@@ -1,0 +1,32 @@
+﻿@*@model ShopNow.ViewModels.DrugCompoundDetailListViewModel*@
+@model IEnumerable<ShopNow.ViewModels.DrugCompoundDetailListViewModel.DrugCompoundList>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Drug Compound Detail List";
+}
+<title>ShopNow | Drug Compound Detail List</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+<div class="container-fluid">
+    <div class="row my-2">
+        <div class="col-md-6">
+            <h5 class="text-success" style="letter-spacing:1px">Drug Compound Detail List</h5>
+        </div>        
+        <div class="col-md-6 text-right">
+            <a href="~/DrugCompoundDetail/Create" target="_blank"><span class="fa fa-plus"></span>&nbsp;New Drug Compound Detail</a>
+            @*<input type="button" id="btnExport" class="btn btn-sm btn-secondary" value="Export To Excel" />*@
+        </div>
+    </div>
+    @Html.Grid(Model).Columns(columns =>
+{
+columns.Add(c => c.AliasName).Titled("Name").Filterable(true).SetWidth(20);
+columns.Add(c => c.InteractingCompounds).Titled("Combination").Filterable(true).SetWidth(20);
+columns.Add(c => c.IntakeIndications).Titled("Category Name").Filterable(true).SetWidth(10);
+columns.Add(c => c.IntakeContraindication).Titled("Brand Name").Filterable(true).SetWidth(20);
+columns.Add()
+.Encoded(false)
+.Sanitized(false)
+.RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code) }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
+               + Html.ActionLink("Delete", "Delete", new { code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code) }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(20);
+}).WithPaging(20).Sortable(true)
+</div>

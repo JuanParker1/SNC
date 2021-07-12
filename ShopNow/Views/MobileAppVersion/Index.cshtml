@@ -1,0 +1,157 @@
+﻿@model ShopNow.ViewModels.MobileAppVersionListViewModel
+@{
+	ViewBag.Title = "Mobile App Version List";
+}
+
+@section Actions
+{
+	<form class="form-inline my-2 my-lg-0 d-none d-lg-inline-block" action="" method="get">
+		<div class="row">
+			<div class="col">
+			</div>
+		</div>
+	</form>
+
+	<a class="btn btn-info text-light ml-auto" href="~/MobileAppVersion/Create">Create</a>
+}
+@section Styles
+{
+	<link href="~/Content/theme-purchases.css" rel="stylesheet" />
+}
+@*@section Titles
+	{
+		<h1 id="page-title" class="background-wave" width="100%" height="42">Mobile App Version</h1>
+	}
+	@section LeftPanel
+	{
+
+		<div class="panel panel-default left-panel">
+			<div class="panel-heading">
+				<h3 class="panel-title"><i class="fa fa-fw fa-link"></i> Quick Links</h3>
+			</div>
+			<div class="panel-body">
+				<ul>
+					<li><a href="~/"><i class="fa fa-fw fa-tachometer"></i> Dashboard</a></li>
+				</ul>
+			</div>
+		</div>
+	}
+	@section RightPanel
+	{
+		<div class="panel panel-default right-panel">
+			<div class="panel-heading" id="borders">
+				<h3 class="panel-title"><i class="fa fa-fw fa-thumbs-up"></i> Actions</h3>
+			</div>
+			<div class="panel-body">
+				<a href="~/MobileAppVersion/Create" class="btn btn-block btn-success"><span class="glyphicon glyphicon-plus-sign"></span> Create App Version</a>
+			</div>
+		</div>
+	}*@
+
+
+
+<div class="card ">
+	<div class="card-body">
+		<table class="table table-striped table-hover table-bordered" id="brand-list">
+			<thead>
+
+
+
+
+				<tr>
+					<th></th>
+
+					<th>Name</th>
+					<th>Version</th>
+					<th>Date Added</th>
+					<th>Added By</th>
+
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model.mobileAppVersionItemsListItem)
+				{
+					<tr>
+						<td><input type="hidden" name="code" id="code" value="@item.Code"></td>
+
+						<td>@item.Name</td>
+						<td>@item.Version</td>
+						<td>@item.DateAdded</td>
+						<td>@item.AddedByEmployeeFullName</td>
+
+						<td>
+							<a href="/MobileAppVersion/Edit?code=@item.Code" class="btn btn-primary btn-sm btn-block">Edit</a>
+							<a href="/MobileAppVersion/Details?code=@item.Code" class="btn btn-primary btn-sm btn-block">Detail</a>
+							<a href="/MobileAppVersion/Delete?code=@item.Code" class="btn btn-danger btn-sm btn-block">Delete</a>
+						</td>
+
+					</tr>
+				}
+
+			</tbody>
+		</table>
+	</div>
+</div>
+
+
+@section Scripts
+{
+
+
+	<link href="~/Scripts/plugins/dataTables/css/dataTables.bootstrap4.css" rel="stylesheet" />
+	<link href="~/Scripts/plugins/dataTables/libs/fixedheaders/css/fixedHeader.bootstrap4.css" rel="stylesheet" />
+	<link href="~/Scripts/plugins/dataTables/libs/scroller/css/scroller.bootstrap4.css" rel="stylesheet" />
+	<script src="~/Scripts/plugins/dataTables/js/jquery.dataTables.js"></script>
+	<script src="~/Scripts/plugins/dataTables/libs/fixedheaders/js/dataTables.fixedHeader.js"></script>
+	<script src="~/Scripts/plugins/dataTables/libs/scroller/js/dataTables.scroller.js"></script>
+	<script src="~/Scripts/plugins/dataTables/js/dataTables.bootstrap4.js"></script>
+
+	<link href="~/Scripts/plugins/select2/css/select2.css" rel="stylesheet" />
+	<link href="~/Content/plugins/select2/select2.custom.css" rel="stylesheet" />
+	<script src="~/Scripts/plugins/select2/js/select2.js"></script>
+
+
+
+
+	<script>
+		$(document).ready(function () {
+			$('.left-panel, .right-panel').sticky({ topSpacing: 10 });
+		});
+		$(document).ready(function () {
+			var t = $('#brand-list').DataTable({
+				"columnDefs": [{
+					"searchable": false,
+					"orderable": false,
+					"targets": 0
+				}],
+				"order": [[1, 'asc']]
+			});
+
+			t.on('order.dt search.dt', function () {
+				t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+					cell.innerHTML = i + 1;
+				});
+			}).draw();
+		});
+	</script>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

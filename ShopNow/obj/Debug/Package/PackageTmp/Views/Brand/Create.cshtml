@@ -1,0 +1,78 @@
+﻿@model ShopNow.ViewModels.BrandCreateEditViewModel
+@{
+    ViewBag.Title = "Brand Entry";
+}
+
+<title>ShopNow | Brand Entry</title>
+
+<div class="container-fluid my-4">
+    <div class="row">
+        <div class="col-md-4">
+            <h5 class="mt-1 text-success" style="letter-spacing:1px">BRAND ENTRY</h5>
+        </div>
+        <div class="col-md-8 text-right">
+            <a href="~/Brand/List" target="_blank"><span class="fa fa-bars"></span>&nbsp;Brand List</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            @using (Html.BeginForm("Create", "Brand", FormMethod.Post, new { id = "BrandForm" }))
+            {
+                <div class="card">
+                    <div class="card-body">
+                        @Html.AntiForgeryToken()
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label class="col-form-label"><strong class="text-secondary">Brand Name</strong></label>
+                                <input id="Name" type="text" class="form-control" name="Name" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="col-form-label"><strong class="text-secondary">Item Type</strong></label>
+                                <select name="ProductType" class="form-control">
+                                    <option value="Select">Select</option>
+                                    <option value="Product">Product</option>
+                                    <option value="Dish">Dish</option>
+                                    <option value="Service">Service</option>
+                                    <option value="Medical">Medical</option>
+                                    <option value="FMCG">FMCG</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-4 mx-auto">
+                                <button type="submit" class="btn btn-block btn-success Save"><span class="glyphicon glyphicon-file"></span> Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script src="~/Scripts/ValidateRequiredFields.js"></script>
+    <script>
+
+        $(".Save").click(function () {
+            var isValidated = false;
+            var requiredArr = [
+                'Name',
+                'ProductType'
+            ];
+            isValidated = ValidateEmptyRequiredFiels(requiredArr);
+
+            if (isValidated) {
+                $('#BrandForm').submit();
+            };
+        });
+    </script>
+}

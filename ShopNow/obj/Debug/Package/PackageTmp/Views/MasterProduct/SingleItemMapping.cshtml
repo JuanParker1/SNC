@@ -1,0 +1,242 @@
+﻿@model ShopNow.ViewModels.ItemMappingViewModel
+@{
+    ViewBag.Title = "Single ItemMapping";
+}
+<title>ShopNow | Single Item Mapping</title>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <h5 class="text-success" style="letter-spacing:1px">SINGLE ITEM MAPPING</h5>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            @using (Html.BeginForm("SingleItemMapping", "MasterProduct", FormMethod.Post, new { id = "ItemMappingForm", enctype = "multipart/form-data" }))
+            {
+                <div class="card mb-3">
+                    <div class="card-body">
+                        @Html.AntiForgeryToken()
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <div class="col-md-12">
+                                        <label class="col-form-label text-secondary font-weight-bold">Shop Name: </label>
+                                        <label class="control-label font-weight-bold"> @Model.ShopName</label>
+                                        <input type="hidden" name="ShopCode" id="ShopCode" value="@Model.ShopCode" />
+                                        <input type="hidden" name="ShopName" id="ShopName" value="@Model.ShopName" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="col-form-label"><strong class="text-secondary">Shop Item Name</strong></label>
+                                        <select name="ItemCode" id="ItemCode" class="form-control"></select>
+                                        <input type="hidden" name="ItemName" id="ItemName" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label class="col-form-label"><strong class="text-secondary">Master Item </strong></label>
+                                                <select name="MasterProductCode" id="MasterProductCode" class="form-control"></select>
+                                                <input type="hidden" name="MasterProductName" id="MasterProductName" />
+                                            </div>
+                                            <div class="col-md-6 mx-auto">
+                                                <a href="~/Home/ImageDenied" data-toggle="modal" data-target="#myModal" title="Click Here To Preview!">
+                                                    <img id='ProductImage' src="" class="ProductImage img-thumbnail my-3" width="150" height="150" onerror="this.src='/Images/No Photo.png'" />
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <p>
+                                                <label class="control-label"><strong class="text-secondary">Brand:</strong></label>
+                                                <span class="ml-3" id="BrandName"></span>
+                                            </p>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <p>
+                                                <label class="control-label"><strong class="text-secondary">Category:</strong></label>
+                                                <span class="ml-3" id="CategoryName"></span>
+                                            </p>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <p>
+                                                <label class="control-label"><strong class="text-secondary">Description:</strong></label>
+                                                <span class="ml-3" id="LongDescription"></span>
+                                            </p>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <p>
+                                                <label class="control-label"><strong class="text-secondary">Price:</strong></label>
+                                                <span class="ml-3" id="Price"></span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6 text-center">
+                                <button type="button" class="btn btn-info" id="Pending">Pending List</button>
+                                <button type="button" class="btn btn-info" id="Mapped">Mapped List</button>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-success Save" id="Create" disabled><span class="glyphicon glyphicon-file"></span>Map Item</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@*Image Modal*@
+
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <span class="close" data-dismiss="modal">&times;</span>
+        <a href="~/Home/ImageDenied">
+            <img class="modal-content" id="myImage">
+        </a>
+    </div>
+</div>
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script src="~/Scripts/ValidateRequiredFields.js"></script>
+    <script src="~/Scripts/multiple-image-upload.js"></script>
+    <link href="~/Content/multiple-image-upload.css" rel="stylesheet" />
+    <script src="~/Scripts/ckeditor/ckeditor.js"></script>
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+
+    <script>
+        $(document).ready(function () {
+
+            $(document).on('click', '.Save', function () {
+                var masterproductcode = $('#MasterProductCode').val();
+                var itemcode = $('#ItemCode').val();
+                var shopcode = $('#ShopCode').val();
+                $.post('/MasterProduct/MappingProduct', { masterproductcode: masterproductcode, itemcode: itemcode, shopcode: shopcode }, function (data) {
+                    if (data == true) {
+                        window.location.reload();
+                      //  swal("Information!", "Succesfully mapped", "warning");
+                        //swal({
+                        //    title: "Information?",
+                        //    text: "Succesfully mapped",
+                        //    type: "warning",
+                        //    confirmButtonColor: "#DD6B55",
+                        //    confirmButtonText: "Ok"
+                        //},function (isConfirm) {
+                        //        if (isConfirm) {
+                        //            window.location.reload();
+                        //        }
+                        //    });
+                    }
+                    else {
+                      //  swal("Warning!", "Unable to Map Please try again", "warning");
+                        swal({
+                            title: "Information?",
+                            text: "Unable to Map Please try again",
+                            type: "error",
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "Ok"
+                        }, function (isConfirm) {
+                            if (isConfirm) {
+                                window.location.reload();
+                            }
+                        });
+                    }
+                });
+            }); 
+
+
+            $(document).on('click', '#Pending', function () {
+                var shopcode = $('#ShopCode').val();
+                if (shopcode == null || shopcode == "") {
+                    swal("Warning!", "Please Select Shop Name!", "warning");
+                } else {
+                    window.location.replace('/MasterProduct/PendingList?shopcode=' + shopcode);
+                }
+            });
+
+            $(document).on('click', '#Mapped', function () {
+                var shopcode = $('#ShopCode').val();
+                if (shopcode == null || shopcode == "") {
+                    swal("Warning!", "Please Select Shop Name!", "warning");
+                } else {
+                    window.location.replace('/MasterProduct/MappedList?shopcode=' + shopcode);
+                }
+            });
+
+            var shopcode = $('#ShopCode').val();
+            var shoptype = "";
+            $("#ItemCode").select2({
+                placeholder: "Search Items",
+                ajax: {
+                    url: "/MasterProduct/GetProductItemSelect2?shopcode=" + shopcode,
+                    width: "100%",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on("select2:select", function (e) {
+                $('input[name="ItemName"]').val(e.params.data.text);
+               
+            });
+            function getURL() {
+                return "/MasterProduct/GetMasterItemSelect2";
+            }
+           // url: "/MasterProduct/GetMasterItemSelect2?type=" + $('input[name="ItemName"]').val(),
+            $('#MasterProductCode').select2({
+                placeholder: "Search Items",
+                ajax: {
+                    url: function () {
+                        return getURL()
+                    },
+                    width: '100%',
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="MasterProductName"]').val(e.params.data.text);
+                if (e.params.data.description == "" || e.params.data.description == null) {
+                    $('#LongDescription').text("N/A");
+                } else {
+                    $('#LongDescription').text(e.params.data.description);
+                }
+                $('#ProductImage').attr("src", "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + e.params.data.image);
+                $('#BrandName').text(e.params.data.brandname);
+                $('#CategoryName').text(e.params.data.categoryname);
+                $('#Price').text("Rs. " + e.params.data.price);
+                var shop = $('#ShopCode').val();
+                var item = $('#ItemCode').val();
+                var masterproduct = $('#MasterProductCode').val();
+                if (shop != null && item != null && masterproduct != null) {
+                    $('#Create').prop('disabled', false);
+                }
+            }).delay(3000);
+
+            var modal = document.getElementById('myModal');
+            var img = document.getElementsByClassName('ProductImage');
+            var modalImg = document.getElementById("myImage");
+            $(img).click(function () {
+                modal.style.display = "block";
+                modalImg.src = this.src;
+                if (this.src == "") {
+                    $('#myModal').hide();
+                }
+                else {
+                    $('#myModal').modal('show');
+                }
+            });
+
+        });
+    </script>
+}
+

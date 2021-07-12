@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <setParameter name="IIS Web Application Name" value="Default Web Site/" />
+  <setParameter name="DefaultConnection-Web.config Connection String" value="Data Source=3.7.252.49,65001;Initial Catalog=Shopnowchat;MultipleActiveResultSets=True;User ID=sa;Password=Tablet*123" />
+  <setParameter name="ShopnowchatEntities-Web.config Connection String" value="metadata=res://*/Models.ApplicationDbContext.csdl|res://*/Models.ApplicationDbContext.ssdl|res://*/Models.ApplicationDbContext.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=3.7.252.49,65001;initial catalog=Shopnowchat;user id=sa;password=Tablet*123;MultipleActiveResultSets=True;App=EntityFramework&quot;" />
+</parameters>

@@ -1,0 +1,158 @@
+﻿@model ShopNow.ViewModels.DrugCompoundDetailCreateEditViewModel
+@{
+    ViewBag.Title = "Drug Compound Detail Edit";
+}
+<title>ShopNow | Drug Compound Detail Edit</title>
+<div class="container-fluid">
+    <div class="row my-2">
+        <div class="col-md-6">
+            <h5 class="text-success" style="letter-spacing:1px">Drug Compound Detail Edit</h5>
+        </div>        
+        <div class="col-md-6 text-right">
+            <a href="~/DrugCompoundDetail/List" target="_blank"><span class="fa fa-bars"></span> Drug Compound Detail List</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            @using (Html.BeginForm("Edit", "DrugCompoundDetail", FormMethod.Post, new { id = "DrugCompoundDetailEditForm" }))
+            {
+                <input type="hidden" name="Code" value="@Model.Code" />
+                <input type="hidden" name="CreatedBy" value="@Model.CreatedBy" />
+                <input type="hidden" name="UpdatedBy" value="@Model.UpdatedBy" />
+                <input type="hidden" name="DateEncoded" value="@Model.DateEncoded" />
+                <input type="hidden" name="DateUpdated" value="@Model.DateUpdated" />
+                <input type="hidden" name="Status" value="@Model.Status" />
+                <div class="card">                    
+                    <div class="card-body">
+                        @Html.AntiForgeryToken()
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label class="control-label"><strong class="text-secondary">Alias Name</strong></label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="AliasName" id="AliasName" value="@Model.AliasName" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label"><strong class="text-secondary">Interacting Compounds</strong></label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="InteractingCompounds" id="InteractingCompounds" value="@Model.InteractingCompounds" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label"><strong class="text-secondary">Intake Indications</strong></label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="IntakeIndications" id="IntakeIndications" value="@Model.IntakeIndications" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label"><strong class="text-secondary">Intake Contraindication</strong></label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="IntakeContraindication" id="IntakeContraindication" value="@Model.IntakeContraindication" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label"><strong class="text-secondary">Mechanism Of Action</strong></label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="MechanismOfAction" id="MechanismOfAction" value="@Model.MechanismOfAction" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label"><strong class="text-secondary">Indication Treatment Age Group</strong></label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="IndicationTreatmentAgeGroup" id="IndicationTreatmentAgeGroup" value="@Model.IndicationTreatmentAgeGroup" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label"><strong class="text-secondary">Compound Usage Reasons</strong></label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="CompoundUsageReasons" id="CompoundUsageReasons" value="@Model.CompoundUsageReasons" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label"><strong class="text-secondary">Alcohol</strong></label>
+                                    <select class="form-control" name="Alcohol" id="Alcohol">
+                                        <option value="Select">Select</option>
+                                        <option value="True">Yes</option>
+                                        <option value="False">No</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label"><strong class="text-secondary">Pregnancy</strong></label>
+                                    <select class="form-control" name="Pregnancy" id="Pregnancy">
+                                        <option value="Select">Select</option>
+                                        <option value="True">Yes</option>
+                                        <option value="False">No</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label"><strong class="text-secondary">Breast Feeding</strong></label>
+                                    <select class="form-control" name="Breastfeeding" id="Breastfeeding">
+                                        <option value="Select">Select</option>
+                                        <option value="True">Yes</option>
+                                        <option value="False">No</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label"><strong class="text-secondary">Driving</strong></label>
+                                    <select class="form-control" name="Driving" id="Driving">
+                                        <option value="Select">Select</option>
+                                        <option value="True">Yes</option>
+                                        <option value="False">No</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row mt-3">
+                            <div class="col-md-3 mx-auto">
+                                <button type="submit" class="btn btn-block btn-success Update"><span class="glyphicon glyphicon-file"></span> Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script src="~/Scripts/ValidateRequiredFields.js"></script>
+    <script>
+        $(document).ready(function () {
+         jQuery(document).ready(function ($) {
+             $('#Alcohol').find('option[value="@Model.Alcohol"]').attr('selected', 'selected');
+             $('#Pregnancy').find('option[value="@Model.Pregnancy"]').attr('selected', 'selected');
+             $('#Breastfeeding').find('option[value="@Model.Breastfeeding"]').attr('selected', 'selected');
+             $('#Driving').find('option[value="@Model.Driving"]').attr('selected', 'selected');
+         });
+
+        $(".Update").click(function () {
+            var isValidated = false;
+            var requiredArr = [
+                'UnitName',
+                'UnitSymbol',
+                'UnitType'
+            ];
+            isValidated = ValidateEmptyRequiredFiels(requiredArr);
+
+            if (isValidated) {
+                $('#DrugCompoundDetailEditForm').submit();
+            };
+        });
+        });
+    </script>
+}
+

@@ -1,0 +1,55 @@
+﻿@model ShopNow.ViewModels.MobileAppVersionDetailsViewModel
+
+@{
+	ViewBag.Title = "MobileApp Version Detail";
+}
+
+@section Styles{
+	<link href="~/Content/theme-purchases.css" rel="stylesheet" />
+}
+
+
+
+<div class="container-fluid mt-3">
+	<input type="hidden" id="Code" name="Code" value="@Model.Code" />
+	
+					<div class="col">
+						<div class="card">
+							
+							<div class="card-body">
+								<div class="row">
+									<div class="col-12">
+										<dl class="row">
+											<dt class="col-5">Name:</dt>
+											<dd class="col-6">@Model.Name</dd>
+										</dl>
+										<dl class="row">
+											<dt class="col-5">Version:</dt>
+											<dd class="col-6">@Model.Version</dd>
+										</dl>
+										<dl class="row">
+											<dt class="col-5">Date Added:</dt>
+											<dd class="col-6">@Model.DateAdded</dd>
+										</dl>
+										<dl class="row">
+											<dt class="col-5">Added By Employee:</dt>
+											<dd class="col-6">@Model.AddedByEmployeeFullName</dd>
+										</dl>
+
+									</div>
+								</div>
+
+
+							</div>
+						</div>
+
+
+
+
+
+					</div>
+			</div>
+
+
+
+

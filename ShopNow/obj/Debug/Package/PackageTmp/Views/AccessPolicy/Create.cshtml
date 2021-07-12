@@ -1,0 +1,152 @@
+﻿@model ShopNow.ViewModels.AccessPolicyCreateEditViewModel
+@{
+    ViewBag.Title = "AccessPolicy Entry";
+}
+
+<title>ShopNow | AccessPolicy Entry</title>
+
+<div class="container-fluid my-4">
+    <div class="row">
+        <div class="col-md-4">
+            <h5 class="mt-1 text-success" style="letter-spacing:1px">ACCESS POLICY ENTRY</h5>
+        </div>
+        <div class="col-md-8 text-right">
+            <a href="~/AccessPolicy/ItemList" target="_self"><span class="fa fa-bars"></span>AccessPolicy List</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            @using (Html.BeginForm("Create", "AccessPolicy", FormMethod.Post, new { id = "AccessPolicyForm" }))
+            {
+                <div class="card">
+                    <div class="card-body">
+                        @Html.AntiForgeryToken()
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label class="col-form-label"><strong class="text-secondary">Page Name</strong></label>
+                                <select name="PageCode" id="PageCode" class="form-control"></select>
+                                <input type="hidden" name="PageName" id="PageName" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="col-form-label"><strong class="text-secondary">Shop Name</strong></label>
+                                <select name="ShopCode" id="ShopCode" class="form-control"></select>
+                                <input type="hidden" name="ShopName" id="ShopName" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="col-form-label"><strong class="text-secondary">Staff Name</strong></label>
+                                <select name="StaffCode" id="StaffCode" class="form-control"></select>
+                                <input type="hidden" name="StaffName" id="StaffName" placeholder="Select Staff" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label class="col-form-label"><strong class="text-secondary">Role</strong></label>
+                                <select id="Position" name="Position" class="form-control">
+                                    <option value=" ">Select</option>
+                                    <option value="0">User</option>
+                                    <option value="1">Shop Owner</option>
+                                    <option value="2">Staff</option>
+                                    <option value="3">Delivery Boy</option>
+                                    <option value="4">Admin</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="col-form-label"><strong class="text-secondary">Website</strong></label>
+                                <select id="Status" name="Status" class="form-control">
+                                    <option value=" ">Select</option>
+                                    <option value="0">ShopNow</option>
+                                    <option value="3">ShopNowPay</option>
+                                </select>
+                            </div>
+                            @*<div class="col-md-3">
+                                    <label class="col-form-label"><strong class="text-secondary">Access</strong></label>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input type="checkbox" class="form-check-input" name="IsAccess" id="IsAccess"> Is Access
+                                        </label>
+                                    </div>
+                                </div>*@
+                        </div>
+                        <div class="form-group row mt-5">
+                            <div class="col-md-2 mx-auto">
+                                <button type="button" class="btn btn-block btn-success Save"><span class="glyphicon glyphicon-file"></span> Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script src="~/Scripts/ValidateRequiredFields.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            //$('#IsAccess').change(function () {
+            //    if (this.checked) {
+            //        $(this).prop("checked");
+            //    }
+            //    $('#IsAccess').val(this.checked);
+            //});
+
+            $(document).on('click', '.Save', function () {
+                var isValidate = false;
+                var requiredArr = [
+                    'PageCode',
+                    'ShopCode',
+                    'StaffCode'
+                ];
+                isValidate = ValidateEmptyRequiredFiels(requiredArr);
+                if (isValidate) {
+                    $('#AccessPolicyForm').submit();
+                }
+
+            });
+
+            $('#PageCode').select2({
+                placeholder: "Search Page",
+                ajax: {
+                    url: "/AccessPolicy/GetPageSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="PageName"]').val(e.params.data.text);
+            });
+
+            $('#ShopCode').select2({
+                placeholder: "Search Shop",
+                ajax: {
+                    url: "/AccessPolicy/GetShopSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ShopName"]').val(e.params.data.text);
+                $("#StaffCode").select2({
+                    placeholder: "Search Staff",
+                    ajax: {
+                        url: "/AccessPolicy/GetStaffSelect2?shopcode=" + e.params.data.id,
+                        width: "100%",
+                        delay: 250,
+                        dataType: 'json'
+                    }
+                }).on("select2:select", function (e) {
+                    $('input[name="StaffName"]').val(e.params.data.text);
+                });
+
+            });
+        });
+    </script>
+}

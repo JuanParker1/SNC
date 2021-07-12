@@ -1,0 +1,111 @@
+﻿@model ShopNow.ViewModels.CartAssignDeliveryBoyViewModel
+@{
+    ViewBag.Title = "Assign DeliveryBoy";
+}
+<title>ShopNowChat | Assign DeliveryBoy</title>
+
+<div class="container-fluid my-0">
+    <div class="row">
+        <div class="col-md-3">
+            <h5 class="mt-1" style="letter-spacing:1px">ASSIGN DELIVERY BOY</h5>
+        </div>
+        <div class="col-md-2 col-sm-4 mb-2 data-search">
+        </div>
+        <div class="col-md-7 mt-2 text-right">
+            <a href="~/Cart/Pending" target="_self"><u> New Order</u></a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            @using (Html.BeginForm("AssignDeliveryBoy", "Cart", FormMethod.Post, new { id = "AssignDeliveryBoyForm", role = "form", enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="CartCode" id="CartCode" value="@Model.CartCode" />
+                <input type="hidden" name="DeliveryBoyCode" id="DeliveryBoyCode" />
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Nearest Delivery Boy List</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table table-striped table-hover table-borderless table-hover" id="Assign-list">
+                                    <thead>
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>Name</th>
+                                            <th>Distance Around 8Km</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.Lists)
+                                        {
+                                            if (@item.Amount < 1500)
+                                            {
+                                            <tr>
+                                                <td></td>
+                                                <td>
+                                                    @item.Name
+                                                </td>
+                                                <td>@Math.Round(item.Meters / 1000, 2) Km </td>
+                                                <td>
+                                                    <input type="button" class="btn btn-sm btn-success assign" value="Assign" data-id="@item.Code" />
+                                                </td>
+                                            </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            var t = $('#Assign-list').DataTable({
+                "dom": "<'row'<'col-sm-6'f>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-3'l><'col-sm-4'p>>" +
+                    "<'row'<'col-sm-12'tr>>",
+                "bPaginate": false,
+                // "scrollY": 400,
+                "paging": true,
+                "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "ALL"]],
+                "pageLength": 10,
+                initComplete: function (settings, json) {
+                    $('.index input').remove();
+                    $('.action-btn input').remove();
+                    $('.dataTables_filter input').appendTo('.data-search');
+                    $('.dataTables_filter label').remove();
+                    $('.data-search input').attr('placeholder', 'Quick Search');
+                    $('.data-search input').addClass('form-control');
+                    $('.data-search input').removeClass('form-control-sm');
+                },
+            });
+
+            t.on('order.dt search.dt', function () {
+                t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+
+            $(".assign").click(function () {
+                var code = $(this).data('id');
+                $("#DeliveryBoyCode").val(code);
+                $("#AssignDeliveryBoyForm").submit();
+            });
+
+        });
+    </script>
+}
+

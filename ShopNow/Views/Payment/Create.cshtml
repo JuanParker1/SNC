@@ -1,0 +1,111 @@
+﻿@model ShopNow.ViewModels.PaymentCreateViewModel
+@{
+    ViewBag.Title = "Payment Entry";
+}
+
+
+@using (Html.BeginForm("Create", "Payment"))
+{
+    <div class="clearfix">
+        <div class="container">
+            @Html.AntiForgeryToken()
+            <button id="rzp-button1">Pay with RazorPay</button>
+        </div>
+    </div>
+}
+@section Scripts
+{
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+var options = {
+    "key": "rzp_test_xXqwMy4biuT1eB", // Enter the Key ID generated from the Dashboard
+    "amount": "50000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 means 50000 paise or ₹500.
+    "currency": "INR",
+    "name": "Joyra Traders",
+    "description": "Testing Razor Pay",
+    "image": "https://cdn.razorpay.com/logos/DpMG1Kg761hs6t_medium.png",
+    //"order_id": "22222",// Replace this with the order_id created using Orders API (https://razorpay.com/docs/api/orders).
+    "handler": function (response){
+        alert(response.razorpay_payment_id);
+    },
+    "prefill": {
+        "name": "Joyra",
+        "email": "joyra@example.com",
+        "contact": "9999999999"
+    },
+    "notes": {
+        "address": "Joyra Medicals Building, No 44, Court Rd, Nagercoil, Tamil Nadu 629001"
+    },
+    "theme": {
+        "color": "#21DC74"
+    }
+};
+        var rzp1 = new Razorpay(options);
+        window.onload = function () {
+            document.getElementById("rzp-button1").onclick = function (e) {
+                rzp1.open();
+                e.preventDefault();
+            }
+        }
+//document.getElementById('rzp-button1').onclick = function(e){
+//    rzp1.open();
+//    e.preventDefault();
+//}
+    </script>
+}
+@*
+    <div class="clearfix">
+            <div class="container">
+                @Html.AntiForgeryToken()
+
+                <div class="formRow clearfix" style="margin:20px 0;">
+                    <b>Select Payment Type*</b>
+                    <div style="margin-top: 8px;">
+                        <label for="radio-2" class="css-label">
+                            @Html.RadioButton("PaymentType", "Pay Using Debit/Credit Card", new { @class = "css-checkbox" })
+                            Pay Using Debit/Credit Card
+                        </label>
+                        <label for="radio-2" class="css-label">
+                            @Html.RadioButton("PaymentType", "Pay Using Net banking", new { @class = "css-checkbox" })
+                            Pay Using Net banking
+                        </label>
+                        <label for="radio-2" class="css-label">
+                            @Html.RadioButton("PaymentType", "Cash On Delivery", new { @class = "css-checkbox" })
+                            Cash On Delivery
+                        </label>
+                        @Html.ValidationMessageFor(m => m.PaymentType)
+                    </div>
+                </div>
+
+                <b>Delivery Address</b>
+            <div class="formRow clearfix" style="margin-top: 8px;">
+                <label>Address*  @Html.ValidationMessageFor(m => m.AddressLine)</label>
+                @Html.TextBoxFor(m => m.AddressLine, new { @class = "inputComn", @placeholder = "Address" })
+            </div>
+
+                <div class="formRow clearfix">
+                    <div class="half fl">
+                        <label>City*  @Html.ValidationMessageFor(m => m.City)</label>
+                        @Html.TextBoxFor(m => m.City, new { @class = "inputComn", @placeholder = "City" })
+                    </div>
+                    <div class="half fr">
+                        <label>State*  @Html.ValidationMessageFor(m => m.State)</label>
+                        @Html.TextBoxFor(m => m.State, new { @class = "inputComn", @placeholder = "State" })
+                    </div>
+                </div>
+
+                <div class="formRow clearfix">
+                    <div class="half fl">
+                        <label>Country*  @Html.ValidationMessageFor(m => m.Country)</label>
+                        @Html.TextBoxFor(m => m.Country, new { @class = "inputComn", @placeholder = "Country" })
+                    </div>
+                    <div class="half fr">
+                        <label>Zip Code*  @Html.ValidationMessageFor(m => m.ZipCode)</label>
+                        @Html.TextBoxFor(m => m.ZipCode, new { @class = "inputComn", @placeholder = "Zip Code" })
+                    </div>
+                </div>
+                <button type="submit" class="contactBtn signupBtn" value="Proceed to Pay" />
+            </div>
+        </div>
+*@
+

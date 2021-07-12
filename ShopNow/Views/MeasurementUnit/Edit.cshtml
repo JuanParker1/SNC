@@ -1,0 +1,98 @@
+﻿@model ShopNow.ViewModels.MeasurementUnitCreateEditViewModel
+@{
+    ViewBag.Title = "Drug Measurement Unit Edit";
+}
+
+<div class="row my-3">
+    <div class="col-md-10 text-right ml-5">
+        <a href="~/MeasurementUnit/List" target="_blank"><span class="fa fa-bars"></span> Drug Measurement Unit List</a>
+    </div>
+</div>
+
+<div class="container-fluid my-4">
+    <div class="row">
+        <div class="col-md-10 mx-auto">
+            @using (Html.BeginForm("Edit", "MeasurementUnit", FormMethod.Post, new { id = "MeasurementUnitEditForm" }))
+            {
+                <input id="Code" type="hidden" class="form-control" value="@Model.Code" name="Code" />
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="text-success">Drug Measurement Unit Update Form</h5>
+                    </div>
+                    <div class="card-body">
+                        @Html.AntiForgeryToken()
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label class="col-form-label"><strong class="text-secondary">Unit Name</strong></label>
+                                <input id="UnitName" type="text" class="form-control" name="UnitName" value="@Model.UnitName" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="col-form-label"><strong class="text-secondary">Unit Symbol</strong></label>
+                                <input id="UnitSymbol" type="text" class="form-control" name="UnitSymbol" value="@Model.UnitSymbol" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="col-form-label"><strong class="text-secondary">Unit Type</strong></label>
+                                <input id="UnitType" type="text" class="form-control" name="UnitType" value="@Model.UnitType" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="col-form-label"><strong class="text-secondary">Conversion Unit</strong></label>
+                                <input id="ConversionUnit" type="text" class="form-control" name="ConversionUnit" value="@Model.ConversionUnit" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="col-form-label"><strong class="text-secondary">Conversion Formula</strong></label>
+                                <input id="ConversionFormula" type="text" class="form-control" name="ConversionFormula" value="@Model.ConversionFormula" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="col-form-label"><strong class="text-secondary">Type</strong></label>
+                                <select name="Type" class="form-control" id="Type">
+                                    <option value="0">Select Type</option>
+                                    <option value="1">Medical</option>
+                                    <option value="2">FMCG</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-4 mx-auto">
+                                <button type="submit" class="btn btn-block btn-success Update"><span class="glyphicon glyphicon-file"></span> Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+
+    <script src="~/Scripts/ValidateRequiredFields.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".Update").click(function () {
+                var isValidated = false;
+                var requiredArr = [
+                    'UnitName',
+                    'UnitSymbol',
+                    'UnitType'
+                ];
+                isValidated = ValidateEmptyRequiredFiels(requiredArr);
+
+                if (isValidated) {
+                    $('#MeasurementUnitEditForm').submit();
+                };
+
+            });
+             $(document).ready(function ($) {
+                $("#Type").find('option[value="@Model.Type"]').attr('selected', 'selected');
+            });
+        });
+    </script>
+}
+

@@ -1,0 +1,148 @@
+﻿@model ShopNow.ViewModels.MeasurementUnitMasterViewModel
+@using System.Data;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<title>Shop Now | Drug Measurement Unit Ecxel Upload</title>
+<div class="container">
+    @using (Html.BeginForm("Index", "MeasurementUnit", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+        <div class="row">
+            <div class="col-md-12">
+                <h5>Drug Measurement Unit Master Excel Upload</h5>
+                <div class="row mt-3">
+                    <div class="col-md-6 mb-2">
+                        <input type="file" id="dataFile" name="upload" />
+                        @if (Model != null)
+                        {
+                            <input type="hidden" value="save" name="button" class="btn btn-secondary" />
+                        }
+                        else
+                        {
+                            <input type="hidden" value="upload" name="button" class="btn btn-success" />
+                        }
+                    </div>
+                    <div class="col-md-6">
+                        <input type="submit" value="Upload" class="btn btn-success" />
+                    </div>
+                </div>
+                <div class="row">
+                    @if (Model != null)
+                    {
+                        <div class="col-md-12 my-2"> <hr class="border-success" style="border-top: 1px dashed" /></div>
+                        <div class="col-md-5">
+                            <p class="text-success">Excel Headers</p>
+                            <table id="Brand-list">
+                                <thead>
+                                </thead>
+                                <tbody>
+                                    @foreach (DataColumn col in Model.DataTable.Columns)
+                                    {
+                                    <tr>
+                                        <td>@col.ColumnName</td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <input id="FileName" name="FileName" type="hidden" value="@Model.Filename" />
+                            <hr class="border-success" style="border-top: 1px dashed" />
+                        </div>
+                        <div class="col-md-6">
+                            <p class="text-success">Choose Excel Headers</p>
+                            <table id="Database-list" class="w-100">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Unit Name</label>
+                                            <input id="UnitName" name="UnitName" type="text" class="col-md-4" />
+                                            <input id="DBUnitName" name="DBUnitName" type="hidden" class="col-md-3" value="UnitName" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Unit Symbol</label>
+                                            <input id="UnitSymbol" name="UnitSymbol" type="text" class="col-md-4" />
+                                            <input id="DBUnitSymbol" name="DBUnitSymbol" type="hidden" class="col-md-3" value="UnitSymbol" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Unit Type</label>
+                                            <input id="UnitType" name="UnitType" type="text" class="col-md-4" />
+                                            <input id="DBUnitType" name="DBUnitType" type="hidden" class="col-md-3" value="UnitType" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Conversion Unit</label>
+                                            <input id="ConversionUnit" name="ConversionUnit" type="text" class="col-md-4" />
+                                            <input id="DBConversionUnit" name="DBConversionUnit" type="hidden" class="col-md-3" value="ConversionUnit" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Conversion Formula</label>
+                                            <input id="ConversionFormula" name="ConversionFormula" type="text" class="col-md-4" />
+                                            <input id="DBConversionFormula" name="DBConversionFormula" type="hidden" class="col-md-3" value="ConversionFormula" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Type</label>
+                                            <select id="Type" name="Type" class="col-md-4">
+                                                <option value=" ">Select Type</option>
+                                                <option value="1">Medical</option>
+                                                <option value="2">FMCG</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                            <div class="col-md-9 text-center my-3">
+                                <input type="submit" value="Submit" class="btn btn-success" />
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@section Scripts
+    {
+    <script>
+        $(document).ready(function () {
+
+            var tbl = document.getElementById("Brand-list");
+            if (tbl != null) {
+                for (var i = 0; i < tbl.rows.length; i++) {
+                    for (var j = 0; j < tbl.rows[i].cells.length; j++)
+                        tbl.rows[i].cells[j].onclick = function () { getval(this); };
+                }
+            }
+            function getval(cel) {
+                $(function () {
+                    $('#UnitName').on('click', function () {
+                        $('#UnitName').val(cel.innerHTML)
+                    });
+                    $('#UnitSymbol').on('click', function () {
+                        $('#UnitSymbol').val(cel.innerHTML)
+                    });
+                    $('#UnitType').on('click', function () {
+                        $('#UnitType').val(cel.innerHTML)
+                    });
+                    $('#ConversionUnit').on('click', function () {
+                        $('#ConversionUnit').val(cel.innerHTML)
+                    });
+                    $('#ConversionFormula').on('click', function () {
+                        $('#ConversionFormula').val(cel.innerHTML)
+                    });
+                });
+            }
+        });
+    </script>
+}
+

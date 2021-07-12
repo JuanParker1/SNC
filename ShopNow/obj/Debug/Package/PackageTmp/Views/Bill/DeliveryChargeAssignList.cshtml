@@ -1,0 +1,32 @@
+﻿@*@model ShopNow.ViewModels.DeliveryListViewModel*@
+@model IEnumerable<ShopNow.ViewModels.DeliveryListViewModel.DeliveryList>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Delivery Charge Assign List";
+}
+<title>ShopNow | Delivery Charge Assign List</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+
+<div class="container-fluid">
+    <div class="row my-2">
+        <div class="col-md-6">
+            <h5 class="text-success" style="letter-spacing:1px">Delivery Charge Assign List</h5>
+        </div>
+        <div class="col-md-6 text-right">
+            <a href="~/Bill/DeliveryChargeAssign" target="_self"><span class="fa fa-plus"></span> Delivery Charge Assign</a>
+        </div>
+    </div>
+    @Html.Grid(Model).Columns(columns =>
+{
+    columns.Add(b => b.ShopName).Titled("Shop").Filterable(true).SetWidth(20);
+    columns.Add().RenderValueAs(b => b.Type == 1 ? "I Tier" : b.Type == 2 ? "II Tier" : b.Type == 3 ? "III Tier" : "N/A").Filterable(true).Titled("Type").SetWidth(10);
+    columns.Add().RenderValueAs(b => b.DeliveryRateSet == 0 ? "General" : b.DeliveryRateSet == 1 ? "Special" : "N/A").Filterable(true).Titled("Delivery Mode").SetWidth(10);
+    columns.Add(b => b.DeliveryChargeKM).Titled("Upto 5Km").Filterable(true).SetWidth(10);
+    columns.Add(b => b.DeliveryChargeOneKM).Titled("After 5 (Rate/Km)").Filterable(true).SetWidth(10);
+    columns.Add()
+   .Encoded(false)
+   .Sanitized(false)
+      .RenderValueAs(o => Html.ActionLink("Delete", "DeliveryChargeDelete", new { code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code) }, new { @class = "btn btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(10);
+}).WithPaging(20).Sortable(true)
+</div>

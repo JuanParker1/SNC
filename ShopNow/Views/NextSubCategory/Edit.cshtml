@@ -1,0 +1,107 @@
+﻿@model ShopNow.ViewModels.NextSubCategoryEditViewModel
+@{
+    ViewBag.Title = "Edit";
+}
+<title>ShopNow | Sub Category II Update</title>
+@using (Html.BeginForm("Edit", "NextSubCategory", FormMethod.Post, new { id = "NextSubCategoryForm", role = "form" }))
+{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <h5 class="text-success" style="letter-spacing:1px">SUB CATEGORY II UPDATE</h5>
+            </div>
+            <div class="col-md-6 text-right">
+                <a href="~/NextSubCategory/List" target="_blank"><span class="fa fa-bars"></span>&nbsp;Sub Category II List</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mx-auto">
+                <div class="card">
+                    <div class="card-body">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="Code" id="Code" value="@Model.Code" />
+                        <input type="hidden" name="Status" value="@Model.Status" />
+                        <input type="hidden" name="CreatedBy" value="@Model.CreatedBy" />
+                        <input type="hidden" name="UpdatedBy" value="@Model.UpdatedBy" />
+                        <input type="hidden" name="DateEncoded" value="@Model.DateEncoded" />
+                        <input type="hidden" name="DateUpdated" value="@Model.DateUpdated" />
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <label class="col-form-label"><strong class="text-secondary">Sub Category II</strong></label>
+                                <input type="text" class="form-control" name="Name" id="Name" value="@Model.Name" />
+                            </div>
+                            <div class="col-md-3">
+                                <label class="col-form-label"><strong class="text-secondary">Sub Category</strong></label>
+                                <select id="SubCategoryCode" name="SubCategoryCode" class="form-control">
+                                    <option value="@Model.SubCategoryCode">@Model.SubCategoryName</option>
+                                </select>
+                                <input type="hidden" name="SubCategoryName" id="SubCategoryName" value="@Model.SubCategoryName" />
+                            </div>
+                            <div class="col-md-3 mt-1">
+                                <label class="control-label"><strong class="text-secondary">Item Type</strong></label>
+                                <select name="ProductType" class="form-control" id="ProductType">
+                                    <option value="">Select Item Type</option>
+                                    <option value="Product">Product</option>
+                                    <option value="Dish">Dish</option>
+                                    <option value="Service">Service</option>
+                                    <option value="Medical">Medical</option>
+                                    <option value="FMCG">FMCG</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="col-form-label"><strong class="text-secondary">Adscore</strong></label>
+                                <input type="text" class="form-control" min="1" name="Adscore" id="Adscore" value="@Model.Adscore" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3 mx-auto">
+                                <button type="button" class="btn btn-block btn-success Save"><span class="glyphicon glyphicon-file"></span> Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script src="~/Scripts/ValidateRequiredFields.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#SubCategoryCode').select2({
+                placeholder: "Search SubCategory",
+                ajax: {
+                    url: "/NextSubCategory/GetSubCategorySelect2",
+                    width: '100%',
+                    delay: 250,
+                    datatype: 'json',
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="SubCategoryName"]').val(e.params.data.text);
+                });
+
+            $(".Save").click(function () {
+                var isValidated = false;
+                var requiredArr = [
+                    'Name',
+                ];
+                isValidated = ValidateEmptyRequiredFiels(requiredArr);
+
+                if (isValidated) {
+                    $('#NextSubCategoryForm').submit();
+                    $('.Save').prop('disabled', true);
+                };
+            });
+            jQuery(document).ready(function ($) {
+                $("#ProductType").find('option[value="@Model.ProductType"]').attr('selected', 'selected');
+            });
+
+        });
+    </script>
+}

@@ -1,0 +1,331 @@
+﻿@model ShopNow.ViewModels.DrugCompoundDetailMasterViewModel
+@using System.Data;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<title>Shop Now | Drug Compound Detail Ecxel Upload</title>
+<div class="container">
+    @using (Html.BeginForm("Index", "DrugCompoundDetail", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+        <div class="row">
+            <div class="col-md-12">
+                <h5>Drug Compound Detail Master Excel Upload</h5>
+                <div class="row mt-3">
+                    <div class="col-md-6 mb-2">
+                        <input type="file" id="dataFile" name="upload" />
+                        @if (Model != null)
+                        {
+                            <input type="hidden" value="save" name="button" class="btn btn-secondary" />
+                        }
+                        else
+                        {
+                            <input type="hidden" value="upload" name="button" class="btn btn-success" />
+                        }
+                    </div>
+                    <div class="col-md-6">
+                        <input type="submit" value="Upload" class="btn btn-success" />
+                    </div>
+                </div>
+                <div class="row">
+                    @if (Model != null)
+                    {
+                        <div class="col-md-12 my-2"> <hr class="border-success" style="border-top: 1px dashed" /></div>
+                        <div class="col-md-5">
+                            <p class="text-success">Excel Headers</p>
+                            <table id="Brand-list">
+                                <thead>
+                                </thead>
+                                <tbody>
+                                    @foreach (DataColumn col in Model.DataTable.Columns)
+                                    {
+                                        <tr>
+                                            <td>@col.ColumnName</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <input id="FileName" name="FileName" type="hidden" value="@Model.Filename" />
+                            <hr class="border-success" style="border-top: 1px dashed" />
+                        </div>
+                        <div class="col-md-6">
+                            <p class="text-success">Choose Excel Headers</p>
+                            <table id="Database-list" class="w-100">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Alias Name</label>
+                                            <input id="AliasName" name="AliasName" type="text" class="col-md-4" />
+                                            <input id="DBAliasName" name="DBAliasName" type="hidden" class="col-md-3" value="AliasName" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Interacting Compounds</label>
+                                            <input id="InteractingCompounds" name="InteractingCompounds" type="text" class="col-md-4" />
+                                            <input id="DBInteractingCompounds" name="DBInteractingCompounds" type="hidden" class="col-md-3" value="InteractingCompounds" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Intake Indications</label>
+                                            <input id="IntakeIndications" name="IntakeIndications" type="text" class="col-md-4" />
+                                            <input id="DBIntakeIndications" name="DBIntakeIndications" type="hidden" class="col-md-3" value="IntakeIndications" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Intake Contraindication</label>
+                                            <input id="IntakeContraindication" name="IntakeContraindication" type="text" class="col-md-4" />
+                                            <input id="DBIntakeContraindication" name="DBIntakeContraindication" type="hidden" class="col-md-3" value="IntakeContraindication" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Mechanism Of Action</label>
+                                            <input id="MechanismOfAction" name="MechanismOfAction" type="text" class="col-md-4" />
+                                            <input id="DBMechanismOfAction" name="DBMechanismOfAction" type="hidden" class="col-md-3" value="MechanismOfAction" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Indication Treatment Age Group</label>
+                                            <input id="IndicationTreatmentAgeGroup" name="IndicationTreatmentAgeGroup" type="text" class="col-md-4" />
+                                            <input id="DBIndicationTreatmentAgeGroup" name="DBIndicationTreatmentAgeGroup" type="hidden" class="col-md-3" value="IndicationTreatmentAgeGroup" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Compound Usage Reasons</label>
+                                            <input id="CompoundUsageReasons" name="CompoundUsageReasons" type="text" class="col-md-4" />
+                                            <input id="DBCompoundUsageReasons" name="DBCompoundUsageReasons" type="hidden" class="col-md-3" value="CompoundUsageReasons" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Alcohol</label>
+                                            <input id="Alcohol" name="Alcohol" type="text" class="col-md-4" />
+                                            <input id="DBAlcohol" name="DBAlcohol" type="hidden" class="col-md-3" value="Alcohol" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Pregnancy</label>
+                                            <input id="Pregnancy" name="Pregnancy" type="text" class="col-md-4" />
+                                            <input id="DBPregnancy" name="DBPregnancy" type="hidden" class="col-md-3" value="Pregnancy" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Breastfeeding</label>
+                                            <input id="Breastfeeding" name="Breastfeeding" type="text" class="col-md-4" />
+                                            <input id="DBBreastfeeding" name="DBBreastfeeding" type="hidden" class="col-md-3" value="Breastfeeding" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Driving</label>
+                                            <input id="Driving" name="Driving" type="text" class="col-md-4" />
+                                            <input id="DBDriving" name="DBDriving" type="hidden" class="col-md-3" value="Driving" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                            <div class="col-md-10 text-center my-3">
+                                <input type="submit" value="Submit" class="btn btn-success" />
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+
+
+        <!--
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="form-group">
+                        <input type="file" id="dataFile" name="upload" />
+                    </div>
+                    @if (Model != null)
+                    {
+                        <input type="hidden" value="save" name="button" class="btn btn-secondary" />
+                    }
+                    else
+                    {
+                        <input type="hidden" value="upload" name="button" class="btn btn-success" />
+                    }
+
+                    <div class="form-group">
+                        <input type="submit" value="Upload" class="btn btn-success" />
+                    </div>
+                </div>
+                <div class="row form-group">
+                    @if (Model != null)
+                    {
+                        <div class="col-md-4">
+                            <table id="Brand-list">
+                                <thead>
+                                </thead>
+                                <tbody>
+                                    @foreach (DataColumn col in Model.DataTable.Columns)
+                                    {
+                                        <tr>
+                                            <td>@col.ColumnName</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <input id="FileName" name="FileName" type="hidden" value="@Model.Filename" />
+                        </div>
+                        <div class="col-md-8">
+                            <table id="Database-list" class="w-100">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-3">Alias Name</label>
+                                            <input id="AliasName" name="AliasName" type="text" class="col-md-3" />
+                                            <input id="DBAliasName" name="DBAliasName" type="hidden" class="col-md-3" value="AliasName" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-3">Interacting Compounds</label>
+                                            <input id="InteractingCompounds" name="InteractingCompounds" type="text" class="col-md-3" />
+                                            <input id="DBInteractingCompounds" name="DBInteractingCompounds" type="hidden" class="col-md-3" value="InteractingCompounds" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-3">Intake Indications</label>
+                                            <input id="IntakeIndications" name="IntakeIndications" type="text" class="col-md-3" />
+                                            <input id="DBIntakeIndications" name="DBIntakeIndications" type="hidden" class="col-md-3" value="IntakeIndications" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-3">Intake Contraindication</label>
+                                            <input id="IntakeContraindication" name="IntakeContraindication" type="text" class="col-md-3" />
+                                            <input id="DBIntakeContraindication" name="DBIntakeContraindication" type="hidden" class="col-md-3" value="IntakeContraindication" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-3">Mechanism Of Action</label>
+                                            <input id="MechanismOfAction" name="MechanismOfAction" type="text" class="col-md-3" />
+                                            <input id="DBMechanismOfAction" name="DBMechanismOfAction" type="hidden" class="col-md-3" value="MechanismOfAction" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-3">Indication Treatment Age Group</label>
+                                            <input id="IndicationTreatmentAgeGroup" name="IndicationTreatmentAgeGroup" type="text" class="col-md-3" />
+                                            <input id="DBIndicationTreatmentAgeGroup" name="DBIndicationTreatmentAgeGroup" type="hidden" class="col-md-3" value="IndicationTreatmentAgeGroup" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-3">Compound Usage Reasons</label>
+                                            <input id="CompoundUsageReasons" name="CompoundUsageReasons" type="text" class="col-md-3" />
+                                            <input id="DBCompoundUsageReasons" name="DBCompoundUsageReasons" type="hidden" class="col-md-3" value="CompoundUsageReasons" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-3">Alcohol</label>
+                                            <input id="Alcohol" name="Alcohol" type="text" class="col-md-3" />
+                                            <input id="DBAlcohol" name="DBAlcohol" type="hidden" class="col-md-3" value="Alcohol" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-3">Pregnancy</label>
+                                            <input id="Pregnancy" name="Pregnancy" type="text" class="col-md-3" />
+                                            <input id="DBPregnancy" name="DBPregnancy" type="hidden" class="col-md-3" value="Pregnancy" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-3">Breastfeeding</label>
+                                            <input id="Breastfeeding" name="Breastfeeding" type="text" class="col-md-3" />
+                                            <input id="DBBreastfeeding" name="DBBreastfeeding" type="hidden" class="col-md-3" value="Breastfeeding" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-3">Driving</label>
+                                            <input id="Driving" name="Driving" type="text" class="col-md-3" />
+                                            <input id="DBDriving" name="DBDriving" type="hidden" class="col-md-3" value="Driving" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                            <div class="form-group row ml-3 mt-2">
+                                <input type="submit" value="submit" class="btn btn-success" />
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        -->
+    }
+</div>
+@section Scripts
+    {
+    <script>
+        $(document).ready(function () {
+
+            var tbl = document.getElementById("Brand-list");
+            if (tbl != null) {
+                for (var i = 0; i < tbl.rows.length; i++) {
+                    for (var j = 0; j < tbl.rows[i].cells.length; j++)
+                        tbl.rows[i].cells[j].onclick = function () { getval(this); };
+                }
+            }
+            function getval(cel) {
+                $(function () {
+                    $('#AliasName').on('click', function () {
+                        $('#AliasName').val(cel.innerHTML)
+                    });
+                    $('#InteractingCompounds').on('click', function () {
+                        $('#InteractingCompounds').val(cel.innerHTML)
+                    });
+                    $('#IntakeIndications').on('click', function () {
+                        $('#IntakeIndications').val(cel.innerHTML)
+                    });
+                    $('#IntakeContraindication').on('click', function () {
+                        $('#IntakeContraindication').val(cel.innerHTML)
+                    });
+                    $('#MechanismOfAction').on('click', function () {
+                        $('#MechanismOfAction').val(cel.innerHTML)
+                    });
+                    $('#IndicationTreatmentAgeGroup').on('click', function () {
+                        $('#IndicationTreatmentAgeGroup').val(cel.innerHTML)
+                    });
+                    $('#CompoundUsageReasons').on('click', function () {
+                        $('#CompoundUsageReasons').val(cel.innerHTML)
+                    });
+                    $('#Alcohol').on('click', function () {
+                        $('#Alcohol').val(cel.innerHTML)
+                    });
+                    $('#Pregnancy').on('click', function () {
+                        $('#Pregnancy').val(cel.innerHTML)
+                    });
+                    $('#Breastfeeding').on('click', function () {
+                        $('#Breastfeeding').val(cel.innerHTML)
+                    });
+                    $('#Driving').on('click', function () {
+                        $('#Driving').val(cel.innerHTML)
+                    });
+                });
+            }
+        });
+    </script>
+}
+

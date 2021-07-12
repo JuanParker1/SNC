@@ -1,0 +1,440 @@
+﻿@model ShopNow.ViewModels.FoodEditViewModel
+@{
+    ViewBag.Title = "Dish Edit";
+}
+<title>ShopNow | Dish Update</title>
+
+<style>
+    .textbox-sm {
+        width: 80px;
+    }
+</style>
+
+@*@if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-danger">
+            <h3>Error:</h3>
+            <p>
+                @ViewBag.ErrorMessage
+            </p>
+        </div>
+    }*@
+@using (Html.BeginForm("FoodEdit", "Product", FormMethod.Post, new { id = "ProductForm", role = "form", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="container-fluid mb-3">
+        <div class="row">
+            <div class="col-md-4">
+                <h5 class="text-theme" style="letter-spacing:1px">DISH UPDATE</h5>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="ShopName" id="ShopName" value="@Model.ShopName" readonly />
+                    <input type="hidden" name="ShopCode" id="ShopCode" value="@Model.ShopCode" />
+                    <input type="hidden" name="Code" id="Code" value="@Model.Code" />
+                    <input type="hidden" name="Id" value="@Model.Id" />
+                    <input type="hidden" name="ShopCategoryCode" id="ShopCategoryCode" value="@Model.ShopCategoryCode" />
+                    <input type="hidden" name="ShopCategoryName" id="ShopCategoryName" value="@Model.ShopCategoryName" />
+                    <input type="hidden" name="ProductType" id="ProductType" value="@Model.ProductType" />
+                    <input type="hidden" name="ShortDescription" id="ShortDescription" value="@Model.ShortDescription" />
+                    <input type="hidden" name="LongDescription" id="LongDescription" value="@Model.LongDescription" />
+                </div>
+            </div>
+            <div class="col-md-4 text-right">
+                <a href="/Product/FoodList" class="mr-3"><span class="fa fa-list-ul"></span> Dish List</a>
+                <a href="~/Product/List" target="_blank"><span class="fa fa-list-ul"></span> Full List</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label class="control-label">
+                                    <strong class="text-secondary">Dish Name</strong>
+                                </label>
+                                <div class="form-group">
+                                    <select id="MasterProductCode" name="MasterProductCode" class="form-control" readonly>
+                                        <option value="@Model.MasterProductCode">@Model.MasterProductName</option>
+                                    </select>
+                                    <input type="hidden" name="MasterProductName" id="MasterProductName" value="@Model.MasterProductName" />
+                                    <input type="hidden" name="Name" value="@Model.Name" />
+                                    <input type="hidden" name="MasterProductId" value="@Model.MasterProductId" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label" for="CategoryCode">
+                                    <strong class="text-secondary">Category Name</strong>
+                                </label>
+                                <div class="form-group">
+                                    <input type="text" name="CategoryName" id="CategoryName" class="form-control" value="@Model.CategoryName" readonly />
+                                    <input type="hidden" name="CategoryCode" id="CategoryCode" value="@Model.CategoryCode" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label col-sm-12"><strong class="text-secondary">Food Type</strong></label>
+                                <select class="form-control" name="ColorCode" id="ColorCode">
+                                    <option value="#168138" @if (Model.ColorCode == "#168138") { <text> selected </text> }>Veg</option>
+                                    <option value="#98361c" @if (Model.ColorCode == "#98361c") { <text> selected </text> }>Non-Veg</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label col-sm-12"><strong class="text-secondary">Customisation</strong></label>
+                                <select class="form-control" name="Customisation" id="select-customisation">
+                                    <option value="true" @if (Model.Customisation == true) { <text> selected </text> }>Yes</option>
+                                    <option value="false" @if (Model.Customisation == false) { <text> selected </text> }>No</option>
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="control-label" for="MenuPrice"><strong class="text-secondary">Menu Price</strong></label>
+                                <div class="form-group">
+                                    <input type="number" class="form-control" name="MenuPrice" id="MenuPrice" step="any" min="0" value="@Model.MenuPrice" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label" for="Price"><strong class="text-secondary">Selling Price</strong></label>
+                                <div class="form-group">
+                                    <input type="number" class="form-control" name="Price" id="Price" step="any" min="0" value="@Model.Price" />
+                                    @*<input type="hidden" name="Qty" value="@Model.Qty" />*@
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                @*//new qty*@
+                                <label class="control-label" for="Qty"><strong class="text-secondary">Quantity</strong></label>
+                                <div class="form-group">
+                                    <input type="number" class="form-control" name="Qty" id="Qty" min="0" value="@Model.Qty" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label" for="Percentage"><strong class="text-secondary">Percentage</strong></label>
+                                    <input id="Percentage" type="number" class="form-control" name="Percentage" readonly value="@Model.Percentage" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label"><strong class="text-secondary">Minimum AddOn Limit</strong></label>
+                                <div class="form-group">
+                                    <input type="number" name="MinSelectionLimit" id="MinSelectionLimit" class="form-control" min="0" value="@Model.MinSelectionLimit" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label"><strong class="text-secondary">Maximum AddOn Limit</strong></label>
+                                <div class="form-group">
+                                    <input type="number" name="MaxSelectionLimit" id="MaxSelectionLimit" class="form-control" min="0" value="@Model.MaxSelectionLimit" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label" for="GoogleTaxonomyCode"><strong class="text-secondary">Google Taxonomy Code</strong></label>
+                                <div class="form-group">
+                                    <input id="GoogleTaxonomyCode" type="text" class="form-control" name="GoogleTaxonomyCode" value="@Model.GoogleTaxonomyCode" readonly />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label" for="PackagingType"><strong class="text-secondary">Packing Type</strong></label>
+                                <div class="form-check-inline ml-3">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="PackagingType" value="0" @if(Model.PackagingType == 0) { <text> checked </text> }>Item Qty
+                                    </label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="PackagingType" value="1" @if(Model.PackagingType == 1) { <text> checked </text> }>SKU
+                                    </label>
+                                </div>
+                                <input type="number" class="form-control" name="PackagingCharge" id="PackagingCharge" value="@Model.PackagingCharge" />
+                            </div>
+                        </div>
+                        <div class="d-none" id="divAddOns">
+                            <hr />
+                            <h5 class="text-success">Dish Addons <small>(Choose any one type to select addons)</small></h5>
+                            <div class="row my-3">
+                                <div class="col-md-3">
+                                    <div class="form-check-inline ml-5">
+                                        <label class="form-check-label">
+                                            <input type="radio" class="form-check-input" name="AddOnsType" value="1">Only Portion
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-check-inline">
+                                        <label class="form-check-label">
+                                            <input type="radio" class="form-check-input" name="AddOnsType" value="2">Only Addons
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-check-inline">
+                                        <label class="form-check-label">
+                                            <input type="radio" class="form-check-input" name="AddOnsType" value="3">Portions and Addons
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-check-inline">
+                                        <label class="form-check-label">
+                                            <input type="radio" class="form-check-input" name="AddOnsType" value="4">Step by Step Process
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table class="table table-borderless table-condensed w-100" id="tbl-addOns">
+                                        <thead>
+                                            <tr>
+                                                <th>Portion Name</th>
+                                                <th>Portion Price</th>
+                                                <th>AddOn Category Name</th>
+                                                <th>AddOn Item Name</th>
+                                                <th>AddOn Price</th>
+                                                <th>Selection Name</th>
+                                                <th>Selection Price</th>
+                                                <th>Min</th>
+                                                <th>Max</th>
+                                                <th>On/Off</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                            <hr />
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h5 class="text-success">Dish Image</h5>
+                                <img id="img-ProductImage1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge1" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
+                                <input type="hidden" name="ImagePathLarge1" value="@Model.ImagePathLarge1" />
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-2 mx-auto">
+                                <button type="submit" class="btn btn-block btn-success Save"><span class="glyphicon glyphicon-file"></span> Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@*Image Modal*@
+
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <span class="close" data-dismiss="modal">&times;</span>
+        <img class="modal-content" id="myImage">
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+
+        $(document).ready(function () {
+            $('#tbl-addOns tbody').empty();
+
+            $('#Price').on('change keyup', function () {
+                var menuprice = $("#MenuPrice").val();
+                var sellingprice = $(this).val();
+                var results = Math.ceil(((menuprice - sellingprice) / menuprice) * 100);
+                $("#Percentage").val(results);
+            });
+
+            $('#MenuPrice').on('change keyup', function () {
+                var menuprice = $(this).val();
+                var sellingprice = $('#Price').val();
+                var results = Math.ceil(((menuprice - sellingprice) / menuprice) * 100);
+                $("#Percentage").val(results);
+            });
+
+            //
+
+            var cust = $('#select-customisation').val();
+            if (cust == 'true') {
+                $("#divAddOns").removeClass("d-none");
+            } else {
+                $("#divAddOns").addClass("d-none");
+            }
+
+            $.getJSON('/Product/GetProductDishAddOnsFoodEdit', { masterProductId: @Model.MasterProductId  }, function (data) {
+                if (data != "") {
+                    $.each(data, function (index, item) {
+                        var tableData = '<tr class="d-none type_' + item.AddOnType + '" data-code=' + item.Code + '> \
+                                    <td>' + item.PortionName + '</td> \
+                                    <td><input class="textbox-sm portion-price" type="number" value=' + item.PortionPrice + '></td> \
+                                    <td>' + item.AddOnCategoryName + '</td> \
+                                    <td>' + item.AddOnItemName + '</td> \
+                                    <td><input class="textbox-sm addon-price" type="number" value=' + item.AddOnsPrice + '></td>\
+                                    <td>' + item.CrustName + '</td>\
+                                    <td><input class="textbox-sm crust-price" type="number" value=' + item.CrustPrice + '></td>\
+                                    <td>' + item.MinSelectionLimit + '</td>\
+                                    <td>' + item.MaxSelectionLimit + '</td>\
+                                    <td><input type="checkbox" class="chk-select chk_'+ item.AddOnType + '" value="true" name="IsActive" data-code=' + item.Code + '></td>\
+                                </tr>';
+
+                        $('#tbl-addOns tbody').append(tableData);
+                    });
+                }
+            });
+
+             $.getJSON('/Product/GetShopDishAddOns', { productId: @Model.Id  }, function (data) {
+                if (data != "") {
+                    $.each(data, function (index, item) {
+                        if (item.IsActive == false) {
+                            var tableData = '<tr class="d-none type_' + item.AddOnType + '" data-code=' + item.Code + '> \
+                                    <td>' + item.PortionName + '</td> \
+                                    <td><input class="textbox-sm portion-price" type="number" value=' + item.PortionPrice + '></td> \
+                                    <td>' + item.AddOnCategoryName + '</td> \
+                                    <td>' + item.AddOnItemName + '</td> \
+                                    <td><input class="textbox-sm addon-price" type="number" value=' + item.AddOnsPrice + '></td>\
+                                    <td>' + item.CrustName + '</td>\
+                                    <td><input class="textbox-sm crust-price" type="number" value=' + item.CrustPrice + '></td>\
+                                    <td>' + item.MinSelectionLimit + '</td>\
+                                    <td>' + item.MaxSelectionLimit + '</td>\
+                                    <td><input type="checkbox" class="chk-select chk_' + item.AddOnType + '" value="true" name="IsActive" data-code=' + item.Code + '></td>\
+                                </tr>';
+                            $('#tbl-addOns tbody').append(tableData);
+                        } else {
+                            var tableData = '<tr class="d-none type_' + item.AddOnType + '" data-code=' + item.Code + '> \
+                                    <td>' + item.PortionName + '</td> \
+                                    <td><input class="textbox-sm portion-price" type="number" value=' + item.PortionPrice + '></td> \
+                                    <td>' + item.AddOnCategoryName + '</td> \
+                                    <td>' + item.AddOnItemName + '</td> \
+                                    <td><input class="textbox-sm addon-price" type="number" value=' + item.AddOnsPrice + '></td>\
+                                    <td>' + item.CrustName + '</td>\
+                                    <td><input class="textbox-sm crust-price" type="number" value=' + item.CrustPrice + '></td>\
+                                    <td>' + item.MinSelectionLimit + '</td>\
+                                    <td>' + item.MaxSelectionLimit + '</td>\
+                                    <td><input type="checkbox" class="chk-select chk_' + item.AddOnType + '" value="true" name="IsActive" data-code=' + item.Code + ' data-type="Shop" checked ></td>\
+                                </tr>';
+                            $('#tbl-addOns tbody').append(tableData);
+                        }
+                    });
+                 }
+                 addonDisableCheckbox();
+            });
+
+            $('#select-customisation').on('change', function () {
+                var cust = $('#select-customisation').val();
+                if (cust == 'true') {
+                    $("#divAddOns").removeClass("d-none");
+                } else {
+                    $("#divAddOns").addClass("d-none");
+                }
+            });
+
+            $('[name="AddOnsType"]').on('change', function () {
+                let value = parseInt($(this).val());
+                $('.type_1').addClass('d-none');
+                $('.type_2').addClass('d-none');
+                $('.type_3').addClass('d-none');
+                $('.type_4').addClass('d-none');
+
+                //
+                $('.portion-price').prop('disabled', true);
+                $('.addon-price').prop('disabled', true);
+                $('.crust-price').prop('disabled', true);
+
+                switch (value) {
+                    case 1:
+                        $('.type_1').removeClass('d-none');
+                        $('.portion-price').prop('disabled', false);
+                        break;
+                    case 2:
+                        $('.type_2').removeClass('d-none');
+                        $('.addon-price').prop('disabled', false);
+                        break;
+                    case 3:
+                        $('.type_3').removeClass('d-none');
+                        $('.portion-price').prop('disabled', false);
+                        $('.addon-price').prop('disabled', false);
+                        break;
+                    case 4:
+                        $('.type_4').removeClass('d-none');
+                        $('.portion-price').prop('disabled', false);
+                        $('.addon-price').prop('disabled', false);
+                        $('.crust-price').prop('disabled', false);
+                        break;
+                }
+            });
+
+            $('#tbl-addOns').on('click', '.chk-select', function () {
+                var code = $(this).data('code');
+                var $tr = $(this).closest('tr');
+                var type = $(this).data('type');
+                if (type != "Shop") {
+                    if ($(this).is(':checked') == true) {
+                        addonDisableCheckbox();
+                        let data = {
+                            Code: $(this).data('code'),
+                            PortionPrice: parseFloat($tr.find('.portion-price').val()),
+                            AddOnsPrice: parseFloat($tr.find('.addon-price').val()),
+                            CrustPrice: parseFloat($tr.find('.crust-price').val()),
+                            IsActive: true
+                        }
+                        $.post('/Product/EditShopAddOns', { model: data }, function () { });
+                    } else {
+                        addonDisableCheckbox();
+                        $.post('/Product/RemoveFromEditShopAddOns', { code: code }, function () { });
+                    }
+                } else {
+                    addonDisableCheckbox();
+                    if ($(this).is(':checked') == true) {
+                        addonDisableCheckbox();
+                        let data = {
+                            Code: $(this).data('code'),
+                            PortionPrice: parseFloat($tr.find('.portion-price').val()),
+                            AddOnsPrice: parseFloat($tr.find('.addon-price').val()),
+                            CrustPrice: parseFloat($tr.find('.crust-price').val()),
+                            IsActive: true
+                        }
+                        $.post('/Product/EditShopAddOns', { model: data }, function () { });
+                    } else {
+                        addonDisableCheckbox();
+                        let data = {
+                            Code: $(this).data('code'),
+                            PortionPrice: parseFloat($tr.find('.portion-price').val()),
+                            AddOnsPrice: parseFloat($tr.find('.addon-price').val()),
+                            CrustPrice: parseFloat($tr.find('.crust-price').val()),
+                            IsActive: false
+                        }
+                        $.post('/Product/EditShopAddOns', { model: data }, function () { });
+                    }
+                }
+            });
+
+            function addonDisableCheckbox() {
+                $('.chk_1').prop('disabled', false);
+                $('.chk_2').prop('disabled', false);
+                $('.chk_3').prop('disabled', false);
+                $('.chk_4').prop('disabled', false);
+                if ($('.chk_1:checked').length > 0) {
+                    $('.chk_2').prop('disabled', true);
+                    $('.chk_3').prop('disabled', true);
+                    $('.chk_4').prop('disabled', true);
+                }
+                else if ($('.chk_2:checked').length > 0) {
+                    $('.chk_1').prop('disabled', true);
+                    $('.chk_3').prop('disabled', true);
+                    $('.chk_4').prop('disabled', true);
+                } else if ($('.chk_3:checked').length > 0) {
+                    $('.chk_1').prop('disabled', true);
+                    $('.chk_2').prop('disabled', true);
+                    $('.chk_4').prop('disabled', true);
+                } else if ($('.chk_4:checked').length > 0) {
+                    $('.chk_1').prop('disabled', true);
+                    $('.chk_2').prop('disabled', true);
+                    $('.chk_3').prop('disabled', true);
+                }
+            }
+
+        });
+    </script>
+}
+

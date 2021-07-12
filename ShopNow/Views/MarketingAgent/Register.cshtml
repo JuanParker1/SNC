@@ -1,0 +1,162 @@
+﻿@model ShopNow.ViewModels.MarketingAgentRegisterViewModel
+@{
+    ViewBag.Title = "Marketing Agent Register";
+    Layout = null;
+}
+<title>Marketing Agent | Register</title>
+<link rel="shortcut icon" href="/Images/ShopNowChat Edit.png" type="image/png">
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+<link href="~/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+<link href="~/Scripts/CustomScript/login.css" rel="stylesheet" />
+<script src="~/Scripts/multiple-image-upload.js"></script>
+<link href="~/Content/multiple-image-upload.css" rel="stylesheet" />
+
+<style>
+    .login_btn {
+        background: linear-gradient(to right, #3399ff 0%, #9933ff 100%);
+    }
+        .login_btn:hover {
+            background: linear-gradient(to right, #9933ff 0%, #3399ff 100%);
+        }
+</style>
+
+<body>
+    <form action="Register" method="post" id="MarketingAgentForm" enctype="multipart/form-data">
+        <div class="d-flex align-items-center min-vh-100 py-3 py-md-0">
+            <div class="container">
+                <div class="card login-card">
+                    <div class="row no-gutters">
+                        <div class="col-md-5">
+                            <img src="~/Images/MarketingAgentRegister.jpg" alt="login" class="login-card-img">
+                        </div>
+                        <div class="col-md-7">
+                            <div class="card-body row">
+                                <h4 class="my-3">Marketing Agent Registration</h4>
+                                <div class="col-md-8">
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <label class="col-form-label"><strong class="text-secondary">Name</strong></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" class="form-control" name="Name" id="Name" />
+                                        </div>
+
+                                        <div class="col-md-4 text-md-left">
+                                            <label class="col-form-label"><strong class="text-secondary">Phone</strong></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" class="form-control" name="PhoneNumber" id="PhoneNumber" />
+                                        </div>
+
+                                        <div class="col-md-4 text-md-left">
+                                            <label class="col-form-label"><strong class="text-secondary">Email</strong></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" class="form-control" name="Email" id="Email" />
+                                        </div>
+                                        @*<div class="col-md-4 text-md-left">
+                                            <label class="col-form-label"><strong class="text-secondary">PAN No.</strong></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" class="form-control" name="PanNumber" id="PanNumber" />
+                                        </div>*@
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    @*<div class="row">
+                                        <div class="col-md-12">
+                                            <label class="text-secondary font-weight-bold">PAN Image</label>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="img-upload-container">
+                                                <img class="img-container w-100 h-100" id="img-upload" />
+                                                <input type="file" id="PanImage" name="PanImage" class="d-none" />
+                                                <label for="PanImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            </div>
+                                        </div>
+                                    </div>*@
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="form-group row">
+                                        <div class="col-md-4 text-md-left">
+                                            <label class="col-form-label"><strong class="text-secondary">Password</strong></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="password" class="form-control" name="Password" id="Password" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4 text-md-left">
+                                            <label class="col-form-label"><strong class="text-secondary">Confirm Password</strong></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="password" class="form-control" name="PasswordConfirm" id="PasswordConfirm" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="row">
+                                        <span class="text-danger passwordwrong d-none">Passwords do not match!</span>
+                                        <span class="text-success passwordright d-none">Passwords match.</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="col-md-6 mx-auto">
+                                        <button type="submit" class="btn btn-block login-btn login_btn Save"><span class="glyphicon glyphicon-file"></span>Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('.Save').prop('disabled', true);
+            function checkPasswordMatch() {
+                var password = $("#Password").val();
+                var confirmPassword = $("#PasswordConfirm").val();
+                if (password != confirmPassword) {
+                    $('.Save').prop('disabled', true);
+                    $(".passwordwrong").removeClass("d-none");
+                    $(".passwordright").addClass("d-none");
+                } else {
+                    $('.Save').prop('disabled', false);
+                    $(".passwordwrong").addClass("d-none");
+                    $(".passwordright").removeClass("d-none");
+                }
+            }
+            $("#PasswordConfirm").keyup(checkPasswordMatch);
+
+            $(document).on('change', '.btn-file :file', function () {
+                var input = $(this),
+                    label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+                input.trigger('fileselect', [label]);
+            });
+
+            function readURLPan(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#img-upload').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#PanImage").change(function () {
+                readURLPan(this);
+            });
+        });
+    </script>
+}

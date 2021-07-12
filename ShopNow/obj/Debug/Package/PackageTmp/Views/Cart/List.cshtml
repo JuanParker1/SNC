@@ -1,0 +1,165 @@
+﻿@*@model ShopNow.ViewModels.CartListViewModel*@
+@model IEnumerable<ShopNow.ViewModels.CartListViewModel.CartList>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Cart List";
+}
+<title>ShopNow | Order List</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+
+<div class="container-fluid">
+    <div class="row my-2">
+        <div class="col-md-4">
+            <h5 class="text-success" style="letter-spacing:1px">Order List</h5>
+        </div>        
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-4">
+                    <select name="ShopCode" id="ShopCode" class="form-control"></select>
+                    <input type="hidden" name="ShopName" id="ShopName" />
+                </div>
+                <div class="col-md-2">
+                    <input type="button" class="form-control btn btn-sm btn-success" name="Filter" id="Filter" value="Filter" />
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.Grid(Model).Columns(columns =>
+{
+    columns.Add(c => c.OrderNo).Titled("OrderNo").Filterable(true).SetWidth(10);
+    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
+    columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(20);
+    columns.Add(c => c.PhoneNumber).Titled("Phone").Filterable(true).SetWidth(10);
+    //columns.Add().RenderValueAs(c => c.CartStatus == 2 ? "Pending" : c.CartStatus == 3 ? "Order is being Prepared" : c.CartStatus==4?"Assigned for Delivery. Waiting for Pickup": c.CartStatus==5? "On the Way to Delivery":c.CartStatus==6? "Delivered": c.CartStatus==7?"Cancelled":"N/A").Titled("Order Status").Filterable(true).SetWidth(10);
+    columns.Add(c => c.CartStatusText).Titled("Order Status").Filterable(true).SetWidth(15);
+    columns.Add()
+    .Encoded(false)
+    .Sanitized(false)
+    .RenderValueAs(o => Html.ActionLink("View", "Edit", new { orderno=o.OrderNo, code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code) }, new { @class = "btn btn-vsm btn-info mr-1", @style = "padding: 3px 26px" }).ToHtmlString()).Titled("Action").SetWidth(10);
+}).WithPaging(20).Sortable(true)
+    <!--
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <table class="table table-striped table-hover table-borderless" id="Cart-list">
+                        <thead>
+                            <tr>
+                                <th class="font-weight-bold">No.</th>
+                                <th class="font-weight-bold">Order No.</th>
+                                <th class="font-weight-bold">Shop Name</th>
+                                <th class="font-weight-bold">Delivery Address</th>
+                                <th class="font-weight-bold">PhoneNumber</th>
+                                <th class="font-weight-bold">Order Status</th>
+                                <th class="font-weight-bold text-nowrap">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            foreach (var item in Model.List)
+                            {
+                            <tr>
+                                <td></td>
+                                <td>item.OrderNo</td>
+                                <td>item.ShopName</td>
+                                <td>item.DeliveryAddress</td>
+                                <td>item.PhoneNumber</td>
+                                <td>
+                                    if (item.CartStatus == 2)
+                                    {
+                                        <span class="text-danger">Pending</span>
+                                    }
+                                    else if (item.CartStatus == 3)
+                                    {
+                                        <span class="text-success">Order is being Prepared</span>
+                                    }
+                                    else if (item.CartStatus == 4)
+                                    {
+                                        <span class="text-success">Assigned for Delivery. Waiting for Pickup</span>
+                                    }
+                                    else if (item.CartStatus == 5)
+                                    {
+                                        <span class="text-success">On the Way to Delivery</span>
+                                    }
+                                    else if (item.CartStatus == 6)
+                                    {
+                                        <span class="text-success">Delivered</span>
+                                    }
+                                    else if (item.CartStatus == 7)
+                                    {
+                                        <span class="text-danger">Cancelled</span>
+                                    }
+                                </td>
+                                <td class="text-nowrap">
+                                    <a href="~/Cart/Edit?orderno=item.OrderNo&code=item.Code" class="btn btn-warning btn-sm" style="padding: 3px 16px">View</a>
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    -->
+</div>
+
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script>
+        $(document).ready(function () {
+
+            var t = $('#Cart-list').DataTable({
+                "dom": "<'row'<'col-sm-6'f>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-3'l><'col-sm-4'p>>" +
+                    "<'row'<'col-sm-12'tr>>",
+                "bPaginate": false,
+                "scrollY": 400,
+                "paging": true,
+                "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "ALL"]],
+                "pageLength": 20,
+                initComplete: function (settings, json) {
+                    $('.index input').remove();
+                    $('.action-btn input').remove();
+                    $('.dataTables_filter input').appendTo('.data-search');
+                    $('.dataTables_filter label').remove();
+                    $('.data-search input').attr('placeholder', 'Quick Search');
+                    $('.data-search input').addClass('form-control');
+                    $('.data-search input').removeClass('form-control-sm');
+                },
+            });
+
+            t.on('order.dt search.dt', function () {
+                t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+
+            $('#ShopCode').select2({
+                placeholder: "Search Shop",
+                ajax: {
+                    url: "/Cart/GetShopSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ShopName"]').val(e.params.data.text);
+            });
+
+            $("#Filter").click(function () {
+                var shopcode = $("#ShopCode").val();
+                window.location.href = "/Cart/List/?shopcode=" + shopcode;
+            });
+
+        });
+
+    </script>
+
+}
+

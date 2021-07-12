@@ -1,0 +1,102 @@
+﻿@model ShopNow.ViewModels.MeasurementUnitCreateEditViewModel
+@{
+    ViewBag.Title = "Measurement Unit Entry";
+}
+<title>ShopNow | Measurement Unit Entry</title>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <h5 class="mt-1 text-success" style="letter-spacing:1px">Measurement Unit Entry</h5>
+        </div>
+        <div class="col-md-6 text-right">
+            <a href="~/MeasurementUnit/List" target="_blank"><span class="fa fa-bars"></span>Measurement Unit List</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            @using (Html.BeginForm("Create", "MeasurementUnit", FormMethod.Post, new { id = "MeasurementUnitForm" }))
+            {
+                <div class="card">
+                    <div class="card-body">
+                        @Html.AntiForgeryToken()
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label class="col-form-label"><strong class="text-secondary">Unit Name</strong></label>
+                                <input id="UnitName" type="text" class="form-control" name="UnitName" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="col-form-label"><strong class="text-secondary">Unit Symbol</strong></label>
+                                <input id="UnitSymbol" type="text" class="form-control" name="UnitSymbol" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="col-form-label"><strong class="text-secondary">Unit Type</strong></label>
+                                <input id="UnitType" type="text" class="form-control" name="UnitType" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="col-form-label"><strong class="text-secondary">Conversion Unit</strong></label>
+                                <input id="ConversionUnit" type="text" class="form-control" name="ConversionUnit" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="col-form-label"><strong class="text-secondary">Conversion Formula</strong></label>
+                                <input id="ConversionFormula" type="text" class="form-control" name="ConversionFormula" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="col-form-label"><strong class="text-secondary">Type</strong></label>
+                                <select name="Type" class="form-control" id="Type">
+                                    <option value="0">Select Type</option>
+                                    <option value="1">Medical</option>
+                                    <option value="2">FMCG</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4 mx-auto">
+                                <button type="button" class="btn btn-block btn-success Save" id="Create"><span class="glyphicon glyphicon-file"></span> Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script src="~/Scripts/ValidateRequiredFields.js"></script>
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            $('#Create').on('click', function () {
+                var isValidated = false;
+                var requiredArr = [
+                    'UnitName',
+                    'UnitSymbol',
+                    'UnitType',
+                    'Type'
+                ];
+                isValidated = ValidateEmptyRequiredFiels(requiredArr);
+
+                if (isValidated) {
+                    var name = $("#UnitName").val();
+                    $.getJSON("/MeasurementUnit/GetUnitName", { name: name }, function (data) {
+                        if (data == true) {
+                            swal("Measurement Unit Name Already Exist!", "", "warning")
+                        }
+                        else {
+                            $($(this)).prop('disabled', true);
+                            $('#MeasurementUnitForm').submit();
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}

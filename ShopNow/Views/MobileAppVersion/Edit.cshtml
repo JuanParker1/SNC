@@ -1,0 +1,98 @@
+﻿@model ShopNow.ViewModels.MobileAppVersionEditViewModel
+
+
+@{
+	ViewBag.Title = "MobileApp Version Edit";
+}
+
+@section Styles
+{
+	<link href="~/Content/theme-purchases.css" rel="stylesheet" />
+}
+
+
+<div class="container-fluid my-4">
+	<div class="row">
+
+		<div class="col-3">
+			<div class="card  left-panel">
+				<div class="card-header">
+					<h6 class="card-title"><i class="fa fa-fw fa-link"></i> Quick Links</h6>
+				</div>
+				<div class="card-body">
+					<ul>
+						<li><a href="~/"><i class="fa fa-fw fa-tachometer"></i> Dashboard</a></li>
+						<li><a href="~/MobileAppVersion/index"><i class="fa fa-fw fa-list"></i> MobileApp Version List</a></li>
+					</ul>
+				</div>
+			</div>
+
+		</div>
+		@*@section RightPanel
+			{
+							<div class="panel panel-default right-panel">
+								<div class="panel-heading" id="borders">
+									<h3 class="panel-title"><i class="fa fa-fw fa-thumbs-up"></i> Actions</h3>
+								</div>
+								<div class="panel-body">
+									<button type="button" class="btn btn-block btn-success Save"><span class="glyphicon glyphicon-file"></span> Save</button>
+								</div>
+							</div>
+						}*@
+
+		<div class="col-9">
+
+			@using (Html.BeginForm("Edit", "MobileAppVersion", FormMethod.Post, new { id = "MobileAppVersionForm" }))
+
+
+			{
+				<div class="card panel-default">
+					<div class="card-header">
+						<h3 class="card-title">Edit</h3>
+					</div>
+					<div class="card-body">
+						@Html.AntiForgeryToken()
+
+						<div class="form-horizontal">
+
+							@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+							@Html.HiddenFor(model => model.Code)
+
+
+
+							<div class="form-group">
+								@Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+								<div class="col-md-10">
+									@Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+									@Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+								</div>
+							</div>
+
+							<div class="form-group">
+								@Html.LabelFor(model => model.Version, htmlAttributes: new { @class = "control-label col-md-2" })
+								<div class="col-md-10">
+									@Html.EditorFor(model => model.Version, new { htmlAttributes = new { @class = "form-control" } })
+									@Html.ValidationMessageFor(model => model.Version, "", new { @class = "text-danger" })
+								</div>
+							</div>
+
+
+
+							<div class="form-group">
+								<div class="col-md-offset-2 col-md-10">
+									<input type="submit" value="Save" class="btn btn-default" />
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+
+
+			}
+		</div>
+
+	</div>
+
+</div>

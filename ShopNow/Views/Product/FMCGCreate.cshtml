@@ -1,0 +1,315 @@
+﻿@model ShopNow.ViewModels.FMCGCreateEditViewModel
+@{
+    ViewBag.Title = "FMCG Entry";
+}
+<title>ShopNow | @ViewBag.Title</title>
+<div class="container-fluid">
+    <div class="row my-2">
+        <div class="col-md-6">
+            <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+        </div>
+        <div class="col-md-6 text-right">
+            <a href="~/Product/FMCGList" target="_blank" class="mr-3"><span class="fa fa-list-ul"></span> FMCG List</a>
+            <a href="~/Product/List" target="_blank"><span class="fa fa-list-ul"></span> Full List</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            @using (Html.BeginForm("FMCGCreate", "Product", FormMethod.Post, new { id = "FMCGCreateForm", enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="col-md-12">
+                            <div class="form-group row">
+                                <div class="col-md-2 text-md-left">
+                                    <label class="col-form-label text-secondary font-weight-bold">Shop Name</label>
+                                </div>
+                                <div class="col-md-4">
+                                    <select id="ShopCode" name="ShopCode" class="form-control"></select>
+                                    <input type="hidden" name="ShopName" id="ShopName" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <div class="col-md-3">
+                                        <label class="col-form-label"><strong class="text-secondary">FMCG Name</strong></label>
+                                        <select name="MasterProductCode" id="MasterProductCode" class="form-control"></select>
+                                        <input type="hidden" name="MasterProductName" id="MasterProductName" />
+                                        <input type="hidden" name="MasterProductId" id="MasterProductId" />
+                                        <input type="hidden" name="Name" id="Name" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="col-form-label"><strong class="text-secondary">Brand Name</strong></label>
+                                        <input type="text" class="form-control" name="BrandName" id="BrandName" readonly />
+                                        <input type="hidden" name="BrandCode" id="BrandCode" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="col-form-label"><strong class="text-secondary">Category Name</strong></label>
+                                        <input type="text" class="form-control" name="CategoryName" id="CategoryName" readonly />
+                                        <input type="hidden" name="CategoryCode" id="CategoryCode" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="col-form-label"><strong class="text-secondary">Sub Category I Name</strong></label>
+                                        <input type="text" class="form-control" name="SubCategoryName" id="SubCategoryName" readonly />
+                                        <input type="hidden" name="SubCategoryCode" id="SubCategoryCode" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="col-form-label"><strong class="text-secondary">Sub Category II Name</strong></label>
+                                        <input type="text" class="form-control" name="NextSubCategoryName" id="NextSubCategoryName" readonly />
+                                        <input type="hidden" name="NextSubCategoryCode" id="NextSubCategoryCode" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="col-form-label" for="Price"><strong class="text-secondary">Menu Price</strong></label>
+                                        <input id="MenuPrice" type="number" class="form-control" name="MenuPrice" step="any" min="0" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="col-form-label" for="Price"><strong class="text-secondary">Selling Price</strong></label>
+                                        <input id="Price" type="number" class="form-control" name="Price" step="any" min="0" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="col-form-label" for="Qty"><strong class="text-secondary">Quantity</strong></label>
+                                        <input id="Qty" type="number" class="form-control" name="Qty" min="0" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label" for="Percentage"><strong class="text-secondary">Percentage</strong></label>
+                                            <input id="Percentage" type="number" class="form-control" name="Percentage" readonly />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="col-form-label" for="Weight"><strong class="text-secondary">Weight</strong></label>
+                                        <input id="weight" type="number" class="form-control" name="weight" step="any" min="0" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="col-form-label" for="SizeLB"><strong class="text-secondary">Size LB</strong></label>
+                                        <input id="SizeLB" type="text" class="form-control" name="SizeLB" min="0" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label><strong class="text-secondary">Measurement Unit Name</strong></label>
+                                        <input type="text" class="form-control" name="MeasurementUnitName" id="MeasurementUnitName" readonly />
+                                        <input type="hidden" name="MeasurementUnitCode" id="MeasurementUnitCode" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="col-form-label" for="PackageCode"><strong class="text-secondary">Package Name</strong></label>
+                                        <input type="text" class="form-control" name="PackageName" id="PackageName" readonly />
+                                        <input type="hidden" name="PackageCode" id="PackageCode" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="col-form-label"><strong class="text-secondary">ASIN / EAN</strong></label>
+                                        <input id="ASIN" type="text" class="form-control" name="ASIN" readonly />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="col-form-label" for="GoogleTaxonomyCode"><strong class="text-secondary">Google Taxonomy Code</strong></label>
+                                        <input id="GoogleTaxonomyCode" type="text" class="form-control" name="GoogleTaxonomyCode" readonly />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="control-label" for="PackagingType"><strong class="text-secondary">Packing Type</strong></label>
+                                        <div class="form-check-inline ml-3">
+                                            <label class="form-check-label">
+                                                <input type="radio" class="form-check-input" name="PackagingType" value="0" checked>Item Qty
+                                            </label>
+                                        </div>
+                                        <div class="form-check-inline">
+                                            <label class="form-check-label">
+                                                <input type="radio" class="form-check-input" name="PackagingType" value="1">SKU
+                                            </label>
+                                        </div>
+                                        <input type="number" class="form-control" name="PackagingCharge" id="PackagingCharge" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-12  form-group">
+                                        <label class="col-form-label" for="ShortDescription"><strong class="text-secondary">Short Description</strong></label>
+                                        <input id="ShortDescription" type="text" class="form-control" name="ShortDescription" min="0" readonly />
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        <label class="control-label"><strong class="text-secondary">Long Description</strong></label>
+                                        <textarea class="form-control" id="LongDescription" name="LongDescription" rows="8" cols="50" readonly></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-4 form-group">
+                                        <label class="control-label text-secondary font-weight-bold ml-2">FMCG Image1</label>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <img class="img-container" id="img-FMCGLargeImage1" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
+                                                <input type="hidden" name="ImagePathLarge1" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <label class="control-label text-secondary font-weight-bold ml-2">FMCG Image2</label>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <img class="img-container" id="img-FMCGLargeImage2" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
+                                                <input type="hidden" name="ImagePathLarge2" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <label class="control-label text-secondary font-weight-bold ml-2">FMCG Image3</label>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <img class="img-container" id="img-FMCGLargeImage3" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
+                                                <input type="hidden" name="ImagePathLarge3" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <label class="control-label text-secondary font-weight-bold ml-2">FMCG Image4</label>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <img class="img-container" id="img-FMCGLargeImage4" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
+                                                <input type="hidden" name="ImagePathLarge4" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <label class="control-label text-secondary font-weight-bold ml-2">FMCG Image5</label>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <img class="img-container" id="img-FMCGLargeImage5" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
+                                                <input type="hidden" name="ImagePathLarge5" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2 mx-auto">
+                                <button type="button" class="btn btn-block btn-success Save" id="Create"><span class="glyphicon glyphicon-file"></span> Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script src="~/Scripts/ValidateRequiredFields.js"></script>
+    <script src="~/Scripts/multiple-image-upload.js"></script>
+    <link href="~/Content/multiple-image-upload.css" rel="stylesheet" />
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+
+    <script>
+
+        $(document).ready(function () {
+            var errormsg = "@ViewBag.ErrorMessage";
+            var msg = "@ViewBag.Message";
+            if (errormsg != "") {
+                swal("Notice!", errormsg, "error")
+            }
+            if (msg != "") {
+                swal("Success!", msg, "success")
+            }
+
+            $('#Price').on('change keyup', function () {
+                var menuprice = $("#MenuPrice").val();
+                var sellingprice = $(this).val();
+                var results = Math.ceil(((menuprice - sellingprice) / menuprice) * 100);
+                $("#Percentage").val(results);
+            });
+
+            $('#MenuPrice').on('change keyup', function () {
+                var menuprice = $(this).val();
+                var sellingprice = $('#Price').val();
+                var results = Math.ceil(((menuprice - sellingprice) / menuprice) * 100);
+                $("#Percentage").val(results);
+            });
+
+            $('#ShopCode').select2({
+                placeholder: "Search Shop",
+                ajax: {
+                    url: "/Product/GetShopSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ShopName"]').val(e.params.data.text);
+            });
+
+            $('#MasterProductCode').select2({
+                placeholder: "Search Product",
+                ajax: {
+                    url: "/Product/GetFMCGSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="MasterProductName"]').val(e.params.data.text);
+                $('input[name="MasterProductId"]').val(e.params.data.MasterId);
+                $('input[name="Name"]').val(e.params.data.text);
+                $('#BrandCode').val(e.params.data.BrandCode);
+                $('#BrandName').val(e.params.data.BrandName);
+                $('#ASIN').val(e.params.data.ASIN);
+                $('#CategoryCode').val(e.params.data.CategoryCode);
+                $('#CategoryName').val(e.params.data.CategoryName);
+                $('#SubCategoryCode').val(e.params.data.SubCategoryCode);
+                $('#SubCategoryName').val(e.params.data.SubCategoryName);
+                $('#NextSubCategoryCode').val(e.params.data.NextSubCategoryCode);
+                $('#NextSubCategoryName').val(e.params.data.NextSubCategoryName);
+                $('#GoogleTaxonomyCode').val(e.params.data.GoogleTaxonomyCode);
+                $('#img-FMCGLargeImage1').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePathLarge1);
+                $('#img-FMCGLargeImage2').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePathLarge2);
+                $('#img-FMCGLargeImage3').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePathLarge3);
+                $('#img-FMCGLargeImage4').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePathLarge4);
+                $('#img-FMCGLargeImage5').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePathLarge5);
+                $('input[name="ImagePathLarge1"]').val(e.params.data.ImagePathLarge1);
+                $('input[name="ImagePathLarge2"]').val(e.params.data.ImagePathLarge2);
+                $('input[name="ImagePathLarge3"]').val(e.params.data.ImagePathLarge3);
+                $('input[name="ImagePathLarge4"]').val(e.params.data.ImagePathLarge4);
+                $('input[name="ImagePathLarge5"]').val(e.params.data.ImagePathLarge5);
+                $('#Price').val(e.params.data.Price);
+                $('#Weight').val(e.params.data.weight);
+                $('#SizeLB').val(e.params.data.SizeLB);
+                $('#ShortDescription').val(e.params.data.ShortDescription);
+                $('#LongDescription').val(e.params.data.LongDescription);
+                $('input[name="MeasurementUnitCode"]').val(e.params.data.MeasurementUnitCode);
+                $('input[name="MeasurementUnitName"]').val(e.params.data.MeasurementUnitName);
+                $('input[name="PackageCode"]').val(e.params.data.PackageCode);
+                $('input[name="PackageName"]').val(e.params.data.PackageName);
+
+            });
+
+
+            $(".Save").click(function () {
+                var shopcode = $("#ShopCode").val();
+                if (shopcode != null) {
+                    if ($('#MasterProductCode').val()) {
+                        $('#FMCGCreateForm').submit();
+                    } else {
+                        swal("Notice!", "Please Select FMCG!", "warning");
+                    }
+                } else {
+                    swal("Notice!", "Please Select Shop!", "warning");
+                }
+            });
+
+        });
+    </script>
+}

@@ -1,0 +1,150 @@
+﻿@model ShopNow.ViewModels.DrugCompoundDetailCreateEditViewModel
+@{
+    ViewBag.Title = "Drug Compound Detail Entry";
+}
+<title>ShopNow | Drug Compound Detail Entry</title>
+<div class="container-fluid">
+    <div class="row my-2">
+        <div class="col-md-6">
+            <h5 class="text-success" style="letter-spacing:1px">Drug Compound Detail Create</h5>
+        </div>
+        <div class="col-md-6 text-right">
+            <a href="~/DrugCompoundDetail/List" target="_blank"><span class="fa fa-bars"></span> Drug Compound Detail List</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            @using (Html.BeginForm("Create", "DrugCompoundDetail", FormMethod.Post, new { id = "DrugCompoundDetailForm" }))
+            {
+                <div class="card">                    
+                    <div class="card-body">
+                        @Html.AntiForgeryToken()
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label class="control-label"><strong class="text-secondary">Alias Name</strong></label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="AliasName" id="AliasName" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label"><strong class="text-secondary">Interacting Compounds</strong></label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="InteractingCompounds" id="InteractingCompounds" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label"><strong class="text-secondary">Intake Indications</strong></label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="IntakeIndications" id="IntakeIndications" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label"><strong class="text-secondary">Intake Contraindication</strong></label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="IntakeContraindication" id="IntakeContraindication" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label"><strong class="text-secondary">Mechanism Of Action</strong></label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="MechanismOfAction" id="MechanismOfAction" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label"><strong class="text-secondary">Indication Treatment Age Group</strong></label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="IndicationTreatmentAgeGroup" id="IndicationTreatmentAgeGroup" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label"><strong class="text-secondary">Compound Usage Reasons</strong></label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="CompoundUsageReasons" id="CompoundUsageReasons" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label"><strong class="text-secondary">Alcohol</strong></label>
+                                    <select class="form-control" name="Alcohol" id="Alcohol">
+                                        <option value="Select">Select</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label"><strong class="text-secondary">Pregnancy</strong></label>
+                                    <select class="form-control" name="Pregnancy" id="Pregnancy">
+                                        <option value="Select">Select</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label"><strong class="text-secondary">Breast Feeding</strong></label>
+                                    <select class="form-control" name="Breastfeeding" id="Breastfeeding">
+                                        <option value="Select">Select</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label"><strong class="text-secondary">Driving</strong></label>
+                                    <select class="form-control" name="Driving" id="Driving">
+                                        <option value="Select">Select</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-md-2 mx-auto">
+                                <button type="button" class="btn btn-block btn-success Save" id="Create"><span class="glyphicon glyphicon-file"></span> Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script src="~/Scripts/ValidateRequiredFields.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#Create').on('click', function () {
+                var isValidated = false;
+                var requiredArr = [
+                    'AliasName',
+                    'InteractingCompounds',
+                    'IntakeIndications',
+                    'IntakeContraindication',
+                    'MechanismOfAction',
+                    'IndicationTreatmentAgeGroup',
+                    'CompoundUsageReasons'
+                ];
+                isValidated = ValidateEmptyRequiredFiels(requiredArr);
+
+                if (isValidated) {
+                    $('#DrugCompoundDetailForm').submit();
+                }
+            });
+
+        });
+    </script>
+}

@@ -1,0 +1,147 @@
+﻿@model ShopNow.ViewModels.ProductEditViewModel
+@{
+
+    ViewBag.Title = "Product Details";
+}
+<title>ShopNow | Product Details</title>
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">
+        <h3>Error:</h3>
+        <p>
+            @ViewBag.ErrorMessage
+        </p>
+    </div>
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <h5 class="text-theme" style="letter-spacing:1px">PRODUCT DETAILS</h5>
+        </div>
+        <div class="col-md-6 text-right">
+            <a href="~/Product/List" target="_blank"><span class="fa fa-bars"></span>&nbsp;Product List</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            @Html.AntiForgeryToken()
+            <div class="card">                
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="col-form-label"><strong class="text-secondary">Product Image</strong></label>
+                            <div class="col-md-12">
+                                <a href="~/Home/ImageDenied">
+                                    <img id='img-upload' src="@Model.ImagePath" class="" />
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="font-weight-normal" style="font-size:25px">
+                                @if (Model.MasterProductName != null)
+                                {
+                                    <span class="font-weight-bold text-dark"> @Model.MasterProductName</span>
+                                }
+                                else
+                                {
+                                    <span class="font-weight-bold text-dark"> @Model.Name</span>
+                                }
+                            </p>
+
+                            <p>
+                                By
+                                @if (Model.BrandName != null || Model.BrandName != "")
+                                {
+                                    <span class="text-info font-weight-bold"> @Model.BrandName</span>
+                                }
+                                else
+                                {
+                                    <span class="font-weight-bold text-dark"> N/A</span>
+                                }
+                                in
+                                @if (Model.CategoryName != null)
+                                {
+                                    <span class="text-info font-weight-bold"> @Model.CategoryName</span>
+                                }
+                                else
+                                {
+                                    <span class="font-weight-bold text-dark"> N/A</span>
+                                }
+                            </p>
+                            <p>
+                                M.R.P:
+                                @if (Model.Price != 0)
+                                {
+                                    <span class="font-weight-bold text-dark"> @Model.Price / @Model.Qty piece(s)</span>
+                                }
+                                else
+                                {
+                                    <span class="font-weight-bold text-dark"> N/A</span>
+                                }
+
+                            </p>
+                            <p>
+                                <label class="control-label"><strong class="text-secondary">Shop Name: </strong></label>
+                                @if (ViewBag.user != null)
+                                {
+                                    @ViewBag.user
+                                }
+                                else
+                                {
+                                    <span class="font-weight-bold text-dark"> @Model.ShopName</span>
+                                }
+
+                            </p>
+                            <p>
+                                <label class="control-label"><strong class="text-secondary">Short Description: </strong></label>
+                            </p>
+                            <p>
+                                @if (Model.ShortDescription != null)
+                                {
+                                    <span class="font-weight-normal text-dark"> @Model.ShortDescription</span>
+                                }
+                                else
+                                {
+                                    <span class="font-weight-bold text-dark"> N/A</span>
+                                }
+                            </p>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="control-label"><strong class="text-secondary">Long Description: </strong></label>
+
+                            @if (Model.LongDescription != null)
+                            {
+                                <span class="font-weight-normal text-dark ml-3"> @Html.Raw(Model.LongDescription)</span>
+                            }
+                            else
+                            {
+                                <span class="font-weight-bold text-dark"> N/A</span>
+                            }
+                            <hr />
+                            <label class="control-label"><strong class="text-secondary">Specification: </strong></label>
+                            @if (Model.Specification != null)
+                            {
+                                <span class="font-weight-bold text-dark"> @Html.Raw(Model.Specification)</span>
+                            }
+                            else
+                            {
+                                <span class="font-weight-bold text-dark"> N/A</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+
+
+}
+

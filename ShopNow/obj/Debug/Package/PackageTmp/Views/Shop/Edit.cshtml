@@ -1,0 +1,2467 @@
+﻿@model ShopNow.ViewModels.ShopEditViewModel
+@{
+    ViewBag.Title = "Shop Edit";
+}
+<title>ShopNow | Shop Update</title>
+<style>
+
+    #map {
+        height: 100%;
+        position: inherit;
+    }
+
+    .btn-file {
+        position: relative;
+        overflow: hidden;
+    }
+
+        .btn-file input[type=file] {
+            position: absolute;
+            top: 0;
+            right: 0;
+            min-width: 100%;
+            min-height: 100%;
+            font-size: 100px;
+            text-align: right;
+            filter: alpha(opacity=0);
+            opacity: 0;
+            outline: none;
+            background: white;
+            cursor: inherit;
+            display: block;
+        }
+
+    .selBox {
+        width: 200% !important;
+        height: 100% !important;
+    }
+</style>
+<div class="px-3 row col-md-12">
+    <div class="col-md-6 row text-center">
+        @if (Model.Status == 1 && Model.Verify == false && Model.ManualPhoneNumber != "")
+        {
+            <div class="col-md-4 generateOTP">
+                <button type="button" id="OTP" class="btn btn-block btn-success">Generated OTP</button>
+            </div>
+            <div class="col-md-4 generateOTP">
+                <input type="text" class="form-control" id="OTPNumber" name="OTPNumber" value="@Model.Otp" readonly />
+            </div>
+        }
+        @if (Model.Status == 1 && Model.Verify == false)
+        {
+            <div class="col-md-12 d-none documentVerifyPending">
+                <div class="alert alert-danger font-weight-bold p-2">Document Verification Pending!</div>
+            </div>
+            <div class="col-md-6 mt-2 d-none verifyOTP">
+                <h6 class="text-success"> OTP Verified</h6>
+            </div>
+        }
+        @*@if (Model.Status == 1 && ViewBag.count >= 10)
+            {
+                <div class="col-md-6 d-none verifyOTP">
+                    <a href="~/Shop/Activate?code=@Model.Code" class="btn btn-success">Activate</a>
+                </div>
+
+            }*@
+        @if (Model.Status == 1 && Model.Verify == true)
+        {
+            <div class="col-md-12 NotverifyOTP">
+                <div class="alert alert-warning font-weight-bold p-2">Please Go to <a href="https://shopnowpay.com/" target="_blank">ShopNowPay</a> and Enter your Products for Shop Activation.</div>
+            </div>
+        }
+    </div>
+    @if (Model.Status == 1 && Model.Verify == true && Model.Password == null)
+    {
+        <div class="row text-center generatePassword">
+            <div class="col-md-6">
+                <button type="button" id="GeneratePassword" class="btn btn-success">Generate Password</button>
+            </div>
+            <div class="col-md-6">
+                <input type="text" class="form-control" id="Password" value="@Model.Password" readonly />
+            </div>
+        </div>
+    }
+    @if (Model.Status == 1 && Model.Verify == false && Model.ManualPhoneNumber != "")
+    {
+        <div class="col-md-5 PhoneVerify">
+            <h6 class="text-success">Phone Verification</h6>
+            <span>CALL from <span class="text-danger">@Model.PhoneNumber</span> TO <span class="text-warning">04448134440</span></span><br /><span>and verify your Phone number</span>
+        </div>
+    }
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <h5 class="text-success" style="letter-spacing:1px">SHOP UPDATE</h5>
+        </div>
+        <div class="col-md-6 text-right">
+            <a href="~/Shop/List" target="_blank"><span class="fa fa-bars"></span>&nbsp;Shop List</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            @using (Html.BeginForm("Edit", "Shop", FormMethod.Post, new { id = "ShopForm", role = "form", enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="Code" id="Code" value="@Model.Code" />
+                <input type="hidden" name="ImageLogoPath" value="@Model.ImageLogoPath" />
+                <input type="hidden" name="ImageBannerPath" value="@Model.ImageBannerPath" />
+                <input type="hidden" name="ImagePath" value="@Model.ImagePath" />
+                <input type="hidden" name="ImageAadharPath" id="ImageAadharPath" value="@Model.ImageAadharPath" />
+                <input type="hidden" name="ImageAccountPath" id="ImageAccountPath" value="@Model.ImageAccountPath" />
+                <input type="hidden" name="ImageGSTINPath" id="ImageGSTINPath" value="@Model.ImageGSTINPath" />
+                <input type="hidden" name="ImagePanPath" id="ImagePanPath" value="@Model.ImagePanPath" />
+                <input type="hidden" name="ImageFSSAIPath" id="ImageFSSAIPath" value="@Model.ImageFSSAIPath" />
+                <input type="hidden" name="ImageDrugPath" id="ImageDrugPath" value="@Model.ImageDrugPath" />
+                <input type="hidden" name="ImageEstablishPath" id="ImageEstablishPath" value="@Model.ImageEstablishPath" />
+                <input type="hidden" name="ImageOtherLicensePath" id="ImageOtherLicensePath" value="@Model.ImageOtherLicensePath" />
+                <input type="hidden" name="ImageAuthoriseBrandPath" id="ImageAuthoriseBrandPath" value="@Model.ImageAuthoriseBrandPath" />
+                <input type="hidden" name="Count" id="Count" value="@Model.Count" />
+                <input type="hidden" name="CustomerCode" id="CustomerCode" value="@Model.CustomerCode" />
+                <input type="hidden" name="CustomerName" id="CustomerName" value="@Model.CustomerName" />
+                <input type="hidden" name="Status" id="Status" value="@Model.Status" />
+
+                <div class="card mb-4">
+                    <div class="card-body row">
+                        <div class="col-md-6">
+                            <div class="row ml-2">
+                                <input class="col-11 mb-2" id="pac-input" type="text" placeholder="Select your Shop" />
+                                <div id="location-error"></div>
+                                <div class="mb-4" id="map" style="width: 92%; height: 250px;"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Name</strong></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input id="Name" type="text" class="form-control" name="Name" value="@Model.Name" />
+                                </div>
+                            </div>
+                            <div class="form-group row mobile">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Mobile Number</strong></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input id="PhoneNumber" type="text" class="form-control" name="PhoneNumber" value="@Model.PhoneNumber" readonly />
+                                </div>
+                            </div>
+                            <div class="form-group row d-none manualmobile">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Mobile Number</strong></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input id="ManualPhoneNumber" type="text" class="form-control" name="ManualPhoneNumber" value="@Model.ManualPhoneNumber" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Official Email</strong></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input id="OfficialEmail" type="text" class="form-control" name="OfficialEmail" value="@Model.OfficialEmail" />
+                                </div>
+                            </div>
+                            <div class="form-group row website">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Website</strong></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input id="Website" type="text" class="form-control" name="Website" value="@Model.Website" readonly />
+                                </div>
+                            </div>
+                            <div class="form-group row d-none manualwebsite">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Manual Website</strong></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input id="ManualWebsite" type="text" class="form-control" name="ManualWebsite" value="@Model.ManualWebsite" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Shop Type</strong></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <select id="ShopCategoryCode" name="ShopCategoryCode" class="form-control" style="width:100%;">
+                                        <option value="@Model.ShopCategoryCode">@Model.ShopCategoryName</option>
+                                    </select>
+                                    <input type="hidden" name="ShopCategoryName" id="ShopCategoryName" value="@Model.ShopCategoryName" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Address</strong></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input id="Address" type="text" class="form-control" placeholder="Address" name="Address" value="@Model.Address" readonly />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4 text-md-left">
+                                </div>
+                                <div class="col-md-4">
+                                    <small class="control-label col-sm-12" for="StreetName"><i class="text-secondary">Locality</i></small>
+                                    <input id="StreetName" type="text" class="form-control mb-2" placeholder="Street Name" name="StreetName" value="@Model.StreetName" readonly />
+                                </div>
+                                <div class="col-md-4">
+                                    <small class="control-label col-sm-12" for="DistrictName"><i class="text-secondary">District</i></small>
+                                    <input id="DistrictName" type="text" class="form-control" placeholder="District Name" name="DistrictName" value="@Model.DistrictName" readonly />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4 text-md-left">
+                                </div>
+                                <div class="col-md-4">
+                                    <small class="control-label col-sm-12" for="StateName"><i class="text-secondary">State / Province</i></small>
+                                    <input id="StateName" type="text" class="form-control mb-2" placeholder="State Name" name="StateName" value="@Model.StateName" readonly />
+                                </div>
+                                <div class="col-md-4">
+                                    <small class="control-label col-sm-12" for="CountryName"><i class="text-secondary">Country</i></small>
+                                    <input id="CountryName" type="text" class="form-control" placeholder="Country Name" name="CountryName" value="@Model.CountryName" readonly />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4 text-md-left">
+                                </div>
+                                <div class="col-md-4">
+                                    <small class="control-label col-sm-12" for="PinCode"><i class="text-secondary">PIN Code</i></small>
+                                    <input id="PinCode" type="text" class="form-control" placeholder="PIN Code" name="PinCode" value="@Model.PinCode" readonly />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Location</strong></label>
+                                </div>
+                                <div class="col-md-4">
+                                    <small class="control-label col-sm-12" for="Latitude"><i class="text-secondary">Latitude</i></small>
+                                    <input id="Latitude" type="text" class="form-control mb-2" placeholder="Latitude" name="Latitude" value="@Model.Latitude" readonly />
+                                </div>
+                                <div class="col-md-4">
+                                    <small class="control-label col-sm-12" for="Longitude"><i class="text-secondary">Longitude</i></small>
+                                    <input id="Longitude" type="text" class="form-control" placeholder="Longitude" name="Longitude" value="@Model.Longitude" readonly />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label class="col-form-label"><strong class="text-secondary">IP Address</strong></label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input id="IpAddress" type="text" class="form-control" placeholder="IP Address" name="IpAddress" value="@Model.IpAddress" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label class="text-secondary font-weight-bold ml-2">Shop Image</label><br />
+                                    <div class="img-upload-container">
+                                        <a href="~/Home/ImageDenied">
+                                            <img class="img-container w-100 h-100" id="img-upload" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath" onerror="this.src='/Images/No Photo.png'" />
+                                            <input type="file" id="ShopImage" name="ShopImage" class="d-none" />
+                                            <label for="ShopImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="text-secondary font-weight-bold ml-2">Logo Image</label><br />
+                                    <div class="img-upload-container">
+                                        <a href="~/Home/ImageDenied">
+                                            <img class="img-container w-100 h-100" id="img-logo" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageLogoPath" onerror="this.src='/Images/No Photo.png'" />
+                                            <input type="file" id="LogoImage" name="LogoImage" class="d-none" />
+                                            <label for="LogoImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="text-secondary font-weight-bold ml-2">Banner Image</label><br />
+                                    <div class="img-upload-container">
+                                        <a href="~/Home/ImageDenied">
+                                            <img class="img-container w-100 h-100" id="img-banner" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageBannerPath" onerror="this.src='/Images/No Photo.png'" />
+                                            <input type="file" id="BannerImage" name="BannerImage" class="d-none" />
+                                            <label for="BannerImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-12 form-group row">
+                                    <div class="col-md-5 text-md-left">
+                                        <label class="col-form-label"><strong class="text-secondary">Google Rating</strong></label>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <input id="Rating" type="text" class="form-control" placeholder="Rating" name="Rating" value="@Model.Rating" readonly />
+                                    </div>
+                                </div>
+                                <div class="col-md-12 form-group row">
+                                    <div class="col-md-5 text-md-left">
+                                        <label class="col-form-label"><strong class="text-secondary">Google Review</strong></label>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <input id="CustomerReview" type="text" class="form-control" placeholder="Customer Review" name="CustomerReview" value="@Model.CustomerReview" readonly />
+                                    </div>
+                                </div>
+                                <div class="col-md-12 form-group row">
+                                    <div class="col-md-5 text-md-left">
+                                        <label class="col-form-label text-secondary font-weight-bold">Adscore</label>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <input id="Adscore" type="number" min="1" value="@Model.Adscore" class="form-control" name="Adscore" />
+                                    </div>
+
+                                </div>
+                                <div class="col-md-12 form-group row">
+                                    <div class="col-md-5 text-md-left">
+                                        <label class="col-form-label"><strong class="text-secondary">Opening Hours</strong></label>
+                                    </div>
+                                    <div class="col-md-7">
+                                    </div>
+                                </div>
+                                <div class="col-md-12 form-group row">
+                                    <div class="col-md-1 text-md-left">
+                                    </div>
+                                    <div class="col-md-4 text-md-left">
+                                        <label class="col-form-label text-secondary font-weight-bold">Monday</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input id="MondayOpenTime" type="text" class="form-control" name="MondayOpenTime" value="@Model.MondayOpenTime" />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <h5 class="font-weight-bold">-</h5>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input id="MondayCloseTime" type="text" class="form-control" name="MondayCloseTime" value="@Model.MondayCloseTime" />
+                                    </div>
+                                </div>
+                                <div class="col-md-12 form-group row">
+                                    <div class="col-md-1 text-md-left">
+                                    </div>
+                                    <div class="col-md-4 text-md-left">
+                                        <label class="col-form-label text-secondary font-weight-bold">Tuesday</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input id="TuesdayOpenTime" type="text" class="form-control" name="TuesdayOpenTime" value="@Model.TuesdayOpenTime" />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <h5 class="font-weight-bold">-</h5>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input id="TuesdayCloseTime" type="text" class="form-control" name="TuesdayCloseTime" value="@Model.TuesdayCloseTime" />
+                                    </div>
+                                </div>
+                                <div class="col-md-12 form-group row">
+                                    <div class="col-md-1 text-md-left">
+                                    </div>
+                                    <div class="col-md-4 text-md-left">
+                                        <label class="col-form-label text-secondary font-weight-bold">Wednesday</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input id="WednesdayOpenTime" type="text" class="form-control" name="WednesdayOpenTime" value="@Model.WednesdayOpenTime" />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <h5 class="font-weight-bold">-</h5>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input id="WednesdayCloseTime" type="text" class="form-control" name="WednesdayCloseTime" value="@Model.WednesdayCloseTime" />
+                                    </div>
+                                </div>
+                                <div class="col-md-12 form-group row">
+                                    <div class="col-md-1 text-md-left">
+                                    </div>
+                                    <div class="col-md-4 text-md-left">
+                                        <label class="col-form-label text-secondary font-weight-bold">Thursday</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input id="ThursdayOpenTime" type="text" class="form-control" name="ThursdayOpenTime" value="@Model.ThursdayOpenTime" />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <h5 class="font-weight-bold">-</h5>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input id="ThursdayCloseTime" type="text" class="form-control" name="ThursdayCloseTime" value="@Model.ThursdayCloseTime" />
+                                    </div>
+                                </div>
+                                <div class="col-md-12 form-group row">
+                                    <div class="col-md-1 text-md-left">
+                                    </div>
+                                    <div class="col-md-4 text-md-left">
+                                        <label class="col-form-label text-secondary font-weight-bold">Friday</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input id="FridayOpenTime" type="text" class="form-control" name="FridayOpenTime" value="@Model.FridayOpenTime" />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <h5 class="font-weight-bold">-</h5>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input id="FridayCloseTime" type="text" class="form-control" name="FridayCloseTime" value="@Model.FridayCloseTime" />
+                                    </div>
+                                </div>
+                                <div class="col-md-12 form-group row">
+                                    <div class="col-md-1 text-md-left">
+                                    </div>
+                                    <div class="col-md-4 text-md-left">
+                                        <label class="col-form-label text-secondary font-weight-bold">Saturday</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input id="SaturdayOpenTime" type="text" class="form-control" name="SaturdayOpenTime" value="@Model.SaturdayOpenTime" />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <h5 class="font-weight-bold">-</h5>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input id="SaturdayCloseTime" type="text" class="form-control" name="SaturdayCloseTime" value="@Model.SaturdayCloseTime" />
+                                    </div>
+                                </div>
+                                <div class="col-md-12 form-group row">
+                                    <div class="col-md-1 text-md-left">
+                                    </div>
+                                    <div class="col-md-4 text-md-left">
+                                        <label class="col-form-label text-secondary font-weight-bold">Sunday</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input id="SundayOpenTime" type="text" class="form-control" name="SundayOpenTime" value="@Model.SundayOpenTime" />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <h5 class="font-weight-bold">-</h5>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input id="SundayCloseTime" type="text" class="form-control" name="SundayCloseTime" value="@Model.SundayCloseTime" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="row">
+                        <h5 class="text-success ml-4 mt-2">Proprietor Details</h5>
+                        <div class="col-md-12 mx-auto">
+                            <div class="card-body row">
+                                <div class="col-md-7">
+                                    <div class="form-group row">
+                                        <div class="col-md-4 mt-4 text-md-left">
+                                            <label class="col-form-label"><strong class="text-secondary">Name</strong></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <small class="control-label col-sm-12" for="AadharName"><i class="text-secondary">*  As in Aadhar</i></small>
+                                            <input id="AadharName" type="text" class="form-control" name="AadharName" value="@Model.AadharName" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4 text-md-left">
+                                            <label class="col-form-label"><strong class="text-secondary">Aadhar Number</strong></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input id="AadharNumber" type="text" class="form-control" name="AadharNumber" value="@Model.AadharNumber" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4 text-md-left">
+                                            <label class="col-form-label"><strong class="text-secondary">Mobile Number *</strong></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input id="OwnerPhoneNumber" type="text" class="form-control" name="OwnerPhoneNumber" value="@Model.OwnerPhoneNumber" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4 text-md-left">
+                                            <label class="col-form-label"><strong class="text-secondary">Personal Email</strong></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input id="Email" type="text" class="form-control" name="Email" value="@Model.Email" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1"></div>
+                                <div class="col-md-4">
+                                    <label class="text-secondary font-weight-bold ml-2">Aadhar Image</label><br />
+                                    <input type="radio" class="ml-3" name="AadharDocument" id="AadharDocumentImage" value="Image" checked> <label for="AadharDocumentImage"> Image</label>
+                                    <input type="radio" class="ml-3" name="AadharDocument" id="AadharDocumentPDF" value="PDF"> <label for="AadharDocumentPDF"> PDF</label>
+                                    <div class="row ml-3 AadharDocumentPdf d-none mt-2 mb-3">
+                                        <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAadharPath" target="_blank" class="mb-2"> Click here for Pdf view</a>
+                                        <input type="file" id="AadharPdf" name="AadharPdf" />
+                                    </div>
+                                    <div class="row AadharDocumentImg ml-3 mt-2">
+                                        <div class="img-upload-container">
+                                            <a href="~/Home/ImageDenied">
+                                                <img class="img-container w-100 h-100 mb-2" id="img-aadhar" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAadharPath" onerror="this.src='/Images/No Photo.png'" />
+                                                <input type="file" id="AadharImage" name="AadharImage" class="d-none" />
+                                                <label for="AadharImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <h5 class="text-success ml-2 mt-2">License Details</h5>
+                    <div class="card-body row">
+                        <div class="card-deck">
+                            <div class="card border-primary bg-muted">
+                                <div class="card-body">
+                                    <label class="col-md-12 text-center"><strong class="text-secondary">FSSAI License</strong></label>
+                                    <label class="col-md-12 text-left"><small class="text-secondary text-left"><i>License Number</i></small></label>
+                                    <input id="FSSAINumber" type="text" class="form-control col-md-12" name="FSSAINumber" value="@Model.FSSAINumber" />
+                                    <label class="col-md-12 text-left"><small class="text-secondary"><i>License Image</i></small></label>
+                                    <input type="radio" class="ml-3" name="FssaiLicense" id="FssaiLicenseImage" value="Image" checked> <label for="FssaiLicenseImage"> Image</label>
+                                    <input type="radio" class="ml-3" name="FssaiLicense" id="FssaiLicensePDF" value="PDF"> <label for="FssaiLicensePDF"> PDF</label>
+                                    <div class="row ml-3 FssaiPdf d-none mt-2 mb-3">
+                                        <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageFSSAIPath" target="_blank" class="mb-2"> Click here for Pdf view</a>
+                                        <input type="file" id="FSSAIPdf" name="FSSAIPdf" />
+                                    </div>
+                                    <div class="row FssaiImg mt-2">
+                                        <div class="img-upload-container mx-auto mb-3">
+                                            <a href="~/Home/ImageDenied">
+                                                <img class="img-container w-100 h-100 mb-2" id="img-fssai" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageFSSAIPath" onerror="this.src='/Images/No Photo.png'" />
+                                                <input type="file" id="FSSAIImage" name="FSSAIImage" class="d-none" />
+                                                <label for="FSSAIImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    @if (Model.ImageFSSAIPath != null && Model.Verify == false)
+                                    {
+                                        <div class="alert alert-success FssaiApprovedlbl font-weight-bold d-none p-2">Approved</div>
+                                        <div class="alert alert-danger FssaiRejectedlbl font-weight-bold d-none p-2">Rejected</div>
+                                        if (Model.ImageFSSAIPath == "Rejected" || Model.FSSAINumber == "Rejected")
+                                        {
+                                            <div class="alert alert-danger Fssai font-weight-bold p-2">Rejected</div>
+                                        }
+                                        else
+                                        {
+                                            <div class="alert alert-danger Fssai font-weight-bold p-2">Verification Pending</div>
+                                        }
+                                    }
+                                    @if (Model.ImageFSSAIPath != null)
+                                    {
+                                        <div class="col-md-12 text-center">
+                                            <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#FssaiModal">
+                                                + Expand
+                                            </button>
+                                            <input type="hidden" id="FSSIApprove" name="FSSIApprove" />
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="card border-primary bg-muted">
+                                <div class="card-body">
+                                    <label class="col-md-12 text-center"><strong class="text-secondary">Drug License</strong></label>
+                                    <label class="col-md-12 text-left"><small class="text-secondary"><i>License Number</i></small></label>
+                                    <input id="DrugNumber" type="text" class="form-control" name="DrugNumber" value="@Model.DrugNumber" />
+                                    <label class="col-md-12 text-left"><small class="text-secondary"><i>License Image</i></small></label>
+                                    <input type="radio" class="ml-3" name="DrugLicense" id="DrugLicenseImage" value="Image" checked> <label for="DrugLicenseImage"> Image</label>
+                                    <input type="radio" class="ml-3" name="DrugLicense" id="DrugLicensePDF" value="PDF"> <label for="DrugLicensePDF"> PDF</label>
+                                    <div class="row ml-3 DrugPdf d-none mt-2 mb-3">
+                                        <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageDrugPath" target="_blank" class="mb-2"> Click here for Pdf view</a>
+                                        <input type="file" id="DrugPdf" name="DrugPdf" />
+                                    </div>
+                                    <div class="row DrugImg">
+                                        <div class="img-upload-container mx-auto mb-3">
+                                            <a href="~/Home/ImageDenied">
+                                                <img class="img-container w-100 h-100 mb-2" id="img-drug" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageDrugPath" onerror="this.src='/Images/No Photo.png'" />
+                                                <input type="file" id="DrugImage" name="DrugImage" class="d-none" />
+                                                <label for="DrugImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    @if (Model.ImageDrugPath != null && Model.Verify == false)
+                                    {
+                                        <div class="alert alert-success DrugApprovedlbl font-weight-bold d-none p-2">Approved</div>
+                                        <div class="alert alert-danger DrugRejectedlbl font-weight-bold d-none p-2">Rejected</div>
+                                        if (Model.ImageDrugPath == "Rejected" || Model.DrugNumber == "Rejected")
+                                        {
+                                            <div class="alert alert-danger font-weight-bold Drug p-2">Rejected</div>
+                                        }
+                                        else
+                                        {
+                                            <div class="alert alert-danger font-weight-bold Drug p-2">Verification Pending</div>
+                                        }
+                                    }
+                                    @if (Model.ImageDrugPath != null)
+                                    {
+                                        <div class="col-md-12 text-center">
+                                            <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#ModalDrug">
+                                                + Expand
+                                            </button>
+                                            <input type="hidden" id="DrugApprove" name="DrugApprove" />
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="card border-primary  bg-muted">
+                                <div class="card-body">
+                                    <label class="col-md-12 text-center"><strong class="text-secondary">Establish License</strong></label>
+                                    <label class="col-md-12 text-left"><small class="text-secondary"><i>License Number</i></small></label>
+                                    <input id="EstablishNumber" type="text" class="form-control" name="EstablishNumber" value="@Model.EstablishNumber" />
+                                    <label class="col-md-12"><small class="text-secondary"><i>License Image</i></small></label>
+                                    <input type="radio" class="ml-3" name="EstablishLicense" id="EstablishLicenseImage" value="Image" checked> <label for="EstablishLicenseImage"> Image</label>
+                                    <input type="radio" class="ml-3" name="EstablishLicense" id="EstablishLicensePDF" value="PDF"> <label for="EstablishLicensePDF"> PDF</label>
+                                    <div class="row ml-3 EstPdf d-none mt-2 mb-3">
+                                        <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageEstablishPath" target="_blank" class="mb-2"> Click here for Pdf view</a>
+                                        <input type="file" id="EstablishPdf" name="EstablishPdf" />
+                                    </div>
+                                    <div class="row EstImg">
+                                        <div class="img-upload-container mx-auto mb-3">
+                                            <a href="~/Home/ImageDenied">
+                                                <img class="img-container w-100 h-100 mb-2" id="img-establish" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageEstablishPath" onerror="this.src='/Images/No Photo.png'" />
+                                                <input type="file" id="EstablishImage" name="EstablishImage" class="d-none" />
+                                                <label for="EstablishImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    @if (Model.ImageEstablishPath != null && Model.Verify == false)
+                                    {
+                                        <div class="alert alert-success EstablishApprovedlbl font-weight-bold d-none p-2">Approved</div>
+                                        <div class="alert alert-danger EstablishRejectedlbl font-weight-bold d-none p-2">Rejected</div>
+                                        if (Model.ImageEstablishPath == "Rejected" || Model.EstablishNumber == "Rejected")
+                                        {
+                                            <div class="alert alert-danger font-weight-bold Establish p-2">Rejected</div>
+                                        }
+                                        else
+                                        {
+                                            <div class="alert alert-danger font-weight-bold Establish p-2">Verification Pending</div>
+                                        }
+                                    }
+                                    @if (Model.ImageEstablishPath != null)
+                                    {
+                                        <div class="col-md-12 text-center">
+                                            <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#ModalEstablish">
+                                                + Expand
+                                            </button>
+                                            <input type="hidden" id="EstablishApprove" name="EstablishApprove" />
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            <div class="card border-primary bg-muted">
+                                <div class="card-body">
+                                    <label class="col-md-12 text-center"><strong class="text-secondary">Other License</strong></label>
+                                    <label class="col-md-12 text-left"><small class="text-secondary"><i>License Name</i></small></label>
+                                    <input id="OtherLicenseName" type="text" class="form-control" name="OtherLicenseName" value="@Model.OtherLicenseName" />
+                                    <label class="col-md-12 text-left"><small class="text-secondary"><i>License Number</i></small></label>
+                                    <input id="OtherLicenseNumber" type="text" class="form-control" name="OtherLicenseNumber" value="@Model.OtherLicenseNumber" />
+                                    <label class="col-md-12"><small class="text-secondary"><i>License Image</i></small></label>
+                                    <input type="radio" class="ml-3" name="OtherLicense" id="OtherImage" value="Image" checked> <label for="OtherImage"> Image</label>
+                                    <input type="radio" class="ml-3" name="OtherLicense" id="OtherPDF" value="PDF"> <label for="OtherPDF"> PDF</label>
+                                    <div class="row ml-3 OtherPdf d-none mt-2 mb-3">
+                                        <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageOtherLicensePath" target="_blank" class="mb-2"> Click here for Pdf view</a>
+                                        <input type="file" id="OtherLicensePdf" name="OtherLicensePdf" />
+                                    </div>
+                                    <div class="row OtherImg">
+                                        <div class="img-upload-container mx-auto mb-3">
+                                            <a href="~/Home/ImageDenied">
+                                                <img class="img-container w-100 h-100 mb-2" id="img-other" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageOtherLicensePath" onerror="this.src='/Images/No Photo.png'" />
+                                                <input type="file" id="OtherLicenseImage" name="OtherLicenseImage" class="d-none" />
+                                                <label for="OtherLicenseImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    @if (Model.ImageOtherLicensePath != null && Model.Verify == false)
+                                    {
+                                        <div class="alert alert-success OtherApprovedlbl font-weight-bold d-none p-2">Approved</div>
+                                        <div class="alert alert-danger OtherRejectedlbl font-weight-bold d-none p-2">Rejected</div>
+                                        if (Model.ImageOtherLicensePath == "Rejected" || Model.OtherLicenseName == "Rejected" || Model.OtherLicenseNumber == "Rejected")
+                                        {
+                                            <div class="alert alert-danger font-weight-bold Other p-2">Rejected</div>
+                                        }
+                                        else
+                                        {
+                                            <div class="alert alert-danger font-weight-bold Other p-2">Verification Pending</div>
+                                        }
+                                    }
+                                    @if (Model.ImageOtherLicensePath != null)
+                                    {
+                                        <div class="col-md-12 text-center">
+                                            <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#ModalOther">
+                                                + Expand
+                                            </button>
+                                            <input type="hidden" id="OtherApprove" name="OtherApprove" />
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            @if (Model.ImageAuthoriseBrandPath != null || Model.ImageAuthoriseBrandPath != "")
+                            {
+                                <div class="col-md-6">
+                                    Authorised Distributer of any Brand :
+                                    <input type="radio" name="distributorCheck" value="yes" checked>Yes
+                                    <input type="radio" name="distributorCheck" value="no"> No
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-md-6">
+                                    Authorised Distributer of any Brand :
+                                    <input type="radio" name="distributorCheck" value="yes">Yes
+                                    <input type="radio" name="distributorCheck" value="no" checked> No
+                                </div>
+
+                            }
+                        </div>
+                        <div class="card-columns d-none form-group row col-md-4 distributor">
+                            <div class="card bg-muted">
+                                <div class="card-body text-center">
+                                    <div class="alert alert-warning alert-dismissible fade show d-none brand">
+                                        <strong>Warning!</strong> It is Required Field.Please upload license
+                                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                    </div>
+                                    <label class="col-md-12"><small class="text-secondary"><i>Authorised Brand Name</i></small></label>
+                                    <select id="AuthorisedBrandCode" name="AuthorisedBrandCode" class="form-control">
+                                        <option value="@Model.AuthorisedBrandCode">@Model.AuthorisedBrandName</option>
+                                    </select>
+                                    <input type="hidden" name="AuthorisedBrandName" id="AuthorisedBrandName" value="@Model.AuthorisedBrandName" />
+                                    <label class="col-md-12"><small class="text-secondary"><i>Authorised Certificate Upload</i></small></label>
+                                    <input type="radio" class="ml-3" name="AuthLicense" id="AuthLicenseImage" value="Image" checked> <label for="AuthLicenseImage"> Image</label>
+                                    <input type="radio" class="ml-3" name="AuthLicense" id="AuthLicensePDF" value="PDF"> <label for="AuthLicensePDF"> PDF</label>
+                                    <div class="row ml-3 AuthLicensePdf d-none mt-2 mb-3">
+                                        <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" target="_blank" class="mb-2"> Click here for Pdf view</a>
+                                        <input type="file" id="AuthorisedDistributorPdf" name="AuthorisedDistributorPdf" />
+                                    </div>
+                                    <div class="row AuthLicenseImg">
+                                        <div class="img-upload-container mx-auto">
+                                            <a href="~/Home/ImageDenied">
+                                                <img class="img-container w-100 h-100 mb-3" id="img-authorise" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" onerror="this.src='/Images/No Photo.png'" />
+                                                <input type="file" id="AuthorisedDistributorImage" name="AuthorisedDistributorImage" class="d-none" />
+                                                <label for="AuthorisedDistributorImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    @if (Model.ImageAuthoriseBrandPath != null && Model.Verify == false)
+                                    {
+                                        <div class="alert alert-success AuthApprovedlbl font-weight-bold d-none p-2">Approved</div>
+                                        <div class="alert alert-danger AuthRejectedlbl font-weight-bold d-none p-2">Rejected</div>
+                                        if (Model.ImageAuthoriseBrandPath == "Rejected" || Model.AuthorisedBrandName == "Rejected")
+                                        {
+                                            <div class="alert alert-danger font-weight-bold Auth p-2">Rejected</div>
+                                        }
+                                        else
+                                        {
+                                            <div class="alert alert-danger font-weight-bold Auth p-2">Verification Pending</div>
+                                        }
+                                    }
+                                    @if (Model.ImageAuthoriseBrandPath != null)
+                                    {
+                                        <div class="col-md-12">
+                                            <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#ModalBrand">
+                                                + Expand
+                                            </button>
+                                            <input type="hidden" id="AuthApprove" name="AuthApprove" />
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <h5 class="text-success ml-2 mt-2">Tax Details</h5>
+                    <div class="col-md-12 mx-auto row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">GSTIN Number</strong></label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" name="GSTINNumber" id="GSTINNumber" value="@Model.GSTINNumber " />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">PAN Number</strong></label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control" name="PanNumber" id="PanNumber" value="@Model.PanNumber" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-columns mr-1 form-group row col-md-3">
+                            <div class="card border-primary bg-muted">
+                                <div class="card-body text-center">
+                                    <label class="col-md-12"><small class="text-secondary"><i>GSTIN Image</i></small></label>
+                                    <input type="radio" class="ml-3" name="GstinLicense" id="GstinLicenseImage" value="Image" checked> <label for="GstinLicenseImage"> Image</label>
+                                    <input type="radio" class="ml-3" name="GstinLicense" id="GstinLicensePDF" value="PDF"> <label for="GstinLicensePDF"> PDF</label>
+                                    <div class="row ml-3 GstinLicensePdf d-none mt-2 mb-3">
+                                        <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageGSTINPath" target="_blank" class="mb-2"> Click here for Pdf view</a>
+                                        <input type="file" id="GSTINPdf" name="GSTINPdf" />
+                                    </div>
+                                    <div class="row GstinLicenseImg">
+                                        <div class="img-upload-container mx-auto mb-3">
+                                            <a href="~/Home/ImageDenied">
+                                                <img class="img-container w-100 h-100 mb-2" id="img-gstin" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageGSTINPath" onerror="this.src='/Images/No Photo.png'" />
+                                                <input type="file" id="GSTINImage" name="GSTINImage" class="d-none" />
+                                                <label for="GSTINImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    @if (Model.ImageGSTINPath != null && Model.Verify == false)
+                                    {
+                                        <div class="alert alert-success GstinApprovedlbl font-weight-bold d-none p-2">Approved</div>
+                                        <div class="alert alert-danger GstinRejectedlbl font-weight-bold d-none p-2">Rejected</div>
+                                        if (Model.ImageGSTINPath == "Rejected" || Model.GSTINNumber == "Rejected")
+                                        {
+                                            <div class="alert alert-danger font-weight-bold Gstin p-2">Rejected</div>
+                                        }
+                                        else
+                                        {
+                                            <div class="alert alert-danger font-weight-bold Gstin p-2">Verification Pending</div>
+                                        }
+                                    }
+                                    @if (Model.ImageGSTINPath != null)
+                                    {
+                                        <div class="col-md-12 text-center">
+                                            <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#ModalGSTIN">
+                                                + Expand
+                                            </button>
+                                            <input type="hidden" id="GstinApprove" name="GstinApprove" />
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-columns form-group row col-md-3">
+                            <div class="card border-primary bg-muted">
+                                <div class="card-body text-center">
+                                    <label class="col-md-12"><small class="text-secondary"><i>PAN Image</i></small></label>
+                                    <input type="radio" class="ml-3" name="PanLicense" id="PanLicenseImage" value="Image" checked> <label for="PanLicenseImage"> Image</label>
+                                    <input type="radio" class="ml-3" name="PanLicense" id="PanLicensePDF" value="PDF"> <label for="PanLicensePDF"> PDF</label>
+                                    <div class="row ml-3 PanLicensePdf d-none mt-2 mb-3">
+                                        <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePanPath" target="_blank" class="mb-2"> Click here for Pdf view</a>
+                                        <input type="file" id="PanPdf" name="PanPdf" />
+                                    </div>
+                                    <div class="row PanLicenseImg">
+                                        <div class="img-upload-container mx-auto mb-3">
+                                            <a href="~/Home/ImageDenied">
+                                                <img class="img-container w-100 h-100 mb-2" id="img-pan" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePanPath" onerror="this.src='/Images/No Photo.png'" />
+                                                <input type="file" id="PanImage" name="PanImage" class="d-none" />
+                                                <label for="PanImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    @if (Model.ImagePanPath != null && Model.Verify == false)
+                                    {
+                                        <div class="alert alert-success PanApprovedlbl font-weight-bold d-none p-2">Approved</div>
+                                        <div class="alert alert-danger PanRejectedlbl font-weight-bold d-none p-2">Rejected</div>
+                                        if (Model.PanNumber == "Rejected" || Model.ImagePanPath == "Rejected")
+                                        {
+                                            <div class="alert alert-danger font-weight-bold Pan p-2">Rejected</div>
+                                        }
+                                        else
+                                        {
+                                            <div class="alert alert-danger font-weight-bold Pan p-2">Verification Pending</div>
+                                        }
+                                    }
+                                    @if (Model.ImagePanPath != null)
+                                    {
+                                        <div class="col-md-12 text-center">
+                                            <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#ModalPAN">
+                                                + Expand
+                                            </button>
+                                            <input type="hidden" id="PanApprove" name="PanApprove" />
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <h5 class="text-success ml-2 mt-2">Bank Details</h5>
+                    <div class="col-md-12 row">
+                        <div class="col-md-8">
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <small class="control-label col-sm-12" for="BankName"><i class="text-secondary">Bank Name</i></small>
+                                    <input id="BankName" type="text" class="form-control" name="BankName" value="@Model.BankName" />
+                                </div>
+                                <div class="col-md-6">
+                                    <small class="control-label col-sm-12" for="AccountName"><i class="text-secondary">Account Name</i></small>
+                                    <input id="AccountName" type="text" class="form-control" name="AccountName" value="@Model.AccountName" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <small class="control-label col-sm-12" for="AccountNumber"><i class="text-secondary">Account Number</i></small>
+                                    <input id="AccountNumber" type="text" class="form-control" name="AccountNumber" value="@Model.AccountNumber" />
+                                </div>
+                                <div class="col-md-6">
+                                    <small class="control-label col-sm-12" for="IFSCCode"><i class="text-secondary">IFSC Code</i></small>
+                                    <input id="IFSCCode" type="text" class="form-control" name="IFSCCode" value="@Model.IFSCCode" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <small class="control-label col-sm-12" for="SwiftCode"><i class="text-secondary">SWIFT Code</i></small>
+                                    <input id="SwiftCode" type="text" class="form-control" name="SwiftCode" value="@Model.SwiftCode" />
+                                </div>
+                                <div class="col-md-6">
+                                    <small class="control-label col-sm-12" for="UPIID"><i class="text-secondary">UPI Code</i></small>
+                                    <input id="UPIID" type="text" class="form-control" name="UPIID" value="@Model.UPIID" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                @if (Model.AcountType != "SA")
+                                {
+                                    <div class="col-md-6">
+                                        <input type="radio" name="AcountType" value="SA"> Saving Account
+                                        <input type="radio" name="AcountType" value="CA" checked> Current Account
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-md-6">
+                                        <input type="radio" name="AcountType" value="SA" checked> Saving Account
+                                        <input type="radio" name="AcountType" value="CA"> Current Account
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card-columns form-group row col-md-12">
+                                <div class="card border-success bg-muted">
+                                    <div class="card-body text-center">
+                                        <label class="col-md-12 text-center"><strong class="text-secondary">Bank Account</strong></label>
+                                        <label class="col-md-12 text-center"><small class="text-secondary"><i>Account Proof Image</i></small></label>
+                                        <input type="radio" class="ml-3" name="AccountDocument" id="AccountDocumentImage" value="Image" checked> <label for="AccountDocumentImage"> Image</label>
+                                        <input type="radio" class="ml-3" name="AccountDocument" id="AccountDocumentPDF" value="PDF"> <label for="AccountDocumentPDF"> PDF</label>
+                                        <div class="row ml-3 AccountDocumentPdf d-none mt-2 mb-3">
+                                            <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAccountPath" target="_blank" class="mb-2"> Click here for Pdf view</a>
+                                            <input type="file" id="AccountPdf" name="AccountPdf" />
+                                        </div>
+                                        <div class="row AccountDocumentImg">
+                                            <div class="img-upload-container mx-auto mb-3">
+                                                <a href="~/Home/ImageDenied">
+                                                    <img class="img-container w-100 h-100 mb-2" id="img-account" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAccountPath" onerror="this.src='/Images/No Photo.png'" />
+                                                    <input type="file" id="AccountImage" name="AccountImage" class="d-none" />
+                                                    <label for="AccountImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        @if (Model.ImageAccountPath != null && Model.Verify == false)
+                                        {
+                                            <div class="alert alert-success AccountApprovedlbl font-weight-bold d-none p-2">Approved</div>
+                                            <div class="alert alert-danger AccountRejectedlbl font-weight-bold d-none p-2">Rejected</div>
+                                            if (Model.AccountName == "Rejected" || Model.BankName == "Rejected" || Model.AccountNumber == "Rejected" || Model.IFSCCode == "Rejected" || Model.ImageAccountPath == "Rejected")
+                                            {
+                                                <div class="alert alert-danger font-weight-bold Account p-2">Rejected</div>
+                                            }
+                                            else
+                                            {
+                                                <div class="alert alert-danger font-weight-bold Account p-2">Verification Pending</div>
+                                            }
+                                        }
+                                        @if (Model.ImageAccountPath != null)
+                                        {
+                                            <div class="col-md-12 text-center">
+                                                <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#ModalAccount">
+                                                    + Expand
+                                                </button>
+                                                <input type="hidden" id="AccountApprove" name="AccountApprove" />
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <h5 class="text-success ml-2 mt-2">Delivery Charge Assign</h5>
+                    <div class="row mb-3 ml-3">
+                        <div class="col-md-12">
+                            <div class="row mt-3">
+                                <div class="col-md-2">
+                                    <label class="col-form-label text-secondary font-weight-bold">Delivery Charge Type</label>
+                                </div>
+                                <div class="col-md-8 mt-2">
+                                    <div class="form-check-inline mr-3">
+                                        <label class="form-check-label">
+                                            <input type="radio" class="form-check-input" name="Type" value="1"> 1<sup>st</sup> Tier
+                                        </label>
+                                    </div>
+                                    <div class="form-check-inline">
+                                        <label class="form-check-label">
+                                            <input type="radio" class="form-check-input" name="Type" value="2"> 2<sup>nd</sup> Tier
+                                        </label>
+                                    </div>
+                                    <div class="form-check-inline">
+                                        <label class="form-check-label">
+                                            <input type="radio" class="form-check-input" name="Type" value="3"> 3<sup>rd</sup> Tier
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <div class="col-md-2 mx-auto">
+                            <button type="submit" class="btn btn-block btn-success btnSubmit"><span class="glyphicon glyphicon-file"></span> Save</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!--FSSAI License Model-->
+<div class="modal fade" id="FssaiModal" tabindex="-1" role="dialog" aria-labelledby="FssaiModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">FSSAI Lisence</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row" id="print-FSSAI">
+                    <div class="col-md-6">
+                        <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageFSSAIPath" target="_blank" class="ml-3 fssai-pdf"> Click here for Pdf view</a>
+                        <a href="~/Home/ImageDenied">
+                            <img class="img-container w-100 h-100 mb-2 fssai-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageFSSAIPath" onerror="this.src='/Images/No Photo.png'" />
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="text-left text-secondary font-weight-bold mt-1"><i>License Number</i></label>
+                        <input type="text" class="form-control" value="@Model.FSSAINumber" readonly />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <span class="FssaiApprovedlbl text-success d-none font-weight-bold">FSSAI License Approved</span>
+                <span class="FssaiRejectedlbl text-danger d-none font-weight-bold">FSSAI License Rejected</span>
+                <button type="button" class="btn btn-success Fssai" id="btnFssaiApprove">Approve</button>
+                <button type="button" class="btn btn-danger Fssai ml-2" id="btnFssaiReject">Request Reupload</button>
+                <button type="button" class="btn btn-secondary ml-2" id="btnFssaiPrint" onclick="printDiv('print-FSSAI')">Print</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Drug License Model-->
+<div class="modal fade" id="ModalDrug" tabindex="-1" role="dialog" aria-labelledby="ModalDrugLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalDrugLabel">Drug Lisence</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row" id="print-Drug">
+                    <div class="col-md-6">
+                        <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageDrugPath" target="_blank" class="mb-2 drug-pdf"> Click here for Pdf view</a>
+                        <a href="~/Home/ImageDenied">
+                            <img class="img-container w-100 h-100 mb-2 drug-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageDrugPath" onerror="this.src='/Images/No Photo.png'" />
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <label class="text-left text-secondary font-weight-bold mt-1">License Number</label>
+                            <input type="text" class="form-control" value="@Model.DrugNumber" readonly />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <span class="DrugApprovedlbl text-success d-none font-weight-bold">Drug License Approved</span>
+                <span class="DrugRejectedlbl text-danger d-none font-weight-bold">Drug License Rejected</span>
+                <button type="button" class="btn btn-success Drug" id="btnDrugApprove">Approve</button>
+                <button type="button" class="btn btn-danger Drug ml-2" id="btnDrugReject">Request Reupload</button>
+                <button type="button" class="btn btn-secondary ml-2" id="btnDrugPrint" onclick="printDiv('print-Drug')">Print</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Establish License Model-->
+<div class="modal fade" id="ModalEstablish" tabindex="-1" role="dialog" aria-labelledby="ModalEstablishLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalEstablishLabel">Establish Lisence</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row" id="print-Establish">
+                    <div class="col-md-6">
+                        <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageEstablishPath" target="_blank" class="mb-2 establish-pdf"> Click here for Pdf view</a>
+                        <a href="~/Home/ImageDenied">
+                            <img class="img-container w-100 h-100 mb-2 establish-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageEstablishPath" onerror="this.src='/Images/No Photo.png'" />
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <label class="text-left text-secondary font-weight-bold mt-1">License Number</label>
+                            <input type="text" class="form-control" value="@Model.EstablishNumber" readonly />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <span class="EstablishApprovedlbl text-success d-none font-weight-bold">Establish License Approved</span>
+                <span class="EstablishRejectedlbl text-danger d-none font-weight-bold">Establish License Rejected</span>
+                <button type="button" class="btn btn-success Establish" id="btnEstablishApprove">Approve</button>
+                <button type="button" class="btn btn-danger Establish ml-2" id="btnEstablishReject">Request Reupload</button>
+                <button type="button" class="btn btn-secondary ml-2" id="btnEstablishPrint" onclick="printDiv('print-Establish')">Print</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Other License Model-->
+<div class="modal fade" id="ModalOther" tabindex="-1" role="dialog" aria-labelledby="ModalOtherLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalOtherLabel">Other Lisence</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row" id="print-Other">
+                    <div class="col-md-6">
+                        <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageOtherLicensePath" target="_blank" class="mb-2 other-pdf"> Click here for Pdf view</a>
+                        <a href="~/Home/ImageDenied">
+                            <img class="img-container w-100 h-100 mb-2 other-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageOtherLicensePath" onerror="this.src='/Images/No Photo.png'" />
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="text-left text-secondary font-weight-bold mt-1"><i>License Name</i></label>
+                        <input type="text" class="form-control" value="@Model.OtherLicenseName" />
+                        <label class="text-left text-secondary font-weight-bold mt-1"><i>License Number</i></label>
+                        <input type="text" class="form-control" value="@Model.OtherLicenseNumber" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <span class="OtherApprovedlbl text-success d-none font-weight-bold">Other License Approved</span>
+                <span class="OtherRejectedlbl text-danger d-none font-weight-bold">Other License Rejected</span>
+                <button type="button" class="btn btn-success Other" id="btnOtherApprove">Approve</button>
+                <button type="button" class="btn btn-danger Other ml-2" id="btnOtherReject">Request Reupload</button>
+                <button type="button" class="btn btn-secondary ml-2" id="btnOtherhPrint" onclick="printDiv('print-Other')">Print</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--GSTIN Model-->
+<div class="modal fade" id="ModalGSTIN" tabindex="-1" role="dialog" aria-labelledby="ModalGSTINLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalGSTINLabel">GSTIN Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row" id="print-GSTIN">
+                    <div class="col-md-6">
+                        <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageGSTINPath" target="_blank" class="mb-2 gstin-pdf"> Click here for Pdf view</a>
+                        <a href="~/Home/ImageDenied">
+                            <img class="img-container w-100 h-100 mb-2 gstin-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageGSTINPath" onerror="this.src='/Images/No Photo.png'" />
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="text-left text-secondary font-weight-bold mt-1"><i>GSTIN Number</i></label>
+                        <input type="text" class="form-control" value="@Model.GSTINNumber" readonly />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <span class="GstinApprovedlbl text-success d-none font-weight-bold">GSTIN Approved</span>
+                <span class="GstinRejectedlbl text-danger d-none font-weight-bold">GSTIN Rejected</span>
+                <button type="button" class="btn btn-success Gstin" id="btnGstinApprove">Approve</button>
+                <button type="button" class="btn btn-danger Gstin ml-2" id="btnGstinReject">Request Reupload</button>
+                <button type="button" class="btn btn-secondary ml-2" id="btnGstinPrint" onclick="printDiv('print-GSTIN')">Print</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--PAN Model-->
+<div class="modal fade" id="ModalPAN" tabindex="-1" role="dialog" aria-labelledby="ModalPANLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalPANLabel">PAN Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row" id="print-Pan">
+                    <div class="col-md-6">
+                        <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePanPath" target="_blank" class="mb-2 pan-pdf"> Click here for Pdf view</a>
+                        <a href="~/Home/ImageDenied">
+                            <img class="img-container w-100 h-100 mb-2 pan-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePanPath" onerror="this.src='/Images/No Photo.png'" />
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-md-4 text-left text-secondary font-weight-bold mt-1"><i>Pan Number</i></label>
+                        <input type="text" class="form-control col-md-8" value="@Model.PanNumber" readonly />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <span class="PanApprovedlbl text-success d-none font-weight-bold">Pan Approved</span>
+                <span class="PanRejectedlbl text-danger d-none font-weight-bold">Pan Rejected</span>
+                <button type="button" class="btn btn-success Pan" id="btnPanApprove">Approve</button>
+                <button type="button" class="btn btn-danger Pan ml-2" id="btnPanReject">Request Reupload</button>
+                <button type="button" class="btn btn-secondary ml-2" id="btnPanPrint" onclick="printDiv('print-Pan')">Print</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Account Model-->
+<div class="modal fade" id="ModalAccount" tabindex="-1" role="dialog" aria-labelledby="ModalAccountLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalAccountLabel">Bank Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row" id="print-Account">
+                    <div class="col-md-6">
+                        <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAccountPath" target="_blank" class="mb-2 pan-pdf"> Click here for Pdf view</a>
+                        <a href="~/Home/ImageDenied">
+                            <img class="img-container w-100 h-100 mb-2 pan-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAccountPath" onerror="this.src='/Images/No Photo.png'" />
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-md-4 text-left text-secondary font-weight-bold mt-1"><i>Bank Name</i></label>
+                        <input type="text" class="form-control col-md-8" value="@Model.BankName" readonly />
+                        <label class="col-md-4 text-left text-secondary font-weight-bold mt-1"><i>Account Name</i></label>
+                        <input type="text" class="form-control col-md-8" value="@Model.AccountName" readonly />
+                        <label class="col-md-4 text-left text-secondary font-weight-bold mt-1"><i>Account Number</i></label>
+                        <input type="text" class="form-control col-md-8" value="@Model.AccountNumber" readonly />
+                        <label class="col-md-4 text-left text-secondary font-weight-bold mt-1"><i>IFSC Code</i></label>
+                        <input type="text" class="form-control col-md-8" value="@Model.IFSCCode" readonly />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <span class="AccountApprovedlbl text-success d-none font-weight-bold">Account Approved</span>
+                <span class="AccountRejectedlbl text-danger d-none font-weight-bold">Account Rejected</span>
+                <button type="button" class="btn btn-success Account" id="btnAccountApprove">Approve</button>
+                <button type="button" class="btn btn-danger Account ml-2" id="btnAccountReject">Request Reupload</button>
+                <button type="button" class="btn btn-secondary ml-2" id="btnAccountPrint" onclick="printDiv('print-Account')">Print</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Brand Model-->
+<div class="modal fade" id="ModalBrand" tabindex="-1" role="dialog" aria-labelledby="ModalModalBrandLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalModalBrandLabel">Authiorised Brand Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row" id="print-Auth">
+                    <div class="col-md-6">
+                        <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" target="_blank" class="mb-2 auth-pdf"> Click here for Pdf view</a>
+                        <a href="~/Home/ImageDenied">
+                            <img class="img-container w-100 h-100 mb-2 auth-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" onerror="this.src='/Images/No Photo.png'" />
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-md-4 text-left text-secondary font-weight-bold mt-1"><i>Authorised Brand Name</i></label>
+                        <input type="text" class="form-control col-md-8" value="@Model.AuthorisedBrandName" readonly />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <span class="AuthApprovedlbl text-success d-none font-weight-bold">Authorised Brand Approved</span>
+                <span class="AuthRejectedlbl text-danger d-none font-weight-bold">Authorised Brand Rejected</span>
+                <button type="button" class="btn btn-success Auth" id="btnAuthApprove">Approve</button>
+                <button type="button" class="btn btn-danger Auth ml-2" id="btnAuthReject">Request Reupload</button>
+                <button type="button" class="btn btn-secondary ml-2" id="btnAuthPrint" onclick="printDiv('print-Auth')">Print</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script src="~/Scripts/multiple-image-upload.js"></script>
+    <link href="~/Content/multiple-image-upload.css" rel="stylesheet" />
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRsR3Wpkj_Vofy5FSU0otOx-6k-YFiNBk&libraries=places&callback=initMap"
+            async defer></script>
+    <script>
+
+        function printDiv(divName) {
+            var printContents = document.getElementById(divName).innerHTML;
+            w = window.open();
+            w.document.write(printContents);
+            w.print();
+            w.close();
+        }
+
+        $(function () {
+            $('#OTP').click(function () {
+                var mobileNo = $('#OwnerPhoneNumber').val();
+                var code = $("#Code").val();
+                $.getJSON("/Shop/GenerateOTP?MobileNo=" + mobileNo + "&Code=" + code, function (data) {
+                    $('#OTPNumber').val(data.data);
+                    if (data.data != null) {
+                        $("#OTP").attr('disabled', true);
+                    }
+                    if (data.ErrorMessage != null) {
+                        alert(data.ErrorMessage);
+                    }
+                });
+
+            });
+        });
+
+        $(function () {
+            $('#GeneratePassword').click(function () {
+                var code = $('#CustomerCode').val();
+                $.getJSON("/Shop/GeneratePassword?Code=" + code, function (data) {
+                    $('#Password').val(data.data);
+                    $("#GeneratePassword").attr('disabled', true);
+                });
+            });
+        });
+
+        $(document).ready(function () {
+
+            var code = $('#Code').val();
+            var password = $('#Password').val();
+            var PhoneNumber = $('#PhoneNumber').val();
+            var imgcount = $('#Count').val();
+            $.getJSON("/Shop/VerifyOTP?Code=" + code + "&PhoneNumber=" + PhoneNumber, function (data) {
+                if (data.Verify == true) {
+                    $(".generateOTP").addClass("d-none");
+                    $(".verifyOTP").addClass("d-none");
+                    $(".PhoneVerify").addClass("d-none");
+                    $(".documentVerifyPending").removeClass("d-none");
+                    //$(".generatePassword").removeClass("d-none");
+                    $(".NotverifyOTP").removeClass("d-none");
+                }
+                if (data.otp != "") {
+                    $("#OTPNumber").val(data.otp);
+                    $("#OTP").attr('disabled', true);
+                } else {
+                    $("#OTP").attr('disabled', false);
+                    $("#OTPNumber").val("");
+
+                }
+            });
+
+
+            if (password != "") {
+                $("#GeneratePassword").attr('disabled', true);
+            } else {
+                $("#GeneratePassword").attr('disabled', false);
+            }
+
+            var verify = "@Model.Verify";
+            if (verify == "True") {
+                //Fssai
+                $('.FssaiApprovedlbl').removeClass('d-none');
+                $('.FssaiRejectedlbl').addClass('d-none');
+                $('#btnFssaiApprove').addClass('d-none');
+                $('#btnFssaiReject').addClass('d-none');
+                //Drug
+                $('.DrugApprovedlbl').removeClass('d-none');
+                $('.DrugRejectedlbl').addClass('d-none');
+                $('#btnDrugApprove').addClass('d-none');
+                $('#btnDrugReject').addClass('d-none');
+                //Establish
+                $('.EstablishApprovedlbl').removeClass('d-none');
+                $('.EstablishRejectedlbl').addClass('d-none');
+                $('#btnEstablishApprove').addClass('d-none');
+                $('#btnEstablishReject').addClass('d-none');
+                //Other
+                $('.OtherApprovedlbl').removeClass('d-none');
+                $('.OtherRejectedlbl').addClass('d-none');
+                $('#btnOtherApprove').addClass('d-none');
+                $('#btnOtherReject').addClass('d-none');
+                //Gstin
+                $('.GstinApprovedlbl').removeClass('d-none');
+                $('.GstinRejectedlbl').addClass('d-none');
+                $('#btnGstinApprove').addClass('d-none');
+                $('#btnGstinReject').addClass('d-none');
+                //Pan
+                $('.PanApprovedlbl').removeClass('d-none');
+                $('.PanRejectedlbl').addClass('d-none');
+                $('#btnPanApprove').addClass('d-none');
+                $('#btnPanReject').addClass('d-none');
+                //Account
+                $('.AccountApprovedlbl').removeClass('d-none');
+                $('.AccountRejectedlbl').addClass('d-none');
+                $('#btnAccountApprove').addClass('d-none');
+                $('#btnAccountReject').addClass('d-none');
+                //Auth
+                $('.AuthApprovedlbl').removeClass('d-none');
+                $('.AuthRejectedlbl').addClass('d-none');
+                $('#btnAuthApprove').addClass('d-none');
+                $('#btnAuthReject').addClass('d-none');
+            }
+
+            var strFssai = $("#ImageFSSAIPath").val();
+            var strDrug = $("#ImageDrugPath").val();
+            var strEstablish = $("#ImageEstablishPath").val();
+            var strOther = $("#ImageOtherLicensePath").val();
+            var strAuth = $("#ImageAuthoriseBrandPath").val();
+            var strGstin = $("#ImageGSTINPath").val();
+            var strPan = $("#ImagePanPath").val();
+            var strAccount = $("#ImageAccountPath").val();
+            var strAadhar = $("#ImageAadharPath").val();
+            var regExp = /.pdf/g;
+            var resFssai = strFssai.match(regExp);
+            var resDrug = strDrug.match(regExp);
+            var resEstablish = strEstablish.match(regExp);
+            var resOther = strOther.match(regExp);
+            var resAuth = strAuth.match(regExp);
+            var resGstin = strGstin.match(regExp);
+            var resPan = strPan.match(regExp);
+            var resAccount = strAccount.match(regExp);
+            var resAadhar = strAadhar.match(regExp);
+
+            if (resFssai == ".pdf") {
+                $("#FssaiLicensePDF").prop("checked", true);
+                $('.FssaiImg').addClass('d-none');
+                $('.FssaiPdf').removeClass('d-none');
+                $("#FSSAIImage").val("");
+                $("#img-fssai").attr('src', '');
+                $('.penFssi').addClass('d-none');
+                $('.fssai-img').addClass('d-none');
+            } else {
+                $("#FssaiLicenseImage").prop("checked", true);
+                $('.FssaiImg').removeClass('d-none');
+                $('.FssaiPdf').addClass('d-none');
+                $("#FSSAIPdf").val("");
+                $('.penFssi').addClass('d-none');
+                $('.fssai-pdf').addClass('d-none');
+            }
+
+            if (resDrug == ".pdf") {
+                $("#DrugLicensePDF").prop("checked", true);
+                $('.drug-img').addClass('d-none');
+                $('.DrugImg').addClass('d-none');
+                $('.DrugPdf').removeClass('d-none');
+                $("#DrugImage").val("");
+                $("#img-drug").attr('src', '');
+                $('.penDrug').addClass('d-none');
+            } else {
+                $("#DrugLicenseImage").prop("checked", true);
+                $('.drug-pdf').addClass('d-none');
+                $('.DrugImg').removeClass('d-none');
+                $('.DrugPdf').addClass('d-none');
+                $("#DrugPdf").val("");
+                $('.penDrug').addClass('d-none');
+            }
+
+            if (resEstablish == ".pdf") {
+                $("#EstablishLicensePDF").prop("checked", true);
+                $('.establish-img').addClass('d-none');
+                $('.EstImg').addClass('d-none');
+                $('.EstPdf').removeClass('d-none');
+                $("#EstablishImage").val("");
+                $("#img-establish").attr('src', '');
+                $('.penEsta').addClass('d-none');
+            } else {
+                $("#EstablishLicenseImage").prop("checked", true);
+                $('.establish-pdf').addClass('d-none');
+                $('.EstImg').removeClass('d-none');
+                $('.EstPdf').addClass('d-none');
+                $("#EstablishPdf").val("");
+                $('.penEsta').addClass('d-none');
+            }
+
+            if (resOther == ".pdf") {
+                $("#OtherPDF").prop("checked", true);
+                $('.other-img').addClass('d-none');
+                $('.OtherImg').addClass('d-none');
+                $('.OtherPdf').removeClass('d-none');
+                $("#OtherLicenseImage").val("");
+                $("#img-other").attr('src', '');
+                $('.penOther').addClass('d-none');
+            } else {
+                $("#OtherImage").prop("checked", true);
+                $('.other-pdf').addClass('d-none');
+                $('.OtherImg').removeClass('d-none');
+                $('.OtherPdf').addClass('d-none');
+                $("#OtherLicensePdf").val("");
+                $('.penOther').addClass('d-none');
+            }
+
+            if (resAuth == ".pdf") {
+                $("#AuthLicensePDF").prop("checked", true);
+                $('.auth-img').addClass('d-none');
+                $('.AuthLicenseImg').addClass('d-none');
+                $('.AuthLicensePdf').removeClass('d-none');
+                $("#AuthorisedDistributorImage").val("");
+                $("#img-authorise").attr('src', '');
+                $('.penAuth').addClass('d-none');
+            } else {
+                $("#AuthLicenseImage").prop("checked", true);
+                $('.auth-pdf').addClass('d-none');
+                $('.AuthLicenseImg').removeClass('d-none');
+                $('.AuthLicensePdf').addClass('d-none');
+                $("#AuthorisedDistributorPdf").val("");
+                $('.penAuth').addClass('d-none');
+            }
+
+            if (resGstin == ".pdf") {
+                $("#GstinLicensePDF").prop("checked", true);
+                $('.gstin-img').addClass('d-none');
+                $('.GstinLicenseImg').addClass('d-none');
+                $('.GstinLicensePdf').removeClass('d-none');
+                $("#GSTINImage").val("");
+                $("#img-gstin").attr('src', '');
+                $('.penGstn').addClass('d-none');
+            } else {
+                $("#GstinLicenseImage").prop("checked", true);
+                $('.gstin-pdf').addClass('d-none');
+                $('.GstinLicenseImg').removeClass('d-none');
+                $('.GstinLicensePdf').addClass('d-none');
+                $("#GSTINPdf").val("");
+                $('.penGstn').addClass('d-none');
+            }
+
+            if (resPan == ".pdf") {
+                $("#PanLicensePDF").prop("checked", true);
+                $('.pan-img').addClass('d-none');
+                $('.PanLicenseImg').addClass('d-none');
+                $('.PanLicensePdf').removeClass('d-none');
+                $("#PanImage").val("");
+                $("#img-pan").attr('src', '');
+                $('.penPan').addClass('d-none');
+            } else {
+                $("#PanLicenseImage").prop("checked", true);
+                $('.pan-pdf').addClass('d-none');
+                $('.PanLicenseImg').removeClass('d-none');
+                $('.PanLicensePdf').addClass('d-none');
+                $("#PanPdf").val("");
+                $('.penPan').addClass('d-none');
+            }
+
+            if (resAccount == ".pdf") {
+                $("#AccountDocumentPDF").prop("checked", true);
+                $('.AccountDocumentImg').addClass('d-none');
+                $('.AccountDocumentPdf').removeClass('d-none');
+                $("#AccountImage").val("");
+                $("#img-account").attr('src', '');
+            } else {
+                $("#AccountDocumentImage").prop("checked", true);
+                $('.AccountDocumentImg').removeClass('d-none');
+                $('.AccountDocumentPdf').addClass('d-none');
+                $("#AccountPdf").val("");
+            }
+
+            if (resAadhar == ".pdf") {
+                $("#AadharDocumentPDF").prop("checked", true);
+                $('.AadharDocumentImg').addClass('d-none');
+                $('.AadharDocumentPdf').removeClass('d-none');
+                $("#AadharImage").val("");
+                $("#img-aadhar").attr('src', '');
+            } else {
+                $("#AadharDocumentImage").prop("checked", true);
+                $('.AadharDocumentImg').removeClass('d-none');
+                $('.AadharDocumentPdf').addClass('d-none');
+                $("#AadharPdf").val("");
+            }
+
+            $('input:radio[name="FssaiLicense"]').change(function () {
+                if (this.checked && this.value == 'Image') {
+                    $('.FssaiImg').removeClass('d-none');
+                    $('.FssaiPdf').addClass('d-none');
+                    $("#FSSAIPdf").val("");
+                    $('.penFssi').addClass('d-none');
+                } else {
+                    $('.FssaiImg').addClass('d-none');
+                    $('.FssaiPdf').removeClass('d-none');
+                    $("#FSSAIImage").val("");
+                    $("#img-fssai").attr('src', '');
+                    $('.penFssi').addClass('d-none');
+                }
+            });
+
+            $('input:radio[name="DrugLicense"]').change(function () {
+                if (this.checked && this.value == 'Image') {
+                    $('.DrugImg').removeClass('d-none');
+                    $('.DrugPdf').addClass('d-none');
+                    $("#DrugPdf").val("");
+                    $('.penDrug').addClass('d-none');
+                } else {
+                    $('.DrugImg').addClass('d-none');
+                    $('.DrugPdf').removeClass('d-none');
+                    $("#DrugImage").val("");
+                    $("#img-drug").attr('src', '');
+                    $('.penDrug').addClass('d-none');
+                }
+            });
+
+            $('input:radio[name="EstablishLicense"]').change(function () {
+                if (this.checked && this.value == 'Image') {
+                    $('.EstImg').removeClass('d-none');
+                    $('.EstPdf').addClass('d-none');
+                    $("#EstablishPdf").val("");
+                    $('.penEsta').addClass('d-none');
+                } else {
+                    $('.EstImg').addClass('d-none');
+                    $('.EstPdf').removeClass('d-none');
+                    $("#EstablishImage").val("");
+                    $("#img-establish").attr('src', '');
+                    $('.penEsta').addClass('d-none');
+                }
+            });
+
+            $('input:radio[name="OtherLicense"]').change(function () {
+                if (this.checked && this.value == 'Image') {
+                    $('.OtherImg').removeClass('d-none');
+                    $('.OtherPdf').addClass('d-none');
+                    $("#OtherLicensePdf").val("");
+                    $('.penOther').addClass('d-none');
+                } else {
+                    $('.OtherImg').addClass('d-none');
+                    $('.OtherPdf').removeClass('d-none');
+                    $("#OtherLicenseImage").val("");
+                    $("#img-other").attr('src', '');
+                    $('.penOther').addClass('d-none');
+                }
+            });
+
+            $('input:radio[name="AuthLicense"]').change(function () {
+                if (this.checked && this.value == 'Image') {
+                    $('.AuthLicenseImg').removeClass('d-none');
+                    $('.AuthLicensePdf').addClass('d-none');
+                    $("#AuthorisedDistributorPdf").val("");
+                    $('.penAuth').addClass('d-none');
+                } else {
+                    $('.AuthLicenseImg').addClass('d-none');
+                    $('.AuthLicensePdf').removeClass('d-none');
+                    $("#AuthorisedDistributorImage").val("");
+                    $("#img-authorise").attr('src', '');
+                    $('.penAuth').addClass('d-none');
+                }
+            });
+
+            $('input:radio[name="GstinLicense"]').change(function () {
+                if (this.checked && this.value == 'Image') {
+                    $('.GstinLicenseImg').removeClass('d-none');
+                    $('.GstinLicensePdf').addClass('d-none');
+                    $("#GSTINPdf").val("");
+                    $('.penGstn').addClass('d-none');
+                } else {
+                    $('.GstinLicenseImg').addClass('d-none');
+                    $('.GstinLicensePdf').removeClass('d-none');
+                    $("#GSTINImage").val("");
+                    $("#img-gstin").attr('src', '');
+                    $('.penGstn').addClass('d-none');
+                }
+            });
+
+            $('input:radio[name="PanLicense"]').change(function () {
+                if (this.checked && this.value == 'Image') {
+                    $('.PanLicenseImg').removeClass('d-none');
+                    $('.PanLicensePdf').addClass('d-none');
+                    $("#PanPdf").val("");
+                    $('.penPan').addClass('d-none');
+                } else {
+                    $('.PanLicenseImg').addClass('d-none');
+                    $('.PanLicensePdf').removeClass('d-none');
+                    $("#PanImage").val("");
+                    $("#img-pan").attr('src', '');
+                    $('.penPan').addClass('d-none');
+                }
+            });
+
+            $('input:radio[name="AadharDocument"]').change(function () {
+                if (this.checked && this.value == 'Image') {
+                    $('.AadharDocumentImg').removeClass('d-none');
+                    $('.AadharDocumentPdf').addClass('d-none');
+                    $("#AadharPdf").val("");
+                } else {
+                    $('.AadharDocumentImg').addClass('d-none');
+                    $('.AadharDocumentPdf').removeClass('d-none');
+                    $("#AadharImage").val("");
+                    $("#img-aadhar").attr('src', '');
+                }
+            });
+
+            $('input:radio[name="AccountDocument"]').change(function () {
+                if (this.checked && this.value == 'Image') {
+                    $('.AccountDocumentImg').removeClass('d-none');
+                    $('.AccountDocumentPdf').addClass('d-none');
+                    $("#AccountPdf").val("");
+                } else {
+                    $('.AccountDocumentImg').addClass('d-none');
+                    $('.AccountDocumentPdf').removeClass('d-none');
+                    $("#AccountImage").val("");
+                    $("#img-account").attr('src', '');
+                }
+            });
+
+            if (imgcount != 0) {
+                var fssai = $("#ImageFSSAIPath").val();
+                var drug = $("#ImageDrugPath").val();
+                var establish = $("#ImageEstablishPath").val();
+                var other = $("#ImageOtherLicensePath").val();
+                var auth = $("#ImageAuthoriseBrandPath").val();
+                var gstin = $("#ImageGSTINPath").val();
+                var pan = $("#ImagePanPath").val();
+                var acc = $("#ImageAccountPath").val();
+                if (fssai != null) {
+                    $('#btnFssaiApprove').focus();
+                } if (drug != null) {
+                    $('#btnDrugApprove').focus();
+                } if (establish != null) {
+                    $('#btnEstablishApprove').focus();
+                } if (other != null) {
+                    $('#btnOtherApprove').focus();
+                } if (auth != null) {
+                    $('#btnAuthApprove').focus();
+                } if (gstin != null) {
+                    $('#btnGstinApprove').focus();
+                } if (pan != null) {
+                    $('#btnPanApprove').focus();
+                } if (acc != null) {
+                    $('#btnAccountApprove').focus();
+                }
+            }
+
+            $("#btnFssaiApprove").click(function () {
+                $('#FSSIApprove').val("true");
+                $(".FssaiApprovedlbl").removeClass("d-none");
+                $(".FssaiRejectedlbl").addClass("d-none");
+                $('.Fssai').addClass("d-none");
+                swal("Successfully Approved!", "FSSAI License Approved!", "success");
+                imgcount--;
+                $('#Count').val(imgcount);
+                //if (imgcount == 0) {
+
+                //    $.getJSON("/Shop/VerifyImage?Code=" + code, function (data) {
+                //        if (data.data == true) {
+
+                //            //$(".generatePassword").removeClass("d-none");
+                //        }
+                //    });
+                //}
+            });
+            $('#btnFssaiReject').click(function () {
+                $('#FSSIApprove').val("false");
+                $('#ImageFSSAIPath').val("Rejected");
+                $('#FSSAINumber').val("Rejected");
+                $(".FssaiApprovedlbl").addClass("d-none");
+                $(".FssaiRejectedlbl").removeClass("d-none");
+                $('.Fssai').addClass("d-none");
+                $("#btnFssaiReject").hide();
+                $("#btnFssaiApprove").hide();
+            });
+            $("#btnDrugApprove").click(function () {
+                $('#DrugApprove').val("true");
+                $('.DrugApprovedlbl').removeClass("d-none");
+                $('#btnDrugReject').hide();
+                $('#btnDrugApprove').hide();
+                $('.Drug').addClass("d-none");
+                swal("Successfully Approved!", "Drug License Approved!", "success");
+                imgcount--;
+                $('#Count').val(imgcount);
+                //if (imgcount == 0) {
+
+                //    $.getJSON("/Shop/VerifyImage?Code=" + code, function (data) {
+                //        if (data.data == true) {
+                //            //$(".generatePassword").removeClass("d-none");
+                //        }
+                //    });
+                //}
+            });
+            $('#btnDrugReject').click(function () {
+                $('#DrugApprove').val("false");
+                $('#ImageDrugPath').val("Rejected");
+                $('#DrugNumber').val("Rejected");
+                $(".DrugApprovedlbl").addClass("d-none");
+                $(".DrugRejectedlbl").removeClass("d-none");
+                $('.Drug').addClass("d-none");
+                $("#btnDrugReject").hide();
+                $("#btnDrugApprove").hide();
+            });
+
+            $("#btnEstablishApprove").click(function () {
+                $('#EstablishApprove').val("true");
+                $('.EstablishApprovedlbl').removeClass("d-none");
+                $('#btnEstablishReject').hide();
+                $('#btnEstablishApprove').hide();
+                $('.Establish').addClass("d-none");
+                swal("Successfully Approved!", "Establish License Approved!", "success");
+                imgcount--;
+                $('#Count').val(imgcount);
+                //if (imgcount == 0) {
+
+                //    $.getJSON("/Shop/VerifyImage?Code=" + code, function (data) {
+                //        if (data.data == true) {
+                //            //$(".generatePassword").removeClass("d-none");
+                //        }
+                //    });
+                //}
+            });
+            $('#btnEstablishReject').click(function () {
+                $('#EstablishApprove').val("false");
+                $('#ImageEstablishPath').val("Rejected");
+                $('#EstablishNumber').val("Rejected");
+                $(".EstablishApprovedlbl").addClass("d-none");
+                $(".EstablishRejectedlbl").removeClass("d-none");
+                $('.Establish').addClass("d-none");
+                $("#btnEstablishReject").hide();
+                $("#btnEstablishApprove").hide();
+            });
+
+            $("#btnOtherApprove").click(function () {
+                $('#OtherApprove').val("true");
+                $('.OtherApprovedlbl').removeClass("d-none");
+                $('#btnOtherReject').hide();
+                $('#btnOtherApprove').hide();
+                $('.Other').addClass("d-none");
+                swal("Successfully Approved!", "Other License Approved!", "success");
+                imgcount--;
+                $('#Count').val(imgcount);
+                //if (imgcount == 0) {
+
+                //    $.getJSON("/Shop/VerifyImage?Code=" + code, function (data) {
+                //        if (data.data == true) {
+                //            //$(".generatePassword").removeClass("d-none");
+                //        }
+                //    });
+                //}
+            });
+            $('#btnOtherReject').click(function () {
+                $('#OtherApprove').val("false");
+                $('#ImageOtherLicensePath').val("Rejected");
+                $('#OtherLicenseNumber').val("Rejected");
+                $('#OtherLicenseName').val("Rejected");
+                $(".OtherApprovedlbl").addClass("d-none");
+                $(".OtherRejectedlbl").removeClass("d-none");
+                $('.Other').addClass("d-none");
+                $("#btnOtherReject").hide();
+                $("#btnOtherApprove").hide();
+            });
+
+            $("#btnAuthApprove").click(function () {
+                $('#AuthApprove').val("true");
+                $('.AuthApprovedlbl').removeClass("d-none");
+                $('#btnAuthReject').hide();
+                $('#btnAuthApprove').hide();
+                $('.Auth').addClass("d-none");
+                swal("Successfully Approved!", "Authorised Brand Approved!", "success");
+                imgcount--;
+                $('#Count').val(imgcount);
+                //if (imgcount == 0) {
+
+                //    $.getJSON("/Shop/VerifyImage?Code=" + code, function (data) {
+                //        if (data.data == true) {
+
+                //            //$(".generatePassword").removeClass("d-none");
+                //        }
+                //    });
+                //}
+            });
+            $('#btnAuthReject').click(function () {
+                $('#AuthApprove').val("false");
+                $('#ImageAuthoriseBrandPath').val("Rejected");
+                $('#AuthorisedBrandName').val("Rejected");
+                $(".AuthApprovedlbl").addClass("d-none");
+                $(".AuthRejectedlbl").removeClass("d-none");
+                $('.Auth').addClass("d-none");
+                $("#btnAuthReject").hide();
+                $("#btnAuthApprove").hide();
+            });
+
+            $("#btnGstinApprove").click(function () {
+                $('#GstinApprove').val("true");
+                $('.GstinApprovedlbl').removeClass("d-none");
+                $('#btnGstinReject').hide();
+                $('#btnGstinApprove').hide();
+                $('.Gstin').addClass("d-none");
+                swal("Successfully Approved!", "GSTIN Number Approved!", "success");
+                imgcount--;
+                $('#Count').val(imgcount);
+                //if (imgcount == 0) {
+
+                //    $.getJSON("/Shop/VerifyImage?Code=" + code, function (data) {
+                //        if (data.data == true) {
+                //            //$(".generatePassword").removeClass("d-none");
+                //        }
+                //    });
+                //}
+            });
+            $('#btnGstinReject').click(function () {
+                $('#GstinApprove').val("false");
+                $('#ImageGSTINPath').val("Rejected");
+                $('#GSTINNumber').val("Rejected");
+                $(".GstinApprovedlbl").addClass("d-none");
+                $(".GstinRejectedlbl").removeClass("d-none");
+                $('.Gstin').addClass("d-none");
+                $("#btnGstinReject").hide();
+                $("#btnGstinApprove").hide();
+            });
+
+            $("#btnPanApprove").click(function () {
+                $('#PanApprove').val("true");
+                $('.PanApprovedlbl').removeClass("d-none");
+                $('#btnPanReject').hide();
+                $('#btnPanApprove').hide();
+                $('.Pan').addClass("d-none");
+                swal("Successfully Approved!", "Pan Number Approved!", "success");
+                imgcount--;
+                $('#Count').val(imgcount);
+                //if (imgcount == 0) {
+
+                //    $.getJSON("/Shop/VerifyImage?Code=" + code, function (data) {
+                //        if (data.data == true) {
+                //            //$(".generatePassword").removeClass("d-none");
+                //        }
+                //    });
+                //}
+            });
+            $('#btnPanReject').click(function () {
+                $('#PanApprove').val("false");
+                $('#ImagePanPath').val("Rejected");
+                $('#PanNumber').val("Rejected");
+                $(".PanApprovedlbl").addClass("d-none");
+                $(".PanRejectedlbl").removeClass("d-none");
+                $('.Pan').addClass("d-none");
+                $("#btnPanReject").hide();
+                $("#btnPanApprove").hide();
+            });
+
+            $("#btnAccountApprove").click(function () {
+                $('#AccountApprove').val("true");
+                $('.AccountApprovedlbl').removeClass("d-none");
+                $('#btnAccountReject').hide();
+                $('#btnAccountApprove').hide();
+                $('.Account').addClass("d-none");
+                swal("Successfully Approved!", "Bank Details Approved!", "success");
+                imgcount--;
+                $('#Count').val(imgcount);
+                //if (imgcount == 0) {
+
+                //    $.getJSON("/Shop/VerifyImage?Code=" + code, function (data) {
+                //        if (data.data == true) {
+                //            //$(".generatePassword").removeClass("d-none");
+                //        }
+                //    });
+                //}
+            });
+            $('#btnAccountReject').click(function () {
+                $('#AccountApprove').val("false");
+                $('#ImageAccountPath').val("Rejected");
+                $('#BankName').val("Rejected");
+                $('#AccountName').val("Rejected");
+                $('#AccountNumber').val("Rejected");
+                $('#IFSCCode').val("Rejected");
+                $(".AccountApprovedlbl").addClass("d-none");
+                $(".AccountRejectedlbl").removeClass("d-none");
+                $('.Account').addClass("d-none");
+                $("#btnAccountReject").hide();
+                $("#btnAccountApprove").hide();
+            });
+
+            //$(function () {
+            //    var code = $('#Code').val();
+            //    $.getJSON("/Shop/Activation?Code=" + code, function (data) {
+            //        if (data.count >= 10) {
+            //            $(".generateOTP").addClass("d-none");
+            //            $(".verifyOTP").removeClass("d-none");
+            //            $(".PhoneVerify").addClass("d-none");
+            //            $(".generatePassword").removeClass("d-none");
+            //            $(".NotverifyOTP").addClass("d-none");
+            //        }
+            //    });
+            //});
+            $(function () {
+                var $radios = $('input:radio[name=distributorCheck]');
+                if ($radios.is(':checked') === true) {
+                    $('.distributor').removeClass('d-none');
+                } else {
+                    $('.distributor').addClass('d-none');
+                }
+            });
+
+            $('input:radio[name="distributorCheck"]').change(
+                function () {
+                    if (this.checked && this.value == 'yes') {
+                        $('.distributor').removeClass('d-none');
+                    } else {
+                        $('.distributor').addClass('d-none');
+                    }
+                });
+
+            $('#ShopCategoryCode').select2({
+                placeholder: "Search Shop Type",
+                ajax: {
+                    url: "/Shop/GetShopCategorySelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ShopCategoryName"]').val(e.params.data.text);
+            });
+
+            $('#AuthorisedBrandCode').select2({
+                placeholder: "Search Brand",
+                ajax: {
+                    url: "/Shop/GetBrandSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="AuthorisedBrandName"]').val(e.params.data.text);
+            });
+
+            var phone = $('#PhoneNumber').val();
+            if (phone != "") {
+                $('.manualmobile').addClass('d-none');
+                $('.mobile').removeClass('d-none');
+            } else {
+                $('.mobile').addClass('d-none');
+                $('.manualmobile').removeClass('d-none');
+            }
+            var website = $('#Website').val();
+            if (website != null) {
+                $('.website').removeClass('d-none');
+                $('.manualwebsite').addClass('d-none');
+            } else {
+                $('.website').addClass('d-none');
+                $('.manualwebsite').removeClass('d-none');
+            }
+
+
+            $(document).on('change', '.btn-file :file', function () {
+                var input = $(this),
+                    label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+                input.trigger('fileselect', [label]);
+            });
+
+            $('.btn-file :file').on('fileselect', function (event, label) {
+
+                var input = $(this).parents('.input-group').find(':text'),
+                    log = label;
+
+                if (input.length) {
+                    input.val(log);
+                } else {
+                    if (log) alert(log);
+                }
+
+            });
+
+            function readAuthoriseURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#img-authorise').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#AuthorisedDistributorImage").change(function () {
+                readAuthoriseURL(this);
+            });
+
+            function readOtherLicenseURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#img-other').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#OtherLicenseImage").change(function () {
+                readOtherLicenseURL(this);
+            });
+            function readEstablishURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#img-establish').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#EstablishImage").change(function () {
+                readEstablishURL(this);
+            });
+            function readDrugURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#img-drug').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#DrugImage").change(function () {
+                readDrugURL(this);
+            });
+            function readFssaiURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#img-fssai').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#FSSAIImage").change(function () {
+                readFssaiURL(this);
+            });
+
+            function readURLPan(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#img-pan').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#PanImage").change(function () {
+                readURLPan(this);
+            });
+
+            function readURLGstin(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#img-gstin').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#GSTINImage").change(function () {
+                readURLGstin(this);
+            });
+
+            function readURLAccount(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#img-account').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#AccountImage").change(function () {
+                readURLAccount(this);
+            });
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#img-upload').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#ShopImage").change(function () {
+                readURL(this);
+            });
+            function readURLLogo(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#img-logo').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#LogoImage").change(function () {
+                readURLLogo(this);
+            });
+
+            function readURLBanner(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#img-banner').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#BannerImage").change(function () {
+                readURLBanner(this);
+            });
+
+            function readURLLicence(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#img-license').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#LicenseImage").change(function () {
+                readURLLicence(this);
+            });
+
+            function readURLLicence(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#img-aadhar').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#AadharImage").change(function () {
+                readURLLicence(this);
+            });
+
+        });
+
+    var map, infoWindow, markers = [];
+        function initMap() {
+
+            var latitude = parseFloat($('#Latitude').val());
+            var longitude = parseFloat($('#Longitude').val());
+            var center = new google.maps.LatLng(latitude, longitude);
+            var card = document.getElementById('pac-card');
+            var input = document.getElementById('pac-input');
+            var autocomplete = new google.maps.places.Autocomplete(input);
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: latitude, lng: longitude },
+                zoom: 6
+            });
+
+            infoWindow = new google.maps.InfoWindow;
+            var pos = {
+                lat: latitude,
+                lng: longitude
+            };
+
+            var marker = new google.maps.Marker({
+                position: pos,
+                map: map,
+                title: "your place"
+            });
+            google.maps.event.addListener(marker, 'click', function () {
+                infowindow.open(map, marker);
+            });
+            markers.push(marker);
+
+            //var google_maps_geocoder = new google.maps.Geocoder();
+            //google_maps_geocoder.geocode(
+            //    { 'latLng': pos },
+            //    function (results, status) {
+            //        console.log(results);
+
+            //    }
+            //);
+
+            autocomplete.addListener('place_changed', function () {
+                document.getElementById("location-error").style.display = 'none';
+                markers.forEach(function (marker) {
+                    marker.setMap(null);
+                });
+
+                var place = autocomplete.getPlace();
+                if (!place.geometry) {
+                    document.getElementById("location-error").style.display = 'inline-block';
+                    document.getElementById("location-error").innerHTML = "Cannot Locate '" + input.value + "' on map";
+                    return;
+                }
+                var marker = new google.maps.Marker({
+                    position: pos,
+                    map: map,
+                    title: "your place"
+                });
+
+                google.maps.event.addListener(marker, 'click', function () {
+                    infowindow.open(map, marker);
+                });
+                markers.push(marker);
+
+                map.fitBounds(place.geometry.viewport);
+                marker.setPosition(place.geometry.location);
+                marker.setVisible(true);
+                console.log(place);
+
+                $('#Address').val(place.formatted_address);
+                var address = place.address_components;
+                $.each(address, function () {
+
+                    if (this.types[0] == "locality") {
+                        $('#StreetName').val(this.long_name);
+                    }
+                    if (this.types[0] == "administrative_area_level_2") {
+                        $('#DistrictName').val(this.long_name);
+                    }
+                    if (this.types[0] == "administrative_area_level_1") {
+                        $('#StateName').val(this.long_name);
+                    }
+                    if (this.types[0] == "country") {
+                        $('#CountryName').val(this.long_name);
+                    }
+                    if (this.types[0] == "postal_code") {
+                        $('#PinCode').val(this.long_name);
+                    }
+                });
+                $('#Latitude').val(place.geometry.location.lat);
+                $('#Longitude').val(place.geometry.location.lng);
+
+                //$.getJSON("https://api.ipify.org/?format=json", function (e) {
+                //    $('#IpAddress').val(e.ip);
+                //});
+                $.getJSON('/Api/GetCountry?placeid=' + place.place_id, null, function (data) {
+                    $('#Rating').val(data.result.result.rating);
+                    $('#CustomerReview').val(data.result.result.user_ratings_total);
+                    $('#Name').val(data.result.result.name);
+
+                    if (data.result.result.international_phone_number != null) {
+                        $('.manualmobile').addClass('d-none');
+                        $('.mobile').removeClass('d-none');
+                        $('#PhoneNumber').val(data.result.result.international_phone_number);
+                    } else {
+                        $('.mobile').addClass('d-none');
+                        $('.manualmobile').removeClass('d-none');
+                    }
+
+                    if (data.result.result.website != null) {
+                        $('.website').removeClass('d-none');
+                        $('.manualwebsite').addClass('d-none');
+                        $('#Website').val(data.result.result.website);
+                    } else {
+                        $('.website').addClass('d-none');
+                        $('.manualwebsite').removeClass('d-none');
+                    }
+
+                    var monday = data.result.result.opening_hours.weekday_text[0];
+                    var mon = monday.split(" ");
+                    var amm = mon[1] + " " + mon[2];
+                    var pmm = mon[4] + " " + mon[5];
+                    $('#MondayOpenTime').val(amm);
+                    $('#MondayCloseTime').val(pmm);
+
+                    var tuesday = data.result.result.opening_hours.weekday_text[1];
+                    var tue = tuesday.split(" ");
+                    var amt = tue[1] + " " + tue[2];
+                    var pmt = tue[4] + " " + tue[5];
+                    $('#TuesdayOpenTime').val(amt);
+                    $('#TuesdayCloseTime').val(pmt);
+                    var wednesday = data.result.result.opening_hours.weekday_text[2];
+                    var wed = wednesday.split(" ");
+                    var amw = wed[1] + " " + wed[2];
+                    var pmw = wed[4] + " " + wed[5];
+                    $('#WednesdayOpenTime').val(amw);
+                    $('#WednesdayCloseTime').val(pmw);
+                    var thursday = data.result.result.opening_hours.weekday_text[3];
+                    var thu = thursday.split(" ");
+                    var amt = thu[1] + " " + thu[2];
+                    var pmt = thu[4] + " " + thu[5];
+                    $('#ThursdayOpenTime').val(amt);
+                    $('#ThursdayCloseTime').val(pmt);
+
+                    var friday = data.result.result.opening_hours.weekday_text[4];
+                    var fri = friday.split(" ");
+                    var amf = fri[1] + " " + fri[2];
+                    var pmf = fri[4] + " " + fri[5];
+                    $('#FridayOpenTime').val(amf);
+                    $('#FridayCloseTime').val(pmf);
+
+                    var saturday = data.result.result.opening_hours.weekday_text[5];
+                    var sat = saturday.split(" ");
+                    var ams = sat[1] + " " + sat[2];
+                    var pms = sat[4] + " " + sat[5];
+                    $('#SaturdayOpenTime').val(ams);
+                    $('#SaturdayCloseTime').val(pms);
+
+                    var sunday = data.result.result.opening_hours.weekday_text[6];
+                    var sun = sunday.split(" ");
+                    var amu = sun[1] + " " + sun[2];
+                    var pmu = sun[4] + " " + sun[5];
+                    $('#SundayOpenTime').val(amu);
+                    $('#SundayCloseTime').val(pmu);
+                });
+            });
+        }
+
+         $(document).ready(function ($) {
+            $("input:radio[value='@Model.Type'][name='Type']").prop('checked', true);
+        });
+
+    </script>
+}
+

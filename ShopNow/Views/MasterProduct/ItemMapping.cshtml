@@ -1,0 +1,83 @@
+﻿@model ShopNow.ViewModels.ItemMappingViewModel
+@{
+    ViewBag.Title = "Single ItemMapping";
+}
+<title>ShopNow | Single Item Mapping</title>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <h5 class="text-success" style="letter-spacing:1px">SINGLE ITEM MAPPING</h5>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <div class="col-md-12">
+                                    <label class="col-form-label text-secondary font-weight-bold">Shop Name<span class="text-danger">*</span></label>
+                                    <select id="ShopCode" name="ShopCode" class="form-control"></select>
+                                    <input type="hidden" name="ShopName" id="ShopName" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-4">
+                            <button type="button" class="btn btn-success Save mt-3" id="Create"><span class="glyphicon glyphicon-file"></span>Go to Map</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script src="~/Scripts/ValidateRequiredFields.js"></script>
+    <script src="~/Scripts/multiple-image-upload.js"></script>
+    <link href="~/Content/multiple-image-upload.css" rel="stylesheet" />
+    <script src="~/Scripts/ckeditor/ckeditor.js"></script>
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+
+    <script>
+        $(document).ready(function () {
+
+            $(document).on('click', '.Save', function () {
+                var shopcode = $('#ShopCode').val();
+                if (shopcode == "" || shopcode == null) {
+                    swal("Warning!", "Please Select Shop Name!", "warning");
+                } else {
+                    window.location = "/MasterProduct/SingleItemMapping?shopcode=" + shopcode;
+                }
+                //$.post('/MasterProduct/SingleMapping', { shopcode: shopcode }, function (data) {
+                //    if (data == true) {
+                //        window.location.reload();
+                //    }
+                //});
+            });
+            $('#ShopCode').select2({
+                placeholder: "Search Shop",
+                ajax: {
+                    url: "/MasterProduct/GetShopSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ShopName"]').val(e.params.data.text);
+            });
+
+        });
+    </script>
+}
+

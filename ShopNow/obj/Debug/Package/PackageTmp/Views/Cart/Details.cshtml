@@ -1,0 +1,102 @@
+﻿@model ShopNow.ViewModels.CartDetailsViewModel
+@{
+
+    ViewBag.Title = "Cart Details";
+}
+<div class="px-3 mb-3">
+    <div class="d-flex flex-row my-3">
+        <div class="button-group ml-auto">
+            <a href="~/Cart/List" class="ml-auto" target="_self"><span class="fa fa-bars"></span> New Order List</a>
+        </div>
+    </div>
+</div>
+<div class="container-fluid my-0">
+    <div class="row bg-green-200">
+        <div class="col-md-12 mx-auto">
+            @Html.AntiForgeryToken()
+            <div class="card">
+                <div class="card-header">
+                    <span class="text-success h5"><strong>Cart Details</strong></span>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 text-center">
+                            <label class="font-weight-bold text-secondary">Image</label>
+                            <div class="col-md-12 mb-2">
+                                <img id='img-upload' src="@Model.ImagePath" class="img-thumbnail" width="100" height="100" onerror="this.src='~/Images/No Photo.png'" />
+                            </div>
+                            @if (Model.ProductName != null)
+                            {
+                                <span class="text-dark font-weight-bold"> @Model.ProductName</span>
+                            }
+                        </div>
+                        <div class="col-md-9">
+                            <p>
+                                <span>Brand:</span>
+                                @if (Model.BrandName != null)
+                                {
+                                    <span class="text-dark font-weight-bold"> @Model.BrandName</span>
+                                }
+                                else
+                                {
+                                    <span class="font-weight-bold text-dark"> N/A</span>
+                                }
+                                <span>Category: </span>
+                                @if (Model.CategoryName != null)
+                                {
+                                    <span class="text-dark font-weight-bold"> @Model.CategoryName</span>
+                                }
+                                else
+                                {
+                                    <span class="font-weight-bold text-dark"> N/A</span>
+                                }
+                            </p>
+                            <p>
+                                M.R.P:
+                                @if (Model.Price != 0)
+                                {
+                                    <span class="font-weight-bold text-dark"> @Model.Price</span>
+                                }
+                                else
+                                {
+                                    <span class="font-weight-bold text-dark"> N/A</span>
+                                }
+                                Quantity:
+                                @if (Model.Price != 0)
+                                {
+                                    <span class="font-weight-bold text-dark"> @Model.Qty</span>
+                                }
+                                else
+                                {
+                                    <span class="font-weight-bold text-dark"> N/A</span>
+                                }
+                            </p>
+                            <p>
+                                Shop Name:
+                                @if (Model.ShopName != null)
+                                {
+                                    <span class="font-weight-bold text-dark"> @Model.ShopName</span>
+                                }
+                                else
+                                {
+                                    <span class="font-weight-bold text-dark"> N/A</span>
+                                }
+                            </p>
+                            <p>
+                                Delivery Address:
+                                @if (Model.DeliveryAddress != null)
+                                {
+                                    <span class="font-weight-bold text-dark"> @Model.DeliveryAddress</span>
+                                }
+                                else
+                                {
+                                    <span class="font-weight-bold text-dark"> N/A</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

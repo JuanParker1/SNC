@@ -1,0 +1,152 @@
+﻿@model ShopNow.ViewModels.DishAddOnViewModel
+@using System.Data;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<title>Shop Now | Dish AddOn Ecxel Upload</title>
+<div class="container">
+    @using (Html.BeginForm("Index", "DishAddOn", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+        <div class="row">
+            <div class="col-md-12">
+                <h5>Dish AddOn Master Excel Upload</h5>
+                <div class="row mt-3">
+                    <div class="col-md-6 mb-2">
+                        <input type="file" id="dataFile" name="upload" />
+                        @if (Model != null)
+                        {
+                            <input type="hidden" value="save" name="button" class="btn btn-secondary" />
+                        }
+                        else
+                        {
+                            <input type="hidden" value="upload" name="button" class="btn btn-success" />
+                        }
+                    </div>
+                    <div class="col-md-6">
+                        <input type="submit" value="Upload" class="btn btn-success" />
+                    </div>
+                </div>
+                <div class="row">
+                    @if (Model != null)
+                    {
+                        <div class="col-md-12 my-2"> <hr class="border-success" style="border-top: 1px dashed" /></div>
+                        <div class="col-md-5">
+                            <p class="text-success">Excel Headers</p>
+                            <table id="DishAddon-list">
+                                <thead>
+                                </thead>
+                                <tbody>
+                                    @foreach (DataColumn col in Model.DataTable.Columns)
+                                    {
+                                        <tr>
+                                            <td>@col.ColumnName</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <input id="FileName" name="FileName" type="hidden" value="@Model.Filename" />
+                            <hr class="border-success" style="border-top: 1px dashed" />
+                        </div>
+                        <div class="col-md-6">
+                            <p class="text-success">Choose Excel Headers</p>
+                            <table id="Database-list" class="w-100">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-5">Name</label>
+                                            <input id="Name" name="Name" type="text" class="col-md-4" />
+                                            <input id="DBName" name="DBName" type="hidden" class="col-md-3" value="Name" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-5">Master Product Name</label>
+                                            <input id="MasterProductName" name="MasterProductName" type="text" class="col-md-4" />
+                                            <input id="DBMasterProductName" name="DBMasterProductName" type="hidden" class="col-md-3" value="MasterProductName" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-5">AddOn Category Name</label>
+                                            <input id="AddOnCategoryName" name="AddOnCategoryName" type="text" class="col-md-4" />
+                                            <input id="DBAddOnCategoryName" name="DBAddOnCategoryName" type="hidden" class="col-md-3" value="AddOnCategoryName" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-5">Portion Name</label>
+                                            <input id="PortionName" name="PortionName" type="text" class="col-md-4" />
+                                            <input id="DBPortionName" name="DBPortionName" type="hidden" value="PortionName" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-5">CrustName</label>
+                                            <input id="CrustName" name="CrustName" type="text" class="col-md-4" />
+                                            <input id="DBCrustName" name="DBCrustName" type="hidden" value="CrustName" />
+                                        </td>
+                                    </tr>                
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-5">Price</label>
+                                            <input id="Price" name="Price" type="text" class="col-md-4" />
+                                            <input id="DBPrice" name="DBPrice" type="hidden" value="Price" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                            <div class="col-md-9 text-center my-3">
+                                <input type="submit" value="submit" class="btn btn-success" />
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@section Scripts
+    {
+    <script>
+        $(document).ready(function () {
+
+            var tbl = document.getElementById("DishAddon-list");
+            if (tbl != null) {
+                for (var i = 0; i < tbl.rows.length; i++) {
+                    for (var j = 0; j < tbl.rows[i].cells.length; j++)
+                        tbl.rows[i].cells[j].onclick = function () { getval(this); };
+                }
+            }
+            function getval(cel) {
+                $(function () {
+                    $('#Name').on('click', function () {
+                        $('#Name').val(cel.innerHTML)
+                    });
+                    $('#MasterProductName').on('click', function () {
+                        $('#MasterProductName').val(cel.innerHTML)
+                    });
+                    $('#AddOnCategoryName').on('click', function () {
+                        $('#AddOnCategoryName').val(cel.innerHTML)
+                    });
+                    $('#PortionName').on('click', function () {
+                        $('#PortionName').val(cel.innerHTML)
+                    });
+                    $('#CrustName').on('click', function () {
+                        $('#CrustName').val(cel.innerHTML)
+                    });
+                    //$('#Qty').on('click', function () {
+                    //    $('#Qty').val(cel.innerHTML)
+                    //});
+                    $('#Price').on('click', function () {
+                        $('#Price').val(cel.innerHTML)
+                    });
+                });
+            }
+
+        });
+    </script>
+}
+

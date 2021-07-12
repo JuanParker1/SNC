@@ -1,0 +1,87 @@
+﻿@model IEnumerable<ShopNow.ViewModels.CartListViewModel.CartList>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Delivery Agent Assigned List";
+}
+<title>ShopNow | Delivery Agent Assigned List</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+<div class="container-fluid">
+    <div class="row my-2">
+        <div class="col-md-4">
+            <h5 class="mt-1 text-success" style="letter-spacing:1px">DELIVERY AGENT ASSIGNED LIST</h5>
+        </div>
+        <div class="col-md-3">
+            <select name="ShopCode" id="ShopCode" class="form-control"></select>
+            <input type="hidden" name="ShopName" id="ShopName" />
+        </div>
+        <div class="col-md-1">
+            <input type="button" class="form-control btn btn-sm btn-success" name="Filter" id="Filter" value="Filter" />
+        </div>
+        <div class="col-md-4 text-right">
+            <a href="~/Cart/Pending" class="ml-auto" target="_self"><span class="fa fa-bars"></span> New Order List</a>
+        </div>
+    </div>
+
+    @Html.Grid(Model).Columns(columns =>
+{
+    columns.Add(c => c.OrderNo).Titled("OrderNo").Filterable(true).SetWidth(10);
+    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
+    columns.Add(c => c.DeliveryBoyName).Titled("DeliveryBoy").Filterable(true).SetWidth(10);
+    columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(15);
+    columns.Add(c => c.PhoneNumber).Titled("DeliveryBoy Phone").Filterable(true).SetWidth(15);
+    columns.Add().RenderValueAs(c => c.CartStatus == 4 ? "Assigned for Delivery" : "N/A").Titled("Order Status").Filterable(true).SetWidth(10);
+    columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10);
+    columns.Add()
+    .Encoded(false)
+    .Sanitized(false)
+    .RenderValueAs(o => Html.ActionLink("View", "Edit", new { orderno = o.OrderNo, code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code) }, new { @class = "btn btn-vsm btn-info mr-1",  }).ToHtmlString()
+    + Html.ActionLink("UnAssigned", "UnAssignDeliveryBoy", new { OrderNo = o.OrderNo}, new { @class = "btn  btn-sm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
+}).WithPaging(20).Sortable(true)
+
+</div>
+
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script>
+        $(document).ready(function () {
+
+            $('#ShopCode').select2({
+                placeholder: "Search Shop",
+                ajax: {
+                    url: "/Cart/GetShopSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ShopName"]').val(e.params.data.text);
+            });
+
+            $("#Filter").click(function () {
+                var shopcode = $("#ShopCode").val();
+                window.location.href = "/Cart/DeliveryAgentAssigned/?shopcode=" + shopcode;
+            });
+
+            $("#btnReject").click(function () {
+                var orderno = $(this).data("orderno");
+                $.getJSON("/Cart/DeliveryBoyReject", { orderNo: orderno }, function (data) {
+                    if (data == true) {
+                        window.location.href = "/Cart/OrderPrepared";
+                    } else {
+                        window.location.reload();
+                    }
+                });
+            });
+
+        });
+
+    </script>
+
+}
+

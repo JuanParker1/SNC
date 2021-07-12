@@ -1,0 +1,77 @@
+﻿@model ShopNow.ViewModels.RefundPendingViewModel
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Pending Refund";
+}
+<title>ShopNow | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <h5 class="mt-1 text-uppercase" style="letter-spacing:1px">@ViewBag.Title</h5>
+        </div>
+
+        <div class="col-md-6">
+            <form method="get" action="/Refund/Pending">
+                <div class="row">
+                    <div class="col-md-4"><input id="date-order" type="date" class="form-control" name="OrderDate" @if (Model.OrderDate != null) { <text> value="@Model.OrderDate.Value.ToString("yyyy-MM-dd")" </text> } /></div>
+                    <div class="col-md-4">
+                        <select class="form-control" id="select-shop" name="ShopCode">
+                            @if (!string.IsNullOrEmpty(Model.ShopName))
+                            {
+                                <option value="@Model.ShopCode">@Model.ShopName</option>
+                            }
+                        </select>
+                        <input type="hidden" name="ShopName" value="@Model.ShopName" />
+                    </div>
+                    <input type="submit" class="btn btn-info" value="Apply Filter" />
+                </div>
+            </form>
+        </div>
+
+    </div>
+    @Html.Grid(Model.ListItems).Columns(columns =>
+{
+    columns.Add(c => c.PaymentId).Titled("Payment Id").Filterable(true).SetWidth(10);
+    columns.Add(c => c.OrderNo).Titled("Order No").Filterable(true).SetWidth(10);
+    columns.Add(c => c.CustomerPhoneNo).Titled("Customer PhoneNo").Filterable(true).SetWidth(10);
+    columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(10);
+    columns.Add(c => c.Remark).Titled("Remark").Filterable(true).SetWidth(10);
+    columns.Add()
+   .Encoded(false)
+   .Sanitized(false)
+   .RenderValueAs(o => Html.ActionLink("Refund", "SendRefund", new { paymentId = o.PaymentId,amount=o.Amount,orderNo = o.OrderNo }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()).Titled("Action").SetWidth(15);
+}).WithPaging(20).Sortable(true)
+
+</div>
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function() {
+            $('#select-shop').select2({
+                placeholder: "Select Shop",
+                ajax: {
+                    url: "/Shop/GetActiveListSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ShopName"]').val(e.params.data.text);
+                });
+
+            var errormsg = "@Model.ErrorMessage";
+            if (errormsg != "") {
+                swal("Notice!", errormsg, "warning")
+            }
+        });
+    </script>
+}

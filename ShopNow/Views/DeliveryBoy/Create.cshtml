@@ -1,0 +1,523 @@
+﻿@model ShopNow.ViewModels.DeliveryBoyCreateEditViewModel
+@{
+    ViewBag.Title = "Create";
+}
+<title>ShopNow | DeliveryBoy Entry</title>
+
+<div class="container-fluid my-0">
+    <div class="row">
+        <div class="col-md-3">
+            <h5 class="mt-1" style="letter-spacing:1px">DELIVERYBOY ENTRY</h5>
+        </div>
+        <div class="col-md-9 text-right">
+            <a href="~/DeliveryBoy/List" target="_self"><span class="fa fa-bars"></span>&nbsp;DeliveryBoy List</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            @using (Html.BeginForm("Create", "DeliveryBoy", FormMethod.Post, new { id = "DeliveryBoyForm", role = "form", enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    @*<div class="col-md-3">
+                                        <label class="col-form-label"><strong class="text-secondary">Shop Name</strong></label>
+                                        <select class="form-control" name="ShopCode" id="ShopCode"></select>
+                                        <input type="hidden" name="ShopName" id="ShopName" />
+                                    </div>*@
+                                    <div class="col-md-4">
+                                        <label class="col-form-label"><strong class="text-secondary">Delivery Boy Name</strong></label>
+                                        <div class="DeliverBoyName">
+                                            <input id="Name" type="text" class="form-control" name="Name" />
+                                        </div>
+                                        @*<div class="Staff d-none">
+                                            <select class="form-control" name="StaffCode" id="StaffCode" style="width:100%"></select>
+                                            <input type="hidden" name="StaffName" id="StaffName" />
+                                        </div>
+                                        <input type="checkbox" id="IsStaff" name="IsStaff">
+                                        <label for="IsStaff">Is he/she Already a Staff</label>*@
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="col-form-label"><strong class="text-secondary">Mobile Number</strong></label>
+                                        <input type="text" class="form-control" name="PhoneNumber" id="PhoneNumber" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="col-form-label"><strong class="text-secondary">Email</strong></label>
+                                        <input type="text" class="form-control" name="Email" id="Email" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <div class="col-md-5">
+                                        <div class="row ml-2">
+                                            <input class="col-11 mb-2" id="pac-input" type="text" placeholder="Select your Place" />
+                                            <div id="location-error"></div>
+                                            <div class="" id="map" style="width: 92%; height: 250px;"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label class="col-form-label"><strong class="text-secondary">Delivery Agent Preference Area</strong></label>
+                                                <input id="Address" type="text" class="form-control mb-2" name="Address" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <small class="control-label" for="StreetName"><i class="text-secondary">Locality</i></small>
+                                                <input id="StreetName" type="text" class="form-control mb-2" name="StreetName" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <small class="control-label" for="DistrictName"><i class="text-secondary">District</i></small>
+                                                <input id="DistrictName" type="text" class="form-control" name="DistrictName" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <small class="control-label" for="StateName"><i class="text-secondary">State / Province</i></small>
+                                                <input id="StateName" type="text" class="form-control mb-2" name="StateName" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <small class="control-label" for="CountryName"><i class="text-secondary">Country</i></small>
+                                                <input id="CountryName" type="text" class="form-control" name="CountryName" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <small class="control-label" for="PinCode"><i class="text-secondary">PIN Code</i></small>
+                                                <input id="PinCode" type="text" class="form-control" name="PinCode" />
+                                            </div>
+                                            <div class="col-md-4"></div>
+                                            <div class="col-md-4">
+                                                <small class="control-label col-sm-12" for="Latitude"><i class="text-secondary">Latitude</i></small>
+                                                <input id="Latitude" type="text" class="form-control mb-2" placeholder="Latitude" name="Latitude" readonly />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <small class="control-label col-sm-12" for="Longitude"><i class="text-secondary">Longitude</i></small>
+                                                <input id="Longitude" type="text" class="form-control" placeholder="Longitude" name="Longitude" readonly />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mx-2 row">
+                                <div class="card-deck">
+                                    <div class="card border-info">
+                                        <div class="card-body ">
+                                            <label class="col-md-12 text-center text-secondary font-weight-bold">Image</label>
+                                            <label class="col-md-12 small font-italic">* Upload recent photo</label>
+                                            <div class="img-upload-container mx-auto text-center">
+                                                <img class="img-container w-100 h-100" id="img-upload" />
+                                                <input type="file" id="DeliveryBoyImage" name="DeliveryBoyImage" class="d-none" />
+                                                <label for="DeliveryBoyImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card border-info">
+                                        <div class="card-body">
+                                            <label class="col-md-12 text-center"><strong class="text-secondary">Resume</strong></label>
+                                            <label class="col-md-12 text-left"><small class="text-secondary font-italic"><i>* Upload PDF</i></small></label>
+                                            <div class="row ml-3 mt-2 mb-3">
+                                                <input type="file" id="CVPdf" name="CVPdf" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card border-info bg-muted">
+                                        <div class="card-body">
+                                            <label class="col-md-12 text-center"><strong class="text-secondary">Driving License</strong></label>
+                                            <label class="col-md-12 text-left"><small class="text-secondary"><i>License Number</i></small></label>
+                                            <input id="LicenseNumber" type="text" class="form-control" name="LicenseNumber" />
+                                            <label class="col-md-12"><small class="text-secondary"><i>Driving License Image</i></small></label>
+                                            <input type="radio" class="ml-3" name="DrivingLicense" id="LicenseImage" value="Image" checked> <label for="LicenseImage"> Image</label>
+                                            <input type="radio" class="ml-3" name="DrivingLicense" id="LicensePDF" value="PDF"> <label for="LicensePDF"> PDF</label>
+                                            <div class="row ml-3 DrivingPdf d-none mt-2 mb-3">
+                                                <input type="file" id="DrivingLicensePdf" name="DrivingLicensePdf" />
+                                            </div>
+                                            <div class="row ml-3 DrivingImg mt-2">
+                                                <div class="img-upload-container mb-3">
+                                                    <img class="img-container w-100 h-100 mb-2" id="img-license" onerror="this.src='/Images/No Photo.png'" />
+                                                    <input type="file" id="DrivingLicenseImage" name="DrivingLicenseImage" class="d-none" />
+                                                    <label for="DrivingLicenseImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h5 class="text-success ml-2">Bank Details</h5>
+                    <div class="col-md-12 row">
+                        <div class="col-md-8">
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <small class="control-label col-sm-12" for="BankName"><i class="text-secondary">Bank Name</i></small>
+                                    <input id="BankName" type="text" class="form-control" name="BankName" />
+                                </div>
+                                <div class="col-md-6">
+                                    <small class="control-label col-sm-12" for="AccountName"><i class="text-secondary">Account Name</i></small>
+                                    <input id="AccountName" type="text" class="form-control" name="AccountName" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <small class="control-label col-sm-12" for="AccountNumber"><i class="text-secondary">Account Number</i></small>
+                                    <input id="AccountNumber" type="text" class="form-control" name="AccountNumber" />
+                                </div>
+                                <div class="col-md-6">
+                                    <small class="control-label col-sm-12" for="IFSCCode"><i class="text-secondary">IFSC Code</i></small>
+                                    <input id="IFSCCode" type="text" class="form-control" name="IFSCCode" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card-columns form-group row col-md-12">
+                                <div class="card border-info">
+                                    <div class="card-body text-center row">
+                                        <label class="col-md-12 text-center"><strong class="text-secondary">Bank Account</strong></label>
+                                        <span class="col-md-12">
+                                            <input type="radio" class="text-center" name="AccountDocument" id="AccountImage" value="Image" checked> <label for="AccountImage"> Image</label>
+                                            <input type="radio" class="text-center" name="AccountDocument" id="AccountPDF" value="PDF"> <label for="AccountPDF"> PDF</label>
+                                        </span>
+                                        <div class="row AccountDocumentPdf mx-auto d-none mt-2 mb-3">
+                                            <input class="mx-auto" type="file" id="BankPassbookPdf" name="BankPassbookPdf" />
+                                        </div>
+                                        <div class="img-upload-container mx-auto mb-3 AccountDocumentImg">
+                                            <img class="img-container w-100 h-100 mb-2" id="img-account" onerror="this.src='/Images/No Photo.png'" />
+                                            <input type="file" id="BankPassbookImage" name="BankPassbookImage" class="d-none" />
+                                            <label for="BankPassbookImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <div class="col-md-3 mx-auto">
+                            <button type="button" class="btn btn-block btn-success" id="Create"><span class="glyphicon glyphicon-file"></span>Submit</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+@section Scripts
+{
+    <script src="~/Scripts/ValidateRequiredFields.js"></script>
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script src="~/Scripts/multiple-image-upload.js"></script>
+    <link href="~/Content/multiple-image-upload.css" rel="stylesheet" />
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRsR3Wpkj_Vofy5FSU0otOx-6k-YFiNBk&libraries=places&callback=initMap"
+            async defer></script>
+    <script>
+        $(document).ready(function () {
+            $('#Create').on('click', function () {
+                    var isValidated = false;
+                    var requiredArr = [
+                        'Name',
+                        'PhoneNumber',
+                        'Email'
+                    ];
+                    isValidated = ValidateEmptyRequiredFiels(requiredArr);
+                if (isValidated) {
+                    var phone = $("#PhoneNumber").val();
+
+                    $.getJSON("/DeliveryBoy/GetPhoneNumberCheck/", { phone: phone }, function (data) {
+                            if (data == 1) {
+                                $('#DeliveryBoyForm').submit();
+                            }
+                            else if (data == 2) {
+                                swal("You are not a Customer", "", "warning");
+                            }
+                            else if (data == 3) {
+                                swal("Phone Number Already Exist!", "", "warning");
+                            }
+                            else {
+
+                            }
+                    });
+                }
+            });
+            $('input:radio[name="DrivingLicense"]').change(
+                function () {
+                    if (this.checked && this.value == 'Image') {
+                        $('.DrivingImg').removeClass('d-none');
+                        $('.DrivingPdf').addClass('d-none');
+                        $("#DrivingLicensePdf").val("");
+                    } else {
+                        $('.DrivingImg').addClass('d-none');
+                        $('.DrivingPdf').removeClass('d-none');
+                        $("#DrivingLicenseImage").val("");
+                        $("#img-license").attr('src', '');
+                    }
+                });
+            $('input:radio[name="AccountDocument"]').change(
+                function () {
+                    if (this.checked && this.value == 'Image') {
+                        $('.AccountDocumentImg').removeClass('d-none');
+                        $('.AccountDocumentPdf').addClass('d-none');
+                        $("#BankPassbookPdf").val("");
+                    } else {
+                        $('.AccountDocumentImg').addClass('d-none');
+                        $('.AccountDocumentPdf').removeClass('d-none');
+                        $("#BankPassbookImage").val("");
+                        $("#img-account").attr('src', '');
+                    }
+                });
+
+            //$('#ShopCode').select2({
+            //    placeholder: "Search Shop",
+            //    ajax: {
+            //        url: "/DeliveryBoy/GetShopSelect2",
+            //        width: '100%',
+            //        delay: 250,
+            //        dataType: 'json'
+            //    }
+            //}).on('select2:select', function (e) {
+            //    $('input[name="ShopName"]').val(e.params.data.text);
+            //    $("#StaffCode").select2({
+            //        placeholder: "Search Staff",
+            //        ajax: {
+            //            url: "/DeliveryBoy/GetStaffSelect2?shopcode=" + e.params.data.id,
+            //            width: "100%",
+            //            delay: 250,
+            //            dataType: 'json'
+            //        }
+            //    }).on("select2:select", function (e) {
+            //        $('input[name="StaffName"]').val(e.params.data.text);
+            //    });
+            //});
+
+            //$("#IsStaff").click(function () {
+            //    var checkBox = document.getElementById("IsStaff");
+            //    if (checkBox.checked == true) {
+            //        $(".Staff").removeClass("d-none");
+            //        $(".DeliverBoyName").addClass("d-none");
+            //        $("#Name").val("");
+            //    }
+            //    else {
+            //        $(".Staff").addClass("d-none");
+            //        $(".DeliverBoyName").removeClass("d-none");
+            //        $("#StaffCode").val('').trigger('change');
+            //    }
+            //});
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#img-upload').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            function readURLlicense(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#img-license').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            function readURLaccount(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#img-account').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#DeliveryBoyImage").change(function () {
+                readURL(this);
+            });
+
+            $("#DrivingLicenseImage").change(function () {
+                readURLlicense(this);
+            });
+
+            $("#BankPassbookImage").change(function () {
+                readURLaccount(this);
+            });
+
+
+        });
+
+
+        var map, infoWindow, markers = [], marker;
+        function initMap() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var card = document.getElementById('pac-card');
+                    var input = document.getElementById('pac-input');
+                    var autocomplete = new google.maps.places.Autocomplete(input);
+                    map = new google.maps.Map(document.getElementById('map'), {
+                        center: { lat: position.coords.latitude, lng: position.coords.longitude },
+                        zoom: 6
+                    });
+                    infoWindow = new google.maps.InfoWindow;
+
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(function (position) {
+                            var pos = {
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude
+                            };
+
+                            marker = new google.maps.Marker({
+                                position: pos,
+                                map: map,
+                                draggable: true,
+                                title: "your place"
+                            });
+                            markers.push(marker);
+                            google.maps.event.addListener(marker, 'dragend', function (evt) {
+                                geocodePosition(marker.position);
+                            });
+
+                            google.maps.event.addListener(marker, 'drag', function () {
+                                geocodePosition(marker.position);
+                            });
+
+                            geocodePosition(pos);
+                            //google.maps.event.addListener(marker, 'click', function (evt) {
+                            //    //infowindow.open(map, marker);
+                            //    geocodePosition(evt.pos);
+                            //});
+
+                            function geocodePosition(pos) {
+                                var google_maps_geocoder = new google.maps.Geocoder();
+                                google_maps_geocoder.geocode(
+                                    { 'latLng': pos },
+                                    function (results, status) {
+                                        console.log(results);
+                                        $('#Address').val(results[0].formatted_address);
+                                        var address = results[0].address_components;
+                                        $.each(address, function () {
+
+                                            if (this.types[0] == "locality") {
+                                                $('#StreetName').val(this.long_name);
+                                            }
+                                            if (this.types[0] == "administrative_area_level_2") {
+                                                $('#DistrictName').val(this.long_name);
+                                            }
+                                            if (this.types[0] == "administrative_area_level_1") {
+                                                $('#StateName').val(this.long_name);
+                                            }
+                                            if (this.types[0] == "country") {
+                                                $('#CountryName').val(this.long_name);
+                                            }
+
+                                            if (this.types[0] == "postal_code") {
+                                                $('#PinCode').val(this.long_name);
+                                            }
+
+                                        });
+
+                                        $('#Latitude').val(results[0].geometry.location.lat);
+                                        $('#Longitude').val(results[0].geometry.location.lng);
+
+                                    }
+                                );
+                            }
+
+                            autocomplete.addListener('place_changed', function () {
+                                document.getElementById("location-error").style.display = 'none';
+                                markers.forEach(function (marker) {
+                                    marker.setMap(null);
+                                });
+
+                                var place = autocomplete.getPlace();
+                                if (!place.geometry) {
+                                    document.getElementById("location-error").style.display = 'inline-block';
+                                    document.getElementById("location-error").innerHTML = "Cannot Locate '" + input.value + "' on map";
+                                    return;
+                                }
+                                var marker = new google.maps.Marker({
+                                    position: pos,
+                                    map: map,
+                                    title: "your place"
+                                });
+
+
+
+                                google.maps.event.addListener(marker, 'click', function () {
+                                    infowindow.open(map, marker);
+                                });
+                                markers.push(marker);
+
+                                map.fitBounds(place.geometry.viewport);
+                                marker.setPosition(place.geometry.location);
+                                marker.setVisible(true);
+                                console.log(place);
+                                $('#Address').val(place.formatted_address);
+                                var address = place.address_components;
+                                $.each(address, function () {
+
+                                    if (this.types[0] == "locality") {
+                                        $('#StreetName').val(this.long_name);
+                                    }
+                                    if (this.types[0] == "administrative_area_level_2") {
+                                        $('#DistrictName').val(this.long_name);
+                                    }
+                                    if (this.types[0] == "administrative_area_level_1") {
+                                        $('#StateName').val(this.long_name);
+                                    }
+                                    if (this.types[0] == "country") {
+                                        $('#CountryName').val(this.long_name);
+                                    }
+                                    if (this.types[0] == "postal_code") {
+                                        $('#PinCode').val(this.long_name);
+                                    }
+
+                                });
+
+                                $('#Latitude').val(place.geometry.location.lat);
+                                $('#Longitude').val(place.geometry.location.lng);
+
+                            });
+                        }, function () {
+                            handleLocationError(true, infoWindow, map.getCenter());
+                        });
+                    } else {
+
+                        handleLocationError(false, infoWindow, map.getCenter());
+                    }
+
+                });
+            } else {
+                x.innerHTML = "Geolocation is not supported by this browser.";
+            }
+
+        }
+
+        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+            infoWindow.setPosition(pos);
+            infoWindow.setContent(browserHasGeolocation ?
+                'Error: The Geolocation service failed.' :
+                'Error: Your browser doesn\'t support geolocation.');
+            infoWindow.open(map);
+        }
+
+    </script>
+}

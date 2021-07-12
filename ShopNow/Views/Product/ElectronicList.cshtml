@@ -1,0 +1,76 @@
+﻿@model ShopNow.ViewModels.ElectronicListViewModel
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Electronic List";
+}
+<title>ShopNow | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <h5 class="mt-1 text-uppercase" style="letter-spacing:1px">@ViewBag.Title</h5>
+        </div>
+        <div class="col-md-6">
+            <form method="get" action="/Product/ElectronicList">
+                <div class="row">
+                    <div class="col-md-8">
+                        <select id="select-shop" class="form-control" name="ShopCode">
+                            @if (Model.ShopCode != null)
+                            {
+                                <option value="@Model.ShopCode">@Model.ShopName</option>
+                            }
+                        </select>
+                        <input type="hidden" name="ShopName" />
+                    </div>
+                    <div class="col-md-3">
+                        <input type="submit" class="btn btn-info mr-3" value="Go" />
+                        <a href="/Product/ElectronicList" class="btn btn-info">Clear</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-3 text-right">
+            <a href="/Product/ElectronicCreate" target="_self"><span class="fa fa-plus"></span> Electronic</a>
+        </div>
+
+    </div>
+    @Html.Grid(Model.ListItems).Columns(columns =>
+{
+    columns.Add(c => c.Name).Titled("Name").Encoded(false).Sanitized(false).RenderValueAs(model => Html.ActionLink(model.Name, "Details", new { code = @ShopNow.Helpers.AdminHelpers.ECode(model.Code) }).ToHtmlString()).Filterable(true).SetWidth(20);
+    columns.Add(c => c.CategoryName).Titled("Category Name").Filterable(true).SetWidth(12);
+    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
+    columns.Add(c => c.Percentage).Titled("Discount %").Filterable(true).SetWidth(10);
+    columns.Add()
+    .Encoded(false)
+    .Sanitized(false)
+    .RenderValueAs(o => Html.ActionLink("Edit", "ElectronicEdit", new { code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code) }, new { @class = "btn btn-sm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
+    + Html.ActionLink("Delete", "Delete", new { code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code), redirectPage=4 }, new { @class = "btn  btn-sm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
+}).WithPaging(20).Sortable(true)
+</div>
+
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script>
+        $(document).ready(function () {
+
+            $('#select-shop').select2({
+                placeholder: "Search Shop",
+                ajax: {
+                    url: "/Product/GetShopSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ShopName"]').val(e.params.data.text);
+            });
+        });
+    </script>
+}

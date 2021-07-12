@@ -1,0 +1,122 @@
+﻿@model ShopNow.ViewModels.ShopDiscountCategoryEditViewModel
+@{
+    ViewBag.Title = "Edit";
+}
+<title>ShopNowChat | Shop Discount Category Update</title>
+<style>
+    .buttonload {
+        background-color: #4CAF50; /* Green background */
+        border: none; /* Remove borders */
+        color: white; /* White text */
+        padding: 12px 24px; /* Some padding */
+        font-size: 16px; /* Set a font-size */
+    }
+
+    /* Add a right margin to each icon */
+    .fa {
+        margin-left: -12px;
+        margin-right: 8px;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <h5 style="letter-spacing:1px">API SHOP OFFER MANAGEMENT</h5>
+        </div>
+        <div class="col-md-8 text-right">
+            <a href="~/ShopDiscountCategory/List" target="_blank"><span class="fa fa-bars"></span> Shop Discount Category List</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            @using (Html.BeginForm("Edit", "ShopDiscountCategory", FormMethod.Post, new { id = "ShopDiscountForm", role = "form", enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="Code" value="@Model.Code" />
+                <input type="hidden" name="Name" value="@Model.Name" />
+                <input type="hidden" name="OfferCategoryCode" value="@Model.OfferCategoryCode" />
+                <input type="hidden" name="Type" value="@Model.Type" />
+                <input type="hidden" name="CategoryType" value="@Model.CategoryType" />
+                <input type="hidden" name="CreatedBy" value="@Model.CreatedBy" />
+                <input type="hidden" name="UpdatedBy" value="@Model.UpdatedBy" />
+                <input type="hidden" name="Status" value="@Model.Status" />
+                <input type="hidden" name="DateEncoded" value="@Model.DateEncoded" />
+                <input type="hidden" name="DateUpdated" value="@Model.DateUpdated" />
+                <div class="card ">
+                    <div class="card-header">
+                        <h5 class="text-success">Update Discount Category</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label class="col-form-label text-secondary font-weight-bold">Category Name:</label>
+                            </div>
+                            <div class="col-md-4 mt-2">
+                                <label class="text-secondary font-weight-bold">@Model.Name</label>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label class="col-form-label text-secondary font-weight-bold">Category Type:</label>
+                            </div>
+                            <div class="col-md-4 mt-2">
+                                <label class="text-secondary font-weight-bold">Category @Model.CategoryType</label>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label class="col-form-label text-secondary font-weight-bold">Discount Type:</label>
+                            </div>
+                            <div class="col-md-4 mt-2">
+                                <label class="text-secondary font-weight-bold">
+                                    @if (Model.Type == 1)
+                                    {
+                                        <span>Categorywise Discount</span>}
+                                    else if (Model.Type == 2)
+                                    {
+                                        <span>Categorywise Loyalty}</span>}
+                                    else if (Model.Type == 3)
+                                    {
+                                        <span>Direct Discount}</span>}
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label class="col-form-label text-secondary font-weight-bold">Discount Percentage:</label>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="number" name="Percentage" class="form-control" id="Percentage" value="@Model.Percentage" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-2 my-3">
+                                <button type="button" class="btn btn-block btn-success Save"><span class="glyphicon glyphicon-file"></span> Update</button>
+                                <button class="buttonload d-none" id="btnspin">
+                                    <i class="fa fa-refresh fa-spin"></i>Loading
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            $(document).on('click', '.Save', function () {
+                $(".Save").addClass("d-none");
+                $("#btnspin").removeClass("d-none");
+                $("#ShopDiscountForm").submit();
+            });
+
+        });
+
+    </script>
+}

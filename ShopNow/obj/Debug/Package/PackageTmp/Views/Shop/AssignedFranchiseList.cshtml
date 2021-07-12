@@ -1,0 +1,66 @@
+﻿@model IEnumerable<ShopNow.ViewModels.ShopFranchiseViewModel.FranchiseList>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "AssignedFranchise List";
+}
+<title>ShopNow | Marketing Agent List</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+<div class="container-fluid">
+    <div class="row my-2">
+        <div class="col-md-6">
+            <h5 style="letter-spacing:1px">Assigned Marketing Agent List</h5>
+        </div>        
+        <div class="col-md-6 text-right">
+            <a href="/Shop/AssignFranchise"><span class="fa fa-tasks"></span> Assign Marketing Agent</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    @Html.Grid(Model).Columns(columns =>
+{
+columns.Add(b => b.Name).Titled("Shop Name").Filterable(true).SetWidth(20);
+columns.Add(b => b.MarketingAgentName).Titled("Franchise").Filterable(true).SetWidth(20);
+columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(b => @<div>
+    <a href="~/Shop/FranchiseUpdate?code=@ShopNow.Helpers.AdminHelpers.ECode(b.Code)" class="btn btn-sm btn-warning" style="padding: 3px 26px">Edit</a>
+    <button type="button" class="btn btn-sm btn-danger Remove" data-id="@b.Code">Remove</button>
+</div>);
+}).WithPaging(20).Sortable(true)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {          
+
+            $('.Remove').on('click', function () {
+                var code = $(this).attr('data-id');
+                $.getJSON("/Shop/FranchiseRemove?code=" + code, function (data) {
+                    if (data.IsAdded == true) {
+                        swal({
+                            title: "Removed Successfully",
+                            text: "",
+                            type: "success"
+                        }, function () {
+                            window.location.href = "/Shop/AssignedFranchiseList";
+                        });
+                    }
+                });
+            });
+
+        });
+
+    </script>
+}
+
+
+
+

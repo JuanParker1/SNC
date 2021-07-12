@@ -1,0 +1,77 @@
+﻿@model IEnumerable<ShopNow.ViewModels.DeliveryListViewModel.DeliveryList>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Delivery Charge List";
+}
+<title>ShopNow | Delivery Charge List</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <h5 class="text-success" style="letter-spacing:1px">Delivery Charge Setting List</h5>
+        </div>
+        <div class="col-md-6 text-right" id="Delivery">
+            <a href="~/Bill/DeliveryCharge" target="_self"><span class="fa fa-plus"></span> Entry of Delivery Charge Setting</a>            
+        </div>
+    </div>
+    @Html.Grid(Model).Columns(columns =>
+{
+    columns.Add().RenderValueAs(b => b.DeliveryRateSet == 0 ? "General" : b.DeliveryRateSet == 1 ? "Special" : "N/A").Filterable(true).Titled("Delivery Mode").SetWidth(10);
+    columns.Add().RenderValueAs(b => b.Type == 1 ? "I Tier" : b.Type == 2 ? "II Tier" : b.Type == 3 ? "III Tier" : "N/A").Filterable(true).Titled("Type").SetWidth(10);
+    columns.Add(b => b.DeliveryChargeKM).Titled("Upto 5Km").Filterable(true).SetWidth(10);
+    columns.Add(b => b.DeliveryChargeOneKM).Titled("After 5 (Rate per Km)").Filterable(true).SetWidth(10);
+    columns.Add()
+    .Encoded(false)
+    .Sanitized(false)
+    .RenderValueAs(o => Html.ActionLink("Edit", "DeliveryUpdate", new { code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code) }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
+               + Html.ActionLink("Delete", "DeliveryDelete", new { code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code) }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(10);
+}).WithPaging(20).Sortable(true)
+</div>
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            var generalcount1 = $("#GeneralCount1").val();
+            var generalcount2 = $("#GeneralCount2").val();
+            var generalcount3 = $("#GeneralCount3").val();
+            var specialCount1 = $("#SpecialCount1").val();
+            var specialCount2 = $("#SpecialCount2").val();
+            var specialCount3 = $("#SpecialCount3").val();
+            if (generalcount1 >= 1 && generalcount2 >= 1 && generalcount3 >= 1 && specialCount1 >= 1 && specialCount2 >= 1 && specialCount3 >= 1) {
+                $("#Delivery").addClass("d-none");
+            } else {
+                $("#Delivery").removeClass("d-none");
+            }
+            var t = $('#deliverycharge-list').DataTable({
+                "dom": "<'row'<'col-sm-6'f>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-3'l><'col-sm-4'p>>" +
+                    "<'row'<'col-sm-12'tr>>",
+                "bPaginate": false,
+                "scrollY": 400,
+                "paging": true,
+                "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "ALL"]],
+                "pageLength": 10,
+                initComplete: function (settings, json) {
+                    $('.index input').remove();
+                    $('.action-btn input').remove();
+                    $('.dataTables_filter input').appendTo('.data-search');
+                    $('.dataTables_filter label').remove();
+                    $('.data-search input').attr('placeholder', 'Quick Search');
+                    $('.data-search input').addClass('form-control');
+                    $('.data-search input').removeClass('form-control-sm');
+                },
+            });
+
+            t.on('order.dt search.dt', function () {
+                t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+
+        });
+
+    </script>
+}

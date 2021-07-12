@@ -1,0 +1,867 @@
+﻿@model ShopNow.ViewModels.DeliveryBoyCreateEditViewModel
+@{
+    ViewBag.Title = "Update";
+}
+<title>ShopNow | DeliveryBoy Update</title>
+
+<div class="container-fluid my-0">
+    <div class="row">
+        <div class="col-md-3">
+            <h5 class="mt-1" style="letter-spacing:1px">DELIVERYBOY UPDATE</h5>
+        </div>
+        <div class="col-md-9 text-right">
+            <div class="button-group ml-auto">
+                @if (Model.Status == 1 || Model.Status == 5)
+                {
+                    <a href="~/DeliveryBoy/Approve?code=@Model.Code" class="btn btn-success text-center text-nowrap btn-sm mr-2">Approve</a>
+                    <a href="~/DeliveryBoy/Reject?code=@Model.Code" class="btn btn-danger text-center text-nowrap btn-sm mr-2">Reject</a>
+                }
+                @if (Model.Status == 0)
+                {
+                    <a href="~/DeliveryBoy/Assign?code=@Model.Code" class="btn btn-success text-center text-nowrap btn-sm mr-2" target="_blank">Assign</a>
+                    <a href="~/DeliveryBoy/DeActivate?code=@Model.Code" class="btn btn-danger text-center text-nowrap btn-sm mr-2">DeActivate</a>
+                }
+                <a href="~/DeliveryBoy/List" target="_self"><span class="fa fa-bars"></span> DeliveryBoy List</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            @using (Html.BeginForm("Edit", "DeliveryBoy", FormMethod.Post, new { id = "DeliveryBoyUpdateForm", role = "form", enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="Code" id="Code" value="@Model.Code" />
+                <input type="hidden" name="ImagePath" value="@Model.ImagePath" />
+                <input type="hidden" name="CVPath" value="@Model.CVPath" />
+                <input type="hidden" name="DrivingLicenseImagePath" id="DrivingLicenseImagePath" value="@Model.DrivingLicenseImagePath" />
+                <input type="hidden" name="BankPassbookPath" id="BankPassbookPath" value="@Model.BankPassbookPath" />
+                <input type="hidden" name="CreatedBy" value="@Model.CreatedBy" />
+                <input type="hidden" name="UpdatedBy" value="@Model.UpdatedBy" />
+                <input type="hidden" name="DateEncoded" value="@Model.DateEncoded" />
+                <input type="hidden" name="DateUpdated" value="@Model.DateUpdated" />
+                <input type="hidden" name="CustomerCode" value="@Model.CustomerCode" />
+                <input type="hidden" name="CustomerName" value="@Model.CustomerName" />
+                <input type="hidden" name="Status" value="@Model.Status" />
+                @*<input type="hidden" name="DeliveryBoyShopCount" id="DeliveryBoyShopCount" value="@Model.DeliveryBoyShopCount" />*@
+                <input type="hidden" name="Count" id="Count" value="@Model.Count" />
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="col-md-12">
+                            <div class="form-group row">
+                                @*<div class="col-md-3">
+                                    <label class="col-form-label"><strong class="text-secondary">Shop Name</strong></label>
+                                    <select class="form-control" name="ShopCode" id="ShopCode">
+                                        <option value="@Model.ShopCode">@Model.ShopName</option>
+                                    </select>
+                                    <input type="hidden" name="ShopName" id="ShopName" value="@Model.ShopName" />
+                                </div>*@
+                                <div class="col-md-4">
+                                    <label class="col-form-label"><strong class="text-secondary">Delivery Boy Name</strong></label>
+                                    <div class="DeliverBoyName">
+                                        <input id="Name" type="text" class="form-control" name="Name" value="@Model.Name" />
+                                    </div>
+                                    @*<div class="Staff d-none">
+                                        <select class="form-control" name="StaffCode" id="StaffCode">
+                                            <option value="@Model.StaffCode">@Model.StaffName</option>
+                                        </select>
+                                        <input type="hidden" name="StaffName" id="StaffName" value="@Model.StaffName" />
+                                    </div>
+                                    <input type="checkbox" id="IsStaff" name="IsStaff">
+                                    <label for="IsStaff">Is he/she Already a Staff</label>*@
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="col-form-label"><strong class="text-secondary">Mobile Number</strong></label>
+                                    <input type="text" class="form-control" name="PhoneNumber" id="PhoneNumber" value="@Model.PhoneNumber" readonly />
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="col-form-label"><strong class="text-secondary">Email</strong></label>
+                                    <input type="text" class="form-control" name="Email" id="Email" value="@Model.Email" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group row">
+                                <div class="col-md-5">
+                                    <div class="row ml-2">
+                                        <input class="col-11 mb-2" id="pac-input" type="text" placeholder="Select your Place" />
+                                        <div id="location-error"></div>
+                                        <div class="mb-4" id="map" style="width: 92%; height: 250px;"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label class="col-form-label"><strong class="text-secondary">Delivery Agent Preference Area</strong></label>
+                                            <input id="Address" type="text" class="form-control mb-2" name="Address" value="@Model.Address" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <small class="control-label" for="StreetName"><i class="text-secondary">Locality</i></small>
+                                            <input id="StreetName" type="text" class="form-control mb-2" name="StreetName" value="@Model.StreetName" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <small class="control-label" for="DistrictName"><i class="text-secondary">District</i></small>
+                                            <input id="DistrictName" type="text" class="form-control" name="DistrictName" value="@Model.DistrictName" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <small class="control-label" for="StateName"><i class="text-secondary">State / Province</i></small>
+                                            <input id="StateName" type="text" class="form-control mb-2" name="StateName" value="@Model.StateName" />
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <small class="control-label" for="CountryName"><i class="text-secondary">Country</i></small>
+                                            <input id="CountryName" type="text" class="form-control" name="CountryName" value="@Model.CountryName" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <small class="control-label" for="PinCode"><i class="text-secondary">PIN Code</i></small>
+                                            <input id="PinCode" type="text" class="form-control" name="PinCode" value="@Model.PinCode" />
+                                        </div>
+                                        <div class="col-md-4"></div>
+                                        <div class="col-md-4">
+                                            <small class="control-label" for="Latitude"><i class="text-secondary">Latitude</i></small>
+                                            <input id="Latitude" type="text" class="form-control mb-2" placeholder="Latitude" name="Latitude" readonly value="@Model.Latitude" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <small class="control-label" for="Longitude"><i class="text-secondary">Longitude</i></small>
+                                            <input id="Longitude" type="text" class="form-control" placeholder="Longitude" name="Longitude" readonly value="@Model.Longitude" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="card-deck">
+                                <div class="card border-info">
+                                    <div class="card-body text-center">
+                                        <label class="col-md-12 text-center text-secondary font-weight-bold">Image</label>
+                                        <label class="col-md-12 small font-italic">* Upload recent photo</label>
+                                        <div class="row">
+                                            <div class="img-upload-container mx-auto text-center">
+                                                <a href="~/Home/ImageDenied">
+                                                    <img class="img-container w-100 h-100" id="img-upload" src="@Model.ImagePath" onerror="this.src='/Images/No Photo.png'" />
+                                                </a>
+                                                <input type="file" id="DeliveryBoyImage" name="DeliveryBoyImage" class="d-none" />
+                                                <label for="DeliveryBoyImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card border-info">
+                                    <div class="card-body">
+                                        <label class="col-md-12 text-center"><strong class="text-secondary">Resume</strong></label>
+                                        <div class="row">
+                                            <div class="col-md-12 my-3 text-center">
+                                                <a href="@Model.CVPath" target="_blank"> Click here for Pdf view</a>
+                                                <input type="file" id="CVPdf" class="my-3" name="CVPdf" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card border-info bg-muted">
+                                    <div class="card-body text-center">
+                                        <label class="col-md-12 text-center"><strong class="text-secondary">Driving License</strong></label>
+                                        <small class="control-label"><i class="text-secondary">License Number</i></small>
+                                        <input id="LicenseNumber" type="text" class="form-control" name="LicenseNumber" value="@Model.LicenseNumber" />
+                                        <small class="control-label"><i class="text-secondary">License Image</i></small>
+                                        <div class="row text-center">
+                                            <div class="col-md-12">
+                                                <input type="radio" class="mr-1" name="DrivingLicense" value="Image" id="LicenseImage" checked> <label for="LicenseImage" class="mr-3"> Image</label>
+                                                <input type="radio" class="mr-1" name="DrivingLicense" value="PDF" id="LicensePDF"> <label for="LicensePDF"> PDF</label>
+                                            </div>
+                                        </div>
+                                        <div class="row DrivingPdf d-none">
+                                            <div class="col-md-12 my-3 text-center">
+                                                <a href="@Model.DrivingLicenseImagePath" target="_blank" class="license-pdf"> Click here for Pdf view</a>
+                                                <input type="file" id="DrivingLicensePdf" class="my-3" name="DrivingLicensePdf" />
+                                            </div>
+                                        </div>
+                                        <div class="row DrivingImg">
+                                            <div class="img-upload-container mx-auto">
+                                                <a href="~/Home/ImageDenied">
+                                                    <img class="img-container w-100 h-100" id="img-license" src="@Model.DrivingLicenseImagePath" onerror="this.src='/Images/No Photo.png'" />
+                                                </a>
+                                                <input type="file" id="DrivingLicenseImage" name="DrivingLicenseImage" class="d-none" />
+                                                <label for="DrivingLicenseImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            </div>
+                                        </div>
+                                        @if (Model.DrivingLicenseImagePath != null && Model.Status == 1)
+                                        {
+                                            <div class="alert alert-success LicenseApprovedlbl font-weight-bold d-none p-2">Approved</div>
+                                            <div class="alert alert-danger LicenseRejectedlbl font-weight-bold d-none p-2">Rejected</div>
+                                            if (Model.LicenseNumber == "Rejected")
+                                            {
+                                                <div class="alert alert-danger License font-weight-bold p-2 d-none">Rejected</div>
+                                            }
+                                            else
+                                            {
+                                                <div class="alert alert-danger License font-weight-bold p-2 text-center">Verification Pending</div>
+                                            }
+                                        }
+                                        @if (Model.DrivingLicenseImagePath != null)
+                                        {
+                                            <div class="col-md-12 text-center">
+                                                <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#LicenseModal"><i class="fa fa-search-plus"></i> Expand</button>
+                                            </div>
+                                            <input type="hidden" id="LicenseApprove" name="LicenseApprove" />
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mt-3 row">
+                            <div class="col-md-8">
+                                <h5 class="text-success mb-2">Bank Details</h5>
+                                <div class="form-group row">
+                                    <div class="col-md-6">
+                                        <small class="control-label" for="BankName"><i class="text-secondary">Bank Name</i></small>
+                                        <input id="BankName" type="text" class="form-control" name="BankName" value="@Model.BankName" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <small class="control-labe" for="AccountName"><i class="text-secondary">Account Name</i></small>
+                                        <input id="AccountName" type="text" class="form-control" name="AccountName" value="@Model.AccountName" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <small class="control-label" for="AccountNumber"><i class="text-secondary">Account Number</i></small>
+                                        <input id="AccountNumber" type="text" class="form-control" name="AccountNumber" value="@Model.AccountNumber" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <small class="control-labe" for="IFSCCode"><i class="text-secondary">IFSC Code</i></small>
+                                        <input id="IFSCCode" type="text" class="form-control" name="IFSCCode" value="@Model.IFSCCode" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card-columns form-group row col-md-12">
+                                    <div class="card border-info bg-muted">
+                                        <div class="card-body text-center">
+                                            <label class="col-md-12 text-center"><strong class="text-secondary">Bank Account</strong></label>
+                                            <span class="col-md-12">
+                                                <input type="radio" class="text-center" name="AccountDocument" id="AccountImage" value="Image" checked> <label for="AccountImage" class="mr-3"> Image</label>
+                                                <input type="radio" class="text-center" name="AccountDocument" id="AccountPDF" value="PDF"> <label for="AccountPDF"> PDF</label>
+                                            </span>
+                                            <div class="row AccountDocumentPdf d-none">
+                                                <div class="col-md-12 my-3 text-center">
+                                                    <a href="@Model.BankPassbookPath" target="_blank" class="account-pdf"> Click here for Pdf view</a>
+                                                    <input type="file" id="BankPassbookPdf" class="my-3" name="BankPassbookPdf" />
+                                                </div>
+                                            </div>
+                                            <div class="row AccountDocumentImg">
+                                                <div class="img-upload-container mx-auto">
+                                                    <a href="~/Home/ImageDenied">
+                                                        <img class="img-container w-100 h-100 mb-2" id="img-account" src="@Model.BankPassbookPath" onerror="this.src='/Images/No Photo.png'" />
+                                                    </a>
+                                                    <input type="file" id="BankPassbookImage" name="BankPassbookImage" class="d-none" />
+                                                    <label for="BankPassbookImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                </div>
+                                            </div>
+                                            @if (Model.BankPassbookPath != null && Model.Status == 1)
+                                            {
+                                                <div class="alert alert-success AccountApprovedlbl font-weight-bold d-none p-2">Approved</div>
+                                                <div class="alert alert-danger AccountRejectedlbl font-weight-bold d-none p-2">Rejected</div>
+                                                if (Model.AccountNumber == "Rejected")
+                                                {
+                                                    <div class="alert alert-danger Account font-weight-bold p-2 d-none">Rejected. Please upload New One</div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="alert alert-danger Account font-weight-bold p-2 text-center">Verification Pending</div>
+                                                }
+                                            }
+                                            @if (Model.BankPassbookPath != null)
+                                            {
+                                                <div class="col-md-12 text-center">
+                                                    <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#AccountModal"><i class="fa fa-search-plus"></i> Expand</button>
+                                                </div>
+                                                <input type="hidden" id="AccountApprove" name="AccountApprove" />
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <div class="col-md-3 mx-auto">
+                            <button type="button" class="btn btn-block btn-success Save"><span class="glyphicon glyphicon-file"></span>Submit</button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!--License Model-->
+
+<div class="modal fade" id="LicenseModal" tabindex="-1" role="dialog" aria-labelledby="LicenseModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Driving License</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row" id="print-License">
+                    <div class="col-md-6">
+                        <a href="@Model.DrivingLicenseImagePath" target="_blank" class="ml-3 license-pdf d-none"> Click here for Pdf view</a>
+                        <a href="~/Home/ImageDenied">
+                            <img class="img-container w-100 h-100 mb-2 license-img" src="@Model.DrivingLicenseImagePath" onerror="this.src='/Images/No Photo.png'" />
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="text-left text-secondary font-weight-bold mt-1"><i>License Number</i></label>
+                        <input type="text" class="form-control" value="@Model.LicenseNumber" readonly />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <span class="LicenseApprovedlbl text-success d-none font-weight-bold">Driving License Approved</span>
+                <span class="LicenseRejectedlbl text-danger d-none font-weight-bold">Driving License Rejected</span>
+                <button type="button" class="btn btn-success License" id="btnLicenseApprove">Approve</button>
+                <button type="button" class="btn btn-danger License ml-2" id="btnLicenseReject">Request Reupload</button>
+                <button type="button" class="btn btn-secondary ml-2" id="btnLicensePrint" onclick="printDiv('print-License')">Print</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Account Model-->
+<div class="modal fade" id="AccountModal" tabindex="-1" role="dialog" aria-labelledby="AccountModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AccountModalLabel">Bank Account Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row" id="print-Account">
+                    <div class="col-md-6">
+                        <a href="@Model.BankPassbookPath" target="_blank" class="mb-2 account-pdf d-none"> Click here for Pdf view</a>
+                        <a href="~/Home/ImageDenied">
+                            <img class="img-container w-100 h-100 mb-2 account-img" src="@Model.BankPassbookPath" onerror="this.src='/Images/No Photo.png'" />
+                        </a>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-md-4 text-left text-secondary font-weight-bold mt-1"><i>Bank Name</i></label>
+                        <input type="text" class="form-control col-md-8" value="@Model.BankName" readonly />
+
+                        <label class="col-md-4 text-left text-secondary font-weight-bold mt-1"><i>Account Name</i></label>
+                        <input type="text" class="form-control col-md-8" value="@Model.AccountName" readonly />
+
+                        <label class="col-md-4 text-left text-secondary font-weight-bold mt-1"><i>Account Number</i></label>
+                        <input type="text" class="form-control col-md-8" value="@Model.AccountNumber" readonly />
+
+                        <label class="col-md-4 text-left text-secondary font-weight-bold mt-1"><i>IFSC Code</i></label>
+                        <input type="text" class="form-control col-md-8" value="@Model.IFSCCode" readonly />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <span class="AccountApprovedlbl text-success d-none font-weight-bold">Bank Details Approved</span>
+                <span class="AccountRejectedlbl text-danger d-none font-weight-bold">Bank Details Rejected</span>
+                <button type="button" class="btn btn-success Account" id="btnAccountApprove">Approve</button>
+                <button type="button" class="btn btn-danger Account ml-2" id="btnAccountReject">Request Reupload</button>
+                <button type="button" class="btn btn-secondary ml-2" id="btnAccountPrint" onclick="printDiv('print-Account')">Print</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <link href="~/Content/multiple-image-upload.css" rel="stylesheet" />
+    <script src="~/Scripts/multiple-image-upload.js"></script>
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRsR3Wpkj_Vofy5FSU0otOx-6k-YFiNBk&libraries=places&callback=initMap"
+            async defer></script>
+    <script>
+        $(document).ready(function () {
+            var imgcount = $('#Count').val();
+            var code = $('#Code').val();
+            var status = "@Model.Status";
+            var license = "@Model.LicenseNumber";
+            var account = "@Model.AccountNumber";
+            if (status == "5") {
+                //License
+                $('.LicenseApprovedlbl').removeClass('d-none');
+                $('.LicenseRejectedlbl').addClass('d-none');
+                $('#btnLicenseApprove').addClass('d-none');
+                $('#btnLicenseReject').addClass('d-none');
+                //Account
+                $('.AccountApprovedlbl').removeClass('d-none');
+                $('.AccountRejectedlbl').addClass('d-none');
+                $('#btnAccountApprove').addClass('d-none');
+                $('#btnAccountReject').addClass('d-none');
+            }
+            if (license == "Rejected") {
+                $('.LicenseApprovedlbl').addClass('d-none');
+                $('.LicenseRejectedlbl').removeClass('d-none');
+                $('#btnLicenseApprove').addClass('d-none');
+                $('#btnLicenseReject').addClass('d-none');
+               // $('#LicenseNumber').val("");
+            }
+            if (account == "Rejected") {
+                $('.AccountApprovedlbl').addClass('d-none');
+                $('.AccountRejectedlbl').removeClass('d-none');
+                $('#btnAccountApprove').addClass('d-none');
+                $('#btnAccountReject').addClass('d-none');
+               // $('#AccountNumber').val("");
+            }
+
+            $(".Save").click(function () {
+                var code = $("#Code").val();
+                var latitude = $("#Latitude").val();
+                var longitude = $("#Longitude").val();
+               // var deliveryBoyShopCount = $("#DeliveryBoyShopCount").val();
+                var licensenumber = $('#LicenseNumber').val();
+                var accountnumber = $('#AccountNumber').val();
+                //if (licensenumber == "Rejected") {
+                //    swal("Warning!", "Please enter License Number!", "warning");
+                //} else if (accountnumber == "Rejected") {
+                //    swal("Warning!", "Please enter Account Number!", "warning");
+                //}
+                //else {
+                    $.getJSON('/DeliveryBoy/GetDeliveryBoyShop', { code: code, latitude: latitude, longitude: longitude }, function (data) {
+                        if (data == true) {
+                            $("#DeliveryBoyUpdateForm").submit();
+                        } else {
+                            //swal("lat and lang are different.");
+                            // swal("Warning!", "Your Latitude and Longitude are Different!", "warning");
+
+                            swal({
+                                title: "Are you sure?",
+                                text: "If you Update Latitude and Longitude, your assigned Shops will Deactivated!",
+                                type: "warning",
+                                showCancelButton: true,
+                                confirmButtonClass: "btn-danger",
+                                confirmButtonText: "OK",
+                                cancelButtonText: "Cancel",
+                                closeOnConfirm: false,
+                                closeOnCancel: false
+                            },
+                                function (isConfirm) {
+                                    if (isConfirm) {
+                                        swal("Deactivated!", "Your assigned shops are deactivated.", "success");
+                                        //  if (deliveryBoyShopCount != 0) {
+                                        $.getJSON('/DeliveryBoy/DeactivateDeliveryBoyShop', { code: code }, function (data) {
+                                            if (data == true) {
+                                                $("#DeliveryBoyUpdateForm").submit();
+                                            }
+                                        });
+                                        //  }
+                                    } else {
+                                        swal("Cancelled", "Your assigned shops are not deactivated", "error");
+                                    }
+                                });
+                        }
+                    });
+                //}
+            });
+            //var staff = $("#StaffCode").val();
+            //if (staff == null || staff == "") {
+            //    $("#IsStaff").prop("checked", false);
+            //    $(".Staff").addClass("d-none");
+            //    $(".DeliverBoyName").removeClass("d-none");
+            //    $("#StaffCode").val('').trigger('change');
+            //} else {
+            //    $("#IsStaff").prop("checked", true);
+            //    $(".Staff").removeClass("d-none");
+            //    $(".DeliverBoyName").addClass("d-none");
+            //}
+
+            $('input:radio[name="DrivingLicense"]').change(
+                function () {
+                    if (this.checked && this.value == 'Image') {
+                        $('.DrivingImg').removeClass('d-none');
+                        $('.DrivingPdf').addClass('d-none');
+                        $("#DrivingLicensePdf").val("");
+                        $('.license-img').removeClass('d-none');
+                        $('.license-pdf').addClass('d-none');
+                    } else {
+                        $('.DrivingImg').addClass('d-none');
+                        $('.DrivingPdf').removeClass('d-none');
+                        $("#DrivingLicenseImage").val("");
+                        $('.license-img').addClass('d-none');
+                        //$('.license-pdf').removeClass('d-none');
+                    }
+                });
+
+            $('input:radio[name="AccountDocument"]').change(
+                function () {
+                    if (this.checked && this.value == 'Image') {
+                        $('.AccountDocumentImg').removeClass('d-none');
+                        $('.AccountDocumentPdf').addClass('d-none');
+                        $("#BankPassbookPdf").val("");
+                        $('.account-img').removeClass('d-none');
+                        $('.account-pdf').addClass('d-none');
+                    } else {
+                        $('.AccountDocumentImg').addClass('d-none');
+                        $('.AccountDocumentPdf').removeClass('d-none');
+                        $("#BankPassbookImage").val("");
+                        $('.account-img').addClass('d-none');
+                        //$('.account-pdf').removeClass('d-none');
+                    }
+                });
+
+            var strLicense = $("#DrivingLicenseImagePath").val();
+            var strAccount = $("#BankPassbookPath").val();
+
+            var regExp = /.pdf/g;
+            var resLicense = strLicense.match(regExp);
+            var resAccount = strAccount.match(regExp);
+
+            if (resLicense == ".pdf") {
+                $("#LicensePDF").prop("checked", true);
+                $('.DrivingImg').addClass('d-none');
+                $('.DrivingPdf').removeClass('d-none');
+                $("#DrivingLicenseImage").val("");
+                $("#img-license").attr('src', '');
+                $('.license-pdf').removeClass('d-none');
+                $('.license-img').addClass('d-none');
+            } else {
+                $("#LicenseImage").prop("checked", true);
+                $('.DrivingImg').removeClass('d-none');
+                $('.DrivingPdf').addClass('d-none');
+                $("#DrivingLicensePdf").val("");
+                $('.license-pdf').addClass('d-none');
+                $('.license-img').removeClass('d-none');
+            }
+            if (resAccount == ".pdf") {
+                $("#AccountPDF").prop("checked", true);
+                $('.AccountDocumentImg').addClass('d-none');
+                $('.AccountDocumentPdf').removeClass('d-none');
+                $("#BankPassbookImage").val("");
+                $("#img-account").attr('src', '');
+                $('.account-pdf').removeClass('d-none');
+                $('.account-img').addClass('d-none');
+            } else {
+                $("#AccountImage").prop("checked", true);
+                $('.AccountDocumentImg').removeClass('d-none');
+                $('.AccountDocumentPdf').addClass('d-none');
+                $("#BankPassbookPdf").val("");
+                $('.account-pdf').addClass('d-none');
+                $('.account-img').removeClass('d-none');
+            }
+
+            if (imgcount != 0) {
+                var license = $("#DrivingLicenseImagePath").val();
+                var account = $("#BankPassbookPath").val();
+                if (license != null) {
+                    $('#btnLicenseApprove').focus();
+                } if (account != null) {
+                    $('#btnAccountApprove').focus();
+                }
+            }
+            $("#btnLicenseApprove").click(function () {
+                $('#LicenseApprove').val("true");
+                $(".LicenseApprovedlbl").removeClass("d-none");
+                $(".LicenseRejectedlbl").addClass("d-none");
+                $('.License').addClass("d-none");
+                swal("Successfully Approved!", "Driving License Approved!", "success");
+                imgcount--;
+                $("#Count").val(imgcount);
+                if (imgcount == 0) {
+                    $.getJSON("/DeliveryBoy/VerifyImage?Code=" + code, function (data) {
+                        if (data.data == true) {
+                           // window.location.reload();
+                        }
+                    });
+                }
+            });
+            $('#btnLicenseReject').click(function () {
+                $('#LicenseApprove').val("false");
+                //$('#DrivingLicenseImagePath').val("Rejected");
+                $('#LicenseNumber').val("Rejected");
+                $(".LicenseApprovedlbl").addClass("d-none");
+                $(".LicenseRejectedlbl").removeClass("d-none");
+                $('.License').addClass("d-none");
+                $("#btnLicenseReject").hide();
+                $("#btnLicenseApprove").hide();
+            });
+
+            $("#btnAccountApprove").click(function () {
+                $('#AccountApprove').val("true");
+                $(".AccountApprovedlbl").removeClass("d-none");
+                $(".AccountRejectedlbl").addClass("d-none");
+                $('.Account').addClass("d-none");
+                swal("Successfully Approved!", "Bank Account Details Approved!", "success");
+                imgcount--;
+                $("#Count").val(imgcount);
+                if (imgcount == 0) {
+                    $.getJSON("/DeliveryBoy/VerifyImage?Code=" + code, function (data) {
+                        if (data.data == true) {
+                           // window.location.reload();
+                        }
+                    });
+                }
+            });
+            $('#btnAccountReject').click(function () {
+                $('#AccountApprove').val("false");
+                //$('#BankPassbookPath').val("Rejected");
+                $('#AccountNumber').val("Rejected");
+                $(".AccountApprovedlbl").addClass("d-none");
+                $(".AccountRejectedlbl").removeClass("d-none");
+                $('.Account').addClass("d-none");
+                $("#btnAccountReject").hide();
+                $("#btnAccountApprove").hide();
+            });
+            //$('#ShopCode').select2({
+            //    placeholder: "Search Shop",
+            //    ajax: {
+            //        url: "/DeliveryBoy/GetShopSelect2",
+            //        width: '100%',
+            //        delay: 250,
+            //        dataType: 'json'
+            //    }
+            //}).on('select2:select', function (e) {
+            //    $('input[name="ShopName"]').val(e.params.data.text);
+            //    $("#StaffCode").select2({
+            //        placeholder: "Search Staff",
+            //        ajax: {
+            //            url: "/DeliveryBoy/GetStaffSelect2?shopcode=" + e.params.data.id,
+            //            width: "100%",
+            //            delay: 250,
+            //            dataType: 'json'
+            //        }
+            //    }).on("select2:select", function (e) {
+            //        $('input[name="StaffName"]').val(e.params.data.text);
+            //    });
+            //});
+
+            //$("#IsStaff").click(function () {
+            //    var checkBox = document.getElementById("IsStaff");
+            //    if (checkBox.checked == true) {
+            //        $(".Staff").removeClass("d-none");
+            //        $(".DeliverBoyName").addClass("d-none");
+            //        $("#Name").val("");
+            //    }
+            //    else {
+            //        $(".Staff").addClass("d-none");
+            //        $(".DeliverBoyName").removeClass("d-none");
+            //        $("#StaffCode").val('').trigger('change');
+            //    }
+            //});
+
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#img-upload').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            function readURLlicense(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#img-license').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            function readURLaccount(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#img-account').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#DeliveryBoyImage").change(function () {
+                readURL(this);
+            });
+
+            $("#DrivingLicenseImage").change(function () {
+                readURLlicense(this);
+            });
+
+            $("#BankPassbookImage").change(function () {
+                readURLaccount(this);
+            });
+
+        });
+
+        function printDiv(divName) {
+            var printContents = document.getElementById(divName).innerHTML;
+            w = window.open();
+            w.document.write(printContents);
+            w.print();
+            w.close();
+        }
+
+        var map, infoWindow, markers = [];
+        function initMap() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var card = document.getElementById('pac-card');
+                    var input = document.getElementById('pac-input');
+                    var autocomplete = new google.maps.places.Autocomplete(input);
+                    map = new google.maps.Map(document.getElementById('map'), {
+                        center: { lat: position.coords.latitude, lng: position.coords.longitude },
+                        zoom: 6
+                    });
+
+                    infoWindow = new google.maps.InfoWindow;
+
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(function (position) {
+                            var pos = {
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude
+                            };
+
+
+                            var marker = new google.maps.Marker({
+                                position: pos,
+                                map: map,
+                                draggable: true,
+                                title: "your place"
+                            });
+                            markers.push(marker);
+
+                            google.maps.event.addListener(marker, 'dragend', function (evt) {
+                                geocodePosition(marker.position);
+                            });
+
+                            google.maps.event.addListener(marker, 'drag', function () {
+                                geocodePosition(marker.position);
+                            });
+
+
+                            function geocodePosition(pos) {
+
+                                var google_maps_geocoder = new google.maps.Geocoder();
+                                google_maps_geocoder.geocode(
+                                    { 'latLng': pos },
+                                    function (results, status) {
+                                        console.log(results);
+                                        $('#Address').val(results[0].formatted_address);
+                                        var address = results[0].address_components;
+                                        $.each(address, function () {
+
+                                            if (this.types[0] == "locality") {
+                                                $('#StreetName').val(this.long_name);
+                                            }
+                                            if (this.types[0] == "administrative_area_level_2") {
+                                                $('#DistrictName').val(this.long_name);
+                                            }
+                                            if (this.types[0] == "administrative_area_level_1") {
+                                                $('#StateName').val(this.long_name);
+                                            }
+                                            if (this.types[0] == "country") {
+                                                $('#CountryName').val(this.long_name);
+                                            }
+
+                                            if (this.types[0] == "postal_code") {
+                                                $('#PinCode').val(this.long_name);
+                                            }
+
+                                        });
+
+                                        $('#Latitude').val(results[0].geometry.location.lat);
+                                        $('#Longitude').val(results[0].geometry.location.lng);
+
+                                    }
+                                );
+                            }
+                            autocomplete.addListener('place_changed', function () {
+                                document.getElementById("location-error").style.display = 'none';
+                                markers.forEach(function (marker) {
+                                    marker.setMap(null);
+                                });
+
+                                var place = autocomplete.getPlace();
+                                if (!place.geometry) {
+                                    document.getElementById("location-error").style.display = 'inline-block';
+                                    document.getElementById("location-error").innerHTML = "Cannot Locate '" + input.value + "' on map";
+                                    return;
+                                }
+                                var marker = new google.maps.Marker({
+                                    position: pos,
+                                    map: map,
+                                    title: "your place"
+                                });
+
+                                google.maps.event.addListener(marker, 'click', function () {
+                                    infowindow.open(map, marker);
+                                });
+                                markers.push(marker);
+
+                                map.fitBounds(place.geometry.viewport);
+                                marker.setPosition(place.geometry.location);
+                                marker.setVisible(true);
+                                console.log(place);
+                                $('#Address').val(place.formatted_address);
+                                var address = place.address_components;
+                                $.each(address, function () {
+
+                                    if (this.types[0] == "locality") {
+                                        $('#StreetName').val(this.long_name);
+                                    }
+                                    if (this.types[0] == "administrative_area_level_2") {
+                                        $('#DistrictName').val(this.long_name);
+                                    }
+                                    if (this.types[0] == "administrative_area_level_1") {
+                                        $('#StateName').val(this.long_name);
+                                    }
+                                    if (this.types[0] == "country") {
+                                        $('#CountryName').val(this.long_name);
+                                    }
+                                    if (this.types[0] == "postal_code") {
+                                        $('#PinCode').val(this.long_name);
+                                    }
+
+                                });
+
+                                $('#Latitude').val(place.geometry.location.lat);
+                                $('#Longitude').val(place.geometry.location.lng);
+
+                            });
+                        }, function () {
+                            handleLocationError(true, infoWindow, map.getCenter());
+                        });
+                    } else {
+
+                        handleLocationError(false, infoWindow, map.getCenter());
+                    }
+
+                });
+            } else {
+                x.innerHTML = "Geolocation is not supported by this browser.";
+            }
+
+        }
+
+        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+            infoWindow.setPosition(pos);
+            infoWindow.setContent(browserHasGeolocation ?
+                'Error: The Geolocation service failed.' :
+                'Error: Your browser doesn\'t support geolocation.');
+            infoWindow.open(map);
+        }
+
+    </script>
+}

@@ -1,0 +1,145 @@
+﻿@model ShopNow.ViewModels.CustomerDetailsViewModel
+@{
+
+    ViewBag.Title = "Customer Details";
+}
+<title>ShopNow | Customer Details</title>
+
+<div class="container my-0">
+    <div class="row">
+        <div class="col-md-6">
+            <h5 class="mt-1 text-theme" style="letter-spacing:1px">CUSTOMER DETAILS</h5>
+        </div>
+        <div class="col-md-6 text-right">
+            <a href="~/Customer/List" target="_blank"><span class="fa fa-bars"></span>&nbsp;Customer List</a>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-12 mx-auto">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="row">
+                        <div class="col-md-12 text-center mb-2">
+                            <a href="~/Home/ImageDenied" data-toggle="modal" data-target="#ModalCustomerImg" title="Click Here To Preview!">
+                                <img src="@Model.ImagePath" class="img-thumbnail ProfileImg mb-2" width="100" height="100" onerror="this.src='/Images/No Photo.png'" />
+                            </a>
+                            <br />
+                        </div>
+                        <div class="col-md-12 text-center">
+                            <h5 class="font-weight-bold">@Model.Name</h5>
+                        </div>
+                        <div class="col-md-12">
+                            @if (Model.PhoneNumber != "" && Model.PhoneNumber != null)
+                            {
+                                <p><span><i class="fa fa-phone text-success mr-2"></i></span>@Model.PhoneNumber</p>
+                            }
+                            @if (Model.Email != "" && Model.Email != null)
+                            {
+                                <p><span><i class="fa fa-envelope text-success mr-2"></i></span>@Model.Email</p>
+                            }
+                            @if (Model.DOB != "" && Model.DOB != null)
+                            {
+                                <p><span><i class="fa fa-birthday-cake text-success mr-2"></i></span>@Model.DOB</p>
+                            }
+                            @if (Model.Address != "" && Model.Address != null)
+                            {
+                                <p><span><i class="fa fa-map-marker text-success mr-2"></i></span>@Model.Address</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9 row">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <div class="col-md-5">
+                                <label>Aadhar Name</label>
+                            </div>
+                            <div class="col-md-7">
+                                <p>@Model.AadharName</p>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-5">
+                                <label>Aadhar Number</label>
+                            </div>
+                            <div class="col-md-7">
+                                <p>@Model.AadharNumber</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mx-auto">
+                        <div class="img-upload-container text-center mx-auto">
+                            <a href="~/Home/ImageDenied" data-toggle="modal" data-target="#ModalAadharImg" title="Click Here To Preview!">
+                                <img id="LicenseImg" src="@Model.ImageAadharPath" class="img-thumbnail AadharImg mb-2" width="100" height="100" onerror="this.src='/Images/No Photo.png'" />
+                            </a>
+                            <br />
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <hr class="border-success" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="ModalCustomerImg" class="modal fade">
+    <div class="modal-dialog">
+        <span class="close" data-dismiss="modal">&times;</span>
+        <a href="~/Home/ImageDenied">
+            <img class="modal-content" id="CustomerImg">
+        </a>
+    </div>
+</div>
+
+<div id="ModalAadharImg" class="modal fade">
+    <div class="modal-dialog">
+        <span class="close" data-dismiss="modal">&times;</span>
+        <a href="~/Home/ImageDenied">
+            <img class="modal-content" id="AadharImg">
+        </a>
+    </div>
+</div>
+
+
+
+@section Scripts
+{
+  
+    <script>
+        $(document).ready(function () {
+
+            var modal1 = document.getElementById('ModalCustomerImg');
+            var img1 = document.getElementsByClassName('ProfileImg');
+            var modalImg1 = document.getElementById("CustomerImg");
+            $(img1).click(function () {
+                modal1.style.display = "block";
+                modalImg1.src = this.src;
+                if (this.src == "") {
+                    $('#ModalCustomerImg').hide();
+                }
+                else {
+                    $('#ModalCustomerImg').modal('show');
+                }
+            });
+
+            var modal2 = document.getElementById('ModalAadharImg');
+            var img2 = document.getElementsByClassName('AadharImg');
+            var modalImg2 = document.getElementById("AadharImg");
+            $(img2).click(function () {
+                modal2.style.display = "block";
+                modalImg2.src = this.src;
+                if (this.src == "") {
+                    $('#ModalAadharImg').hide();
+                }
+                else {
+                    $('#ModalAadharImg').modal('show');
+                }
+            });
+
+        });        
+    </script>
+}
+
+

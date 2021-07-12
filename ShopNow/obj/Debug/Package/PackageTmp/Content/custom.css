@@ -1,0 +1,56 @@
+﻿@font-face {
+    font-family: 'Roboto';
+    src: url('../fonts/Roboto/Roboto-Regular.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Roboto';
+    font-weight: 700;
+    src: url('../fonts/Roboto/Roboto-Bold.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Product Sans';
+    src: url('../fonts/product-sans/Product Sans Regular.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Product Sans';
+    font-weight: 700;
+    src: url('../fonts/product-sans/Product Sans Bold.ttf') format('truetype');
+}
+
+
+h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
+    font-family: 'Product Sans', Arial, Helvetica, Tahoma, Geneva, Verdana, sans-serif !important;
+}
+
+body {
+    background-color: #fafbfc;
+    font-family: 'Roboto', Arial, Helvetica, Tahoma, Geneva, Verdana, sans-serif;
+}
+label {
+    color:#7c7c7c;
+    display:block;
+}
+ul li {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+#header {
+    box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302), 0 1px 3px 1px rgba(60,64,67,0.149);
+}
+#header ul li {
+    padding: .5rem;
+}
+#sub-header h1, #sub-header h2, #sub-header h3, #sub-header h4, #sub-header h5, #sub-header h6 {
+    color: #a7a7a7;
+    margin:0;
+}
+#loading-screen{
+    display:block;
+    background-color:#fff;
+    position:fixed;
+    z-index:99999;
+    height:100vh;
+    width:100vw;
+    top:0;
+    left:0;
+}

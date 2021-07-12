@@ -1,0 +1,203 @@
+﻿@model IEnumerable<ShopNow.Models.Shop>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Shop List";
+}
+<title>ShopNow | Shop List</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <h5 class="mt-1" style="letter-spacing:1px">SHOP LIST</h5>
+        </div>
+        <div class="col-md-2 col-sm-4 mb-2 data-search">
+        </div>
+        <div class="col-md-7 text-right">
+            <a href="~/Shop/InactiveList" class="text-danger mr-2" target="_self"><span class="fa fa-hand-point-up"></span> Approval Pending</a>
+            <a href="~/Shop/Create" target="_self"><span class="fa fa-plus"></span> Shop</a>
+        </div>
+    </div>
+    @Html.Grid(Model).Columns(columns =>
+{
+    columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(10);
+    columns.Add(c => c.OwnerPhoneNumber).Titled("Owner PhoneNo.").Filterable(true).SetWidth(15);
+    columns.Add().RenderValueAs(c => c.PhoneNumber != null ? c.PhoneNumber : c.ManualPhoneNumber).Titled("PhoneNo.").Filterable(true).SetWidth(10);
+    columns.Add(c => c.ShopCategoryName).Titled("Shop Type").Filterable(true).SetWidth(10);
+    columns.Add(c => c.Address).Titled("Address").Filterable(true).SetWidth(10);
+    //columns.Add(c => c.DistrictName).Titled("District").Filterable(true).SetWidth(10);
+    //columns.Add(c => c.StateName).Titled("State").Filterable(true).SetWidth(10);
+    columns.Add(c => c.PinCode).Titled("PinCode").Filterable(true).SetWidth(10);
+    columns.Add()
+    .Encoded(false)
+    .Sanitized(false)
+    .RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code) }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
+                   + Html.ActionLink("Delete", "Delete", new { code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code) }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
+}).WithPaging(20).Sortable(true)
+
+</div>
+
+@*@model ShopNow.ViewModels.ShopListViewModel
+    @{
+
+        ViewBag.Title = "Shop List";
+    }
+    <title>ShopNow | Active Shop List</title>
+
+    @using (Html.BeginForm("List", "Shop", FormMethod.Post, new { id = "ShopForm", role = "form", enctype = "multipart/form-data" }))
+    {
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2">
+                <h5 class="mt-1" style="letter-spacing:1px">ACTIVE SHOP LIST</h5>
+            </div>
+            <div class="col-md-2 col-sm-4 mb-2 data-search">
+            </div>
+            <div class="col-md-2">
+                <select class="form-control" name="ColumnName" id="ColumnName">
+                    <option value="Select">Select Column</option>
+                    <option value="0">Name</option>
+                    <option value="1">Owner Phone Number</option>
+                    <option value="2">Shop Type</option>
+                    <option value="3">Address</option>
+                    <option value="4">District</option>
+                    <option value="5">State</option>
+                    <option value="6">PinCode</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control" name="AdvanceFilter" id="AdvanceFilter">
+                    <option value="Select">Advance Filter</option>
+                    <option value="0">Is</option>
+                    <option value="1">Is Not</option>
+                    <option value="5">Starts with</option>
+                    <option value="6">Doesn't Starts with</option>
+                    <option value="4">Ends with</option>
+                    <option value="3">Is Empty</option>
+                    <option value="2">Is Not Empty</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-none" id="FilterText">
+                <input type="text" class="form-control" name="keyword" />
+            </div>
+            <div class="col-md-1" id="FilterBtn">
+                <button type="submit" class="btn btn-info">Filter</button>
+            </div>
+            <div class="col-md-3 mt-2 text-right">
+                <a href="~/Shop/InactiveList" class="text-danger mr-2" target="_self"><span class="fa fa-hand-point-up"></span> Approval Pending</a>
+                <a href="~/Shop/Create" target="_self"><span class="fa fa-plus"></span> Shop</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card mb-5">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover table-borderless table-hover" id="Shop-list">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th class="text-nowrap">Name</th>
+                                        <th class="text-wrap">Owner Phone Number</th>
+                                        <th class="text-wrap">Phone Number</th>
+                                        <th class="text-wrap">Shop Type</th>
+                                        <th class="text-nowrap">Address</th>
+                                        <th class="text-wrap">District</th>
+                                        <th class="text-wrap">State</th>
+                                        <th class="text-wrap">PinCode</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.List)
+                                    {
+                                        <tr>
+                                            <td></td>
+                                            <td class="text-break">
+                                                <a href="~/Shop/Details?code=@ShopNow.Helpers.AdminHelpers.ECode(item.Code)" class="text-info" target="_blank"> @item.Name</a>
+                                            </td>
+                                            <td class="text-wrap">@item.OwnerPhoneNumber</td>
+                                            @if (item.PhoneNumber != null)
+                                            {
+                                                <td class="text-wrap">@item.PhoneNumber</td>}
+                                            else
+                                            {
+                                                <td class="text-wrap">@item.ManualPhoneNumber</td>
+                                            }
+                                            @if (item.ShopCategoryName != null)
+                                            {
+                                                <td class="text-wrap">@item.ShopCategoryName</td>
+                                            }
+                                            else
+                                            {
+                                                <td class="text-wrap">N/A</td>
+                                            }
+                                            <td class="text-break">@item.Address</td>
+                                            <td class="text-wrap">@item.DistrictName</td>
+                                            <td class="text-wrap">@item.StateName</td>
+                                            <td class="text-wrap">@item.PinCode</td>
+                                            <td class="text-break">
+                                                <a href="~/Shop/Edit?code=@ShopNow.Helpers.AdminHelpers.ECode(item.Code)" class="btn btn-warning text-center text-nowrap btn-sm mb-2" style="padding: 3px 26px">Edit</a>
+                                                <a href="~/Shop/Delete?code=@ShopNow.Helpers.AdminHelpers.ECode(item.Code)" class="btn btn-danger text-center text-nowrap btn-sm" style="padding: 3px 18px">Delete</a>
+                                            </td>
+                                        </tr>
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+    @section Scripts
+    {
+        <script>
+            $(document).ready(function () {
+                $('#AdvanceFilter').on('change', function () {
+                    var filter = $('#AdvanceFilter').val();
+                    if (filter == '0' || filter == '1' || filter == '2' || filter == '3'
+                        || filter == '4' || filter == '5' || filter == '6') {
+                        $("#FilterText").removeClass("d-none");
+                        // $("#FilterBtn").removeClass("d-none");
+                    } else {
+                        $("#FilterText").addClass("d-none");
+                        //  $("#FilterBtn").addClass("d-none");
+                    }
+                });
+
+                var t = $('#Shop-list').DataTable({
+                    // "dom": '<"top"flpi>rt<"bottom"i><"clear">',
+                    "dom": "<'row'<'col-sm-6'f>>" +
+                        "<'row'<'col-sm-5'i><'col-sm-3'l><'col-sm-4'p>>" +
+                        "<'row'<'col-sm-12'tr>>",
+                    "bPaginate": false,
+                    "scrollY": 400,
+                    "paging": true,
+                    "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "ALL"]],
+                    "pageLength": 20,
+                    initComplete: function (settings, json) {
+                        $('.index input').remove();
+                        $('.action-btn input').remove();
+                        $('.dataTables_filter input').appendTo('.data-search');
+                        $('.dataTables_filter label').remove();
+                        $('.data-search input').attr('placeholder', 'Quick Search');
+                        $('.data-search input').addClass('form-control');
+                        $('.data-search input').removeClass('form-control-sm');
+                        $('')
+                    },
+                });
+
+                t.on('order.dt search.dt', function () {
+                    t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                        cell.innerHTML = i + 1;
+                    });
+                }).draw();
+
+            });
+        </script>
+    }*@
+

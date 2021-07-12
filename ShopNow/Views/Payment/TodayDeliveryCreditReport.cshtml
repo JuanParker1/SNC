@@ -1,0 +1,88 @@
+﻿@model IEnumerable<ShopNow.ViewModels.DeliveryCreditReportViewModel.DeliveryCreditReportList>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Today Delivery Credit Report";
+}
+<title>ShopNow | Today Delivery Credit Report </title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+@using (Html.BeginForm("TodayDeliveryCreditReport", "Payment", FormMethod.Post, new { id = "DeliveryCreditReportForm", role = "form", enctype = "multipart/form-data" }))
+{
+    <div class="container-fluid">
+        <div class="my-2 row d-print-none">
+            <div class="col-sm-6">
+                <h5 class="text-success text-nowrap">Today Delivery Credit Report</h5>
+            </div>
+            <div class="col-sm-6 text-right">
+                <input type="button" id="btnPrint" class="btn btn-vsm btn-secondary mx-2" value="Print" />
+                <input type="button" id="btnExport" class="btn btn-vsm btn-secondary" value="Export To Excel" />
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 class="text-center d-none d-print-block">Today Delivery Credit Report</h4>
+                        @Html.Grid(Model).Columns(columns =>
+{
+columns.Add(c => c.OrderNo).Titled("OrderNo").Filterable(true).SetWidth(10);
+columns.Add(c => c.DeliveryCharge).Titled("Delivery Charge").Filterable(true).SetWidth(10);
+columns.Add().RenderValueAs(c => c.CartStatus == 6 ? "Delivered" : "N/A").Titled("Order Status").Filterable(true).SetWidth(10);
+}).WithPaging(25).Sortable(true)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script src="~/Scripts/exporttoexcel/jquery.table2excel.js"></script>
+    <script src="~/Scripts/datepicker.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $('#btnPrint').click(function () {
+                $('.container-fluid *').removeClass('card');
+                $('.container-fluid *').removeClass('card-body');
+                //$('.dataTables_info').addClass('d-none');
+                //$('.dataTables_paginate').addClass('d-none');
+                window.print();
+            });
+            $("#btnExport").click(function () {
+                $("#DeliveryCredit-list").table2excel({
+                    name: "Worksheet Name",
+                    filename: "TodayDeliveryCreditReport",
+                    fileext: ".xls",
+                    exclude_links: true,
+                });
+            });
+
+            $('#ShopCode').select2({
+                placeholder: "Search Shop",
+                ajax: {
+                    url: "/Payment/GetShopSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ShopName"]').val(e.params.data.text);
+            });
+
+            $("#Filter").click(function () {
+                var shopcode = $("#ShopCode").val();
+                window.location.href = "/Payment/TodayDeliveryCreditReport/?shopcode=" + shopcode;
+            });
+
+
+        });
+
+    </script>
+}
+

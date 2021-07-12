@@ -1,0 +1,168 @@
+﻿@model ShopNow.ViewModels.BillCreateEditViewModel
+@{
+    ViewBag.Title = "Delivary Charge Assign";
+}
+<title>ShopNow | @ViewBag.Title</title>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <h5 class="mt-1 text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+        </div>
+        <div class="col-md-8 text-right">
+            <a href="~/Bill/DeliveryChargeAssignList" target="_self"><span class="fa fa-list-ul ml-3"></span> Delivery Charge Assign List</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            @using (Html.BeginForm("DeliveryChargeAssign", "Bill", FormMethod.Post, new { id = "DeliveryForm" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <div class="col-md-2">
+                                        <label class="col-form-label text-secondary font-weight-bold">Shop Name</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select id="ShopCode" name="ShopCode" class="form-control"></select>
+                                        <input type="hidden" name="ShopName" id="ShopName" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-2">
+                                <label class="col-form-label text-secondary font-weight-bold">Delivery Charge Type</label>
+                            </div>
+                            <div class="col-md-8 mt-2">
+                                <div class="form-check-inline mr-3">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="Type" value="1"> 1<sup>st</sup> Tier
+                                    </label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="Type" value="2"> 2<sup>nd</sup> Tier
+                                    </label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="Type" value="3"> 3<sup>rd</sup> Tier
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-2">
+                                <label class="col-form-label text-secondary font-weight-bold">General</label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="text-secondary">Rate upto 5 Km. : </label>
+                                <input type="text" class="font-weight-bold col-md-3" id="DeliveryChargeKM" name="DeliveryChargeKM" readonly style="border:0" />
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-3">
+                                <label class="text-secondary">After 5 Km. (Rate per Km.) : </label>
+                                <input type="text" class="font-weight-bold col-md-3" id="DeliveryChargeOneKM" name="DeliveryChargeOneKM" readonly style="border:0" />
+                                <input type="hidden" name="DeliveryRateSet" id="DeliveryRateSet" />
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-2">
+                                <label class="col-form-label text-secondary font-weight-bold">Special</label>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="text-secondary">Rate upto 5 Km. : </label>
+                                <input type="text" class="font-weight-bold col-md-3" id="DeliveryChargeKM1" name="DeliveryChargeKM1" readonly style="border:0"/>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-3">
+                                <label class="text-secondary">After 5 Km. (Rate per Km.) : </label>
+                                <input type="text" class="font-weight-bold col-md-3" id="DeliveryChargeOneKM1" name="DeliveryChargeOneKM1" readonly style="border:0" />
+                                <input type="hidden" name="DeliveryRateSet1" id="DeliveryRateSet1" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2 my-2 mx-auto">
+                                <button type="button" class="btn btn-block btn-success" id="Create"><span class="glyphicon glyphicon-file"></span> Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script src="~/Scripts/ValidateRequiredFields.js"></script>
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+        var msg = "@ViewBag.Message";
+        if (msg != "") {
+            swal("Notice!", msg, "warning")
+        }
+            $('input[type=radio][name=Type]').change(function () {
+                var type = $('input[name="Type"]:checked').val();
+                $.getJSON("/Bill/GetDeliveryChargeType?type=" + type, function (data) {
+                    debugger;
+                    $.each(data, function (key, val) {
+                        $.each(val, function (index, list) {
+                            if (list.DeliveryRateSet == 0) {
+                                $("#DeliveryChargeKM").val(list.DeliveryChargeKM);
+                                $("#DeliveryChargeOneKM").val(list.DeliveryChargeOneKM);
+                                $("#DeliveryRateSet").val(list.DeliveryRateSet);
+                            }
+                            if (list.DeliveryRateSet == 1) {
+                                $("#DeliveryChargeKM1").val(list.DeliveryChargeKM);
+                                $("#DeliveryChargeOneKM1").val(list.DeliveryChargeOneKM);
+                                $("#DeliveryRateSet1").val(list.DeliveryRateSet);
+                            }
+                        });
+                    });
+                });
+            });
+
+            $('#ShopCode').select2({
+                placeholder: "Search Shop",
+                ajax: {
+                    url: "/Bill/GetBillShopSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ShopName"]').val(e.params.data.text);
+                });
+
+            $('#Create').on('click', function () {
+                var shop = $("#ShopCode").val();
+                var type = $('input[name="Type"]:checked').val();
+                if (shop != null) {
+                    if (type == '1' || type == '2' || type == '3') {
+                        $('#DeliveryForm').submit();
+                    } else {
+                        swal("Notice!", "Please Select Delivery Charge Type!", "warning");
+                    }
+                } else {
+                    swal("Notice!", "Please Select Shop Name!", "warning");
+                }
+            });
+
+        });
+    </script>
+}

@@ -1,0 +1,212 @@
+﻿@model ShopNow.ViewModels.DeliveryBoyPlacesListViewModel
+@{
+    ViewBag.Title = "Assign";
+}
+<title>ShopNow | Delivery Boy Assign</title>
+
+<div class="container-fluid my-0">
+    <div class="row">
+        <div class="col-md-3">
+            <h5 class="mt-1 text-success" style="letter-spacing:1px">DELIVERYBOY ASSIGN</h5>
+        </div>
+        <div class="col-md-9 text-right">
+            <a href="~/DeliveryBoy/List" target="_self"><span class="fa fa-bars"></span>&nbsp;DeliveryBoy List</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            @using (Html.BeginForm("Assign", "DeliveryBoy", FormMethod.Post, new { id = "DeliveryBoyAssignForm", role = "form", enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="Code" value="@Model.Code" />
+                <div class="card mb-4">                    
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="row text-center">
+                                    <div class="col-md-12">
+                                        <label class="font-weight-bold">@Model.Name</label>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div>
+                                            <img class="w-100 h-100" src="@Model.ImagePath" onerror="this.src='/Images/No Photo.png'" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="form-group row"></div>
+                                <div class="form-group row"></div>
+                                <div class="form-group row">
+                                    <div class="col-md-2">
+                                        <label>Mobile : </label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <label class="font-weight-bold"> @Model.PhoneNumber</label>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-2">
+                                        <label>Email : </label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <strong class="font-weight-bold"> @Model.Email</strong>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-2">
+                                        <label>Shop Name : </label>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <strong class="font-weight-bold"> @Model.ShopName</strong>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-2">
+                                        Work Type:
+                                    </div>
+                                    <div class="col-md-10">
+                                        <label class="font-weight-bold">
+                                            @if (Model.WorkType == 1)
+                                            {<span>Part-Time</span> }
+                                            else
+                                            {<span>Full-Time</span>}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-2">
+                                        Work Time:
+                                    </div>
+                                    <div class="col-md-10">
+                                        <label class="font-weight-bold"> @Model.WorkStartTime - @Model.WorkEndTime</label>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-2">
+                                        Address:
+                                    </div>
+                                    <div class="col-md-10">
+                                        <span class="font-weight-bold">@Model.Address</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h5>Nearest Shop Lists</h5>
+                                    </div>
+                                    <div class="col-md-6 text-right">
+                                        @if (Model.DeliveryBoyShopCount == 0)
+                                        {
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    <input type="checkbox" class="form-check-input" value="SelectAll" id="SelectAll">Select All
+                                                </label>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <h5 class="text-danger">Already Assigned to this Delivery Boy</h5>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12 table-responsive">
+                                        <table class="table table-striped table-hover table-borderless table-hover" id="shop-list">
+                                            <thead>
+                                                <tr>
+                                                    <th>No.</th>
+                                                    <th class="text-nowrap">Name</th>
+                                                    <th class="text-nowrap">Address</th>
+                                                    <th class="text-nowrap">Distance</th>
+                                                    <th class="">Image</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var item in Model.List)
+                                                {
+                                                    <tr>
+                                                        <td></td>
+                                                        <td class="">
+                                                            <a href="~/DeliveryBoy/Details?code=@item.Code"> @item.Name</a>
+                                                        </td>
+                                                        <td class="">@item.Address</td>
+                                                        <td class="">@Math.Round(item.Meters / 1000, 2) Km </td>
+                                                        <td class="">
+                                                            @if (item.ImagePath != null)
+                                                            {
+                                                                <span><a href="#" data-toggle="modal" data-target="#myModal" title="Click Here To Preview!"><img id='img-upload' src="@item.ImagePath" class="img-thumbnail" width="75" height="75" onerror="this.src='/Images/No Photo.png'" /></a></span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <img src="~/Images/No Photo.png" class="img-thumbnail" width="75" height="75" />
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="form-group row my-3">
+                                    <div class="col-md-3 mx-auto">
+                                        <button type="submit" class="btn btn-block btn-success Save d-none"><span class="glyphicon glyphicon-file"></span>Assign to this DeliveryBoy</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            var t = $('#shop-list').DataTable({
+                "dom": "<'row'<'col-sm-6'f>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-3'l><'col-sm-4'p>>" +
+                    "<'row'<'col-sm-12'tr>>",
+                "bPaginate": false,
+                // "scrollY": 400,
+                "paging": true,
+                "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "ALL"]],
+                "pageLength": 10,
+                initComplete: function (settings, json) {
+                    $('.index input').remove();
+                    $('.action-btn input').remove();
+                    $('.dataTables_filter input').appendTo('.data-search');
+                    $('.dataTables_filter label').remove();
+                    $('.data-search input').attr('placeholder', 'Quick Search');
+                    $('.data-search input').addClass('form-control');
+                    $('.data-search input').removeClass('form-control-sm');
+                },
+            });
+
+            t.on('order.dt search.dt', function () {
+                t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+
+            $("#SelectAll").click(function () {
+                var checkBox = document.getElementById("SelectAll");
+                if (checkBox.checked == true) {
+                    $(".Save").removeClass("d-none");
+                }
+                else {
+                    $(".Save").addClass("d-none");
+                }
+            });
+
+
+        });
+    </script>
+}

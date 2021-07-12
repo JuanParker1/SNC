@@ -1,0 +1,92 @@
+﻿@model IEnumerable<ShopNow.ViewModels.FranchiseViewModel.FranchiseList>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Assigned Franchise List";
+}
+<title>ShopNow | Franchise List</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+<div class="container-fluid">
+    <div class="row my-2">
+        <div class="col-md-6">
+            <h5 style="letter-spacing:1px">Assigned Deliveryboy List</h5>
+        </div>        
+        <div class="col-md-6 text-right">
+            <a href="/DeliveryBoy/AssignFranchise"><span class="fa fa-tasks"></span> Assign Franchise</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    @Html.Grid(Model).Columns(columns =>
+{
+columns.Add(b => b.Name).Titled("DeliveryBoy Name").Filterable(true).SetWidth(20);
+columns.Add(b => b.MarketingAgentName).Titled("Franchise").Filterable(true).SetWidth(20);
+columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(b => @<div>
+    <a href="~/DeliveryBoy/FranchiseUpdate?code=@b.Code" class="btn btn-sm btn-warning" style="padding: 3px 26px">Edit</a>
+    <button type="button" class="btn btn-sm btn-danger Remove" data-id="@b.Code">Remove</button>
+</div>);
+}).WithPaging(20).Sortable(true)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            var t = $('#Franchise-list').DataTable({
+                "dom": "<'row'<'col-sm-6'f>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-3'l><'col-sm-4'p>>" +
+                    "<'row'<'col-sm-12'tr>>",
+                "bPaginate": false,
+                "scrollY": 400,
+                "paging": true,
+                "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "ALL"]],
+                "pageLength": -1,
+                initComplete: function (settings, json) {
+                    $('.index input').remove();
+                    $('.action-btn input').remove();
+                    $('.dataTables_filter input').appendTo('.data-search');
+                    $('.dataTables_filter label').remove();
+                    $('.data-search input').attr('placeholder', 'Quick Search');
+                    $('.data-search input').addClass('form-control');
+                    $('.data-search input').removeClass('form-control-sm');
+                },
+            });
+
+            t.on('order.dt search.dt', function () {
+                t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+
+            $('.Remove').on('click', function () {
+                var code = $(this).attr('data-id');
+                $.getJSON("/DeliveryBoy/FranchiseRemove?code=" + code, function (data) {
+                    if (data.IsAdded == true) {
+                        swal({
+                            title: "Removed Successfully",
+                            text: "",
+                            type: "success"
+                        }, function () {
+                            window.location.href = "/DeliveryBoy/AssignedFranchiseList";
+                        });
+                    }
+                });
+            });
+
+        });
+
+    </script>
+}
+
+
+
+

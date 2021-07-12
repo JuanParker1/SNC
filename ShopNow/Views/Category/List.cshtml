@@ -1,0 +1,286 @@
+﻿@model IEnumerable<ShopNow.Models.Category>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Category";
+}
+<title>ShopNow | Category List</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+<style>
+    .table td, .table th {
+        border-top: 1px solid #eaeaea;
+        vertical-align: middle;
+        padding: .4rem 1.25rem;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <h5 class="" style="letter-spacing:1px">CATEGORY LIST</h5>
+        </div>
+        <div class="col-md-6 text-right">
+            <a data-toggle="modal" data-target="#createModal" href="createModal"><span class="fa fa-plus"></span> New Category</a>
+        </div>
+    </div>
+    @Html.Grid(Model).Columns(columns =>
+{
+columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(20);
+columns.Add(c => c.ProductType).Titled("Product Type").Filterable(true).SetWidth(20);
+columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
+columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(c => @<div><a href="" data-id="@c.Code" data-id1="@c.Name" data-id2="@c.ProductType" data-id3="@c.OrderNo" class="btn-sm btn-warning edit-prompt" data-toggle="modal" data-target="#editModal" style="padding: 3px 26px">Edit</a> <a href="" data-id="@c.Code" data-id1="@c.Name" class="btn-sm btn-danger delete-prompt" data-toggle="modal" data-target="#deleteModal" style="padding: 3px 18px">Delete</a></div>);
+    }).WithPaging(20).Sortable(true)
+
+    <!--
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover table-borderless table-hover" id="Category-list">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Category Name</th>
+                                    <th>Item Type</th>
+                                    <th>Adscore</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                foreach (var item in Model.List)
+                                {
+                                    <tr>
+                                        <td></td>
+                                        <td>item.Name</td>
+                                        <td>item.ProductType</td>
+                                        <td>item.OrderNo</td>
+                                        <td>
+                                            <a href="" data-id="item.Code" data-id1="item.Name" data-id2="item.ProductType" data-id3="item.OrderNo" class="btn-sm btn-warning edit-prompt" data-toggle="modal" data-target="#editModal" style="padding: 3px 26px">Edit</a>
+                                            <a href="" data-id="item.Code" data-id1="item.Name" class="btn-sm btn-danger delete-prompt" data-toggle="modal" data-target="#deleteModal" style="padding: 3px 18px">Delete</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    -->
+</div>
+
+<div class="modal fade" id="deleteModal" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert alert-danger">
+                <h4 class="modal-title" id="myModalLabel">Warning</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="success-message">Are you sure want to delete this record? </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success delete-confirm">Yes</button>
+                <button class="btn btn-danger" data-dismiss="modal">No</button>
+                <input type="hidden" name="Code" id="Code" data-dismiss="modal" />
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert alert-info">
+                <h5 class="modal-title" id="createModalLabel">New Category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <label class="col-form-label font-weight-bold text-secondary">Category Name</label>
+                        <input type="text" name="Name" id="Name" class="form-control" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-form-label"><strong class="text-secondary">Item Type</strong></label>
+                        <select name="ProductType" class="form-control" id="ProductType">
+                            <option value="">Select</option>
+                            <option value="Product">Product</option>
+                            <option value="Dish">Dish</option>
+                            <option value="Service">Service</option>
+                            <option value="Medical">Medical</option>
+                            <option value="FMCG">FMCG</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-form-label font-weight-bold text-secondary">Adscore</label>
+                        <input type="number" min="1" value="1" name="OrderNo" id="OrderNo" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="button" id="Create" name="Create" value="Save" class="btn btn-success float-right Save" />
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert alert-info">
+                <h5 class="modal-title" id="editModalLabel">Update Category</h5>
+                <button type="button" class="btnClose close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <label class="col-form-label font-weight-bold text-secondary">Category Name</label>
+                        <div id="CategoryName"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-form-label font-weight-bold text-secondary">Item Type</label>
+                        <div id="Type"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-form-label font-weight-bold text-secondary">Adscore</label>
+                        <div id="CategoryNo"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="button" id="Edit" name="Edit" value="Save" class="btn btn-success float-right Edit" />
+                <input type="hidden" name="CategoryCode" id="CategoryCode" data-dismiss="modal" />
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
+{
+    <script src="~/Scripts/ValidateRequiredFields.js"></script>
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+
+            var t = $('#Category-list').DataTable({
+                "dom": "<'row'<'col-sm-6'f>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-3'l><'col-sm-4'p>>" +
+                    "<'row'<'col-sm-12'tr>>",
+                "bPaginate": false,
+                "scrollY": 400,
+                "paging": true,
+                "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "ALL"]],
+                "pageLength": -1,
+                initComplete: function (settings, json) {
+                    $('.index input').remove();
+                    $('.action-btn input').remove();
+                    $('.dataTables_filter input').appendTo('.data-search');
+                    $('.dataTables_filter label').remove();
+                    $('.data-search input').attr('placeholder', 'Quick Search');
+                    $('.data-search input').addClass('form-control');
+                    $('.data-search input').removeClass('form-control-sm');
+                },
+            });
+
+            t.on('order.dt search.dt', function () {
+                t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+
+            $('#Create').on('click', function () {
+                var name = $('#Name').val();
+                var type = $('#ProductType').val();
+                var orderNo = $('#OrderNo').val();
+                var isValidate = false;
+                var requiredArr = [
+                    'Name',
+                    'ProductType'
+                ];
+                isValidate = ValidateEmptyRequiredFiels(requiredArr);
+                if (isValidate) {
+                    $.getJSON("/Category/Save?name=" + name + "&type=" + type + "&orderNo=" + orderNo, function (data) {
+                        if (data.IsAdded == true) {
+                            swal({
+                                title: data.message,
+                                text: "",
+                                type: "success"
+                            }, function () {
+                                window.location.reload();
+                            });
+                        } else {
+                            if (data.message1 != null || data.message1 != "") {
+                                swal(data.message1, "", "warning");
+                                $('#Name').val("");
+                                $('#ProductType').val("");
+                                $('#OrderNo').val("");
+                            }
+                        }
+                    });
+                }
+            });
+
+            $(".edit-prompt").click(function () {
+                var code = $(this).attr('data-id');
+                var name = $(this).attr('data-id1');
+                var type = $(this).attr('data-id2');
+                var orderno = $(this).attr('data-id3');
+                $("#CategoryCode").val(code);
+                $("#CategoryName").append("<input type=text name=CName id=CName class=form-control value='" + name + "' />");
+                $("#CategoryNo").append("<input type=number name=COrderNo id=COrderNo class=form-control value='" + orderno + "' />");
+                $("#Type").append("<select name=CProductType id=CProductType class=form-control><option value=" + type + ">" + type + "</option><option value=Product>Product</option><option value=Dish>Dish</option><option value=Service>Service</option><option value=Medical>Medical</option> <option value=FMCG>FMCG</option></select>");
+
+            });
+
+            $(".Edit").click(function () {
+                var Code = $("#CategoryCode").val();
+                var categoryName = $("#CName").val();
+                var productType = $("#CProductType").val();
+                var orderNo = $("#COrderNo").val();
+                if (categoryName == "" || categoryName == null) {
+                    swal("Name is Empty.", "Please Enter a Category Name", "warning");
+                }
+                else if (categoryName != "" || categoryName != null) {
+                    $.getJSON("/Category/Edit", { code: Code, name: categoryName, type: productType, orderNo: orderNo }, function (data) {
+                        if (data.message != null || data.message != "") {
+                            swal({
+                                title: data.message,
+                                text: "",
+                                type: "success"
+                            }, function () {
+                                window.location.reload();
+                            });
+                        }
+                    });
+                }
+            });
+
+            $("#editModal").on("hidden.bs.modal", function () {
+                window.location.reload();
+            });
+
+            $(".delete-prompt").click(function () {
+                var code = $(this).attr('data-id');
+                $("#Code").val(code);
+            });
+
+            $(".delete-confirm").click(function () {
+                var code = $("#Code").val();
+                $.getJSON("/Category/Delete", { code: code }, function (data) {
+                    window.location.reload();
+                });
+            });
+
+        });
+
+    </script>
+}
+
+

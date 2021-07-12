@@ -1,0 +1,572 @@
+﻿@model ShopNow.ViewModels.ProductCreateViewModel
+@{
+    ViewBag.Title = "Electronic Item Entry";
+}
+<title>ShopNow | Electronic Item Entry</title>
+@*@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">
+        <h3>Error:</h3>
+        <p>
+            @ViewBag.ErrorMessage
+        </p>
+    </div>
+}*@
+<style>
+    .select2 {
+        width: 100% !important;
+    }
+
+    .toggle.ios, .toggle-on.ios, .toggle-off.ios {
+        border-radius: 20rem;
+    }
+
+        .toggle.ios .toggle-handle {
+            border-radius: 20rem;
+        }
+
+    .img-upload-container {
+        position: relative;
+        width: 120px;
+        height: 120px;
+        background: #fff;
+        border: 1px solid #ccc;
+        float: left;
+        margin: 5px;
+    }
+
+    .img-container {
+        width: 100%;
+    }
+
+    .img-browse {
+        position: absolute;
+        top: 35%;
+        left: 0;
+        text-align: center;
+        cursor: pointer;
+        width: 100%;
+        font-weight: normal;
+        opacity: 0.5;
+        transition: 0.5s;
+    }
+
+        .img-browse:hover {
+            opacity: 1.5;
+        }
+</style>
+
+<div class="container-fluid my-0">
+    <div class="row">
+        <div class="col-md-2">
+            <h5 class="mt-1" style="letter-spacing:1px">ELECTRONIC ITEM ENTRY</h5>
+        </div>
+        <div class="col-md-10 text-right">
+            <a href="~/Product/ElectronicList" target="_blank"><span class="fa fa-bars"></span> Electronic List</a>
+        </div>
+    </div>
+
+    <div class="row bg-green-200">
+        <div class="col-md-12">
+            @using (Html.BeginForm("Create", "Product", FormMethod.Post, new { id = "ProductForm", role = "form", enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <div class="col-md-3 text-md-left">
+                                <label class="col-form-label text-secondary font-weight-bold">Shop Name</label>
+                            </div>
+                            <div class="col-md-9">
+                                @if (ViewBag.user != null)
+                                {
+                                    <strong class="text-secondary">@ViewBag.user</strong>
+                                }
+                                else
+                                {
+                                    <select id="ShopCode" name="ShopCode" class="form-control"></select>
+                                    <input type="hidden" name="ShopName" id="ShopName" />
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="text-success h5"><strong>Electronic Product</strong></span>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label class="control-label">
+                                    <span class="text-secondary font-weight-bold">Item Name</span>
+                                </label>
+                                <div class="form-group">
+                                    <div class="Select2Name">
+                                        <select id="MasterProductCode" name="MasterProductCode" class="form-control"></select>
+                                        <input type="hidden" name="MasterProductName" id="MasterProductName" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label text-secondary font-weight-bold" for="BrandCode">Brand Name</label>
+                                <div class="form-group">
+                                    <input type="hidden" id="BrandCode" name="BrandCode" />
+                                    <input type="text" name="BrandName" id="BrandName" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label text-secondary font-weight-bold" for="CategoryCode">Category Name</label>
+                                <div class="form-group">
+                                    <input type="hidden" id="CategoryCode" name="CategoryCode" />
+                                    <input type="text" name="CategoryName" id="CategoryName" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label" for="GoogleTaxonomyCode"><strong class="text-secondary">Google Taxonomy Code</strong></label>
+                                    <input id="GoogleTaxonomyCode" type="text" class="form-control" name="GoogleTaxonomyCode" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="control-label"><strong class="text-secondary">Short Description</strong></label>
+                                <input type="text" class="form-control" name="ShortDescription" id="ShortDescription" maxlength="100" />
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label" for="MenuPrice"><strong class="text-secondary">Menu Price</strong></label>
+                                    <input id="MenuPrice" type="number" class="form-control" step="any" name="MenuPrice" min="1" />
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label" for="Price"><strong class="text-secondary">Selling Price</strong></label>
+                                    <input id="Price" type="number" class="form-control" step="any" name="Price" min="1" />
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label" for="Qty"><strong class="text-secondary">Quantity</strong></label>
+                                    <input id="Qty" type="number" class="form-control" name="Qty" min="1" value="1" />
+                                    <input type="hidden" name="ProductType" id="ProductType" value="Product" />
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label" for="Percentage"><strong class="text-secondary">Percentage</strong></label>
+                                    <input id="Percentage" type="number" class="form-control" name="Percentage" readonly />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label"><strong class="text-secondary">Long Description</strong></label>
+                                    <textarea class="form-control ckeditor h-50" id="LongDescription" name="LongDescription" maxlength="500"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label col-sm-12" for="GTIN14"><strong class="text-secondary">GTIN14</strong></label>
+                                <div class="col-sm-12">
+                                    <input id="GTIN14" type="text" class="form-control" name="GTIN14" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label col-sm-12" for="GTIN13"><strong class="text-secondary">GTIN13</strong></label>
+                                <div class="col-sm-12">
+                                    <input id="GTIN13" type="text" class="form-control" name="GTIN13" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label col-sm-12" for="GTIN12"><strong class="text-secondary">GTIN12</strong></label>
+                                <div class="col-sm-12">
+                                    <input id="GTIN12" type="text" class="form-control" name="GTIN12" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label col-sm-12" for="UPC"><strong class="text-secondary">UPC</strong></label>
+                                <div class="col-sm-12">
+                                    <input id="UPC" type="text" class="form-control" name="UPC" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label col-sm-12" for="GTIN"><strong class="text-secondary">GTIN</strong></label>
+                                <div class="col-sm-12">
+                                    <input id="GTIN" type="text" class="form-control" name="GTIN" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label col-sm-12" for="ISBN"><strong class="text-secondary">ISBN</strong></label>
+                                <div class="col-sm-12">
+                                    <input id="ISBN" type="text" class="form-control" name="ISBN" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label col-sm-12" for="EAN"><strong class="text-secondary">EAN</strong></label>
+                                <div class="col-sm-12">
+                                    <input id="EAN" type="text" class="form-control" name="EAN" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div id="divSpec" class="table-responsive">
+                            <table class="table table-borderless table-striped table-condensed w-100 mr-auto ml-5" id="tbl-specification">
+                                <thead>
+                                    <tr>
+                                        <th>Specification Name</th>
+                                        <th>Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot></tfoot>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="card my-3">
+                    <div class="card-body">
+                        <div class="row mt-2">
+                            <h5 class="text-success">Add Product Image(s)</h5>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-2">
+                                <label class="control-label"><strong class="text-secondary">Product Image1</strong></label>
+                                <div class="img-upload-container ml-2">
+                                    <img class="img-container w-100 h-100" id="img-ProductImage1" onerror="this.src='/Images/No Photo.png'" />
+                                    <input type="file" id="ProductImage1" name="ProductImage1" class="d-none" />
+                                    <label for="ProductImage1" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="control-label"><strong class="text-secondary">Product Image2</strong></label>
+                                <div class="img-upload-container ml-2">
+                                    <img class="img-container w-100 h-100" id="img-ProductImage2" onerror="this.src='/Images/No Photo.png'" />
+                                    <input type="file" id="ProductImage2" name="ProductImage2" class="d-none" />
+                                    <label for="ProductImage2" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="control-label"><strong class="text-secondary">Product Image3</strong></label>
+                                <div class="img-upload-container ml-2">
+                                    <img class="img-container w-100 h-100" id="img-ProductImage3" onerror="this.src='/Images/No Photo.png'" />
+                                    <input type="file" id="ProductImage3" name="ProductImage3" class="d-none" />
+                                    <label for="ProductImage3" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="control-label"><strong class="text-secondary">Product Image4</strong></label>
+                                <div class="img-upload-container ml-2">
+                                    <img class="img-container w-100 h-100" id="img-ProductImage4" onerror="this.src='/Images/No Photo.png'" />
+                                    <input type="file" id="ProductImage4" name="ProductImage4" class="d-none" />
+                                    <label for="ProductImage4" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="control-label"><strong class="text-secondary">Product Image5</strong></label>
+                                <div class="img-upload-container ml-2">
+                                    <img class="img-container w-100 h-100" id="img-ProductImage5" onerror="this.src='/Images/No Photo.png'" />
+                                    <input type="file" id="ProductImage5" name="ProductImage5" class="d-none" />
+                                    <label for="ProductImage5" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-3 mx-auto">
+                                <button type="button" class="btn btn-block btn-success Save"><span class="glyphicon glyphicon-file"></span> Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+@*Image Modal*@
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <span class="close" data-dismiss="modal">&times;</span>
+        <img class="modal-content" id="myImage">
+    </div>
+</div>
+
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script src="~/Scripts/ckeditor/ckeditor.js"></script>
+    <script src="~/Scripts/multiple-image-upload.js"></script>
+    <link href="~/Content/multiple-image-upload.css" rel="stylesheet" />
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script>
+
+        $(document).ready(function () {
+            var errormsg = "@ViewBag.ErrorMessage";
+            var msg = "@ViewBag.Message";
+            if (errormsg != "") {
+                swal("Notice!", errormsg, "warning")
+            }
+            if (msg != "") {
+                swal("Success!", msg, "success")
+            }
+
+            $('#Price').on('change keyup', function () {
+                var menuprice = $("#MenuPrice").val();
+                var sellingprice = $(this).val();
+                var results = Math.ceil(((menuprice - sellingprice) / menuprice) * 100);
+                $("#Percentage").val(results);
+            });
+
+            $('#MenuPrice').on('change keyup', function () {
+                var menuprice = $(this).val();
+                var sellingprice = $('#Price').val();
+                var results = Math.ceil(((menuprice - sellingprice) / menuprice) * 100);
+                $("#Percentage").val(results);
+            });
+
+           
+            var count = $('#tbl-specification tr').length;
+            if (count == 1) {
+                $("#divSpec").addClass("d-none");
+            }
+
+            
+            $('#ShopCode').select2({
+                placeholder: "Search Shop",
+                ajax: {
+                    url: "/Product/GetProductShopSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ShopName"]').val(e.params.data.text);
+            });
+
+            $(".Save").click(function () {
+                var shopcode = $("#ShopCode").val();
+                if (shopcode != null) {
+                    $('#ProductForm').submit();
+                } else {
+                    swal("Notice!", "Please Select Shop Name!", "warning");
+                }
+            });
+
+            $('#MasterProductCode').select2({
+                placeholder: "Search Product",
+                ajax: {
+                    url: "/Product/GetMasterProductSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                var code = e.params.data.id;
+                $('input[name="MasterProductName"]').val(e.params.data.text);
+                $('input[name="CategoryCode"]').val(e.params.data.CategoryCode);
+                $('input[name="CategoryName"]').val(e.params.data.CategoryName);
+                $('input[name="BrandCode"]').val(e.params.data.BrandCode);
+                $('input[name="BrandName"]').val(e.params.data.BrandName);
+                $('input[name="ShortDescription"]').val(e.params.data.ShortDescription);
+                CKEDITOR.instances['LongDescription'].setData(e.params.data.LongDescription);
+                var res = e.params.data.ImagePath;
+                var r = res.split(',');
+                var result = $.trim(r[0]);
+                $('input[name="ImagePath"]').val(result);
+                $('#img-upload').attr('src', '/Content/Images/' + result);
+                $('input[name="MenuPrice"]').val(e.params.data.Price);
+                $('input[name="ProductType"]').val(e.params.data.ProductType);
+                $.getJSON('/Product/GetMasterProductSpecification', { code: code }, function (data) {
+                    $.each(data, function (index, list) {
+                        var tableData = '<tr> \
+                                                                                        <td>'+ list.SpecificationName + '<input type="hidden" name="SpecificationCode" value=' + list.SpecificationCode + ' /></td> \
+                                                                                        <td>'+ list.Value + '</td> \
+                                                                                    </tr> ';
+
+                        $('#tbl-specification tbody').append(tableData);
+                    });
+                });
+
+                $('#ShortDescription').prop('readonly', true);
+                CKEDITOR.instances['LongDescription'].setReadOnly(true);
+                $('#BrandName').prop('readonly', true);
+                $('#CategoryName').prop('readonly', true);
+                //$('#MenuPrice').prop('readonly', true);
+            });
+
+            $('#addToSpecification').on('click', function () {
+                var SpecificationCode = $("#SpecificationCode").val();
+                var SpecificationName = $("#SpecificationName").val();
+                var SpecificationValue = $("#SpecificationValue").val();
+
+                var fd = new FormData();
+                fd.append('SpecificationCode', SpecificationCode);
+                fd.append('SpecificationName', SpecificationName);
+                fd.append('Value', SpecificationValue);
+                $.ajax({
+                    url: '/Product/Specifications',
+                    data: fd,
+                    type: 'post',
+                    dataType: 'json',
+                    contentType: false,
+                    enctype: 'multipart/form-data',
+                    processData: false,
+                    success: function (data) {
+                        var tableData = '<tr> \
+                                                    <td>'+ data.Id + '</td> \
+                                                    <td>'+ data.SpecificationName + '<input type="hidden" name="SpecificationCode" value=' + data.SpecificationCode + ' /></td> \
+                                                    <td>'+ data.Value + '</td> \
+                                                    <td><button class="btn btn-link text-danger removeSpecifications" type="button" data-id='+ data.Id + '><u>Remove</u></button></td>\
+                                                </tr> ';
+
+                        $('#tbl-specification tbody').append(tableData);
+                        $('#divSpecification').removeClass('d-none');
+                        $('#SpecificationCode').val('').trigger('change');
+                        $('#SpecificationValue').val("");
+                    }
+                })
+
+            });
+
+            $(document).on('click', '.removeSpecifications', function () {
+                var id = $(this).data('id');
+                var thisRow = $(this).closest("tr");
+                $.post('/Product/RemoveSpecifications', { id: id }, function (data) {
+                    if (data == true) {
+                        thisRow.remove();
+                        alert("Specification Successfully Removed!");
+                        var count = $('#tbl-specification tr').length;
+                        if (count == 1) {
+                            $("#divSpecification").addClass("d-none");
+                        }
+                    }
+                    else
+                        alert("Something went wrong please try again!");
+                });
+            });
+
+           
+            $(document).on('change', '.btn-file :file', function () {
+                var input = $(this),
+                    label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+                input.trigger('fileselect', [label]);
+            });
+
+            function readURLProduct1(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#img-ProductImage1').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#ProductImage1").change(function () {
+                readURLProduct1(this);
+            });
+
+            function readURLProduct2(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#img-ProductImage2').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#ProductImage2").change(function () {
+                readURLProduct2(this);
+            });
+
+            function readURLProduct3(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#img-ProductImage3').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#ProductImage3").change(function () {
+                readURLProduct3(this);
+            });
+
+            function readURLProduct4(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#img-ProductImage4').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#ProductImage4").change(function () {
+                readURLProduct4(this);
+            });
+
+            function readURLProduct5(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#img-ProductImage5').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#ProductImage5").change(function () {
+                readURLProduct5(this);
+            });
+
+            var modal = document.getElementById('myModal');
+            var img = document.getElementsByClassName('ProductImage');
+            var modalImg = document.getElementById("myImage");
+            $(img).click(function () {
+                modal.style.display = "block";
+                modalImg.src = this.src;
+                if (this.src == "") {
+                    $('#myModal').hide();
+                }
+                else {
+                    $('#myModal').modal('show');
+                }
+            });
+
+        });
+
+    </script>
+}
+

@@ -1,0 +1,62 @@
+﻿@model ShopNow.ViewModels.RefundHistoryViewModel
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Refund History";
+}
+<title>ShopNow | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <h5 class="mt-1 text-uppercase" style="letter-spacing:1px">@ViewBag.Title</h5>
+        </div>
+
+        <div class="col-md-9">
+            <form method="get" action="/Refund/History">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>From Date</label>
+                            <input id="date-start" type="date" class="form-control" name="StartDate" @if(Model.StartDate != null){ <text> value="@Model.StartDate.Value.ToString("yyyy-MM-dd")" </text>}  />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>To Date</label>
+                            <input id="date-end" type="date" class="form-control" name="EndDate" @if(Model.EndDate != null){ <text> value="@Model.EndDate.Value.ToString("yyyy-MM-dd")" </text>}  />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Customer Phone No</label>
+                            <input type="text" class="form-control" name="CustomerPhoneNo" value="@Model.CustomerPhoneNo"/>
+                        </div>
+                    </div>
+                    <div class="mt-1"> 
+                    <input type="submit" class="btn btn-info h-50 mt-4" value="Apply Filter" />
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    @Html.Grid(Model.ListItems).Columns(columns =>
+{
+    columns.Add(c => c.OrderDate).Titled("Order Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
+    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
+    columns.Add(c => c.OrderNo).Titled("Order No").Filterable(true).SetWidth(10);
+    columns.Add(c => c.CustomerName).Titled("Customer Name").Filterable(true).SetWidth(12);
+    columns.Add(c => c.CustomerPhoneNo).Titled("Customer PhoneNo").Filterable(true).SetWidth(15);
+    columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(10);
+    columns.Add(c => c.Remark).Titled("Remark").Filterable(true).SetWidth(8);
+    columns.Add(c => c.RefundDate).Titled("Refund Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
+    columns.Add(c => c.RefundId).Titled("Refund Id").Filterable(true).SetWidth(10);
+}).WithPaging(20).Sortable(true)
+
+</div>
+@section Scripts
+{
+    
+}

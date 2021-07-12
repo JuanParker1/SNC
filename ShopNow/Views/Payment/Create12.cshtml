@@ -1,0 +1,1049 @@
+﻿@model ShopNow.ViewModels.PaymentCreateViewModel
+@{
+    /**/
+
+    ViewBag.Title = "Payment Entry";
+}
+
+@section Styles{
+    <link href="~/Content/theme-purchases.css" rel="stylesheet" />
+}
+
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">
+        <h3>Error:</h3>
+        <p>
+            @ViewBag.ErrorMessage
+        </p>
+    </div>
+}
+
+@using (Html.BeginForm("Create", "Payment", FormMethod.Post, new { id = "ProductForm", role = "form", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <form id="form1" runat="server">
+        <div>
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td>
+                        <asp:Button ID="btnRedirect" Text="Redirect and Post" runat="server" onclick="Redirect_Click" color="red" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+
+}
+
+
+
+
+@section Scripts
+{
+    <link href="~/Scripts/plugins/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/plugins/select2/select2.custom.css" rel="stylesheet" />
+    <script src="~/Scripts/plugins/select2/js/select2.js"></script>
+    <script src="~/Scripts/plugins/ckeditor/ckeditor.js"></script>
+    <script src="~/Scripts/ValidateRequiredFields.js"></script>
+    <script>
+
+
+
+        //Two Decimal Value
+        var generateCode = false;
+        function limit(element) {
+            var max_chars = 5;
+            if (element.value.length > max_chars) {
+                element.value = element.value.substr(0, max_chars);
+            }
+        }
+        function limitNine(element, ValNum) {
+            var max_chars = 9;
+            if (element.value.length > max_chars) {
+                element.value = element.value.substr(0, max_chars);
+            }
+
+        }
+
+
+
+
+
+        $(document).on('focusout', '.specification-value', function () {
+            var code = $(this).data('specification-code');
+            var value = $(this).val();
+
+            $.getJSON("/Product/SetSpecificationValue", { code: code, value: value }, function (data) {
+                //do nothing
+            });
+        });
+
+        $(document).ready(function () {
+            $('#BrandCode').select2({
+				placeholder: "Search Brand",
+				width: '100%',
+                ajax: {
+                    url: "/Api/GetBrandsSelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $.getJSON('/Product/GetCurrencyName/?brandCode=' + e.params.data.id, null, function (result) {
+                    $('#CurrencyName').val(result.Currency);
+                    $('input[name="CurrencyName"]').val(result.Currency);
+                });
+
+                $('input[name="BrandName"]').val(e.params.data.text);
+
+            });
+
+
+            $('#ProductLineCode').select2({
+                placeholder: "Search ProductLine",
+                ajax: {
+					url: "/Api/GetProductLinesSelect2",
+					width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ProductLineName"]').val(e.params.data.text);
+				});
+
+
+
+
+		$('#PricingComputationCode').on('change', function () {
+			var url = '@Url.Action("GetPriceValue", "Product")';
+			var cost = $('#Cost').val();
+			var formula = $('#PricingComputationCode').val();
+			if (cost && formula) {
+				$.getJSON(url, { cost: cost, formula: formula }, function (data) {
+
+					$('#ShowEstimatedPrice').val(data);
+				});
+			}
+
+		});
+
+		$('#Cost').on('change keyup', function () {
+			var url = '@Url.Action("GetPriceValue", "Product")';
+			var cost = $('#Cost').val();
+			var formula = $('#PricingComputationCode').val();
+			if (cost) {
+				$('#ShowEstimatedPrice').val(cost);
+			}
+			else {
+				$('#ShowEstimatedPrice').val(0);
+			}
+		 if ((cost) && (formula)) {
+				$.getJSON(url, { cost: cost, formula: formula }, function (data) {
+
+					$('#ShowEstimatedPrice').val(data);
+				});
+			}
+
+			});
+
+			$('#PricingComputationCode').select2({
+				placeholder: "Search Formula",
+				width: '100%',
+				ajax: {
+					url: "/Product/GetPricingComputationSelect2",
+					delay: 250,
+					dataType: 'json'
+				}
+			}).on('select2:select', function (e) {
+				$('input[name="PricingComputationName"]').val(e.params.data.text);
+			});
+
+            var category = $('#CategoryCode,#CategoryCode1');
+            category.select2({
+				placeholder: "Search Category",
+				width: '60%',
+                ajax: {
+                    url: "/Api/GetCategoriesSelect2",
+                    dataType: 'json',
+                    delay: 300
+                }
+            }).on('select2:select', function (e) {
+                $('.item-list').remove();
+                $.getJSON("/Product/GetSpecificationListByCategoryCode?code=" + e.params.data.id, function (data) {
+                    $.each(data.list, function (index, da) {
+                        var newItem = "<tr data-specification-code=\"" + da.SpecificationCode + "\" class=\"item-list\"> \
+                                                        <td> \
+                                                            " + da.SpecificationName + " \
+                                                        </td> \
+                                                        <td> \
+                                                            <input type=\"text\" class=\"form-control specification-value\" data-specification-code=\""+ da.SpecificationCode + "\"  data-specification-name=\"" + da.SpecificationName + "\" name=\"Value\" /> \
+                                                        </td> \
+                                                        \
+                                                        </tr> ";
+                        $('#Item_' + da.SpecificationCode).remove();
+                        $('#specification-list').append(newItem);
+                        $('#specification-list1').append(newItem);
+                    });
+                    $('#CategoryName').val(e.params.data.text);
+                });
+            });
+
+            $('#MeasurementCode').select2({
+				placeholder: "Search",
+				width: '100%',
+                ajax: {
+                    url: "/api/GetMeasurementsSelect2",
+                    dataType: 'json',
+                    delay: 300
+                },
+            }).on('select2:select', function (e) {
+                $('#MeasurementName').val(e.params.data.text);
+            });
+
+            $('#ProductCode').select2({
+                allowClear: true,
+                placeholder: "Search Model",
+                ajax: {
+                    url: "/Product/GetListSelect2",
+                    delay: 50,
+                    dataType: 'json'
+                },
+                width: '100%',
+                dropdownAutoWidth: true
+            }).on('select2:select', function (e) {
+                $('input[name="ProductName"]').val(e.params.data.text);
+            }).on('select2:unselecting', function (e) {
+                $('input[name="ProductName"]').val('');
+            });
+            $('#MeasurementCode1').select2({
+                placeholder: "Search",
+                ajax: {
+                    url: "/api/GetMeasurementsSelect2",
+                    dataType: 'json',
+                    delay: 300
+                },
+            }).on('select2:select', function (e) {
+                $('#ServiceMeasurementName').val(e.params.data.text);
+            });
+
+            $('#VolumeCode').select2({
+                placeholder: "Search Volume",
+                ajax: {
+                    url: "/api/GetVolumesSelect2",
+                    dataType: 'json',
+                    delay: 300
+                },
+            }).on('select2:select', function (e) {
+                $('#VolumeName').val(e.params.data.text);
+            });
+
+            $('#FBrandCode').select2({
+                allowClear: true,
+                placeholder: "Search Brand",
+                ajax: {
+                    url: "/Api/GetBrandsSelect2",
+                    delay: 250,
+                    dataType: 'json'
+                },
+                width: '100%',
+                dropdownAutoWidth: true
+            }).on('select2:select', function (e) {
+                $('input[name="FBrandName"]').val(e.params.data.text);
+
+            }).on('select2:unselecting', function (e) {
+                $('input[name="FBrandName"]').val('');
+            });
+
+            $('#FProductLineCode').select2({
+                allowClear: true,
+				placeholder: "Search ProductLine",
+				width: '100%',
+                ajax: {
+                    url: "/Api/GetProductLinesSelect2",
+                    delay: 250,
+                    dataType: 'json'
+                },
+
+                dropdownAutoWidth: true
+            }).on('select2:select', function (e) {
+                $('input[name="FProductLineName"]').val(e.params.data.text);
+            }).on('select2:unselecting', function (e) {
+                $('input[name="FProductLineName"]').val('');
+            });
+
+
+            $('#FCategoryCode').select2({
+                allowClear: true,
+                placeholder: "Search Category",
+                ajax: {
+                    url: "/Api/GetCategoriesSelect2",
+                    dataType: 'json',
+                    delay: 300
+                },
+                width: '100%',
+                dropdownAutoWidth: true
+            }).on('select2:select', function (e) {
+                $('#FCategoryName').val(e.params.data.text);
+            }).on('select2:unselecting', function (e) {
+                $('input[name="FCategoryName"]').val('');
+            });
+        });
+
+        $('#generateCode').on('click', function () {
+            if (generateCode == false) {
+                generateCode = true;
+                $.ajax({
+                    type: "POST",
+                    url: "/Product/GenerateSKUCode/",
+                    success: function (result) {
+                        $('#StockKeepingUnit').val(result);
+                    }
+                });
+            }
+            else {
+                generateCode = false;
+                $('#StockKeepingUnit').val("");
+            }
+
+
+        });
+
+        $(document).ready(function () {
+            //For Validation
+            $('#submitBtn').on('click', function () {
+                var isValidated = false;
+                var requiredArr = [
+                    'ProductLineCode',
+                    'BrandCode',
+                    'Name',
+                    'ShortDescription',
+                    'MeasurementCode',
+                    'UnitLevel',
+                    'AcquisitionPrice',
+                    'EstimatedPrice'
+                ];
+                isValidated = ValidateEmptyRequiredFiels(requiredArr);
+                if (isValidated) {
+                    $('#ProductForm').submit();
+                }
+                //};
+            });
+        });
+    </script>
+    <script>
+        //Weight
+        function weightPoundGram(valNum) {
+            var wgtpnds = document.getElementById("WeightPounds").value = valNum * 2.2046;
+            wgtpnds += '';
+            wgtpnds = wgtpnds.replace(',', ''); wgtpnds = wgtpnds.replace(',', ''); wgtpnds = wgtpnds.replace(',', '');
+            wgtpnds = wgtpnds.replace(',', ''); wgtpnds = wgtpnds.replace(',', ''); wgtpnds = wgtpnds.replace(',', '');
+            x = wgtpnds.split('.');
+            format(x);
+            $('#WeightPounds').val(x1);
+
+            var wgtgram = document.getElementById("WeightGram").value = valNum * 1000;
+            wgtgram += '';
+            wgtgram = wgtgram.replace(',', ''); wgtgram = wgtgram.replace(',', ''); wgtgram = wgtgram.replace(',', '');
+            wgtgram = wgtgram.replace(',', ''); wgtgram = wgtgram.replace(',', ''); wgtgram = wgtgram.replace(',', '');
+            x = wgtgram.split('.');
+            format(x);
+            $('#WeightGram').val(x1);
+        }
+        function weightPoundKilogram(valNum) {
+            var wgtpnds = document.getElementById("WeightPounds").value = valNum * 0.0022046;
+            wgtpnds += '';
+            wgtpnds = wgtpnds.replace(',', ''); wgtpnds = wgtpnds.replace(',', ''); wgtpnds = wgtpnds.replace(',', '');
+            wgtpnds = wgtpnds.replace(',', ''); wgtpnds = wgtpnds.replace(',', ''); wgtpnds = wgtpnds.replace(',', '');
+            x = wgtpnds.split('.');
+            format(x);
+            $('#WeightPounds').val(x1);
+
+            var wgtkg = document.getElementById("WeightKiloGram").value = valNum / 1000;
+            wgtkg += '';
+            wgtkg = wgtkg.replace(',', ''); wgtkg = wgtkg.replace(',', ''); wgtkg = wgtkg.replace(',', '');
+            wgtkg = wgtkg.replace(',', ''); wgtkg = wgtkg.replace(',', ''); wgtkg = wgtkg.replace(',', '');
+            x = wgtkg.split('.');
+            format(x);
+            $('#WeightKiloGram').val(x1);
+        }
+        function weightGramKilogram(valNum) {
+            var wgtgram = document.getElementById("WeightGram").value = valNum / 0.0022046;
+            wgtgram += '';
+            wgtgram = wgtgram.replace(',', ''); wgtgram = wgtgram.replace(',', ''); wgtgram = wgtgram.replace(',', '');
+            wgtgram = wgtgram.replace(',', ''); wgtgram = wgtgram.replace(',', ''); wgtgram = wgtgram.replace(',', '');
+            x = wgtgram.split('.');
+            format(x);
+            $('#WeightGram').val(x1);
+
+            var wgtkg = document.getElementById("WeightKiloGram").value = valNum / 2.2046;
+            wgtkg += '';
+            wgtkg = wgtkg.replace(',', ''); wgtkg = wgtkg.replace(',', ''); wgtkg = wgtkg.replace(',', '');
+            wgtkg = wgtkg.replace(',', ''); wgtkg = wgtkg.replace(',', ''); wgtkg = wgtkg.replace(',', '');
+            x = wgtkg.split('.');
+            format(x);
+            $('#WeightKiloGram').val(x1);
+        }
+        //Length
+        function lengthMMCMFT(valNum) {
+            var lengmm = document.getElementById("LengthMilliMeter").value = valNum * 1000;
+            lengmm += '';
+            lengmm = lengmm.replace(',', ''); lengmm = lengmm.replace(',', ''); lengmm = lengmm.replace(',', '');
+            lengmm = lengmm.replace(',', ''); lengmm = lengmm.replace(',', ''); lengmm = lengmm.replace(',', '');
+            x = lengmm.split('.');
+            format(x);
+            $('#LengthMilliMeter').val(x1);
+
+            var lengcm = document.getElementById("LengthCentiMeter").value = valNum / 0.01;
+            lengcm += '';
+            lengcm = lengcm.replace(',', ''); lengcm = lengcm.replace(',', ''); lengcm = lengcm.replace(',', '');
+            lengcm = lengcm.replace(',', ''); lengcm = lengcm.replace(',', ''); lengcm = lengcm.replace(',', '');
+            x = lengcm.split('.');
+            format(x);
+            $('#LengthCentiMeter').val(x1);
+
+            var lengft = document.getElementById("LengthFeet").value = valNum * 3.2808;
+            lengft += '';
+            lengft = lengft.replace(',', ''); lengft = lengft.replace(',', ''); lengft = lengft.replace(',', '');
+            lengft = lengft.replace(',', ''); lengft = lengft.replace(',', ''); lengft = lengft.replace(',', '');
+            x = lengft.split('.');
+            format(x);
+            $('#LengthFeet').val(x1);
+
+        }
+        function lengthMCMFT(valNum) {
+            //this.value = parseFloat(this.value).toFixed(2);
+            var lengm = document.getElementById("LengthMeter").value = valNum / 1000;
+            lengm += '';
+            lengm = lengm.replace(',', ''); lengm = lengm.replace(',', ''); lengm = lengm.replace(',', '');
+            lengm = lengm.replace(',', ''); lengm = lengm.replace(',', ''); lengm = lengm.replace(',', '');
+            x = lengm.split('.');
+            format(x);
+            $('#LengthMeter').val(x1);
+
+            var lengcm = document.getElementById("LengthCentiMeter").value = valNum / 10;
+            lengcm += '';
+            lengcm = lengcm.replace(',', ''); lengcm = lengcm.replace(',', ''); lengcm = lengcm.replace(',', '');
+            lengcm = lengcm.replace(',', ''); lengcm = lengcm.replace(',', ''); lengcm = lengcm.replace(',', '');
+            x = lengcm.split('.');
+            format(x);
+            $('#LengthCentiMeter').val(x1);
+
+            var lengft = document.getElementById("LengthFeet").value = valNum / 304.8;
+            lengft += '';
+            lengft = lengft.replace(',', ''); lengft = lengft.replace(',', ''); lengft = lengft.replace(',', '');
+            lengft = lengft.replace(',', ''); lengft = lengft.replace(',', ''); lengft = lengft.replace(',', '');
+            x = lengft.split('.');
+            format(x);
+            $('#LengthFeet').val(x1);
+        }
+        function lengthMMMFT(valNum) {
+            var lengmm = document.getElementById("LengthMilliMeter").value = valNum * 10;
+            lengmm += '';
+            lengmm = lengmm.replace(',', ''); lengmm = lengmm.replace(',', ''); lengmm = lengmm.replace(',', '');
+            lengmm = lengmm.replace(',', ''); lengmm = lengmm.replace(',', ''); lengmm = lengmm.replace(',', '');
+            x = lengmm.split('.');
+            format(x);
+            $('#LengthMilliMeter').val(x1);
+
+            var lengm = document.getElementById("LengthMeter").value = valNum / 100;
+            lengm += '';
+            lengm = lengm.replace(',', ''); lengm = lengm.replace(',', ''); lengm = lengm.replace(',', '');
+            lengm = lengm.replace(',', ''); lengm = lengm.replace(',', ''); lengm = lengm.replace(',', '');
+            x = lengm.split('.');
+            format(x);
+            $('#LengthMeter').val(x1);
+
+            var lengft = document.getElementById("LengthFeet").value = valNum * 0.032808;
+            lengft += '';
+            lengft = lengft.replace(',', ''); lengft = lengft.replace(',', ''); lengft = lengft.replace(',', '');
+            lengft = lengft.replace(',', ''); lengft = lengft.replace(',', ''); lengft = lengft.replace(',', '');
+            x = lengft.split('.');
+            format(x);
+            $('#LengthFeet').val(x1);
+        }
+        function lengthMMMCM(valNum) {
+            var lengmm = document.getElementById("LengthMilliMeter").value = valNum * 304.8;
+            lengmm += '';
+            lengmm = lengmm.replace(',', ''); lengmm = lengmm.replace(',', ''); lengmm = lengmm.replace(',', '');
+            lengmm = lengmm.replace(',', ''); lengmm = lengmm.replace(',', ''); lengmm = lengmm.replace(',', '');
+            x = lengmm.split('.');
+            format(x);
+            $('#LengthMilliMeter').val(x1);
+
+            var lengcm = document.getElementById("LengthCentiMeter").value = valNum / 0.032808;
+            lengcm += '';
+            lengcm = lengcm.replace(',', ''); lengcm = lengcm.replace(',', ''); lengcm = lengcm.replace(',', '');
+            lengcm = lengcm.replace(',', ''); lengcm = lengcm.replace(',', ''); lengcm = lengcm.replace(',', '');
+            x = lengcm.split('.');
+            format(x);
+            $('#LengthCentiMeter').val(x1);
+
+            var lengm = document.getElementById("LengthMeter").value = valNum / 3.2808;
+            lengm += '';
+            lengm = lengm.replace(',', ''); lengm = lengm.replace(',', ''); lengm = lengm.replace(',', '');
+            lengm = lengm.replace(',', ''); lengm = lengm.replace(',', ''); lengm = lengm.replace(',', '');
+            x = lengm.split('.');
+            format(x);
+            $('#LengthMeter').val(x1);
+        }
+        //Width
+        function WidthMMCMFT(valNum) {
+            var widmm = document.getElementById("WidthMilliMeter").value = valNum * 1000;
+            widmm += '';
+            widmm = widmm.replace(',', ''); widmm = widmm.replace(',', ''); widmm = widmm.replace(',', '');
+            widmm = widmm.replace(',', ''); widmm = widmm.replace(',', ''); widmm = widmm.replace(',', '');
+            x = widmm.split('.');
+            format(x);
+            $('#WidthMilliMeter').val(x1);
+
+            var widcm = document.getElementById("WidthCentiMeter").value = valNum / 0.01;
+            widcm += '';
+            widcm = widcm.replace(',', ''); widcm = widcm.replace(',', ''); widcm = widcm.replace(',', '');
+            widcm = widcm.replace(',', ''); widcm = widcm.replace(',', ''); widcm = widcm.replace(',', '');
+            x = widcm.split('.');
+            format(x);
+            $('#WidthCentiMeter').val(x1);
+
+            var widft = document.getElementById("WidthFeet").value = valNum * 3.2808;
+            widft += '';
+            widft = widft.replace(',', ''); widft = widft.replace(',', ''); widft = widft.replace(',', '');
+            widft = widft.replace(',', ''); widft = widft.replace(',', ''); widft = widft.replace(',', '');
+            x = widft.split('.');
+            format(x);
+            $('#WidthFeet').val(x1);
+        }
+        function WidthMCMFT(valNum) {
+            var widm = document.getElementById("WidthMeter").value = valNum / 1000;
+            widm += '';
+            widm = widm.replace(',', ''); widm = widm.replace(',', ''); widm = widm.replace(',', '');
+            widm = widm.replace(',', ''); widm = widm.replace(',', ''); widm = widm.replace(',', '');
+            x = widm.split('.');
+            format(x);
+            $('#WidthMeter').val(x1);
+
+            var widcm = document.getElementById("WidthCentiMeter").value = valNum / 10;
+            widcm += '';
+            widcm = widcm.replace(',', ''); widcm = widcm.replace(',', ''); widcm = widcm.replace(',', '');
+            widcm = widcm.replace(',', ''); widcm = widcm.replace(',', ''); widcm = widcm.replace(',', '');
+            x = widcm.split('.');
+            format(x);
+            $('#WidthCentiMeter').val(x1);
+
+            var widft = document.getElementById("WidthFeet").value = valNum / 304.8;
+            widft += '';
+            widft = widft.replace(',', ''); widft = widft.replace(',', ''); widft = widft.replace(',', '');
+            widft = widft.replace(',', ''); widft = widft.replace(',', ''); widft = widft.replace(',', '');
+            x = widft.split('.');
+            format(x);
+            $('#WidthFeet').val(x1);
+        }
+        function WidthMMMFT(valNum) {
+            var widmm = document.getElementById("WidthMilliMeter").value = valNum * 10;
+            widmm += '';
+            widmm = widmm.replace(',', ''); widmm = widmm.replace(',', ''); widmm = widmm.replace(',', '');
+            widmm = widmm.replace(',', ''); widmm = widmm.replace(',', ''); widmm = widmm.replace(',', '');
+            x = widmm.split('.');
+            format(x);
+            $('#WidthMilliMeter').val(x1);
+
+            var widm = document.getElementById("WidthMeter").value = valNum / 100;
+            widm += '';
+            widm = widm.replace(',', ''); widm = widm.replace(',', ''); widm = widm.replace(',', '');
+            widm = widm.replace(',', ''); widm = widm.replace(',', ''); widm = widm.replace(',', '');
+            x = widm.split('.');
+            format(x);
+            $('#WidthMeter').val(x1);
+
+            var widft = document.getElementById("WidthFeet").value = valNum * 0.032808;
+            widft += '';
+            widft = widft.replace(',', ''); widft = widft.replace(',', ''); widft = widft.replace(',', '');
+            widft = widft.replace(',', ''); widft = widft.replace(',', ''); widft = widft.replace(',', '');
+            x = widft.split('.');
+            format(x);
+            $('#WidthFeet').val(x1);
+        }
+        function WidthMMMCM(valNum) {
+            var widmm = document.getElementById("WidthMilliMeter").value = valNum * 304.8;
+            widmm += '';
+            widmm = widmm.replace(',', ''); widmm = widmm.replace(',', ''); widmm = widmm.replace(',', '');
+            widmm = widmm.replace(',', ''); widmm = widmm.replace(',', ''); widmm = widmm.replace(',', '');
+            x = widmm.split('.');
+            format(x);
+            $('#WidthMilliMeter').val(x1);
+
+            var widcm = document.getElementById("WidthCentiMeter").value = valNum / 0.032808;
+            widcm += '';
+            widcm = widcm.replace(',', ''); widcm = widcm.replace(',', ''); widcm = widcm.replace(',', '');
+            widcm = widcm.replace(',', ''); widcm = widcm.replace(',', ''); widcm = widcm.replace(',', '');
+            x = widcm.split('.');
+            format(x);
+            $('#WidthCentiMeter').val(x1);
+
+            var widm = document.getElementById("WidthMeter").value = valNum / 3.2808;
+            widm += '';
+            widm = widm.replace(',', ''); widm = widm.replace(',', ''); widm = widm.replace(',', '');
+            widm = widm.replace(',', ''); widm = widm.replace(',', ''); widm = widm.replace(',', '');
+            x = widm.split('.');
+            format(x);
+            $('#WidthMeter').val(x1);
+        }
+        //Height
+        function HeightMMCMFT(valNum) {
+
+            var hgtmm = document.getElementById("HeightMilliMeter").value = valNum * 1000;
+            hgtmm += '';
+            hgtmm = hgtmm.replace(',', ''); hgtmm = hgtmm.replace(',', ''); hgtmm = hgtmm.replace(',', '');
+            hgtmm = hgtmm.replace(',', ''); hgtmm = hgtmm.replace(',', ''); hgtmm = hgtmm.replace(',', '');
+            x = hgtmm.split('.');
+            format(x);
+            $('#HeightMilliMeter').val(x1);
+
+
+            var hgtcm = document.getElementById("HeightCentiMeter").value = valNum / 0.01;
+            hgtcm += '';
+            hgtcm = hgtcm.replace(',', ''); hgtcm = hgtcm.replace(',', ''); hgtcm = hgtcm.replace(',', '');
+            hgtcm = hgtcm.replace(',', ''); hgtcm = hgtcm.replace(',', ''); hgtcm = hgtcm.replace(',', '');
+            x = hgtcm.split('.');
+            format(x);
+            $('#HeightCentiMeter').val(x1);
+
+
+            var hgtft = document.getElementById("HeightFeet").value = valNum * 3.2808;
+            hgtft += '';
+            hgtft = hgtft.replace(',', ''); hgtft = hgtft.replace(',', ''); hgtft = hgtft.replace(',', '');
+            hgtft = hgtft.replace(',', ''); hgtft = hgtft.replace(',', ''); hgtft = hgtft.replace(',', '');
+            x = hgtft.split('.');
+            format(x);
+            $('#HeightFeet').val(x1);
+
+
+        }
+        function HeightMCMFT(valNum) {
+            var hgtm = document.getElementById("HeightMeter").value = valNum / 1000;
+            hgtm += '';
+            hgtm = hgtm.replace(',', ''); hgtm = hgtm.replace(',', ''); hgtm = hgtm.replace(',', '');
+            hgtm = hgtm.replace(',', ''); hgtm = hgtm.replace(',', ''); hgtm = hgtm.replace(',', '');
+            x = hgtm.split('.');
+            format(x);
+            $('#HeightMeter').val(x1);
+
+            var hgtcm = document.getElementById("HeightCentiMeter").value = valNum / 10;
+            hgtcm += '';
+            hgtcm = hgtcm.replace(',', ''); hgtcm = hgtcm.replace(',', ''); hgtcm = hgtcm.replace(',', '');
+            hgtcm = hgtcm.replace(',', ''); hgtcm = hgtcm.replace(',', ''); hgtcm = hgtcm.replace(',', '');
+            x = hgtcm.split('.');
+            format(x);
+            $('#HeightCentiMeter').val(x1);
+
+            var hgtft = document.getElementById("HeightFeet").value = valNum / 304.8;
+            hgtft += '';
+            hgtft = hgtft.replace(',', ''); hgtft = hgtft.replace(',', ''); hgtft = hgtft.replace(',', '');
+            hgtft = hgtft.replace(',', ''); hgtft = hgtft.replace(',', ''); hgtft = hgtft.replace(',', '');
+            x = hgtft.split('.');
+            format(x);
+            $('#HeightFeet').val(x1);
+        }
+        function HeightMMMFT(valNum) {
+            var hgtmm = document.getElementById("HeightMilliMeter").value = valNum * 10;
+            hgtmm += '';
+            hgtmm = hgtmm.replace(',', ''); hgtmm = hgtmm.replace(',', ''); hgtmm = hgtmm.replace(',', '');
+            hgtmm = hgtmm.replace(',', ''); hgtmm = hgtmm.replace(',', ''); hgtmm = hgtmm.replace(',', '');
+            x = hgtmm.split('.');
+            format(x);
+            $('#HeightMilliMeter').val(x1);
+
+            var hgtm = document.getElementById("HeightMeter").value = valNum / 100;
+            hgtm += '';
+            hgtm = hgtm.replace(',', ''); hgtm = hgtm.replace(',', ''); hgtm = hgtm.replace(',', '');
+            hgtm = hgtm.replace(',', ''); hgtm = hgtm.replace(',', ''); hgtm = hgtm.replace(',', '');
+            x = hgtm.split('.');
+            format(x);
+            $('#HeightMeter').val(x1);
+
+            var hgtft = document.getElementById("HeightFeet").value = valNum * 0.032808;
+            hgtft += '';
+            hgtft = hgtft.replace(',', ''); hgtft = hgtft.replace(',', ''); hgtft = hgtft.replace(',', '');
+            hgtft = hgtft.replace(',', ''); hgtft = hgtft.replace(',', ''); hgtft = hgtft.replace(',', '');
+            x = hgtft.split('.');
+            format(x);
+            $('#HeightFeet').val(x1);
+        }
+        function HeightMMMCM(valNum) {
+            var hgtmm = document.getElementById("HeightMilliMeter").value = valNum * 304.8;
+            hgtmm += '';
+            hgtmm = hgtmm.replace(',', ''); hgtmm = hgtmm.replace(',', ''); hgtmm = hgtmm.replace(',', '');
+            hgtmm = hgtmm.replace(',', ''); hgtmm = hgtmm.replace(',', ''); hgtmm = hgtmm.replace(',', '');
+            x = hgtmm.split('.');
+            format(x);
+            $('#HeightMilliMeter').val(x1);
+
+            var hgtcm = document.getElementById("HeightCentiMeter").value = valNum / 0.032808;
+            hgtcm += '';
+            hgtcm = hgtcm.replace(',', ''); hgtcm = hgtcm.replace(',', ''); hgtcm = hgtcm.replace(',', '');
+            hgtcm = hgtcm.replace(',', ''); hgtcm = hgtcm.replace(',', ''); hgtcm = hgtcm.replace(',', '');
+            x = hgtcm.split('.');
+            format(x);
+            $('#HeightCentiMeter').val(x1);
+
+            var hgtm = document.getElementById("HeightMeter").value = valNum / 3.2808;
+            hgtm += '';
+            hgtm = hgtm.replace(',', ''); hgtm = hgtm.replace(',', ''); hgtm = hgtm.replace(',', '');
+            hgtm = hgtm.replace(',', ''); hgtm = hgtm.replace(',', ''); hgtm = hgtm.replace(',', '');
+            x = hgtm.split('.');
+            format(x);
+            $('#HeightMeter').val(x1);
+        }
+
+        function format(x) {
+            x1 = x[0];
+            x2 = x.length > 1 ? '.' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1))
+                x1 = x1.replace(rgx, '$1' + ',' + '$2');
+        }
+
+        $('#TypeSelect').on('change', function () {
+            var dropValue = $('option:selected', this).text();
+            if (dropValue == "Single Item") {
+                $('.packageSelectionArea').addClass('d-none');
+                $('.packageCategoryArea').removeClass('d-none');
+                $('.packageCategoryAreaOnGrouped').addClass('d-none');
+                $('.ServicesArea').addClass('d-none');
+                $('#PriceDifferenceDiv').addClass('d-none');
+                $('.ServicesHiddenArea').removeClass('d-none');
+                $('#page-title').html('Product Entry');
+                $("#LengthMeter").val('');
+                $("#LengthMeter").prop('readonly', false);
+                $("#LengthMilliMeter").val('');
+                $("#LengthMilliMeter").prop('readonly', false);
+                $("#LengthCentiMeter").val('');
+                $("#LengthCentiMeter").prop('readonly', false);
+                $("#LengthFeet").val('');
+                $("#LengthFeet").prop('readonly', false);
+
+                $("#WidthMeter").val('');
+                $("#WidthMeter").prop('readonly', false);
+                $("#WidthMilliMeter").val('');
+                $("#WidthMilliMeter").prop('readonly', false);
+                $("#WidthCentiMeter").val('');
+                $("#WidthCentiMeter").prop('readonly', false);
+                $("#WidthFeet").val('');
+                $("#WidthFeet").prop('readonly', false);
+
+                $("#HeightMeter").val('');
+                $("#HeightMeter").prop('readonly', false);
+                $("#HeightMilliMeter").val('');
+                $("#HeightMilliMeter").prop('readonly', false);
+                $("#HeightCentiMeter").val('');
+                $("#HeightCentiMeter").prop('readonly', false);
+                $("#HeightFeet").val('');
+                $("#HeightFeet").prop('readonly', false);
+
+            }
+            else if (dropValue == "Grouped Items") {
+                $('.packageSelectionArea').removeClass('d-none');
+                $('.packageCategoryAreaOnGrouped').removeClass('d-none');
+                $('.packageCategoryArea').addClass('d-none');
+                $('.ServicesArea').addClass('d-none');
+                $('#PriceDifferenceDiv').removeClass('d-none');
+                $('.ServicesHiddenArea').removeClass('d-none');
+                $('#specification-listdiv').css('height', '200px');
+                $('#page-title').html('Product Package Entry');
+                $("#LengthMeter").val(0);
+                $("#LengthMeter").prop('readonly', true);
+                $("#LengthMilliMeter").val(0);
+                $("#LengthMilliMeter").prop('readonly', true);
+                $("#LengthCentiMeter").val(0);
+                $("#LengthCentiMeter").prop('readonly', true);
+                $("#LengthFeet").val(0);
+                $("#LengthFeet").prop('readonly', true);
+
+                $("#WidthMeter").val(0);
+                $("#WidthMeter").prop('readonly', true);
+                $("#WidthMilliMeter").val(0);
+                $("#WidthMilliMeter").prop('readonly', true);
+                $("#WidthCentiMeter").val(0);
+                $("#WidthCentiMeter").prop('readonly', true);
+                $("#WidthFeet").val(0);
+                $("#WidthFeet").prop('readonly', true);
+
+                $("#HeightMeter").val(0);
+                $("#HeightMeter").prop('readonly', true);
+                $("#HeightMilliMeter").val(0);
+                $("#HeightMilliMeter").prop('readonly', true);
+                $("#HeightCentiMeter").val(0);
+                $("#HeightCentiMeter").prop('readonly', true);
+                $("#HeightFeet").val(0);
+                $("#HeightFeet").prop('readonly', true);
+            }
+            else if (dropValue == "Services") {
+                $('.ServicesHiddenArea').addClass('d-none');
+                $('.ServicesArea').removeClass('d-none');
+                $('#PriceDifferenceDiv').addClass('d-none');
+                $('#page-title').html('Product Services');
+            }
+        });
+
+
+        $(document).on('click', '#packageFilter', function () {
+            var productModel = $("#ProductCode").val();
+            var brand = $("#FBrandCode").val();
+            var category = $("#FCategoryCode").val();
+            $('#package-list tbody').empty();
+            if (productModel == "" && brand == "" && category == "") {
+                alert("Please Choose Atleast one field!");
+            }
+            else {
+                $.getJSON("/Product/PackageFilter", {
+                    ProductModel: productModel,
+                    Brand: brand,
+                    Category: category,
+                }, function (data) {
+                    if (data.data != "") {
+                        var content = '';
+                        var i = 0;
+                        for (i = 0; i < data.data.length; i++) {
+                            content += '<tr id="Item_' + data.data[i].Name + '">';
+                            content += '<td class="modelName w-20"><input type="hidden" name="SKU" value="' + data.data[i].StockKeepingUnit + '"/>' + data.data[i].Name + '</td>';
+                            content += '<td class="Category w-20"><input type="hidden" value="' + data.data[i].CategoryName + '"/>' + data.data[i].CategoryName + '</td>';
+                            content += '<td class="description w-20"><input type="hidden" name="shortDesc" value="' + data.data[i].ShortDescription + '"/>' + data.data[i].ShortDescription + '</td>';
+                            content += '<td class="price text-right w-10"><input id="Price" type="hidden" class="form-control" value="' + addCommas(data.data[i].AcquisitionPrice.toFixed(2)) + '" />' + addCommas(data.data[i].EstimatedPrice.toFixed(2)) + '</td>';
+                            content += '<td class="productQty text-right w-10"><input id="Quantity" type="hidden" class="form-control Qty" name="" min="0" /><div class="input-group"><input type="number" class="form-control text-center Qty w-50" value="0" name="UnitLevel" min="0" /></div></td>';
+                            content += '<td class="Code d-none"><input id="ckb" type="hidden" name="ckb" value="' + data.data[i].Code + '"/></td>';
+                            content += '<td class="WeightGram d-none"><input type="hidden" value="' + data.data[i].WeightGram + '" /></td>'
+                            content += '<td class="WeightKg d-none"><input type="hidden" value="' + data.data[i].WeightKiloGram + '" /></td>'
+                            content += '<td class="WeightPounds d-none"><input type="hidden" value="' + data.data[i].WeightPounds + '" /></td>'
+                            content += '</tr>';
+                        }
+                        $('#package-list tbody').prepend(content);
+                    }
+                    else {
+                        alert("No Record Found!");
+                    }
+                });
+            }
+
+        });
+
+        $('#modalPackageItem').on('click', '#btnAddList', function () {
+            $('#PackageWeight').removeClass("d-none");
+            $('#Weight').addClass("d-none");
+            $('#ProductPackageWeight').addClass("d-none");
+            $('#ProductPackageTotal').html("");
+            $.getJSON("/Product/AddToPackageList", {
+            }, function (data) {
+                var totalWgtGram = data.list1.TotalWgtGram;
+                var totalWgtKiloGram = data.list1.TotalWgtKiloGram;
+                var totalWgtPounds = data.list1.TotalWgtPounds;
+                var totalSum = data.list1.TotalSum;
+                if (data.list != null) {
+                    var content = '';
+                    var i = 0;
+                    for (i = 0; i < data.list.length; i++) {
+                        if (data.list[i].IsPackage == true) {
+                            $('#packageItem-list tbody').empty();
+                            content += '<tr id="PackageItem_' + data.list[i].Code + '">';
+                            content += '<td class="modelName w-20"><input type="hidden" name="SKU" value="' + data.list[i].StockKeepingUnit + '"/>' + data.list[i].Name + '</td>';
+                            content += '<td class="CategoryName w-20"><input type="hidden" value="' + data.list[i].CategoryName + '"/>' + data.list[i].CategoryName + '</td>';
+                            content += '<td class="description w-20"><input type="hidden" name="shortDesc" value="' + data.list[i].ShortDescription + '"/>' + data.list[i].ShortDescription + '</td>';
+                            content += '<td class="price w-15"><input id="Price" type="hidden" class="form-control" value="' + addCommas(data.list[i].AcquisitionPrice.toFixed(2)) + '" />' + addCommas(data.list[i].EstimatedPrice.toFixed(2)) + '</td>';
+                            content += '<td class="productQty text-right w-10"><div class="input-group"></div>' + data.list[i].Quantity + '</td>';
+                            content += '<td id="subTotal w-10" class="text-right"><input id="SubTotal" type="hidden" class="form-control" name="SubTotal" readonly/><span id="SubTotalText\">' + addCommas(data.list[i].SubTotal.toFixed(2)) + '</span></td>';
+                            content += '<td><a class="btnRemoveItem" data-code="' + data.list[i].Code + '"><span class="text-danger"><b>x</b></span></a></td>'
+                            content += '</tr>';
+                        }
+                    }
+                    $('#packageItem-list tbody').append(content);
+                    $('#modalPackageItem').modal('toggle');
+                    $('#package-list tbody').empty();
+                    $("#ProductCode").val([]).trigger("change");
+                    $("#FBrandCode").val([]).trigger("change");
+                    $("#FCategoryCode").val([]).trigger("change");
+                    $("#TotalWgtKiloGram").append("<input type=text id=WeightKiloGram min=0 class=form-control name=WeightKiloGram oninput=weightPoundGram(this.value) value='" + totalWgtKiloGram + "' /><div class=input-group-append ><span class=input-group-text>Kg</span></div>");
+                    $("#TotalWgtGram").append("<input type=text id=WeightGram min=0 class=form-control name=WeightGram oninput=weightPoundKilogram(this.value) value='" + totalWgtGram + "' /><div class=input-group-append ><span class=input-group-text>g</span></div>");
+                    $("#TotalWgtPounds").append("<input type=text id=WeightPounds min=0 class=form-control name=WeightPounds oninput=weightGramKilogram(this.value) value='" + totalWgtPounds + "' /><div class=input-group-append ><span class=input-group-text>lbs</span></div>");
+                    $("#ProductPackageTotal").append("<tr><td colspan=7><span class=float-right><b>Grand Total:</b> &#8369; <span id=grandtotal>" + addCommas(totalSum.toFixed(2)) + "</span></span></td></tr>");
+                }
+
+            });
+        });
+
+        function addCommas(x) {
+            var parts = x.toString().split(".");
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            return parts.join(".");
+        }
+
+        $(document).on('click', '.btnRemoveItem', function () {
+            $('#PackageWeight').addClass("d-none");
+            $('#ProductPackageWeight').removeClass("d-none");
+            $('#ProductPackageTotal').html("");
+            var code = $(this).data('code');
+            $.getJSON("/Product/RemovePackageItem", { Code: code }, function (data) {
+                var totalWgtGram = data.list1.TotalWgtGram;
+                var totalWgtKiloGram = data.list1.TotalWgtKiloGram;
+                var totalWgtPounds = data.list1.TotalWgtPounds;
+                var totalSum = data.list1.TotalSum;
+                $('#PackageItem_' + code).remove();
+                $("#TotalWeightKiloGram").append("<input type=text id=WeightKiloGram min=0 class=form-control name=WeightKiloGram oninput=weightPoundGram(this.value) value='" + totalWgtKiloGram + "' /><div class=input-group-append ><span class=input-group-text>Kg</span></div>");
+                $("#TotalWeightGram").append("<input type=text id=WeightGram min=0 class=form-control name=WeightGram oninput=weightPoundKilogram(this.value) value='" + totalWgtGram + "' /><div class=input-group-append ><span class=input-group-text>g</span></div>");
+                $("#TotalWeightPounds").append("<input type=text id=WeightPounds min=0 class=form-control name=WeightPounds oninput=weightGramKilogram(this.value) value='" + totalWgtPounds + "' /><div class=input-group-append ><span class=input-group-text>lbs</span></div>");
+                $("#ProductPackageTotal").append("<tr><td colspan=7><span class=float-right><b>Grand Total:</b> &#8369; <span id=grandtotal>" + addCommas(totalSum.toFixed(2)) + "</span></span></td></tr>");
+
+            })
+        })
+
+        $('#modalPackageItem').on('click', '#btnCancel', function () {
+            $('#package-list tbody').empty();
+            $("#ProductCode").val([]).trigger("change");
+            $("#FBrandCode").val([]).trigger("change");
+            $("#FCategoryCode").val([]).trigger("change");
+        });
+
+
+
+        $('table#package-list').on('change', '.Qty', function () {
+            var $row = $(this).closest("tr");
+            var name = $row.find(".modelName").text();
+            var sku = $row.find(".modelName input").val();
+            var shortdesc = $row.find(".description input").val();
+            var estimatedPrice = $row.find(".price").text();
+            var acquisitionPrice = $row.find(".price input").val();
+            var qty = $row.find('input[name^="UnitLevel"]').val();
+            var code = $row.find(".Code input").val();
+            var category = $row.find(".Category input").val();
+            var wgtGram = $row.find(".WeightGram input").val();
+            var wgtKiloGram = $row.find(".WeightKg input").val();
+            var wgtPounds = $row.find(".WeightPounds input").val();
+            $.ajax({
+                type: "POST",
+                url: "/Product/UpdateProductPackageItemTemp/?modelName=" + name + "&modelSku=" + sku + "&desc=" + shortdesc + "&estPrice=" + estimatedPrice + "&orgPrice=" + acquisitionPrice + "&qty=" + qty + "&category=" + category + "&modelCode=" + code + "&wgtGram=" + wgtGram + "&wgtKGram=" + wgtKiloGram + "&wgtPounds=" + wgtPounds + "",
+                success: function (data) {
+                    return true;
+                }
+            });
+        })
+
+        $('#EstimatedPrice').on('keyup', function () {
+            var originalPrice = $('#AcquisitionPrice').val();
+            var marketPrice = $('#EstimatedPrice').val();
+            var priceDifference = originalPrice - marketPrice;
+            var markUp = Math.floor((priceDifference / originalPrice) * 100);
+            $('#PriceDifferenceText').html('&#8369;' + priceDifference.toFixed(2));
+            $('#PriceDifference').val(priceDifference.toFixed(2));
+            $('#MarkupPercentage').val(markUp.toFixed(0));
+        })
+        $('#AcquisitionPrice').on('keyup', function () {
+            var originalPrice = $('#AcquisitionPrice').val();
+            var marketPrice = $('#EstimatedPrice').val();
+            var priceDifference = originalPrice - marketPrice;
+            var markUp = Math.floor((priceDifference / originalPrice) * 100);
+            $('#PriceDifferenceText').html('&#8369;' + priceDifference.toFixed(2));
+            $('#PriceDifference').val(priceDifference.toFixed(2));
+            $('#MarkupPercentage').val(markUp.toFixed(0));
+        })
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                $("#ImageUrl").removeClass('d-none');
+                reader.onload = function (e) {
+                    $('#' + input.alt)
+                        .attr('src', e.target.result)
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+            else {
+                var img = input.value;
+                $('#' + input.alt).attr('src', img);
+            }
+        }
+
+
+        function disable() {
+            $("#WeightGram").val('');
+            $("#WeightGram").prop('readonly', false);
+            $("#WeightKiloGram").val('');
+            $("#WeightKiloGram").prop('readonly', false);
+            $("#WeightPounds").val('');
+            $("#WeightPounds").prop('readonly', false);
+
+            $("#LengthMeter").val('');
+            $("#LengthMeter").prop('readonly', false);
+            $("#LengthMilliMeter").val('');
+            $("#LengthMilliMeter").prop('readonly', false);
+            $("#LengthCentiMeter").val('');
+            $("#LengthCentiMeter").prop('readonly', false);
+            $("#LengthFeet").val('');
+            $("#LengthFeet").prop('readonly', false);
+
+            $("#WidthMeter").val('');
+            $("#WidthMeter").prop('readonly', false);
+            $("#WidthMilliMeter").val('');
+            $("#WidthMilliMeter").prop('readonly', false);
+            $("#WidthCentiMeter").val('');
+            $("#WidthCentiMeter").prop('readonly', false);
+            $("#WidthFeet").val('');
+            $("#WidthFeet").prop('readonly', false);
+
+            $("#HeightMeter").val('');
+            $("#HeightMeter").prop('readonly', false);
+            $("#HeightMilliMeter").val('');
+            $("#HeightMilliMeter").prop('readonly', false);
+            $("#HeightCentiMeter").val('');
+            $("#HeightCentiMeter").prop('readonly', false);
+            $("#HeightFeet").val('');
+            $("#HeightFeet").prop('readonly', false);
+        }
+
+        function enable() {
+            $("#WeightGram").val(0);
+            $("#WeightGram").prop('readonly', true);
+            $("#WeightKiloGram").val(0);
+            $("#WeightKiloGram").prop('readonly', true);
+            $("#WeightPounds").val(0);
+            $("#WeightPounds").prop('readonly', true);
+
+            $("#LengthMeter").val(0);
+            $("#LengthMeter").prop('readonly', true);
+            $("#LengthMilliMeter").val(0);
+            $("#LengthMilliMeter").prop('readonly', true);
+            $("#LengthCentiMeter").val(0);
+            $("#LengthCentiMeter").prop('readonly', true);
+            $("#LengthFeet").val(0);
+            $("#LengthFeet").prop('readonly', true);
+
+            $("#WidthMeter").val(0);
+            $("#WidthMeter").prop('readonly', true);
+            $("#WidthMilliMeter").val(0);
+            $("#WidthMilliMeter").prop('readonly', true);
+            $("#WidthCentiMeter").val(0);
+            $("#WidthCentiMeter").prop('readonly', true);
+            $("#WidthFeet").val(0);
+            $("#WidthFeet").prop('readonly', true);
+
+            $("#HeightMeter").val(0);
+            $("#HeightMeter").prop('readonly', true);
+            $("#HeightMilliMeter").val(0);
+            $("#HeightMilliMeter").prop('readonly', true);
+            $("#HeightCentiMeter").val(0);
+            $("#HeightCentiMeter").prop('readonly', true);
+            $("#HeightFeet").val(0);
+            $("#HeightFeet").prop('readonly', true);
+
+        }
+
+        $("#IsVirtualItem").on("change", function () {
+            if ($("#IsVirtualItem").prop('checked') == true) {
+                enable();
+
+            }
+            else {
+                disable();
+            }
+        });
+    </script>
+
+}

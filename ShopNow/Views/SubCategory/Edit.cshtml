@@ -1,0 +1,107 @@
+﻿@model ShopNow.ViewModels.SubCategoryEditViewModel
+@{
+    ViewBag.Title = "Edit";
+}
+<title>ShopNow | Sub Category I Update</title>
+@using (Html.BeginForm("Edit", "SubCategory", FormMethod.Post, new { id = "SubCategoryForm", role = "form" }))
+{
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <h5 class="text-success" style="letter-spacing:1px">SUB CATEGORY I UPDATE</h5>
+            </div>
+            <div class="col-md-6 text-right">
+                <a href="~/SubCategory/List" target="_blank"><span class="fa fa-bars"></span>&nbsp;Sub Category I List</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mx-auto">
+                <div class="card">
+                    <div class="card-body">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="Code" id="Code" value="@Model.Code" />
+                        <input type="hidden" name="Status" value="@Model.Status" />
+                        <input type="hidden" name="CreatedBy" value="@Model.CreatedBy" />
+                        <input type="hidden" name="UpdatedBy" value="@Model.UpdatedBy" />
+                        <input type="hidden" name="DateEncoded" value="@Model.DateEncoded" />
+                        <input type="hidden" name="DateUpdated" value="@Model.DateUpdated" />
+                        <div class="form-group row">
+                            <div class="col-md-3">
+                                <label class="col-form-label"><strong class="text-secondary">Sub Category I</strong></label>
+                                <input type="text" class="form-control" name="Name" id="Name" value="@Model.Name" />
+                            </div>
+                            <div class="col-md-3">
+                                <label class="col-form-label"><strong class="text-secondary">Category</strong></label>
+                                <select id="CategoryCode" name="CategoryCode" class="form-control">
+                                    <option value="@Model.CategoryCode">@Model.CategoryName</option>
+                                </select>
+                                <input type="hidden" name="CategoryName" id="CategoryName" value="@Model.CategoryName" />
+                            </div>
+                            <div class="col-md-3 mt-1">
+                                <label class="control-label"><strong class="text-secondary">Item Type</strong></label>
+                                <select name="ProductType" class="form-control" id="ProductType">
+                                    <option value="">Select Item Type</option>
+                                    <option value="Product">Product</option>
+                                    <option value="Dish">Dish</option>
+                                    <option value="Service">Service</option>
+                                    <option value="Medical">Medical</option>
+                                    <option value="FMCG">FMCG</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="col-form-label"><strong class="text-secondary">Adscore</strong></label>
+                                <input type="text" class="form-control" min="1" name="Adscore" id="Adscore" value="@Model.Adscore" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-3 mx-auto">
+                                <button type="button" class="btn btn-block btn-success Save"><span class="glyphicon glyphicon-file"></span> Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script src="~/Scripts/ValidateRequiredFields.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#CategoryCode').select2({
+                placeholder: "Search Category",
+                ajax: {
+                    url: "/SubCategory/GetCategorySelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="CategoryName"]').val(e.params.data.text);
+            });
+
+            $(".Save").click(function () {
+                var isValidated = false;
+                var requiredArr = [
+                    'Name',
+                ];
+                isValidated = ValidateEmptyRequiredFiels(requiredArr);
+
+                if (isValidated) {
+                    $('#SubCategoryForm').submit();
+                    $('.Save').prop('disabled', true);
+                };
+            });
+            jQuery(document).ready(function ($) {
+                $("#ProductType").find('option[value="@Model.ProductType"]').attr('selected', 'selected');
+            });
+
+        });
+    </script>
+}

@@ -1,0 +1,293 @@
+﻿@model ShopNow.ViewModels.CustomerEditViewModel
+@{
+
+    ViewBag.Title = "Customer Update";
+}
+<title>ShopNow | Customer Update</title>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h5 class="text-theme" style="letter-spacing:1px">CUSTOMER UPDATE</h5>
+        </div>
+        <div class="col-md-6 text-right">
+            <a href="~/Customer/List" target="_blank"><span class="fa fa-bars"></span>&nbsp;Customer List</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <input type="hidden" value="@Model.Code" name="Code" id="Code" />
+            <div class="card mb-3">
+                <div class="card-body row">
+                    <div class="col-md-5">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <div class="form-group row">
+                                    <div class="col-md-6 text-md-left">
+                                        <label class="col-form-label text-secondary font-weight-bold">Name</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @if (Model.Name != null)
+                                        {<p>@Model.Name</p>}
+                                    else
+                                    {<p>N/A</p>}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-6 text-left">
+                                        <label class="col-form-label text-secondary font-weight-bold">Mobile Number</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @if (Model.PhoneNumber != null)
+                                        {<p>@Model.PhoneNumber</p>}
+                                    else
+                                    {<p>N/A</p>}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-6 text-left">
+                                        <label class="col-form-label text-secondary font-weight-bold">Personal Email</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @if (Model.Email != null || Model.Email == "")
+                                        {<p>@Model.Email</p>}
+                                    else
+                                    {<p class="text-warning">N/A</p>}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-6 text-md-left">
+                                        <label class="col-form-label"><strong class="text-secondary">Address</strong></label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @if (Model.Address == "" || Model.Address == null)
+                                        {<p class="text-warning">N/A</p>}
+                                        else
+                                        {<p>@Model.Address</p>}
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-6 text-md-left">
+                                        <label class="col-form-label"><strong class="text-secondary">Image</strong></label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <img class="img-upload-container" src="@Model.ImagePath" onerror="this.src='/Images/No Photo.png'" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="form-group row">
+                            <div class="col-md-4 text-left">
+                                <label class="col-form-label text-secondary font-weight-bold">Aadhar Name</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="AadharName" type="text" class="form-control" name="AadharName" value="@Model.AadharName" readonly />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4 text-left">
+                                <label class="col-form-label text-secondary font-weight-bold">Aadhar Number</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input id="AadharNumber" type="text" class="form-control" name="AadharNumber" value="@Model.AadharNumber" readonly />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4 text-left">
+                                <label class="col-form-label text-secondary font-weight-bold">Date Of Birth</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input id="DOB" type="text" class="form-control" name="DOB" value="@Model.DOB" readonly />
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" id="ShowAge" class="form-control" readonly />
+                            </div>
+                            <div class="col-md-1" id="DOBVerified">
+                                <button type="button" class="btn btn-success" id="btnDOBVerify">Verify</button>
+                            </div>
+                            <div class="col-md-2">
+                                @*<span class="text-danger d-none font-weight-bold" id="AgeNotVerify">Unverify.</span>*@
+                                <span class="text-success d-none font-weight-bold" id="AgeVerified">Age Verified.</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4 text-left">
+                                <label class="col-form-label text-secondary font-weight-bold">Aadhar Image</label>
+                            </div>
+                            <div class="col-md-8">
+                                <img class="img-upload-container" src="@Model.ImageAadharPath" onerror="this.src='/Images/No Photo.png'" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4"></div>
+                            <div class="col-md-5">
+                                @if (Model.ImageAadharPath != null)
+                                {
+                                    <div class="alert alert-danger Aadharpendinglbl font-weight-bold p-2">Verification Pending!</div>
+                                    <div class="alert alert-success AadharApprovedlbl font-weight-bold d-none p-2">Approved</div>
+                                    <div class="alert alert-danger AadharRejectedlbl font-weight-bold d-none p-2">Rejected</div>
+                                }
+                                <div class="col-md-12">
+                                    <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#AadharModal">
+                                        + Expand
+                                    </button>
+                                    <input type="hidden" id="AadharVerify" name="AadharVerify" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Aadhar Model-->
+<div class="modal fade" id="AadharModal" tabindex="-1" role="dialog" aria-labelledby="AadharModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Aadhar Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row" id="print-Aadhar">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <img class="img-container w-100 h-100 mb-2" src="@Model.ImageAadharPath" onerror="this.src='/Images/No Photo.png'" />
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label class="text-left text-secondary font-weight-bold mt-1"><i>Aadhar Name</i></label>
+                                        <input type="text" class="form-control" value="@Model.AadharName" readonly />
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label class="text-left text-secondary font-weight-bold mt-1"><i>Aadhar Number</i></label>
+                                        <input type="text" class="form-control" value="@Model.AadharNumber" readonly />
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label class="col-form-label text-secondary font-weight-bold">Date Of Birth</label>
+                                        <input type="text" class="form-control" value="@Model.DOB" readonly />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <span class="AadharApprovedlbl text-success d-none font-weight-bold">Aadhar Approved</span>
+                <span class="AadharRejectedlbl text-danger d-none font-weight-bold">Aadhar Rejected</span>
+                <button type="button" class="btn btn-success Aadhar" id="btnAadharApprove">Approve</button>
+                <button type="button" class="btn btn-danger Aadhar ml-2" id="btnAadharReject">Request Reupload</button>
+                <button type="button" class="btn btn-secondary ml-2" id="btnAadharPrint" onclick="printDiv('print-Aadhar')">Print</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/multiple-image-upload.js"></script>
+    <link href="~/Content/multiple-image-upload.css" rel="stylesheet" />
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script>
+
+        function printDiv(divName) {
+            var printContents = document.getElementById(divName).innerHTML;
+            w = window.open();
+            w.document.write(printContents);
+            w.print();
+            w.close();
+        }
+        $(document).ready(function () {
+            var verify = "@Model.AgeVerify";
+            if (verify == "True") {
+                $("#DOBVerified").addClass("d-none");
+                $("#AgeVerified").removeClass("d-none");
+            }
+           var code = $("#Code").val();
+            $.getJSON("/Customer/CheckAadharImage?Code=" + code, function (data) {
+                if (data == true) {
+                    $(".AadharApprovedlbl").removeClass("d-none");
+                    $(".AadharRejectedlbl").addClass("d-none");
+                    $(".Aadharpendinglbl").addClass("d-none");
+                    $("#btnAadharReject").hide();
+                    $("#btnAadharApprove").hide();
+                } else if (data.data == "Rejected") {
+                    $(".AadharApprovedlbl").addClass("d-none");
+                    $(".AadharRejectedlbl").removeClass("d-none");
+                    $(".Aadharpendinglbl").addClass("d-none");
+                    $("#btnAadharReject").hide();
+                    $("#btnAadharApprove").hide();
+                } else {
+                    $(".AadharApprovedlbl").addClass("d-none");
+                    $(".AadharRejectedlbl").addClass("d-none");
+                    $("#btnAadharReject").show();
+                    $("#btnAadharApprove").show();
+                }
+            });
+
+
+            $("#btnAadharApprove").click(function () {
+                $.getJSON("/Customer/VerifyAadharImage?Code=" + code, function (data) {
+                    if (data.IsAdded == true) {
+                        $(".AadharApprovedlbl").removeClass("d-none");
+                        $(".AadharRejectedlbl").addClass("d-none");
+                        $(".Aadharpendinglbl").addClass("d-none");
+                        $('.Aadhar').addClass("d-none");
+                        location.reload();
+                    }
+                    if (data.message != null && data.message != "") {
+                        swal("Notice!", data.message, "warning");
+                    }
+                });
+            });
+
+            $('#btnAadharReject').click(function () {
+                $('#AadharVerify').val("false");
+                $('#ImageAadharPath').val("Rejected");
+                $('#AadharName').val("Rejected");
+                $('#AadharNumber').val("Rejected");
+                $.getJSON("/Customer/RejectAadharImage?Code=" + code, function (data) {
+                      if (data == false) { location.reload(); }
+                });
+                $(".AadharApprovedlbl").addClass("d-none");
+                $(".AadharRejectedlbl").removeClass("d-none");
+                $(".Aadharpendinglbl").addClass("d-none");
+                $('.Aadhar').addClass("d-none");
+                $("#btnAadharReject").hide();
+                $("#btnAadharApprove").hide();
+            });
+
+            var mydate = $("#DOB").val().split("-");
+            if (mydate != "" && mydate != null) {
+                var dob = new Date(mydate[2], mydate[1] - 1, mydate[0])
+                var today = new Date();
+                var age = Math.floor((today - dob) / (365.25 * 24 * 60 * 60 * 1000));
+                $("#ShowAge").val(age);
+            }
+            $("#btnDOBVerify").click(function () {
+                if (age != "" && age != null) {
+                    $.getJSON("/Customer/VerifyAge?Code=" + code, function (data) {
+                        if (data == true) {
+                            $("#AgeVerified").removeClass("d-none");
+                            $("#DOBVerified").addClass("d-none");
+                        }
+                    });
+                } else {
+                   // $("#AgeNotVerify").removeClass("d-none");
+                    swal("Notice!", "Date of Birth and Age is Empty!", "warning");
+                }
+            });
+        });
+    </script>
+}

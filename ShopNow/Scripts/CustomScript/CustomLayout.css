@@ -1,0 +1,97 @@
+﻿@media only screen and (max-width: 600px) {
+   .CustomerMax {
+        display: none;
+    } 
+}
+
+@media only screen and (min-width: 600px) {
+    .CustomerMin {
+        display: none;
+    }
+}
+
+.img-thumbnail-StampSize {
+    padding: 0.25rem;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    max-width: 100%;
+    /*height: auto;*/
+}
+
+/* Gradient transparent - color - transparent */
+
+.sn_theme-gradient {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(85, 200, 54, 0.75), rgba(0, 0, 0, 0));
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover{
+    background: none !important;
+    border: none !important;
+}
+
+*,
+::before,
+::after {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+.loading {
+    align-items: center;
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    left: 0;
+    position: fixed;
+    top: 0;
+    transition: opacity 0.3s linear;
+    font-weight: bold;
+    width: 100%;
+    z-index: 9999;
+    text-decoration: underline;
+    font-size: 50px;
+}
+
+.pulse {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    transform: scale(0);
+    position: absolute;
+    z-index: -1;
+    animation: pulse 4s infinite;
+}
+
+    .pulse:nth-child(1) {
+        /*background-color: #61c4ff;*/
+        background-color: #0A400D;
+        animation-delay: 0.4s;
+    }
+
+    .pulse:nth-child(2) {
+        background-color: #1ba122;
+        /*background-color: #bde080;*/
+        animation-delay: 0.8s;
+    }
+
+    .pulse:nth-child(3) {
+        background-color: #A3D9A6;
+        /*background-color: #f7df69;*/
+        animation-delay: 1.2s;
+    }
+
+@keyframes pulse {
+    0% {
+        transform: scale(0);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: scale(3);
+        opacity: 0;
+    }
+}

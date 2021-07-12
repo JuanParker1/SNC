@@ -1,0 +1,611 @@
+﻿@model ShopNow.ViewModels.ProductCreateViewModel
+@{
+    ViewBag.Title = "Medical Entry";
+}
+<title>ShopNow | @ViewBag.Title</title>
+<style>
+    .select2 {
+        width: 100% !important;
+    }
+</style>
+@using (Html.BeginForm("MedicalCreate", "Product", FormMethod.Post, new { id = "ProductForm", role = "form", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="container-fluid my-0">
+        <div class="row">
+            <div class="col-md-2">
+                <h5 class="mt-1 text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+            </div>
+            <div class="col-md-4">
+                <select id="ShopCode" name="ShopCode" class="form-control"></select>
+                <input type="hidden" name="ShopName" id="ShopName" />
+            </div>
+            <div class="col-md-6 text-right">
+                <a href="~/Product/MedicalList" target="_self"><span class="fa fa-list-ul"></span> Medical List</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label class="control-label">
+                                    <span class="text-secondary font-weight-bold">Drug Name</span>
+                                </label>
+                                <div class="form-group">
+                                    <div class="Select2Name">
+                                        <select id="MasterProductCode" name="MasterProductCode" class="form-control"></select>
+                                        <input type="hidden" name="MasterProductName" id="MasterProductName" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label text-secondary font-weight-bold" for="BrandCode">Brand Name</label>
+                                <div class="form-group">
+                                    <input type="hidden" name="BrandCode" id="BrandCode" />
+                                    <input type="text" class="form-control" name="BrandName" id="BrandName" readonly />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label text-secondary font-weight-bold" for="CategoryCode">Category Name</label>
+                                <div class="form-group">
+                                    <input type="hidden" name="CategoryCode" id="CategoryCode" />
+                                    <input type="text" class="form-control" name="CategoryName" id="CategoryName" readonly />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label text-secondary font-weight-bold" for="DrugMeasurementUnitCode">Drug Measurement Unit Name</label>
+                                <div class="form-group">
+                                    <input type="hidden" name="DrugMeasurementUnitCode" id="DrugMeasurementUnitCode" />
+                                    <input type="text" class="form-control" name="DrugMeasurementUnitName" id="DrugMeasurementUnitName" readonly />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="control-label text-secondary font-weight-bold" for="DrugCompoundDetailCode">Combination DrugCompound</label>
+                                <div class="form-group">
+                                    @*<select class="form-control" name="DrugCompoundDetailCode" id="DrugCompoundDetailCode" multiple></select>*@
+                                    <input type="text" class="form-control" name="CombinationDrugCompound" id="CombinationDrugCompound" readonly />
+                                    <input type="hidden" name="DrugCompoundDetailCode" id="DrugCompoundDetailCode" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label"><strong class="text-secondary">Prescription</strong></label>
+                                    <select class="form-control" name="PriscriptionCategory" id="PriscriptionCategory" disabled>
+                                        <option value="Select">Select Prescription</option>
+                                        <option value="true">Rx Required</option>
+                                        <option value="false">Rx Not Required</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label"><strong class="text-secondary">iBarU</strong></label>
+                                    <input type="text" class="form-control" name="iBarU" id="iBarU" readonly />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label" for="MenuPrice"><strong class="text-secondary">Menu Price</strong></label>
+                                    <input id="MenuPrice" type="number" class="form-control" step="any" name="MenuPrice" min="1" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label" for="Price"><strong class="text-secondary">Selling Price</strong></label>
+                                    <input id="Price" type="number" class="form-control" step="any" name="Price" min="1" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label" for="Price"><strong class="text-secondary">Percentage</strong></label>
+                                    <input id="Percentage" type="number" class="form-control" step="any" name="Percentage" min="1" readonly />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label" for="Qty1"><strong class="text-secondary">Quantity</strong></label>
+                                    <input id="Qty1" type="number" class="form-control" name="Qty1" min="1" value="1" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label text-secondary font-weight-bold" for="DiscountCategoryCode">Discount Category Name</label>
+                                <div class="form-group">
+                                    <select class="form-control" name="DiscountCategoryCode" id="DiscountCategoryCode"></select>
+                                    <input type="hidden" name="DiscountCategoryName" id="DiscountCategoryName" />
+                                    <input type="hidden" name="DiscountType" id="DiscountType" />
+                                    <input type="hidden" name="DiscountCategoryType" id="DiscountCategoryType" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label" for="DiscountCategoryPercentage"><strong class="text-secondary">Discount Percentage</strong></label>
+                                    <input type="number" class="form-control" name="DiscountCategoryPercentage" id="DiscountCategoryPercentage" readonly />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label"><strong class="text-secondary">Weight</strong></label>
+                                    <input type="number" class="form-control" name="weight" id="weight" step="any" readonly />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label"><strong class="text-secondary">Size</strong></label>
+                                    <input type="text" class="form-control" name="SizeLB" id="SizeLB" readonly />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label"><strong class="text-secondary">Package Name</strong></label>
+                                    <input type="text" class="form-control" name="PackageName" id="PackageName" readonly />
+                                    <input type="hidden" name="PackageCode" id="PackageCode" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label" for="GoogleTaxonomyCode"><strong class="text-secondary">Google Taxonomy Code</strong></label>
+                                <input id="GoogleTaxonomyCode" type="text" class="form-control" name="GoogleTaxonomyCode" readonly />
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label"><strong class="text-secondary">Manufacturer</strong></label>
+                                    <input type="text" class="form-control" name="Manufacturer" id="Manufacturer" readonly />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label"><strong class="text-secondary">Origin Country</strong></label>
+                                    <input type="text" class="form-control" name="OriginCountry" id="OriginCountry" readonly />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="control-label" for="PackagingType"><strong class="text-secondary">Packing Type</strong></label>
+                                <div class="form-check-inline ml-3">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="PackagingType" value="0" checked>Item Qty
+                                    </label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="PackagingType" value="1">SKU
+                                    </label>
+                                </div>
+                                <input type="number" class="form-control" name="PackagingCharge" id="PackagingCharge" />
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-1">
+                                <input type="button" id="AddStock" class="btn btn-success" value=" + Add Stock" />
+                            </div>
+                        </div>
+                        <div class="row d-none mt-2" id="divStock">
+                            <div class="col-md-10">
+                                <div class="row">
+                                    @*<div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label"><strong class="text-secondary">Shop Name</strong></label>
+                                            <input type="text" class="form-control" name="SupplierName" id="SupplierName" />
+                                        </div>
+                                    </div>*@
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label"><strong class="text-secondary">Stock</strong></label>
+                                            <input type="number" class="form-control" name="Stock" id="Stock" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label"><strong class="text-secondary">Loyalty Points per 100 Value</strong></label>
+                                            <input type="number" class="form-control" name="LoyaltyPointsper100Value" id="LoyaltyPointsper100Value" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="control-label"><strong class="text-secondary">Min. Loyalty Reducation %</strong></label>
+                                        <div class="form-group">
+                                            <input type="number" class="form-control" name="MinimumLoyaltyReducationPercentage" id="MinimumLoyaltyReducationPercentage" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="control-label"><strong class="text-secondary">MRP</strong></label>
+                                        <div class="form-group">
+                                            <input type="number" class="form-control" name="MRP" id="MRP" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="control-label"><strong class="text-secondary">Tax %</strong></label>
+                                        <div class="form-group">
+                                            <input type="number" class="form-control" name="TaxPercentage" id="TaxPercentage" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="control-label"><strong class="text-secondary">Discount %</strong></label>
+                                        <div class="form-group">
+                                            <input type="number" class="form-control" name="DiscountPercentage" id="DiscountPercentage" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="control-label"><strong class="text-secondary">Sale Price</strong></label>
+                                        <div class="form-group">
+                                            <input type="number" class="form-control" step="any" name="SalePrice" id="SalePrice" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="control-label"><strong class="text-secondary">Special Price</strong></label>
+                                        <div class="form-group">
+                                            <input type="number" class="form-control" step="any" name="SpecialPrice" id="SpecialPrice" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="control-label"><strong class="text-secondary">Special Cost Of Delivery</strong></label>
+                                        <div class="form-group">
+                                            <input type="number" class="form-control" name="SpecialCostOfDelivery" id="SpecialCostOfDelivery" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="control-label"><strong class="text-secondary">Min. Sale Qty</strong></label>
+                                        <div class="form-group">
+                                            <input type="number" class="form-control" name="MinSaleQty" id="MinSaleQty" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="control-label"><strong class="text-secondary">OutLet Id</strong></label>
+                                        <div class="form-group">
+                                            <input type="number" class="form-control" name="OutLetId" id="OutLetId" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="row">
+                                    <div class="col-md-12"><label></label></div>
+                                    <div class="col-md-12"><label></label></div>
+                                    <div class="col-md-12"><label></label></div>
+                                    <div class="col-md-12"><label></label></div>
+                                    <div class="col-md-12"><label></label></div>
+                                    <div class="col-md-12"><label></label></div>
+                                    <div class="col-md-12"><label></label></div>
+                                    <div class="col-md-12 mt-2">
+                                        <label></label>
+                                        <input type="button" class="btn btn-success btn-block" id="addToDefaultMedicalStock" value="Add" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="table-responsive d-none" id="divDefaultMedicalStock">
+                                <table class="table table-borderless table-striped table-condensed" id="tbl-defaultMedical">
+                                    <thead>
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>Shop Name</th>
+                                            <th>Stock</th>
+                                            <th>Loyalty Points per 100 Value</th>
+                                            <th>Min.Loyalty Reducation %</th>
+                                            <th>MRP</th>
+                                            <th>Tax %</th>
+                                            <th>Discount %</th>
+                                            <th>Sale Price</th>
+                                            <th>Special Price</th>
+                                            <th>Special Cost Of Delivery</th>
+                                            <th>Min.Sale Qty</th>
+                                            <th>OutLet Id</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card my-3">
+                    <div class="card-body">
+                        <div class="row mt-2">
+                            <h5 class="text-success">Drug Image(s)</h5>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-2">
+                                <label class="control-label"><strong class="text-secondary">Product Image1</strong></label>
+                                @*<div class="img-upload-container ml-2">
+                                    <img class="img-container w-100 h-100" id="img-ProductImage1" onerror="this.src='/Images/No Photo.png'" />
+                                    <input type="file" id="ProductImage1" name="ProductImage1" class="d-none" />
+                                    <label for="ProductImage1" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                </div>*@
+                                <img class="img-container" id="img-ProductImage1" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
+                                <input type="hidden" name="ImagePathLarge1" />
+                            </div>
+                            <div class="col-md-2">
+                                <label class="control-label"><strong class="text-secondary">Product Image2</strong></label>
+                                @*<div class="img-upload-container ml-2">
+                                    <img class="img-container w-100 h-100" id="img-ProductImage2" onerror="this.src='/Images/No Photo.png'" />
+                                    <input type="file" id="ProductImage2" name="ProductImage2" class="d-none" />
+                                    <label for="ProductImage2" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                </div>*@
+                                 <img class="img-container" id="img-ProductImage2" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
+                                <input type="hidden" name="ImagePathLarge2" />
+                            </div>
+                            <div class="col-md-2">
+                                <label class="control-label"><strong class="text-secondary">Product Image3</strong></label>
+                                @*<div class="img-upload-container ml-2">
+                                    <img class="img-container w-100 h-100" id="img-ProductImage3" onerror="this.src='/Images/No Photo.png'" />
+                                    <input type="file" id="ProductImage3" name="ProductImage3" class="d-none" />
+                                    <label for="ProductImage3" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                </div>*@
+                                <img class="img-container" id="img-ProductImage3" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
+                                <input type="hidden" name="ImagePathLarge3" />
+                            </div>
+                            <div class="col-md-2">
+                                <label class="control-label"><strong class="text-secondary">Product Image4</strong></label>
+                                @*<div class="img-upload-container ml-2">
+                                    <img class="img-container w-100 h-100" id="img-ProductImage4" onerror="this.src='/Images/No Photo.png'" />
+                                    <input type="file" id="ProductImage4" name="ProductImage4" class="d-none" />
+                                    <label for="ProductImage4" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                </div>*@
+                                <img class="img-container" id="img-ProductImage4" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
+                                <input type="hidden" name="ImagePathLarge4" />
+                            </div>
+                            <div class="col-md-2">
+                                <label class="control-label"><strong class="text-secondary">Product Image5</strong></label>
+                                @*<div class="img-upload-container ml-2">
+                                    <img class="img-container w-100 h-100" id="img-ProductImage5" onerror="this.src='/Images/No Photo.png'" />
+                                    <input type="file" id="ProductImage5" name="ProductImage5" class="d-none" />
+                                    <label for="ProductImage5" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                </div>*@
+                                <img class="img-container" id="img-ProductImage5" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
+                                <input type="hidden" name="ImagePathLarge5" />
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-3 mx-auto">
+                                <button type="button" class="btn btn-block btn-success Save"><span class="glyphicon glyphicon-file"></span> Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+}
+    @*Image Modal*@
+    <div id="myModal" class="modal fade">
+        <div class="modal-dialog">
+            <span class="close" data-dismiss="modal">&times;</span>
+            <img class="modal-content" id="myImage">
+        </div>
+    </div>
+
+    @section Scripts
+{
+        <!--Select2-->
+        <script src="~/Scripts/select2/js/select2.js"></script>
+        <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+        <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+        <!--Select2 End-->
+        <script src="~/Scripts/ckeditor/ckeditor.js"></script>
+        <script src="~/Scripts/multiple-image-upload.js"></script>
+        <link href="~/Content/multiple-image-upload.css" rel="stylesheet" />
+        <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+        <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+        <script>
+
+            $(document).ready(function () {
+
+                $("#AddStock").on('click', function () {
+                    $("#divStock").toggleClass('d-none');
+                });
+
+                var errormsg = "@ViewBag.ErrorMessage";
+                var msg = "@ViewBag.Message";
+                if (errormsg != "") {
+                    swal("Notice!", errormsg, "warning")
+                }
+                if (msg != "") {
+                    swal("Success!", msg, "success")
+                }
+
+                $('#Price').on('change keyup', function () {
+                    var menuprice = $("#MenuPrice").val();
+                    var sellingprice = $(this).val();
+                    var results = Math.ceil(((menuprice - sellingprice) / menuprice) * 100);
+                    $("#Percentage").val(results);
+                });
+
+                $('#MenuPrice').on('change keyup', function () {
+                    var menuprice = $(this).val();
+                    var sellingprice = $('#Price').val();
+                    var results = Math.ceil(((menuprice - sellingprice) / menuprice) * 100);
+                    $("#Percentage").val(results);
+                });
+
+                $('#ShopCode').select2({
+                    placeholder: "Search Shop",
+                    ajax: {
+                        url: "/Product/GetProductShopSelect2",
+                        width: '100%',
+                        delay: 250,
+                        dataType: 'json'
+                    }
+                }).on('select2:select', function (e) {
+                    $('input[name="ShopName"]').val(e.params.data.text);
+                });
+
+                $('#DiscountCategoryCode').select2({
+                    placeholder: "Search Discount Category",
+                    ajax: {
+                        url: "/Product/GetDiscountCategorySelect2",
+                        width: '100%',
+                        delay: 250,
+                        dataType: 'json'
+                    }
+                }).on('select2:select', function (e) {
+                    $('input[name="DiscountCategoryName"]').val(e.params.data.text);
+                    $('input[name="DiscountCategoryPercentage"]').val(e.params.data.percentage);
+                    $('input[name="DiscountType"]').val(e.params.data.Type);
+                    $('input[name="DiscountCategoryType"]').val(e.params.data.categorytype);
+                });
+
+                $(".Save").click(function () {
+                    var shopcode = $("#ShopCode").val();
+                    if (shopcode != null) {
+                        $('#ProductForm').submit();
+                    } else {
+                        swal("Notice!", "Please Select Shop Name!", "warning");
+                    }
+                });
+
+
+
+                //$('#DrugCompoundDetailCode').select2({
+                //    placeholder: "Search Combination",
+                //    ajax: {
+                //        url: "/Product/GetDrugCompoundDetailSelect2",
+                //        width: '100%',
+                //        delay: 250,
+                //        dataType: 'json'
+                //    }
+                //}).on('select2:select', function (e) {
+                //    $('input[name="CombinationDrugCompound"]').val(e.params.data.text);
+                //});
+
+                $('#MasterProductCode').select2({
+                    placeholder: "Search Drug",
+                    ajax: {
+                        url: "/Product/GetMedicalMasterProductSelect2",
+                        width: '100%',
+                        delay: 250,
+                        dataType: 'json'
+                    }
+                }).on('select2:select', function (e) {
+                    var code = e.params.data.id;
+                    $('input[name="MasterProductName"]').val(e.params.data.text);
+                    $('input[name="CategoryCode"]').val(e.params.data.CategoryCode);
+                    $('input[name="CategoryName"]').val(e.params.data.CategoryName);
+                    $('input[name="BrandCode"]').val(e.params.data.BrandCode);
+                    $('input[name="BrandName"]').val(e.params.data.BrandName);
+                    $('input[name="DrugMeasurementUnitCode"]').val(e.params.data.DrugMeasurementUnitCode);
+                    $('input[name="DrugMeasurementUnitName"]').val(e.params.data.DrugMeasurementUnitName);
+                    $('input[name="DrugCompoundDetailCode"]').val(e.params.data.DrugCompoundDetailCode);
+                    $('input[name="CombinationDrugCompound"]').val(e.params.data.CombinationDrugCompound);
+                    $('input[name="PackageCode"]').val(e.params.data.BrandCode);
+                    $('input[name="PackageName"]').val(e.params.data.BrandName);
+                    $('input[name="Manufacturer"]').val(e.params.data.Manufacturer);
+                    $('input[name="OriginCountry"]').val(e.params.data.OriginCountry);
+                    $('input[name="iBarU"]').val(e.params.data.iBarU);
+                    $('input[name="weight"]').val(e.params.data.weight);
+                    $('input[name="SizeLB"]').val(e.params.data.SizeLB);
+                    $('input[name="MenuPrice"]').val(e.params.data.Price);
+                    $('input[name="GoogleTaxonomyCode"]').val(e.params.data.GoogleTaxonomyCode);
+                    $('select[name^="PriscriptionCategory"] option[value="' + e.params.data.PriscriptionCategory + '"]').attr("selected", "selected");
+                    $('#img-ProductImage1').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePathLarge1);
+                    $('#img-ProductImage2').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePathLarge2);
+                    $('#img-ProductImage3').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePathLarge3);
+                    $('#img-ProductImage4').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePathLarge4);
+                    $('#img-ProductImage5').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePathLarge5);
+                    $('input[name="ImagePathLarge1"]').val(e.params.data.ImagePathLarge1);
+                    $('input[name="ImagePathLarge2"]').val(e.params.data.ImagePathLarge2);
+                    $('input[name="ImagePathLarge3"]').val(e.params.data.ImagePathLarge3);
+                    $('input[name="ImagePathLarge4"]').val(e.params.data.ImagePathLarge4);
+                    $('input[name="ImagePathLarge5"]').val(e.params.data.ImagePathLarge5);
+                });
+
+                $('#addToDefaultMedicalStock').on('click', function () {
+                    var Stock = $("#Stock").val();
+                    var SupplierName = $("#ShopName").val();
+                    var MRP = $("#MRP").val();
+                    var SalePrice = $("#SalePrice").val();
+                    var TaxPercentage = $("#TaxPercentage").val();
+                    var DiscountPercentage = $("#DiscountPercentage").val();
+                    var LoyaltyPointsper100Value = $("#LoyaltyPointsper100Value").val();
+                    var MinimumLoyaltyReducationPercentage = $("#MinimumLoyaltyReducationPercentage").val();
+                    var SpecialCostOfDelivery = $("#SpecialCostOfDelivery").val();
+                    var OutLetId = $("#OutLetId").val();
+                    var SpecialPrice = $("#SpecialPrice").val();
+                    var MinSaleQty = $("#MinSaleQty").val();
+
+                    var fd = new FormData();
+                    fd.append('Stock', Stock);
+                    fd.append('SupplierName', SupplierName);
+                    fd.append('MRP', MRP);
+                    fd.append('SalePrice', SalePrice);
+                    fd.append('TaxPercentage', TaxPercentage);
+                    fd.append('DiscountPercentage', DiscountPercentage);
+                    fd.append('LoyaltyPointsper100Value', LoyaltyPointsper100Value);
+                    fd.append('MinimumLoyaltyReducationPercentage', MinimumLoyaltyReducationPercentage);
+                    fd.append('SpecialCostOfDelivery', SpecialCostOfDelivery);
+                    fd.append('OutLetId', OutLetId);
+                    fd.append('SpecialPrice', SpecialPrice);
+                    fd.append('MinSaleQty', MinSaleQty);
+                    if (SupplierName == "") {
+                        swal("Notice!","Please select Shop!","warning")
+                    } else {
+                        $.ajax({
+                            url: '/Product/AddToDefaultMedicalStock',
+                            data: fd,
+                            type: 'post',
+                            dataType: 'json',
+                            contentType: false,
+                            enctype: 'multipart/form-data',
+                            processData: false,
+                            success: function (data) {
+                                var supplierName;
+                                if (data.SupplierName == null || data.SupplierName == "") { supplierName = "N/A" } else { supplierName = data.SupplierName }
+                                var tableData = '<tr> \
+                                                                        <td>'+ data.Id + '</td> \
+                                                                        <td>'+ supplierName + '</td> \
+                                                                        <td>'+ data.Stock + '</td> \
+                                                                        <td>'+ data.LoyaltyPointsper100Value + '</td> \
+                                                                        <td>'+ data.MinimumLoyaltyReducationPercentage + '</td> \
+                                                                        <td>'+ data.MRP + '</td> \
+                                                                        <td>'+ data.TaxPercentage + '</td> \
+                                                                        <td>'+ data.DiscountPercentage + '</td> \
+                                                                        <td>'+ data.SalePrice + '</td> \
+                                                                        <td>'+ data.SpecialPrice + '</td> \
+                                                                        <td>'+ data.SpecialCostOfDelivery + '</td> \
+                                                                        <td>'+ data.MinSaleQty + '</td> \
+                                                                        <td>'+ data.OutLetId + '</td> \
+                                                                        <td><button class="btn btn-link text-dark removeFromDefaultMedicalStock" type="button" data-id='+ data.Id + '><i class="fa fa-trash" aria-hidden="true"></i></button></td>\
+                                                                    </tr> ';
+
+                                $('#tbl-defaultMedical tbody').append(tableData);
+                                $('#divDefaultMedicalStock').removeClass('d-none');
+                                $('#SupplierName').val("");
+                                $('#Stock').val("");
+                                $('#LoyaltyPointsper100Value').val("");
+                                $('#MinimumLoyaltyReducationPercentage').val("");
+                                $('#MRP').val("");
+                                $('#TaxPercentage').val("");
+                                $('#DiscountPercentage').val("");
+                                $('#SalePrice').val("");
+                                $('#SpecialPrice').val("");
+                                $('#SpecialCostOfDelivery').val("");
+                                $('#MinSaleQty').val("");
+                                $('#OutLetId').val("");
+                            }
+                        })
+                    }
+                });
+
+                $(document).on('click', '.removeFromDefaultMedicalStock', function () {
+                    var id = $(this).data('id');
+                    var thisRow = $(this).closest("tr");
+                    $.post('/Product/RemoveFromDefaultMedicalStock', { id: id }, function (data) {
+                        if (data == true) {
+                            thisRow.remove();
+                            var count = $('#tbl-defaultMedical tr').length;
+                            if (count == 1) {
+                                $("#divDefaultMedicalStock").addClass("d-none");
+                            }
+                        }
+                        else
+                            swal("Warning!","Something went wrong please try again!","error");
+                    });
+                });
+
+            });
+
+        </script>
+}
+

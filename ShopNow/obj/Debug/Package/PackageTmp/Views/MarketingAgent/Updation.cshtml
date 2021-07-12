@@ -1,0 +1,159 @@
+﻿@model ShopNow.ViewModels.MarketingAgentUpdationViewModel
+@{
+    ViewBag.Title = "Marketing Agent Updation";
+    Layout = "~/Views/MarketingAgent/_Layout.cshtml";
+}
+
+<h4 class="text-secondary font-weight-bold ml-3 mb-3">Marketing Agent Updation</h4>
+<div class="container-fluid my-0">
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            @using (Html.BeginForm("Updation", "MarketingAgent", FormMethod.Post, new { id = "MarketingAgentForm", role = "form", enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="Code" value="@Model.Code" />
+                <input type="hidden" name="ImagePanPath" value="@Model.ImagePanPath" />
+                <div class="card mb-4">
+                    <h5 class="text-success ml-2 mt-2"></h5>
+                    <div class="card-body row">
+                        <div class="col-md-7">
+                            <div class="form-group row">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Name</strong></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" name="Name" id="Name" value="@Model.Name" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Mobile Number</strong></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" name="PhoneNumber" id="PhoneNumber" value="@Model.PhoneNumber" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Email</strong></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" name="Email" id="Email" value="@Model.Email" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">PAN Number</strong></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" name="PanNumber" id="PanNumber" value="@Model.PanNumber" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1"></div>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label class="text-secondary font-weight-bold">PAN Image</label>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="img-upload-container">
+                                        <img class="img-container w-100 h-100" id="img-upload" src="@Model.ImagePanPath" onerror="this.src='/Images/No Photo.png'" />
+                                        <input type="file" id="PanImage" name="PanImage" class="d-none" />
+                                        <label for="PanImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Password</strong></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="password" class="form-control" name="Password" id="Password" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Confirm Password</strong></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="password" class="form-control" name="PasswordConfirm" id="PasswordConfirm" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="row">
+                                <span class="text-danger passwordwrong d-none">Passwords do not match!</span>
+                                <span class="text-success passwordright d-none">Passwords match.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <div class="col-md-3 mx-auto">
+                            <button type="submit" class="btn btn-block btn-success Save"><span class="glyphicon glyphicon-file"></span>Submit</button>
+                        </div>
+                    </div>
+
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/bootstrap-4.1.3-dist/js/bootstrap.min.js"></script>
+    <link href="~/Scripts/bootstrap-4.1.3-dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <link href="~/Content/multiple-image-upload.css" rel="stylesheet" />
+    <script src="~/Scripts/multiple-image-upload.js"></script>
+    <link href="~/Content/plugins/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script src="~/Scripts/plugins/sweetalert/sweetalert.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.Save').prop('disabled', true);
+            function checkPasswordMatch() {
+                var password = $("#Password").val();
+                var confirmPassword = $("#PasswordConfirm").val();
+                if (password != confirmPassword) {
+                    $('.Save').prop('disabled', true);
+                    $(".passwordwrong").removeClass("d-none");
+                    $(".passwordright").addClass("d-none");
+                } else {
+                    $('.Save').prop('disabled', false);
+                    $(".passwordwrong").addClass("d-none");
+                    $(".passwordright").removeClass("d-none");
+
+                }
+
+            }
+            $("#PasswordConfirm").keyup(checkPasswordMatch);
+
+            $(document).on('change', '.btn-file :file', function () {
+                var input = $(this),
+                    label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+                input.trigger('fileselect', [label]);
+            });
+
+            function readURLPan(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#img-upload').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#PanImage").change(function () {
+                readURLPan(this);
+            });
+        });
+    </script>
+}
