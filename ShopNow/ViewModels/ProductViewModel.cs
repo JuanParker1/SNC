@@ -941,9 +941,9 @@ namespace ShopNow.ViewModels
         public List<ProductList> List { get; set; }
         public class ProductList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string Name { get; set; }
-            public string ShopCode { get; set; }
+            public int ShopId { get; set; }
             public string ShopName { get; set; }
             public double Price { get; set; }
             public double MenuPrice { get; set; }
@@ -955,7 +955,7 @@ namespace ShopNow.ViewModels
 
     public class ProductActiveOrInViewModel
     {
-        public string ProductCode { get; set; }
+        public int ProductId { get; set; }
         public string CustomerCode { get; set; }
         public int State { get; set; }
     }

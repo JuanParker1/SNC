@@ -15,19 +15,18 @@ namespace ShopNow.Models
     public partial class Staff
     {
         public int Id { get; set; }
-        public string Code { get; set; }
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
-        public string CustomerCode { get; set; }
+        public int CustomerId { get; set; }
         public string CustomerName { get; set; }
-        public string ShopCode { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
         public string ImagePath { get; set; }
         public string IpAddress { get; set; }
+        public string Password { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }
-        public string Password { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
     }

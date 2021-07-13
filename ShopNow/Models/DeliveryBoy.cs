@@ -21,14 +21,11 @@ namespace ShopNow.Models
         }
     
         public int Id { get; set; }
-        public string Code { get; set; }
         public string Name { get; set; }
+        public int CustomerId { get; set; }
+        public string CustomerName { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
-        public string ShopCode { get; set; }
-        public string ShopName { get; set; }
-        public string StaffCode { get; set; }
-        public string StaffName { get; set; }
         public string ImagePath { get; set; }
         public string CountryName { get; set; }
         public string StateName { get; set; }
@@ -38,13 +35,6 @@ namespace ShopNow.Models
         public string PinCode { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public int Status { get; set; }
-        public System.DateTime DateEncoded { get; set; }
-        public System.DateTime DateUpdated { get; set; }
-        public string CreatedBy { get; set; }
-        public string UpdatedBy { get; set; }
-        public string CustomerCode { get; set; }
-        public string CustomerName { get; set; }
         public string CVPath { get; set; }
         public string DrivingLicenseImagePath { get; set; }
         public string BankPassbookPath { get; set; }
@@ -53,11 +43,16 @@ namespace ShopNow.Models
         public string AccountName { get; set; }
         public string AccountNumber { get; set; }
         public string IFSCCode { get; set; }
-        public int OnWork { get; set; }
-        public string MarketingAgentCode { get; set; }
+        public string MarketingAgentId { get; set; }
         public string MarketingAgentName { get; set; }
-        public int Active { get; set; }
+        public int OnWork { get; set; }
         public int isAssign { get; set; }
+        public int Active { get; set; }
+        public int Status { get; set; }
+        public string CreatedBy { get; set; }
+        public string UpdatedBy { get; set; }
+        public System.DateTime DateEncoded { get; set; }
+        public System.DateTime DateUpdated { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order> Orders { get; set; }

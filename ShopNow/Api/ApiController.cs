@@ -85,7 +85,7 @@ namespace ShopNow.Controllers
                 config.CreateMap<OtpVerification, CustomerShopAllListViewModel.VerifyList>();
                 config.CreateMap<DeliveryBoyCreateViewModel, DeliveryBoy>();
                 config.CreateMap<Models.Payment, CreditPaymentViewModel>();
-                config.CreateMap<CarCreateViewModel, Cart>();
+                //config.CreateMap<CartCreateViewModel, Cart>();
                 config.CreateMap<PaymentCreateApiViewModel, Models.Payment>();
                 config.CreateMap<ShopSingleEditViewModel, Shop>();
                 config.CreateMap<ShopReviewViewModel, CustomerReview>();
@@ -257,16 +257,13 @@ namespace ShopNow.Controllers
                 {
                     user.Name = "Null";
                 }
-                user.Code = ShopNow.Helpers.DRC.Generate("CUS");
                 user.Status = 0;
                 user.DateEncoded = DateTime.Now;
                 user.DateUpdated = DateTime.Now;
                 db.Customers.Add(user);
                 db.SaveChanges();
-                //user.Code = Customer.Add(user, out errorCode);
+
                 Admin admin = new Admin();
-                admin.AnonymisedID = user.Code;
-                //Admin.Add(admin, out errorCode);
                 admin.Code = ShopNow.Helpers.DRC.Generate("ADM");
                 admin.OfficialID = AdminHelpers.SecureData(admin.Code);
                 admin.AnonymisedID = AdminHelpers.SecureData(admin.AnonymisedID);
@@ -795,18 +792,18 @@ namespace ShopNow.Controllers
         }
 
 
-        public JsonResult GetProducts(string shopCode, int page = 1, int pageSize = 5)
+        public JsonResult GetProducts(int shopId, int page = 1, int pageSize = 5)
         {
 
             var source = (from p in db.Products
-                          join m in db.MasterProducts on p.MasterProductCode equals m.Code
-                          where p.ShopCode == shopCode && (p.Status == 0 || p.Status == 1) && p.ShopCode != null
+                          join m in db.MasterProducts on p.MasterProductId equals m.Id
+                          where p.ShopId == shopId && (p.Status == 0 || p.Status == 1) && p.ShopId != 0
                           select new ActiveProductListViewModel.ProductList
                           {
-                              Code = p.Code,
+                              Id = p.Id,
                               // Name = p.Name,
                               Name=m.Name,
-                              ShopCode = p.ShopCode,
+                              ShopId = p.ShopId,
                               ShopName = p.ShopName,
                               Price = p.Price,
                               Qty = p.Qty,
@@ -827,13 +824,13 @@ namespace ShopNow.Controllers
 
             var items = source.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
             var previous = CurrentPage - 1;
-            var previousurl =apipath+ "/Api/GetProducts?shopCode=" + shopCode + "&page=" + previous;
+            var previousurl =apipath+ "/Api/GetProducts?shopId=" + shopId + "&page=" + previous;
 
             var previousPage = CurrentPage > 1 ? previousurl : "No";
 
             var current = CurrentPage + 1;
 
-            var nexturl = apipath + "/Api/GetProducts?shopCode=" + shopCode + "&page=" + current;
+            var nexturl = apipath + "/Api/GetProducts?shopId=" + shopId + "&page=" + current;
             var nextPage = CurrentPage < TotalPages ? nexturl : "No";
             var paginationMetadata = new
             {
@@ -850,18 +847,18 @@ namespace ShopNow.Controllers
 
         }
 
-        public JsonResult GetShopItemList(string shopCode, string str = "", int page = 1, int pageSize = 20)
+        public JsonResult GetShopItemList(int shopId, string str = "", int page = 1, int pageSize = 20)
         {
-            var shid = db.Shops.Where(s => s.Code == shopCode).FirstOrDefault();
+            var shid = db.Shops.Where(s => s.Id == shopId).FirstOrDefault();
             var model = db.Products.Join(db.MasterProducts, p => p.MasterProductId, m =>m.Id,(p,m) => new {p,m })//, (c, p) => new { c, p })
                             .AsEnumerable()
-                            .Where(i => i.p.shopid == shid.Id && (i.p.Status == 0 || i.p.Status == 1) && (str != "" ? i.m.Name.ToLower().StartsWith(str.ToLower()) : true))
+                            .Where(i => i.p.ShopId == shid.Id && (i.p.Status == 0 || i.p.Status == 1) && (str != "" ? i.m.Name.ToLower().StartsWith(str.ToLower()) : true))
 
                             .Select(i => new ActiveProductListViewModel.ProductList
                             {
-                                Code = i.p.Code,
+                                Id = i.p.Id,
                                 Name = i.m.Name,
-                                ShopCode = i.p.ShopCode,
+                                ShopId = i.p.ShopId,
                                 ShopName = i.p.ShopName,
                                 Price = i.p.Price,
                                 MenuPrice = i.p.MenuPrice,
@@ -882,13 +879,13 @@ namespace ShopNow.Controllers
 
             var items = model.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
             var previous = CurrentPage - 1;
-            var previousurl = apipath+ "/Api/GetShopItemList?shopCode=" + shopCode + "&str=" + str + "&page=" + previous;
+            var previousurl = apipath+ "/Api/GetShopItemList?shopId=" + shopId + "&str=" + str + "&page=" + previous;
 
             var previousPage = CurrentPage > 1 ? previousurl : "No";
 
             var current = CurrentPage + 1;
 
-            var nexturl = apipath+ "/Api/GetShopItemList?shopCode=" + shopCode + "&str=" + str + "&page=" + current;
+            var nexturl = apipath+ "/Api/GetShopItemList?shopId=" + shopId + "&str=" + str + "&page=" + current;
             var nextPage = CurrentPage < TotalPages ? nexturl : "No";
             var paginationMetadata = new
             {
@@ -976,32 +973,30 @@ namespace ShopNow.Controllers
         {
             if (model.State == 0)
             {
-                var product = db.Products.FirstOrDefault(i => i.Code == model.ProductCode); // Product.Get(model.ProductCode);
+                var product = db.Products.FirstOrDefault(i => i.Id == model.ProductId);
                 product.Status = 0;
                 if (model.CustomerCode != null)
                 {
-                    var customer = db.Customers.FirstOrDefault(i => i.Code == model.CustomerCode);// Customer.Get(model.CustomerCode);
+                    var customer = db.Customers.FirstOrDefault(i => i.Code == model.CustomerCode);
                     product.UpdatedBy = customer.Name;
                 }
                 product.DateUpdated = DateTime.Now;
                 db.Entry(product).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                // Product.Edit(product, out int errorCode);
                 return Json(new { message = "Successfully Activated the Product!" }, JsonRequestBehavior.AllowGet);
             }
             else
             {
-                var product = db.Products.FirstOrDefault(i => i.Code == model.ProductCode); // Product.Get(model.ProductCode);
+                var product = db.Products.FirstOrDefault(i => i.Id == model.ProductId);
                 product.Status = 1;
                 if (model.CustomerCode != null)
                 {
-                    var customer = db.Customers.FirstOrDefault(i => i.Code == model.CustomerCode);//Customer.Get(model.CustomerCode);
+                    var customer = db.Customers.FirstOrDefault(i => i.Code == model.CustomerCode);
                     product.UpdatedBy = customer.Name;
                 }
                 product.DateUpdated = DateTime.Now;
                 db.Entry(product).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                // Product.Edit(product, out int errorCode);
                 return Json(new { message = "Successfully InActivated the Product!" }, JsonRequestBehavior.AllowGet);
             }
 
@@ -1010,12 +1005,11 @@ namespace ShopNow.Controllers
         [HttpPost]
         public JsonResult DeliveryBoyCreate(DeliveryBoyCreateViewModel model)
         {
-            //int errorCode = 0;
             var deliveryBoyExist = db.DeliveryBoys.FirstOrDefault(i => i.Name == model.Name && i.PhoneNumber == model.PhoneNumber && (i.Status == 0 || i.Status == 1));
             if (deliveryBoyExist == null)
             {
                 var deliveryBoy = _mapper.Map<DeliveryBoyCreateViewModel, DeliveryBoy>(model);
-                var customer = db.Customers.FirstOrDefault(i => i.Code == model.CustomerCode);// Customer.Get(model.CustomerCode);
+                var customer = db.Customers.FirstOrDefault(i => i.Code == model.CustomerCode);
                 if (customer != null)
                 {
                     deliveryBoy.Name = customer.Name;
@@ -1024,7 +1018,6 @@ namespace ShopNow.Controllers
                     deliveryBoy.UpdatedBy = customer.Name;
                     customer.Position = 3;
                     customer.UpdatedBy = customer.Name;
-                    // Customer.Edit(customer, out int error);
                     customer.DateUpdated = DateTime.Now;
                     db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
@@ -1035,12 +1028,11 @@ namespace ShopNow.Controllers
                 deliveryBoy.DateUpdated = DateTime.Now;
                 db.DeliveryBoys.Add(deliveryBoy);
                 db.SaveChanges();
-                //deliveryBoy.Code = DeliveryBoy.Add(deliveryBoy, out errorCode);
 
 
                 if (deliveryBoy.Code != null || deliveryBoy.Code != "")
                 {
-                    return Json(new { message = "Successfully Created a Delivery Boy!", /*Details = deliveryBoy,*/ Position = customer.Position });
+                    return Json(new { message = "Successfully Created a Delivery Boy!", Position = customer.Position });
 
                 }
                 else
@@ -1054,7 +1046,7 @@ namespace ShopNow.Controllers
         [HttpPost]
         public JsonResult GetStockCheck(ProductStockCheckViewModel model)
         {
-           // string message = "";
+           
             try
             {
                 double stock = 0;
@@ -1093,11 +1085,10 @@ namespace ShopNow.Controllers
         {
           
                 var payment = _mapper.Map<PaymentCreateApiViewModel, Models.Payment>(model);
-                // var perOrderAmount = db.PlatFormCreditRates.Where(s => s.Status == 0).Select(sp => sp.RatePerOrder);
                 var perOrderAmount = db.PlatFormCreditRates.Where(s => s.Status == 0).FirstOrDefault();
                 if (model.CustomerCode != null || model.CustomerCode != "")
                 {
-                    var customer = db.Customers.FirstOrDefault(i => i.Code == model.CustomerCode);// Customer.Get(model.CustomerCode);
+                    var customer = db.Customers.FirstOrDefault(i => i.Code == model.CustomerCode);
                     payment.CustomerName = customer.Name;
                     payment.CreatedBy = customer.Name;
                     payment.UpdatedBy = customer.Name;
@@ -1194,7 +1185,6 @@ namespace ShopNow.Controllers
                             topup.Status = 0;
                             db.TopUps.Add(topup);
                             db.SaveChanges();
-                            //  TopUp.Add(topup, out errorCode);
                         }
                         else
                         {
@@ -1203,7 +1193,6 @@ namespace ShopNow.Controllers
                             top.DateUpdated = DateTime.Now;
                             db.Entry(top).State = System.Data.Entity.EntityState.Modified;
                             db.SaveChanges();
-                            //TopUp.Edit(top, out errorCode);
                         }
                     }
                     else
@@ -1231,7 +1220,6 @@ namespace ShopNow.Controllers
                         detail.Status = 0;
                         db.ShopCharges.Add(detail);
                         db.SaveChanges();
-                        // ShopCharge.Add(detail, out errorCode);
                     }
                     payment.Code = _generateCode("PAY");
                     payment.DateEncoded = DateTime.Now;
@@ -1241,7 +1229,6 @@ namespace ShopNow.Controllers
                     payment.refundStatus = 1;
                     db.Payments.Add(payment);
                     db.SaveChanges();
-                    // payment.Code = Payment.Add(payment, out errorCode);
 
                     return Json(new { message = "Successfully Added to Payment!", Details = model });
 
@@ -1263,7 +1250,7 @@ namespace ShopNow.Controllers
             string secret = "yychwOUOsYLsSn3XoNYvD1HY";
 
             Dictionary<string, object> input = new Dictionary<string, object>();
-            input.Add("amount", model.Price); // this amount should be same as transaction amount
+            input.Add("amount", model.Price);
             input.Add("currency", "INR");
             input.Add("receipt", "order_rcptid_11");
             RazorpayClient client = new RazorpayClient(key, secret);
@@ -1325,16 +1312,16 @@ namespace ShopNow.Controllers
         }
 
         [HttpPost]
-        public JsonResult AddCart(CarCreateViewModel model)
+        public JsonResult AddCart(CartCreateViewModel model)
         {
             var shop = db.Shops.FirstOrDefault(i => i.Code == model.ShopCode);
             var orderCount = (from s in db.Carts
                               join sh in db.Shops on s.ShopCode equals sh.Code
                               join c in db.Customers on sh.CustomerCode equals c.Code
-                              where sh.CustomerCode==shop.CustomerCode && (s.CartStatus >= 2)
+                              where sh.CustomerCode == shop.CustomerCode && (s.CartStatus >= 2)
                               group s by s.OrderNo into g
                               select g).Count();
-           
+
             var platform = (from ss in db.Payments
                             join sh in db.Shops on ss.ShopCode equals sh.Code
                             join c in db.Customers on sh.CustomerCode equals c.Code
@@ -1351,7 +1338,7 @@ namespace ShopNow.Controllers
             var varDeliveryCharges = (from ss in db.ShopCharges
                                       join sh in db.Shops on ss.ShopCode equals sh.Code
                                       join c in db.Customers on sh.CustomerCode equals c.Code
-                                      where sh.CustomerCode == shop.CustomerCode && ss.CartStatus >= 2 
+                                      where sh.CustomerCode == shop.CustomerCode && ss.CartStatus >= 2
                                       select (Double?)ss.GrossDeliveryCharge).Sum() ?? 0;
             var DeliveryCredits = varDelivery - varDeliveryCharges;
             var PlatformCredits = platform - platformorder;
@@ -1359,7 +1346,7 @@ namespace ShopNow.Controllers
             if ((PlatformCredits < 26 && DeliveryCredits < 67))
             {
                 //Shop DeActivate
-               
+
                 shop.Status = 6;
                 db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
@@ -1368,92 +1355,40 @@ namespace ShopNow.Controllers
             }
             else
             {
-                if (model.ItemId != "N/A")
+                if (model.ItemId != 0) //model.ItemId != "N/A"
                 {
+                    var product = db.Products.FirstOrDefault(i => i.ItemId == model.ItemId && i.Status == 0); // ProductMedicalStock.GetItemId(model.ItemId);
+                    product.HoldOnStok = Convert.ToInt32(model.Qty);
+                    product.Qty = product.Qty - Convert.ToInt32(model.Qty);
+                    db.Entry(product).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
 
-                    //using (WebClient myData = new WebClient())
-                    //{
+                    var cart = _mapper.Map<CartCreateViewModel, Cart>(model);
+                    cart.CartStatus = 0;
+                    if (model.CustomerCode != null)
+                    {
+                        var customer = db.Customers.FirstOrDefault(i => i.Code == model.CustomerCode);// Customer.Get(model.CustomerCode);
+                        cart.CreatedBy = customer.Name;
+                        cart.UpdatedBy = customer.Name;
+                        cart.CustomerName = customer.Name;
+                    }
 
-                       // myData.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
-                       // myData.Headers[HttpRequestHeader.Accept] = "application/json";
-                       // myData.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-                    
-                      //  string getList = myData.DownloadString("http://joyrahq.gofrugal.com/RayMedi_HQ/api/v1/items?q=itemId==" + model.ItemId + ", status == R, outletId == 2");
+                    cart.Code = _generateCode("CAR");
+                    cart.DateEncoded = DateTime.Now;
+                    cart.DateUpdated = DateTime.Now;
+                    db.Carts.Add(cart);
+                    db.SaveChanges();
+                    if (cart.Code != null || cart.Code != "")
+                    {
+                        return Json(new { message = "Successfully Added to Cart!", Details = cart });
+                    }
+                    else
 
-                        //var result = JsonConvert.DeserializeObject<RootObject>(getList);
-                        //foreach (var pro in result.items)
-                       // {
-                            //foreach (var med in pro.stock)
-                            //{
-                                var productMedicalStock = db.Products.FirstOrDefault(i => i.ItemId == model.ItemId && i.Status == 0); // ProductMedicalStock.GetItemId(model.ItemId);
-                                //if (productMedicalStock != null)
-                                //{
-                                   // if (med.outletId == "2")
-                                    //{
-                                        productMedicalStock.HoldOnStok = Convert.ToInt32(model.Qty);
-                                        productMedicalStock.Qty = productMedicalStock.Qty - Convert.ToInt32(model.Qty);
-                                       // productMedicalStock.DateUpdated = DateTime.Now;
-                                        db.Entry(productMedicalStock).State = System.Data.Entity.EntityState.Modified;
-                                        db.SaveChanges();
-                                       // ProductMedicalStock.Edit(productMedicalStock, out errorCode);
-                                       //if (Convert.ToDouble(med.stock) - Convert.ToDouble(model.Qty) <= Convert.ToDouble(model.Qty))
-                                       //{
-                    var cart = _mapper.Map<CarCreateViewModel, Cart>(model);
-                                            cart.CartStatus = 0;
-                                            if (model.CustomerCode != null)
-                                            {
-                                                var customer = db.Customers.FirstOrDefault(i => i.Code == model.CustomerCode);// Customer.Get(model.CustomerCode);
-                                                cart.CreatedBy = customer.Name;
-                                                cart.UpdatedBy = customer.Name;
-                                                cart.CustomerName = customer.Name;
-                                            }
-
-                                            cart.Code = _generateCode("CAR");
-                                            cart.DateEncoded = DateTime.Now;
-                                            cart.DateUpdated = DateTime.Now;
-                                            db.Carts.Add(cart);
-                                            db.SaveChanges();
-                                            // cart.Code = Cart.Add(cart, out errorCode);
-
-                                            if (cart.Code != null || cart.Code != "")
-                                            {
-                                                return Json(new { message = "Successfully Added to Cart!", Details = cart });
-
-                                            }
-                                            else
-                                                return Json(new { message = "Failed to Add Cart!" });
-                                        //}
-                                       // else
-                                        //{
-                                           // return Json(new { message = "Qty Unavailable!" });
-
-                                       // }
-
-                                   // }
-                               // }
-                                //else
-                               // {
-                                //    return Json(new { message = "This Item not available" });
-                            //
-                                //}
-                           // }
-                       // }
-                   // }
-                    return Json(new { message = "Network Issue!" });
+                        return Json(new { message = "Network Issue!" });
                 }
                 else
                 {
-                 //   var productMedicalStock = db.Products.FirstOrDefault(i => i.ItemId == model.ItemId && i.Status == 0); // ProductMedicalStock.GetItemId(model.ItemId);
-                                                                                                                          //if (productMedicalStock != null)
-                                                                                                                          //{
-                                                                                                                          // if (med.outletId == "2")
-                                                                                                                          //{
-                    //productMedicalStock.HoldOnStok = Convert.ToInt32(model.Qty);
-                   // productMedicalStock.Qty = productMedicalStock.Qty - Convert.ToInt32(model.Qty);
-                    // productMedicalStock.DateUpdated = DateTime.Now;
-                   // db.Entry(productMedicalStock).State = System.Data.Entity.EntityState.Modified;
-                   // db.SaveChanges();
-                    var carts = _mapper.Map<CarCreateViewModel, Cart>(model);
+                    var carts = _mapper.Map<CartCreateViewModel, Cart>(model);
                     carts.CartStatus = 0;
                     if (model.CustomerCode != null)
                     {
@@ -1462,18 +1397,15 @@ namespace ShopNow.Controllers
                         carts.UpdatedBy = customer.Name;
                         carts.CustomerName = customer.Name;
                     }
-
                     carts.Code = _generateCode("CAR");
                     carts.DateEncoded = DateTime.Now;
                     carts.DateUpdated = DateTime.Now;
                     db.Carts.Add(carts);
                     db.SaveChanges();
-                    // carts.Code = Cart.Add(carts, out errorCode);
 
                     if (carts.Code != null || carts.Code != "")
                     {
                         return Json(new { message = "Successfully Added to Cart!", Details = carts });
-
                     }
                     else
                         return Json(new { message = "Failed to Add Cart!" });
@@ -1556,7 +1488,7 @@ namespace ShopNow.Controllers
 
                 foreach (var item in model.ListItems)
                 {
-                    if (item.ItemId != "N/A")
+                    if (item.ItemId != 0)
                     {
                         var productMedicalStock = db.Products.FirstOrDefault(i => i.ItemId == item.ItemId && i.Status == 0);
                         productMedicalStock.HoldOnStok = Convert.ToInt32(item.Quantity);
@@ -1582,10 +1514,10 @@ namespace ShopNow.Controllers
         }
 
         [HttpPost]
-        public JsonResult StockChecking(CarCreateViewModel model)
+        public JsonResult StockChecking(CartCreateViewModel model)
         {
             //int errorCode = 0;
-            if (model.ItemId != "N/A")
+            if (model.ItemId != 0)  //model.ItemId != "N/A"
             {
 
                 using (WebClient myData = new WebClient())
@@ -1602,55 +1534,39 @@ namespace ShopNow.Controllers
                     {
                         foreach (var med in pro.stock)
                         {
-                            var productMedicalStock = db.ProductMedicalStocks.FirstOrDefault(i => i.ItemId == model.ItemId && i.Status == 0); // ProductMedicalStock.GetItemId(model.ItemId);
-                            if (productMedicalStock != null)
+                            if (med.outletId == "2")
                             {
-                                if (med.outletId == "2")
+                                if (Convert.ToDouble(med.stock) - Convert.ToDouble(model.Qty) <= Convert.ToDouble(model.Qty))
                                 {
-                                    productMedicalStock.HoldStock = Convert.ToDouble(model.Qty);
-                                    productMedicalStock.Stock = Convert.ToDouble(med.stock);
-                                    productMedicalStock.DateUpdated = DateTime.Now;
-                                    db.Entry(productMedicalStock).State = System.Data.Entity.EntityState.Modified;
-                                    db.SaveChanges();
-                                    // ProductMedicalStock.Edit(productMedicalStock, out errorCode);
-                                    if (Convert.ToDouble(med.stock) - Convert.ToDouble(model.Qty) <= Convert.ToDouble(model.Qty))
+                                    var cart = _mapper.Map<CartCreateViewModel, Cart>(model);
+                                    cart.CartStatus = 0;
+                                    if (model.CustomerCode != null)
                                     {
-                                        var cart = _mapper.Map<CarCreateViewModel, Cart>(model);
-                                        cart.CartStatus = 0;
-                                        if (model.CustomerCode != null)
-                                        {
-                                            var customer = db.Customers.FirstOrDefault(i => i.Code == model.CustomerCode);// Customer.Get(model.CustomerCode);
-                                            cart.CreatedBy = customer.Name;
-                                            cart.UpdatedBy = customer.Name;
-                                            cart.CustomerName = customer.Name;
-                                        }
+                                        var customer = db.Customers.FirstOrDefault(i => i.Code == model.CustomerCode);// Customer.Get(model.CustomerCode);
+                                        cart.CreatedBy = customer.Name;
+                                        cart.UpdatedBy = customer.Name;
+                                        cart.CustomerName = customer.Name;
+                                    }
 
-                                        cart.Code = _generateCode("CAR");
-                                        cart.DateEncoded = DateTime.Now;
-                                        cart.DateUpdated = DateTime.Now;
-                                        db.Carts.Add(cart);
-                                        db.SaveChanges();
-                                        // cart.Code = Cart.Add(cart, out errorCode);
+                                    cart.Code = _generateCode("CAR");
+                                    cart.DateEncoded = DateTime.Now;
+                                    cart.DateUpdated = DateTime.Now;
+                                    db.Carts.Add(cart);
+                                    db.SaveChanges();
 
-                                        if (cart.Code != null || cart.Code != "")
-                                        {
-                                            return Json(new { message = "Successfully Added to Cart!", Details = cart });
+                                    if (cart.Code != null || cart.Code != "")
+                                    {
+                                        return Json(new { message = "Successfully Added to Cart!", Details = cart });
 
-                                        }
-                                        else
-                                            return Json(new { message = "Failed to Add Cart!" });
                                     }
                                     else
-                                    {
-                                        return Json(new { message = "Qty Unavailable!" });
-
-                                    }
+                                        return Json(new { message = "Failed to Add Cart!" });
+                                }
+                                else
+                                {
+                                    return Json(new { message = "Qty Unavailable!" });
 
                                 }
-                            }
-                            else
-                            {
-                                return Json(new { message = "This Item not available" });
 
                             }
                         }
@@ -1660,7 +1576,7 @@ namespace ShopNow.Controllers
             }
             else
             {
-                var carts = _mapper.Map<CarCreateViewModel, Cart>(model);
+                var carts = _mapper.Map<CartCreateViewModel, Cart>(model);
                 carts.CartStatus = 0;
                 if (model.CustomerCode != null)
                 {
@@ -1675,20 +1591,16 @@ namespace ShopNow.Controllers
                 carts.DateUpdated = DateTime.Now;
                 db.Carts.Add(carts);
                 db.SaveChanges();
-                // carts.Code = Cart.Add(carts, out errorCode);
 
                 if (carts.Code != null || carts.Code != "")
                 {
                     return Json(new { message = "Successfully Added to Cart!", Details = carts });
-
                 }
                 else
                     return Json(new { message = "Failed to Add Cart!" });
             }
-
-
-
         }
+
         public JsonResult GetUpdateCart(string code, string qty, double amount, string customercode, int isupdate, string deliveryBoyCode = "")
         {
             var cart = db.Carts.FirstOrDefault(i => i.Code == code); // Cart.Get(code);
@@ -1786,7 +1698,7 @@ namespace ShopNow.Controllers
                     db.SaveChanges();
 
                     //Product Stock Update
-                    var product = db.Products.FirstOrDefault(i => i.Code == c.ProductCode);
+                    var product = db.Products.FirstOrDefault(i => i.Id == c.ProductCode);
                     product.HoldOnStok -= Convert.ToInt32(c.Qty);
                     db.Entry(product).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
@@ -1811,7 +1723,7 @@ namespace ShopNow.Controllers
             }
         }
 
-        public JsonResult GetShopDeliveredOrders(string shopCode, int status, int page = 1, int pageSize = 5)
+        public JsonResult GetShopDeliveredOrders(string shopId, int status, int page = 1, int pageSize = 5)
         {
 
             var model = new CartAcceptListApiViewModel();
@@ -1866,13 +1778,13 @@ namespace ShopNow.Controllers
 
             var items = model.List.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
             var previous = CurrentPage - 1;
-            var previousurl = apipath+ "/Api/GetShopDeliveredOrders?shopCode=" + shopCode + "&status=" + status + "&page=" + previous;
+            var previousurl = apipath+ "/Api/GetShopDeliveredOrders?shopId=" + shopId + "&status=" + status + "&page=" + previous;
 
             var previousPage = CurrentPage > 1 ? previousurl : "No";
 
             var current = CurrentPage + 1;
 
-            var nexturl = apipath+ "/Api/GetShopDeliveredOrders?shopCode=" + shopCode + "&status=" + status + "&page=" + current;
+            var nexturl = apipath+ "/Api/GetShopDeliveredOrders?shopId=" + shopId + "&status=" + status + "&page=" + current;
             var nextPage = CurrentPage < TotalPages ? nexturl : "No";
             var paginationMetadata = new
             {
@@ -1883,8 +1795,6 @@ namespace ShopNow.Controllers
                 previousPage,
                 nextPage
             };
-
-
             return Json(new { Page = paginationMetadata, items }, JsonRequestBehavior.AllowGet);
         }
 
@@ -2123,12 +2033,12 @@ namespace ShopNow.Controllers
                     db.SaveChanges();
 
                     //Product Stock Update
-                    var product = db.Products.FirstOrDefault(i => i.Code == c.ProductCode);
+                    var product = db.Products.FirstOrDefault(i => i.Id == c.ProductCode);
                     product.HoldOnStok -= Convert.ToInt32(c.Qty);
                     db.Entry(product).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }
-                var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);// ShopCharge.GetOrderNo(orderNo);
+                var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
                 detail.CartStatus = 5;
                 //ShopCharge.Edit(detail, out int error);
                 detail.DateUpdated = DateTime.Now;
@@ -2597,7 +2507,7 @@ namespace ShopNow.Controllers
             return Json(new { Page = paginationMetadata, items }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetShopAllOrders(string shopCode, int page = 1, int pageSize = 5)
+        public JsonResult GetShopAllOrders(string shopId, int page = 1, int pageSize = 5)
         {
             var model = new CartListApiViewModel();
             model.List = db.Carts.Where(j => (j.CartStatus == 4 || j.CartStatus == 3) && j.Status ==0).Join(db.Payments, c => c.OrderNo, p => p.OrderNo, (c, p) => new { c, p })
@@ -2606,7 +2516,7 @@ namespace ShopNow.Controllers
                 .Join(db.ShopCharges, pay => pay.py.rz.c.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
                    //.Join(db.DeliveryBoys, ca => ca.pay.py.rz.c.DeliveryBoyCode, db => db.Code, (ca, db) => new { ca, db })
                     .AsEnumerable()
-               .Where(i => (i.pay.py.rz.p.PaymentResult == "success" || i.pay.py.rz.p.PaymentResult == "pending" || i.pay.py.rz.p.PaymentMode == "Cash On Hand" || i.pay.py.rz.p.PaymentMode == "Online Payment") && i.pay.py.rz.p.ShopCode == shopCode)
+               .Where(i => (i.pay.py.rz.p.PaymentResult == "success" || i.pay.py.rz.p.PaymentResult == "pending" || i.pay.py.rz.p.PaymentMode == "Cash On Hand" || i.pay.py.rz.p.PaymentMode == "Online Payment") && i.pay.py.rz.ShopId == shopId)
                .GroupBy(j => j.pay.py.rz.c.OrderNo).Select(i => new CartListApiViewModel.CartList
                {
                    Code = i.Any() ? i.FirstOrDefault().pay.py.rz.c.Code : "N/A",
@@ -2655,13 +2565,13 @@ namespace ShopNow.Controllers
 
             var items = model.List.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
             var previous = CurrentPage - 1;
-            var previousurl = apipath+ "/Api/GetShopAllOrders?shopCode=" + shopCode + "&page=" + previous;
+            var previousurl = apipath+ "/Api/GetShopAllOrders?shopId=" + shopId + "&page=" + previous;
 
             var previousPage = CurrentPage > 1 ? previousurl : "No";
 
             var current = CurrentPage + 1;
 
-            var nexturl = apipath+ "/Api/GetShopAllOrders?shopCode=" + shopCode + "&str=" + current;
+            var nexturl = apipath+ "/Api/GetShopAllOrders?shopId=" + shopId + "&str=" + current;
             var nextPage = CurrentPage < TotalPages ? nexturl : "No";
             var paginationMetadata = new
             {
@@ -2907,7 +2817,7 @@ namespace ShopNow.Controllers
                 //model.ProductLists = db.Products.Where(i => i.ShopCode == code && i.Status == 0).ToList().Where(i => str != "" ? i.Name.ToLower().StartsWith(str.ToLower()) : true && categoryCode != "" ? i.CategoryCode == categoryCode : true).AsQueryable().ProjectTo<ShopDetails.ProductList>(_mapperConfiguration).OrderBy(i => i.Name).ToList();
                 model.ProductLists = (from pl in db.Products
                                       join m in db.MasterProducts on pl.MasterProductId equals m.Id
-                                      where pl.shopid == shid && pl.Status == 0  && (categoryCode != "" ? pl.CategoryCode == categoryCode : true)
+                                      where pl.ShopId == shid && pl.Status == 0  && (categoryCode != "" ? pl.CategoryCode == categoryCode : true)
                                       select new ShopDetails.ProductList
                                       {
                                           Code = pl.Code,
@@ -2991,7 +2901,7 @@ namespace ShopNow.Controllers
             {
                 model.ProductLists = (from pl in db.Products
                                       join m in db.MasterProducts on pl.MasterProductId equals m.Id
-                                      where pl.shopid == shid && pl.Status == 0 && m.Name.ToLower().Contains(str) && (categoryCode != "" ? pl.CategoryCode == categoryCode : true)
+                                      where pl.ShopId == shid && pl.Status == 0 && m.Name.ToLower().Contains(str) && (categoryCode != "" ? pl.CategoryCode == categoryCode : true)
                                       select new ShopDetails.ProductList
                                       {
                                           Code = pl.Code,
@@ -3010,7 +2920,7 @@ namespace ShopNow.Controllers
                 model.AddOnsLists = db.Products
                .Join(db.ShopDishAddOns, p => p.Id, d => d.ProductId, (p, d) => new { p, d })
                            .AsEnumerable()
-                           .Where(i => i.p.shopid == shid && i.p.Status == 0 && i.d.Status == 0)
+                           .Where(i => i.p.ShopId == shid && i.p.Status == 0 && i.d.Status == 0)
                            .Select(i => new ShopDetails.AddOnsList
                            {
                                Code = i.d.Code,

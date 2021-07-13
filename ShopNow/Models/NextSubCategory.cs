@@ -15,16 +15,15 @@ namespace ShopNow.Models
     public partial class NextSubCategory
     {
         public int Id { get; set; }
-        public string Code { get; set; }
         public string Name { get; set; }
-        public string SubCategoryCode { get; set; }
+        public int SubCategoryId { get; set; }
         public string SubCategoryName { get; set; }
-        public string ProductType { get; set; }
+        public int ProductTypeId { get; set; }
+        public int Status { get; set; }
+        public int Adscore { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
-        public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }
-        public int Adscore { get; set; }
     }
 }

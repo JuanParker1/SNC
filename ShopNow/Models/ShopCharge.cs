@@ -15,24 +15,23 @@ namespace ShopNow.Models
     public partial class ShopCharge
     {
         public int Id { get; set; }
-        public string Code { get; set; }
-        public string CustomerCode { get; set; }
+        public Nullable<int> CustomerId { get; set; }
         public string CustomerName { get; set; }
-        public string ShopCode { get; set; }
+        public Nullable<int> ShopId { get; set; }
         public string ShopName { get; set; }
-        public string DeliveryBoyCode { get; set; }
+        public Nullable<int> DeliveryBoyId { get; set; }
         public string DeliveryBoyName { get; set; }
+        public Nullable<int> OrderNo { get; set; }
+        public double GrossDeliveryCharge { get; set; }
+        public double ShopDeliveryDiscount { get; set; }
+        public double NetDeliveryCharge { get; set; }
+        public int OrderStatus { get; set; }
+        public double Packingcharge { get; set; }
+        public double Convinenientcharge { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }
         public string UpdatedBy { get; set; }
         public string CreatedBy { get; set; }
-        public string OrderNo { get; set; }
-        public double GrossDeliveryCharge { get; set; }
-        public double ShopDeliveryDiscount { get; set; }
-        public double NetDeliveryCharge { get; set; }
-        public int CartStatus { get; set; }
-        public double Packingcharge { get; set; }
-        public double Convinenientcharge { get; set; }
     }
 }

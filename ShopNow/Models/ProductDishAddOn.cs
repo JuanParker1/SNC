@@ -15,19 +15,13 @@ namespace ShopNow.Models
     public partial class ProductDishAddOn
     {
         public int Id { get; set; }
-        public string Code { get; set; }
         public string AddOnItemName { get; set; }
-        public string MasterProductCode { get; set; }
         public string MasterProductName { get; set; }
-        public string AddOnCategoryCode { get; set; }
+        public int AddOnCategoryId { get; set; }
         public string AddOnCategoryName { get; set; }
         public string CrustName { get; set; }
         public int Status { get; set; }
-        public System.DateTime DateEncoded { get; set; }
-        public System.DateTime DateUpdated { get; set; }
-        public string CreatedBy { get; set; }
-        public string UpdatedBy { get; set; }
-        public string PortionCode { get; set; }
+        public int PortionId { get; set; }
         public string PortionName { get; set; }
         public int MinSelectionLimit { get; set; }
         public int MaxSelectionLimit { get; set; }
@@ -36,5 +30,9 @@ namespace ShopNow.Models
         public double CrustPrice { get; set; }
         public int AddOnType { get; set; }
         public Nullable<int> MasterProductId { get; set; }
+        public System.DateTime DateEncoded { get; set; }
+        public System.DateTime DateUpdated { get; set; }
+        public string CreatedBy { get; set; }
+        public string UpdatedBy { get; set; }
     }
 }

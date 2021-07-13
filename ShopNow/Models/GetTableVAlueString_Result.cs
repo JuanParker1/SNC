@@ -10,16 +10,9 @@
 namespace ShopNow.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class GSTState
+    public partial class GetTableVAlueString_Result
     {
-        public int Id { get; set; }
-        public string Code { get; set; }
         public string Name { get; set; }
-        public int Tin { get; set; }
-        public int Status { get; set; }
-        public System.DateTime DateEncoded { get; set; }
-        public System.DateTime DateUpdated { get; set; }
     }
 }

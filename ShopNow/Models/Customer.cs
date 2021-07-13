@@ -15,7 +15,6 @@ namespace ShopNow.Models
     public partial class Customer
     {
         public int Id { get; set; }
-        public string Code { get; set; }
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
         public string Password { get; set; }
@@ -29,9 +28,6 @@ namespace ShopNow.Models
         public string PinCode { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public int Status { get; set; }
-        public System.DateTime DateEncoded { get; set; }
-        public System.DateTime DateUpdated { get; set; }
         public string LandMark { get; set; }
         public int AddressType { get; set; }
         public string FlatNo { get; set; }
@@ -42,9 +38,12 @@ namespace ShopNow.Models
         public bool AgeVerify { get; set; }
         public bool AadharVerify { get; set; }
         public string DOB { get; set; }
-        public string CreatedBy { get; set; }
-        public string UpdatedBy { get; set; }
         public string FcmTocken { get; set; }
         public string IpAddress { get; set; }
+        public int Status { get; set; }
+        public string UpdatedBy { get; set; }
+        public string CreatedBy { get; set; }
+        public System.DateTime DateEncoded { get; set; }
+        public System.DateTime DateUpdated { get; set; }
     }
 }

@@ -15,10 +15,9 @@ namespace ShopNow.Models
     public partial class ShopMember
     {
         public int Id { get; set; }
-        public string Code { get; set; }
-        public string ShopCode { get; set; }
+        public Nullable<int> ShopId { get; set; }
         public string ShopName { get; set; }
-        public string CustomerCode { get; set; }
+        public Nullable<int> CustomerId { get; set; }
         public string CustomerName { get; set; }
         public string MemeberType { get; set; }
         public string TopUpCode { get; set; }

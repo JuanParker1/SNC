@@ -15,19 +15,18 @@ namespace ShopNow.Models
     public partial class DeliveryBoyShop
     {
         public int Id { get; set; }
-        public string Code { get; set; }
         public string PhoneNumber { get; set; }
-        public string ShopCode { get; set; }
+        public int DeliveryBoyId { get; set; }
+        public string DeliveryBoyName { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
         public string Address { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public string CreatedBy { get; set; }
-        public string UpdatedBy { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }
-        public string DeliveryBoyCode { get; set; }
-        public string DeliveryBoyName { get; set; }
+        public string CreatedBy { get; set; }
+        public string UpdatedBy { get; set; }
     }
 }

@@ -21,21 +21,15 @@ namespace ShopNow.Models
         }
     
         public int Id { get; set; }
-        public string Code { get; set; }
-        public string CartCode { get; set; }
         public string CorporateID { get; set; }
         public double Amount { get; set; }
         public string PaymentMode { get; set; }
         public string Key { get; set; }
-        public int Status { get; set; }
-        public System.DateTime DateEncoded { get; set; }
-        public System.DateTime DateUpdated { get; set; }
         public string ReferenceCode { get; set; }
-        public string CustomerCode { get; set; }
+        public Nullable<int> CustomerId { get; set; }
         public string CustomerName { get; set; }
-        public string ShopCode { get; set; }
+        public Nullable<int> ShopId { get; set; }
         public string ShopName { get; set; }
-        public string Address { get; set; }
         public string GSTINNumber { get; set; }
         public double OriginalAmount { get; set; }
         public double GSTAmount { get; set; }
@@ -43,11 +37,7 @@ namespace ShopNow.Models
         public string CountryName { get; set; }
         public string PaymentResult { get; set; }
         public string Credits { get; set; }
-        public string UpdatedBy { get; set; }
-        public string CreatedBy { get; set; }
-        public string CheckSumString { get; set; }
-        public string QueryString { get; set; }
-        public string OrderNo { get; set; }
+        public int OrderNo { get; set; }
         public int PaymentCategoryType { get; set; }
         public int CreditType { get; set; }
         public double ConvenientCharge { get; set; }
@@ -59,6 +49,11 @@ namespace ShopNow.Models
         public Nullable<double> Rateperorder { get; set; }
         public string refundRemark { get; set; }
         public int refundStatus { get; set; }
+        public int Status { get; set; }
+        public string UpdatedBy { get; set; }
+        public string CreatedBy { get; set; }
+        public System.DateTime DateEncoded { get; set; }
+        public System.DateTime DateUpdated { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Banner> Banners { get; set; }

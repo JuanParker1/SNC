@@ -15,12 +15,11 @@ namespace ShopNow.Models
     public partial class UserEnquiry
     {
         public int Id { get; set; }
-        public string Code { get; set; }
-        public string CustomerCode { get; set; }
+        public int CustomerId { get; set; }
         public string CustomerName { get; set; }
-        public string ShopCode { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public string ProductCode { get; set; }
+        public int ProductId { get; set; }
         public string ProductName { get; set; }
         public string Qty { get; set; }
         public double Price { get; set; }

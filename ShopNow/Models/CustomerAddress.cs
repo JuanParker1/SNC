@@ -15,9 +15,8 @@ namespace ShopNow.Models
     public partial class CustomerAddress
     {
         public int Id { get; set; }
-        public string Code { get; set; }
         public string Name { get; set; }
-        public string CustomerCode { get; set; }
+        public int CustomerId { get; set; }
         public string CustomerName { get; set; }
         public string CountryName { get; set; }
         public string StateName { get; set; }
@@ -27,13 +26,13 @@ namespace ShopNow.Models
         public string PinCode { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public int Status { get; set; }
-        public System.DateTime DateEncoded { get; set; }
-        public System.DateTime DateUpdated { get; set; }
         public int AddressType { get; set; }
         public string LandMark { get; set; }
         public string FlatNo { get; set; }
+        public int Status { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
+        public System.DateTime DateEncoded { get; set; }
+        public System.DateTime DateUpdated { get; set; }
     }
 }

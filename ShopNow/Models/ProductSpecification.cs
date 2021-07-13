@@ -15,16 +15,15 @@ namespace ShopNow.Models
     public partial class ProductSpecification
     {
         public int Id { get; set; }
-        public string Code { get; set; }
         public string Value { get; set; }
-        public int Status { get; set; }
-        public System.DateTime DateEncoded { get; set; }
-        public string SpecificationCode { get; set; }
+        public int SpecificationId { get; set; }
         public string SpecificationName { get; set; }
-        public string MasterProductCode { get; set; }
+        public int MasterProductId { get; set; }
         public string MasterProductName { get; set; }
+        public int Status { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
         public System.DateTime DateUpdated { get; set; }
+        public System.DateTime DateEncoded { get; set; }
     }
 }

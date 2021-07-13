@@ -12,7 +12,7 @@ namespace ShopNow.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class refundsData
+    public partial class RefundsData
     {
         public long id { get; set; }
         public string refundid { get; set; }

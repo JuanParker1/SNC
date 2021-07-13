@@ -15,7 +15,6 @@ namespace ShopNow.Models
     public partial class DrugCompoundDetail
     {
         public int Id { get; set; }
-        public string Code { get; set; }
         public string AliasName { get; set; }
         public string InteractingCompounds { get; set; }
         public string IntakeIndications { get; set; }
@@ -27,9 +26,9 @@ namespace ShopNow.Models
         public bool Pregnancy { get; set; }
         public bool Breastfeeding { get; set; }
         public bool Driving { get; set; }
+        public int Status { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
-        public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }
     }

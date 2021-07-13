@@ -22,76 +22,50 @@ namespace ShopNow.Models
         }
     
         public int Id { get; set; }
-        public string Code { get; set; }
         public string Name { get; set; }
-        public string ShopCode { get; set; }
         public string ShopName { get; set; }
-        public string CategoryCode { get; set; }
-        public string CategoryName { get; set; }
-        public string BrandCode { get; set; }
-        public string BrandName { get; set; }
-        public string ShopCategoryCode { get; set; }
+        public int ShopCategoryId { get; set; }
         public string ShopCategoryName { get; set; }
-        public string MainSNCode { get; set; }
         public string GTIN { get; set; }
         public string UPC { get; set; }
-        public string GTIN12 { get; set; }
-        public string GTIN13 { get; set; }
         public string GTIN14 { get; set; }
         public string EAN { get; set; }
         public string ISBN { get; set; }
-        public string ImagePath { get; set; }
         public double Price { get; set; }
         public int Qty { get; set; }
-        public int Status { get; set; }
-        public System.DateTime DateEncoded { get; set; }
-        public string MasterProductCode { get; set; }
-        public string MasterProductName { get; set; }
-        public string ProductType { get; set; }
-        public string ColorCode { get; set; }
-        public string ShortDescription { get; set; }
-        public string LongDescription { get; set; }
-        public string Specification { get; set; }
-        public System.DateTime DateUpdated { get; set; }
+        public string TypeName { get; set; }
+        public int TypeId { get; set; }
         public int MinSelectionLimit { get; set; }
         public int MaxSelectionLimit { get; set; }
         public bool Customisation { get; set; }
         public double MenuPrice { get; set; }
-        public string CreatedBy { get; set; }
-        public string UpdatedBy { get; set; }
-        public double weight { get; set; }
-        public string SizeLB { get; set; }
-        public string MeasurementUnitCode { get; set; }
-        public string MeasurementUnitName { get; set; }
-        public bool PriscriptionCategory { get; set; }
-        public string DrugCompoundDetailCode { get; set; }
-        public string CombinationDrugCompound { get; set; }
-        public string iBarU { get; set; }
-        public string Manufacturer { get; set; }
-        public string OriginCountry { get; set; }
-        public string ItemId { get; set; }
-        public int Percentage { get; set; }
-        public string DiscountCategoryCode { get; set; }
+        public int IBarU { get; set; }
+        public int ItemId { get; set; }
+        public double Percentage { get; set; }
+        public int DiscountCategoryId { get; set; }
         public string DiscountCategoryName { get; set; }
         public double DiscountCategoryPercentage { get; set; }
         public int DataEntry { get; set; }
-        public string GoogleTaxonomyCode { get; set; }
         public int AppliesOnline { get; set; }
         public int DiscountType { get; set; }
         public int DiscountCategoryType { get; set; }
-        public string PackageCode { get; set; }
-        public string PackageName { get; set; }
-        public string ImagePathLarge1 { get; set; }
-        public string ImagePathLarge2 { get; set; }
-        public string ImagePathLarge3 { get; set; }
-        public string ImagePathLarge4 { get; set; }
-        public string ImagePathLarge5 { get; set; }
-        public Nullable<bool> isOnline { get; set; }
-        public Nullable<int> shopid { get; set; }
-        public Nullable<int> MasterProductId { get; set; }
-        public Nullable<int> HoldOnStok { get; set; }
-        public Nullable<int> PackagingType { get; set; }
-        public Nullable<double> PackagingCharge { get; set; }
+        public bool IsOnline { get; set; }
+        public int ShopId { get; set; }
+        public int MasterProductId { get; set; }
+        public int HoldOnStok { get; set; }
+        public int PackingType { get; set; }
+        public double TaxPercentage { get; set; }
+        public double SpecialCostOfDelivery { get; set; }
+        public int OutletId { get; set; }
+        public string CategoryNameMain { get; set; }
+        public string ItemTimeStamp { get; set; }
+        public double LoyaltyPoints { get; set; }
+        public double PackingCharge { get; set; }
+        public int Status { get; set; }
+        public System.DateTime DateEncoded { get; set; }
+        public System.DateTime DateUpdated { get; set; }
+        public string CreatedBy { get; set; }
+        public string UpdatedBy { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderItem> OrderItems { get; set; }

@@ -264,7 +264,7 @@ namespace ShopNow.ViewModels
 
 
     //Api
-    public class CarCreateViewModel
+    public class CartCreateViewModel
     {
         public string Code { get; set; }
         public string CustomerCode { get; set; }
@@ -285,7 +285,7 @@ namespace ShopNow.ViewModels
         public string ImagePath { get; set; }
         public string Qty { get; set; }
         public double Price { get; set; }
-        public string ItemId { get; set; }
+        public int ItemId { get; set; }
     }
 
     public class OrderCreateViewModel
@@ -312,7 +312,7 @@ namespace ShopNow.ViewModels
             public int Quantity { get; set; }
             public double UnitPrice { get; set; }
             public double Price { get; set; }
-            public string ItemId { get; set; }
+            public int ItemId { get; set; }
         }
     }
 

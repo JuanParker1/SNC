@@ -12,7 +12,7 @@ namespace ShopNow.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class paymentsData
+    public partial class PaymentsData
     {
         public long id { get; set; }
         public string paymentId { get; set; }

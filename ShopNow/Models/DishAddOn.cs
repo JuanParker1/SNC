@@ -15,21 +15,20 @@ namespace ShopNow.Models
     public partial class DishAddOn
     {
         public int Id { get; set; }
-        public string Code { get; set; }
         public int Qty { get; set; }
         public double Price { get; set; }
-        public int Status { get; set; }
-        public System.DateTime DateEncoded { get; set; }
         public string Name { get; set; }
-        public string AddOnCategoryCode { get; set; }
+        public int AddOnCategoryId { get; set; }
         public string AddOnCategoryName { get; set; }
         public string CrustName { get; set; }
-        public string MasterProductCode { get; set; }
+        public int MasterProductId { get; set; }
         public string MasterProductName { get; set; }
-        public string PortionCode { get; set; }
+        public int PortionId { get; set; }
         public string PortionName { get; set; }
+        public int Status { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
         public System.DateTime DateUpdated { get; set; }
+        public System.DateTime DateEncoded { get; set; }
     }
 }

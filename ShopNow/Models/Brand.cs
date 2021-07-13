@@ -15,12 +15,11 @@ namespace ShopNow.Models
     public partial class Brand
     {
         public int Id { get; set; }
-        public string Code { get; set; }
         public string Name { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }
-        public string ProductType { get; set; }
+        public int ProductTypeId { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
     }

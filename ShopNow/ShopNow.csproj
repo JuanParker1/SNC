@@ -19,10 +19,14 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
-    <IISExpressSSLPort>45678</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
-    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
+    <IISExpressSSLPort>
+    </IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication>
+    </IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>
+    </IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>
+    </IISExpressUseClassicPipelineMode>
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -405,9 +409,6 @@
     <Compile Include="Models\BrandOwner.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Cart.cs">
-      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Category.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
@@ -436,22 +437,7 @@
     <Compile Include="Models\DrugCompoundDetail.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Employee.cs">
-      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\getCategoryListbyShopcode_Result.cs">
-      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\GetProductList_Result.cs">
-      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\GetShopCategoryProducts_Result.cs">
-      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\GetShopname_Result.cs">
-      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\GSTState.cs">
+    <Compile Include="Models\GetTableVAlueString_Result.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MarketingAgent.cs">
@@ -484,7 +470,7 @@
     <Compile Include="Models\Payment.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\paymentsData.cs">
+    <Compile Include="Models\PaymentsData.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\PincodeRate.cs">
@@ -511,13 +497,7 @@
     <Compile Include="Models\ProductSpecificationItem.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ReatillerPaymentReportAdmin_Result.cs">
-      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ReatillerPaymentReport_Result.cs">
-      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\refundsData.cs">
+    <Compile Include="Models\RefundsData.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Shop.cs">
@@ -544,10 +524,10 @@
     <Compile Include="Models\SubCategory.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\TopUp.cs">
+    <Compile Include="Models\test_Result.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\User.cs">
+    <Compile Include="Models\TopUp.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\UserEnquiry.cs">

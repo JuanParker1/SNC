@@ -15,12 +15,11 @@ namespace ShopNow.Models
     public partial class PlatFormCreditRate
     {
         public int Id { get; set; }
-        public string Code { get; set; }
         public double RatePerOrder { get; set; }
         public double DailyViewer { get; set; }
+        public int Status { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
-        public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }
     }

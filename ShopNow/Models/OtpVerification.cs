@@ -15,9 +15,10 @@ namespace ShopNow.Models
     public partial class OtpVerification
     {
         public int Id { get; set; }
-        public string Code { get; set; }
-        public string CustomerCode { get; set; }
+        public int CustomerId { get; set; }
         public string CustomerName { get; set; }
+        public int ShopId { get; set; }
+        public int OrderNo { get; set; }
         public string PhoneNumber { get; set; }
         public string ReferenceCode { get; set; }
         public string Otp { get; set; }
@@ -25,9 +26,7 @@ namespace ShopNow.Models
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }
-        public string ShopCode { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
-        public string OrderNo { get; set; }
     }
 }
