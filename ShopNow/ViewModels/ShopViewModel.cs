@@ -263,7 +263,7 @@ namespace ShopNow.ViewModels
         public HttpPostedFileBase AuthorisedDistributorImage { get; set; }
         public string Otp { get; set; }
 
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string OwnerPhoneNumber { get; set; }
         public string PhoneNumber { get; set; }
@@ -316,20 +316,6 @@ namespace ShopNow.ViewModels
         public string IpAddress { get; set; }
         public int CustomerReview { get; set; }
         public double Rating { get; set; }
-        public string MondayOpenTime { get; set; }
-        public string TuesdayOpenTime { get; set; }
-        public string WednesdayOpenTime { get; set; }
-        public string ThursdayOpenTime { get; set; }
-        public string FridayOpenTime { get; set; }
-        public string SaturdayOpenTime { get; set; }
-        public string SundayOpenTime { get; set; }
-        public string MondayCloseTime { get; set; }
-        public string TuesdayCloseTime { get; set; }
-        public string WednesdayCloseTime { get; set; }
-        public string ThursdayCloseTime { get; set; }
-        public string FridayCloseTime { get; set; }
-        public string SaturdayCloseTime { get; set; }
-        public string SundayCloseTime { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public bool AccessStaff { get; set; }
@@ -390,16 +376,16 @@ namespace ShopNow.ViewModels
 
     public class ShopFranchiseViewModel
     {
-        public string ShopCode { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public string MarketingAgentCode { get; set; }
+        public string MarketingAgentId { get; set; }//clarify
         public string MarketingAgentName { get; set; }
         public List<FranchiseList> List { get; set; }
         public class FranchiseList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string Name { get; set; }
-            public string MarketingAgentCode { get; set; }
+            public int MarketingAgentId { get; set; }
             public string MarketingAgentName { get; set; }
         }
     }
