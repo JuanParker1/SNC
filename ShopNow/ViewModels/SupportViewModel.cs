@@ -43,7 +43,7 @@ namespace ShopNow.ViewModels
         public List<DeliveryBoy> DeliveryBoyList { get; set; }
         public class DeliveryBoy
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string Name { get; set; }
         }
     }

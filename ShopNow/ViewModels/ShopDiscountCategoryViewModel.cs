@@ -46,10 +46,10 @@ namespace ShopNow.ViewModels
         public List<CategoryList> CategoryLists { get; set; }
         public class CategoryList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public double DiscountPercentage { get; set; }
             public string CategoryName { get; set; }
-            public string CategoryCode { get; set; }
+            public int CategoryId { get; set; }
             public int Type { get; set; }
             public int CategoryType { get; set; }
         }

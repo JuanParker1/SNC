@@ -65,7 +65,7 @@ namespace ShopNow.Controllers
             model.DeliveryBoyList = db.DeliveryBoys.Where(i => i.isAssign == 0 && i.OnWork == 0 && i.Active == 1 && i.Status == 0)
                 .Select(i => new DeliveryBoyAssignViewModel.DeliveryBoy
                 {
-                    Code = i.Code,
+                    Id = i.Id,
                     Name = i.Name
                 }).ToList();
 

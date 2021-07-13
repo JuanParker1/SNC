@@ -83,19 +83,6 @@ namespace ShopNow.Controllers
             //var model = new ShopListViewModel();
             var List = (from s in db.Shops
                         select s).OrderBy(s => s.Name).Where(i=> i.Status == 0).ToList();
-            //model.List = (from mp in db.Shops
-            //            select new ShopListViewModel.ShopList
-            //            {
-            //              Code = mp.Code,
-            //              Name = mp.Name,
-            //              OwnerPhoneNumber = mp.OwnerPhoneNumber,
-            //              PhoneNumber = mp.PhoneNumber,
-            //              ShopCategoryName = mp.ShopCategoryName,
-            //              Address = mp.Address,
-            //              DistrictName = mp.DistrictName,
-            //              StateName = mp.StateName,
-            //              PinCode = mp.PinCode
-            //            }).OrderBy(mp => mp.Name).Where(i=> i.Status == 0).ToList();
 
             return View(List);
         }
@@ -109,12 +96,7 @@ namespace ShopNow.Controllers
                         select s).OrderBy(s => s.Name).Where(i => i.Status == 1) .ToList();
             return View(List);
 
-            //var user = ((Helpers.Sessions.User)Session["USER"]);
-            //ViewBag.Name = user.Name;
-            //var model = new ShopListViewModel();
-            //model.List = Shop.GetInActiveList().AsQueryable().ProjectTo<ShopListViewModel.ShopList>(_mapperConfiguration).OrderBy(i => i.Name).ToList();
-
-            //return View(model);
+           
         }
 
         [AccessPolicy(PageCode = "SHNSHPC001")]
@@ -130,8 +112,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNSHPC001")]
         public ActionResult Create(ShopRegisterViewModel model)
         {
-            //var shopduplicateCount = db.Shops.Where(m => m.Latitude == model.Latitude && m.Longitude == model.Longitude).Count();
-            //var shopbeforeApprovalCount = db.Shops.Where(m => m.Latitude == model.Latitude && m.Longitude == model.Longitude && m.Status == 0).Count();
+           
             var shopduplicateCount = db.Shops.Where(m => m.GooglePlaceId == model.GooglePlaceId).Count();
             var shopbeforeApprovalCount = db.Shops.Where(m => m.GooglePlaceId == model.GooglePlaceId && m.Status == 0).Count();
             if (shopduplicateCount != 0)
@@ -150,7 +131,7 @@ namespace ShopNow.Controllers
             }
 
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var customer = db.Customers.FirstOrDefault(i => i.Code == user.Code); //Customer.Get(user.Code);
+            var customer = db.Customers.FirstOrDefault(i => i.Id == user.Id); //Customer.Get(user.Code);
             var shop = _mapper.Map<ShopRegisterViewModel, Shop>(model);
             shop.Status = 1;
             var custom = db.Customers.FirstOrDefault(i => i.Code == shop.CustomerCode); // Customer.Get(shop.CustomerCode);
