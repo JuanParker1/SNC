@@ -246,8 +246,6 @@ namespace ShopNow.Controllers
         [HttpPost]
         public JsonResult Register(CustomerCreateViewModel model)
         {
-            //int errorCode = 0;
-
             var otpVerification = db.Customers.FirstOrDefault(i => i.PhoneNumber == model.PhoneNumber && i.Status == 0);
             if (otpVerification == null)
             {
@@ -264,7 +262,6 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
                 Admin admin = new Admin();
                 admin.AnonymisedID = user.Id.ToString();
-                //Admin.Add(admin, out errorCode);
                 admin.Code = ShopNow.Helpers.DRC.Generate("ADM");
                 admin.OfficialID = AdminHelpers.SecureData(admin.Code);
                 admin.AnonymisedID = AdminHelpers.SecureData(admin.AnonymisedID);
@@ -273,11 +270,11 @@ namespace ShopNow.Controllers
                 admin.DateUpdated = DateTime.Now;
                 db.Admins.Add(admin);
                 db.SaveChanges();
-                if (user.Code != null || user.Code != "")
+                if (user.Id !=0)
                 {
                     var otpmodel = new OtpViewModel();
                     var models = _mapper.Map<OtpViewModel, OtpVerification>(otpmodel);
-                    models.CustomerCode = user.Code;
+                    models.CustomerId = user.Id;
                     models.CustomerName = user.Name;
                     models.PhoneNumber = model.PhoneNumber;
                     models.Otp = _generatedCode;
@@ -292,21 +289,17 @@ namespace ShopNow.Controllers
 
                     string joyra = "04448134440";
                     string Msg = "Hi, " + models.Otp + " is the OTP for (Shop Now Chat) Verification at " + time + " with " + models.ReferenceCode + " reference - Joyra";
-                    //string Msg = "ShopNowChat[#] " + models.Otp + " is the verification OTP " + time + " time " + date + " date " + models.ReferenceCode + " reference";
 
                     string result = SendSMS.execute(joyra, model.PhoneNumber, Msg);
-                    models.Code = ShopNow.Helpers.DRC.Generate("SMS");
                     models.Status = 0;
                     models.DateEncoded = DateTime.Now;
                     models.DateUpdated = DateTime.Now;
                     db.OtpVerifications.Add(models);
                     db.SaveChanges();
-                    model.Code = models.Code;
-                    // model.Code = OtpVerification.Add(models, out errorCode);
 
-                    if (model.Code != null)
+                    if (model.Id != 0)
                     {
-                        return Json(new { message = "Successfully Registered and OTP send!", Code = user.Code, user.Position });
+                        return Json(new { message = "Successfully Registered and OTP send!", id = user.Id, user.Position });
 
 
                     }
@@ -322,7 +315,7 @@ namespace ShopNow.Controllers
                 var otpmodel = new OtpViewModel();
                 var customer = db.Customers.FirstOrDefault(i => i.PhoneNumber == model.PhoneNumber);
                 var models = _mapper.Map<OtpViewModel, OtpVerification>(otpmodel);
-                models.CustomerCode = customer.Code;
+                models.CustomerId = customer.Id;
                 models.CustomerName = customer.Name;
                 models.PhoneNumber = model.PhoneNumber;
                 models.Otp = _generatedCode;
@@ -335,20 +328,16 @@ namespace ShopNow.Controllers
 
                 string joyra = "04448134440";
                 string Msg = "Hi, " + models.Otp + " is the OTP for (Shop Now Chat) Verification at " + time + " with " + models.ReferenceCode + " reference - Joyra";
-                //   string Msg = "ShopNowChat[#] " + models.Otp + " is the verification OTP " + time + " time " + date + " date " + models.ReferenceCode + " reference";
 
                 string result = SendSMS.execute(joyra, model.PhoneNumber, Msg);
-                //model.Code = OtpVerification.Add(models, out errorCode);
-                models.Code = ShopNow.Helpers.DRC.Generate("SMS");
                 models.Status = 0;
                 models.DateEncoded = DateTime.Now;
                 models.DateUpdated = DateTime.Now;
                 db.OtpVerifications.Add(models);
                 db.SaveChanges();
-                model.Code = models.Code;
-                if (model.Code != null)
+                if (models.Id != 0)
                 {
-                    return Json(new { message = "Already Customer and OTP send!", Code = customer.Code, Position = customer.Position });
+                    return Json(new { message = "Already Customer and OTP send!", id = customer.Id, Position = customer.Position });
 
                 }
                 else
@@ -359,8 +348,7 @@ namespace ShopNow.Controllers
         [HttpPost]
         public JsonResult CustomerUpdate(CustomerCreateViewModel model)
         {
-            //int errorCode = 0;
-            var customer = db.Customers.FirstOrDefault(i => i.Code == model.Code);// Customer.Get(model.Code);
+            var customer = db.Customers.FirstOrDefault(i => i.Id == model.Id);
             if ((model.Name == null && model.Email == null) || (model.Name == "" && model.Email == ""))
             {
                 customer.AadharName = model.AadharName;
@@ -370,7 +358,6 @@ namespace ShopNow.Controllers
                 customer.DOB = model.DOB;
                 customer.ImagePath = model.ImagePath;
                 customer.UpdatedBy = customer.Name;
-                //Customer.Edit(customer, out errorCode);
                 customer.DateUpdated = DateTime.Now;
                 db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
@@ -382,7 +369,6 @@ namespace ShopNow.Controllers
                 customer.Name = model.Name;
                 customer.Email = model.Email;
                 customer.UpdatedBy = customer.Name;
-                //// Customer.Edit(customer, out errorCode);
                 customer.DateUpdated = DateTime.Now;
                 db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
@@ -394,36 +380,33 @@ namespace ShopNow.Controllers
         [HttpPost]
         public JsonResult CustomerPassword(CustomerPasswordViewModel model)
         {
-            //int errorCode = 0;
             if (model.Password == null || model.Password == "")
             {
                 return Json(new { message = "Not Give Empty!" });
             }
-            else if (model.CustomerCode != null || model.CustomerCode != "")
+            else if (model.CustomerId != 0)
             {
-                var customer = db.Customers.FirstOrDefault(i => i.Code == model.CustomerCode);// Customer.Get(model.CustomerCode);
+                var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);// Customer.Get(model.CustomerCode);
                 customer.Password = model.Password;
                 customer.Position = 1;
                 customer.UpdatedBy = customer.Name;
-                //Customer.Edit(customer, out errorCode);
                 customer.DateUpdated = DateTime.Now;
                 db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return Json(new { message = "Successfully Your Password Created!" });
             }
-            else if (model.StaffCode != null || model.StaffCode != "")
+            else if (model.StaffId != 0)
             {
-                var staff = db.Staffs.FirstOrDefault(i => i.Code == model.StaffCode);// Staff.Get(model.StaffCode);
+                var staff = db.Staffs.FirstOrDefault(i => i.Id == model.StaffId);
                 staff.Password = model.Password;
                 staff.UpdatedBy = staff.Name;
-                //Staff.Edit(staff, out errorCode);
                 staff.DateUpdated = DateTime.Now;
                 db.Entry(staff).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                var customer = db.Customers.FirstOrDefault(i => i.Code == staff.CustomerCode);// Customer.Get(staff.CustomerCode);
+
+                var customer = db.Customers.FirstOrDefault(i => i.Id == staff.CustomerId);
                 customer.Position = 2;
                 customer.UpdatedBy = customer.Name;
-                //Customer.Edit(customer, out errorCode);
                 customer.DateUpdated = DateTime.Now;
                 db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
@@ -438,33 +421,29 @@ namespace ShopNow.Controllers
 
         }
 
-        public JsonResult GetCustomerAddOnsDelete(string Code)
+        public JsonResult GetCustomerAddOnsDelete(int id)
         {
-            var customerAddress = db.CustomerAddresses.FirstOrDefault(i => i.Code == Code);// CustomerAddress.Get(Code);
+            var customerAddress = db.CustomerAddresses.FirstOrDefault(i => i.Id == id);
             customerAddress.Status = 2;
             db.Entry(customerAddress).State = System.Data.Entity.EntityState.Modified;
             db.SaveChangesAsync();
 
-            if (Code != null || Code != "")
-            {
+            if (id != 0)
                 return Json(new { message = "Successfully Deleted Addons Address!", AddressType = customerAddress.AddressType }, JsonRequestBehavior.AllowGet);
-            }
             else
-            {
                 return Json(new { message = "Failed to Delete Addons Address!" }, JsonRequestBehavior.AllowGet);
-            }
 
         }
 
         [HttpPost]
         public JsonResult CustomerAddOns(CustomerAddOnsAddressViewModel model)
         {
-            //int errorCode = 0;
-            var customerAddons = db.CustomerAddresses.Where(i => i.CustomerCode == model.CustomerCode && i.AddressType == model.AddressType && i.Status == 0).FirstOrDefault();
+            var customerAddons = db.CustomerAddresses.Where(i => i.CustomerId == model.CustomerId && i.AddressType == model.AddressType && i.Status == 0).FirstOrDefault();
             if (customerAddons != null)
             {
-                if (db.CustomerAddresses.Where(i => i.CustomerCode == model.CustomerCode  && i.Status == 0 && i.Code == model.Code).Count()>0) {
-                    var customerAdd = db.CustomerAddresses.Where(i => i.CustomerCode == model.CustomerCode && i.AddressType == model.AddressType && i.Status == 0).FirstOrDefault(); // CustomerAddress.GetAddessType(model.CustomerCode, model.AddressType);
+                if (db.CustomerAddresses.Where(i => i.CustomerId == model.CustomerId && i.Status == 0 && i.Id == model.Id).Count() > 0)
+                {
+                    var customerAdd = db.CustomerAddresses.Where(i => i.CustomerId == model.CustomerId && i.AddressType == model.AddressType && i.Status == 0).FirstOrDefault();
                     customerAdd.Name = model.Name;
                     customerAdd.CountryName = model.CountryName;
                     customerAdd.AddressType = model.AddressType;
@@ -484,7 +463,7 @@ namespace ShopNow.Controllers
                     // CustomerAddress.Edit(customerAdd, out errorCode);
                     if (model.AddressType == 0)
                     {
-                        var customer = db.Customers.Where(i => i.Code == model.CustomerCode).FirstOrDefault();// Customer.Get(model.CustomerCode);
+                        var customer = db.Customers.Where(i => i.Id == model.CustomerId).FirstOrDefault();// Customer.Get(model.CustomerCode);
                         customer.AddressType = model.AddressType;
                         customer.LandMark = model.LandMark;
                         customer.FlatNo = model.FlatNo;
@@ -504,7 +483,7 @@ namespace ShopNow.Controllers
                     }
 
 
-                    if (model.CustomerCode != null || model.CustomerCode != "")
+                    if (model.CustomerId != 0)
                     {
                         return Json(new { message = "Successfully Added Addons Address!", Details = customerAdd }, JsonRequestBehavior.AllowGet);
                     }
@@ -521,72 +500,52 @@ namespace ShopNow.Controllers
             }
             else
             {
-                //if (db.CustomerAddresses.Where(i => i.CustomerCode == model.CustomerCode && i.Status == 0 && i.Code == model.Code).Count() > 0)
-                //{
-                    var user = _mapper.Map<CustomerAddOnsAddressViewModel, CustomerAddress>(model);
-                    user.Code = _generateCode("CAR");
-                    user.Status = 0;
-                    user.DateEncoded = DateTime.Now;
-                    user.DateUpdated = DateTime.Now;
-                    db.CustomerAddresses.Add(user);
+                var user = _mapper.Map<CustomerAddOnsAddressViewModel, CustomerAddress>(model);
+                user.Status = 0;
+                user.DateEncoded = DateTime.Now;
+                user.DateUpdated = DateTime.Now;
+                db.CustomerAddresses.Add(user);
+                db.SaveChanges();
+
+                if (model.AddressType == 0)
+                {
+                    var customer = db.Customers.Where(i => i.Id == model.CustomerId).FirstOrDefault();
+                    customer.AddressType = model.AddressType;
+                    customer.LandMark = model.LandMark;
+                    customer.FlatNo = model.FlatNo;
+                    customer.CountryName = model.CountryName;
+                    customer.StateName = model.StateName;
+                    customer.DistrictName = model.DistrictName;
+                    customer.StreetName = model.StreetName;
+                    customer.Address = model.Address;
+                    customer.PinCode = model.PinCode;
+                    customer.Latitude = model.Latitude;
+                    customer.Longitude = model.Longitude;
+                    customer.UpdatedBy = customer.Name;
+                    customer.DateUpdated = DateTime.Now;
+                    db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
-                    model.Code = user.Code;
-                    // model.Code = CustomerAddress.Add(user, out errorCode);
-                    //if (db.Customers.Where(i => i.Code == model.CustomerCode && i.Status == 0 && i.Code == model.Code && i.AddressType == 0).Count() > 0)
-                   // {
-                        if (model.AddressType == 0)
-                        {
-                            var customer = db.Customers.Where(i => i.Code == model.CustomerCode).FirstOrDefault();// Customer.Get(model.CustomerCode);
-                            customer.AddressType = model.AddressType;
-                            customer.LandMark = model.LandMark;
-                            customer.FlatNo = model.FlatNo;
-                            customer.CountryName = model.CountryName;
-                            customer.StateName = model.StateName;
-                            customer.DistrictName = model.DistrictName;
-                            customer.StreetName = model.StreetName;
-                            customer.Address = model.Address;
-                            customer.PinCode = model.PinCode;
-                            customer.Latitude = model.Latitude;
-                            customer.Longitude = model.Longitude;
-                            customer.UpdatedBy = customer.Name;
-                            //Customer.Edit(customer, out errorCode);
-                            customer.DateUpdated = DateTime.Now;
-                            db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
-                            db.SaveChanges();
-                        }
-                    //}
-                    //else
-                    //{
-                    //    return Json(new { message = "Already This Address Exist!" }, JsonRequestBehavior.AllowGet);
-                    //}
-
-                    if (user.Code != null || user.Code != "")
-                    {
-                        return Json(new { message = "Successfully Added Addons Address!", Details = user }, JsonRequestBehavior.AllowGet);
-                    }
-                    else
-                    {
-                        return Json(new { message = "Failed to Add Addons Address!" }, JsonRequestBehavior.AllowGet);
-                    }
-                //}
-                //else
-                //{
-                //    return Json(new { message = "Already This Address Exist!" }, JsonRequestBehavior.AllowGet);
-                //}
+                }
+                if (user.Id != 0)
+                {
+                    return Json(new { message = "Successfully Added Addons Address!", Details = user }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { message = "Failed to Add Addons Address!" }, JsonRequestBehavior.AllowGet);
+                }
             }
-
-
         }
 
         [HttpPost]
         public JsonResult CustomerAddressUpdate(CustomerAddressViewModel model)
         {
-            int checkCustomerAddTypeExist = db.CustomerAddresses.Where(i => i.Code != model.Code && i.CustomerCode == model.CustomerCode && i.AddressType == model.AddressType && i.Status == 0).Count();
-            var customerAddress = db.CustomerAddresses.Where(i => i.Code == model.Code && i.Status == 0).FirstOrDefault();
+            int checkCustomerAddTypeExist = db.CustomerAddresses.Where(i => i.Id != model.Id && i.CustomerId == model.CustomerId && i.AddressType == model.AddressType && i.Status == 0).Count();
+            var customerAddress = db.CustomerAddresses.Where(i => i.Id == model.Id && i.Status == 0).FirstOrDefault();
             if (checkCustomerAddTypeExist > 0)
             {
                 return Json(new { message = "This Addresstype Alreay Exist", Details = customerAddress });
-                
+
             }
             else
             {
@@ -607,46 +566,6 @@ namespace ShopNow.Controllers
                 db.Entry(customerAddress).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
-            ////int errorCode = 0;
-            //var customerAdd = db.CustomerAddresses.Where(i => i.Code == model.Code).FirstOrDefault();// CustomerAddress.Get(model.Code);
-            //customerAdd.Name = model.Name;
-            //customerAdd.CountryName = model.CountryName;
-            //customerAdd.AddressType = model.AddressType;
-            //customerAdd.FlatNo = model.FlatNo;
-            //customerAdd.LandMark = model.LandMark;
-            //customerAdd.StateName = model.StateName;
-            //customerAdd.DistrictName = model.DistrictName;
-            //customerAdd.StreetName = model.StreetName;
-            //customerAdd.Address = model.Address;
-            //customerAdd.PinCode = model.PinCode;
-            //customerAdd.Latitude = model.Latitude;
-            //customerAdd.Longitude = model.Longitude;
-            //customerAdd.UpdatedBy = customerAdd.Name;
-            //customerAdd.DateUpdated = DateTime.Now;
-            //db.Entry(customerAdd).State = System.Data.Entity.EntityState.Modified;
-            //db.SaveChanges();
-            ////CustomerAddress.Edit(customerAdd, out errorCode);
-
-            //if (model.AddressType == 0)
-            //{
-            //    var customer = db.Customers.Where(i => i.Code == customerAdd.CustomerCode).FirstOrDefault();// Customer.Get(customerAdd.CustomerCode);
-            //    customer.AddressType = model.AddressType;
-            //    customer.LandMark = model.LandMark;
-            //    customer.FlatNo = model.FlatNo;
-            //    customer.CountryName = model.CountryName;
-            //    customer.StateName = model.StateName;
-            //    customer.DistrictName = model.DistrictName;
-            //    customer.StreetName = model.StreetName;
-            //    customer.Address = model.Address;
-            //    customer.PinCode = model.PinCode;
-            //    customer.Latitude = model.Latitude;
-            //    customer.Longitude = model.Longitude;
-            //    customer.UpdatedBy = customer.Name;
-            //    // Customer.Edit(customer, out errorCode);
-            //    customer.DateUpdated = DateTime.Now;
-            //    db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
-            //    db.SaveChanges();
-            //}
 
             return Json(new { message = "Successfully Updated Your Address!", Details = customerAddress });
         }
@@ -701,12 +620,7 @@ namespace ShopNow.Controllers
             {
                 if (otpVerification.FirstOrDefault().Otp == digits)
                 {
-                    //var otpverify = OtpVerification.Get(otpVerification.FirstOrDefault().Code);
-                    //otpverify.Verify = true;
-                    //otpverify.UpdatedBy = otpverify.CustomerName;
                     otpVerification[0].Verify = true;
-
-                    // OtpVerification.Edit(otpVerification[0], out int errorCode);
                     db.Entry(otpVerification[0]).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                     return Json(new { message = "Successfully Your Phone Number Verified!" }, JsonRequestBehavior.AllowGet);
@@ -718,8 +632,6 @@ namespace ShopNow.Controllers
             }
             else
                 return Json(new { message = "Use Todays OTP. Please try!" }, JsonRequestBehavior.AllowGet);
-            //  }else
-            // return Json(new { message = "Your OTP Code expired. Please try!" });
         }
 
 
@@ -753,39 +665,37 @@ namespace ShopNow.Controllers
             }
         }
 
-        public JsonResult GetPaymentCredit(string customerCode)
+        public JsonResult GetPaymentCredit(int customerId)
         {
 
            
             var customerName = (from c in db.Customers
-                               where c.Code == customerCode && c.Position ==1
+                               where c.Id == customerId && c.Position ==1
                                select c.Name).FirstOrDefault();
-            var orderCount = (from s in db.Carts
-                              join sh in db.Shops on s.ShopCode equals sh.Code
-                              join c in db.Customers on sh.CustomerCode equals c.Code
-                              //where sh.CustomerCode == customerCode && (s.CartStatus >= 2 && s.CartStatus < 7)
-                              where sh.CustomerCode == customerCode && (s.CartStatus >= 2)
-                              group s by s.OrderNo into g
-                             select g).Count();
+            var orderCount = (from s in db.Orders
+                              join sh in db.Shops on s.Shopid equals sh.Id
+                              join c in db.Customers on sh.CustomerId equals c.Id
+                              where sh.CustomerId == customerId && (s.Status >= 2)
+                             select s).Count();
                 
             var platformcredits = (from ss in db.Payments
-                                   where ss.CustomerCode == customerCode && ss.Status == 0 && ss.CreditType == 0
+                                   where ss.CustomerId == customerId && ss.Status == 0 && ss.CreditType == 0
                                    select (Double?)ss.OriginalAmount).Sum() ?? 0;
 
             var platformorder = (Convert.ToInt32(orderCount)  * (db.PlatFormCreditRates.FirstOrDefault().RatePerOrder));         
             var varDelivery = (from ss in db.Payments
-                               where ss.CustomerCode == customerCode && ss.Status == 0 && ss.CreditType == 1
+                               where ss.CustomerId == customerId && ss.Status == 0 && ss.CreditType == 1
                                select (Double?)ss.OriginalAmount).Sum() ?? 0;
 
             var varDeliveryCharges = (from ss in db.ShopCharges
-                                      join sh in db.Shops on ss.ShopCode equals sh.Code
-                                      where sh.CustomerCode == customerCode && ss.CartStatus >= 2 //&& ss.CartStatus < 7
+                                      join sh in db.Shops on ss.ShopId equals sh.Id
+                                      where sh.CustomerId == customerId && ss.Status >= 2
                                       select (Double?)ss.GrossDeliveryCharge).Sum() ?? 0;
 
             List<CreditPaymentViewModel> payment = new List<CreditPaymentViewModel>
             {
-                new CreditPaymentViewModel{CustomerCode=customerCode,CustomerName=customerName,CreditType=0,Credits=Math.Floor(platformcredits - platformorder) },
-                new CreditPaymentViewModel{CustomerCode=customerCode,CustomerName=customerName,CreditType=1,Credits=Math.Floor(varDelivery - varDeliveryCharges) }
+                new CreditPaymentViewModel{CustomerId=customerId,CustomerName=customerName,CreditType=0,Credits=Math.Floor(platformcredits - platformorder) },
+                new CreditPaymentViewModel{CustomerId=customerId,CustomerName=customerName,CreditType=1,Credits=Math.Floor(varDelivery - varDeliveryCharges) }
             };
       
 
@@ -905,9 +815,8 @@ namespace ShopNow.Controllers
         [HttpPost]
         public JsonResult BillUpdate(BillUpdate model)
         {
-            //int errorCode = 0;
-            var bill = db.Bills.FirstOrDefault(i => i.Code == model.Code); // Bill.Get(model.Code);
-            var customer = db.Customers.FirstOrDefault(i => i.Code == model.CustomerCode);// Customer.Get(model.CustomerCode);
+            var bill = db.Bills.FirstOrDefault(i => i.Id == model.Id);
+            var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
             if (bill != null && customer != null)
             {
                 bill.DeliveryChargeCustomer = model.DeliveryChargeCustomer;
@@ -918,25 +827,22 @@ namespace ShopNow.Controllers
                 bill.DateUpdated = DateTime.Now;
                 db.Entry(bill).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                // Bill.Edit(bill, out errorCode);
                 return Json(new { message = "Successfully Updated Bill!" });
             }
             else
             {
                 return Json(new { message = "Fail to Update Bill!" });
             }
-
         }
 
-
-        public JsonResult GetBillOrDelivary(int bill, string shopCode)
+        public JsonResult GetBillOrDelivary(int bill, int shopId)
         {
             var model = new BillApiListViewModel(); 
-            model.List = db.Bills.Where(i => i.NameOfBill == bill && i.ShopCode == shopCode && i.Status == 0).Select(i => new BillApiListViewModel.BillList
+            model.List = db.Bills.Where(i => i.NameOfBill == bill && i.ShopId == shopId && i.Status == 0).Select(i => new BillApiListViewModel.BillList
             {
-                Code = i.Code,
+                Id = i.Id,
                 ConvenientChargeRange = i.ConvenientCharge,
-                ShopCode = i.ShopCode,
+                ShopId = i.ShopId,
                 ShopName = i.ShopName,
                 ItemType = i.ItemType,
                 ConvenientCharge = i.PlatformCreditRate,
@@ -955,7 +861,7 @@ namespace ShopNow.Controllers
         [HttpPost]
         public JsonResult SaveCustomerToken(string CustomerCode,string token)
         {
-            var customer = db.Customers.Where(c => c.Code == CustomerCode).FirstOrDefault();
+            var customer = db.Customers.Where(c => c.Id == CustomerCode).FirstOrDefault();
             try
             {
                 

@@ -250,3 +250,8 @@ C:\Users\Gigabyte\source\repos\ShopNowChat\WebAppShopnowAdmin\WebAppShopnowAdmin
 C:\Users\Gigabyte\source\repos\ShopNowChat\WebAppShopnowAdmin\WebAppShopnowAdmin\ShopNow\obj\Debug\ShopNow.csproj.CopyComplete
 C:\Users\Gigabyte\source\repos\ShopNowChat\WebAppShopnowAdmin\WebAppShopnowAdmin\ShopNow\obj\Debug\ShopNow.dll
 C:\Users\Gigabyte\source\repos\ShopNowChat\WebAppShopnowAdmin\WebAppShopnowAdmin\ShopNow\obj\Debug\ShopNow.pdb
+E:\Beno\SNC\ShopNow\obj\Debug\ShopNow.csproj.App.config
+E:\Beno\SNC\ShopNow\obj\Debug\ShopNow.csprojAssemblyReference.cache
+E:\Beno\SNC\ShopNow\obj\Debug\ShopNow.csproj.CoreCompileInputs.cache
+E:\Beno\SNC\ShopNow\obj\Debug\ShopNow.dll
+E:\Beno\SNC\ShopNow\obj\Debug\ShopNow.pdb

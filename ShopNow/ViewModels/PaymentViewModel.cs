@@ -112,7 +112,7 @@ namespace ShopNow.ViewModels
       //  public List<CreditPaymentListViewModel> List { get; set; }
        // public class CreditPaymentListViewModel
        // {
-            public string CustomerCode { get; set; }
+            public int CustomerId { get; set; }
             public string CustomerName { get; set; }
             public int CreditType { get; set; }
             public double Credits { get; set; }

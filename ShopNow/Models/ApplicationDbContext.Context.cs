@@ -27,7 +27,6 @@ namespace ShopNow.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<AccessPolicy> AccessPolicies { get; set; }
         public virtual DbSet<AddOnCategory> AddOnCategories { get; set; }
         public virtual DbSet<Admin> Admins { get; set; }
         public virtual DbSet<Banner> Banners { get; set; }
@@ -72,6 +71,7 @@ namespace ShopNow.Models
         public virtual DbSet<SubCategory> SubCategories { get; set; }
         public virtual DbSet<TopUp> TopUps { get; set; }
         public virtual DbSet<UserEnquiry> UserEnquiries { get; set; }
+        public virtual DbSet<AccessPolicy> AccessPolicies { get; set; }
     
         [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)
