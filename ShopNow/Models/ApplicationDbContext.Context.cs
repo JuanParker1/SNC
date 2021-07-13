@@ -58,7 +58,6 @@ namespace ShopNow.Models
         public virtual DbSet<PlatFormCreditRate> PlatFormCreditRates { get; set; }
         public virtual DbSet<Portion> Portions { get; set; }
         public virtual DbSet<ProductDishAddOn> ProductDishAddOns { get; set; }
-        public virtual DbSet<ProductMedicalStock> ProductMedicalStocks { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductSpecificationItem> ProductSpecificationItems { get; set; }
         public virtual DbSet<ProductSpecification> ProductSpecifications { get; set; }
@@ -74,14 +73,14 @@ namespace ShopNow.Models
         public virtual DbSet<TopUp> TopUps { get; set; }
         public virtual DbSet<UserEnquiry> UserEnquiries { get; set; }
     
-        [DbFunction("sncEntities1", "GetTableVAlueString")]
+        [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)
         {
             var keyParameter = key != null ?
                 new ObjectParameter("key", key) :
                 new ObjectParameter("key", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<GetTableVAlueString_Result>("[sncEntities1].[GetTableVAlueString](@key)", keyParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<GetTableVAlueString_Result>("[sncEntities].[GetTableVAlueString](@key)", keyParameter);
         }
     
         public virtual int getCategoryListbyShopcode(string code)

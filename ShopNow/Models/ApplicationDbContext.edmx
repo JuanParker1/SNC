@@ -10,29 +10,27 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Code" Type="nvarchar(max)" />
           <Property Name="PageCode" Type="nvarchar(max)" />
           <Property Name="PageName" Type="nvarchar(max)" />
-          <Property Name="ShopCode" Type="nvarchar(max)" />
+          <Property Name="ShopId" Type="nvarchar(max)" Nullable="false" />
           <Property Name="ShopName" Type="nvarchar(max)" />
-          <Property Name="StaffCode" Type="nvarchar(max)" />
+          <Property Name="StaffId" Type="int" Nullable="false" />
           <Property Name="StaffName" Type="nvarchar(max)" />
-          <Property Name="CustomerCode" Type="nvarchar(max)" />
+          <Property Name="CustomerId" Type="int" Nullable="false" />
           <Property Name="CustomerName" Type="nvarchar(max)" />
-          <Property Name="Status" Type="int" Nullable="false" />
-          <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="isAccess" Type="bit" Nullable="false" />
+          <Property Name="Position" Type="int" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
           <Property Name="CreatedBy" Type="nvarchar(max)" />
           <Property Name="UpdatedBy" Type="nvarchar(max)" />
-          <Property Name="Position" Type="int" Nullable="false" />
+          <Property Name="DateEncoded" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="AddOnCategories">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Code" Type="nvarchar(max)" />
           <Property Name="Name" Type="nvarchar(max)" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
@@ -697,49 +695,6 @@
           <Property Name="CreatedBy" Type="nvarchar(max)" />
           <Property Name="UpdatedBy" Type="nvarchar(max)" />
         </EntityType>
-        <EntityType Name="ProductMedicalStocks">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Code" Type="nvarchar(max)" />
-          <Property Name="ProductCode" Type="nvarchar(max)" />
-          <Property Name="ProductName" Type="nvarchar(max)" />
-          <Property Name="Stock" Type="float" Nullable="false" />
-          <Property Name="SupplierName" Type="nvarchar(max)" />
-          <Property Name="MRP" Type="float" Nullable="false" />
-          <Property Name="SalePrice" Type="float" Nullable="false" />
-          <Property Name="TaxPercentage" Type="float" Nullable="false" />
-          <Property Name="DiscountPercentage" Type="float" Nullable="false" />
-          <Property Name="LoyaltyPointsper100Value" Type="float" Nullable="false" />
-          <Property Name="MinimumLoyaltyReducationPercentage" Type="float" Nullable="false" />
-          <Property Name="SpecialCostOfDelivery" Type="float" Nullable="false" />
-          <Property Name="OutLetId" Type="int" Nullable="false" />
-          <Property Name="SpecialPrice" Type="float" Nullable="false" />
-          <Property Name="MinSaleQty" Type="int" Nullable="false" />
-          <Property Name="CreatedBy" Type="nvarchar(max)" />
-          <Property Name="UpdatedBy" Type="nvarchar(max)" />
-          <Property Name="Status" Type="int" Nullable="false" />
-          <Property Name="DateEncoded" Type="datetime" Nullable="false" />
-          <Property Name="DateUpdated" Type="datetime" Nullable="false" />
-          <Property Name="CategoryName1" Type="nvarchar(max)" />
-          <Property Name="CategoryName2" Type="nvarchar(max)" />
-          <Property Name="CategoryName3" Type="nvarchar(max)" />
-          <Property Name="CategoryName4" Type="nvarchar(max)" />
-          <Property Name="CategoryName5" Type="nvarchar(max)" />
-          <Property Name="CategoryName6" Type="nvarchar(max)" />
-          <Property Name="CategoryName7" Type="nvarchar(max)" />
-          <Property Name="CategoryName8" Type="nvarchar(max)" />
-          <Property Name="CategoryName9" Type="nvarchar(max)" />
-          <Property Name="CategoryName10" Type="nvarchar(max)" />
-          <Property Name="ItemTimeStamp" Type="nvarchar(max)" />
-          <Property Name="OfferCategoryCode" Type="nvarchar(max)" />
-          <Property Name="OfferCategoryName" Type="nvarchar(max)" />
-          <Property Name="OfferCategoryType" Type="int" Nullable="false" />
-          <Property Name="ItemId" Type="nvarchar(max)" />
-          <Property Name="productid" Type="int" />
-          <Property Name="HoldStock" Type="float" />
-        </EntityType>
         <EntityType Name="Products">
           <Key>
             <PropertyRef Name="Id" />
@@ -1152,18 +1107,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ProductMedicalStocks_Products">
-          <End Role="Products" Type="Self.Products" Multiplicity="0..1" />
-          <End Role="ProductMedicalStocks" Type="Self.ProductMedicalStocks" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Products">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ProductMedicalStocks">
-              <PropertyRef Name="productid" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Products_Shops">
           <End Role="Shops" Type="Self.Shops" Multiplicity="1" />
           <End Role="Products" Type="Self.Products" Multiplicity="*" />
@@ -1300,7 +1243,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <EntitySet Name="PlatFormCreditRates" EntityType="Self.PlatFormCreditRates" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Portions" EntityType="Self.Portions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductDishAddOns" EntityType="Self.ProductDishAddOns" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ProductMedicalStocks" EntityType="Self.ProductMedicalStocks" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductSpecificationItems" EntityType="Self.ProductSpecificationItems" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductSpecifications" EntityType="Self.ProductSpecifications" Schema="dbo" store:Type="Tables" />
@@ -1331,10 +1273,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             <End Role="DeliveryBoys" EntitySet="DeliveryBoys" />
             <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="FK_ProductMedicalStocks_Products" Association="Self.FK_ProductMedicalStocks_Products">
-            <End Role="Products" EntitySet="Products" />
-            <End Role="ProductMedicalStocks" EntitySet="ProductMedicalStocks" />
-          </AssociationSet>
           <AssociationSet Name="FK_Products_Shops" Association="Self.FK_Products_Shops">
             <End Role="Shops" EntitySet="Shops" />
             <End Role="Products" EntitySet="Products" />
@@ -1353,29 +1291,27 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Code" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="PageCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="PageName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ShopCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ShopId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="ShopName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="StaffCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="StaffId" Type="Int32" Nullable="false" />
           <Property Name="StaffName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CustomerCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
           <Property Name="CustomerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="isAccess" Type="Boolean" Nullable="false" />
+          <Property Name="Position" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Position" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <EntityType Name="AddOnCategory">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Code" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
@@ -2047,50 +1983,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="ProductMedicalStock">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Code" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ProductCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ProductName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Stock" Type="Double" Nullable="false" />
-          <Property Name="SupplierName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="MRP" Type="Double" Nullable="false" />
-          <Property Name="SalePrice" Type="Double" Nullable="false" />
-          <Property Name="TaxPercentage" Type="Double" Nullable="false" />
-          <Property Name="DiscountPercentage" Type="Double" Nullable="false" />
-          <Property Name="LoyaltyPointsper100Value" Type="Double" Nullable="false" />
-          <Property Name="MinimumLoyaltyReducationPercentage" Type="Double" Nullable="false" />
-          <Property Name="SpecialCostOfDelivery" Type="Double" Nullable="false" />
-          <Property Name="OutLetId" Type="Int32" Nullable="false" />
-          <Property Name="SpecialPrice" Type="Double" Nullable="false" />
-          <Property Name="MinSaleQty" Type="Int32" Nullable="false" />
-          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CategoryName1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CategoryName2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CategoryName3" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CategoryName4" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CategoryName5" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CategoryName6" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CategoryName7" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CategoryName8" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CategoryName9" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CategoryName10" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ItemTimeStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="OfferCategoryCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="OfferCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="OfferCategoryType" Type="Int32" Nullable="false" />
-          <Property Name="ItemId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="productid" Type="Int32" />
-          <Property Name="HoldStock" Type="Double" />
-          <NavigationProperty Name="Product" Relationship="Self.FK_ProductMedicalStocks_Products" FromRole="ProductMedicalStocks" ToRole="Products" />
-        </EntityType>
         <EntityType Name="Product">
           <Key>
             <PropertyRef Name="Id" />
@@ -2141,7 +2033,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="OrderItems" Relationship="Self.FK_OrderItems_Products" FromRole="Products" ToRole="OrderItems" />
-          <NavigationProperty Name="ProductMedicalStocks" Relationship="Self.FK_ProductMedicalStocks_Products" FromRole="Products" ToRole="ProductMedicalStocks" />
           <NavigationProperty Name="Shop" Relationship="Self.FK_Products_Shops" FromRole="Products" ToRole="Shops" />
         </EntityType>
         <EntityType Name="ProductSpecificationItem">
@@ -2495,18 +2386,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ProductMedicalStocks_Products">
-          <End Role="Products" Type="Self.Product" Multiplicity="0..1" />
-          <End Role="ProductMedicalStocks" Type="Self.ProductMedicalStock" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Products">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ProductMedicalStocks">
-              <PropertyRef Name="productid" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Products_Shops">
           <End Role="Shops" Type="Self.Shop" Multiplicity="1" />
           <End Role="Products" Type="Self.Product" Multiplicity="*" />
@@ -2519,7 +2398,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="sncEntities1" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="sncEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AccessPolicies" EntityType="Self.AccessPolicy" />
           <EntitySet Name="AddOnCategories" EntityType="Self.AddOnCategory" />
           <EntitySet Name="Admins" EntityType="Self.Admin" />
@@ -2551,7 +2430,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <EntitySet Name="PlatFormCreditRates" EntityType="Self.PlatFormCreditRate" />
           <EntitySet Name="Portions" EntityType="Self.Portion" />
           <EntitySet Name="ProductDishAddOns" EntityType="Self.ProductDishAddOn" />
-          <EntitySet Name="ProductMedicalStocks" EntityType="Self.ProductMedicalStock" />
           <EntitySet Name="Products" EntityType="Self.Product" />
           <EntitySet Name="ProductSpecificationItems" EntityType="Self.ProductSpecificationItem" />
           <EntitySet Name="ProductSpecifications" EntityType="Self.ProductSpecification" />
@@ -2581,10 +2459,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <AssociationSet Name="FK_OrderItems_Products" Association="Self.FK_OrderItems_Products">
             <End Role="Products" EntitySet="Products" />
             <End Role="OrderItems" EntitySet="OrderItems" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ProductMedicalStocks_Products" Association="Self.FK_ProductMedicalStocks_Products">
-            <End Role="Products" EntitySet="Products" />
-            <End Role="ProductMedicalStocks" EntitySet="ProductMedicalStocks" />
           </AssociationSet>
           <AssociationSet Name="FK_Products_Shops" Association="Self.FK_Products_Shops">
             <End Role="Shops" EntitySet="Shops" />
@@ -2720,27 +2594,26 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="sncModelStoreContainer" CdmEntityContainer="sncEntities1">
+        <EntityContainerMapping StorageEntityContainer="sncModelStoreContainer" CdmEntityContainer="sncEntities">
           <EntitySetMapping Name="AccessPolicies">
             <EntityTypeMapping TypeName="sncModel.AccessPolicy">
               <MappingFragment StoreEntitySet="AccessPolicies">
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="PageCode" ColumnName="PageCode" />
                 <ScalarProperty Name="PageName" ColumnName="PageName" />
-                <ScalarProperty Name="ShopCode" ColumnName="ShopCode" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
                 <ScalarProperty Name="ShopName" ColumnName="ShopName" />
-                <ScalarProperty Name="StaffCode" ColumnName="StaffCode" />
+                <ScalarProperty Name="StaffId" ColumnName="StaffId" />
                 <ScalarProperty Name="StaffName" ColumnName="StaffName" />
-                <ScalarProperty Name="CustomerCode" ColumnName="CustomerCode" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
                 <ScalarProperty Name="isAccess" ColumnName="isAccess" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2748,7 +2621,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             <EntityTypeMapping TypeName="sncModel.AddOnCategory">
               <MappingFragment StoreEntitySet="AddOnCategories">
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
@@ -3441,50 +3313,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
                 <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ProductMedicalStocks">
-            <EntityTypeMapping TypeName="sncModel.ProductMedicalStock">
-              <MappingFragment StoreEntitySet="ProductMedicalStocks">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="Stock" ColumnName="Stock" />
-                <ScalarProperty Name="SupplierName" ColumnName="SupplierName" />
-                <ScalarProperty Name="MRP" ColumnName="MRP" />
-                <ScalarProperty Name="SalePrice" ColumnName="SalePrice" />
-                <ScalarProperty Name="TaxPercentage" ColumnName="TaxPercentage" />
-                <ScalarProperty Name="DiscountPercentage" ColumnName="DiscountPercentage" />
-                <ScalarProperty Name="LoyaltyPointsper100Value" ColumnName="LoyaltyPointsper100Value" />
-                <ScalarProperty Name="MinimumLoyaltyReducationPercentage" ColumnName="MinimumLoyaltyReducationPercentage" />
-                <ScalarProperty Name="SpecialCostOfDelivery" ColumnName="SpecialCostOfDelivery" />
-                <ScalarProperty Name="OutLetId" ColumnName="OutLetId" />
-                <ScalarProperty Name="SpecialPrice" ColumnName="SpecialPrice" />
-                <ScalarProperty Name="MinSaleQty" ColumnName="MinSaleQty" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-                <ScalarProperty Name="CategoryName1" ColumnName="CategoryName1" />
-                <ScalarProperty Name="CategoryName2" ColumnName="CategoryName2" />
-                <ScalarProperty Name="CategoryName3" ColumnName="CategoryName3" />
-                <ScalarProperty Name="CategoryName4" ColumnName="CategoryName4" />
-                <ScalarProperty Name="CategoryName5" ColumnName="CategoryName5" />
-                <ScalarProperty Name="CategoryName6" ColumnName="CategoryName6" />
-                <ScalarProperty Name="CategoryName7" ColumnName="CategoryName7" />
-                <ScalarProperty Name="CategoryName8" ColumnName="CategoryName8" />
-                <ScalarProperty Name="CategoryName9" ColumnName="CategoryName9" />
-                <ScalarProperty Name="CategoryName10" ColumnName="CategoryName10" />
-                <ScalarProperty Name="ItemTimeStamp" ColumnName="ItemTimeStamp" />
-                <ScalarProperty Name="OfferCategoryCode" ColumnName="OfferCategoryCode" />
-                <ScalarProperty Name="OfferCategoryName" ColumnName="OfferCategoryName" />
-                <ScalarProperty Name="OfferCategoryType" ColumnName="OfferCategoryType" />
-                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
-                <ScalarProperty Name="productid" ColumnName="productid" />
-                <ScalarProperty Name="HoldStock" ColumnName="HoldStock" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

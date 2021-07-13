@@ -15,21 +15,20 @@ namespace ShopNow.Models
     public partial class AccessPolicy
     {
         public int Id { get; set; }
-        public string Code { get; set; }
         public string PageCode { get; set; }
         public string PageName { get; set; }
-        public string ShopCode { get; set; }
+        public string ShopId { get; set; }
         public string ShopName { get; set; }
-        public string StaffCode { get; set; }
+        public int StaffId { get; set; }
         public string StaffName { get; set; }
-        public string CustomerCode { get; set; }
+        public int CustomerId { get; set; }
         public string CustomerName { get; set; }
-        public int Status { get; set; }
-        public System.DateTime DateEncoded { get; set; }
         public bool isAccess { get; set; }
+        public int Position { get; set; }
+        public int Status { get; set; }
         public System.DateTime DateUpdated { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
-        public int Position { get; set; }
+        public System.DateTime DateEncoded { get; set; }
     }
 }

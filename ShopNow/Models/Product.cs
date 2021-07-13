@@ -18,7 +18,6 @@ namespace ShopNow.Models
         public Product()
         {
             this.OrderItems = new HashSet<OrderItem>();
-            this.ProductMedicalStocks = new HashSet<ProductMedicalStock>();
         }
     
         public int Id { get; set; }
@@ -69,8 +68,6 @@ namespace ShopNow.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderItem> OrderItems { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ProductMedicalStock> ProductMedicalStocks { get; set; }
         public virtual Shop Shop { get; set; }
     }
 }

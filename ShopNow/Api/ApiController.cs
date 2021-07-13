@@ -262,8 +262,9 @@ namespace ShopNow.Controllers
                 user.DateUpdated = DateTime.Now;
                 db.Customers.Add(user);
                 db.SaveChanges();
-
                 Admin admin = new Admin();
+                admin.AnonymisedID = user.Id.ToString();
+                //Admin.Add(admin, out errorCode);
                 admin.Code = ShopNow.Helpers.DRC.Generate("ADM");
                 admin.OfficialID = AdminHelpers.SecureData(admin.Code);
                 admin.AnonymisedID = AdminHelpers.SecureData(admin.AnonymisedID);

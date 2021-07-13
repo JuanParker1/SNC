@@ -488,9 +488,6 @@
     <Compile Include="Models\ProductDishAddOn.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ProductMedicalStock.cs">
-      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\ProductSpecification.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
