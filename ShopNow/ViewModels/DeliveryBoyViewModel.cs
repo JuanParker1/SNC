@@ -157,12 +157,12 @@ namespace ShopNow.ViewModels
     //Api
     public class DeliveryBoyCreateViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string CustomerName { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
-        public string CustomerCode { get; set; }
+        public int CustomerId { get; set; }
         public string ImagePath { get; set; }
         public string CountryName { get; set; }
         public string StateName { get; set; }
@@ -190,7 +190,7 @@ namespace ShopNow.ViewModels
 
     public class DeliveryBoyViewModel
     {
-        public string DeliveryBoyCode { get; set; }
+        public int DeliveryBoyId { get; set; }
         public string DeliveryBoyName { get; set; }
         public string DeliveryBoyPhoneNumber { get; set; }
         public int CartStatus { get; set; }
@@ -205,9 +205,9 @@ namespace ShopNow.ViewModels
         public List<DeliveryBoyViewModel> Lists { get; set; }
         public class DeliveryBoyViewModel
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string Name { get; set; }
-            public string DelivaryCustomerCode { get; set; }
+            public int DelivaryCustomerId { get; set; }
             public string DeilvaryCustomerName { get; set; }
             public string DeilvaryName { get; set; }
             public string DeilvaryPhoneNumber { get; set; }

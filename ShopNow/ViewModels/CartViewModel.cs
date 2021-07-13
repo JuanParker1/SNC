@@ -266,14 +266,14 @@ namespace ShopNow.ViewModels
     //Api
     public class CartCreateViewModel
     {
-        public string Code { get; set; }
-        public string CustomerCode { get; set; }
-        public string ShopCode { get; set; }
+        public int Id { get; set; }
+        public int CustomerId { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
         public string PhoneNumber { get; set; }
-        public string ProductCode { get; set; }
+        public int ProductId { get; set; }
         public string ProductName { get; set; }
-        public string BrandCode { get; set; }
+        public int BrandId { get; set; }
         public string BrandName { get; set; }
         public string OrderNo { get; set; }
         public double Latitude { get; set; }
@@ -290,8 +290,8 @@ namespace ShopNow.ViewModels
 
     public class OrderCreateViewModel
     {
-        public string CustomerCode { get; set; }
-        public string ShopCode { get; set; }
+        public int CustomerId { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
         public string PhoneNumber { get; set; }
         public string OrderNo { get; set; }
@@ -345,7 +345,7 @@ namespace ShopNow.ViewModels
         public class CartList
         {
 
-            public string OrderNo { get; set; }
+            public int OrderNo { get; set; }
             public double GrossDeliveryCharge { get; set; }
             public int CartStatus { get; set; }
             public DateTime DateEncoded { get; set; }
@@ -381,7 +381,7 @@ namespace ShopNow.ViewModels
         public class CartList
         {
 
-            public string OrderNo { get; set; }
+            public int OrderNo { get; set; }
             public double GrossDeliveryCharge { get; set; }
 
             public string Amount { get; set; }
@@ -400,7 +400,7 @@ namespace ShopNow.ViewModels
         public class CartList
         {
 
-            public string OrderNo { get; set; }
+            public int OrderNo { get; set; }
             public string Amount { get; set; }
             public int ShopPaymentStatus { get; set; }
             public int CartStatus { get; set; }
@@ -422,7 +422,7 @@ namespace ShopNow.ViewModels
             public double ShopLongitude { get; set; }
             public double CustomerLatitude { get; set; }
             public double CustomerLongitude { get; set; }
-            public string OrderNo { get; set; }
+            public int OrderNo { get; set; }
             public double Amount { get; set; }
             public string CustomerPhoneNumber { get; set; }
             public string CustomerName { get; set; }
@@ -434,7 +434,7 @@ namespace ShopNow.ViewModels
             public int OnWork { get; set; }
             public Double? RefundAmount { get; set; }
             public string RefundRemark { get; set; }
-            public List<Cart> OrderList { get; set; }
+            public List<OrderItem> OrderList { get; set; }
         }
     }
 
@@ -445,9 +445,9 @@ namespace ShopNow.ViewModels
         public List<CartList> List { get; set; }
         public class CartList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string ShopName { get; set; }
-            public string OrderNo { get; set; }
+            public int OrderNo { get; set; }
             public string ProductName { get; set; }
             public double Price { get; set; }
             public int CartStatus { get; set; }

@@ -889,14 +889,14 @@ namespace ShopNow.ViewModels
         public class ShopLists
         {
 
-            public string ShopCode { get; set; }
+            public int ShopId { get; set; }
             public string ShopName { get; set; }
             public string ImagePath { get; set; }
             public double Latitude { get; set; }
             public double Longitude { get; set; }
             public string DistrictName { get; set; }
             public double Rating { get; set; }
-            public string ShopCategoryCode { get; set; }
+            public int ShopCategoryId { get; set; }
             public double Meters { get; set; }
             public Boolean ? ShopOnline { get; set; }
             public int ShopStatus { get; set; }
@@ -928,8 +928,8 @@ namespace ShopNow.ViewModels
 
     public class ProductQuickUpdateViewModel
     {
-        public string Code { get; set; }
-        public string CustomerCode { get; set; }
+        public int Id { get; set; }
+        public int CustomerId { get; set; }
         public double Price { get; set; }
         public double MenuPrice { get; set; }
         public int Qty { get; set; }
@@ -956,7 +956,7 @@ namespace ShopNow.ViewModels
     public class ProductActiveOrInViewModel
     {
         public int ProductId { get; set; }
-        public string CustomerCode { get; set; }
+        public int CustomerId { get; set; }
         public int State { get; set; }
     }
 

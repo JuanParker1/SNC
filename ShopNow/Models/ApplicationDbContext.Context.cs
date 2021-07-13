@@ -73,14 +73,14 @@ namespace ShopNow.Models
         public virtual DbSet<UserEnquiry> UserEnquiries { get; set; }
         public virtual DbSet<AccessPolicy> AccessPolicies { get; set; }
     
-        [DbFunction("sncEntities", "GetTableVAlueString")]
+        [DbFunction("ShopnowchatEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)
         {
             var keyParameter = key != null ?
                 new ObjectParameter("key", key) :
                 new ObjectParameter("key", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<GetTableVAlueString_Result>("[sncEntities].[GetTableVAlueString](@key)", keyParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<GetTableVAlueString_Result>("[ShopnowchatEntities].[GetTableVAlueString](@key)", keyParameter);
         }
     
         public virtual int getCategoryListbyShopcode(string code)
