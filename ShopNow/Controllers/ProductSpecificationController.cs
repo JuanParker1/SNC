@@ -22,14 +22,7 @@ namespace ShopNow.Controllers
         private ShopnowchatEntities _db = new ShopnowchatEntities();
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
-        private const string _prefix = "PSF";
-        private static string _generatedCode(string _prefix)
-        {
-    
-                return ShopNow.Helpers.DRC.Generate(_prefix);
-            
-        }
-
+     
         public ProductSpecificationController()
         {
             _mapperConfiguration = new MapperConfiguration(config =>
@@ -74,8 +67,6 @@ namespace ShopNow.Controllers
                 var ps = _mapper.Map<ProductSpecificationCreateEditViewModel, ProductSpecification>(model);
                 ps.CreatedBy = user.Name;
                 ps.UpdatedBy = user.Name;
-                // ps.Code = ProductSpecification.Add(ps, out errorCode);
-                ps.Code = _generatedCode("PSF");
                 ps.Status = 0;
                 ps.DateEncoded = DateTime.Now;
                 ps.DateUpdated = DateTime.Now;
@@ -92,12 +83,12 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNPSFE003")]
         public ActionResult Edit(string code)
         {
-            var dCode = AdminHelpers.DCode(code);
+            var dCode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            if (string.IsNullOrEmpty(dCode))
+            if (dCode==0)
                 return HttpNotFound();
-            var ps = _db.ProductSpecifications.FirstOrDefault(i => i.Code == dCode && i.Status == 0);// ProductSpecification.Get(dCode);
+            var ps = _db.ProductSpecifications.FirstOrDefault(i => i.Id == dCode && i.Status == 0);// ProductSpecification.Get(dCode);
             var model = _mapper.Map<ProductSpecification, ProductSpecificationCreateEditViewModel>(ps);
             return View(model);
         }
@@ -112,7 +103,7 @@ namespace ShopNow.Controllers
             int errorCode = 0;
             try
             {
-                ProductSpecification ps = _db.ProductSpecifications.FirstOrDefault(i => i.Code == model.Code && i.Status == 0);// ProductSpecification.Get(model.Code);
+                ProductSpecification ps = _db.ProductSpecifications.FirstOrDefault(i => i.Id == model.Id && i.Status == 0);// ProductSpecification.Get(model.Code);
                 _mapper.Map(model, ps);
                 ps.UpdatedBy = user.Name;
                 ps.DateUpdated = DateTime.Now;
@@ -132,8 +123,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNPSFD004")]
         public ActionResult Delete(string code)
         {
-            var dCode = AdminHelpers.DCode(code);
-            var ps = _db.ProductSpecifications.FirstOrDefault(i => i.Code == dCode && i.Status == 0);// ProductSpecification.Get(dCode);
+            var dCode = AdminHelpers.DCodeInt(code);
+            var ps = _db.ProductSpecifications.FirstOrDefault(i => i.Id == dCode && i.Status == 0);// ProductSpecification.Get(dCode);
             ps.Status = 2;
             _db.Entry(ps).State = System.Data.Entity.EntityState.Modified;
             _db.SaveChanges();
@@ -245,10 +236,9 @@ namespace ShopNow.Controllers
                     {
                         _db.ProductSpecifications.Add(new ProductSpecification
                         {
-                            Code = _generatedCode("PSF"),
                             MasterProductName = row[model.MasterProductName].ToString(),
-                            MasterProductCode = CheckProduct(row[model.MasterProductName].ToString()),
-                            SpecificationCode = CheckSpecification(row[model.SpecificationName].ToString()),
+                            MasterProductId = CheckProduct(row[model.MasterProductName].ToString()),
+                            SpecificationId = CheckSpecification(row[model.SpecificationName].ToString()),
                             SpecificationName = row[model.SpecificationName].ToString(),
                             Value = row[model.Value].ToString(),
                             Status = 0,
@@ -264,29 +254,28 @@ namespace ShopNow.Controllers
             return View();
         }
 
-        public string CheckProduct(string ProductName)
+        public int CheckProduct(string ProductName)
         {
             var master = _db.MasterProducts.FirstOrDefault(i => i.Name == ProductName && i.Status == 0); ;// MasterProduct.GetName(ProductName);
-            return master.Code;
+            return master.Id;
         }
-        public string CheckSpecification(string SpecificationName)
+        public int CheckSpecification(string SpecificationName)
         {
             var specification = _db.Specifications.FirstOrDefault(i => i.Name == SpecificationName && i.Status == 0); ;// Specification.GetName(SpecificationName);
             if (specification != null)
             {
-                return specification.Code;
+                return specification.Id;
             }
             else
             {
                 Specification sp = new Specification();
                 sp.Name = SpecificationName;
-                sp.Code = _generatedCode("SPF");
                 sp.Status = 0;
                 sp.DateEncoded = DateTime.Now;
                 sp.DateUpdated = DateTime.Now;
                 _db.Specifications.Add(sp);
                 _db.SaveChanges();
-                return sp.Code;
+                return sp.Id;
             }
         }
 
@@ -307,7 +296,7 @@ namespace ShopNow.Controllers
         {
             var model = await _db.Specifications.Where(a => a.Name.Contains(q) && a.Status == 0).OrderBy(i => i.Name).Select(i => new
             {
-                id = i.Code,
+                id = i.Id,
                 text = i.Name
             }).OrderBy(i => i.text).ToListAsync();
 

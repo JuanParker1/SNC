@@ -56,7 +56,7 @@ namespace ShopNow.ViewModels
     }
     public class ShopDiscountCategoryEditViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string OfferCategoryCode { get; set; }
         public string Name { get; set; }
         public double Percentage { get; set; }

@@ -64,14 +64,13 @@ namespace ShopNow.Controllers
                 portion.Name = name;
                 portion.CreatedBy = user.Name;
                 portion.UpdatedBy = user.Name;
-                // string code = Portion.Add(portion, out int error);
-                portion.Code = _generatedCode;
+
                 portion.DateEncoded = DateTime.Now;
                 portion.DateUpdated = DateTime.Now;
                 db.Portions.Add(portion);
                 db.SaveChanges();
                 
-                IsAdded = portion.Code != String.Empty ? true : false;
+                IsAdded = portion.Id != 0 ? true : false;
                 message = name + " Successfully Added";
             }
             else
@@ -83,11 +82,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNCSTE003")]
-        public JsonResult Edit(string code, string name)
+        public JsonResult Edit(int code, string name)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             string message = "";
-            Portion portion = db.Portions.FirstOrDefault(i => i.Code == code);// Portion.Get(code);
+            Portion portion = db.Portions.FirstOrDefault(i => i.Id == code);// Portion.Get(code);
             if (portion != null)
             {
                 portion.Name = name;
@@ -103,10 +102,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNCSTD004")]
-        public JsonResult Delete(string code)
+        public JsonResult Delete(int code)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var portion = db.Portions.FirstOrDefault(i => i.Code == code);// Portion.Get(code);
+            var portion = db.Portions.FirstOrDefault(i => i.Id == code);// Portion.Get(code);
             if (portion != null)
             {
                 portion.Status = 2;
@@ -221,7 +220,6 @@ namespace ShopNow.Controllers
                         db.Portions.Add(new Portion
                         {
                             Name = row[model.Name].ToString(),
-                            Code = _generatedCode,
                             Status = 0,
                             DateEncoded = DateTime.Now,
                             DateUpdated = DateTime.Now,

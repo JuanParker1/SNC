@@ -19,14 +19,7 @@ namespace ShopNow.Controllers
         private ShopnowchatEntities db = new ShopnowchatEntities();
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
-        private const string _prefix = "PKG";
-        private static string _generatedCode
-        {
-            get
-            {
-                return ShopNow.Helpers.DRC.Generate(_prefix);
-            }
-        }
+
         public PackageController()
         {
             _mapperConfiguration = new MapperConfiguration(config =>
@@ -63,14 +56,13 @@ namespace ShopNow.Controllers
                 medicalPackage.CreatedBy = user.Name;
                 medicalPackage.UpdatedBy = user.Name;
 
-                medicalPackage.Code = _generatedCode;
                 medicalPackage.Status = 0;
                 medicalPackage.DateEncoded = DateTime.Now;
                 medicalPackage.DateUpdated = DateTime.Now;
                 db.Packages.Add(medicalPackage);
                 db.SaveChanges();
                 //string code = Package.Add(medicalPackage, out int error);
-                IsAdded = medicalPackage.Code != String.Empty ? true : false;
+                IsAdded = medicalPackage.Id != 0 ? true : false;
                 message = name + " Successfully Added";
             }
             else
@@ -81,12 +73,12 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNMPKE003")]
-        public JsonResult Edit(string code, string name, int type)
+        public JsonResult Edit(int code, string name, int type)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             //bool result = false;
             string message = "";
-            Package medicalPackage = db.Packages.FirstOrDefault(i => i.Code == code && i.Status == 0);// Package.Get(code);
+            Package medicalPackage = db.Packages.FirstOrDefault(i => i.Id == code && i.Status == 0);// Package.Get(code);
             if (medicalPackage != null)
             {
                 medicalPackage.Name = name;
@@ -103,10 +95,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNMPKD004")]
-        public JsonResult Delete(string code)
+        public JsonResult Delete(int code)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var medicalPackage = db.Packages.FirstOrDefault(i => i.Code == code && i.Status == 0);// Package.Get(code);
+            var medicalPackage = db.Packages.FirstOrDefault(i => i.Id == code && i.Status == 0);// Package.Get(code);
             if (medicalPackage != null)
             {
                 medicalPackage.Status = 2;
@@ -222,7 +214,6 @@ namespace ShopNow.Controllers
                         {
                             Name = row[model.Name].ToString(),
                             Type = model.Type,
-                            Code = _generatedCode,
                             Status = 0,
                             DateEncoded = DateTime.Now,
                             DateUpdated = DateTime.Now,

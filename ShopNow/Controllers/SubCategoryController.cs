@@ -95,7 +95,7 @@ namespace ShopNow.Controllers
         public ActionResult Edit(SubCategoryEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            SubCategory subCategory = db.SubCategories.FirstOrDefault(i => i.Code == model.Code); // SubCategory.Get(model.Code);
+            SubCategory subCategory = db.SubCategories.FirstOrDefault(i => i.Id == model.Id); // SubCategory.Get(model.Code);
             _mapper.Map(model, subCategory);
             subCategory.DateUpdated = DateTime.Now;
             subCategory.UpdatedBy = user.Name;

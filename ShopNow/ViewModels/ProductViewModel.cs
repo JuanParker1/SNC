@@ -8,19 +8,18 @@ namespace ShopNow.ViewModels
 {
     public class ProductItemListViewModel
     {
-        public string ShopCode { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
 
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {
             public int Id { get; set; }
-            public string Code { get; set; }
             public string ProductType { get; set; }
             public string Name { get; set; }
             public string CategoryName { get; set; }
             public string BrandName { get; set; }
-            public string ShopCode { get; set; }
+            public int ShopId { get; set; }
             public string ShopName { get; set; }
             public double DiscountCategoryPercentage { get; set; }
         }
@@ -33,27 +32,24 @@ namespace ShopNow.ViewModels
         public HttpPostedFileBase ProductImage3 { get; set; }
         public HttpPostedFileBase ProductImage4 { get; set; }
         public HttpPostedFileBase ProductImage5 { get; set; }
-        public string Code { get; set; }
         public string Name { get; set; }
-        public string MasterProductCode { get; set; }
+        public int MasterProductId { get; set; }
         public string MasterProductName { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
         public string Specification { get; set; }
-        public string ShopCode { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public string CategoryCode { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
-        public string BrandCode { get; set; }
+        public int BrandId { get; set; }
         public string BrandName { get; set; }
         public string ProductType { get; set; }
-        public string ShopCategoryCode { get; set; }
+        public int ShopCategoryId { get; set; }
         public string ShopCategoryName { get; set; }
         public string MainSNCode { get; set; }
         public string GTIN { get; set; }
         public string UPC { get; set; }
-        public string GTIN12 { get; set; }
-        public string GTIN13 { get; set; }
         public string GTIN14 { get; set; }
         public string EAN { get; set; }
         public string ISBN { get; set; }
@@ -133,7 +129,7 @@ namespace ShopNow.ViewModels
         public List<MedicalStockList> MedicalStockLists { get; set; }
         public class MedicalStockList
         {
-            public string Code { get; set; }
+             
             public string ProductCode { get; set; }
             public string ProductName { get; set; }
             public double Stock { get; set; }
@@ -158,22 +154,21 @@ namespace ShopNow.ViewModels
         public HttpPostedFileBase ProductImage3 { get; set; }
         public HttpPostedFileBase ProductImage4 { get; set; }
         public HttpPostedFileBase ProductImage5 { get; set; }
-        public string Code { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
-        public string MasterProductCode { get; set; }
+        public int MasterProductId { get; set; }
         public string MasterProductName { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
         public string Specification { get; set; }
-        public string ShopCode { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public string CategoryCode { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
-        public string BrandCode { get; set; }
+        public int BrandId { get; set; }
         public string BrandName { get; set; }
         public string ProductType { get; set; }
-        public string ShopCategoryCode { get; set; }
+        public int ShopCategoryId { get; set; }
         public string ShopCategoryName { get; set; }
         public string MainSNCode { get; set; }
         public string GTIN { get; set; }
@@ -202,14 +197,14 @@ namespace ShopNow.ViewModels
         public List<SpecificationList> SpecificationLists { get; set; }
         public class SpecificationList
         {
-            public string Code { get; set; }
-            public string ProductCode { get; set; }
+          
+            public int ProductId { get; set; }
             public string ProductName { get; set; }
-            public string ShopCode { get; set; }
+            public int ShopId { get; set; }
             public string ShopName { get; set; }
-            public string MasterProductCode { get; set; }
+            public int MasterProductId { get; set; }
             public string MasterProductName { get; set; }
-            public string SpecificationCode { get; set; }
+            public int SpecificationId { get; set; }
             public string SpecificationName { get; set; }
             public string Value { get; set; }
         }
@@ -235,7 +230,7 @@ namespace ShopNow.ViewModels
         public List<MedicalStockList> MedicalStockLists { get; set; }
         public class MedicalStockList
         {
-            public string Code { get; set; }
+             
             public string ProductCode { get; set; }
             public string ProductName { get; set; }
             public double Stock { get; set; }
@@ -255,15 +250,15 @@ namespace ShopNow.ViewModels
 
     public class MedicalCreateViewModel
     {
-        public string Code { get; set; }
+         
         public string Name { get; set; }
-        public string MasterProductCode { get; set; }
+        public int MasterProductId { get; set; }
         public string MasterProductName { get; set; }
-        public string ShopCode { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public string CategoryCode { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
-        public string BrandCode { get; set; }
+        public string BrandId { get; set; }
         public string BrandName { get; set; }
         public string ProductType { get; set; }
         public double Price { get; set; }
@@ -288,7 +283,7 @@ namespace ShopNow.ViewModels
         public string SizeLB { get; set; }
         public string PackageCode { get; set; }
         public string PackageName { get; set; }
-        public string DiscountCategoryCode { get; set; }
+        public int DiscountCategoryId { get; set; }
         public string DiscountCategoryName { get; set; }
         public double DiscountCategoryPercentage { get; set; }
         public int DiscountType { get; set; }
@@ -297,8 +292,7 @@ namespace ShopNow.ViewModels
         public List<MedicalStockList> MedicalStockLists { get; set; }
         public class MedicalStockList
         {
-            public string Code { get; set; }
-            public string ProductCode { get; set; }
+            public string ProductId { get; set; }
             public string ProductName { get; set; }
             public double Stock { get; set; }
             public string SupplierName { get; set; }
@@ -318,14 +312,13 @@ namespace ShopNow.ViewModels
 
     public class MedicalEditViewModel
     {
-        public string Code { get; set; }
-        public string MasterProductCode { get; set; }
+        public int MasterProductId { get; set; }
         public string MasterProductName { get; set; }
-        public string ShopCode { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public string CategoryCode { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
-        public string BrandCode { get; set; }
+        public int BrandId { get; set; }
         public string BrandName { get; set; }
         public double Price { get; set; }
         public double MenuPrice { get; set; }
@@ -360,7 +353,7 @@ namespace ShopNow.ViewModels
         public List<MedicalStockList> MedicalStockLists { get; set; }
         public class MedicalStockList
         {
-            public string Code { get; set; }
+             
             public string ProductCode { get; set; }
             public string ProductName { get; set; }
             public double Stock { get; set; }
@@ -381,16 +374,16 @@ namespace ShopNow.ViewModels
 
     public class ElectronicListViewModel
     {
-        public string ShopCode { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
 
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {
-            public string Code { get; set; }
+             
             public string Name { get; set; }
             public string CategoryName { get; set; }
-            public string ShopCode { get; set; }
+            public int ShopId { get; set; }
             public string ShopName { get; set; }
             public int Percentage { get; set; }
         }
@@ -398,16 +391,16 @@ namespace ShopNow.ViewModels
 
     public class FMCGListViewModel
     {
-        public string ShopCode { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
 
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {
-            public string Code { get; set; }
+             
             public string Name { get; set; }
             public string CategoryName { get; set; }
-            public string ShopCode { get; set; }
+            public int ShopId { get; set; }
             public string ShopName { get; set; }
             public int Percentage { get; set; }
         }
@@ -415,17 +408,17 @@ namespace ShopNow.ViewModels
 
     public class MedicalListViewModel
     {
-        public string ShopCode { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
 
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {
             public int Id { get; set; }
-            public string Code { get; set; }
+             
             public string Name { get; set; }
             public string CategoryName { get; set; }
-            public string ShopCode { get; set; }
+            public int ShopId { get; set; }
             public string ShopName { get; set; }
             public int Percentage { get; set; }
         }
@@ -433,16 +426,16 @@ namespace ShopNow.ViewModels
 
     public class FoodListViewModel
     {
-        public string ShopCode { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
 
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {
-            public string Code { get; set; }
+             
             public string Name { get; set; }
             public string CategoryName { get; set; }
-            public string ShopCode { get; set; }
+            public int ShopId { get; set; }
             public string ShopName { get; set; }
             public int Percentage { get; set; }
         }
@@ -451,13 +444,13 @@ namespace ShopNow.ViewModels
    
     public class ServiceCreateEditViewModel
     {
-        public string Code { get; set; }
+         
         public string Name { get; set; }
-        public string ShopCode { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public string BrandCode { get; set; }
+        public int BrandId { get; set; }
         public string BrandName { get; set; }
-        public string CategoryCode { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public string ProductType { get; set; }
         public string ImagePath { get; set; }
@@ -470,7 +463,7 @@ namespace ShopNow.ViewModels
         public List<ProductList> List { get; set; }
         public class ProductList
         {
-            public string Code { get; set; }
+             
             public string Name { get; set; }
             public string MasterProductName { get; set; }
             public string CategoryName { get; set; }
@@ -483,13 +476,13 @@ namespace ShopNow.ViewModels
         public List<MasterDishList> MasterDishLists { get; set; }
         public class MasterDishList
         {
-            public string Code { get; set; }
+             
             public string Name { get; set; }
-            public string CategoryCode { get; set; }
+            public int CategoryId { get; set; }
             public string CategoryName { get; set; }
             public bool Customisation { get; set; }
             public string ColorCode { get; set; }
-            public string BrandCode { get; set; }
+            public int BrandId { get; set; }
             public string BrandName { get; set; }
             public string ShortDescription { get; set; }
             public string LongDescription { get; set; }
@@ -502,7 +495,7 @@ namespace ShopNow.ViewModels
     public class AddOnsCreateViewModel
     {
         public int Id { get; set; }
-        public string Code { get; set; }
+         
         public string Name { get; set; }
         public string AddOnCategoryCode { get; set; }
         public string AddOnCategoryName { get; set; }
@@ -516,7 +509,7 @@ namespace ShopNow.ViewModels
         public double PortionPrice { get; set; }
         public double AddOnsPrice { get; set; }
         public double CrustPrice { get; set; }
-        public string MasterProductCode { get; set; }
+        public int MasterProductId { get; set; }
         public string MasterProductName { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
@@ -525,9 +518,9 @@ namespace ShopNow.ViewModels
         public class DishList
         {
             public int Id { get; set; }
-            public string Code { get; set; }
+             
             public string Name { get; set; }
-            public string MasterProductCode { get; set; }
+            public int MasterProductId { get; set; }
             public string MasterProductName { get; set; }
             public string AddOnCategoryCode { get; set; }
             public string AddOnCategoryName { get; set; }
@@ -551,10 +544,9 @@ namespace ShopNow.ViewModels
         public List<List> Lists { get; set; }
         public class List
         {
-            public string Code { get; set; }
-            public string MasterProductCode { get; set; }
+            public int MasterProductId { get; set; }
             public string MasterProductName { get; set; }
-            public string SpecificationCode { get; set; }
+            public int SpecificationId { get; set; }
             public string SpecificationName { get; set; }
             public string Value { get; set; }
         }
@@ -563,7 +555,7 @@ namespace ShopNow.ViewModels
     public class DefaultMedicalStockViewModel
     {
         public int Id { get; set; }
-        public string Code { get; set; }
+         
         public string ProductCode { get; set; }
         public string ProductName { get; set; }
         public double Stock { get; set; }
@@ -583,7 +575,7 @@ namespace ShopNow.ViewModels
     public class ManualMedicalStockViewModel
     {
         public int Id { get; set; }
-        public string Code { get; set; }
+         
         public string ProductCode { get; set; }
         public string ProductName { get; set; }
         public double Stock1 { get; set; }
@@ -608,11 +600,11 @@ namespace ShopNow.ViewModels
         {
             public string ItemId { get; set; }
             public string Name { get; set; }
-            public string MasterProductCode { get; set; }
+            public int MasterProductId { get; set; }
             public string MasterProductName { get; set; }
-            public string CategoryCode { get; set; }
+            public int CategoryId { get; set; }
             public string CategoryName { get; set; }
-            public string BrandCode { get; set; }
+            public int BrandId { get; set; }
             public string BrandName { get; set; }
             public string DrugMeasurementUnitCode { get; set; }
             public string DrugMeasurementUnitName { get; set; }
@@ -662,16 +654,15 @@ namespace ShopNow.ViewModels
         public HttpPostedFileBase FMCGLargeImage3 { get; set; }
         public HttpPostedFileBase FMCGLargeImage4 { get; set; }
         public HttpPostedFileBase FMCGLargeImage5 { get; set; }
-        public string Code { get; set; }
+         
         public string Name { get; set; }
-        public string MasterProductCode { get; set; }
+        public int MasterProductId { get; set; }
         public string MasterProductName { get; set; }
-        public string MasterProductId { get; set; }
-        public string ShopCode { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
         public string ShopCategoryCode { get; set; }
         public string ShopCategoryName { get; set; }
-        public string CategoryCode { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public string SubCategoryCode { get; set; }
         public string SubCategoryName { get; set; }
@@ -682,7 +673,7 @@ namespace ShopNow.ViewModels
         public string MeasurementUnitCode { get; set; }
         public string MeasurementUnitName { get; set; }
         public string GoogleTaxonomyCode { get; set; }
-        public string BrandCode { get; set; }
+        public int BrandId { get; set; }
         public string BrandName { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
@@ -714,16 +705,15 @@ namespace ShopNow.ViewModels
 
     public class ElectronicCreateEditViewModel
     {
-        public string Code { get; set; }
+         
         public string Name { get; set; }
-        public string MasterProductCode { get; set; }
+        public int MasterProductId { get; set; }
         public string MasterProductName { get; set; }
-        public string MasterProductId { get; set; }
-        public string ShopCode { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
         public string ShopCategoryCode { get; set; }
         public string ShopCategoryName { get; set; }
-        public string CategoryCode { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public string SubCategoryCode { get; set; }
         public string SubCategoryName { get; set; }
@@ -734,7 +724,7 @@ namespace ShopNow.ViewModels
         public string MeasurementUnitCode { get; set; }
         public string MeasurementUnitName { get; set; }
         public string GoogleTaxonomyCode { get; set; }
-        public string BrandCode { get; set; }
+        public int BrandId { get; set; }
         public string BrandName { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
@@ -765,15 +755,14 @@ namespace ShopNow.ViewModels
     }
     public class FoodCreateViewModel
     {
-        public string Code { get; set; }
+         
         public string Name { get; set; }
         public string NickName { get; set; }
-        public string MasterProductCode { get; set; }
-        public string MasterProductName { get; set; }
         public int MasterProductId { get; set; }
-        public string ShopCode { get; set; }
+        public string MasterProductName { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public string CategoryCode { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public string ShopCategoryCode { get; set; }
         public string ShopCategoryName { get; set; }
@@ -793,22 +782,20 @@ namespace ShopNow.ViewModels
         public string Entry { get; set; }
         public string GoogleTaxonomyCode { get; set; }
         public string ImagePathLarge1 { get; set; }
-        public int ShopId { get; set; }
         public Nullable<int> PackagingType { get; set; }
         public Nullable<double> PackagingCharge { get; set; }
     }
     public class FoodEditViewModel
     {
         public int Id { get; set; }
-        public string Code { get; set; }
+         
         public string Name { get; set; }
         public string NickName { get; set; }
-        public string MasterProductCode { get; set; }
+        public int MasterProductId { get; set; }
         public string MasterProductName { get; set; }
-        public string MasterProductId { get; set; }
-        public string ShopCode { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public string CategoryCode { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public string ShopCategoryCode { get; set; }
         public string ShopCategoryName { get; set; }
@@ -834,7 +821,7 @@ namespace ShopNow.ViewModels
 
     public class ShopAddOnSessionAddViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public double PortionPrice { get; set; }
         public double AddOnsPrice { get; set; }
         public double CrustPrice { get; set; }
@@ -842,7 +829,7 @@ namespace ShopNow.ViewModels
 
     public class ShopAddOnSessionEditViewModel
     {
-        public string Code { get; set; }
+         
         public double PortionPrice { get; set; }
         public double AddOnsPrice { get; set; }
         public double CrustPrice { get; set; }
@@ -862,9 +849,9 @@ namespace ShopNow.ViewModels
             public string ProductName { get; set; }
             public string ImagePath { get; set; }
             public string ShopImagePath { get; set; }
-            public string ShopCode { get; set; }
+            public int ShopId { get; set; }
            public string ShopName { get; set; }
-            public string CategoryCode { get; set; }
+            public int CategoryId { get; set; }
             public bool ? isOnline { get; set; }
             public string CategoryName { get; set; }
             public string DiscountCategoryCode { get; set; }
@@ -905,16 +892,16 @@ namespace ShopNow.ViewModels
 
     public class ProductDetailsViewModel
     {
-        public string Code { get; set; }
+         
         public string Name { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
         public string Specification { get; set; }
-        public string ShopCode { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public string CategoryCode { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
-        public string BrandCode { get; set; }
+        public int BrandId { get; set; }
         public string BrandName { get; set; }
         public string ProductType { get; set; }
         public string ShopCategoryCode { get; set; }
