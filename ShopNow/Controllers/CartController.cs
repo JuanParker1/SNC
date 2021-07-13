@@ -1886,6 +1886,120 @@ namespace ShopNow.Controllers
             return RedirectToAction("OrderPrepared");
         }
 
+        public ActionResult DeliveryBoyAccept(string orderNo, string code)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            var cart = db.Carts.FirstOrDefault(i => i.Code == code);
+            var delivaryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Code == cart.DeliveryBoyCode && i.Status == 0);
+            delivaryBoy.OnWork = 1;
+            delivaryBoy.UpdatedBy = user.Name;
+            delivaryBoy.DateUpdated = DateTime.Now;
+            db.Entry(delivaryBoy).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+
+            var shopCharge = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
+            var shop = db.Shops.FirstOrDefault(i => i.Code == shopCharge.ShopCode);
+            var topup = db.TopUps.OrderByDescending(q => q.Id).FirstOrDefault(i => i.CustomerCode == shop.CustomerCode && i.CreditType == 1 && i.Status == 0);
+            if (topup != null)
+            {
+                topup.CreditAmount = topup.CreditAmount - shopCharge.GrossDeliveryCharge;
+                topup.DateUpdated = DateTime.Now;
+                db.Entry(topup).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return RedirectToAction("Edit", "Cart", new { orderno = orderNo, code = code });
+        }
+
+        public ActionResult DeliveryBoyPickup(string orderNo, string code)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            var cartList = db.Carts.Where(i => i.OrderNo == orderNo).ToList();
+            foreach (var c in cartList)
+            {
+                var cart = db.Carts.FirstOrDefault(i => i.Code == c.Code);
+                cart.CartStatus = 5;
+                cart.UpdatedBy = user.Name;
+                cart.DateUpdated = DateTime.Now;
+                db.Entry(cart).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+
+                //Product Stock Update
+                var product = db.Products.FirstOrDefault(i => i.Code == c.ProductCode);
+                product.HoldOnStok -= Convert.ToInt32(c.Qty);
+                db.Entry(product).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
+            detail.CartStatus = 5;
+            detail.DateUpdated = DateTime.Now;
+            db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+
+            var payment = db.Payments.FirstOrDefault(i => i.OrderNo == orderNo);
+            if (payment.PaymentMode == "Online Payment" && payment.Amount > 1000)
+            {
+                //var otpmodel = new OtpViewModel();
+                //var models = _mapper.Map<OtpViewModel, OtpVerification>(otpmodel);
+                var otpVerification = new OtpVerification();
+                otpVerification.Code = Helpers.DRC.Generate("SMS");
+                otpVerification.ShopCode = cartList[0].ShopCode;
+                otpVerification.CustomerCode = user.Code;
+                otpVerification.CustomerName = user.Name;
+                otpVerification.PhoneNumber = cartList[0].DeliveryBoyPhoneNumber;
+                otpVerification.Otp = Helpers.DRC.GenerateOTP();
+                otpVerification.ReferenceCode = Helpers.DRC.Generate("");
+                otpVerification.Verify = false;
+                otpVerification.OrderNo = orderNo;
+                otpVerification.CreatedBy = user.Name;
+                otpVerification.UpdatedBy = user.Name;
+                otpVerification.DateUpdated = DateTime.Now;
+                db.OtpVerifications.Add(otpVerification);
+                db.SaveChanges();
+            }
+            return RedirectToAction("Edit", "Cart", new { orderno = orderNo, code = code });
+        }
+
+        public ActionResult MarkAsDelivered(string orderNo, string code)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+
+            var otpVerify = db.OtpVerifications.FirstOrDefault(i => i.OrderNo == orderNo);
+            var cart = db.Carts.FirstOrDefault(i => i.Code == code);
+
+            var delivaryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Code == cart.DeliveryBoyCode && i.Status == 0);// DeliveryBoy.GetCustomer(customerCode);
+            delivaryBoy.OnWork = 0;
+            delivaryBoy.isAssign = 0;
+            delivaryBoy.DateUpdated = DateTime.Now;
+            db.Entry(delivaryBoy).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+
+            otpVerify.Verify = true;
+            otpVerify.UpdatedBy = user.Name;
+            otpVerify.DateUpdated = DateTime.Now;
+            db.Entry(otpVerify).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+
+            var cartList = db.Carts.Where(i => i.OrderNo == orderNo).ToList();
+            foreach (var c in cartList)
+            {
+                var cartItem = db.Carts.FirstOrDefault(i => i.Code == c.Code);
+                cartItem.CartStatus = 6;
+                cartItem.UpdatedBy = delivaryBoy.CustomerName;
+                cartItem.DateUpdated = DateTime.Now;
+                db.Entry(cartItem).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
+            detail.CartStatus = 6;
+            detail.DateUpdated = DateTime.Now;
+            db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+
+            return RedirectToAction("Edit", "Cart", new { orderno = orderNo, code = code });
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

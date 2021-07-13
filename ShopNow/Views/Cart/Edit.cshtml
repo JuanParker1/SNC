@@ -55,14 +55,17 @@
                             else if (Model.CartStatus == 4 && Model.isAssign == 1 && Model.OnWork == 0)
                             {
                                 <span class="text-success">Assigned for Delivery</span>
+                                <a href="Cart/DeliveryBoyAccept?OrderNo=@Model.OrderNo&code=@Model.Code" class="btn btn-info mt-2">Delivery Boy Accept</a>
                             }
                             else if (Model.CartStatus == 4 && Model.isAssign == 1 && Model.OnWork == 1)
                             {
                                 <span class="text-success">Waiting for Pickup</span>
+                                <a href="Cart/DeliveryBoyPickup?OrderNo=@Model.OrderNo&code=@Model.Code" class="btn btn-info mt-2">Delivery Boy Pickup</a>
                             }
                             else if (Model.CartStatus == 5)
                             {
                                 <span class="text-success">On the Way to Delivery</span>
+                                <a href="Cart/MarkAsDelivered?OrderNo=@Model.OrderNo&code=@Model.Code" class="btn btn-info mt-2">Mark as Delivered</a>
                             }
                             else if (Model.CartStatus == 6)
                             {
