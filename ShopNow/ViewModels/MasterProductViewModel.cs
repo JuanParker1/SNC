@@ -36,7 +36,7 @@ namespace ShopNow.ViewModels
         public int Id { get; set; }
         public string Name { get; set; }
         public string NickName { get; set; }
-        public string CategoryCode { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public string SubCategoryCode1 { get; set; }
         public string SubCategoryName1 { get; set; }
@@ -120,7 +120,6 @@ namespace ShopNow.ViewModels
         public class PendingList
         {
             public int Id { get; set; }
-            public int Id { get; set; }
             public string Name { get; set; }
             public string ItemId { get; set; }
             public string ProductType { get; set; }
@@ -129,9 +128,8 @@ namespace ShopNow.ViewModels
         public class MappedList
         {
             public int Id { get; set; }
-            public int Id { get; set; }
             public string Name { get; set; }
-            public string MasterProductCode { get; set; }
+            public int MasterProductId { get; set; }
             public string MasterProductName { get; set; }
             public string ProductType { get; set; }
         }
@@ -142,7 +140,7 @@ namespace ShopNow.ViewModels
         public int Id { get; set; }
         public string Name { get; set; }
         public string NickName { get; set; }
-        public string CategoryCode { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public string DrugMeasurementUnitCode { get; set; }
         public string DrugMeasurementUnitName { get; set; }
@@ -228,11 +226,11 @@ namespace ShopNow.ViewModels
         public string ItemId { get; set; }
         public string Name { get; set; }
         public string NickName { get; set; }
-        public string MasterProductCode { get; set; }
+        public int MasterProductId { get; set; }
         public string MasterProductName { get; set; }
         public string ShopCode { get; set; }
         public string ShopName { get; set; }
-        public string CategoryCode { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public string BrandCode { get; set; }
         public string BrandName { get; set; }
@@ -347,7 +345,7 @@ namespace ShopNow.ViewModels
         public int Id { get; set; }
         public string Name { get; set; }
         public string NickName { get; set; }
-        public string CategoryCode { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public string ProductType { get; set; }
         public int MinSelectionLimit { get; set; }
@@ -364,12 +362,12 @@ namespace ShopNow.ViewModels
         {
             public int Id { get; set; }
             public string AddOnItemName { get; set; }
-            public string MasterProductCode { get; set; }
+            public int MasterProductId { get; set; }
             public string MasterProductName { get; set; }
-            public string AddOnCategoryCode { get; set; }
+            public string AddOnCategoryId { get; set; }
             public string AddOnCategoryName { get; set; }
             public string CrustName { get; set; }
-            public string PortionCode { get; set; }
+            public string PortionId { get; set; }
             public string PortionName { get; set; }
             public int MinSelectionLimit { get; set; }
             public int MaxSelectionLimit { get; set; }
@@ -377,7 +375,6 @@ namespace ShopNow.ViewModels
             public double AddOnsPrice { get; set; }
             public double CrustPrice { get; set; }
             public int AddOnType { get; set; }
-            public Nullable<int> MasterProductId { get; set; }
         }
     }
     public class MasterFoodEditViewModel
@@ -386,7 +383,7 @@ namespace ShopNow.ViewModels
         public int Id { get; set; }
         public string Name { get; set; }
         public string NickName { get; set; }
-        public string CategoryCode { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public string ProductType { get; set; }
         public int MinSelectionLimit { get; set; }
@@ -403,7 +400,7 @@ namespace ShopNow.ViewModels
         {
             public int Id { get; set; }
             public string AddOnItemName { get; set; }
-            public string MasterProductCode { get; set; }
+            public int MasterProductId { get; set; }
             public string MasterProductName { get; set; }
             public string AddOnCategoryCode { get; set; }
             public string AddOnCategoryName { get; set; }
@@ -416,21 +413,19 @@ namespace ShopNow.ViewModels
             public double AddOnsPrice { get; set; }
             public double CrustPrice { get; set; }
             public int AddOnType { get; set; }
-            public Nullable<int> MasterProductId { get; set; }
         }
     }
 
     public class MasterAddOnsCreateViewModel
     {
         public int Id { get; set; }
-        public int Id { get; set; }
         public string AddOnItemName { get; set; }
-        public string MasterProductCode { get; set; }
+        public int MasterProductId { get; set; }
         public string MasterProductName { get; set; }
-        public string AddOnCategoryCode { get; set; }
+        public string AddOnCategoryId { get; set; }
         public string AddOnCategoryName { get; set; }
         public string CrustName { get; set; }
-        public string PortionCode { get; set; }
+        public string PortionId { get; set; }
         public string PortionName { get; set; }
         public int MinSelectionLimit { get; set; }
         public int MaxSelectionLimit { get; set; }
@@ -438,17 +433,15 @@ namespace ShopNow.ViewModels
         public double AddOnsPrice { get; set; }
         public double CrustPrice { get; set; }
         public int AddOnType { get; set; }
-        public Nullable<int> MasterProductId { get; set; }
 
         public List<DishList> DishLists { get; set; }
         public class DishList
         {
             public int Id { get; set; }
-            public int Id { get; set; }
             public string AddOnItemName { get; set; }
-            public string MasterProductCode { get; set; }
+            public int MasterProductId { get; set; }
             public string MasterProductName { get; set; }
-            public string AddOnCategoryCode { get; set; }
+            public string AddOnCategoryId { get; set; }
             public string AddOnCategoryName { get; set; }
             public string CrustName { get; set; }
             public string PortionCode { get; set; }
@@ -459,7 +452,6 @@ namespace ShopNow.ViewModels
             public double AddOnsPrice { get; set; }
             public double CrustPrice { get; set; }
             public int AddOnType { get; set; }
-            public Nullable<int> MasterProductId { get; set; }
         }
     }
 }
