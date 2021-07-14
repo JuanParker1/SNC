@@ -10,7 +10,7 @@ namespace ShopNow.ViewModels
         public List<NextSubCategoryList> List { get; set; }
         public class NextSubCategoryList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string Name { get; set; }
             public string SubCategoryCode { get; set; }
             public string SubCategoryName { get; set; }
@@ -21,7 +21,7 @@ namespace ShopNow.ViewModels
 
     public class NextSubCategoryEditViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string SubCategoryCode { get; set; }
         public string SubCategoryName { get; set; }

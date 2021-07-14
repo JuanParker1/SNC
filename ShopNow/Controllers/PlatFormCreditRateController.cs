@@ -37,16 +37,7 @@ namespace ShopNow.Controllers
             ViewBag.Count = db.PlatFormCreditRates.Where(i => i.Status == 0).Count();
             return View(model.List);
         }
-        private const string _prefix = "PFC";
 
-        private static string _generatedCode
-        {
-            get
-            {
-                return ShopNow.Helpers.DRC.Generate(_prefix);
-            }
-
-        }
         [AccessPolicy(PageCode = "SHNPFCS002")]
         public JsonResult Save(double RatePerOrder, int DailyViewer)
         {
@@ -58,27 +49,26 @@ namespace ShopNow.Controllers
             platFormCreaditRate.DailyViewer = DailyViewer;
             platFormCreaditRate.CreatedBy = user.Name;
             platFormCreaditRate.UpdatedBy = user.Name;
-            platFormCreaditRate.Code = _generatedCode;
             platFormCreaditRate.Status = 0;
             platFormCreaditRate.DateEncoded = DateTime.Now;
             platFormCreaditRate.DateUpdated = DateTime.Now;
             db.PlatFormCreditRates.Add(platFormCreaditRate);
 
             db.SaveChanges();
-            string code = platFormCreaditRate.Code;
+
            // string code = PlatFormCreditRate.Add(platFormCreaditRate, out int error);
-           IsAdded = code != String.Empty ? true : false;
+           IsAdded = platFormCreaditRate.Id !=0 ? true : false;
             message = RatePerOrder + " Successfully Added";
 
             return Json(new { IsAdded = IsAdded, message = message }, JsonRequestBehavior.AllowGet);
         }
 
         [AccessPolicy(PageCode = "SHNPFCE003")]
-        public JsonResult Edit(string code, double ratePerOrder, int dailyViewer)
+        public JsonResult Edit(int code, double ratePerOrder, int dailyViewer)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             string message = "";
-            PlatFormCreditRate platFormCR = db.PlatFormCreditRates.FirstOrDefault(i => i.Code == code);// PlatFormCreditRate.Get(code);
+            PlatFormCreditRate platFormCR = db.PlatFormCreditRates.FirstOrDefault(i => i.Id == code);// PlatFormCreditRate.Get(code);
             if (platFormCR != null)
             {
                 platFormCR.RatePerOrder = ratePerOrder;
@@ -95,10 +85,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNPFCD004")]
-        public JsonResult Delete(string code)
+        public JsonResult Delete(int code)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var platFormCreaditRate = db.PlatFormCreditRates.FirstOrDefault(i => i.Code == code);// PlatFormCreditRate.Get(code);
+            var platFormCreaditRate = db.PlatFormCreditRates.FirstOrDefault(i => i.Id == code);// PlatFormCreditRate.Get(code);
             if (platFormCreaditRate != null)
             {
                 platFormCreaditRate.Status = 2;

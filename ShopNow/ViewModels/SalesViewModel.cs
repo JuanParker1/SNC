@@ -7,7 +7,7 @@ namespace ShopNow.ViewModels
 {
     public class SalesReportViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string CustomerCode { get; set; }
         public string CustomerName { get; set; }
         public string ShopCode { get; set; }
@@ -36,7 +36,7 @@ namespace ShopNow.ViewModels
         public List<SalesReportList> List { get; set; }
         public class SalesReportList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string CustomerCode { get; set; }
             public string CustomerName { get; set; }
             public string ShopCode { get; set; }

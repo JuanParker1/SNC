@@ -29,7 +29,7 @@ namespace ShopNow.ViewModels
 
     public class OtpViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string ShopCode { get; set; }
         public string CustomerCode { get; set; }
         public string CustomerName { get; set; }
@@ -53,7 +53,7 @@ namespace ShopNow.ViewModels
         public List<PaymentReportList> List { get; set; }
         public class PaymentReportList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string CartCode { get; set; }
             public string CorporateID { get; set; }
             public string ReferenceCode { get; set; }
@@ -82,7 +82,7 @@ namespace ShopNow.ViewModels
         public List<PlatformCreditReportList> List { get; set; }
         public class PlatformCreditReportList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string OrderNo { get; set; }
             public string CustomerCode { get; set; }
             public string CustomerName { get; set; }
@@ -99,7 +99,7 @@ namespace ShopNow.ViewModels
         public List<DeliveryCreditReportList> List { get; set; }
         public class DeliveryCreditReportList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string OrderNo { get; set; }
             public int CartStatus { get; set; }
             public double DeliveryCharge { get; set; }
@@ -121,8 +121,8 @@ namespace ShopNow.ViewModels
 
     public class PaymentUpdatedApiViewModel
     {        
-        public string OrderNo { get; set; }    
-        public string CustomerCode { get; set; }
+        public int OrderNo { get; set; }    
+        public int CustomerId { get; set; }
         public string CustomerName { get; set; }
         public double UpdatedAmount { get; set; }
         public double UpdatedOriginalAmount { get; set; }
@@ -145,13 +145,13 @@ namespace ShopNow.ViewModels
     }
     public class PaymentCreateApiViewModel
     {
-        public string CartCode { get; set; }
-        public string OrderNo { get; set; }
+        public int OrderId { get; set; }
+        public int OrderNo { get; set; }
         public string CorporateID { get; set; }
         public string ReferenceCode { get; set; }
-        public string CustomerCode { get; set; }
+        public int CustomerId { get; set; }
         public string CustomerName { get; set; }
-        public string ShopCode { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
         public string Address { get; set; }
         public string GSTINNumber { get; set; }

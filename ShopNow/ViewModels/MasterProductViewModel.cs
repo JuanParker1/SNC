@@ -7,7 +7,7 @@ namespace ShopNow.ViewModels
 {
     public class MainPageModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string NickName { get; set; }
         public string Customisation { get; set; }
@@ -33,7 +33,7 @@ namespace ShopNow.ViewModels
 
     public class GroceryPageModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string NickName { get; set; }
         public string CategoryCode { get; set; }
@@ -76,7 +76,7 @@ namespace ShopNow.ViewModels
         public HttpPostedFileBase ProductImage3 { get; set; }
         public HttpPostedFileBase ProductImage4 { get; set; }
         public HttpPostedFileBase ProductImage5 { get; set; }
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string NickName { get; set; }
         public string[] CategoryCode { get; set; }
@@ -109,7 +109,7 @@ namespace ShopNow.ViewModels
         public int maxRows { get; set; }
         public class MasterProductList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string Name { get; set; }
             public string CategoryName { get; set; }
             public string BrandName { get; set; }
@@ -120,7 +120,7 @@ namespace ShopNow.ViewModels
         public class PendingList
         {
             public int Id { get; set; }
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string Name { get; set; }
             public string ItemId { get; set; }
             public string ProductType { get; set; }
@@ -129,7 +129,7 @@ namespace ShopNow.ViewModels
         public class MappedList
         {
             public int Id { get; set; }
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string Name { get; set; }
             public string MasterProductCode { get; set; }
             public string MasterProductName { get; set; }
@@ -139,7 +139,7 @@ namespace ShopNow.ViewModels
   
     public class MedicalDrugViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string NickName { get; set; }
         public string CategoryCode { get; set; }
@@ -177,7 +177,7 @@ namespace ShopNow.ViewModels
         public HttpPostedFileBase ProductImage3 { get; set; }
         public HttpPostedFileBase ProductImage4 { get; set; }
         public HttpPostedFileBase ProductImage5 { get; set; }
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string NickName { get; set; }
         public string[] CategoryCode { get; set; }
@@ -213,7 +213,7 @@ namespace ShopNow.ViewModels
         public List<MedicalDrugList> List { get; set; }
         public class MedicalDrugList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string Name { get; set; }
             public string Combination { get; set; }
             public string CategoryName { get; set; }
@@ -224,7 +224,7 @@ namespace ShopNow.ViewModels
 
     public class ItemMappingViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string ItemId { get; set; }
         public string Name { get; set; }
         public string NickName { get; set; }
@@ -286,7 +286,7 @@ namespace ShopNow.ViewModels
         public List<ItemMappingList> List { get; set; }
         public class ItemMappingList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string Name { get; set; }
             public string ImagePath { get; set; }
             public string LongDescription { get; set; }
@@ -300,7 +300,7 @@ namespace ShopNow.ViewModels
         public HttpPostedFileBase FMCGLargeImage3 { get; set; }
         public HttpPostedFileBase FMCGLargeImage4 { get; set; }
         public HttpPostedFileBase FMCGLargeImage5 { get; set; }
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string NickName { get; set; }
         public string[] CategoryCode { get; set; }
@@ -344,7 +344,7 @@ namespace ShopNow.ViewModels
     public class MasterFoodCreateViewModel
     {
         public HttpPostedFileBase ProductImage1 { get; set; }
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string NickName { get; set; }
         public string CategoryCode { get; set; }
@@ -362,7 +362,7 @@ namespace ShopNow.ViewModels
         public List<AddonList> AddonLists { get; set; }
         public class AddonList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string AddOnItemName { get; set; }
             public string MasterProductCode { get; set; }
             public string MasterProductName { get; set; }
@@ -383,7 +383,7 @@ namespace ShopNow.ViewModels
     public class MasterFoodEditViewModel
     {
         public HttpPostedFileBase ProductImage1 { get; set; }
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string NickName { get; set; }
         public string CategoryCode { get; set; }
@@ -401,7 +401,7 @@ namespace ShopNow.ViewModels
         public List<AddonList> AddonLists { get; set; }
         public class AddonList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string AddOnItemName { get; set; }
             public string MasterProductCode { get; set; }
             public string MasterProductName { get; set; }
@@ -423,7 +423,7 @@ namespace ShopNow.ViewModels
     public class MasterAddOnsCreateViewModel
     {
         public int Id { get; set; }
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string AddOnItemName { get; set; }
         public string MasterProductCode { get; set; }
         public string MasterProductName { get; set; }
@@ -444,7 +444,7 @@ namespace ShopNow.ViewModels
         public class DishList
         {
             public int Id { get; set; }
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string AddOnItemName { get; set; }
             public string MasterProductCode { get; set; }
             public string MasterProductName { get; set; }

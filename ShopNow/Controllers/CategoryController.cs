@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using ExcelDataReader;
 using ShopNow.Filters;
 using ShopNow.Models;
@@ -23,14 +22,7 @@ namespace ShopNow.Controllers
         private ShopnowchatEntities db = new ShopnowchatEntities();
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
-        private const string _prefix = "CAT";
-        private static string _generatedCode
-        {
-            get
-            {
-                return ShopNow.Helpers.DRC.Generate(_prefix);
-            }
-        }
+
         public CategoryController()
         {
             _mapperConfiguration = new MapperConfiguration(config =>
@@ -50,13 +42,7 @@ namespace ShopNow.Controllers
             var List = (from s in db.Categories
                         select s).OrderBy(s => s.Name).Where(i => i.Status == 0).ToList();
             return View(List);
-            //var user = ((Helpers.Sessions.User)Session["USER"]);
-            //ViewBag.Name = user.Name;
-            //var model = new CategoryListViewModel();
 
-            //model.List = Category.GetList().AsQueryable().ProjectTo<CategoryListViewModel.CategoryList>(_mapperConfiguration).OrderBy(i => i.Name).ToList();
-
-            //return View(model);
         }
 
         [AccessPolicy(PageCode = "SHNCATS003")]
@@ -75,14 +61,12 @@ namespace ShopNow.Controllers
                 category.OrderNo = orderNo;
                 category.CreatedBy = user.Name;
                 category.UpdatedBy = user.Name;
-                //string code = Category.Add(category, out int error);
-                category.Code = _generatedCode;
                 category.Status = 0;
                 category.DateEncoded = DateTime.Now;
                 category.DateUpdated = DateTime.Now;
                 db.Categories.Add(category);
                 db.SaveChanges();
-                IsAdded = category.Code != String.Empty ? true : false;
+                IsAdded = category.Id != 0 ? true : false;
                 message = name + " Successfully Added";
             }
             else
@@ -93,11 +77,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNCATE004")]
-        public JsonResult Edit(string code, string name, string type, int orderNo)
+        public JsonResult Edit(int code, string name, string type, int orderNo)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             string message = "";
-            Category category = db.Categories.FirstOrDefault(i => i.Code == code); //Category.Get(code);
+            Category category = db.Categories.FirstOrDefault(i => i.Id == code); //Category.Get(code);
             if (category != null)
             {
                 category.Name = name;
@@ -116,10 +100,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNCATD005")]
-        public JsonResult Delete(string code)
+        public JsonResult Delete(int code)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var category = db.Categories.FirstOrDefault(i => i.Code == code); //Category.Get(code);
+            var category = db.Categories.FirstOrDefault(i => i.Id == code); //Category.Get(code);
             if (category != null)
             {
                 category.Status = 2;
@@ -136,7 +120,7 @@ namespace ShopNow.Controllers
         {
             var model = await db.Categories.Where(a => a.Name.Contains(q)).OrderBy(i => i.Name).Select(i => new
             {
-                id = i.Code,
+                id = i.Id,
                 text = i.Name
             }).OrderBy(i => i.text).ToListAsync();
 
@@ -247,7 +231,6 @@ namespace ShopNow.Controllers
                         db.Categories.Add(new Category
                         {
                             Name = row[model.Name].ToString(),
-                            Code = _generatedCode,
                             ProductType = model.ProductType,
                             Status = 0,
                             DateEncoded = DateTime.Now,

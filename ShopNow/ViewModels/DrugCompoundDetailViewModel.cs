@@ -10,7 +10,7 @@ namespace ShopNow.ViewModels
         public List<DrugCompoundList> List { get; set; }
         public class DrugCompoundList
         {
-            public string Code { get; set; }
+            public int Id{ get; set; }
             public string AliasName { get; set; }
             public string InteractingCompounds { get; set; }
             public string IntakeIndications { get; set; }
@@ -26,7 +26,7 @@ namespace ShopNow.ViewModels
     }
     public class DrugCompoundDetailCreateEditViewModel
     {
-        public string Code { get; set; }
+        public int Id{ get; set; }
         public string AliasName { get; set; }
         public string InteractingCompounds { get; set; }
         public string IntakeIndications { get; set; }
@@ -46,7 +46,7 @@ namespace ShopNow.ViewModels
     }
     public class DrugCompoundDetailMasterViewModel
     {
-        public string Code { get; set; }
+        public int Id{ get; set; }
         public string AliasName { get; set; }
         public string InteractingCompounds { get; set; }
         public string IntakeIndications { get; set; }

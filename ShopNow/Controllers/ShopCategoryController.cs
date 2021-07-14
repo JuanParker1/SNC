@@ -134,7 +134,7 @@ namespace ShopNow.Controllers
                         db.ShopCategories.Add(new ShopCategory
                         {
                             Name = row[model.Name].ToString(),
-                            Code = row[model.Code].ToString(),
+                            Id = row[model.id],
                             Status = 0,
                             DateEncoded = DateTime.Now,
                             DateUpdated = DateTime.Now,
@@ -166,14 +166,14 @@ namespace ShopNow.Controllers
             bool IsAdded = false;
             string message = "";
             string message1 = "";
-            string count = "";
+            int count = 0;
             var shopCategoryName = db.ShopCategories.FirstOrDefault(i => i.Name == name && i.Status == 0);// ShopCategory.GetName(name);
-            count = db.ShopCategories.Count().ToString();
+            count = db.ShopCategories.Count();
             if (shopCategoryName == null)
             {
                 var shopCategory = new ShopCategory();
                 shopCategory.Name = name;
-                shopCategory.Code = count;
+                shopCategory.Id = count;
                 shopCategory.CreatedBy = user.Name;
                 shopCategory.UpdatedBy = user.Name;
                 //string code = ShopCategory.Add(shopCategory, out int error);
@@ -181,7 +181,7 @@ namespace ShopNow.Controllers
                 shopCategory.DateUpdated = DateTime.Now;
                 db.ShopCategories.Add(shopCategory);
                 db.SaveChanges();
-                IsAdded = shopCategory.Code != String.Empty ? true : false;
+                IsAdded = shopCategory.Id != 0 ? true : false;
                 message = name + " Successfully Added";
             }
             else
@@ -192,11 +192,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNSCTE003")]
-        public JsonResult Edit(string code, string name)
+        public JsonResult Edit(int code, string name)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             string message = "";
-            ShopCategory shopCategory = db.ShopCategories.FirstOrDefault(i => i.Code == code);// ShopCategory.Get(code);
+            ShopCategory shopCategory = db.ShopCategories.FirstOrDefault(i => i.Id == code);// ShopCategory.Get(code);
             if (shopCategory != null)
             {
                 shopCategory.Name = name;
@@ -213,10 +213,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNSCTD005")]
-        public JsonResult Delete(string code)
+        public JsonResult Delete(int code)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var shopCategory = db.ShopCategories.FirstOrDefault(i => i.Code == code);// ShopCategory.Get(code);
+            var shopCategory = db.ShopCategories.FirstOrDefault(i => i.Id == code);// ShopCategory.Get(code);
             if (shopCategory != null)
             {
                 shopCategory.Status = 2;

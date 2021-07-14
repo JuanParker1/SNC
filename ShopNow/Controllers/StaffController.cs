@@ -67,77 +67,6 @@ namespace ShopNow.Controllers
                         select s).OrderBy(s => s.Name).Where(i => i.Status == 0).ToList();
             return View(List);
         }
-        //public ActionResult List(int? ColumnName, int? AdvanceFilter, string keyword = "", string shopcode = "")
-        //{
-        //    var user = ((Helpers.Sessions.User)Session["USER"]);
-        //    ViewBag.Name = user.Name;
-        //    var model = new StaffListViewModel();
-
-        //    if (shopcode != "")
-        //    {
-        //        model.List = db.Staffs.Where(i => i.Status == 0 && i.ShopCode == shopcode).Select(i => new StaffListViewModel.StaffList
-        //        {
-        //            Code = i.Code,
-        //            Name = i.Name,
-        //            PhoneNumber = i.PhoneNumber,
-        //            ImagePath = i.ImagePath,
-        //            ShopCode = i.ShopCode,
-        //            ShopName = i.ShopName
-        //        }).ToList();
-        //    }
-        //    else if (ColumnName == 0)
-        //    {
-        //        model.List = db.Staffs.Where(i => (AdvanceFilter == 0 ? i.Name.Contains(keyword) : true) && (AdvanceFilter == 1 ? i.Name != keyword : true)
-        //        && (AdvanceFilter == 2 ? i.Name != null : true) && (AdvanceFilter == 3 ? i.Name == null : true) && (AdvanceFilter == 4 ? i.Name.EndsWith(keyword) : true)
-        //        && (AdvanceFilter == 5 ? i.Name.StartsWith(keyword) : true) && (AdvanceFilter == 6 ? !i.Name.StartsWith(keyword) : true))
-        //         .Select(i => new StaffListViewModel.StaffList
-        //         {
-        //             Code = i.Code,
-        //             Name = i.Name,
-        //             PhoneNumber = i.PhoneNumber,
-        //             ImagePath = i.ImagePath,
-        //             ShopCode = i.ShopCode,
-        //             ShopName = i.ShopName
-        //         }).ToList();
-        //    }
-        //    else if (ColumnName == 1)
-        //    {
-        //        model.List = db.Staffs.Where(i => (AdvanceFilter == 0 ? i.PhoneNumber.Contains(keyword) : true) && (AdvanceFilter == 1 ? i.PhoneNumber != keyword : true)
-        //       && (AdvanceFilter == 2 ? i.PhoneNumber != null : true) && (AdvanceFilter == 3 ? i.PhoneNumber == null : true) && (AdvanceFilter == 4 ? i.PhoneNumber.EndsWith(keyword) : true)
-        //       && (AdvanceFilter == 5 ? i.PhoneNumber.StartsWith(keyword) : true) && (AdvanceFilter == 6 ? !i.PhoneNumber.StartsWith(keyword) : true))
-        //        .Select(i => new StaffListViewModel.StaffList
-        //        {
-        //            Code = i.Code,
-        //            Name = i.Name,
-        //            PhoneNumber = i.PhoneNumber,
-        //            ImagePath = i.ImagePath,
-        //            ShopCode = i.ShopCode,
-        //            ShopName = i.ShopName
-        //        }).ToList();
-        //    }
-        //    else if (ColumnName == 2)
-        //    {
-        //        model.List = db.Staffs.Where(i => (AdvanceFilter == 0 ? i.ShopName.Contains(keyword) : true) && (AdvanceFilter == 1 ? i.ShopName != keyword : true)
-        //       && (AdvanceFilter == 2 ? i.ShopName != null : true) && (AdvanceFilter == 3 ? i.ShopName == null : true) && (AdvanceFilter == 4 ? i.ShopName.EndsWith(keyword) : true)
-        //       && (AdvanceFilter == 5 ? i.ShopName.StartsWith(keyword) : true) && (AdvanceFilter == 6 ? !i.ShopName.StartsWith(keyword) : true))
-        //        .Select(i => new StaffListViewModel.StaffList
-        //        {
-        //            Code = i.Code,
-        //            Name = i.Name,
-        //            PhoneNumber = i.PhoneNumber,
-        //            ImagePath = i.ImagePath,
-        //            ShopCode = i.ShopCode,
-        //            ShopName = i.ShopName
-        //        }).ToList();
-        //    }
-        //    else
-        //    {
-        //        model.List = Staff.GetList().AsQueryable().ProjectTo<StaffListViewModel.StaffList>(_mapperConfiguration).OrderBy(i => i.Name).ToList();
-        //    }
-
-        //    return View(model);
-        //}
-
         [AccessPolicy(PageCode = "SHNSTFC002")]
         public ActionResult Create()
         {
@@ -154,16 +83,14 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
 
             var staff = _mapper.Map<StaffCreateEditViewModel, Staff>(model);
-            if(model.ShopCode != null)
+            if(model.ShopId != 0)
             {
-                var shop = db.Shops.FirstOrDefault(i => i.Code == model.ShopCode); //Get(model.ShopCode);
-                staff.CustomerCode = shop.CustomerCode;
+                var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId); //Get(model.ShopCode);
+                staff.CustomerId = shop.CustomerId;
                 staff.CustomerName = shop.CustomerName;
-                staff.IpAddress = shop.IpAddress;
             }
             staff.CreatedBy = user.Name;
             staff.UpdatedBy = user.Name;
-            staff.Code = _generatedCode;
             staff.Status = 0;
             staff.DateEncoded = DateTime.Now;
             staff.DateUpdated = DateTime.Now;
@@ -176,8 +103,8 @@ namespace ShopNow.Controllers
                 // Staff Image
                 if (model.StaffImage != null)
                 {
-                    uc.UploadFiles(model.StaffImage.InputStream, staff.Code + "_" + model.StaffImage.FileName, accesskey, secretkey, "image");
-                    staff.ImagePath = staff.Code + "_" + model.StaffImage.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.StaffImage.InputStream, staff.Id + "_" + model.StaffImage.FileName, accesskey, secretkey, "image");
+                    staff.ImagePath = staff.Id + "_" + model.StaffImage.FileName.Replace(" ", "");
                 }
                 db.Staffs.Add(staff);
                 db.SaveChanges();
@@ -204,12 +131,12 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNSTFE003")]
         public ActionResult Edit(string code)
         {
-            var dCode = AdminHelpers.DCode(code);
+            var dCode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            if (string.IsNullOrEmpty(dCode))
+            if (dCode==0)
                 return HttpNotFound();
-            var staff = db.Staffs.FirstOrDefault(i => i.Code == dCode); //Staff.Get(dCode);
+            var staff = db.Staffs.FirstOrDefault(i => i.Id == dCode); //Staff.Get(dCode);
             var model = _mapper.Map<Staff, StaffCreateEditViewModel>(staff);
             return View(model);
         }
@@ -220,7 +147,7 @@ namespace ShopNow.Controllers
         public ActionResult Edit(StaffCreateEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            Staff staff = db.Staffs.FirstOrDefault(i => i.Code == model.Code); // Staff.Get(model.Code);
+            Staff staff = db.Staffs.FirstOrDefault(i => i.Id == model.Id); // Staff.Get(model.Code);
             _mapper.Map(model, staff);
 
             staff.DateUpdated = DateTime.Now;
@@ -233,8 +160,8 @@ namespace ShopNow.Controllers
                 // Staff Image
                 if (model.StaffImage != null)
                 {
-                    uc.UploadFiles(model.StaffImage.InputStream, staff.Code + "_" + model.StaffImage.FileName, accesskey, secretkey, "image");
-                    staff.ImagePath = staff.Code + "_" + model.StaffImage.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.StaffImage.InputStream, staff.Id + "_" + model.StaffImage.FileName, accesskey, secretkey, "image");
+                    staff.ImagePath = staff.Id + "_" + model.StaffImage.FileName.Replace(" ", "");
                 }
                 db.Entry(staff).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
@@ -261,36 +188,22 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNSTFD004")]
         public ActionResult Details(string code)
         {
-            var dCode = AdminHelpers.DCode(code);
+            var dCode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            Staff staff = db.Staffs.FirstOrDefault(i => i.Code == dCode); //Staff.Get(dCode);
+            Staff staff = db.Staffs.FirstOrDefault(i => i.Id == dCode); //Staff.Get(dCode);
             var model = new StaffCreateEditViewModel();
             _mapper.Map(staff, model);
-            model.List = db.Shops.Where(i => i.Code == staff.ShopCode).Select(i => new StaffCreateEditViewModel.ShopList
+            model.List = db.Shops.Where(i => i.Id == staff.ShopId).Select(i => new StaffCreateEditViewModel.ShopList
             {
                 Address = i.Address,
                 CountryName = i.CountryName,
-                Code = i.Code,
+                Id = i.Id,
                 DistrictName = i.DistrictName,
-                FridayCloseTime=i.FridayCloseTime,
-                FridayOpenTime=i.FridayOpenTime,
-                MondayCloseTime=i.MondayCloseTime,
-                MondayOpenTime=i.MondayOpenTime,
                 Name=i.Name,
                 PinCode=i.PinCode,
-                SaturdayCloseTime=i.SaturdayCloseTime,
-                SaturdayOpenTime=i.SaturdayOpenTime,
                 StateName=i.StateName,
-                StreetName=i.StreetName,
-                SundayCloseTime=i.SundayCloseTime,
-                SundayOpenTime=i.SundayOpenTime,
-                ThursdayCloseTime=i.ThursdayCloseTime,
-                ThursdayOpenTime=i.ThursdayOpenTime,
-                TuesdayCloseTime=i.TuesdayCloseTime,
-                TuesdayOpenTime=i.TuesdayOpenTime,
-                WednesdayCloseTime=i.WednesdayCloseTime,
-               WednesdayOpenTime=i.WednesdayOpenTime 
+                StreetName=i.StreetName
             }).ToList();
             return View(model);
         }
@@ -298,9 +211,9 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNSTFR005")]
         public ActionResult Delete(string code)
         {
-            var dCode = AdminHelpers.DCode(code);
+            var dCode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var staff = db.Staffs.FirstOrDefault(i => i.Code == dCode); // Staff.Get(dCode);
+            var staff = db.Staffs.FirstOrDefault(i => i.Id == dCode); // Staff.Get(dCode);
             staff.Status = 2;
             staff.DateUpdated = DateTime.Now;
             staff.UpdatedBy = user.Name;
@@ -312,7 +225,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNSTFGP006")]
         public JsonResult GeneratePassword(string code)
         {
-            var staff = db.Staffs.FirstOrDefault(i => i.Code == code); // Staff.Get(code);
+            var dCode = AdminHelpers.DCodeInt(code);
+            var staff = db.Staffs.FirstOrDefault(i => i.Id == dCode); // Staff.Get(code);
             staff.Password = _generatedPassword;
             staff.DateUpdated = DateTime.Now;
             db.Entry(staff).State = System.Data.Entity.EntityState.Modified;
@@ -328,7 +242,7 @@ namespace ShopNow.Controllers
         {
             var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
             {
-                id = i.Code,
+                id = i.Id,
                 text = i.Name
             }).ToListAsync();
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using ExcelDataReader;
 using ShopNow.Filters;
+using ShopNow.Helpers;
 using ShopNow.Models;
 using ShopNow.ViewModels;
 using System;
@@ -18,14 +18,7 @@ namespace ShopNow.Controllers
         private ShopnowchatEntities db = new ShopnowchatEntities();
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
-        private const string _prefix = "SPF";
-        private static string _generatedCode
-        {
-            get
-            {
-                return ShopNow.Helpers.DRC.Generate(_prefix);
-            }
-        }
+
         public SpecificationController()
         {
             _mapperConfiguration = new MapperConfiguration(config =>
@@ -42,9 +35,7 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            // var model = new SpecificationListViewModel();
-
-            //model.List = Specification.GetList().AsQueryable().ProjectTo<SpecificationListViewModel.SpecificationList>(_mapperConfiguration).OrderBy(i => i.Name).ToList();
+ 
             var List = (from s in db.Specifications
                         select s).OrderBy(s => s.Name).Where(i => i.Status == 0).ToList();
             return View(List);
@@ -64,15 +55,13 @@ namespace ShopNow.Controllers
                 specification.Name = name;
                 specification.CreatedBy = user.Name;
                 specification.UpdatedBy = user.Name;
-
-                specification.Code = _generatedCode;
                 specification.Status = 0;
                 specification.DateEncoded = DateTime.Now;
                 specification.DateUpdated = DateTime.Now;
                 db.Specifications.Add(specification);
                 db.SaveChanges();
                 //string code = Specification.Add(specification, out int error);
-                IsAdded = specification.Code != String.Empty ? true : false;
+                IsAdded = specification.Id != 0 ? true : false;
                 message = name + " Successfully Added";
             }
             else
@@ -86,9 +75,10 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNSPFE003")]
         public JsonResult Edit(string code, string name)
         {
+            var dCode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             string message = "";
-            Specification specification = db.Specifications.FirstOrDefault(i => i.Code == code); // Specification.Get(code);
+            Specification specification = db.Specifications.FirstOrDefault(i => i.Id == dCode); // Specification.Get(code);
             if (specification != null)
             {
                 specification.Name = name;
@@ -106,8 +96,9 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNSPFD004")]
         public JsonResult Delete(string code)
         {
+            var dCode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var specification = db.Specifications.FirstOrDefault(i => i.Code == code); // Specification.Get(code);
+            var specification = db.Specifications.FirstOrDefault(i => i.Id == dCode); // Specification.Get(code);
             if (specification != null)
             {
                 specification.Status = 2;
@@ -222,7 +213,6 @@ namespace ShopNow.Controllers
                         db.Specifications.Add(new Specification
                         {
                             Name = row[model.Name].ToString(),
-                            Code = _generatedCode,
                             Status = 0,
                             DateEncoded = DateTime.Now,
                             DateUpdated = DateTime.Now,

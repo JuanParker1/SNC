@@ -10,9 +10,9 @@ namespace ShopNow.Helpers
     {
         private static ShopnowchatEntities db = new ShopnowchatEntities();
 
-        public static string GetMasterProductName(string code)
+        public static string GetMasterProductName(int code)
         {
-            var masterProduct = db.MasterProducts.FirstOrDefault(i => i.Code == code);
+            var masterProduct = db.MasterProducts.FirstOrDefault(i => i.Id == code);
             var name = "N/A";
             if (masterProduct != null)
             {

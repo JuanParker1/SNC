@@ -7,7 +7,7 @@ namespace ShopNow.ViewModels
 {
     public class ProductSpecificationViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string MasterProductName { get; set; }
         public string SpecificationName { get; set; }
         public string Value { get; set; }
@@ -17,10 +17,10 @@ namespace ShopNow.ViewModels
     }
     public class ProductSpecificationCreateEditViewModel
     {
-        public string Code { get; set; }
-        public string MasterProductCode { get; set; }
+        public int Id { get; set; }
+        public int MasterProductId { get; set; }
         public string MasterProductName { get; set; }
-        public string SpecificationCode { get; set; }
+        public string SpecificationId { get; set; }
         public string SpecificationName { get; set; }
         public string Value { get; set; }
         public string CreatedBy { get; set; }
@@ -34,7 +34,7 @@ namespace ShopNow.ViewModels
         public List<ProductSpecificationList> List { get; set; }
         public class ProductSpecificationList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string MasterProductCode { get; set; }
             public string MasterProductName { get; set; }
             public string SpecificationCode { get; set; }

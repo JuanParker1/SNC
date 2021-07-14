@@ -7,7 +7,7 @@ namespace ShopNow.ViewModels
 {
     public class DiscountCategoryListViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public double Percentage { get; set; }
 
@@ -15,7 +15,7 @@ namespace ShopNow.ViewModels
         public List<DiscountCategoryList> List { get; set; }
         public class DiscountCategoryList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string Name { get; set; }
             public double Percentage { get; set; }
         }

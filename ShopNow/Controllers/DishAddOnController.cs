@@ -72,7 +72,6 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var dishAddOn = _mapper.Map<DishAddOnCreateEditViewModel, DishAddOn>(model);
             dishAddOn.CreatedBy= user.Name;
-            dishAddOn.Code = _generatedCode("DAN");
             dishAddOn.DateEncoded = DateTime.Now;
             dishAddOn.DateUpdated = DateTime.Now;
             _db.DishAddOns.Add(dishAddOn);
@@ -85,12 +84,12 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNDANE003")]
         public ActionResult Edit(string code)
         {
-            var dCode = AdminHelpers.DCode(code);
+            var dCode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            if (string.IsNullOrEmpty(dCode))
+            if (dCode==0)
                 return HttpNotFound();
-            var dishAddOn = _db.DishAddOns.FirstOrDefault(i => i.Code == dCode);// DishAddOn.Get(dCode);
+            var dishAddOn = _db.DishAddOns.FirstOrDefault(i => i.Id == dCode);// DishAddOn.Get(dCode);
             var model = _mapper.Map<DishAddOn, DishAddOnCreateEditViewModel>(dishAddOn);
             return View(model);
         }
@@ -105,7 +104,7 @@ namespace ShopNow.Controllers
             int errorCode = 0;
             try
             {
-                DishAddOn da = _db.DishAddOns.FirstOrDefault(i => i.Code == model.Code);//DishAddOn.Get(model.Code);
+                DishAddOn da = _db.DishAddOns.FirstOrDefault(i => i.Id == model.Id);//DishAddOn.Get(model.Code);
                 _mapper.Map(model, da);
                 da.UpdatedBy = user.Name;
                 da.DateUpdated = DateTime.Now;
@@ -126,8 +125,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNDAND004")]
         public ActionResult Delete(string code)
         {
-            var dCode = AdminHelpers.DCode(code);
-            var dishAddOn = _db.DishAddOns.FirstOrDefault(i => i.Code == dCode);// DishAddOn.Get(dCode);
+            var dCode = AdminHelpers.DCodeInt(code);
+            var dishAddOn = _db.DishAddOns.FirstOrDefault(i => i.Id == dCode);// DishAddOn.Get(dCode);
             dishAddOn.Status = 2;
             _db.Entry(dishAddOn).State = System.Data.Entity.EntityState.Modified;
             _db.SaveChanges();
@@ -239,13 +238,12 @@ namespace ShopNow.Controllers
                     {
                         _db.DishAddOns.Add(new DishAddOn
                         {
-                            Code = _generatedCode("DAN"),
                             Name = row[model.Name].ToString(),
                             MasterProductName = row[model.MasterProductName].ToString(),
-                            MasterProductCode = CheckProduct(row[model.MasterProductName].ToString()),
-                            AddOnCategoryCode = CheckAddOnCategory(row[model.AddOnCategoryName].ToString()),
+                            MasterProductId = CheckProduct(row[model.MasterProductName].ToString()),
+                            AddOnCategoryId = CheckAddOnCategory(row[model.AddOnCategoryName].ToString()),
                             AddOnCategoryName = row[model.AddOnCategoryName].ToString(),
-                            PortionCode = CheckPortion(row[model.PortionName].ToString()),
+                            PortionId = CheckPortion(row[model.PortionName].ToString()),
                             PortionName = row[model.PortionName].ToString(),
                             CrustName = row[model.CrustName].ToString(),
                             Qty = 1,
@@ -263,49 +261,47 @@ namespace ShopNow.Controllers
             return View();
         }
 
-        public string CheckProduct(string ProductName)
+        public int CheckProduct(string ProductName)
         {
             var master = _db.MasterProducts.FirstOrDefault(i => i.Name == ProductName && i.Status == 0);//MasterProduct.GetName(ProductName);
-            return master.Code;
+            return master.Id;
         }
-        public string CheckAddOnCategory(string AddOnCategoryName)
+        public int CheckAddOnCategory(string AddOnCategoryName)
         {
             var addon = _db.AddOnCategories.FirstOrDefault(i => i.Name == AddOnCategoryName && i.Status == 0);// AddOnCategory.GetName(AddOnCategoryName);
             if (addon != null)
             {
-                return addon.Code;
+                return addon.Id;
             }
             else
             {
                 AddOnCategory ad = new AddOnCategory();
                 ad.Name = AddOnCategoryName;
-                ad.Code = _generatedCode("CTA");
                 ad.DateEncoded = DateTime.Now;
                 ad.DateUpdated = DateTime.Now;
                 _db.AddOnCategories.Add(ad);
                 _db.SaveChanges();
                //  ad.Code = ad.Code// AddOnCategory.Add(ad, out int error);
-                return ad.Code;
+                return ad.Id;
             }
         }
-        public string CheckPortion(string PortionName)
+        public int CheckPortion(string PortionName)
         {
             var cust = _db.Portions.FirstOrDefault(i => i.Name == PortionName && i.Status == 0);// Portion.GetName(PortionName);
             if (cust != null)
             {
-                return cust.Code;
+                return cust.Id;
             }
             else
             {
                 Portion ct = new Portion();
                 ct.Name = PortionName;
-                ct.Code = _generatedCode("CST");
                 ct.DateEncoded = DateTime.Now;
                 ct.DateUpdated = DateTime.Now;
                 _db.Portions.Add(ct);
                 _db.SaveChanges();
                 // ct.Code = Portion.Add(ct, out int error);
-                return ct.Code;
+                return ct.Id;
             }
         }
 
@@ -314,7 +310,7 @@ namespace ShopNow.Controllers
         {
             var model = await _db.Portions.Where(a => a.Name.Contains(q) && a.Status == 0).OrderBy(i => i.Name).Select(i => new
             {
-                id = i.Code,
+                id = i.Id,
                 text = i.Name
             }).OrderBy(i => i.text).ToListAsync();
 
@@ -326,7 +322,7 @@ namespace ShopNow.Controllers
         {
             var model = await _db.AddOnCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
             {
-                id = i.Code,
+                id = i.Id,
                 text = i.Name
             }).ToListAsync();
 

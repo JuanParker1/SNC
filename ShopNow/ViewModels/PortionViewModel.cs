@@ -7,20 +7,20 @@ namespace ShopNow.ViewModels
 {
     public class PortionListViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
 
         public List<PortionList> List { get; set; }
         public class PortionList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string Name { get; set; }
         }
 
     }
     public class PortionMasterViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public System.Data.DataTable DataTable { get; set; }
         public string button { get; set; }
