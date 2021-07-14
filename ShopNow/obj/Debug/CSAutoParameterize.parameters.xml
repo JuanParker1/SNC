@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<parameters>
-  <parameter name="DefaultConnection-Web.config Connection String" description="DefaultConnection Connection String used in web.config by the application to access the database." defaultValue="Data Source=3.7.252.49,65001;Initial Catalog=Shopnowchat;MultipleActiveResultSets=True;User ID=sa;Password=Tablet*123" tags="SqlConnectionString">
-    <parameterEntry kind="XmlFile" scope="C:\\Users\\Gigabyte\\source\\repos\\ShopNowChat\\WebAppShopnowAdmin\\WebAppShopnowAdmin\\ShopNow\\obj\\Debug\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DefaultConnection']/@connectionString" />
-  </parameter>
-  <parameter name="ShopnowchatEntities-Web.config Connection String" description="ShopnowchatEntities Connection String used in web.config by the application to access the database." defaultValue="metadata=res://*/Models.ApplicationDbContext.csdl|res://*/Models.ApplicationDbContext.ssdl|res://*/Models.ApplicationDbContext.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=3.7.252.49,65001;initial catalog=Shopnowchat;user id=sa;password=Tablet*123;MultipleActiveResultSets=True;App=EntityFramework&quot;" tags="SqlConnectionString">
-    <parameterEntry kind="XmlFile" scope="C:\\Users\\Gigabyte\\source\\repos\\ShopNowChat\\WebAppShopnowAdmin\\WebAppShopnowAdmin\\ShopNow\\obj\\Debug\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='ShopnowchatEntities']/@connectionString" />
-  </parameter>
-</parameters>
