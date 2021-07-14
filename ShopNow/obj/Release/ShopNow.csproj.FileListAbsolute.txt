@@ -1,3 +1,0 @@
-C:\Users\Gigabyte\source\repos\SNC-NEW\WebAppShopnowAdmin\ShopNow\obj\Release\ShopNow.csproj.App.config
-C:\Users\Gigabyte\source\repos\SNC-NEW\WebAppShopnowAdmin\ShopNow\obj\Release\ShopNow.csprojAssemblyReference.cache
-C:\Users\Gigabyte\source\repos\SNC-NEW\WebAppShopnowAdmin\ShopNow\obj\Release\ShopNow.csproj.CoreCompileInputs.cache
