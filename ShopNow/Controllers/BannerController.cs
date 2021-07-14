@@ -115,8 +115,8 @@ namespace ShopNow.Controllers
                 //Banner Image
                 if (model.BannerImage != null)
                 {
-                    uc.UploadMediumFile(model.BannerImage.InputStream, banner.Code + "_" + model.BannerImage.FileName, accesskey, secretkey, "image");  // Upload Medium Image
-                    banner.Bannerpath = banner.Code + "_" + model.BannerImage.FileName;
+                    uc.UploadMediumFile(model.BannerImage.InputStream, banner.Id + "_" + model.BannerImage.FileName, accesskey, secretkey, "image");  // Upload Medium Image
+                    banner.Bannerpath = banner.Id + "_" + model.BannerImage.FileName;
                 }
                 db.Entry(banner).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
@@ -140,10 +140,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNBAND004")]
-        public ActionResult Delete(string code)
+        public ActionResult Delete(int id)
         {
-            var dCode = AdminHelpers.DCode(code);
-            var banner = db.Banners.FirstOrDefault(i => i.Code == dCode);  //Product.Get(dCode);
+            var dCode = AdminHelpers.DCodeInt(id.ToString());
+            var banner = db.Banners.FirstOrDefault(i => i.Id == dCode);  //Product.Get(dCode);
             banner.Status = 2;
             db.Entry(banner).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
@@ -155,20 +155,20 @@ namespace ShopNow.Controllers
         {
             var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
             {
-                id = i.Code,
+                id = i.Id,
                 text = i.Name
             }).ToListAsync();
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
         [AccessPolicy(PageCode = "SHNBANE003")]
-        public async Task<JsonResult> GetShopProductSelect2(string shopcode, string q = "")
+        public async Task<JsonResult> GetShopProductSelect2(int shopid, string q = "")
         {
-            var model = await db.Products.Where(a => a.ShopCode == shopcode && a.Status == 0)
-                .Join(db.MasterProducts.Where(a => a.Name.Contains(q)), p => p.MasterProductCode, m => m.Code, (p, m) => new { p, m })
+            var model = await db.Products.Where(a => a.ShopId == shopid && a.Status == 0)
+                .Join(db.MasterProducts.Where(a => a.Name.Contains(q)), p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
                 .Select(i => new
                 {
-                    id = i.p.Code,
+                    id = i.p.Id,
                     text = i.m.Name
                 }).OrderBy(i => i.text).ToListAsync();
 

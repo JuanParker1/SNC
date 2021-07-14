@@ -61,13 +61,13 @@ namespace ShopNow.Controllers
             pincodeRate.CreatedBy = user.Name;
             pincodeRate.UpdatedBy = user.Name;
             // string code = PincodeRate.Add(pincodeRate, out int error);
-            pincodeRate.Code = _generatedCode;
+           // pincodeRate.Code = _generatedCode;
             pincodeRate.Status = 0;
             pincodeRate.DateEncoded = DateTime.Now;
             pincodeRate.DateUpdated = DateTime.Now;
             db.PincodeRates.Add(pincodeRate);
             db.SaveChanges();
-            string code = pincodeRate.Code;
+            //string code = pincodeRate.Code;
             message = pincode + " Successfully Updated";
 
             var shopList = db.Shops.Where(i => i.Status == 0 && i.PinCode == pincode).ToList();
@@ -75,10 +75,10 @@ namespace ShopNow.Controllers
             {
                 foreach(var s in shopList)
                 {
-                    var shop = db.Shops.FirstOrDefault(i => i.Code == s.Code);// Shop.Get(s.Code);
+                    var shop = db.Shops.FirstOrDefault(i => i.Id == s.Id);// Shop.Get(s.Code);
                     if (shop != null)
                     {
-                        shop.PincodeRateCode = code;
+                        shop.PincodeRateId = pincodeRate.Id;
                         shop.PincodeRateDeliveryRateSet = deliveryRateSet;
                         shop.DateUpdated = DateTime.Now;
 
