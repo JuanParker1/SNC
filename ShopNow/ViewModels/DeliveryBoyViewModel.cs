@@ -13,7 +13,7 @@ namespace ShopNow.ViewModels
         public HttpPostedFileBase BankPassbookImage { get; set; }
         public HttpPostedFileBase BankPassbookPdf { get; set; }
         public HttpPostedFileBase CVPdf { get; set; }
-        public string Code { get; set; }
+         public int Id{ get; set; }
         public string Name { get; set; }
         public string CustomerCode { get; set; }
         public string CustomerName { get; set; }
@@ -21,7 +21,7 @@ namespace ShopNow.ViewModels
         public string MarketingAgentName { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
-        public string ShopCode { get; set; }
+         public int ShopId{ get; set; }
         public string ShopName { get; set; }
         public string StaffCode { get; set; }
         public string StaffName { get; set; }
@@ -58,10 +58,10 @@ namespace ShopNow.ViewModels
         public List<DeliveryBoyList> List { get; set; }
         public class DeliveryBoyList
         {
-            public string Code { get; set; }
+             public int Id{ get; set; }
             public string Name { get; set; }
             public string PhoneNumber { get; set; }
-            public string ShopCode { get; set; }
+             public int ShopId{ get; set; }
             public string ShopName { get; set; }
             public string ImagePath { get; set; }
         }
@@ -69,11 +69,11 @@ namespace ShopNow.ViewModels
 
     public class DeliveryBoyPlacesListViewModel
     {
-        public string Code { get; set; }
+         public int Id{ get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
-        public string ShopCode { get; set; }
+         public int ShopId{ get; set; }
         public string ShopName { get; set; }
         public string StaffCode { get; set; }
         public string StaffName { get; set; }
@@ -94,7 +94,7 @@ namespace ShopNow.ViewModels
         public List<Places> List { get; set; }
         public class Places
         {
-            public string Code { get; set; }
+             public int Id{ get; set; }
             public string Name { get; set; }
             public string PhoneNumber { get; set; }
             public string ImagePath { get; set; }
@@ -108,28 +108,28 @@ namespace ShopNow.ViewModels
 
     public class FranchiseViewModel
     {
-        public string DeliveryBoyCode { get; set; }
+        public int DeliveryBoyId { get; set; }
         public string DeliveryBoyName { get; set; }
-        public string MarketingAgentCode { get; set; }
+        public int MarketingAgentId { get; set; }
         public string MarketingAgentName { get; set; }
         public List<FranchiseList> Lists { get; set; }
         public class FranchiseList
         {
-            public string Code { get; set; }
+             public int Id{ get; set; }
             public string Name { get; set; }
-            public string MarketingAgentCode { get; set; }
+            public int MarketingAgentId { get; set; }
             public string MarketingAgentName { get; set; }
         }
     }
 
     public class DeliveryBoyCreditAmountViewModel
     {
-        public string Code { get; set; }
+         public int Id{ get; set; }
         public string CustomerCode { get; set; }
         public string CustomerName { get; set; }
         public string DeliveryBoyCode { get; set; }
         public string DeliveryBoyName { get; set; }
-        public string ShopCode { get; set; }
+         public int ShopId{ get; set; }
         public string ShopName { get; set; }
         public string OrderNo { get; set; }
         public int CartStatus { get; set; }
@@ -142,7 +142,7 @@ namespace ShopNow.ViewModels
         public List<CreditAmountList> List { get; set; }
         public class CreditAmountList
         {
-            public string Code { get; set; }
+             public int Id{ get; set; }
             public string CustomerCode { get; set; }
             public string CustomerName { get; set; }
             public string DeliveryBoyCode { get; set; }
@@ -157,12 +157,12 @@ namespace ShopNow.ViewModels
     //Api
     public class DeliveryBoyCreateViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string CustomerName { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
-        public string CustomerCode { get; set; }
+        public int CustomerId { get; set; }
         public string ImagePath { get; set; }
         public string CountryName { get; set; }
         public string StateName { get; set; }
@@ -190,7 +190,7 @@ namespace ShopNow.ViewModels
 
     public class DeliveryBoyViewModel
     {
-        public string DeliveryBoyCode { get; set; }
+        public int DeliveryBoyId { get; set; }
         public string DeliveryBoyName { get; set; }
         public string DeliveryBoyPhoneNumber { get; set; }
         public int CartStatus { get; set; }
@@ -205,9 +205,9 @@ namespace ShopNow.ViewModels
         public List<DeliveryBoyViewModel> Lists { get; set; }
         public class DeliveryBoyViewModel
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string Name { get; set; }
-            public string DelivaryCustomerCode { get; set; }
+            public int DelivaryCustomerId { get; set; }
             public string DeilvaryCustomerName { get; set; }
             public string DeilvaryName { get; set; }
             public string DeilvaryPhoneNumber { get; set; }

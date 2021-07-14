@@ -53,20 +53,12 @@ namespace ShopNow.Controllers
         {
 
             var marketingAgent = _mapper.Map<MarketingAgentRegisterViewModel, MarketingAgent>(model);
-            marketingAgent.Code = ShopNow.Helpers.DRC.Generate("MAG");
             marketingAgent.Status = 0;
             marketingAgent.DateEncoded = DateTime.Now;
             marketingAgent.DateUpdated = DateTime.Now;
             _db.MarketingAgents.Add(marketingAgent);
             _db.SaveChanges();
-          //  marketingAgent.Code = marketingAgent.Code;// MarketingAgent.Add(marketingAgent, out int error);
-            //if (model.PanImage != null)
-            //{
-            //    uc.UploadImage(model.PanImage, marketingAgent.Code + "_", "/Content/PanImage/", Server, _db, "", marketingAgent.Code, "");
-            //    var marketingAgentImage = MarketingAgent.Get(marketingAgent.Code);
-            //    marketingAgentImage.ImagePanPath = marketingAgent.Code + "_" + model.PanImage.FileName;
-            //    MarketingAgent.Edit(marketingAgentImage, out error);
-            //}
+
             return RedirectToAction("Login", "MarketingAgent");
         }
 

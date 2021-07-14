@@ -7,7 +7,7 @@ namespace ShopNow.ViewModels
 {
     public class PlatFormCreditRateListViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public double RatePerOrder { get; set; }
         public double DailyViewer { get; set; }
         public int Count { get; set; }
@@ -15,7 +15,7 @@ namespace ShopNow.ViewModels
         public List<PlatFormCreditRateList> List { get; set; }
         public class PlatFormCreditRateList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public double RatePerOrder { get; set; }
             public double DailyViewer { get; set; }
         }

@@ -7,7 +7,7 @@ namespace ShopNow.ViewModels
 {
     public class PincodeRateListViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string PinCode { get; set; }
         public int DeliveryRateSet { get; set; }
         public int Remarks { get; set; }
@@ -15,7 +15,7 @@ namespace ShopNow.ViewModels
         public List<PincodeRateList> List { get; set; }
         public class PincodeRateList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string PinCode { get; set; }
             public int PincodeRateDeliveryRateSet { get; set; }
             public int Remarks { get; set; }

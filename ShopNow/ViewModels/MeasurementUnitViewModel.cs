@@ -10,7 +10,7 @@ namespace ShopNow.ViewModels
         public List<UnitList> List { get; set; }
         public class UnitList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string UnitName { get; set; }
             public string UnitSymbol { get; set; }
             public string UnitType { get; set; }
@@ -21,7 +21,7 @@ namespace ShopNow.ViewModels
     }
     public class MeasurementUnitCreateEditViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string UnitName { get; set; }
         public string UnitSymbol { get; set; }
         public string UnitType { get; set; }
@@ -36,7 +36,7 @@ namespace ShopNow.ViewModels
     }
     public class MeasurementUnitMasterViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string UnitName { get; set; }
         public string UnitSymbol { get; set; }
         public string UnitType { get; set; }

@@ -9,8 +9,7 @@ namespace ShopNow.ViewModels
     {
         public HttpPostedFileBase BannerImage { get; set; }
         public int Id { get; set; }
-        public string Code { get; set; }
-        public string ShopCode { get; set; }
+        public string ShopId { get; set; }
         public string ShopName { get; set; }
         public string ProductCode { get; set; }
         public string ProductName { get; set; }
@@ -34,10 +33,10 @@ namespace ShopNow.ViewModels
         public List<BannerList> List { get; set; }
         public class BannerList
         {
-            public string Code { get; set; }
-            public string ShopCode { get; set; }
+            public int Id { get; set; }
+            public int ShopId { get; set; }
             public string ShopName { get; set; }
-            public string ProductCode { get; set; }
+            public int ProductId { get; set; }
             public string ProductName { get; set; }
             public int Position { get; set; }
             public string BannerName { get; set; }

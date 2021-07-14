@@ -11,14 +11,14 @@ namespace ShopNow.ViewModels
         public List<PackageList> List { get; set; }
         public class PackageList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string Name { get; set; }
             public int Type { get; set; }
         }
     }
     public class PackageMasterViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public int Type { get; set; }
         public System.Data.DataTable DataTable { get; set; }

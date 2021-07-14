@@ -45,11 +45,11 @@ namespace ShopNow.Controllers
             var model = new BillListViewModel();
             model.List = db.Bills.Where(i => i.NameOfBill == 1 && i.Status == 0).Select(i => new BillListViewModel.BillList
             {
-                Code = i.Code,
+                Id = i.Id,
                 ConvenientCharge = i.ConvenientCharge,
                 ItemType = i.ItemType,
                 PackingCharge = i.PackingCharge,
-                ShopCode = i.ShopCode,
+                ShopId = i.ShopId,
                 ShopName = i.ShopName
             }).ToList();
             return View(model.List);
@@ -61,9 +61,9 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new DeliveryListViewModel();
-            model.List = db.Bills.Where(i => i.NameOfBill == 0 && i.Status == 0 && i.ShopCode == "Admin").Select(i => new DeliveryListViewModel.DeliveryList
+            model.List = db.Bills.Where(i => i.NameOfBill == 0 && i.Status == 0 && i.ShopId == 0).Select(i => new DeliveryListViewModel.DeliveryList
             {
-                Code = i.Code,
+                Id = i.Id,
                 DeliveryChargeKM = i.DeliveryChargeKM,
                 DeliveryChargeOneKM = i.DeliveryChargeOneKM,
                 DeliveryRateSet = i.DeliveryRateSet,
@@ -84,9 +84,9 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var model = new BillCreateEditViewModel();
             ViewBag.Name = user.Name;
-            var ratecode = db.PlatFormCreditRates.Where(i => i.Status == 0).Select(i => i.Code).FirstOrDefault();
+            var ratecode = db.PlatFormCreditRates.Where(i => i.Status == 0).Select(i => i.Id).FirstOrDefault();
             ViewBag.PlatformCreditRateCode = ratecode;
-            var platFormCreaditRate = db.PlatFormCreditRates.Where(i => i.Code == ratecode).FirstOrDefault();//PlatFormCreditRate.Get(model.PlatformCreditRateCode);
+            var platFormCreaditRate = db.PlatFormCreditRates.Where(i => i.Id == ratecode).FirstOrDefault();//PlatFormCreditRate.Get(model.PlatformCreditRateCode);
             if (platFormCreaditRate != null)
             {
                 ViewBag.PlatformCreditRate = platFormCreaditRate.RatePerOrder;
@@ -99,7 +99,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNBILBC003")]
         public ActionResult BillingCharge(BillCreateEditViewModel model)
         {
-            bool isCheck = db.Bills.Any(i => i.ShopCode == model.ShopCode && i.NameOfBill == 1 && i.Status == 0);
+            bool isCheck = db.Bills.Any(i => i.ShopId == model.ShopId && i.NameOfBill == 1 && i.Status == 0);
             if (isCheck)
             {
                 ViewBag.Message = "Billing Charge Already Exist";
@@ -107,9 +107,9 @@ namespace ShopNow.Controllers
             }
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var bill = _mapper.Map<BillCreateEditViewModel, Bill>(model);
-            var shop = db.Shops.FirstOrDefault(i => i.Code == model.ShopCode);
+            var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
             if (shop != null) {
-                bill.CustomerCode = shop.CustomerCode;
+                bill.CustomerId = shop.CustomerId;
                 bill.CustomerName = shop.CustomerName;
             }
             bill.CreatedBy = user.Name;
@@ -120,9 +120,6 @@ namespace ShopNow.Controllers
             {
                 bill.PackingCharge = model.PackingCharge1;
             }
-
-            // Bill.Add(bill, out int error);
-            bill.Code = _generatedCode;
             bill.Status = 0;
             bill.DateEncoded = DateTime.Now;
             bill.DateUpdated = DateTime.Now;
@@ -154,9 +151,9 @@ namespace ShopNow.Controllers
             var bill = _mapper.Map<BillCreateEditViewModel, Bill>(model);
             model.GeneralCount = db.Bills.Where(i => i.NameOfBill == 0 && i.DeliveryRateSet == 0 && i.Status == 0).Count();
             model.SpecialCount = db.Bills.Where(i => i.NameOfBill == 0 && i.DeliveryRateSet == 1 && i.Status == 0).Count();
-            bill.CustomerCode = user.Code;
+            bill.CustomerId = user.Id;
             bill.CustomerName = user.Name;
-            bill.ShopCode = "Admin";
+            bill.ShopId = 0;
             bill.ShopName = "Admin";
             bill.CreatedBy = user.Name;
             bill.UpdatedBy = user.Name;
@@ -168,8 +165,6 @@ namespace ShopNow.Controllers
                 bill.DeliveryChargeKM = model.DeliveryChargeKM1;
                 bill.DeliveryChargeOneKM = model.DeliveryChargeOneKM1;
             }
-            // Bill.Add(bill, out int error);
-            bill.Code = _generatedCode;
             bill.Status = 0;
             bill.DateEncoded = DateTime.Now;
             bill.DateUpdated = DateTime.Now;
@@ -181,19 +176,19 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNBILBU005")]
         public ActionResult BillingUpdate(string code)
         {
-            var dCode = AdminHelpers.DCode(code);
+            var dCode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            if (string.IsNullOrEmpty(dCode))
+            if (dCode==0)
                 return HttpNotFound();
-            var bill = db.Bills.Where(b => b.Code == dCode && b.Status==0).FirstOrDefault(); //Bill.Get(dCode);
+            var bill = db.Bills.Where(b => b.Id == dCode && b.Status==0).FirstOrDefault(); //Bill.Get(dCode);
             var model = _mapper.Map<Bill, BillCreateEditViewModel>(bill);
             if(model.ItemType == 1)
             {
                 model.PackingCharge1 = model.PackingCharge;
             }
-            model.PlatformCreditRateCode = db.PlatFormCreditRates.Where(i => i.Status == 0).Select(i => i.Code).FirstOrDefault();
-            var platFormCreaditRate = db.PlatFormCreditRates.Where(p => p.Code == model.PlatformCreditRateCode).FirstOrDefault(); //PlatFormCreditRate.Get(model.PlatformCreditRateCode);
+            model.PlatformCreditRateId = db.PlatFormCreditRates.Where(i => i.Status == 0).Select(i => i.Id).FirstOrDefault();
+            var platFormCreaditRate = db.PlatFormCreditRates.Where(p => p.Id == model.PlatformCreditRateId).FirstOrDefault(); //PlatFormCreditRate.Get(model.PlatformCreditRateCode);
             if (platFormCreaditRate != null)
             {
                 model.PlatformCreditRate = platFormCreaditRate.RatePerOrder;
@@ -207,10 +202,10 @@ namespace ShopNow.Controllers
         public ActionResult BillingUpdate(BillCreateEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            Bill bill = db.Bills.Where(b => b.Code == model.Code && b.Status == 0).FirstOrDefault(); //Bill.Get(model.Code);
+            Bill bill = db.Bills.Where(b => b.Id == model.Id && b.Status == 0).FirstOrDefault(); //Bill.Get(model.Code);
             _mapper.Map(model, bill);
-            var shop = db.Shops.FirstOrDefault(i => i.Code == bill.ShopCode);
-            bill.CustomerCode = shop.CustomerCode;
+            var shop = db.Shops.FirstOrDefault(i => i.Id == bill.ShopId);
+            bill.CustomerId = shop.CustomerId;
             bill.CustomerName = shop.CustomerName;
             if (bill != null)
             {
@@ -231,12 +226,12 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNBILDU006")]
         public ActionResult DeliveryUpdate(string code)
         {
-            var dCode = AdminHelpers.DCode(code);
+            var dCode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            if (string.IsNullOrEmpty(dCode))
+            if (dCode==0)
                 return HttpNotFound();
-            var bill = db.Bills.Where(b => b.Code ==dCode && b.Status == 0).FirstOrDefault();// Bill.Get(dCode);
+            var bill = db.Bills.Where(b => b.Id ==dCode && b.Status == 0).FirstOrDefault();// Bill.Get(dCode);
             var model = _mapper.Map<Bill, BillCreateEditViewModel>(bill);
             if(bill.DeliveryRateSet == 1)
             {
@@ -252,7 +247,7 @@ namespace ShopNow.Controllers
         public ActionResult DeliveryUpdate(BillCreateEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            Bill bill = db.Bills.Where(b => b.Code == model.Code && b.Status == 0).FirstOrDefault(); //Bill.Get(model.Code);
+            Bill bill = db.Bills.Where(b => b.Id == model.Id && b.Status == 0).FirstOrDefault(); //Bill.Get(model.Code);
             _mapper.Map(model, bill);
             if (bill != null)
             {
@@ -275,9 +270,9 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNBILBD007")]
         public ActionResult BillingDelete(string code)
         {
-            var dCode = AdminHelpers.DCode(code);
+            var dCode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var bill = db.Bills.Where(b => b.Code == dCode && b.Status == 0).FirstOrDefault();//Bill.Get(dCode);
+            var bill = db.Bills.Where(b => b.Id == dCode && b.Status == 0).FirstOrDefault();//Bill.Get(dCode);
             if (bill != null)
             {
                 bill.Status = 2;
@@ -292,9 +287,9 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNBILDD008")]
         public ActionResult DeliveryDelete(string code)
         {
-            var dCode = AdminHelpers.DCode(code);
+            var dCode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var bill = db.Bills.Where(b => b.Code == dCode && b.Status == 0).FirstOrDefault(); //Bill.Get(dCode);
+            var bill = db.Bills.Where(b => b.Id == dCode && b.Status == 0).FirstOrDefault(); //Bill.Get(dCode);
             if (bill != null)
             {
                 bill.Status = 2;
@@ -309,9 +304,9 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNBILDD008")]
         public ActionResult DeliveryChargeDelete(string code)
         {
-            var dCode = AdminHelpers.DCode(code);
+            var dCode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var bill = db.Bills.Where(b => b.Code == dCode && b.Status == 0).FirstOrDefault();
+            var bill = db.Bills.Where(b => b.Id == dCode && b.Status == 0).FirstOrDefault();
             if (bill != null)
             {
                 bill.Status = 2;
@@ -329,10 +324,10 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new DeliveryListViewModel();
-            model.List = db.Bills.Where(i => i.NameOfBill == 0 && i.Status == 0 && i.ShopCode != null && i.ShopCode != "Admin").Select(i => new DeliveryListViewModel.DeliveryList
+            model.List = db.Bills.Where(i => i.NameOfBill == 0 && i.Status == 0 && i.ShopId != 0 ).Select(i => new DeliveryListViewModel.DeliveryList
             {
-                Code = i.Code,
-                ShopCode = i.ShopCode,
+                Id = i.Id,
+                ShopId = i.ShopId,
                 ShopName = i.ShopName,
                 DeliveryChargeKM = i.DeliveryChargeKM,
                 DeliveryChargeOneKM = i.DeliveryChargeOneKM,
@@ -355,7 +350,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNBILDCA010")]
         public ActionResult DeliveryChargeAssign(BillCreateEditViewModel model)
         {
-            bool isCheck = db.Bills.Any(i => i.ShopCode == model.ShopCode && i.NameOfBill == 0 && i.Status == 0);
+            bool isCheck = db.Bills.Any(i => i.ShopId == model.ShopId && i.NameOfBill == 0 && i.Status == 0);
             if (isCheck)
             {
                 ViewBag.Message = "Delivery Charge Already Exist";
@@ -363,7 +358,7 @@ namespace ShopNow.Controllers
             }
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var bill = _mapper.Map<BillCreateEditViewModel, Bill>(model);
-            bill.CustomerCode = user.Code;
+            bill.CustomerId = user.Id;
             bill.CustomerName = user.Name;
             bill.CreatedBy = user.Name;
             bill.UpdatedBy = user.Name;
@@ -371,8 +366,7 @@ namespace ShopNow.Controllers
             if (model.DeliveryRateSet == 0)
             {
                 bill.DeliveryRateSet = model.DeliveryRateSet;
-                // Bill.Add(bill, out int error);
-                bill.Code = _generatedCode;
+
                 bill.Status = 0;
                 bill.DateEncoded = DateTime.Now;
                 bill.DateUpdated = DateTime.Now;
@@ -384,8 +378,7 @@ namespace ShopNow.Controllers
                 bill.DeliveryChargeKM = model.DeliveryChargeKM1;
                 bill.DeliveryChargeOneKM = model.DeliveryChargeOneKM1;
                 bill.DeliveryRateSet = model.DeliveryRateSet1;
-                //Bill.Add(bill, out int error);
-                bill.Code = _generatedCode;
+
                 bill.Status = 0;
                 bill.DateEncoded = DateTime.Now;
                 bill.DateUpdated = DateTime.Now;
@@ -401,7 +394,7 @@ namespace ShopNow.Controllers
         {
             var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
             {
-                id = i.Code,
+                id = i.Id,
                 text = i.Name
             }).ToListAsync();
 
@@ -445,7 +438,7 @@ namespace ShopNow.Controllers
             var model = new DeliveryListViewModel();
             model.List = await db.Bills.Where(a => a.Type == type && a.Status == 0).Select(i => new DeliveryListViewModel.DeliveryList
             {
-               Code = i.Code,
+               Id = i.Id,
                DeliveryChargeKM = i.DeliveryChargeKM,
                DeliveryChargeOneKM = i.DeliveryChargeOneKM,
                DeliveryRateSet = i.DeliveryRateSet

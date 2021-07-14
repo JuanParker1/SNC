@@ -17,14 +17,6 @@ namespace ShopNow.Controllers
         private ShopnowchatEntities db = new ShopnowchatEntities();
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
-        private const string _prefix = "NSC";
-        private static string _generatedCode
-        {
-            get
-            {
-                return ShopNow.Helpers.DRC.Generate(_prefix);
-            }
-        }
         public NextSubCategoryController()
         {
             _mapperConfiguration = new MapperConfiguration(config =>
@@ -44,15 +36,11 @@ namespace ShopNow.Controllers
             var List = (from s in db.NextSubCategories
                         select s).OrderBy(s => s.Name).Where(i => i.Status == 0).ToList();
             return View(List);
-            //var user = ((Helpers.Sessions.User)Session["USER"]);
-            //ViewBag.Name = user.Name;
-            //var model = new NextSubCategoryViewModel();
-            //model.List = NextSubCategory.GetList().AsQueryable().ProjectTo<NextSubCategoryViewModel.NextSubCategoryList>(_mapperConfiguration).OrderBy(i => i.Name).ToList();
-            //return View(model);
+
         }
 
         [AccessPolicy(PageCode = "SHNNSCS002")]
-        public JsonResult Save(string name = "", string type = "", string subcategorycode = "", string subcategoryname = "", int adscore = 1)
+        public JsonResult Save(string name = "", string type = "", int subcategorycode =0, string subcategoryname = "", int adscore = 1)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             bool IsAdded = false;
@@ -64,19 +52,18 @@ namespace ShopNow.Controllers
                 var nextsubcategory = new NextSubCategory();
                 nextsubcategory.Name = name;
                 nextsubcategory.ProductType = type;
-                nextsubcategory.SubCategoryCode = subcategorycode;
+                nextsubcategory.SubCategoryId = subcategorycode;
                 nextsubcategory.SubCategoryName = subcategoryname;
                 nextsubcategory.Adscore = adscore;
                 nextsubcategory.CreatedBy = user.Name;
                 nextsubcategory.UpdatedBy = user.Name;
-                nextsubcategory.Code = _generatedCode;
                 nextsubcategory.DateEncoded = DateTime.Now;
                 nextsubcategory.DateUpdated = DateTime.Now;
                 nextsubcategory.Status = 0;
                 db.NextSubCategories.Add(nextsubcategory);
                 db.SaveChanges();
                 // string code = NextSubCategory.Add(nextsubcategory, out int error);
-                IsAdded = nextsubcategory.Code != String.Empty ? true : false;
+                IsAdded = nextsubcategory.Id != 0 ? true : false;
                 message = name + " Successfully Added";
             }
             else
@@ -87,10 +74,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNNSCD004")]
-        public JsonResult Delete(string code)
+        public JsonResult Delete(int code)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var nextsubcategory = db.NextSubCategories.FirstOrDefault(i => i.Code == code);// NextSubCategory.Get(code);
+            var nextsubcategory = db.NextSubCategories.FirstOrDefault(i => i.Id == code);// NextSubCategory.Get(code);
             if (nextsubcategory != null)
             {
                 nextsubcategory.Status = 2;
@@ -105,12 +92,12 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNNSCE003")]
         public ActionResult Edit(string code)
         {
-            var dcode = AdminHelpers.DCode(code);
+            var dcode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            if (String.IsNullOrEmpty(dcode))
+            if (dcode==0)
                 return HttpNotFound();
-            var nextSubCategory = db.NextSubCategories.FirstOrDefault(i => i.Code == dcode);// NextSubCategory.Get(dcode);
+            var nextSubCategory = db.NextSubCategories.FirstOrDefault(i => i.Id == dcode);// NextSubCategory.Get(dcode);
             var model = _mapper.Map<NextSubCategory, NextSubCategoryEditViewModel>(nextSubCategory);
             return View(model);
         }
@@ -121,7 +108,7 @@ namespace ShopNow.Controllers
         public ActionResult Edit(NextSubCategoryEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            NextSubCategory nextSubCategory = db.NextSubCategories.FirstOrDefault(i => i.Code == model.Code);// NextSubCategory.Get(model.Code);
+            NextSubCategory nextSubCategory = db.NextSubCategories.FirstOrDefault(i => i.Id == model.Id);// NextSubCategory.Get(model.Code);
             _mapper.Map(model, nextSubCategory);
             nextSubCategory.DateUpdated = DateTime.Now;
             nextSubCategory.UpdatedBy = user.Name;
@@ -136,7 +123,7 @@ namespace ShopNow.Controllers
         {
             var model = await db.SubCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductType == "FMCG").Select(i => new
             {
-                id = i.Code,
+                id = i.Id,
                 text = i.Name
             }).ToListAsync();
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);

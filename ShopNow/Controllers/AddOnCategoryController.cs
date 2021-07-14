@@ -47,7 +47,7 @@ namespace ShopNow.Controllers
             var model = new AddOnCategoryListViewModel();
             model.List = db.AddOnCategories.Where(i => i.Status == 0).Select(i => new AddOnCategoryListViewModel.AddOnCategoryList
             {
-                Code = i.Code,
+                Id = i.Id,
                 Name = i.Name
             }).OrderBy(i => i.Name).ToList();
             return View(model);
@@ -67,14 +67,14 @@ namespace ShopNow.Controllers
                 addOnCategory.Name = name;
                 addOnCategory.CreatedBy = user.Name;
                 addOnCategory.UpdatedBy = user.Name;
-                addOnCategory.Code = _generatedCode;
+               //addOnCategory.Code = _generatedCode;
                 addOnCategory.DateEncoded = DateTime.Now;
                 addOnCategory.DateUpdated = DateTime.Now;
                 db.AddOnCategories.Add(addOnCategory);
                 db.SaveChanges();
                // string code = AddOnCategory.Add(addOnCategory, out int error);
 
-                IsAdded = addOnCategory.Code != String.Empty ? true : false;
+            //    IsAdded = addOnCategory.Code != String.Empty ? true : false;
                 message = name + " Successfully Added";
             }
             else
@@ -86,11 +86,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNCTAE004")]
-        public JsonResult Edit(string code, string name)
+        public JsonResult Edit(int code, string name)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             string message = "";
-            AddOnCategory addOnCategory = db.AddOnCategories.Where(i => i.Code == code).FirstOrDefault();
+            AddOnCategory addOnCategory = db.AddOnCategories.Where(i => i.Id == code).FirstOrDefault();
             if (addOnCategory != null)
             {
                 addOnCategory.Name = name;
@@ -106,10 +106,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNCTAD005")]
-        public JsonResult Delete(string code)
+        public JsonResult Delete(int code)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var addOnCategory = db.AddOnCategories.Where(i=>i.Code ==code).FirstOrDefault();
+            var addOnCategory = db.AddOnCategories.Where(i=>i.Id ==code).FirstOrDefault();
             if (addOnCategory != null)
             {
                 addOnCategory.Status = 2;
@@ -224,7 +224,7 @@ namespace ShopNow.Controllers
                         db.AddOnCategories.Add(new AddOnCategory
                         {
                             Name = row[model.Name].ToString(),
-                            Code = _generatedCode,
+                         //   Code = _generatedCode,
                             Status = 0,
                             DateEncoded = DateTime.Now,
                             DateUpdated = DateTime.Now,

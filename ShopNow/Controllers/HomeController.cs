@@ -38,7 +38,7 @@ namespace ShopNow.Controllers
             if (Session["PhoneNumber"] != null)
             {
                 string userId = Convert.ToString(Session["PhoneNumber"]);
-                var user = _db.Customers.FirstOrDefault(i => i.Code == userId && i.Status == 0);
+                var user = _db.Customers.FirstOrDefault(i => i.PhoneNumber == userId && i.Status == 0);
                 if (user != null)
                 {
                     Response.Cookies["Name"].Value = user.Name;

@@ -8,7 +8,7 @@ namespace ShopNow.ViewModels
     public class WebApiCreateViewModel
     {
         public int CategoryType { get; set; }
-        public string ShopCode { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
         public string Link { get; set; }
         public string AuthName { get; set; }

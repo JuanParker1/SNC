@@ -7,7 +7,7 @@ namespace ShopNow.ViewModels
 {
     public class ProductMedicalStockCreateViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string ProductCode { get; set; }
         public string ProductName { get; set; }
         public double Stock { get; set; }
@@ -45,7 +45,7 @@ namespace ShopNow.ViewModels
         public List<ProductMedicalStockList> List { get; set; }
         public class ProductMedicalStockList
         { 
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string ProductCode { get; set; }
         public string ProductName { get; set; }
         public double Stock { get; set; }

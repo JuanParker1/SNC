@@ -7,14 +7,14 @@ namespace ShopNow.ViewModels
 {
     public class AccessPolicyListViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string PageCode { get; set; }
         public string PageName { get; set; }
-        public string ShopCode { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public string StaffCode { get; set; }
+        public int StaffId { get; set; }
         public string StaffName { get; set; }
-        public string CustomerCode { get; set; }
+        public int CustomerId { get; set; }
         public string CustomerName { get; set; }
         public int Position { get; set; }
         public int Status { get; set; }
@@ -22,14 +22,14 @@ namespace ShopNow.ViewModels
         public List<AccessPolicy> List { get; set; }
         public class AccessPolicy
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string PageCode { get; set; }
             public string PageName { get; set; }
-            public string ShopCode { get; set; }
+            public int ShopId { get; set; }
             public string ShopName { get; set; }
-            public string StaffCode { get; set; }
+            public int StaffId { get; set; }
             public string StaffName { get; set; }
-            public string CustomerCode { get; set; }
+            public int CustomerId { get; set; }
             public string CustomerName { get; set; }
             public bool IsAccess { get; set; }
             public int Position { get; set; }
@@ -39,14 +39,14 @@ namespace ShopNow.ViewModels
         public List<AccessManage> ManageList { get; set; }
         public class AccessManage
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string PageCode { get; set; }
             public string PageName { get; set; }
-            public string ShopCode { get; set; }
+            public int ShopId { get; set; }
             public string ShopName { get; set; }
-            public string StaffCode { get; set; }
+            public int StaffId { get; set; }
             public string StaffName { get; set; }
-            public string CustomerCode { get; set; }
+            public int CustomerId { get; set; }
             public string CustomerName { get; set; }
             public bool IsAccess { get; set; }
             public int Position { get; set; }
@@ -56,14 +56,14 @@ namespace ShopNow.ViewModels
 
     public class AccessPolicyViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string PageCode { get; set; }
         public string PageName { get; set; }
-        public string ShopCode { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public string StaffCode { get; set; }
+        public int StaffId { get; set; }
         public string StaffName { get; set; }
-        public string CustomerCode { get; set; }
+        public int CustomerId { get; set; }
         public string CustomerName { get; set; }
         public bool IsAccess { get; set; }
         public int Position { get; set; }
@@ -81,14 +81,14 @@ namespace ShopNow.ViewModels
     }
     public class AccessPolicyCreateEditViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string PageCode { get; set; }
         public string PageName { get; set; }
-        public string ShopCode { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public string StaffCode { get; set; }
+        public int StaffId { get; set; }
         public string StaffName { get; set; }
-        public string CustomerCode { get; set; }
+        public int CustomerId { get; set; }
         public string CustomerName { get; set; }
         public bool IsAccess { get; set; }
         public int Position { get; set; }
@@ -105,12 +105,12 @@ namespace ShopNow.ViewModels
         public List<AccessPolicy> List { get; set; }
         public class AccessPolicy
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string PageCode { get; set; }
             public string PageName { get; set; }
-            public string ShopCode { get; set; }
+            public int ShopId { get; set; }
             public string ShopName { get; set; }
-            public string StaffCode { get; set; }
+            public int StaffId { get; set; }
             public string StaffName { get; set; }
             public int Position { get; set; }
             public int Status { get; set; }

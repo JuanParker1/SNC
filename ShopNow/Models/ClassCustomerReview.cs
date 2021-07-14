@@ -19,7 +19,7 @@ namespace ShopNow.Models
         }
 
         public int Id { get; set; }
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string ShopCode { get; set; }
         public string ShopName { get; set; }
         public string CustomerCode { get; set; }

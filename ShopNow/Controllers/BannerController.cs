@@ -42,13 +42,13 @@ namespace ShopNow.Controllers
             model.List = db.Banners.Where(i => i.Status == 0).Select(i => new BannerListViewModel.BannerList {
                 BannerName = i.BannerName,
                 Bannerpath = i.Bannerpath,
-                Code = i.Code,
+                Id = i.Id,
                 Days = i.Days,
                 Fromdate = i.Fromdate,
                 Position = i.Position,
-                ProductCode = i.ProductCode,
+                ProductId = i.ProductId,
                 ProductName = i.ProductName,
-                ShopCode = i.ShopCode,
+                ShopId = i.ShopId,
                 ShopName = i.ShopName,
                 Todate = i.Todate,
                 CreditType = i.CreditType
@@ -68,13 +68,13 @@ namespace ShopNow.Controllers
             {
                 BannerName = i.BannerName,
                 Bannerpath = i.Bannerpath,
-                Code = i.Code,
+                Id= i.Id,
                 Days = i.Days,
                 Fromdate = i.Fromdate,
                 Position = i.Position,
-                ProductCode = i.ProductCode,
+                ProductId = i.ProductId,
                 ProductName = i.ProductName,
-                ShopCode = i.ShopCode,
+                ShopId = i.ShopId,
                 ShopName = i.ShopName,
                 Todate = i.Todate,
                 CreditType = i.CreditType

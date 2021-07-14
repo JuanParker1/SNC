@@ -7,7 +7,7 @@ namespace ShopNow.ViewModels
 {
     public class DishAddOnViewModel
     {
-        public string Code { get; set; }
+        public int Id{ get; set; }
         public string Name { get; set; }
         public string MasterProductName { get; set; }
         public string AddOnCategoryName { get; set; }
@@ -22,7 +22,7 @@ namespace ShopNow.ViewModels
     }
     public class DishAddOnCreateEditViewModel
     {
-        public string Code { get; set; }
+        public int Id{ get; set; }
         public string Name { get; set; }
         public string MasterProductCode { get; set; }
         public string MasterProductName { get; set; }
@@ -39,7 +39,7 @@ namespace ShopNow.ViewModels
         public List<DishAddOnList> List { get; set; }
         public class DishAddOnList
         {
-            public string Code { get; set; }
+            public int Id{ get; set; }
             public string Name { get; set; }
             public string MasterProductCode { get; set; }
             public string MasterProductName { get; set; }

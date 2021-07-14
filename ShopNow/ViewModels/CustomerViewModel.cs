@@ -11,7 +11,7 @@ namespace ShopNow.ViewModels
         public List<CustomerList> List { get; set; }
         public class CustomerList
         {
-            public string Code { get; set; }
+            public int Id{ get; set; }
             public string Name { get; set; }
             public string PhoneNumber { get; set; }
             public string Email { get; set; }
@@ -26,7 +26,7 @@ namespace ShopNow.ViewModels
 
     public class CustomerEditViewModel
     {
-        public string Code { get; set; }
+        public int Id{ get; set; }
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
         public string Password { get; set; }
@@ -56,7 +56,7 @@ namespace ShopNow.ViewModels
 
     public class CustomerDetailsViewModel
     {
-        public string Code { get; set; }
+        public int Id{ get; set; }
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
@@ -76,7 +76,7 @@ namespace ShopNow.ViewModels
         public List<AddressList> List { get; set; }
         public class AddressList
         {
-            public string Code { get; set; }
+            public int Id{ get; set; }
             public string Name { get; set; }
             public string CountryName { get; set; }
             public string StateName { get; set; }
@@ -91,15 +91,15 @@ namespace ShopNow.ViewModels
 
     public class CustomerPasswordViewModel
     {
-        public string CustomerCode { get; set; }
-        public string StaffCode { get; set; }
+        public int CustomerId { get; set; }
+        public int StaffId { get; set; }
         public string Password { get; set; }
         
     }
 
     public class CustomerCreateViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string ImageAadharPath { get; set; }
         public string AadharName { get; set; }
         public string AadharNumber { get; set; }
@@ -124,9 +124,9 @@ namespace ShopNow.ViewModels
 
     public class CustomerAddOnsAddressViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
-        public string CustomerCode { get; set; }
+        public int CustomerId{ get; set; }
         public string CustomerName { get; set; }
         public int AddressType { get; set; }
         public string LandMark { get; set; }
@@ -143,8 +143,8 @@ namespace ShopNow.ViewModels
 
     public class CustomerAddressViewModel
     {
-        public string Code { get; set; }
-        public string CustomerCode { get; set; }
+        public int Id { get; set; }
+        public int CustomerId { get; set; }
         public string Name { get; set; }
         public int AddressType { get; set; }
         public string LandMark { get; set; }
@@ -169,7 +169,7 @@ namespace ShopNow.ViewModels
         //public List<CustomerList> OtherList { get; set; }
         public class CustomerList
         {
-            public string Code { get; set; }
+            public int Id{ get; set; }
             public string Name { get; set; }
             public int AddressType { get; set; }
             public string CountryName { get; set; }

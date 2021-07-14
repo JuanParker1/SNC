@@ -7,14 +7,14 @@ namespace ShopNow.ViewModels
 {
     public class BillCreateEditViewModel
     {
-        public string Code { get; set; }
-        public string CustomerCode { get; set; }
+         public int Id{ get; set; }
+        public int CustomerId { get; set; }
         public string CustomerName { get; set; }
-        public string ShopCode { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
         public int NameOfBill { get; set; }
         public double ConvenientCharge { get; set; }
-        public string PlatformCreditRateCode { get; set; }
+        public int PlatformCreditRateId { get; set; }
         public double PlatformCreditRate { get; set; }
         public double DeliveryChargeKM { get; set; }
         public double DeliveryChargeOneKM { get; set; }
@@ -43,10 +43,10 @@ namespace ShopNow.ViewModels
         public List<BillList> List { get; set; }
         public class BillList
         {
-            public string Code { get; set; }
-            public string CustomerCode { get; set; }
+             public int Id{ get; set; }
+            public int CustomerId { get; set; }
             public string CustomerName { get; set; }
-            public string ShopCode { get; set; }
+            public int ShopId { get; set; }
             public string ShopName { get; set; }
             public int NameOfBill { get; set; }
             public double ConvenientCharge { get; set; }
@@ -89,10 +89,10 @@ namespace ShopNow.ViewModels
         public List<DeliveryList> List { get; set; }
         public class DeliveryList
         {
-            public string Code { get; set; }
-            public string CustomerCode { get; set; }
+             public int Id{ get; set; }
+            public int CustomerId { get; set; }
             public string CustomerName { get; set; }
-            public string ShopCode { get; set; }
+            public int ShopId { get; set; }
             public string ShopName { get; set; }
             public int NameOfBill { get; set; }
             public double PlatformCreditRateCode { get; set; }
@@ -114,10 +114,10 @@ namespace ShopNow.ViewModels
         public List<BillList> List { get; set; }
         public class BillList
         {
-            public string Code { get; set; }
-            public string CustomerCode { get; set; }
+            public int Id { get; set; }
+            public int CustomerId { get; set; }
             public string CustomerName { get; set; }
-            public string ShopCode { get; set; }
+            public int ShopId { get; set; }
             public string ShopName { get; set; }
             public int NameOfBill { get; set; }
             public double ConvenientCharge { get; set; }
@@ -135,8 +135,8 @@ namespace ShopNow.ViewModels
 
     public class BillUpdate
     {
-        public string Code { get; set; }
-        public string CustomerCode { get; set; }
+        public int Id { get; set; }
+        public int CustomerId { get; set; }
         public double ConvenientChargeRange { get; set; }
         public double DeliveryChargeCustomer { get; set; }
         public double PackingCharge { get; set; }

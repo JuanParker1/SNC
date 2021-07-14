@@ -14,10 +14,10 @@
             <div class="col-md-2 col-sm-4 mb-2 data-search">
             </div>
             <div class="col-md-3 float-right">
-                <select name="CustomerCode" id="CustomerCode" class="form-control">
-                    @if (Model.CustomerCode != null)
+                <select name="CustomerId" id="CustomerId" class="form-control">
+                    @if (Model.CustomerId != 0)
                     {
-                        <option value="@Model.CustomerCode" selected>@Model.CustomerName</option>
+                        <option value="@Model.CustomerId" selected>@Model.CustomerName</option>
                     }
                 </select>
                 <input type="hidden" name="CustomerName" id="CustomerName" value="@Model.CustomerName" />
@@ -121,7 +121,7 @@
                 });
             }).draw();
 
-            $('#CustomerCode').select2({
+            $('#CustomerId').select2({
                 placeholder: "Search Customer",
                 ajax: {
                     url: "/AccessPolicy/GetCustomerSelect2",
@@ -134,16 +134,16 @@
             });
 
             $("#btnFilter").click(function () {
-                var code = $("#CustomerCode").val();
-                if (code == null || code == "") {
+                var Id = $("#CustomerId").val();
+                if (Id == null || Id == "") {
                     swal("Notice!", "Please Select Customer Name!", "warning");
                 } else {
-                    window.location.href = "/AccessPolicy/List/?customercode=" + code;
+                    window.location.href = "/AccessPolicy/List/?customerid=" + Id;
                 }
             });
             $(".Save").click(function () {
-                var customercode = $("#CustomerCode").val();
-                if (customercode != null || customercode != "") {
+                var customerid = $("#CustomerId").val();
+                if (customerid != null || customerid != "") {
                     $('#AccessPolicyForm').submit();
                 } else {
                     swal("Notice!", "Please Select Customer Name!", "warning");
@@ -153,7 +153,7 @@
                 var $row = $(this).closest("tr").find(".td");
                 var $txtValue = $row.find(".txt").val();
                 var geek = $txtValue.split(' ');
-                var customerCode = $("#CustomerCode").val();
+                var customerId = $("#CustomerId").val();
                 var customerName = $("#CustomerName").val();
                 if ($(this).is(":checked")) {
                     var PageCode = geek[0];
@@ -161,7 +161,7 @@
                     var IsAccess = true;
                     $.getJSON("/AccessPolicy/AddManageSession/", {
                         PageCode: PageCode, PageName: PageName, IsAccess: IsAccess,
-                        CustomerCode: customerCode, CustomerName: customerName
+                        customerId: customerId, CustomerName: customerName
                     }, function (data) {
                     });
                 }
@@ -171,7 +171,7 @@
                     var IsAccess = false;
                     $.getJSON("/AccessPolicy/RemoveManageSession/", {
                         PageCode: PageCode, PageName: PageName, IsAccess: IsAccess,
-                        CustomerCode: customerCode, CustomerName: customerName
+                        CustomerId: customerId, CustomerName: customerName
                     }, function (data) {
                     });
                 }

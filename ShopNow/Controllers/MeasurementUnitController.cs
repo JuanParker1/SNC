@@ -20,15 +20,7 @@ namespace ShopNow.Controllers
         private ShopnowchatEntities db = new ShopnowchatEntities();
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
-        private const string _prefix = "MSU";
-
-        private static string _generatedCode
-        {
-            get
-            {
-                return ShopNow.Helpers.DRC.Generate(_prefix);
-            }
-        }
+        
 
         public MeasurementUnitController()
         {
@@ -73,7 +65,6 @@ namespace ShopNow.Controllers
                 var drug = _mapper.Map<MeasurementUnitCreateEditViewModel, MeasurementUnit>(model);
                 drug.CreatedBy = user.Name;
                 drug.UpdatedBy = user.Name;
-                drug.Code = _generatedCode;
                 drug.Status = 0;
                 drug.DateEncoded = DateTime.Now;
                 drug.DateUpdated = DateTime.Now;
@@ -91,12 +82,12 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNDMUE003")]
         public ActionResult Edit(string code)
         {
-            var dCode = AdminHelpers.DCode(code);
-            if (string.IsNullOrEmpty(dCode))
+            var dCode = AdminHelpers.DCodeInt(code);
+            if (dCode==0)
                 return HttpNotFound();
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var drug = db.MeasurementUnits.FirstOrDefault(i => i.Code == dCode && i.Status == 0);// MeasurementUnit.Get(dCode);
+            var drug = db.MeasurementUnits.FirstOrDefault(i => i.Id == dCode && i.Status == 0);// MeasurementUnit.Get(dCode);
             var model = _mapper.Map<MeasurementUnit, MeasurementUnitCreateEditViewModel>(drug);
             return View(model);
         }
@@ -110,7 +101,7 @@ namespace ShopNow.Controllers
             int errorCode = 0;
             try
             {
-                var drug = db.MeasurementUnits.FirstOrDefault(i => i.Code == model.Code && i.Status == 0);// MeasurementUnit.Get(model.Code);
+                var drug = db.MeasurementUnits.FirstOrDefault(i => i.Id == model.Id && i.Status == 0);// MeasurementUnit.Get(model.Code);
                 drug.UnitName = model.UnitName;
                 drug.UnitSymbol = model.UnitSymbol;
                 drug.UnitType = model.UnitType;
@@ -134,9 +125,9 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNDMUD004")]
         public ActionResult Delete(string code)
         {
-            var dCode = AdminHelpers.DCode(code);
+            var dCode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var drug = db.MeasurementUnits.FirstOrDefault(i => i.Code == dCode && i.Status == 0);// MeasurementUnit.Get(dCode);
+            var drug = db.MeasurementUnits.FirstOrDefault(i => i.Id == dCode && i.Status == 0);// MeasurementUnit.Get(dCode);
             drug.Status = 2;
             drug.UpdatedBy = user.Name;
             db.Entry(drug).State = System.Data.Entity.EntityState.Modified;
@@ -249,7 +240,6 @@ namespace ShopNow.Controllers
                         {
                             UnitName = row[model.UnitName].ToString(),
                             Type = model.Type,
-                            Code = _generatedCode,
                             ConversionFormula = row[model.ConversionFormula].ToString(),
                             ConversionUnit = row[model.ConversionUnit].ToString(),
                             UnitSymbol = row[model.UnitSymbol].ToString(),

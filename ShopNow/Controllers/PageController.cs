@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using ExcelDataReader;
 using ShopNow.Filters;
 using ShopNow.Helpers;
@@ -47,12 +46,7 @@ namespace ShopNow.Controllers
             var List = (from s in db.Pages
                         select s).OrderBy(s => s.Name).Where(i => i.Status == 0).ToList();
             return View(List);
-            //var user = ((Helpers.Sessions.User)Session["USER"]);
-            //ViewBag.Name = user.Name;
-            //var model = new PageListViewModel();
-            //model.List = Page.GetListAll().AsQueryable().ProjectTo<PageListViewModel.PageList>(_mapperConfiguration).OrderBy(i => i.Name).ToList();
-
-            //return View(model);
+       
         }
 
         [AccessPolicy(PageCode = "SHNPGEC002")]

@@ -29,8 +29,8 @@ namespace ShopNow.Controllers
         {
             _mapperConfiguration = new MapperConfiguration(config =>
             {
-                config.CreateMap<ShopDiscountCategoryViewModel, ProductMedicalStock>();
-                config.CreateMap<ProductMedicalStock, ShopDiscountCategoryViewModel.DiscountCategoryList>();
+                config.CreateMap<ShopDiscountCategoryViewModel, Product>();
+                config.CreateMap<Product, ShopDiscountCategoryViewModel.DiscountCategoryList>();
                 config.CreateMap<DiscountCategory, ShopDiscountCategoryViewModel.CategoryList>();
                 config.CreateMap<DiscountCategory, ShopDiscountCategoryEditViewModel>();
                 config.CreateMap<ShopDiscountCategoryEditViewModel, DiscountCategory>();
@@ -48,8 +48,8 @@ namespace ShopNow.Controllers
             model.CategoryLists = db.DiscountCategories.Where(i=> i.Status == 0 && i.Type != 0)
                    .Select(i => new ShopDiscountCategoryViewModel.CategoryList
                    {
-                       Code = i.Code,
-                       CategoryCode = i.OfferCategoryCode,
+                       Id = i.Id,
+                       CategoryId = i.CategoryType,
                        CategoryName = i.Name,
                        DiscountPercentage = i.Percentage,
                        Type = i.Type,
@@ -74,7 +74,7 @@ namespace ShopNow.Controllers
         public ActionResult Create(ShopDiscountCategoryViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var prod = _mapper.Map<ShopDiscountCategoryViewModel, ProductMedicalStock >(model);
+            var prod = _mapper.Map<ShopDiscountCategoryViewModel, Product >(model);
         
             return RedirectToAction("List");
 
@@ -83,10 +83,10 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNSDCE003")]
         public ActionResult Edit(string code)
         {
-            var dCode = AdminHelpers.DCode(code);
+            var dCode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var dc = db.DiscountCategories.FirstOrDefault(i => i.Code == dCode); // DiscountCategory.Get(dCode);
+            var dc = db.DiscountCategories.FirstOrDefault(i => i.Id == dCode); // DiscountCategory.Get(dCode);
             var model = _mapper.Map<DiscountCategory, ShopDiscountCategoryEditViewModel>(dc);
             return View(model);
         }
@@ -97,8 +97,8 @@ namespace ShopNow.Controllers
         public ActionResult Edit(ShopDiscountCategoryEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var discountcategory = db.DiscountCategories.FirstOrDefault(i => i.Code == model.Code); // DiscountCategory.Get(model.Code);
-            var product = db.Products.Where(i => i.DiscountCategoryCode == discountcategory.Code && i.Status == 0).ToList();
+            var discountcategory = db.DiscountCategories.FirstOrDefault(i => i.Id == model.Id); // DiscountCategory.Get(model.Code);
+            var product = db.Products.Where(i => i.DiscountCategoryId == discountcategory.Id && i.Status == 0).ToList();
             //var dc = _mapper.Map<ShopDiscountCategoryEditViewModel, DiscountCategory>(model);
 
             discountcategory.Percentage = model.Percentage;
@@ -111,10 +111,10 @@ namespace ShopNow.Controllers
             {
                 foreach (var item in product)
                 {
-                    var prod = db.Products.FirstOrDefault(i => i.Code == item.Code); // Product.Get(item.Code);
+                    var prod = db.Products.FirstOrDefault(i => i.Id == item.Id); // Product.Get(item.Code);
                     if (prod != null)
                     {
-                        prod.DiscountCategoryCode = discountcategory.Code;
+                        prod.DiscountCategoryId = discountcategory.Id;
                         prod.DiscountCategoryName = discountcategory.Name;
                         prod.DiscountCategoryPercentage = discountcategory.Percentage;
                         prod.DiscountCategoryType = discountcategory.CategoryType;
@@ -124,16 +124,6 @@ namespace ShopNow.Controllers
                         db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
                         db.SaveChanges();
                         //Product.Edit(prod, out int error);
-
-                        var pms = db.ProductMedicalStocks.FirstOrDefault(i => i.Id == prod.Id); //ProductMedicalStock.GetProduct(prod.Code);
-                        if (pms != null)
-                        {
-                            pms.DiscountPercentage = discountcategory.Percentage;
-                            pms.DateUpdated = DateTime.Now;
-                            db.Entry(pms).State = System.Data.Entity.EntityState.Modified;
-                            db.SaveChanges();
-                            //ProductMedicalStock.Edit(pms, out int error2);
-                        }
                     }
                 }
             }
@@ -461,7 +451,7 @@ namespace ShopNow.Controllers
         {
             var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
             {
-                id = i.Code,
+                id = i.Id,
                 text = i.Name
             }).ToListAsync();
 

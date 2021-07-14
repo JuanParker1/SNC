@@ -8,7 +8,7 @@ namespace ShopNow.ViewModels
     public class RefundPendingViewModel
     {
         public DateTime? OrderDate { get; set; }
-        public string ShopCode { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
         public string ErrorMessage { get; set; }
 

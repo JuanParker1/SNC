@@ -22,12 +22,7 @@ namespace ShopNow.Controllers
         private MapperConfiguration _mapperConfiguration;
        
 
-        private static string _generatedCode(string _prefix)
-        {
-           
-                return ShopNow.Helpers.DRC.Generate(_prefix);
-            
-        }
+
 
         public DrugCompoundDetailController()
         {
@@ -72,7 +67,6 @@ namespace ShopNow.Controllers
                 var drug = _mapper.Map<DrugCompoundDetailCreateEditViewModel, DrugCompoundDetail>(model);
                 drug.CreatedBy = user.Name;
                 drug.UpdatedBy = user.Name;
-                drug.Code = _generatedCode("DCD");
                 drug.Status = 0;
                 drug.DateEncoded = DateTime.Now;
                 drug.DateUpdated = DateTime.Now;
@@ -90,12 +84,12 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNDCDE003")]
         public ActionResult Edit(string code)
         {
-            var dCode = AdminHelpers.DCode(code);
-            if (string.IsNullOrEmpty(dCode))
+            var dCode = AdminHelpers.DCodeInt(code);
+            if (dCode==0)
                 return HttpNotFound();
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var drug = db.DrugCompoundDetails.FirstOrDefault(i => i.Code == dCode && i.Status == 0);// DrugCompoundDetail.Get(dCode);
+            var drug = db.DrugCompoundDetails.FirstOrDefault(i => i.Id == dCode && i.Status == 0);// DrugCompoundDetail.Get(dCode);
             var model = _mapper.Map<DrugCompoundDetail, DrugCompoundDetailCreateEditViewModel>(drug);
             return View(model);
         }
@@ -109,7 +103,7 @@ namespace ShopNow.Controllers
             int errorCode = 0;
             try
             {
-                DrugCompoundDetail drug = db.DrugCompoundDetails.FirstOrDefault(i => i.Code == model.Code && i.Status == 0);// DrugCompoundDetail.Get(model.Code);
+                DrugCompoundDetail drug = db.DrugCompoundDetails.FirstOrDefault(i => i.Id == model.Id && i.Status == 0);// DrugCompoundDetail.Get(model.Code);
                 _mapper.Map(model, drug);
                 drug.UpdatedBy = user.Name;
                 drug.DateUpdated = DateTime.Now;
@@ -130,9 +124,9 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNDCDD004")]
         public ActionResult Delete(string code)
         {
-            var dCode = AdminHelpers.DCode(code);
+            var dCode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var drug = db.DrugCompoundDetails.FirstOrDefault(i => i.Code == dCode && i.Status == 0);//DrugCompoundDetail.Get(dCode);
+            var drug = db.DrugCompoundDetails.FirstOrDefault(i => i.Id == dCode && i.Status == 0);//DrugCompoundDetail.Get(dCode);
             drug.Status = 2;
             drug.UpdatedBy = user.Name;
             db.Entry(drug).State = System.Data.Entity.EntityState.Modified;
@@ -243,8 +237,7 @@ namespace ShopNow.Controllers
                     {
                         db.DrugCompoundDetails.Add(new DrugCompoundDetail
                         {
-                            AliasName = row[model.AliasName].ToString(),
-                            Code = _generatedCode("DCD"),                        
+                            AliasName = row[model.AliasName].ToString(),                     
                             IndicationTreatmentAgeGroup = row[model.IndicationTreatmentAgeGroup].ToString(),
                             IntakeContraindication = row[model.IntakeContraindication].ToString(),
                             IntakeIndications = row[model.IntakeIndications].ToString(),
