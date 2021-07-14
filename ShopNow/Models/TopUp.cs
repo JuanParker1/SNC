@@ -15,7 +15,6 @@ namespace ShopNow.Models
     public partial class TopUp
     {
         public int Id { get; set; }
-        public int Id { get; set; }
         public string PlanName { get; set; }
         public int Validity { get; set; }
         public int Status { get; set; }

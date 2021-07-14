@@ -262,8 +262,8 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
                 Admin admin = new Admin();
                 admin.AnonymisedID = user.Id.ToString();
-                admin.Code = ShopNow.Helpers.DRC.Generate("ADM");
-                admin.OfficialID = AdminHelpers.SecureData(admin.Code);
+                //admin.Code = ShopNow.Helpers.DRC.Generate("ADM");
+                admin.OfficialID = AdminHelpers.SecureData(admin.Id.ToString());
                 admin.AnonymisedID = AdminHelpers.SecureData(admin.AnonymisedID);
                 admin.Status = 0;
                 admin.DateEncoded = DateTime.Now;
@@ -2414,7 +2414,7 @@ namespace ShopNow.Controllers
 
                 Admin admin = new Admin();
                 admin.AnonymisedID = shop.Id.ToString();
-                admin.Code = _generateCode("ADM");
+                //admin.Code = _generateCode("ADM");
                 admin.Status = 0;
                 admin.DateEncoded = DateTime.Now;
                 admin.DateUpdated = DateTime.Now;
@@ -2904,8 +2904,8 @@ namespace ShopNow.Controllers
             int errorCode = 0;
 
             var review = _mapper.Map<ShopReviewViewModel, CustomerReview>(model);
-            review.Code = ClassCustomerReview.Add(review, out errorCode);
-            if (review.Code != null)
+            ClassCustomerReview.Add(review, out errorCode);
+            if (review.Id != 0)
             {
                 return Json(new { message = "Successfully Added to Rating!", Details = model });
             }
@@ -2919,7 +2919,8 @@ namespace ShopNow.Controllers
         public JsonResult UpdateReview(ShopReviewUpdateViewModel model)
         {
             int errorCode = 0;
-            var review = ClassCustomerReview.Get(model.Code);
+            //var review = ClassCustomerReview.Get(model.Code);
+            var review = db.CustomerReviews.FirstOrDefault(i => i.Id == model.Id);
             review.CustomerRemark = model.CustomerRemark;
             review.Rating = model.Rating;
             ClassCustomerReview.Edit(review, out errorCode);
@@ -2934,7 +2935,7 @@ namespace ShopNow.Controllers
                            .AsEnumerable()
                          .Select(i => new ReviewListViewModel.ReviewlList
                          {
-                             Code = i.Code,
+                             Id = i.Id,
                              ShopName = i.ShopName,
                              CustomerName = i.CustomerName,
                              CustomerRemark = i.CustomerRemark,
@@ -2946,7 +2947,7 @@ namespace ShopNow.Controllers
                            .AsEnumerable()
                          .Select(i => new ReviewListViewModel.ReviewlList
                          {
-                             Code = i.Code,
+                             Id = i.Id,
                              ShopName = i.ShopName,
                              CustomerName = i.CustomerName,
                              CustomerRemark = i.CustomerRemark,

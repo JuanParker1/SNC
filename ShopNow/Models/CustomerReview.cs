@@ -14,7 +14,6 @@ namespace ShopNow.Models
     
     public partial class CustomerReview
     {
-        public long Id { get; set; }
         public int Id { get; set; }
         public string ShopCode { get; set; }
         public string ShopName { get; set; }
