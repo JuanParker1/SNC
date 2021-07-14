@@ -9,9 +9,9 @@ namespace ShopNow.ViewModels
     public class CartDetailsViewModel
     {
         public int Id { get; set; }
-        public string CustomerCode { get; set; }
+        public int CustomerId { get; set; }
         public string CustomerName { get; set; }
-        public string ShopCode { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
         public string ProductCode { get; set; }
         public string ProductName { get; set; }
@@ -69,24 +69,24 @@ namespace ShopNow.ViewModels
     public class CartListViewModel
     {
         public int Id { get; set; }
-        public string CustomerCode { get; set; }
+        public int CustomerId { get; set; }
         public string CustomerName { get; set; }
-        public string ShopCode { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public string ProductCode { get; set; }
+        public int ProductId { get; set; }
         public string ProductName { get; set; }
         public string PhoneNumber { get; set; }
-        public string BrandCode { get; set; }
+        public int BrandId { get; set; }
         public string BrandName { get; set; }
-        public string CategoryCode { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public string DeliveryAddress { get; set; }
         public string ImagePath { get; set; }
-        public string DeliveryBoyCode { get; set; }
+        public int DeliveryBoyId { get; set; }
         public string DeliveryBoyName { get; set; }
         public string UserEnquiryCode { get; set; }
         public string UserEnquiryName { get; set; }
-        public string OrderNo { get; set; }
+        public int OrderNo { get; set; }
         public string Qty { get; set; }
         public double Price { get; set; }
         public int CartStatus { get; set; }
@@ -106,26 +106,26 @@ namespace ShopNow.ViewModels
         public class CartList
         {
             public int Id { get; set; }
-            public string CustomerCode { get; set; }
+            public int CustomerId { get; set; }
             public string CustomerName { get; set; }
-            public string ShopCode { get; set; }
+            public int ShopId { get; set; }
             public string ShopName { get; set; }
-            public string ProductCode { get; set; }
+            public int ProductId { get; set; }
             public string ProductName { get; set; }
             public string PhoneNumber { get; set; }
-            public string BrandCode { get; set; }
+            public int BrandId { get; set; }
             public string BrandName { get; set; }
-            public string CategoryCode { get; set; }
+            public int CategoryId { get; set; }
             public string CategoryName { get; set; }
             public string DeliveryAddress { get; set; }
             public string ImagePath { get; set; }
-            public string DeliveryBoyCode { get; set; }
+            public int DeliveryBoyId { get; set; }
             public string DeliveryBoyName { get; set; }
             public string DeliveryPhoneNumber { get; set; }
             public string UserEnquiryCode { get; set; }
             public string UserEnquiryName { get; set; }
-            public string OrderNo { get; set; }
-            public string Qty { get; set; }
+            public int OrderNo { get; set; }
+            public int Qty { get; set; }
             public double Price { get; set; }
             public int CartStatus { get; set; }
             public string CreatedBy { get; set; }
@@ -171,8 +171,8 @@ namespace ShopNow.ViewModels
     public class CartAssignDeliveryBoyViewModel
     {
         public int Id { get; set; }
-        public string CartCode { get; set; }
-        public string DeliveryBoyCode { get; set; }
+        public int OrderId { get; set; }
+        public int DeliveryBoyId { get; set; }
 
         public List<CartAssignList> Lists { get; set; }
         public class CartAssignList
