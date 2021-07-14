@@ -21,9 +21,6 @@ namespace ShopNow.Controllers
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
        
-
-
-
         public DrugCompoundDetailController()
         {
             _mapperConfiguration = new MapperConfiguration(config =>
@@ -61,7 +58,6 @@ namespace ShopNow.Controllers
         public ActionResult Create(DrugCompoundDetailCreateEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            int errorCode = 0;
             try
             {
                 var drug = _mapper.Map<DrugCompoundDetailCreateEditViewModel, DrugCompoundDetail>(model);
@@ -72,24 +68,23 @@ namespace ShopNow.Controllers
                 drug.DateUpdated = DateTime.Now;
                 db.DrugCompoundDetails.Add(drug);
                 db.SaveChanges();
-                // DrugCompoundDetail.Add(drug, out errorCode);
                 return RedirectToAction("List");
             }
             catch (Exception ex)
             {
-                return HttpNotFound("Error Code: " + errorCode);
+                return HttpNotFound("Error: " + ex);
             }
         }
 
         [AccessPolicy(PageCode = "SHNDCDE003")]
-        public ActionResult Edit(string code)
+        public ActionResult Edit(string Id)
         {
-            var dCode = AdminHelpers.DCodeInt(code);
+            var dCode = AdminHelpers.DCodeInt(Id);
             if (dCode==0)
                 return HttpNotFound();
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var drug = db.DrugCompoundDetails.FirstOrDefault(i => i.Id == dCode && i.Status == 0);// DrugCompoundDetail.Get(dCode);
+            var drug = db.DrugCompoundDetails.FirstOrDefault(i => i.Id == dCode && i.Status == 0);
             var model = _mapper.Map<DrugCompoundDetail, DrugCompoundDetailCreateEditViewModel>(drug);
             return View(model);
         }
@@ -100,10 +95,9 @@ namespace ShopNow.Controllers
         public ActionResult Edit(DrugCompoundDetailCreateEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            int errorCode = 0;
             try
             {
-                DrugCompoundDetail drug = db.DrugCompoundDetails.FirstOrDefault(i => i.Id == model.Id && i.Status == 0);// DrugCompoundDetail.Get(model.Code);
+                DrugCompoundDetail drug = db.DrugCompoundDetails.FirstOrDefault(i => i.Id == model.Id && i.Status == 0);
                 _mapper.Map(model, drug);
                 drug.UpdatedBy = user.Name;
                 drug.DateUpdated = DateTime.Now;
@@ -111,22 +105,20 @@ namespace ShopNow.Controllers
                 db.Entry(drug).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
-                // DrugCompoundDetail.Edit(drug, out errorCode);
-
                 return RedirectToAction("List");
             }
             catch (Exception ex)
             {
-                return HttpNotFound("Error Code: " + errorCode);
+                return HttpNotFound("Error: " + ex);
             }
         }
 
         [AccessPolicy(PageCode = "SHNDCDD004")]
-        public ActionResult Delete(string code)
+        public ActionResult Delete(string Id)
         {
-            var dCode = AdminHelpers.DCodeInt(code);
+            var dCode = AdminHelpers.DCodeInt(Id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var drug = db.DrugCompoundDetails.FirstOrDefault(i => i.Id == dCode && i.Status == 0);//DrugCompoundDetail.Get(dCode);
+            var drug = db.DrugCompoundDetails.FirstOrDefault(i => i.Id == dCode && i.Status == 0);
             drug.Status = 2;
             drug.UpdatedBy = user.Name;
             db.Entry(drug).State = System.Data.Entity.EntityState.Modified;
@@ -150,7 +142,6 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             DataTable dt = new DataTable();
-
             if (model.button == "upload")
             {
                 string path = Server.MapPath("~/Content/ExcelUpload/" + upload.FileName);
@@ -161,7 +152,6 @@ namespace ShopNow.Controllers
                     {
                         Stream stream = upload.InputStream;
                         IExcelDataReader reader = null;
-
                         if (upload.FileName.EndsWith(".xls"))
                         {
                             reader = ExcelReaderFactory.CreateBinaryReader(stream);
@@ -182,11 +172,7 @@ namespace ShopNow.Controllers
                                 UseHeaderRow = true
                             }
                         });
-
-                        // reader.IsFirstRowAsColumnNames = true;
-
                         reader.Close();
-
                         model.DataTable = result.Tables[0];
                         model.Filename = upload.FileName;
                         return View(model);
@@ -201,7 +187,6 @@ namespace ShopNow.Controllers
             {
                 string path = Server.MapPath("~/Content/ExcelUpload/" + model.Filename);
                 string excelConnectionString = @"Provider='Microsoft.ACE.OLEDB.12.0';Data Source='" + path + "';Extended Properties='Excel 12.0 Xml;IMEX=1'";
-
                 OleDbConnection excelConnection = new OleDbConnection(excelConnectionString);
                 using (OleDbConnection connExcel = new OleDbConnection(excelConnectionString))
                 {

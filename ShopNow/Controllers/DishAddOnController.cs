@@ -76,20 +76,19 @@ namespace ShopNow.Controllers
             dishAddOn.DateUpdated = DateTime.Now;
             _db.DishAddOns.Add(dishAddOn);
             _db.SaveChanges();
-            // DishAddOn.Add(dishAddOn, out int errorCode);
 
             return RedirectToAction("List","DishAddOn");
         }
 
         [AccessPolicy(PageCode = "SHNDANE003")]
-        public ActionResult Edit(string code)
+        public ActionResult Edit(string Id)
         {
-            var dCode = AdminHelpers.DCodeInt(code);
+            var dCode = AdminHelpers.DCodeInt(Id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             if (dCode==0)
                 return HttpNotFound();
-            var dishAddOn = _db.DishAddOns.FirstOrDefault(i => i.Id == dCode);// DishAddOn.Get(dCode);
+            var dishAddOn = _db.DishAddOns.FirstOrDefault(i => i.Id == dCode);
             var model = _mapper.Map<DishAddOn, DishAddOnCreateEditViewModel>(dishAddOn);
             return View(model);
         }
@@ -101,10 +100,9 @@ namespace ShopNow.Controllers
         public ActionResult Edit(DishAddOnCreateEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            int errorCode = 0;
             try
             {
-                DishAddOn da = _db.DishAddOns.FirstOrDefault(i => i.Id == model.Id);//DishAddOn.Get(model.Code);
+                DishAddOn da = _db.DishAddOns.FirstOrDefault(i => i.Id == model.Id);
                 _mapper.Map(model, da);
                 da.UpdatedBy = user.Name;
                 da.DateUpdated = DateTime.Now;
@@ -112,21 +110,19 @@ namespace ShopNow.Controllers
                 _db.Entry(da).State = System.Data.Entity.EntityState.Modified;
                 _db.SaveChanges();
 
-                // DishAddOn.Edit(da, out errorCode);
-
                 return RedirectToAction("List", "DishAddOn");
             }
             catch (Exception ex)
             {
-                return HttpNotFound("Error Code: " + errorCode);
+                return HttpNotFound("Error: " + ex);
             }
         }
 
         [AccessPolicy(PageCode = "SHNDAND004")]
-        public ActionResult Delete(string code)
+        public ActionResult Delete(string Id)
         {
-            var dCode = AdminHelpers.DCodeInt(code);
-            var dishAddOn = _db.DishAddOns.FirstOrDefault(i => i.Id == dCode);// DishAddOn.Get(dCode);
+            var dCode = AdminHelpers.DCodeInt(Id);
+            var dishAddOn = _db.DishAddOns.FirstOrDefault(i => i.Id == dCode);
             dishAddOn.Status = 2;
             _db.Entry(dishAddOn).State = System.Data.Entity.EntityState.Modified;
             _db.SaveChanges();
@@ -281,7 +277,6 @@ namespace ShopNow.Controllers
                 ad.DateUpdated = DateTime.Now;
                 _db.AddOnCategories.Add(ad);
                 _db.SaveChanges();
-               //  ad.Code = ad.Code// AddOnCategory.Add(ad, out int error);
                 return ad.Id;
             }
         }
@@ -300,7 +295,6 @@ namespace ShopNow.Controllers
                 ct.DateUpdated = DateTime.Now;
                 _db.Portions.Add(ct);
                 _db.SaveChanges();
-                // ct.Code = Portion.Add(ct, out int error);
                 return ct.Id;
             }
         }

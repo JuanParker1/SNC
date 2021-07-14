@@ -55,7 +55,6 @@ namespace ShopNow.Controllers
                 discountCategory.Percentage = Percentage;
                 discountCategory.CreatedBy = user.Name;
                 discountCategory.UpdatedBy = user.Name;
-                //string code = DiscountCategory.Add(discountCategory, out int error);
                 discountCategory.Status = 0;
                 discountCategory.DateEncoded = DateTime.Now;
                 discountCategory.DateUpdated = DateTime.Now;
@@ -72,11 +71,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNDCAE003")]
-        public JsonResult Edit(int code, string name, double percentage)
+        public JsonResult Edit(int Id, string name, double percentage)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             string message = "";
-            DiscountCategory discountCategory = db.DiscountCategories.FirstOrDefault(i => i.Id == code);// DiscountCategory.Get(code);
+            DiscountCategory discountCategory = db.DiscountCategories.FirstOrDefault(i => i.Id == Id);
             if (discountCategory != null)
             {
                 discountCategory.Name = name;
@@ -93,10 +92,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNDCAD004")]
-        public JsonResult Delete(int code)
+        public JsonResult Delete(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var discountCategory = db.DiscountCategories.FirstOrDefault(i => i.Id == code);// DiscountCategory.Get(code);
+            var discountCategory = db.DiscountCategories.FirstOrDefault(i => i.Id == Id);
             if (discountCategory != null)
             {
                 discountCategory.Status = 2;

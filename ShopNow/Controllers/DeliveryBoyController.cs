@@ -166,7 +166,6 @@ namespace ShopNow.Controllers
                 db.Entry(deliveryBoyImage).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
-                // DeliveryBoy.Edit(deliveryBoyImage, out int error1);
                 return RedirectToAction("List");
             }
             catch (AmazonS3Exception amazonS3Exception)
@@ -556,11 +555,11 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             var model = new DeliveryBoyCreditAmountViewModel();
             model.List = db.ShopCharges.Where(i => i.OrderStatus == 6)
-                .GroupBy(i => i.DeliveryBoyCode)
+                .GroupBy(i => i.DeliveryBoyId)
                 .Select(i => new DeliveryBoyCreditAmountViewModel.CreditAmountList
             {
-                Code = i.Any() ? i.FirstOrDefault().Code : "",
-                DeliveryBoyCode = i.Any() ? i.FirstOrDefault().DeliveryBoyCode : "",
+                Id = i.Any() ? i.FirstOrDefault().Id : 0,
+                DeliveryBoyId = i.Any() ? i.FirstOrDefault().DeliveryBoyId.Value : 0,
                 DeliveryBoyName = i.Any() ? i.FirstOrDefault().DeliveryBoyName : "",
                 GrossDeliveryCharge = i.Any() ? i.Sum(j=> j.GrossDeliveryCharge) : 0.0
             }).ToList();
@@ -575,12 +574,12 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             var model = new DeliveryBoyCreditAmountViewModel();
             var date = DateTime.Now;
-            model.List = db.ShopCharges.Where(i => i.CartStatus == 6 && i.DateUpdated.Year == date.Year && i.DateUpdated.Month == date.Month && i.DateUpdated.Day == date.Day)
-                .GroupBy(i => i.DeliveryBoyCode)
+            model.List = db.ShopCharges.Where(i => i.OrderStatus == 6 && i.DateUpdated.Year == date.Year && i.DateUpdated.Month == date.Month && i.DateUpdated.Day == date.Day)
+                .GroupBy(i => i.DeliveryBoyId)
                 .Select(i => new DeliveryBoyCreditAmountViewModel.CreditAmountList
                 {
-                    Code = i.Any() ? i.FirstOrDefault().Code : "",
-                    DeliveryBoyCode = i.Any() ? i.FirstOrDefault().DeliveryBoyCode : "",
+                    Id = i.Any() ? i.FirstOrDefault().Id : 0,
+                    DeliveryBoyId = i.Any() ? i.FirstOrDefault().DeliveryBoyId.Value : 0,
                     DeliveryBoyName = i.Any() ? i.FirstOrDefault().DeliveryBoyName : "",
                     GrossDeliveryCharge = i.Any() ? i.Sum(j => j.GrossDeliveryCharge) : 0.0
                 }).ToList();
@@ -589,11 +588,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNDBYFR014")]
-        public JsonResult FranchiseRemove(string code)
+        public JsonResult FranchiseRemove(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             bool IsAdded = false;
-            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Code == code);// DeliveryBoy.Get(code);
+            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == Id);// DeliveryBoy.Get(code);
             if (deliveryBoy != null)
             {
                 deliveryBoy.MarketingAgentId = null;
@@ -632,7 +631,7 @@ namespace ShopNow.Controllers
         {
             var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
             {
-                id = i.Code,
+                id = i.Id,
                 text = i.Name
             }).ToListAsync();
 
@@ -640,11 +639,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNDBYC001")]
-        public async Task<JsonResult> GetStaffSelect2(string ShopId)
+        public async Task<JsonResult> GetStaffSelect2(int ShopId)
         {
             var model = await db.Staffs.OrderBy(i => i.Name).Where(a => a.ShopId == ShopId && a.Status == 0).Select(i => new
             {
-                id = i.Code,
+                id = i.Id,
                 text = i.Name
             }).ToListAsync();
 
@@ -656,7 +655,7 @@ namespace ShopNow.Controllers
         {
             var model = await db.DeliveryBoys.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.MarketingAgentId == null && a.MarketingAgentName == null).Select(i => new
             {
-                id = i.Code,
+                id = i.Id,
                 text = i.Name
             }).ToListAsync();
 
@@ -668,7 +667,7 @@ namespace ShopNow.Controllers
         {
             var model = await db.MarketingAgents.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
             {
-                id = i.Code,
+                id = i.Id,
                 text = i.Name
             }).ToListAsync();
 
@@ -676,9 +675,9 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNDBYE002")]
-        public JsonResult GetDeliveryBoyShop(string code, double latitude, double longitude)
+        public JsonResult GetDeliveryBoyShop(int Id, double latitude, double longitude)
         {
-            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Code == code);//DeliveryBoy.Get(code);
+            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == Id);//DeliveryBoy.Get(code);
             if (deliveryBoy.Latitude == latitude && deliveryBoy.Longitude == longitude)
             {
                 return Json(true, JsonRequestBehavior.AllowGet);
@@ -691,15 +690,15 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNDBYE002")]
-        public JsonResult DeactivateDeliveryBoyShop(string code)
+        public JsonResult DeactivateDeliveryBoyShop(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var list = db.DeliveryBoyShops.Where(i => i.DeliveryBoyCode == code && i.Status == 0).ToList();
+            var list = db.DeliveryBoyShops.Where(i => i.DeliveryBoyId == Id && i.Status == 0).ToList();
             if (list != null)
             {
                 foreach (var dbs in list)
                 {
-                    var dbshops = db.DeliveryBoyShops.FirstOrDefault(i => i.Code == dbs.Code);// DeliveryBoyShop.Get(dbs.Code);
+                    var dbshops = db.DeliveryBoyShops.FirstOrDefault(i => i.Id == dbs.Id);// DeliveryBoyShop.Get(dbs.Code);
                     dbshops.Status = 4;
                     dbshops.DateUpdated = DateTime.Now;
                     dbshops.UpdatedBy = user.Name;
@@ -713,10 +712,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNDBYE002")]
-        public JsonResult VerifyImage(string code)
+        public JsonResult VerifyImage(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var dboy = db.DeliveryBoys.FirstOrDefault(i => i.Code == code); // DeliveryBoy.Get(code);
+            var dboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == Id); // DeliveryBoy.Get(code);
             dboy.Status = 5;
             dboy.DateUpdated = DateTime.Now;
             dboy.UpdatedBy = user.Name;
@@ -743,12 +742,12 @@ namespace ShopNow.Controllers
                 else if(dboy != null)
                     return Json(isCheck = 3, JsonRequestBehavior.AllowGet);
             }
-            return Json(isCheck = 0, JsonRequestBehavior.AllowGet);
+            return Json(isCheck, JsonRequestBehavior.AllowGet);
         }
-        public ActionResult UpdateDeliveryBoyOnline(string code, int Active)
+        public ActionResult UpdateDeliveryBoyOnline(int Id, int Active)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var dboy = db.DeliveryBoys.Where(i => i.Code == code && i.Status == 0).FirstOrDefault();
+            var dboy = db.DeliveryBoys.Where(i => i.Id == Id && i.Status == 0).FirstOrDefault();
             dboy.Active = Active;
             db.Entry(dboy).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();

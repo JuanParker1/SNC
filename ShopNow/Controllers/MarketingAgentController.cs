@@ -66,7 +66,7 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["MARKETINGUSER"]);
             ViewBag.Name = user.Name;
-            var marketingAgent = _db.MarketingAgents.FirstOrDefault(i => i.Code == user.Code);//MarketingAgent.Get(user.Code);
+            var marketingAgent = _db.MarketingAgents.FirstOrDefault(i => i.Id == user.Id);
             var model = _mapper.Map<MarketingAgent, MarketingAgentUpdationViewModel>(marketingAgent);
             return View(model);
         }
@@ -76,7 +76,7 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["MARKETINGUSER"]);
             ViewBag.Name = user.Name;
-            var marketingAgent = _db.MarketingAgents.FirstOrDefault(i => i.Code == model.Code);// MarketingAgent.Get(model.Code);
+            var marketingAgent = _db.MarketingAgents.FirstOrDefault(i => i.Id == model.Id);
             //var ma = _mapper.Map(model, marketingAgent);
             marketingAgent.Name = model.Name;
             marketingAgent.PhoneNumber = model.PhoneNumber;
@@ -87,38 +87,15 @@ namespace ShopNow.Controllers
             _db.Entry(marketingAgent).State = System.Data.Entity.EntityState.Modified;
             _db.SaveChanges();
 
-            //MarketingAgent.Edit(marketingAgent, out int error);
             try
             {
                 if (model.PanImage != null)
                 {
-                    uc.UploadImage(model.PanImage, marketingAgent.Code + "_", "/Content/ImageUpload/", Server, _db, "", marketingAgent.Code, "");
-                    var s3Client = new AmazonS3Client(accesskey, secretkey, bucketRegion);
-                    var fileTransferUtility = new TransferUtility(s3Client);
+                    uc.UploadFiles(model.PanImage.InputStream, marketingAgent.Id + "_" + model.PanImage.FileName, accesskey, secretkey, "image");
+                    marketingAgent.ImagePath = marketingAgent.Id + "_" + model.PanImage.FileName.Replace(" ", "");
 
-                    if (model.PanImage.ContentLength > 0)
-                    {
-                        var filePath = Path.Combine(Server.MapPath("/Content/ImageUpload/Original/"),
-                        Path.GetFileName(marketingAgent.Code + "_" + model.PanImage.FileName));
-                        var fileTransferUtilityRequest = new TransferUtilityUploadRequest
-                        {
-                            BucketName = bucketName,
-                            FilePath = filePath.ToString(),
-                            StorageClass = S3StorageClass.StandardInfrequentAccess,
-                            PartSize = 6291456, // 6 MB.
-                            Key = marketingAgent.Code + "_" + model.PanImage.FileName,
-                            ContentType = model.PanImage.ContentType,
-                            CannedACL = S3CannedACL.PublicRead
-                        };
-                        fileTransferUtilityRequest.Metadata.Add("param1", "Value1");
-                        fileTransferUtilityRequest.Metadata.Add("param2", "Value2");
-                        fileTransferUtility.Upload(fileTransferUtilityRequest);
-                        fileTransferUtility.Dispose();
-                    }
-                    var PanImg = _db.MarketingAgents.FirstOrDefault(i => i.Code == model.Code);// MarketingAgent.Get(model.Code);
-                    PanImg.ImagePanPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/" + PanImg.Code + "_" + model.PanImage.FileName;
-                    PanImg.DateUpdated = DateTime.Now;
-                    _db.Entry(PanImg).State = System.Data.Entity.EntityState.Modified;
+                    marketingAgent.DateUpdated = DateTime.Now;
+                    _db.Entry(marketingAgent).State = System.Data.Entity.EntityState.Modified;
                     _db.SaveChanges();
 
                     //MarketingAgent.Edit(PanImg, out int error1);
@@ -231,8 +208,9 @@ namespace ShopNow.Controllers
         [ValidateInput(false)]
         public ActionResult ChangePassword(ChangePasswordViewModel cpm)
         {
-            string LoginMemberId = Convert.ToString(Session["UserCode"]);
-            var ExistingDetails = _db.MarketingAgents.FirstOrDefault(i => i.Code == LoginMemberId && i.Status == 0);
+            //string LoginMemberId = Convert.ToString(Session["UserCode"]);
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var ExistingDetails = _db.MarketingAgents.FirstOrDefault(i => i.Id == user.Id && i.Status == 0);
             if (cpm.OldPassword == ExistingDetails.Password)
             {
                 ExistingDetails.Password = cpm.NewPassword;
@@ -257,7 +235,7 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             model.List = _db.MarketingAgents.Where(i => i.Status == 0).Select(i => new MarketingAgentListViewModel.MarketingAgentList
             {
-                Code = i.Code,
+                Id = i.Id,
                 Email = i.Email,
                 Name = i.Name,
                 PhoneNumber = i.PhoneNumber
@@ -272,9 +250,9 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["MARKETINGUSER"]);
             ViewBag.Name = user.Name;
             var model = new ShopListViewModel();
-            model.List = _db.Shops.Where(i => i.Status == 0 && i.MarketingAgentCode == user.Code).Select(i => new ShopListViewModel.ShopList
+            model.List = _db.Shops.Where(i => i.Status == 0 && i.MarketingAgentId == user.Id).Select(i => new ShopListViewModel.ShopList
             {
-                Code = i.Code,
+                Id = i.Id,
                 Name = i.Name,
                 PhoneNumber = i.PhoneNumber,
                 OwnerPhoneNumber = i.OwnerPhoneNumber,
@@ -297,12 +275,12 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["MARKETINGUSER"]);
             ViewBag.Name = user.Name;
             var model = new DeliveryBoyListViewModel();
-            model.List = _db.DeliveryBoys.Where(i => i.Status == 0 && i.MarketingAgentCode == user.Code).Select(i => new DeliveryBoyListViewModel.DeliveryBoyList
+            model.List = _db.DeliveryBoys.Where(i => i.Status == 0 && i.MarketingAgentId == user.Id).Select(i => new DeliveryBoyListViewModel.DeliveryBoyList
             {
-                Code = i.Code,
+                Id = i.Id,
                 Name = i.Name,
                 PhoneNumber = i.PhoneNumber,
-                ShopCode = i.ShopCode,
+                ShopId = i.ShopId,
                 ShopName = i.ShopName,
                 ImagePath = i.ImagePath
             }).OrderBy(i => i.Name).ToList();
@@ -332,9 +310,8 @@ namespace ShopNow.Controllers
             }
             deliveryboy.CreatedBy = user.Name;
             deliveryboy.UpdatedBy = user.Name;
-            deliveryboy.CustomerCode = user.Code;
+            deliveryboy.CustomerId = user.Id;
             deliveryboy.CustomerName = user.Name;
-            deliveryboy.Code = ShopNow.Helpers.DRC.Generate("DBY");
             deliveryboy.DateEncoded = DateTime.Now;
             deliveryboy.DateUpdated = DateTime.Now;
             model.Status = 1;
@@ -346,218 +323,47 @@ namespace ShopNow.Controllers
                 // DeliveryBoy Image
                 if (model.DeliveryBoyImage != null)
                 {
-                    uc.UploadImage(model.DeliveryBoyImage, deliveryboy.Code + "_", "/Content/ImageUpload/", Server, _db, "", deliveryboy.Code, "");
-                    var s3Client = new AmazonS3Client(accesskey, secretkey, bucketRegion);
-                    var fileTransferUtility = new TransferUtility(s3Client);
-
-                    if (model.DeliveryBoyImage.ContentLength > 0)
-                    {
-                        var filePath = Path.Combine(Server.MapPath("/Content/ImageUpload/Original/"),
-                        Path.GetFileName(deliveryboy.Code + "_" + model.DeliveryBoyImage.FileName));
-                        var fileTransferUtilityRequest = new TransferUtilityUploadRequest
-                        {
-                            BucketName = bucketName,
-                            FilePath = filePath.ToString(),
-                            StorageClass = S3StorageClass.StandardInfrequentAccess,
-                            PartSize = 6291456, // 6 MB.
-                            Key = deliveryboy.Code + "_" + model.DeliveryBoyImage.FileName,
-                            ContentType = model.DeliveryBoyImage.ContentType,
-                            CannedACL = S3CannedACL.PublicRead
-                        };
-                        fileTransferUtilityRequest.Metadata.Add("param1", "Value1");
-                        fileTransferUtilityRequest.Metadata.Add("param2", "Value2");
-                        fileTransferUtility.Upload(fileTransferUtilityRequest);
-                        fileTransferUtility.Dispose();
-                    }
-                    var deliveryBoyImage = _db.DeliveryBoys.FirstOrDefault(i => i.Code == deliveryboy.Code);//DeliveryBoy.Get(deliveryboy.Code);
-                    deliveryBoyImage.ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/" + deliveryboy.Code + "_" + model.DeliveryBoyImage.FileName;
-                    deliveryBoyImage.DateUpdated = DateTime.Now;
-                    _db.Entry(deliveryBoyImage).State = System.Data.Entity.EntityState.Modified;
-                    _db.SaveChanges();
-                    //  DeliveryBoy.Edit(deliveryBoyImage, out int errorCode);
+                    uc.UploadFiles(model.DeliveryBoyImage.InputStream, deliveryboy.Id + "_" + model.DeliveryBoyImage.FileName, accesskey, secretkey, "image");
+                    deliveryboy.ImagePath = deliveryboy.Id + "_" + model.DeliveryBoyImage.FileName.Replace(" ", "");
                 }
 
                 // DrivingLicense Image
                 if (model.DrivingLicenseImage != null)
                 {
-                    uc.UploadImage(model.DrivingLicenseImage, deliveryboy.Code + "_", "/Content/ImageUpload/", Server, _db, "", deliveryboy.Code, "");
-                    var s3Client = new AmazonS3Client(accesskey, secretkey, bucketRegion);
-                    var fileTransferUtility = new TransferUtility(s3Client);
-
-                    if (model.DrivingLicenseImage.ContentLength > 0)
-                    {
-                        var filePath = Path.Combine(Server.MapPath("/Content/ImageUpload/Original/"),
-                        Path.GetFileName(deliveryboy.Code + "_" + model.DrivingLicenseImage.FileName));
-                        var fileTransferUtilityRequest = new TransferUtilityUploadRequest
-                        {
-                            BucketName = bucketName,
-                            FilePath = filePath.ToString(),
-                            StorageClass = S3StorageClass.StandardInfrequentAccess,
-                            PartSize = 6291456, // 6 MB.
-                            Key = deliveryboy.Code + "_" + model.DrivingLicenseImage.FileName,
-                            ContentType = model.DrivingLicenseImage.ContentType,
-                            CannedACL = S3CannedACL.PublicRead
-                        };
-                        fileTransferUtilityRequest.Metadata.Add("param1", "Value1");
-                        fileTransferUtilityRequest.Metadata.Add("param2", "Value2");
-                        fileTransferUtility.Upload(fileTransferUtilityRequest);
-                        fileTransferUtility.Dispose();
-                    }
-                    var drivingLicenseImage = _db.DeliveryBoys.FirstOrDefault(i => i.Code == deliveryboy.Code); //DeliveryBoy.Get(deliveryboy.Code);
-                    drivingLicenseImage.DrivingLicenseImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/" + deliveryboy.Code + "_" + model.DrivingLicenseImage.FileName;
-                    drivingLicenseImage.DateUpdated = DateTime.Now;
-                    _db.Entry(drivingLicenseImage).State = System.Data.Entity.EntityState.Modified;
-                    _db.SaveChanges();
-                    //DeliveryBoy.Edit(drivingLicenseImage, out int errorCode);
+                    uc.UploadFiles(model.DrivingLicenseImage.InputStream, deliveryboy.Id + "_" + model.DrivingLicenseImage.FileName, accesskey, secretkey, "image");
+                    deliveryboy.ImagePath = deliveryboy.Id + "_" + model.DrivingLicenseImage.FileName.Replace(" ", "");
                 }
 
                 // DrivingLicense Pdf
                 if (model.DrivingLicensePdf != null)
                 {
-                    if (model.DrivingLicensePdf.ContentLength > 0)
-                    {
-                        string _FileName = Path.GetFileName(model.DrivingLicensePdf.FileName);
-                        string _path = Path.Combine(Server.MapPath("/Content/PdfUpload"), deliveryboy.Code + "_" + _FileName);
-                        model.DrivingLicensePdf.SaveAs(_path);
-                        var s3Client1 = new AmazonS3Client(accesskey, secretkey, bucketRegion);
-                        var fileTransferUtility1 = new TransferUtility(s3Client1);
-                        if (model.DrivingLicensePdf.ContentLength > 0)
-                        {
-                            var filePath = Path.Combine(Server.MapPath("/Content/PdfUpload"),
-                            Path.GetFileName(deliveryboy.Code + "_" + model.DrivingLicensePdf.FileName));
-                            var fileTransferUtilityRequest = new TransferUtilityUploadRequest
-                            {
-                                BucketName = bucketName,
-                                FilePath = filePath.ToString(),
-                                StorageClass = S3StorageClass.StandardInfrequentAccess,
-                                PartSize = 6291456, // 6 MB.
-                                Key = deliveryboy.Code + "_" + model.DrivingLicensePdf.FileName,
-                                ContentType = model.DrivingLicensePdf.ContentType,
-                                CannedACL = S3CannedACL.PublicRead
-                            };
-                            fileTransferUtilityRequest.Metadata.Add("param1", "Value1");
-                            fileTransferUtilityRequest.Metadata.Add("param2", "Value2");
-                            fileTransferUtility1.Upload(fileTransferUtilityRequest);
-                            fileTransferUtility1.Dispose();
-                        }
-                        var drivingLicensePdf = _db.DeliveryBoys.FirstOrDefault(i => i.Code == deliveryboy.Code);// DeliveryBoy.Get(deliveryboy.Code);
-                        drivingLicensePdf.DrivingLicenseImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/" + deliveryboy.Code + "_" + model.DrivingLicensePdf.FileName;
-                        drivingLicensePdf.DateUpdated = DateTime.Now;
-                        _db.Entry(drivingLicensePdf).State = System.Data.Entity.EntityState.Modified;
-                        _db.SaveChanges();
-                        //DeliveryBoy.Edit(drivingLicensePdf, out int errors);
-                    }
+                    uc.UploadFiles(model.DrivingLicensePdf.InputStream, deliveryboy.Id + "_" + model.DrivingLicensePdf.FileName, accesskey, secretkey, "pdf");
+                    deliveryboy.DrivingLicenseImagePath = deliveryboy.Id + "_" + model.DrivingLicensePdf.FileName.Replace(" ", "");
                 }
 
                 // BankPassbook Image
                 if (model.BankPassbookImage != null)
                 {
-                    uc.UploadImage(model.BankPassbookImage, deliveryboy.Code + "_", "/Content/ImageUpload/", Server, _db, "", deliveryboy.Code, "");
-                    var s3Client = new AmazonS3Client(accesskey, secretkey, bucketRegion);
-                    var fileTransferUtility = new TransferUtility(s3Client);
-
-                    if (model.BankPassbookImage.ContentLength > 0)
-                    {
-                        var filePath = Path.Combine(Server.MapPath("/Content/ImageUpload/Original/"),
-                        Path.GetFileName(deliveryboy.Code + "_" + model.BankPassbookImage.FileName));
-                        var fileTransferUtilityRequest = new TransferUtilityUploadRequest
-                        {
-                            BucketName = bucketName,
-                            FilePath = filePath.ToString(),
-                            StorageClass = S3StorageClass.StandardInfrequentAccess,
-                            PartSize = 6291456, // 6 MB.
-                            Key = deliveryboy.Code + "_" + model.BankPassbookImage.FileName,
-                            ContentType = model.BankPassbookImage.ContentType,
-                            CannedACL = S3CannedACL.PublicRead
-                        };
-                        fileTransferUtilityRequest.Metadata.Add("param1", "Value1");
-                        fileTransferUtilityRequest.Metadata.Add("param2", "Value2");
-                        fileTransferUtility.Upload(fileTransferUtilityRequest);
-                        fileTransferUtility.Dispose();
-                    }
-                    var bankPassbookImage = _db.DeliveryBoys.FirstOrDefault(i => i.Code == deliveryboy.Code);// DeliveryBoy.Get(deliveryboy.Code);
-                    bankPassbookImage.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/" + deliveryboy.Code + "_" + model.BankPassbookImage.FileName;
-                    bankPassbookImage.DateUpdated = DateTime.Now;
-                    _db.Entry(bankPassbookImage).State = System.Data.Entity.EntityState.Modified;
-                    _db.SaveChanges();
-                    //DeliveryBoy.Edit(bankPassbookImage, out int errorCode);
+                    uc.UploadFiles(model.BankPassbookImage.InputStream, deliveryboy.Id + "_" + model.BankPassbookImage.FileName, accesskey, secretkey, "image");
+                    deliveryboy.BankPassbookPath = deliveryboy.Id + "_" + model.BankPassbookImage.FileName.Replace(" ", "");
                 }
 
                 // BankPassbook Pdf
                 if (model.BankPassbookPdf != null)
                 {
-                    if (model.BankPassbookPdf.ContentLength > 0)
-                    {
-                        string _FileName = Path.GetFileName(model.BankPassbookPdf.FileName);
-                        string _path = Path.Combine(Server.MapPath("/Content/PdfUpload"), deliveryboy.Code + "_" + _FileName);
-                        model.BankPassbookPdf.SaveAs(_path);
-                        var s3Client1 = new AmazonS3Client(accesskey, secretkey, bucketRegion);
-                        var fileTransferUtility1 = new TransferUtility(s3Client1);
-                        if (model.BankPassbookPdf.ContentLength > 0)
-                        {
-                            var filePath = Path.Combine(Server.MapPath("/Content/PdfUpload"),
-                            Path.GetFileName(deliveryboy.Code + "_" + model.BankPassbookPdf.FileName));
-                            var fileTransferUtilityRequest = new TransferUtilityUploadRequest
-                            {
-                                BucketName = bucketName,
-                                FilePath = filePath.ToString(),
-                                StorageClass = S3StorageClass.StandardInfrequentAccess,
-                                PartSize = 6291456, // 6 MB.
-                                Key = deliveryboy.Code + "_" + model.BankPassbookPdf.FileName,
-                                ContentType = model.BankPassbookPdf.ContentType,
-                                CannedACL = S3CannedACL.PublicRead
-                            };
-                            fileTransferUtilityRequest.Metadata.Add("param1", "Value1");
-                            fileTransferUtilityRequest.Metadata.Add("param2", "Value2");
-                            fileTransferUtility1.Upload(fileTransferUtilityRequest);
-                            fileTransferUtility1.Dispose();
-                        }
-                        var bankPassbookPdf = _db.DeliveryBoys.FirstOrDefault(i => i.Code == deliveryboy.Code);// DeliveryBoy.Get(deliveryboy.Code);
-                        bankPassbookPdf.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/" + deliveryboy.Code + "_" + model.BankPassbookPdf.FileName;
-                        bankPassbookPdf.DateUpdated = DateTime.Now;
-                        _db.Entry(bankPassbookPdf).State = System.Data.Entity.EntityState.Modified;
-                        _db.SaveChanges();
-                        //  DeliveryBoy.Edit(bankPassbookPdf, out int errors);
-                    }
+                    uc.UploadFiles(model.BankPassbookPdf.InputStream, deliveryboy.Id + "_" + model.BankPassbookPdf.FileName, accesskey, secretkey, "pdf");
+                    deliveryboy.BankPassbookPath = deliveryboy.Id + "_" + model.BankPassbookPdf.FileName.Replace(" ", "");
                 }
 
                 // CV Pdf
                 if (model.CVPdf != null)
                 {
-                    if (model.CVPdf.ContentLength > 0)
-                    {
-                        string _FileName = Path.GetFileName(model.CVPdf.FileName);
-                        string _path = Path.Combine(Server.MapPath("/Content/PdfUpload"), deliveryboy.Code + "_" + _FileName);
-                        model.CVPdf.SaveAs(_path);
-                        var s3Client1 = new AmazonS3Client(accesskey, secretkey, bucketRegion);
-                        var fileTransferUtility1 = new TransferUtility(s3Client1);
-                        if (model.CVPdf.ContentLength > 0)
-                        {
-                            var filePath = Path.Combine(Server.MapPath("/Content/PdfUpload"),
-                            Path.GetFileName(deliveryboy.Code + "_" + model.CVPdf.FileName));
-                            var fileTransferUtilityRequest = new TransferUtilityUploadRequest
-                            {
-                                BucketName = bucketName,
-                                FilePath = filePath.ToString(),
-                                StorageClass = S3StorageClass.StandardInfrequentAccess,
-                                PartSize = 6291456, // 6 MB.
-                                Key = deliveryboy.Code + "_" + model.CVPdf.FileName,
-                                ContentType = model.CVPdf.ContentType,
-                                CannedACL = S3CannedACL.PublicRead
-                            };
-                            fileTransferUtilityRequest.Metadata.Add("param1", "Value1");
-                            fileTransferUtilityRequest.Metadata.Add("param2", "Value2");
-                            fileTransferUtility1.Upload(fileTransferUtilityRequest);
-                            fileTransferUtility1.Dispose();
-                        }
-                        var cVPdf = _db.DeliveryBoys.FirstOrDefault(i => i.Code == deliveryboy.Code);// DeliveryBoy.Get(deliveryboy.Code);
-                        cVPdf.CVPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/" + deliveryboy.Code + "_" + model.CVPdf.FileName;
-                        cVPdf.DateUpdated = DateTime.Now;
-                        _db.Entry(cVPdf).State = System.Data.Entity.EntityState.Modified;
-                        _db.SaveChanges();
-                        //   DeliveryBoy.Edit(cVPdf, out int errors);
-                    }
+                    uc.UploadFiles(model.CVPdf.InputStream, deliveryboy.Id + "_" + model.CVPdf.FileName, accesskey, secretkey, "pdf");
+                    deliveryboy.CVPath = deliveryboy.Id + "_" + model.CVPdf.FileName.Replace(" ", "");
                 }
+                deliveryboy.DateUpdated = DateTime.Now;
+                _db.Entry(deliveryboy).State = System.Data.Entity.EntityState.Modified;
+                _db.SaveChanges();
 
                 return RedirectToAction("List");
             }
@@ -579,13 +385,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "")]
-        public ActionResult DeliveryBoyEdit(string code)
+        public ActionResult DeliveryBoyEdit(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["MARKETINGUSER"]);
             ViewBag.Name = user.Name;
-            if (string.IsNullOrEmpty(code))
-                return HttpNotFound();
-            var deliveryBoy = _db.DeliveryBoys.FirstOrDefault(i => i.Code == code);// DeliveryBoy.Get(code);
+            var deliveryBoy = _db.DeliveryBoys.FirstOrDefault(i => i.Id == Id);
             var model = _mapper.Map<DeliveryBoy, DeliveryBoyCreateEditViewModel>(deliveryBoy);
 
             return View(model);
@@ -598,7 +402,7 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["MARKETINGUSER"]);
 
-            DeliveryBoy deliveryboy = _db.DeliveryBoys.FirstOrDefault(i => i.Code == model.Code);// DeliveryBoy.Get(model.Code);
+            DeliveryBoy deliveryboy = _db.DeliveryBoys.FirstOrDefault(i => i.Id == model.Id);// DeliveryBoy.Get(model.Code);
             _mapper.Map(model, deliveryboy);
 
             if (model.Name == null && model.StaffCode != null)
@@ -618,221 +422,49 @@ namespace ShopNow.Controllers
                 // DeliveryBoy Image
                 if (model.DeliveryBoyImage != null)
                 {
-                    uc.UploadImage(model.DeliveryBoyImage, deliveryboy.Code + "_", "/Content/ImageUpload/", Server, _db, "", deliveryboy.Code, "");
-                    var s3Client = new AmazonS3Client(accesskey, secretkey, bucketRegion);
-                    var fileTransferUtility = new TransferUtility(s3Client);
-
-                    if (model.DeliveryBoyImage.ContentLength > 0)
-                    {
-                        var filePath = Path.Combine(Server.MapPath("/Content/ImageUpload/Original/"),
-                        Path.GetFileName(deliveryboy.Code + "_" + model.DeliveryBoyImage.FileName));
-                        var fileTransferUtilityRequest = new TransferUtilityUploadRequest
-                        {
-                            BucketName = bucketName,
-                            FilePath = filePath.ToString(),
-                            StorageClass = S3StorageClass.StandardInfrequentAccess,
-                            PartSize = 6291456, // 6 MB.
-                            Key = deliveryboy.Code + "_" + model.DeliveryBoyImage.FileName,
-                            ContentType = model.DeliveryBoyImage.ContentType,
-                            CannedACL = S3CannedACL.PublicRead
-                        };
-                        fileTransferUtilityRequest.Metadata.Add("param1", "Value1");
-                        fileTransferUtilityRequest.Metadata.Add("param2", "Value2");
-                        fileTransferUtility.Upload(fileTransferUtilityRequest);
-                        fileTransferUtility.Dispose();
-                    }
-                    var deliveryBoyImage = _db.DeliveryBoys.FirstOrDefault(i => i.Code == deliveryboy.Code);// DeliveryBoy.Get(deliveryboy.Code);
-                    deliveryBoyImage.ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/" + deliveryboy.Code + "_" + model.DeliveryBoyImage.FileName;
-                    deliveryBoyImage.DateUpdated = DateTime.Now;
-                    _db.Entry(deliveryBoyImage).State = System.Data.Entity.EntityState.Modified;
-                    _db.SaveChanges();
-                    //DeliveryBoy.Edit(deliveryBoyImage, out int errorCode1);
+                    uc.UploadFiles(model.DeliveryBoyImage.InputStream, deliveryboy.Id + "_" + model.DeliveryBoyImage.FileName, accesskey, secretkey, "image");
+                    deliveryboy.ImagePath = deliveryboy.Id + "_" + model.DeliveryBoyImage.FileName.Replace(" ", "");
                 }
 
                 // DrivingLicense Image
                 if (model.DrivingLicenseImage != null)
                 {
-                    uc.UploadImage(model.DrivingLicenseImage, deliveryboy.Code + "_", "/Content/ImageUpload/", Server, _db, "", deliveryboy.Code, "");
-                    var s3Client = new AmazonS3Client(accesskey, secretkey, bucketRegion);
-                    var fileTransferUtility = new TransferUtility(s3Client);
-
-                    if (model.DrivingLicenseImage.ContentLength > 0)
-                    {
-                        var filePath = Path.Combine(Server.MapPath("/Content/ImageUpload/Original/"),
-                        Path.GetFileName(deliveryboy.Code + "_" + model.DrivingLicenseImage.FileName));
-                        var fileTransferUtilityRequest = new TransferUtilityUploadRequest
-                        {
-                            BucketName = bucketName,
-                            FilePath = filePath.ToString(),
-                            StorageClass = S3StorageClass.StandardInfrequentAccess,
-                            PartSize = 6291456, // 6 MB.
-                            Key = deliveryboy.Code + "_" + model.DrivingLicenseImage.FileName,
-                            ContentType = model.DrivingLicenseImage.ContentType,
-                            CannedACL = S3CannedACL.PublicRead
-                        };
-                        fileTransferUtilityRequest.Metadata.Add("param1", "Value1");
-                        fileTransferUtilityRequest.Metadata.Add("param2", "Value2");
-                        fileTransferUtility.Upload(fileTransferUtilityRequest);
-                        fileTransferUtility.Dispose();
-                    }
-                    var drivingLicenseImage = _db.DeliveryBoys.FirstOrDefault(i => i.Code == deliveryboy.Code);// DeliveryBoy.Get(deliveryboy.Code);
-                    drivingLicenseImage.DrivingLicenseImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/" + deliveryboy.Code + "_" + model.DrivingLicenseImage.FileName;
-                    drivingLicenseImage.DateUpdated = DateTime.Now;
-                    _db.Entry(drivingLicenseImage).State = System.Data.Entity.EntityState.Modified;
-                    _db.SaveChanges();
-                    // DeliveryBoy.Edit(drivingLicenseImage, out int errorCode1);
+                    uc.UploadFiles(model.DrivingLicenseImage.InputStream, deliveryboy.Id + "_" + model.DrivingLicenseImage.FileName, accesskey, secretkey, "image");
+                    deliveryboy.ImagePath = deliveryboy.Id + "_" + model.DrivingLicenseImage.FileName.Replace(" ", "");
                 }
 
                 // DrivingLicense Pdf
                 if (model.DrivingLicensePdf != null)
                 {
-                    if (model.DrivingLicensePdf.ContentLength > 0)
-                    {
-                        string _FileName = Path.GetFileName(model.DrivingLicensePdf.FileName);
-                        string _path = Path.Combine(Server.MapPath("/Content/PdfUpload"), deliveryboy.Code + "_" + _FileName);
-                        model.DrivingLicensePdf.SaveAs(_path);
-                        var s3Client1 = new AmazonS3Client(accesskey, secretkey, bucketRegion);
-                        var fileTransferUtility1 = new TransferUtility(s3Client1);
-                        if (model.DrivingLicensePdf.ContentLength > 0)
-                        {
-                            var filePath = Path.Combine(Server.MapPath("/Content/PdfUpload"),
-                            Path.GetFileName(deliveryboy.Code + "_" + model.DrivingLicensePdf.FileName));
-                            var fileTransferUtilityRequest = new TransferUtilityUploadRequest
-                            {
-                                BucketName = bucketName,
-                                FilePath = filePath.ToString(),
-                                StorageClass = S3StorageClass.StandardInfrequentAccess,
-                                PartSize = 6291456, // 6 MB.
-                                Key = deliveryboy.Code + "_" + model.DrivingLicensePdf.FileName,
-                                ContentType = model.DrivingLicensePdf.ContentType,
-                                CannedACL = S3CannedACL.PublicRead
-                            };
-                            fileTransferUtilityRequest.Metadata.Add("param1", "Value1");
-                            fileTransferUtilityRequest.Metadata.Add("param2", "Value2");
-                            fileTransferUtility1.Upload(fileTransferUtilityRequest);
-                            fileTransferUtility1.Dispose();
-                        }
-                        var drivingLicensePdf = _db.DeliveryBoys.FirstOrDefault(i => i.Code == deliveryboy.Code);// DeliveryBoy.Get(deliveryboy.Code);
-                        drivingLicensePdf.DrivingLicenseImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/" + deliveryboy.Code + "_" + model.DrivingLicensePdf.FileName;
-                        drivingLicensePdf.DateUpdated = DateTime.Now;
-                        _db.Entry(drivingLicensePdf).State = System.Data.Entity.EntityState.Modified;
-                        _db.SaveChanges();
-                        // DeliveryBoy.Edit(drivingLicensePdf, out int errors);
-                    }
+                    uc.UploadFiles(model.DrivingLicensePdf.InputStream, deliveryboy.Id + "_" + model.DrivingLicensePdf.FileName, accesskey, secretkey, "pdf");
+                    deliveryboy.DrivingLicenseImagePath = deliveryboy.Id + "_" + model.DrivingLicensePdf.FileName.Replace(" ", "");
                 }
 
                 // BankPassbook Image
                 if (model.BankPassbookImage != null)
                 {
-                    uc.UploadImage(model.BankPassbookImage, deliveryboy.Code + "_", "/Content/ImageUpload/", Server, _db, "", deliveryboy.Code, "");
-                    var s3Client = new AmazonS3Client(accesskey, secretkey, bucketRegion);
-                    var fileTransferUtility = new TransferUtility(s3Client);
-
-                    if (model.BankPassbookImage.ContentLength > 0)
-                    {
-                        var filePath = Path.Combine(Server.MapPath("/Content/ImageUpload/Original/"),
-                        Path.GetFileName(deliveryboy.Code + "_" + model.BankPassbookImage.FileName));
-                        var fileTransferUtilityRequest = new TransferUtilityUploadRequest
-                        {
-                            BucketName = bucketName,
-                            FilePath = filePath.ToString(),
-                            StorageClass = S3StorageClass.StandardInfrequentAccess,
-                            PartSize = 6291456, // 6 MB.
-                            Key = deliveryboy.Code + "_" + model.BankPassbookImage.FileName,
-                            ContentType = model.BankPassbookImage.ContentType,
-                            CannedACL = S3CannedACL.PublicRead
-                        };
-                        fileTransferUtilityRequest.Metadata.Add("param1", "Value1");
-                        fileTransferUtilityRequest.Metadata.Add("param2", "Value2");
-                        fileTransferUtility.Upload(fileTransferUtilityRequest);
-                        fileTransferUtility.Dispose();
-                    }
-                    var bankPassbookImage = _db.DeliveryBoys.FirstOrDefault(i => i.Code == deliveryboy.Code);// DeliveryBoy.Get(deliveryboy.Code);
-                    bankPassbookImage.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/" + deliveryboy.Code + "_" + model.BankPassbookImage.FileName;
-                    bankPassbookImage.DateUpdated = DateTime.Now;
-                    _db.Entry(bankPassbookImage).State = System.Data.Entity.EntityState.Modified;
-                    _db.SaveChanges();
-                    //DeliveryBoy.Edit(bankPassbookImage, out int errorCode1);
+                    uc.UploadFiles(model.BankPassbookImage.InputStream, deliveryboy.Id + "_" + model.BankPassbookImage.FileName, accesskey, secretkey, "image");
+                    deliveryboy.BankPassbookPath = deliveryboy.Id + "_" + model.BankPassbookImage.FileName.Replace(" ", "");
                 }
 
                 // BankPassbook Pdf
                 if (model.BankPassbookPdf != null)
                 {
-                    if (model.BankPassbookPdf.ContentLength > 0)
-                    {
-                        string _FileName = Path.GetFileName(model.BankPassbookPdf.FileName);
-                        string _path = Path.Combine(Server.MapPath("/Content/PdfUpload"), deliveryboy.Code + "_" + _FileName);
-                        model.BankPassbookPdf.SaveAs(_path);
-                        var s3Client1 = new AmazonS3Client(accesskey, secretkey, bucketRegion);
-                        var fileTransferUtility1 = new TransferUtility(s3Client1);
-                        if (model.BankPassbookPdf.ContentLength > 0)
-                        {
-                            var filePath = Path.Combine(Server.MapPath("/Content/PdfUpload"),
-                            Path.GetFileName(deliveryboy.Code + "_" + model.BankPassbookPdf.FileName));
-                            var fileTransferUtilityRequest = new TransferUtilityUploadRequest
-                            {
-                                BucketName = bucketName,
-                                FilePath = filePath.ToString(),
-                                StorageClass = S3StorageClass.StandardInfrequentAccess,
-                                PartSize = 6291456, // 6 MB.
-                                Key = deliveryboy.Code + "_" + model.BankPassbookPdf.FileName,
-                                ContentType = model.BankPassbookPdf.ContentType,
-                                CannedACL = S3CannedACL.PublicRead
-                            };
-                            fileTransferUtilityRequest.Metadata.Add("param1", "Value1");
-                            fileTransferUtilityRequest.Metadata.Add("param2", "Value2");
-                            fileTransferUtility1.Upload(fileTransferUtilityRequest);
-                            fileTransferUtility1.Dispose();
-                        }
-                        var bankPassbookPdf = _db.DeliveryBoys.FirstOrDefault(i => i.Code == deliveryboy.Code);// DeliveryBoy.Get(deliveryboy.Code);
-                        bankPassbookPdf.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/" + deliveryboy.Code + "_" + model.BankPassbookPdf.FileName;
-                        bankPassbookPdf.DateUpdated = DateTime.Now;
-                        _db.Entry(bankPassbookPdf).State = System.Data.Entity.EntityState.Modified;
-                        _db.SaveChanges();
-                       // DeliveryBoy.Edit(bankPassbookPdf, out int errors);
-                    }
+                    uc.UploadFiles(model.BankPassbookPdf.InputStream, deliveryboy.Id + "_" + model.BankPassbookPdf.FileName, accesskey, secretkey, "pdf");
+                    deliveryboy.BankPassbookPath = deliveryboy.Id + "_" + model.BankPassbookPdf.FileName.Replace(" ", "");
                 }
 
                 // CV Pdf
                 if (model.CVPdf != null)
                 {
-                    if (model.CVPdf.ContentLength > 0)
-                    {
-                        string _FileName = Path.GetFileName(model.CVPdf.FileName);
-                        string _path = Path.Combine(Server.MapPath("/Content/PdfUpload"), deliveryboy.Code + "_" + _FileName);
-                        model.CVPdf.SaveAs(_path);
-                        var s3Client1 = new AmazonS3Client(accesskey, secretkey, bucketRegion);
-                        var fileTransferUtility1 = new TransferUtility(s3Client1);
-                        if (model.CVPdf.ContentLength > 0)
-                        {
-                            var filePath = Path.Combine(Server.MapPath("/Content/PdfUpload"),
-                            Path.GetFileName(deliveryboy.Code + "_" + model.CVPdf.FileName));
-                            var fileTransferUtilityRequest = new TransferUtilityUploadRequest
-                            {
-                                BucketName = bucketName,
-                                FilePath = filePath.ToString(),
-                                StorageClass = S3StorageClass.StandardInfrequentAccess,
-                                PartSize = 6291456, // 6 MB.
-                                Key = deliveryboy.Code + "_" + model.CVPdf.FileName,
-                                ContentType = model.CVPdf.ContentType,
-                                CannedACL = S3CannedACL.PublicRead
-                            };
-                            fileTransferUtilityRequest.Metadata.Add("param1", "Value1");
-                            fileTransferUtilityRequest.Metadata.Add("param2", "Value2");
-                            fileTransferUtility1.Upload(fileTransferUtilityRequest);
-                            fileTransferUtility1.Dispose();
-                        }
-                        var cVPdf = _db.DeliveryBoys.FirstOrDefault(i => i.Code == deliveryboy.Code);// DeliveryBoy.Get(deliveryboy.Code);
-                        cVPdf.CVPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/" + deliveryboy.Code + "_" + model.CVPdf.FileName;
-                        cVPdf.DateUpdated = DateTime.Now;
-                        _db.Entry(cVPdf).State = System.Data.Entity.EntityState.Modified;
-                        _db.SaveChanges();
-
-                        //DeliveryBoy.Edit(cVPdf, out int errors);
-                    }
+                    uc.UploadFiles(model.CVPdf.InputStream, deliveryboy.Id + "_" + model.CVPdf.FileName, accesskey, secretkey, "pdf");
+                    deliveryboy.CVPath = deliveryboy.Id + "_" + model.CVPdf.FileName.Replace(" ", "");
                 }
+                deliveryboy.DateUpdated = DateTime.Now;
+                _db.Entry(deliveryboy).State = System.Data.Entity.EntityState.Modified;
+                _db.SaveChanges();
 
-                return RedirectToAction("DeliveryBoyList");
+                return RedirectToAction("List");
             }
             catch (AmazonS3Exception amazonS3Exception)
             {
@@ -851,11 +483,11 @@ namespace ShopNow.Controllers
         }
         
         [AccessPolicy(PageCode = "")]
-        public ActionResult DeliveryBoyDetails(string code)
+        public ActionResult DeliveryBoyDetails(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["MARKETINGUSER"]);
             ViewBag.Name = user.Name;
-            DeliveryBoy deliverBoy = _db.DeliveryBoys.FirstOrDefault(i => i.Code == code);// DeliveryBoy.Get(code);
+            DeliveryBoy deliverBoy = _db.DeliveryBoys.FirstOrDefault(i => i.Id == Id);// DeliveryBoy.Get(code);
             var model = new DeliveryBoyCreateEditViewModel();
             _mapper.Map(deliverBoy, model);
             return View(model);
@@ -868,7 +500,7 @@ namespace ShopNow.Controllers
         {
             var model = await _db.ShopCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q)).Select(i => new
             {
-                id = i.Code,
+                id = i.Id,
                 text = i.Name
             }).ToListAsync();
 
@@ -880,7 +512,7 @@ namespace ShopNow.Controllers
         {
             var model = await _db.Brands.OrderBy(i => i.Name).Where(a => a.Name.Contains(q)).Select(i => new
             {
-                id = i.Code,
+                id = i.Id,
                 text = i.Name
             }).ToListAsync();
 
@@ -891,11 +523,11 @@ namespace ShopNow.Controllers
         public async Task<JsonResult> GetShopSelect2(string q = "")
         {
             var user = ((Helpers.Sessions.User)Session["MARKETINGUSER"]);
-            var marketingAgent = _db.MarketingAgents.FirstOrDefault(i => i.Code == user.Code);// MarketingAgent.Get(user.Code);
+            var marketingAgent = _db.MarketingAgents.FirstOrDefault(i => i.Id == user.Id);
 
-            var model = await _db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.MarketingAgentCode == marketingAgent.Code).Select(i => new
+            var model = await _db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.MarketingAgentId == marketingAgent.Id).Select(i => new
             {
-                id = i.Code,
+                id = i.Id,
                 text = i.Name
             }).ToListAsync();
 
@@ -903,11 +535,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "")]
-        public async Task<JsonResult> GetStaffSelect2(string shopcode)
+        public async Task<JsonResult> GetStaffSelect2(int shopid)
         {
-            var model = await _db.Staffs.OrderBy(i => i.Name).Where(a => a.ShopCode == shopcode && a.Status == 0).Select(i => new
+            var model = await _db.Staffs.OrderBy(i => i.Name).Where(a => a.ShopId == shopid && a.Status == 0).Select(i => new
             {
-                id = i.Code,
+                id = i.Id,
                 text = i.Name
             }).ToListAsync();
 

@@ -145,7 +145,7 @@ namespace ShopNow.ViewModels
              public int Id{ get; set; }
             public string CustomerCode { get; set; }
             public string CustomerName { get; set; }
-            public string DeliveryBoyCode { get; set; }
+            public int DeliveryBoyId { get; set; }
             public string DeliveryBoyName { get; set; }
             public string OrderNo { get; set; }
             public int CartStatus { get; set; }
