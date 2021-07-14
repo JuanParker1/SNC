@@ -555,7 +555,7 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new DeliveryBoyCreditAmountViewModel();
-            model.List = db.ShopCharges.Where(i => i.CartStatus == 6)
+            model.List = db.ShopCharges.Where(i => i.OrderStatus == 6)
                 .GroupBy(i => i.DeliveryBoyCode)
                 .Select(i => new DeliveryBoyCreditAmountViewModel.CreditAmountList
             {
