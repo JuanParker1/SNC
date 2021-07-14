@@ -134,11 +134,11 @@
             });
 
             $("#btnFilter").click(function () {
-                var code = $("#CustomerId").val();
-                if (code == null || code == "") {
+                var Id = $("#CustomerId").val();
+                if (Id == null || Id == "") {
                     swal("Notice!", "Please Select Customer Name!", "warning");
                 } else {
-                    window.location.href = "/AccessPolicy/List/?customerid=" + code;
+                    window.location.href = "/AccessPolicy/List/?customerid=" + Id;
                 }
             });
             $(".Save").click(function () {
