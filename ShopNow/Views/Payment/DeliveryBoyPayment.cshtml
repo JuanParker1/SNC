@@ -31,7 +31,7 @@
     </div>
     @Html.Grid(Model.ListItems).Columns(columns =>
 {
-    columns.Add(c => c.DeliveryBoyCode).Titled("Code").Filterable(true).SetWidth(7);
+    columns.Add(c => c.DeliveryBoyId).Titled("Code").Filterable(true).SetWidth(7);
     columns.Add(c => c.DeliveryBoyName).Titled("Name").Filterable(true).SetWidth(10);
     columns.Add(c => c.DeliveryBoyPhoneNumber).Titled("Phone No.").Filterable(true).SetWidth(10);
     columns.Add(c => c.TransactionType).Titled("Trans Type").Filterable(true).SetWidth(10);
@@ -47,7 +47,7 @@
 </div>
 <table id="table-excel" class="d-none">
     <tbody>
-        @foreach (var item in Model.ListItems.GroupBy(i => i.DeliveryBoyCode))
+        @foreach (var item in Model.ListItems.GroupBy(i => i.DeliveryBoyId))
         {
             <tr>
                 <td>N</td>
@@ -79,7 +79,6 @@
         </div>
     </form>
 }
-@*<script src="~/Scripts/exporttoexcel/jquery.table2excel.js"></script>*@
 <script src="/Scripts/exporttoexcel/Table2ExcelNew.js"></script>
 <script>
     $(document).ready(function () {
@@ -90,18 +89,10 @@
             $('#date').val($(this).val());
         });
         $("#btnExport").on('click', function () {
-            //$("#table-excel").table2excel({
-            //    exclude: ".noExl",
-            //    name: "Worksheet Name",
-            //    filename: "DeliveryBoyPayment",
-            //    fileext: ".xls",
-            //    exclude_links: true,
-            //});
             $(function () {
                 Table2Excel.extend((cell, cellText) => {
                     return $(cell).attr('type') == 'string' ? { t: 's', v: cellText } : { t: 'n', v: cellText };
                 });
-
                 var table2excel = new Table2Excel({
                     defaultFileName: "DeliveryBoyPayment",
                 });

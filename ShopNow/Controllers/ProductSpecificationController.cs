@@ -282,7 +282,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNPSFC002")]
         public async Task<JsonResult> GetMasterProductSelect2(string q = "")
         {
-            var model = await _db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductType == "Product").Select(i => new
+            var model = await _db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 4).Select(i => new
             {
                 id = i.Code,
                 text = i.Name

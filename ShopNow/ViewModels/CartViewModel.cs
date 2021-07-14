@@ -212,12 +212,12 @@ namespace ShopNow.ViewModels
             public string CategoryName { get; set; }
             public string DeliveryAddress { get; set; }
             public string ImagePath { get; set; }
-            public string DeliveryBoyCode { get; set; }
+            public int DeliveryBoyId { get; set; }
             public string DeliveryBoyName { get; set; }
             public string DeliveryBoyPhoneNumber { get; set; }
             public string UserEnquiryCode { get; set; }
             public string UserEnquiryName { get; set; }
-            public string OrderNo { get; set; }
+            public int OrderNo { get; set; }
             public string Qty { get; set; }
             public double Price { get; set; }
             public int CartStatus { get; set; }

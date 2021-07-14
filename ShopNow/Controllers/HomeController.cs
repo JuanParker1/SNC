@@ -135,7 +135,7 @@ namespace ShopNow.Controllers
         public ActionResult ChangePassword(ChangePasswordViewModel cpm)
         {
             string LoginMemberId = Convert.ToString(Session["UserCode"]);
-            var ExistingDetails = _db.Customers.FirstOrDefault(i => i.Code == LoginMemberId && i.Status == 0);
+            var ExistingDetails = _db.Customers.FirstOrDefault(i => i.Id == Convert.ToInt32(LoginMemberId) && i.Status == 0);
             if (cpm.OldPassword == ExistingDetails.Password)
             {
                 ExistingDetails.Password = cpm.NewPassword;

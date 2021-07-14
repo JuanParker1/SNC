@@ -30,18 +30,18 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             var model = new SupportViewModel();
 
-            model.ShopAcceptanceCount = db.Carts.Where(i => i.CartStatus == 2 && i.Status == 0 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5)
-                   .AsEnumerable().GroupBy(i => i.OrderNo).Count();
-            model.DeliveryAcceptanceCount = db.Carts.Join(db.DeliveryBoys, c => c.DeliveryBoyCode, d => d.Code, (c, d) => new { c, d })
-                      .Where(i => i.c.CartStatus == 4 && i.c.Status == 0 && i.d.isAssign == 1 && i.d.OnWork == 0 && SqlFunctions.DateDiff("minute", i.c.DateUpdated, DateTime.Now) >= 5)
-                      .AsEnumerable().GroupBy(i => i.c.OrderNo).Count();
-            model.ShopPickupCount = db.Carts.Join(db.DeliveryBoys, c => c.DeliveryBoyCode, d => d.Code, (c, d) => new { c, d })
-                    .Where(i => i.c.CartStatus == 4 && i.c.Status == 0 && i.d.isAssign == 1 && i.d.OnWork == 1 && SqlFunctions.DateDiff("minute", i.c.DateUpdated, DateTime.Now) >= 15)
-                    .AsEnumerable().GroupBy(i => i.c.OrderNo).Count();
-            model.CustomerDeliveryCount = db.Carts.Where(i => i.CartStatus == 5 && i.Status == 0 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 15)
-                    .AsEnumerable().GroupBy(i => i.OrderNo).Count();
-            model.OrderswithoutDeliveryboyCount = db.Carts.Where(i => i.CartStatus == 3 && i.Status == 0)
-                    .AsEnumerable().GroupBy(i => i.OrderNo).Count();
+            model.ShopAcceptanceCount = db.Orders.Where(i => i.Status == 2 && i.Status == 0 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5)
+                   .AsEnumerable().Count();
+            model.DeliveryAcceptanceCount = db.Orders.Join(db.DeliveryBoys, c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
+                      .Where(i => i.c.Status == 4 && i.c.Status == 0 && i.d.isAssign == 1 && i.d.OnWork == 0 && SqlFunctions.DateDiff("minute", i.c.DateUpdated, DateTime.Now) >= 5)
+                      .AsEnumerable().Count();
+            model.ShopPickupCount = db.Orders.Join(db.DeliveryBoys, c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
+                    .Where(i => i.c.Status == 4 && i.c.Status == 0 && i.d.isAssign == 1 && i.d.OnWork == 1 && SqlFunctions.DateDiff("minute", i.c.DateUpdated, DateTime.Now) >= 15)
+                    .AsEnumerable().Count();
+            model.CustomerDeliveryCount = db.Orders.Where(i => i.Status == 5 && i.Status == 0 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 15)
+                    .AsEnumerable().Count();
+            model.OrderswithoutDeliveryboyCount = db.Orders.Where(i => i.Status == 3 && i.Status == 0)
+                    .AsEnumerable().Count();
 
             model.CustomerAadhaarVerifyCount = db.Customers.Where(i => i.AadharVerify == false && i.Status == 0 && i.ImageAadharPath != null && i.ImageAadharPath != "Rejected").Count();
             model.ShopOnBoardingVerifyCount = db.Shops.Where(i => i.Status == 1).Count();
@@ -49,14 +49,14 @@ namespace ShopNow.Controllers
             model.BannerPendingCount = db.Banners.Where(i => i.Status == 1).Count();
             model.ShopCount = db.Shops.Where(i => i.Status == 0).Count();
             model.CustomerCount = db.Customers.Where(i => i.Status == 0).Count();
-            model.OrderCount = db.Carts.Where(i => i.Status == 0 && i.OrderNo !=null && i.CartStatus != 7 && i.CartStatus != 6 && i.CartStatus != 0).GroupBy(i=>i.OrderNo).Count();
+            model.OrderCount = db.Orders.Where(i => i.Status == 0 && i.OrderNumber !=0 && i.Status != 7 && i.Status != 6 && i.Status != 0).Count();
             model.DeliveryBoyLiveCount = db.DeliveryBoys.Where(i => i.Status == 0 && i.isAssign == 0 && i.OnWork == 0 && i.Active == 1).Count();
             model.RefundCount = db.Payments.Where(i => i.refundAmount != 0 && i.refundStatus == 1 && i.refundAmount != null && i.PaymentMode == "Online Payment").Count();
             return View(model);
         }
- 
+
         [AccessPolicy(PageCode = "SHNSUPLD002")]
-        public ActionResult LiveDeliveryboyAssignment(string shopcode="")
+        public ActionResult LiveDeliveryboyAssignment(int shopId = 0)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -69,32 +69,17 @@ namespace ShopNow.Controllers
                     Name = i.Name
                 }).ToList();
 
-            if (shopcode != "")
-            {
-                model.List = db.Carts.Where(i => i.CartStatus == 3 && i.Status == 0 && i.ShopCode == shopcode)
-                   .GroupBy(i => i.OrderNo).Select(i => new DeliveryBoyAssignViewModel.AssignList
-                   {
-                       Code = i.FirstOrDefault().Code,
-                       ShopCode = i.FirstOrDefault().ShopCode,
-                       ShopName = i.FirstOrDefault().ShopName,
-                       OrderNo = i.FirstOrDefault().OrderNo,
-                       CartStatus = i.FirstOrDefault().CartStatus,
-                       DateEncoded = i.FirstOrDefault().DateEncoded
-                   }).ToList();
-            }
-            else
-            {
-                model.List = db.Carts.Where(i => i.CartStatus == 3 && i.Status == 0)
-                   .GroupBy(i => i.OrderNo).Select(i => new DeliveryBoyAssignViewModel.AssignList
-                   {
-                       Code = i.FirstOrDefault().Code,
-                       ShopCode = i.FirstOrDefault().ShopCode,
-                       ShopName = i.FirstOrDefault().ShopName,
-                       OrderNo = i.FirstOrDefault().OrderNo,
-                       CartStatus = i.FirstOrDefault().CartStatus,
-                       DateEncoded = i.FirstOrDefault().DateEncoded
-                   }).ToList();
-            }
+            model.List = db.Orders.Where(i => i.Status == 3 && (shopId != 0 ? i.Shopid == shopId : true))
+               .Select(i => new DeliveryBoyAssignViewModel.AssignList
+               {
+                   Id = i.id,
+                   ShopId = i.Shopid,
+                   ShopName = i.Shopname,
+                   OrderNo = i.OrderNumber,
+                   CartStatus = i.Status,
+                   DateEncoded = i.DateEncoded
+               }).ToList();
+
             return View(model);
         }
 

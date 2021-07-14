@@ -84,12 +84,12 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNBANE003")]
-        public ActionResult Edit(string code)
+        public ActionResult Edit(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var dcode = AdminHelpers.DCode(code);
-            var banner = db.Banners.FirstOrDefault(i => i.Code == dcode);
+            var dcode = AdminHelpers.DCodeInt(id.ToString());
+            var banner = db.Banners.FirstOrDefault(i => i.Id == dcode);
             var model = _mapper.Map<Banner, BannerEditViewModel>(banner);
 
             return View(model);
@@ -104,11 +104,11 @@ namespace ShopNow.Controllers
             var banner = _mapper.Map<BannerEditViewModel, Banner>(model);
             banner.UpdatedBy = user.Name;
             banner.DateUpdated = DateTime.Now;
-            if (banner.ProductCode != null)
+            if (banner.ProductId != 0)
             {
-                var product = db.Products.FirstOrDefault(i => i.Code == banner.ProductCode && i.Status == 0);
-                banner.MasterProductCode = product.MasterProductCode;
-                banner.MasterProductName = product.MasterProductName;
+                var product = db.Products.FirstOrDefault(i => i.Id == banner.ProductId && i.Status == 0);
+                banner.MasterProductId = product.MasterProductId;
+                banner.MasterProductName = product.Name;
             }
             try
             {

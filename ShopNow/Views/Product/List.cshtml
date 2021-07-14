@@ -17,10 +17,10 @@
                 <form method="get" action="/Product/List">
                     <div class="row">
                         <div class="col-md-8">
-                            <select id="select-shop" class="form-control" name="ShopCode">
-                                @if (Model.ShopCode != null)
+                            <select id="select-shop" class="form-control" name="ShopId">
+                                @if (Model.ShopId != 0)
                                 {
-                                    <option value="@Model.ShopCode">@Model.ShopName</option>
+                                    <option value="@Model.ShopId">@Model.ShopName</option>
                                 }
                             </select>
                             <input type="hidden" name="ShopName" />
@@ -41,8 +41,8 @@
         </div>
         @Html.Grid(Model.ListItems).Columns(columns =>
    {
-       columns.Add(c => c.ProductType).Titled("Item Type").Filterable(true).SetWidth(10);
-       columns.Add(c => c.Name).Titled("Name").Encoded(false).Sanitized(false).RenderValueAs(model => Html.ActionLink(model.Name, "Details", new { code = @ShopNow.Helpers.AdminHelpers.ECode(model.Code) }).ToHtmlString()).Filterable(true).SetWidth(20);
+       columns.Add(c => c.ProductTypeName).Titled("Item Type").Filterable(true).SetWidth(10);
+       columns.Add(c => c.Name).Titled("Name").Encoded(false).Sanitized(false).RenderValueAs(model => Html.ActionLink(model.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(model.Id) }).ToHtmlString()).Filterable(true).SetWidth(20);
        columns.Add(c => c.CategoryName).Titled("Category Name").Filterable(true).SetWidth(12);/*.RenderValueAs(c=> c.CategoryName == null ? "N/A" : c.CategoryName);*/
        columns.Add(c => c.BrandName).Titled("Brand Name").Filterable(true).SetWidth(18);/*.RenderValueAs(c => c.BrandName == null ? "N/A" : c.BrandName);*/
        columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
@@ -50,12 +50,12 @@
        columns.Add()
        .Encoded(false)
        .Sanitized(false)
-       .RenderValueAs(o => o.ProductType == "Product" ? Html.ActionLink("Edit", "Edit", new { code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code) }, new { @class = "btn btn-sm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString() :
-       (o.ProductType == "Dish" ? Html.ActionLink("Edit", "FoodEdit", new { code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code) }, new { @class = "btn btn-sm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString() :
-       (o.ProductType == "FMCG" ? Html.ActionLink("Edit", "FMCGEdit", new { code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code) }, new { @class = "btn btn-sm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString() :
-       (o.ProductType == "Medical" ? Html.ActionLink("Edit", "MedicalEdit", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-sm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString() :
-       Html.ActionLink("Edit", "ServiceEdit", new { code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code) }, new { @class = "btn btn-sm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString())))
-       + Html.ActionLink("Delete", "Delete", new { code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code), redirectPage=0 }, new { @class = "btn  btn-sm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
+       .RenderValueAs(o => o.ProductTypeName == "Product" ? Html.ActionLink("Edit", "Edit", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-sm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString() :
+       (o.ProductTypeName == "Dish" ? Html.ActionLink("Edit", "FoodEdit", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-sm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString() :
+       (o.ProductTypeName == "FMCG" ? Html.ActionLink("Edit", "FMCGEdit", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-sm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString() :
+       (o.ProductTypeName == "Medical" ? Html.ActionLink("Edit", "MedicalEdit", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-sm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString() :
+       Html.ActionLink("Edit", "ServiceEdit", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-sm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString())))
+       + Html.ActionLink("Delete", "Delete", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id), redirectPage=0 }, new { @class = "btn  btn-sm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
    }).WithPaging(20).Sortable(true)
     </div>
 

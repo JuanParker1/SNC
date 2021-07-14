@@ -82,7 +82,8 @@ namespace ShopNow.Controllers
                  select new ProductItemListViewModel.ListItem
                  {
                      Id = i.Id,
-                     ProductType = m.ProductType,
+                     ProductTypeId = m.ProductTypeId,
+                     ProductTypeName = m.ProductTypeName,
                      CategoryName = m.CategoryName,
                      BrandName = m.BrandName,
                      Name = m.Name,
@@ -144,9 +145,9 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNPROD002")]
-        public ActionResult Details(string code)
+        public ActionResult Details(int id)
         {
-            var dCode = AdminHelpers.DCodeInt(code);
+            var dCode = AdminHelpers.DCodeInt(id.ToString());
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             Product pd = db.Products.FirstOrDefault(i => i.Id == dCode);// Product.Get(dCode);
@@ -184,7 +185,7 @@ namespace ShopNow.Controllers
             {
                 prod.ShopId = user.Id;
                 prod.ShopName = user.Name;
-                ViewBag.user = user.Code;
+                ViewBag.user = user.Id;
             }
             if (model.ShopId != 0)
             {
@@ -199,12 +200,12 @@ namespace ShopNow.Controllers
                 prod.ShopCategoryName = sh.ShopCategoryName;
             }
 
-            prod.CategoryId = model.CategoryId;
-            var cat = db.Categories.FirstOrDefault(i => i.Id == model.CategoryId);//  Category.Get(model.CategoryCode);
-            if (cat != null)
-            {
-                prod.CategoryName = cat.Name;
-            }
+            //prod.CategoryId = model.CategoryId;
+            //var cat = db.Categories.FirstOrDefault(i => i.Id == model.CategoryId);//  Category.Get(model.CategoryCode);
+            //if (cat != null)
+            //{
+            //    prod.CategoryName = cat.Name;
+            //}
            // prod.BrandId = model.BrandId;
             //var brand = db.Brands.FirstOrDefault(i => i.Id == model.BrandCode && i.Status == 0);//  Brand.Get(model.BrandCode);
             //if (brand != null)
@@ -215,10 +216,11 @@ namespace ShopNow.Controllers
             {
                 prod.Name = model.MasterProductName;
             }
-            prod.ProductType = "Product";
+            prod.TypeId = 4;
+            prod.TypeName = "Electronic";
             prod.CreatedBy = user.Name;
             prod.UpdatedBy = user.Name;
-            var name = db.Products.FirstOrDefault(i => i.Name == model.Name && i.Status == 0 && i.ProductType == "Product");// Product.GetElectronicName(model.Name);
+            var name = db.Products.FirstOrDefault(i => i.Name == model.Name && i.Status == 0 && i.TypeName == "Product");// Product.GetElectronicName(model.Name);
             if (name == null)
             {
                 //Product.Add(prod);
@@ -296,73 +298,13 @@ namespace ShopNow.Controllers
                     db.SaveChanges();
                 }
             }
-            try
-            {
-                var productImage = db.Products.FirstOrDefault(i => i.Id == prod.Id);// Product.Get(prod.Code);
-                //ProductImage1
-                if (model.ProductImage1 != null)
-                {
-                    uc.UploadFiles(model.ProductImage1.InputStream, prod.Id + "_" + model.ProductImage1.FileName, accesskey, secretkey, "image");
-                    productImage.ImagePathLarge1 = prod.Id + "_" + model.ProductImage1.FileName.Replace(" ", "");
-                }
-
-                //ProductImage2
-                if (model.ProductImage2 != null)
-                {
-                    uc.UploadFiles(model.ProductImage2.InputStream, prod.Id + "_" + model.ProductImage2.FileName, accesskey, secretkey, "image");
-                    productImage.ImagePathLarge2 = prod.Id + "_" + model.ProductImage2.FileName.Replace(" ", "");
-                }
-
-                //ProductImage3
-                if (model.ProductImage3 != null)
-                {
-                    uc.UploadFiles(model.ProductImage3.InputStream, prod.Id + "_" + model.ProductImage3.FileName, accesskey, secretkey, "image");
-                    productImage.ImagePathLarge3 = prod.Id + "_" + model.ProductImage3.FileName.Replace(" ", "");
-                }
-
-                //ProductImage4
-                if (model.ProductImage4 != null)
-                {
-                    uc.UploadFiles(model.ProductImage4.InputStream, prod.Id + "_" + model.ProductImage4.FileName, accesskey, secretkey, "image");
-                    productImage.ImagePathLarge4 = prod.Id + "_" + model.ProductImage4.FileName.Replace(" ", "");
-                }
-
-                //ProductImage5
-                if (model.ProductImage5 != null)
-                {
-                    uc.UploadFiles(model.ProductImage5.InputStream, prod.Id + "_" + model.ProductImage5.FileName, accesskey, secretkey, "image");
-                    productImage.ImagePathLarge5 = prod.Id + "_" + model.ProductImage5.FileName.Replace(" ", "");
-                }
-                if (model.ProductImage1 != null || model.ProductImage2 != null || model.ProductImage3 != null || model.ProductImage4 != null || model.ProductImage5 != null)
-                {
-                    // Product.Edit(productImage, out int error);
-                    productImage.DateUpdated = DateTime.Now;
-                    db.Entry(productImage).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-
-                }
-            }
-            catch (AmazonS3Exception amazonS3Exception)
-            {
-                if (amazonS3Exception.ErrorCode != null &&
-                    (amazonS3Exception.ErrorCode.Equals("InvalidAccessKeyId")
-                    ||
-                    amazonS3Exception.ErrorCode.Equals("InvalidSecurity")))
-                {
-                    ViewBag.Message = "Check the provided AWS Credentials.";
-                }
-                else
-                {
-                    ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
-                }
-            }
             return View();
         }
 
         [AccessPolicy(PageCode = "SHNPROE003")]
-        public ActionResult Edit(string code)
+        public ActionResult Edit(int id)
         {
-            var dCode = AdminHelpers.DCodeInt(code);
+            var dCode = AdminHelpers.DCodeInt(id.ToString());
             if (dCode==0)
                 return HttpNotFound();
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -388,77 +330,14 @@ namespace ShopNow.Controllers
         public ActionResult Edit(ProductEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            Product prod = db.Products.FirstOrDefault(i => i.Id == model.Id);// Product.Get(model.Code);
+            Product prod = db.Products.FirstOrDefault(i => i.Id == model.Id);
             _mapper.Map(model, prod);
-            var cat = db.Categories.FirstOrDefault(i => i.Id == model.CategoryId);// Category.Get(model.CategoryCode);
-            //if (cat != null)
-            //{
-            //    prod.CategoryName = cat.Name;
-            //}
-
-            //var brand = db.Brands.FirstOrDefault(i => i.Id == model.BrandCode && i.Status == 0);//  Brand.Get(model.BrandCode);
-            //if (brand != null)
-            //{
-            //    prod.BrandName = brand.Name;
-            //}
+            var cat = db.Categories.FirstOrDefault(i => i.Id == model.CategoryId);
             prod.DateUpdated = DateTime.Now;
             prod.UpdatedBy = user.Name;
-
-            try
-            {
-                //ProductImage1
-                if (model.ProductImage1 != null)
-                {
-                    uc.UploadFiles(model.ProductImage1.InputStream, prod.Code + "_" + model.ProductImage1.FileName, accesskey, secretkey, "image");
-                    prod.ImagePathLarge1 = prod.Code + "_" + model.ProductImage1.FileName.Replace(" ", "");
-                }
-
-                //ProductImage2
-                if (model.ProductImage2 != null)
-                {
-                    uc.UploadFiles(model.ProductImage2.InputStream, prod.Code + "_" + model.ProductImage2.FileName, accesskey, secretkey, "image");
-                    prod.ImagePathLarge2 = prod.Code + "_" + model.ProductImage2.FileName.Replace(" ", "");
-                }
-
-                //ProductImage3
-                if (model.ProductImage3 != null)
-                {
-                    uc.UploadFiles(model.ProductImage3.InputStream, prod.Code + "_" + model.ProductImage3.FileName, accesskey, secretkey, "image");
-                    prod.ImagePathLarge3 = prod.Code + "_" + model.ProductImage3.FileName.Replace(" ", "");
-                }
-
-                //ProductImage4
-                if (model.ProductImage4 != null)
-                {
-                    uc.UploadFiles(model.ProductImage4.InputStream, prod.Code + "_" + model.ProductImage4.FileName, accesskey, secretkey, "image");
-                    prod.ImagePathLarge4 = prod.Code + "_" + model.ProductImage4.FileName.Replace(" ", "");
-                }
-
-                //ProductImage5
-                if (model.ProductImage5 != null)
-                {
-                    uc.UploadFiles(model.ProductImage5.InputStream, prod.Code + "_" + model.ProductImage5.FileName, accesskey, secretkey, "image");
-                    prod.ImagePathLarge5 = prod.Code + "_" + model.ProductImage5.FileName.Replace(" ", "");
-                }
-                //  Product.Edit(prod, out int error);
-                prod.DateUpdated = DateTime.Now;
-                db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-            }
-            catch (AmazonS3Exception amazonS3Exception)
-            {
-                if (amazonS3Exception.ErrorCode != null &&
-                    (amazonS3Exception.ErrorCode.Equals("InvalidAccessKeyId")
-                    ||
-                    amazonS3Exception.ErrorCode.Equals("InvalidSecurity")))
-                {
-                    ViewBag.Message = "Check the provided AWS Credentials.";
-                }
-                else
-                {
-                    ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
-                }
-            }
+            prod.DateUpdated = DateTime.Now;
+            db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
             return RedirectToAction("ElectronicList", "Product");
         }
 
@@ -485,7 +364,7 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var prod = _mapper.Map<MedicalCreateViewModel, Product>(model);
-            var name = db.Products.FirstOrDefault(i => i.Name == model.MasterProductName && i.Status == 0 && i.ProductType == "Medical" && i.ShopId == model.ShopId);
+            var name = db.Products.FirstOrDefault(i => i.Name == model.MasterProductName && i.Status == 0 && i.TypeName == "Medical" && i.ShopId == model.ShopId);
             var master = db.MasterProducts.FirstOrDefault(i => i.Id == model.MasterProductId && i.Status == 0);
             if (master != null)
                 prod.MasterProductId = master.Id;
@@ -497,7 +376,7 @@ namespace ShopNow.Controllers
                 prod.ShopCategoryName = sh.ShopCategoryName;
                 prod.Id = sh.Id;
             }
-            prod.ProductType = "Medical";
+            prod.TypeName = "Medical";
             prod.CreatedBy = user.Name;
             prod.UpdatedBy = user.Name;
             if (name == null)
@@ -516,7 +395,7 @@ namespace ShopNow.Controllers
 
             List<DefaultMedicalStockViewModel> dms = Session["MedicalStock"] as List<DefaultMedicalStockViewModel>;
 
-            if (model.ShopId != null)
+            if (model.ShopId != 0)
             {
                 var sh = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);// Shop.Get(model.ShopId);
                 var productcount = db.Products.Where(i => i.ShopId == model.ShopId && i.Status == 0).Count();
@@ -565,30 +444,30 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             var product = db.Products.FirstOrDefault(i => i.Id == dCode);
             var model = _mapper.Map<Product, MedicalEditViewModel>(product);
-            model.MedicalStockLists = db.ProductMedicalStocks.Where(i => i.productid == dCode && i.Status == 0).Select(i => new MedicalEditViewModel.MedicalStockList
-            {
-               ProductCode = i.ProductCode,
-               ProductName = i.ProductName,
-               Stock = i.Stock,
-               SupplierName = i.SupplierName,
-               LoyaltyPointsper100Value = i.LoyaltyPointsper100Value,
-               MinimumLoyaltyReducationPercentage = i.MinimumLoyaltyReducationPercentage,
-               TaxPercentage = i.TaxPercentage,
-               DiscountPercentage = i.DiscountPercentage,
-               MRP = i.MRP,
-               SalePrice = i.SalePrice,
-               SpecialPrice = i.SpecialPrice,
-               MinSaleQty = i.MinSaleQty,
-               OutLetId = i.OutLetId,
-               SpecialCostOfDelivery = i.SpecialCostOfDelivery,
-               productid = i.productid
-            }).ToList();
-            foreach (var s in model.MedicalStockLists)
-            {
-                var stock = _mapper.Map<MedicalEditViewModel.MedicalStockList, DefaultMedicalStockViewModel>(s);
-                Medicalstocks.Add(stock);
-            }
-            Session["MedicalStock"] = Medicalstocks;
+            //model.MedicalStockLists = db.ProductMedicalStocks.Where(i => i.productid == dCode && i.Status == 0).Select(i => new MedicalEditViewModel.MedicalStockList
+            //{
+            //   ProductCode = i.ProductCode,
+            //   ProductName = i.ProductName,
+            //   Stock = i.Stock,
+            //   SupplierName = i.SupplierName,
+            //   LoyaltyPointsper100Value = i.LoyaltyPointsper100Value,
+            //   MinimumLoyaltyReducationPercentage = i.MinimumLoyaltyReducationPercentage,
+            //   TaxPercentage = i.TaxPercentage,
+            //   DiscountPercentage = i.DiscountPercentage,
+            //   MRP = i.MRP,
+            //   SalePrice = i.SalePrice,
+            //   SpecialPrice = i.SpecialPrice,
+            //   MinSaleQty = i.MinSaleQty,
+            //   OutLetId = i.OutLetId,
+            //   SpecialCostOfDelivery = i.SpecialCostOfDelivery,
+            //   productid = i.productid
+            //}).ToList();
+            //foreach (var s in model.MedicalStockLists)
+            //{
+            //    var stock = _mapper.Map<MedicalEditViewModel.MedicalStockList, DefaultMedicalStockViewModel>(s);
+            //    Medicalstocks.Add(stock);
+            //}
+            //Session["MedicalStock"] = Medicalstocks;
             return View(model);
         }
 
@@ -599,7 +478,7 @@ namespace ShopNow.Controllers
         public ActionResult MedicalEdit(MedicalEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            Product prod = db.Products.FirstOrDefault(i => i.Id == model.Code);
+            Product prod = db.Products.FirstOrDefault(i => i.Id == model.Id);
             _mapper.Map(model, prod);
             
             prod.DateUpdated = DateTime.Now;
@@ -607,37 +486,37 @@ namespace ShopNow.Controllers
             db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
-            List<DefaultMedicalStockViewModel> dms = Session["MedicalStock"] as List<DefaultMedicalStockViewModel>;
-            var pms = new ProductMedicalStock();
-            foreach (var s in dms)
-            {
-                if (s.Code == null)
-                {
-                    pms.Code = ShopNow.Helpers.DRC.Generate("PMS");
-                    pms.ProductCode = prod.Code;
-                    pms.productid = prod.Id;
-                    pms.ProductName = prod.Name;
-                    pms.Stock = s.Stock;
-                    pms.SupplierName = s.SupplierName;
-                    pms.MRP = s.MRP;
-                    pms.SalePrice = s.SalePrice;
-                    pms.TaxPercentage = s.TaxPercentage;
-                    pms.DiscountPercentage = s.DiscountPercentage;
-                    pms.LoyaltyPointsper100Value = s.LoyaltyPointsper100Value;
-                    pms.MinimumLoyaltyReducationPercentage = s.MinimumLoyaltyReducationPercentage;
-                    pms.SpecialCostOfDelivery = s.SpecialCostOfDelivery;
-                    pms.OutLetId = s.OutLetId;
-                    pms.SpecialPrice = s.SpecialPrice;
-                    pms.MinSaleQty = s.MinSaleQty;
-                    pms.CreatedBy = user.Name;
-                    pms.UpdatedBy = user.Name;
-                    pms.Status = 0;
-                    pms.DateEncoded = DateTime.Now;
-                    pms.DateUpdated = DateTime.Now;
-                    db.ProductMedicalStocks.Add(pms);
-                    db.SaveChanges();
-                }
-            }
+            //List<DefaultMedicalStockViewModel> dms = Session["MedicalStock"] as List<DefaultMedicalStockViewModel>;
+            //var pms = new ProductMedicalStock();
+            //foreach (var s in dms)
+            //{
+            //    if (s.Code == null)
+            //    {
+            //        pms.Code = ShopNow.Helpers.DRC.Generate("PMS");
+            //        pms.ProductCode = prod.Code;
+            //        pms.productid = prod.Id;
+            //        pms.ProductName = prod.Name;
+            //        pms.Stock = s.Stock;
+            //        pms.SupplierName = s.SupplierName;
+            //        pms.MRP = s.MRP;
+            //        pms.SalePrice = s.SalePrice;
+            //        pms.TaxPercentage = s.TaxPercentage;
+            //        pms.DiscountPercentage = s.DiscountPercentage;
+            //        pms.LoyaltyPointsper100Value = s.LoyaltyPointsper100Value;
+            //        pms.MinimumLoyaltyReducationPercentage = s.MinimumLoyaltyReducationPercentage;
+            //        pms.SpecialCostOfDelivery = s.SpecialCostOfDelivery;
+            //        pms.OutLetId = s.OutLetId;
+            //        pms.SpecialPrice = s.SpecialPrice;
+            //        pms.MinSaleQty = s.MinSaleQty;
+            //        pms.CreatedBy = user.Name;
+            //        pms.UpdatedBy = user.Name;
+            //        pms.Status = 0;
+            //        pms.DateEncoded = DateTime.Now;
+            //        pms.DateUpdated = DateTime.Now;
+            //        db.ProductMedicalStocks.Add(pms);
+            //        db.SaveChanges();
+            //    }
+            //}
             return RedirectToAction("MedicalList", "Product");
         }
 
@@ -645,16 +524,16 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            model.ListItems = db.Products.Where(i => i.Status == 0 && i.ProductType == "FMCG" && (model.ShopId != null ? i.ShopId == model.ShopId : false))
-                .AsEnumerable()
+            model.ListItems = db.Products.Where(i => i.Status == 0 && i.TypeName == "FMCG" && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
+                .Join(db.MasterProducts,p=>p.MasterProductId,m=>m.Id,(p,m)=>new { p,m})
             .Select(i => new FMCGListViewModel.ListItem
             {
-                CategoryName = i.CategoryName,
-                Code = i.Id,
-                Name = CommonHelpers.GetMasterProductName(i.MasterProductId),
-                Percentage = i.Percentage,
-                ShopId = i.ShopId,
-                ShopName = i.ShopName
+                CategoryName = i.m.CategoryName,
+                Id = i.p.Id,
+                Name = i.m.Name,
+                Percentage = i.p.Percentage,
+                ShopId = i.p.ShopId,
+                ShopName = i.p.ShopName
             }).ToList();
             return View(model);
         }
@@ -664,17 +543,17 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             model.ListItems = db.Products.Where(i => i.Status == 0 &&
-            i.ProductType == "Medical" &&
-            (model.ShopId != null ? i.ShopId == model.ShopId : false))
-            .AsEnumerable()
+            i.TypeName == "Medical" &&
+            (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
+              .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
             .Select(i => new MedicalListViewModel.ListItem
             {
-                Id = i.Id,
-                CategoryName = i.CategoryName,
-                Name = CommonHelpers.GetMasterProductName(i.MasterProductId),
-                Percentage = i.Percentage,
-                ShopId = i.ShopId,
-                ShopName = i.ShopName
+                CategoryName = i.m.CategoryName,
+                Id = i.p.Id,
+                Name = i.m.Name,
+                Percentage = i.p.Percentage,
+                ShopId = i.p.ShopId,
+                ShopName = i.p.ShopName
             }).ToList();
             return View(model);
         }
@@ -684,17 +563,17 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             model.ListItems = db.Products.Where(i => i.Status == 0 &&
-            i.ProductType == "Dish" &&
-            (model.ShopId != null ? i.ShopId == model.ShopId : false))
-            .AsEnumerable()
+            i.TypeName == "Dish" &&
+            (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
+             .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
             .Select(i => new FoodListViewModel.ListItem
             {
-                CategoryName = i.CategoryName,
-                Code = i.Id,
-                Name = CommonHelpers.GetMasterProductName(i.MasterProductId),
-                Percentage = i.Percentage,
-                ShopId = i.ShopId,
-                ShopName = i.ShopName
+                CategoryName = i.m.CategoryName,
+                Id = i.p.Id,
+                Name = i.m.Name,
+                Percentage = i.p.Percentage,
+                ShopId = i.p.ShopId,
+                ShopName = i.p.ShopName
             }).ToList();
             return View(model);
         }
@@ -719,7 +598,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNPROFC004")]
         public ActionResult FoodCreate(FoodCreateViewModel model)
         {
-            var name = db.Products.FirstOrDefault(i => i.Name == model.Name && i.Status == 0 && i.ProductType == "Dish" && i.shopid == model.ShopId);
+            var name = db.Products.FirstOrDefault(i => i.Name == model.Name && i.Status == 0 && i.TypeName == "Dish" && i.ShopId == model.ShopId);
             if (name != null)
             {
                 ViewBag.ErrorMessage = model.Name + " Already Exist";
@@ -735,7 +614,8 @@ namespace ShopNow.Controllers
                 prod.ShopCategoryName = sh.ShopCategoryName;
                 prod.ShopId = sh.Id;
             }
-            prod.ProductType = "Dish";
+            prod.TypeId = 1;
+            prod.TypeName = "Dish";
             prod.Status = 0;
             prod.CreatedBy = user.Name;
             prod.UpdatedBy = user.Name;
@@ -851,7 +731,7 @@ namespace ShopNow.Controllers
                 List<ShopAddOnSessionEditViewModel> shopAddOns = Session["ShopAddOnsEdit"] as List<ShopAddOnSessionEditViewModel> ?? new List<ShopAddOnSessionEditViewModel>();
                 foreach (var item in shopAddOns)
                 {
-                    var shopDishAddon = db.ShopDishAddOns.FirstOrDefault(i => i.Id == item.Code);
+                    var shopDishAddon = db.ShopDishAddOns.FirstOrDefault(i => i.Id == item.Id);
                     if (shopDishAddon != null)
                     {
                         shopDishAddon.AddOnsPrice = item.AddOnsPrice;
@@ -863,7 +743,7 @@ namespace ShopNow.Controllers
                     }
                     else
                     {
-                        var productDishAddon = db.ProductDishAddOns.FirstOrDefault(i => i.Id == item.Code);
+                        var productDishAddon = db.ProductDishAddOns.FirstOrDefault(i => i.Id == item.Id);
                         var shopdishAddOn = _mapper.Map<ProductDishAddOn, ShopDishAddOn>(productDishAddon);
                         shopdishAddOn.PortionPrice = item.PortionPrice;
                         shopdishAddOn.AddOnsPrice = item.AddOnsPrice;
@@ -884,7 +764,7 @@ namespace ShopNow.Controllers
                 var shopDishAddonList = db.ShopDishAddOns.Where(i => i.ProductId == prod.Id);
                 foreach (var item in shopDishAddonList)
                 {
-                    var shopDishAddon = db.ShopDishAddOns.FirstOrDefault(i => i.Id == item.Code);
+                    var shopDishAddon = db.ShopDishAddOns.FirstOrDefault(i => i.Id == item.Id);
                     shopDishAddon.IsActive = false;
                     db.Entry(shopDishAddon).State = EntityState.Modified;
                     db.SaveChanges();
@@ -903,12 +783,12 @@ namespace ShopNow.Controllers
         public JsonResult AddShopAddOns(ShopAddOnSessionAddViewModel model)
         {
             List<ShopAddOnSessionAddViewModel> shopAddOns = Session["ShopAddOns"] as List<ShopAddOnSessionAddViewModel> ?? new List<ShopAddOnSessionAddViewModel>();
-            if (model.Code != null)
+            if (model.Id != 0)
             {
                 var addOn = new ShopAddOnSessionAddViewModel
                 {
                     AddOnsPrice = model.AddOnsPrice,
-                    Code = model.Code,
+                    Id = model.Id,
                     CrustPrice = model.CrustPrice,
                     PortionPrice = model.PortionPrice
                 };
@@ -918,11 +798,11 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult RemoveFromShopAddOns(string code)
+        public JsonResult RemoveFromShopAddOns(int id)
         {
             List<ShopAddOnSessionAddViewModel> shopAddOns = Session["ShopAddOns"] as List<ShopAddOnSessionAddViewModel> ?? new List<ShopAddOnSessionAddViewModel>();
 
-            if (shopAddOns.Remove(shopAddOns.SingleOrDefault(i => i.Id == code)))
+            if (shopAddOns.Remove(shopAddOns.SingleOrDefault(i => i.Id == id)))
                 Session["ShopAddOns"] = shopAddOns;
 
             return Json(true, JsonRequestBehavior.AllowGet);
@@ -932,12 +812,12 @@ namespace ShopNow.Controllers
         public JsonResult EditShopAddOns(ShopAddOnSessionEditViewModel model)
         {
             List<ShopAddOnSessionEditViewModel> shopAddOns = Session["ShopAddOnsEdit"] as List<ShopAddOnSessionEditViewModel> ?? new List<ShopAddOnSessionEditViewModel>();
-            if (model.Code != null)
+            if (model.Id != 0)
             {
                 var addOn = new ShopAddOnSessionEditViewModel
                 {
                     AddOnsPrice = model.AddOnsPrice,
-                    Code = model.Code,
+                    Id = model.Id,
                     CrustPrice = model.CrustPrice,
                     PortionPrice = model.PortionPrice,
                     IsActive = model.IsActive
@@ -948,11 +828,11 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult RemoveFromEditShopAddOns(string code)
+        public JsonResult RemoveFromEditShopAddOns(int id)
         {
             List<ShopAddOnSessionEditViewModel> shopAddOns = Session["ShopAddOnsEdit"] as List<ShopAddOnSessionEditViewModel> ?? new List<ShopAddOnSessionEditViewModel>();
 
-            if (shopAddOns.Remove(shopAddOns.SingleOrDefault(i => i.Id == code)))
+            if (shopAddOns.Remove(shopAddOns.SingleOrDefault(i => i.Id == id)))
                 Session["ShopAddOnsEdit"] = shopAddOns;
 
             return Json(true, JsonRequestBehavior.AllowGet);
@@ -995,7 +875,7 @@ namespace ShopNow.Controllers
            // Session["DefaultFMCG"] = new List<FMCGCreateEditViewModel>();
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var shop = db.Shops.Any(i => i.Id == user.Code);
+            var shop = db.Shops.Any(i => i.Id == user.Id);
             if (shop != false)
             {
                 ViewBag.user = user.Name;
@@ -1010,7 +890,7 @@ namespace ShopNow.Controllers
         public ActionResult FMCGCreate(FMCGCreateEditViewModel model)
         {
             //Return to View if product already exist
-            var name = db.Products.FirstOrDefault(i => i.Name == model.Name && i.Status == 0 && i.ProductType == "FMCG" && i.ShopId == model.ShopId);
+            var name = db.Products.FirstOrDefault(i => i.Name == model.Name && i.Status == 0 && i.TypeName == "FMCG" && i.ShopId == model.ShopId);
             if (name != null)
             {
                 ViewBag.ErrorMessage = model.Name + " Already Exist";
@@ -1021,12 +901,12 @@ namespace ShopNow.Controllers
             var product = _mapper.Map<FMCGCreateEditViewModel, Product>(model);
             product.CreatedBy = user.Name;
             product.UpdatedBy = user.Name;
-            product.ProductType = "FMCG";
-            product.Code = _generatedCode("PRO");
-            if (model.ShopId != null)
+            product.TypeName = "FMCG";
+            //product.Code = _generatedCode("PRO");
+            if (model.ShopId != 0)
             {
                 var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
-                product.shopid = shop.Id;
+                product.ShopId = shop.Id;
                 product.ShopCategoryId = shop.ShopCategoryId;
                 product.ShopCategoryName = shop.ShopCategoryName;
             }
@@ -1076,27 +956,27 @@ namespace ShopNow.Controllers
             return View();
         }
 
-        public ActionResult FMCGEdit(string code)
+        public ActionResult FMCGEdit(int id)
         {
-            var dCode = AdminHelpers.DCode(code);
+            var dCode = AdminHelpers.DCodeInt(id.ToString());
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            if (string.IsNullOrEmpty(dCode))
+            if (string.IsNullOrEmpty(dCode.ToString()))
                 return HttpNotFound();
             var product = db.Products.FirstOrDefault(i => i.Id == dCode);
-            if (product != null)
-            {
-                if (product.ImagePathLarge1 != null)
-                    product.ImagePathLarge1 = product.ImagePathLarge1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-                if (product.ImagePathLarge2 != null)
-                    product.ImagePathLarge2 = product.ImagePathLarge2.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-                if (product.ImagePathLarge3 != null)
-                    product.ImagePathLarge3 = product.ImagePathLarge3.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-                if (product.ImagePathLarge4 != null)
-                    product.ImagePathLarge4 = product.ImagePathLarge4.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-                if (product.ImagePathLarge5 != null)
-                    product.ImagePathLarge5 = product.ImagePathLarge5.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-            }
+            //if (product != null)
+            //{
+            //    if (product.ImagePathLarge1 != null)
+            //        product.ImagePathLarge1 = product.ImagePathLarge1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
+            //    if (product.ImagePathLarge2 != null)
+            //        product.ImagePathLarge2 = product.ImagePathLarge2.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
+            //    if (product.ImagePathLarge3 != null)
+            //        product.ImagePathLarge3 = product.ImagePathLarge3.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
+            //    if (product.ImagePathLarge4 != null)
+            //        product.ImagePathLarge4 = product.ImagePathLarge4.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
+            //    if (product.ImagePathLarge5 != null)
+            //        product.ImagePathLarge5 = product.ImagePathLarge5.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
+            //}
             var model = _mapper.Map<Product, FMCGCreateEditViewModel>(product);
             model.MasterProductName = CommonHelpers.GetMasterProductName(model.MasterProductId);
             return View(model);
@@ -1108,10 +988,10 @@ namespace ShopNow.Controllers
         public ActionResult FMCGEdit(FMCGCreateEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var prod = db.Products.FirstOrDefault(i => i.Id == model.Code);
+            var prod = db.Products.FirstOrDefault(i => i.Id == model.Id);
             _mapper.Map(model, prod);
             prod.Name = model.Name;
-            prod.ProductType = model.ProductType;
+            prod.TypeName = model.ProductType;
             prod.UpdatedBy = user.Name;
             prod.DateUpdated = DateTime.Now;
             prod.DateUpdated = DateTime.Now;
@@ -1126,7 +1006,7 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var shop = db.Shops.Any(i => i.Id == user.Code);
+            var shop = db.Shops.Any(i => i.Id == user.Id);
             if (shop != false)
             {
                 ViewBag.user = user.Name;
@@ -1141,7 +1021,7 @@ namespace ShopNow.Controllers
         public ActionResult ElectronicCreate(ElectronicCreateEditViewModel model)
         {
             //Return to View if product already exist
-            var name = db.Products.FirstOrDefault(i => i.Name == model.Name && i.Status == 0 && i.ProductType == "Product" && i.ShopId == model.ShopId);
+            var name = db.Products.FirstOrDefault(i => i.Name == model.Name && i.Status == 0 && i.TypeName == "Product" && i.ShopId == model.ShopId);
             if (name != null)
             {
                 ViewBag.ErrorMessage = model.Name + " Already Exist";
@@ -1152,12 +1032,12 @@ namespace ShopNow.Controllers
             var product = _mapper.Map<ElectronicCreateEditViewModel, Product>(model);
             product.CreatedBy = user.Name;
             product.UpdatedBy = user.Name;
-            product.ProductType = "Product";
-            product.Code = _generatedCode("PRO");
-            if (model.ShopId != null)
+            product.TypeName = "Product";
+           // product.Code = _generatedCode("PRO");
+            if (model.ShopId != 0)
             {
                 var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
-                product.shopid = shop.Id;
+                product.ShopId = shop.Id;
                 product.ShopCategoryId = shop.ShopCategoryId;
                 product.ShopCategoryName = shop.ShopCategoryName;
             }
@@ -1167,7 +1047,7 @@ namespace ShopNow.Controllers
             db.Products.Add(product);
             db.SaveChanges();
             ViewBag.Message = model.Name + " Saved Successfully!";
-            if (model.ShopId != null)
+            if (model.ShopId != 0)
             {
                 var sh = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);// Shop.Get(model.ShopId);
                 var productcount = db.Products.Where(i => i.ShopId == model.ShopId && i.Status == 0).Count();
@@ -1207,27 +1087,27 @@ namespace ShopNow.Controllers
             return View();
         }
 
-        public ActionResult ElectronicEdit(string code)
+        public ActionResult ElectronicEdit(int id)
         {
-            var dCode = AdminHelpers.DCode(code);
+            var dCode = AdminHelpers.DCodeInt(id.ToString());
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            if (string.IsNullOrEmpty(dCode))
+            if (string.IsNullOrEmpty(dCode.ToString()))
                 return HttpNotFound();
             var product = db.Products.FirstOrDefault(i => i.Id == dCode);
-            if (product != null)
-            {
-                if (product.ImagePathLarge1 != null)
-                    product.ImagePathLarge1 = product.ImagePathLarge1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-                if (product.ImagePathLarge2 != null)
-                    product.ImagePathLarge2 = product.ImagePathLarge2.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-                if (product.ImagePathLarge3 != null)
-                    product.ImagePathLarge3 = product.ImagePathLarge3.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-                if (product.ImagePathLarge4 != null)
-                    product.ImagePathLarge4 = product.ImagePathLarge4.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-                if (product.ImagePathLarge5 != null)
-                    product.ImagePathLarge5 = product.ImagePathLarge5.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-            }
+            //if (product != null)
+            //{
+            //    if (product.ImagePathLarge1 != null)
+            //        product.ImagePathLarge1 = product.ImagePathLarge1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
+            //    if (product.ImagePathLarge2 != null)
+            //        product.ImagePathLarge2 = product.ImagePathLarge2.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
+            //    if (product.ImagePathLarge3 != null)
+            //        product.ImagePathLarge3 = product.ImagePathLarge3.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
+            //    if (product.ImagePathLarge4 != null)
+            //        product.ImagePathLarge4 = product.ImagePathLarge4.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
+            //    if (product.ImagePathLarge5 != null)
+            //        product.ImagePathLarge5 = product.ImagePathLarge5.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
+            //}
             var model = _mapper.Map<Product, ElectronicCreateEditViewModel>(product);
             model.MasterProductName = CommonHelpers.GetMasterProductName(model.MasterProductId);
             return View(model);
@@ -1239,10 +1119,10 @@ namespace ShopNow.Controllers
         public ActionResult ElectronicEdit(ElectronicCreateEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var prod = db.Products.FirstOrDefault(i => i.Id == model.Code);
+            var prod = db.Products.FirstOrDefault(i => i.Id == model.Id);
             _mapper.Map(model, prod);
             prod.Name = model.Name;
-            prod.ProductType = model.ProductType;
+            prod.TypeName = model.ProductType;
             prod.UpdatedBy = user.Name;
             prod.DateUpdated = DateTime.Now;
             prod.DateUpdated = DateTime.Now;
@@ -1256,16 +1136,16 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            model.ListItems = db.Products.Where(i => i.Status == 0 && i.ProductType == "Product" && (model.ShopId != null ? i.ShopId == model.ShopId : false))
-                .AsEnumerable()
+            model.ListItems = db.Products.Where(i => i.Status == 0 && i.TypeName == "Product" && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
+           .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
             .Select(i => new ElectronicListViewModel.ListItem
             {
-                CategoryName = i.CategoryName,
-                Code = i.Id,
-                Name = CommonHelpers.GetMasterProductName(i.MasterProductId),
-                Percentage = i.Percentage,
-                ShopId = i.ShopId,
-                ShopName = i.ShopName
+                CategoryName = i.m.CategoryName,
+                Id = i.p.Id,
+                Name = i.m.Name,
+                Percentage = i.p.Percentage,
+                ShopId = i.p.ShopId,
+                ShopName = i.p.ShopName
             }).ToList();
             return View(model);
         }
@@ -1286,30 +1166,30 @@ namespace ShopNow.Controllers
 
             var prod = _mapper.Map<ServiceCreateEditViewModel, Product>(pd);
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var shop = db.Shops.Any(i => i.Id == user.Code);
+            var shop = db.Shops.Any(i => i.Id == user.Id);
             if (shop != false)
             {
-                prod.ShopId = user.Code;
+                prod.ShopId = user.Id;
                 prod.ShopName = user.Name;
-                ViewBag.user = user.Code;
+                ViewBag.user = user.Id;
             }
-            prod.CategoryCode = pd.CategoryCode;
-            var cat = db.Categories.FirstOrDefault(i => i.Id == pd.CategoryCode);//  Category.Get(pd.CategoryCode);
-            if (cat != null)
-            {
-                prod.CategoryName = cat.Name;
-            }
+            //prod.CategoryCode = pd.CategoryCode;
+            //var cat = db.Categories.FirstOrDefault(i => i.Id == pd.CategoryCode);//  Category.Get(pd.CategoryCode);
+            //if (cat != null)
+            //{
+            //    prod.CategoryName = cat.Name;
+            //}
 
             //prod.ImagePath = _ProductImage != null ? _ProductImage.FileName : prod.ImagePath;
 
-            prod.ProductType = "Service";
+            prod.TypeName = "Service";
 
-            if (prod.Code == "" || prod.Code == null)
+            if (prod.Id == 0)
             {
                 prod.Status = 0;
                 // prod.Code = Product.Add(prod);
-                prod.MainSNCode = ShopNow.Helpers.DRC.Generate("PRO");
-                prod.Code = prod.MainSNCode;
+                //prod.MainSNCode = ShopNow.Helpers.DRC.Generate("PRO");
+               // prod.Code = prod.MainSNCode;
                 prod.DateEncoded = DateTime.Now;
                 prod.DateUpdated = DateTime.Now;
                 prod.Status = 0;
@@ -1329,9 +1209,9 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNPROR010")]
-        public ActionResult Delete(string code, int redirectPage=0) //redirectPage : 0-Product List, 1-Food List, 2-Medical List, 3-FMCG List , 4-Electronic List
+        public ActionResult Delete(int id, int redirectPage=0) //redirectPage : 0-Product List, 1-Food List, 2-Medical List, 3-FMCG List , 4-Electronic List
         {
-            var dCode = AdminHelpers.DCode(code);
+            var dCode = AdminHelpers.DCodeInt(id.ToString());
             var product = db.Products.FirstOrDefault(i => i.Id == dCode);// Product.Get(dCode);
             product.Status = 2;
             product.DateUpdated = DateTime.Now;
@@ -1356,18 +1236,18 @@ namespace ShopNow.Controllers
         // Food Create(Dish) Json Result
 
         [AccessPolicy(PageCode = "SHNPROAO014")]
-        public JsonResult AddOns(string code)
+        public JsonResult AddOns(int id)
         {
             var model = new AddOnsCreateViewModel();
-            model.DishLists = db.DishAddOns.Where(i => i.MasterProductId == code && i.Status == 0).Select(i => new AddOnsCreateViewModel.DishList
+            model.DishLists = db.DishAddOns.Where(i => i.MasterProductId == id && i.Status == 0).Select(i => new AddOnsCreateViewModel.DishList
             {
                 Name = i.Name,
-                Code = i.Id,
+                Id = i.Id,
                 MasterProductId = i.MasterProductId,
                 MasterProductName = i.MasterProductName,
-                AddOnCategoryCode = i.AddOnCategoryCode,
+                AddOnCategoryId = i.AddOnCategoryId,
                 AddOnCategoryName = i.AddOnCategoryName,
-                PortionCode = i.PortionCode,
+                PortionId = i.PortionId,
                 PortionName = i.PortionName,
                 CrustName = i.CrustName,
                 Price = i.Price,
@@ -1426,7 +1306,7 @@ namespace ShopNow.Controllers
             }
             if (code != null)
             {
-                var addon = db.ProductDishAddOns.FirstOrDefault(i => i.Id == code);// ProductDishAddOn.Get(code);
+                var addon = db.ProductDishAddOns.FirstOrDefault(i => i.Id == id);// ProductDishAddOn.Get(code);
                 addon.Status = 2;
                 //ProductDishAddOn.Edit(addon, out int error);
                 addon.DateUpdated = DateTime.Now;
@@ -1459,7 +1339,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNPROFC004")]
         public async Task<JsonResult> GetDishCategorySelect2(string q = "")
         {
-            var model = await db.Categories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductType == "Dish").Select(i => new
+            var model = await db.Categories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 1).Select(i => new
             {
                 id = i.Id,
                 text = i.Name
@@ -1471,7 +1351,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNPROFC004")]
         public async Task<JsonResult> GetDishShopSelect2(string q = "")
         {
-            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && (a.ShopCategoryId == "0" || a.ShopCategoryId == "2") && (a.Status == 0 || a.Status == 1)).Select(i => new
+            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && (a.ShopCategoryId == 0 || a.ShopCategoryId == 2) && (a.Status == 0 || a.Status == 1)).Select(i => new
             {
                 id = i.Id,
                 text = i.Name,
@@ -1496,22 +1376,23 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNPROFC004")]
         public async Task<JsonResult> GetDishMasterProductSelect2(string q = "")
         {
-            var model = await db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductType == "Dish").Select(i => new
+            var model = await db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 1).Select(i => new
             {
                 id = i.Id,
                 text = i.Name,
-                CategoryCode = i.CategoryCode,
+                CategoryId = i.CategoryId,
                 CategoryName = i.CategoryName,
-                BrandCode = i.BrandCode,
+                BrandId = i.BrandId,
                 BrandName = i.BrandName,
                 ShortDescription = i.ShortDescription,
                 LongDescription = i.LongDescription,
                 Customisation = i.Customisation,
                 ColorCode = i.ColorCode,
-                ImagePath = i.ImagePath,
+                //ImagePath = i.ImagePath,
                 Price = i.Price,
-                ProductType = i.ProductType,
-                ImagePathLarge1 = i.ImagePathLarge1,
+                ProductTypeId = i.ProductTypeId,
+                ProductTypeName = i.ProductTypeName,
+                ImagePath1 = i.ImagePath1,
                 GoogleTaxonomyCode = i.GoogleTaxonomyCode,
                 MasterId = i.Id
 
@@ -1632,16 +1513,16 @@ namespace ShopNow.Controllers
             }
             if (code != null)
             {
-                var pms = db.ProductMedicalStocks.FirstOrDefault(i => i.Id == code && i.Status == 0);// ProductMedicalStock.Get(code);
-                pms.Status = 2;
-                // ProductMedicalStock.Edit(pms, out int error);
-                pms.DateUpdated = DateTime.Now;
-                db.Entry(pms).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-                if (medicalStock.Remove(medicalStock.SingleOrDefault(i => i.Id == code)))
-                {
-                    this.Session["MedicalStock"] = medicalStock;
-                }
+                //var pms = db.ProductMedicalStocks.FirstOrDefault(i => i.Id == code && i.Status == 0);// ProductMedicalStock.Get(code);
+                //pms.Status = 2;
+                //// ProductMedicalStock.Edit(pms, out int error);
+                //pms.DateUpdated = DateTime.Now;
+                //db.Entry(pms).State = System.Data.Entity.EntityState.Modified;
+                //db.SaveChanges();
+                //if (medicalStock.Remove(medicalStock.SingleOrDefault(i => i.Id == code)))
+                //{
+                //    this.Session["MedicalStock"] = medicalStock;
+                //}
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
             return Json(false, JsonRequestBehavior.AllowGet);
@@ -1664,7 +1545,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNPROC001")]
         public async Task<JsonResult> GetMedicalBrandSelect2(string q = "")
         {
-            var model = await db.Brands.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductType == "Medical").Select(i => new
+            var model = await db.Brands.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 3).Select(i => new
             {
                 id = i.Id,
                 text = i.Name
@@ -1676,7 +1557,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNPROC001")]
         public async Task<JsonResult> GetProductShopSelect2(string q = "")
         {
-            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && (a.ShopCategoryId == "2" || a.ShopCategoryId == "3" || a.ShopCategoryId == "4" || a.ShopCategoryId == "1") && (a.Status == 0 || a.Status == 1)).Select(i => new
+            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && (a.ShopCategoryId == 2 || a.ShopCategoryId == 3 || a.ShopCategoryId == 4 || a.ShopCategoryId == 1) && (a.Status == 0 || a.Status == 1)).Select(i => new
             {
                 id = i.Id,
                 text = i.Name + " (" + i.PhoneNumber + ")"
@@ -1700,7 +1581,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNPROC001")]
         public async Task<JsonResult> GetMedicalCategorySelect2(string q = "")
         {
-            var model = await db.Categories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductType == "Medical").Select(i => new
+            var model = await db.Categories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 3).Select(i => new
             {
                 id = i.Id,
                 text = i.Name
@@ -1712,7 +1593,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNPROC001")]
         public async Task<JsonResult> GetProductCategorySelect2(string q = "")
         {
-            var model = await db.Categories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductType == "Product").Select(i => new
+            var model = await db.Categories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId ==4).Select(i => new
             {
                 id = i.Id,
                 text = i.Name
@@ -1724,19 +1605,20 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNPROC001")]
         public async Task<JsonResult> GetMasterProductSelect2(string q = "")
         {
-            var model = await db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductType == "Product").Select(i => new
+            var model = await db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 4).Select(i => new
             {
                 id = i.Id,
                 text = i.Name,
-                CategoryCode = i.CategoryCode,
+                CategoryId = i.CategoryId,
                 CategoryName = i.CategoryName,
-                BrandCode = i.BrandCode,
+                BrandId = i.BrandId,
                 BrandName = i.BrandName,
                 ShortDescription = i.ShortDescription,
                 LongDescription = i.LongDescription,
-                ImagePath = i.ImagePath,
+                ImagePath = i.ImagePath1,
                 Price = i.Price,
-                ProductType = i.ProductType
+                ProductTypeName = i.ProductTypeName,
+                ProductTypeId = i.ProductTypeId
             }).Take(500).ToListAsync();
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
@@ -1745,20 +1627,20 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNPROC001")]
         public async Task<JsonResult> GetMedicalMasterProductSelect2(string q = "")
         {
-            var model = await db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductType == "Medical").Select(i => new
+            var model = await db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 3).Select(i => new
             {
                 id = i.Id,
                 text = i.Name,
-                CategoryCode = i.CategoryCode,
+                CategoryId = i.CategoryId,
                 CategoryName = i.CategoryName,
-                BrandCode = i.BrandCode,
+                BrandId = i.BrandId,
                 BrandName = i.BrandName,
-                DrugMeasurementUnitCode = i.MeasurementUnitCode,
-                DrugMeasurementUnitName = i.MeasurementUnitName,
+                MeasurementUnitId = i.MeasurementUnitId,
+                MeasurementUnitName = i.MeasurementUnitName,
                 PriscriptionCategory = i.PriscriptionCategory,
-                DrugCompoundDetailCode = i.DrugCompoundDetailCode,
-                CombinationDrugCompound = i.CombinationDrugCompound,
-                PackageCode = i.PackageCode,
+                DrugCompoundDetailId = i.DrugCompoundDetailId,
+                DrugCompoundDetailName = i.DrugCompoundDetailName,
+                PackageId = i.PackageId,
                 PackageName = i.PackageName,
                 Manufacturer = i.Manufacturer,
                 OriginCountry = i.OriginCountry,
@@ -1766,12 +1648,12 @@ namespace ShopNow.Controllers
                 weight = i.weight,
                 SizeLB = i.SizeLB,
                 Price = i.Price,
-                ImagePathLarge1 = i.ImagePathLarge1,
-                ImagePathLarge2 = i.ImagePathLarge2,
-                ImagePathLarge3 = i.ImagePathLarge3,
-                ImagePathLarge4 = i.ImagePathLarge4,
-                ImagePathLarge5 = i.ImagePathLarge5,
-                ProductType = i.ProductType,
+                ImagePath1 = i.ImagePath1,
+                ImagePath2 = i.ImagePath2,
+                ImagePath3 = i.ImagePath3,
+                ImagePath4 = i.ImagePath4,
+                ImagePath5 = i.ImagePath5,
+                ProductTypeId = i.ProductTypeId,
                 GoogleTaxonomyCode = i.GoogleTaxonomyCode
             }).Take(500).ToListAsync();
 
@@ -1781,7 +1663,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNPROC001")]
         public async Task<JsonResult> GetManualMedicalMasterProductSelect2(string q = "")
         {
-            var model = await db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductType == "Medical").Select(i => new
+            var model = await db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 3).Select(i => new
             {
                 id = i.Id,
                 text = i.Name
@@ -1791,16 +1673,16 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNPROC001")]
-        public JsonResult GetMasterProductSpecification(string code)
+        public JsonResult GetMasterProductSpecification(int id)
         {
             var model =new  List<ProductEditViewModel.SpecificationList>();
-            model = db.ProductSpecifications.Where(i => i.MasterProductId == code && i.Status == 0).Select(i => new ProductEditViewModel.SpecificationList
+            model = db.ProductSpecifications.Where(i => i.MasterProductId == id && i.Status == 0).Select(i => new ProductEditViewModel.SpecificationList
             {
-                Code = i.Id,
+                Id = i.Id,
                 SpecificationName = i.SpecificationName,
-                SpecificationCode = i.SpecificationCode,
+                SpecificationId = i.SpecificationId,
                 ProductName = i.MasterProductName,
-                ProductCode = i.MasterProductId,
+                ProductId = i.MasterProductId,
                 Value = i.Value
             }).ToList();
 
@@ -1868,61 +1750,61 @@ namespace ShopNow.Controllers
         }
         [HttpPost]
         [AccessPolicy(PageCode = "SHNPROC001")]
-        public ActionResult ShopItemMapping(string originalShopId, string newShopId, string newShopName)
+        public ActionResult ShopItemMapping(int originalShopId, int newShopId, string newShopName)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new ProductMappingViewModel();
             model.Lists = db.Products.Where(i => i.ShopId == originalShopId && i.Status == 0).ToList().AsQueryable().ProjectTo<ProductMappingViewModel.List>(_mapperConfiguration).ToList();// Product.GetListItem(originalShopId).AsQueryable().ProjectTo<ProductMappingViewModel.List>(_mapperConfiguration).ToList();
-            
-                foreach (var pro in model.Lists)
-                {
-                    Product product = new Product();
-                    var prod = _mapper.Map<ProductMappingViewModel, Product>(model);
-                    prod.ShopId = newShopId;
-                    prod.ShopName = newShopName;
-                prod.MainSNCode = ShopNow.Helpers.DRC.GenerateSNIN();
+
+            foreach (var pro in model.Lists)
+            {
+                Product product = new Product();
+                var prod = _mapper.Map<ProductMappingViewModel, Product>(model);
+                prod.ShopId = newShopId;
+                prod.ShopName = newShopName;
+                //prod.MainSNCode = ShopNow.Helpers.DRC.GenerateSNIN();
                 prod.DateEncoded = DateTime.Now;
                 prod.DateUpdated = DateTime.Now;
                 prod.Status = 0;
                 db.Products.Add(prod);
                 db.SaveChanges();
-               // prod.Code = prod.MainSNCode;
-                }
+                // prod.Code = prod.MainSNCode;
+            }
                       
             return View(model);
         }
 
         public async Task<JsonResult> GetFMCGSelect2(string q = "")
         {
-            var model = await db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductType == "FMCG").Select(i => new
+            var model = await db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 2).Select(i => new
             {
                 id = i.Id,
                 text = i.Name,
-                CategoryCode = i.CategoryCode,
+                CategoryId = i.CategoryId,
                 CategoryName = i.CategoryName,
-                SubCategoryCode = i.SubCategoryCode,
+                SubCategoryId = i.SubCategoryId,
                 SubCategoryName = i.SubCategoryName,
-                NextSubCategoryCode = i.NextSubCategoryCode,
+                NextSubCategoryId = i.NextSubCategoryId,
                 NextSubCategoryName = i.NextSubCategoryName,
-                BrandCode = i.BrandCode,
+                BrandId = i.BrandId,
                 BrandName = i.BrandName,
                 ShortDescription = i.ShortDescription,
                 LongDescription = i.LongDescription,
-                ImagePathLarge1 = i.ImagePathLarge1,
-                ImagePathLarge2 = i.ImagePathLarge2,
-                ImagePathLarge3 = i.ImagePathLarge3,
-                ImagePathLarge4 = i.ImagePathLarge4,
-                ImagePathLarge5 = i.ImagePathLarge5,
+                ImagePath1 = i.ImagePath1,
+                ImagePath2 = i.ImagePath2,
+                ImagePath3 = i.ImagePath3,
+                ImagePath4 = i.ImagePath4,
+                ImagePath5 = i.ImagePath5,
                 Price = i.Price,
-                ProductType = i.ProductType,
+                ProductTypeId = i.ProductTypeId,
                 ASIN = i.ASIN,
                 GoogleTaxonomyCode = i.GoogleTaxonomyCode,
                 weight = i.weight,
                 SizeLB = i.SizeLB,
-                MeasurementUnitCode = i.MeasurementUnitCode,
+                MeasurementUnitId = i.MeasurementUnitId,
                 MeasurementUnitName = i.MeasurementUnitName,
-                PackageCode = i.PackageCode,
+                PackageId = i.PackageId,
                 PackageName = i.PackageName,
                 MasterId = i.Id
             }).ToListAsync();
@@ -1953,34 +1835,34 @@ namespace ShopNow.Controllers
 
         public async Task<JsonResult> GetElectronicSelect2(string q = "")
         {
-            var model = await db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductType == "FMCG").Select(i => new
+            var model = await db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 4).Select(i => new
             {
                 id = i.Id,
                 text = i.Name,
-                CategoryCode = i.CategoryCode,
+                CategoryId = i.CategoryId,
                 CategoryName = i.CategoryName,
-                SubCategoryCode = i.SubCategoryCode,
+                SubCategoryId = i.SubCategoryId,
                 SubCategoryName = i.SubCategoryName,
-                NextSubCategoryCode = i.NextSubCategoryCode,
+                NextSubCategoryId = i.NextSubCategoryId,
                 NextSubCategoryName = i.NextSubCategoryName,
-                BrandCode = i.BrandCode,
+                BrandId = i.BrandId,
                 BrandName = i.BrandName,
                 ShortDescription = i.ShortDescription,
                 LongDescription = i.LongDescription,
-                ImagePathLarge1 = i.ImagePathLarge1,
-                ImagePathLarge2 = i.ImagePathLarge2,
-                ImagePathLarge3 = i.ImagePathLarge3,
-                ImagePathLarge4 = i.ImagePathLarge4,
-                ImagePathLarge5 = i.ImagePathLarge5,
+                ImagePath1 = i.ImagePath1,
+                ImagePath2 = i.ImagePath2,
+                ImagePath3 = i.ImagePath3,
+                ImagePath4 = i.ImagePath4,
+                ImagePath5 = i.ImagePath5,
                 Price = i.Price,
-                ProductType = i.ProductType,
+                ProductTypeId = i.ProductTypeId,
                 ASIN = i.ASIN,
                 GoogleTaxonomyCode = i.GoogleTaxonomyCode,
                 weight = i.weight,
                 SizeLB = i.SizeLB,
-                MeasurementUnitCode = i.MeasurementUnitCode,
+                MeasurementUnitId = i.MeasurementUnitId,
                 MeasurementUnitName = i.MeasurementUnitName,
-                PackageCode = i.PackageCode,
+                PackageId = i.PackageId,
                 PackageName = i.PackageName,
                 MasterId = i.Id
             }).ToListAsync();

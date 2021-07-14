@@ -134,7 +134,7 @@ namespace ShopNow.Controllers
                         db.ShopCategories.Add(new ShopCategory
                         {
                             Name = row[model.Name].ToString(),
-                            Id = row[model.id],
+                            Id = Convert.ToInt32(row[model.Id]),
                             Status = 0,
                             DateEncoded = DateTime.Now,
                             DateUpdated = DateTime.Now,

@@ -18,7 +18,7 @@ namespace ShopNowPay.Controllers
         {
             _mapperConfiguration = new MapperConfiguration(config =>
             {
-                config.CreateMap<Cart, SalesReportViewModel.SalesReportList>();
+                config.CreateMap<Order, SalesReportViewModel.SalesReportList>();
                 config.CreateMap<Payment,SalesReportViewModel.SalesReportList>();
 
             });
@@ -38,34 +38,34 @@ namespace ShopNowPay.Controllers
                 DateTime startDatetFilter = new DateTime(startDate.Value.Year, startDate.Value.Month, startDate.Value.Day);
                 DateTime endDateFilter = new DateTime(endDate.Value.Year, endDate.Value.Month, endDate.Value.Day).AddDays(1);
 
-                model.List = db.Carts.Join(db.Payments, c => c.OrderNo, p => p.OrderNo, (c, p) => new { c, p })
-                 .Where(i => i.c.DateEncoded >= startDatetFilter && i.c.DateEncoded <= endDateFilter && i.c.Status == 0 && i.c.CartStatus == 6)
-                 .GroupBy(i => i.c.OrderNo)
+                model.List = db.Orders
+                    .Join(db.Payments, c => c.OrderNumber, p => p.OrderNo, (c, p) => new { c, p })
+                 .Where(i => i.c.DateEncoded >= startDatetFilter && i.c.DateEncoded <= endDateFilter && i.c.Status == 6)
                  .Select(i => new SalesReportViewModel.SalesReportList
                  {
-                     Code = i.Any() ? i.FirstOrDefault().c.Code : "",
-                     ShopCode = i.Any() ? i.FirstOrDefault().c.ShopCode : "",
-                     ShopName = i.Any() ? i.FirstOrDefault().c.ShopName : "",
-                     DeliveryAddress = i.Any() ? i.FirstOrDefault().c.DeliveryAddress : "",
-                     DateEncoded = i.Any() ? i.FirstOrDefault().c.DateEncoded : DateTime.Now,
-                     Amount = i.Any() ? i.FirstOrDefault().p.Amount : 0.0,
-                     OrderNo = i.Any() ? i.FirstOrDefault().p.OrderNo : ""
+                     Id = i.c.id,
+                     ShopId = i.c.Shopid,
+                     ShopName = i.c.Shopname,
+                     DeliveryAddress = i.c.DeliveryAddress,
+                     DateEncoded = i.c.DateEncoded,
+                     Amount = i.p.Amount,
+                     OrderNo = i.p.OrderNo
                  }).OrderByDescending(i => i.DateEncoded).ToList();
             }
             else
             {
-                model.List = db.Carts.Join(db.Payments, c => c.OrderNo, p => p.OrderNo, (c, p) => new { c, p })
-                  .Where(i => i.c.Status == 0 && i.c.CartStatus == 6)
-                  .GroupBy(i=> i.c.OrderNo)
+                model.List = db.Orders
+                    .Join(db.Payments, c => c.OrderNumber, p => p.OrderNo, (c, p) => new { c, p })
+                  .Where(i => i.c.Status == 6)
                   .Select(i => new SalesReportViewModel.SalesReportList
                   {
-                      Code = i.Any()?i.FirstOrDefault().c.Code:"",
-                      ShopCode = i.Any() ? i.FirstOrDefault().c.ShopCode : "",
-                      ShopName = i.Any() ? i.FirstOrDefault().c.ShopName : "",
-                      DeliveryAddress = i.Any() ? i.FirstOrDefault().c.DeliveryAddress : "",
-                      DateEncoded = i.Any() ? i.FirstOrDefault().c.DateEncoded : DateTime.Now,
-                      Amount = i.Any() ? i.FirstOrDefault().p.Amount : 0.0,
-                      OrderNo = i.Any() ? i.FirstOrDefault().p.OrderNo : ""
+                      Id = i.c.id,
+                      ShopId = i.c.Shopid,
+                      ShopName = i.c.Shopname,
+                      DeliveryAddress = i.c.DeliveryAddress,
+                      DateEncoded = i.c.DateEncoded,
+                      Amount = i.p.Amount,
+                      OrderNo = i.p.OrderNo
                   }).OrderByDescending(i => i.DateEncoded).ToList();
             }
             return View(model.List);

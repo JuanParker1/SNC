@@ -54,12 +54,11 @@ namespace ShopNow.ViewModels
         public class PaymentReportList
         {
             public int Id { get; set; }
-            public string CartCode { get; set; }
             public string CorporateID { get; set; }
             public string ReferenceCode { get; set; }
-            public string CustomerCode { get; set; }
+            public int CustomerId { get; set; }
             public string CustomerName { get; set; }
-            public string ShopCode { get; set; }
+            public int ShopId { get; set; }
             public string ShopName { get; set; }
             public string Address { get; set; }
             public string GSTINNumber { get; set; }
@@ -71,7 +70,7 @@ namespace ShopNow.ViewModels
             public string CountryName { get; set; }
             public string Credits { get; set; }
             public DateTime DateEncoded { get; set; }
-            public string OrderNo { get; set; }
+            public int OrderNo { get; set; }
         }
     }
 
@@ -83,8 +82,8 @@ namespace ShopNow.ViewModels
         public class PlatformCreditReportList
         {
             public int Id { get; set; }
-            public string OrderNo { get; set; }
-            public string CustomerCode { get; set; }
+            public int OrderNo { get; set; }
+            public int CustomerId { get; set; }
             public string CustomerName { get; set; }
             public int CartStatus { get; set; }
             public double RatePerOrder { get; set; }
@@ -180,7 +179,7 @@ namespace ShopNow.ViewModels
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {
-            public string ShopCode { get; set; }
+            public int ShopId { get; set; }
             public string ShopName { get; set; }
             public string ShopOwnerPhoneNumber { get; set; }
             public string TransactionType { get; set; }
@@ -227,7 +226,7 @@ namespace ShopNow.ViewModels
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {
-            public string DeliveryBoyCode { get; set; }
+            public int DeliveryBoyId { get; set; }
             public string DeliveryBoyName { get; set; }
             public string DeliveryBoyPhoneNumber { get; set; }
             public string TransactionType { get; set; }
@@ -238,7 +237,7 @@ namespace ShopNow.ViewModels
             public string PaymentId { get; set; }
             public string IfscCode { get; set; }
             public string AccountType { get; set; }
-            public string OrderNo { get; set; }
+            public int OrderNo { get; set; }
             public int CartStatus { get; set; }
             public int DeliveryBoyPaymentStatus { get; set; }
 

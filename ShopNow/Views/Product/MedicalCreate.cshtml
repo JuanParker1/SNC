@@ -17,7 +17,7 @@
                 <h5 class="mt-1 text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
             </div>
             <div class="col-md-4">
-                <select id="ShopCode" name="ShopCode" class="form-control"></select>
+                <select id="ShopId" name="ShopId" class="form-control"></select>
                 <input type="hidden" name="ShopName" id="ShopName" />
             </div>
             <div class="col-md-6 text-right">
@@ -420,7 +420,7 @@
                     $("#Percentage").val(results);
                 });
 
-                $('#ShopCode').select2({
+                $('#ShopId').select2({
                     placeholder: "Search Shop",
                     ajax: {
                         url: "/Product/GetProductShopSelect2",

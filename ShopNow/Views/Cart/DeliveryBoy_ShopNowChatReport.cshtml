@@ -16,7 +16,7 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <select name="DeliveryBoyCode" id="DeliveryBoyCode" class="form-control"></select>
+                <select name="DeliveryBoyId" id="DeliveryBoyId" class="form-control"></select>
                 <input type="hidden" name="DeliveryBoyName" id="DeliveryBoyName" />
             </div>
             <div class="col-md-4">
@@ -66,7 +66,7 @@
                                     <td></td>
                                     <td>@item.DateUpdated.ToString("dd-MM-yyyy hh:mm tt")</td>
                                     <td>
-                                       <a href="~/Cart/Edit?orderno=@item.OrderNo&code=@item.Code">@item.OrderNo</a>
+                                       <a href="~/Cart/Edit?orderno=@item.OrderNo&id=@item.Id">@item.OrderNo</a>
                                     </td>
                                     <td>@item.DeliveryBoyPhoneNumber</td>
                                     <td>@item.DeliveryBoyName</td>
@@ -141,7 +141,7 @@
                 });
             });
 
-            $('#DeliveryBoyCode').select2({
+            $('#DeliveryBoyId').select2({
                 placeholder: "Search DeliveryBoy",
                 ajax: {
                     url: "/Cart/GetDeliveryBoySelect2",
@@ -154,8 +154,8 @@
             });
 
             $("#Filter").click(function () {
-                var deliveryboycode = $("#DeliveryBoyCode").val();
-                window.location.href = "/Cart/DeliveryBoy_ShopNowChatReport/?deliveryboycode=" + deliveryboycode;
+                var deliveryboyId= $("#DeliveryBoyId").val();
+                window.location.href = "/Cart/DeliveryBoy_ShopNowChatReport/?deliveryboyId=" + deliveryboyId;
             });
 
             $('.btnPayNow').click(function () {

@@ -24,7 +24,7 @@ namespace ShopNow.Controllers
             model.ListItems = db.Payments.Where(i => (i.refundAmount != 0 && i.refundStatus == 1 &&i.refundAmount != null) && i.PaymentMode == "Online Payment" &&
                (model.OrderDate != null ? DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(model.OrderDate.Value) : true) &&
               (model.ShopId != 0 ? i.ShopId == model.ShopId : true))
-                .Join(db.PaymentsDatas, p => p.OrderNo, pd => pd.OrderNo.ToString(), (p, pd) => new { p, pd })
+                .Join(db.PaymentsDatas, p => p.OrderNo, pd => pd.OrderNo, (p, pd) => new { p, pd })
                 .Join(db.Customers, p => p.p.CustomerId, c => c.Id, (p, c) => new { p, c })
                 .Select(i => new RefundPendingViewModel.ListItem
                 {
@@ -48,8 +48,8 @@ namespace ShopNow.Controllers
             model.ListItems = db.Payments
                .Where(i => ((model.StartDate != null ? DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) : true) &&
                (model.EndDate != null ? DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate) : true)) && i.refundAmount != null && i.refundAmount > 0)
-               .GroupJoin(db.RefundsDatas, p => p.OrderNo, r => r.orderNo.ToString(), (p, r) => new { p, r })
-               .Join(db.Customers.Where(i => model.CustomerPhoneNo != null ? i.PhoneNumber == model.CustomerPhoneNo : true), p => p.p.CustomerCode, c => c.Code, (p, c) => new { p, c })
+               .GroupJoin(db.RefundsDatas, p => p.OrderNo, r => r.orderNo, (p, r) => new { p, r })
+               .Join(db.Customers.Where(i => model.CustomerPhoneNo != null ? i.PhoneNumber == model.CustomerPhoneNo : true), p => p.p.CustomerId, c => c.Id, (p, c) => new { p, c })
                .AsEnumerable()
                .Select(i => new RefundHistoryViewModel.ListItem
                {
@@ -57,7 +57,7 @@ namespace ShopNow.Controllers
                    CustomerName = i.p.p.CustomerName,
                    CustomerPhoneNo = i.c.PhoneNumber,
                    OrderDate = i.p.p.DateEncoded,
-                   OrderNo = Convert.ToInt32(i.p.p.OrderNo),
+                   OrderNo = i.p.p.OrderNo,
                    PaymentId = i.p.r.Any() ? i.p.r.FirstOrDefault().payment_id : "",
                    RefundDate = i.p.r.Any() ? i.p.r.FirstOrDefault().DateEncoded : i.p.p.DateEncoded,
                    RefundId = i.p.r.Any() ? i.p.r.FirstOrDefault().refundid : "N/A",
