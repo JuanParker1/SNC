@@ -8,14 +8,14 @@ namespace ShopNow.ViewModels
 
     public class CategoryListViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string ProductType { get; set; }
         public int OrderNo { get; set; }
         public List<CategoryList> List { get; set; }
         public class CategoryList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string Name { get; set; }
             public string ProductType { get; set; }
             public int OrderNo { get; set; }
@@ -24,7 +24,7 @@ namespace ShopNow.ViewModels
     }
     public class CategoryMasterViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string ProductType { get; set; }
         public System.Data.DataTable DataTable { get; set; }

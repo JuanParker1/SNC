@@ -7,20 +7,20 @@ namespace ShopNow.ViewModels
 {
     public class ShopCategoryListViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
 
         public List<ShopCategoryList> List { get; set; }
         public class ShopCategoryList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string Name { get; set; }
         }
 
     }
     public class ShopCategoryMasterViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public System.Data.DataTable DataTable { get; set; }
         public string button { get; set; }

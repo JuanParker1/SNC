@@ -55,7 +55,7 @@ namespace ShopNow.Controllers
             var model = new CustomerListViewModel();
             model.List = db.Customers.Where(i => i.Status == 0 && i.ImageAadharPath != null && i.ImageAadharPath != "Rejected" && i.AadharVerify == false).Select(i => new CustomerListViewModel.CustomerList
             {
-                Code = i.Code,
+                Id = i.Id,
                 Name = i.Name,
                 Address = i.Address,
                 CountryName = i.CountryName,
@@ -71,34 +71,34 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNCUSD002")]
         public ActionResult Details(string code)
         {
-            var dCode = AdminHelpers.DCode(code);
+            var dCode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            if (string.IsNullOrEmpty(dCode))
+            if (dCode==0)
                 return HttpNotFound();
-            var customer = db.Customers.Where(m => m.Code == dCode).FirstOrDefault();//Customer.Get(dCode);         
+            var customer = db.Customers.Where(m => m.Id == dCode).FirstOrDefault();//Customer.Get(dCode);         
             var model = _mapper.Map<Customer, CustomerDetailsViewModel>(customer);
-            model.List = db.CustomerAddresses.Where(i => i.Status == 0 && i.CustomerCode == dCode).ToList().AsQueryable().ProjectTo<CustomerDetailsViewModel.AddressList>(_mapperConfiguration).ToList();
+            model.List = db.CustomerAddresses.Where(i => i.Status == 0 && i.CustomerId == dCode).ToList().AsQueryable().ProjectTo<CustomerDetailsViewModel.AddressList>(_mapperConfiguration).ToList();
             return View(model);
         }
 
         [AccessPolicy(PageCode = "SHNCUSE003")]
         public ActionResult Edit(string code)
         {
-            var dCode = AdminHelpers.DCode(code);
+            var dCode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            if (string.IsNullOrEmpty(dCode))
+            if (dCode==0)
                 return HttpNotFound();
-            var customer = db.Customers.Where(m => m.Code == dCode).FirstOrDefault();//Customer.Get(dCode);
+            var customer = db.Customers.Where(m => m.Id == dCode).FirstOrDefault();//Customer.Get(dCode);
             var model = _mapper.Map<Customer, CustomerEditViewModel>(customer);
             return View(model);
         }
 
         [AccessPolicy(PageCode = "SHNCUSIA005")]
-        public ActionResult InActive(string code)
+        public ActionResult InActive(int code)
         {
-            var customer = db.Customers.Where(m => m.Code == code).FirstOrDefault(); //Customer.Get(code);
+            var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault(); //Customer.Get(code);
             customer.Status = 1;
             db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
@@ -106,9 +106,9 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNCUSA006")]
-        public ActionResult Active(string code)
+        public ActionResult Active(int code)
         {
-            var customer = db.Customers.Where(m => m.Code == code).FirstOrDefault();// Customer.Get(code);
+            var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();// Customer.Get(code);
             customer.Status = 0;
             db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
@@ -119,8 +119,8 @@ namespace ShopNow.Controllers
         public ActionResult Delete(string code)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var dCode = AdminHelpers.DCode(code);
-            var customer = db.Customers.FirstOrDefault(i => i.Code == dCode);// db.Customers.Where(m => m.Code == code).FirstOrDefault();// Customer.Get(code);
+            var dCode = AdminHelpers.DCodeInt(code);
+            var customer = db.Customers.FirstOrDefault(i => i.Id == dCode);// db.Customers.Where(m => m.Code == code).FirstOrDefault();// Customer.Get(code);
             customer.Status = 2;
             customer.UpdatedBy = user.Name;
             db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
@@ -129,10 +129,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNCUSVAI007")]
-        public JsonResult VerifyAadharImage(string code)
+        public JsonResult VerifyAadharImage(int code)
         {
            
-            var customer = db.Customers.Where(m => m.Code == code).FirstOrDefault();//Customer.Get(code);
+            var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();//Customer.Get(code);
             bool IsAdded = false;
             string message = "";
             if (customer != null)
@@ -183,9 +183,9 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNCUSVA008")]
-        public JsonResult VerifyAge(string code)
+        public JsonResult VerifyAge(int code)
         {
-            var customer = db.Customers.Where(m => m.Code == code).FirstOrDefault();//Customer.Get(code);
+            var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();//Customer.Get(code);
             customer.AgeVerify = true;
             customer.DateUpdated = DateTime.Now;
             db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
@@ -195,9 +195,9 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNCUSRAI009")]
-        public JsonResult RejectAadharImage(string code)
+        public JsonResult RejectAadharImage(int code)
         {
-            var customer = db.Customers.Where(m => m.Code == code).FirstOrDefault();//Customer.Get(code);
+            var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();//Customer.Get(code);
             customer.AadharVerify = false;
             customer.AadharName = "Rejected";
             customer.AadharNumber = "Rejected";
@@ -210,9 +210,9 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNCUSCAI010")]
-        public JsonResult CheckAadharImage(string code)
+        public JsonResult CheckAadharImage(int code)
         {
-            var customer = db.Customers.Where(m => m.Code == code).FirstOrDefault();//Customer.Get(code);
+            var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();//Customer.Get(code);
             if (customer.AadharVerify == true)
             {
                 return Json(true, JsonRequestBehavior.AllowGet);
@@ -233,7 +233,7 @@ namespace ShopNow.Controllers
 
             model.List = db.Customers.Where(i => i.Position == 4 && i.Status == 0).Select(i => new CustomerListViewModel.CustomerList
             {
-                Code = i.Code,
+                Id = i.Id,
                 Name = i.Name,
                 PhoneNumber = i.PhoneNumber,
                 Address = i.Address,
@@ -246,14 +246,14 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNCUSSA012")]
-        public JsonResult Save(string code = "")
+        public JsonResult Save(int code = 0)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             bool IsAdded = false;
             string message = "";
             string message1 = "";
 
-            var customer = db.Customers.Where(m => m.Code == code).FirstOrDefault();//Customer.Get(code);
+            var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();//Customer.Get(code);
             if (customer != null && customer.Position != 4)
             {
                 customer.Position = 4;
@@ -276,11 +276,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNCUSSA012")]
-        public JsonResult Remove(string code)
+        public JsonResult Remove(int code)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             bool IsAdded = false;
-            var customer = db.Customers.Where(m => m.Code == code).FirstOrDefault();//Customer.Get(code);
+            var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();//Customer.Get(code);
             if (customer != null)
             {
                 customer.Position = 0;
@@ -298,7 +298,7 @@ namespace ShopNow.Controllers
         {
             var model = await db.Customers.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.Position != 4).Select(i => new
             {
-                id = i.Code,
+                id = i.Id,
                 text = i.Name
             }).ToListAsync();
 

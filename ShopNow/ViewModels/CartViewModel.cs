@@ -8,7 +8,7 @@ namespace ShopNow.ViewModels
 {
     public class CartDetailsViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string CustomerCode { get; set; }
         public string CustomerName { get; set; }
         public string ShopCode { get; set; }
@@ -44,7 +44,7 @@ namespace ShopNow.ViewModels
         public List<CartList> List { get; set; }
         public class CartList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string CustomerCode { get; set; }
             public string CustomerName { get; set; }
             public string ShopCode { get; set; }
@@ -68,7 +68,7 @@ namespace ShopNow.ViewModels
 
     public class CartListViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string CustomerCode { get; set; }
         public string CustomerName { get; set; }
         public string ShopCode { get; set; }
@@ -105,7 +105,7 @@ namespace ShopNow.ViewModels
         public List<CartList> List { get; set; }
         public class CartList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string CustomerCode { get; set; }
             public string CustomerName { get; set; }
             public string ShopCode { get; set; }
@@ -170,14 +170,14 @@ namespace ShopNow.ViewModels
 
     public class CartAssignDeliveryBoyViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string CartCode { get; set; }
         public string DeliveryBoyCode { get; set; }
 
         public List<CartAssignList> Lists { get; set; }
         public class CartAssignList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string Name { get; set; }
             public string DeliveryBoyName { get; set; }
             public double Meters { get; set; }
@@ -198,7 +198,7 @@ namespace ShopNow.ViewModels
         public List<CartReportList> List { get; set; }
         public class CartReportList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string CustomerCode { get; set; }
             public string CustomerName { get; set; }
             public string ShopCode { get; set; }
@@ -245,7 +245,7 @@ namespace ShopNow.ViewModels
         public List<ShopDeliveredAmountReportList> List { get; set; }
         public class ShopDeliveredAmountReportList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string CustomerCode { get; set; }
             public string CustomerName { get; set; }
             public string ShopCode { get; set; }
@@ -323,7 +323,7 @@ namespace ShopNow.ViewModels
         public List<CartList> List { get; set; }
         public class CartList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string ShopCode { get; set; }
             public string ShopName { get; set; }
             public string OrderNo { get; set; }
@@ -464,7 +464,7 @@ namespace ShopNow.ViewModels
         public List<CartList> List { get; set; }
         public class CartList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string OrderNo { get; set; }
             public string ShopName { get; set; }
             public string ProductName { get; set; }
@@ -483,7 +483,7 @@ namespace ShopNow.ViewModels
         public List<CartList> List { get; set; }
         public class CartList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string OrderNo { get; set; }
             public string ShopCode { get; set; }
             public string ShopName { get; set; }
@@ -519,7 +519,7 @@ namespace ShopNow.ViewModels
         public List<CartList> List { get; set; }
         public class CartList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string OrderNo { get; set; }
             public string ShopCode { get; set; }
             public string ShopName { get; set; }

@@ -11,7 +11,7 @@ namespace ShopNow.ViewModels
         public List<CustomerList> List { get; set; }
         public class CustomerList
         {
-            public string Code { get; set; }
+            public int Id{ get; set; }
             public string Name { get; set; }
             public string PhoneNumber { get; set; }
             public string Email { get; set; }
@@ -26,7 +26,7 @@ namespace ShopNow.ViewModels
 
     public class CustomerEditViewModel
     {
-        public string Code { get; set; }
+        public int Id{ get; set; }
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
         public string Password { get; set; }
@@ -56,7 +56,7 @@ namespace ShopNow.ViewModels
 
     public class CustomerDetailsViewModel
     {
-        public string Code { get; set; }
+        public int Id{ get; set; }
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
@@ -76,7 +76,7 @@ namespace ShopNow.ViewModels
         public List<AddressList> List { get; set; }
         public class AddressList
         {
-            public string Code { get; set; }
+            public int Id{ get; set; }
             public string Name { get; set; }
             public string CountryName { get; set; }
             public string StateName { get; set; }
@@ -169,7 +169,7 @@ namespace ShopNow.ViewModels
         //public List<CustomerList> OtherList { get; set; }
         public class CustomerList
         {
-            public string Code { get; set; }
+            public int Id{ get; set; }
             public string Name { get; set; }
             public int AddressType { get; set; }
             public string CountryName { get; set; }

@@ -98,7 +98,6 @@ namespace ShopNow.Controllers
             prod.UpdatedBy = user.Name;
             prod.ProductType = "Dish";
             prod.Status = 0;
-            prod.Code = _generatedCode("MPR");
             var name = _db.MasterProducts.FirstOrDefault(i => i.Name == model.Name && i.Status == 0 && i.ProductType == "Dish" && i.CategoryCode == model.CategoryCode);
             prod.Name = model.Name;
             if(model.NickName == null)
@@ -1727,15 +1726,15 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNMPRIM011")]
-        public JsonResult MappingProduct(string masterproductcode, string itemcode, string shopcode)
+        public JsonResult MappingProduct(int masterproductcode, int itemcode, int shopcode)
         {
             try
             {
                 var user = ((Helpers.Sessions.User)Session["USER"]);
                 ViewBag.Name = user.Name;
-                var masterproduct = _db.MasterProducts.FirstOrDefault(i => i.Code == masterproductcode);// MasterProduct.Get(masterproductcode);
+                var masterproduct = _db.MasterProducts.FirstOrDefault(i => i.Id == masterproductcode);// MasterProduct.Get(masterproductcode);
 
-                var product = _db.Products.FirstOrDefault(i => i.Code == itemcode);// Product.Get(itemcode);
+                var product = _db.Products.FirstOrDefault(i => i.Id == itemcode);// Product.Get(itemcode);
                 if (product != null)
                 {
                     product.MasterProductCode = masterproductcode;
@@ -1833,14 +1832,14 @@ namespace ShopNow.Controllers
                     {
                         product.ProductType = masterproduct.ProductType;
                     }
-                    //if (shopcode == null)
-                    //{
-                    //    product.ShopCode = "Admin";
-                    //    product.ShopName = "Admin";
-                    //}
-                    if (shopcode != null)
+                    if (shopId == 0)
                     {
-                        var shop = _db.Shops.FirstOrDefault(i => i.Code == shopcode);// Shop.Get(shopcode);
+                        product.ShopId = 0;
+                        product.ShopName = "Admin";
+                    }
+                    if (shopId != 0)
+                    {
+                        var shop = _db.Shops.FirstOrDefault(i => i.Id == shopId);// Shop.Get(shopcode);
                         if (shop != null)
                         {
                             product.ShopCode = shop.Code;

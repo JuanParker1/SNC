@@ -18,7 +18,7 @@ namespace ShopNow.ViewModels
 
     public class ShopReviewUpdateViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string CustomerCode { get; set; }
         public string CustomerRemark { get; set; }
         public int Rating { get; set; }
@@ -30,7 +30,7 @@ namespace ShopNow.ViewModels
         public List<ReviewlList> ReviewlLists { get; set; }
         public class ReviewlList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string ShopName { get; set; }
             public string CustomerName { get; set; }
             public string CustomerRemark { get; set; }

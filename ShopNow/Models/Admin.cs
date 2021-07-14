@@ -15,7 +15,7 @@ namespace ShopNow.Models
     public partial class Admin
     {
         public int Id { get; set; }
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string AnonymisedID { get; set; }
         public string OfficialID { get; set; }
         public int Status { get; set; }

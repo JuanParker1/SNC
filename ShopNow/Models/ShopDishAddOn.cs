@@ -15,7 +15,7 @@ namespace ShopNow.Models
     public partial class ShopDishAddOn
     {
         public int Id { get; set; }
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string AddOnItemName { get; set; }
         public string MasterProductCode { get; set; }
         public string MasterProductName { get; set; }

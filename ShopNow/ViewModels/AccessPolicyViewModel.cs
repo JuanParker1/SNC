@@ -7,7 +7,7 @@ namespace ShopNow.ViewModels
 {
     public class AccessPolicyListViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string PageCode { get; set; }
         public string PageName { get; set; }
         public string ShopCode { get; set; }
@@ -22,7 +22,7 @@ namespace ShopNow.ViewModels
         public List<AccessPolicy> List { get; set; }
         public class AccessPolicy
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string PageCode { get; set; }
             public string PageName { get; set; }
             public string ShopCode { get; set; }
@@ -39,7 +39,7 @@ namespace ShopNow.ViewModels
         public List<AccessManage> ManageList { get; set; }
         public class AccessManage
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string PageCode { get; set; }
             public string PageName { get; set; }
             public string ShopCode { get; set; }
@@ -56,7 +56,7 @@ namespace ShopNow.ViewModels
 
     public class AccessPolicyViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string PageCode { get; set; }
         public string PageName { get; set; }
         public string ShopCode { get; set; }
@@ -81,7 +81,7 @@ namespace ShopNow.ViewModels
     }
     public class AccessPolicyCreateEditViewModel
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string PageCode { get; set; }
         public string PageName { get; set; }
         public string ShopCode { get; set; }
@@ -105,7 +105,7 @@ namespace ShopNow.ViewModels
         public List<AccessPolicy> List { get; set; }
         public class AccessPolicy
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string PageCode { get; set; }
             public string PageName { get; set; }
             public string ShopCode { get; set; }

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using ShopNow.Filters;
 using ShopNow.Models;
 using ShopNow.ViewModels;

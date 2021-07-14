@@ -20,14 +20,7 @@ namespace ShopNow.Controllers
         private ShopnowchatEntities db = new ShopnowchatEntities();
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
-        private const string _prefix = "BRA";
-        private static string _generatedCode
-        {
-            get
-            {
-                return ShopNow.Helpers.DRC.Generate(_prefix);
-            }
-        }
+
         public BrandController()
         {
             _mapperConfiguration = new MapperConfiguration(config =>
@@ -45,37 +38,30 @@ namespace ShopNow.Controllers
             var List = (from s in db.Brands
                         select s).OrderBy(s => s.Name).Where(i => i.Status == 0).ToList();
             return View(List);
-            //var user = ((Helpers.Sessions.User)Session["USER"]);
-            //ViewBag.Name = user.Name;
-            //var model = new BrandListViewModel();
-            //model.List = Brand.GetList().AsQueryable().ProjectTo<BrandListViewModel.BrandList>(_mapperConfiguration).OrderBy(i => i.Name).ToList();
 
-            //return View(model);
         }
 
         [AccessPolicy(PageCode = "SHNBRAC001")]
-        public JsonResult Save(string name = "", string type = "")
+        public JsonResult Save(string name = "", int type = 0)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             bool IsAdded = false;
             string message = "";
             string message1 = "";
-            var brandname = db.Brands.FirstOrDefault(i => i.Name == name && i.ProductType == type && i.Status == 0); //Brand.GetNameType(name, type);
+            var brandname = db.Brands.FirstOrDefault(i => i.Name == name && i.ProductTypeId == type && i.Status == 0); //Brand.GetNameType(name, type);
             if (brandname == null)
             {
                 var brand = new Brand();
                 brand.Name = name;
-                brand.ProductType = type;
+                brand.ProductTypeId = type;
                 brand.CreatedBy = user.Name;
                 brand.UpdatedBy = user.Name;
-                brand.Code = _generatedCode;
                 brand.Status = 0;
                 brand.DateEncoded = DateTime.Now;
                 brand.DateUpdated = DateTime.Now;
                 db.Brands.Add(brand);
                 db.SaveChanges();
-                string code = brand.Code;// Brand.Add(brand, out int error);
-                IsAdded = code != String.Empty ? true : false;
+                IsAdded = brand.Id != 0 ? true : false;
                 message = name + " Successfully Added";
             }
             else
@@ -87,15 +73,15 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNBRAE002")]
-        public JsonResult Edit(string code, string name, string type)
+        public JsonResult Edit(int code, string name, int type)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             string message = "";
-            Brand brand = db.Brands.Where(b => b.Code == code).FirstOrDefault(); //Brand.Get(code);
+            Brand brand = db.Brands.Where(b => b.Id == code).FirstOrDefault(); //Brand.Get(code);
             if (brand != null)
             {
                 brand.Name = name;
-                brand.ProductType = type;
+                brand.ProductTypeId = type;
                 brand.DateUpdated = DateTime.Now;
                 brand.UpdatedBy = user.Name;
                 brand.DateUpdated = DateTime.Now;
@@ -108,10 +94,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNBRAR005")]
-        public JsonResult Delete(string code)
+        public JsonResult Delete(int code)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var brand = db.Brands.Where(b => b.Code == code).FirstOrDefault(); //Brand.Get(code);
+            var brand = db.Brands.Where(b => b.Id == code).FirstOrDefault(); //Brand.Get(code);
             if (brand != null)
             {
                 brand.Status = 2;
@@ -227,8 +213,7 @@ namespace ShopNow.Controllers
                         db.Brands.Add(new Brand
                         {
                             Name = row[model.Name].ToString(),
-                            Code = _generatedCode,
-                            ProductType = model.ProductType,
+                            ProductTypeId = model.ProductType,
                             Status = 0,
                             DateEncoded = DateTime.Now,
                             DateUpdated = DateTime.Now,
