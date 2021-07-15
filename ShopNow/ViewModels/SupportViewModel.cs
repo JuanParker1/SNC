@@ -33,10 +33,10 @@ namespace ShopNow.ViewModels
         public List<AssignList> List { get; set; }
         public class AssignList
         {
-            public string Code { get; set; }
-            public string ShopCode { get; set; }
+            public int Id { get; set; }
+            public int ShopId { get; set; }
             public string ShopName { get; set; }
-            public string OrderNo { get; set; }
+            public int OrderNo { get; set; }
             public int CartStatus { get; set; }
             public DateTime DateEncoded { get; set; }
         }

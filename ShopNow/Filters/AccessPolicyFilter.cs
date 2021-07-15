@@ -19,7 +19,7 @@ namespace ShopNow.Filters
             var customer = ((ShopNow.Helpers.Sessions.User)System.Web.HttpContext.Current.Session["USER"]);
                 if(customer != null)
                 {
-                    var roles = db.AccessPolicies.Where(i => i.CustomerCode.Equals(customer.Code) && i.Status == 0).Select(s => s.PageCode);
+                    var roles = db.AccessPolicies.Where(i => i.CustomerId.Equals(customer.Id) && i.Status == 0).Select(s => s.PageCode);
 
                     if (roles != null)
                     {

@@ -709,7 +709,7 @@ namespace ShopNow.Controllers
                 {
                     Name = i.Name,
                     Id = i.Id,
-                    MarketingAgentId = i.MarketingAgentId,
+                    MarketingAgentId =Convert.ToInt32(i.MarketingAgentId),
                     MarketingAgentName = i.MarketingAgentName
                 }).OrderBy(i => i.Name).ToList();
             return View(model.List);

@@ -106,10 +106,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNSUCD004")]
-        public JsonResult Delete(string code)
+        public JsonResult Delete(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var subcategory = db.SubCategories.FirstOrDefault(i => i.Code == code);  //SubCategory.Get(code);
+            var subcategory = db.SubCategories.FirstOrDefault(i => i.Id == id);  //SubCategory.Get(code);
             if (subcategory != null)
             {
                 subcategory.Status = 2;
@@ -124,9 +124,9 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNSUCL001")]
         public async Task<JsonResult> GetCategorySelect2(string q = "")
         {
-            var model = await db.Categories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductType == "FMCG").Select(i => new
+            var model = await db.Categories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 2).Select(i => new
             {
-                id = i.Code,
+                id = i.Id,
                 text = i.Name
             }).ToListAsync();
 

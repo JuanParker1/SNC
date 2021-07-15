@@ -20,8 +20,8 @@
             @using (Html.BeginForm("AssignDeliveryBoy", "Cart", FormMethod.Post, new { id = "AssignDeliveryBoyForm", role = "form", enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
-                <input type="hidden" name="CartCode" id="CartCode" value="@Model.CartCode" />
-                <input type="hidden" name="DeliveryBoyCode" id="DeliveryBoyCode" />
+                <input type="hidden" name="OrderId" id="OrderId" value="@Model.OrderId" />
+                <input type="hidden" name="DeliveryBoyId" id="DeliveryBoyId" value="@Model.DeliveryBoyId" />
                 <div class="card mb-4">
                     <div class="card-header">
                         <div class="row">
@@ -54,7 +54,7 @@
                                                 </td>
                                                 <td>@Math.Round(item.Meters / 1000, 2) Km </td>
                                                 <td>
-                                                    <input type="button" class="btn btn-sm btn-success assign" value="Assign" data-id="@item.Code" />
+                                                    <input type="button" class="btn btn-sm btn-success assign" value="Assign" data-id="@item.Id" />
                                                 </td>
                                             </tr>
                                             }
@@ -101,7 +101,7 @@
 
             $(".assign").click(function () {
                 var code = $(this).data('id');
-                $("#DeliveryBoyCode").val(code);
+                $("#DeliveryBoyId").val(code);
                 $("#AssignDeliveryBoyForm").submit();
             });
 

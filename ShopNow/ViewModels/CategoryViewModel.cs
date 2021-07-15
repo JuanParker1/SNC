@@ -26,7 +26,7 @@ namespace ShopNow.ViewModels
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string ProductType { get; set; }
+        public int ProductType { get; set; }
         public System.Data.DataTable DataTable { get; set; }
         public string button { get; set; }
         public string Filename { get; set; }

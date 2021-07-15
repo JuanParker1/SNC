@@ -20,7 +20,7 @@ namespace ShopNow.Controllers
             ViewBag.customer = _db.Customers.Where(i => i.Status == 0).Count();
             ViewBag.Shops = _db.Shops.Where(i => i.Status == 0).Count();
             ViewBag.Delivery = _db.DeliveryBoys.Where(i => i.Status == 0).Count();
-            ViewBag.Order = _db.Carts.Where(i => i.Status == 0 && i.OrderNo != null && i.CartStatus != 7 && i.CartStatus != 6).GroupBy(i => i.OrderNo).Count();
+            ViewBag.Order = _db.Orders.Where(i => i.Status == 0 && i.OrderNumber != 0 && i.Status != 7 && i.Status != 6).Count();
             //var authu = "";
 
             //var user = Customer.GetPhoneNumber(phoneNumber.ToString());

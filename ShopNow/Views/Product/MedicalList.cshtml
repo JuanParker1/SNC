@@ -16,10 +16,10 @@
             <form method="get" action="/Product/MedicalList">
                 <div class="row">
                     <div class="col-md-4">
-                        <select id="select-shop" class="form-control" name="ShopCode">
-                            @if (Model.ShopCode != null)
+                        <select id="select-shop" class="form-control" name="ShopId">
+                            @if (Model.ShopId != 0)
                             {
-                                <option value="@Model.ShopCode">@Model.ShopName</option>
+                                <option value="@Model.ShopId">@Model.ShopName</option>
                             }
                         </select>
                         <input type="hidden" name="ShopName" />
@@ -38,7 +38,7 @@
     </div>
     @Html.Grid(Model.ListItems).Columns(columns =>
 {
-    columns.Add(c => c.Name).Titled("Name").Encoded(false).Sanitized(false).RenderValueAs(model => Html.ActionLink(model.Name, "Details", new { code = @ShopNow.Helpers.AdminHelpers.ECode(model.Code) }).ToHtmlString()).Filterable(true).SetWidth(20);
+    columns.Add(c => c.Name).Titled("Name").Encoded(false).Sanitized(false).RenderValueAs(model => Html.ActionLink(model.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(model.Id) }).ToHtmlString()).Filterable(true).SetWidth(20);
     columns.Add(c => c.CategoryName).Titled("Category Name").Filterable(true).SetWidth(12);
     columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
     columns.Add(c => c.Percentage).Titled("Discount %").Filterable(true).SetWidth(10);
@@ -46,7 +46,7 @@
     .Encoded(false)
     .Sanitized(false)
     .RenderValueAs(o => Html.ActionLink("Edit", "MedicalEdit", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-sm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
-    + Html.ActionLink("Delete", "Delete", new { code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code), redirectPage=2 }, new { @class = "btn  btn-sm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
+    + Html.ActionLink("Delete", "Delete", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id), redirectPage=2 }, new { @class = "btn  btn-sm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
 }).WithPaging(20).Sortable(true)
 </div>
 

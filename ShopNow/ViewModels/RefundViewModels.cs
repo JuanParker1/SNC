@@ -16,7 +16,7 @@ namespace ShopNow.ViewModels
         public class ListItem
         {
             public string PaymentId { get; set; }
-            public string OrderNo { get; set; }
+            public int OrderNo { get; set; }
             public string CustomerName { get; set; }
             public string CustomerPhoneNo { get; set; }
             public double? Amount { get; set; }

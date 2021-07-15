@@ -13,7 +13,7 @@
             <h5 class="text-success" style="letter-spacing:1px">Order is being prepared List</h5>
         </div>
         <div class="col-md-3">
-            <select name="ShopCode" id="ShopCode" class="form-control"></select>
+            <select name="ShopId" id="ShopId" class="form-control"></select>
             <input type="hidden" name="ShopName" id="ShopName" />
         </div>
         <div class="col-md-1">
@@ -34,12 +34,12 @@
     columns.Add()
     .Encoded(false)
     .Sanitized(false)
-    .RenderValueAs(o => Html.ActionLink("View", "Edit", new { orderno=o.OrderNo, code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code) }, new { @class = "btn btn-vsm btn-info mr-1",  }).ToHtmlString()
-    + Html.ActionLink("Pickup Slip", "PickupSlip", new { orderno = o.OrderNo, code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code) }, new { @class = "btn btn-vsm btn-secondary mr-1", }).ToHtmlString()).Titled("Action").SetWidth(15);
+    .RenderValueAs(o => Html.ActionLink("View", "Edit", new { orderno=o.OrderNo, id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-info mr-1",  }).ToHtmlString()
+    + Html.ActionLink("Pickup Slip", "PickupSlip", new { orderno = o.OrderNo, id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-secondary mr-1", }).ToHtmlString()).Titled("Action").SetWidth(15);
     columns.Add()
     .Encoded(false)
     .Sanitized(false)
-        .RenderValueAs(o => (o.RefundAmount == 0 || o.RefundAmount == null) ? "<a href='#modal-refund' data-code='" + o.Code + "' data-toggle='modal' data-target='#modal-refund' class='btn btn-vsm btn-primary btn-modal-refund'>Refund</a>" : o.RefundAmount.Value > 0 ? "<span>" + o.RefundAmount + "(" + o.RefundRemark + ")" + "</span>" : "N/A").Titled("Refund").SetWidth(15);
+        .RenderValueAs(o => (o.RefundAmount == 0 || o.RefundAmount == null) ? "<a href='#modal-refund' data-code='" + o.Id + "' data-toggle='modal' data-target='#modal-refund' class='btn btn-vsm btn-primary btn-modal-refund'>Refund</a>" : o.RefundAmount.Value > 0 ? "<span>" + o.RefundAmount + "(" + o.RefundRemark + ")" + "</span>" : "N/A").Titled("Refund").SetWidth(15);
     //.RenderValueAs(o => (o.RefundAmount == 0 || o.RefundAmount == null) ? "<a href='#modal-refund' data-code='" + o.Code + "' data-toggle='modal' data-target='#modal-refund' class='btn btn-vsm btn-primary btn-modal-refund'>Refund</a>" : "N/A").Titled("Refund").SetWidth(10);
 }).WithPaging(20).Sortable(true)
 </div>
@@ -49,7 +49,7 @@
         <div class="modal-content">
             <div class="modal-body">
                 <form method="get" action="/Cart/AddRefundFromShopOrderProcessing">
-                    <input type="hidden" name="Code" />
+                    <input type="hidden" name="Id" />
                     <h5>Initiate Refund</h5>
                     <div class="form-group">
                         <label>Amount</label>
@@ -92,13 +92,13 @@
             });
 
             $("#Filter").click(function () {
-                var shopcode = $("#ShopCode").val();
-                window.location.href = "/Cart/OrderPrepared/?shopcode=" + shopcode;
+                var shopId = $("#ShopId").val();
+                window.location.href = "/Cart/OrderPrepared/?shopId=" + shopId;
             });
 
             $(".btn-modal-refund").click(function () {
                 var code = $(this).data('code');
-                $('[name="Code"]').val(code);
+                $('[name="Id"]').val(code);
                 $('#modal-refund').modal('show');
             });
 

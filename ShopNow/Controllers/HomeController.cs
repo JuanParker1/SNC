@@ -134,8 +134,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNHOMCP002")]
         public ActionResult ChangePassword(ChangePasswordViewModel cpm)
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            var ExistingDetails = _db.Customers.FirstOrDefault(i => i.Id == user.Id && i.Status == 0);
+            string LoginMemberId = Convert.ToString(Session["UserCode"]);
+            var ExistingDetails = _db.Customers.FirstOrDefault(i => i.Id == Convert.ToInt32(LoginMemberId) && i.Status == 0);
             if (cpm.OldPassword == ExistingDetails.Password)
             {
                 ExistingDetails.Password = cpm.NewPassword;

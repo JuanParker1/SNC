@@ -39,7 +39,7 @@ namespace ShopNow.ViewModels
             public int Id { get; set; }
             public string CustomerCode { get; set; }
             public string CustomerName { get; set; }
-            public string ShopCode { get; set; }
+            public int ShopId { get; set; }
             public string ShopName { get; set; }
             public string ProductCode { get; set; }
             public string ProductName { get; set; }
@@ -58,7 +58,7 @@ namespace ShopNow.ViewModels
             public int Status { get; set; }
             public DateTime DateEncoded { get; set; }
             public DateTime DateUpdated { get; set; }
-            public string OrderNo { get; set; }
+            public int OrderNo { get; set; }
             public double Amount { get; set; }
         }
     }

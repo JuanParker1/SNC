@@ -12,7 +12,7 @@
         <div class="col-md-2 col-sm-4 mb-2 data-search">
         </div>
         <div class="col-md-2">
-            <select name="ShopCode" id="ShopCode" class="form-control"></select>
+            <select name="ShopId" id="ShopId" class="form-control"></select>
             <input type="hidden" name="ShopName" id="ShopName" />
         </div>
         <div class="col-md-1">
@@ -43,7 +43,7 @@
                                     <td>@item.OrderNo - @item.ShopName</td>
                                     <td>@item.DateEncoded.ToString("dd/MMM/yyyy hh:mm tt")</td>
                                     <td class="text-nowrap">
-                                        <a href="~/Cart/AssignDeliveryBoy/?code=@item.OrderNo" class="btn btn-warning btn-sm" style="padding: 3px 16px">Assign</a>
+                                        <a href="~/Cart/AssignDeliveryBoy/?id=@item.OrderNo" class="btn btn-warning btn-sm" style="padding: 3px 16px">Assign</a>
                                     </td>
                                 </tr>
                             }
@@ -152,8 +152,8 @@
             });
 
             $("#Filter").click(function () {
-                var shopcode = $("#ShopCode").val();
-                window.location.href = "/Support/LiveDeliveryboyAssignment/?shopcode=" + shopcode;
+                var shopId = $("#ShopId").val();
+                window.location.href = "/Support/LiveDeliveryboyAssignment/?shopId=" + shopId;
             });
             $("#ClearFilter").click(function () {
                 window.location.href = "/Support/LiveDeliveryboyAssignment";

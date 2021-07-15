@@ -47,18 +47,18 @@ namespace ShopNow.Controllers
         {
 
             var brandOwner = _mapper.Map<BrandOwnerRegisterEditViewModel, BrandOwner>(model);
-            brandOwner.Code = _generatedCode;
+           // brandOwner.Code = _generatedCode;
             brandOwner.Status = 0;
             brandOwner.DateEncoded = DateTime.Now;
             brandOwner.DateUpdated = DateTime.Now;
             _db.BrandOwners.Add(brandOwner);
             _db.SaveChanges();
-            brandOwner.Code = brandOwner.Code;// BrandOwner.Add(brandOwner, out int error);
+         //   brandOwner.Code = brandOwner.Code;// BrandOwner.Add(brandOwner, out int error);
             if (model.BrandOwnerImage != null)
             {
-                uc.UploadImage(model.BrandOwnerImage, brandOwner.Code + "_", "/Content/BrandImage/", Server, _db, "", brandOwner.Code, "");
-                var brandOwnerImage = _db.BrandOwners.FirstOrDefault(i => i.Code == brandOwner.Code); //BrandOwner.Get(brandOwner.Code);
-                brandOwnerImage.ImageAuthoriseBrandPath = brandOwner.Code + "_" + model.BrandOwnerImage.FileName;
+                uc.UploadImage(model.BrandOwnerImage, brandOwner.Id + "_", "/Content/BrandImage/", Server, _db, "", brandOwner.Id.ToString(), "");
+                var brandOwnerImage = _db.BrandOwners.FirstOrDefault(i => i.Id == brandOwner.Id); //BrandOwner.Get(brandOwner.Code);
+                brandOwnerImage.ImageAuthoriseBrandPath = brandOwner.Id + "_" + model.BrandOwnerImage.FileName;
                 brandOwnerImage.DateUpdated = DateTime.Now;
                 _db.Entry(brandOwnerImage).State = System.Data.Entity.EntityState.Modified;
                 _db.SaveChanges();
@@ -71,7 +71,7 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["BRANDUSER"]);
             ViewBag.Name = user.Name;
-            var brandOwner = _db.BrandOwners.FirstOrDefault(i => i.Code == user.Code);//BrandOwner.Get(user.Code);
+            var brandOwner = _db.BrandOwners.FirstOrDefault(i => i.Id == user.Id);//BrandOwner.Get(user.Code);
             var model = _mapper.Map<BrandOwner, BrandOwnerRegisterEditViewModel>(brandOwner);
             return View(model);
         }
@@ -183,7 +183,7 @@ namespace ShopNow.Controllers
         public ActionResult ChangePassword(ChangePasswordViewModel cpm)
         {
             string LoginMemberId = Convert.ToString(Session["UserCode"]);
-            var ExistingDetails = _db.BrandOwners.FirstOrDefault(i => i.Code == LoginMemberId && i.Status == 0);
+            var ExistingDetails = _db.BrandOwners.FirstOrDefault(i => i.Id == Convert.ToInt32(LoginMemberId) && i.Status == 0);
             if (cpm.OldPassword == ExistingDetails.Password)
             {
                 ExistingDetails.Password = cpm.NewPassword;

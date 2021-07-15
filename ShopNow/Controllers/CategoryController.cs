@@ -46,18 +46,18 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNCATS003")]
-        public JsonResult Save(string name = "", string type = "", int orderNo = 1)
+        public JsonResult Save(string name = "", int type = 0, int orderNo = 1)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             bool IsAdded = false;
             string message = "";
             string message1 = "";
-            var categoryname = db.Categories.FirstOrDefault(i => i.Name == name && i.ProductType == type && i.Status == 0);//Category.GetNameType(name, type);
+            var categoryname = db.Categories.FirstOrDefault(i => i.Name == name && i.ProductTypeId == type && i.Status == 0);//Category.GetNameType(name, type);
             if (categoryname == null)
             {
                 var category = new Category();
                 category.Name = name;
-                category.ProductType = type;
+                category.ProductTypeId = type;
                 category.OrderNo = orderNo;
                 category.CreatedBy = user.Name;
                 category.UpdatedBy = user.Name;
@@ -77,7 +77,7 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNCATE004")]
-        public JsonResult Edit(int code, string name, string type, int orderNo)
+        public JsonResult Edit(int code, string name, int type, int orderNo)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             string message = "";
@@ -85,7 +85,7 @@ namespace ShopNow.Controllers
             if (category != null)
             {
                 category.Name = name;
-                category.ProductType = type;
+                category.ProductTypeId = type;
                 category.OrderNo = orderNo;
                 category.DateUpdated = DateTime.Now;
                 category.UpdatedBy = user.Name;
@@ -231,7 +231,7 @@ namespace ShopNow.Controllers
                         db.Categories.Add(new Category
                         {
                             Name = row[model.Name].ToString(),
-                            ProductType = model.ProductType,
+                            ProductTypeId = model.ProductType,
                             Status = 0,
                             DateEncoded = DateTime.Now,
                             DateUpdated = DateTime.Now,

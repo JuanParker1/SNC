@@ -282,7 +282,7 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             if (string.IsNullOrEmpty(dInt.ToString()))
                 return HttpNotFound();
-            var cart = db.Orders.FirstOrDefault(i => i.id == id);
+            var cart = db.Orders.FirstOrDefault(i => i.id == dInt);
             var payment = db.Payments.FirstOrDefault(i => i.OrderNo == orderno);
             var model = new CartListViewModel();
             if (cart != null)
@@ -335,7 +335,7 @@ namespace ShopNow.Controllers
             var dInt = AdminHelpers.DCodeInt(id.ToString());
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var cart = db.Orders.FirstOrDefault(i => i.id == id);
+            var cart = db.Orders.FirstOrDefault(i => i.id == dInt);
             var model = new CartListViewModel();
             if (cart != null)
             {
@@ -967,7 +967,7 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var cart = db.Orders.FirstOrDefault(i => i.id == model.OrderId);
+            var cart = db.Orders.FirstOrDefault(i => i.OrderNumber == model.Id);
             if (cart != null && model.DeliveryBoyId != 0)
             {
                 var cartList = db.OrderItems.Where(i => i.OrderId == cart.id).ToList();
@@ -1008,250 +1008,248 @@ namespace ShopNow.Controllers
 
         }
 
-        [AccessPolicy(PageCode = "SHNCARDAR024")]
-        public ActionResult DeliveredAmountReport(DateTime? StartDate, DateTime? EndDate, string ShopCode = "")
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            var model = new CartReportViewModel();
+        //[AccessPolicy(PageCode = "SHNCARDAR024")]
+        //public ActionResult DeliveredAmountReport(DateTime? StartDate, DateTime? EndDate, string ShopCode = "")
+        //{
+        //    var user = ((Helpers.Sessions.User)Session["USER"]);
+        //    ViewBag.Name = user.Name;
+        //    var model = new CartReportViewModel();
 
-            if (ShopCode != "")
-            {
-                var shop = db.Shops.FirstOrDefault(i => i.Code == ShopCode);//Shop.Get(ShopCode);
-                if (StartDate != null && EndDate != null)
-                {
-                    DateTime startDatetFilter = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day);
-                    DateTime endDateFilter = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day).AddDays(1);
+        //    if (ShopCode != "")
+        //    {
+        //        var shop = db.Shops.FirstOrDefault(i => i.Code == ShopCode);//Shop.Get(ShopCode);
+        //        if (StartDate != null && EndDate != null)
+        //        {
+        //            DateTime startDatetFilter = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day);
+        //            DateTime endDateFilter = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day).AddDays(1);
 
-                    model.List = db.Payments.Join(db.Carts, p => p.OrderNo, c => c.OrderNo, (p, c) => new { p, c })
-                    .Where(i => i.p.DateEncoded >= startDatetFilter && i.p.DateEncoded <= endDateFilter && i.p.Status == 0 && i.c.CartStatus == 6 && i.c.ShopCode == ShopCode && i.p.PaymentMode == "Cash On Hand")
-                     .GroupBy(i => i.p.OrderNo)
-                     .Select(i => new CartReportViewModel.CartReportList
-                     {
-                         Code = i.Any() ? i.FirstOrDefault().p.Code : "",
-                         ShopName = i.Any() ? i.FirstOrDefault().p.ShopName : "",
-                         OrderNo = i.Any() ? i.FirstOrDefault().p.OrderNo : "",
-                         DeliveryAddress = i.Any() ? i.FirstOrDefault().c.DeliveryAddress : "",
-                         PhoneNumber = i.Any() ? i.FirstOrDefault().c.PhoneNumber : "",
-                         CartStatus = i.Any() ? i.FirstOrDefault().c.CartStatus : 0,
-                         DateEncoded = i.Any() ? i.FirstOrDefault().p.DateEncoded : DateTime.Now,
-                         Amount = i.Any() ? i.FirstOrDefault().p.OriginalAmount : 0.0,
-                     }).OrderByDescending(i => i.DateEncoded).ToList();
-                    model.StartingDate = StartDate.Value.ToString("yyyy/MM/dd");
-                    model.EndingDate = EndDate.Value.ToString("yyyy/MM/dd");
-                    model.ShopCode = ShopCode;
-                    model.ShopName = shop.Name;
-                }
-                else
-                {
-                    model.List = db.Payments.Join(db.Carts, p => p.OrderNo, c => c.OrderNo, (p, c) => new { p, c })
-                      .Where(i => i.p.Status == 0 && i.c.CartStatus == 6 && i.c.ShopCode == ShopCode && i.p.PaymentMode == "Cash On Hand")
-                      .GroupBy(i => i.p.OrderNo)
-                      .Select(i => new CartReportViewModel.CartReportList
-                      {
-                          Code = i.Any() ? i.FirstOrDefault().p.Code : "",
-                          ShopName = i.Any() ? i.FirstOrDefault().p.ShopName : "",
-                          OrderNo = i.Any() ? i.FirstOrDefault().p.OrderNo : "",
-                          DeliveryAddress = i.Any() ? i.FirstOrDefault().c.DeliveryAddress : "",
-                          PhoneNumber = i.Any() ? i.FirstOrDefault().c.PhoneNumber : "",
-                          CartStatus = i.Any() ? i.FirstOrDefault().c.CartStatus : 0,
-                          DateEncoded = i.Any() ? i.FirstOrDefault().p.DateEncoded : DateTime.Now,
-                          Amount = i.Any() ? i.FirstOrDefault().p.OriginalAmount : 0.0,
-                      }).OrderByDescending(i => i.DateEncoded).ToList();
-                    model.ShopCode = ShopCode;
-                    model.ShopName = shop.Name;
-                }
+        //            model.List = db.Payments.Join(db.Carts, p => p.OrderNo, c => c.OrderNo, (p, c) => new { p, c })
+        //            .Where(i => i.p.DateEncoded >= startDatetFilter && i.p.DateEncoded <= endDateFilter && i.p.Status == 0 && i.c.CartStatus == 6 && i.c.ShopCode == ShopCode && i.p.PaymentMode == "Cash On Hand")
+        //             .GroupBy(i => i.p.OrderNo)
+        //             .Select(i => new CartReportViewModel.CartReportList
+        //             {
+        //                 Code = i.Any() ? i.FirstOrDefault().p.Code : "",
+        //                 ShopName = i.Any() ? i.FirstOrDefault().p.ShopName : "",
+        //                 OrderNo = i.Any() ? i.FirstOrDefault().p.OrderNo : "",
+        //                 DeliveryAddress = i.Any() ? i.FirstOrDefault().c.DeliveryAddress : "",
+        //                 PhoneNumber = i.Any() ? i.FirstOrDefault().c.PhoneNumber : "",
+        //                 CartStatus = i.Any() ? i.FirstOrDefault().c.CartStatus : 0,
+        //                 DateEncoded = i.Any() ? i.FirstOrDefault().p.DateEncoded : DateTime.Now,
+        //                 Amount = i.Any() ? i.FirstOrDefault().p.OriginalAmount : 0.0,
+        //             }).OrderByDescending(i => i.DateEncoded).ToList();
+        //            model.StartingDate = StartDate.Value.ToString("yyyy/MM/dd");
+        //            model.EndingDate = EndDate.Value.ToString("yyyy/MM/dd");
+        //            model.ShopCode = ShopCode;
+        //            model.ShopName = shop.Name;
+        //        }
+        //        else
+        //        {
+        //            model.List = db.Payments.Join(db.Carts, p => p.OrderNo, c => c.OrderNo, (p, c) => new { p, c })
+        //              .Where(i => i.p.Status == 0 && i.c.CartStatus == 6 && i.c.ShopCode == ShopCode && i.p.PaymentMode == "Cash On Hand")
+        //              .GroupBy(i => i.p.OrderNo)
+        //              .Select(i => new CartReportViewModel.CartReportList
+        //              {
+        //                  Code = i.Any() ? i.FirstOrDefault().p.Code : "",
+        //                  ShopName = i.Any() ? i.FirstOrDefault().p.ShopName : "",
+        //                  OrderNo = i.Any() ? i.FirstOrDefault().p.OrderNo : "",
+        //                  DeliveryAddress = i.Any() ? i.FirstOrDefault().c.DeliveryAddress : "",
+        //                  PhoneNumber = i.Any() ? i.FirstOrDefault().c.PhoneNumber : "",
+        //                  CartStatus = i.Any() ? i.FirstOrDefault().c.CartStatus : 0,
+        //                  DateEncoded = i.Any() ? i.FirstOrDefault().p.DateEncoded : DateTime.Now,
+        //                  Amount = i.Any() ? i.FirstOrDefault().p.OriginalAmount : 0.0,
+        //              }).OrderByDescending(i => i.DateEncoded).ToList();
+        //            model.ShopCode = ShopCode;
+        //            model.ShopName = shop.Name;
+        //        }
 
-            }
-            else
-            {
-                if (StartDate != null && EndDate != null)
-                {
-                    DateTime startDatetFilter = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day);
-                    DateTime endDateFilter = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day).AddDays(1);
+        //    }
+        //    else
+        //    {
+        //        if (StartDate != null && EndDate != null)
+        //        {
+        //            DateTime startDatetFilter = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day);
+        //            DateTime endDateFilter = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day).AddDays(1);
 
-                    model.List = db.Payments.Join(db.Carts, p => p.OrderNo, c => c.OrderNo, (p, c) => new { p, c })
-                    .Where(i => i.p.DateEncoded >= startDatetFilter && i.p.DateEncoded <= endDateFilter && i.p.Status == 0 && i.c.CartStatus == 6 && i.p.PaymentMode == "Cash On Hand")
-                     .GroupBy(i => i.p.OrderNo)
-                     .Select(i => new CartReportViewModel.CartReportList
-                     {
-                         Code = i.Any() ? i.FirstOrDefault().p.Code : "",
-                         ShopName = i.Any() ? i.FirstOrDefault().p.ShopName : "",
-                         OrderNo = i.Any() ? i.FirstOrDefault().p.OrderNo : "",
-                         DeliveryAddress = i.Any() ? i.FirstOrDefault().c.DeliveryAddress : "",
-                         PhoneNumber = i.Any() ? i.FirstOrDefault().c.PhoneNumber : "",
-                         CartStatus = i.Any() ? i.FirstOrDefault().c.CartStatus : 0,
-                         DateEncoded = i.Any() ? i.FirstOrDefault().p.DateEncoded : DateTime.Now,
-                         Amount = i.Any() ? i.FirstOrDefault().p.OriginalAmount : 0.0,
-                     }).OrderByDescending(i => i.DateEncoded).ToList();
-                    model.StartingDate = StartDate.Value.ToString("yyyy/MM/dd");
-                    model.EndingDate = EndDate.Value.ToString("yyyy/MM/dd");
-                }
-                else
-                {
-                    model.List = db.Payments.Join(db.Carts, p => p.OrderNo, c => c.OrderNo, (p, c) => new { p, c })
-                       .Where(i => i.p.Status == 0 && i.c.CartStatus == 6 && i.p.PaymentMode == "Cash On Hand")
-                       .GroupBy(i => i.p.OrderNo)
-                       .Select(i => new CartReportViewModel.CartReportList
-                       {
-                           Code = i.Any() ? i.FirstOrDefault().p.Code : "",
-                           ShopName = i.Any() ? i.FirstOrDefault().p.ShopName : "",
-                           OrderNo = i.Any() ? i.FirstOrDefault().p.OrderNo : "",
-                           DeliveryAddress = i.Any() ? i.FirstOrDefault().c.DeliveryAddress : "",
-                           PhoneNumber = i.Any() ? i.FirstOrDefault().c.PhoneNumber : "",
-                           CartStatus = i.Any() ? i.FirstOrDefault().c.CartStatus : 0,
-                           DateEncoded = i.Any() ? i.FirstOrDefault().p.DateEncoded : DateTime.Now,
-                           Amount = i.Any() ? i.FirstOrDefault().p.OriginalAmount : 0.0,
-                       }).OrderByDescending(i => i.DateEncoded).ToList();
-                }
-            }
-            return View(model.List);
-        }
+        //            model.List = db.Payments.Join(db.Carts, p => p.OrderNo, c => c.OrderNo, (p, c) => new { p, c })
+        //            .Where(i => i.p.DateEncoded >= startDatetFilter && i.p.DateEncoded <= endDateFilter && i.p.Status == 0 && i.c.CartStatus == 6 && i.p.PaymentMode == "Cash On Hand")
+        //             .GroupBy(i => i.p.OrderNo)
+        //             .Select(i => new CartReportViewModel.CartReportList
+        //             {
+        //                 Code = i.Any() ? i.FirstOrDefault().p.Code : "",
+        //                 ShopName = i.Any() ? i.FirstOrDefault().p.ShopName : "",
+        //                 OrderNo = i.Any() ? i.FirstOrDefault().p.OrderNo : "",
+        //                 DeliveryAddress = i.Any() ? i.FirstOrDefault().c.DeliveryAddress : "",
+        //                 PhoneNumber = i.Any() ? i.FirstOrDefault().c.PhoneNumber : "",
+        //                 CartStatus = i.Any() ? i.FirstOrDefault().c.CartStatus : 0,
+        //                 DateEncoded = i.Any() ? i.FirstOrDefault().p.DateEncoded : DateTime.Now,
+        //                 Amount = i.Any() ? i.FirstOrDefault().p.OriginalAmount : 0.0,
+        //             }).OrderByDescending(i => i.DateEncoded).ToList();
+        //            model.StartingDate = StartDate.Value.ToString("yyyy/MM/dd");
+        //            model.EndingDate = EndDate.Value.ToString("yyyy/MM/dd");
+        //        }
+        //        else
+        //        {
+        //            model.List = db.Payments.Join(db.Carts, p => p.OrderNo, c => c.OrderNo, (p, c) => new { p, c })
+        //               .Where(i => i.p.Status == 0 && i.c.CartStatus == 6 && i.p.PaymentMode == "Cash On Hand")
+        //               .GroupBy(i => i.p.OrderNo)
+        //               .Select(i => new CartReportViewModel.CartReportList
+        //               {
+        //                   Code = i.Any() ? i.FirstOrDefault().p.Code : "",
+        //                   ShopName = i.Any() ? i.FirstOrDefault().p.ShopName : "",
+        //                   OrderNo = i.Any() ? i.FirstOrDefault().p.OrderNo : "",
+        //                   DeliveryAddress = i.Any() ? i.FirstOrDefault().c.DeliveryAddress : "",
+        //                   PhoneNumber = i.Any() ? i.FirstOrDefault().c.PhoneNumber : "",
+        //                   CartStatus = i.Any() ? i.FirstOrDefault().c.CartStatus : 0,
+        //                   DateEncoded = i.Any() ? i.FirstOrDefault().p.DateEncoded : DateTime.Now,
+        //                   Amount = i.Any() ? i.FirstOrDefault().p.OriginalAmount : 0.0,
+        //               }).OrderByDescending(i => i.DateEncoded).ToList();
+        //        }
+        //    }
+        //    return View(model.List);
+        //}
+
+        //[AccessPolicy(PageCode = "")]
+        //public ActionResult ShopNowChat_ShopReport(DateTime? StartDate, DateTime? EndDate, string shopcode = "")
+        //{
+        //    var user = ((Helpers.Sessions.User)Session["USER"]);
+        //    ViewBag.Name = user.Name;
+        //    var model = new CartReportViewModel();
+
+        //    if (shopcode != "")
+        //    {
+        //        var shop = db.Shops.FirstOrDefault(i => i.Code == shopcode);//Shop.Get(shopcode);
+        //        if (StartDate != null && EndDate != null)
+        //        {
+        //            DateTime startDatetFilter = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day);
+        //            DateTime endDateFilter = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day).AddDays(1);
+
+        //            model.List = db.Payments.Join(db.Carts, p => p.OrderNo, c => c.OrderNo, (p, c) => new { p, c })
+        //            .Where(i => i.p.DateEncoded >= startDatetFilter && i.p.DateEncoded <= endDateFilter 
+        //            && i.p.Status == 0 && i.c.CartStatus == 6 && i.c.ShopCode == shopcode)
+        //             .GroupBy(i => i.p.OrderNo)
+        //             .Select(i => new CartReportViewModel.CartReportList
+        //             {
+        //                 Code = i.Any() ? i.FirstOrDefault().c.Code : "",
+        //                 ShopName = i.Any() ? i.FirstOrDefault().p.ShopName : "",
+        //                 OrderNo = i.Any() ? i.FirstOrDefault().p.OrderNo : "",
+        //                 CartStatus = i.Any() ? i.FirstOrDefault().c.CartStatus : 0,
+        //                 DateEncoded = i.Any() ? i.FirstOrDefault().p.DateEncoded : DateTime.Now,
+        //                 OriginalAmount = i.Any() ? i.FirstOrDefault().p.OriginalAmount : 0.0,
+        //                 ShopPaymentStatus = i.Any() ? i.FirstOrDefault().c.ShopPaymentStatus : 0
+        //             }).OrderByDescending(i => i.DateEncoded).ToList();
+        //            model.StartingDate = StartDate.Value.ToString("yyyy/MM/dd");
+        //            model.EndingDate = EndDate.Value.ToString("yyyy/MM/dd");
+        //            model.ShopCode = shopcode;
+        //            model.ShopName = shop.Name;
+        //        }
+        //        else
+        //        {
+        //            model.List = db.Payments.Join(db.Carts, p => p.OrderNo, c => c.OrderNo, (p, c) => new { p, c })
+        //              .Where(i => i.p.Status == 0 && i.c.CartStatus == 6 && i.c.ShopCode == shopcode)
+        //              .GroupBy(i => i.p.OrderNo)
+        //              .Select(i => new CartReportViewModel.CartReportList
+        //              {
+        //                  Code = i.Any() ? i.FirstOrDefault().c.Code : "",
+        //                  ShopName = i.Any() ? i.FirstOrDefault().p.ShopName : "",
+        //                  OrderNo = i.Any() ? i.FirstOrDefault().p.OrderNo : "",
+        //                  CartStatus = i.Any() ? i.FirstOrDefault().c.CartStatus : 0,
+        //                  DateEncoded = i.Any() ? i.FirstOrDefault().p.DateEncoded : DateTime.Now,
+        //                  OriginalAmount = i.Any() ? i.FirstOrDefault().p.OriginalAmount : 0.0,
+        //                  ShopPaymentStatus = i.Any() ? i.FirstOrDefault().c.ShopPaymentStatus : 0
+        //              }).OrderByDescending(i => i.DateEncoded).ToList();
+        //            model.ShopCode = shopcode;
+        //            model.ShopName = shop.Name;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        if (StartDate != null && EndDate != null)
+        //        {
+        //            DateTime startDatetFilter = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day);
+        //            DateTime endDateFilter = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day).AddDays(1);
+
+        //            model.List = db.Payments.Join(db.Carts, p => p.OrderNo, c => c.OrderNo, (p, c) => new { p, c })
+        //            .Where(i => i.p.DateEncoded >= startDatetFilter && i.p.DateEncoded <= endDateFilter && i.p.Status == 0 && i.c.CartStatus == 6)
+        //             .GroupBy(i => i.p.OrderNo)
+        //             .Select(i => new CartReportViewModel.CartReportList
+        //             {
+        //                 Code = i.Any() ? i.FirstOrDefault().c.Code : "",
+        //                 ShopName = i.Any() ? i.FirstOrDefault().p.ShopName : "",
+        //                 OrderNo = i.Any() ? i.FirstOrDefault().p.OrderNo : "",
+        //                 CartStatus = i.Any() ? i.FirstOrDefault().c.CartStatus : 0,
+        //                 DateEncoded = i.Any() ? i.FirstOrDefault().p.DateEncoded : DateTime.Now,
+        //                 OriginalAmount = i.Any() ? i.FirstOrDefault().p.OriginalAmount : 0.0,
+        //                 ShopPaymentStatus = i.Any() ? i.FirstOrDefault().c.ShopPaymentStatus : 0
+        //             }).OrderByDescending(i => i.DateEncoded).ToList();
+        //            model.StartingDate = StartDate.Value.ToString("yyyy/MM/dd");
+        //            model.EndingDate = EndDate.Value.ToString("yyyy/MM/dd");
+        //        }
+        //        else
+        //        {
+        //            model.List = db.Payments.Join(db.Carts, p => p.OrderNo, c => c.OrderNo, (p, c) => new { p, c })
+        //               .Where(i => i.p.Status == 0 && i.c.CartStatus == 6)
+        //               .GroupBy(i => i.p.OrderNo)
+        //               .Select(i => new CartReportViewModel.CartReportList
+        //               {
+        //                   Code = i.Any() ? i.FirstOrDefault().c.Code : "",
+        //                   ShopName = i.Any() ? i.FirstOrDefault().p.ShopName : "",
+        //                   OrderNo = i.Any() ? i.FirstOrDefault().p.OrderNo : "",
+        //                   CartStatus = i.Any() ? i.FirstOrDefault().c.CartStatus : 0,
+        //                   DateEncoded = i.Any() ? i.FirstOrDefault().p.DateEncoded : DateTime.Now,
+        //                   OriginalAmount = i.Any() ? i.FirstOrDefault().p.OriginalAmount : 0.0,
+        //                   ShopPaymentStatus = i.Any() ? i.FirstOrDefault().c.ShopPaymentStatus : 0
+        //               }).OrderByDescending(i => i.DateEncoded).ToList();
+        //        }
+        //    }
+        //    return View(model);
+        //}
 
         [AccessPolicy(PageCode = "")]
-        public ActionResult ShopNowChat_ShopReport(DateTime? StartDate, DateTime? EndDate, string shopcode = "")
+        public ActionResult DeliveryBoy_ShopNowChatReport(DateTime? StartDate, DateTime? EndDate, int deliveryboyId = 0)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new CartReportViewModel();
 
-            if (shopcode != "")
-            {
-                var shop = db.Shops.FirstOrDefault(i => i.Code == shopcode);//Shop.Get(shopcode);
-                if (StartDate != null && EndDate != null)
-                {
-                    DateTime startDatetFilter = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day);
-                    DateTime endDateFilter = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day).AddDays(1);
-
-                    model.List = db.Payments.Join(db.Carts, p => p.OrderNo, c => c.OrderNo, (p, c) => new { p, c })
-                    .Where(i => i.p.DateEncoded >= startDatetFilter && i.p.DateEncoded <= endDateFilter 
-                    && i.p.Status == 0 && i.c.CartStatus == 6 && i.c.ShopCode == shopcode)
-                     .GroupBy(i => i.p.OrderNo)
-                     .Select(i => new CartReportViewModel.CartReportList
-                     {
-                         Code = i.Any() ? i.FirstOrDefault().c.Code : "",
-                         ShopName = i.Any() ? i.FirstOrDefault().p.ShopName : "",
-                         OrderNo = i.Any() ? i.FirstOrDefault().p.OrderNo : "",
-                         CartStatus = i.Any() ? i.FirstOrDefault().c.CartStatus : 0,
-                         DateEncoded = i.Any() ? i.FirstOrDefault().p.DateEncoded : DateTime.Now,
-                         OriginalAmount = i.Any() ? i.FirstOrDefault().p.OriginalAmount : 0.0,
-                         ShopPaymentStatus = i.Any() ? i.FirstOrDefault().c.ShopPaymentStatus : 0
-                     }).OrderByDescending(i => i.DateEncoded).ToList();
-                    model.StartingDate = StartDate.Value.ToString("yyyy/MM/dd");
-                    model.EndingDate = EndDate.Value.ToString("yyyy/MM/dd");
-                    model.ShopCode = shopcode;
-                    model.ShopName = shop.Name;
-                }
-                else
-                {
-                    model.List = db.Payments.Join(db.Carts, p => p.OrderNo, c => c.OrderNo, (p, c) => new { p, c })
-                      .Where(i => i.p.Status == 0 && i.c.CartStatus == 6 && i.c.ShopCode == shopcode)
-                      .GroupBy(i => i.p.OrderNo)
-                      .Select(i => new CartReportViewModel.CartReportList
-                      {
-                          Code = i.Any() ? i.FirstOrDefault().c.Code : "",
-                          ShopName = i.Any() ? i.FirstOrDefault().p.ShopName : "",
-                          OrderNo = i.Any() ? i.FirstOrDefault().p.OrderNo : "",
-                          CartStatus = i.Any() ? i.FirstOrDefault().c.CartStatus : 0,
-                          DateEncoded = i.Any() ? i.FirstOrDefault().p.DateEncoded : DateTime.Now,
-                          OriginalAmount = i.Any() ? i.FirstOrDefault().p.OriginalAmount : 0.0,
-                          ShopPaymentStatus = i.Any() ? i.FirstOrDefault().c.ShopPaymentStatus : 0
-                      }).OrderByDescending(i => i.DateEncoded).ToList();
-                    model.ShopCode = shopcode;
-                    model.ShopName = shop.Name;
-                }
-            }
-            else
+            if (deliveryboyId != 0)
             {
                 if (StartDate != null && EndDate != null)
                 {
                     DateTime startDatetFilter = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day);
                     DateTime endDateFilter = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day).AddDays(1);
 
-                    model.List = db.Payments.Join(db.Carts, p => p.OrderNo, c => c.OrderNo, (p, c) => new { p, c })
-                    .Where(i => i.p.DateEncoded >= startDatetFilter && i.p.DateEncoded <= endDateFilter && i.p.Status == 0 && i.c.CartStatus == 6)
-                     .GroupBy(i => i.p.OrderNo)
-                     .Select(i => new CartReportViewModel.CartReportList
-                     {
-                         Code = i.Any() ? i.FirstOrDefault().c.Code : "",
-                         ShopName = i.Any() ? i.FirstOrDefault().p.ShopName : "",
-                         OrderNo = i.Any() ? i.FirstOrDefault().p.OrderNo : "",
-                         CartStatus = i.Any() ? i.FirstOrDefault().c.CartStatus : 0,
-                         DateEncoded = i.Any() ? i.FirstOrDefault().p.DateEncoded : DateTime.Now,
-                         OriginalAmount = i.Any() ? i.FirstOrDefault().p.OriginalAmount : 0.0,
-                         ShopPaymentStatus = i.Any() ? i.FirstOrDefault().c.ShopPaymentStatus : 0
-                     }).OrderByDescending(i => i.DateEncoded).ToList();
-                    model.StartingDate = StartDate.Value.ToString("yyyy/MM/dd");
-                    model.EndingDate = EndDate.Value.ToString("yyyy/MM/dd");
-                }
-                else
-                {
-                    model.List = db.Payments.Join(db.Carts, p => p.OrderNo, c => c.OrderNo, (p, c) => new { p, c })
-                       .Where(i => i.p.Status == 0 && i.c.CartStatus == 6)
-                       .GroupBy(i => i.p.OrderNo)
-                       .Select(i => new CartReportViewModel.CartReportList
-                       {
-                           Code = i.Any() ? i.FirstOrDefault().c.Code : "",
-                           ShopName = i.Any() ? i.FirstOrDefault().p.ShopName : "",
-                           OrderNo = i.Any() ? i.FirstOrDefault().p.OrderNo : "",
-                           CartStatus = i.Any() ? i.FirstOrDefault().c.CartStatus : 0,
-                           DateEncoded = i.Any() ? i.FirstOrDefault().p.DateEncoded : DateTime.Now,
-                           OriginalAmount = i.Any() ? i.FirstOrDefault().p.OriginalAmount : 0.0,
-                           ShopPaymentStatus = i.Any() ? i.FirstOrDefault().c.ShopPaymentStatus : 0
-                       }).OrderByDescending(i => i.DateEncoded).ToList();
-                }
-            }
-            return View(model);
-        }
-
-        [AccessPolicy(PageCode = "")]
-        public ActionResult DeliveryBoy_ShopNowChatReport(DateTime? StartDate, DateTime? EndDate, string deliveryboycode = "")
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            var model = new CartReportViewModel();
-
-            if (deliveryboycode != "")
-            {
-                if (StartDate != null && EndDate != null)
-                {
-                    DateTime startDatetFilter = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day);
-                    DateTime endDateFilter = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day).AddDays(1);
-
-                    model.List = db.Payments.Join(db.Carts, p => p.OrderNo, c => c.OrderNo, (p, c) => new { p, c })
+                    model.List = db.Payments.Join(db.Orders, p => p.OrderNo, c => c.OrderNumber, (p, c) => new { p, c })
                     .Where(i => i.p.DateEncoded >= startDatetFilter && i.p.DateEncoded <= endDateFilter && i.p.Status == 0
-                    && i.c.DeliveryBoyCode == deliveryboycode && i.c.CartStatus == 6 && i.p.PaymentMode == "Cash On Hand")
-                     .GroupBy(i => i.c.OrderNo)
+                    && i.c.DeliveryBoyId == deliveryboyId && i.c.Status == 6 && i.p.PaymentMode == "Cash On Hand")
                      .Select(i => new CartReportViewModel.CartReportList
                      {
-                         Code = i.Any() ? i.FirstOrDefault().c.Code : "",
-                         OrderNo = i.Any() ? i.FirstOrDefault().p.OrderNo : "",
-                         DeliveryBoyPhoneNumber =i.Any()? i.FirstOrDefault().c.DeliveryBoyPhoneNumber : "",
-                         DeliveryBoyCode = i.Any() ? i.FirstOrDefault().c.DeliveryBoyCode : "",
-                         DeliveryBoyName = i.Any() ? i.FirstOrDefault().c.DeliveryBoyName : "",
-                         Amount = i.Any() ? ((i.FirstOrDefault().p.Amount) - ((i.FirstOrDefault().p.refundAmount) ?? 0)) : 0.0,
-                         //Amount = i.Any() ? (i.FirstOrDefault().p.Amount - (i.FirstOrDefault().p.refundAmount)?? 0) : 0.0,
-                         DateUpdated = i.Any() ? i.FirstOrDefault().c.DateUpdated : DateTime.Now,
-                         DeliveryOrderPaymentStatus = i.Any() ? i.FirstOrDefault().c.DeliveryOrderPaymentStatus : 0
+                         Id = i.c.id,
+                         OrderNo = i.p.OrderNo ,
+                         DeliveryBoyPhoneNumber =i.c.DeliveryBoyPhoneNumber,
+                         DeliveryBoyId = i.c.DeliveryBoyId,
+                         DeliveryBoyName = i.c.DeliverBoyName,
+                         Amount = i.p.Amount - (i.p.refundAmount ?? 0),
+                         DateUpdated = i.c.DateUpdated,
+                         DeliveryOrderPaymentStatus = i.c.DeliveryOrderPaymentStatus
                      }).OrderByDescending(i => i.DateUpdated).ToList();
                     model.StartingDate = StartDate.Value.ToString("yyyy/MM/dd");
                     model.EndingDate = EndDate.Value.ToString("yyyy/MM/dd");
                 }
                 else
                 {
-                    model.List = db.Payments.Join(db.Carts, p => p.OrderNo, c => c.OrderNo, (p, c) => new { p, c })
-                      .Where(i => i.p.Status == 0 && i.c.DeliveryBoyCode == deliveryboycode && i.c.CartStatus == 6 && i.p.PaymentMode == "Cash On Hand")
-                      .GroupBy(i => i.c.OrderNo)
+                    model.List = db.Payments
+                        .Join(db.Orders, p => p.OrderNo, c => c.OrderNumber, (p, c) => new { p, c })
+                      .Where(i => i.p.Status == 0 && i.c.DeliveryBoyId == deliveryboyId && i.c.Status == 6 && i.p.PaymentMode == "Cash On Hand")
                      .Select(i => new CartReportViewModel.CartReportList
                      {
-                         Code = i.Any() ? i.FirstOrDefault().c.Code : "",
-                         OrderNo = i.Any() ? i.FirstOrDefault().p.OrderNo : "",
-                         DeliveryBoyPhoneNumber = i.Any() ? i.FirstOrDefault().c.DeliveryBoyPhoneNumber : "",
-                         DeliveryBoyCode = i.Any() ? i.FirstOrDefault().c.DeliveryBoyCode : "",
-                         DeliveryBoyName = i.Any() ? i.FirstOrDefault().c.DeliveryBoyName : "",
-                         Amount = i.Any() ? ((i.FirstOrDefault().p.Amount) - ((i.FirstOrDefault().p.refundAmount) ?? 0)) : 0.0,
-                         DateUpdated = i.Any() ? i.FirstOrDefault().c.DateUpdated : DateTime.Now,
-                         DeliveryOrderPaymentStatus = i.Any() ? i.FirstOrDefault().c.DeliveryOrderPaymentStatus : 0
+                         Id = i.c.id,
+                         OrderNo = i.p.OrderNo,
+                         DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
+                         DeliveryBoyId = i.c.DeliveryBoyId,
+                         DeliveryBoyName = i.c.DeliverBoyName,
+                         Amount = i.p.Amount - (i.p.refundAmount ?? 0),
+                         DateUpdated = i.c.DateUpdated,
+                         DeliveryOrderPaymentStatus = i.c.DeliveryOrderPaymentStatus
                      }).OrderByDescending(i => i.DateUpdated).ToList();
                 }
             }
@@ -1262,172 +1260,172 @@ namespace ShopNow.Controllers
                     DateTime startDatetFilter = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day);
                     DateTime endDateFilter = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day).AddDays(1);
 
-                    model.List = db.Payments.Join(db.Carts, p => p.OrderNo, c => c.OrderNo, (p, c) => new { p, c })
+                    model.List = db.Payments
+                        .Join(db.Orders, p => p.OrderNo, c => c.OrderNumber, (p, c) => new { p, c })
                     .Where(i => i.p.DateEncoded >= startDatetFilter && i.p.DateEncoded <= endDateFilter && i.p.Status == 0
-                    && i.c.CartStatus == 6 && i.p.PaymentMode == "Cash On Hand")
-                    .GroupBy(i => i.c.OrderNo)
+                    && i.c.Status == 6 && i.p.PaymentMode == "Cash On Hand")
                      .Select(i => new CartReportViewModel.CartReportList
                      {
-                         Code = i.Any() ? i.FirstOrDefault().c.Code : "",
-                         OrderNo = i.Any() ? i.FirstOrDefault().p.OrderNo : "",
-                         DeliveryBoyPhoneNumber = i.Any() ? i.FirstOrDefault().c.DeliveryBoyPhoneNumber : "",
-                         DeliveryBoyCode = i.Any() ? i.FirstOrDefault().c.DeliveryBoyCode : "",
-                         DeliveryBoyName = i.Any() ? i.FirstOrDefault().c.DeliveryBoyName : "",
-                         Amount = i.Any() ? ((i.FirstOrDefault().p.Amount) - ((i.FirstOrDefault().p.refundAmount) ?? 0)) : 0.0,
-                         DateUpdated = i.Any() ? i.FirstOrDefault().c.DateUpdated : DateTime.Now,
-                         DeliveryOrderPaymentStatus = i.Any() ? i.FirstOrDefault().c.DeliveryOrderPaymentStatus : 0
+                         Id = i.c.id,
+                         OrderNo = i.p.OrderNo,
+                         DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
+                         DeliveryBoyId = i.c.DeliveryBoyId,
+                         DeliveryBoyName = i.c.DeliverBoyName,
+                         Amount = i.p.Amount - (i.p.refundAmount ?? 0),
+                         DateUpdated = i.c.DateUpdated,
+                         DeliveryOrderPaymentStatus = i.c.DeliveryOrderPaymentStatus
                      }).OrderByDescending(i => i.DateUpdated).ToList();
                     model.StartingDate = StartDate.Value.ToString("yyyy/MM/dd");
                     model.EndingDate = EndDate.Value.ToString("yyyy/MM/dd");
                 }
                 else
                 {
-                    model.List = db.Payments.Join(db.Carts, p => p.OrderNo, c => c.OrderNo, (p, c) => new { p, c })
-                       .Where(i => i.p.Status == 0 && i.c.CartStatus == 6 && i.p.PaymentMode == "Cash On Hand")
-                      .GroupBy(i => i.c.OrderNo)
+                    model.List = db.Payments.Join(db.Orders, p => p.OrderNo, c => c.OrderNumber, (p, c) => new { p, c })
+                       .Where(i => i.p.Status == 0 && i.c.Status == 6 && i.p.PaymentMode == "Cash On Hand")
                      .Select(i => new CartReportViewModel.CartReportList
                      {
-                         Code = i.Any() ? i.FirstOrDefault().c.Code : "",
-                         OrderNo = i.Any() ? i.FirstOrDefault().p.OrderNo : "",
-                         DeliveryBoyPhoneNumber = i.Any() ? i.FirstOrDefault().c.DeliveryBoyPhoneNumber : "",
-                         DeliveryBoyCode = i.Any() ? i.FirstOrDefault().c.DeliveryBoyCode : "",
-                         DeliveryBoyName = i.Any() ? i.FirstOrDefault().c.DeliveryBoyName : "",
-                         Amount = i.Any() ? ((i.FirstOrDefault().p.Amount) - ((i.FirstOrDefault().p.refundAmount) ?? 0)) : 0.0,
-                         DateUpdated = i.Any() ? i.FirstOrDefault().c.DateUpdated : DateTime.Now,
-                         DeliveryOrderPaymentStatus = i.Any() ? i.FirstOrDefault().c.DeliveryOrderPaymentStatus : 0
+                         Id = i.c.id,
+                         OrderNo = i.p.OrderNo,
+                         DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
+                         DeliveryBoyId = i.c.DeliveryBoyId,
+                         DeliveryBoyName = i.c.DeliverBoyName,
+                         Amount = i.p.Amount - (i.p.refundAmount ?? 0),
+                         DateUpdated = i.c.DateUpdated,
+                         DeliveryOrderPaymentStatus = i.c.DeliveryOrderPaymentStatus
                      }).OrderByDescending(i => i.DateUpdated).ToList();
                 }
             }
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "")]
-        public ActionResult ShopNowChat_DeliveryBoyReport(DateTime? StartDate, DateTime? EndDate, string deliveryboycode = "")
+        //[AccessPolicy(PageCode = "")]
+        //public ActionResult ShopNowChat_DeliveryBoyReport(DateTime? StartDate, DateTime? EndDate, string deliveryboycode = "")
+        //{
+        //    var user = ((Helpers.Sessions.User)Session["USER"]);
+        //    ViewBag.Name = user.Name;
+        //    var model = new CartReportViewModel();
+
+        //    if (deliveryboycode != "")
+        //    {
+        //        if (StartDate != null && EndDate != null)
+        //        {
+        //            DateTime startDatetFilter = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day);
+        //            DateTime endDateFilter = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day).AddDays(1);
+
+        //            model.List = db.Carts.Join(db.ShopCharges, c => c.OrderNo, sc => sc.OrderNo, (c, sc) => new { c, sc })
+        //                 .Join(db.Payments, cp => cp.c.OrderNo, p => p.OrderNo, (cp, p) => new { cp, p })
+        //          .Where(i => i.cp.c.DateEncoded >= startDatetFilter && i.cp.c.DateEncoded <= endDateFilter && i.cp.c.CartStatus == 6 && i.cp.c.Status == 0 && i.cp.sc.DeliveryBoyCode == deliveryboycode)
+        //                .GroupBy(i => i.cp.c.OrderNo).AsEnumerable()
+        //                .Select(i => new CartReportViewModel.CartReportList
+        //                {
+        //                    Code = i.Any() ? i.FirstOrDefault().cp.sc.Code : "",
+        //                    DateEncoded = i.Any() ? i.FirstOrDefault().cp.c.DateEncoded : DateTime.Now,
+        //                    OrderNo = i.Any() ? i.FirstOrDefault().cp.c.OrderNo : "",
+        //                    DeliveryBoyCode = i.Any() ? i.FirstOrDefault().cp.sc.DeliveryBoyCode : "",
+        //                    DeliveryBoyName = i.Any() ? i.FirstOrDefault().cp.sc.DeliveryBoyName : "",
+        //                    DeliveryBoyPhoneNumber = i.Any() ? i.FirstOrDefault().cp.c.DeliveryBoyPhoneNumber : "",
+        //                    GrossDeliveryCharge = i.Any() ? i.Sum(j => j.cp.sc.GrossDeliveryCharge) : 0.0,
+        //                    DeliveryBoyPaymentStatus = i.Any() ? i.FirstOrDefault().cp.c.DeliveryBoyPaymentStatus : 0,
+        //                    DeliveryRateSet = i.Any() ? i.FirstOrDefault().p.CreditType : 0,
+        //                    Kilometer = getDeliveryBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode) != null ? (((Math.Acos(Math.Sin((i.FirstOrDefault().cp.c.Latitude * Math.PI / 180))
+        //                    * Math.Sin((getDBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode).Latitude * Math.PI / 180))
+        //                       + Math.Cos((i.FirstOrDefault().cp.c.Latitude * Math.PI / 180)) * Math.Cos((getDBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode).Latitude * Math.PI / 180))
+        //                      * Math.Cos(((i.FirstOrDefault().cp.c.Longitude - getDBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode).Longitude)
+        //                      * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) : 0
+        //                }).OrderBy(i => i.DeliveryBoyName).ToList();
+        //        }
+        //        else
+        //        {
+        //            model.List = db.Carts.Join(db.ShopCharges, c => c.OrderNo, sc => sc.OrderNo, (c, sc) => new { c, sc })
+        //                 .Join(db.Payments, cp => cp.c.OrderNo, p => p.OrderNo, (cp, p) => new { cp, p })
+        //          .Where(i => i.cp.c.CartStatus == 6 && i.cp.c.Status == 0 && i.cp.sc.DeliveryBoyCode == deliveryboycode)
+        //                .GroupBy(i => i.cp.c.OrderNo).AsEnumerable()
+        //                .Select(i => new CartReportViewModel.CartReportList
+        //                {
+        //                    Code = i.Any() ? i.FirstOrDefault().cp.sc.Code : "",
+        //                    DateEncoded = i.Any() ? i.FirstOrDefault().cp.c.DateEncoded : DateTime.Now,
+        //                    OrderNo = i.Any() ? i.FirstOrDefault().cp.c.OrderNo : "",
+        //                    DeliveryBoyCode = i.Any() ? i.FirstOrDefault().cp.sc.DeliveryBoyCode : "",
+        //                    DeliveryBoyName = i.Any() ? i.FirstOrDefault().cp.sc.DeliveryBoyName : "",
+        //                    DeliveryBoyPhoneNumber = i.Any() ? i.FirstOrDefault().cp.c.DeliveryBoyPhoneNumber : "",
+        //                    GrossDeliveryCharge = i.Any() ? i.Sum(j => j.cp.sc.GrossDeliveryCharge) : 0.0,
+        //                    DeliveryBoyPaymentStatus = i.Any() ? i.FirstOrDefault().cp.c.DeliveryBoyPaymentStatus : 0,
+        //                    DeliveryRateSet = i.Any() ? i.FirstOrDefault().p.CreditType : 0,
+        //                    Kilometer = getDeliveryBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode) != null ? (((Math.Acos(Math.Sin((i.FirstOrDefault().cp.c.Latitude * Math.PI / 180))
+        //                    * Math.Sin((getDBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode).Latitude * Math.PI / 180))
+        //                       + Math.Cos((i.FirstOrDefault().cp.c.Latitude * Math.PI / 180)) * Math.Cos((getDBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode).Latitude * Math.PI / 180))
+        //                      * Math.Cos(((i.FirstOrDefault().cp.c.Longitude - getDBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode).Longitude)
+        //                      * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) : 0
+        //                }).OrderBy(i => i.DeliveryBoyName).ToList();
+        //        }
+        //    }
+        //    else
+        //    {
+        //        if (StartDate != null && EndDate != null)
+        //        {
+        //            DateTime startDatetFilter = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day);
+        //            DateTime endDateFilter = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day).AddDays(1);
+
+        //            model.List = db.Carts.Join(db.ShopCharges, c => c.OrderNo, sc => sc.OrderNo, (c, sc) => new { c, sc })
+        //                .Join(db.Payments, cp => cp.c.OrderNo, p => p.OrderNo, (cp, p) => new { cp, p })
+        //         .Where(i => i.cp.c.DateEncoded >= startDatetFilter && i.cp.c.DateEncoded <= endDateFilter && i.cp.c.CartStatus == 6 && i.cp.c.Status == 0)
+        //               .GroupBy(i => i.cp.c.OrderNo).AsEnumerable()
+        //               .Select(i => new CartReportViewModel.CartReportList
+        //               {
+        //                   Code = i.Any() ? i.FirstOrDefault().cp.sc.Code : "",
+        //                   DateEncoded = i.Any() ? i.FirstOrDefault().cp.c.DateEncoded : DateTime.Now,
+        //                   OrderNo = i.Any() ? i.FirstOrDefault().cp.c.OrderNo : "",
+        //                   DeliveryBoyCode = i.Any() ? i.FirstOrDefault().cp.sc.DeliveryBoyCode : "",
+        //                   DeliveryBoyName = i.Any() ? i.FirstOrDefault().cp.sc.DeliveryBoyName : "",
+        //                   DeliveryBoyPhoneNumber = i.Any() ? i.FirstOrDefault().cp.c.DeliveryBoyPhoneNumber : "",
+        //                   GrossDeliveryCharge = i.Any() ? i.Sum(j => j.cp.sc.GrossDeliveryCharge) : 0.0,
+        //                   DeliveryBoyPaymentStatus = i.Any() ? i.FirstOrDefault().cp.c.DeliveryBoyPaymentStatus : 0,
+        //                   DeliveryRateSet = i.Any() ? i.FirstOrDefault().p.CreditType : 0,
+        //                   Kilometer = getDeliveryBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode) != null ? (((Math.Acos(Math.Sin((i.FirstOrDefault().cp.c.Latitude * Math.PI / 180))
+        //                    * Math.Sin((getDBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode).Latitude * Math.PI / 180))
+        //                       + Math.Cos((i.FirstOrDefault().cp.c.Latitude * Math.PI / 180)) * Math.Cos((getDBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode).Latitude * Math.PI / 180))
+        //                      * Math.Cos(((i.FirstOrDefault().cp.c.Longitude - getDBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode).Longitude)
+        //                      * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) : 0
+        //               }).OrderBy(i => i.DeliveryBoyName).ToList();
+        //        }
+        //        else
+        //        {
+        //            model.List = db.Carts.Join(db.ShopCharges, c => c.OrderNo, sc => sc.OrderNo, (c, sc) => new { c, sc })
+        //                .Join(db.Payments, cp=> cp.c.OrderNo, p=> p.OrderNo, (cp,p)=> new { cp,p})
+        //          .Where(i => i.cp.c.CartStatus == 6 && i.cp.c.Status == 0)
+        //                .GroupBy(i => i.cp.c.OrderNo)
+        //                 .AsEnumerable()
+        //                .Select(i => new CartReportViewModel.CartReportList
+        //                {
+        //                    Code = i.Any() ? i.FirstOrDefault().cp.sc.Code : "",
+        //                    DateEncoded = i.Any() ? i.FirstOrDefault().cp.c.DateEncoded : DateTime.Now,
+        //                    OrderNo = i.Any() ? i.FirstOrDefault().cp.c.OrderNo : "",
+        //                    DeliveryBoyCode = i.Any() ? i.FirstOrDefault().cp.sc.DeliveryBoyCode : "",
+        //                    DeliveryBoyName = i.Any() ? i.FirstOrDefault().cp.sc.DeliveryBoyName : "",
+        //                    DeliveryBoyPhoneNumber = i.Any() ? i.FirstOrDefault().cp.c.DeliveryBoyPhoneNumber : "",
+        //                    GrossDeliveryCharge = i.Any() ? i.Sum(j => j.cp.sc.GrossDeliveryCharge) : 0.0,
+        //                    DeliveryBoyPaymentStatus = i.Any() ? i.FirstOrDefault().cp.c.DeliveryBoyPaymentStatus : 0,
+        //                    DeliveryRateSet = i.Any() ? i.FirstOrDefault().p.CreditType : 0,
+        //                    Kilometer = getDeliveryBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode) != null?(((Math.Acos(Math.Sin((i.FirstOrDefault().cp.c.Latitude * Math.PI / 180)) 
+        //                    * Math.Sin((getDBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode).Latitude * Math.PI / 180))
+        //                       + Math.Cos((i.FirstOrDefault().cp.c.Latitude * Math.PI / 180)) * Math.Cos((getDBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode).Latitude * Math.PI / 180))
+        //                      * Math.Cos(((i.FirstOrDefault().cp.c.Longitude - getDBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode).Longitude)
+        //                      * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344): 0
+        //                }).OrderBy(i => i.DeliveryBoyName).ToList();
+        //        }
+        //    }
+        //    return View(model);
+        //}
+
+       DeliveryBoy getDBoy(int id)
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            var model = new CartReportViewModel();
-
-            if (deliveryboycode != "")
-            {
-                if (StartDate != null && EndDate != null)
-                {
-                    DateTime startDatetFilter = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day);
-                    DateTime endDateFilter = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day).AddDays(1);
-
-                    model.List = db.Carts.Join(db.ShopCharges, c => c.OrderNo, sc => sc.OrderNo, (c, sc) => new { c, sc })
-                         .Join(db.Payments, cp => cp.c.OrderNo, p => p.OrderNo, (cp, p) => new { cp, p })
-                  .Where(i => i.cp.c.DateEncoded >= startDatetFilter && i.cp.c.DateEncoded <= endDateFilter && i.cp.c.CartStatus == 6 && i.cp.c.Status == 0 && i.cp.sc.DeliveryBoyCode == deliveryboycode)
-                        .GroupBy(i => i.cp.c.OrderNo).AsEnumerable()
-                        .Select(i => new CartReportViewModel.CartReportList
-                        {
-                            Code = i.Any() ? i.FirstOrDefault().cp.sc.Code : "",
-                            DateEncoded = i.Any() ? i.FirstOrDefault().cp.c.DateEncoded : DateTime.Now,
-                            OrderNo = i.Any() ? i.FirstOrDefault().cp.c.OrderNo : "",
-                            DeliveryBoyCode = i.Any() ? i.FirstOrDefault().cp.sc.DeliveryBoyCode : "",
-                            DeliveryBoyName = i.Any() ? i.FirstOrDefault().cp.sc.DeliveryBoyName : "",
-                            DeliveryBoyPhoneNumber = i.Any() ? i.FirstOrDefault().cp.c.DeliveryBoyPhoneNumber : "",
-                            GrossDeliveryCharge = i.Any() ? i.Sum(j => j.cp.sc.GrossDeliveryCharge) : 0.0,
-                            DeliveryBoyPaymentStatus = i.Any() ? i.FirstOrDefault().cp.c.DeliveryBoyPaymentStatus : 0,
-                            DeliveryRateSet = i.Any() ? i.FirstOrDefault().p.CreditType : 0,
-                            Kilometer = getDeliveryBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode) != null ? (((Math.Acos(Math.Sin((i.FirstOrDefault().cp.c.Latitude * Math.PI / 180))
-                            * Math.Sin((getDBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode).Latitude * Math.PI / 180))
-                               + Math.Cos((i.FirstOrDefault().cp.c.Latitude * Math.PI / 180)) * Math.Cos((getDBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode).Latitude * Math.PI / 180))
-                              * Math.Cos(((i.FirstOrDefault().cp.c.Longitude - getDBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode).Longitude)
-                              * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) : 0
-                        }).OrderBy(i => i.DeliveryBoyName).ToList();
-                }
-                else
-                {
-                    model.List = db.Carts.Join(db.ShopCharges, c => c.OrderNo, sc => sc.OrderNo, (c, sc) => new { c, sc })
-                         .Join(db.Payments, cp => cp.c.OrderNo, p => p.OrderNo, (cp, p) => new { cp, p })
-                  .Where(i => i.cp.c.CartStatus == 6 && i.cp.c.Status == 0 && i.cp.sc.DeliveryBoyCode == deliveryboycode)
-                        .GroupBy(i => i.cp.c.OrderNo).AsEnumerable()
-                        .Select(i => new CartReportViewModel.CartReportList
-                        {
-                            Code = i.Any() ? i.FirstOrDefault().cp.sc.Code : "",
-                            DateEncoded = i.Any() ? i.FirstOrDefault().cp.c.DateEncoded : DateTime.Now,
-                            OrderNo = i.Any() ? i.FirstOrDefault().cp.c.OrderNo : "",
-                            DeliveryBoyCode = i.Any() ? i.FirstOrDefault().cp.sc.DeliveryBoyCode : "",
-                            DeliveryBoyName = i.Any() ? i.FirstOrDefault().cp.sc.DeliveryBoyName : "",
-                            DeliveryBoyPhoneNumber = i.Any() ? i.FirstOrDefault().cp.c.DeliveryBoyPhoneNumber : "",
-                            GrossDeliveryCharge = i.Any() ? i.Sum(j => j.cp.sc.GrossDeliveryCharge) : 0.0,
-                            DeliveryBoyPaymentStatus = i.Any() ? i.FirstOrDefault().cp.c.DeliveryBoyPaymentStatus : 0,
-                            DeliveryRateSet = i.Any() ? i.FirstOrDefault().p.CreditType : 0,
-                            Kilometer = getDeliveryBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode) != null ? (((Math.Acos(Math.Sin((i.FirstOrDefault().cp.c.Latitude * Math.PI / 180))
-                            * Math.Sin((getDBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode).Latitude * Math.PI / 180))
-                               + Math.Cos((i.FirstOrDefault().cp.c.Latitude * Math.PI / 180)) * Math.Cos((getDBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode).Latitude * Math.PI / 180))
-                              * Math.Cos(((i.FirstOrDefault().cp.c.Longitude - getDBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode).Longitude)
-                              * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) : 0
-                        }).OrderBy(i => i.DeliveryBoyName).ToList();
-                }
-            }
-            else
-            {
-                if (StartDate != null && EndDate != null)
-                {
-                    DateTime startDatetFilter = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day);
-                    DateTime endDateFilter = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day).AddDays(1);
-
-                    model.List = db.Carts.Join(db.ShopCharges, c => c.OrderNo, sc => sc.OrderNo, (c, sc) => new { c, sc })
-                        .Join(db.Payments, cp => cp.c.OrderNo, p => p.OrderNo, (cp, p) => new { cp, p })
-                 .Where(i => i.cp.c.DateEncoded >= startDatetFilter && i.cp.c.DateEncoded <= endDateFilter && i.cp.c.CartStatus == 6 && i.cp.c.Status == 0)
-                       .GroupBy(i => i.cp.c.OrderNo).AsEnumerable()
-                       .Select(i => new CartReportViewModel.CartReportList
-                       {
-                           Code = i.Any() ? i.FirstOrDefault().cp.sc.Code : "",
-                           DateEncoded = i.Any() ? i.FirstOrDefault().cp.c.DateEncoded : DateTime.Now,
-                           OrderNo = i.Any() ? i.FirstOrDefault().cp.c.OrderNo : "",
-                           DeliveryBoyCode = i.Any() ? i.FirstOrDefault().cp.sc.DeliveryBoyCode : "",
-                           DeliveryBoyName = i.Any() ? i.FirstOrDefault().cp.sc.DeliveryBoyName : "",
-                           DeliveryBoyPhoneNumber = i.Any() ? i.FirstOrDefault().cp.c.DeliveryBoyPhoneNumber : "",
-                           GrossDeliveryCharge = i.Any() ? i.Sum(j => j.cp.sc.GrossDeliveryCharge) : 0.0,
-                           DeliveryBoyPaymentStatus = i.Any() ? i.FirstOrDefault().cp.c.DeliveryBoyPaymentStatus : 0,
-                           DeliveryRateSet = i.Any() ? i.FirstOrDefault().p.CreditType : 0,
-                           Kilometer = getDeliveryBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode) != null ? (((Math.Acos(Math.Sin((i.FirstOrDefault().cp.c.Latitude * Math.PI / 180))
-                            * Math.Sin((getDBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode).Latitude * Math.PI / 180))
-                               + Math.Cos((i.FirstOrDefault().cp.c.Latitude * Math.PI / 180)) * Math.Cos((getDBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode).Latitude * Math.PI / 180))
-                              * Math.Cos(((i.FirstOrDefault().cp.c.Longitude - getDBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode).Longitude)
-                              * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) : 0
-                       }).OrderBy(i => i.DeliveryBoyName).ToList();
-                }
-                else
-                {
-                    model.List = db.Carts.Join(db.ShopCharges, c => c.OrderNo, sc => sc.OrderNo, (c, sc) => new { c, sc })
-                        .Join(db.Payments, cp=> cp.c.OrderNo, p=> p.OrderNo, (cp,p)=> new { cp,p})
-                  .Where(i => i.cp.c.CartStatus == 6 && i.cp.c.Status == 0)
-                        .GroupBy(i => i.cp.c.OrderNo)
-                         .AsEnumerable()
-                        .Select(i => new CartReportViewModel.CartReportList
-                        {
-                            Code = i.Any() ? i.FirstOrDefault().cp.sc.Code : "",
-                            DateEncoded = i.Any() ? i.FirstOrDefault().cp.c.DateEncoded : DateTime.Now,
-                            OrderNo = i.Any() ? i.FirstOrDefault().cp.c.OrderNo : "",
-                            DeliveryBoyCode = i.Any() ? i.FirstOrDefault().cp.sc.DeliveryBoyCode : "",
-                            DeliveryBoyName = i.Any() ? i.FirstOrDefault().cp.sc.DeliveryBoyName : "",
-                            DeliveryBoyPhoneNumber = i.Any() ? i.FirstOrDefault().cp.c.DeliveryBoyPhoneNumber : "",
-                            GrossDeliveryCharge = i.Any() ? i.Sum(j => j.cp.sc.GrossDeliveryCharge) : 0.0,
-                            DeliveryBoyPaymentStatus = i.Any() ? i.FirstOrDefault().cp.c.DeliveryBoyPaymentStatus : 0,
-                            DeliveryRateSet = i.Any() ? i.FirstOrDefault().p.CreditType : 0,
-                            Kilometer = getDeliveryBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode) != null?(((Math.Acos(Math.Sin((i.FirstOrDefault().cp.c.Latitude * Math.PI / 180)) 
-                            * Math.Sin((getDBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode).Latitude * Math.PI / 180))
-                               + Math.Cos((i.FirstOrDefault().cp.c.Latitude * Math.PI / 180)) * Math.Cos((getDBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode).Latitude * Math.PI / 180))
-                              * Math.Cos(((i.FirstOrDefault().cp.c.Longitude - getDBoy(i.FirstOrDefault().cp.c.DeliveryBoyCode).Longitude)
-                              * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344): 0
-                        }).OrderBy(i => i.DeliveryBoyName).ToList();
-                }
-            }
-            return View(model);
-        }
-       DeliveryBoy getDBoy(string dbcode)
-        {
-            var deliveryBoy = db.DeliveryBoys.Where(d => d.Code == dbcode).FirstOrDefault();
+            var deliveryBoy = db.DeliveryBoys.Where(d => d.Id == id).FirstOrDefault();
             return deliveryBoy;
         }
-        public string getDeliveryBoy(string dbcode)
+        public int getDeliveryBoy(int id)
         {
-            var deliveryBoy = db.DeliveryBoys.Where(d => d.Code == dbcode).FirstOrDefault();
-            return deliveryBoy.Code;
+            var deliveryBoy = db.DeliveryBoys.Where(d => d.Id == id).FirstOrDefault();
+            return deliveryBoy.Id;
         }
         
         double GetMeters(Double Latitudes, Double Longitudes, Double Latitude, Double Longitude)
@@ -1440,7 +1438,7 @@ namespace ShopNow.Controllers
         {
             var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
             {
-                id = i.Code,
+                id = i.Id,
                 text = i.Name
             }).ToListAsync();
 
@@ -1452,7 +1450,7 @@ namespace ShopNow.Controllers
         {
             var model = await db.DeliveryBoys.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
             {
-                id = i.Code,
+                id = i.Id,
                 text = i.Name
             }).ToListAsync();
 
@@ -1460,41 +1458,34 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNCARAC011")]
-        public JsonResult Accept(string orderNo, string customerCode)
+        public JsonResult Accept(int orderNo, int customerId)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-            if (orderNo != null || orderNo != "" && customerCode != null || customerCode != "")
+            if (orderNo != 0 && customerId != 0)
             {
-                var cartList = db.Carts.Where(i => i.OrderNo == orderNo).ToList();
+                var order = db.Orders.FirstOrDefault(i => i.OrderNumber == orderNo);
+                order.Status = 3;
+                order.UpdatedBy = user.Name;
+                order.DateUpdated = DateTime.Now;
+                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
 
-                var topup = db.TopUps.OrderByDescending(q => q.Id).FirstOrDefault(i => i.CustomerCode == customerCode && i.CreditType == 0 && i.Status == 0);//TopUp.GetCustomerPlatform(customerCode);
-                if (topup != null)
-                {
-                    var list = db.PlatFormCreditRates.Where(i => i.Status == 0).ToList();//PlatFormCreditRate.GetList();
-                    topup.CreditAmount = topup.CreditAmount - list.FirstOrDefault().RatePerOrder;
-                    topup.DateUpdated = DateTime.Now;
-                    db.Entry(topup).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-                    //TopUp.Edit(topup, out int errors);
-                }
+                //var topup = db.TopUps.OrderByDescending(q => q.Id).FirstOrDefault(i => i.CustomerCode == customerId && i.CreditType == 0 && i.Status == 0);//TopUp.GetCustomerPlatform(customerCode);
+                //if (topup != null)
+                //{
+                //    var list = db.PlatFormCreditRates.Where(i => i.Status == 0).ToList();
+                //    topup.CreditAmount = topup.CreditAmount - list.FirstOrDefault().RatePerOrder;
+                //    topup.DateUpdated = DateTime.Now;
+                //    db.Entry(topup).State = System.Data.Entity.EntityState.Modified;
+                //    db.SaveChanges();
+                //}
 
-                var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo); //ShopCharge.GetOrderNo(orderNo);
-                detail.CartStatus = 3;
-                // ShopCharge.Edit(detail, out int error);
+                var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
+                detail.OrderStatus = 3;
                 detail.DateUpdated = DateTime.Now;
                 db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                var customer = db.Customers.FirstOrDefault(i => i.Code == customerCode);//Customer.Get(customerCode);
-                foreach (var c in cartList)
-                {
-                    var cart = GetCart(c.Code); // db.Carts.FirstOrDefault(i => i.Code == c.Code);
-                    cart.CartStatus = 3;
-                    cart.UpdatedBy = user.Name;
-                    cart.DateUpdated = DateTime.Now;
-                    db.Entry(cart).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
 
-                }
                 return Json(new { message = "Order Confirmed!" }, JsonRequestBehavior.AllowGet);
             }
             else
@@ -1504,48 +1495,45 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNCARR012")]
-        public JsonResult Cancel(string orderNo, string customerCode, int? status)
+        public JsonResult Cancel(int orderNo, int customerId, int? status)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-            if (orderNo != null || orderNo != "" && customerCode != null || customerCode != "" && status != 0)
+            if (orderNo != 0 && customerId != 0 && status != 0)
             {
-                var customer = db.Customers.FirstOrDefault(i => i.Code == customerCode);
-                var cartList = db.Carts.Where(i => i.OrderNo == orderNo).ToList();
-                foreach (var c in cartList)
-                {
-                    var cart = GetCart(c.Code);// db.Carts.FirstOrDefault(i => i.Code == c.Code);
-                    cart.CartStatus = 7;
-                    cart.UpdatedBy = user.Name;
-                    cart.DateUpdated = DateTime.Now;
-                    db.Entry(cart).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
+                var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
 
+                var order = db.Orders.FirstOrDefault(i => i.OrderNumber ==orderNo);
+                order.Status = 7;
+                order.UpdatedBy = user.Name;
+                order.DateUpdated = DateTime.Now;
+                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+
+                var orderItemList = db.OrderItems.Where(i => i.OrderId == order.id);
+                foreach (var item in orderItemList)
+                {
                     //Product Stock Update
-                    var product = db.Products.FirstOrDefault(i => i.Code == c.ProductCode);
-                    //product.Qty += Convert.ToInt32(c.Qty);
-                    product.HoldOnStok -= Convert.ToInt32(c.Qty);
+                    var product = db.Products.FirstOrDefault(i => i.Id == item.ProductId);
+                    product.HoldOnStok -= Convert.ToInt32(item.Quantity);
                     db.Entry(product).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
-
-                    //Refund
-                    var payment = db.Payments.FirstOrDefault(i => i.OrderNo == c.OrderNo);
-                    //if (payment.PaymentMode == "Online Payment")
-                    //{
-                        payment.refundAmount = payment.Amount;
-                        payment.refundRemark = "Your order has been cancelled by shop.";
-                        payment.UpdatedBy = customer.Name;
-                        payment.DateUpdated = DateTime.Now;
-                        db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
-                        db.SaveChanges();
-                    //}
-
-                    // update Shopcharge cartstatus 7
-                    var sc = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo); //ShopCharge.GetOrderNo(orderNo);
-                    sc.CartStatus = 7;
-                    sc.DateUpdated = DateTime.Now;
-                    db.Entry(sc).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
+                    
                 }
+                //Refund
+                var payment = db.Payments.FirstOrDefault(i => i.OrderNo == order.OrderNumber);
+                payment.refundAmount = payment.Amount;
+                payment.refundRemark = "Your order has been cancelled by shop.";
+                payment.UpdatedBy = customer.Name;
+                payment.DateUpdated = DateTime.Now;
+                db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+
+                // update Shopcharge cartstatus 7
+                var sc = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
+                sc.OrderStatus = 7;
+                sc.DateUpdated = DateTime.Now;
+                db.Entry(sc).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
                 return Json(new { message = "Order Cancelled!" }, JsonRequestBehavior.AllowGet);
             }
             else
@@ -1555,75 +1543,58 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "")]
-        public JsonResult ShopPay(string orderNo)
+        public JsonResult ShopPay(int orderNo)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-            var cartList = db.Carts.Where(i => i.OrderNo == orderNo && i.Status == 0 && i.ShopPaymentStatus == 0).ToList();
-            foreach (var c in cartList)
-            {
-                var cart = GetCart(c.Code);// db.Carts.FirstOrDefault(i => i.Code == c.Code);
-                cart.ShopPaymentStatus = 1;
-                db.Entry(cart).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-            }
+            var order = db.Orders.FirstOrDefault(i => i.OrderNumber == orderNo && i.ShopPaymentStatus == 0);
+            order.ShopPaymentStatus = 1;
+            db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [AccessPolicy(PageCode = "")]
-        public JsonResult ShopNowChatPay(string orderno)
+        public JsonResult ShopNowChatPay(int orderNo)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-            var cartList = db.Carts.Where(i => i.OrderNo == orderno && i.Status == 0 && i.DeliveryOrderPaymentStatus == 0).ToList();
-            foreach(var c in cartList)
-            {
-                var cart = GetCart(c.Code);// db.Carts.FirstOrDefault(i=> i.Code == c.Code);
-                cart.DeliveryOrderPaymentStatus = 1;
-                db.Entry(cart).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-            }
+            var order = db.Orders.FirstOrDefault(i => i.OrderNumber == orderNo && i.DeliveryBoyPaymentStatus == 0);
+            order.DeliveryBoyPaymentStatus = 1;
+            db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [AccessPolicy(PageCode = "")]
-        public JsonResult DeliveryBoyPay(string orderno)
+        public JsonResult DeliveryBoyPay(int orderNo)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-            var cartList = db.Carts.Where(i => i.OrderNo == orderno && i.Status == 0 && i.DeliveryBoyPaymentStatus == 0).ToList();
-            foreach (var c in cartList)
-            {
-                var cart = GetCart(c.Code);// db.Carts.FirstOrDefault(i => i.Code == c.Code);
-                cart.DeliveryBoyPaymentStatus = 1;
-                db.Entry(cart).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-            }
+            var order = db.Orders.FirstOrDefault(i => i.OrderNumber == orderNo && i.DeliveryBoyPaymentStatus == 0);
+            order.DeliveryBoyPaymentStatus = 1;
+            db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [AccessPolicy(PageCode = "")]
-        public JsonResult DeliveryBoyReject(string orderNo)
+        public JsonResult DeliveryBoyReject(int orderNo)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-            if (orderNo != null || orderNo != "")
+            if (orderNo != 0)
             {
-                var cartList = db.Carts.Where(i => i.OrderNo == orderNo).ToList();
-                foreach (var c in cartList)
-                {
-                    var cart = GetCart(c.Code);// db.Carts.FirstOrDefault(i => i.Code == c.Code);
-                    cart.DeliveryBoyCode = null;
-                    cart.DeliveryBoyName = null;
-                    cart.DeliveryBoyPhoneNumber = null;
-                    cart.CartStatus = 3;
-                    db.Entry(cart).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
+                var order =  db.Orders.FirstOrDefault(i => i.OrderNumber == orderNo);
+                order.DeliveryBoyId = 0;
+                order.DeliverBoyName = null;
+                order.DeliveryBoyPhoneNumber = null;
+                order.Status = 3;
+                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
 
-                    var dboy = db.DeliveryBoys.FirstOrDefault(i => i.Code == cart.DeliveryBoyCode);// DeliveryBoy.Get(cart.DeliveryBoyCode);
-                    dboy.isAssign = 0;
-                    dboy.OnWork = 0;
-                    dboy.DateUpdated = DateTime.Now;
-                    db.Entry(dboy).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-                    // DeliveryBoy.Edit(dboy, out int error);
-                }
+                var dboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId);
+                dboy.isAssign = 0;
+                dboy.OnWork = 0;
+                dboy.DateUpdated = DateTime.Now;
+                db.Entry(dboy).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
             else
@@ -1632,72 +1603,61 @@ namespace ShopNow.Controllers
             }
         }
 
-         Cart GetCart(string code)
-        {
-            try
-            {
+        // Cart GetCart(string code)
+        //{
+        //    try
+        //    {
 
-                return db.Carts.Where(i => i.Code == code).FirstOrDefault();
-            }
-            catch
-            {
-                return (Cart)null;
-            }
-        }
+        //        return db.Carts.Where(i => i.Code == code).FirstOrDefault();
+        //    }
+        //    catch
+        //    {
+        //        return (Cart)null;
+        //    }
+        //}
 
-        public ActionResult UnAssignDeliveryBoy(string OrderNo)
+        public ActionResult UnAssignDeliveryBoy(int orderNo)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-           
-            var cartList = db.Carts.Where(i => i.OrderNo == OrderNo).ToList();
-            var getDeliveryBoyFromCart = cartList.FirstOrDefault();
-            var deliveryboy = db.DeliveryBoys.FirstOrDefault(i => i.Code == getDeliveryBoyFromCart.DeliveryBoyCode);
+            var order = db.Orders.FirstOrDefault(i => i.OrderNumber == orderNo);
+            var deliveryboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId);
             deliveryboy.isAssign = 0;
             deliveryboy.DateUpdated = DateTime.Now;
             db.Entry(deliveryboy).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
-            if (cartList != null)
-            {
-                foreach (var c in cartList)
-                {
-                    var carts = GetCart(c.Code);
-                    carts.DeliveryBoyCode = string.Empty;
-                    carts.DeliveryBoyName = string.Empty;
-                    carts.DeliveryBoyPhoneNumber = string.Empty;
-                    carts.CartStatus = 3;
-                    carts.DateUpdated = DateTime.Now;
-                    db.Entry(carts).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-                   
-                }
-            }
+
+            order.DeliveryBoyId = 0;
+            order.DeliverBoyName = string.Empty;
+            order.DeliveryBoyPhoneNumber = string.Empty;
+            order.Status = 3;
+            order.DateUpdated = DateTime.Now;
+            db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
             return RedirectToAction("DeliveryAgentAssigned");
         }
 
-        public ActionResult AddRefundFromShopOrderProcessing(string code,double amount,string remark)
+        public ActionResult AddRefundFromShopOrderProcessing(int id, double amount, string remark)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-            var cart = db.Carts.FirstOrDefault(i => i.Code == code);
+
+            var order = db.Orders.FirstOrDefault(i => i.id == id);
             //Refund
-            var payment = db.Payments.FirstOrDefault(i => i.OrderNo == cart.OrderNo);
-            //if (payment.PaymentMode == "Online Payment")
-            //{
-                payment.refundAmount = amount;
-                payment.refundRemark = remark;
-                payment.UpdatedBy = user.Name;
-                payment.DateUpdated = DateTime.Now;
-                db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-            //}
+            var payment = db.Payments.FirstOrDefault(i => i.OrderNo == order.OrderNumber);
+            payment.refundAmount = amount;
+            payment.refundRemark = remark;
+            payment.UpdatedBy = user.Name;
+            payment.DateUpdated = DateTime.Now;
+            db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
 
             return RedirectToAction("OrderPrepared");
         }
 
-        public ActionResult DeliveryBoyAccept(string orderNo, string code)
+        public ActionResult DeliveryBoyAccept(int orderNo, int id)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-            var cart = db.Carts.FirstOrDefault(i => i.Code == code);
-            var delivaryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Code == cart.DeliveryBoyCode && i.Status == 0);
+            var order = db.Orders.FirstOrDefault(i => i.id == id);
+            var delivaryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId && i.Status == 0);
             delivaryBoy.OnWork = 1;
             delivaryBoy.UpdatedBy = user.Name;
             delivaryBoy.DateUpdated = DateTime.Now;
@@ -1705,40 +1665,41 @@ namespace ShopNow.Controllers
             db.SaveChanges();
 
             var shopCharge = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
-            var shop = db.Shops.FirstOrDefault(i => i.Code == shopCharge.ShopCode);
-            var topup = db.TopUps.OrderByDescending(q => q.Id).FirstOrDefault(i => i.CustomerCode == shop.CustomerCode && i.CreditType == 1 && i.Status == 0);
-            if (topup != null)
-            {
-                topup.CreditAmount = topup.CreditAmount - shopCharge.GrossDeliveryCharge;
-                topup.DateUpdated = DateTime.Now;
-                db.Entry(topup).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-            }
-            return RedirectToAction("Edit", "Cart", new { orderno = orderNo, code = code });
+            var shop = db.Shops.FirstOrDefault(i => i.Id == shopCharge.ShopId);
+            //var topup = db.TopUps.OrderByDescending(q => q.Id).FirstOrDefault(i => i.CustomerCode == shop.CustomerCode && i.CreditType == 1 && i.Status == 0);
+            //if (topup != null)
+            //{
+            //    topup.CreditAmount = topup.CreditAmount - shopCharge.GrossDeliveryCharge;
+            //    topup.DateUpdated = DateTime.Now;
+            //    db.Entry(topup).State = System.Data.Entity.EntityState.Modified;
+            //    db.SaveChanges();
+            //}
+            return RedirectToAction("Edit", "Cart", new { orderno = orderNo, id = id });
         }
 
-        public ActionResult DeliveryBoyPickup(string orderNo, string code)
+        public ActionResult DeliveryBoyPickup(int orderNo, int id)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-            var cartList = db.Carts.Where(i => i.OrderNo == orderNo).ToList();
-            foreach (var c in cartList)
-            {
-                var cart = db.Carts.FirstOrDefault(i => i.Code == c.Code);
-                cart.CartStatus = 5;
-                cart.UpdatedBy = user.Name;
-                cart.DateUpdated = DateTime.Now;
-                db.Entry(cart).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
 
+            var order = db.Orders.FirstOrDefault(i => i.id == id);
+            order.Status = 5;
+            order.UpdatedBy = user.Name;
+            order.DateUpdated = DateTime.Now;
+            db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+
+            var orderItemList = db.OrderItems.Where(i => i.OrderId == order.id).ToList();
+            foreach (var item in orderItemList)
+            {
                 //Product Stock Update
-                var product = db.Products.FirstOrDefault(i => i.Code == c.ProductCode);
-                product.HoldOnStok -= Convert.ToInt32(c.Qty);
+                var product = db.Products.FirstOrDefault(i => i.Id == item.ProductId);
+                product.HoldOnStok -= Convert.ToInt32(item.Quantity);
                 db.Entry(product).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
 
             var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
-            detail.CartStatus = 5;
+            detail.OrderStatus = 5;
             detail.DateUpdated = DateTime.Now;
             db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
@@ -1746,14 +1707,12 @@ namespace ShopNow.Controllers
             var payment = db.Payments.FirstOrDefault(i => i.OrderNo == orderNo);
             if (payment.PaymentMode == "Online Payment" && payment.Amount > 1000)
             {
-                //var otpmodel = new OtpViewModel();
-                //var models = _mapper.Map<OtpViewModel, OtpVerification>(otpmodel);
                 var otpVerification = new OtpVerification();
-                otpVerification.Code = Helpers.DRC.Generate("SMS");
-                otpVerification.ShopCode = cartList[0].ShopCode;
-                otpVerification.CustomerCode = user.Code;
+               //otpVerification.Code = Helpers.DRC.Generate("SMS");
+                otpVerification.ShopId = order.Shopid;
+                otpVerification.Id = user.Id;
                 otpVerification.CustomerName = user.Name;
-                otpVerification.PhoneNumber = cartList[0].DeliveryBoyPhoneNumber;
+                otpVerification.PhoneNumber = order.DeliveryBoyPhoneNumber;
                 otpVerification.Otp = Helpers.DRC.GenerateOTP();
                 otpVerification.ReferenceCode = Helpers.DRC.Generate("");
                 otpVerification.Verify = false;
@@ -1764,17 +1723,18 @@ namespace ShopNow.Controllers
                 db.OtpVerifications.Add(otpVerification);
                 db.SaveChanges();
             }
-            return RedirectToAction("Edit", "Cart", new { orderno = orderNo, code = code });
+            return RedirectToAction("Edit", "Cart", new { orderno = orderNo, id = id });
         }
 
-        public ActionResult MarkAsDelivered(string orderNo, string code)
+        public ActionResult MarkAsDelivered(int orderNo, int id)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
 
             var otpVerify = db.OtpVerifications.FirstOrDefault(i => i.OrderNo == orderNo);
-            var cart = db.Carts.FirstOrDefault(i => i.Code == code);
 
-            var delivaryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Code == cart.DeliveryBoyCode && i.Status == 0);// DeliveryBoy.GetCustomer(customerCode);
+            var order = db.Orders.FirstOrDefault(i => i.id == id);
+
+            var delivaryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId && i.Status == 0);
             delivaryBoy.OnWork = 0;
             delivaryBoy.isAssign = 0;
             delivaryBoy.DateUpdated = DateTime.Now;
@@ -1787,24 +1747,20 @@ namespace ShopNow.Controllers
             db.Entry(otpVerify).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
-            var cartList = db.Carts.Where(i => i.OrderNo == orderNo).ToList();
-            foreach (var c in cartList)
-            {
-                var cartItem = db.Carts.FirstOrDefault(i => i.Code == c.Code);
-                cartItem.CartStatus = 6;
-                cartItem.UpdatedBy = delivaryBoy.CustomerName;
-                cartItem.DateUpdated = DateTime.Now;
-                db.Entry(cartItem).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-            }
+
+            order.Status = 6;
+            order.UpdatedBy = delivaryBoy.CustomerName;
+            order.DateUpdated = DateTime.Now;
+            db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
 
             var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
-            detail.CartStatus = 6;
+            detail.OrderStatus = 6;
             detail.DateUpdated = DateTime.Now;
             db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
-            return RedirectToAction("Edit", "Cart", new { orderno = orderNo, code = code });
+            return RedirectToAction("Edit", "Cart", new { orderno = orderNo, id = id });
         }
 
         protected override void Dispose(bool disposing)

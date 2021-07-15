@@ -40,7 +40,7 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNNSCS002")]
-        public JsonResult Save(string name = "", string type = "", int subcategorycode =0, string subcategoryname = "", int adscore = 1)
+        public JsonResult Save(string name = "", int type = 0, int subcategorycode =0, string subcategoryname = "", int adscore = 1)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             bool IsAdded = false;
@@ -51,7 +51,7 @@ namespace ShopNow.Controllers
             {
                 var nextsubcategory = new NextSubCategory();
                 nextsubcategory.Name = name;
-                nextsubcategory.ProductType = type;
+                nextsubcategory.ProductTypeId = type;
                 nextsubcategory.SubCategoryId = subcategorycode;
                 nextsubcategory.SubCategoryName = subcategoryname;
                 nextsubcategory.Adscore = adscore;

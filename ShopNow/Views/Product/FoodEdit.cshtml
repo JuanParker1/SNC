@@ -10,15 +10,6 @@
     }
 </style>
 
-@*@if (ViewBag.ErrorMessage != null)
-    {
-        <div class="alert alert-danger">
-            <h3>Error:</h3>
-            <p>
-                @ViewBag.ErrorMessage
-            </p>
-        </div>
-    }*@
 @using (Html.BeginForm("FoodEdit", "Product", FormMethod.Post, new { id = "ProductForm", role = "form", enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
@@ -30,8 +21,8 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <input type="text" class="form-control" name="ShopName" id="ShopName" value="@Model.ShopName" readonly />
-                    <input type="hidden" name="ShopCode" id="ShopCode" value="@Model.ShopCode" />
-                    <input type="hidden" name="Code" id="Code" value="@Model.Code" />
+                    <input type="hidden" name="ShopId" id="ShopId" value="@Model.ShopId" />
+                    <input type="hidden" name="Id" id="Code" value="@Model.Id" />
                     <input type="hidden" name="Id" value="@Model.Id" />
                     <input type="hidden" name="ShopCategoryCode" id="ShopCategoryCode" value="@Model.ShopCategoryCode" />
                     <input type="hidden" name="ShopCategoryName" id="ShopCategoryName" value="@Model.ShopCategoryName" />
@@ -57,7 +48,7 @@
                                 </label>
                                 <div class="form-group">
                                     <select id="MasterProductCode" name="MasterProductCode" class="form-control" readonly>
-                                        <option value="@Model.MasterProductCode">@Model.MasterProductName</option>
+                                        <option value="@Model.MasterProductId">@Model.MasterProductName</option>
                                     </select>
                                     <input type="hidden" name="MasterProductName" id="MasterProductName" value="@Model.MasterProductName" />
                                     <input type="hidden" name="Name" value="@Model.Name" />
@@ -70,7 +61,7 @@
                                 </label>
                                 <div class="form-group">
                                     <input type="text" name="CategoryName" id="CategoryName" class="form-control" value="@Model.CategoryName" readonly />
-                                    <input type="hidden" name="CategoryCode" id="CategoryCode" value="@Model.CategoryCode" />
+                                    <input type="hidden" name="CategoryId" id="CategoryId" value="@Model.CategoryId" />
                                 </div>
                             </div>
                             <div class="col-md-3">

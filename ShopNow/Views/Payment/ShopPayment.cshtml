@@ -34,31 +34,22 @@
     </div>
     @Html.Grid(Model.ListItems).Columns(columns =>
 {
-    //columns.Add(c => c.Identifier).Titled("Identifier").Css("dis-none");
-    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10)/*.Css("noExl")*/;
-    columns.Add(c => c.ShopOwnerPhoneNumber).Titled("Phone No.").Filterable(true).SetWidth(9)/*.Css("noExl")*/;
-    columns.Add(c => c.TransactionType).Titled("Trans Type").Filterable(true).SetWidth(10)/*.Css("noExl")*/;
+    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
+    columns.Add(c => c.ShopOwnerPhoneNumber).Titled("Phone No.").Filterable(true).SetWidth(9);
+    columns.Add(c => c.TransactionType).Titled("Trans Type").Filterable(true).SetWidth(10);
     columns.Add(c => c.FinalAmount).Titled("Amount").Filterable(true).SetWidth(8);
     columns.Add(c => c.PaymentDate).Titled("Payment Date").Filterable(true).SetWidth(12).Format("{0:dd-MMM-yyyy}");
     columns.Add(c => c.AccountName).Titled("Account Name").Filterable(true).SetWidth(12);
     columns.Add(c => c.AccountNumber).Titled("Account No.").Filterable(true).SetWidth(10);
-    columns.Add(c => c.PaymentId).Titled("Payment Id").Filterable(true).SetWidth(10)/*.Css("noExl")*/;
-    columns.Add(c => c.IfscCode).Titled("Ifsc Code").Filterable(true).SetWidth(8)/*.Css("noExl")*/;
-    columns.Add(c => c.AccountType).Titled("Account Type").Filterable(true).SetWidth(11)/*.Css("noExl")*/;
-    //columns.Add(c => c.EmailID).Titled("Email Id").Css("dis-none");
-    //columns.Add(c => c.EmailBody).Titled("Email Body").Css("dis-none");
-    //columns.Add(c => c.DebitAccountNo).Titled("DebitAccountNo").Css("dis-none");
-    //columns.Add(c => c.CNR).Titled("CNR").Css("dis-none");
-    //columns.Add(c => c.ReceiverIFSC).Titled("ReceiverIFSC").Css("dis-none");
-    //columns.Add(c => c.ReceiverACType).Titled("ReceiverAC").Css("dis-none");
-    //columns.Add(c => c.Remarks).Titled("Remarks").Css("dis-none");
-    //columns.Add(c => c.PhoneNo).Titled("Phone No.").Css("dis-none noExl");
+    columns.Add(c => c.PaymentId).Titled("Payment Id").Filterable(true).SetWidth(10);
+    columns.Add(c => c.IfscCode).Titled("Ifsc Code").Filterable(true).SetWidth(8);
+    columns.Add(c => c.AccountType).Titled("Account Type").Filterable(true).SetWidth(11);
 }).WithPaging(20).Sortable(true)
 
 </div>
 
 <table id="table-excel" class="d-none">
-        @foreach (var item in Model.ListItems.GroupBy(i => i.ShopCode))
+        @foreach (var item in Model.ListItems.GroupBy(i => i.ShopId))
         {
             <tr>
                 <td>@item.FirstOrDefault().Identifier</td>
@@ -89,8 +80,6 @@
     </form>
 }
 
-@*<script src="~/Scripts/exporttoexcel/jquery.table2excel.js"></script>*@
-@*<script type="text/javascript" src="https://rusty1s.github.io/table2excel/dist/table2excel.js"></script>*@
 <script src = "/Scripts/exporttoexcel/Table2ExcelNew.js" ></script>
 <script>
     $(document).ready(function () {
@@ -103,21 +92,10 @@
     });
 
     $("#btnExport").on('click', function () {
-        //$("#table-excel").table2excel({
-        //    exclude: ".noExl",
-        //    name: "Worksheet Name",
-        //    filename: "ShopPayment",
-        //    fileext: ".xls",
-        //    exclude_links: true,
-        //});
-
         $(function () {
             Table2Excel.extend((cell, cellText) => {
-                // method 2
-                //return $(cell).attr('type') == 'string' ? { t: 's', v: cellText } : null;
                 return $(cell).attr('type') == 'string' ? { t: 's', v: cellText } : { t: 'n', v: cellText };
             });
-            
             var table2excel = new Table2Excel({
                 defaultFileName: "ShopPayment",
             });
