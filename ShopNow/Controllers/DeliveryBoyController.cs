@@ -166,7 +166,6 @@ namespace ShopNow.Controllers
                 db.Entry(deliveryBoyImage).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
-                // DeliveryBoy.Edit(deliveryBoyImage, out int error1);
                 return RedirectToAction("List");
             }
             catch (AmazonS3Exception amazonS3Exception)
@@ -575,7 +574,8 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             var model = new DeliveryBoyCreditAmountViewModel();
             var date = DateTime.Now;
-            model.List = db.ShopCharges.Where(i => i.Status == 6 && i.DateUpdated.Year == date.Year && i.DateUpdated.Month == date.Month && i.DateUpdated.Day == date.Day)
+
+            model.List = db.ShopCharges.Where(i => i.OrderStatus == 6 && i.DateUpdated.Year == date.Year && i.DateUpdated.Month == date.Month && i.DateUpdated.Day == date.Day)
                 .GroupBy(i => i.DeliveryBoyId)
                 .Select(i => new DeliveryBoyCreditAmountViewModel.CreditAmountList
                 {
@@ -594,6 +594,7 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             bool IsAdded = false;
             var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == id);// DeliveryBoy.Get(code);
+
             if (deliveryBoy != null)
             {
                 deliveryBoy.MarketingAgentId = null;
@@ -676,9 +677,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNDBYE002")]
-        public JsonResult GetDeliveryBoyShop(int id, double latitude, double longitude)
+
+        public JsonResult GetDeliveryBoyShop(int Id, double latitude, double longitude)
         {
-            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == id);//DeliveryBoy.Get(code);
+            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == Id);//DeliveryBoy.Get(code);
             if (deliveryBoy.Latitude == latitude && deliveryBoy.Longitude == longitude)
             {
                 return Json(true, JsonRequestBehavior.AllowGet);
@@ -743,8 +745,9 @@ namespace ShopNow.Controllers
                 else if(dboy != null)
                     return Json(isCheck = 3, JsonRequestBehavior.AllowGet);
             }
-            return Json(isCheck = 0, JsonRequestBehavior.AllowGet);
+            return Json(isCheck, JsonRequestBehavior.AllowGet);
         }
+
         public ActionResult UpdateDeliveryBoyOnline(int id, int Active)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);

@@ -546,10 +546,10 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
 
                 //Delivery charge Assign
-                var deliveryChargeList = db.Bills.Where(i => i.Type == model.Type && i.Status == 0 && i.ShopCode == "Admin").ToList();
+                var deliveryChargeList = db.Bills.Where(i => i.Type == model.Type && i.Status == 0 && i.ShopName == "Admin").ToList();
                 var deliveryChargeShopList = db.Bills.Where(i => i.Id == shop.Id && i.NameOfBill == 0 && i.Status == 0).ToList();
-                var general = db.Bills.FirstOrDefault(i => i.Type == model.Type && i.DeliveryRateSet == 0 && i.Status == 0 && i.ShopCode == "Admin");
-                var special = db.Bills.FirstOrDefault(i => i.Type == model.Type && i.DeliveryRateSet == 1 && i.Status == 0 && i.ShopCode == "Admin");
+                var general = db.Bills.FirstOrDefault(i => i.Type == model.Type && i.DeliveryRateSet == 0 && i.Status == 0 && i.ShopName == "Admin");
+                var special = db.Bills.FirstOrDefault(i => i.Type == model.Type && i.DeliveryRateSet == 1 && i.Status == 0 && i.ShopName == "Admin");
                 if (deliveryChargeShopList.Count() > 0)
                 {
                     foreach (var dc in deliveryChargeShopList)
@@ -704,12 +704,12 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new ShopFranchiseViewModel();
-            model.List = db.Shops.Where(i => i.Status == 0 && i.MarketingAgentCode != null && i.MarketingAgentName != null)
+            model.List = db.Shops.Where(i => i.Status == 0 && i.MarketingAgentId != null && i.MarketingAgentName != null)
                 .Select(i => new ShopFranchiseViewModel.FranchiseList
                 {
                     Name = i.Name,
                     Id = i.Id,
-                    MarketingAgentId = i.MarketingAgentId,
+                    MarketingAgentId =Convert.ToInt32(i.MarketingAgentId),
                     MarketingAgentName = i.MarketingAgentName
                 }).OrderBy(i => i.Name).ToList();
             return View(model.List);
@@ -894,13 +894,13 @@ namespace ShopNow.Controllers
         {
             bool Verify = false;
             var otp = "";
-            var otpcode = "";
+            int otpcode;
             var otpverification = db.OtpVerifications.Where(i => i.ShopId == code && i.PhoneNumber == phoneNumber).OrderByDescending(i => i.DateEncoded).ToList();
             if (otpverification.Count != 0)
             {
-                otpcode = otpverification[0].Code;
+                otpcode = otpverification[0].Id;
                 var otpverify = (from o in db.OtpVerifications
-                                 where o.Code == otpcode
+                                 where o.Id == otpcode
                                  select o).FirstOrDefault(); //db.OtpVerifications.Where(i => i.Code == otpverification.FirstOrDefault().Code).FirstOrDefault(); // OtpVerification.Get(otpverification.FirstOrDefault().Code);
                 if (otpverify != null && otpverify.Verify == true)
                 {
@@ -1014,9 +1014,9 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNSHPAF015")]
         public async Task<JsonResult> GetShopSelect2(string q = "")
         {
-            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.MarketingAgentCode == null && a.MarketingAgentName == null).Select(i => new
+            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.MarketingAgentId == null && a.MarketingAgentName == null).Select(i => new
             {
-                id = i.Code,
+                id = i.Id,
                 text = i.Name
             }).ToListAsync();
 
