@@ -18,12 +18,12 @@ namespace ShopNow.ViewModels
         public string LongDescription { get; set; }
         public string Specification { get; set; }
         public string ImagePath { get; set; }
-        public string ImagePathLarge1 { get; set; }
-        public string ImagePathLarge2 { get; set; }
-        public string ImagePathLarge3 { get; set; }
-        public string ImagePathLarge4 { get; set; }
-        public string ImagePathLarge5 { get; set; }
-        public string ProductType { get; set; }
+        public string ImagePath1 { get; set; }
+        public string ImagePath2 { get; set; }
+        public string ImagePath3 { get; set; }
+        public string ImagePath4 { get; set; }
+        public string ImagePath5 { get; set; }
+        public int ProductTypeId { get; set; }
         public string GoogleTaxonomyCode { get; set; }
         public string Price { get; set; }
         public System.Data.DataTable DataTable { get; set; }
@@ -36,9 +36,9 @@ namespace ShopNow.ViewModels
         public int Id { get; set; }
         public string Name { get; set; }
         public string NickName { get; set; }
-        public string CategoryCode { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
-        public string SubCategoryCode1 { get; set; }
+        public int SubCategoryCode1 { get; set; }
         public string SubCategoryName1 { get; set; }
         public string SubCategoryName2 { get; set; }
         public string weight { get; set; }
@@ -48,12 +48,12 @@ namespace ShopNow.ViewModels
         public string LongDescription { get; set; }
         public string Specification { get; set; }
         public string ImagePath { get; set; }
-        public string ImagePathLarge1 { get; set; }
-        public string ImagePathLarge2 { get; set; }
-        public string ImagePathLarge3 { get; set; }
-        public string ImagePathLarge4 { get; set; }
-        public string ImagePathLarge5 { get; set; }
-        public string ProductType { get; set; }
+        public string ImagePath1 { get; set; }
+        public string ImagePath2 { get; set; }
+        public string ImagePath3 { get; set; }
+        public string ImagePath4 { get; set; }
+        public string ImagePath5 { get; set; }
+        public int ProductTypeId { get; set; }
         public string ASIN { get; set; }
         public string GoogleTaxonomyCode { get; set; }
         public string Price { get; set; }
@@ -90,13 +90,13 @@ namespace ShopNow.ViewModels
         public string LongDescription { get; set; }
         public string ImagePath { get; set; }
         public double Price { get; set; }
-        public string ProductType { get; set; }
+        public int ProductTypeId { get; set; }
         public string GoogleTaxonomyCode { get; set; }
-        public string ImagePathLarge1 { get; set; }
-        public string ImagePathLarge2 { get; set; }
-        public string ImagePathLarge3 { get; set; }
-        public string ImagePathLarge4 { get; set; }
-        public string ImagePathLarge5 { get; set; }
+        public string ImagePath1 { get; set; }
+        public string ImagePath2 { get; set; }
+        public string ImagePath3 { get; set; }
+        public string ImagePath4 { get; set; }
+        public string ImagePath5 { get; set; }
         public int Adscore { get; set; }
     }
 
@@ -120,15 +120,13 @@ namespace ShopNow.ViewModels
         public class PendingList
         {
             public int Id { get; set; }
-            public int Id { get; set; }
             public string Name { get; set; }
-            public string ItemId { get; set; }
-            public string ProductType { get; set; }
+            public int ItemId { get; set; }
+            public string TypeName { get; set; }
         }
         public List<MappedList> MappedLists { get; set; }
         public class MappedList
         {
-            public int Id { get; set; }
             public int Id { get; set; }
             public string Name { get; set; }
             public string MasterProductCode { get; set; }
@@ -144,27 +142,27 @@ namespace ShopNow.ViewModels
         public string NickName { get; set; }
         public string CategoryCode { get; set; }
         public string CategoryName { get; set; }
-        public string DrugMeasurementUnitCode { get; set; }
+        public int DrugMeasurementUnitId { get; set; }
         public string DrugMeasurementUnitName { get; set; }
         public string GoogleTaxonomyCode { get; set; }
         public string BrandCode { get; set; }
         public string BrandName { get; set; }
         public string ImagePath { get; set; }
-        public string ImagePathLarge1 { get; set; }
-        public string ImagePathLarge2 { get; set; }
-        public string ImagePathLarge3 { get; set; }
-        public string ImagePathLarge4 { get; set; }
-        public string ImagePathLarge5 { get; set; }
+        public string ImagePath1 { get; set; }
+        public string ImagePath2 { get; set; }
+        public string ImagePath3 { get; set; }
+        public string ImagePath4 { get; set; }
+        public string ImagePath5 { get; set; }
         public string Price { get; set; }
         public string PriscriptionCategory { get; set; }
-        public string DrugCompoundDetailCode { get; set; }
+        public int DrugCompoundDetailId{ get; set; }
         public string CombinationDrugCompound { get; set; }
         public string iBarU { get; set; }
         public string OriginCountry { get; set; }
         public string Manufacturer { get; set; }
         public string weight { get; set; }
         public string SizeLB { get; set; }
-        public string ProductType { get; set; }
+        public int ProductTypeId { get; set; }
         public string PackageName { get; set; }
         public System.Data.DataTable DataTable { get; set; }
         public string button { get; set; }
@@ -188,11 +186,11 @@ namespace ShopNow.ViewModels
         public string GoogleTaxonomyCode { get; set; }
         public string BrandCode { get; set; }
         public string BrandName { get; set; }
-        public string ImagePathLarge1 { get; set; }
-        public string ImagePathLarge2 { get; set; }
-        public string ImagePathLarge3 { get; set; }
-        public string ImagePathLarge4 { get; set; }
-        public string ImagePathLarge5 { get; set; }
+        public string ImagePath1 { get; set; }
+        public string ImagePath2 { get; set; }
+        public string ImagePath3 { get; set; }
+        public string ImagePath4 { get; set; }
+        public string ImagePath5 { get; set; }
         public double Price { get; set; }
         public int Adscore { get; set; }
         public bool PriscriptionCategory { get; set; }
@@ -228,21 +226,21 @@ namespace ShopNow.ViewModels
         public string ItemId { get; set; }
         public string Name { get; set; }
         public string NickName { get; set; }
-        public string MasterProductCode { get; set; }
+        public int MasterProductId { get; set; }
         public string MasterProductName { get; set; }
-        public string ShopCode { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public string CategoryCode { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
-        public string BrandCode { get; set; }
+        public int BrandId { get; set; }
         public string BrandName { get; set; }
-        public string DrugMeasurementUnitCode { get; set; }
+        public int DrugMeasurementUnitId { get; set; }
         public string DrugMeasurementUnitName { get; set; }
         public string GoogleTaxonomyCode { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
         public string Specification { get; set; }
-        public string ShopCategoryCode { get; set; }
+        public int ShopCategoryId { get; set; }
         public string ShopCategoryName { get; set; }
         public string ProductType { get; set; }
         public int MinSelectionLimit { get; set; }
@@ -295,11 +293,11 @@ namespace ShopNow.ViewModels
 
     public class MasterFMCGCreateEditViewModel
     {
-        public HttpPostedFileBase FMCGLargeImage1 { get; set; }
-        public HttpPostedFileBase FMCGLargeImage2 { get; set; }
-        public HttpPostedFileBase FMCGLargeImage3 { get; set; }
-        public HttpPostedFileBase FMCGLargeImage4 { get; set; }
-        public HttpPostedFileBase FMCGLargeImage5 { get; set; }
+        public HttpPostedFileBase FMCGImage1 { get; set; }
+        public HttpPostedFileBase FMCGImage2 { get; set; }
+        public HttpPostedFileBase FMCGImage3 { get; set; }
+        public HttpPostedFileBase FMCGImage4 { get; set; }
+        public HttpPostedFileBase FMCGImage5 { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
         public string NickName { get; set; }
@@ -323,16 +321,16 @@ namespace ShopNow.ViewModels
         public string LongDescription { get; set; }
         public int Adscore { get; set; }
         public string ImagePath { get; set; }
-        public string ImagePathLarge1 { get; set; }
-        public string ImagePathLarge2 { get; set; }
-        public string ImagePathLarge3 { get; set; }
-        public string ImagePathLarge4 { get; set; }
-        public string ImagePathLarge5 { get; set; }
+        public string ImagePath1 { get; set; }
+        public string ImagePath2 { get; set; }
+        public string ImagePath3 { get; set; }
+        public string ImagePath4 { get; set; }
+        public string ImagePath5 { get; set; }
         public double Price { get; set; }
         public string ASIN { get; set; }
         public double weight { get; set; }
         public string SizeLB { get; set; }
-        public string ProductType { get; set; }
+        public int ProductTypeId { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
         public int Status { get; set; }
@@ -347,7 +345,7 @@ namespace ShopNow.ViewModels
         public int Id { get; set; }
         public string Name { get; set; }
         public string NickName { get; set; }
-        public string CategoryCode { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public string ProductType { get; set; }
         public int MinSelectionLimit { get; set; }
@@ -356,7 +354,7 @@ namespace ShopNow.ViewModels
         public bool Customisation { get; set; }
         public double Price { get; set; }
         public string GoogleTaxonomyCode { get; set; }
-        public string ImagePathLarge1 { get; set; }
+        public string ImagePath1 { get; set; }
         public int Adscore { get; set; }
 
         public List<AddonList> AddonLists { get; set; }
@@ -395,7 +393,7 @@ namespace ShopNow.ViewModels
         public bool Customisation { get; set; }
         public double Price { get; set; }
         public string GoogleTaxonomyCode { get; set; }
-        public string ImagePathLarge1 { get; set; }
+        public string ImagePath1 { get; set; }
         public int Adscore { get; set; }
 
         public List<AddonList> AddonLists { get; set; }
@@ -403,12 +401,12 @@ namespace ShopNow.ViewModels
         {
             public int Id { get; set; }
             public string AddOnItemName { get; set; }
-            public string MasterProductCode { get; set; }
+            public int MasterProductId { get; set; }
             public string MasterProductName { get; set; }
-            public string AddOnCategoryCode { get; set; }
+            public int AddOnCategoryId { get; set; }
             public string AddOnCategoryName { get; set; }
             public string CrustName { get; set; }
-            public string PortionCode { get; set; }
+            public int PortionId { get; set; }
             public string PortionName { get; set; }
             public int MinSelectionLimit { get; set; }
             public int MaxSelectionLimit { get; set; }
@@ -416,21 +414,19 @@ namespace ShopNow.ViewModels
             public double AddOnsPrice { get; set; }
             public double CrustPrice { get; set; }
             public int AddOnType { get; set; }
-            public Nullable<int> MasterProductId { get; set; }
         }
     }
 
     public class MasterAddOnsCreateViewModel
     {
         public int Id { get; set; }
-        public int Id { get; set; }
         public string AddOnItemName { get; set; }
-        public string MasterProductCode { get; set; }
+        public int MasterProductId { get; set; }
         public string MasterProductName { get; set; }
-        public string AddOnCategoryCode { get; set; }
+        public int AddOnCategoryId { get; set; }
         public string AddOnCategoryName { get; set; }
         public string CrustName { get; set; }
-        public string PortionCode { get; set; }
+        public int PortionId { get; set; }
         public string PortionName { get; set; }
         public int MinSelectionLimit { get; set; }
         public int MaxSelectionLimit { get; set; }
@@ -438,20 +434,19 @@ namespace ShopNow.ViewModels
         public double AddOnsPrice { get; set; }
         public double CrustPrice { get; set; }
         public int AddOnType { get; set; }
-        public Nullable<int> MasterProductId { get; set; }
+      //  public Nullable<int> MasterProductId { get; set; }
 
         public List<DishList> DishLists { get; set; }
         public class DishList
         {
             public int Id { get; set; }
-            public int Id { get; set; }
             public string AddOnItemName { get; set; }
-            public string MasterProductCode { get; set; }
+            public int MasterProductId { get; set; }
             public string MasterProductName { get; set; }
-            public string AddOnCategoryCode { get; set; }
+            public int AddOnCategoryId { get; set; }
             public string AddOnCategoryName { get; set; }
             public string CrustName { get; set; }
-            public string PortionCode { get; set; }
+            public int PortionId { get; set; }
             public string PortionName { get; set; }
             public int MinSelectionLimit { get; set; }
             public int MaxSelectionLimit { get; set; }
@@ -459,7 +454,6 @@ namespace ShopNow.ViewModels
             public double AddOnsPrice { get; set; }
             public double CrustPrice { get; set; }
             public int AddOnType { get; set; }
-            public Nullable<int> MasterProductId { get; set; }
         }
     }
 }

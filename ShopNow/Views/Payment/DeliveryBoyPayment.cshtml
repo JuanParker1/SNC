@@ -31,7 +31,7 @@
     </div>
     @Html.Grid(Model.ListItems).Columns(columns =>
 {
-    columns.Add(c => c.DeliveryBoyId).Titled("Code").Filterable(true).SetWidth(7);
+    //columns.Add(c => c.DeliveryBoyId).Titled("Code").Filterable(true).SetWidth(7);
     columns.Add(c => c.DeliveryBoyName).Titled("Name").Filterable(true).SetWidth(10);
     columns.Add(c => c.DeliveryBoyPhoneNumber).Titled("Phone No.").Filterable(true).SetWidth(10);
     columns.Add(c => c.TransactionType).Titled("Trans Type").Filterable(true).SetWidth(10);
