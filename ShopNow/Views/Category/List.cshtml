@@ -26,9 +26,9 @@
     @Html.Grid(Model).Columns(columns =>
 {
 columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(20);
-columns.Add(c => c.ProductType).Titled("Product Type").Filterable(true).SetWidth(20);
+columns.Add(c => c.ProductTypeId).Titled("Product Type").Filterable(true).SetWidth(20);
 columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
-columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(c => @<div><a href="" data-id="@c.Code" data-id1="@c.Name" data-id2="@c.ProductType" data-id3="@c.OrderNo" class="btn-sm btn-warning edit-prompt" data-toggle="modal" data-target="#editModal" style="padding: 3px 26px">Edit</a> <a href="" data-id="@c.Code" data-id1="@c.Name" class="btn-sm btn-danger delete-prompt" data-toggle="modal" data-target="#deleteModal" style="padding: 3px 18px">Delete</a></div>);
+columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(c => @<div><a href="" data-id="@c.Id" data-id1="@c.Name" data-id2="@c.ProductTypeId" data-id3="@c.OrderNo" class="btn-sm btn-warning edit-prompt" data-toggle="modal" data-target="#editModal" style="padding: 3px 26px">Edit</a> <a href="" data-id="@c.Id" data-id1="@c.Name" class="btn-sm btn-danger delete-prompt" data-toggle="modal" data-target="#deleteModal" style="padding: 3px 18px">Delete</a></div>);
     }).WithPaging(20).Sortable(true)
 
     <!--
