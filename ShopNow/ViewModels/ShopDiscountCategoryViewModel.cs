@@ -31,17 +31,13 @@ namespace ShopNow.ViewModels
         public class DiscountCategoryList
         {
             public int Id { get; set; }
-            public int ProductId { get; set; }
-            public string Code { get; set; }
-            public string ProductCode { get; set; }
-            public string ProductName { get; set; }
-            public double DiscountPercentage { get; set; }
-            public double LoyaltyPointsper100Value { get; set; }
-            public double MinimumLoyaltyReducationPercentage { get; set; }
-            public string CategoryName { get; set; }
-            public string OfferCategoryCode { get; set; }
-            public string OfferCategoryName { get; set; }
-            public int OfferCategoryType { get; set; }
+            public int DiscountCategoryId { get; set; }
+            public string DiscountCategoryName { get; set; }
+            public double DiscountCategoryPercentage { get; set; }
+            public int DiscountType { get; set; }
+            public int DiscountCategoryType { get; set; }
+            public string CategoryNameMain { get; set; }
+            public double LoyaltyPoints { get; set; }
         }
         public List<CategoryList> CategoryLists { get; set; }
         public class CategoryList

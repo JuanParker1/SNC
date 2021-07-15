@@ -1,0 +1,3 @@
+C:\Jose\SNC\ShopNow\obj\Debug\ShopNow.csproj.App.config
+C:\Jose\SNC\ShopNow\obj\Debug\ShopNow.csprojAssemblyReference.cache
+C:\Jose\SNC\ShopNow\obj\Debug\ShopNow.csproj.CoreCompileInputs.cache
