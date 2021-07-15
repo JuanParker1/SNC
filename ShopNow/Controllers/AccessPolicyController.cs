@@ -47,31 +47,30 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNAPGL001")]
-        public ActionResult List(string customercode = "")
+        public ActionResult List(int customerid)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             Session["AccessList"] = null;
             var model = new AccessPolicyListViewModel();
-            if (customercode != "")
+            if (customerid != 0)
             {
                 model.List = db.Pages.Where(i => i.Status == 0)
-                .GroupJoin(db.AccessPolicies.Where(i => i.CustomerCode == customercode && i.isAccess == true), p => p.Code, a => a.PageCode, (p, a) => new { p, a })
+                .GroupJoin(db.AccessPolicies.Where(i => i.CustomerId == customerid && i.isAccess == true), p => p.Code, a => a.PageCode, (p, a) => new { p, a })
                             .Select(i => new AccessPolicyListViewModel.AccessPolicy
                             {
                                 PageCode = i.p.Code,
                                 PageName = i.p.Name,
                                 IsAccess = i.a.Any() ? i.a.FirstOrDefault().isAccess : false,
-                                Code = i.a.FirstOrDefault().Code,
-                                CustomerCode = i.a.FirstOrDefault().CustomerCode,
+                                Id = i.a.FirstOrDefault().Id,
+                                CustomerId = i.a.FirstOrDefault().CustomerId,
                                 CustomerName = i.a.FirstOrDefault().CustomerName,
                                 Status = i.p.Status,
                             }).OrderBy(i => i.PageName).ToList();
-                if (model.CustomerCode == null)
-                {
-                    model.CustomerCode = customercode;
-                    model.CustomerName = db.Customers.FirstOrDefault(m => m.Code == customercode).Name;
-                }
+                
+                    model.CustomerId = customerid;
+                    model.CustomerName = db.Customers.FirstOrDefault(m => m.Id == customerid).Name;
+               
                 List<AccessPolicyViewModel> itemList = Session["AccessList"] as List<AccessPolicyViewModel>;
                 foreach (var ap in model.List)
                 {
@@ -80,14 +79,14 @@ namespace ShopNow.Controllers
                         itemList = new List<AccessPolicyViewModel>();
                     }
                     AccessPolicyViewModel item = new AccessPolicyViewModel();
-                    item.Code = ap.Code;
+                    item.Id = ap.Id;
                     item.PageCode = ap.PageCode;
                     item.PageName = ap.PageName;
-                    item.ShopCode = ap.ShopCode;
+                    item.ShopId = ap.ShopId;
                     item.ShopName = ap.ShopName;
-                    item.StaffCode = ap.StaffCode;
+                    item.StaffId = ap.StaffId;
                     item.StaffName = ap.StaffName;
-                    item.CustomerCode = ap.CustomerCode;
+                    item.CustomerId = ap.CustomerId;
                     item.CustomerName = ap.CustomerName;
                     item.IsAccess = ap.IsAccess;
                     item.Position = ap.Position;
@@ -100,7 +99,7 @@ namespace ShopNow.Controllers
             {
                 model.List = db.Pages.Where(i => i.Status == 0).Select(i => new AccessPolicyListViewModel.AccessPolicy
                 {
-                    Code = i.Code,
+                    Id = i.Id,
                     PageCode = i.Code,
                     PageName = i.Name,
                     Status = i.Status
@@ -120,27 +119,27 @@ namespace ShopNow.Controllers
 
             foreach (var s in shiftsessions)
             {
-                if (s.Code == null && s.IsAccess == true)
+                if (s.Id == 0 && s.IsAccess == true)
                 {
                     var access = new AccessPolicy();
                     access.PageCode = s.PageCode;
                     access.PageName = s.PageName;
-                    access.ShopCode = model.ShopCode;
+                    access.ShopId = model.ShopId;
                     access.ShopName = model.ShopName;
-                    access.StaffCode = model.StaffCode;
+                    access.StaffId = model.StaffId;
                     access.StaffName = model.StaffName;
-                    access.CustomerCode = model.CustomerCode;
+                    access.CustomerId = model.CustomerId;
                     access.CustomerName = model.CustomerName;
                     access.isAccess = true;
                     access.CreatedBy = user.Name;
                     access.UpdatedBy = user.Name;
-                    var cust = db.Customers.Where(m => m.Code == model.CustomerCode).Select(m => m.Position).FirstOrDefault();
+                    var cust = db.Customers.Where(m => m.Id == model.CustomerId).Select(m => m.Position).FirstOrDefault();
                     if (cust != 0)
                     {
                         access.Position = cust;
                     }
                     // string shiftsessioncode = AccessPolicy.Add(access, out int errorCode);
-                    access.Code = Helpers.DRC.Generate("APG");
+                    //access.Code = Helpers.DRC.Generate("APG");
                     access.Status = 0;
                     access.DateEncoded = DateTime.Now;
                     access.DateUpdated = DateTime.Now;
@@ -149,7 +148,7 @@ namespace ShopNow.Controllers
                 }
             }
             model.List = db.Pages.Where(i => i.Status == 0)
-               .GroupJoin(db.AccessPolicies.Where(i => i.CustomerCode == model.CustomerCode && i.isAccess == true), p => p.Code, a => a.PageCode, (p, a) => new { p, a })
+               .GroupJoin(db.AccessPolicies.Where(i => i.CustomerId == model.CustomerId && i.isAccess == true), p => p.Code, a => a.PageCode, (p, a) => new { p, a })
                            .Select(i => new AccessPolicyListViewModel.AccessPolicy
                            {
                                PageCode = i.p.Code,
@@ -162,39 +161,37 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNAPGM002")]
-        public ActionResult Manage(string shopcode="", string staffcode="")
+        public ActionResult Manage(int shopid, int staffid)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             Session["ManageList"] = new List<AccessPolicyViewModel>();
             var model = new AccessPolicyListViewModel();
 
-            if (shopcode != "" && staffcode != "")
+            if (shopid != 0 && staffid != 0)
             {
                 model.ManageList = db.Pages.Where(i => i.Status == 0)
-                .GroupJoin(db.AccessPolicies.Where(i => i.ShopCode == shopcode && i.StaffCode == staffcode && i.isAccess == true), p => p.Code, a => a.PageCode, (p, a) => new { p, a })
+                .GroupJoin(db.AccessPolicies.Where(i => i.ShopId == shopid && i.StaffId == staffid && i.isAccess == true), p => p.Code, a => a.PageCode, (p, a) => new { p, a })
                             .Select(i => new AccessPolicyListViewModel.AccessManage
                             {
                                 PageCode = i.p.Code,
                                 PageName = i.p.Name,
                                 IsAccess = i.a.Any() ? i.a.FirstOrDefault().isAccess : false,
-                                Code = i.a.FirstOrDefault().Code,
-                                ShopCode = i.a.FirstOrDefault().ShopCode,
+                                Id = i.a.FirstOrDefault().Id,
+                                ShopId = i.a.FirstOrDefault().ShopId,
                                 ShopName = i.a.FirstOrDefault().ShopName,
-                                StaffCode = i.a.FirstOrDefault().StaffCode,
+                                StaffId = i.a.FirstOrDefault().StaffId,
                                 StaffName = i.a.FirstOrDefault().StaffName,
-                                CustomerCode = i.a.FirstOrDefault().CustomerCode,
+                                CustomerId = i.a.FirstOrDefault().CustomerId,
                                 CustomerName = i.a.FirstOrDefault().CustomerName,
                                 Status = i.p.Status,
                             }).OrderBy(i=> i.PageName).ToList();
-                if (model.ShopCode == null)
-                {
-                    model.ShopCode = shopcode;
-                    //model.ShopName = Shop.Get(shopcode).Name;
-                    model.ShopName = db.Shops.Where(s => s.Code == shopcode).Select(s => s.Name).ToString();
-                    model.StaffCode = staffcode;
-                    model.StaffName = db.Staffs.Where(s => s.Code == shopcode).Select(s => s.Name).ToString();//Staff.Get(staffcode).Name;
-                }
+               
+                    model.ShopId = shopid;
+                    model.ShopName = db.Shops.Where(s => s.Id == shopid).Select(s => s.Name).ToString();
+                    model.StaffId = staffid;
+                    model.StaffName = db.Staffs.Where(s => s.Id == shopid).Select(s => s.Name).ToString();//Staff.Get(staffcode).Name;
+                
                 List<AccessPolicyViewModel> itemList = Session["ManageList"] as List<AccessPolicyViewModel>;
                 foreach (var ap in model.ManageList)
                 {
@@ -203,14 +200,14 @@ namespace ShopNow.Controllers
                         itemList = new List<AccessPolicyViewModel>();
                     }
                     AccessPolicyViewModel item = new AccessPolicyViewModel();
-                    item.Code = ap.Code;
+                    item.Id = ap.Id;
                     item.PageCode = ap.PageCode;
                     item.PageName = ap.PageName;
-                    item.ShopCode = ap.ShopCode;
+                    item.ShopId = ap.ShopId;
                     item.ShopName = ap.ShopName;
-                    item.StaffCode = ap.StaffCode;
+                    item.StaffId = ap.StaffId;
                     item.StaffName = ap.StaffName;
-                    item.CustomerCode = ap.CustomerCode;
+                    item.CustomerId = ap.CustomerId;
                     item.CustomerName = ap.CustomerName;
                     item.IsAccess = ap.IsAccess;
                     item.Position = ap.Position;
@@ -221,9 +218,9 @@ namespace ShopNow.Controllers
             }
             else
             {
-                model.ManageList = db.AccessPolicies.Where(i => i.ShopCode == shopcode && i.StaffCode == staffcode).Select(i => new AccessPolicyListViewModel.AccessManage
+                model.ManageList = db.AccessPolicies.Where(i => i.ShopId == shopid && i.StaffId == staffid).Select(i => new AccessPolicyListViewModel.AccessManage
                 {
-                    Code = i.Code,
+                    Id = i.Id,
                     PageCode = i.PageCode,
                     PageName = i.PageName,
                     IsAccess = i.isAccess
@@ -242,21 +239,21 @@ namespace ShopNow.Controllers
 
             foreach (var s in shiftsessions)
             {
-                if (s.Code == null && s.IsAccess == true)
+                if (s.Id == 0 && s.IsAccess == true)
                 {
                     var access = new AccessPolicy();
 
                     access.PageCode = s.PageCode;
                     access.PageName = s.PageName;
-                    access.ShopCode = s.ShopCode;
+                    access.ShopId = s.ShopId;
                     access.ShopName = s.ShopName;
-                    access.StaffCode = s.StaffCode;
+                    access.StaffId = s.StaffId;
                     access.StaffName = s.StaffName;
-                    var shop = db.Shops.Where(m => m.Code == s.ShopCode).FirstOrDefault();  //Shop.Get(s.ShopCode);
-                    var customer = db.Customers.Where(m => m.Code == shop.CustomerCode).FirstOrDefault(); //Customer.Get(shop.CustomerCode);
+                    var shop = db.Shops.Where(m => m.Id == s.ShopId).FirstOrDefault();  //Shop.Get(s.ShopCode);
+                    var customer = db.Customers.Where(m => m.Id == shop.CustomerId).FirstOrDefault(); //Customer.Get(shop.CustomerCode);
                     if (customer != null)
                     {
-                        access.CustomerCode = customer.Code;
+                        access.CustomerId = customer.Id;
                         access.CustomerName = customer.Name;
                         access.Position = customer.Position;
                     }
@@ -265,7 +262,7 @@ namespace ShopNow.Controllers
                     access.UpdatedBy = user.Name;
                     access.Status = s.Status;
                     //string shiftsessioncode = AccessPolicy.Add(access, out int errorCode);
-                    access.Code = Helpers.DRC.Generate("APG");
+                   // access.Code = Helpers.DRC.Generate("APG");
                     access.Status = 0;
                     access.DateEncoded = DateTime.Now;
                     access.DateUpdated = DateTime.Now;
@@ -274,7 +271,7 @@ namespace ShopNow.Controllers
                 }
             }
             model.ManageList = db.Pages.Where(i => i.Status == 3)
-               .GroupJoin(db.AccessPolicies.Where(i => i.ShopCode == model.ShopCode && i.StaffCode == model.StaffCode && i.isAccess == true), p => p.Code, a => a.PageCode, (p, a) => new { p, a })
+               .GroupJoin(db.AccessPolicies.Where(i => i.ShopId == model.ShopId && i.StaffId == model.StaffId && i.isAccess == true), p => p.Code, a => a.PageCode, (p, a) => new { p, a })
                            .Select(i => new AccessPolicyListViewModel.AccessManage
                            {
                                PageCode = i.p.Code,
@@ -315,10 +312,10 @@ namespace ShopNow.Controllers
             var isExisting = itemList.Any(i => i.PageCode == pageCode && i.PageName == pageName);
             if (isExisting)
             {
-                var code = itemList.FirstOrDefault(i => i.PageCode == pageCode && i.PageName == pageName).Code;
-                if (code != null)
+                var code = itemList.FirstOrDefault(i => i.PageCode == pageCode && i.PageName == pageName).Id;
+                if (code != 0)
                 {
-                    var ap = db.AccessPolicies.Where(m => m.Code == code).FirstOrDefault();//AccessPolicy.Get(code);
+                    var ap = db.AccessPolicies.Where(m => m.Id == code).FirstOrDefault();//AccessPolicy.Get(code);
                     ap.isAccess = false;
                     ap.Status = 2;
                     //AccessPolicy.Edit(ap, out int error);
@@ -365,14 +362,14 @@ namespace ShopNow.Controllers
             var isExisting = itemList.Any(i => i.PageCode == pageCode && i.PageName == pageName);
             if (isExisting)
             {
-                var code = itemList.FirstOrDefault(i => i.PageCode == pageCode && i.PageName == pageName).Code;
-                if (code != null)
+                var code = itemList.FirstOrDefault(i => i.PageCode == pageCode && i.PageName == pageName).Id;
+                if (code != 0)
                 {
                     //var ap = AccessPolicy.Get(code);
                     //ap.IsAccess = false;
                     //ap.Status = 2;
                     //AccessPolicy.Edit(ap, out int error);
-                    var ap = db.AccessPolicies.Where(m => m.Code == code).FirstOrDefault();//AccessPolicy.Get(code);
+                    var ap = db.AccessPolicies.Where(m => m.Id == code).FirstOrDefault();//AccessPolicy.Get(code);
                     ap.isAccess = false;
                     ap.Status = 2;
                     //AccessPolicy.Edit(ap, out int error);
@@ -390,11 +387,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNAPGL001")]
-        public async Task<JsonResult> GetStaffSelect2(string shopcode)
+        public async Task<JsonResult> GetStaffSelect2(int shopid)
         {
-            var model = await db.Staffs.OrderBy(i => i.Name).Where(a => a.ShopCode == shopcode).Select(i => new
+            var model = await db.Staffs.OrderBy(i => i.Name).Where(a => a.ShopId == shopid).Select(i => new
             {
-                id = i.Code,
+                id = i.Id,
                 text = i.Name
             }).ToListAsync();
 
@@ -406,7 +403,7 @@ namespace ShopNow.Controllers
         {
             var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q)).Select(i => new
             {
-                id = i.Code,
+                id = i.Id,
                 text = i.Name
             }).ToListAsync();
 
@@ -418,7 +415,7 @@ namespace ShopNow.Controllers
         {
             var model = await db.Customers.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Position == 4).Select(i => new
             {
-                id = i.Code,
+                id = i.Id,
                 text = i.Name
             }).ToListAsync();
 
@@ -539,7 +536,7 @@ namespace ShopNow.Controllers
                     {
                         db.AccessPolicies.Add(new AccessPolicy
                         {
-                            Code = _generatedCode,
+                           // Id = _generatedCode,
                             PageName = row[model.PageName].ToString(),
                             PageCode = row[model.PageCode].ToString(),
                             //Status = Convert.ToInt32(row[model.Status]),
@@ -548,7 +545,7 @@ namespace ShopNow.Controllers
                             //Position = 4,
                             Status = 3,
                             Position = 1,
-                            CustomerCode = user.Code,
+                            CustomerId = user.Id,
                             CustomerName = user.Name,
                             DateEncoded = DateTime.Now,
                             DateUpdated = DateTime.Now,
@@ -610,16 +607,16 @@ namespace ShopNow.Controllers
                 var access = _mapper.Map<AccessPolicyCreateEditViewModel, AccessPolicy>(model);
                 access.CreatedBy = user.Name;
                 access.UpdatedBy = user.Name;
-                var shop = db.Shops.Where(m => m.Code == model.ShopCode).FirstOrDefault(); //Shop.Get(model.ShopCode);
-                var customer = db.Customers.Where(c => c.Code == shop.CustomerCode).FirstOrDefault(); //Customer.Get(shop.CustomerCode);
+                var shop = db.Shops.Where(m => m.Id == model.ShopId).FirstOrDefault(); //Shop.Get(model.ShopCode);
+                var customer = db.Customers.Where(c => c.Id == shop.CustomerId).FirstOrDefault(); //Customer.Get(shop.CustomerCode);
                 if (customer != null)
                 {
-                    access.CustomerCode = customer.Code;
+                    access.CustomerId = customer.Id;
                     access.CustomerName = customer.Name;
                 }
                 access.isAccess = true;
                 // access.Code = AccessPolicy.Add(access, out errorCode);
-                access.Code = Helpers.DRC.Generate("APG");
+               // access.Code = Helpers.DRC.Generate("APG");
                 access.Status = 0;
                 access.DateEncoded = DateTime.Now;
                 access.DateUpdated = DateTime.Now;
@@ -634,14 +631,14 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNAPGE006")]
-        public ActionResult Edit(string code)
+        public ActionResult Edit(string id)
         {
-            var dCode = AdminHelpers.DCode(code);
+            var dCode = AdminHelpers.DCodeInt(id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            if (string.IsNullOrEmpty(dCode))
-                return HttpNotFound();
-            var access = db.AccessPolicies.Where(m => m.Code == dCode).FirstOrDefault();//AccessPolicy.Get(dCode);
+            //if (string.IsNullOrEmpty(dCode))
+            //    return HttpNotFound();
+            var access = db.AccessPolicies.Where(m => m.Id == dCode).FirstOrDefault();//AccessPolicy.Get(dCode);
             var model = _mapper.Map<AccessPolicy, AccessPolicyCreateEditViewModel>(access);
             return View(model);
         }
@@ -655,16 +652,16 @@ namespace ShopNow.Controllers
             int errorCode = 0;
             try
             {
-                AccessPolicy access = db.AccessPolicies.Where(m => m.Code == model.Code).FirstOrDefault();//AccessPolicy.Get(model.Code);
+                AccessPolicy access = db.AccessPolicies.Where(m => m.Id == model.Id).FirstOrDefault();//AccessPolicy.Get(model.Code);
                 _mapper.Map(model, access);
                 access.DateUpdated = DateTime.Now;
                 access.UpdatedBy = user.Name;
                 access.isAccess = true;
-                var shop = db.Shops.Where(s => s.Code == model.ShopCode).FirstOrDefault(); //Shop.Get(model.ShopCode);
-                var customer = db.Customers.Where(c => c.Code == shop.CustomerCode).FirstOrDefault(); //Customer.Get(shop.CustomerCode);
+                var shop = db.Shops.Where(s => s.Id == model.ShopId).FirstOrDefault(); //Shop.Get(model.ShopCode);
+                var customer = db.Customers.Where(c => c.Id == shop.CustomerId).FirstOrDefault(); //Customer.Get(shop.CustomerCode);
                 if (customer != null)
                 {
-                    access.CustomerCode = customer.Code;
+                    access.CustomerId = customer.Id;
                     access.CustomerName = customer.Name;
                 }
                 // bool success = AccessPolicy.Edit(access, out errorCode);
@@ -680,11 +677,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNAPGD007")]
-        public ActionResult Delete(string code)
+        public ActionResult Delete(string id)
         {
-            var dCode = AdminHelpers.DCode(code);
+            var dCode = AdminHelpers.DCodeInt(id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var access = db.AccessPolicies.Where(m => m.Code == dCode).FirstOrDefault(); //AccessPolicy.Get(dCode);
+            var access = db.AccessPolicies.Where(m => m.Id == dCode).FirstOrDefault(); //AccessPolicy.Get(dCode);
             access.Status = 2;
             access.DateUpdated = DateTime.Now;
             access.UpdatedBy = user.Name;

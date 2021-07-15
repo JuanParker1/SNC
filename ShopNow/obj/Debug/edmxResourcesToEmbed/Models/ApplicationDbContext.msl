@@ -1,28 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="sncModelStoreContainer" CdmEntityContainer="sncEntities">
-    <EntitySetMapping Name="AccessPolicies">
-      <EntityTypeMapping TypeName="sncModel.AccessPolicy">
-        <MappingFragment StoreEntitySet="AccessPolicies">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="PageCode" ColumnName="PageCode" />
-          <ScalarProperty Name="PageName" ColumnName="PageName" />
-          <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-          <ScalarProperty Name="ShopName" ColumnName="ShopName" />
-          <ScalarProperty Name="StaffId" ColumnName="StaffId" />
-          <ScalarProperty Name="StaffName" ColumnName="StaffName" />
-          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
-          <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
-          <ScalarProperty Name="isAccess" ColumnName="isAccess" />
-          <ScalarProperty Name="Position" ColumnName="Position" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-          <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-          <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="AddOnCategories">
       <EntityTypeMapping TypeName="sncModel.AddOnCategory">
         <MappingFragment StoreEntitySet="AddOnCategories">
@@ -1157,5 +1135,27 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
+    <EntitySetMapping Name="AccessPolicies">
+      <EntityTypeMapping TypeName="sncModel.AccessPolicy">
+        <MappingFragment StoreEntitySet="AccessPolicies">
+          <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+          <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="Position" ColumnName="Position" />
+          <ScalarProperty Name="isAccess" ColumnName="isAccess" />
+          <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+          <ScalarProperty Name="StaffName" ColumnName="StaffName" />
+          <ScalarProperty Name="StaffId" ColumnName="StaffId" />
+          <ScalarProperty Name="ShopName" ColumnName="ShopName" />
+          <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+          <ScalarProperty Name="PageName" ColumnName="PageName" />
+          <ScalarProperty Name="PageCode" ColumnName="PageCode" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

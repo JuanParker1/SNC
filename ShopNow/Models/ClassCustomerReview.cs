@@ -19,7 +19,6 @@ namespace ShopNow.Models
         }
 
         public int Id { get; set; }
-        public int Id { get; set; }
         public string ShopCode { get; set; }
         public string ShopName { get; set; }
         public string CustomerCode { get; set; }
@@ -36,12 +35,12 @@ namespace ShopNow.Models
 
         private static ShopnowchatEntities _db = new ShopnowchatEntities();
 
-        public static CustomerReview Get(string code)
+        public static CustomerReview Get(int id)
         {
             try
             {
 
-                return _db.CustomerReviews.FirstOrDefault(i => i.Code == code && i.Status == 0) ?? (CustomerReview)null;
+                return _db.CustomerReviews.FirstOrDefault(i => i.Id == id && i.Status == 0) ?? (CustomerReview)null;
             }
             catch
             {
@@ -70,13 +69,12 @@ namespace ShopNow.Models
             {
                 if (Validate(model, out error))
                 {
-                    model.Code = _generatedCode;
                     model.Status = 0;
                     model.DateEncoded = DateTime.Now;
                     model.DateUpdated = DateTime.Now;
                     _db.CustomerReviews.Add(model);
                     _db.SaveChanges();
-                    return model.Code;
+                    return model.CustomerName;
                 }
                 else
                     return string.Empty;

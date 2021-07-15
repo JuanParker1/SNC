@@ -96,9 +96,10 @@ namespace ShopNow.Controllers
             var prod = _mapper.Map<MasterFoodCreateViewModel, MasterProduct>(model);
             prod.CreatedBy = user.Name;
             prod.UpdatedBy = user.Name;
-            prod.ProductType = "Dish";
+            prod.ProductTypeId = 1;
+            prod.ProductTypeName = "Dish";
             prod.Status = 0;
-            var name = _db.MasterProducts.FirstOrDefault(i => i.Name == model.Name && i.Status == 0 && i.ProductType == "Dish" && i.CategoryCode == model.CategoryCode);
+            var name = _db.MasterProducts.FirstOrDefault(i => i.Name == model.Name && i.Status == 0 && i.ProductTypeName == "Dish" && i.CategoryId == model.CategoryId);
             prod.Name = model.Name;
             if(model.NickName == null)
             {
@@ -113,8 +114,8 @@ namespace ShopNow.Controllers
                 {
                     if (model.ProductImage1 != null)
                     {
-                        uc.UploadFiles(model.ProductImage1.InputStream, prod.Code + "_" + model.ProductImage1.FileName, accesskey, secretkey, "image");
-                        prod.ImagePathLarge1 = prod.Code + "_" + model.ProductImage1.FileName.Replace(" ", "");
+                        uc.UploadFiles(model.ProductImage1.InputStream, prod.Id + "_" + model.ProductImage1.FileName, accesskey, secretkey, "image");
+                        prod.ImagePath1 = prod.Id + "_" + model.ProductImage1.FileName.Replace(" ", "");
                     }
                 }
                 catch (AmazonS3Exception amazonS3Exception)
@@ -144,13 +145,12 @@ namespace ShopNow.Controllers
             var productDishaddOn = new ProductDishAddOn();
             foreach (var s in addOns)
             {
-                productDishaddOn.Code = _generatedCode("PDA");
                 productDishaddOn.AddOnItemName = s.AddOnItemName;
-                productDishaddOn.MasterProductCode = prod.Code;
+                productDishaddOn.MasterProductId = prod.Id;
                 productDishaddOn.MasterProductName = prod.Name;
-                productDishaddOn.AddOnCategoryCode = s.AddOnCategoryCode;
+                productDishaddOn.AddOnCategoryId = s.AddOnCategoryId;
                 productDishaddOn.AddOnCategoryName = s.AddOnCategoryName;
-                productDishaddOn.PortionCode = s.PortionCode;
+                productDishaddOn.PortionId = s.PortionId;
                 productDishaddOn.PortionName = s.PortionName;
                 productDishaddOn.MinSelectionLimit = s.MinSelectionLimit;
                 productDishaddOn.MaxSelectionLimit = s.MaxSelectionLimit;

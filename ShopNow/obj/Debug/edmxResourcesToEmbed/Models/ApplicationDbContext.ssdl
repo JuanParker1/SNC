@@ -7,7 +7,7 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="PageCode" Type="nvarchar(max)" />
     <Property Name="PageName" Type="nvarchar(max)" />
-    <Property Name="ShopId" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="ShopId" Type="int" Nullable="false" />
     <Property Name="ShopName" Type="nvarchar(max)" />
     <Property Name="StaffId" Type="int" Nullable="false" />
     <Property Name="StaffName" Type="nvarchar(max)" />

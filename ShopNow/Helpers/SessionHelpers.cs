@@ -12,8 +12,6 @@ namespace ShopNow.Helpers
      
         public class User
         {
-           
-            public int Id { get; set; }
             public int Id { get; set; }
             public string Name { get; set; }
             public string PhoneNumber { get; set; }
@@ -95,7 +93,7 @@ namespace ShopNow.Helpers
                 user = db.Customers.Where(i => i.PhoneNumber == username && i.Status == 0 && i.Position ==4)
                      .Select(i => new Helpers.Sessions.User
                      {
-                         Code = i.Code,
+                         Id = i.Id,
                          Name = i.Name,
                          
                      }).FirstOrDefault();
@@ -138,7 +136,7 @@ namespace ShopNow.Helpers
                 user = db.BrandOwners.Where(i => i.PhoneNumber == username && i.Status == 0)
                      .Select(i => new Helpers.Sessions.User
                      {
-                         Code = i.Code,
+                         Id = i.Id,
                          Name = i.Name,
 
                      }).FirstOrDefault();
@@ -168,7 +166,7 @@ namespace ShopNow.Helpers
                 user = db.MarketingAgents.Where(i => i.PhoneNumber == username && i.Status == 0)
                      .Select(i => new Helpers.Sessions.User
                      {
-                         Code = i.Code,
+                         Id = i.Id,
                          Name = i.Name,
 
                      }).FirstOrDefault();

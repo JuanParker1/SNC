@@ -3,27 +3,6 @@
   <ComplexType Name="GetTableVAlueString_Result">
     <Property Name="Name" Type="String" MaxLength="600" FixedLength="false" Unicode="true" />
   </ComplexType>
-  <EntityType Name="AccessPolicy">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="PageCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="PageName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="ShopId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="ShopName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="StaffId" Type="Int32" Nullable="false" />
-    <Property Name="StaffName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="CustomerId" Type="Int32" Nullable="false" />
-    <Property Name="CustomerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="isAccess" Type="Boolean" Nullable="false" />
-    <Property Name="Position" Type="Int32" Nullable="false" />
-    <Property Name="Status" Type="Int32" Nullable="false" />
-    <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-  </EntityType>
   <EntityType Name="AddOnCategory">
     <Key>
       <PropertyRef Name="Id" />
@@ -1116,7 +1095,6 @@
     </ReferentialConstraint>
   </Association>
   <EntityContainer Name="sncEntities" annotation:LazyLoadingEnabled="true">
-    <EntitySet Name="AccessPolicies" EntityType="Self.AccessPolicy" />
     <EntitySet Name="AddOnCategories" EntityType="Self.AddOnCategory" />
     <EntitySet Name="Admins" EntityType="Self.Admin" />
     <EntitySet Name="Banners" EntityType="Self.Banner" />
@@ -1260,6 +1238,7 @@
     <FunctionImport Name="test" ReturnType="Collection(sncModel.test_Result)">
       <Parameter Name="str" Mode="In" Type="String" />
     </FunctionImport>
+    <EntitySet Name="AccessPolicies" EntityType="sncModel.AccessPolicy" />
   </EntityContainer>
   <ComplexType Name="test_Result">
     <Property Type="Int32" Name="Id" Nullable="false" />
@@ -1306,4 +1285,25 @@
     <Property Type="String" Name="CreatedBy" Nullable="true" />
     <Property Type="String" Name="UpdatedBy" Nullable="true" />
   </ComplexType>
+  <EntityType Name="AccessPolicy">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PageCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PageName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ShopId" Type="Int32" Nullable="false" />
+    <Property Name="ShopName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="StaffId" Type="Int32" Nullable="false" />
+    <Property Name="StaffName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="CustomerId" Type="Int32" Nullable="false" />
+    <Property Name="CustomerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="isAccess" Type="Boolean" Nullable="false" />
+    <Property Name="Position" Type="Int32" Nullable="false" />
+    <Property Name="Status" Type="Int32" Nullable="false" />
+    <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+  </EntityType>
 </Schema>
