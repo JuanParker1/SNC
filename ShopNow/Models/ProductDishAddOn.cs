@@ -16,6 +16,7 @@ namespace ShopNow.Models
     {
         public int Id { get; set; }
         public string AddOnItemName { get; set; }
+        public Nullable<int> MasterProductId { get; set; }
         public string MasterProductName { get; set; }
         public int AddOnCategoryId { get; set; }
         public string AddOnCategoryName { get; set; }
@@ -29,7 +30,6 @@ namespace ShopNow.Models
         public double AddOnsPrice { get; set; }
         public double CrustPrice { get; set; }
         public int AddOnType { get; set; }
-        public Nullable<int> MasterProductId { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }
         public string CreatedBy { get; set; }

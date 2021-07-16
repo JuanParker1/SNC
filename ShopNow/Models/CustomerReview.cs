@@ -14,17 +14,17 @@ namespace ShopNow.Models
     
     public partial class CustomerReview
     {
-        public int Id { get; set; }
-        public string ShopCode { get; set; }
+        public long Id { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public string CustomerCode { get; set; }
+        public int CustomerId { get; set; }
         public string CustomerName { get; set; }
         public string CustomerRemark { get; set; }
-        public Nullable<int> Rating { get; set; }
+        public int Rating { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
-        public Nullable<int> Status { get; set; }
-        public Nullable<System.DateTime> DateEncoded { get; set; }
-        public Nullable<System.DateTime> DateUpdated { get; set; }
+        public int Status { get; set; }
+        public System.DateTime DateEncoded { get; set; }
+        public System.DateTime DateUpdated { get; set; }
     }
 }

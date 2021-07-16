@@ -79,12 +79,12 @@ namespace ShopNow.Models
         public string AccountNumber { get; set; }
         public int ShopCategoryId { get; set; }
         public string ShopCategoryName { get; set; }
-        public Nullable<int> PincodeRateId { get; set; }
+        public int PincodeRateId { get; set; }
         public int PincodeRateDeliveryRateSet { get; set; }
-        public string MarketingAgentId { get; set; }
+        public int MarketingAgentId { get; set; }
         public string MarketingAgentName { get; set; }
         public int Adscore { get; set; }
-        public Nullable<bool> isOnline { get; set; }
+        public Nullable<bool> IsOnline { get; set; }
         public string GooglePlaceId { get; set; }
         public int Status { get; set; }
         public string CreatedBy { get; set; }

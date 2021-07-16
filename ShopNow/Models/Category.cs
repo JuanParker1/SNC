@@ -18,6 +18,7 @@ namespace ShopNow.Models
         public string Name { get; set; }
         public int OrderNo { get; set; }
         public int ProductTypeId { get; set; }
+        public string ProductTypeName { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }

@@ -29,11 +29,11 @@ namespace ShopNow.Models
         public int MeasurementUnitId { get; set; }
         public string MeasurementUnitName { get; set; }
         public bool PriscriptionCategory { get; set; }
-        public double weight { get; set; }
+        public double Weight { get; set; }
         public string SizeLB { get; set; }
         public int DrugCompoundDetailId { get; set; }
         public string DrugCompoundDetailName { get; set; }
-        public string iBarU { get; set; }
+        public string IBarU { get; set; }
         public string OriginCountry { get; set; }
         public string Manufacturer { get; set; }
         public Nullable<int> PackageId { get; set; }

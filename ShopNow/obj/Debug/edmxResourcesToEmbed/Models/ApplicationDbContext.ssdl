@@ -55,12 +55,12 @@
     <Property Name="ProductId" Type="int" Nullable="false" />
     <Property Name="ProductName" Type="nvarchar(max)" />
     <Property Name="Position" Type="int" Nullable="false" />
-    <Property Name="Bannerpath" Type="nvarchar(max)" />
-    <Property Name="Fromdate" Type="datetime" Nullable="false" />
+    <Property Name="BannerPath" Type="nvarchar(max)" />
+    <Property Name="FromDate" Type="datetime" Nullable="false" />
     <Property Name="Todate" Type="datetime" Nullable="false" />
     <Property Name="Days" Type="int" Nullable="false" />
     <Property Name="BannerName" Type="nvarchar(max)" />
-    <Property Name="paymentid" Type="int" />
+    <Property Name="PaymentId" Type="int" Nullable="false" />
     <Property Name="CreditType" Type="int" />
     <Property Name="MasterProductId" Type="int" Nullable="false" />
     <Property Name="MasterProductName" Type="varchar" MaxLength="50" />
@@ -146,6 +146,7 @@
     <Property Name="DateEncoded" Type="datetime" Nullable="false" />
     <Property Name="DateUpdated" Type="datetime" Nullable="false" />
     <Property Name="ProductTypeId" Type="int" Nullable="false" />
+    <Property Name="ProductTypeName" Type="nvarchar" MaxLength="50" />
     <Property Name="CreatedBy" Type="nvarchar(max)" />
     <Property Name="UpdatedBy" Type="nvarchar(max)" />
   </EntityType>
@@ -157,6 +158,7 @@
     <Property Name="Name" Type="nvarchar(max)" />
     <Property Name="OrderNo" Type="int" Nullable="false" />
     <Property Name="ProductTypeId" Type="int" Nullable="false" />
+    <Property Name="ProductTypeName" Type="nvarchar" MaxLength="50" />
     <Property Name="Status" Type="int" Nullable="false" />
     <Property Name="DateEncoded" Type="datetime" Nullable="false" />
     <Property Name="DateUpdated" Type="datetime" Nullable="false" />
@@ -193,18 +195,17 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Code" Type="varchar" MaxLength="100" />
-    <Property Name="ShopCode" Type="nvarchar" MaxLength="150" />
+    <Property Name="ShopId" Type="int" Nullable="false" />
     <Property Name="ShopName" Type="varchar" MaxLength="150" />
-    <Property Name="CustomerCode" Type="varchar" MaxLength="100" />
+    <Property Name="CustomerId" Type="int" Nullable="false" />
     <Property Name="CustomerName" Type="varchar" MaxLength="150" />
     <Property Name="CustomerRemark" Type="varchar" MaxLength="250" />
-    <Property Name="Rating" Type="int" />
+    <Property Name="Rating" Type="int" Nullable="false" />
     <Property Name="CreatedBy" Type="varchar" MaxLength="100" />
     <Property Name="UpdatedBy" Type="varchar" MaxLength="100" />
-    <Property Name="Status" Type="int" />
-    <Property Name="DateEncoded" Type="datetime" />
-    <Property Name="DateUpdated" Type="datetime" />
+    <Property Name="Status" Type="int" Nullable="false" />
+    <Property Name="DateEncoded" Type="datetime" Nullable="false" />
+    <Property Name="DateUpdated" Type="datetime" Nullable="false" />
   </EntityType>
   <EntityType Name="Customers">
     <Key>
@@ -233,7 +234,7 @@
     <Property Name="AadharNumber" Type="nvarchar(max)" />
     <Property Name="AgeVerify" Type="bit" Nullable="false" />
     <Property Name="AadharVerify" Type="bit" Nullable="false" />
-    <Property Name="DOB" Type="nvarchar(max)" />
+    <Property Name="DOB" Type="datetime" />
     <Property Name="FcmTocken" Type="nvarchar" MaxLength="250" />
     <Property Name="IpAddress" Type="nvarchar" MaxLength="100" />
     <Property Name="Status" Type="int" Nullable="false" />
@@ -269,7 +270,7 @@
     <Property Name="AccountName" Type="nvarchar(max)" />
     <Property Name="AccountNumber" Type="nvarchar(max)" />
     <Property Name="IFSCCode" Type="nvarchar(max)" />
-    <Property Name="MarketingAgentId" Type="nvarchar(max)" />
+    <Property Name="MarketingAgentId" Type="int" Nullable="false" />
     <Property Name="MarketingAgentName" Type="nvarchar(max)" />
     <Property Name="OnWork" Type="int" Nullable="false" />
     <Property Name="isAssign" Type="int" Nullable="false" />
@@ -313,27 +314,6 @@
     <Property Name="UpdatedBy" Type="nvarchar(max)" />
     <Property Name="DateEncoded" Type="datetime" Nullable="false" />
     <Property Name="DateUpdated" Type="datetime" Nullable="false" />
-  </EntityType>
-  <EntityType Name="DishAddOns">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Qty" Type="int" Nullable="false" />
-    <Property Name="Price" Type="float" Nullable="false" />
-    <Property Name="Name" Type="nvarchar(max)" />
-    <Property Name="AddOnCategoryId" Type="int" Nullable="false" />
-    <Property Name="AddOnCategoryName" Type="nvarchar(max)" />
-    <Property Name="CrustName" Type="nvarchar(max)" />
-    <Property Name="MasterProductId" Type="int" Nullable="false" />
-    <Property Name="MasterProductName" Type="nvarchar(max)" />
-    <Property Name="PortionId" Type="int" Nullable="false" />
-    <Property Name="PortionName" Type="nvarchar(max)" />
-    <Property Name="Status" Type="int" Nullable="false" />
-    <Property Name="CreatedBy" Type="nvarchar(max)" />
-    <Property Name="UpdatedBy" Type="nvarchar(max)" />
-    <Property Name="DateUpdated" Type="datetime" Nullable="false" />
-    <Property Name="DateEncoded" Type="datetime" Nullable="false" />
   </EntityType>
   <EntityType Name="DrugCompoundDetails">
     <Key>
@@ -411,11 +391,11 @@
     <Property Name="MeasurementUnitId" Type="int" Nullable="false" />
     <Property Name="MeasurementUnitName" Type="nvarchar(max)" />
     <Property Name="PriscriptionCategory" Type="bit" Nullable="false" />
-    <Property Name="weight" Type="float" Nullable="false" />
+    <Property Name="Weight" Type="float" Nullable="false" />
     <Property Name="SizeLB" Type="nvarchar(max)" />
     <Property Name="DrugCompoundDetailId" Type="int" Nullable="false" />
     <Property Name="DrugCompoundDetailName" Type="nvarchar(max)" />
-    <Property Name="iBarU" Type="nvarchar(max)" />
+    <Property Name="IBarU" Type="nvarchar(max)" />
     <Property Name="OriginCountry" Type="nvarchar(max)" />
     <Property Name="Manufacturer" Type="nvarchar(max)" />
     <Property Name="PackageId" Type="int" />
@@ -465,6 +445,7 @@
     <Property Name="SubCategoryId" Type="int" Nullable="false" />
     <Property Name="SubCategoryName" Type="nvarchar(max)" />
     <Property Name="ProductTypeId" Type="int" Nullable="false" />
+    <Property Name="ProductTypeName" Type="nvarchar" MaxLength="50" />
     <Property Name="Status" Type="int" Nullable="false" />
     <Property Name="Adscore" Type="int" Nullable="false" />
     <Property Name="CreatedBy" Type="nvarchar(max)" />
@@ -493,27 +474,32 @@
   </EntityType>
   <EntityType Name="Orders">
     <Key>
-      <PropertyRef Name="id" />
+      <PropertyRef Name="Id" />
     </Key>
-    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Customerid" Type="int" Nullable="false" />
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CustomerId" Type="int" Nullable="false" />
     <Property Name="CustomerName" Type="varchar" MaxLength="100" />
-    <Property Name="CustomerPhonenumber" Type="varchar" MaxLength="50" />
-    <Property Name="Shopid" Type="int" Nullable="false" />
-    <Property Name="Shopname" Type="nvarchar" MaxLength="100" />
+    <Property Name="CustomerPhoneNumber" Type="varchar" MaxLength="50" />
+    <Property Name="ShopId" Type="int" Nullable="false" />
+    <Property Name="ShopName" Type="nvarchar" MaxLength="100" />
     <Property Name="DeliveryAddress" Type="nvarchar" MaxLength="250" />
-    <Property Name="ShopPhonenumber" Type="nvarchar" MaxLength="20" />
-    <Property Name="ShopOwnerPhonenumber" Type="nvarchar" MaxLength="20" />
+    <Property Name="ShopPhoneNumber" Type="nvarchar" MaxLength="20" />
+    <Property Name="ShopOwnerPhoneNumber" Type="nvarchar" MaxLength="20" />
     <Property Name="TotalProduct" Type="int" Nullable="false" />
     <Property Name="TotalQuantity" Type="int" Nullable="false" />
     <Property Name="TotalPrice" Type="float" Nullable="false" />
     <Property Name="OrderNumber" Type="int" Nullable="false" />
     <Property Name="DeliveryBoyId" Type="int" Nullable="false" />
-    <Property Name="DeliverBoyName" Type="nvarchar" MaxLength="50" />
+    <Property Name="DeliveryBoyName" Type="nvarchar" MaxLength="50" />
     <Property Name="DeliveryBoyPhoneNumber" Type="nvarchar" MaxLength="20" />
     <Property Name="DeliveryCharge" Type="float" Nullable="false" />
+    <Property Name="ShopDeliveryDiscount" Type="float" Nullable="false" />
+    <Property Name="NetDeliveryCharge" Type="float" Nullable="false" />
+    <Property Name="Convinenientcharge" Type="float" Nullable="false" />
+    <Property Name="Packingcharge" Type="float" Nullable="false" />
     <Property Name="Latitude" Type="float" Nullable="false" />
     <Property Name="Longitude" Type="float" Nullable="false" />
+    <Property Name="Distance" Type="float" />
     <Property Name="ShopPaymentStatus" Type="int" Nullable="false" />
     <Property Name="DeliveryBoyPaymentStatus" Type="int" Nullable="false" />
     <Property Name="DeliveryOrderPaymentStatus" Type="int" Nullable="false" />
@@ -590,7 +576,7 @@
     <Property Name="CountryName" Type="nvarchar(max)" />
     <Property Name="PaymentResult" Type="nvarchar(max)" />
     <Property Name="Credits" Type="nvarchar(max)" />
-    <Property Name="OrderNo" Type="int" Nullable="false" />
+    <Property Name="OrderNumber" Type="int" Nullable="false" />
     <Property Name="PaymentCategoryType" Type="int" Nullable="false" />
     <Property Name="CreditType" Type="int" Nullable="false" />
     <Property Name="ConvenientCharge" Type="float" Nullable="false" />
@@ -598,10 +584,10 @@
     <Property Name="DelivaryCharge" Type="float" Nullable="false" />
     <Property Name="UpdatedAmount" Type="float" Nullable="false" />
     <Property Name="UpdatedOriginalAmount" Type="float" Nullable="false" />
-    <Property Name="refundAmount" Type="float" />
-    <Property Name="Rateperorder" Type="float" />
-    <Property Name="refundRemark" Type="varchar" MaxLength="100" />
-    <Property Name="refundStatus" Type="int" Nullable="false" />
+    <Property Name="RefundAmount" Type="float" />
+    <Property Name="RatePerOrder" Type="float" />
+    <Property Name="RefundRemark" Type="nvarchar(max)" />
+    <Property Name="RefundStatus" Type="int" Nullable="false" />
     <Property Name="Status" Type="int" Nullable="false" />
     <Property Name="UpdatedBy" Type="nvarchar(max)" />
     <Property Name="CreatedBy" Type="nvarchar(max)" />
@@ -610,20 +596,20 @@
   </EntityType>
   <EntityType Name="PaymentsData">
     <Key>
-      <PropertyRef Name="id" />
+      <PropertyRef Name="Id" />
     </Key>
-    <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="paymentId" Type="nvarchar" MaxLength="100" />
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PaymentId" Type="nvarchar" MaxLength="100" />
     <Property Name="OrderNo" Type="int" />
-    <Property Name="entity" Type="varchar" MaxLength="100" />
-    <Property Name="amount" Type="decimal" Precision="18" Scale="2" />
-    <Property Name="currency" Type="varchar" MaxLength="50" />
-    <Property Name="status" Type="int" />
-    <Property Name="order_id" Type="nvarchar" MaxLength="100" />
-    <Property Name="invoice_id" Type="nvarchar" MaxLength="50" />
-    <Property Name="method" Type="nvarchar" MaxLength="150" />
-    <Property Name="fee" Type="decimal" Precision="18" Scale="2" />
-    <Property Name="tax" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Entity" Type="varchar" MaxLength="100" />
+    <Property Name="Amount" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Currency" Type="varchar" MaxLength="50" />
+    <Property Name="Status" Type="int" />
+    <Property Name="Order_Id" Type="nvarchar" MaxLength="100" />
+    <Property Name="Invoice_Id" Type="nvarchar" MaxLength="50" />
+    <Property Name="Method" Type="nvarchar" MaxLength="150" />
+    <Property Name="Fee" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="Tax" Type="decimal" Precision="18" Scale="2" />
     <Property Name="DateEncoded" Type="datetime" />
   </EntityType>
   <EntityType Name="PincodeRates">
@@ -671,6 +657,7 @@
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="AddOnItemName" Type="nvarchar" MaxLength="100" />
+    <Property Name="MasterProductId" Type="int" />
     <Property Name="MasterProductName" Type="nvarchar" MaxLength="200" />
     <Property Name="AddOnCategoryId" Type="int" Nullable="false" />
     <Property Name="AddOnCategoryName" Type="nvarchar(max)" />
@@ -684,7 +671,6 @@
     <Property Name="AddOnsPrice" Type="float" Nullable="false" />
     <Property Name="CrustPrice" Type="float" Nullable="false" />
     <Property Name="AddOnType" Type="int" Nullable="false" />
-    <Property Name="MasterProductId" Type="int" />
     <Property Name="DateEncoded" Type="datetime" Nullable="false" />
     <Property Name="DateUpdated" Type="datetime" Nullable="false" />
     <Property Name="CreatedBy" Type="nvarchar(max)" />
@@ -696,6 +682,8 @@
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Name" Type="nvarchar(max)" />
+    <Property Name="MasterProductId" Type="int" Nullable="false" />
+    <Property Name="ShopId" Type="int" Nullable="false" />
     <Property Name="ShopName" Type="nvarchar(max)" />
     <Property Name="ShopCategoryId" Type="int" Nullable="false" />
     <Property Name="ShopCategoryName" Type="nvarchar(max)" />
@@ -715,22 +703,15 @@
     <Property Name="IBarU" Type="int" Nullable="false" />
     <Property Name="ItemId" Type="int" Nullable="false" />
     <Property Name="Percentage" Type="float" Nullable="false" />
-    <Property Name="DiscountCategoryId" Type="int" Nullable="false" />
     <Property Name="DiscountCategoryName" Type="nvarchar(max)" />
-    <Property Name="DiscountCategoryPercentage" Type="float" Nullable="false" />
     <Property Name="DataEntry" Type="int" Nullable="false" />
     <Property Name="AppliesOnline" Type="int" Nullable="false" />
-    <Property Name="DiscountType" Type="int" Nullable="false" />
-    <Property Name="DiscountCategoryType" Type="int" Nullable="false" />
     <Property Name="IsOnline" Type="bit" Nullable="false" />
-    <Property Name="ShopId" Type="int" Nullable="false" />
-    <Property Name="MasterProductId" Type="int" Nullable="false" />
     <Property Name="HoldOnStok" Type="int" Nullable="false" />
     <Property Name="PackingType" Type="int" Nullable="false" />
     <Property Name="TaxPercentage" Type="float" Nullable="false" />
     <Property Name="SpecialCostOfDelivery" Type="float" Nullable="false" />
     <Property Name="OutletId" Type="int" Nullable="false" />
-    <Property Name="CategoryNameMain" Type="nvarchar" MaxLength="500" />
     <Property Name="ItemTimeStamp" Type="nvarchar" MaxLength="100" />
     <Property Name="LoyaltyPoints" Type="float" Nullable="false" />
     <Property Name="PackingCharge" Type="float" Nullable="false" />
@@ -778,15 +759,15 @@
   </EntityType>
   <EntityType Name="RefundsData">
     <Key>
-      <PropertyRef Name="id" />
+      <PropertyRef Name="Id" />
     </Key>
-    <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="refundid" Type="varchar" MaxLength="50" />
-    <Property Name="enity" Type="varchar" MaxLength="50" />
-    <Property Name="amount" Type="float" />
-    <Property Name="currency" Type="varchar" MaxLength="50" />
-    <Property Name="payment_id" Type="varchar" MaxLength="50" />
-    <Property Name="orderNo" Type="int" />
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RefundId" Type="varchar" MaxLength="50" />
+    <Property Name="Entity" Type="varchar" MaxLength="50" />
+    <Property Name="Amount" Type="float" />
+    <Property Name="Currency" Type="varchar" MaxLength="50" />
+    <Property Name="Payment_Id" Type="varchar" MaxLength="50" />
+    <Property Name="OrderNumber" Type="int" />
     <Property Name="DateEncoded" Type="datetime" />
   </EntityType>
   <!--Errors Found During Generation:
@@ -807,40 +788,15 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
     <Property Name="CreatedBy" Type="nvarchar(max)" />
     <Property Name="UpdatedBy" Type="nvarchar(max)" />
   </EntityType>
-  <EntityType Name="ShopCharges">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CustomerId" Type="int" />
-    <Property Name="CustomerName" Type="nvarchar(max)" />
-    <Property Name="ShopId" Type="int" />
-    <Property Name="ShopName" Type="nvarchar(max)" />
-    <Property Name="DeliveryBoyId" Type="int" />
-    <Property Name="DeliveryBoyName" Type="nvarchar(max)" />
-    <Property Name="OrderNo" Type="int" />
-    <Property Name="GrossDeliveryCharge" Type="float" Nullable="false" />
-    <Property Name="ShopDeliveryDiscount" Type="float" Nullable="false" />
-    <Property Name="NetDeliveryCharge" Type="float" Nullable="false" />
-    <Property Name="OrderStatus" Type="int" Nullable="false" />
-    <Property Name="Packingcharge" Type="float" Nullable="false" />
-    <Property Name="Convinenientcharge" Type="float" Nullable="false" />
-    <Property Name="Status" Type="int" Nullable="false" />
-    <Property Name="DateEncoded" Type="datetime" Nullable="false" />
-    <Property Name="DateUpdated" Type="datetime" Nullable="false" />
-    <Property Name="UpdatedBy" Type="nvarchar(max)" />
-    <Property Name="CreatedBy" Type="nvarchar(max)" />
-  </EntityType>
   <EntityType Name="ShopDishAddOns">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Code" Type="nvarchar" MaxLength="50" />
     <Property Name="AddOnItemName" Type="nvarchar" MaxLength="100" />
-    <Property Name="MasterProductCode" Type="nvarchar" MaxLength="100" />
+    <Property Name="MasterProductId" Type="int" Nullable="false" />
     <Property Name="MasterProductName" Type="nvarchar" MaxLength="200" />
-    <Property Name="AddOnCategoryCode" Type="nvarchar(max)" />
+    <Property Name="AddOnCategoryId" Type="int" Nullable="false" />
     <Property Name="AddOnCategoryName" Type="nvarchar(max)" />
     <Property Name="CrustName" Type="nvarchar(max)" />
     <Property Name="Status" Type="int" Nullable="false" />
@@ -848,7 +804,7 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
     <Property Name="DateUpdated" Type="datetime" Nullable="false" />
     <Property Name="CreatedBy" Type="nvarchar(max)" />
     <Property Name="UpdatedBy" Type="nvarchar(max)" />
-    <Property Name="PortionCode" Type="nvarchar(max)" />
+    <Property Name="PortionId" Type="int" Nullable="false" />
     <Property Name="PortionName" Type="nvarchar(max)" />
     <Property Name="MinSelectionLimit" Type="int" Nullable="false" />
     <Property Name="MaxSelectionLimit" Type="int" Nullable="false" />
@@ -856,10 +812,9 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
     <Property Name="AddOnsPrice" Type="float" Nullable="false" />
     <Property Name="CrustPrice" Type="float" Nullable="false" />
     <Property Name="AddOnType" Type="int" Nullable="false" />
-    <Property Name="MasterProductId" Type="int" />
-    <Property Name="ProductId" Type="int" />
+    <Property Name="ProductId" Type="int" Nullable="false" />
     <Property Name="ProductName" Type="nvarchar" MaxLength="200" />
-    <Property Name="Shopid" Type="int" />
+    <Property Name="ShopId" Type="int" Nullable="false" />
     <Property Name="ShopName" Type="nvarchar" MaxLength="150" />
     <Property Name="IsActive" Type="bit" />
     <Property Name="ProductDishAddonId" Type="int" Nullable="false" />
@@ -949,12 +904,12 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
     <Property Name="AccountNumber" Type="nvarchar(max)" />
     <Property Name="ShopCategoryId" Type="int" Nullable="false" />
     <Property Name="ShopCategoryName" Type="nvarchar(max)" />
-    <Property Name="PincodeRateId" Type="int" />
+    <Property Name="PincodeRateId" Type="int" Nullable="false" />
     <Property Name="PincodeRateDeliveryRateSet" Type="int" Nullable="false" />
-    <Property Name="MarketingAgentId" Type="nvarchar(max)" />
+    <Property Name="MarketingAgentId" Type="int" Nullable="false" />
     <Property Name="MarketingAgentName" Type="nvarchar(max)" />
     <Property Name="Adscore" Type="int" Nullable="false" />
-    <Property Name="isOnline" Type="bit" />
+    <Property Name="IsOnline" Type="bit" />
     <Property Name="GooglePlaceId" Type="nvarchar" MaxLength="100" />
     <Property Name="Status" Type="int" Nullable="false" />
     <Property Name="CreatedBy" Type="nvarchar(max)" />
@@ -1000,9 +955,10 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Name" Type="nvarchar(max)" />
-    <Property Name="CategoryId" Type="int" />
+    <Property Name="CategoryId" Type="int" Nullable="false" />
     <Property Name="CategoryName" Type="nvarchar(max)" />
-    <Property Name="ProductType" Type="nvarchar(max)" />
+    <Property Name="ProductTypeId" Type="int" Nullable="false" />
+    <Property Name="ProductTypeName" Type="nvarchar(max)" />
     <Property Name="Adscore" Type="int" Nullable="false" />
     <Property Name="Status" Type="int" Nullable="false" />
     <Property Name="CreatedBy" Type="nvarchar(max)" />
@@ -1016,25 +972,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="name" Type="nvarchar" MaxLength="500" />
           <Property Name="percentage" Type="float" />
         </EntityType>-->
-  <EntityType Name="TopUps">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Code" Type="nvarchar(max)" />
-    <Property Name="PlanName" Type="nvarchar(max)" />
-    <Property Name="Validity" Type="int" Nullable="false" />
-    <Property Name="Status" Type="int" Nullable="false" />
-    <Property Name="DateEncoded" Type="datetime" Nullable="false" />
-    <Property Name="DateUpdated" Type="datetime" Nullable="false" />
-    <Property Name="CreatedBy" Type="nvarchar(max)" />
-    <Property Name="UpdatedBy" Type="nvarchar(max)" />
-    <Property Name="CustomerCode" Type="nvarchar(max)" />
-    <Property Name="CustomerName" Type="nvarchar(max)" />
-    <Property Name="CustomerPhoneNumber" Type="nvarchar(max)" />
-    <Property Name="CreditType" Type="int" Nullable="false" />
-    <Property Name="CreditAmount" Type="float" Nullable="false" />
-  </EntityType>
   <EntityType Name="UserEnquiries">
     <Key>
       <PropertyRef Name="Id" />
@@ -1055,14 +992,14 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
     <Property Name="CreatedBy" Type="nvarchar(max)" />
   </EntityType>
   <Association Name="FK_Banners_Payments">
-    <End Role="Payments" Type="Self.Payments" Multiplicity="0..1" />
+    <End Role="Payments" Type="Self.Payments" Multiplicity="1" />
     <End Role="Banners" Type="Self.Banners" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Payments">
         <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="Banners">
-        <PropertyRef Name="paymentid" />
+        <PropertyRef Name="PaymentId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1221,7 +1158,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
     <EntitySet Name="DeliveryBoys" EntityType="Self.DeliveryBoys" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DeliveryBoyShops" EntityType="Self.DeliveryBoyShops" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DiscountCategories" EntityType="Self.DiscountCategories" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="DishAddOns" EntityType="Self.DishAddOns" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DrugCompoundDetails" EntityType="Self.DrugCompoundDetails" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MarketingAgents" EntityType="Self.MarketingAgents" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="MasterProducts" EntityType="Self.MasterProducts" Schema="dbo" store:Type="Tables" />
@@ -1243,14 +1179,12 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
     <EntitySet Name="ProductSpecifications" EntityType="Self.ProductSpecifications" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RefundsData" EntityType="Self.RefundsData" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ShopCategories" EntityType="Self.ShopCategories" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="ShopCharges" EntityType="Self.ShopCharges" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ShopDishAddOns" EntityType="Self.ShopDishAddOns" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ShopMembers" EntityType="Self.ShopMembers" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Shops" EntityType="Self.Shops" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Specifications" EntityType="Self.Specifications" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Staffs" EntityType="Self.Staffs" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="SubCategories" EntityType="Self.SubCategories" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="TopUps" EntityType="Self.TopUps" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserEnquiries" EntityType="Self.UserEnquiries" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_Banners_Payments" Association="Self.FK_Banners_Payments">
       <End Role="Payments" EntitySet="Payments" />

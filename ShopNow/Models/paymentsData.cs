@@ -14,18 +14,18 @@ namespace ShopNow.Models
     
     public partial class PaymentsData
     {
-        public long id { get; set; }
-        public string paymentId { get; set; }
+        public long Id { get; set; }
+        public string PaymentId { get; set; }
         public Nullable<int> OrderNo { get; set; }
-        public string entity { get; set; }
-        public Nullable<decimal> amount { get; set; }
-        public string currency { get; set; }
-        public Nullable<int> status { get; set; }
-        public string order_id { get; set; }
-        public string invoice_id { get; set; }
-        public string method { get; set; }
-        public Nullable<decimal> fee { get; set; }
-        public Nullable<decimal> tax { get; set; }
+        public string Entity { get; set; }
+        public Nullable<decimal> Amount { get; set; }
+        public string Currency { get; set; }
+        public Nullable<int> Status { get; set; }
+        public string Order_Id { get; set; }
+        public string Invoice_Id { get; set; }
+        public string Method { get; set; }
+        public Nullable<decimal> Fee { get; set; }
+        public Nullable<decimal> Tax { get; set; }
         public Nullable<System.DateTime> DateEncoded { get; set; }
     }
 }

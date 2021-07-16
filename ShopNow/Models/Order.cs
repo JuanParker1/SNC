@@ -14,25 +14,30 @@ namespace ShopNow.Models
     
     public partial class Order
     {
-        public int id { get; set; }
-        public int Customerid { get; set; }
+        public int Id { get; set; }
+        public int CustomerId { get; set; }
         public string CustomerName { get; set; }
-        public string CustomerPhonenumber { get; set; }
-        public int Shopid { get; set; }
-        public string Shopname { get; set; }
+        public string CustomerPhoneNumber { get; set; }
+        public int ShopId { get; set; }
+        public string ShopName { get; set; }
         public string DeliveryAddress { get; set; }
-        public string ShopPhonenumber { get; set; }
-        public string ShopOwnerPhonenumber { get; set; }
+        public string ShopPhoneNumber { get; set; }
+        public string ShopOwnerPhoneNumber { get; set; }
         public int TotalProduct { get; set; }
         public int TotalQuantity { get; set; }
         public double TotalPrice { get; set; }
         public int OrderNumber { get; set; }
         public int DeliveryBoyId { get; set; }
-        public string DeliverBoyName { get; set; }
+        public string DeliveryBoyName { get; set; }
         public string DeliveryBoyPhoneNumber { get; set; }
         public double DeliveryCharge { get; set; }
+        public double ShopDeliveryDiscount { get; set; }
+        public double NetDeliveryCharge { get; set; }
+        public double Convinenientcharge { get; set; }
+        public double Packingcharge { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        public Nullable<double> Distance { get; set; }
         public int ShopPaymentStatus { get; set; }
         public int DeliveryBoyPaymentStatus { get; set; }
         public int DeliveryOrderPaymentStatus { get; set; }

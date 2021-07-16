@@ -19,6 +19,7 @@ namespace ShopNow.Models
         public int SubCategoryId { get; set; }
         public string SubCategoryName { get; set; }
         public int ProductTypeId { get; set; }
+        public string ProductTypeName { get; set; }
         public int Status { get; set; }
         public int Adscore { get; set; }
         public string CreatedBy { get; set; }
