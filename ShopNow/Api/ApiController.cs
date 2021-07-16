@@ -673,7 +673,7 @@ namespace ShopNow.Controllers
                                where c.Id == customerId && c.Position ==1
                                select c.Name).FirstOrDefault();
             var orderCount = (from s in db.Orders
-                              join sh in db.Shops on s.Shopid equals sh.Id
+                              join sh in db.Shops on s.ShopId equals sh.Id
                               join c in db.Customers on sh.CustomerId equals c.Id
                               where sh.CustomerId == customerId && (s.Status >= 2)
                              select s).Count();
@@ -687,10 +687,10 @@ namespace ShopNow.Controllers
                                where ss.CustomerId == customerId && ss.Status == 0 && ss.CreditType == 1
                                select (Double?)ss.OriginalAmount).Sum() ?? 0;
 
-            var varDeliveryCharges = (from ss in db.ShopCharges
+            var varDeliveryCharges = (from ss in db.Orders
                                       join sh in db.Shops on ss.ShopId equals sh.Id
                                       where sh.CustomerId == customerId && ss.Status >= 2
-                                      select (Double?)ss.GrossDeliveryCharge).Sum() ?? 0;
+                                      select (Double?)ss.DeliveryCharge).Sum() ?? 0;
 
             List<CreditPaymentViewModel> payment = new List<CreditPaymentViewModel>
             {
@@ -1018,6 +1018,12 @@ namespace ShopNow.Controllers
                     order.UpdatedBy = customer.Name;
                     order.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
                     order.DateUpdated = DateTime.Now;
+                    //
+                    order.NetDeliveryCharge = model.NetDeliveryCharge;
+                    order.DeliveryCharge = model.GrossDeliveryCharge;
+                    order.ShopDeliveryDiscount = model.ShopDeliveryDiscount;
+                    order.Packingcharge = model.PackagingCharge;
+                    order.Convinenientcharge = model.ConvenientCharge;
                     db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
 
@@ -1035,35 +1041,35 @@ namespace ShopNow.Controllers
                         PaymentsData pay = new PaymentsData();
 
                         pay.OrderNo = Convert.ToInt32(model.OrderNo);
-                        pay.paymentId = model.ReferenceCode;
+                        pay.PaymentId = model.ReferenceCode;
 
-                        pay.invoice_id = s["invoice_id"];
+                        pay.Invoice_Id = s["invoice_id"];
                         if (s["status"] == "created")
-                            pay.status = 0;
+                            pay.Status = 0;
                         else if (s["status"] == "authorized")
-                            pay.status = 1;
+                            pay.Status = 1;
                         else if (s["status"] == "captured")
-                            pay.status = 2;
+                            pay.Status = 2;
                         else if (s["status"] == "refunded")
-                            pay.status = 3;
+                            pay.Status = 3;
                         else if (s["status"] == "failed")
-                            pay.status = 4;
-                        pay.order_id = s["order_id"];
+                            pay.Status = 4;
+                        pay.Order_Id = s["order_id"];
                         if (s["fee"] != null && s["fee"] > 0)
-                            pay.fee = (decimal)s["fee"] / 100;
+                            pay.Fee = (decimal)s["fee"] / 100;
                         else
-                            pay.fee = s["fee"];
-                        pay.entity = s["entity"];
-                        pay.currency = s["currency"];
-                        pay.method = s["method"];
+                            pay.Fee = s["fee"];
+                        pay.Entity = s["entity"];
+                        pay.Currency = s["currency"];
+                        pay.Method = s["method"];
                         if (s["tax"] != null && s["tax"] > 0)
-                            pay.tax = (decimal)s["tax"] / 100;
+                            pay.Tax = (decimal)s["tax"] / 100;
                         else
-                            pay.tax = s["tax"];
+                            pay.Tax = s["tax"];
                         if (s["amount"] != null && s["amount"] > 0)
-                            pay.amount = s["amount"] / 100;
+                            pay.Amount = s["amount"] / 100;
                         else
-                            pay.amount = s["amount"];
+                            pay.Amount = s["amount"];
                         pay.DateEncoded = DateTime.Now;
                         db.PaymentsDatas.Add(pay);
                         db.SaveChanges();
@@ -1112,32 +1118,20 @@ namespace ShopNow.Controllers
                         payment.PaymentCategoryType = 0;
                         payment.Credits = "N/A";
 
-                        ShopCharge detail = new ShopCharge();
-                        detail.CustomerId = customer.Id;
-                        detail.CustomerName = customer.Name;
-                        detail.OrderNo = model.OrderNo;
-                        detail.ShopId = model.ShopId;
-                        detail.ShopName = model.ShopName;
-                        detail.NetDeliveryCharge = model.NetDeliveryCharge;
-                        detail.GrossDeliveryCharge = model.GrossDeliveryCharge;
-                        detail.ShopDeliveryDiscount = model.ShopDeliveryDiscount;
-                        detail.OrderStatus = 2;
-                        detail.UpdatedBy = customer.Name;
-                        detail.CreatedBy = customer.Name;
-                        detail.Packingcharge = model.PackagingCharge;
-                        detail.Convinenientcharge = model.ConvenientCharge;
-                        detail.DateEncoded = DateTime.Now;
-                        detail.DateUpdated = DateTime.Now;
-                        detail.Status = 0;
-                        db.ShopCharges.Add(detail);
-                        db.SaveChanges();
+                    
+                       
+                        //detail.DateEncoded = DateTime.Now;
+                        //detail.DateUpdated = DateTime.Now;
+                        //detail.Status = 0;
+                        //db.ShopCharges.Add(detail);
+                        //db.SaveChanges();
                     }
 
                     payment.DateEncoded = DateTime.Now;
                     payment.DateUpdated = DateTime.Now;
                     payment.Status = 0;
-                    payment.Rateperorder = Convert.ToDouble(perOrderAmount.RatePerOrder);
-                    payment.refundStatus = 1;
+                    payment.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
+                    payment.RefundStatus = 1;
                     db.Payments.Add(payment);
                     db.SaveChanges();
 
@@ -1178,13 +1172,13 @@ namespace ShopNow.Controllers
         public JsonResult UpdatedPayment(PaymentUpdatedApiViewModel model)
         {
             //int errorCode = 0;
-            var payment = db.Payments.FirstOrDefault(i => i.OrderNo == model.OrderNo); // Payment.GetOrderNo(model.OrderNo);
+            var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == model.OrderNo); // Payment.GetOrderNo(model.OrderNo);
             payment.UpdatedOriginalAmount = model.UpdatedOriginalAmount;
             payment.UpdatedAmount = model.UpdatedAmount;
             if (model.RefundAmount >0)
             {
-                payment.refundAmount = model.RefundAmount;
-                payment.refundRemark = model.RefundRemark;
+                payment.RefundAmount = model.RefundAmount;
+                payment.RefundRemark = model.RefundRemark;
             }
             if (model.CustomerId !=0)
             {
@@ -1311,7 +1305,7 @@ namespace ShopNow.Controllers
         {
             var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
             var orderCount = (from s in db.Orders
-                              join sh in db.Shops on s.Shopid equals sh.Id
+                              join sh in db.Shops on s.ShopId equals sh.Id
                               join c in db.Customers on sh.CustomerId equals c.Id
                               where sh.CustomerId == shop.CustomerId && (s.Status >= 2)
                               select s).Count();
@@ -1329,11 +1323,11 @@ namespace ShopNow.Controllers
                                where sh.CustomerId == shop.CustomerId && ss.Status == 0 && ss.CreditType == 1
                                select (Double?)ss.OriginalAmount).Sum() ?? 0;
 
-            var varDeliveryCharges = (from ss in db.ShopCharges
+            var varDeliveryCharges = (from ss in db.Orders
                                       join sh in db.Shops on ss.ShopId equals sh.Id
                                       join c in db.Customers on sh.CustomerId equals c.Id
                                       where sh.CustomerId == shop.CustomerId && ss.Status >= 2
-                                      select (Double?)ss.GrossDeliveryCharge).Sum() ?? 0;
+                                      select (Double?)ss.DeliveryCharge).Sum() ?? 0;
             var DeliveryCredits = varDelivery - varDeliveryCharges;
             var PlatformCredits = platform - platformorder;
 
@@ -1353,18 +1347,18 @@ namespace ShopNow.Controllers
                 if (model.CustomerId != 0)
                 {
                     var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
-                    order.Customerid = customer.Id;
+                    order.CustomerId = customer.Id;
                     order.CreatedBy = customer.Name;
                     order.UpdatedBy = customer.Name;
                     order.CustomerName = customer.Name;
-                    order.CustomerPhonenumber = customer.PhoneNumber;
+                    order.CustomerPhoneNumber = customer.PhoneNumber;
                 }
 
                 order.OrderNumber = Convert.ToInt32(model.OrderNo);
-                order.Shopid = shop.Id;
-                order.Shopname = shop.Name;
-                order.ShopPhonenumber = shop.PhoneNumber ?? shop.ManualPhoneNumber;
-                order.ShopOwnerPhonenumber = shop.OwnerPhoneNumber;
+                order.ShopId = shop.Id;
+                order.ShopName = shop.Name;
+                order.ShopPhoneNumber = shop.PhoneNumber ?? shop.ManualPhoneNumber;
+                order.ShopOwnerPhoneNumber = shop.OwnerPhoneNumber;
                 order.TotalPrice = model.ListItems.Sum(i => i.Price);
                 order.TotalProduct = model.ListItems.Count();
                 order.TotalQuantity = model.ListItems.Sum(i => Convert.ToInt32(i.Quantity));
@@ -1387,7 +1381,7 @@ namespace ShopNow.Controllers
 
                     var orderItem = _mapper.Map<OrderCreateViewModel.ListItem, OrderItem>(item);
                     orderItem.Status = 0;
-                    orderItem.OrderId = order.id;
+                    orderItem.OrderId = order.Id;
                     orderItem.OrdeNumber = order.OrderNumber;
                     db.Orders.Add(order);
                     db.SaveChanges();
@@ -1478,11 +1472,11 @@ namespace ShopNow.Controllers
                 //        db.SaveChanges();
                 //    }
                 //}
-                var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
-                detail.OrderStatus = status;
-                detail.DateUpdated = DateTime.Now;
-                db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
+                //var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
+                //detail.OrderStatus = status;
+                //detail.DateUpdated = DateTime.Now;
+                //db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
+                //db.SaveChanges();
                
                 var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
                 var order = db.Orders.FirstOrDefault(i => i.OrderNumber == orderNo);
@@ -1492,7 +1486,7 @@ namespace ShopNow.Controllers
                 db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
-                var orderList = db.OrderItems.Where(i => i.OrderId == order.id).ToList();
+                var orderList = db.OrderItems.Where(i => i.OrderId == order.Id).ToList();
                 foreach (var item in orderList)
                 {
                     //Product Stock Update
@@ -1502,11 +1496,11 @@ namespace ShopNow.Controllers
                     db.SaveChanges();
                 }
                 //Refund
-                var payment = db.Payments.FirstOrDefault(i => i.OrderNo == order.OrderNumber);
+                var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == order.OrderNumber);
                 if (payment.PaymentMode == "Online Payment")
                 {
-                    payment.refundAmount = payment.Amount;
-                    payment.refundRemark = "Your order has been cancelled by shop.";
+                    payment.RefundAmount = payment.Amount;
+                    payment.RefundRemark = "Your order has been cancelled by shop.";
                     payment.UpdatedBy = customer.Name;
                     payment.DateUpdated = DateTime.Now;
                     db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
@@ -1603,14 +1597,14 @@ namespace ShopNow.Controllers
             var model = new CartDelivaryListApiViewModel();
             string dt = DateTime.Now.ToString("dd-MMM-yyyy");
             model.ResturantList = db.Orders.Where(j => j.Status == 4 || j.Status == 5)
-                .Join(db.Payments, c => c.Shopid, p => p.ShopId, (c, p) => new { c, p })
-                .Join(db.Shops, ca => ca.c.Shopid, s => s.Id, (ca, s) => new { ca, s })
+                .Join(db.Payments, c => c.ShopId, p => p.ShopId, (c, p) => new { c, p })
+                .Join(db.Shops, ca => ca.c.ShopId, s => s.Id, (ca, s) => new { ca, s })
                  .Join(db.DeliveryBoys, py => py.ca.c.DeliveryBoyId, d => d.Id, (py, d) => new { py, d })
                .AsEnumerable()
                .Where(i => i.py.ca.c.DeliveryBoyPhoneNumber == phoneNumber && i.py.s.ShopCategoryId == 0 && i.py.ca.c.DateEncoded.ToString("dd-MMM-yyyy") == dt)
                .Select(i => new CartDelivaryListApiViewModel.CartList
                {
-                   ShopName = i.py.ca.c.Shopname,
+                   ShopName = i.py.ca.c.ShopName,
                    CustomerName = i.py.ca.c.CustomerName,
                    OrderNo = i.py.ca.c.OrderNumber,
                    ShopAddress = i.py.s.Address,
@@ -1618,28 +1612,28 @@ namespace ShopNow.Controllers
                    ShopLongitude = i.py.s.Longitude,
                    ShopPhoneNumber = i.py.s.PhoneNumber,
                    CartStatus = i.py.ca.c.Status,
-                   CustomerPhoneNumber = i.py.ca.c.CustomerPhonenumber,
+                   CustomerPhoneNumber = i.py.ca.c.CustomerPhoneNumber,
                    CustomerLatitude = i.py.ca.c.Latitude,
                    CustomerLongitude = i.py.ca.c.Longitude,
                    DeliveryAddress = i.py.ca.c.DeliveryAddress,
                    PaymentMode = GetPayment(i.py.ca.c.OrderNumber).PaymentMode,
                    Amount = GetPayment(i.py.ca.c.OrderNumber).UpdatedAmount == 0 ? GetPayment(i.py.ca.c.OrderNumber).Amount : GetPayment(i.py.ca.c.OrderNumber).UpdatedAmount,
-                   OrderList = GetOrderList(i.py.ca.c.id),
+                   OrderList = GetOrderList(i.py.ca.c.Id),
                    OnWork = i.d.OnWork ,
                    Date =  i.py.ca.c.DateEncoded.ToString("dd-MMM-yyyy HH:ss"),
-                   RefundAmount= ((GetPayment(i.py.ca.c.OrderNumber).refundAmount)?? 0),
-                   RefundRemark = ((GetPayment(i.py.ca.c.OrderNumber).refundRemark) ?? "N/A")
+                   RefundAmount= ((GetPayment(i.py.ca.c.OrderNumber).RefundAmount)?? 0),
+                   RefundRemark = ((GetPayment(i.py.ca.c.OrderNumber).RefundRemark) ?? "N/A")
                }).ToList();
 
             model.OtherList = db.Orders.Where(j => j.Status == 4 || j.Status == 5)
-               .Join(db.Payments, c => c.Shopid, p => p.ShopId, (c, p) => new { c, p })
-               .Join(db.Shops, ca => ca.c.Shopid, s => s.Id, (ca, s) => new { ca, s })
+               .Join(db.Payments, c => c.ShopId, p => p.ShopId, (c, p) => new { c, p })
+               .Join(db.Shops, ca => ca.c.ShopId, s => s.Id, (ca, s) => new { ca, s })
                 .Join(db.DeliveryBoys, py => py.ca.c.DeliveryBoyId, d => d.Id, (py, d) => new { py, d })
               .AsEnumerable()
               .Where(i => i.py.ca.c.DeliveryBoyPhoneNumber == phoneNumber && i.py.s.ShopCategoryId != 0)
               .Select(i => new CartDelivaryListApiViewModel.CartList
               {
-                  ShopName = i.py.ca.c.Shopname,
+                  ShopName = i.py.ca.c.ShopName,
                   CustomerName = i.py.ca.c.CustomerName,
                   OrderNo = i.py.ca.c.OrderNumber,
                   ShopAddress = i.py.s.Address,
@@ -1647,17 +1641,17 @@ namespace ShopNow.Controllers
                   ShopLongitude = i.py.s.Longitude,
                   ShopPhoneNumber = i.py.s.PhoneNumber,
                   CartStatus = i.py.ca.c.Status,
-                  CustomerPhoneNumber = i.py.ca.c.CustomerPhonenumber,
+                  CustomerPhoneNumber = i.py.ca.c.CustomerPhoneNumber,
                   CustomerLatitude = i.py.ca.c.Latitude,
                   CustomerLongitude = i.py.ca.c.Longitude,
                   DeliveryAddress = i.py.ca.c.DeliveryAddress,
                   PaymentMode = GetPayment(i.py.ca.c.OrderNumber).PaymentMode,
                   Amount = GetPayment(i.py.ca.c.OrderNumber).UpdatedAmount == 0 ? GetPayment(i.py.ca.c.OrderNumber).Amount : GetPayment(i.py.ca.c.OrderNumber).UpdatedAmount,
-                  OrderList = GetOrderList(i.py.ca.c.id),
+                  OrderList = GetOrderList(i.py.ca.c.Id),
                   OnWork = i.d.OnWork,
                   Date = i.py.ca.c.DateEncoded.ToString("dd-MMM-yyyy HH:ss"),
-                  RefundAmount = ((GetPayment(i.py.ca.c.OrderNumber).refundAmount) ?? 0),
-                  RefundRemark = ((GetPayment(i.py.ca.c.OrderNumber).refundRemark) ?? "N/A")
+                  RefundAmount = ((GetPayment(i.py.ca.c.OrderNumber).RefundAmount) ?? 0),
+                  RefundRemark = ((GetPayment(i.py.ca.c.OrderNumber).RefundRemark) ?? "N/A")
               }).ToList();
             return Json(model, JsonRequestBehavior.AllowGet);
         }
@@ -1671,7 +1665,7 @@ namespace ShopNow.Controllers
                 var order = db.Orders.FirstOrDefault(i => i.OrderNumber == orderNo);
                 order.Status = 3;
                 order.DeliveryBoyId = customer.Id;
-                order.DeliverBoyName =  customer.Name;
+                order.DeliveryBoyName =  customer.Name;
                 order.DeliveryBoyPhoneNumber = customer.PhoneNumber;
                 order.UpdatedBy = customer.Name;
                 order.DateUpdated = DateTime.Now;
@@ -1699,7 +1693,7 @@ namespace ShopNow.Controllers
                        
             if (shopId != 0)
             {
-                var shop = db.Orders.OrderByDescending(q => q.id).FirstOrDefault(i => i.Shopid == shopId && i.Status == 2 && i.Status == 0);
+                var shop = db.Orders.OrderByDescending(q => q.Id).FirstOrDefault(i => i.ShopId == shopId && i.Status == 2 && i.Status == 0);
 
                 if (shop != null)
                 {
@@ -1723,7 +1717,7 @@ namespace ShopNow.Controllers
         {
             if (customerId != 0)
             {
-                var cart = db.Orders.OrderByDescending(q => q.id).FirstOrDefault(i => i.Customerid == customerId && i.Status == 5 && i.Status == 0);// Cart.GetCustomerPickUp(customerCode);
+                var cart = db.Orders.OrderByDescending(q => q.Id).FirstOrDefault(i => i.CustomerId == customerId && i.Status == 5 && i.Status == 0);// Cart.GetCustomerPickUp(customerCode);
 
                 if (cart != null)
                 {
@@ -1752,7 +1746,7 @@ namespace ShopNow.Controllers
         {
             if (phoneNo != null || phoneNo != "")
             {
-                var delivaryBoy = db.Orders.OrderByDescending(q => q.id).FirstOrDefault(i => i.DeliveryBoyPhoneNumber == phoneNo && i.Status  == 4 && i.Status == 0);// Cart.GetDelivaryPhoneNo(phoneNo);
+                var delivaryBoy = db.Orders.OrderByDescending(q => q.Id).FirstOrDefault(i => i.DeliveryBoyPhoneNumber == phoneNo && i.Status  == 4 && i.Status == 0);// Cart.GetDelivaryPhoneNo(phoneNo);
 
                 if (delivaryBoy != null)
                 {
@@ -1781,7 +1775,7 @@ namespace ShopNow.Controllers
         {
 
             var order = db.Orders.Where(i => i.OrderNumber == orderNo).FirstOrDefault();
-            var shop = db.Shops.FirstOrDefault(i => i.Id == order.Shopid);
+            var shop = db.Shops.FirstOrDefault(i => i.Id == order.ShopId);
             var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId);
             var model = new DeliveryBoyViewModel();
             model.ShopLatitude = shop.Latitude;
@@ -1790,7 +1784,7 @@ namespace ShopNow.Controllers
             model.CustomerLongitude = order.Longitude;
             if (deliveryBoy != null)
             {
-                model.DeliveryBoyName = order.DeliverBoyName;
+                model.DeliveryBoyName = order.DeliveryBoyName;
                 model.DeliveryBoyId = order.DeliveryBoyId;
                 model.DeliveryBoyPhoneNumber = order.DeliveryBoyPhoneNumber;
             }
@@ -1819,7 +1813,7 @@ namespace ShopNow.Controllers
                 db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
-                var orderList = db.OrderItems.Where(i => i.OrderId == order.id).ToList();
+                var orderList = db.OrderItems.Where(i => i.OrderId == order.Id).ToList();
                 foreach (var item in orderList)
                 {
                     //Product Stock Update
@@ -1828,17 +1822,17 @@ namespace ShopNow.Controllers
                     db.Entry(product).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }
-                var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
-                detail.Status = 5;
-                detail.DateUpdated = DateTime.Now;
-                db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
+                //var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
+                //detail.Status = 5;
+                //detail.DateUpdated = DateTime.Now;
+                //db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
+                //db.SaveChanges();
 
                 if (PaymentMode == "Online Payment" && Amount > 1000)
                 {
                     
                     var models = new OtpVerification();
-                    models.ShopId = order.Shopid;
+                    models.ShopId = order.ShopId;
                     models.CustomerId = customer.Id;
                     models.CustomerName = customer.Name;
                     models.PhoneNumber = order.DeliveryBoyPhoneNumber;
@@ -1872,8 +1866,8 @@ namespace ShopNow.Controllers
                 db.Entry(delivaryBoy).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
-                var shopCharge = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
-                var shop = db.Shops.FirstOrDefault(i => i.Id == shopCharge.ShopId);
+                //var shopCharge = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
+                //var shop = db.Shops.FirstOrDefault(i => i.Id == shopCharge.ShopId);
                 //var topup = db.TopUps.OrderByDescending(q => q.Id).FirstOrDefault(i => i.CustomerCode == shop.CustomerCode && i.CreditType == 1 && i.Status == 0);// TopUp.GetCustomerDelivary(shop.CustomerCode);
                 //if (topup != null)
                 //{
@@ -1935,11 +1929,11 @@ namespace ShopNow.Controllers
             db.Entry(order).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
-            var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
-            detail.OrderStatus = 6;
-            detail.DateUpdated = DateTime.Now;
-            db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
+            //var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
+            //detail.OrderStatus = 6;
+            //detail.DateUpdated = DateTime.Now;
+            //db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
+            //db.SaveChanges();
             return Json(new { message = "Successfully DelivaryBoy Delivered!" }, JsonRequestBehavior.AllowGet);
         }
 
@@ -1953,7 +1947,7 @@ namespace ShopNow.Controllers
                 var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
 
                 order.DeliveryBoyId = deliveryBoy.Id;
-                order.DeliverBoyName = deliveryBoy.Name;
+                order.DeliveryBoyName = deliveryBoy.Name;
                 order.DeliveryBoyPhoneNumber = deliveryBoy.PhoneNumber;
                 order.Status = 4;
                 order.UpdatedBy = customer.Name;
@@ -1966,16 +1960,16 @@ namespace ShopNow.Controllers
                 db.Entry(deliveryBoy).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
-                var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
-                detail.CustomerId = deliveryBoy.CustomerId;
-                detail.CustomerName = deliveryBoy.CustomerName;
-                detail.DeliveryBoyId = deliveryBoy.Id;
-                detail.DeliveryBoyName = deliveryBoy.Name;
-                detail.Status = 4;
-                detail.UpdatedBy = customer.Name;
-                detail.DateUpdated = DateTime.Now;
-                db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
+                //var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
+                //detail.CustomerId = deliveryBoy.CustomerId;
+                //detail.CustomerName = deliveryBoy.CustomerName;
+                //detail.DeliveryBoyId = deliveryBoy.Id;
+                //detail.DeliveryBoyName = deliveryBoy.Name;
+                //detail.Status = 4;
+                //detail.UpdatedBy = customer.Name;
+                //detail.DateUpdated = DateTime.Now;
+                //db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
+                //db.SaveChanges();
                 var fcmToken = (from c in db.Customers
                                 where c.Id == deliveryBoyId
                                 select c.FcmTocken ?? "").FirstOrDefault().ToString();
@@ -1994,8 +1988,8 @@ namespace ShopNow.Controllers
             model.List = db.Orders.Where(j => j.Status == 6)
                .Where(i => i.DeliveryBoyPhoneNumber == phoneNumber).Select(i => new CartDelivaredListApiViewModel.CartList
                {
-                   Id = i.id,
-                   ShopName = i.Shopname,
+                   Id = i.Id,
+                   ShopName = i.ShopName,
                    OrderNo = i.OrderNumber,
                    CartStatus = i.Status,
                    Date = i.DateUpdated.ToString("dd-MMM-yyyy"),
@@ -2009,45 +2003,45 @@ namespace ShopNow.Controllers
         {
             var model = new CartListApiViewModel();
             model.List = db.Orders
-                .Join(db.OrderItems, o => o.id, oi => oi.OrderId, (o, oi) => new { o, oi })
-                .Join(db.Payments, c => c.o.OrderNumber, p => p.OrderNo, (c, p) => new { c, p })
+                .Join(db.OrderItems, o => o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
+                .Join(db.Payments, c => c.o.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
             .Join(db.Products, rz => rz.c.oi.ProductId, pr => pr.Id, (rz, pr) => new { rz, pr })
-             .Join(db.ShopCharges, pay => pay.rz.c.o.OrderNumber, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
-              .Join(db.Shops, py => py.pay.rz.c.o.Shopid, s => s.Id, (py, s) => new { py, s })
+             //.Join(db.ShopCharges, pay => pay.rz.c.o.OrderNumber, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
+              .Join(db.Shops, py => py.rz.c.o.ShopId, s => s.Id, (py, s) => new { py, s })
              .AsEnumerable()
-           .Where(i => i.py.pay.rz.c.o.Customerid == customerId && i.py.pay.rz.p.CreditType == 2)
+           .Where(i => i.py.rz.c.o.CustomerId == customerId && i.py.rz.p.CreditType == 2)
            .Select(i => new CartListApiViewModel.CartList
            {
-               Id = i.py.pay.rz.c.o.id,
-               ProductId = i.py.pay.rz.c.oi.ProductId,
+               Id = i.py.rz.c.o.Id,
+               ProductId = i.py.rz.c.oi.ProductId,
                ShopPhoneNumber = i.s.PhoneNumber,
-               PaymentMode = i.py.pay.rz.p.PaymentMode,
-               ShopId = i.py.pay.rz.c.o.Shopid,
-               ShopName = i.py.pay.rz.c.o.Shopname,
-               CustomerName = i.py.pay.rz.c.o.CustomerName,
-               ProductName = GetMasterProductName(i.py.pay.pr.MasterProductId),
-               OrderNo = i.py.pay.rz.c.o.OrderNumber,
-               Price = i.py.pay.rz.c.o.TotalPrice,
+               PaymentMode = i.py.rz.p.PaymentMode,
+               ShopId = i.py.rz.c.o.ShopId,
+               ShopName = i.py.rz.c.o.ShopName,
+               CustomerName = i.py.rz.c.o.CustomerName,
+               ProductName = GetMasterProductName(i.py.pr.MasterProductId),
+               OrderNo = i.py.rz.c.o.OrderNumber,
+               Price = i.py.rz.c.o.TotalPrice,
                //OriginalAmount = GetPayment(i.py.pay.rz.c.o.OrderNumber).UpdatedOriginalAmount != 0 ? i.FirstOrDefault().py.pay.rz.p.OriginalAmount : GetPayment(i.FirstOrDefault().py.pay.rz.c.OrderNo).UpdatedOriginalAmount,
-               DeliveryBoyId = i.py.pay.rz.c.o.DeliveryBoyId,
-               DeliveryBoyName = i.py.pay.rz.c.o.DeliverBoyName,
-               DeliveryBoyPhoneNumber = i.py.pay.rz.c.o.DeliveryBoyPhoneNumber,
-               PhoneNumber = i.py.pay.rz.c.o.ShopPhonenumber,
-               Otp = GetOtp(i.py.pay.rz.c.o.OrderNumber),
-               DeliveryAddress = i.py.pay.rz.c.o.DeliveryAddress,
-               PackingCharge = i.py.sc.Packingcharge,
-               ConvinenientCharge = i.py.sc.Convinenientcharge,
-               Amount = GetPayment(i.py.pay.rz.c.o.OrderNumber).Amount,
-               GrossDeliveryCharge = i.py.sc.GrossDeliveryCharge,
-               ShopDeliveryDiscount = i.py.sc.ShopDeliveryDiscount,
-               NetDeliveryCharge = i.py.sc.NetDeliveryCharge,
-               Qty = i.py.pay.rz.c.o.TotalQuantity,
-               OrderList = GetOrderList(i.py.pay.rz.c.o.OrderNumber),
-               Date = i.py.pay.rz.c.o.DateEncoded.ToString("dd/MMM/yyyy HH:mm"),
-               DateEncoded = i.py.pay.rz.c.o.DateEncoded,
-               CartStatus = i.py.pay.rz.c.o.Status,
-               RfAmount = i.py.pay.rz.p.refundAmount,
-               RefundRemark = i.py.pay.rz.p.refundRemark
+               DeliveryBoyId = i.py.rz.c.o.DeliveryBoyId,
+               DeliveryBoyName = i.py.rz.c.o.DeliveryBoyName,
+               DeliveryBoyPhoneNumber = i.py.rz.c.o.DeliveryBoyPhoneNumber,
+               PhoneNumber = i.py.rz.c.o.ShopPhoneNumber,
+               Otp = GetOtp(i.py.rz.c.o.OrderNumber),
+               DeliveryAddress = i.py.rz.c.o.DeliveryAddress,
+               PackingCharge = i.py.rz.c.o.Packingcharge,
+               ConvinenientCharge = i.py.rz.c.o.Convinenientcharge,
+               Amount = GetPayment(i.py.rz.c.o.OrderNumber).Amount,
+               GrossDeliveryCharge = i.py.rz.c.o.DeliveryCharge,
+               ShopDeliveryDiscount = i.py.rz.c.o.ShopDeliveryDiscount,
+               NetDeliveryCharge = i.py.rz.c.o.NetDeliveryCharge,
+               Qty = i.py.rz.c.o.TotalQuantity,
+               OrderList = GetOrderList(i.py.rz.c.o.OrderNumber),
+               Date = i.py.rz.c.o.DateEncoded.ToString("dd/MMM/yyyy HH:mm"),
+               DateEncoded = i.py.rz.c.o.DateEncoded,
+               CartStatus = i.py.rz.c.o.Status,
+               RfAmount = i.py.rz.p.RefundAmount,
+               RefundRemark = i.py.rz.p.RefundRemark
 
            }).OrderBy(j => j.CartStatus).OrderByDescending(i => i.DateEncoded).ToList();
 
@@ -2090,40 +2084,39 @@ namespace ShopNow.Controllers
         {
             var model = new CartAcceptListApiViewModel();
             model.List = db.Orders.Where(j => j.Status == 3)
-                 .Join(db.OrderItems, o => o.id, oi => oi.OrderId, (o, oi) => new { o, oi })
-                .Join(db.Payments, c => c.o.OrderNumber, p => p.OrderNo, (c, p) => new { c, p })
+                 .Join(db.OrderItems, o => o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
+                .Join(db.Payments, c => c.o.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Join(db.Products, rz => rz.c.oi.ProductId, pr => pr.Id, (rz, pr) => new { rz, pr })
-                .Join(db.Shops, py => py.rz.c.o.Shopid, s => s.Id, (py, s) => new { py, s })
-                .Join(db.ShopCharges, pay => pay.py.rz.c.o.OrderNumber, sc => sc.OrderNo, (pay, sc)
-                => new { pay, sc })
+                .Join(db.Shops, py => py.rz.c.o.ShopId, s => s.Id, (py, s) => new { py, s })
+               // .Join(db.ShopCharges, pay => pay.py.rz.c.o.OrderNumber, sc => sc.OrderNo, (pay, sc)=> new { pay, sc })
                    .AsEnumerable()
-               .Where(i => (i.pay.py.rz.p.PaymentResult == "success" || i.pay.py.rz.p.PaymentMode == "Cash On Hand") && i.pay.py.rz.p.ShopId == shopId)
+               .Where(i => (i.py.rz.p.PaymentResult == "success" || i.py.rz.p.PaymentMode == "Cash On Hand") && i.py.rz.p.ShopId == shopId)
                .Select(i => new CartAcceptListApiViewModel.CartList
                {
-                   Id = i.pay.py.rz.c.o.id,
-                   ProductId = i.pay.py.rz.c.oi.ProductId,
-                   ShopId = i.pay.py.rz.c.o.Shopid,
-                   ShopName = i.pay.py.rz.c.o.Shopname,
-                   OrderNo = i.pay.py.rz.c.o.OrderNumber,
-                   PaymentMode = i.pay.py.rz.p.PaymentMode,
-                   CustomerName = i.pay.py.rz.c.o.CustomerName,
-                   ProductName = GetMasterProductName(i.pay.py.pr.MasterProductId),
-                   PhoneNumber = i.pay.py.rz.c.o.ShopPhonenumber,
-                   DeliveryAddress = i.pay.py.rz.c.o.DeliveryAddress,
-                   ShopLatitude = i.pay.s.Latitude,
-                   ShopLongitude = i.pay.s.Longitude,
-                   PackingCharge = i.sc.Packingcharge,
-                   ConvinenientCharge = i.sc.Convinenientcharge,
-                   Amount = GetPayment(i.pay.py.rz.c.o.OrderNumber).Amount,
+                   Id = i.py.rz.c.o.Id,
+                   ProductId = i.py.rz.c.oi.ProductId,
+                   ShopId = i.py.rz.c.o.ShopId,
+                   ShopName = i.py.rz.c.o.ShopName,
+                   OrderNo = i.py.rz.c.o.OrderNumber,
+                   PaymentMode = i.py.rz.p.PaymentMode,
+                   CustomerName = i.py.rz.c.o.CustomerName,
+                   ProductName = GetMasterProductName(i.py.pr.MasterProductId),
+                   PhoneNumber = i.py.rz.c.o.ShopPhoneNumber,
+                   DeliveryAddress = i.py.rz.c.o.DeliveryAddress,
+                   ShopLatitude = i.s.Latitude,
+                   ShopLongitude = i.s.Longitude,
+                   PackingCharge = i.py.rz.c.o.Packingcharge,
+                   ConvinenientCharge = i.py.rz.c.o.Convinenientcharge,
+                   Amount = GetPayment(i.py.rz.c.o.OrderNumber).Amount,
                    //OriginalAmount = GetPayment(i.FirstOrDefault().pay.py.rz.c.OrderNo).UpdatedOriginalAmount == 0 ? GetPayment(i.FirstOrDefault().pay.py.rz.c.OrderNo).OriginalAmount : GetPayment(i.FirstOrDefault().pay.py.rz.c.OrderNo).UpdatedOriginalAmount,
-                   GrossDeliveryCharge = i.sc.GrossDeliveryCharge,
-                   ShopDeliveryDiscount = i.sc.ShopDeliveryDiscount,
-                   NetDeliveryCharge = i.sc.NetDeliveryCharge,
-                   Qty = i.pay.py.rz.c.o.TotalQuantity,
-                   Date = i.pay.py.rz.c.o.DateEncoded.ToString("dd-MMM-yyyy HH:mm"),
-                   DateEncoded = i.pay.py.rz.c.o.DateEncoded,
-                   OrderList = GetOrderPendingList(i.pay.py.rz.c.o.OrderNumber),
-                   CartStatus = i.pay.py.rz.c.o.Status
+                   GrossDeliveryCharge = i.py.rz.c.o.DeliveryCharge,
+                   ShopDeliveryDiscount = i.py.rz.c.o.ShopDeliveryDiscount,
+                   NetDeliveryCharge = i.py.rz.c.o.NetDeliveryCharge,
+                   Qty = i.py.rz.c.o.TotalQuantity,
+                   Date = i.py.rz.c.o.DateEncoded.ToString("dd-MMM-yyyy HH:mm"),
+                   DateEncoded = i.py.rz.c.o.DateEncoded,
+                   OrderList = GetOrderPendingList(i.py.rz.c.o.OrderNumber),
+                   CartStatus = i.py.rz.c.o.Status
                }).OrderByDescending(i => i.DateEncoded).ToList();
 
             int count = model.List.Count();
@@ -2166,79 +2159,77 @@ namespace ShopNow.Controllers
             if (mode == 0)
             {
                 model.List = db.Orders.Where(j => j.Status == 2)
-                 .Join(db.OrderItems, o => o.id, oi => oi.OrderId, (o, oi) => new { o, oi })
-                .Join(db.Payments, c => c.o.OrderNumber, p => p.OrderNo, (c, p) => new { c, p })
+                 .Join(db.OrderItems, o => o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
+                .Join(db.Payments, c => c.o.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Join(db.Products, rz => rz.c.oi.ProductId, pr => pr.Id, (rz, pr) => new { rz, pr })
-                .Join(db.Shops, py => py.rz.c.o.Shopid, s => s.Id, (py, s) => new { py, s })
-                .Join(db.ShopCharges, pay => pay.py.rz.c.o.OrderNumber, sc => sc.OrderNo, (pay, sc)
-                => new { pay, sc })
+                .Join(db.Shops, py => py.rz.c.o.ShopId, s => s.Id, (py, s) => new { py, s })
+                //.Join(db.ShopCharges, pay => pay.py.rz.c.o.OrderNumber, sc => sc.OrderNo, (pay, sc)=> new { pay, sc })
                    .AsEnumerable()
-                   .Where(i => (i.pay.py.rz.p.PaymentResult == "success" || i.pay.py.rz.p.PaymentMode == "Cash On Hand" || i.pay.py.rz.p.PaymentMode == "Online Payment" || i.pay.py.rz.p.PaymentMode == "pending") && i.pay.py.rz.p.ShopId == shopId)
+                   .Where(i => (i.py.rz.p.PaymentResult == "success" || i.py.rz.p.PaymentMode == "Cash On Hand" || i.py.rz.p.PaymentMode == "Online Payment" || i.py.rz.p.PaymentMode == "pending") && i.py.rz.p.ShopId == shopId)
                    .Select(i => new CartAcceptListApiViewModel.CartList
                    {
-                       Id = i.pay.py.rz.c.o.id,
-                       ProductId = i.pay.py.rz.c.oi.ProductId,
-                       ShopId = i.pay.py.rz.c.o.Shopid,
-                       ShopName = i.pay.py.rz.c.o.Shopname,
-                       OrderNo = i.pay.py.rz.c.o.OrderNumber,
-                       PaymentMode = i.pay.py.rz.p.PaymentMode,
-                       CustomerName = i.pay.py.rz.c.o.CustomerName,
-                       ProductName = GetMasterProductName(i.pay.py.pr.MasterProductId),
-                       PhoneNumber = i.pay.py.rz.c.o.ShopPhonenumber,
-                       DeliveryAddress = i.pay.py.rz.c.o.DeliveryAddress,
-                       ShopLatitude = i.pay.s.Latitude,
-                       ShopLongitude = i.pay.s.Longitude,
-                       PackingCharge = i.sc.Packingcharge,
-                       ConvinenientCharge = i.sc.Convinenientcharge,
-                       Amount = GetPayment(i.pay.py.rz.c.o.OrderNumber).Amount,
+                       Id = i.py.rz.c.o.Id,
+                       ProductId = i.py.rz.c.oi.ProductId,
+                       ShopId = i.py.rz.c.o.ShopId,
+                       ShopName = i.py.rz.c.o.ShopName,
+                       OrderNo = i.py.rz.c.o.OrderNumber,
+                       PaymentMode = i.py.rz.p.PaymentMode,
+                       CustomerName = i.py.rz.c.o.CustomerName,
+                       ProductName = GetMasterProductName(i.py.pr.MasterProductId),
+                       PhoneNumber = i.py.rz.c.o.ShopPhoneNumber,
+                       DeliveryAddress = i.py.rz.c.o.DeliveryAddress,
+                       ShopLatitude = i.s.Latitude,
+                       ShopLongitude = i.s.Longitude,
+                       PackingCharge = i.py.rz.c.o.Packingcharge,
+                       ConvinenientCharge = i.py.rz.c.o.Convinenientcharge,
+                       Amount = GetPayment(i.py.rz.c.o.OrderNumber).Amount,
                        //OriginalAmount = GetPayment(i.FirstOrDefault().pay.py.rz.c.OrderNo).UpdatedOriginalAmount == 0 ? GetPayment(i.FirstOrDefault().pay.py.rz.c.OrderNo).OriginalAmount : GetPayment(i.FirstOrDefault().pay.py.rz.c.OrderNo).UpdatedOriginalAmount,
-                       GrossDeliveryCharge = i.sc.GrossDeliveryCharge,
-                       ShopDeliveryDiscount = i.sc.ShopDeliveryDiscount,
-                       NetDeliveryCharge = i.sc.NetDeliveryCharge,
-                       Qty = i.pay.py.rz.c.o.TotalQuantity,
-                       Date = i.pay.py.rz.c.o.DateEncoded.ToString("dd-MMM-yyyy HH:mm"),
-                       DateEncoded = i.pay.py.rz.c.o.DateEncoded,
-                       OrderList = GetOrderPendingList(i.pay.py.rz.c.o.OrderNumber),
-                       CartStatus = i.pay.py.rz.c.o.Status
+                       GrossDeliveryCharge = i.py.rz.c.o.DeliveryCharge,
+                       ShopDeliveryDiscount = i.py.rz.c.o.ShopDeliveryDiscount,
+                       NetDeliveryCharge = i.py.rz.c.o.NetDeliveryCharge,
+                       Qty = i.py.rz.c.o.TotalQuantity,
+                       Date = i.py.rz.c.o.DateEncoded.ToString("dd-MMM-yyyy HH:mm"),
+                       DateEncoded = i.py.rz.c.o.DateEncoded,
+                       OrderList = GetOrderPendingList(i.py.rz.c.o.OrderNumber),
+                       CartStatus = i.py.rz.c.o.Status
                    }).OrderByDescending(i => i.DateEncoded).ToList();
             }
             else
             {
                 model.List = db.Orders.Where(j => j.Status ==3 || j.Status ==4)
-                 .Join(db.OrderItems, o => o.id, oi => oi.OrderId, (o, oi) => new { o, oi })
-                .Join(db.Payments, c => c.o.OrderNumber, p => p.OrderNo, (c, p) => new { c, p })
+                 .Join(db.OrderItems, o => o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
+                .Join(db.Payments, c => c.o.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Join(db.Products, rz => rz.c.oi.ProductId, pr => pr.Id, (rz, pr) => new { rz, pr })
-                .Join(db.Shops, py => py.rz.c.o.Shopid, s => s.Id, (py, s) => new { py, s })
-                .Join(db.ShopCharges, pay => pay.py.rz.c.o.OrderNumber, sc => sc.OrderNo, (pay, sc)
-                => new { pay, sc })
+                .Join(db.Shops, py => py.rz.c.o.ShopId, s => s.Id, (py, s) => new { py, s })
+               // .Join(db.ShopCharges, pay => pay.py.rz.c.o.OrderNumber, sc => sc.OrderNo, (pay, sc)=> new { pay, sc })
                    .AsEnumerable()
-                  .Where(i => (i.pay.py.rz.p.PaymentResult == "success" || i.pay.py.rz.p.PaymentMode == "Cash On Hand" || i.pay.py.rz.p.PaymentMode == "Online Payment" || i.pay.py.rz.p.PaymentMode == "pending") && i.pay.py.rz.p.ShopId == shopId)
+                  .Where(i => (i.py.rz.p.PaymentResult == "success" || i.py.rz.p.PaymentMode == "Cash On Hand" || i.py.rz.p.PaymentMode == "Online Payment" || i.py.rz.p.PaymentMode == "pending") && i.py.rz.p.ShopId == shopId)
                   .Select(i => new CartAcceptListApiViewModel.CartList
                   {
-                      Id = i.pay.py.rz.c.o.id,
-                      ProductId = i.pay.py.rz.c.oi.ProductId,
-                      ShopId = i.pay.py.rz.c.o.Shopid,
-                      ShopName = i.pay.py.rz.c.o.Shopname,
-                      OrderNo = i.pay.py.rz.c.o.OrderNumber,
-                      PaymentMode = i.pay.py.rz.p.PaymentMode,
-                      CustomerName = i.pay.py.rz.c.o.CustomerName,
-                      ProductName = GetMasterProductName(i.pay.py.pr.MasterProductId),
-                      PhoneNumber = i.pay.py.rz.c.o.ShopPhonenumber,
-                      DeliveryAddress = i.pay.py.rz.c.o.DeliveryAddress,
-                      ShopLatitude = i.pay.s.Latitude,
-                      ShopLongitude = i.pay.s.Longitude,
-                      PackingCharge = i.sc.Packingcharge,
-                      ConvinenientCharge = i.sc.Convinenientcharge,
-                      Amount = GetPayment(i.pay.py.rz.c.o.OrderNumber).Amount,
+                      Id = i.py.rz.c.o.Id,
+                      ProductId = i.py.rz.c.oi.ProductId,
+                      ShopId = i.py.rz.c.o.ShopId,
+                      ShopName = i.py.rz.c.o.ShopName,
+                      OrderNo = i.py.rz.c.o.OrderNumber,
+                      PaymentMode = i.py.rz.p.PaymentMode,
+                      CustomerName = i.py.rz.c.o.CustomerName,
+                      ProductName = GetMasterProductName(i.py.pr.MasterProductId),
+                      PhoneNumber = i.py.rz.c.o.ShopPhoneNumber,
+                      DeliveryAddress = i.py.rz.c.o.DeliveryAddress,
+                      ShopLatitude = i.s.Latitude,
+                      ShopLongitude = i.s.Longitude,
+                      PackingCharge = i.py.rz.c.o.Packingcharge,
+                      ConvinenientCharge = i.py.rz.c.o.Convinenientcharge,
+                      Amount = GetPayment(i.py.rz.c.o.OrderNumber).Amount,
                       //OriginalAmount = GetPayment(i.FirstOrDefault().pay.py.rz.c.OrderNo).UpdatedOriginalAmount == 0 ? GetPayment(i.FirstOrDefault().pay.py.rz.c.OrderNo).OriginalAmount : GetPayment(i.FirstOrDefault().pay.py.rz.c.OrderNo).UpdatedOriginalAmount,
-                      GrossDeliveryCharge = i.sc.GrossDeliveryCharge,
-                      ShopDeliveryDiscount = i.sc.ShopDeliveryDiscount,
-                      NetDeliveryCharge = i.sc.NetDeliveryCharge,
-                      Qty = i.pay.py.rz.c.o.TotalQuantity,
-                      Date = i.pay.py.rz.c.o.DateEncoded.ToString("dd-MMM-yyyy HH:mm"),
-                      DateEncoded = i.pay.py.rz.c.o.DateEncoded,
-                      OrderList = GetOrderPendingList(i.pay.py.rz.c.o.OrderNumber),
-                      CartStatus = i.pay.py.rz.c.o.Status
+                      GrossDeliveryCharge = i.py.rz.c.o.DeliveryCharge,
+                      ShopDeliveryDiscount = i.py.rz.c.o.ShopDeliveryDiscount,
+                      NetDeliveryCharge = i.py.rz.c.o.NetDeliveryCharge,
+                      Qty = i.py.rz.c.o.TotalQuantity,
+                      Date = i.py.rz.c.o.DateEncoded.ToString("dd-MMM-yyyy HH:mm"),
+                      DateEncoded = i.py.rz.c.o.DateEncoded,
+                      OrderList = GetOrderPendingList(i.py.rz.c.o.OrderNumber),
+                      CartStatus = i.py.rz.c.o.Status
                   }).OrderByDescending(i => i.DateEncoded).ToList();
             }
 
@@ -2280,46 +2271,42 @@ namespace ShopNow.Controllers
         {
             var model = new CartListApiViewModel();
             model.List = db.Orders.Where(j => (j.Status == 4 || j.Status == 3) && j.Status == 0)
-                .Join(db.OrderItems, o => o.id, oi => oi.OrderId, (o, oi) => new { o, oi })
-                .Join(db.Payments, c => c.o.OrderNumber, p => p.OrderNo, (c, p) => new { c, p })
+                .Join(db.OrderItems, o => o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
+                .Join(db.Payments, c => c.o.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Join(db.Products, rz => rz.c.oi.ProductId, pr => pr.Id, (rz, pr) => new { rz, pr })
-                .Join(db.Shops, py => py.rz.c.o.Shopid, s => s.Id, (py, s) => new { py, s })
-                .Join(db.ShopCharges, pay => pay.py.rz.c.o.OrderNumber, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
+                .Join(db.Shops, py => py.rz.c.o.ShopId, s => s.Id, (py, s) => new { py, s })
+                //.Join(db.ShopCharges, pay => pay.py.rz.c.o.OrderNumber, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
                     //.Join(db.DeliveryBoys, ca => ca.pay.py.rz.c.DeliveryBoyCode, db => db.Code, (ca, db) => new { ca, db })
                     .AsEnumerable()
-               .Where(i => (i.pay.py.rz.p.PaymentResult == "success" || i.pay.py.rz.p.PaymentResult == "pending" || i.pay.py.rz.p.PaymentMode == "Cash On Hand" || i.pay.py.rz.p.PaymentMode == "Online Payment") && i.pay.py.rz.c.o.Shopid == shopId)
+               .Where(i => (i.py.rz.p.PaymentResult == "success" || i.py.rz.p.PaymentResult == "pending" || i.py.rz.p.PaymentMode == "Cash On Hand" || i.py.rz.p.PaymentMode == "Online Payment") && i.py.rz.c.o.ShopId == shopId)
                .Select(i => new CartListApiViewModel.CartList
                {
-                   Id = i.pay.py.rz.c.o.id,
-                   ProductId = i.pay.py.rz.c.oi.ProductId,
-                   ShopPhoneNumber = i.pay.py.rz.c.o.ShopPhonenumber,
-                   PaymentMode = i.pay.py.rz.p.PaymentMode,
-                   ShopId = i.pay.py.rz.c.o.Shopid,
-                   ShopName = i.pay.py.rz.c.o.Shopname,
-                   CustomerName = i.pay.py.rz.c.o.CustomerName,
-                   ProductName = GetMasterProductName(i.pay.py.pr.MasterProductId),
-                   OrderNo = i.pay.py.rz.c.o.OrderNumber,
-                   Price = i.pay.py.rz.c.o.TotalPrice,
-                   //OriginalAmount = GetPayment(i.py.pay.rz.c.o.OrderNumber).UpdatedOriginalAmount != 0 ? i.FirstOrDefault().py.pay.rz.p.OriginalAmount : GetPayment(i.FirstOrDefault().py.pay.rz.c.OrderNo).UpdatedOriginalAmount,
-                   DeliveryBoyId = i.pay.py.rz.c.o.DeliveryBoyId,
-                   DeliveryBoyName = i.pay.py.rz.c.o.DeliverBoyName,
-                   DeliveryBoyPhoneNumber = i.pay.py.rz.c.o.DeliveryBoyPhoneNumber,
-                   PhoneNumber = i.pay.py.rz.c.o.ShopPhonenumber,
-                   Otp = GetOtp(i.pay.py.rz.c.o.OrderNumber),
-                   DeliveryAddress = i.pay.py.rz.c.o.DeliveryAddress,
-                   PackingCharge = i.sc.Packingcharge,
-                   ConvinenientCharge = i.sc.Convinenientcharge,
-                   Amount = GetPayment(i.pay.py.rz.c.o.OrderNumber).Amount,
-                   GrossDeliveryCharge = i.sc.GrossDeliveryCharge,
-                   ShopDeliveryDiscount = i.sc.ShopDeliveryDiscount,
-                   NetDeliveryCharge = i.sc.NetDeliveryCharge,
-                   Qty = i.pay.py.rz.c.o.TotalQuantity,
-                   OrderList = GetOrderList(i.pay.py.rz.c.o.OrderNumber),
-                   Date = i.pay.py.rz.c.o.DateEncoded.ToString("dd/MMM/yyyy HH:mm"),
-                   DateEncoded = i.pay.py.rz.c.o.DateEncoded,
-                   CartStatus = i.pay.py.rz.c.o.Status,
-                   RfAmount = i.pay.py.rz.p.refundAmount,
-                   RefundRemark = i.pay.py.rz.p.refundRemark
+                   Id = i.py.rz.c.o.Id,
+                   ProductId = i.py.rz.c.oi.ProductId,
+                   ShopId = i.py.rz.c.o.ShopId,
+                   ShopName = i.py.rz.c.o.ShopName,
+                   OrderNo = i.py.rz.c.o.OrderNumber,
+                   PaymentMode = i.py.rz.p.PaymentMode,
+                   CustomerName = i.py.rz.c.o.CustomerName,
+                   ProductName = GetMasterProductName(i.py.pr.MasterProductId),
+                   PhoneNumber = i.py.rz.c.o.ShopPhoneNumber,
+                   DeliveryAddress = i.py.rz.c.o.DeliveryAddress,
+                   ShopLatitude = i.s.Latitude,
+                   ShopLongitude = i.s.Longitude,
+                   PackingCharge = i.py.rz.c.o.Packingcharge,
+                   ConvinenientCharge = i.py.rz.c.o.Convinenientcharge,
+                   Amount = GetPayment(i.py.rz.c.o.OrderNumber).Amount,
+                   //OriginalAmount = GetPayment(i.FirstOrDefault().pay.py.rz.c.OrderNo).UpdatedOriginalAmount == 0 ? GetPayment(i.FirstOrDefault().pay.py.rz.c.OrderNo).OriginalAmount : GetPayment(i.FirstOrDefault().pay.py.rz.c.OrderNo).UpdatedOriginalAmount,
+                   GrossDeliveryCharge = i.py.rz.c.o.DeliveryCharge,
+                   ShopDeliveryDiscount = i.py.rz.c.o.ShopDeliveryDiscount,
+                   NetDeliveryCharge = i.py.rz.c.o.NetDeliveryCharge,
+                   Qty = i.py.rz.c.o.TotalQuantity,
+                   Date = i.py.rz.c.o.DateEncoded.ToString("dd-MMM-yyyy HH:mm"),
+                   DateEncoded = i.py.rz.c.o.DateEncoded,
+                   OrderList = GetOrderPendingList(i.py.rz.c.o.OrderNumber),
+                   CartStatus = i.py.rz.c.o.Status,
+                   RfAmount = i.py.rz.p.RefundAmount,
+                   RefundRemark = i.py.rz.p.RefundRemark
                }).OrderByDescending(i => i.DateEncoded).ToList();
 
 
@@ -2563,9 +2550,9 @@ namespace ShopNow.Controllers
                                           Name = m.Name,
                                           ShopId = pl.ShopId,
                                           ShopName = pl.ShopName,
-                                         // CategoryId = pl.ShopCategoryId,
-                                         // CategoryName = pl.ShopCategoryName,
-                                         // ColorCode = pl.ColorCode,
+                                          CategoryId = m.CategoryId,
+                                          CategoryName = m.CategoryName,
+                                          ColorCode = m.ColorCode,
                                           Price = pl.Price,
                                           ImagePath = m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23"),
                                           Status = pl.Status
@@ -2586,9 +2573,9 @@ namespace ShopNow.Controllers
                                 ProductName = GetMasterProductName(i.p.MasterProductId),
                                ShopId = i.p.ShopId,
                                ShopName = i.p.ShopName,
-                               AddOnCategoryCode = i.d.AddOnCategoryCode,
+                               AddOnCategoryId = i.d.AddOnCategoryId,
                                AddOnCategoryName = i.d.AddOnCategoryName,
-                               PortionCode = i.d.PortionCode,
+                               PortionId = i.d.PortionId,
                                PortionName = i.d.PortionName,
                                MinSelectionLimit = i.d.MinSelectionLimit,
                                MaxSelectionLimit = i.d.MaxSelectionLimit,
@@ -2611,7 +2598,7 @@ namespace ShopNow.Controllers
                                           Name = m.Name,
                                           ShopId = pl.ShopId,
                                           ShopName = pl.ShopName,
-                                          //CategoryCode = m.NextSubCategoryCode,
+                                          CategoryId = m.NextSubCategoryId,
                                           CategoryName = m.NextSubCategoryName,
                                           //ColorCode = pl.ColorCode,
                                           Price = pl.Price,
@@ -2633,9 +2620,9 @@ namespace ShopNow.Controllers
                                ProductName =GetMasterProductName(i.p.MasterProductId),
                                ShopId = i.p.ShopId,
                                ShopName = i.p.ShopName,
-                               AddOnCategoryCode = i.d.AddOnCategoryCode,
+                               AddOnCategoryId = i.d.AddOnCategoryId,
                                AddOnCategoryName = i.d.AddOnCategoryName,
-                               PortionCode = i.d.PortionCode,
+                               PortionId = i.d.PortionId,
                                PortionName = i.d.PortionName,
                                MinSelectionLimit = i.d.MinSelectionLimit,
                                MaxSelectionLimit = i.d.MaxSelectionLimit,
@@ -2685,7 +2672,7 @@ namespace ShopNow.Controllers
                 DistrictName = i.DistrictName,
                 Rating = i.Rating,
                 ShopCategoryId = i.ShopCategoryId,
-                ShopOnline=i.isOnline,
+                ShopOnline=i.IsOnline,
                 ShopStatus=i.Status
                 }).ToList();
 
@@ -2854,7 +2841,7 @@ namespace ShopNow.Controllers
                                     select c.Name).FirstOrDefault();
                 
                 var orderCount = (from s in db.Orders
-                                  join sh in db.Shops on s.Shopid equals sh.Id
+                                  join sh in db.Shops on s.ShopId equals sh.Id
                                   join c in db.Customers on sh.CustomerId equals c.Id
                                   where sh.CustomerId == customerId && (s.Status >= 2)
                                   select s).Count();
@@ -2868,10 +2855,10 @@ namespace ShopNow.Controllers
                                    where ss.CustomerId == customerId && ss.Status == 0 && ss.CreditType == 1
                                    select (Double?)ss.OriginalAmount).Sum() ?? 0;
 
-                var varDeliveryCharges = (from ss in db.ShopCharges
+                var varDeliveryCharges = (from ss in db.Orders
                                           join sh in db.Shops on ss.ShopId equals sh.Id
                                           where sh.CustomerId == customerId && ss.Status >= 2
-                                          select (Double?)ss.GrossDeliveryCharge).Sum() ?? 0;
+                                          select (Double?)ss.DeliveryCharge).Sum() ?? 0;
 
                 if (platformcredits - platformorder <= 100)
                 {
@@ -2926,15 +2913,15 @@ namespace ShopNow.Controllers
             return Json(new { message = "Successfully Updated to Rating!", Details = model });
 
         }
-        public JsonResult GetAllReview(string code, string customerCode, int page = 1, int pageSize = 9)
+        public JsonResult GetAllReview(int id, int customerId, int page = 1, int pageSize = 9)
         {
             var model = new ReviewListViewModel();
             model.CustomerList = db.CustomerReviews
-                             .Where(i => i.Status == 0 && i.ShopCode == code && i.CustomerCode == customerCode)
+                             .Where(i => i.Status == 0 && i.ShopId == id && i.CustomerId == customerId)
                            .AsEnumerable()
                          .Select(i => new ReviewListViewModel.ReviewlList
                          {
-                             Id = i.Id,
+                             Id = Convert.ToInt32(i.Id),
                              ShopName = i.ShopName,
                              CustomerName = i.CustomerName,
                              CustomerRemark = i.CustomerRemark,
@@ -2942,11 +2929,11 @@ namespace ShopNow.Controllers
                          }).ToList();
 
             model.ReviewlLists = db.CustomerReviews
-                             .Where(i => i.Status == 0 && i.ShopCode == code && i.CustomerCode != customerCode)
+                             .Where(i => i.Status == 0 && i.ShopId == id && i.CustomerId != customerId)
                            .AsEnumerable()
                          .Select(i => new ReviewListViewModel.ReviewlList
                          {
-                             Id = i.Id,
+                             Id = Convert.ToInt32(i.Id),
                              ShopName = i.ShopName,
                              CustomerName = i.CustomerName,
                              CustomerRemark = i.CustomerRemark,
@@ -2968,12 +2955,12 @@ namespace ShopNow.Controllers
             var items = model.ReviewlLists.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
             var previous = CurrentPage - 1;
 
-            var previousurl = "http://192.168.0.111/WebAdmin/Api/GetAllReview?code=" + code + "&page=" + previous;
+            var previousurl = "http://192.168.0.111/WebAdmin/Api/GetAllReview?id=" + id + "&page=" + previous;
             var previousPage = CurrentPage > 1 ? previousurl : "No";
 
             var current = CurrentPage + 1;
 
-            var nexturl = "http://192.168.0.111/WebAdmin/Api/GetAllReview?code=" + code + "&page=" + current;
+            var nexturl = "http://192.168.0.111/WebAdmin/Api/GetAllReview?id=" + id + "&page=" + current;
             var nextPage = CurrentPage < TotalPages ? nexturl : "No";
             var paginationMetadata = new
             {
@@ -3077,7 +3064,7 @@ namespace ShopNow.Controllers
                                 Otp = i.o.Any() ? i.o.LastOrDefault().Otp : "N/A",
                                 Password = i.ss.c.FirstOrDefault().Password != null ? "Password Generated" : "Not Password Generated",
                                 Status = i.ss.s.Status,
-                                isOnline = i.ss.s.isOnline,
+                                isOnline = i.ss.s.IsOnline,
                                 Rating = i.ss.s.Rating,
                                 ImagePath = i.ss.s.ImagePath,
                                 DistrictName = i.ss.s.DistrictName,
@@ -3094,7 +3081,7 @@ namespace ShopNow.Controllers
             if (model.State == 0)
             {
                 var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
-                shop.isOnline = true;
+                shop.IsOnline = true;
                 if (model.CustomerId != 0)
                 {
                     var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
@@ -3108,7 +3095,7 @@ namespace ShopNow.Controllers
             else
             {
                 var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
-                shop.isOnline = false;
+                shop.IsOnline = false;
                 if (model.CustomerId != 0)
                 {
                     var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
@@ -3256,7 +3243,7 @@ namespace ShopNow.Controllers
         Latitude = i.Latitude,
         Longitude = i.Longitude,
         Status = i.Status,
-        isOnline = i.isOnline
+        isOnline = i.IsOnline
     }).ToList();
 
                 model.SuperMarketList = db.Shops.SqlQuery(querySuperMarketList,
@@ -3273,7 +3260,7 @@ namespace ShopNow.Controllers
         Latitude = i.Latitude,
         Longitude = i.Longitude,
         Status = i.Status,
-        isOnline = i.isOnline
+        isOnline = i.IsOnline
     }).ToList();
 
                 model.GroceriesList = db.Shops.SqlQuery(queryGroceriesList,
@@ -3291,7 +3278,7 @@ namespace ShopNow.Controllers
             Latitude = i.Latitude,
             Longitude = i.Longitude,
             Status = i.Status,
-            isOnline = i.isOnline
+            isOnline = i.IsOnline
         }).ToList();
 
   
@@ -3309,7 +3296,7 @@ namespace ShopNow.Controllers
             Latitude = i.Latitude,
             Longitude = i.Longitude,
             Status = i.Status,
-            isOnline = i.isOnline
+            isOnline = i.IsOnline
         }).ToList();
 
                 model.ElectronicsList = db.Shops.SqlQuery(queryElectronicsList,
@@ -3327,7 +3314,7 @@ namespace ShopNow.Controllers
            Latitude = i.Latitude,
            Longitude = i.Longitude,
            Status = i.Status,
-           isOnline = i.isOnline
+           isOnline = i.IsOnline
        }).ToList();
 
 
@@ -3346,7 +3333,7 @@ namespace ShopNow.Controllers
         Latitude = i.Latitude,
         Longitude = i.Longitude,
         Status = i.Status,
-        isOnline = i.isOnline
+        isOnline = i.IsOnline
     }).ToList();
 
     
@@ -3365,7 +3352,7 @@ namespace ShopNow.Controllers
         Longitude = i.Longitude,
         List = GetBannerImageList(i.Id),
         Status = i.Status,
-        isOnline = i.isOnline
+        isOnline = i.IsOnline
     }).ToList();
 
                 return Json(model, JsonRequestBehavior.AllowGet);
@@ -3386,7 +3373,7 @@ namespace ShopNow.Controllers
         Latitude = i.Latitude,
         Longitude = i.Longitude,
         Status = i.Status,
-        isOnline = i.isOnline
+        isOnline = i.IsOnline
     }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3407,7 +3394,7 @@ namespace ShopNow.Controllers
        Latitude = i.Latitude,
        Longitude = i.Longitude,
        Status = i.Status,
-       isOnline = i.isOnline
+       isOnline = i.IsOnline
    }).ToList();
 
                 return Json(model, JsonRequestBehavior.AllowGet);
@@ -3429,7 +3416,7 @@ namespace ShopNow.Controllers
           Latitude = i.Latitude,
           Longitude = i.Longitude,
           Status = i.Status,
-          isOnline = i.isOnline
+          isOnline = i.IsOnline
       }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3451,7 +3438,7 @@ namespace ShopNow.Controllers
             Latitude = i.Latitude,
             Longitude = i.Longitude,
             Status = i.Status,
-            isOnline = i.isOnline
+            isOnline = i.IsOnline 
         }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3472,7 +3459,7 @@ namespace ShopNow.Controllers
                     Latitude = i.Latitude,
                 Longitude = i.Longitude,
                 Status = i.Status,
-                isOnline = i.isOnline
+                isOnline = i.IsOnline
                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3494,7 +3481,7 @@ namespace ShopNow.Controllers
         Latitude = i.Latitude,
         Longitude = i.Longitude,
         Status = i.Status,
-        isOnline = i.isOnline
+        isOnline = i.IsOnline
     }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3519,7 +3506,7 @@ namespace ShopNow.Controllers
         Latitude = i.Latitude,
         Longitude = i.Longitude,
         Status = i.Status,
-        isOnline=i.isOnline
+        isOnline=i.IsOnline
     }).ToList();
 
                 return Json(model, JsonRequestBehavior.AllowGet);
@@ -3535,18 +3522,18 @@ namespace ShopNow.Controllers
             {
                 dt = DateTime.Now.ToString("dd-MMM-yyyy");
                 model.List = db.Orders.Where(i => i.Status == 6)
-                    .Join(db.Payments, c => c.OrderNumber, p => p.OrderNo, (c, p) => new { c, p })
-                         .Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
+                    .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+                         //.Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
                      .AsEnumerable()
-                   .Where(i => i.pay.c.Shopid == shopId && i.pay.c.DateEncoded.ToString("dd-MMM-yyyy") == dt)
+                   .Where(i => i.c.ShopId == shopId && i.c.DateEncoded.ToString("dd-MMM-yyyy") == dt)
                    .Select(i => new ShopOrderAmountApiViewModel.CartList
                    {
 
-                       OrderNo = i.pay.c.OrderNumber,
-                       CartStatus = i.pay.c.Status,
-                       ShopPaymentStatus = i.pay.c.ShopPaymentStatus,
-                       Amount = i.pay.p.OriginalAmount.ToString(),
-                       Date = i.pay.c.DateEncoded.ToString("dd-MMM-yyyy HH:ss")
+                       OrderNo = i.c.OrderNumber,
+                       CartStatus = i.c.Status,
+                       ShopPaymentStatus = i.c.ShopPaymentStatus,
+                       Amount = i.p.OriginalAmount.ToString(),
+                       Date = i.c.DateEncoded.ToString("dd-MMM-yyyy HH:ss")
                    }).ToList();
                 if (model.List.Count() != 0)
                 {
@@ -3559,17 +3546,17 @@ namespace ShopNow.Controllers
                 DateTime from1 = DateTime.Parse(from);
                 DateTime to1 = DateTime.Parse(to);
                 model.List = db.Orders.Where(i => i.Status == 6)
-                    .Join(db.Payments, c => c.OrderNumber, p => p.OrderNo, (c, p) => new { c, p })
-                         .Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
+                    .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+                        //.Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
                      .AsEnumerable()
-                   .Where(i => i.pay.c.Shopid == shopId && i.pay.c.DateEncoded >= from1 && i.pay.c.DateEncoded <= to1)
+                   .Where(i => i.c.ShopId == shopId && i.c.DateEncoded >= from1 && i.c.DateEncoded <= to1)
                    .Select(i => new ShopOrderAmountApiViewModel.CartList
                    {
-                       OrderNo = i.pay.c.OrderNumber,
-                       CartStatus = i.pay.c.Status,
-                       ShopPaymentStatus = i.pay.c.ShopPaymentStatus,
-                       Amount = i.pay.p.OriginalAmount.ToString(),
-                       Date = i.pay.c.DateEncoded.ToString("dd-MMM-yyyy HH:ss")
+                       OrderNo = i.c.OrderNumber,
+                       CartStatus = i.c.Status,
+                       ShopPaymentStatus = i.c.ShopPaymentStatus,
+                       Amount = i.p.OriginalAmount.ToString(),
+                       Date = i.c.DateEncoded.ToString("dd-MMM-yyyy HH:ss")
                    }).ToList();
                 if (model.List.Count() != 0)
                 {
@@ -3580,17 +3567,17 @@ namespace ShopNow.Controllers
             else
             {
                 model.List = db.Orders.Where(i => i.Status == 6)
-                    .Join(db.Payments, c => c.OrderNumber, p => p.OrderNo, (c, p) => new { c, p })
-                         .Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
+                    .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+                        // .Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
                      .AsEnumerable()
-                   .Where(i => i.pay.c.Shopid == shopId && i.pay.c.DateEncoded.ToString("dd-MMM-yyyy") == dt)
+                   .Where(i => i.c.ShopId == shopId && i.c.DateEncoded.ToString("dd-MMM-yyyy") == dt)
                    .Select(i => new ShopOrderAmountApiViewModel.CartList
                    {
-                       OrderNo = i.pay.c.OrderNumber,
-                       CartStatus = i.pay.c.Status,
-                       ShopPaymentStatus = i.pay.c.ShopPaymentStatus,
-                       Amount = i.pay.p.OriginalAmount.ToString(),
-                       Date = i.pay.c.DateEncoded.ToString("dd-MMM-yyyy HH:ss")
+                       OrderNo = i.c.OrderNumber,
+                       CartStatus = i.c.Status,
+                       ShopPaymentStatus = i.c.ShopPaymentStatus,
+                       Amount = i.p.OriginalAmount.ToString(),
+                       Date = i.c.DateEncoded.ToString("dd-MMM-yyyy HH:ss")
                    }).ToList();
                 if (model.List.Count() != 0)
                 {
@@ -3641,13 +3628,13 @@ namespace ShopNow.Controllers
             var model = new DelivaryCreditAmountApiViewModel();
 
             model.List = db.Orders.Where(i => i.Status == 6)
-                 .Join(db.Payments, c => c.OrderNumber, p => p.OrderNo, (c, p) => new { c, p })
-                      .Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
+                 .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+                      //.Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
                   .AsEnumerable()
-                .Where(i => i.pay.c.DeliveryBoyPhoneNumber == phoneNumber && i.pay.p.PaymentMode != "Online Payment" && i.pay.c.DeliveryOrderPaymentStatus == 0)
+                .Where(i => i.c.DeliveryBoyPhoneNumber == phoneNumber && i.p.PaymentMode != "Online Payment" && i.c.DeliveryOrderPaymentStatus == 0)
                 .Select(i => new DelivaryCreditAmountApiViewModel.CartList
                 {
-                    Amount = i.pay.p.Amount.ToString(),
+                    Amount = i.p.Amount.ToString(),
                     
                 }).ToList();
             if (model.List.Count() != 0)
@@ -3666,21 +3653,21 @@ namespace ShopNow.Controllers
             {
                 dt = DateTime.Now.ToString("dd-MMM-yyyy");
                 model.List = db.Orders.Where(i => i.Status == 6)
-                         .Join(db.ShopCharges, c => c.OrderNumber, sc => sc.OrderNo, (c, sc) => new { c, sc })
-                            .Join(db.Shops, scc => scc.c.Shopid, s => s.Id, (scc, s) => new { scc, s })
+                         //.Join(db.ShopCharges, c => c.OrderNumber, sc => sc.OrderNo, (c, sc) => new { c, sc })
+                            .Join(db.Shops, scc => scc.ShopId, s => s.Id, (scc, s) => new { scc, s })
                      .AsEnumerable()
-                   .Where(i => i.scc.c.DeliveryBoyPhoneNumber == phoneNumber && i.scc.c.DateEncoded.ToString("dd-MMM-yyyy") == dt)
+                   .Where(i => i.scc.DeliveryBoyPhoneNumber == phoneNumber && i.scc.DateEncoded.ToString("dd-MMM-yyyy") == dt)
                    .Select(i => new DelivaryBoyReportViewModel.CartList
                    {
-                       OrderNo = i.scc.c.OrderNumber,
-                       CartStatus = i.scc.c.Status,
-                       GrossDeliveryCharge = i.scc.sc.GrossDeliveryCharge,
-                       CustomerLatitude =  i.scc.c.Latitude,
-                       CustomerLongitude = i.scc.c.Longitude,
+                       OrderNo = i.scc.OrderNumber,
+                       CartStatus = i.scc.Status,
+                       GrossDeliveryCharge = i.scc.DeliveryCharge,
+                       CustomerLatitude =  i.scc.Latitude,
+                       CustomerLongitude = i.scc.Longitude,
                        ShopLatitude = i.s.Latitude,
                        ShopLongitude = i.s.Longitude,
-                       DateEncoded = i.scc.c.DateEncoded,
-                       Date = i.scc.c.DateEncoded.ToString("dd-MMM-yyyy HH:ss")
+                       DateEncoded = i.scc.DateEncoded,
+                       Date = i.scc.DateEncoded.ToString("dd-MMM-yyyy HH:ss")
                    }).OrderByDescending(j => j.DateEncoded).ToList();
                 if (model.List.Count() != 0)
                 {
@@ -3693,23 +3680,23 @@ namespace ShopNow.Controllers
                 DateTime to1 = DateTime.Parse(to);
 
                 model.List = db.Orders.Where(i => i.Status == 6)
-                         .Join(db.ShopCharges, c => c.OrderNumber, sc => sc.OrderNo, (c, sc) => new { c, sc })
-                            .Join(db.Shops, scc => scc.c.Shopid, s => s.Id, (scc, s) => new { scc, s })
-                          .Where(i => ((DbFunctions.TruncateTime(i.scc.c.DateEncoded) >= DbFunctions.TruncateTime(from1)) &&
-            (DbFunctions.TruncateTime(i.scc.c.DateEncoded) <= DbFunctions.TruncateTime(to1))))
+                        // .Join(db.ShopCharges, c => c.OrderNumber, sc => sc.OrderNo, (c, sc) => new { c, sc })
+                            .Join(db.Shops, scc => scc.ShopId, s => s.Id, (scc, s) => new { scc, s })
+                          .Where(i => ((DbFunctions.TruncateTime(i.scc.DateEncoded) >= DbFunctions.TruncateTime(from1)) &&
+            (DbFunctions.TruncateTime(i.scc.DateEncoded) <= DbFunctions.TruncateTime(to1))))
                           .AsEnumerable()
                    .Select(i => new DelivaryBoyReportViewModel.CartList
                    {
 
-                       OrderNo = i.scc.c.OrderNumber,
-                       CartStatus = i.scc.c.Status,
-                       GrossDeliveryCharge = i.scc.sc.GrossDeliveryCharge,
-                       CustomerLatitude = i.scc.c.Latitude,
-                       CustomerLongitude = i.scc.c.Longitude,
+                       OrderNo = i.scc.OrderNumber,
+                       CartStatus = i.scc.Status,
+                       GrossDeliveryCharge = i.scc.DeliveryCharge,
+                       CustomerLatitude = i.scc.Latitude,
+                       CustomerLongitude = i.scc.Longitude,
                        ShopLatitude = i.s.Latitude,
                        ShopLongitude = i.s.Longitude,
-                       DateEncoded = i.scc.c.DateEncoded,
-                       Date = i.scc.c.DateEncoded.ToString("dd-MMM-yyyy HH:ss")
+                       DateEncoded = i.scc.DateEncoded,
+                       Date = i.scc.DateEncoded.ToString("dd-MMM-yyyy HH:ss")
                    }).OrderByDescending(j => j.DateEncoded).ToList();
                 if (model.List.Count() != 0)
                 {
@@ -3719,21 +3706,21 @@ namespace ShopNow.Controllers
             else
             {
                 model.List = db.Orders.Where(i => i.Status == 6)
-                         .Join(db.ShopCharges, c => c.OrderNumber, sc => sc.OrderNo, (c, sc) => new { c, sc })
-                            .Join(db.Shops, scc => scc.c.Shopid, s => s.Id, (scc, s) => new { scc, s })
+                        // .Join(db.ShopCharges, c => c.OrderNumber, sc => sc.OrderNo, (c, sc) => new { c, sc })
+                            .Join(db.Shops, scc => scc.ShopId, s => s.Id, (scc, s) => new { scc, s })
                      .AsEnumerable()
-                   .Where(i => i.scc.c.DeliveryBoyPhoneNumber == phoneNumber && i.scc.c.DateEncoded.ToString("dd-MMM-yyyy") == dt)
+                   .Where(i => i.scc.DeliveryBoyPhoneNumber == phoneNumber && i.scc.DateEncoded.ToString("dd-MMM-yyyy") == dt)
                    .Select(i => new DelivaryBoyReportViewModel.CartList
                    {
-                       OrderNo = i.scc.c.OrderNumber,
-                       CartStatus = i.scc.c.Status,
-                       GrossDeliveryCharge = i.scc.sc.GrossDeliveryCharge,
-                       CustomerLatitude = i.scc.c.Latitude,
-                       CustomerLongitude = i.scc.c.Longitude,
+                       OrderNo = i.scc.OrderNumber,
+                       CartStatus = i.scc.Status,
+                       GrossDeliveryCharge = i.scc.DeliveryCharge,
+                       CustomerLatitude = i.scc.Latitude,
+                       CustomerLongitude = i.scc.Longitude,
                        ShopLatitude = i.s.Latitude,
                        ShopLongitude = i.s.Longitude,
-                       DateEncoded = i.scc.c.DateEncoded,
-                       Date = i.scc.c.DateEncoded.ToString("dd-MMM-yyyy HH:ss")
+                       DateEncoded = i.scc.DateEncoded,
+                       Date = i.scc.DateEncoded.ToString("dd-MMM-yyyy HH:ss")
                    }).OrderByDescending(j => j.DateEncoded).ToList();
                 if (model.List.Count() != 0)
                 {
@@ -3781,18 +3768,18 @@ namespace ShopNow.Controllers
             {
                 dt = DateTime.Now.ToString("dd-MMM-yyyy");
                 model.List = db.Orders.Where(i => i.Status == 6)
-                    .Join(db.Payments, c => c.OrderNumber, p => p.OrderNo, (c, p) => new { c, p })
-                         .Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
+                    .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+                         //.Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
                      .AsEnumerable()
-                   .Where(i => i.pay.c.DeliveryBoyPhoneNumber == phoneNumber && i.pay.c.DateEncoded.ToString("dd-MMM-yyyy") == dt && i.pay.p.PaymentMode != "Online Payment" && i.pay.c.DeliveryOrderPaymentStatus == 0)
+                   .Where(i => i.c.DeliveryBoyPhoneNumber == phoneNumber && i.c.DateEncoded.ToString("dd-MMM-yyyy") == dt && i.p.PaymentMode != "Online Payment" && i.c.DeliveryOrderPaymentStatus == 0)
                    .Select(i => new DelivaryCreditAmountApiViewModel.CartList
                    {
-                       OrderNo = i.pay.c.OrderNumber,
-                       CartStatus = i.pay.c.Status,
-                       GrossDeliveryCharge = i.sc.GrossDeliveryCharge,
-                       DeliveryBoyPaymentStatus = i.pay.c.DeliveryBoyPaymentStatus,
-                       Amount = i.pay.p.Amount.ToString(),
-                       Date = i.pay.c.DateEncoded.ToString("dd-MMM-yyyy HH:ss")
+                       OrderNo = i.c.OrderNumber,
+                       CartStatus = i.c.Status,
+                       GrossDeliveryCharge = i.c.DeliveryCharge,
+                       DeliveryBoyPaymentStatus = i.c.DeliveryBoyPaymentStatus,
+                       Amount = i.p.Amount.ToString(),
+                       Date = i.c.DateEncoded.ToString("dd-MMM-yyyy HH:ss")
                    }).ToList();
                 if (model.List.Count() != 0)
                 {
@@ -3814,18 +3801,18 @@ namespace ShopNow.Controllers
                 DateTime from1 = DateTime.Parse(from);
                 DateTime to1 = DateTime.Parse(to);
                 model.List = db.Orders.Where(i => i.Status == 6)
-                    .Join(db.Payments, c => c.OrderNumber, p => p.OrderNo, (c, p) => new { c, p })
-                         .Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
+                    .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+                         //.Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
                      .AsEnumerable()
-                   .Where(i => i.pay.c.DeliveryBoyPhoneNumber == phoneNumber && i.pay.p.PaymentMode != "Online Payment" && i.pay.c.DateEncoded >= from1 && i.pay.c.DateEncoded <= to1 && i.pay.c.DeliveryOrderPaymentStatus == 0)
+                   .Where(i => i.c.DeliveryBoyPhoneNumber == phoneNumber && i.p.PaymentMode != "Online Payment" && i.c.DateEncoded >= from1 && i.c.DateEncoded <= to1 && i.c.DeliveryOrderPaymentStatus == 0)
                    .Select(i => new DelivaryCreditAmountApiViewModel.CartList
                    {
-                       OrderNo = i.pay.c.OrderNumber,
-                       CartStatus = i.pay.c.Status,
-                       GrossDeliveryCharge = i.sc.GrossDeliveryCharge,
-                       DeliveryBoyPaymentStatus = i.pay.c.DeliveryBoyPaymentStatus,
-                       Amount = i.pay.p.Amount.ToString(),
-                       Date = i.pay.c.DateEncoded.ToString("dd-MMM-yyyy HH:ss")
+                       OrderNo = i.c.OrderNumber,
+                       CartStatus = i.c.Status,
+                       GrossDeliveryCharge = i.c.DeliveryCharge,
+                       DeliveryBoyPaymentStatus = i.c.DeliveryBoyPaymentStatus,
+                       Amount = i.p.Amount.ToString(),
+                       Date = i.c.DateEncoded.ToString("dd-MMM-yyyy HH:ss")
                    }).ToList();
                 if (model.List.Count() != 0)
                 {
@@ -3845,18 +3832,18 @@ namespace ShopNow.Controllers
             else
             {
                 model.List = db.Orders.Where(i => i.Status == 6)
-                    .Join(db.Payments, c => c.OrderNumber, p => p.OrderNo, (c, p) => new { c, p })
-                         .Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
+                    .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+                         //.Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
                     .AsEnumerable()
-                   .Where(i => i.pay.c.DeliveryBoyPhoneNumber == phoneNumber && i.pay.c.DateEncoded.ToString("dd-MMM-yyyy") == dt && i.pay.p.PaymentMode != "Online Payment" && i.pay.c.DeliveryOrderPaymentStatus == 0)
+                   .Where(i => i.c.DeliveryBoyPhoneNumber == phoneNumber && i.c.DateEncoded.ToString("dd-MMM-yyyy") == dt && i.p.PaymentMode != "Online Payment" && i.c.DeliveryOrderPaymentStatus == 0)
                    .Select(i => new DelivaryCreditAmountApiViewModel.CartList
                    {
-                       OrderNo = i.pay.c.OrderNumber,
-                       CartStatus = i.pay.c.Status,
-                       GrossDeliveryCharge = i.sc.GrossDeliveryCharge,
-                       DeliveryBoyPaymentStatus = i.pay.c.DeliveryBoyPaymentStatus,
-                       Amount = i.pay.p.Amount.ToString(),
-                       Date = i.pay.c.DateEncoded.ToString("dd-MMM-yyyy HH:ss")
+                       OrderNo = i.c.OrderNumber,
+                       CartStatus = i.c.Status,
+                       GrossDeliveryCharge = i.c.DeliveryCharge,
+                       DeliveryBoyPaymentStatus = i.c.DeliveryBoyPaymentStatus,
+                       Amount = i.p.Amount.ToString(),
+                       Date = i.c.DateEncoded.ToString("dd-MMM-yyyy HH:ss")
                    }).ToList();
                 if (model.List.Count() != 0)
                 {
@@ -4081,8 +4068,8 @@ namespace ShopNow.Controllers
             {
                 var d = DateTime.Now.Date.Date;
             var teenStudentsName = (from s in db.Banners
-            where (s.Status== 0 || s.Status == 6) && s.ShopId == id && (DbFunctions.TruncateTime(s.Fromdate) <= DbFunctions.TruncateTime(DateTime.Now) && DbFunctions.TruncateTime(s.Todate) >= DbFunctions.TruncateTime(DateTime.Now))
-            select  new BannerImages { Bannerpath = (s.Bannerpath !=null)?s.Bannerpath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23"):"", ShopId = s.ShopId, ProductName = s.MasterProductName, ShopName = s.ShopName, ProductId = s.MasterProductId }).ToList();
+            where (s.Status== 0 || s.Status == 6) && s.ShopId == id && (DbFunctions.TruncateTime(s.FromDate) <= DbFunctions.TruncateTime(DateTime.Now) && DbFunctions.TruncateTime(s.Todate) >= DbFunctions.TruncateTime(DateTime.Now))
+            select  new BannerImages { Bannerpath = (s.BannerPath !=null)?s.BannerPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23"):"", ShopId = s.ShopId, ProductName = s.MasterProductName, ShopName = s.ShopName, ProductId = s.MasterProductId }).ToList();
           
                 return teenStudentsName;
             }
@@ -4125,12 +4112,12 @@ namespace ShopNow.Controllers
         //        return new List<Cart>();
         //    }
         //}
-        Double RatingCalculation(string code)
+        Double RatingCalculation(int id)
         {
             Double rating = 0;
-            var ratingCount = db.CustomerReviews.Where(i => i.ShopCode == code).Count();
+            var ratingCount = db.CustomerReviews.Where(i => i.ShopId == id).Count();
            var ratingSum= (from ss in db.CustomerReviews
-                           where ss.ShopCode == code 
+                           where ss.ShopId == id 
                           select(Double ?)ss.Rating).Sum() ?? 0;
             if (ratingCount == 0)
                 ratingCount = 1;
@@ -4143,7 +4130,7 @@ namespace ShopNow.Controllers
             try
             {
 
-                return db.Payments.FirstOrDefault(i => i.OrderNo == code);
+                return db.Payments.FirstOrDefault(i => i.OrderNumber == code);
             }
             catch
             {
@@ -4157,18 +4144,15 @@ namespace ShopNow.Controllers
         {
             //DelivaryBoyPayoutReportViewModel
             var model = new DelivaryBoyPayoutReportViewModel();
-            model.List = db.ShopCharges
-                .Where(i => ((DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(startDate)) &&
-            (DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(endDate))) && i.Status == 0)
-            .Join(db.Orders.Where(i=>i.Status ==6), sc => sc.OrderNo, c => c.OrderNumber, (sc, c) => new { sc, c })
-            .Join(db.DeliveryBoys.Where(i => i.PhoneNumber == phoneNo), c => c.c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
-            .GroupBy(i => DbFunctions.TruncateTime(i.c.sc.DateEncoded))
+            model.List = db.Orders.Where(i=>i.Status ==6 && ((DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(startDate)) &&(DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(endDate))))
+            .Join(db.DeliveryBoys.Where(i => i.PhoneNumber == phoneNo), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
+            .GroupBy(i => DbFunctions.TruncateTime(i.c.DateEncoded))
             .AsEnumerable()
             .Select(i => new DelivaryBoyPayoutReportViewModel.PayoutOut
             {
-                Date = i.Any() ? i.FirstOrDefault().c.sc.DateEncoded.ToString("dd-MMM-yyyy HH:ss") : "",
-                date = i.FirstOrDefault().c.sc.DateEncoded,
-                totalamount = i.Sum(a=>a.c.sc.GrossDeliveryCharge),
+                Date = i.Any() ? i.FirstOrDefault().c.DateEncoded.ToString("dd-MMM-yyyy HH:ss") : "",
+                date = i.FirstOrDefault().c.DateEncoded,
+                totalamount = i.Sum(a=>a.c.DeliveryCharge),
                 paidamount = GetPaidAmount(i.Key.Value, phoneNo),
             }).OrderByDescending(j => j.date).ToList();
             int count = model.List.Count();
@@ -4206,13 +4190,12 @@ namespace ShopNow.Controllers
 
         public double GetPaidAmount(DateTime dateEncoded, string phoneNo)
         {
-            var list = db.ShopCharges.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(dateEncoded) && i.Status == 0)
-           .Join(db.Orders.Where(i => i.Status == 6 && i.DeliveryBoyPaymentStatus == 1), sc => sc.OrderNo, c => c.OrderNumber, (sc, c) => new { sc, c })
-           .Join(db.DeliveryBoys.Where(i => i.PhoneNumber == phoneNo), c => c.c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
+            var list = db.Orders.Where(i => i.Status == 6 && i.DeliveryBoyPaymentStatus == 1 && DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(dateEncoded))
+           .Join(db.DeliveryBoys.Where(i => i.PhoneNumber == phoneNo), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
            .GroupBy(i=> DbFunctions.TruncateTime(dateEncoded))
            .Select(i => new
            {
-               amount = i.Any() ? i.Sum(a => a.c.sc.GrossDeliveryCharge) : 0
+               amount = i.Any() ? i.Sum(a => a.c.DeliveryCharge) : 0
            }).FirstOrDefault();
             if (list != null)
                 return Convert.ToDouble(list.amount);
@@ -4229,7 +4212,7 @@ namespace ShopNow.Controllers
                      .Where(i => ((DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(startDate)) &&
                  (DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(endDate))))
                  .Join(db.Shops.Where(i => i.Id == shopId), p => p.ShopId, s => s.Id, (p, s) => new { p, s })
-                 .Join(db.Orders.Where(i => i.Status == 6), p => p.p.OrderNo, c => c.OrderNumber, (p, c) => new { p, c })
+                 .Join(db.Orders.Where(i => i.Status == 6), p => p.p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
                  .GroupBy(i => DbFunctions.TruncateTime(i.p.p.DateEncoded))
                  .AsEnumerable()
                  .Select(i=> new ShopApiReportsViewModel.EarningListItem
@@ -4247,17 +4230,17 @@ namespace ShopNow.Controllers
                     .Where(i => ((DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(startDate)) &&
                 (DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(endDate))))
                 .Join(db.Shops.Where(i => i.Id == shopId), p => p.ShopId, s => s.Id, (p, s) => new { p, s })
-                .Join(db.Orders .Where(i => i.Status == 6), p => p.p.OrderNo, c => c.OrderNumber, (p, c) => new { p, c })
-                .Join(db.ShopCharges.Where(i => i.Status == 0), p => p.p.p.OrderNo, sc => sc.OrderNo, (p, sc) => new { p, sc })
+                .Join(db.Orders .Where(i => i.Status == 6), p => p.p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
+               // .Join(db.ShopCharges.Where(i => i.Status == 0), p => p.p.p.OrderNo, sc => sc.OrderNo, (p, sc) => new { p, sc })
                 .AsEnumerable()
                 .Select(i => new ShopApiReportsViewModel.RefundListItem
                 {
-                    Date = i.p.p.p.DateEncoded.ToString("dd-MMM-yyyy HH:ss"),
-                    DateEncoded = i.p.p.p.DateEncoded,
-                    Earning = i.p.p.p.Amount,
-                    Refund = i.p.p.p.refundAmount ??0,
-                    DeliveryCredits = i.sc.GrossDeliveryCharge,
-                    OrderNo = i.p.p.p.OrderNo
+                    Date = i.p.p.DateEncoded.ToString("dd-MMM-yyyy HH:ss"),
+                    DateEncoded = i.p.p.DateEncoded,
+                    Earning = i.p.p.Amount,
+                    Refund = i.p.p.RefundAmount ??0,
+                    DeliveryCredits = i.c.DeliveryCharge,
+                    OrderNo = i.p.p.OrderNumber
                 }).OrderByDescending(i => i.DateEncoded).ToList();
                 return Json(model.RefundLists, JsonRequestBehavior.AllowGet);
             }
@@ -4268,7 +4251,7 @@ namespace ShopNow.Controllers
         {
             var list = db.Payments.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(dateEncoded))
                 .Join(db.Shops.Where(i => i.Id == shopId), p => p.ShopId, s => s.Id, (p, s) => new { p, s })
-            .Join(db.Orders.Where(i => i.Status == 6 && i.ShopPaymentStatus ==1), p => p.p.OrderNo, c => c.OrderNumber, (p, c) => new { p, c })
+            .Join(db.Orders.Where(i => i.Status == 6 && i.ShopPaymentStatus ==1), p => p.p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
            .GroupBy(i => DbFunctions.TruncateTime(dateEncoded))
            .Select(i => new
            {
