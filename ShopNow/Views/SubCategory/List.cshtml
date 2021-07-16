@@ -33,8 +33,8 @@ columns.Add(s => s.Adscore).Titled("Adscore").Filterable(true).SetWidth(10);
     columns.Add()
     .Encoded(false)
     .Sanitized(false)
-    .RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code) }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
-                   + Html.ActionLink("Delete", "Delete", new { code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code) }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
+    .RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
+                   + Html.ActionLink("Delete", "Delete", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
             }).WithPaging(20).Sortable(true)
 
     <!--
@@ -117,18 +117,18 @@ columns.Add(s => s.Adscore).Titled("Adscore").Filterable(true).SetWidth(10);
                     </div>
                     <div class="col-md-6">
                         <label class="col-form-label font-weight-bold text-secondary">Category Name</label>
-                        <select name="CategoryCode" class="form-control" id="CategoryCode"></select>
+                        <select name="CategoryCode" class="form-control w-100" id="CategoryCode"></select>
                         <input type="hidden" name="CategoryName" id="CategoryName" />
                     </div>
                     <div class="col-md-6">
                         <label class="col-form-label"><strong class="text-secondary">Item Type</strong></label>
                         <select name="ProductType" class="form-control" id="ProductType">
-                            <option value="">Select</option>
-                            <option value="Product">Product</option>
-                            <option value="Dish">Dish</option>
-                            <option value="Service">Service</option>
-                            <option value="Medical">Medical</option>
-                            <option value="FMCG">FMCG</option>
+                            <option value="0">Select</option>
+                            <option value="4">Product</option>
+                            <option value="1">Dish</option>
+                            <option value="5">Service</option>
+                            <option value="3">Medical</option>
+                            <option value="2">FMCG</option>
                         </select>
                     </div>
                     <div class="col-md-6">

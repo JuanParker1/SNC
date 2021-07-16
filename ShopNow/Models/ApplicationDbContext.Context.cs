@@ -27,6 +27,7 @@ namespace ShopNow.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<AccessPolicy> AccessPolicies { get; set; }
         public virtual DbSet<AddOnCategory> AddOnCategories { get; set; }
         public virtual DbSet<Admin> Admins { get; set; }
         public virtual DbSet<Banner> Banners { get; set; }
@@ -40,7 +41,6 @@ namespace ShopNow.Models
         public virtual DbSet<DeliveryBoy> DeliveryBoys { get; set; }
         public virtual DbSet<DeliveryBoyShop> DeliveryBoyShops { get; set; }
         public virtual DbSet<DiscountCategory> DiscountCategories { get; set; }
-        public virtual DbSet<DishAddOn> DishAddOns { get; set; }
         public virtual DbSet<DrugCompoundDetail> DrugCompoundDetails { get; set; }
         public virtual DbSet<MarketingAgent> MarketingAgents { get; set; }
         public virtual DbSet<MasterProduct> MasterProducts { get; set; }
@@ -62,25 +62,22 @@ namespace ShopNow.Models
         public virtual DbSet<ProductSpecification> ProductSpecifications { get; set; }
         public virtual DbSet<RefundsData> RefundsDatas { get; set; }
         public virtual DbSet<ShopCategory> ShopCategories { get; set; }
-        public virtual DbSet<ShopCharge> ShopCharges { get; set; }
         public virtual DbSet<ShopDishAddOn> ShopDishAddOns { get; set; }
         public virtual DbSet<ShopMember> ShopMembers { get; set; }
         public virtual DbSet<Shop> Shops { get; set; }
         public virtual DbSet<Specification> Specifications { get; set; }
         public virtual DbSet<Staff> Staffs { get; set; }
         public virtual DbSet<SubCategory> SubCategories { get; set; }
-        public virtual DbSet<TopUp> TopUps { get; set; }
         public virtual DbSet<UserEnquiry> UserEnquiries { get; set; }
-        public virtual DbSet<AccessPolicy> AccessPolicies { get; set; }
     
-        [DbFunction("ShopnowchatEntities", "GetTableVAlueString")]
+        [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)
         {
             var keyParameter = key != null ?
                 new ObjectParameter("key", key) :
                 new ObjectParameter("key", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<GetTableVAlueString_Result>("[ShopnowchatEntities].[GetTableVAlueString](@key)", keyParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<GetTableVAlueString_Result>("[sncEntities].[GetTableVAlueString](@key)", keyParameter);
         }
     
         public virtual int getCategoryListbyShopcode(string code)

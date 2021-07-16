@@ -43,7 +43,7 @@ namespace ShopNow.Models
         public string AccountName { get; set; }
         public string AccountNumber { get; set; }
         public string IFSCCode { get; set; }
-        public string MarketingAgentId { get; set; }
+        public int MarketingAgentId { get; set; }
         public string MarketingAgentName { get; set; }
         public int OnWork { get; set; }
         public int isAssign { get; set; }

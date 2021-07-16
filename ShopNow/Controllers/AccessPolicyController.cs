@@ -47,7 +47,7 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNAPGL001")]
-        public ActionResult List(int customerid)
+        public ActionResult List(int customerid=0)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -62,9 +62,9 @@ namespace ShopNow.Controllers
                                 PageCode = i.p.Code,
                                 PageName = i.p.Name,
                                 IsAccess = i.a.Any() ? i.a.FirstOrDefault().isAccess : false,
-                                Id = i.a.FirstOrDefault().Id,
-                                CustomerId = i.a.FirstOrDefault().CustomerId,
-                                CustomerName = i.a.FirstOrDefault().CustomerName,
+                                Id = i.a.Any() ? i.a.FirstOrDefault().Id:0,
+                                CustomerId = i.a.Any() ? i.a.FirstOrDefault().CustomerId:0,
+                                CustomerName = i.a.Any() ? i.a.FirstOrDefault().CustomerName:"",
                                 Status = i.p.Status,
                             }).OrderBy(i => i.PageName).ToList();
                 

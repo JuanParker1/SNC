@@ -37,7 +37,7 @@ namespace ShopNow.Models
         public string AadharNumber { get; set; }
         public bool AgeVerify { get; set; }
         public bool AadharVerify { get; set; }
-        public string DOB { get; set; }
+        public Nullable<System.DateTime> DOB { get; set; }
         public string FcmTocken { get; set; }
         public string IpAddress { get; set; }
         public int Status { get; set; }

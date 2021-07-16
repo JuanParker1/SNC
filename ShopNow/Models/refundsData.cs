@@ -14,13 +14,13 @@ namespace ShopNow.Models
     
     public partial class RefundsData
     {
-        public long id { get; set; }
-        public string refundid { get; set; }
-        public string enity { get; set; }
-        public Nullable<double> amount { get; set; }
-        public string currency { get; set; }
-        public string payment_id { get; set; }
-        public Nullable<int> orderNo { get; set; }
+        public long Id { get; set; }
+        public string RefundId { get; set; }
+        public string Entity { get; set; }
+        public Nullable<double> Amount { get; set; }
+        public string Currency { get; set; }
+        public string Payment_Id { get; set; }
+        public Nullable<int> OrderNumber { get; set; }
         public Nullable<System.DateTime> DateEncoded { get; set; }
     }
 }

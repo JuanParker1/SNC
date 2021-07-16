@@ -81,7 +81,7 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             string message = "";
-            Category category = db.Categories.FirstOrDefault(i => i.Id == code); //Category.Get(code);
+            Category category = db.Categories.FirstOrDefault(i => i.Id == code);
             if (category != null)
             {
                 category.Name = name;
@@ -92,18 +92,17 @@ namespace ShopNow.Controllers
                 category.DateUpdated = DateTime.Now;
                 db.Entry(category).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-
-                //bool result = Category.Edit(category, out int error);
+                
                 message = name + " Updated Successfully";
             }
             return Json(new { message = message }, JsonRequestBehavior.AllowGet);
         }
 
         [AccessPolicy(PageCode = "SHNCATD005")]
-        public JsonResult Delete(int code)
+        public JsonResult Delete(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var category = db.Categories.FirstOrDefault(i => i.Id == code); //Category.Get(code);
+            var category = db.Categories.FirstOrDefault(i => i.Id == id);
             if (category != null)
             {
                 category.Status = 2;

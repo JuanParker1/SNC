@@ -73,11 +73,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNBRAE002")]
-        public JsonResult Edit(int code, string name, int type)
+        public JsonResult Edit(int id, string name, int type)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             string message = "";
-            Brand brand = db.Brands.Where(b => b.Id == code).FirstOrDefault(); //Brand.Get(code);
+            Brand brand = db.Brands.Where(b => b.Id == id).FirstOrDefault(); //Brand.Get(code);
             if (brand != null)
             {
                 brand.Name = name;
@@ -94,10 +94,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNBRAR005")]
-        public JsonResult Delete(int code)
+        public JsonResult Delete(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var brand = db.Brands.Where(b => b.Id == code).FirstOrDefault(); //Brand.Get(code);
+            var brand = db.Brands.Where(b => b.Id == id).FirstOrDefault(); //Brand.Get(code);
             if (brand != null)
             {
                 brand.Status = 2;

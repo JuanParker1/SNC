@@ -20,12 +20,12 @@ namespace ShopNow.Models
         public int ProductId { get; set; }
         public string ProductName { get; set; }
         public int Position { get; set; }
-        public string Bannerpath { get; set; }
-        public System.DateTime Fromdate { get; set; }
+        public string BannerPath { get; set; }
+        public System.DateTime FromDate { get; set; }
         public System.DateTime Todate { get; set; }
         public int Days { get; set; }
         public string BannerName { get; set; }
-        public Nullable<int> paymentid { get; set; }
+        public int PaymentId { get; set; }
         public Nullable<int> CreditType { get; set; }
         public int MasterProductId { get; set; }
         public string MasterProductName { get; set; }
@@ -33,7 +33,8 @@ namespace ShopNow.Models
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
         public System.DateTime DateEncoded { get; set; }
-        public System.DateTime DateUpdated { get; set; }    
+        public System.DateTime DateUpdated { get; set; }
+    
         public virtual Payment Payment { get; set; }
     }
 }

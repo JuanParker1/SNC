@@ -37,7 +37,7 @@ namespace ShopNow.Models
         public string CountryName { get; set; }
         public string PaymentResult { get; set; }
         public string Credits { get; set; }
-        public int OrderNo { get; set; }
+        public int OrderNumber { get; set; }
         public int PaymentCategoryType { get; set; }
         public int CreditType { get; set; }
         public double ConvenientCharge { get; set; }
@@ -45,10 +45,10 @@ namespace ShopNow.Models
         public double DelivaryCharge { get; set; }
         public double UpdatedAmount { get; set; }
         public double UpdatedOriginalAmount { get; set; }
-        public Nullable<double> refundAmount { get; set; }
-        public Nullable<double> Rateperorder { get; set; }
-        public string refundRemark { get; set; }
-        public int refundStatus { get; set; }
+        public Nullable<double> RefundAmount { get; set; }
+        public Nullable<double> RatePerOrder { get; set; }
+        public string RefundRemark { get; set; }
+        public int RefundStatus { get; set; }
         public int Status { get; set; }
         public string UpdatedBy { get; set; }
         public string CreatedBy { get; set; }

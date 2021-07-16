@@ -16,9 +16,10 @@ namespace ShopNow.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public Nullable<int> CategoryId { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
-        public string ProductType { get; set; }
+        public int ProductTypeId { get; set; }
+        public string ProductTypeName { get; set; }
         public int Adscore { get; set; }
         public int Status { get; set; }
         public string CreatedBy { get; set; }

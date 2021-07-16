@@ -22,6 +22,8 @@ namespace ShopNow.Models
     
         public int Id { get; set; }
         public string Name { get; set; }
+        public int MasterProductId { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
         public int ShopCategoryId { get; set; }
         public string ShopCategoryName { get; set; }
@@ -41,22 +43,15 @@ namespace ShopNow.Models
         public int IBarU { get; set; }
         public int ItemId { get; set; }
         public double Percentage { get; set; }
-        public int DiscountCategoryId { get; set; }
         public string DiscountCategoryName { get; set; }
-        public double DiscountCategoryPercentage { get; set; }
         public int DataEntry { get; set; }
         public int AppliesOnline { get; set; }
-        public int DiscountType { get; set; }
-        public int DiscountCategoryType { get; set; }
         public bool IsOnline { get; set; }
-        public int ShopId { get; set; }
-        public int MasterProductId { get; set; }
         public int HoldOnStok { get; set; }
         public int PackingType { get; set; }
         public double TaxPercentage { get; set; }
         public double SpecialCostOfDelivery { get; set; }
         public int OutletId { get; set; }
-        public string CategoryNameMain { get; set; }
         public string ItemTimeStamp { get; set; }
         public double LoyaltyPoints { get; set; }
         public double PackingCharge { get; set; }
