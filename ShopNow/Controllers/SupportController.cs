@@ -51,7 +51,7 @@ namespace ShopNow.Controllers
             model.CustomerCount = db.Customers.Where(i => i.Status == 0).Count();
             model.OrderCount = db.Orders.Where(i => i.Status == 0 && i.OrderNumber !=0 && i.Status != 7 && i.Status != 6 && i.Status != 0).Count();
             model.DeliveryBoyLiveCount = db.DeliveryBoys.Where(i => i.Status == 0 && i.isAssign == 0 && i.OnWork == 0 && i.Active == 1).Count();
-            model.RefundCount = db.Payments.Where(i => i.refundAmount != 0 && i.refundStatus == 1 && i.refundAmount != null && i.PaymentMode == "Online Payment").Count();
+            model.RefundCount = db.Payments.Where(i => i.RefundAmount != 0 && i.RefundStatus == 1 && i.RefundAmount != null && i.PaymentMode == "Online Payment").Count();
             return View(model);
         }
 
@@ -69,12 +69,12 @@ namespace ShopNow.Controllers
                     Name = i.Name
                 }).ToList();
 
-            model.List = db.Orders.Where(i => i.Status == 3 && (shopId != 0 ? i.Shopid == shopId : true))
+            model.List = db.Orders.Where(i => i.Status == 3 && (shopId != 0 ? i.ShopId == shopId : true))
                .Select(i => new DeliveryBoyAssignViewModel.AssignList
                {
-                   Id = i.id,
-                   ShopId = i.Shopid,
-                   ShopName = i.Shopname,
+                   Id = i.Id,
+                   ShopId = i.ShopId,
+                   ShopName = i.ShopName,
                    OrderNo = i.OrderNumber,
                    CartStatus = i.Status,
                    DateEncoded = i.DateEncoded

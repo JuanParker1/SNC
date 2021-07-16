@@ -43,18 +43,18 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNSUCS002")]
-        public JsonResult Save(string name = "", string type = "", int categorycode = 0, string categoryname = "", int adscore = 1)
+        public JsonResult Save(string name = "", int type = 0, int categorycode = 0, string categoryname = "", int adscore = 1)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             bool IsAdded = false;
             string message = "";
             string message1 = "";
-            var subcategoryname = db.SubCategories.Where(i => i.Name == name && i.ProductType == type).FirstOrDefault(); //SubCategory.GetNameType(name, type);
+            var subcategoryname = db.SubCategories.Where(i => i.Name == name && i.ProductTypeId == type).FirstOrDefault(); //SubCategory.GetNameType(name, type);
             if (subcategoryname == null)
             {
                 var subcategory = new SubCategory();
                 subcategory.Name = name;
-                subcategory.ProductType = type;
+                subcategory.ProductTypeId = type;
                 subcategory.CategoryId = categorycode;
                 subcategory.CategoryName = categoryname;
                 subcategory.Adscore = adscore;

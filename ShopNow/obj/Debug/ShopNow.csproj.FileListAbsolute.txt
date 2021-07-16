@@ -1,5 +1,4 @@
 E:\Beno\SNC\ShopNow\obj\Debug\ShopNow.csproj.App.config
-E:\Beno\SNC\ShopNow\obj\Debug\ShopNow.csprojAssemblyReference.cache
 E:\Beno\SNC\ShopNow\obj\Debug\ShopNow.csproj.CoreCompileInputs.cache
 E:\Beno\SNC\ShopNow\bin\ShopNow.dll.config
 E:\Beno\SNC\ShopNow\bin\ShopNow.dll

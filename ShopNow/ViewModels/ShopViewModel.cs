@@ -378,7 +378,7 @@ namespace ShopNow.ViewModels
     {
         public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public string MarketingAgentId { get; set; }//clarify
+        public int MarketingAgentId { get; set; }//clarify
         public string MarketingAgentName { get; set; }
         public List<FranchiseList> List { get; set; }
         public class FranchiseList

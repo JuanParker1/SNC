@@ -1019,9 +1019,9 @@ namespace ShopNow.Controllers
                             ImagePath5 = row[model.ImagePath5].ToString(),
                             OriginCountry = row[model.OriginCountry].ToString(),
                             Manufacturer = row[model.Manufacturer].ToString(),
-                            iBarU = row[model.iBarU].ToString(),
+                            IBarU = row[model.iBarU].ToString(),
                             SizeLB = row[model.SizeLB].ToString(),
-                            weight = Convert.ToDouble(row[model.weight]),
+                            Weight = Convert.ToDouble(row[model.weight]),
                             PackageId = CheckMedicalPackage(row[model.PackageName].ToString()),
                             PackageName = row[model.PackageName].ToString(),
                             ProductTypeId = model.ProductTypeId,
@@ -1253,9 +1253,9 @@ namespace ShopNow.Controllers
                         product.Price = masterproduct.Price;
                     }
                 
-                    if (product.IBarU == 0 && masterproduct.iBarU != null)
+                    if (product.IBarU == 0 && masterproduct.IBarU != null)
                     {
-                        product.IBarU = Convert.ToInt32(masterproduct.iBarU);
+                        product.IBarU = Convert.ToInt32(masterproduct.IBarU);
                     }
                    
                     if (product.TypeId == 0 && masterproduct.ProductTypeId != 0)
@@ -1332,9 +1332,9 @@ namespace ShopNow.Controllers
                         product.Price = masterproduct.Price;
                     }
 
-                    if (product.IBarU == 0 && masterproduct.iBarU != null)
+                    if (product.IBarU == 0 && masterproduct.IBarU != null)
                     {
-                        product.IBarU = Convert.ToInt32(masterproduct.iBarU);
+                        product.IBarU = Convert.ToInt32(masterproduct.IBarU);
                     }
 
                     if (product.TypeId == 0 && masterproduct.ProductTypeId != 0)
@@ -1346,9 +1346,9 @@ namespace ShopNow.Controllers
                         product.Price = masterproduct.Price;
                     }
 
-                    if (masterproduct.iBarU != null)
+                    if (masterproduct.IBarU != null)
                     {
-                        product.IBarU = Convert.ToInt32(masterproduct.iBarU);
+                        product.IBarU = Convert.ToInt32(masterproduct.IBarU);
                     }
 
                     if (masterproduct.ProductTypeId != 0)
@@ -1493,7 +1493,7 @@ namespace ShopNow.Controllers
                             BrandId = CheckBrand(row[model.BrandName].ToString(), model.ProductTypeId),
                             BrandName = row[model.BrandName].ToString(),
                             SizeLB = row[model.SizeLB].ToString(),
-                            weight = Convert.ToDouble(row[model.weight]),
+                            Weight = Convert.ToDouble(row[model.weight]),
                             GoogleTaxonomyCode = row[model.GoogleTaxonomyCode].ToString(),
                             ASIN = row[model.ASIN].ToString(),
                             CategoryId = model.CategoryId,
@@ -2144,7 +2144,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "")]
         public async Task<JsonResult> GetSubCategorySelect2(string q = "")
         {
-            var model = await _db.SubCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductType == "FMCG").Select(i => new
+            var model = await _db.SubCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 2).Select(i => new
             {
                 id = i.Id,
                 text = i.Name
@@ -2445,7 +2445,7 @@ namespace ShopNow.Controllers
                 sub.Name = SubCategoryName1;
                 sub.CategoryId = CategoryId;
                 sub.CategoryName = CategoryName;
-                sub.ProductType = ProductTypeId.ToString();
+                sub.ProductTypeId = ProductTypeId;
                 sub.CreatedBy = user.Name;
                 sub.UpdatedBy = user.Name;
                 //sub.Code = _generatedCode("SCT");

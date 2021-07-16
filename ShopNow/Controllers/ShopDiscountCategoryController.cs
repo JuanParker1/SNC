@@ -98,7 +98,7 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var discountcategory = db.DiscountCategories.FirstOrDefault(i => i.Id == model.Id); // DiscountCategory.Get(model.Code);
-            var product = db.Products.Where(i => i.DiscountCategoryId == discountcategory.Id && i.Status == 0).ToList();
+            var product = db.Products.Where(i => i.DiscountCategoryName == discountcategory.Name && i.Status == 0).ToList();
             //var dc = _mapper.Map<ShopDiscountCategoryEditViewModel, DiscountCategory>(model);
 
             discountcategory.Percentage = model.Percentage;
@@ -114,11 +114,11 @@ namespace ShopNow.Controllers
                     var prod = db.Products.FirstOrDefault(i => i.Id == item.Id); // Product.Get(item.Code);
                     if (prod != null)
                     {
-                        prod.DiscountCategoryId = discountcategory.Id;
+                        //prod.DiscountCategoryId = discountcategory.Id;
                         prod.DiscountCategoryName = discountcategory.Name;
-                        prod.DiscountCategoryPercentage = discountcategory.Percentage;
-                        prod.DiscountCategoryType = discountcategory.CategoryType;
-                        prod.DiscountType = discountcategory.Type;
+                       // prod.DiscountCategoryPercentage = discountcategory.Percentage;
+                        //prod.DiscountCategoryType = discountcategory.CategoryType;
+                        //prod.DiscountType = discountcategory.Type;
                         prod.UpdatedBy = user.Name;
                         prod.DateUpdated = DateTime.Now;
                         db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
@@ -132,153 +132,153 @@ namespace ShopNow.Controllers
 
         }
 
-        [AccessPolicy(PageCode = "SHNSDCC002")]
-        public JsonResult GetDiscountCategory(string category, string type)
-        {
-            var model = new List<ShopDiscountCategoryViewModel.DiscountCategoryList>();
-            if (category == "1")
-            {
-                model = db.Products.Where(i => i.DiscountCategoryType == 1 && i.Status == 0)
-                    .Select(i => new ShopDiscountCategoryViewModel.DiscountCategoryList
-                    {
-                        Id = i.Id,
-                        CategoryNameMain = i.CategoryNameMain,
-                        DiscountCategoryId = i.DiscountCategoryId,
-                        DiscountCategoryName = i.DiscountCategoryName,
-                        DiscountCategoryPercentage = i.DiscountCategoryPercentage,
-                        DiscountCategoryType = i.DiscountCategoryType,
-                        DiscountType = i.DiscountType
-                    }).ToList();
-            }
-            if (category == "2")
-            {
-                model = db.Products.Where(i => i.DiscountCategoryType == 2 && i.Status == 0)
-                    .Select(i => new ShopDiscountCategoryViewModel.DiscountCategoryList
-                    {
-                        Id = i.Id,
-                        CategoryNameMain = i.CategoryNameMain,
-                        DiscountCategoryId = i.DiscountCategoryId,
-                        DiscountCategoryName = i.DiscountCategoryName,
-                        DiscountCategoryPercentage = i.DiscountCategoryPercentage,
-                        DiscountCategoryType = i.DiscountCategoryType,
-                        DiscountType = i.DiscountType
-                    }).ToList();
-            }
-            if (category == "3")
-            {
-                model = db.Products.Where(i => i.DiscountCategoryType == 3 && i.Status == 0)
-                   .Select(i => new ShopDiscountCategoryViewModel.DiscountCategoryList
-                   {
-                       Id = i.Id,
-                       CategoryNameMain = i.CategoryNameMain,
-                       DiscountCategoryId = i.DiscountCategoryId,
-                       DiscountCategoryName = i.DiscountCategoryName,
-                       DiscountCategoryPercentage = i.DiscountCategoryPercentage,
-                       DiscountCategoryType = i.DiscountCategoryType,
-                       DiscountType = i.DiscountType
-                   }).ToList();
-            }
-            if (category == "4")
-            {
-                model = db.Products.Where(i => i.DiscountCategoryType == 4 && i.Status == 0)
-                   .Select(i => new ShopDiscountCategoryViewModel.DiscountCategoryList
-                   {
-                       Id = i.Id,
-                       CategoryNameMain = i.CategoryNameMain,
-                       DiscountCategoryId = i.DiscountCategoryId,
-                       DiscountCategoryName = i.DiscountCategoryName,
-                       DiscountCategoryPercentage = i.DiscountCategoryPercentage,
-                       DiscountCategoryType = i.DiscountCategoryType,
-                       DiscountType = i.DiscountType
-                   }).ToList();
-            }
-            if (category == "5")
-            {
-                model = db.Products.Where(i => i.DiscountCategoryType == 5 && i.Status == 0)
-                    .Select(i => new ShopDiscountCategoryViewModel.DiscountCategoryList
-                    {
-                        Id = i.Id,
-                        CategoryNameMain = i.CategoryNameMain,
-                        DiscountCategoryId = i.DiscountCategoryId,
-                        DiscountCategoryName = i.DiscountCategoryName,
-                        DiscountCategoryPercentage = i.DiscountCategoryPercentage,
-                        DiscountCategoryType = i.DiscountCategoryType,
-                        DiscountType = i.DiscountType
-                    }).ToList();
-            }
-            if (category == "6")
-            {
-                model = db.Products.Where(i => i.DiscountCategoryType == 6 && i.Status == 0)
-                    .Select(i => new ShopDiscountCategoryViewModel.DiscountCategoryList
-                    {
-                        Id = i.Id,
-                        CategoryNameMain = i.CategoryNameMain,
-                        DiscountCategoryId = i.DiscountCategoryId,
-                        DiscountCategoryName = i.DiscountCategoryName,
-                        DiscountCategoryPercentage = i.DiscountCategoryPercentage,
-                        DiscountCategoryType = i.DiscountCategoryType,
-                        DiscountType = i.DiscountType
-                    }).ToList();
-            }
-            if (category == "7")
-            {
-                model = db.Products.Where(i => i.DiscountCategoryType == 7 && i.Status == 0)
-                   .Select(i => new ShopDiscountCategoryViewModel.DiscountCategoryList
-                   {
-                       Id = i.Id,
-                       CategoryNameMain = i.CategoryNameMain,
-                       DiscountCategoryId = i.DiscountCategoryId,
-                       DiscountCategoryName = i.DiscountCategoryName,
-                       DiscountCategoryPercentage = i.DiscountCategoryPercentage,
-                       DiscountCategoryType = i.DiscountCategoryType,
-                       DiscountType = i.DiscountType
-                   }).ToList();
-            }
-            if (category == "8")
-            {
-                model = db.Products.Where(i => i.DiscountCategoryType == 8 && i.Status == 0)
-                    .Select(i => new ShopDiscountCategoryViewModel.DiscountCategoryList
-                    {
-                        Id = i.Id,
-                        CategoryNameMain = i.CategoryNameMain,
-                        DiscountCategoryId = i.DiscountCategoryId,
-                        DiscountCategoryName = i.DiscountCategoryName,
-                        DiscountCategoryPercentage = i.DiscountCategoryPercentage,
-                        DiscountCategoryType = i.DiscountCategoryType,
-                        DiscountType = i.DiscountType
-                    }).ToList();
-            }
-            if (category == "9")
-            {
-                model = db.Products.Where(i => i.DiscountCategoryType == 9 && i.Status == 0)
-                   .Select(i => new ShopDiscountCategoryViewModel.DiscountCategoryList
-                   {
-                       Id = i.Id,
-                       CategoryNameMain = i.CategoryNameMain,
-                       DiscountCategoryId = i.DiscountCategoryId,
-                       DiscountCategoryName = i.DiscountCategoryName,
-                       DiscountCategoryPercentage = i.DiscountCategoryPercentage,
-                       DiscountCategoryType = i.DiscountCategoryType,
-                       DiscountType = i.DiscountType
-                   }).ToList();
-            }
-            if (category == "10")
-            {
-                model = db.Products.Where(i => i.DiscountCategoryType == 10 && i.Status == 0)
-                   .Select(i => new ShopDiscountCategoryViewModel.DiscountCategoryList
-                   {
-                       Id = i.Id,
-                       CategoryNameMain = i.CategoryNameMain,
-                       DiscountCategoryId = i.DiscountCategoryId,
-                       DiscountCategoryName = i.DiscountCategoryName,
-                       DiscountCategoryPercentage = i.DiscountCategoryPercentage,
-                       DiscountCategoryType = i.DiscountCategoryType,
-                       DiscountType = i.DiscountType
-                   }).ToList();
-            }
+        //[AccessPolicy(PageCode = "SHNSDCC002")]
+        //public JsonResult GetDiscountCategory(string category, string type)
+        //{
+        //    var model = new List<ShopDiscountCategoryViewModel.DiscountCategoryList>();
+        //    if (category == "1")
+        //    {
+        //        model = db.Products.Where(i => i.DiscountCategoryType == 1 && i.Status == 0)
+        //            .Select(i => new ShopDiscountCategoryViewModel.DiscountCategoryList
+        //            {
+        //                Id = i.Id,
+        //                CategoryNameMain = i.CategoryNameMain,
+        //                DiscountCategoryId = i.DiscountCategoryId,
+        //                DiscountCategoryName = i.DiscountCategoryName,
+        //                DiscountCategoryPercentage = i.DiscountCategoryPercentage,
+        //                DiscountCategoryType = i.DiscountCategoryType,
+        //                DiscountType = i.DiscountType
+        //            }).ToList();
+        //    }
+        //    if (category == "2")
+        //    {
+        //        model = db.Products.Where(i => i.DiscountCategoryType == 2 && i.Status == 0)
+        //            .Select(i => new ShopDiscountCategoryViewModel.DiscountCategoryList
+        //            {
+        //                Id = i.Id,
+        //                CategoryNameMain = i.CategoryNameMain,
+        //                DiscountCategoryId = i.DiscountCategoryId,
+        //                DiscountCategoryName = i.DiscountCategoryName,
+        //                DiscountCategoryPercentage = i.DiscountCategoryPercentage,
+        //                DiscountCategoryType = i.DiscountCategoryType,
+        //                DiscountType = i.DiscountType
+        //            }).ToList();
+        //    }
+        //    if (category == "3")
+        //    {
+        //        model = db.Products.Where(i => i.DiscountCategoryType == 3 && i.Status == 0)
+        //           .Select(i => new ShopDiscountCategoryViewModel.DiscountCategoryList
+        //           {
+        //               Id = i.Id,
+        //               CategoryNameMain = i.CategoryNameMain,
+        //               DiscountCategoryId = i.DiscountCategoryId,
+        //               DiscountCategoryName = i.DiscountCategoryName,
+        //               DiscountCategoryPercentage = i.DiscountCategoryPercentage,
+        //               DiscountCategoryType = i.DiscountCategoryType,
+        //               DiscountType = i.DiscountType
+        //           }).ToList();
+        //    }
+        //    if (category == "4")
+        //    {
+        //        model = db.Products.Where(i => i.DiscountCategoryType == 4 && i.Status == 0)
+        //           .Select(i => new ShopDiscountCategoryViewModel.DiscountCategoryList
+        //           {
+        //               Id = i.Id,
+        //               CategoryNameMain = i.CategoryNameMain,
+        //               DiscountCategoryId = i.DiscountCategoryId,
+        //               DiscountCategoryName = i.DiscountCategoryName,
+        //               DiscountCategoryPercentage = i.DiscountCategoryPercentage,
+        //               DiscountCategoryType = i.DiscountCategoryType,
+        //               DiscountType = i.DiscountType
+        //           }).ToList();
+        //    }
+        //    if (category == "5")
+        //    {
+        //        model = db.Products.Where(i => i.DiscountCategoryType == 5 && i.Status == 0)
+        //            .Select(i => new ShopDiscountCategoryViewModel.DiscountCategoryList
+        //            {
+        //                Id = i.Id,
+        //                CategoryNameMain = i.CategoryNameMain,
+        //                DiscountCategoryId = i.DiscountCategoryId,
+        //                DiscountCategoryName = i.DiscountCategoryName,
+        //                DiscountCategoryPercentage = i.DiscountCategoryPercentage,
+        //                DiscountCategoryType = i.DiscountCategoryType,
+        //                DiscountType = i.DiscountType
+        //            }).ToList();
+        //    }
+        //    if (category == "6")
+        //    {
+        //        model = db.Products.Where(i => i.DiscountCategoryType == 6 && i.Status == 0)
+        //            .Select(i => new ShopDiscountCategoryViewModel.DiscountCategoryList
+        //            {
+        //                Id = i.Id,
+        //                CategoryNameMain = i.CategoryNameMain,
+        //                DiscountCategoryId = i.DiscountCategoryId,
+        //                DiscountCategoryName = i.DiscountCategoryName,
+        //                DiscountCategoryPercentage = i.DiscountCategoryPercentage,
+        //                DiscountCategoryType = i.DiscountCategoryType,
+        //                DiscountType = i.DiscountType
+        //            }).ToList();
+        //    }
+        //    if (category == "7")
+        //    {
+        //        model = db.Products.Where(i => i.DiscountCategoryType == 7 && i.Status == 0)
+        //           .Select(i => new ShopDiscountCategoryViewModel.DiscountCategoryList
+        //           {
+        //               Id = i.Id,
+        //               CategoryNameMain = i.CategoryNameMain,
+        //               DiscountCategoryId = i.DiscountCategoryId,
+        //               DiscountCategoryName = i.DiscountCategoryName,
+        //               DiscountCategoryPercentage = i.DiscountCategoryPercentage,
+        //               DiscountCategoryType = i.DiscountCategoryType,
+        //               DiscountType = i.DiscountType
+        //           }).ToList();
+        //    }
+        //    if (category == "8")
+        //    {
+        //        model = db.Products.Where(i => i.DiscountCategoryType == 8 && i.Status == 0)
+        //            .Select(i => new ShopDiscountCategoryViewModel.DiscountCategoryList
+        //            {
+        //                Id = i.Id,
+        //                CategoryNameMain = i.CategoryNameMain,
+        //                DiscountCategoryId = i.DiscountCategoryId,
+        //                DiscountCategoryName = i.DiscountCategoryName,
+        //                DiscountCategoryPercentage = i.DiscountCategoryPercentage,
+        //                DiscountCategoryType = i.DiscountCategoryType,
+        //                DiscountType = i.DiscountType
+        //            }).ToList();
+        //    }
+        //    if (category == "9")
+        //    {
+        //        model = db.Products.Where(i => i.DiscountCategoryType == 9 && i.Status == 0)
+        //           .Select(i => new ShopDiscountCategoryViewModel.DiscountCategoryList
+        //           {
+        //               Id = i.Id,
+        //               CategoryNameMain = i.CategoryNameMain,
+        //               DiscountCategoryId = i.DiscountCategoryId,
+        //               DiscountCategoryName = i.DiscountCategoryName,
+        //               DiscountCategoryPercentage = i.DiscountCategoryPercentage,
+        //               DiscountCategoryType = i.DiscountCategoryType,
+        //               DiscountType = i.DiscountType
+        //           }).ToList();
+        //    }
+        //    if (category == "10")
+        //    {
+        //        model = db.Products.Where(i => i.DiscountCategoryType == 10 && i.Status == 0)
+        //           .Select(i => new ShopDiscountCategoryViewModel.DiscountCategoryList
+        //           {
+        //               Id = i.Id,
+        //               CategoryNameMain = i.CategoryNameMain,
+        //               DiscountCategoryId = i.DiscountCategoryId,
+        //               DiscountCategoryName = i.DiscountCategoryName,
+        //               DiscountCategoryPercentage = i.DiscountCategoryPercentage,
+        //               DiscountCategoryType = i.DiscountCategoryType,
+        //               DiscountType = i.DiscountType
+        //           }).ToList();
+        //    }
 
-            return Json(model, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(model, JsonRequestBehavior.AllowGet);
+        //}
 
         //[AccessPolicy(PageCode = "SHNSDCC002")]
         //public JsonResult UpdateDiscountCategory(string offercode, string offername, int type, int category, double discount, string shopcode, string shopname)

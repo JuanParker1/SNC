@@ -37,16 +37,16 @@ namespace ShopNow.Controllers
             var model = new PaymentReportViewModel();
 
             model.List = db.Orders
-                .Join(db.Payments, c => c.OrderNumber, p => p.OrderNo, (c, p) => new { c, p }).Where(i => i.c.Status == 6)
+                .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p }).Where(i => i.c.Status == 6)
             .Select(i => new PaymentReportViewModel.PaymentReportList
             {
-                Id = i.c.id,
-                ShopId = i.c.Shopid,
-                ShopName = i.c.Shopname,
+                Id = i.c.Id,
+                ShopId = i.c.ShopId,
+                ShopName = i.c.ShopName,
                 Address = i.c.DeliveryAddress,
                 DateEncoded = i.c.DateEncoded,
                 Amount = i.p.Amount,
-                OrderNo = i.p.OrderNo
+                OrderNo = i.p.OrderNumber
             }).OrderByDescending(i => i.DateEncoded).ToList();
 
             return View(model.List);
@@ -67,13 +67,14 @@ namespace ShopNow.Controllers
                     DateTime startDatetFilter = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day);
                     DateTime endDateFilter = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day).AddDays(1);
 
-                    model.List = db.Payments.Join(db.ShopCharges, p => p.OrderNo, sc => sc.OrderNo, (p, sc) => new { p, sc })
+                    model.List = db.Payments
+                        .Join(db.Orders, p => p.OrderNumber, sc => sc.OrderNumber, (p, sc) => new { p, sc })
                         .Where(i => i.p.DateEncoded >= startDatetFilter && i.p.DateEncoded <= endDateFilter && i.sc.Status == 6 && i.p.ShopId == shopId)
                         .AsEnumerable()
                         .Select(i => new PlatformCreditReportViewModel.PlatformCreditReportList
                         {
-                            OrderNo = i.p.OrderNo,
-                            CartStatus = i.sc.OrderStatus,
+                            OrderNo = i.p.OrderNumber,
+                            CartStatus = i.sc.Status,
                             RatePerOrder = rate
                         }).ToList();
                     model.StartingDate = StartDate.Value.ToString("yyyy/MM/dd");
@@ -81,13 +82,13 @@ namespace ShopNow.Controllers
                 }
                 else
                 {
-                    model.List = db.Payments.Join(db.ShopCharges, p => p.OrderNo, sc => sc.OrderNo, (p, sc) => new { p, sc })
+                    model.List = db.Payments.Join(db.Orders, p => p.OrderNumber, sc => sc.OrderNumber, (p, sc) => new { p, sc })
                         .Where(i => i.sc.Status == 6 && i.p.ShopId == shopId)
                         .AsEnumerable()
                         .Select(i => new PlatformCreditReportViewModel.PlatformCreditReportList
                         {
-                            OrderNo = i.p.OrderNo,
-                            CartStatus = i.sc.OrderStatus,
+                            OrderNo = i.p.OrderNumber,
+                            CartStatus = i.sc.Status,
                             RatePerOrder = rate
                         }).ToList();
                 }
@@ -99,12 +100,12 @@ namespace ShopNow.Controllers
                     DateTime startDatetFilter = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day);
                     DateTime endDateFilter = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day).AddDays(1);
 
-                    model.List = db.Payments.Join(db.ShopCharges, p => p.OrderNo, sc => sc.OrderNo, (p, sc) => new { p, sc })
+                    model.List = db.Payments.Join(db.Orders, p => p.OrderNumber, sc => sc.OrderNumber, (p, sc) => new { p, sc })
                           .Where(i => i.p.DateEncoded >= startDatetFilter && i.p.DateEncoded <= endDateFilter && i.sc.Status == 6)
                           .AsEnumerable().Select(i => new PlatformCreditReportViewModel.PlatformCreditReportList
                           {
-                              OrderNo = i.p.OrderNo,
-                              CartStatus = i.sc.OrderStatus,
+                              OrderNo = i.p.OrderNumber,
+                              CartStatus = i.sc.Status,
                               RatePerOrder = rate
                           }).ToList();
                     model.StartingDate = StartDate.Value.ToString("yyyy/MM/dd");
@@ -112,12 +113,12 @@ namespace ShopNow.Controllers
                 }
                 else
                 {
-                    model.List = db.Payments.Join(db.ShopCharges, p => p.OrderNo, sc => sc.OrderNo, (p, sc) => new { p, sc })
+                    model.List = db.Payments.Join(db.Orders, p => p.OrderNumber, sc => sc.OrderNumber, (p, sc) => new { p, sc })
                         .Where(i => i.sc.Status == 6)
                         .AsEnumerable().Select(i => new PlatformCreditReportViewModel.PlatformCreditReportList
                         {
-                            OrderNo = i.p.OrderNo,
-                            CartStatus = i.sc.OrderStatus,
+                            OrderNo = i.p.OrderNumber,
+                            CartStatus = i.sc.Status,
                             RatePerOrder = rate
                         }).ToList();
                 }
@@ -135,25 +136,25 @@ namespace ShopNow.Controllers
             var date = DateTime.Now;
             if (shopId != 0)
             {
-                model.List = db.Payments.Join(db.ShopCharges, p => p.OrderNo, sc => sc.OrderNo, (p, sc) => new { p, sc })
+                model.List = db.Payments.Join(db.Orders, p => p.OrderNumber, sc => sc.OrderNumber, (p, sc) => new { p, sc })
                     .Where(i => i.sc.Status == 6 && i.p.ShopId == shopId && i.p.DateUpdated.Year == date.Year && i.p.DateUpdated.Month == date.Month && i.p.DateUpdated.Day == date.Day)
                     .AsEnumerable()
                     .Select(i => new PlatformCreditReportViewModel.PlatformCreditReportList
                     {
-                        OrderNo = i.p.OrderNo,
-                        CartStatus = i.sc.OrderStatus,
+                        OrderNo = i.p.OrderNumber,
+                        CartStatus = i.sc.Status,
                         RatePerOrder = rate
                     }).ToList();
             }
             else
             {
-                model.List = db.Payments.Join(db.ShopCharges, p => p.OrderNo, sc => sc.OrderNo, (p, sc) => new { p, sc })
+                model.List = db.Payments.Join(db.Orders, p => p.OrderNumber, sc => sc.OrderNumber, (p, sc) => new { p, sc })
                     .Where(i => i.sc.Status == 6 && i.p.DateUpdated.Year == date.Year && i.p.DateUpdated.Month == date.Month && i.p.DateUpdated.Day == date.Day)
                     .AsEnumerable()
                     .Select(i => new PlatformCreditReportViewModel.PlatformCreditReportList
                     {
-                        OrderNo = i.p.OrderNo,
-                        CartStatus = i.sc.OrderStatus,
+                        OrderNo = i.p.OrderNumber,
+                        CartStatus = i.sc.Status,
                         RatePerOrder = rate
                     }).ToList();
             }
@@ -286,26 +287,26 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             model.EarningDate = model.EarningDate == null ? DateTime.Now : model.EarningDate.Value;
             
-            model.ListItems = db.Payments.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(model.EarningDate.Value) && i.OrderNo !=0)
+            model.ListItems = db.Payments.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(model.EarningDate.Value) && i.OrderNumber !=0)
                .Join(db.Shops, p => p.ShopId, s => s.Id, (p, s) => new { p, s })
-               .Join(db.Orders.Where(i => i.Status == 6), p => p.p.OrderNo, c => c.OrderNumber, (p, c) => new { p, c })
-               .GroupJoin(db.PaymentsDatas, p => p.p.p.ReferenceCode, pd => pd.paymentId, (p, pd) => new { p, pd })
+               .Join(db.Orders.Where(i => i.Status == 6), p => p.p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
+               .GroupJoin(db.PaymentsDatas, p => p.p.p.ReferenceCode, pd => pd.PaymentId, (p, pd) => new { p, pd })
                .AsEnumerable()
                .Select(i => new ShopPaymentListViewModel.ListItem
                {
                    AccountName = i.p.p.s.AccountName,
                    AccountNumber = i.p.p.s.AccountNumber,
                    AccountType = i.p.p.s.AcountType,
-                   FinalAmount = i.p.p.p.Amount - (i.p.p.p.refundAmount ?? 0) - (Convert.ToDouble(i.pd.Any() ? (i.pd.FirstOrDefault().fee ?? 0) : 0)) - (Convert.ToDouble(i.pd.Any() ? (i.pd.FirstOrDefault().tax ?? 0) : 0)),
+                   FinalAmount = i.p.p.p.Amount - (i.p.p.p.RefundAmount ?? 0) - (Convert.ToDouble(i.pd.Any() ? (i.pd.FirstOrDefault().Fee ?? 0) : 0)) - (Convert.ToDouble(i.pd.Any() ? (i.pd.FirstOrDefault().Tax ?? 0) : 0)),
                    IfscCode = i.p.p.s.IFSCCode,
                    PaymentDate = i.p.p.p.DateEncoded,
-                   PaymentId = "JOY" + i.p.p.p.OrderNo,
+                   PaymentId = "JOY" + i.p.p.p.OrderNumber,
                    ShopName = i.p.p.p.ShopName,
-                   ShopId = i.p.c.Shopid,
+                   ShopId = i.p.c.ShopId,
                    ShopOwnerPhoneNumber = i.p.p.s.OwnerPhoneNumber,
                    TransactionType = i.p.p.p.PaymentMode,
                    Identifier = (i.p.p.s.AcountType == "CA" && i.p.p.s.BankName == "Axis Bank") ? "I" : "N",
-                   CNR = "JOY" + i.p.p.p.OrderNo,
+                   CNR = "JOY" + i.p.p.p.OrderNumber,
                    DebitAccountNo = "918020043538740",
                    EmailBody = "",
                    EmailID = i.p.p.s.Email,
@@ -320,13 +321,13 @@ namespace ShopNow.Controllers
 
         public ActionResult MarkShopPaymentAsPaidInCart(DateTime date)
         {
-            var paymentListByDate = db.Payments.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(date) && i.OrderNo != null).Select(i=>i.OrderNo).ToList();
+            var paymentListByDate = db.Payments.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(date) && i.OrderNumber != 0).Select(i=>i.OrderNumber).ToList();
             foreach (var orderno in paymentListByDate)
             {
                 var orderList = db.Orders.Where(i => i.OrderNumber == orderno && i.Status==6).ToList();
                 foreach (var item in orderList)
                 {
-                    var order = db.Orders.FirstOrDefault(i => i.id == item.id);
+                    var order = db.Orders.FirstOrDefault(i => i.Id == item.Id);
                     order.ShopPaymentStatus = 1;
                     db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
@@ -342,39 +343,38 @@ namespace ShopNow.Controllers
             model.EarningDate = model.EarningDate == null ? DateTime.Now : model.EarningDate.Value;
 
             model.ListItems = db.Orders.Where(i => i.Status == 6)
-               .Join(db.ShopCharges, c => c.OrderNumber, s => s.OrderNo, (c, s) => new { c, s })
-               .Join(db.Payments, c => c.c.OrderNumber, p => p.OrderNo, (c, p) => new { c, p })
-               .Join(db.DeliveryBoys, c => c.c.c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
+               .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+               .Join(db.DeliveryBoys, c => c.c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
                .Select(i => new DeliveryBoyPaymentListViewModel.ListItem
                {
                    AccountName = i.d.AccountName,
                    AccountNumber = i.d.AccountNumber,
                    AccountType = "SA",
-                   Amount = i.c.c.s.GrossDeliveryCharge,
+                   Amount = i.c.c.DeliveryCharge,
                    IfscCode = i.d.IFSCCode,
                    PaymentDate = i.c.p.DateEncoded,
-                   PaymentId = "JOY" + i.c.p.OrderNo,
+                   PaymentId = "JOY" + i.c.p.OrderNumber,
                    DeliveryBoyId = i.d.Id,
                    DeliveryBoyName = i.d.Name,
                    DeliveryBoyPhoneNumber = i.d.PhoneNumber,
                    TransactionType = i.c.p.PaymentMode,
-                   OrderNo = i.c.p.OrderNo,
+                   OrderNo = i.c.p.OrderNumber,
                    EmailBody = "",
                    EmailID = i.d.Email,
-                   DeliveryBoyPaymentStatus = i.c.c.c.DeliveryBoyPaymentStatus
+                   DeliveryBoyPaymentStatus = i.c.c.DeliveryBoyPaymentStatus
                }).Where(i =>(DbFunctions.TruncateTime(i.PaymentDate) == DbFunctions.TruncateTime(model.EarningDate.Value)) /*&& i.OrderNo != null*/).ToList();
             return View(model);
         }
 
         public ActionResult MarkDeliveryBoyPaymentAsPaidInCart(DateTime date)
         {
-            var paymentListByDate = db.Payments.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(date) && i.OrderNo != null).Select(i => i.OrderNo).ToList();
+            var paymentListByDate = db.Payments.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(date) && i.OrderNumber != 0).Select(i => i.OrderNumber).ToList();
             foreach (var orderno in paymentListByDate)
             {
                 var orderList = db.Orders.Where(i => i.OrderNumber == orderno && i.Status == 6).ToList();
                 foreach (var item in orderList)
                 {
-                    var order = db.Orders.FirstOrDefault(i => i.id == item.id);
+                    var order = db.Orders.FirstOrDefault(i => i.Id == item.Id);
                     order.DeliveryBoyPaymentStatus = 1;
                     db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();

@@ -43,16 +43,16 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             var dt = DateTime.Now;
             var model = new CartListViewModel();
-            model.List = db.Orders.Where(i => i.Status == 0 && (shopId != 0 ? i.Shopid == shopId : true) && i.Status != 6 && i.Status != 7 && i.Status != 0)
+            model.List = db.Orders.Where(i => i.Status == 0 && (shopId != 0 ? i.ShopId == shopId : true) && i.Status != 6 && i.Status != 7 && i.Status != 0)
             .AsEnumerable().Select(i => new CartListViewModel.CartList
             {
-                Id = i.id,
-                ShopName = i.Shopname,
+                Id = i.Id,
+                ShopName = i.ShopName,
                 OrderNo = i.OrderNumber,
                 DeliveryAddress = i.DeliveryAddress,
-                PhoneNumber = i.ShopPhonenumber,
+                PhoneNumber = i.ShopPhoneNumber,
                 CartStatus = i.Status,
-                DeliveryBoyName = i.DeliverBoyName ?? "N/A",
+                DeliveryBoyName = i.DeliveryBoyName ?? "N/A",
                 DateEncoded = i.DateEncoded,
                 Date = i.DateEncoded.ToString("dd/MMM/yyyy hh:mm tt")
             }).OrderBy(i => i.CartStatus).OrderByDescending(i => i.DateEncoded).ToList();
@@ -66,23 +66,23 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             var model = new CartListViewModel();
 
-                model.List = db.Orders.Where(i => (shopId !=0 ? i.Shopid == shopId : true) && i.Status == 2)
-                  .Join(db.Payments, c => c.OrderNumber, p => p.OrderNo, (c, p) => new { c, p })
+                model.List = db.Orders.Where(i => (shopId !=0 ? i.ShopId == shopId : true) && i.Status == 2)
+                  .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                     .AsEnumerable()
                     .Select(i => new CartListViewModel.CartList
                     {
-                        Id = i.c.id,
-                        ShopName = i.c.Shopname,
+                        Id = i.c.Id,
+                        ShopName = i.c.ShopName,
                         OrderNo = i.c.OrderNumber,
                         DeliveryAddress = i.c.DeliveryAddress,
-                        PhoneNumber = i.c.ShopOwnerPhonenumber,
+                        PhoneNumber = i.c.ShopOwnerPhoneNumber,
                         CartStatus = i.c.Status,
-                        DeliveryBoyName = i.c.DeliverBoyName,
+                        DeliveryBoyName = i.c.DeliveryBoyName,
                         DateEncoded = i.c.DateEncoded,
                         Date = i.c.DateEncoded.ToString("dd/MMM/yyyy hh:mm tt"),
                         Price = i.c.TotalPrice,
-                        RefundAmount = i.p.refundAmount ?? 0,
-                        RefundRemark = i.p.refundRemark ?? "",
+                        RefundAmount = i.p.RefundAmount ?? 0,
+                        RefundRemark = i.p.RefundRemark ?? "",
                         PaymentMode = i.p.PaymentMode,
                     }).OrderByDescending(i => i.DateEncoded).ToList();
             return View(model.List);
@@ -94,25 +94,25 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new CartListViewModel();
-            model.List = db.Orders.Where(i => (shopId != 0 ? i.Shopid == shopId : true) && (i.Status == 3 || i.Status == 4))
-                .Join(db.Payments, c => c.OrderNumber, p => p.OrderNo, (c, p) => new { c, p })
+            model.List = db.Orders.Where(i => (shopId != 0 ? i.ShopId == shopId : true) && (i.Status == 3 || i.Status == 4))
+                .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .AsEnumerable()
                 .Select(i => new CartListViewModel.CartList
                 {
-                    Id = i.c.id,
-                    ShopName = i.c.Shopname,
+                    Id = i.c.Id,
+                    ShopName = i.c.ShopName,
                     OrderNo = i.c.OrderNumber,
                     DeliveryAddress = i.c.DeliveryAddress,
-                    PhoneNumber = i.c.ShopPhonenumber,
+                    PhoneNumber = i.c.ShopPhoneNumber,
                     CartStatus = i.c.Status,
-                    DeliveryBoyName = i.c.DeliverBoyName,
+                    DeliveryBoyName = i.c.DeliveryBoyName,
                     DateEncoded = i.c.DateEncoded,
                     Date = i.c.DateEncoded.ToString("dd/MMM/yyyy hh:mm tt"),
-                    RefundAmount = i.p.refundAmount ?? 0,
-                    RefundRemark = i.p.refundRemark ?? "",
+                    RefundAmount = i.p.RefundAmount ?? 0,
+                    RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
                     DeliveryPhoneNumber = i.c.DeliveryBoyPhoneNumber ?? "Not Assigned",
-                    Price = i.p.Amount - (i.p.refundAmount ?? 0)
+                    Price = i.p.Amount - (i.p.RefundAmount ?? 0)
                 }).OrderByDescending(i => i.DateEncoded).ToList();
 
             return View(model.List);
@@ -127,22 +127,22 @@ namespace ShopNow.Controllers
 
                 model.List = db.Orders
                     .Join(db.DeliveryBoys, c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
-                    .Join(db.Payments, c => c.c.OrderNumber, p => p.OrderNo, (c, p) => new { c, p })
-                    .Where(i =>(shopId!=0? i.c.c.Shopid == shopId:true) && i.c.c.Status == 4 && i.c.d.isAssign == 1 && i.c.d.OnWork == 0)
+                    .Join(db.Payments, c => c.c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+                    .Where(i =>(shopId!=0? i.c.c.ShopId == shopId:true) && i.c.c.Status == 4 && i.c.d.isAssign == 1 && i.c.d.OnWork == 0)
                     .AsEnumerable().Select(i => new CartListViewModel.CartList
                     {
-                        Id = i.c.c.id,
-                        ShopName = i.c.c.Shopname,
+                        Id = i.c.c.Id,
+                        ShopName = i.c.c.ShopName,
                         OrderNo = i.c.c.OrderNumber,
                         DeliveryAddress = i.c.c.DeliveryAddress,
                         PhoneNumber = i.c.d.PhoneNumber,
                         CartStatus = i.c.c.Status,
-                        DeliveryBoyName = i.c.c.DeliverBoyName,
+                        DeliveryBoyName = i.c.c.DeliveryBoyName,
                         DeliveryBoyId = i.c.c.DeliveryBoyId,
                         DateEncoded = i.c.c.DateEncoded,
                         Date = i.c.c.DateEncoded.ToString("dd/MMM/yyyy hh:mm tt"),
-                        RefundAmount = i.p.refundAmount ?? 0,
-                        RefundRemark = i.p.refundRemark ?? "",
+                        RefundAmount = i.p.RefundAmount ?? 0,
+                        RefundRemark = i.p.RefundRemark ?? "",
                         PaymentMode = i.p.PaymentMode,
                     }).OrderByDescending(i => i.DateEncoded).ToList();
             
@@ -156,26 +156,26 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             var model = new CartListViewModel();
            
-            model.List = db.Orders.Where(i=>i.Status == 4 && i.Status ==0 && (shopId != 0 ? i.Shopid == shopId : true))
+            model.List = db.Orders.Where(i=>i.Status == 4 && i.Status ==0 && (shopId != 0 ? i.ShopId == shopId : true))
                 .Join(db.DeliveryBoys.Where(i=>i.isAssign ==1 && i.OnWork == 1), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
-                .Join(db.Payments,c=>c.c.OrderNumber,p=>p.OrderNo,(c,p)=>new { c,p})
+                .Join(db.Payments,c=>c.c.OrderNumber,p=>p.OrderNumber,(c,p)=>new { c,p})
                 .AsEnumerable()
                  .Select(i => new CartListViewModel.CartList
                     {
-                     Id = i.c.c.id,
-                     ShopName = i.c.c.Shopname,
+                     Id = i.c.c.Id,
+                     ShopName = i.c.c.ShopName,
                      OrderNo = i.c.c.OrderNumber,
                      DeliveryAddress = i.c.c.DeliveryAddress,
                      PhoneNumber = i.c.d.PhoneNumber,
                      CartStatus = i.c.c.Status,
-                     DeliveryBoyName = i.c.c.DeliverBoyName,
+                     DeliveryBoyName = i.c.c.DeliveryBoyName,
                      DeliveryBoyId = i.c.c.DeliveryBoyId,
                      DateEncoded = i.c.c.DateEncoded,
                      Date = i.c.c.DateEncoded.ToString("dd/MMM/yyyy hh:mm tt"),
-                     RefundAmount = i.p.refundAmount ?? 0,
-                     RefundRemark = i.p.refundRemark ?? "",
+                     RefundAmount = i.p.RefundAmount ?? 0,
+                     RefundRemark = i.p.RefundRemark ?? "",
                      PaymentMode = i.p.PaymentMode,
-                     Amount = i.p.Amount - (i.p.refundAmount ?? 0),
+                     Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
                     }).OrderByDescending(i => i.DateEncoded).ToList();
             return View(model.List);
         }
@@ -186,23 +186,23 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new CartListViewModel();
-                model.List = db.Orders.Where(i => (shopId !=0? i.Shopid == shopId : true) && i.Status == 5)
-                    .Join(db.Payments, c => c.OrderNumber, p => p.OrderNo, (c, p) => new { c, p })
+                model.List = db.Orders.Where(i => (shopId !=0? i.ShopId == shopId : true) && i.Status == 5)
+                    .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                     .AsEnumerable()
                     .Select(i => new CartListViewModel.CartList
                     {
-                        Id = i.c.id,
-                        ShopName = i.c.Shopname,
+                        Id = i.c.Id,
+                        ShopName = i.c.ShopName,
                         OrderNo = i.c.OrderNumber,
                         DeliveryAddress = i.c.DeliveryAddress,
-                        PhoneNumber = i.c.ShopOwnerPhonenumber,
+                        PhoneNumber = i.c.ShopOwnerPhoneNumber,
                         CartStatus = i.c.Status,
-                        DeliveryBoyName = i.c.DeliverBoyName,
+                        DeliveryBoyName = i.c.DeliveryBoyName,
                         DateEncoded = i.c.DateEncoded,
                         Date = i.c.DateEncoded.ToString("dd/MMM/yyyy hh:mm tt"),
                         Price = i.c.TotalPrice,
-                        RefundAmount = i.p.refundAmount ?? 0,
-                        RefundRemark = i.p.refundRemark ?? "",
+                        RefundAmount = i.p.RefundAmount ?? 0,
+                        RefundRemark = i.p.RefundRemark ?? "",
                         PaymentMode = i.p.PaymentMode,
                     }).OrderByDescending(i => i.DateEncoded).ToList();
             
@@ -215,23 +215,23 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new CartListViewModel();
-            model.List = db.Orders.Where(i => (shopId != 0 ? i.Shopid == shopId : true) && i.Status == 6)
-                .Join(db.Payments, c => c.OrderNumber, p => p.OrderNo, (c, p) => new { c, p })
+            model.List = db.Orders.Where(i => (shopId != 0 ? i.ShopId == shopId : true) && i.Status == 6)
+                .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .AsEnumerable()
                 .Select(i => new CartListViewModel.CartList
                 {
-                    Id = i.c.id,
-                    ShopName = i.c.Shopname,
+                    Id = i.c.Id,
+                    ShopName = i.c.ShopName,
                     OrderNo = i.c.OrderNumber,
                     DeliveryAddress = i.c.DeliveryAddress,
-                    PhoneNumber = i.c.ShopOwnerPhonenumber,
+                    PhoneNumber = i.c.ShopOwnerPhoneNumber,
                     CartStatus = i.c.Status,
-                    DeliveryBoyName = i.c.DeliverBoyName,
+                    DeliveryBoyName = i.c.DeliveryBoyName,
                     DateEncoded = i.c.DateEncoded,
                     Date = i.c.DateEncoded.ToString("dd/MMM/yyyy hh:mm tt"),
                     Price = i.c.TotalPrice,
-                    RefundAmount = i.p.refundAmount ?? 0,
-                    RefundRemark = i.p.refundRemark ?? "",
+                    RefundAmount = i.p.RefundAmount ?? 0,
+                    RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
                 }).OrderByDescending(i => i.DateEncoded).ToList();
 
@@ -244,18 +244,18 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new CartListViewModel();
-            model.List = db.Orders.Where(i => (shopId != 0 ? i.Shopid == shopId : true) && i.Status == 6)
-            .Join(db.Payments, c => c.OrderNumber, p => p.OrderNo, (c, p) => new { c, p })
+            model.List = db.Orders.Where(i => (shopId != 0 ? i.ShopId == shopId : true) && i.Status == 6)
+            .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
             .AsEnumerable()
             .Select(i => new CartListViewModel.CartList
             {
-                Id = i.c.id,
-                ShopName = i.c.Shopname,
+                Id = i.c.Id,
+                ShopName = i.c.ShopName,
                 OrderNo = i.c.OrderNumber,
                 DeliveryAddress = i.c.DeliveryAddress,
-                PhoneNumber = i.c.ShopOwnerPhonenumber,
+                PhoneNumber = i.c.ShopOwnerPhoneNumber,
                 CartStatus = i.c.Status,
-                DeliveryBoyName = i.c.DeliverBoyName,
+                DeliveryBoyName = i.c.DeliveryBoyName,
                 DateEncoded = i.c.DateEncoded,
                 Date = i.c.DateEncoded.ToString("dd/MMM/yyyy hh:mm tt"),
             }).OrderByDescending(i => i.DateEncoded).ToList();
@@ -268,7 +268,7 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            Order order = db.Orders.FirstOrDefault(i => i.id == id);
+            Order order = db.Orders.FirstOrDefault(i => i.Id == id);
             var model = new CartDetailsViewModel();
             _mapper.Map(order, model);
             return View(model);
@@ -282,20 +282,20 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             if (string.IsNullOrEmpty(dInt.ToString()))
                 return HttpNotFound();
-            var cart = db.Orders.FirstOrDefault(i => i.id == dInt);
-            var payment = db.Payments.FirstOrDefault(i => i.OrderNo == orderno);
+            var cart = db.Orders.FirstOrDefault(i => i.Id == dInt);
+            var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == orderno);
             var model = new CartListViewModel();
             if (cart != null)
             {
                 model.Id = id;
                 model.OrderNo = orderno;
-                model.CustomerId = cart.Customerid;
+                model.CustomerId = cart.CustomerId;
                 model.CustomerName = cart.CustomerName;
                 model.CartStatus = cart.Status;
-                model.ShopName = cart.Shopname;
+                model.ShopName = cart.ShopName;
                 model.DeliveryAddress = cart.DeliveryAddress;
-                model.PhoneNumber = cart.CustomerPhonenumber;
-                model.DeliveryBoyName = cart.DeliverBoyName;
+                model.PhoneNumber = cart.CustomerPhoneNumber;
+                model.DeliveryBoyName = cart.DeliveryBoyName;
                 model.DateEncoded = cart.DateEncoded;
                 var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == cart.DeliveryBoyId);
                 if (deliveryBoy != null)
@@ -316,13 +316,13 @@ namespace ShopNow.Controllers
                 Id = i.id,
                 BrandName = i.BrandName,
                 CategoryName = i.CategoryName,
-                ShopName = cart.Shopname,
+                ShopName = cart.ShopName,
                 ProductId = i.ProductId,
                 ProductName = i.ProductName,
                 Qty = i.Quantity,
                 Price = i.Price,
                 CartStatus = cart.Status,
-                PhoneNumber = cart.CustomerPhonenumber,
+                PhoneNumber = cart.CustomerPhoneNumber,
                 ImagePath = i.ImagePath == "N/A" ? null : i.ImagePath,
                 SinglePrice = i.UnitPrice
             }).ToList();
@@ -335,19 +335,19 @@ namespace ShopNow.Controllers
             var dInt = AdminHelpers.DCodeInt(id.ToString());
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var cart = db.Orders.FirstOrDefault(i => i.id == dInt);
+            var cart = db.Orders.FirstOrDefault(i => i.Id == dInt);
             var model = new CartListViewModel();
             if (cart != null)
             {
                 model.Id = id;
                 model.OrderNo = orderno;
-                model.CustomerId = cart.Customerid;
+                model.CustomerId = cart.CustomerId;
                 model.CustomerName = cart.CustomerName;
                 model.CartStatus = cart.Status;
-                model.ShopName = cart.Shopname;
+                model.ShopName = cart.ShopName;
                 model.DeliveryAddress = cart.DeliveryAddress;
-                model.PhoneNumber = cart.CustomerPhonenumber;
-                model.DeliveryBoyName = cart.DeliverBoyName;
+                model.PhoneNumber = cart.CustomerPhoneNumber;
+                model.DeliveryBoyName = cart.DeliveryBoyName;
                 model.DateEncoded = cart.DateEncoded;
                 var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == cart.DeliveryBoyId);
                 if (deliveryBoy != null)
@@ -361,13 +361,13 @@ namespace ShopNow.Controllers
                 Id = i.id,
                 BrandName = i.BrandName,
                 CategoryName = i.CategoryName,
-                ShopName = cart.Shopname,
+                ShopName = cart.ShopName,
                 ProductId = i.ProductId,
                 ProductName = i.ProductName,
                 Qty = i.Quantity,
                 Price = i.Price,
                 CartStatus = cart.Status,
-                PhoneNumber = cart.CustomerPhonenumber,
+                PhoneNumber = cart.CustomerPhoneNumber,
                 ImagePath = i.ImagePath == "N/A" ? null : i.ImagePath,
                 SinglePrice = i.UnitPrice
             }).ToList();
@@ -935,14 +935,14 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var order = db.Orders.Where(i => i.OrderNumber == orderno).FirstOrDefault();
-            var shop = db.Shops.FirstOrDefault(i => i.Id == order.Shopid);
+            var shop = db.Shops.FirstOrDefault(i => i.Id == order.ShopId);
             var model = new CartAssignDeliveryBoyViewModel();
-            model.OrderId = order.id;
+            model.OrderId = order.Id;
             DateTime date = DateTime.Now;
             
-            var amount = (from i in db.ShopCharges
-                                   where i.OrderNo == orderno && i.Status == 0 && i.Status == 6 && i.DateUpdated.Year == date.Year && i.DateUpdated.Month == date.Month && i.DateUpdated.Day == date.Day
-                                   select (Double?)i.GrossDeliveryCharge).Sum() ?? 0;
+            var amount = (from i in db.Orders
+                                   where i.OrderNumber == orderno && i.Status == 0 && i.Status == 6 && i.DateUpdated.Year == date.Year && i.DateUpdated.Month == date.Month && i.DateUpdated.Day == date.Day
+                                   select (Double?)i.DeliveryCharge).Sum() ?? 0;
 
             model.Lists = db.DeliveryBoys
                .Where(i => i.OnWork == 0 && i.isAssign == 0 && i.Active == 1 && i.Status == 0)
@@ -970,11 +970,11 @@ namespace ShopNow.Controllers
             var cart = db.Orders.FirstOrDefault(i => i.OrderNumber == model.Id);
             if (cart != null && model.DeliveryBoyId != 0)
             {
-                var cartList = db.OrderItems.Where(i => i.OrderId == cart.id).ToList();
+                var cartList = db.OrderItems.Where(i => i.OrderId == cart.Id).ToList();
                 var delivary = db.DeliveryBoys.FirstOrDefault(i => i.Id == model.DeliveryBoyId);
 
                 cart.DeliveryBoyId = delivary.Id;
-                cart.DeliverBoyName = delivary.Name;
+                cart.DeliveryBoyName = delivary.Name;
                 cart.DeliveryBoyPhoneNumber = delivary.PhoneNumber;
                 cart.Status = 4;
                 cart.DateUpdated = DateTime.Now;
@@ -982,23 +982,21 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
 
                 delivary.isAssign = 1;
-                //DeliveryBoy.Edit(delivary, out int errors);
                 delivary.DateUpdated = DateTime.Now;
                 db.Entry(delivary).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
 
-                var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == cart.OrderNumber); //ShopCharge.GetOrderNo(cart.OrderNo);
-                detail.CustomerId = delivary.CustomerId;
-                detail.CustomerName = delivary.CustomerName;
-                detail.DeliveryBoyId = delivary.Id;
-                detail.DeliveryBoyName = delivary.Name;
-                detail.Status = 4;
-                detail.UpdatedBy = user.Name;
-                detail.DateUpdated = DateTime.Now;
-                db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-                //ShopCharge.Edit(detail, out int errorss);
+                //var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == cart.OrderNumber);
+                //detail.CustomerId = delivary.CustomerId;
+                //detail.CustomerName = delivary.CustomerName;
+                //detail.DeliveryBoyId = delivary.Id;
+                //detail.DeliveryBoyName = delivary.Name;
+                //detail.Status = 4;
+                //detail.UpdatedBy = user.Name;
+                //detail.DateUpdated = DateTime.Now;
+                //db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
+                //db.SaveChanges();
                 return RedirectToAction("List");
             }
             else
@@ -1218,17 +1216,17 @@ namespace ShopNow.Controllers
                     DateTime startDatetFilter = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day);
                     DateTime endDateFilter = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day).AddDays(1);
 
-                    model.List = db.Payments.Join(db.Orders, p => p.OrderNo, c => c.OrderNumber, (p, c) => new { p, c })
+                    model.List = db.Payments.Join(db.Orders, p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
                     .Where(i => i.p.DateEncoded >= startDatetFilter && i.p.DateEncoded <= endDateFilter && i.p.Status == 0
                     && i.c.DeliveryBoyId == deliveryboyId && i.c.Status == 6 && i.p.PaymentMode == "Cash On Hand")
                      .Select(i => new CartReportViewModel.CartReportList
                      {
-                         Id = i.c.id,
-                         OrderNo = i.p.OrderNo ,
+                         Id = i.c.Id,
+                         OrderNo = i.p.OrderNumber,
                          DeliveryBoyPhoneNumber =i.c.DeliveryBoyPhoneNumber,
                          DeliveryBoyId = i.c.DeliveryBoyId,
-                         DeliveryBoyName = i.c.DeliverBoyName,
-                         Amount = i.p.Amount - (i.p.refundAmount ?? 0),
+                         DeliveryBoyName = i.c.DeliveryBoyName,
+                         Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
                          DateUpdated = i.c.DateUpdated,
                          DeliveryOrderPaymentStatus = i.c.DeliveryOrderPaymentStatus
                      }).OrderByDescending(i => i.DateUpdated).ToList();
@@ -1238,16 +1236,16 @@ namespace ShopNow.Controllers
                 else
                 {
                     model.List = db.Payments
-                        .Join(db.Orders, p => p.OrderNo, c => c.OrderNumber, (p, c) => new { p, c })
+                        .Join(db.Orders, p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
                       .Where(i => i.p.Status == 0 && i.c.DeliveryBoyId == deliveryboyId && i.c.Status == 6 && i.p.PaymentMode == "Cash On Hand")
                      .Select(i => new CartReportViewModel.CartReportList
                      {
-                         Id = i.c.id,
-                         OrderNo = i.p.OrderNo,
+                         Id = i.c.Id,
+                         OrderNo = i.p.OrderNumber,
                          DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
                          DeliveryBoyId = i.c.DeliveryBoyId,
-                         DeliveryBoyName = i.c.DeliverBoyName,
-                         Amount = i.p.Amount - (i.p.refundAmount ?? 0),
+                         DeliveryBoyName = i.c.DeliveryBoyName,
+                         Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
                          DateUpdated = i.c.DateUpdated,
                          DeliveryOrderPaymentStatus = i.c.DeliveryOrderPaymentStatus
                      }).OrderByDescending(i => i.DateUpdated).ToList();
@@ -1261,17 +1259,17 @@ namespace ShopNow.Controllers
                     DateTime endDateFilter = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day).AddDays(1);
 
                     model.List = db.Payments
-                        .Join(db.Orders, p => p.OrderNo, c => c.OrderNumber, (p, c) => new { p, c })
+                        .Join(db.Orders, p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
                     .Where(i => i.p.DateEncoded >= startDatetFilter && i.p.DateEncoded <= endDateFilter && i.p.Status == 0
                     && i.c.Status == 6 && i.p.PaymentMode == "Cash On Hand")
                      .Select(i => new CartReportViewModel.CartReportList
                      {
-                         Id = i.c.id,
-                         OrderNo = i.p.OrderNo,
+                         Id = i.c.Id,
+                         OrderNo = i.p.OrderNumber,
                          DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
                          DeliveryBoyId = i.c.DeliveryBoyId,
-                         DeliveryBoyName = i.c.DeliverBoyName,
-                         Amount = i.p.Amount - (i.p.refundAmount ?? 0),
+                         DeliveryBoyName = i.c.DeliveryBoyName,
+                         Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
                          DateUpdated = i.c.DateUpdated,
                          DeliveryOrderPaymentStatus = i.c.DeliveryOrderPaymentStatus
                      }).OrderByDescending(i => i.DateUpdated).ToList();
@@ -1280,16 +1278,16 @@ namespace ShopNow.Controllers
                 }
                 else
                 {
-                    model.List = db.Payments.Join(db.Orders, p => p.OrderNo, c => c.OrderNumber, (p, c) => new { p, c })
+                    model.List = db.Payments.Join(db.Orders, p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
                        .Where(i => i.p.Status == 0 && i.c.Status == 6 && i.p.PaymentMode == "Cash On Hand")
                      .Select(i => new CartReportViewModel.CartReportList
                      {
-                         Id = i.c.id,
-                         OrderNo = i.p.OrderNo,
+                         Id = i.c.Id,
+                         OrderNo = i.p.OrderNumber,
                          DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
                          DeliveryBoyId = i.c.DeliveryBoyId,
-                         DeliveryBoyName = i.c.DeliverBoyName,
-                         Amount = i.p.Amount - (i.p.refundAmount ?? 0),
+                         DeliveryBoyName = i.c.DeliveryBoyName,
+                         Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
                          DateUpdated = i.c.DateUpdated,
                          DeliveryOrderPaymentStatus = i.c.DeliveryOrderPaymentStatus
                      }).OrderByDescending(i => i.DateUpdated).ToList();
@@ -1480,11 +1478,11 @@ namespace ShopNow.Controllers
                 //    db.SaveChanges();
                 //}
 
-                var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
-                detail.OrderStatus = 3;
-                detail.DateUpdated = DateTime.Now;
-                db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
+                //var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
+                //detail.OrderStatus = 3;
+                //detail.DateUpdated = DateTime.Now;
+                //db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
+                //db.SaveChanges();
 
                 return Json(new { message = "Order Confirmed!" }, JsonRequestBehavior.AllowGet);
             }
@@ -1509,7 +1507,7 @@ namespace ShopNow.Controllers
                 db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
-                var orderItemList = db.OrderItems.Where(i => i.OrderId == order.id);
+                var orderItemList = db.OrderItems.Where(i => i.OrderId == order.Id);
                 foreach (var item in orderItemList)
                 {
                     //Product Stock Update
@@ -1520,20 +1518,20 @@ namespace ShopNow.Controllers
                     
                 }
                 //Refund
-                var payment = db.Payments.FirstOrDefault(i => i.OrderNo == order.OrderNumber);
-                payment.refundAmount = payment.Amount;
-                payment.refundRemark = "Your order has been cancelled by shop.";
+                var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == order.OrderNumber);
+                payment.RefundAmount = payment.Amount;
+                payment.RefundRemark = "Your order has been cancelled by shop.";
                 payment.UpdatedBy = customer.Name;
                 payment.DateUpdated = DateTime.Now;
                 db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
                 // update Shopcharge cartstatus 7
-                var sc = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
-                sc.OrderStatus = 7;
-                sc.DateUpdated = DateTime.Now;
-                db.Entry(sc).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
+                //var sc = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
+                //sc.OrderStatus = 7;
+                //sc.DateUpdated = DateTime.Now;
+                //db.Entry(sc).State = System.Data.Entity.EntityState.Modified;
+                //db.SaveChanges();
                 return Json(new { message = "Order Cancelled!" }, JsonRequestBehavior.AllowGet);
             }
             else
@@ -1583,7 +1581,7 @@ namespace ShopNow.Controllers
             {
                 var order =  db.Orders.FirstOrDefault(i => i.OrderNumber == orderNo);
                 order.DeliveryBoyId = 0;
-                order.DeliverBoyName = null;
+                order.DeliveryBoyName = null;
                 order.DeliveryBoyPhoneNumber = null;
                 order.Status = 3;
                 db.Entry(order).State = System.Data.Entity.EntityState.Modified;
@@ -1627,7 +1625,7 @@ namespace ShopNow.Controllers
             db.SaveChanges();
 
             order.DeliveryBoyId = 0;
-            order.DeliverBoyName = string.Empty;
+            order.DeliveryBoyName = string.Empty;
             order.DeliveryBoyPhoneNumber = string.Empty;
             order.Status = 3;
             order.DateUpdated = DateTime.Now;
@@ -1640,11 +1638,11 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
 
-            var order = db.Orders.FirstOrDefault(i => i.id == id);
+            var order = db.Orders.FirstOrDefault(i => i.Id == id);
             //Refund
-            var payment = db.Payments.FirstOrDefault(i => i.OrderNo == order.OrderNumber);
-            payment.refundAmount = amount;
-            payment.refundRemark = remark;
+            var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == order.OrderNumber);
+            payment.RefundAmount = amount;
+            payment.RefundRemark = remark;
             payment.UpdatedBy = user.Name;
             payment.DateUpdated = DateTime.Now;
             db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
@@ -1656,7 +1654,7 @@ namespace ShopNow.Controllers
         public ActionResult DeliveryBoyAccept(int orderNo, int id)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-            var order = db.Orders.FirstOrDefault(i => i.id == id);
+            var order = db.Orders.FirstOrDefault(i => i.Id == id);
             var delivaryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId && i.Status == 0);
             delivaryBoy.OnWork = 1;
             delivaryBoy.UpdatedBy = user.Name;
@@ -1664,8 +1662,8 @@ namespace ShopNow.Controllers
             db.Entry(delivaryBoy).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
-            var shopCharge = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
-            var shop = db.Shops.FirstOrDefault(i => i.Id == shopCharge.ShopId);
+            //var shopCharge = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
+            //var shop = db.Shops.FirstOrDefault(i => i.Id == shopCharge.ShopId);
             //var topup = db.TopUps.OrderByDescending(q => q.Id).FirstOrDefault(i => i.CustomerCode == shop.CustomerCode && i.CreditType == 1 && i.Status == 0);
             //if (topup != null)
             //{
@@ -1681,14 +1679,14 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
 
-            var order = db.Orders.FirstOrDefault(i => i.id == id);
+            var order = db.Orders.FirstOrDefault(i => i.Id == id);
             order.Status = 5;
             order.UpdatedBy = user.Name;
             order.DateUpdated = DateTime.Now;
             db.Entry(order).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
-            var orderItemList = db.OrderItems.Where(i => i.OrderId == order.id).ToList();
+            var orderItemList = db.OrderItems.Where(i => i.OrderId == order.Id).ToList();
             foreach (var item in orderItemList)
             {
                 //Product Stock Update
@@ -1698,18 +1696,18 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
             }
 
-            var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
-            detail.OrderStatus = 5;
-            detail.DateUpdated = DateTime.Now;
-            db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
+            //var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
+            //detail.OrderStatus = 5;
+            //detail.DateUpdated = DateTime.Now;
+            //db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
+            //db.SaveChanges();
 
-            var payment = db.Payments.FirstOrDefault(i => i.OrderNo == orderNo);
+            var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == orderNo);
             if (payment.PaymentMode == "Online Payment" && payment.Amount > 1000)
             {
                 var otpVerification = new OtpVerification();
                //otpVerification.Code = Helpers.DRC.Generate("SMS");
-                otpVerification.ShopId = order.Shopid;
+                otpVerification.ShopId = order.ShopId;
                 otpVerification.Id = user.Id;
                 otpVerification.CustomerName = user.Name;
                 otpVerification.PhoneNumber = order.DeliveryBoyPhoneNumber;
@@ -1732,7 +1730,7 @@ namespace ShopNow.Controllers
 
             var otpVerify = db.OtpVerifications.FirstOrDefault(i => i.OrderNo == orderNo);
 
-            var order = db.Orders.FirstOrDefault(i => i.id == id);
+            var order = db.Orders.FirstOrDefault(i => i.Id == id);
 
             var delivaryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId && i.Status == 0);
             delivaryBoy.OnWork = 0;
@@ -1754,11 +1752,11 @@ namespace ShopNow.Controllers
             db.Entry(order).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
-            var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
-            detail.OrderStatus = 6;
-            detail.DateUpdated = DateTime.Now;
-            db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
+            //var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
+            //detail.OrderStatus = 6;
+            //detail.DateUpdated = DateTime.Now;
+            //db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
+            //db.SaveChanges();
 
             return RedirectToAction("Edit", "Cart", new { orderno = orderNo, id = id });
         }

@@ -121,7 +121,7 @@ namespace ShopNow.Controllers
 
         public async Task<JsonResult> GetSubCategorySelect2(string q = "")
         {
-            var model = await db.SubCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductType == "FMCG").Select(i => new
+            var model = await db.SubCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 2).Select(i => new
             {
                 id = i.Id,
                 text = i.Name

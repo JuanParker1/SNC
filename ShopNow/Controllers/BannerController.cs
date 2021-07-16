@@ -41,10 +41,10 @@ namespace ShopNow.Controllers
             var model = new BannerListViewModel();
             model.List = db.Banners.Where(i => i.Status == 0).Select(i => new BannerListViewModel.BannerList {
                 BannerName = i.BannerName,
-                Bannerpath = i.Bannerpath,
+                Bannerpath = i.BannerPath,
                 Id = i.Id,
                 Days = i.Days,
-                Fromdate = i.Fromdate,
+                Fromdate = i.FromDate,
                 Position = i.Position,
                 ProductId = i.ProductId,
                 ProductName = i.ProductName,
@@ -67,10 +67,10 @@ namespace ShopNow.Controllers
             model.List = db.Banners.Where(i => i.Status == 1).Select(i => new BannerListViewModel.BannerList
             {
                 BannerName = i.BannerName,
-                Bannerpath = i.Bannerpath,
+                Bannerpath = i.BannerPath,
                 Id= i.Id,
                 Days = i.Days,
-                Fromdate = i.Fromdate,
+                Fromdate = i.FromDate,
                 Position = i.Position,
                 ProductId = i.ProductId,
                 ProductName = i.ProductName,
@@ -116,7 +116,7 @@ namespace ShopNow.Controllers
                 if (model.BannerImage != null)
                 {
                     uc.UploadMediumFile(model.BannerImage.InputStream, banner.Id + "_" + model.BannerImage.FileName, accesskey, secretkey, "image");  // Upload Medium Image
-                    banner.Bannerpath = banner.Id + "_" + model.BannerImage.FileName;
+                    banner.BannerPath = banner.Id + "_" + model.BannerImage.FileName;
                 }
                 db.Entry(banner).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();

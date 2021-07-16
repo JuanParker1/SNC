@@ -326,7 +326,6 @@
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\DeliveryBoyController.cs" />
     <Compile Include="Controllers\DiscountCategoryController.cs" />
-    <Compile Include="Controllers\DishAddOnController.cs" />
     <Compile Include="Controllers\DrugCompoundDetailController.cs" />
     <Compile Include="Controllers\ErrorPageController.cs" />
     <Compile Include="Controllers\MeasurementUnitController.cs" />
@@ -530,7 +529,6 @@
     <Compile Include="ViewModels\CustomerReviewViewModel .cs" />
     <Compile Include="ViewModels\DeliveryBoyViewModel.cs" />
     <Compile Include="ViewModels\DiscountCategoryViewModel.cs" />
-    <Compile Include="ViewModels\DishAddOnViewModel.cs" />
     <Compile Include="ViewModels\DrugCompoundDetailViewModel.cs" />
     <Compile Include="ViewModels\MeasurementUnitViewModel.cs" />
     <Compile Include="ViewModels\MarketingAgentViewModel.cs" />
@@ -2807,7 +2805,6 @@
     <Content Include="Views\BrandOwner\Login.cshtml" />
     <Content Include="Views\ShopCategory\Index.cshtml" />
     <Content Include="Views\Specification\Index.cshtml" />
-    <Content Include="Views\DishAddOn\Index.cshtml" />
     <Content Include="Views\Page\Index.cshtml" />
     <Content Include="Views\ProductSpecification\Index.cshtml" />
     <Content Include="Views\AddOnCategory\Index.cshtml" />
@@ -2817,9 +2814,6 @@
     <Content Include="Views\Category\Index.cshtml" />
     <Content Include="Views\Shop\Details.cshtml" />
     <Content Include="Views\DeliveryBoy\Create.cshtml" />
-    <Content Include="Views\DishAddOn\Create.cshtml" />
-    <Content Include="Views\DishAddOn\Edit.cshtml" />
-    <Content Include="Views\DishAddOn\List.cshtml" />
     <Content Include="Views\MasterProduct\Create.cshtml" />
     <Content Include="Views\MasterProduct\Edit.cshtml" />
     <Content Include="Views\MasterProduct\List.cshtml" />

@@ -39,33 +39,33 @@ namespace ShopNowPay.Controllers
                 DateTime endDateFilter = new DateTime(endDate.Value.Year, endDate.Value.Month, endDate.Value.Day).AddDays(1);
 
                 model.List = db.Orders
-                    .Join(db.Payments, c => c.OrderNumber, p => p.OrderNo, (c, p) => new { c, p })
+                    .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                  .Where(i => i.c.DateEncoded >= startDatetFilter && i.c.DateEncoded <= endDateFilter && i.c.Status == 6)
                  .Select(i => new SalesReportViewModel.SalesReportList
                  {
-                     Id = i.c.id,
-                     ShopId = i.c.Shopid,
-                     ShopName = i.c.Shopname,
+                     Id = i.c.Id,
+                     ShopId = i.c.ShopId,
+                     ShopName = i.c.ShopName,
                      DeliveryAddress = i.c.DeliveryAddress,
                      DateEncoded = i.c.DateEncoded,
                      Amount = i.p.Amount,
-                     OrderNo = i.p.OrderNo
+                     OrderNo = i.p.OrderNumber
                  }).OrderByDescending(i => i.DateEncoded).ToList();
             }
             else
             {
                 model.List = db.Orders
-                    .Join(db.Payments, c => c.OrderNumber, p => p.OrderNo, (c, p) => new { c, p })
+                    .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                   .Where(i => i.c.Status == 6)
                   .Select(i => new SalesReportViewModel.SalesReportList
                   {
-                      Id = i.c.id,
-                      ShopId = i.c.Shopid,
-                      ShopName = i.c.Shopname,
+                      Id = i.c.Id,
+                      ShopId = i.c.ShopId,
+                      ShopName = i.c.ShopName,
                       DeliveryAddress = i.c.DeliveryAddress,
                       DateEncoded = i.c.DateEncoded,
                       Amount = i.p.Amount,
-                      OrderNo = i.p.OrderNo
+                      OrderNo = i.p.OrderNumber
                   }).OrderByDescending(i => i.DateEncoded).ToList();
             }
             return View(model.List);
