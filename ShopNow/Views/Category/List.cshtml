@@ -30,45 +30,6 @@ columns.Add(c => c.ProductTypeId).Titled("Product Type").Filterable(true).SetWid
 columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
 columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(c => @<div><a href="" data-id="@c.Id" data-id1="@c.Name" data-id2="@c.ProductTypeId" data-id3="@c.OrderNo" class="btn-sm btn-warning edit-prompt" data-toggle="modal" data-target="#editModal" style="padding: 3px 26px">Edit</a> <a href="" data-id="@c.Id" data-id1="@c.Name" class="btn-sm btn-danger delete-prompt" data-toggle="modal" data-target="#deleteModal" style="padding: 3px 18px">Delete</a></div>);
     }).WithPaging(20).Sortable(true)
-
-    <!--
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-hover table-borderless table-hover" id="Category-list">
-                            <thead>
-                                <tr>
-                                    <th>No.</th>
-                                    <th>Category Name</th>
-                                    <th>Item Type</th>
-                                    <th>Adscore</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                foreach (var item in Model.List)
-                                {
-                                    <tr>
-                                        <td></td>
-                                        <td>item.Name</td>
-                                        <td>item.ProductType</td>
-                                        <td>item.OrderNo</td>
-                                        <td>
-                                            <a href="" data-id="item.Code" data-id1="item.Name" data-id2="item.ProductType" data-id3="item.OrderNo" class="btn-sm btn-warning edit-prompt" data-toggle="modal" data-target="#editModal" style="padding: 3px 26px">Edit</a>
-                                            <a href="" data-id="item.Code" data-id1="item.Name" class="btn-sm btn-danger delete-prompt" data-toggle="modal" data-target="#deleteModal" style="padding: 3px 18px">Delete</a>
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    -->
 </div>
 
 <div class="modal fade" id="deleteModal" role="dialog" aria-labelledby="myModalLabel">
@@ -109,12 +70,12 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
                     <div class="col-md-6">
                         <label class="col-form-label"><strong class="text-secondary">Item Type</strong></label>
                         <select name="ProductType" class="form-control" id="ProductType">
-                            <option value="">Select</option>
-                            <option value="Product">Product</option>
-                            <option value="Dish">Dish</option>
-                            <option value="Service">Service</option>
-                            <option value="Medical">Medical</option>
-                            <option value="FMCG">FMCG</option>
+                            <option value="0">Select</option>
+                            <option value="4">Product</option>
+                            <option value="1">Dish</option>
+                            <option value="5">Service</option>
+                            <option value="3">Medical</option>
+                            <option value="2">FMCG</option>
                         </select>
                     </div>
                     <div class="col-md-6">
@@ -146,7 +107,14 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
                     </div>
                     <div class="col-md-6">
                         <label class="col-form-label font-weight-bold text-secondary">Item Type</label>
-                        <div id="Type"></div>
+                        <select name="ProductType" class="form-control" id="CProductType">
+                            <option value="0">Select</option>
+                            <option value="4">Product</option>
+                            <option value="1">Dish</option>
+                            <option value="3">Medical</option>
+                            <option value="2">FMCG</option>
+                            <option value="5">Service</option>
+                        </select>
                     </div>
                     <div class="col-md-6">
                         <label class="col-form-label font-weight-bold text-secondary">Adscore</label>
@@ -235,8 +203,8 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
                 $("#CategoryCode").val(code);
                 $("#CategoryName").append("<input type=text name=CName id=CName class=form-control value='" + name + "' />");
                 $("#CategoryNo").append("<input type=number name=COrderNo id=COrderNo class=form-control value='" + orderno + "' />");
-                $("#Type").append("<select name=CProductType id=CProductType class=form-control><option value=" + type + ">" + type + "</option><option value=Product>Product</option><option value=Dish>Dish</option><option value=Service>Service</option><option value=Medical>Medical</option> <option value=FMCG>FMCG</option></select>");
-
+                //$("#Type").append("<select name=CProductType id=CProductType class=form-control><option value=" + type + ">" + type + "</option><option value=Product>Product</option><option value=Dish>Dish</option><option value=Service>Service</option><option value=Medical>Medical</option> <option value=FMCG>FMCG</option></select>");
+                $('#CProductType').val(type);
             });
 
             $(".Edit").click(function () {
@@ -273,7 +241,7 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
 
             $(".delete-confirm").click(function () {
                 var code = $("#Code").val();
-                $.getJSON("/Category/Delete", { code: code }, function (data) {
+                $.getJSON("/Category/Delete", { id: code }, function (data) {
                     window.location.reload();
                 });
             });
