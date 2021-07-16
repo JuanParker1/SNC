@@ -29,8 +29,8 @@
     @Html.Grid(Model).Columns(columns =>
 {
 columns.Add(b => b.Name).Titled("Name").Filterable(true).SetWidth(20);
-columns.Add(b => b.ProductTypeId).Titled("Product Type").Filterable(true).SetWidth(20);
-columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(b => @<div><a href="javascript:void(0)" data-id="@b.Id" data-id1="@b.Name" data-id2="@b.ProductTypeId" class="btn-sm btn-warning edit-prompt" data-toggle="modal" data-target="#editModal" style="padding: 3px 26px">Edit</a> <a href="javascript:void(0)" data-id="@b.Id" data-id1="@b.Name" class="btn-sm btn-danger delete-prompt" data-toggle="modal" data-target="#deleteModal" style="padding: 3px 18px">Delete</a></div>);    
+columns.Add(b => b.ProductTypeName).Titled("Product Type").Filterable(true).SetWidth(20);
+columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(b => @<div><a href="javascript:void(0)" data-id="@b.Id" data-name="@b.Name" data-productTypeId="@b.ProductTypeId" data-productTypeName="@b.ProductTypeName" class="btn-sm btn-warning edit-prompt" data-toggle="modal" data-target="#editModal" style="padding: 3px 26px">Edit</a> <a href="javascript:void(0)" data-code="@b.Id" class="btn-sm btn-danger delete-prompt" data-toggle="modal" data-target="#deleteModal" style="padding: 3px 18px">Delete</a></div>);    
 }).WithPaging(20).Sortable(true)
 </div>
 
@@ -73,7 +73,7 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
                     </div>
                     <div class="col-md-6">
                         <label class="col-form-label"><strong class="text-secondary">Item Type</strong></label>
-                        <select name="ProductType" class="form-control" id="ProductType">
+                        <select name="ProductType" class="form-control" id="ProductTypeId">
                             <option value="0" disabled selected>Select</option>
                             <option value="4">Product</option>
                             <option value="1">Dish</option>
@@ -81,6 +81,7 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
                             <option value="2">FMCG</option>
                             <option value="5">Service</option>
                         </select>
+                        <input type="hidden" name="ProductTypeName" id="ProductTypeName" />
                     </div>
                 </div>
             </div>
@@ -105,11 +106,11 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
                 <div class="form-group row">
                     <div class="col-md-6">
                         <label class="col-form-label font-weight-bold text-secondary">Brand Name</label>
-                        <div id="BrandName"></div>
+                        <input type="text" name="Name" id="edit-Name" class="form-control" />
                     </div>
                     <div class="col-md-6">
                         <label class="col-form-label font-weight-bold text-secondary">Item Type</label>
-                        <select name="BProductType" class="form-control" id="BProductType">
+                        <select class="form-control" id="edit-ProductTypeId">
                             <option value="0">Select</option>
                             <option value="4">Product</option>
                             <option value="1">Dish</option>
@@ -117,6 +118,7 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
                             <option value="2">FMCG</option>
                             <option value="5">Service</option>
                         </select>
+                        <input type="hidden" id="edit-ProductTypeName"/>
                     </div>
                 </div>
             </div>
@@ -136,18 +138,28 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
 
     <script>
         $(document).ready(function () {
-
+            $('#ProductTypeId').on('change', function () {
+                let selectedType = $(this).find("option:selected").text();
+                $('[name="ProductTypeName"]').val(selectedType);
+            });
+            $('#edit-ProductTypeId').on('change', function () {
+                let selectedType = $(this).find("option:selected").text();
+                $('#edit-ProductTypeName').val(selectedType);
+            });
             $('#Create').on('click', function () {
-                var name = $('#Name').val();
-                var type = $('#ProductType').val();
                 var isValidate = false;
                 var requiredArr = [
                     'Name',
-                    'ProductType'
+                    'ProductTypeId'
                 ];
                 isValidate = ValidateEmptyRequiredFiels(requiredArr);
                 if (isValidate) {
-                    $.getJSON("/Brand/Save?name=" + name + "&type=" + type, function (data) {
+                    var brand = {
+                        Name: $('#Name').val(),
+                        ProductTypeId: $('#ProductTypeId').val(),
+                        ProductTypeName: $('#ProductTypeName').val()
+                    }
+                    $.post("/Brand/Save", { brand: brand }, function (data) {
                         if (data.IsAdded == true) {
                             swal({
                                 title: data.message,
@@ -168,24 +180,24 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
             });
 
             $(".edit-prompt").click(function () {
-                var code = $(this).attr('data-id');
-                var name = $(this).attr('data-id1');
-                var type = $(this).attr('data-id2');
-                $("#BrandId").val(code);
-                $("#BrandName").append("<input type=text name=BName id=BName class=form-control value='" + name + "' />");
-                //$("#Type").append("<select name=BProductType id=BProductType class=form-control><option value=" + type + ">" + type + "</option><option value=Product>Product</option><option value=Dish>Dish</option><option value=Service>Service</option><option value=Medical>Medical</option> <option value=FMCG>FMCG</option></select>");
-                $('#BProductType').val(type);
+                $("#BrandId").val($(this).attr('data-id'));
+                $("#edit-Name").val($(this).attr('data-name'));
+                $('#edit-ProductTypeId').val($(this).attr('data-productTypeId'));
+                $('#edit-ProductTypeName').val($(this).attr('data-productTypeName'));
             });
 
             $(".Edit").click(function () {
-                var Code = $("#BrandId").val();
-                var brandName = $("#BName").val();
-                var productType = $("#BProductType").val();
-                if (brandName == "" || brandName == null) {
+                var brand = {
+                    Id: $('#BrandId').val(),
+                    Name: $('#edit-Name').val(),
+                    ProductTypeId: $('#edit-ProductTypeId').val(),
+                    ProductTypeName: $('#edit-ProductTypeName').val()
+                }
+                if ($('#edit-Name').val() == "" || $('#edit-Name').val() == null) {
                     swal("Name is Empty.", "Please Enter a Brand Name", "warning");
                 }
-                else if (brandName != "" || brandName != null) {
-                    $.getJSON("/Brand/Edit", { id: Code, name: brandName, type: productType }, function (data) {
+                else {
+                    $.post("/Brand/Edit", { brandmodel: brand }, function (data) {
                         if (data.message != null || data.message != "") {
                             swal({
                                 title: data.message,

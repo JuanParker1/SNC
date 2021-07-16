@@ -2765,8 +2765,6 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\AccessPolicy\List.cshtml" />
     <Content Include="Views\AccessPolicy\Manage.cshtml" />
-    <Content Include="Views\Brand\Create.cshtml" />
-    <Content Include="Views\Brand\Edit.cshtml" />
     <Content Include="Views\Brand\List.cshtml" />
     <Content Include="Views\Category\List.cshtml" />
     <Content Include="Views\Dashboard\Index.cshtml" />

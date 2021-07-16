@@ -501,3 +501,4 @@ C:\Jose\SNC\ShopNow\obj\Debug\ShopNow.csproj.CoreCompileInputs.cache
 C:\Jose\SNC\ShopNow\obj\Debug\ShopNow.csproj.CopyComplete
 C:\Jose\SNC\ShopNow\obj\Debug\ShopNow.dll
 C:\Jose\SNC\ShopNow\obj\Debug\ShopNow.pdb
+E:\Beno\SNC\ShopNow\obj\Debug\ShopNow.csprojAssemblyReference.cache

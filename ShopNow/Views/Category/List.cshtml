@@ -26,9 +26,9 @@
     @Html.Grid(Model).Columns(columns =>
 {
 columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(20);
-columns.Add(c => c.ProductTypeId).Titled("Product Type").Filterable(true).SetWidth(20);
+columns.Add(c => c.ProductTypeName).Titled("Product Type").Filterable(true).SetWidth(20);
 columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
-columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(c => @<div><a href="" data-id="@c.Id" data-id1="@c.Name" data-id2="@c.ProductTypeId" data-id3="@c.OrderNo" class="btn-sm btn-warning edit-prompt" data-toggle="modal" data-target="#editModal" style="padding: 3px 26px">Edit</a> <a href="" data-id="@c.Id" data-id1="@c.Name" class="btn-sm btn-danger delete-prompt" data-toggle="modal" data-target="#deleteModal" style="padding: 3px 18px">Delete</a></div>);
+columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(c => @<div><a href="" data-id="@c.Id" data-name="@c.Name" data-producttypeid="@c.ProductTypeId" data-producttypename="@c.ProductTypeName" data-orderno="@c.OrderNo" class="btn-sm btn-warning edit-prompt" data-toggle="modal" data-target="#editModal" style="padding: 3px 26px">Edit</a> <a href="" data-id="@c.Id" class="btn-sm btn-danger delete-prompt" data-toggle="modal" data-target="#deleteModal" style="padding: 3px 18px">Delete</a></div>);
     }).WithPaging(20).Sortable(true)
 </div>
 
@@ -69,7 +69,7 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
                     </div>
                     <div class="col-md-6">
                         <label class="col-form-label"><strong class="text-secondary">Item Type</strong></label>
-                        <select name="ProductType" class="form-control" id="ProductType">
+                        <select name="ProductType" class="form-control" id="ProductTypeId">
                             <option value="0">Select</option>
                             <option value="4">Product</option>
                             <option value="1">Dish</option>
@@ -77,6 +77,7 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
                             <option value="3">Medical</option>
                             <option value="2">FMCG</option>
                         </select>
+                        <input type="hidden" id="ProductTypeName" name="ProductTypeName"/>
                     </div>
                     <div class="col-md-6">
                         <label class="col-form-label font-weight-bold text-secondary">Adscore</label>
@@ -102,12 +103,13 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
             <div class="modal-body">
                 <div class="form-group row">
                     <div class="col-md-6">
+                        <input type="hidden" id="CategoryId" />
                         <label class="col-form-label font-weight-bold text-secondary">Category Name</label>
-                        <div id="CategoryName"></div>
+                        <input type="text" name="Name" id="edit-Name" class="form-control" />
                     </div>
                     <div class="col-md-6">
                         <label class="col-form-label font-weight-bold text-secondary">Item Type</label>
-                        <select name="ProductType" class="form-control" id="CProductType">
+                        <select name="ProductType" class="form-control" id="edit-productTypeId">
                             <option value="0">Select</option>
                             <option value="4">Product</option>
                             <option value="1">Dish</option>
@@ -115,16 +117,16 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
                             <option value="2">FMCG</option>
                             <option value="5">Service</option>
                         </select>
+                        <input type="hidden" id="edit-productTypeName" name="ProductTypeName" />
                     </div>
                     <div class="col-md-6">
                         <label class="col-form-label font-weight-bold text-secondary">Adscore</label>
-                        <div id="CategoryNo"></div>
+                        <input type="number" min="1" name="OrderNo" id="edit-OrderNo" class="form-control" />
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <input type="button" id="Edit" name="Edit" value="Save" class="btn btn-success float-right Edit" />
-                <input type="hidden" name="CategoryCode" id="CategoryCode" data-dismiss="modal" />
             </div>
         </div>
     </div>
@@ -136,7 +138,14 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
-
+            $('#ProductTypeId').on('change', function () {
+                let selectedType = $(this).find("option:selected").text();
+                $('[name="ProductTypeName"]').val(selectedType);
+            });
+            $('#edit-ProductTypeId').on('change', function () {
+                let selectedType = $(this).find("option:selected").text();
+                $('#edit-ProductTypeName').val(selectedType);
+            });
             var t = $('#Category-list').DataTable({
                 "dom": "<'row'<'col-sm-6'f>>" +
                     "<'row'<'col-sm-5'i><'col-sm-3'l><'col-sm-4'p>>" +
@@ -164,17 +173,20 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
             }).draw();
 
             $('#Create').on('click', function () {
-                var name = $('#Name').val();
-                var type = $('#ProductType').val();
-                var orderNo = $('#OrderNo').val();
                 var isValidate = false;
                 var requiredArr = [
                     'Name',
-                    'ProductType'
+                    'ProductTypeId'
                 ];
                 isValidate = ValidateEmptyRequiredFiels(requiredArr);
                 if (isValidate) {
-                    $.getJSON("/Category/Save?name=" + name + "&type=" + type + "&orderNo=" + orderNo, function (data) {
+                    var category = {
+                        Name: $('#Name').val(),
+                        ProductTypeId: $('#ProductTypeId').val(),
+                        ProductTypeName: $('#ProductTypeName').val(),
+                        OrderNo: $('#OrderNo').val()
+                    }
+                    $.post("/Category/Save?", { category: category }, function (data) {
                         if (data.IsAdded == true) {
                             swal({
                                 title: data.message,
@@ -187,7 +199,7 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
                             if (data.message1 != null || data.message1 != "") {
                                 swal(data.message1, "", "warning");
                                 $('#Name').val("");
-                                $('#ProductType').val("");
+                                $('#ProductTypeId').val("");
                                 $('#OrderNo').val("");
                             }
                         }
@@ -196,27 +208,28 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
             });
 
             $(".edit-prompt").click(function () {
-                var code = $(this).attr('data-id');
-                var name = $(this).attr('data-id1');
-                var type = $(this).attr('data-id2');
-                var orderno = $(this).attr('data-id3');
-                $("#CategoryCode").val(code);
-                $("#CategoryName").append("<input type=text name=CName id=CName class=form-control value='" + name + "' />");
-                $("#CategoryNo").append("<input type=number name=COrderNo id=COrderNo class=form-control value='" + orderno + "' />");
-                //$("#Type").append("<select name=CProductType id=CProductType class=form-control><option value=" + type + ">" + type + "</option><option value=Product>Product</option><option value=Dish>Dish</option><option value=Service>Service</option><option value=Medical>Medical</option> <option value=FMCG>FMCG</option></select>");
-                $('#CProductType').val(type);
+                var type = $(this).attr('data-producttypename');
+                alert(type);
+                $("#CategoryId").val($(this).attr('data-id'));
+                $("#edit-Name").val($(this).attr('data-name'));
+                $('#edit-ProductTypeId').val($(this).attr('data-producttypeid'));
+                $('#edit-ProductTypeName').val($(this).attr('data-producttypename'));
+                $('#edit-OrderNo').val($(this).attr('data-orderno'));
             });
 
             $(".Edit").click(function () {
-                var Code = $("#CategoryCode").val();
-                var categoryName = $("#CName").val();
-                var productType = $("#CProductType").val();
-                var orderNo = $("#COrderNo").val();
-                if (categoryName == "" || categoryName == null) {
+                var category = {
+                    Id: $('#CategoryId').val(),
+                    Name: $('#edit-Name').val(),
+                    ProductTypeId: $('#edit-ProductTypeId').val(),
+                    ProductTypeName: $('#edit-ProductTypeName').val(),
+                    OrderNo: $('#edit-OrderNo').val()
+                }
+                if ($('#edit-Name').val() == "" || $('#edit-Name').val() == null) {
                     swal("Name is Empty.", "Please Enter a Category Name", "warning");
                 }
-                else if (categoryName != "" || categoryName != null) {
-                    $.getJSON("/Category/Edit", { code: Code, name: categoryName, type: productType, orderNo: orderNo }, function (data) {
+                else {
+                    $.post("/Category/Edit", { categoryModel: category }, function (data) {
                         if (data.message != null || data.message != "") {
                             swal({
                                 title: data.message,
