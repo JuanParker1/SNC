@@ -20,14 +20,14 @@
     @Html.Grid(Model).Columns(columns =>
 {
     columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(20);
-    columns.Add(c => c.CombinationDrugCompound).Titled("Combination").Filterable(true).SetWidth(20);
+    columns.Add(c => c.DrugCompoundDetailName).Titled("Combination").Filterable(true).SetWidth(20);
     columns.Add(c => c.CategoryName).Titled("Category Name").Filterable(true).SetWidth(12);
     columns.Add(c => c.BrandName).Titled("Brand Name").Filterable(true).SetWidth(16);
-    columns.Add(c => c.ProductType).Titled("Item Type").Filterable(true).SetWidth(8);
+    columns.Add(c => c.ProductTypeName).Titled("Item Type").Filterable(true).SetWidth(8);
     columns.Add()
     .Encoded(false)
     .Sanitized(false)
-    .RenderValueAs(o => Html.ActionLink("Edit", "MedicalEdit", new { code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code) }, new { @class = "btn btn-sm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
-                   + Html.ActionLink("Delete", "MedicalDelete", new { code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code) }, new { @class = "btn  btn-sm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(13);
+    .RenderValueAs(o => Html.ActionLink("Edit", "MedicalEdit", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-sm btn-warning mr-1"}).ToHtmlString()
+                   + Html.ActionLink("Delete", "MedicalDelete", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn  btn-sm btn-danger"}).ToHtmlString()).Titled("Action").SetWidth(13);
 }).WithPaging(20).Sortable(true)
 </div>
