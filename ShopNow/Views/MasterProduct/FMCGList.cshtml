@@ -20,14 +20,13 @@
     @Html.Grid(Model).Columns(columns =>
 {
     columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(20);
-    //columns.Add(c => c.CombinationDrugCompound).Titled("Combination").Filterable(true).SetWidth(10);
     columns.Add(c => c.CategoryName).Titled("Category Name").Filterable(true).SetWidth(10);
     columns.Add(c => c.BrandName).Titled("Brand Name").Filterable(true).SetWidth(10);
-    columns.Add(c => c.ProductType).Titled("Item Type").SetWidth(5);
+    columns.Add(c => c.ProductTypeName).Titled("Item Type").SetWidth(5);
     columns.Add()
     .Encoded(false)
     .Sanitized(false)
-    .RenderValueAs(o => Html.ActionLink("Edit", "FMCGEdit", new { code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code) }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
-                   + Html.ActionLink("Delete", "FMCGDelete", new { code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code) }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(10);
+    .RenderValueAs(o => Html.ActionLink("Edit", "FMCGEdit", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-warning mr-1"}).ToHtmlString()
+                   + Html.ActionLink("Delete", "FMCGDelete", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn  btn-vsm btn-danger" }).ToHtmlString()).Titled("Action").SetWidth(10);
 }).WithPaging(20).Sortable(true)
 </div>

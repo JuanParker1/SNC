@@ -63,6 +63,7 @@ namespace ShopNow.Controllers
             _mapper = _mapperConfiguration.CreateMapper();
         }
 
+        // All MasterItem List
         [AccessPolicy(PageCode = "SHNMPRL001")]
         public ActionResult List()
         {
@@ -76,7 +77,20 @@ namespace ShopNow.Controllers
             var List = (from mp in _db.MasterProducts select mp).OrderBy(mp => mp.Name).Where(mp => mp.Status == 0).ToList();
             return View(List);
         }
-        
+
+        // All MasterItem Delete
+        [AccessPolicy(PageCode = "SHNMPRD004")]
+        public ActionResult Delete(string Id)
+        {
+            var dCode = AdminHelpers.DCodeInt(Id);
+            var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dCode);
+            master.Status = 2;
+            _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
+            _db.SaveChanges();
+            return RedirectToAction("List");
+        }
+
+        // Dish Create
         [AccessPolicy(PageCode = "SHNMPRFC015")]
         public ActionResult FoodCreate()
         {
@@ -145,7 +159,6 @@ namespace ShopNow.Controllers
             var productDishaddOn = new ProductDishAddOn();
             foreach (var s in addOns)
             {
-               // productDishaddOn.Code = _generatedCode("PDA");
                 productDishaddOn.AddOnItemName = s.AddOnItemName;
                 productDishaddOn.MasterProductId = prod.Id;
                 productDishaddOn.MasterProductName = prod.Name;
@@ -173,10 +186,11 @@ namespace ShopNow.Controllers
             return View();
         }
 
+        // Dish Update
         [AccessPolicy(PageCode = "SHNMPRFE016")]
-        public ActionResult FoodEdit(int id)
+        public ActionResult FoodEdit(string Id)
         {
-            var dCode = AdminHelpers.DCodeInt(id.ToString());
+            var dCode = AdminHelpers.DCodeInt(Id);
             Session["AddOns"] = new List<MasterAddOnsCreateViewModel>();
             var addOns = new List<MasterAddOnsCreateViewModel>();
             if (string.IsNullOrEmpty(dCode.ToString()))
@@ -254,7 +268,6 @@ namespace ShopNow.Controllers
             {
                 if (s.Id == 0)
                 {
-                   // productDishaddOn.Code = _generatedCode("PDA");
                     productDishaddOn.AddOnItemName = s.AddOnItemName;
                     productDishaddOn.MasterProductId = prod.Id;
                     productDishaddOn.MasterProductName = prod.Name;
@@ -283,6 +296,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("FoodList", "MasterProduct");
         }
 
+        // Dish List
         [AccessPolicy(PageCode = "SHNMPRFL017")]
         public ActionResult FoodList()
         {
@@ -296,501 +310,19 @@ namespace ShopNow.Controllers
             return View(List);
         }
 
-        [AccessPolicy(PageCode = "SHNMPRC002")]
-        public ActionResult Create()
+        // Dish Delete  -- return Dish List page
+        [AccessPolicy(PageCode = "")]
+        public ActionResult FoodDelete(string Id)
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [ValidateInput(false)]
-        [AccessPolicy(PageCode = "SHNMPRC002")]
-        public ActionResult Create(MasterProductCreateEditViewModel model)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            var prod = _mapper.Map<MasterProductCreateEditViewModel, MasterProduct>(model);
-            prod.CreatedBy = user.Name;
-            prod.UpdatedBy = user.Name;
-            var name = _db.MasterProducts.FirstOrDefault(i => i.Name == model.Name && i.Status == 0 && i.ProductTypeId == 1);
-            try
-            {
-                //if (model.CategoryCode != null)
-                //{
-                //    prod.CategoryCode = String.Join(",", model.CategoryCode);
-                //    StringBuilder sb = new StringBuilder();
-                //    foreach (var s in model.CategoryCode)
-                //    {
-                //        var cat = _db.Categories.FirstOrDefault(i => i.Code == s);
-                //        sb.Append(cat.Name);
-                //        sb.Append(",");
-                //    }
-                //    if (sb.Length >= 1)
-                //    {
-                //         model.CategoryName = sb.ToString().Remove(sb.Length - 1);
-                //        prod.CategoryName = model.CategoryName;
-                //    }
-                //    else
-                //    {
-                //        model.CategoryName = sb.ToString();
-                //        prod.CategoryName = model.CategoryName;
-                //    }
-                //}
-                if (model.ProductImage1 != null)
-                {
-                    uc.UploadFiles(model.ProductImage1.InputStream, prod.Id + "_" + model.ProductImage1.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath1 = prod.Id + "_" + model.ProductImage1.FileName.Replace(" ", "");
-                }
-
-                //ProductImage2
-                //if (model.ProductImage2 != null)
-                //{
-                //    uc.UploadFiles(model.ProductImage2.InputStream, prod.Code + "_" + model.ProductImage2.FileName, accesskey, secretkey, "image");
-                //    prod.ImagePath2 = prod.Code + "_" + model.ProductImage2.FileName.Replace(" ", "");
-                //}
-
-                //ProductImage3
-                //if (model.ProductImage3 != null)
-                //{
-                //    uc.UploadFiles(model.ProductImage3.InputStream, prod.Code + "_" + model.ProductImage3.FileName, accesskey, secretkey, "image");
-                //    prod.ImagePath3 = prod.Code + "_" + model.ProductImage3.FileName.Replace(" ", "");
-                //}
-
-                //ProductImage4
-                //if (model.ProductImage4 != null)
-                //{
-                //    uc.UploadFiles(model.ProductImage4.InputStream, prod.Code + "_" + model.ProductImage4.FileName, accesskey, secretkey, "image");
-                //    prod.ImagePath4 = prod.Code + "_" + model.ProductImage4.FileName.Replace(" ", "");
-                //}
-
-                //ProductImage5
-                //if (model.ProductImage5 != null)
-                //{
-                //    uc.UploadFiles(model.ProductImage5.InputStream, prod.Code + "_" + model.ProductImage5.FileName, accesskey, secretkey, "image");
-                //    prod.ImagePath5 = prod.Code + "_" + model.ProductImage5.FileName.Replace(" ", "");
-                //}
-                if (name == null)
-                {
-                    // MasterProduct.Add(prod);
-                    prod.DateEncoded = DateTime.Now;
-                    prod.DateUpdated = DateTime.Now;
-                    prod.Status = 0;
-                    _db.MasterProducts.Add(prod);
-                    _db.SaveChanges();
-                    ViewBag.Message = model.Name + " Saved Successfully!";
-                }
-                else
-                {
-                    ViewBag.ErrorMessage = model.Name + " Already Exist";
-                }
-            }
-            catch (AmazonS3Exception amazonS3Exception)
-            {
-                if (amazonS3Exception.ErrorCode != null &&
-                    (amazonS3Exception.ErrorCode.Equals("InvalidAccessKeyId")
-                    ||
-                    amazonS3Exception.ErrorCode.Equals("InvalidSecurity")))
-                {
-                    ViewBag.Message = "Check the provided AWS Credentials.";
-                }
-                else
-                {
-                    ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
-                }
-            }
-            return View();
-        }
-
-
-        [AccessPolicy(PageCode = "SHNMPRE003")]
-        public ActionResult Edit(int id)
-        {
-            var dCode = AdminHelpers.DCodeInt(id.ToString());
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            if (string.IsNullOrEmpty(dCode.ToString()))
-                return HttpNotFound();
-            var masterProduct = _db.MasterProducts.FirstOrDefault(i => i.Id == dCode);// MasterProduct.Get(dCode);
-            var model = _mapper.Map<MasterProduct, MasterProductCreateEditViewModel>(masterProduct);
-            //if (masterProduct != null)
-            //{
-            //    model.CategoryCode1 = masterProduct.CategoryCode;
-            //}
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [ValidateInput(false)]
-        [AccessPolicy(PageCode = "SHNMPRE003")]
-        public ActionResult Edit(MasterProductCreateEditViewModel model)
-        {
-            int errorCode = 0;
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            try
-            {
-                var prod = _db.MasterProducts.FirstOrDefault(i => i.Id == model.Id);
-                _mapper.Map(model, prod);
-                prod.Name = model.Name;
-                prod.ProductTypeId = model.ProductTypeId;
-                prod.UpdatedBy = user.Name;
-                prod.DateUpdated = DateTime.Now;
-                //if (model.CategoryCode != null)
-                //{
-                //    prod.CategoryCode = String.Join(",", model.CategoryCode);
-                //    StringBuilder sb = new StringBuilder();
-                //    foreach (var s in model.CategoryCode)
-                //    {
-                //        var cat = _db.Categories.FirstOrDefault(i => i.Code == s);
-                //        if (cat != null)
-                //        {
-                //            sb.Append(cat.Name);
-                //            sb.Append(",");
-                //        }
-                //    }
-                //    if (sb.Length >= 1)
-                //    {
-                //        model.CategoryName = sb.ToString().Remove(sb.Length - 1);
-                //        prod.CategoryName = model.CategoryName;
-                //    }
-                //    else
-                //    {
-                //        model.CategoryName = sb.ToString();
-                //        prod.CategoryName = model.CategoryName;
-                //    }
-                //}
-                prod.DateUpdated = DateTime.Now;
-                _db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
-                _db.SaveChanges();
-
-              
-                try
-                {
-                    var productImage = _db.MasterProducts.FirstOrDefault(i => i.Id == prod.Id);
-                    //ProductImage1
-                    if (model.ProductImage1 != null)
-                    {
-                        uc.UploadFiles(model.ProductImage1.InputStream, prod.Id + "_" + model.ProductImage1.FileName, accesskey, secretkey, "image");
-                        productImage.ImagePath1 = prod.Id + "_" + model.ProductImage1.FileName.Replace(" ", "");
-                    }
-
-                    //ProductImage2
-                    if (model.ProductImage2 != null)
-                    {
-                        uc.UploadFiles(model.ProductImage2.InputStream, prod.Id + "_" + model.ProductImage2.FileName, accesskey, secretkey, "image");
-                        productImage.ImagePath2 = prod.Id + "_" + model.ProductImage2.FileName.Replace(" ", "");
-                    }
-
-                    //ProductImage3
-                    if (model.ProductImage3 != null)
-                    {
-                        uc.UploadFiles(model.ProductImage3.InputStream, prod.Id + "_" + model.ProductImage3.FileName, accesskey, secretkey, "image");
-                        productImage.ImagePath3 = prod.Id + "_" + model.ProductImage3.FileName.Replace(" ", "");
-                    }
-
-                    //ProductImage4
-                    if (model.ProductImage4 != null)
-                    {
-                        uc.UploadFiles(model.ProductImage4.InputStream, prod.Id + "_" + model.ProductImage4.FileName, accesskey, secretkey, "image");
-                        productImage.ImagePath4 = prod.Id + "_" + model.ProductImage4.FileName.Replace(" ", "");
-                    }
-
-                    //ProductImage5
-                    if (model.ProductImage5 != null)
-                    {
-                        uc.UploadFiles(model.ProductImage5.InputStream, prod.Id + "_" + model.ProductImage5.FileName, accesskey, secretkey, "image");
-                        productImage.ImagePath5 = prod.Id + "_" + model.ProductImage5.FileName.Replace(" ", "");
-                    }
-                    if (model.ProductImage1 != null || model.ProductImage2 != null || model.ProductImage3 != null || model.ProductImage4 != null || model.ProductImage5 != null)
-                    {
-                        productImage.DateUpdated = DateTime.Now;
-                        _db.Entry(productImage).State = System.Data.Entity.EntityState.Modified;
-                        _db.SaveChanges();
-
-                        //MasterProduct.Edit(productImage, out int error);
-                    }
-                }
-                catch (AmazonS3Exception amazonS3Exception)
-                {
-                    if (amazonS3Exception.ErrorCode != null &&
-                        (amazonS3Exception.ErrorCode.Equals("InvalidAccessKeyId")
-                        ||
-                        amazonS3Exception.ErrorCode.Equals("InvalidSecurity")))
-                    {
-                        ViewBag.Message = "Check the provided AWS Credentials.";
-                    }
-                    else
-                    {
-                        ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
-                    }
-                }
-                return RedirectToAction("DishList");
-            }
-            catch (Exception ex)
-            {
-                return HttpNotFound("Error Code: " + errorCode);
-            }
-        }
-
-        [AccessPolicy(PageCode = "SHNMPRD004")]
-        public ActionResult Delete(int id)
-        {
-            var dCode = AdminHelpers.DCodeInt(id.ToString());
+            var dCode = AdminHelpers.DCodeInt(Id);
             var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dCode);
             master.Status = 2;
             _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
             _db.SaveChanges();
-            return RedirectToAction("List");
+            return RedirectToAction("FoodList");
         }
 
-        [AccessPolicy(PageCode = "SHNMPRI005")]
-        public ActionResult Index()
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNMPRI005")]
-        public ActionResult Index(HttpPostedFileBase upload, MainPageModel model)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            DataTable dt = new DataTable();
-
-            if (model.button == "upload")
-            {
-                string path = Server.MapPath("~/Content/ExcelUpload/" + upload.FileName);
-                upload.SaveAs(path);
-                if (ModelState.IsValid)
-                {
-                    if (upload != null && upload.ContentLength > 0)
-                    {
-                        Stream stream = upload.InputStream;
-                        IExcelDataReader reader = null;
-
-                        if (upload.FileName.EndsWith(".xls"))
-                        {
-                            reader = ExcelReaderFactory.CreateBinaryReader(stream);
-                        }
-                        else if (upload.FileName.EndsWith(".xlsx"))
-                        {
-                            reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
-                        }
-                        else
-                        {
-                            ModelState.AddModelError("File", "This file format is not supported");
-                            return View();
-                        }
-                        DataSet result = reader.AsDataSet(new ExcelDataSetConfiguration()
-                        {
-                            ConfigureDataTable = (_) => new ExcelDataTableConfiguration()
-                            {
-                                UseHeaderRow = true
-                            }
-                        });
-
-                        // reader.IsFirstRowAsColumnNames = true;
-
-                        reader.Close();
-
-                        model.DataTable = result.Tables[0];
-                        model.Filename = upload.FileName;
-                        return View(model);
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("File", "Please Upload Your file");
-                    }
-
-                }
-            }
-            else
-            {
-                string path = Server.MapPath("~/Content/ExcelUpload/" + model.Filename);
-                string excelConnectionString = @"Provider='Microsoft.ACE.OLEDB.12.0';Data Source='" + path + "';Extended Properties='Excel 12.0 Xml;IMEX=1'";
-
-                OleDbConnection excelConnection = new OleDbConnection(excelConnectionString);
-                using (OleDbConnection connExcel = new OleDbConnection(excelConnectionString))
-                {
-                    using (OleDbCommand cmdExcel = new OleDbCommand())
-                    {
-                        using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
-                        {
-                            cmdExcel.Connection = connExcel;
-
-                            //Get the name of First Sheet.
-                            connExcel.Open();
-                            DataTable dtExcelSchema;
-                            dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-                            string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
-                            connExcel.Close();
-
-                            //Read Data from First Sheet.
-                            connExcel.Open();
-                            cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
-                            odaExcel.SelectCommand = cmdExcel;
-                            odaExcel.Fill(dt);
-                            connExcel.Close();
-                        }
-                    }
-                }
-
-                // Insert records to database table.
-                // MainPageModel entities = new MainPageModel();
-                foreach (DataRow row in dt.Rows)
-                {
-                    var masterProduct = _db.MasterProducts.FirstOrDefault(i => i.Name == row[model.Name].ToString() && i.Status == 0);// MasterProduct.GetName(row[model.Name].ToString());
-                    if (masterProduct == null)
-                    {
-                        _db.MasterProducts.Add(new MasterProduct
-                        {
-                            Name = row[model.Name].ToString(),
-                           // Code = _generatedCode("MPR"),
-                            BrandId = CheckBrand(row[model.BrandName].ToString(), model.ProductTypeId),
-                            BrandName = row[model.BrandName].ToString(),
-                            CategoryId = CheckCategory(row[model.CategoryName].ToString(), model.ProductTypeId),
-                            CategoryName = row[model.CategoryName].ToString(),
-                            ShortDescription = row[model.ShortDescription].ToString(),
-                            LongDescription = row[model.LongDescription].ToString(),
-                            Customisation = Convert.ToBoolean(row[model.Customisation]),
-                            ColorCode = row[model.ColorCode].ToString(),
-                            Price = Convert.ToDouble(row[model.Price]),
-                            ImagePath1 = row[model.ImagePath1].ToString(),
-                            ImagePath2 = row[model.ImagePath2].ToString(),
-                            ImagePath3 = row[model.ImagePath3].ToString(),
-                            ImagePath4 = row[model.ImagePath4].ToString(),
-                            ImagePath5 = row[model.ImagePath5].ToString(),
-                            ProductTypeId = model.ProductTypeId,
-                            Status = 0,
-                            CreatedBy = user.Name,
-                            UpdatedBy = user.Name,
-                            DateEncoded = DateTime.Now,
-                            DateUpdated = DateTime.Now,
-                        });
-                        _db.SaveChanges();
-                    }
-                }
-            }
-
-            return View();
-        }
-
-        public int CheckBrand(string BrandName, int ProductTypeId)
-        {
-            var brand = _db.Brands.FirstOrDefault(i => i.Name == BrandName && i.Status == 0);// Brand.GetName(BrandName);
-            if (brand != null)
-            {
-                return brand.Id;
-            }
-            else
-            {
-                Brand br = new Brand();
-                br.Name = BrandName;
-                br.ProductTypeId = ProductTypeId;
-                //br.Code = _generatedCode("BRA");
-                br.Status = 0;
-                br.DateEncoded = DateTime.Now;
-                br.DateUpdated = DateTime.Now;
-                _db.Brands.Add(br);
-                _db.SaveChanges();
-                //br.Code = Brand.Add(br, out int error);
-                return br.Id;
-            }
-
-        }
-
-
-        public int CheckSubCategory(int CategoryId, string CategoryName, string SubCategoryName1, int ProductTypeId)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            var subCategory = _db.SubCategories.FirstOrDefault(i => i.Name == SubCategoryName1 && i.Status == 0);// SubCategory.GetName(SubCategoryName1);
-            if (subCategory != null)
-            {
-
-                return subCategory.Id;
-            }
-            else
-            {
-                SubCategory sub = new SubCategory();
-                sub.Name = SubCategoryName1;
-                sub.CategoryId = CategoryId;
-                sub.CategoryName = CategoryName;
-                sub.ProductType = ProductTypeId.ToString();
-                sub.CreatedBy = user.Name;
-                sub.UpdatedBy = user.Name;
-                //sub.Code = _generatedCode("SCT");
-                sub.Status = 0;
-                sub.DateEncoded = DateTime.Now;
-                sub.DateUpdated = DateTime.Now;
-                _db.SubCategories.Add(sub);
-                _db.SaveChanges();
-                //sub.Code = SubCategory.Add(sub, out int error);
-                return sub.Id;
-            }
-
-        }
-
-
-        public int CheckNextSubCategory(int subCategoryCode1, string SubCategoryName1, string SubCategoryName2, int ProductTypeId)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-
-            var nextSubCategory = _db.NextSubCategories.FirstOrDefault(i => i.Name == SubCategoryName2 && i.Status == 0);// NextSubCategory.GetName(SubCategoryName2);
-            if (nextSubCategory != null)
-            {
-
-                return nextSubCategory.Id;
-            }
-            else
-            {
-                NextSubCategory sub = new NextSubCategory();
-                sub.Name = SubCategoryName2;
-                sub.SubCategoryId = subCategoryCode1;
-                sub.SubCategoryName = SubCategoryName1;
-                sub.ProductTypeId = ProductTypeId;
-                sub.CreatedBy = user.Name;
-                sub.UpdatedBy = user.Name;
-               // sub.Code = _generatedCode("NSC");
-                sub.DateEncoded = DateTime.Now;
-                sub.DateUpdated = DateTime.Now;
-                sub.Status = 0;
-                _db.NextSubCategories.Add(sub);
-                _db.SaveChanges();
-                //sub.Code = NextSubCategory.Add(sub, out int error);
-                return sub.Id;
-            }
-
-        }
-
-        public int CheckCategory(string CategoryName, int ProductTypeId)
-        {
-            var category = _db.Categories.FirstOrDefault(i => i.Name == CategoryName && i.Status == 0);// Category.GetName(CategoryName);
-            if (category != null)
-            {
-
-                return category.Id;
-            }
-            else
-            {
-                Category cat = new Category();
-                cat.Name = CategoryName;
-                cat.ProductTypeId = ProductTypeId;
-                //cat.Code = _generatedCode("CAT");
-                cat.Status = 0;
-                cat.DateEncoded = DateTime.Now;
-                cat.DateUpdated = DateTime.Now;
-                _db.Categories.Add(cat);
-                _db.SaveChanges();
-                return cat.Id;
-            }
-
-        }
-
+        // Electronic List
         [AccessPolicy(PageCode = "SHNMPREL018")]
         public ActionResult ElectronicList()
         {
@@ -804,6 +336,7 @@ namespace ShopNow.Controllers
             return View(List);
         }
 
+        // Electronic Create
         [AccessPolicy(PageCode = "SHNMPREC019")]
         public ActionResult ElectronicCreate()
         {
@@ -916,17 +449,17 @@ namespace ShopNow.Controllers
             return View();
         }
 
+        // Electronic Update
         [AccessPolicy(PageCode = "SHNMPREE020")]
-        public ActionResult ElectronicEdit(int id)
+        public ActionResult ElectronicEdit(string Id)
         {
-            var dCode = AdminHelpers.DCodeInt(id.ToString());
+            var dCode = AdminHelpers.DCodeInt(Id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             if (string.IsNullOrEmpty(dCode.ToString()))
                 return HttpNotFound();
-            var masterProduct = _db.MasterProducts.FirstOrDefault(i => i.Id == dCode);// MasterProduct.Get(dCode);
+            var masterProduct = _db.MasterProducts.FirstOrDefault(i => i.Id == dCode);
             var model = _mapper.Map<MasterProduct, MasterProductCreateEditViewModel>(masterProduct);
-          //  model.CategoryCode1 = masterProduct.CategoryId;
             return View(model);
         }
 
@@ -936,108 +469,101 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNMPREE020")]
         public ActionResult ElectronicEdit(MasterProductCreateEditViewModel model)
         {
-            int errorCode = 0;
             var user = ((Helpers.Sessions.User)Session["USER"]);
+            var prod = _db.MasterProducts.FirstOrDefault(i => i.Id == model.Id);
+            _mapper.Map(model, prod);
+            prod.Name = model.Name;
+            prod.ProductTypeId = model.ProductTypeId;
+            prod.UpdatedBy = user.Name;
+            prod.DateUpdated = DateTime.Now;
             try
             {
-                var prod = _db.MasterProducts.FirstOrDefault(i => i.Id == model.Id);// MasterProduct.Get(model.Code);
-                _mapper.Map(model, prod);
-                prod.Name = model.Name;
-                prod.ProductTypeId = model.ProductTypeId;
-                prod.UpdatedBy = user.Name;
+                //if (model.CategoryCode != null)
+                //{
+                //    prod.CategoryCode = String.Join(",", model.CategoryCode);
+                //    StringBuilder sb = new StringBuilder();
+                //    foreach (var s in model.CategoryCode)
+                //    {
+                //        var cat = _db.Categories.FirstOrDefault(i => i.Code == s);// Category.Get(s);
+                //        if (cat != null)
+                //        {
+                //            sb.Append(cat.Name);
+                //            sb.Append(",");
+                //        }
+                //    }
+                //    if (sb.Length >= 1)
+                //    {
+                //        model.CategoryName = sb.ToString().Remove(sb.Length - 1);
+                //        prod.CategoryName = model.CategoryName;
+                //    }
+                //    else
+                //    {
+                //        model.CategoryName = sb.ToString();
+                //        prod.CategoryName = model.CategoryName;
+                //    }
+                //}
+
+                //ProductImage1
+                if (model.ProductImage1 != null)
+                {
+                    uc.UploadFiles(model.ProductImage1.InputStream, prod.Id + "_" + model.ProductImage1.FileName, accesskey, secretkey, "image");
+                    prod.ImagePath1 = prod.Id + "_" + model.ProductImage1.FileName.Replace(" ", "");
+                }
+
+                //ProductImage2
+                if (model.ProductImage2 != null)
+                {
+                    uc.UploadFiles(model.ProductImage2.InputStream, prod.Id + "_" + model.ProductImage2.FileName, accesskey, secretkey, "image");
+                    prod.ImagePath2 = prod.Id + "_" + model.ProductImage2.FileName.Replace(" ", "");
+                }
+
+                //ProductImage3
+                if (model.ProductImage3 != null)
+                {
+                    uc.UploadFiles(model.ProductImage3.InputStream, prod.Id + "_" + model.ProductImage3.FileName, accesskey, secretkey, "image");
+                    prod.ImagePath3 = prod.Id + "_" + model.ProductImage3.FileName.Replace(" ", "");
+                }
+
+                //ProductImage4
+                if (model.ProductImage4 != null)
+                {
+                    uc.UploadFiles(model.ProductImage4.InputStream, prod.Id + "_" + model.ProductImage4.FileName, accesskey, secretkey, "image");
+                    prod.ImagePath4 = prod.Id + "_" + model.ProductImage4.FileName.Replace(" ", "");
+                }
+
+                //ProductImage5
+                if (model.ProductImage5 != null)
+                {
+                    uc.UploadFiles(model.ProductImage5.InputStream, prod.Id + "_" + model.ProductImage5.FileName, accesskey, secretkey, "image");
+                    prod.ImagePath5 = prod.Id + "_" + model.ProductImage5.FileName.Replace(" ", "");
+                }
                 prod.DateUpdated = DateTime.Now;
-                try
-                {
-                    //if (model.CategoryCode != null)
-                    //{
-                    //    prod.CategoryCode = String.Join(",", model.CategoryCode);
-                    //    StringBuilder sb = new StringBuilder();
-                    //    foreach (var s in model.CategoryCode)
-                    //    {
-                    //        var cat = _db.Categories.FirstOrDefault(i => i.Code == s);// Category.Get(s);
-                    //        if (cat != null)
-                    //        {
-                    //            sb.Append(cat.Name);
-                    //            sb.Append(",");
-                    //        }
-                    //    }
-                    //    if (sb.Length >= 1)
-                    //    {
-                    //        model.CategoryName = sb.ToString().Remove(sb.Length - 1);
-                    //        prod.CategoryName = model.CategoryName;
-                    //    }
-                    //    else
-                    //    {
-                    //        model.CategoryName = sb.ToString();
-                    //        prod.CategoryName = model.CategoryName;
-                    //    }
-                    //}
-                
-                    //ProductImage1
-                    if (model.ProductImage1 != null)
-                    {
-                        uc.UploadFiles(model.ProductImage1.InputStream, prod.Id + "_" + model.ProductImage1.FileName, accesskey, secretkey, "image");
-                        prod.ImagePath1 = prod.Id + "_" + model.ProductImage1.FileName.Replace(" ", "");
-                    }
-
-                    //ProductImage2
-                    if (model.ProductImage2 != null)
-                    {
-                        uc.UploadFiles(model.ProductImage2.InputStream, prod.Id + "_" + model.ProductImage2.FileName, accesskey, secretkey, "image");
-                        prod.ImagePath2 = prod.Id + "_" + model.ProductImage2.FileName.Replace(" ", "");
-                    }
-
-                    //ProductImage3
-                    if (model.ProductImage3 != null)
-                    {
-                        uc.UploadFiles(model.ProductImage3.InputStream, prod.Id + "_" + model.ProductImage3.FileName, accesskey, secretkey, "image");
-                        prod.ImagePath3 = prod.Id + "_" + model.ProductImage3.FileName.Replace(" ", "");
-                    }
-
-                    //ProductImage4
-                    if (model.ProductImage4 != null)
-                    {
-                        uc.UploadFiles(model.ProductImage4.InputStream, prod.Id + "_" + model.ProductImage4.FileName, accesskey, secretkey, "image");
-                        prod.ImagePath4 = prod.Id + "_" + model.ProductImage4.FileName.Replace(" ", "");
-                    }
-
-                    //ProductImage5
-                    if (model.ProductImage5 != null)
-                    {
-                        uc.UploadFiles(model.ProductImage5.InputStream, prod.Id + "_" + model.ProductImage5.FileName, accesskey, secretkey, "image");
-                        prod.ImagePath5 = prod.Id + "_" + model.ProductImage5.FileName.Replace(" ", "");
-                    }
-                    prod.DateUpdated = DateTime.Now;
-                    _db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
-                    _db.SaveChanges();
-                    //  MasterProduct.Edit(prod, out errorCode);
-                }
-                catch (AmazonS3Exception amazonS3Exception)
-                {
-                    if (amazonS3Exception.ErrorCode != null &&
-                        (amazonS3Exception.ErrorCode.Equals("InvalidAccessKeyId")
-                        ||
-                        amazonS3Exception.ErrorCode.Equals("InvalidSecurity")))
-                    {
-                        ViewBag.Message = "Check the provided AWS Credentials.";
-                    }
-                    else
-                    {
-                        ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
-                    }
-                }
-                return RedirectToAction("List");
+                _db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
+                _db.SaveChanges();
+                //  MasterProduct.Edit(prod, out errorCode);
             }
-            catch (Exception ex)
+            catch (AmazonS3Exception amazonS3Exception)
             {
-                return HttpNotFound("Error Code: " + errorCode);
+                if (amazonS3Exception.ErrorCode != null &&
+                    (amazonS3Exception.ErrorCode.Equals("InvalidAccessKeyId")
+                    ||
+                    amazonS3Exception.ErrorCode.Equals("InvalidSecurity")))
+                {
+                    ViewBag.Message = "Check the provided AWS Credentials.";
+                }
+                else
+                {
+                    ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
+                }
             }
+            return RedirectToAction("List");
         }
 
+        // Electronic Delete
         [AccessPolicy(PageCode = "SHNMPRED021")]
-        public ActionResult ElectronicDelete(int id)
+        public ActionResult ElectronicDelete(string Id)
         {
-            var dCode = AdminHelpers.DCodeInt(id.ToString());
+            var dCode = AdminHelpers.DCodeInt(Id);
             var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dCode);// MasterProduct.Get(dCode);
             master.Status = 2;
             _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
@@ -1045,6 +571,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("List");
         }
 
+        // Medical List
         [AccessPolicy(PageCode = "SHNMPRML006")]
         public ActionResult MedicalList()
         {
@@ -1058,6 +585,7 @@ namespace ShopNow.Controllers
             return View(List);
         }
 
+        // Medical Create
         [AccessPolicy(PageCode = "SHNMPRMC007")]
         public ActionResult MedicalCreate()
         {
@@ -1195,10 +723,11 @@ namespace ShopNow.Controllers
             return View();
         }
 
+        // Medical Update
         [AccessPolicy(PageCode = "SHNMPRME008")]
-        public ActionResult MedicalEdit(int id)
+        public ActionResult MedicalEdit(string Id)
         {
-            var dCode = AdminHelpers.DCodeInt(id.ToString());
+            var dCode = AdminHelpers.DCodeInt(Id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             if (string.IsNullOrEmpty(dCode.ToString()))
@@ -1215,8 +744,6 @@ namespace ShopNow.Controllers
                 model.ImagePath4 = model.ImagePath4.Replace("%", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
             if (model.ImagePath5 != null)
                 model.ImagePath5 = model.ImagePath5.Replace("%", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-            //model.DrugCompoundDetailCode1 = masterProduct.DrugCompoundDetailCode;
-            //model.CategoryCode1 = masterProduct.CategoryCode;
             return View(model);
         }
 
@@ -1356,17 +883,19 @@ namespace ShopNow.Controllers
 
         }
 
+        // Medical Update
         [AccessPolicy(PageCode = "SHNMPRMD009")]
-        public ActionResult MedicalDelete(int id)
+        public ActionResult MedicalDelete(string Id)
         {
-            var dCode = AdminHelpers.DCodeInt(id.ToString());
-            var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dCode);// MasterProduct.Get(dCode);
+            var dCode = AdminHelpers.DCodeInt(Id);
+            var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dCode);
             master.Status = 2;
             _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
             _db.SaveChanges();
             return RedirectToAction("MedicalList");
         }
 
+        // Upload Medical MasterItems
         [AccessPolicy(PageCode = "SHNMPRMI010")]
         public ActionResult MedicalIndex()
         {
@@ -1631,6 +1160,7 @@ namespace ShopNow.Controllers
 
         }
 
+        // Item Mapping
         [AccessPolicy(PageCode = "SHNMPRIM011")]
         public ActionResult ItemMapping()
         {
@@ -1851,6 +1381,7 @@ namespace ShopNow.Controllers
             return Json(new { results, shopId }, JsonRequestBehavior.AllowGet);
         }
 
+        // Upload FMCG MasterItems
         [AccessPolicy(PageCode = "SHNMPRI005")]
         public ActionResult GroceryEntry()
         {
@@ -1998,6 +1529,7 @@ namespace ShopNow.Controllers
             return View();
         }
 
+        // FMCG List
         [AccessPolicy(PageCode = "SHNMPRFL022")]
         public ActionResult FMCGList()
         {
@@ -2011,6 +1543,7 @@ namespace ShopNow.Controllers
             return View(List);
         }
 
+        // FMCG Create
         [AccessPolicy(PageCode = "SHNMPRFC023")]
         public ActionResult FMCGCreate()
         {
@@ -2183,11 +1716,12 @@ namespace ShopNow.Controllers
 
             return View();
         }
-   
+
+        // FMCG Update
         [AccessPolicy(PageCode = "SHNMPRFE024")]
-        public ActionResult FMCGEdit(int id)
+        public ActionResult FMCGEdit(string Id)
         {
-            var dCode = AdminHelpers.DCodeInt(id.ToString());
+            var dCode = AdminHelpers.DCodeInt(Id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             if (string.IsNullOrEmpty(dCode.ToString()))
@@ -2204,9 +1738,6 @@ namespace ShopNow.Controllers
             if (masterProduct.ImagePath5 != null)
                 masterProduct.ImagePath5 = masterProduct.ImagePath5.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
             var model = _mapper.Map<MasterProduct, MasterFMCGCreateEditViewModel>(masterProduct);
-            //model.CategoryCode1 = masterProduct.CategoryCode;
-            //model.SubCategoryCode1 = masterProduct.SubCategoryCode;
-            //model.NextSubCategoryCode1 = masterProduct.NextSubCategoryCode;
             return View(model);
         }
 
@@ -2358,15 +1889,44 @@ namespace ShopNow.Controllers
             return RedirectToAction("FMCGList");
         }
 
+        // FMCG Delete
         [AccessPolicy(PageCode = "SHNMPRFD025")]
-        public ActionResult FMCGDelete(int id)
+        public ActionResult FMCGDelete(string Id)
         {
-            var dCode = AdminHelpers.DCodeInt(id.ToString());
+            var dCode = AdminHelpers.DCodeInt(Id);
             var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dCode);
             master.Status = 2;
             _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
             _db.SaveChanges();
             return RedirectToAction("FMCGList");
+        }
+
+        // Json Results
+        [AccessPolicy(PageCode = "SHNMPRIM011")]
+        public JsonResult GetMasterItemSelect2(string q = "")
+        {
+            if (q != "")
+            {
+                var model = _db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId != 1).Select(i => new
+                {
+                    id = i.Id,
+                    text = i.Name,
+                    image = i.ImagePath1,
+                    description = i.LongDescription,
+                    brandname = i.BrandName,
+                    categoryname = i.CategoryName,
+                    price = i.Price,
+                    type = i.ProductTypeName
+                }).Take(50).ToList();
+                return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json("", JsonRequestBehavior.AllowGet);
+            }
+
+
+
         }
 
         [AccessPolicy(PageCode = "SHNMPRIM011")]
@@ -2419,10 +1979,71 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
+        public async Task<JsonResult> GetDishMasterSelect2(string q = "")
+        {
+            var model = await _db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 1).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name,
+                CategoryId = i.CategoryId,
+                CategoryName = i.CategoryName,
+                BrandId = i.BrandId,
+                BrandName = i.BrandName,
+                ShortDescription = i.ShortDescription,
+                LongDescription = i.LongDescription,
+                Customisation = i.Customisation,
+                ColorCode = i.ColorCode,
+                ImagePath = i.ImagePath1,
+                Price = i.Price,
+                ProductType = i.ProductTypeName,
+                ImagePath1 = i.ImagePath1
+            }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        // Brand Select2
         [AccessPolicy(PageCode = "SHNMPRMC007")]
         public async Task<JsonResult> GetMedicalBrandSelect2(string q = "")
         {
             var model = await _db.Brands.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 3).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        [AccessPolicy(PageCode = "")]
+        public async Task<JsonResult> GetFMCGBrandSelect2(string q = "")
+        {
+            var model = await _db.Brands.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 2).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        // Category Select2
+        [AccessPolicy(PageCode = "")]
+        public async Task<JsonResult> GetDishCategorySelect2(string q = "")
+        {
+            var model = await _db.Categories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 1).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        [AccessPolicy(PageCode = "")]
+        public async Task<JsonResult> GetCategorySelect2(string q = "")
+        {
+            var model = await _db.Categories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 2).Select(i => new
             {
                 id = i.Id,
                 text = i.Name
@@ -2443,6 +2064,7 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
+        // Measurement Unit Select2
         [AccessPolicy(PageCode = "SHNMPRMC007")]
         public async Task<JsonResult> GetDrugUnitSelect2(string q = "")
         {
@@ -2451,105 +2073,6 @@ namespace ShopNow.Controllers
                 id = i.Id,
                 text = i.UnitName
             }).OrderBy(i => i.text).ToListAsync();
-
-            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "SHNMPRMC007")]
-        public async Task<JsonResult> GetDrugCompoundDetailSelect2(string q = "")
-        {
-            var model = await _db.DrugCompoundDetails.Where(a => a.AliasName.Contains(q) && a.Status == 0).OrderBy(i => i.AliasName).Select(i => new
-            {
-                id = i.Id,
-                text = i.AliasName
-            }).OrderBy(i => i.text).ToListAsync();
-
-            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "SHNMPRMC007")]
-        public async Task<JsonResult> GetMedicalPackageSelect2(string q = "")
-        {
-            var model = await _db.Packages.Where(a => a.Name.Contains(q) && a.Status == 0 && a.Type == 1).OrderBy(i => i.Name).Select(i => new
-            {
-                id = i.Id,
-                text = i.Name
-            }).OrderBy(i => i.text).ToListAsync();
-
-            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "SHNMPRIM011")]
-        public async Task<JsonResult> GetShopSelect2(string q = "")
-        {
-            var model = await _db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
-            {
-                id = i.Id,
-                text = i.Name
-            }).ToListAsync();
-
-            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "SHNMPRIM011")]
-        public JsonResult GetMasterItemSelect2(string q = "")
-         {
-            if (q != "")
-            {
-                var model = _db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId !=1 ).Select(i => new
-                {
-                    id = i.Id,
-                    text = i.Name,
-                    image = i.ImagePath1,
-                    description = i.LongDescription,
-                    brandname = i.BrandName,
-                    categoryname = i.CategoryName,
-                    price = i.Price,
-                    type = i.ProductTypeName
-                }).Take(50).ToList();
-                return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                return Json("", JsonRequestBehavior.AllowGet);
-            }
-          
-           
-            
-        }
-
-        [AccessPolicy(PageCode = "")]
-        public async Task<JsonResult> GetFMCGBrandSelect2(string q = "")
-        {
-            var model = await _db.Brands.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId==2).Select(i => new
-            {
-                id = i.Id,
-                text = i.Name
-            }).ToListAsync();
-
-            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "")]
-        public async Task<JsonResult> GetDishCategorySelect2(string q = "")
-        {
-            var model = await _db.Categories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 1).Select(i => new
-            {
-                id = i.Id,
-                text = i.Name
-            }).ToListAsync();
-
-            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "")]
-        public async Task<JsonResult> GetFMCGPackageSelect2(string q = "")
-        {
-            var model = await _db.Packages.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.Type == 2).Select(i => new
-            {
-                id = i.Id,
-                text = i.Name
-            }).ToListAsync();
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
@@ -2566,10 +2089,36 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "")]
-        public async Task<JsonResult> GetCategorySelect2(string q = "")
+        // Drug Compound Detail Select2
+        [AccessPolicy(PageCode = "SHNMPRMC007")]
+        public async Task<JsonResult> GetDrugCompoundDetailSelect2(string q = "")
         {
-            var model = await _db.Categories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 2).Select(i => new
+            var model = await _db.DrugCompoundDetails.Where(a => a.AliasName.Contains(q) && a.Status == 0).OrderBy(i => i.AliasName).Select(i => new
+            {
+                id = i.Id,
+                text = i.AliasName
+            }).OrderBy(i => i.text).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        //Package Select2
+        [AccessPolicy(PageCode = "SHNMPRMC007")]
+        public async Task<JsonResult> GetMedicalPackageSelect2(string q = "")
+        {
+            var model = await _db.Packages.Where(a => a.Name.Contains(q) && a.Status == 0 && a.Type == 1).OrderBy(i => i.Name).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).OrderBy(i => i.text).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        [AccessPolicy(PageCode = "")]
+        public async Task<JsonResult> GetFMCGPackageSelect2(string q = "")
+        {
+            var model = await _db.Packages.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.Type == 2).Select(i => new
             {
                 id = i.Id,
                 text = i.Name
@@ -2578,6 +2127,20 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
+        // Shop Select2
+        [AccessPolicy(PageCode = "SHNMPRIM011")]
+        public async Task<JsonResult> GetShopSelect2(string q = "")
+        {
+            var model = await _db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        // Sub Category Select2
         [AccessPolicy(PageCode = "")]
         public async Task<JsonResult> GetSubCategorySelect2(string q = "")
         {
@@ -2590,6 +2153,7 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
+        // NextSub Category Select2
         [AccessPolicy(PageCode = "")]
         public async Task<JsonResult> GetNextSubCategorySelect2(string q = "")
         {
@@ -2601,7 +2165,32 @@ namespace ShopNow.Controllers
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
-       
+
+        // AddonCategory Select2
+        public async Task<JsonResult> GetAddonCategorySelect2(string q = "")
+        {
+            var model = await _db.AddOnCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        // PortionSelect2
+        public async Task<JsonResult> GetPortionSelect2(string q = "")
+        {
+            var model = await _db.Portions.Where(a => a.Name.Contains(q) && a.Status == 0).OrderBy(i => i.Name).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).OrderBy(i => i.text).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        // AddOns
         [HttpPost]
         [AccessPolicy(PageCode = "")]
         public JsonResult AddToAddOns(MasterAddOnsCreateViewModel model)
@@ -2681,51 +2270,249 @@ namespace ShopNow.Controllers
             return Json(false, JsonRequestBehavior.AllowGet);
         }
 
-        public async Task<JsonResult> GetDishMasterSelect2(string q = "")
+        // Upload Master Items
+        [AccessPolicy(PageCode = "SHNMPRI005")]
+        public ActionResult Index()
         {
-            var model = await _db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 1).Select(i => new
-            {
-                id = i.Id,
-                text = i.Name,
-                CategoryId = i.CategoryId,
-                CategoryName = i.CategoryName,
-                BrandId = i.BrandId,
-                BrandName = i.BrandName,
-                ShortDescription = i.ShortDescription,
-                LongDescription = i.LongDescription,
-                Customisation = i.Customisation,
-                ColorCode = i.ColorCode,
-                ImagePath = i.ImagePath1,
-                Price = i.Price,
-                ProductType = i.ProductTypeName,
-                ImagePath1 = i.ImagePath1
-            }).ToListAsync();
-
-            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            return View();
         }
 
-        public async Task<JsonResult> GetAddonCategorySelect2(string q = "")
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AccessPolicy(PageCode = "SHNMPRI005")]
+        public ActionResult Index(HttpPostedFileBase upload, MainPageModel model)
         {
-            var model = await _db.AddOnCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
-            {
-                id = i.Id,
-                text = i.Name
-            }).ToListAsync();
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            DataTable dt = new DataTable();
 
-            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+            if (model.button == "upload")
+            {
+                string path = Server.MapPath("~/Content/ExcelUpload/" + upload.FileName);
+                upload.SaveAs(path);
+                if (ModelState.IsValid)
+                {
+                    if (upload != null && upload.ContentLength > 0)
+                    {
+                        Stream stream = upload.InputStream;
+                        IExcelDataReader reader = null;
+
+                        if (upload.FileName.EndsWith(".xls"))
+                        {
+                            reader = ExcelReaderFactory.CreateBinaryReader(stream);
+                        }
+                        else if (upload.FileName.EndsWith(".xlsx"))
+                        {
+                            reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("File", "This file format is not supported");
+                            return View();
+                        }
+                        DataSet result = reader.AsDataSet(new ExcelDataSetConfiguration()
+                        {
+                            ConfigureDataTable = (_) => new ExcelDataTableConfiguration()
+                            {
+                                UseHeaderRow = true
+                            }
+                        });
+
+                        // reader.IsFirstRowAsColumnNames = true;
+
+                        reader.Close();
+
+                        model.DataTable = result.Tables[0];
+                        model.Filename = upload.FileName;
+                        return View(model);
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("File", "Please Upload Your file");
+                    }
+
+                }
+            }
+            else
+            {
+                string path = Server.MapPath("~/Content/ExcelUpload/" + model.Filename);
+                string excelConnectionString = @"Provider='Microsoft.ACE.OLEDB.12.0';Data Source='" + path + "';Extended Properties='Excel 12.0 Xml;IMEX=1'";
+
+                OleDbConnection excelConnection = new OleDbConnection(excelConnectionString);
+                using (OleDbConnection connExcel = new OleDbConnection(excelConnectionString))
+                {
+                    using (OleDbCommand cmdExcel = new OleDbCommand())
+                    {
+                        using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
+                        {
+                            cmdExcel.Connection = connExcel;
+
+                            //Get the name of First Sheet.
+                            connExcel.Open();
+                            DataTable dtExcelSchema;
+                            dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                            string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+                            connExcel.Close();
+
+                            //Read Data from First Sheet.
+                            connExcel.Open();
+                            cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
+                            odaExcel.SelectCommand = cmdExcel;
+                            odaExcel.Fill(dt);
+                            connExcel.Close();
+                        }
+                    }
+                }
+
+                // Insert records to database table.
+                // MainPageModel entities = new MainPageModel();
+                foreach (DataRow row in dt.Rows)
+                {
+                    var masterProduct = _db.MasterProducts.FirstOrDefault(i => i.Name == row[model.Name].ToString() && i.Status == 0);// MasterProduct.GetName(row[model.Name].ToString());
+                    if (masterProduct == null)
+                    {
+                        _db.MasterProducts.Add(new MasterProduct
+                        {
+                            Name = row[model.Name].ToString(),
+                            // Code = _generatedCode("MPR"),
+                            BrandId = CheckBrand(row[model.BrandName].ToString(), model.ProductTypeId),
+                            BrandName = row[model.BrandName].ToString(),
+                            CategoryId = CheckCategory(row[model.CategoryName].ToString(), model.ProductTypeId),
+                            CategoryName = row[model.CategoryName].ToString(),
+                            ShortDescription = row[model.ShortDescription].ToString(),
+                            LongDescription = row[model.LongDescription].ToString(),
+                            Customisation = Convert.ToBoolean(row[model.Customisation]),
+                            ColorCode = row[model.ColorCode].ToString(),
+                            Price = Convert.ToDouble(row[model.Price]),
+                            ImagePath1 = row[model.ImagePath1].ToString(),
+                            ImagePath2 = row[model.ImagePath2].ToString(),
+                            ImagePath3 = row[model.ImagePath3].ToString(),
+                            ImagePath4 = row[model.ImagePath4].ToString(),
+                            ImagePath5 = row[model.ImagePath5].ToString(),
+                            ProductTypeId = model.ProductTypeId,
+                            Status = 0,
+                            CreatedBy = user.Name,
+                            UpdatedBy = user.Name,
+                            DateEncoded = DateTime.Now,
+                            DateUpdated = DateTime.Now,
+                        });
+                        _db.SaveChanges();
+                    }
+                }
+            }
+
+            return View();
         }
 
-        public async Task<JsonResult> GetPortionSelect2(string q = "")
+        public int CheckBrand(string BrandName, int ProductTypeId)
         {
-            var model = await _db.Portions.Where(a => a.Name.Contains(q) && a.Status == 0).OrderBy(i => i.Name).Select(i => new
+            var brand = _db.Brands.FirstOrDefault(i => i.Name == BrandName && i.Status == 0);// Brand.GetName(BrandName);
+            if (brand != null)
             {
-                id = i.Id,
-                text = i.Name
-            }).OrderBy(i => i.text).ToListAsync();
+                return brand.Id;
+            }
+            else
+            {
+                Brand br = new Brand();
+                br.Name = BrandName;
+                br.ProductTypeId = ProductTypeId;
+                //br.Code = _generatedCode("BRA");
+                br.Status = 0;
+                br.DateEncoded = DateTime.Now;
+                br.DateUpdated = DateTime.Now;
+                _db.Brands.Add(br);
+                _db.SaveChanges();
+                //br.Code = Brand.Add(br, out int error);
+                return br.Id;
+            }
 
-            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
+        public int CheckSubCategory(int CategoryId, string CategoryName, string SubCategoryName1, int ProductTypeId)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var subCategory = _db.SubCategories.FirstOrDefault(i => i.Name == SubCategoryName1 && i.Status == 0);// SubCategory.GetName(SubCategoryName1);
+            if (subCategory != null)
+            {
 
+                return subCategory.Id;
+            }
+            else
+            {
+                SubCategory sub = new SubCategory();
+                sub.Name = SubCategoryName1;
+                sub.CategoryId = CategoryId;
+                sub.CategoryName = CategoryName;
+                sub.ProductType = ProductTypeId.ToString();
+                sub.CreatedBy = user.Name;
+                sub.UpdatedBy = user.Name;
+                //sub.Code = _generatedCode("SCT");
+                sub.Status = 0;
+                sub.DateEncoded = DateTime.Now;
+                sub.DateUpdated = DateTime.Now;
+                _db.SubCategories.Add(sub);
+                _db.SaveChanges();
+                //sub.Code = SubCategory.Add(sub, out int error);
+                return sub.Id;
+            }
+
+        }
+
+        public int CheckNextSubCategory(int subCategoryCode1, string SubCategoryName1, string SubCategoryName2, int ProductTypeId)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+
+            var nextSubCategory = _db.NextSubCategories.FirstOrDefault(i => i.Name == SubCategoryName2 && i.Status == 0);// NextSubCategory.GetName(SubCategoryName2);
+            if (nextSubCategory != null)
+            {
+
+                return nextSubCategory.Id;
+            }
+            else
+            {
+                NextSubCategory sub = new NextSubCategory();
+                sub.Name = SubCategoryName2;
+                sub.SubCategoryId = subCategoryCode1;
+                sub.SubCategoryName = SubCategoryName1;
+                sub.ProductTypeId = ProductTypeId;
+                sub.CreatedBy = user.Name;
+                sub.UpdatedBy = user.Name;
+                // sub.Code = _generatedCode("NSC");
+                sub.DateEncoded = DateTime.Now;
+                sub.DateUpdated = DateTime.Now;
+                sub.Status = 0;
+                _db.NextSubCategories.Add(sub);
+                _db.SaveChanges();
+                //sub.Code = NextSubCategory.Add(sub, out int error);
+                return sub.Id;
+            }
+
+        }
+
+        public int CheckCategory(string CategoryName, int ProductTypeId)
+        {
+            var category = _db.Categories.FirstOrDefault(i => i.Name == CategoryName && i.Status == 0);// Category.GetName(CategoryName);
+            if (category != null)
+            {
+
+                return category.Id;
+            }
+            else
+            {
+                Category cat = new Category();
+                cat.Name = CategoryName;
+                cat.ProductTypeId = ProductTypeId;
+                //cat.Code = _generatedCode("CAT");
+                cat.Status = 0;
+                cat.DateEncoded = DateTime.Now;
+                cat.DateUpdated = DateTime.Now;
+                _db.Categories.Add(cat);
+                _db.SaveChanges();
+                return cat.Id;
+            }
+
+        }
     }
 }

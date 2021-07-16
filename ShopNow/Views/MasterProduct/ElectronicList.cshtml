@@ -22,12 +22,12 @@
     columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(20);
     columns.Add(c => c.CategoryName).Titled("Category Name").Filterable(true).SetWidth(20);
     columns.Add(c => c.BrandName).Titled("Brand Name").Filterable(true).SetWidth(20);
-    columns.Add(c => c.ProductType).Titled("Item Type").Filterable(true).SetWidth(10);
+    columns.Add(c => c.ProductTypeName).Titled("Item Type").Filterable(true).SetWidth(10);
     columns.Add()
     .Encoded(false)
     .Sanitized(false)
-       .RenderValueAs(o => Html.ActionLink("Edit", "ElectronicEdit", new { code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code) }, new { @class = "btn btn-sm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
-       + Html.ActionLink("Delete", "ElectronicDelete", new { code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code) }, new { @class = "btn  btn-sm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(20);
+       .RenderValueAs(o => Html.ActionLink("Edit", "ElectronicEdit", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-warning mr-1" }).ToHtmlString()
+       + Html.ActionLink("Delete", "ElectronicDelete", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn  btn-vsm btn-danger" }).ToHtmlString()).Titled("Action").SetWidth(20);
 }).WithPaging(20).Sortable(true)
 
 </div>
