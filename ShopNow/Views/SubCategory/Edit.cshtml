@@ -19,12 +19,7 @@
                 <div class="card">
                     <div class="card-body">
                         @Html.AntiForgeryToken()
-                        <input type="hidden" name="Code" id="Code" value="@Model.Code" />
-                        <input type="hidden" name="Status" value="@Model.Status" />
-                        <input type="hidden" name="CreatedBy" value="@Model.CreatedBy" />
-                        <input type="hidden" name="UpdatedBy" value="@Model.UpdatedBy" />
-                        <input type="hidden" name="DateEncoded" value="@Model.DateEncoded" />
-                        <input type="hidden" name="DateUpdated" value="@Model.DateUpdated" />
+                        <input type="hidden" name="Id" value="@Model.Id" />
                         <div class="form-group row">
                             <div class="col-md-3">
                                 <label class="col-form-label"><strong class="text-secondary">Sub Category I</strong></label>
@@ -32,21 +27,22 @@
                             </div>
                             <div class="col-md-3">
                                 <label class="col-form-label"><strong class="text-secondary">Category</strong></label>
-                                <select id="CategoryCode" name="CategoryCode" class="form-control">
-                                    <option value="@Model.CategoryCode">@Model.CategoryName</option>
+                                <select id="CategoryId" name="CategoryId" class="form-control">
+                                    <option value="@Model.CategoryId">@Model.CategoryName</option>
                                 </select>
                                 <input type="hidden" name="CategoryName" id="CategoryName" value="@Model.CategoryName" />
                             </div>
                             <div class="col-md-3 mt-1">
                                 <label class="control-label"><strong class="text-secondary">Item Type</strong></label>
-                                <select name="ProductType" class="form-control" id="ProductType">
-                                    <option value="">Select Item Type</option>
-                                    <option value="Product">Product</option>
-                                    <option value="Dish">Dish</option>
-                                    <option value="Service">Service</option>
-                                    <option value="Medical">Medical</option>
-                                    <option value="FMCG">FMCG</option>
+                                <select name="ProductTypeId" class="form-control" id="ProductTypeId">
+                                    <option value="0">Select Item Type</option>
+                                    <option value="4">Product</option>
+                                    <option value="1">Dish</option>
+                                    <option value="5">Service</option>
+                                    <option value="3">Medical</option>
+                                    <option value="2">FMCG</option>
                                 </select>
+                                <input type="hidden" name="ProductTypeName" value="@Model.ProductTypeName" />
                             </div>
                             <div class="col-md-3">
                                 <label class="col-form-label"><strong class="text-secondary">Adscore</strong></label>
@@ -74,7 +70,12 @@
     <script src="~/Scripts/ValidateRequiredFields.js"></script>
     <script>
         $(document).ready(function () {
-            $('#CategoryCode').select2({
+            $("#ProductTypeId").val('@Model.ProductTypeId');
+            $('#ProductTypeId').on('change', function () {
+                let selectedType = $(this).find("option:selected").text();
+                $('[name="ProductTypeName"]').val(selectedType);
+            });
+            $('#CategoryId').select2({
                 placeholder: "Search Category",
                 ajax: {
                     url: "/SubCategory/GetCategorySelect2",
@@ -97,9 +98,6 @@
                     $('#SubCategoryForm').submit();
                     $('.Save').prop('disabled', true);
                 };
-            });
-            jQuery(document).ready(function ($) {
-                $("#ProductType").find('option[value="@Model.ProductType"]').attr('selected', 'selected');
             });
 
         });

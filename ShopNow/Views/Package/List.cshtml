@@ -26,8 +26,8 @@
                    columns.Add(b => b.Name).Titled("Package Name").Filterable(true).SetWidth(20);                   
                    columns.Add().RenderValueAs(b => b.Type == 1 ? "Medical" : b.Type == 2 ? "FMCG" : "N/A").Titled("Type").SetWidth(10);
                    columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(b => @<div>
-    <a href="javascript:void(0)" data-id="@b.Code" data-id1="@b.Name" data-id2="@b.Type" class="btn-sm btn-warning edit-prompt" id="edit-prompt" data-toggle="modal" data-target="#editModal" style="padding: 3px 26px">Edit</a>
-    <a href="javascript:void(0)" data-id="@b.Code" data-id1="@b.Name" class="btn-sm btn-danger delete-prompt" data-toggle="modal" data-target="#deleteModel" style="padding: 3px 18px">Delete</a>
+    <a href="javascript:void(0)" data-id="@b.Id" data-id1="@b.Name" data-id2="@b.Type" class="btn-sm btn-warning edit-prompt" id="edit-prompt" data-toggle="modal" data-target="#editModal" style="padding: 3px 26px">Edit</a>
+    <a href="javascript:void(0)" data-id="@b.Id" data-id1="@b.Name" class="btn-sm btn-danger delete-prompt" data-toggle="modal" data-target="#deleteModel" style="padding: 3px 18px">Delete</a>
 </div>);
                  }).WithPaging(20).Sortable(true)
 

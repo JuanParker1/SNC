@@ -109,7 +109,7 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
                     </div>
                     <div class="col-md-6">
                         <label class="col-form-label font-weight-bold text-secondary">Item Type</label>
-                        <select name="ProductType" class="form-control" id="edit-productTypeId">
+                        <select name="ProductType" class="form-control" id="edit-ProductTypeId">
                             <option value="0">Select</option>
                             <option value="4">Product</option>
                             <option value="1">Dish</option>
@@ -117,7 +117,7 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
                             <option value="2">FMCG</option>
                             <option value="5">Service</option>
                         </select>
-                        <input type="hidden" id="edit-productTypeName" name="ProductTypeName" />
+                        <input type="hidden" id="edit-ProductTypeName" name="ProductTypeName" />
                     </div>
                     <div class="col-md-6">
                         <label class="col-form-label font-weight-bold text-secondary">Adscore</label>
@@ -146,31 +146,6 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
                 let selectedType = $(this).find("option:selected").text();
                 $('#edit-ProductTypeName').val(selectedType);
             });
-            var t = $('#Category-list').DataTable({
-                "dom": "<'row'<'col-sm-6'f>>" +
-                    "<'row'<'col-sm-5'i><'col-sm-3'l><'col-sm-4'p>>" +
-                    "<'row'<'col-sm-12'tr>>",
-                "bPaginate": false,
-                "scrollY": 400,
-                "paging": true,
-                "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "ALL"]],
-                "pageLength": -1,
-                initComplete: function (settings, json) {
-                    $('.index input').remove();
-                    $('.action-btn input').remove();
-                    $('.dataTables_filter input').appendTo('.data-search');
-                    $('.dataTables_filter label').remove();
-                    $('.data-search input').attr('placeholder', 'Quick Search');
-                    $('.data-search input').addClass('form-control');
-                    $('.data-search input').removeClass('form-control-sm');
-                },
-            });
-
-            t.on('order.dt search.dt', function () {
-                t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
-                    cell.innerHTML = i + 1;
-                });
-            }).draw();
 
             $('#Create').on('click', function () {
                 var isValidate = false;
@@ -207,9 +182,7 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
                 }
             });
 
-            $(".edit-prompt").click(function () {
-                var type = $(this).attr('data-producttypename');
-                alert(type);
+            $("table").on('click', '.edit-prompt', function () {
                 $("#CategoryId").val($(this).attr('data-id'));
                 $("#edit-Name").val($(this).attr('data-name'));
                 $('#edit-ProductTypeId').val($(this).attr('data-producttypeid'));
@@ -243,9 +216,9 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
                 }
             });
 
-            $("#editModal").on("hidden.bs.modal", function () {
-                window.location.reload();
-            });
+            //$("#editModal").on("hidden.bs.modal", function () {
+            //    window.location.reload();
+            //});
 
             $(".delete-prompt").click(function () {
                 var code = $(this).attr('data-id');
