@@ -44,13 +44,13 @@ namespace ShopNow.Controllers
                 Bannerpath = i.BannerPath,
                 Id = i.Id,
                 Days = i.Days,
-                Fromdate = i.FromDate,
+                FromDate = i.FromDate,
                 Position = i.Position,
                 ProductId = i.ProductId,
                 ProductName = i.ProductName,
                 ShopId = i.ShopId,
                 ShopName = i.ShopName,
-                Todate = i.Todate,
+                ToDate = i.Todate,
                 CreditType = i.CreditType
             }).ToList();
             
@@ -70,13 +70,13 @@ namespace ShopNow.Controllers
                 Bannerpath = i.BannerPath,
                 Id= i.Id,
                 Days = i.Days,
-                Fromdate = i.FromDate,
+                FromDate = i.FromDate,
                 Position = i.Position,
                 ProductId = i.ProductId,
                 ProductName = i.ProductName,
                 ShopId = i.ShopId,
                 ShopName = i.ShopName,
-                Todate = i.Todate,
+                ToDate = i.Todate,
                 CreditType = i.CreditType
             }).ToList();
 

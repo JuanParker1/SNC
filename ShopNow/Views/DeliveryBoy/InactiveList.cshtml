@@ -40,7 +40,7 @@
                                     <tr>
                                         <td></td>
                                         <td class="text-nowrap">
-                                            <a href="~/DeliveryBoy/Details?code=@item.Code"> @item.Name</a>
+                                            <a href="~/DeliveryBoy/Details?code=@item.Id"> @item.Name</a>
                                         </td>
                                         <td class="text-nowrap">@item.PhoneNumber</td>
                                         <td class="text-nowrap">@item.ShopName</td>
@@ -55,7 +55,7 @@
                                             }
                                         </td>
                                         <td>
-                                            <a href="~/DeliveryBoy/Edit?code=@ShopNow.Helpers.AdminHelpers.ECode(item.Code)" class="btn btn-warning text-center text-nowrap btn-sm" style="padding: 3px 26px">Edit</a>
+                                            <a href="~/DeliveryBoy/Edit?code=@ShopNow.Helpers.AdminHelpers.ECodeInt(item.Id)" class="btn btn-warning text-center text-nowrap btn-sm" style="padding: 3px 26px">Edit</a>
                                         </td>
                                     </tr>
                                 }

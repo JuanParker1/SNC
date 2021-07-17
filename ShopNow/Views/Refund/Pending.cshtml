@@ -21,7 +21,7 @@
                         <select class="form-control" id="select-shop" name="ShopCode">
                             @if (!string.IsNullOrEmpty(Model.ShopName))
                             {
-                                <option value="@Model.ShopCode">@Model.ShopName</option>
+                                <option value="@Model.ShopId">@Model.ShopName</option>
                             }
                         </select>
                         <input type="hidden" name="ShopName" value="@Model.ShopName" />

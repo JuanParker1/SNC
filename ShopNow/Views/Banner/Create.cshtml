@@ -26,7 +26,7 @@
                                         <label class="col-form-label text-secondary font-weight-bold">Shop Name*</label>
                                     </div>
                                     <div class="col-md-9">
-                                        <select id="ShopCode" name="ShopCode" class="form-control"></select>
+                                        <select id="ShopId" name="ShopId" class="form-control"></select>
                                         <input type="hidden" name="ShopName" id="ShopName" />
                                     </div>
                                 </div>
@@ -54,7 +54,7 @@
                                         <label class="col-form-label text-secondary font-weight-bold">Product Name*</label>
                                     </div>
                                     <div class="col-md-9">
-                                        <select id="ProductCode" name="ProductCode" class="form-control" style="width: 100%"></select>
+                                        <select id="ProductId" name="ProductId" class="form-control" style="width: 100%"></select>
                                         <input type="hidden" name="ProductName" id="ProductName" />
                                     </div>
                                 </div>
@@ -145,7 +145,7 @@
 <script>
     $(document).ready(function () {
 
-        $('#ShopCode').select2({
+        $('#ShopId').select2({
             placeholder: "Search Shop",
             ajax: {
                 url: "/Banner/GetShopSelect2",
@@ -156,7 +156,7 @@
         }).on('select2:select', function (e) {
             $('input[name="ShopName"]').val(e.params.data.text);
             var shopcode = e.params.data.id;
-            $('#ProductCode').select2({
+            $('#ProductId').select2({
                 placeholder: "Search Product",
                 ajax: {
                     url: "/Banner/GetShopProductSelect2/?shopcode=" + shopcode,
@@ -242,8 +242,8 @@
         });
 
         $("#Proceed").click(function () {
-            var shop = $("#ShopCode").val();
-            var product = $("#ProductCode").val();
+            var shop = $("#ShopId").val();
+            var product = $("#ProductId").val();
             var position = $("#Position").val();
             var days = $("#Days").val();
             //var radio = $('input[type=radio][name=Type]').val();

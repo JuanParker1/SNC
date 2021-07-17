@@ -29,7 +29,7 @@
                    columns.Add(s => s.CategoryType).Titled("Category Type").Filterable(true).SetWidth(20);
                    columns.Add().RenderValueAs(s => s.Type == 1 ? "Categorywise Discount" : s.Type == 2 ? "Categorywise Loyalty" : s.Type == 3 ? "Direct Discount" : "N/A").Filterable(true).Titled("Discount Type").SetWidth(20);
                    columns.Add(s => s.DiscountPercentage).Titled("Discount").Filterable(true).SetWidth(10);                   
-                   columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(s => @<div><a href="~/ShopDiscountCategory/Edit?code=@ShopNow.Helpers.AdminHelpers.ECode(s.Code)" class="btn btn-warning text-center text-nowrap btn-vsm mb-1" style="padding: 3px 26px">Edit</a></div>);
+                   columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(s => @<div><a href="~/ShopDiscountCategory/Edit?code=@ShopNow.Helpers.AdminHelpers.ECode(s.Id)" class="btn btn-warning text-center text-nowrap btn-vsm mb-1" style="padding: 3px 26px">Edit</a></div>);
                  }).WithPaging(10).Sortable(true)
                     </div>
                 </div>

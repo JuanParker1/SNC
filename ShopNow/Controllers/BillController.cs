@@ -224,9 +224,9 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNBILDU006")]
-        public ActionResult DeliveryUpdate(string code)
+        public ActionResult DeliveryUpdate(string id)
         {
-            var dCode = AdminHelpers.DCodeInt(code);
+            var dCode = AdminHelpers.DCodeInt(id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             if (dCode==0)
@@ -285,11 +285,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNBILDD008")]
-        public ActionResult DeliveryDelete(string code)
+        public ActionResult DeliveryDelete(int id)
         {
-            var dCode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var bill = db.Bills.Where(b => b.Id == dCode && b.Status == 0).FirstOrDefault(); //Bill.Get(dCode);
+            var bill = db.Bills.Where(b => b.Id == id && b.Status == 0).FirstOrDefault(); //Bill.Get(dCode);
             if (bill != null)
             {
                 bill.Status = 2;
