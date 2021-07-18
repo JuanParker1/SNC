@@ -20,19 +20,19 @@
             @using (Html.BeginForm("DeliveryUpdate", "Bill", FormMethod.Post, new { id = "DeliveryForm" }))
             {
                 @Html.AntiForgeryToken()
-                <input type="hidden" name="Code" value="@Model.Code" />
+                <input type="hidden" name="Id" value="@Model.Id" />
                 <input type="hidden" name="DateEncoded" value="@Model.DateEncoded" />
                 <input type="hidden" name="DateUpdated" value="@Model.DateUpdated" />
                 <input type="hidden" name="CreatedBy" value="@Model.CreatedBy" />
                 <input type="hidden" name="UpdatedBy" value="@Model.UpdatedBy" />
                 <input type="hidden" name="Status" value="@Model.Status" />
-                <input type="hidden" name="CustomerCode" value="@Model.CustomerCode" />
+                <input type="hidden" name="CustomerId" value="@Model.CustomerId" />
                 <input type="hidden" name="CustomerName" value="@Model.CustomerName" />
                 <input type="hidden" name="NameOfBill" value="@Model.NameOfBill" />
                 <input type="hidden" name="ItemType" value="@Model.ItemType" />
                 <input type="hidden" name="Distance" value="@Model.Distance" />
                 <input type="hidden" name="TotalAmount" value="@Model.TotalAmount" />
-                <input type="hidden" name="ShopCode" value="@Model.ShopCode" />
+                <input type="hidden" name="ShopId" value="@Model.ShopId" />
                 <input type="hidden" name="ShopName" value="@Model.ShopName" />
                 <input type="hidden" name="DeliveryRateSet" id="DeliveryRateSet" value="@Model.DeliveryRateSet" />
                 <input type="hidden" name="Type" id="Type" value="@Model.Type" />

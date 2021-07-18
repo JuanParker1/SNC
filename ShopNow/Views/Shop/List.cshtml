@@ -107,12 +107,12 @@
             .Encoded(false)
             .Sanitized(false)
              .RenderValueAs(s => new HtmlString
-                      ("<label class='switch'> <input type='checkbox' value='" + s.isOnline + "' Id='Id_" + s.Code + "' class='CheckOnline' data-code='" + s.Code + "'><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(10);
+                      ("<label class='switch'> <input type='checkbox' value='" + s.IsOnline + "' Id='Id_" + s.Id + "' class='CheckOnline' data-code='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(10);
     columns.Add()
     .Encoded(false)
     .Sanitized(false)
-    .RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code) }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
-                   + Html.ActionLink("Delete", "Delete", new { code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code) }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
+    .RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
+                   + Html.ActionLink("Delete", "Delete", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
 }).WithPaging(20).Sortable(true)
 
 </div>

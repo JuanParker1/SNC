@@ -17,17 +17,17 @@
             @using (Html.BeginForm("Edit", "Banner", FormMethod.Post, new { id = "BannerForm", enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
-                <input type="hidden" name="Code" id="Code" value="@Model.Code" />
+                <input type="hidden" name="Code" id="Code" value="@Model.PaymentId" />
                 <input type="hidden" name="Id" id="Id" value="@Model.Id" />
                 <input type="hidden" name="Status" id="Status" value="@Model.Status" />
                 <input type="hidden" name="DateEncoded" id="DateEncoded" value="@Model.DateEncoded" />
                 <input type="hidden" name="DateUpdated" id="DateUpdated" value="@Model.DateUpdated" />
-                <input type="hidden" name="paymentid" id="paymentid" value="@Model.paymentid" />
+                <input type="hidden" name="PaymentId" id="PaymentId" value="@Model.PaymentId" />
                 <input type="hidden" name="CreatedBy" id="CreatedBy" value="@Model.CreatedBy" />
                 <input type="hidden" name="UpdatedBy" id="UpdatedBy" value="@Model.UpdatedBy" />
                 <input type="hidden" name="Bannerpath" id="Bannerpath" value="@Model.Bannerpath" />
-                <input type="hidden" name="Fromdate" id="Fromdate" value="@Model.Fromdate" />
-                <input type="hidden" name="Todate" id="Todate" value="@Model.Todate" />
+                <input type="hidden" name="Fromdate" id="Fromdate" value="@Model.FromDate" />
+                <input type="hidden" name="Todate" id="Todate" value="@Model.ToDate" />
                 <div class="card mt-2">
                     <div class="card-body">
                         <div class="row">
@@ -37,8 +37,8 @@
                                         <label class="col-form-label text-secondary font-weight-bold">Shop Name*</label>
                                     </div>
                                     <div class="col-md-9">
-                                        <select id="ShopCode" name="ShopCode" class="form-control">
-                                            <option value="@Model.ShopCode">@Model.ShopName</option>
+                                        <select id="ShopId" name="ShopId" class="form-control">
+                                            <option value="@Model.ShopId">@Model.ShopName</option>
                                         </select>
                                         <input type="hidden" name="ShopName" id="ShopName" value="@Model.ShopName" />
                                     </div>
@@ -67,8 +67,8 @@
                                         <label class="col-form-label text-secondary font-weight-bold">Product Name*</label>
                                     </div>
                                     <div class="col-md-9">
-                                        <select id="ProductCode" name="ProductCode" class="form-control" style="width: 100%">
-                                            <option value="@Model.ProductCode">@Model.ProductName</option>
+                                        <select id="ProductId" name="ProductId" class="form-control" style="width: 100%">
+                                            <option value="@Model.ProductId">@Model.ProductName</option>
                                         </select>
                                         <input type="hidden" name="ProductName" id="ProductName" value="@Model.ProductName" />
                                     </div>
@@ -100,9 +100,9 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="input-daterange input-group">
-                                            <input type="text" class="form-control" value="@Model.Fromdate.ToString("MM-dd-yyyy")" readonly>
+                                            <input type="text" class="form-control" value="@Model.FromDate.ToString("MM-dd-yyyy")" readonly>
                                             <span class="input-group-addon mx-3">to</span>
-                                            <input type="text" class="form-control" value="@Model.Todate.ToString("MM-dd-yyyy")" readonly>
+                                            <input type="text" class="form-control" value="@Model.ToDate.ToString("MM-dd-yyyy")" readonly>
                                         </div>
                                     </div>
                                     <div class="col-md-1 text-md-left">
@@ -117,14 +117,7 @@
                                 <div class="row">
                                     <label class="col-md-12 text-center font-weight-bold text-secondary">Banner Image</label>
                                     <div class="img-upload-container mx-auto">
-                                        @*@if (Model.Bannerpath != null)
-                                        {
-                                            <img class="img-container w-100 h-100" width="100" height="100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.Bannerpath" onerror="this.src='/Images/No Photo.png'" />
-                                        }
-                                        else
-                                        {*@
                                             <img id="img-upload" class="img-container w-100 h-100" width="100" height="100" @if (Model.Bannerpath != null) { <text> src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.Bannerpath" </text> } />
-                                        @*}*@
                                         <input type="file" id="BannerImage" name="BannerImage" class="d-none" />
                                         <label for="BannerImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                     </div>
@@ -213,7 +206,7 @@
         w.close();
     }
     $(document).ready(function () {
-        var productcode = $("#ProductCode").val();
+        var productcode = $("#ProductId").val();
         if (productcode != null) {
             $(".ProductBanner").removeClass("d-none");
         } else {
@@ -251,7 +244,7 @@
                 $(".ProductBanner").removeClass("d-none");
             }
         });
-        $('#ShopCode').select2({
+        $('#ShopId').select2({
             placeholder: "Search Shop",
             ajax: {
                 url: "/Banner/GetShopSelect2",
@@ -261,14 +254,13 @@
             }
         }).on('select2:select', function (e) {
             $('input[name="ShopName"]').val(e.params.data.text);
-            //var shopcode = e.params.data.id;
-            
-            });
-        var shopcode = $("#ShopCode").val();
-        $('#ProductCode').select2({
+        });
+
+        var shopId = $("#ShopId").val();
+        $('#ProductId').select2({
             placeholder: "Search Product",
             ajax: {
-                url: "/Banner/GetShopProductSelect2?shopcode=" + shopcode,
+                url: "/Banner/GetShopProductSelect2?shopid=" + shopId,
                 width: '100%',
                 delay: 250,
                 dataType: 'json'
@@ -287,21 +279,7 @@
                 $(".ProductBanner").removeClass("d-none");
             }
         });
-
-        //function readURL(input) {
-        //    if (input.files && input.files[0]) {
-        //        var reader = new FileReader();
-        //        reader.onload = function (e) {
-        //            $('#img-upload').attr('src', e.target.result);
-        //        }
-        //        reader.readAsDataURL(input.files[0]);
-        //    }
-        //}
-
-        //$("#BannerImage").change(function () {
-        //    readURL(this);
-        //});
-
+    
         var _URL = window.URL || window.webkitURL;
         $("#BannerImage").on('change', function (e) {
             var file, img;
@@ -310,7 +288,6 @@
                 img.onload = function () {
                     var width = this.width;
                     var height = this.height;
-                    //alert(width +" "+ height);
                     if (width != 456 && height != 142) {
                         swal("Warning!", "Image Dimension should be 456x142", "warning");
                         $('#img-upload').removeAttr('src');
@@ -327,13 +304,9 @@
                 };
                 img.onerror = function () {
                     swal("Warning!", "Choose Image File", "warning");
-                    //swal("not a valid file: " + file.type);
                 };
-
                 img.src = _URL.createObjectURL(file);
-
             }
-            //hi
         });
     });
 </script>
