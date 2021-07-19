@@ -1209,10 +1209,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNPROR010")]
-        public ActionResult Delete(int id, int redirectPage=0) //redirectPage : 0-Product List, 1-Food List, 2-Medical List, 3-FMCG List , 4-Electronic List
+        public ActionResult Delete(string id, int redirectPage=0) //redirectPage : 0-Product List, 1-Food List, 2-Medical List, 3-FMCG List , 4-Electronic List
         {
-            var dCode = AdminHelpers.DCodeInt(id.ToString());
-            var product = db.Products.FirstOrDefault(i => i.Id == dCode);// Product.Get(dCode);
+            var dCode = AdminHelpers.DCodeInt(id);
+            var product = db.Products.FirstOrDefault(i => i.Id == dCode);
             product.Status = 2;
             product.DateUpdated = DateTime.Now;
             db.Entry(product).State = System.Data.Entity.EntityState.Modified;
