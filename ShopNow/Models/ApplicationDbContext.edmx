@@ -5,7 +5,7 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="sncModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="AccessPolicies">
+    <EntityType Name="AccessPolicies">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -776,12 +776,6 @@
           <Property Name="OrderNumber" Type="int" />
           <Property Name="DateEncoded" Type="datetime" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="SearchData">
-          <Property Name="source" Type="nvarchar" MaxLength="500" />
-          <Property Name="keyValue" Type="nvarchar" MaxLength="500" />
-        </EntityType>-->
         <EntityType Name="ShopCategories">
           <Key>
             <PropertyRef Name="Id" />
@@ -982,12 +976,6 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tbl">
-          <Property Name="name" Type="nvarchar" MaxLength="500" />
-          <Property Name="percentage" Type="float" />
-        </EntityType>-->
         <EntityType Name="UserEnquiries">
           <Key>
             <PropertyRef Name="Id" />
@@ -1605,7 +1593,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
-        <EntityType Name="MasterProduct">
+       <EntityType Name="MasterProduct">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -1654,6 +1642,8 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CategoryIds" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
+=======
+>>>>>>> fc8dac83bccb8cea6493084313b21abd2eee98d3
         <EntityType Name="MeasurementUnit">
           <Key>
             <PropertyRef Name="Id" />
@@ -2299,7 +2289,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <EntitySet Name="DiscountCategories" EntityType="Self.DiscountCategory" />
           <EntitySet Name="DrugCompoundDetails" EntityType="Self.DrugCompoundDetail" />
           <EntitySet Name="MarketingAgents" EntityType="Self.MarketingAgent" />
-          <EntitySet Name="MasterProducts" EntityType="Self.MasterProduct" />
           <EntitySet Name="MeasurementUnits" EntityType="Self.MeasurementUnit" />
           <EntitySet Name="NextSubCategories" EntityType="Self.NextSubCategory" />
           <EntitySet Name="OrderItems" EntityType="Self.OrderItem" />
@@ -2424,8 +2413,11 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <FunctionImport Name="test" ReturnType="Collection(sncModel.test_Result)">
           <Parameter Name="str" Mode="In" Type="String" />
           </FunctionImport>
+
           <FunctionImport Name="GetDEliveryBoyList" ReturnType="Collection(sncModel.GetDEliveryBoyList_Result)" />
           <EntitySet Name="ShopCredits" EntityType="sncModel.ShopCredit" />
+
+          <EntitySet Name="MasterProducts" EntityType="sncModel.MasterProduct" />
         </EntityContainer>
         <ComplexType Name="test_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -2479,15 +2471,64 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Type="String" Name="PhoneNumber" Nullable="true" />
           <Property Type="String" Name="ImagePath" Nullable="true" />
         </ComplexType>
-        <EntityType Name="ShopCredit">
+  <EntityType Name="ShopCredit">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="PlatformCredit" Type="Double" Nullable="false" />
+    <Property Name="DeliveryCredit" Type="Double" Nullable="false" />
+    <Property Name="ShopId" Type="Int32" Nullable="false" />
+    <Property Name="DateUpdated" Type="DateTime" Precision="3" />
+  </EntityType>
+        <EntityType Name="MasterProduct">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="PlatformCredit" Type="Double" Nullable="false" />
-          <Property Name="DeliveryCredit" Type="Double" Nullable="false" />
-          <Property Name="ShopId" Type="Int32" Nullable="false" />
-          <Property Name="DateUpdated" Type="DateTime" Precision="3" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BrandId" Type="Int32" Nullable="false" />
+          <Property Name="BrandName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryIds" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <Property Name="CategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ShortDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LongDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ProductTypeId" Type="Int32" Nullable="false" />
+          <Property Name="ProductTypeName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="Customisation" Type="Boolean" Nullable="false" />
+          <Property Name="ColorCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MeasurementUnitId" Type="Int32" Nullable="false" />
+          <Property Name="MeasurementUnitName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PriscriptionCategory" Type="Boolean" Nullable="false" />
+          <Property Name="Weight" Type="Double" Nullable="false" />
+          <Property Name="SizeLB" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DrugCompoundDetailId" Type="Int32" Nullable="false" />
+          <Property Name="DrugCompoundDetailName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IBarU" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OriginCountry" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Manufacturer" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PackageId" Type="Int32" />
+          <Property Name="PackageName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="GoogleTaxonomyCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SubCategoryId" Type="Int32" Nullable="false" />
+          <Property Name="SubCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="NextSubCategoryId" Type="Int32" Nullable="false" />
+          <Property Name="NextSubCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ASIN" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath3" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath4" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath5" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Adscore" Type="Int32" Nullable="false" />
+          <Property Name="NickName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -2879,56 +2920,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
                 <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="MasterProducts">
-            <EntityTypeMapping TypeName="sncModel.MasterProduct">
-              <MappingFragment StoreEntitySet="MasterProducts">
-                <ScalarProperty Name="CategoryIds" ColumnName="CategoryIds" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
-                <ScalarProperty Name="BrandName" ColumnName="BrandName" />
-                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
-                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
-                <ScalarProperty Name="ShortDescription" ColumnName="ShortDescription" />
-                <ScalarProperty Name="LongDescription" ColumnName="LongDescription" />
-                <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
-                <ScalarProperty Name="ProductTypeName" ColumnName="ProductTypeName" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Customisation" ColumnName="Customisation" />
-                <ScalarProperty Name="ColorCode" ColumnName="ColorCode" />
-                <ScalarProperty Name="MeasurementUnitId" ColumnName="MeasurementUnitId" />
-                <ScalarProperty Name="MeasurementUnitName" ColumnName="MeasurementUnitName" />
-                <ScalarProperty Name="PriscriptionCategory" ColumnName="PriscriptionCategory" />
-                <ScalarProperty Name="Weight" ColumnName="Weight" />
-                <ScalarProperty Name="SizeLB" ColumnName="SizeLB" />
-                <ScalarProperty Name="DrugCompoundDetailId" ColumnName="DrugCompoundDetailId" />
-                <ScalarProperty Name="DrugCompoundDetailName" ColumnName="DrugCompoundDetailName" />
-                <ScalarProperty Name="IBarU" ColumnName="IBarU" />
-                <ScalarProperty Name="OriginCountry" ColumnName="OriginCountry" />
-                <ScalarProperty Name="Manufacturer" ColumnName="Manufacturer" />
-                <ScalarProperty Name="PackageId" ColumnName="PackageId" />
-                <ScalarProperty Name="PackageName" ColumnName="PackageName" />
-                <ScalarProperty Name="GoogleTaxonomyCode" ColumnName="GoogleTaxonomyCode" />
-                <ScalarProperty Name="SubCategoryId" ColumnName="SubCategoryId" />
-                <ScalarProperty Name="SubCategoryName" ColumnName="SubCategoryName" />
-                <ScalarProperty Name="NextSubCategoryId" ColumnName="NextSubCategoryId" />
-                <ScalarProperty Name="NextSubCategoryName" ColumnName="NextSubCategoryName" />
-                <ScalarProperty Name="ASIN" ColumnName="ASIN" />
-                <ScalarProperty Name="ImagePath1" ColumnName="ImagePath1" />
-                <ScalarProperty Name="ImagePath2" ColumnName="ImagePath2" />
-                <ScalarProperty Name="ImagePath3" ColumnName="ImagePath3" />
-                <ScalarProperty Name="ImagePath4" ColumnName="ImagePath4" />
-                <ScalarProperty Name="ImagePath5" ColumnName="ImagePath5" />
-                <ScalarProperty Name="Adscore" ColumnName="Adscore" />
-                <ScalarProperty Name="NickName" ColumnName="NickName" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3586,6 +3577,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+
           <FunctionImportMapping FunctionImportName="GetDEliveryBoyList" FunctionName="sncModel.Store.GetDEliveryBoyList">
             <ResultMapping>
               <ComplexTypeMapping TypeName="sncModel.GetDEliveryBoyList_Result">
@@ -3597,13 +3589,62 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="ShopCredits">
-            <EntityTypeMapping TypeName="sncModel.ShopCredit">
-              <MappingFragment StoreEntitySet="ShopCredit">
+  <EntitySetMapping Name="ShopCredits">
+    <EntityTypeMapping TypeName="sncModel.ShopCredit">
+      <MappingFragment StoreEntitySet="ShopCredit">
+        <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+        <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+        <ScalarProperty Name="DeliveryCredit" ColumnName="DeliveryCredit" />
+        <ScalarProperty Name="PlatformCredit" ColumnName="PlatformCredit" />
+      </MappingFragment>
+    </EntityTypeMapping>
+  </EntitySetMapping>
+          <EntitySetMapping Name="MasterProducts">
+            <EntityTypeMapping TypeName="sncModel.MasterProduct">
+              <MappingFragment StoreEntitySet="MasterProducts">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-                <ScalarProperty Name="DeliveryCredit" ColumnName="DeliveryCredit" />
-                <ScalarProperty Name="PlatformCredit" ColumnName="PlatformCredit" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="NickName" ColumnName="NickName" />
+                <ScalarProperty Name="Adscore" ColumnName="Adscore" />
+                <ScalarProperty Name="ImagePath5" ColumnName="ImagePath5" />
+                <ScalarProperty Name="ImagePath4" ColumnName="ImagePath4" />
+                <ScalarProperty Name="ImagePath3" ColumnName="ImagePath3" />
+                <ScalarProperty Name="ImagePath2" ColumnName="ImagePath2" />
+                <ScalarProperty Name="ImagePath1" ColumnName="ImagePath1" />
+                <ScalarProperty Name="ASIN" ColumnName="ASIN" />
+                <ScalarProperty Name="NextSubCategoryName" ColumnName="NextSubCategoryName" />
+                <ScalarProperty Name="NextSubCategoryId" ColumnName="NextSubCategoryId" />
+                <ScalarProperty Name="SubCategoryName" ColumnName="SubCategoryName" />
+                <ScalarProperty Name="SubCategoryId" ColumnName="SubCategoryId" />
+                <ScalarProperty Name="GoogleTaxonomyCode" ColumnName="GoogleTaxonomyCode" />
+                <ScalarProperty Name="PackageName" ColumnName="PackageName" />
+                <ScalarProperty Name="PackageId" ColumnName="PackageId" />
+                <ScalarProperty Name="Manufacturer" ColumnName="Manufacturer" />
+                <ScalarProperty Name="OriginCountry" ColumnName="OriginCountry" />
+                <ScalarProperty Name="IBarU" ColumnName="IBarU" />
+                <ScalarProperty Name="DrugCompoundDetailName" ColumnName="DrugCompoundDetailName" />
+                <ScalarProperty Name="DrugCompoundDetailId" ColumnName="DrugCompoundDetailId" />
+                <ScalarProperty Name="SizeLB" ColumnName="SizeLB" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="PriscriptionCategory" ColumnName="PriscriptionCategory" />
+                <ScalarProperty Name="MeasurementUnitName" ColumnName="MeasurementUnitName" />
+                <ScalarProperty Name="MeasurementUnitId" ColumnName="MeasurementUnitId" />
+                <ScalarProperty Name="ColorCode" ColumnName="ColorCode" />
+                <ScalarProperty Name="Customisation" ColumnName="Customisation" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="ProductTypeName" ColumnName="ProductTypeName" />
+                <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
+                <ScalarProperty Name="LongDescription" ColumnName="LongDescription" />
+                <ScalarProperty Name="ShortDescription" ColumnName="ShortDescription" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="CategoryIds" ColumnName="CategoryIds" />
+                <ScalarProperty Name="BrandName" ColumnName="BrandName" />
+                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

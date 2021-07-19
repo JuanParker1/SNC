@@ -18,6 +18,7 @@ namespace ShopNow.Models
         public string Name { get; set; }
         public int BrandId { get; set; }
         public string BrandName { get; set; }
+        public string CategoryIds { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public string ShortDescription { get; set; }
@@ -57,6 +58,5 @@ namespace ShopNow.Models
         public System.DateTime DateUpdated { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
-        public string CategoryIds { get; set; }
     }
 }

@@ -388,55 +388,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="MasterProducts">
-      <EntityTypeMapping TypeName="sncModel.MasterProduct">
-        <MappingFragment StoreEntitySet="MasterProducts">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
-          <ScalarProperty Name="BrandId" ColumnName="BrandId" />
-          <ScalarProperty Name="BrandName" ColumnName="BrandName" />
-          <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
-          <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
-          <ScalarProperty Name="ShortDescription" ColumnName="ShortDescription" />
-          <ScalarProperty Name="LongDescription" ColumnName="LongDescription" />
-          <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
-          <ScalarProperty Name="ProductTypeName" ColumnName="ProductTypeName" />
-          <ScalarProperty Name="Price" ColumnName="Price" />
-          <ScalarProperty Name="Customisation" ColumnName="Customisation" />
-          <ScalarProperty Name="ColorCode" ColumnName="ColorCode" />
-          <ScalarProperty Name="MeasurementUnitId" ColumnName="MeasurementUnitId" />
-          <ScalarProperty Name="MeasurementUnitName" ColumnName="MeasurementUnitName" />
-          <ScalarProperty Name="PriscriptionCategory" ColumnName="PriscriptionCategory" />
-          <ScalarProperty Name="Weight" ColumnName="Weight" />
-          <ScalarProperty Name="SizeLB" ColumnName="SizeLB" />
-          <ScalarProperty Name="DrugCompoundDetailId" ColumnName="DrugCompoundDetailId" />
-          <ScalarProperty Name="DrugCompoundDetailName" ColumnName="DrugCompoundDetailName" />
-          <ScalarProperty Name="IBarU" ColumnName="IBarU" />
-          <ScalarProperty Name="OriginCountry" ColumnName="OriginCountry" />
-          <ScalarProperty Name="Manufacturer" ColumnName="Manufacturer" />
-          <ScalarProperty Name="PackageId" ColumnName="PackageId" />
-          <ScalarProperty Name="PackageName" ColumnName="PackageName" />
-          <ScalarProperty Name="GoogleTaxonomyCode" ColumnName="GoogleTaxonomyCode" />
-          <ScalarProperty Name="SubCategoryId" ColumnName="SubCategoryId" />
-          <ScalarProperty Name="SubCategoryName" ColumnName="SubCategoryName" />
-          <ScalarProperty Name="NextSubCategoryId" ColumnName="NextSubCategoryId" />
-          <ScalarProperty Name="NextSubCategoryName" ColumnName="NextSubCategoryName" />
-          <ScalarProperty Name="ASIN" ColumnName="ASIN" />
-          <ScalarProperty Name="ImagePath1" ColumnName="ImagePath1" />
-          <ScalarProperty Name="ImagePath2" ColumnName="ImagePath2" />
-          <ScalarProperty Name="ImagePath3" ColumnName="ImagePath3" />
-          <ScalarProperty Name="ImagePath4" ColumnName="ImagePath4" />
-          <ScalarProperty Name="ImagePath5" ColumnName="ImagePath5" />
-          <ScalarProperty Name="Adscore" ColumnName="Adscore" />
-          <ScalarProperty Name="NickName" ColumnName="NickName" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-          <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-          <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="MeasurementUnits">
       <EntityTypeMapping TypeName="sncModel.MeasurementUnit">
         <MappingFragment StoreEntitySet="MeasurementUnits">
@@ -1102,5 +1053,65 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
+    <EntitySetMapping Name="ShopCredits">
+      <EntityTypeMapping TypeName="sncModel.ShopCredit">
+        <MappingFragment StoreEntitySet="ShopCredit">
+          <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+          <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+          <ScalarProperty Name="DeliveryCredit" ColumnName="DeliveryCredit" />
+          <ScalarProperty Name="PlatformCredit" ColumnName="PlatformCredit" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MasterProducts">
+      <EntityTypeMapping TypeName="sncModel.MasterProduct">
+        <MappingFragment StoreEntitySet="MasterProducts">
+          <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+          <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="NickName" ColumnName="NickName" />
+          <ScalarProperty Name="Adscore" ColumnName="Adscore" />
+          <ScalarProperty Name="ImagePath5" ColumnName="ImagePath5" />
+          <ScalarProperty Name="ImagePath4" ColumnName="ImagePath4" />
+          <ScalarProperty Name="ImagePath3" ColumnName="ImagePath3" />
+          <ScalarProperty Name="ImagePath2" ColumnName="ImagePath2" />
+          <ScalarProperty Name="ImagePath1" ColumnName="ImagePath1" />
+          <ScalarProperty Name="ASIN" ColumnName="ASIN" />
+          <ScalarProperty Name="NextSubCategoryName" ColumnName="NextSubCategoryName" />
+          <ScalarProperty Name="NextSubCategoryId" ColumnName="NextSubCategoryId" />
+          <ScalarProperty Name="SubCategoryName" ColumnName="SubCategoryName" />
+          <ScalarProperty Name="SubCategoryId" ColumnName="SubCategoryId" />
+          <ScalarProperty Name="GoogleTaxonomyCode" ColumnName="GoogleTaxonomyCode" />
+          <ScalarProperty Name="PackageName" ColumnName="PackageName" />
+          <ScalarProperty Name="PackageId" ColumnName="PackageId" />
+          <ScalarProperty Name="Manufacturer" ColumnName="Manufacturer" />
+          <ScalarProperty Name="OriginCountry" ColumnName="OriginCountry" />
+          <ScalarProperty Name="IBarU" ColumnName="IBarU" />
+          <ScalarProperty Name="DrugCompoundDetailName" ColumnName="DrugCompoundDetailName" />
+          <ScalarProperty Name="DrugCompoundDetailId" ColumnName="DrugCompoundDetailId" />
+          <ScalarProperty Name="SizeLB" ColumnName="SizeLB" />
+          <ScalarProperty Name="Weight" ColumnName="Weight" />
+          <ScalarProperty Name="PriscriptionCategory" ColumnName="PriscriptionCategory" />
+          <ScalarProperty Name="MeasurementUnitName" ColumnName="MeasurementUnitName" />
+          <ScalarProperty Name="MeasurementUnitId" ColumnName="MeasurementUnitId" />
+          <ScalarProperty Name="ColorCode" ColumnName="ColorCode" />
+          <ScalarProperty Name="Customisation" ColumnName="Customisation" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+          <ScalarProperty Name="ProductTypeName" ColumnName="ProductTypeName" />
+          <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
+          <ScalarProperty Name="LongDescription" ColumnName="LongDescription" />
+          <ScalarProperty Name="ShortDescription" ColumnName="ShortDescription" />
+          <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+          <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+          <ScalarProperty Name="CategoryIds" ColumnName="CategoryIds" />
+          <ScalarProperty Name="BrandName" ColumnName="BrandName" />
+          <ScalarProperty Name="BrandId" ColumnName="BrandId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

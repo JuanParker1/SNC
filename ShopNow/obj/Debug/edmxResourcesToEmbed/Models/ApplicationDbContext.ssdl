@@ -379,6 +379,7 @@
     <Property Name="Name" Type="nvarchar(max)" />
     <Property Name="BrandId" Type="int" Nullable="false" />
     <Property Name="BrandName" Type="nvarchar(max)" />
+    <Property Name="CategoryIds" Type="nvarchar(max)" />
     <Property Name="CategoryId" Type="int" Nullable="false" />
     <Property Name="CategoryName" Type="nvarchar(max)" />
     <Property Name="ShortDescription" Type="nvarchar(max)" />
@@ -770,12 +771,6 @@
     <Property Name="OrderNumber" Type="int" />
     <Property Name="DateEncoded" Type="datetime" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="SearchData">
-          <Property Name="source" Type="nvarchar" MaxLength="500" />
-          <Property Name="keyValue" Type="nvarchar" MaxLength="500" />
-        </EntityType>-->
   <EntityType Name="ShopCategories">
     <Key>
       <PropertyRef Name="Id" />
@@ -787,6 +782,16 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
     <Property Name="DateUpdated" Type="datetime" Nullable="false" />
     <Property Name="CreatedBy" Type="nvarchar(max)" />
     <Property Name="UpdatedBy" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="ShopCredit">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="PlatformCredit" Type="float" Nullable="false" />
+    <Property Name="DeliveryCredit" Type="float" Nullable="false" />
+    <Property Name="ShopId" Type="int" Nullable="false" />
+    <Property Name="DateUpdated" Type="datetime" />
   </EntityType>
   <EntityType Name="ShopDishAddOns">
     <Key>
@@ -966,12 +971,6 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
     <Property Name="DateEncoded" Type="datetime" Nullable="false" />
     <Property Name="DateUpdated" Type="datetime" Nullable="false" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tbl">
-          <Property Name="name" Type="nvarchar" MaxLength="500" />
-          <Property Name="percentage" Type="float" />
-        </EntityType>-->
   <EntityType Name="UserEnquiries">
     <Key>
       <PropertyRef Name="Id" />
@@ -1180,6 +1179,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
     <EntitySet Name="ProductSpecifications" EntityType="Self.ProductSpecifications" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RefundsData" EntityType="Self.RefundsData" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ShopCategories" EntityType="Self.ShopCategories" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ShopCredit" EntityType="Self.ShopCredit" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ShopDishAddOns" EntityType="Self.ShopDishAddOns" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ShopMembers" EntityType="Self.ShopMembers" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Shops" EntityType="Self.Shops" Schema="dbo" store:Type="Tables" />

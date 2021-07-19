@@ -4,7 +4,11 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
+<<<<<<< HEAD
       <Diagram DiagramId="04cbea06bac5411bba7d2a2223bd4c3a" Name="Diagram1" ZoomLevel="23">
+=======
+      <Diagram DiagramId="04cbea06bac5411bba7d2a2223bd4c3a" Name="Diagram1" ZoomLevel="75">
+>>>>>>> fc8dac83bccb8cea6493084313b21abd2eee98d3
         <EntityTypeShape EntityType="sncModel.AccessPolicy" Width="1.5" PointX="12.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.AddOnCategory" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.Admin" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
@@ -21,7 +25,6 @@
         <EntityTypeShape EntityType="sncModel.DiscountCategory" Width="1.5" PointX="16.75" PointY="5.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.DrugCompoundDetail" Width="1.5" PointX="16.75" PointY="9.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.MarketingAgent" Width="1.5" PointX="16.75" PointY="15.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.MasterProduct" Width="1.5" PointX="18.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.MeasurementUnit" Width="1.5" PointX="0.75" PointY="18.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.NextSubCategory" Width="1.5" PointX="6.75" PointY="18.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.OrderItem" Width="1.5" PointX="5.25" PointY="6.875" IsExpanded="true" />
@@ -52,7 +55,11 @@
         <AssociationConnector Association="sncModel.FK_OrderItems_OrderItems" ManuallyRouted="false" />
         <AssociationConnector Association="sncModel.FK_OrderItems_Products" ManuallyRouted="false" />
         <AssociationConnector Association="sncModel.FK_Products_Shops" ManuallyRouted="false" />
+<<<<<<< HEAD
         <EntityTypeShape EntityType="sncModel.ShopCredit" Width="1.5" PointX="7.375" PointY="23.75" />
+=======
+        <EntityTypeShape EntityType="sncModel.MasterProduct" Width="1.5" PointX="7.375" PointY="23.75" />
+>>>>>>> fc8dac83bccb8cea6493084313b21abd2eee98d3
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

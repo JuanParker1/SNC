@@ -15,10 +15,10 @@ namespace ShopNow.Models
     using System.Data.Entity.Core.Objects;
     using System.Linq;
     
-    public partial class sncEntities : DbContext
+    public partial class ShopnowchatEntities : DbContext
     {
-        public sncEntities()
-            : base("name=sncEntities")
+        public ShopnowchatEntities()
+            : base("name=ShopnowchatEntities")
         {
         }
     
@@ -43,7 +43,6 @@ namespace ShopNow.Models
         public virtual DbSet<DiscountCategory> DiscountCategories { get; set; }
         public virtual DbSet<DrugCompoundDetail> DrugCompoundDetails { get; set; }
         public virtual DbSet<MarketingAgent> MarketingAgents { get; set; }
-        public virtual DbSet<MasterProduct> MasterProducts { get; set; }
         public virtual DbSet<MeasurementUnit> MeasurementUnits { get; set; }
         public virtual DbSet<NextSubCategory> NextSubCategories { get; set; }
         public virtual DbSet<OrderItem> OrderItems { get; set; }
@@ -70,6 +69,9 @@ namespace ShopNow.Models
         public virtual DbSet<SubCategory> SubCategories { get; set; }
         public virtual DbSet<UserEnquiry> UserEnquiries { get; set; }
         public virtual DbSet<ShopCredit> ShopCredits { get; set; }
+
+        public virtual DbSet<MasterProduct> MasterProducts { get; set; }
+
     
         [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)
