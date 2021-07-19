@@ -1061,6 +1061,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
     <Parameter Name="page" Type="int" Mode="In" />
     <Parameter Name="pageSize" Type="int" Mode="In" />
   </Function>
+  <Function Name="GetDEliveryBoyList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="GetKeyname" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="nvarchar">
     <Parameter Name="key" Type="nvarchar" Mode="In" />
   </Function>

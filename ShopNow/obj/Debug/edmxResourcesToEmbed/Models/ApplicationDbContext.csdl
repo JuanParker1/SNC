@@ -1194,6 +1194,7 @@
     <FunctionImport Name="test" ReturnType="Collection(sncModel.test_Result)">
       <Parameter Name="str" Mode="In" Type="String" />
     </FunctionImport>
+    <FunctionImport Name="GetDEliveryBoyList" ReturnType="Collection(sncModel.GetDEliveryBoyList_Result)" />
   </EntityContainer>
   <ComplexType Name="test_Result">
     <Property Type="Int32" Name="Id" Nullable="false" />
@@ -1239,5 +1240,12 @@
     <Property Type="DateTime" Name="DateUpdated" Nullable="false" Precision="23" />
     <Property Type="String" Name="CreatedBy" Nullable="true" />
     <Property Type="String" Name="UpdatedBy" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="GetDEliveryBoyList_Result">
+    <Property Type="Int32" Name="Id" Nullable="false" />
+    <Property Type="String" Name="Name" Nullable="true" />
+    <Property Type="Int32" Name="Active" Nullable="false" />
+    <Property Type="String" Name="PhoneNumber" Nullable="true" />
+    <Property Type="String" Name="ImagePath" Nullable="true" />
   </ComplexType>
 </Schema>
