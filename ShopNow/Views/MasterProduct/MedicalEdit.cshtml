@@ -19,7 +19,7 @@
                 <div class="card">
                     <div class="card-body">
                         @Html.AntiForgeryToken()
-                        <input type="hidden" name="Code" value="@Model.Code" />
+                        <input type="hidden" name="Id" value="@Model.Id" />
                         <div class="form-group row">
                             <div class="col-md-12">
                                 <div class="row">
@@ -36,34 +36,34 @@
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="control-label text-secondary font-weight-bold" for="BrandCode">Brand Name</label>
+                                        <label class="control-label text-secondary font-weight-bold" for="BrandId">Brand Name</label>
                                         <div class="form-group">
-                                            <select class="form-control" name="BrandCode" id="BrandCode">
-                                                <option value="@Model.BrandCode">@Model.BrandName</option>
+                                            <select class="form-control" name="BrandId" id="BrandId">
+                                                <option value="@Model.BrandId">@Model.BrandName</option>
                                             </select>
                                             <input type="hidden" name="BrandName" id="BrandName" value="@Model.BrandName" />
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="control-label text-secondary font-weight-bold" for="CategoryCode">Category Name</label>
+                                        <label class="control-label text-secondary font-weight-bold" for="CategoryId">Category Name</label>
                                         <div class="form-group">
-                                            <select class="form-control" name="CategoryCode" id="CategoryCode" multiple></select>
+                                            <select class="form-control" name="CategoryId" id="CategoryId" multiple></select>
                                             <input type="hidden" name="CategoryName" id="CategoryName" value="@Model.CategoryName" />
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="control-label text-secondary font-weight-bold" for="MeasurementUnitCode">Drug Measurement Unit Name</label>
+                                        <label class="control-label text-secondary font-weight-bold" for="MeasurementUnitId">Drug Measurement Unit Name</label>
                                         <div class="form-group">
-                                            <select class="form-control" name="MeasurementUnitCode" id="MeasurementUnitCode">
-                                                <option value="@Model.MeasurementUnitCode">@Model.MeasurementUnitName</option>
+                                            <select class="form-control" name="MeasurementUnitId" id="MeasurementUnitId">
+                                                <option value="@Model.MeasurementUnitId">@Model.MeasurementUnitName</option>
                                             </select>
                                             <input type="hidden" name="MeasurementUnitName" id="MeasurementUnitName" value="@Model.MeasurementUnitName" />
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="control-label text-secondary font-weight-bold" for="DrugCompoundDetailCode">Combination DrugCompound</label>
+                                        <label class="control-label text-secondary font-weight-bold" for="DrugCompoundDetailId">Combination DrugCompound</label>
                                         <div class="form-group">
-                                            <select class="form-control DrugCompoundDetailCode" name="DrugCompoundDetailCode" id="DrugCompoundDetailCode" multiple></select>
+                                            <select class="form-control DrugCompoundDetailId" name="DrugCompoundDetailId" id="DrugCompoundDetailId" multiple></select>
                                             <input type="hidden" name="CombinationDrugCompound" id="CombinationDrugCompound" value="@Model.CombinationDrugCompound" />
                                         </div>
                                     </div>
@@ -92,7 +92,7 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="control-label"><strong class="text-secondary">iBarU</strong></label>
-                                            <input type="text" class="form-control" name="iBarU" id="iBarU" value="@Model.iBarU" />
+                                            <input type="text" class="form-control" name="IBarU" id="IBarU" value="@Model.IBarU" />
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -248,27 +248,27 @@
     <script>
         $(document).ready(function () {
             
-             var categorySelect = $('#CategoryCode');
-            var categorycode = "@Model.CategoryCode1";
+             var categorySelect = $('#CategoryId');
+            var CategoryId = "@Model.CategoryId1";
             var categoryname = "@Model.CategoryName";
-            if (categorycode) {
-                var array_code = categorycode.split(',');
+            if (CategoryId) {
+                var array_code = CategoryId.split(',');
                 var array_name = categoryname.split(',');
                 $.each(array_code, function (i) {
-                    $('select[name="CategoryCode"] option[value=' + array_code[i] + ']').attr('selected', 'selected');
+                    $('select[name="CategoryId"] option[value=' + array_code[i] + ']').attr('selected', 'selected');
                     var option = new Option(array_name[i], array_code[i], true, true);
                     categorySelect.append(option).trigger('change');
                 });
             }
 
-            var drugSelect = $('#DrugCompoundDetailCode');
-            var drugcompounddetailcode = "@Model.DrugCompoundDetailCode1";
+            var drugSelect = $('#DrugCompoundDetailId');
+            var DrugCompoundDetailId = "@Model.DrugCompoundDetailId1";
             var drugcompounddetailname = "@Model.CombinationDrugCompound";
-            if (drugcompounddetailcode) {
-                var array_code = drugcompounddetailcode.split(',');
+            if (DrugCompoundDetailId) {
+                var array_code = DrugCompoundDetailId.split(',');
                 var array_name = drugcompounddetailname.split(',');
                 $.each(array_code, function (i) {
-                    $('select[name="DrugCompoundDetailCode"] option[value=' + array_code[i] + ']').attr('selected', 'selected');
+                    $('select[name="DrugCompoundDetailId"] option[value=' + array_code[i] + ']').attr('selected', 'selected');
                     var option = new Option(array_name[i], array_code[i], true, true);
                     drugSelect.append(option).trigger('change');
                 });
@@ -278,7 +278,7 @@
                  $("#PriscriptionCategory").find('option[value="@Model.PriscriptionCategory"]').attr('selected', 'selected');
              });
 
-            $('#BrandCode').select2({
+            $('#BrandId').select2({
                 placeholder: "Search Brand",
                 ajax: {
                     url: "/MasterProduct/GetMedicalBrandSelect2",
@@ -290,7 +290,7 @@
                 $('input[name="BrandName"]').val(e.params.data.text);
             });
 
-            $('#CategoryCode').select2({
+            $('#CategoryId').select2({
                 placeholder: "Search Category",
                 ajax: {
                     url: "/MasterProduct/GetMedicalCategorySelect2",
@@ -302,7 +302,7 @@
                 $('input[name="CategoryName"]').val(e.params.data.text);
             });
 
-            $('#MeasurementUnitCode').select2({
+            $('#MeasurementUnitId').select2({
                 placeholder: "Search Drug Unit",
                 ajax: {
                     url: "/MasterProduct/GetDrugUnitSelect2",
@@ -314,7 +314,7 @@
                 $('input[name="MeasurementUnitName"]').val(e.params.data.text);
             });
 
-            $('#DrugCompoundDetailCode').select2({
+            $('#DrugCompoundDetailId').select2({
                 placeholder: "Search Combination",
                 ajax: {
                     url: "/MasterProduct/GetDrugCompoundDetailSelect2",

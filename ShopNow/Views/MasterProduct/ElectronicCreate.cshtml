@@ -37,14 +37,13 @@
                                     </div>
                                     <div class="col-md-4">
                                         <label class="col-form-label"><strong class="text-secondary">Category Name</strong></label>
-                                        <select name="CategoryCode" id="CategoryCode" class="form-control" multiple></select>
+                                        <select name="CategoryId" id="CategoryId" class="form-control" multiple></select>
                                         <input type="hidden" name="CategoryName" id="CategoryName" />
                                     </div>
                                     <div class="col-md-4">
                                         <label class="col-form-label"><strong class="text-secondary">Brand Name</strong></label>
-                                        <select name="BrandCode" id="BrandCode" class="form-control"></select>
+                                        <select name="BrandId" id="BrandId" class="form-control"></select>
                                         <input type="hidden" name="BrandName" id="BrandName" />
-                                        <input type="hidden" name="ProductType" value="Product" />
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -161,7 +160,7 @@
                 }
             });
 
-            $('#BrandCode').select2({
+            $('#BrandId').select2({
                 placeholder: "Search Brand",
                 ajax: {
                     url: "/Product/GetBrandSelect2",
@@ -173,7 +172,7 @@
                 $('input[name="BrandName"]').val(e.params.data.text);
             });
 
-            $('#CategoryCode').select2({
+            $('#CategoryId').select2({
                 placeholder: "Search Category",
                 ajax: {
                     url: "/Product/GetCategorySelect2",

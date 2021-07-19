@@ -38,30 +38,30 @@
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="control-label text-secondary font-weight-bold" for="BrandCode">Brand Name</label>
+                                        <label class="control-label text-secondary font-weight-bold" for="BrandId">Brand Name</label>
                                         <div class="form-group">
-                                            <select class="form-control" name="BrandCode" id="BrandCode"></select>
+                                            <select class="form-control" name="BrandId" id="BrandId"></select>
                                             <input type="hidden" name="BrandName" id="BrandName" />
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="control-label text-secondary font-weight-bold" for="CategoryCode">Category Name</label>
+                                        <label class="control-label text-secondary font-weight-bold" for="CategoryId">Category Name</label>
                                         <div class="form-group">
-                                            <select class="form-control" name="CategoryCode" id="CategoryCode" multiple></select>
+                                            <select class="form-control" name="CategoryId" id="CategoryId" multiple></select>
                                             <input type="hidden" name="CategoryName" id="CategoryName" />
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="control-label text-secondary font-weight-bold" for="MeasurementUnitCode">Drug Measurement Unit Name</label>
+                                        <label class="control-label text-secondary font-weight-bold" for="MeasurementUnitId">Drug Measurement Unit Name</label>
                                         <div class="form-group">
-                                            <select class="form-control" name="MeasurementUnitCode" id="MeasurementUnitCode"></select>
+                                            <select class="form-control" name="MeasurementUnitId" id="MeasurementUnitId"></select>
                                             <input type="hidden" name="MeasurementUnitName" id="MeasurementUnitName" />
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="control-label text-secondary font-weight-bold" for="DrugCompoundDetailCode">Combination DrugCompound</label>
+                                        <label class="control-label text-secondary font-weight-bold" for="DrugCompoundDetailId">Combination DrugCompound</label>
                                         <div class="form-group">
-                                            <select class="form-control" name="DrugCompoundDetailCode" id="DrugCompoundDetailCode" multiple></select>
+                                            <select class="form-control" name="DrugCompoundDetailId" id="DrugCompoundDetailId" multiple></select>
                                             <input type="hidden" name="CombinationDrugCompound" id="CombinationDrugCompound" />
                                         </div>
                                     </div>
@@ -90,13 +90,13 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="control-label"><strong class="text-secondary">iBarU</strong></label>
-                                            <input type="text" class="form-control" name="iBarU" id="iBarU" />
+                                            <input type="text" class="form-control" name="IBarU" id="IBarU" />
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="control-label"><strong class="text-secondary">Weight</strong></label>
-                                            <input type="number" class="form-control" name="weight" id="weight" />
+                                            <input type="number" class="form-control" name="Weight" id="Weight" />
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -118,9 +118,9 @@
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="control-label text-secondary font-weight-bold" for="PackageCode">Package Name</label>
+                                        <label class="control-label text-secondary font-weight-bold" for="PackageId">Package Name</label>
                                         <div class="form-group">
-                                            <select class="form-control" name="PackageCode" id="PackageCode"></select>
+                                            <select class="form-control" name="PackageId" id="PackageId"></select>
                                             <input type="hidden" name="PackageName" id="PackageName" />
                                         </div>
                                     </div>
@@ -230,7 +230,7 @@
                 };
             });
 
-            $('#BrandCode').select2({
+            $('#BrandId').select2({
                 placeholder: "Search Brand",
                 ajax: {
                     url: "/MasterProduct/GetMedicalBrandSelect2",
@@ -242,7 +242,7 @@
                 $('input[name="BrandName"]').val(e.params.data.text);
             });
 
-            $('#CategoryCode').select2({
+            $('#CategoryId').select2({
                 placeholder: "Search Category",
                 ajax: {
                     url: "/MasterProduct/GetMedicalCategorySelect2",
@@ -254,7 +254,7 @@
                 $('input[name="CategoryName"]').val(e.params.data.text);
             });
 
-            $('#MeasurementUnitCode').select2({
+            $('#MeasurementUnitId').select2({
                 placeholder: "Search Drug Unit",
                 ajax: {
                     url: "/MasterProduct/GetDrugUnitSelect2",
@@ -266,7 +266,7 @@
                 $('input[name="MeasurementUnitName"]').val(e.params.data.text);
             });
 
-            $('#DrugCompoundDetailCode').select2({
+            $('#DrugCompoundDetailId').select2({
                 placeholder: "Search Combination",
                 ajax: {
                     url: "/MasterProduct/GetDrugCompoundDetailSelect2",
@@ -278,7 +278,7 @@
                 $('input[name="CombinationDrugCompound"]').val(e.params.data.text);
             });
 
-            $('#PackageCode').select2({
+            $('#PackageId').select2({
                 placeholder: "Search Package",
                 ajax: {
                     url: "/MasterProduct/GetMedicalPackageSelect2",

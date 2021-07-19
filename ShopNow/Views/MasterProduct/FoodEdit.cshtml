@@ -29,8 +29,9 @@
                                 </label>
                                 <div class="form-group">
                                     <input type="text" class="form-control" name="Name" id="Name" value="@Model.Name" />
-                                    <input type="hidden" name="ProductType" id="ProductType" value="Dish" />
-                                    <input type="hidden" name="Code" value="@Model.Code" />
+                                    <input type="hidden" name="Id" value="@Model.Id" />
+                                    <input type="hidden" name="ProductTypeId" id="ProductTypeId" value="@Model.ProductTypeId" />
+                                    <input type="hidden" name="ProductTypeName" id="ProductTypeName" value="@Model.ProductTypeName" />
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -42,12 +43,12 @@
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <label class="control-label" for="CategoryCode">
+                                <label class="control-label" for="CategoryId">
                                     <strong class="text-secondary">Category Name</strong>
                                 </label>
                                 <div class="form-group">
-                                    <select class="form-control" name="CategoryCode" id="CategoryCode">
-                                        <option value="@Model.CategoryCode">@Model.CategoryName</option>
+                                    <select class="form-control" name="CategoryId" id="CategoryId">
+                                        <option value="@Model.CategoryId">@Model.CategoryName</option>
                                     </select>
                                     <input type="hidden" name="CategoryName" id="CategoryName" value="@Model.CategoryName" />
                                 </div>
@@ -125,9 +126,9 @@
                                 <div class="row"><label class="font-weight-bold text-success">ADD ONLY PORTION</label></div>
                                 <div class="row">
                                     <div class="col-md-3">
-                                        <label class="control-label" for="PortionCode"><strong class="text-secondary">Portion Name</strong></label>
+                                        <label class="control-label" for="PortionId"><strong class="text-secondary">Portion Name</strong></label>
                                         <div class="form-group">
-                                            <select id="PortionCode" name="PortionCode" class="form-control"></select>
+                                            <select id="PortionId" name="PortionId" class="form-control"></select>
                                             <input type="hidden" name="PortionName" id="PortionName" />
                                         </div>
                                     </div>
@@ -150,7 +151,7 @@
                                     <div class="col-md-4">
                                         <label class="control-label"><strong class="text-secondary">AddOn Category</strong></label>
                                         <div class="form-group">
-                                            <select class="form-control" name="AddOnCategoryCode" id="AddOnCategoryCode"></select>
+                                            <select class="form-control" name="AddOnCategoryId" id="AddOnCategoryId"></select>
                                             <input type="hidden" name="AddOnCategoryName" id="AddOnCategoryName" />
                                         </div>
                                     </div>
@@ -191,14 +192,14 @@
                                     <div class="col-md-3">
                                         <label class="control-label"><strong class="text-secondary">Portion Name</strong></label>
                                         <div class="form-group">
-                                            <select id="PortionCode1" name="PortionCode1" class="form-control"></select>
+                                            <select id="PortionId1" name="PortionId1" class="form-control"></select>
                                             <input type="hidden" name="PortionName1" id="PortionName1" />
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <label class="control-label"><strong class="text-secondary">AddOn Category</strong></label>
                                         <div class="form-group">
-                                            <select class="form-control" name="AddOnCategoryCode1" id="AddOnCategoryCode1"></select>
+                                            <select class="form-control" name="AddOnCategoryId1" id="AddOnCategoryId1"></select>
                                             <input type="hidden" name="AddOnCategoryName1" id="AddOnCategoryName1" />
                                         </div>
                                     </div>
@@ -247,7 +248,7 @@
                                             <div class="col-md-7">
                                                 <label class="control-label"><strong class="text-secondary">Portion Name</strong></label>
                                                 <div class="form-group">
-                                                    <select class="form-control" id="PortionCode2" name="PortionCode2"></select>
+                                                    <select class="form-control" id="PortionId2" name="PortionId2"></select>
                                                     <input type="hidden" name="PortionName2" id="PortionName2" />
                                                 </div>
                                             </div>
@@ -264,7 +265,7 @@
                                             <div class="col-md-5">
                                                 <label class="control-label"><strong class="text-secondary">AddOn Category</strong></label>
                                                 <div class="form-group">
-                                                    <select class="form-control" name="AddOnCategoryCode2" id="AddOnCategoryCode2"></select>
+                                                    <select class="form-control" name="AddOnCategoryId2" id="AddOnCategoryId2"></select>
                                                     <input type="hidden" name="AddOnCategoryName2" id="AddOnCategoryName2" />
                                                 </div>
                                             </div>
@@ -363,7 +364,7 @@
                                                 <td>@s.MinSelectionLimit</td>
                                                 <td>@s.MaxSelectionLimit</td>
                                                 <td>
-                                                    <button class="btn removeAddOns" type="button" data-code="@s.Code" data-id="@count"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                                                    <button class="btn removeAddOns" type="button" data-code="@s.Id" data-id="@count"><i class="fa fa-trash" aria-hidden="true"></i></button>
                                                 </td>
                                             </tr>
                                         }
@@ -380,10 +381,10 @@
                             <div class="row mt-2">
                                 <div class="col-md-2">
                                     <div class="img-upload-container ml-2">
-                                        <img class="img-container w-100 h-100" id="img-ProductImage1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge1" onerror="this.src='/Images/No Photo.png'" />
-                                        <input type="file" id="ProductImage1" name="ProductImage1" class="d-none" />
-                                        <input type="hidden" name="ImagePathLarge1" value="@Model.ImagePathLarge1" />
-                                        <label for="ProductImage1" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                        <img class="img-container w-100 h-100" id="img-DishImage" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath1" onerror="this.src='/Images/No Photo.png'" />
+                                        <input type="file" id="DishImage" name="DishImage" class="d-none" />
+                                        <input type="hidden" name="ImagePath1" value="@Model.ImagePath1" />
+                                        <label for="DishImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                     </div>
                                 </div>
                             </div>
@@ -443,7 +444,7 @@
                     $("#radioAddons").addClass("d-none");
                 }
             });
-            $('#CategoryCode').select2({
+            $('#CategoryId').select2({
                 placeholder: "Search Category",
                 ajax: {
                     url: "/MasterProduct/GetDishCategorySelect2",
@@ -495,24 +496,24 @@
             });
 
             function resetFields() {
-                $("#PortionCode").val('').trigger('change');
+                $("#PortionId").val('').trigger('change');
                 $("#PortionName").val("");
                 $("#PortionPrice").val("");
-                $("#AddOnCategoryCode").val('').trigger('change');
+                $("#AddOnCategoryId").val('').trigger('change');
                 $("#AddOnCategoryName").val("");
                 $('#AddOnItemName').val("");
                 $('#AddOnsPrice').val("");
-                $("#PortionCode1").val('').trigger('change');
+                $("#PortionId1").val('').trigger('change');
                 $("#PortionName1").val("");
                 $('#PortionPrice1').val("");
-                $("#AddOnCategoryCode1").val('').trigger('change');
+                $("#AddOnCategoryId1").val('').trigger('change');
                 $("#AddOnCategoryName1").val("");
                 $('#AddOnItemName1').val("");
                 $('#AddOnsPrice1').val("");
-                $("#PortionCode2").val('').trigger('change');
+                $("#PortionId2").val('').trigger('change');
                 $("#PortionName2").val("");
                 $('#PortionPrice2').val("");
-                $("#AddOnCategoryCode2").val('').trigger('change');
+                $("#AddOnCategoryId2").val('').trigger('change');
                 $("#AddOnCategoryName2").val("");
                 $('#AddOnItemName2').val("");
                 $('#AddOnsPrice2').val("");
@@ -526,7 +527,7 @@
                 $("#MaxSelectionLimit4").val("");
             }
             
-            $('#AddOnCategoryCode').select2({
+            $('#AddOnCategoryId').select2({
                 placeholder: "Search Addon Category",
                 ajax: {
                     url: "/MasterProduct/GetAddonCategorySelect2",
@@ -538,7 +539,7 @@
                 $('input[name="AddOnCategoryName"]').val(e.params.data.text);
             });
 
-            $('#AddOnCategoryCode1').select2({
+            $('#AddOnCategoryId1').select2({
                 placeholder: "Search Addon Category",
                 ajax: {
                     url: "/MasterProduct/GetAddonCategorySelect2",
@@ -550,7 +551,7 @@
                 $('input[name="AddOnCategoryName1"]').val(e.params.data.text);
             });
 
-            $('#AddOnCategoryCode2').select2({
+            $('#AddOnCategoryId2').select2({
                 placeholder: "Search Addon Category",
                 ajax: {
                     url: "/MasterProduct/GetAddonCategorySelect2",
@@ -562,7 +563,7 @@
                 $('input[name="AddOnCategoryName2"]').val(e.params.data.text);
             });
 
-            $('#PortionCode').select2({
+            $('#PortionId').select2({
                 placeholder: "Search Portion",
                 ajax: {
                     url: "/MasterProduct/GetPortionSelect2",
@@ -574,7 +575,7 @@
                 $('input[name="PortionName"]').val(e.params.data.text);
             });
 
-            $('#PortionCode1').select2({
+            $('#PortionId1').select2({
                 placeholder: "Search Portion",
                 ajax: {
                     url: "/MasterProduct/GetPortionSelect2",
@@ -586,7 +587,7 @@
                 $('input[name="PortionName1"]').val(e.params.data.text);
             });
 
-            $('#PortionCode2').select2({
+            $('#PortionId2').select2({
                 placeholder: "Search Portion",
                 ajax: {
                     url: "/MasterProduct/GetPortionSelect2",
@@ -604,10 +605,10 @@
                 var type = $("input[name='AddOnsType']:checked").val();
                 if (type == "1") {
                     //Only Portion
-                    var PortionCode = $("#PortionCode").val();
+                    var PortionId = $("#PortionId").val();
                     var PortionName = $("#PortionName").val();
                     var PortionPrice = $("#PortionPrice").val();
-                    var AddOnCategoryCode = "N/A";
+                    var AddOnCategoryId = "N/A";
                     var AddOnCategoryName = "N/A";
                     var AddOnItemName = "N/A";
                     var AddOnsPrice = 0;
@@ -615,10 +616,10 @@
                     var CrustPrice = 0;
                     var AddOnType = 1;
 
-                    fd.append('PortionCode', PortionCode);
+                    fd.append('PortionId', PortionId);
                     fd.append('PortionName', PortionName);
                     fd.append('PortionPrice', PortionPrice);
-                    fd.append('AddOnCategoryCode', AddOnCategoryCode);
+                    fd.append('AddOnCategoryId', AddOnCategoryId);
                     fd.append('AddOnCategoryName', AddOnCategoryName);
                     fd.append('AddOnItemName', AddOnItemName);
                     fd.append('AddOnsPrice', AddOnsPrice);
@@ -628,23 +629,23 @@
                 }
                 else if (type == "2") {
                     //Only AddOns
-                    var AddOnCategoryCode = $("#AddOnCategoryCode").val();
+                    var AddOnCategoryId = $("#AddOnCategoryId").val();
                     var AddOnCategoryName = $("#AddOnCategoryName").val();
                     var AddOnItemName = ($('#AddOnItemName').val() == "") ? "N/A" : $('#AddOnItemName').val();
                     var AddOnsPrice = $('#AddOnsPrice').val();
                     var MinSelectionLimit = $("#MinSelectionLimit2").val();
                     var MaxSelectionLimit = $("#MaxSelectionLimit2").val();
-                    var PortionCode = "N/A";
+                    var PortionId = "N/A";
                     var PortionName = "N/A";
                     var PortionPrice = 0;
                     var CrustName = "N/A";
                     var CrustPrice = 0;
                     var AddOnType = 2;
 
-                    fd.append('PortionCode', PortionCode);
+                    fd.append('PortionId', PortionId);
                     fd.append('PortionName', PortionName);
                     fd.append('PortionPrice', PortionPrice);
-                    fd.append('AddOnCategoryCode', AddOnCategoryCode);
+                    fd.append('AddOnCategoryId', AddOnCategoryId);
                     fd.append('AddOnCategoryName', AddOnCategoryName);
                     fd.append('MinSelectionLimit', MinSelectionLimit);
                     fd.append('MaxSelectionLimit', MaxSelectionLimit);
@@ -656,10 +657,10 @@
                 }
                 else if (type == "3") {
                     // Portion and AddOns
-                    var PortionCode = $("#PortionCode1").val();
+                    var PortionId = $("#PortionId1").val();
                     var PortionName = $("#PortionName1").val();
                     var PortionPrice = $('#PortionPrice1').val();
-                    var AddOnCategoryCode = $("#AddOnCategoryCode1").val();
+                    var AddOnCategoryId = $("#AddOnCategoryId1").val();
                     var AddOnCategoryName = $("#AddOnCategoryName1").val();
                     var MinSelectionLimit = $("#MinSelectionLimit3").val();
                     var MaxSelectionLimit = $("#MaxSelectionLimit3").val();
@@ -669,10 +670,10 @@
                     var CrustPrice = 0;
                     var AddOnType = 3;
 
-                    fd.append('PortionCode', PortionCode);
+                    fd.append('PortionId', PortionId);
                     fd.append('PortionName', PortionName);
                     fd.append('PortionPrice', PortionPrice);
-                    fd.append('AddOnCategoryCode', AddOnCategoryCode);
+                    fd.append('AddOnCategoryId', AddOnCategoryId);
                     fd.append('AddOnCategoryName', AddOnCategoryName);
                     fd.append('MinSelectionLimit', MinSelectionLimit);
                     fd.append('MaxSelectionLimit', MaxSelectionLimit);
@@ -684,10 +685,10 @@
                 }
                 else if (type == "4") {
                     // Step by Step Process
-                    var PortionCode = $("#PortionCode2").val();
+                    var PortionId = $("#PortionId2").val();
                     var PortionName = $("#PortionName2").val();
                     var PortionPrice = $('#PortionPrice2').val();
-                    var AddOnCategoryCode = $("#AddOnCategoryCode2").val();
+                    var AddOnCategoryId = $("#AddOnCategoryId2").val();
                     var AddOnCategoryName = $("#AddOnCategoryName2").val();
                     var MinSelectionLimit = $("#MinSelectionLimit4").val();
                     var MaxSelectionLimit = $("#MaxSelectionLimit4").val();
@@ -697,10 +698,10 @@
                     var CrustPrice = $('#CrustPrice').val();
                     var AddOnType = 4;
 
-                    fd.append('PortionCode', PortionCode);
+                    fd.append('PortionId', PortionId);
                     fd.append('PortionName', PortionName);
                     fd.append('PortionPrice', PortionPrice);
-                    fd.append('AddOnCategoryCode', AddOnCategoryCode);
+                    fd.append('AddOnCategoryId', AddOnCategoryId);
                     fd.append('AddOnCategoryName', AddOnCategoryName);
                     fd.append('MinSelectionLimit', MinSelectionLimit);
                     fd.append('MaxSelectionLimit', MaxSelectionLimit);
@@ -710,14 +711,14 @@
                     fd.append('CrustPrice', CrustPrice);
                     fd.append('AddOnType', AddOnType);
                 }
-                if (PortionCode == null) {
+                if (PortionId == null) {
                     swal("Warning!", "Please select Portion!", "warning")
                 }
-                else if (AddOnCategoryCode == null) {
+                else if (AddOnCategoryId == null) {
                     swal("Warning!", "Please select AddOnCategory!", "warning")
                 } else {
                     $.ajax({
-                        url: '/MasterProduct/AddToAddOns',
+                        url: '/MasterProduct/EditAddToAddOns',
                         data: fd,
                         type: 'post',
                         dataType: 'json',
@@ -731,7 +732,7 @@
                             if (type == 3) { typename = "Portions & AddOns" }
                             if (type == 4) { typename = "Step by Step Process" }
                             var tableData = '<tr> \
-                                                <td>' + data.Id + '</td> \
+                                                <td>' + data.Index + '</td> \
                                                 <td>' + typename + '</td> \
                                                 <td>' + data.PortionName + '</td> \
                                                 <td>' + data.PortionPrice + '</td> \
@@ -742,7 +743,7 @@
                                                 <td>' + data.CrustPrice + '</td>\
                                                 <td>' + data.MinSelectionLimit + '</td>\
                                                 <td>' + data.MaxSelectionLimit + '</td>\
-                                                <td><button class="btn removeAddOns" type="button" data-id='+ data.Id + ' data-code=' + data.Code + '><i class="fa fa-trash" aria-hidden="true"></i></button></td>\
+                                                <td><button class="btn removeAddOns" type="button" data-id='+ data.Index + ' data-code=' + data.Id + '><i class="fa fa-trash" aria-hidden="true"></i></button></td>\
                                             </tr> ';
 
                             $('#tbl-addOns1 tbody').append(tableData);
@@ -775,13 +776,13 @@
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
                     reader.onload = function (e) {
-                        $('#img-ProductImage1').attr('src', e.target.result);
+                        $('#img-DishImage').attr('src', e.target.result);
                     }
                     reader.readAsDataURL(input.files[0]);
                 }
             }
 
-            $("#ProductImage1").change(function () {
+            $("#DishImage").change(function () {
                 readURLProduct(this);
             });
 
