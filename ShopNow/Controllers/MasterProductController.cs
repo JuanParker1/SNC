@@ -2545,7 +2545,6 @@ namespace ShopNow.Controllers
                 cat.Name = CategoryName;
                 cat.ProductTypeId = ProductTypeId;
                 cat.ProductTypeName = ProductTypeName;
-                //cat.Code = _generatedCode("CAT");
                 cat.Status = 0;
                 cat.DateEncoded = DateTime.Now;
                 cat.DateUpdated = DateTime.Now;
