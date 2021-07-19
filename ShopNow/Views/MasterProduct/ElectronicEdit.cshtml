@@ -27,7 +27,7 @@
                                     <div class="col-md-4">
                                         <label class="col-form-label"><strong class="text-secondary">Product Name</strong></label>
                                         <input id="Name" type="text" class="form-control" name="Name" value="@Model.Name" />
-                                        <input type="hidden" name="Code" value="@Model.Code" />
+                                        <input type="hidden" name="Id" value="@Model.Id" />
                                     </div>
                                     <div class="col-md-4">
                                         <label class="col-form-label"><strong class="text-secondary">Nick Name</strong></label>
@@ -35,13 +35,13 @@
                                     </div>
                                     <div class="col-md-4">
                                         <label class="col-form-label"><strong class="text-secondary">Category Name</strong></label>
-                                        <select name="CategoryCode" id="CategoryCode" class="form-control" multiple></select>
+                                        <select name="CategoryId" id="CategoryId" class="form-control" multiple></select>
                                         <input type="hidden" name="CategoryName" id="CategoryName" value="@Model.CategoryName" />
                                     </div>
                                     <div class="col-md-4">
                                         <label class="col-form-label"><strong class="text-secondary">Brand Name</strong></label>
-                                        <select name="BrandCode" id="BrandCode" class="form-control">
-                                            <option value="@Model.BrandCode">@Model.BrandName</option>
+                                        <select name="BrandId" id="BrandId" class="form-control">
+                                            <option value="@Model.BrandId">@Model.BrandName</option>
                                         </select>
                                         <input type="hidden" name="BrandName" id="BrandName" value="@Model.BrandName" />
                                         <input type="hidden" name="ProductType" value="@Model.ProductType" />
@@ -65,10 +65,10 @@
                                     <div class="col-md-2">
                                         <label class="control-label ml-2"><strong class="text-secondary">Product Image1</strong></label>
                                         <div class="img-upload-container ml-2">
-                                            @if (Model.ImagePathLarge1 != null)
+                                            @if (Model.ImagePath1 != null)
                                             {
                                                 <a href="~/Home/ImageDenied">
-                                                    <img id='img-ProductImage1' class="img-container w-100 h-100" width="100" height="100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge1" onerror="this.src='/Images/No Photo.png'" />
+                                                    <img id='img-ProductImage1' class="img-container w-100 h-100" width="100" height="100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath1" onerror="this.src='/Images/No Photo.png'" />
                                                 </a>
                                             }
                                             else
@@ -79,16 +79,16 @@
                                             }
                                             <input type="file" id="ProductImage1" name="ProductImage1" class="d-none" />
                                             <label for="ProductImage1" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePathLarge1" id="ImagePathLarge1" value="@Model.ImagePathLarge1" />
+                                            <input type="hidden" name="ImagePath1" id="ImagePath1" value="@Model.ImagePath1" />
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <label class="control-label ml-2"><strong class="text-secondary">Product Image2</strong></label>
                                         <div class="img-upload-container ml-2">
-                                            @if (Model.ImagePathLarge2 != null)
+                                            @if (Model.ImagePath2 != null)
                                             {
                                                 <a href="~/Home/ImageDenied">
-                                                    <img id='img-ProductImage2' class="img-container w-100 h-100" width="100" height="100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge2" onerror="this.src='/Images/No Photo.png'" />
+                                                    <img id='img-ProductImage2' class="img-container w-100 h-100" width="100" height="100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath2" onerror="this.src='/Images/No Photo.png'" />
                                                 </a>
                                             }
                                             else
@@ -99,16 +99,16 @@
                                             }
                                             <input type="file" id="ProductImage2" name="ProductImage2" class="d-none" />
                                             <label for="ProductImage2" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePathLarge2" id="ImagePathLarge2" value="@Model.ImagePathLarge2" />
+                                            <input type="hidden" name="ImagePath2" id="ImagePath2" value="@Model.ImagePath2" />
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <label class="control-label ml-2"><strong class="text-secondary">Product Image3</strong></label>
                                         <div class="img-upload-container ml-2">
-                                            @if (Model.ImagePathLarge3 != null)
+                                            @if (Model.ImagePath3 != null)
                                             {
                                                 <a href="~/Home/ImageDenied">
-                                                    <img id='img-ProductImage3' class="img-container w-100 h-100" width="100" height="100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge3" onerror="this.src='/Images/No Photo.png'" />
+                                                    <img id='img-ProductImage3' class="img-container w-100 h-100" width="100" height="100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath3" onerror="this.src='/Images/No Photo.png'" />
                                                 </a>
                                             }
                                             else
@@ -119,16 +119,16 @@
                                             }
                                             <input type="file" id="ProductImage3" name="ProductImage3" class="d-none" />
                                             <label for="ProductImage3" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePathLarge3" id="ImagePathLarge3" value="@Model.ImagePathLarge3" />
+                                            <input type="hidden" name="ImagePath3" id="ImagePath3" value="@Model.ImagePath3" />
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <label class="control-label ml-2"><strong class="text-secondary">Product Image4</strong></label>
                                         <div class="img-upload-container ml-2">
-                                            @if (Model.ImagePathLarge4 != null)
+                                            @if (Model.ImagePath4 != null)
                                             {
                                                 <a href="~/Home/ImageDenied">
-                                                    <img id='img-ProductImage4' class="img-container w-100 h-100" width="100" height="100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge4" onerror="this.src='/Images/No Photo.png'" />
+                                                    <img id='img-ProductImage4' class="img-container w-100 h-100" width="100" height="100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath4" onerror="this.src='/Images/No Photo.png'" />
                                                 </a>
                                             }
                                             else
@@ -139,16 +139,16 @@
                                             }
                                             <input type="file" id="ProductImage4" name="ProductImage4" class="d-none" />
                                             <label for="ProductImage4" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePathLarge4" id="ImagePathLarge4" value="@Model.ImagePathLarge4" />
+                                            <input type="hidden" name="ImagePath4" id="ImagePath4" value="@Model.ImagePath4" />
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <label class="control-label ml-2"><strong class="text-secondary">Product Image5</strong></label>
                                         <div class="img-upload-container ml-2">
-                                            @if (Model.ImagePathLarge5 != null)
+                                            @if (Model.ImagePath5 != null)
                                             {
                                                 <a href="~/Home/ImageDenied">
-                                                    <img id='img-ProductImage5' class="img-container w-100 h-100" width="100" height="100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge5" onerror="this.src='/Images/No Photo.png'" />
+                                                    <img id='img-ProductImage5' class="img-container w-100 h-100" width="100" height="100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath5" onerror="this.src='/Images/No Photo.png'" />
                                                 </a>
                                             }
                                             else
@@ -159,7 +159,7 @@
                                             }
                                             <input type="file" id="ProductImage5" name="ProductImage5" class="d-none" />
                                             <label for="ProductImage5" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePathLarge5" id="ImagePathLarge5" value="@Model.ImagePathLarge5" />
+                                            <input type="hidden" name="ImagePath5" id="ImagePath5" value="@Model.ImagePath5" />
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -202,14 +202,14 @@
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
-             var categorySelect = $('#CategoryCode');
-            var categorycode = "@Model.CategoryCode1";
+             var categorySelect = $('#CategoryId');
+            var CategoryId = "@Model.CategoryId1";
             var categoryname = "@Model.CategoryName";
-            if (categorycode) {
-                var array_code = categorycode.split(',');
+            if (CategoryId) {
+                var array_code = CategoryId.split(',');
                 var array_name = categoryname.split(',');
                 $.each(array_code, function (i) {
-                    $('select[name="CategoryCode"] option[value=' + array_code[i] + ']').attr('selected', 'selected');
+                    $('select[name="CategoryId"] option[value=' + array_code[i] + ']').attr('selected', 'selected');
                     var option = new Option(array_name[i], array_code[i], true, true);
                     categorySelect.append(option).trigger('change');
                 });
@@ -228,7 +228,7 @@
             //    };
             //});
 
-            $('#BrandCode').select2({
+            $('#BrandId').select2({
                 placeholder: "Search Brand",
                 ajax: {
                     url: "/Product/GetBrandSelect2",
@@ -240,7 +240,7 @@
                 $('input[name="BrandName"]').val(e.params.data.text);
             });
 
-            $('#CategoryCode').select2({
+            $('#CategoryId').select2({
                 placeholder: "Search Category",
                 ajax: {
                     url: "/Product/GetCategorySelect2",
