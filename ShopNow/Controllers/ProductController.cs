@@ -609,7 +609,7 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             if (model.ShopId != 0)
             {
-                var sh = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);// Shop.Get(model.ShopId);
+                var sh = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
                 prod.ShopCategoryId = sh.ShopCategoryId;
                 prod.ShopCategoryName = sh.ShopCategoryName;
                 prod.ShopId = sh.Id;

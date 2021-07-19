@@ -376,54 +376,6 @@
     <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
     <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
   </EntityType>
-  <EntityType Name="MasterProduct">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="BrandId" Type="Int32" Nullable="false" />
-    <Property Name="BrandName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="CategoryId" Type="Int32" Nullable="false" />
-    <Property Name="CategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="ShortDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="LongDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="ProductTypeId" Type="Int32" Nullable="false" />
-    <Property Name="ProductTypeName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="Price" Type="Double" Nullable="false" />
-    <Property Name="Customisation" Type="Boolean" Nullable="false" />
-    <Property Name="ColorCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="MeasurementUnitId" Type="Int32" Nullable="false" />
-    <Property Name="MeasurementUnitName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="PriscriptionCategory" Type="Boolean" Nullable="false" />
-    <Property Name="Weight" Type="Double" Nullable="false" />
-    <Property Name="SizeLB" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="DrugCompoundDetailId" Type="Int32" Nullable="false" />
-    <Property Name="DrugCompoundDetailName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="IBarU" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="OriginCountry" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="Manufacturer" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="PackageId" Type="Int32" />
-    <Property Name="PackageName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="GoogleTaxonomyCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="SubCategoryId" Type="Int32" Nullable="false" />
-    <Property Name="SubCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="NextSubCategoryId" Type="Int32" Nullable="false" />
-    <Property Name="NextSubCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="ASIN" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="ImagePath1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="ImagePath2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="ImagePath3" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="ImagePath4" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="ImagePath5" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="Adscore" Type="Int32" Nullable="false" />
-    <Property Name="NickName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="Status" Type="Int32" Nullable="false" />
-    <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-  </EntityType>
   <EntityType Name="MeasurementUnit">
     <Key>
       <PropertyRef Name="Id" />
@@ -1069,7 +1021,6 @@
     <EntitySet Name="DiscountCategories" EntityType="Self.DiscountCategory" />
     <EntitySet Name="DrugCompoundDetails" EntityType="Self.DrugCompoundDetail" />
     <EntitySet Name="MarketingAgents" EntityType="Self.MarketingAgent" />
-    <EntitySet Name="MasterProducts" EntityType="Self.MasterProduct" />
     <EntitySet Name="MeasurementUnits" EntityType="Self.MeasurementUnit" />
     <EntitySet Name="NextSubCategories" EntityType="Self.NextSubCategory" />
     <EntitySet Name="OrderItems" EntityType="Self.OrderItem" />
@@ -1194,6 +1145,7 @@
     <FunctionImport Name="test" ReturnType="Collection(sncModel.test_Result)">
       <Parameter Name="str" Mode="In" Type="String" />
     </FunctionImport>
+    <EntitySet Name="MasterProducts" EntityType="sncModel.MasterProduct" />
   </EntityContainer>
   <ComplexType Name="test_Result">
     <Property Type="Int32" Name="Id" Nullable="false" />
@@ -1240,4 +1192,53 @@
     <Property Type="String" Name="CreatedBy" Nullable="true" />
     <Property Type="String" Name="UpdatedBy" Nullable="true" />
   </ComplexType>
+  <EntityType Name="MasterProduct">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="BrandId" Type="Int32" Nullable="false" />
+    <Property Name="BrandName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="CategoryIds" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="CategoryId" Type="Int32" Nullable="false" />
+    <Property Name="CategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ShortDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="LongDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ProductTypeId" Type="Int32" Nullable="false" />
+    <Property Name="ProductTypeName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Price" Type="Double" Nullable="false" />
+    <Property Name="Customisation" Type="Boolean" Nullable="false" />
+    <Property Name="ColorCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="MeasurementUnitId" Type="Int32" Nullable="false" />
+    <Property Name="MeasurementUnitName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PriscriptionCategory" Type="Boolean" Nullable="false" />
+    <Property Name="Weight" Type="Double" Nullable="false" />
+    <Property Name="SizeLB" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="DrugCompoundDetailId" Type="Int32" Nullable="false" />
+    <Property Name="DrugCompoundDetailName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="IBarU" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="OriginCountry" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Manufacturer" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PackageId" Type="Int32" />
+    <Property Name="PackageName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="GoogleTaxonomyCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SubCategoryId" Type="Int32" Nullable="false" />
+    <Property Name="SubCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="NextSubCategoryId" Type="Int32" Nullable="false" />
+    <Property Name="NextSubCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ASIN" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ImagePath1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ImagePath2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ImagePath3" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ImagePath4" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ImagePath5" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Adscore" Type="Int32" Nullable="false" />
+    <Property Name="NickName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="Int32" Nullable="false" />
+    <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
 </Schema>

@@ -103,7 +103,7 @@
             @using (Html.BeginForm("Edit", "Shop", FormMethod.Post, new { id = "ShopForm", role = "form", enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
-                <input type="hidden" name="Code" id="Code" value="@Model.Code" />
+                <input type="hidden" name="Code" id="Id" value="@Model.Id" />
                 <input type="hidden" name="ImageLogoPath" value="@Model.ImageLogoPath" />
                 <input type="hidden" name="ImageBannerPath" value="@Model.ImageBannerPath" />
                 <input type="hidden" name="ImagePath" value="@Model.ImagePath" />
@@ -245,7 +245,7 @@
                                     <input id="Longitude" type="text" class="form-control" placeholder="Longitude" name="Longitude" value="@Model.Longitude" readonly />
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            @*<div class="form-group row">
                                 <div class="col-md-4">
                                     <label class="col-form-label"><strong class="text-secondary">IP Address</strong></label>
                                 </div>
@@ -284,7 +284,7 @@
                                         </a>
                                     </div>
                                 </div>
-                            </div>
+                            </div>*@
                         </div>
                         <div class="col-md-6">
                             <div class="row">
@@ -311,127 +311,166 @@
                                     <div class="col-md-7">
                                         <input id="Adscore" type="number" min="1" value="@Model.Adscore" class="form-control" name="Adscore" />
                                     </div>
-
                                 </div>
-                                <div class="col-md-12 form-group row">
-                                    <div class="col-md-5 text-md-left">
-                                        <label class="col-form-label"><strong class="text-secondary">Opening Hours</strong></label>
+                                <div class="form-group row col-md-12">
+                                    <div class="col-md-5">
+                                        <label class="col-form-label"><strong class="text-secondary">IP Address</strong></label>
                                     </div>
                                     <div class="col-md-7">
+                                        <input id="IpAddress" type="text" class="form-control" placeholder="IP Address" name="IpAddress" value="@Model.IpAddress" />
                                     </div>
                                 </div>
-                                <div class="col-md-12 form-group row">
-                                    <div class="col-md-1 text-md-left">
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <label class="text-secondary font-weight-bold ml-2">Shop Image</label><br />
+                                        <div class="img-upload-container">
+                                            <a href="~/Home/ImageDenied">
+                                                <img class="img-container w-100 h-100" id="img-upload" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath" onerror="this.src='/Images/No Photo.png'" />
+                                                <input type="file" id="ShopImage" name="ShopImage" class="d-none" />
+                                                <label for="ShopImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            </a>
+                                        </div>
                                     </div>
-                                    <div class="col-md-4 text-md-left">
-                                        <label class="col-form-label text-secondary font-weight-bold">Monday</label>
+                                    <div class="col-md-4">
+                                        <label class="text-secondary font-weight-bold ml-2">Logo Image</label><br />
+                                        <div class="img-upload-container">
+                                            <a href="~/Home/ImageDenied">
+                                                <img class="img-container w-100 h-100" id="img-logo" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageLogoPath" onerror="this.src='/Images/No Photo.png'" />
+                                                <input type="file" id="LogoImage" name="LogoImage" class="d-none" />
+                                                <label for="LogoImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            </a>
+                                        </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <input id="MondayOpenTime" type="text" class="form-control" name="MondayOpenTime" value="@Model.MondayOpenTime" />
-                                    </div>
-                                    <div class="col-md-1">
-                                        <h5 class="font-weight-bold">-</h5>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input id="MondayCloseTime" type="text" class="form-control" name="MondayCloseTime" value="@Model.MondayCloseTime" />
-                                    </div>
-                                </div>
-                                <div class="col-md-12 form-group row">
-                                    <div class="col-md-1 text-md-left">
-                                    </div>
-                                    <div class="col-md-4 text-md-left">
-                                        <label class="col-form-label text-secondary font-weight-bold">Tuesday</label>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input id="TuesdayOpenTime" type="text" class="form-control" name="TuesdayOpenTime" value="@Model.TuesdayOpenTime" />
-                                    </div>
-                                    <div class="col-md-1">
-                                        <h5 class="font-weight-bold">-</h5>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input id="TuesdayCloseTime" type="text" class="form-control" name="TuesdayCloseTime" value="@Model.TuesdayCloseTime" />
-                                    </div>
-                                </div>
-                                <div class="col-md-12 form-group row">
-                                    <div class="col-md-1 text-md-left">
-                                    </div>
-                                    <div class="col-md-4 text-md-left">
-                                        <label class="col-form-label text-secondary font-weight-bold">Wednesday</label>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input id="WednesdayOpenTime" type="text" class="form-control" name="WednesdayOpenTime" value="@Model.WednesdayOpenTime" />
-                                    </div>
-                                    <div class="col-md-1">
-                                        <h5 class="font-weight-bold">-</h5>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input id="WednesdayCloseTime" type="text" class="form-control" name="WednesdayCloseTime" value="@Model.WednesdayCloseTime" />
+                                    <div class="col-md-4">
+                                        <label class="text-secondary font-weight-bold ml-2">Banner Image</label><br />
+                                        <div class="img-upload-container">
+                                            <a href="~/Home/ImageDenied">
+                                                <img class="img-container w-100 h-100" id="img-banner" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageBannerPath" onerror="this.src='/Images/No Photo.png'" />
+                                                <input type="file" id="BannerImage" name="BannerImage" class="d-none" />
+                                                <label for="BannerImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12 form-group row">
-                                    <div class="col-md-1 text-md-left">
-                                    </div>
-                                    <div class="col-md-4 text-md-left">
-                                        <label class="col-form-label text-secondary font-weight-bold">Thursday</label>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input id="ThursdayOpenTime" type="text" class="form-control" name="ThursdayOpenTime" value="@Model.ThursdayOpenTime" />
-                                    </div>
-                                    <div class="col-md-1">
-                                        <h5 class="font-weight-bold">-</h5>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input id="ThursdayCloseTime" type="text" class="form-control" name="ThursdayCloseTime" value="@Model.ThursdayCloseTime" />
-                                    </div>
-                                </div>
-                                <div class="col-md-12 form-group row">
-                                    <div class="col-md-1 text-md-left">
-                                    </div>
-                                    <div class="col-md-4 text-md-left">
-                                        <label class="col-form-label text-secondary font-weight-bold">Friday</label>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input id="FridayOpenTime" type="text" class="form-control" name="FridayOpenTime" value="@Model.FridayOpenTime" />
-                                    </div>
-                                    <div class="col-md-1">
-                                        <h5 class="font-weight-bold">-</h5>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input id="FridayCloseTime" type="text" class="form-control" name="FridayCloseTime" value="@Model.FridayCloseTime" />
-                                    </div>
-                                </div>
-                                <div class="col-md-12 form-group row">
-                                    <div class="col-md-1 text-md-left">
-                                    </div>
-                                    <div class="col-md-4 text-md-left">
-                                        <label class="col-form-label text-secondary font-weight-bold">Saturday</label>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input id="SaturdayOpenTime" type="text" class="form-control" name="SaturdayOpenTime" value="@Model.SaturdayOpenTime" />
-                                    </div>
-                                    <div class="col-md-1">
-                                        <h5 class="font-weight-bold">-</h5>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input id="SaturdayCloseTime" type="text" class="form-control" name="SaturdayCloseTime" value="@Model.SaturdayCloseTime" />
-                                    </div>
-                                </div>
-                                <div class="col-md-12 form-group row">
-                                    <div class="col-md-1 text-md-left">
-                                    </div>
-                                    <div class="col-md-4 text-md-left">
-                                        <label class="col-form-label text-secondary font-weight-bold">Sunday</label>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input id="SundayOpenTime" type="text" class="form-control" name="SundayOpenTime" value="@Model.SundayOpenTime" />
-                                    </div>
-                                    <div class="col-md-1">
-                                        <h5 class="font-weight-bold">-</h5>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input id="SundayCloseTime" type="text" class="form-control" name="SundayCloseTime" value="@Model.SundayCloseTime" />
-                                    </div>
-                                </div>
+                                @*<div class="col-md-12 form-group row">
+            <div class="col-md-5 text-md-left">
+                <label class="col-form-label"><strong class="text-secondary">Opening Hours</strong></label>
+            </div>
+            <div class="col-md-7">
+            </div>
+        </div>*@
+                                @*<div class="col-md-12 form-group row">
+            <div class="col-md-1 text-md-left">
+            </div>
+            <div class="col-md-4 text-md-left">
+                <label class="col-form-label text-secondary font-weight-bold">Monday</label>
+            </div>
+            <div class="col-md-3">
+                <input id="MondayOpenTime" type="text" class="form-control" name="MondayOpenTime" value="@Model.MondayOpenTime" />
+            </div>
+            <div class="col-md-1">
+                <h5 class="font-weight-bold">-</h5>
+            </div>
+            <div class="col-md-3">
+                <input id="MondayCloseTime" type="text" class="form-control" name="MondayCloseTime" value="@Model.MondayCloseTime" />
+            </div>
+        </div>
+        <div class="col-md-12 form-group row">
+            <div class="col-md-1 text-md-left">
+            </div>
+            <div class="col-md-4 text-md-left">
+                <label class="col-form-label text-secondary font-weight-bold">Tuesday</label>
+            </div>
+            <div class="col-md-3">
+                <input id="TuesdayOpenTime" type="text" class="form-control" name="TuesdayOpenTime" value="@Model.TuesdayOpenTime" />
+            </div>
+            <div class="col-md-1">
+                <h5 class="font-weight-bold">-</h5>
+            </div>
+            <div class="col-md-3">
+                <input id="TuesdayCloseTime" type="text" class="form-control" name="TuesdayCloseTime" value="@Model.TuesdayCloseTime" />
+            </div>
+        </div>
+        <div class="col-md-12 form-group row">
+            <div class="col-md-1 text-md-left">
+            </div>
+            <div class="col-md-4 text-md-left">
+                <label class="col-form-label text-secondary font-weight-bold">Wednesday</label>
+            </div>
+            <div class="col-md-3">
+                <input id="WednesdayOpenTime" type="text" class="form-control" name="WednesdayOpenTime" value="@Model.WednesdayOpenTime" />
+            </div>
+            <div class="col-md-1">
+                <h5 class="font-weight-bold">-</h5>
+            </div>
+            <div class="col-md-3">
+                <input id="WednesdayCloseTime" type="text" class="form-control" name="WednesdayCloseTime" value="@Model.WednesdayCloseTime" />
+            </div>
+        </div>
+        <div class="col-md-12 form-group row">
+            <div class="col-md-1 text-md-left">
+            </div>
+            <div class="col-md-4 text-md-left">
+                <label class="col-form-label text-secondary font-weight-bold">Thursday</label>
+            </div>
+            <div class="col-md-3">
+                <input id="ThursdayOpenTime" type="text" class="form-control" name="ThursdayOpenTime" value="@Model.ThursdayOpenTime" />
+            </div>
+            <div class="col-md-1">
+                <h5 class="font-weight-bold">-</h5>
+            </div>
+            <div class="col-md-3">
+                <input id="ThursdayCloseTime" type="text" class="form-control" name="ThursdayCloseTime" value="@Model.ThursdayCloseTime" />
+            </div>
+        </div>
+        <div class="col-md-12 form-group row">
+            <div class="col-md-1 text-md-left">
+            </div>
+            <div class="col-md-4 text-md-left">
+                <label class="col-form-label text-secondary font-weight-bold">Friday</label>
+            </div>
+            <div class="col-md-3">
+                <input id="FridayOpenTime" type="text" class="form-control" name="FridayOpenTime" value="@Model.FridayOpenTime" />
+            </div>
+            <div class="col-md-1">
+                <h5 class="font-weight-bold">-</h5>
+            </div>
+            <div class="col-md-3">
+                <input id="FridayCloseTime" type="text" class="form-control" name="FridayCloseTime" value="@Model.FridayCloseTime" />
+            </div>
+        </div>
+        <div class="col-md-12 form-group row">
+            <div class="col-md-1 text-md-left">
+            </div>
+            <div class="col-md-4 text-md-left">
+                <label class="col-form-label text-secondary font-weight-bold">Saturday</label>
+            </div>
+            <div class="col-md-3">
+                <input id="SaturdayOpenTime" type="text" class="form-control" name="SaturdayOpenTime" value="@Model.SaturdayOpenTime" />
+            </div>
+            <div class="col-md-1">
+                <h5 class="font-weight-bold">-</h5>
+            </div>
+            <div class="col-md-3">
+                <input id="SaturdayCloseTime" type="text" class="form-control" name="SaturdayCloseTime" value="@Model.SaturdayCloseTime" />
+            </div>
+        </div>
+        <div class="col-md-12 form-group row">
+            <div class="col-md-1 text-md-left">
+            </div>
+            <div class="col-md-4 text-md-left">
+                <label class="col-form-label text-secondary font-weight-bold">Sunday</label>
+            </div>
+            <div class="col-md-3">
+                <input id="SundayOpenTime" type="text" class="form-control" name="SundayOpenTime" value="@Model.SundayOpenTime" />
+            </div>
+            <div class="col-md-1">
+                <h5 class="font-weight-bold">-</h5>
+            </div>
+            <div class="col-md-3">
+                <input id="SundayCloseTime" type="text" class="form-control" name="SundayCloseTime" value="@Model.SundayCloseTime" />
+            </div>
+        </div>*@
                             </div>
                         </div>
                     </div>
@@ -2303,7 +2342,7 @@
             var autocomplete = new google.maps.places.Autocomplete(input);
             map = new google.maps.Map(document.getElementById('map'), {
                 center: { lat: latitude, lng: longitude },
-                zoom: 6
+                zoom: 13
             });
 
             infoWindow = new google.maps.InfoWindow;
