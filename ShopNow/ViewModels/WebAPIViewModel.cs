@@ -29,7 +29,7 @@ namespace ShopNow.ViewModels
     }
     public class items
     {
-        public string itemId { get; set; }
+        public int itemId { get; set; }
         public string itemName { get; set; }      
         public string iBarU { get; set; }
         public string status { get; set; }

@@ -18,7 +18,7 @@
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
-    <Use64BitIISExpress />
+    <Use64BitIISExpress>true</Use64BitIISExpress>
     <IISExpressSSLPort>
     </IISExpressSSLPort>
     <IISExpressAnonymousAuthentication>
@@ -319,6 +319,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Base\BaseClass.cs" />
     <Compile Include="Controllers\AccessPolicyController.cs" />
     <Compile Include="Controllers\AddOnCategoryController.cs" />
     <Compile Include="Controllers\BannerController.cs" />
@@ -433,6 +434,10 @@
     <Compile Include="Models\DrugCompoundDetail.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GetDeliveryBoy.cs" />
+    <Compile Include="Models\GetDEliveryBoyList_Result.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GetTableVAlueString_Result.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
@@ -499,6 +504,9 @@
     <Compile Include="Models\ShopCategory.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ShopCredit.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ShopDishAddOn.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
@@ -521,12 +529,18 @@
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\AccessPolicyViewModel.cs" />
     <Compile Include="ViewModels\AddOnCategoryViewModel.cs" />
     <Compile Include="ViewModels\BannerViewModel.cs" />
     <Compile Include="ViewModels\BillViewModel.cs" />
     <Compile Include="ViewModels\CartViewModel.cs" />
     <Compile Include="ViewModels\CustomerReviewViewModel .cs" />
+    <Compile Include="ViewModels\DeliveryBoysList.cs" />
     <Compile Include="ViewModels\DeliveryBoyViewModel.cs" />
     <Compile Include="ViewModels\DiscountCategoryViewModel.cs" />
     <Compile Include="ViewModels\DrugCompoundDetailViewModel.cs" />
@@ -2812,6 +2826,8 @@
     <Content Include="Views\Category\Index.cshtml" />
     <Content Include="Views\Shop\Details.cshtml" />
     <Content Include="Views\DeliveryBoy\Create.cshtml" />
+    <Content Include="Views\MasterProduct\Create.cshtml" />
+    <Content Include="Views\MasterProduct\Edit.cshtml" />
     <Content Include="Views\MasterProduct\List.cshtml" />
     <Content Include="Views\Portion\Index.cshtml" />
     <Content Include="Views\Portion\List.cshtml" />
@@ -2943,6 +2959,7 @@
     <Content Include="Views\MasterProduct\FMCGEdit.cshtml" />
     <Content Include="Views\Banner\Create.cshtml" />
     <Content Include="Views\Banner\List.cshtml" />
+    <Content Include="Views\MasterProduct\DishList.cshtml" />
     <Content Include="Views\MasterProduct\ElectronicList.cshtml" />
     <Content Include="Views\MasterProduct\ElectronicCreate.cshtml" />
     <Content Include="Views\MasterProduct\ElectronicEdit.cshtml" />
@@ -3017,6 +3034,12 @@
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\AWSSDK.S3.3.3.110.57\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

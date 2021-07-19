@@ -67,6 +67,7 @@ namespace ShopNow.ViewModels
         }
     }
 
+
     public class DeliveryBoyPlacesListViewModel
     {
          public int Id{ get; set; }

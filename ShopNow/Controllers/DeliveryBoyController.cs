@@ -7,11 +7,14 @@ using ShopNow.Helpers;
 using ShopNow.Models;
 using ShopNow.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Resources;
+using ShopNow.Base;
 
 namespace ShopNow.Controllers
 {
@@ -53,9 +56,17 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var List = (from s in db.DeliveryBoys
-                        select s).OrderBy(s => s.Name).Where(i => i.Status == 0).ToList();
-            return View(List);
+
+            List<GetDeliveryBoy> lstDelivery = db.DeliveryBoys.Where(D => D.Status == 0)
+    .Select(m => new GetDeliveryBoy
+    {
+        Id = m.Id,
+        Name = m.Name,
+        PhoneNumber = m.PhoneNumber,
+        Active = m.Active,
+        ImagePath = ((m.ImagePath) != "" ? BaseClass.smallImage + m.ImagePath : m.ImagePath)
+    }).ToList();
+            return View(lstDelivery);
         }
         
         [AccessPolicy(PageCode = "SHNDBYIAL006")]
@@ -201,6 +212,18 @@ namespace ShopNow.Controllers
                 if (model.DrivingLicenseImagePath != null) { count++; }
                 if (model.BankPassbookPath != null) { count++; }
                 model.Count = count;
+            }
+            if (!string.IsNullOrWhiteSpace(model.DrivingLicenseImagePath))
+            {
+                model.DrivingLicenseImagePath = BaseClass.mediumImage + model.DrivingLicenseImagePath;
+            }
+            if (!string.IsNullOrWhiteSpace(model.BankPassbookPath))
+            {
+                model.BankPassbookPath = BaseClass.mediumImage + model.BankPassbookPath;
+            }
+            if (!string.IsNullOrWhiteSpace(model.ImagePath))
+            {
+                model.ImagePath = BaseClass.mediumImage + model.ImagePath;
             }
             return View(model);
         }
@@ -678,9 +701,9 @@ namespace ShopNow.Controllers
 
         [AccessPolicy(PageCode = "SHNDBYE002")]
 
-        public JsonResult GetDeliveryBoyShop(int Id, double latitude, double longitude)
+        public JsonResult GetDeliveryBoyShop(int code, double latitude, double longitude)
         {
-            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == Id);//DeliveryBoy.Get(code);
+            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == code);//DeliveryBoy.Get(code);
             if (deliveryBoy.Latitude == latitude && deliveryBoy.Longitude == longitude)
             {
                 return Json(true, JsonRequestBehavior.AllowGet);
@@ -693,10 +716,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNDBYE002")]
-        public JsonResult DeactivateDeliveryBoyShop(int id)
+        public JsonResult DeactivateDeliveryBoyShop(int code)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var list = db.DeliveryBoyShops.Where(i => i.DeliveryBoyId == id && i.Status == 0).ToList();
+            var list = db.DeliveryBoyShops.Where(i => i.DeliveryBoyId == code && i.Status == 0).ToList();
             if (list != null)
             {
                 foreach (var dbs in list)
@@ -715,10 +738,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNDBYE002")]
-        public JsonResult VerifyImage(int id)
+        public JsonResult VerifyImage(int Code)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var dboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == id); // DeliveryBoy.Get(code);
+            var dboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == Code); // DeliveryBoy.Get(code);
             dboy.Status = 5;
             dboy.DateUpdated = DateTime.Now;
             dboy.UpdatedBy = user.Name;
@@ -748,10 +771,10 @@ namespace ShopNow.Controllers
             return Json(isCheck, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult UpdateDeliveryBoyOnline(int id, int Active)
+        public ActionResult UpdateDeliveryBoyOnline(int code, int Active)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var dboy = db.DeliveryBoys.Where(i => i.Id == id && i.Status == 0).FirstOrDefault();
+            var dboy = db.DeliveryBoys.Where(i => i.Id == code && i.Status == 0).FirstOrDefault();
             dboy.Active = Active;
             db.Entry(dboy).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();

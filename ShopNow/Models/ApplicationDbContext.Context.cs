@@ -68,7 +68,10 @@ namespace ShopNow.Models
         public virtual DbSet<Staff> Staffs { get; set; }
         public virtual DbSet<SubCategory> SubCategories { get; set; }
         public virtual DbSet<UserEnquiry> UserEnquiries { get; set; }
+        public virtual DbSet<ShopCredit> ShopCredits { get; set; }
+
         public virtual DbSet<MasterProduct> MasterProducts { get; set; }
+
     
         [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)
@@ -340,6 +343,11 @@ namespace ShopNow.Models
                 new ObjectParameter("str", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<test_Result>("test", strParameter);
+        }
+    
+        public virtual ObjectResult<GetDEliveryBoyList_Result> GetDEliveryBoyList()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetDEliveryBoyList_Result>("GetDEliveryBoyList");
         }
     }
 }

@@ -5,7 +5,7 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="sncModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="AccessPolicies">
+    <EntityType Name="AccessPolicies">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -788,6 +788,16 @@
           <Property Name="CreatedBy" Type="nvarchar(max)" />
           <Property Name="UpdatedBy" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="ShopCredit">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="PlatformCredit" Type="float" Nullable="false" />
+          <Property Name="DeliveryCredit" Type="float" Nullable="false" />
+          <Property Name="ShopId" Type="int" Nullable="false" />
+          <Property Name="DateUpdated" Type="datetime" />
+        </EntityType>
         <EntityType Name="ShopDishAddOns">
           <Key>
             <PropertyRef Name="Id" />
@@ -1055,6 +1065,7 @@
           <Parameter Name="page" Type="int" Mode="In" />
           <Parameter Name="pageSize" Type="int" Mode="In" />
         </Function>
+        <Function Name="GetDEliveryBoyList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="GetKeyname" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="nvarchar">
           <Parameter Name="key" Type="nvarchar" Mode="In" />
         </Function>
@@ -1173,6 +1184,7 @@
           <EntitySet Name="ProductSpecifications" EntityType="Self.ProductSpecifications" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RefundsData" EntityType="Self.RefundsData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ShopCategories" EntityType="Self.ShopCategories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ShopCredit" EntityType="Self.ShopCredit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ShopDishAddOns" EntityType="Self.ShopDishAddOns" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ShopMembers" EntityType="Self.ShopMembers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Shops" EntityType="Self.Shops" Schema="dbo" store:Type="Tables" />
@@ -1581,6 +1593,57 @@
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
+       <EntityType Name="MasterProduct">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BrandId" Type="Int32" Nullable="false" />
+          <Property Name="BrandName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <Property Name="CategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ShortDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LongDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ProductTypeId" Type="Int32" Nullable="false" />
+          <Property Name="ProductTypeName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="Customisation" Type="Boolean" Nullable="false" />
+          <Property Name="ColorCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MeasurementUnitId" Type="Int32" Nullable="false" />
+          <Property Name="MeasurementUnitName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PriscriptionCategory" Type="Boolean" Nullable="false" />
+          <Property Name="Weight" Type="Double" Nullable="false" />
+          <Property Name="SizeLB" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DrugCompoundDetailId" Type="Int32" Nullable="false" />
+          <Property Name="DrugCompoundDetailName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IBarU" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OriginCountry" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Manufacturer" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PackageId" Type="Int32" />
+          <Property Name="PackageName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="GoogleTaxonomyCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SubCategoryId" Type="Int32" Nullable="false" />
+          <Property Name="SubCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="NextSubCategoryId" Type="Int32" Nullable="false" />
+          <Property Name="NextSubCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ASIN" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath3" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath4" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath5" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Adscore" Type="Int32" Nullable="false" />
+          <Property Name="NickName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryIds" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+=======
+>>>>>>> fc8dac83bccb8cea6493084313b21abd2eee98d3
         <EntityType Name="MeasurementUnit">
           <Key>
             <PropertyRef Name="Id" />
@@ -2350,6 +2413,10 @@
           <FunctionImport Name="test" ReturnType="Collection(sncModel.test_Result)">
           <Parameter Name="str" Mode="In" Type="String" />
           </FunctionImport>
+
+          <FunctionImport Name="GetDEliveryBoyList" ReturnType="Collection(sncModel.GetDEliveryBoyList_Result)" />
+          <EntitySet Name="ShopCredits" EntityType="sncModel.ShopCredit" />
+
           <EntitySet Name="MasterProducts" EntityType="sncModel.MasterProduct" />
         </EntityContainer>
         <ComplexType Name="test_Result">
@@ -2397,6 +2464,23 @@
           <Property Type="String" Name="CreatedBy" Nullable="true" />
           <Property Type="String" Name="UpdatedBy" Nullable="true" />
         </ComplexType>
+        <ComplexType Name="GetDEliveryBoyList_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="true" />
+          <Property Type="Int32" Name="Active" Nullable="false" />
+          <Property Type="String" Name="PhoneNumber" Nullable="true" />
+          <Property Type="String" Name="ImagePath" Nullable="true" />
+        </ComplexType>
+  <EntityType Name="ShopCredit">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="PlatformCredit" Type="Double" Nullable="false" />
+    <Property Name="DeliveryCredit" Type="Double" Nullable="false" />
+    <Property Name="ShopId" Type="Int32" Nullable="false" />
+    <Property Name="DateUpdated" Type="DateTime" Precision="3" />
+  </EntityType>
         <EntityType Name="MasterProduct">
           <Key>
             <PropertyRef Name="Id" />
@@ -3493,6 +3577,28 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+
+          <FunctionImportMapping FunctionImportName="GetDEliveryBoyList" FunctionName="sncModel.Store.GetDEliveryBoyList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="sncModel.GetDEliveryBoyList_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+  <EntitySetMapping Name="ShopCredits">
+    <EntityTypeMapping TypeName="sncModel.ShopCredit">
+      <MappingFragment StoreEntitySet="ShopCredit">
+        <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+        <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+        <ScalarProperty Name="DeliveryCredit" ColumnName="DeliveryCredit" />
+        <ScalarProperty Name="PlatformCredit" ColumnName="PlatformCredit" />
+      </MappingFragment>
+    </EntityTypeMapping>
+  </EntitySetMapping>
           <EntitySetMapping Name="MasterProducts">
             <EntityTypeMapping TypeName="sncModel.MasterProduct">
               <MappingFragment StoreEntitySet="MasterProducts">

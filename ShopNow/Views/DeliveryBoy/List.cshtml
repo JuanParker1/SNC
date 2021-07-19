@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ShopNow.Models.DeliveryBoy>
+﻿@model IEnumerable<ShopNow.Models.GetDeliveryBoy>
 @using GridMvc.Html
 @{
     ViewBag.Title = "Delivery Boy List";
@@ -94,17 +94,16 @@
     </div>
     @Html.Grid(Model).Columns(columns =>
         {
-        columns.Add(c => c.Name).Titled("Name").Encoded(false).Sanitized(false).RenderValueAs(model => Html.ActionLink(model.Name, "Details", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(model.Id) }).ToHtmlString()).Filterable(true).SetWidth(20);
+        columns.Add(c => c.Name).Titled("Name").Encoded(false).Sanitized(false).Filterable(true).SetWidth(20).RenderValueAs(model => Html.ActionLink(model.Name, "Details", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(model.Id) }).ToHtmlString());
         columns.Add(c => c.PhoneNumber).Titled("Phone No.").Filterable(true).SetWidth(15);
-        //columns.Add(c => c.ShopName).Titled("Shop").Filterable(true).SetWidth(10);
         columns.Add().Encoded(false).Sanitized(false).Titled("Image").Filterable(false).SetWidth(10).RenderValueAs(c => @<div><img alt="Image" data-toggle="modal" data-target="#myModal" class="img-thumbnail DeliveryBoyImage" src="@c.ImagePath" style="width:60px; height:45px" onerror="this.src='/Images/No Photo.png'" /></div>);
         columns.Add()
             .Encoded(false)
-            .Sanitized(false)
+           .Sanitized(false)
             .RenderValueAs(s => new HtmlString
-                        ("<label class='switch'> <input type='checkbox' value='" + s.Active + "' Id='Id_" + s.Id + "' class='CheckOnline' data-code='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(10);
+                        ("<label class='switch'> <input type='checkbox' value='" + s.Active + "' Id='Id_" + s.Id + "' class='CheckOnline' data-code='" + s.Id + "' disabled><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(10);
         columns.Add()
-            .Encoded(false)
+           .Encoded(false)
             .Sanitized(false)
             .RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
                             + Html.ActionLink("Delete", "Delete", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);

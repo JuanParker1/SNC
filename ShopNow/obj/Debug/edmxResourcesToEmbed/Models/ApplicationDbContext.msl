@@ -1042,6 +1042,27 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="GetDEliveryBoyList" FunctionName="sncModel.Store.GetDEliveryBoyList">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="sncModel.GetDEliveryBoyList_Result">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="ShopCredits">
+      <EntityTypeMapping TypeName="sncModel.ShopCredit">
+        <MappingFragment StoreEntitySet="ShopCredit">
+          <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+          <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+          <ScalarProperty Name="DeliveryCredit" ColumnName="DeliveryCredit" />
+          <ScalarProperty Name="PlatformCredit" ColumnName="PlatformCredit" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="MasterProducts">
       <EntityTypeMapping TypeName="sncModel.MasterProduct">
         <MappingFragment StoreEntitySet="MasterProducts">

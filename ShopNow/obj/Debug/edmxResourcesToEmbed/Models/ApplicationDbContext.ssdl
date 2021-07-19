@@ -783,6 +783,16 @@
     <Property Name="CreatedBy" Type="nvarchar(max)" />
     <Property Name="UpdatedBy" Type="nvarchar(max)" />
   </EntityType>
+  <EntityType Name="ShopCredit">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="PlatformCredit" Type="float" Nullable="false" />
+    <Property Name="DeliveryCredit" Type="float" Nullable="false" />
+    <Property Name="ShopId" Type="int" Nullable="false" />
+    <Property Name="DateUpdated" Type="datetime" />
+  </EntityType>
   <EntityType Name="ShopDishAddOns">
     <Key>
       <PropertyRef Name="Id" />
@@ -1050,6 +1060,7 @@
     <Parameter Name="page" Type="int" Mode="In" />
     <Parameter Name="pageSize" Type="int" Mode="In" />
   </Function>
+  <Function Name="GetDEliveryBoyList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="GetKeyname" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="nvarchar">
     <Parameter Name="key" Type="nvarchar" Mode="In" />
   </Function>
@@ -1168,6 +1179,7 @@
     <EntitySet Name="ProductSpecifications" EntityType="Self.ProductSpecifications" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RefundsData" EntityType="Self.RefundsData" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ShopCategories" EntityType="Self.ShopCategories" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ShopCredit" EntityType="Self.ShopCredit" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ShopDishAddOns" EntityType="Self.ShopDishAddOns" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ShopMembers" EntityType="Self.ShopMembers" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Shops" EntityType="Self.Shops" Schema="dbo" store:Type="Tables" />
