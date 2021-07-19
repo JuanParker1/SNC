@@ -87,7 +87,7 @@ namespace ShopNow.Controllers
                      CategoryName = m.CategoryName,
                      BrandName = m.BrandName,
                      Name = m.Name,
-                     DiscountCategoryPercentage = i.DiscountCategoryPercentage,
+                     //DiscountCategoryPercentage = i.DiscountCategoryPercentage,
                      ShopId = i.ShopId,
                      ShopName = i.ShopName
                  }).ToList();
@@ -641,7 +641,7 @@ namespace ShopNow.Controllers
                         shopdishAddOn.IsActive = true;
                         shopdishAddOn.ProductId = prod.Id;
                         shopdishAddOn.ProductName = prod.Name;
-                        shopdishAddOn.Shopid = prod.ShopId;
+                        shopdishAddOn.ShopId = prod.ShopId;
                         shopdishAddOn.ShopName = prod.ShopName;
                         shopdishAddOn.ProductDishAddonId = productDishAddon.Id;
                         db.ShopDishAddOns.Add(shopdishAddOn);
@@ -751,7 +751,7 @@ namespace ShopNow.Controllers
                         shopdishAddOn.IsActive = true;
                         shopdishAddOn.ProductId = prod.Id;
                         shopdishAddOn.ProductName = prod.Name;
-                        shopdishAddOn.Shopid = prod.ShopId;
+                        shopdishAddOn.ShopId = prod.ShopId;
                         shopdishAddOn.ShopName = prod.ShopName;
                         shopdishAddOn.ProductDishAddonId = productDishAddon.Id;
                         db.ShopDishAddOns.Add(shopdishAddOn);
@@ -1235,26 +1235,26 @@ namespace ShopNow.Controllers
 
         // Food Create(Dish) Json Result
 
-        [AccessPolicy(PageCode = "SHNPROAO014")]
-        public JsonResult AddOns(int id)
-        {
-            var model = new AddOnsCreateViewModel();
-            model.DishLists = db.DishAddOns.Where(i => i.MasterProductId == id && i.Status == 0).Select(i => new AddOnsCreateViewModel.DishList
-            {
-                Name = i.Name,
-                Id = i.Id,
-                MasterProductId = i.MasterProductId,
-                MasterProductName = i.MasterProductName,
-                AddOnCategoryId = i.AddOnCategoryId,
-                AddOnCategoryName = i.AddOnCategoryName,
-                PortionId = i.PortionId,
-                PortionName = i.PortionName,
-                CrustName = i.CrustName,
-                Price = i.Price,
-                Qty = i.Qty
-            }).ToList();
-            return Json(model.DishLists, JsonRequestBehavior.AllowGet);
-        }
+        //[AccessPolicy(PageCode = "SHNPROAO014")]
+        //public JsonResult AddOns(int id)
+        //{
+        //    var model = new AddOnsCreateViewModel();
+        //    model.DishLists = db.DishAddOns.Where(i => i.MasterProductId == id && i.Status == 0).Select(i => new AddOnsCreateViewModel.DishList
+        //    {
+        //        Name = i.Name,
+        //        Id = i.Id,
+        //        MasterProductId = i.MasterProductId,
+        //        MasterProductName = i.MasterProductName,
+        //        AddOnCategoryId = i.AddOnCategoryId,
+        //        AddOnCategoryName = i.AddOnCategoryName,
+        //        PortionId = i.PortionId,
+        //        PortionName = i.PortionName,
+        //        CrustName = i.CrustName,
+        //        Price = i.Price,
+        //        Qty = i.Qty
+        //    }).ToList();
+        //    return Json(model.DishLists, JsonRequestBehavior.AllowGet);
+        //}
 
         [HttpPost]
         [AccessPolicy(PageCode = "SHNPROATA015")]
@@ -1644,8 +1644,8 @@ namespace ShopNow.Controllers
                 PackageName = i.PackageName,
                 Manufacturer = i.Manufacturer,
                 OriginCountry = i.OriginCountry,
-                iBarU = i.iBarU,
-                weight = i.weight,
+                iBarU = i.IBarU,
+                weight = i.Weight,
                 SizeLB = i.SizeLB,
                 Price = i.Price,
                 ImagePath1 = i.ImagePath1,
@@ -1800,7 +1800,7 @@ namespace ShopNow.Controllers
                 ProductTypeId = i.ProductTypeId,
                 ASIN = i.ASIN,
                 GoogleTaxonomyCode = i.GoogleTaxonomyCode,
-                weight = i.weight,
+                weight = i.Weight,
                 SizeLB = i.SizeLB,
                 MeasurementUnitId = i.MeasurementUnitId,
                 MeasurementUnitName = i.MeasurementUnitName,
@@ -1858,7 +1858,7 @@ namespace ShopNow.Controllers
                 ProductTypeId = i.ProductTypeId,
                 ASIN = i.ASIN,
                 GoogleTaxonomyCode = i.GoogleTaxonomyCode,
-                weight = i.weight,
+                weight = i.Weight,
                 SizeLB = i.SizeLB,
                 MeasurementUnitId = i.MeasurementUnitId,
                 MeasurementUnitName = i.MeasurementUnitName,

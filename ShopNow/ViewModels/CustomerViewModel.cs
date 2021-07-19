@@ -103,7 +103,7 @@ namespace ShopNow.ViewModels
         public string ImageAadharPath { get; set; }
         public string AadharName { get; set; }
         public string AadharNumber { get; set; }
-        public string DOB { get; set; }
+        public DateTime? DOB { get; set; }
         public bool AgeVerify { get; set; }
         public int AddressType { get; set; }
         public string Name { get; set; }

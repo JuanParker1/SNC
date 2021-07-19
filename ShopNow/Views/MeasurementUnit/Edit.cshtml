@@ -14,7 +14,7 @@
         <div class="col-md-10 mx-auto">
             @using (Html.BeginForm("Edit", "MeasurementUnit", FormMethod.Post, new { id = "MeasurementUnitEditForm" }))
             {
-                <input id="Code" type="hidden" class="form-control" value="@Model.Code" name="Code" />
+                <input type="hidden" class="form-control" value="@Model.Id" name="Id" />
                 <div class="card">
                     <div class="card-header">
                         <h5 class="text-success">Drug Measurement Unit Update Form</h5>

@@ -27,7 +27,7 @@
                                         <label class="col-form-label text-secondary font-weight-bold">Shop Name</label>
                                     </div>
                                     <div class="col-md-4">
-                                        <select id="ShopCode" name="ShopCode" class="form-control"></select>
+                                        <select id="ShopId" name="ShopId" class="form-control"></select>
                                         <input type="hidden" name="ShopName" id="ShopName" />
                                     </div>
                                 </div>
@@ -150,7 +150,7 @@
                 });
 
             $('#Create').on('click', function () {
-                var shop = $("#ShopCode").val();
+                var shop = $("#ShopId").val();
                 var type = $('input[name="Type"]:checked').val();
                 if (shop != null) {
                     if (type == '1' || type == '2' || type == '3') {

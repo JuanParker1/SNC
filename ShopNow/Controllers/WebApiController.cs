@@ -113,14 +113,14 @@ namespace ShopNow.Controllers
                                         {
                                             product.TaxPercentage = 0;
                                         }
-                                        if (med.discountpercentage != null)
-                                        {
-                                            product.DiscountCategoryPercentage = Convert.ToDouble(med.discountpercentage);
-                                        }
-                                        else
-                                        {
-                                            product.DiscountCategoryPercentage = 0;
-                                        }
+                                        //if (med.discountpercentage != null)
+                                        //{
+                                        //    product.DiscountCategoryPercentage = Convert.ToDouble(med.discountpercentage);
+                                        //}
+                                        //else
+                                        //{
+                                        //    product.DiscountCategoryPercentage = 0;
+                                        //}
                                         if (med.loyaltypointsper100value != null)
                                         {
                                             product.LoyaltyPoints = Convert.ToDouble(med.loyaltypointsper100value);
@@ -172,11 +172,11 @@ namespace ShopNow.Controllers
                                         //{
                                         //    productMedicalStock.MinSaleQty = 0;
                                         //}
-                                        product.CategoryNameMain = med.Cat1;
-                                        product.DiscountCategoryId= CheckCategory(med.Cat1, Convert.ToDouble(med.discountpercentage));
+                                        //product.CategoryNameMain = med.Cat1;
+                                        //product.DiscountCategoryId= CheckCategory(med.Cat1, Convert.ToDouble(med.discountpercentage));
                                         product.DiscountCategoryName = med.Cat1;
-                                        product.DiscountCategoryType = 1;
-                                        product.DiscountType = 1;
+                                        //product.DiscountCategoryType = 1;
+                                        //product.DiscountType = 1;
                                         product.ItemTimeStamp = med.itemTimeStamp;
                                         product.Status = 0;
                                         product.CreatedBy = user.Name;
@@ -318,14 +318,14 @@ namespace ShopNow.Controllers
                                         {
                                             product.TaxPercentage = 0;
                                         }
-                                        if (med.discountpercentage != null)
-                                        {
-                                            product.DiscountCategoryPercentage = Convert.ToDouble(med.discountpercentage);
-                                        }
-                                        else
-                                        {
-                                            product.DiscountCategoryPercentage = 0;
-                                        }
+                                        //if (med.discountpercentage != null)
+                                        //{
+                                        //    product.DiscountCategoryPercentage = Convert.ToDouble(med.discountpercentage);
+                                        //}
+                                        //else
+                                        //{
+                                        //    product.DiscountCategoryPercentage = 0;
+                                        //}
                                         if (med.loyaltypointsper100value != null)
                                         {
                                             product.LoyaltyPoints = Convert.ToDouble(med.loyaltypointsper100value);
@@ -377,11 +377,11 @@ namespace ShopNow.Controllers
                                         //{
                                         //    productMedicalStock.MinSaleQty = 0;
                                         //}
-                                        product.CategoryNameMain = med.Cat1;
-                                        product.DiscountCategoryId = CheckCategory(med.Cat1, Convert.ToDouble(med.discountpercentage));
+                                        //product.CategoryNameMain = med.Cat1;
+                                        //product.DiscountCategoryId = CheckCategory(med.Cat1, Convert.ToDouble(med.discountpercentage));
                                         product.DiscountCategoryName = med.Cat1;
-                                        product.DiscountCategoryType = 1;
-                                        product.DiscountType = 1;
+                                        //product.DiscountCategoryType = 1;
+                                        //product.DiscountType = 1;
                                         product.ItemTimeStamp = med.itemTimeStamp;
                                         product.Status = 0;
                                         product.CreatedBy = user.Name;
@@ -496,14 +496,14 @@ namespace ShopNow.Controllers
                                         {
                                             product.TaxPercentage = 0;
                                         }
-                                        if (med.discountpercentage != null)
-                                        {
-                                            product.DiscountCategoryPercentage = Convert.ToDouble(med.discountpercentage);
-                                        }
-                                        else
-                                        {
-                                            product.DiscountCategoryPercentage = 0;
-                                        }
+                                        //if (med.discountpercentage != null)
+                                        //{
+                                        //    product.DiscountCategoryPercentage = Convert.ToDouble(med.discountpercentage);
+                                        //}
+                                        //else
+                                        //{
+                                        //    product.DiscountCategoryPercentage = 0;
+                                        //}
                                         if (med.loyaltypointsper100value != null)
                                         {
                                             product.LoyaltyPoints = Convert.ToDouble(med.loyaltypointsper100value);
@@ -530,11 +530,11 @@ namespace ShopNow.Controllers
                                         {
                                             product.OutletId = 0;
                                         }
-                                        product.CategoryNameMain = med.Cat1;
-                                        product.DiscountCategoryId = CheckCategory(med.Cat1, Convert.ToDouble(med.discountpercentage));
+                                        //product.CategoryNameMain = med.Cat1;
+                                        //product.DiscountCategoryId = CheckCategory(med.Cat1, Convert.ToDouble(med.discountpercentage));
                                         product.DiscountCategoryName = med.Cat1;
-                                        product.DiscountCategoryType = 1;
-                                        product.DiscountType = 1;
+                                        //product.DiscountCategoryType = 1;
+                                        //product.DiscountType = 1;
                                         product.ItemTimeStamp = med.itemTimeStamp;
                                         product.Status = 0;
                                         product.CreatedBy = user.Name;

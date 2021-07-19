@@ -761,7 +761,7 @@ namespace ShopNow.Controllers
             var shop = db.Shops.FirstOrDefault(i => i.Id == id); // Shop.Get(code);
             if (shop != null)
             {
-                shop.MarketingAgentId = null;
+                shop.MarketingAgentId = 0;
                 shop.MarketingAgentName = null;
                 db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
@@ -1050,7 +1050,7 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var shop = db.Shops.Where(i => i.Id == code && i.Status == 0).FirstOrDefault();
-            shop.isOnline = isOnline;
+            shop.IsOnline = isOnline;
             db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
             return RedirectToAction("List");

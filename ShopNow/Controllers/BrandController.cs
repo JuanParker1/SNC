@@ -42,18 +42,15 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNBRAC001")]
-        public JsonResult Save(string name = "", int type = 0)
+        public JsonResult Save(Brand brand)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             bool IsAdded = false;
             string message = "";
             string message1 = "";
-            var brandname = db.Brands.FirstOrDefault(i => i.Name == name && i.ProductTypeId == type && i.Status == 0); //Brand.GetNameType(name, type);
+            var brandname = db.Brands.FirstOrDefault(i => i.Name == brand.Name && i.ProductTypeId == brand.ProductTypeId && i.Status == 0); //Brand.GetNameType(name, type);
             if (brandname == null)
             {
-                var brand = new Brand();
-                brand.Name = name;
-                brand.ProductTypeId = type;
                 brand.CreatedBy = user.Name;
                 brand.UpdatedBy = user.Name;
                 brand.Status = 0;
@@ -62,33 +59,32 @@ namespace ShopNow.Controllers
                 db.Brands.Add(brand);
                 db.SaveChanges();
                 IsAdded = brand.Id != 0 ? true : false;
-                message = name + " Successfully Added";
+                message = brand.Name + " Successfully Added";
             }
             else
             {
-                message1 = name + " Already Exist!";
+                message1 = brand.Name + " Already Exist!";
             }
 
             return Json(new { IsAdded = IsAdded, message = message, message1 = message1 }, JsonRequestBehavior.AllowGet);
         }
 
         [AccessPolicy(PageCode = "SHNBRAE002")]
-        public JsonResult Edit(int id, string name, int type)
+        public JsonResult Edit(Brand brandmodel)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             string message = "";
-            Brand brand = db.Brands.Where(b => b.Id == id).FirstOrDefault(); //Brand.Get(code);
+            Brand brand = db.Brands.Where(b => b.Id == brandmodel.Id).FirstOrDefault();
             if (brand != null)
             {
-                brand.Name = name;
-                brand.ProductTypeId = type;
-                brand.DateUpdated = DateTime.Now;
+                brand.Name = brandmodel.Name;
+                brand.ProductTypeId = brandmodel.ProductTypeId;
+                brand.ProductTypeName = brandmodel.ProductTypeName;
                 brand.UpdatedBy = user.Name;
                 brand.DateUpdated = DateTime.Now;
                 db.Entry(brand).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-               // bool result = Brand.Edit(brand, out int error);
-                message = name + " Updated Successfully";
+                message = brandmodel.Name + " Updated Successfully";
             }
             return Json(new { message = message }, JsonRequestBehavior.AllowGet);
         }

@@ -80,14 +80,14 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNDMUE003")]
-        public ActionResult Edit(string code)
+        public ActionResult Edit(string id)
         {
-            var dCode = AdminHelpers.DCodeInt(code);
+            var dCode = AdminHelpers.DCodeInt(id);
             if (dCode==0)
                 return HttpNotFound();
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var drug = db.MeasurementUnits.FirstOrDefault(i => i.Id == dCode && i.Status == 0);// MeasurementUnit.Get(dCode);
+            var drug = db.MeasurementUnits.FirstOrDefault(i => i.Id == dCode && i.Status == 0);
             var model = _mapper.Map<MeasurementUnit, MeasurementUnitCreateEditViewModel>(drug);
             return View(model);
         }
@@ -112,7 +112,6 @@ namespace ShopNow.Controllers
                 drug.DateUpdated = DateTime.Now;
                 db.Entry(drug).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                // MeasurementUnit.Edit(drug, out errorCode);
 
                 return RedirectToAction("List");
             }
@@ -123,13 +122,13 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNDMUD004")]
-        public ActionResult Delete(string code)
+        public ActionResult Delete(int id)
         {
-            var dCode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var drug = db.MeasurementUnits.FirstOrDefault(i => i.Id == dCode && i.Status == 0);// MeasurementUnit.Get(dCode);
+            var drug = db.MeasurementUnits.FirstOrDefault(i => i.Id == id && i.Status == 0);
             drug.Status = 2;
             drug.UpdatedBy = user.Name;
+            drug.DateUpdated = DateTime.Now;
             db.Entry(drug).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
             return RedirectToAction("List");

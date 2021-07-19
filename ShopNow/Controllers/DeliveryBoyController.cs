@@ -554,14 +554,14 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new DeliveryBoyCreditAmountViewModel();
-            model.List = db.ShopCharges.Where(i => i.OrderStatus == 6)
+            model.List = db.Orders.Where(i => i.Status == 6)
                 .GroupBy(i => i.DeliveryBoyId)
                 .Select(i => new DeliveryBoyCreditAmountViewModel.CreditAmountList
             {
                 Id = i.Any() ? i.FirstOrDefault().Id : 0,
-                DeliveryBoyId = i.Any() ? i.FirstOrDefault().DeliveryBoyId.Value :0,
+                DeliveryBoyId = i.Any() ? i.FirstOrDefault().DeliveryBoyId :0,
                 DeliveryBoyName = i.Any() ? i.FirstOrDefault().DeliveryBoyName : "",
-                GrossDeliveryCharge = i.Any() ? i.Sum(j=> j.GrossDeliveryCharge) : 0.0
+                GrossDeliveryCharge = i.Any() ? i.Sum(j=> j.DeliveryCharge) : 0.0
             }).ToList();
 
             return View(model.List);
@@ -575,14 +575,14 @@ namespace ShopNow.Controllers
             var model = new DeliveryBoyCreditAmountViewModel();
             var date = DateTime.Now;
 
-            model.List = db.ShopCharges.Where(i => i.OrderStatus == 6 && i.DateUpdated.Year == date.Year && i.DateUpdated.Month == date.Month && i.DateUpdated.Day == date.Day)
+            model.List = db.Orders.Where(i => i.Status == 6 && i.DateUpdated.Year == date.Year && i.DateUpdated.Month == date.Month && i.DateUpdated.Day == date.Day)
                 .GroupBy(i => i.DeliveryBoyId)
                 .Select(i => new DeliveryBoyCreditAmountViewModel.CreditAmountList
                 {
                     Id = i.Any() ? i.FirstOrDefault().Id : 0,
-                    DeliveryBoyId = i.Any() ? i.FirstOrDefault().DeliveryBoyId.Value : 0,
+                    DeliveryBoyId = i.Any() ? i.FirstOrDefault().DeliveryBoyId : 0,
                     DeliveryBoyName = i.Any() ? i.FirstOrDefault().DeliveryBoyName : "",
-                    GrossDeliveryCharge = i.Any() ? i.Sum(j => j.GrossDeliveryCharge) : 0.0
+                    GrossDeliveryCharge = i.Any() ? i.Sum(j => j.DeliveryCharge) : 0.0
                 }).ToList();
 
             return View(model.List);
@@ -597,7 +597,7 @@ namespace ShopNow.Controllers
 
             if (deliveryBoy != null)
             {
-                deliveryBoy.MarketingAgentId = null;
+                deliveryBoy.MarketingAgentId = 0;
                 deliveryBoy.MarketingAgentName = null;
                 deliveryBoy.DateUpdated = DateTime.Now;
                 db.Entry(deliveryBoy).State = System.Data.Entity.EntityState.Modified;

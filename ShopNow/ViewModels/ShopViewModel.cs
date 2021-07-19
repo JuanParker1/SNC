@@ -378,7 +378,7 @@ namespace ShopNow.ViewModels
     {
         public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public string MarketingAgentId { get; set; }//clarify
+        public int MarketingAgentId { get; set; }//clarify
         public string MarketingAgentName { get; set; }
         public List<FranchiseList> List { get; set; }
         public class FranchiseList
@@ -753,9 +753,9 @@ namespace ShopNow.ViewModels
             public string ProductName { get; set; }
             public int ShopId { get; set; }
             public string ShopName { get; set; }
-            public string AddOnCategoryCode { get; set; }
+            public int AddOnCategoryId { get; set; }
             public string AddOnCategoryName { get; set; }
-            public string PortionCode { get; set; }
+            public int PortionId { get; set; }
             public string PortionName { get; set; }
             public int MinSelectionLimit { get; set; }
             public int MaxSelectionLimit { get; set; }

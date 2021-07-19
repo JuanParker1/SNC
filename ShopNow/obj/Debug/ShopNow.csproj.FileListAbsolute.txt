@@ -1,5 +1,4 @@
 E:\Beno\SNC\ShopNow\obj\Debug\ShopNow.csproj.App.config
-E:\Beno\SNC\ShopNow\obj\Debug\ShopNow.csprojAssemblyReference.cache
 E:\Beno\SNC\ShopNow\obj\Debug\ShopNow.csproj.CoreCompileInputs.cache
 E:\Beno\SNC\ShopNow\bin\ShopNow.dll.config
 E:\Beno\SNC\ShopNow\bin\ShopNow.dll
@@ -497,8 +496,8 @@ C:\Jose\SNC\ShopNow\bin\System.Web.WebPages.Razor.xml
 C:\Jose\SNC\ShopNow\bin\Antlr3.Runtime.pdb
 C:\Jose\SNC\ShopNow\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
 C:\Jose\SNC\ShopNow\obj\Debug\ShopNow.csproj.App.config
-C:\Jose\SNC\ShopNow\obj\Debug\ShopNow.csprojAssemblyReference.cache
 C:\Jose\SNC\ShopNow\obj\Debug\ShopNow.csproj.CoreCompileInputs.cache
 C:\Jose\SNC\ShopNow\obj\Debug\ShopNow.csproj.CopyComplete
 C:\Jose\SNC\ShopNow\obj\Debug\ShopNow.dll
 C:\Jose\SNC\ShopNow\obj\Debug\ShopNow.pdb
+E:\Beno\SNC\ShopNow\obj\Debug\ShopNow.csprojAssemblyReference.cache

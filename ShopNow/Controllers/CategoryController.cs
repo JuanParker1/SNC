@@ -46,19 +46,15 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNCATS003")]
-        public JsonResult Save(string name = "", int type = 0, int orderNo = 1)
+        public JsonResult Save(Category category)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             bool IsAdded = false;
             string message = "";
             string message1 = "";
-            var categoryname = db.Categories.FirstOrDefault(i => i.Name == name && i.ProductTypeId == type && i.Status == 0);//Category.GetNameType(name, type);
+            var categoryname = db.Categories.FirstOrDefault(i => i.Name == category.Name && i.ProductTypeId == category.ProductTypeId && i.Status == 0);//Category.GetNameType(name, type);
             if (categoryname == null)
             {
-                var category = new Category();
-                category.Name = name;
-                category.ProductTypeId = type;
-                category.OrderNo = orderNo;
                 category.CreatedBy = user.Name;
                 category.UpdatedBy = user.Name;
                 category.Status = 0;
@@ -67,33 +63,34 @@ namespace ShopNow.Controllers
                 db.Categories.Add(category);
                 db.SaveChanges();
                 IsAdded = category.Id != 0 ? true : false;
-                message = name + " Successfully Added";
+                message = category.Name + " Successfully Added";
             }
             else
             {
-                message1 = name + " Already Exist!";
+                message1 = category.Name + " Already Exist!";
             }
             return Json(new { IsAdded = IsAdded, message = message, message1 = message1 }, JsonRequestBehavior.AllowGet);
         }
 
         [AccessPolicy(PageCode = "SHNCATE004")]
-        public JsonResult Edit(int code, string name, int type, int orderNo)
+        public JsonResult Edit(Category categoryModel)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             string message = "";
-            Category category = db.Categories.FirstOrDefault(i => i.Id == code);
+            Category category = db.Categories.FirstOrDefault(i => i.Id == categoryModel.Id);
             if (category != null)
             {
-                category.Name = name;
-                category.ProductTypeId = type;
-                category.OrderNo = orderNo;
+                category.Name = categoryModel.Name;
+                category.ProductTypeId = categoryModel.ProductTypeId;
+                category.ProductTypeName= categoryModel.ProductTypeName;
+                category.OrderNo = categoryModel.OrderNo;
                 category.DateUpdated = DateTime.Now;
                 category.UpdatedBy = user.Name;
                 category.DateUpdated = DateTime.Now;
                 db.Entry(category).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 
-                message = name + " Updated Successfully";
+                message = categoryModel.Name + " Updated Successfully";
             }
             return Json(new { message = message }, JsonRequestBehavior.AllowGet);
         }

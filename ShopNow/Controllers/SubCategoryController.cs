@@ -23,7 +23,7 @@ namespace ShopNow.Controllers
         {
             _mapperConfiguration = new MapperConfiguration(config =>
             {
-                config.CreateMap<SubCategory, SubCategoryListViewModel.SubCategoryList>();
+                //config.CreateMap<SubCategory, SubCategoryListViewModel.SubCategoryList>();
                 config.CreateMap<SubCategory, SubCategoryEditViewModel>();
                 config.CreateMap<SubCategoryEditViewModel, SubCategory>();
             });
@@ -43,35 +43,28 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNSUCS002")]
-        public JsonResult Save(string name = "", string type = "", int categorycode = 0, string categoryname = "", int adscore = 1)
+        public JsonResult Save(SubCategory subCategory)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             bool IsAdded = false;
             string message = "";
             string message1 = "";
-            var subcategoryname = db.SubCategories.Where(i => i.Name == name && i.ProductType == type).FirstOrDefault(); //SubCategory.GetNameType(name, type);
+            var subcategoryname = db.SubCategories.Where(i => i.Name == subCategory.Name && i.ProductTypeId == subCategory.ProductTypeId).FirstOrDefault();
             if (subcategoryname == null)
             {
-                var subcategory = new SubCategory();
-                subcategory.Name = name;
-                subcategory.ProductType = type;
-                subcategory.CategoryId = categorycode;
-                subcategory.CategoryName = categoryname;
-                subcategory.Adscore = adscore;
-                subcategory.CreatedBy = user.Name;
-                subcategory.UpdatedBy = user.Name;
-                subcategory.Status = 0;
-                subcategory.DateEncoded = DateTime.Now;
-                subcategory.DateUpdated = DateTime.Now;
-                db.SubCategories.Add(subcategory);
+                subCategory.CreatedBy = user.Name;
+                subCategory.UpdatedBy = user.Name;
+                subCategory.Status = 0;
+                subCategory.DateEncoded = DateTime.Now;
+                subCategory.DateUpdated = DateTime.Now;
+                db.SubCategories.Add(subCategory);
                 db.SaveChanges();
-                //string code = SubCategory.Add(subcategory, out int error);
-                IsAdded = subcategory.Id != 0 ? true : false;
-                message = name + " Successfully Added";
+                IsAdded = subCategory.Id != 0 ? true : false;
+                message = subCategory.Name + " Successfully Added";
             }
             else
             {
-                message1 = name + " Already Exist!";
+                message1 = subCategory.Name + " Already Exist!";
             }
             return Json(new { IsAdded = IsAdded, message = message, message1 = message1 }, JsonRequestBehavior.AllowGet);
         }
@@ -84,7 +77,7 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             if (dcode==0)
                 return HttpNotFound();
-            var subCategory = db.SubCategories.FirstOrDefault(i => i.Id == dcode); // SubCategory.Get(dcode);
+            var subCategory = db.SubCategories.FirstOrDefault(i => i.Id == dcode);
             var model = _mapper.Map<SubCategory, SubCategoryEditViewModel>(subCategory);
             return View(model);
         }
@@ -95,21 +88,20 @@ namespace ShopNow.Controllers
         public ActionResult Edit(SubCategoryEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            SubCategory subCategory = db.SubCategories.FirstOrDefault(i => i.Id == model.Id); // SubCategory.Get(model.Code);
+            SubCategory subCategory = db.SubCategories.FirstOrDefault(i => i.Id == model.Id);
             _mapper.Map(model, subCategory);
             subCategory.DateUpdated = DateTime.Now;
             subCategory.UpdatedBy = user.Name;
             db.Entry(subCategory).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
-           // SubCategory.Edit(subCategory, out int errorcode);
             return RedirectToAction("List");
         }
 
         [AccessPolicy(PageCode = "SHNSUCD004")]
-        public JsonResult Delete(int id)
+        public ActionResult Delete(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var subcategory = db.SubCategories.FirstOrDefault(i => i.Id == id);  //SubCategory.Get(code);
+            var subcategory = db.SubCategories.FirstOrDefault(i => i.Id == id);
             if (subcategory != null)
             {
                 subcategory.Status = 2;
@@ -118,7 +110,7 @@ namespace ShopNow.Controllers
                 db.Entry(subcategory).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
-            return Json("Success", JsonRequestBehavior.AllowGet);
+            return RedirectToAction("List");
         }
 
         [AccessPolicy(PageCode = "SHNSUCL001")]

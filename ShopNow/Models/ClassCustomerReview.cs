@@ -107,11 +107,11 @@ namespace ShopNow.Models
             }
         }
 
-        public static List<CustomerReview> GetList(string code)
+        public static List<CustomerReview> GetList(int code)
         {
             try
             {
-                return _db.CustomerReviews.Where(i => i.Status == 0 && i.ShopCode == code).ToList() ?? new List<CustomerReview>();
+                return _db.CustomerReviews.Where(i => i.Status == 0 && i.ShopId == code).ToList() ?? new List<CustomerReview>();
             }
             catch
             {
