@@ -1642,8 +1642,6 @@
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CategoryIds" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
-=======
->>>>>>> fc8dac83bccb8cea6493084313b21abd2eee98d3
         <EntityType Name="MeasurementUnit">
           <Key>
             <PropertyRef Name="Id" />
@@ -2417,7 +2415,6 @@
           <FunctionImport Name="GetDEliveryBoyList" ReturnType="Collection(sncModel.GetDEliveryBoyList_Result)" />
           <EntitySet Name="ShopCredits" EntityType="sncModel.ShopCredit" />
 
-          <EntitySet Name="MasterProducts" EntityType="sncModel.MasterProduct" />
         </EntityContainer>
         <ComplexType Name="test_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
