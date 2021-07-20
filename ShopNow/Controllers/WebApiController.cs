@@ -61,8 +61,8 @@ namespace ShopNow.Controllers
                             product.ShopName = model.ShopName;
                             product.Name = pro.itemName;
                             product.IBarU = Convert.ToInt32(pro.iBarU);
-                            product.TypeId = 1;
-                            product.TypeName = "Medical";
+                            product.ProductTypeId = 3;
+                            product.ProductTypeName = "Medical";
                             product.DataEntry = 1;
                             
                             if (pro.appliesOnline != null)
@@ -266,8 +266,8 @@ namespace ShopNow.Controllers
                             product.ShopName = model.ShopName;
                             product.Name = pro.itemName;
                             product.IBarU = Convert.ToInt32(pro.iBarU);
-                            product.TypeId = 1;
-                            product.TypeName = "Medical";
+                            product.ProductTypeId = 3;
+                            product.ProductTypeName = "Medical";
                             product.DataEntry = 1;
 
                             if (pro.appliesOnline != null)
@@ -444,8 +444,8 @@ namespace ShopNow.Controllers
                             product.ItemId = Convert.ToInt32(pro.itemId);
                             product.Name = pro.itemName;
                             product.IBarU = Convert.ToInt32(pro.iBarU);
-                            product.TypeId = 1;
-                            product.TypeName = "Medical";
+                            product.ProductTypeId = 3;
+                            product.ProductTypeName = "Medical";
                             product.DataEntry = 1;
 
                             if (pro.appliesOnline != null)

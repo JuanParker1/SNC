@@ -34,5 +34,7 @@ namespace ShopNow.Models
         public string UpdatedBy { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }
+    
+        public virtual Customer Customer { get; set; }
     }
 }

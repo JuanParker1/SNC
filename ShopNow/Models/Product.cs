@@ -17,7 +17,7 @@ namespace ShopNow.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Product()
         {
-            this.OrderItems = new HashSet<OrderItem>();
+            this.ShopDishAddOns = new HashSet<ShopDishAddOn>();
         }
     
         public int Id { get; set; }
@@ -34,8 +34,8 @@ namespace ShopNow.Models
         public string ISBN { get; set; }
         public double Price { get; set; }
         public int Qty { get; set; }
-        public string TypeName { get; set; }
-        public int TypeId { get; set; }
+        public string ProductTypeName { get; set; }
+        public int ProductTypeId { get; set; }
         public int MinSelectionLimit { get; set; }
         public int MaxSelectionLimit { get; set; }
         public bool Customisation { get; set; }
@@ -61,8 +61,9 @@ namespace ShopNow.Models
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OrderItem> OrderItems { get; set; }
+        public virtual ProductType ProductType { get; set; }
         public virtual Shop Shop { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ShopDishAddOn> ShopDishAddOns { get; set; }
     }
 }

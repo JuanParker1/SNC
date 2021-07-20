@@ -313,7 +313,7 @@ namespace ShopNow.Controllers
             }
                 model.List = db.OrderItems.Where(i => i.OrdeNumber == orderno && i.Status == 0).Select(i => new CartListViewModel.CartList
             {
-                Id = i.id,
+                Id = i.Id,
                 BrandName = i.BrandName,
                 CategoryName = i.CategoryName,
                 ShopName = cart.ShopName,
@@ -358,7 +358,7 @@ namespace ShopNow.Controllers
             }
             model.List = db.OrderItems.Where(i => i.OrdeNumber == orderno && i.Status == 0).Select(i => new CartListViewModel.CartList
             {
-                Id = i.id,
+                Id = i.Id,
                 BrandName = i.BrandName,
                 CategoryName = i.CategoryName,
                 ShopName = cart.ShopName,

@@ -4,55 +4,78 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="04cbea06bac5411bba7d2a2223bd4c3a" Name="Diagram1" ZoomLevel="75">
-        <EntityTypeShape EntityType="sncModel.AccessPolicy" Width="1.5" PointX="12.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.AddOnCategory" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.Admin" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.Banner" Width="1.5" PointX="10" PointY="2.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.Bill" Width="1.5" PointX="12.75" PointY="5.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.BrandOwner" Width="1.5" PointX="12.75" PointY="12.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.Brand" Width="1.5" PointX="14.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.Category" Width="1.5" PointX="2.75" PointY="14.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.CustomerAddress" Width="1.5" PointX="14.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.CustomerReview" Width="1.5" PointX="4.75" PointY="14.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.Customer" Width="1.5" PointX="14.75" PointY="10.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.DeliveryBoy" Width="1.5" PointX="7.75" PointY="10.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.DeliveryBoyShop" Width="1.5" PointX="16.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.DiscountCategory" Width="1.5" PointX="16.75" PointY="5.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.DrugCompoundDetail" Width="1.5" PointX="16.75" PointY="9.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.MarketingAgent" Width="1.5" PointX="16.75" PointY="15.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.MeasurementUnit" Width="1.5" PointX="0.75" PointY="18.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.NextSubCategory" Width="1.5" PointX="6.75" PointY="18.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.OrderItem" Width="1.5" PointX="5.25" PointY="6.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="10" PointY="10.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.OtpVerification" Width="1.5" PointX="8.75" PointY="18.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.Package" Width="1.5" PointX="18.75" PointY="11.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.Page" Width="1.5" PointX="18.75" PointY="15.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.Payment" Width="1.5" PointX="7.75" PointY="1.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.PaymentsData" Width="1.5" PointX="2.75" PointY="19.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.PincodeRate" Width="1.5" PointX="18.75" PointY="19.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.PlatFormCreditRate" Width="1.5" PointX="20.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.Portion" Width="1.5" PointX="20.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.ProductDishAddOn" Width="1.5" PointX="20.75" PointY="8.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.Product" Width="1.5" PointX="3" PointY="4.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.ProductSpecificationItem" Width="1.5" PointX="20.75" PointY="14.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.ProductSpecification" Width="1.5" PointX="20.75" PointY="19.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.RefundsData" Width="1.5" PointX="10.75" PointY="21.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.ShopCategory" Width="1.5" PointX="12.75" PointY="21.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.ShopDishAddOn" Width="1.5" PointX="22.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.ShopMember" Width="1.5" PointX="22.75" PointY="7.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.Shop" Width="1.5" PointX="0.75" PointY="1.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.Specification" Width="1.5" PointX="22.75" PointY="13.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.Staff" Width="1.5" PointX="22.75" PointY="17.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.SubCategory" Width="1.5" PointX="22.75" PointY="22.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.UserEnquiry" Width="1.5" PointX="4.75" PointY="23.75" IsExpanded="true" />
-        <AssociationConnector Association="sncModel.FK_Banners_Payments" ManuallyRouted="false" />
-        <AssociationConnector Association="sncModel.FK_Orders_Orders" ManuallyRouted="false" />
-        <AssociationConnector Association="sncModel.FK_OrderItems_OrderItems" ManuallyRouted="false" />
-        <AssociationConnector Association="sncModel.FK_OrderItems_Products" ManuallyRouted="false" />
-        <AssociationConnector Association="sncModel.FK_Products_Shops" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="sncModel.ShopCredit" Width="1.5" PointX="7.375" PointY="23.75" />
-        <EntityTypeShape EntityType="sncModel.MasterProduct" Width="1.5" PointX="7.375" PointY="23.75" />
+      <Diagram DiagramId="9bbf4aea274440b08bc0862ca5a16e84" Name="Diagram1">
+        <EntityTypeShape EntityType="ShopnowchatEntities.AccessPolicy" Width="1.5" PointX="4.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.AddOnCategory" Width="1.5" PointX="5.75" PointY="6.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.Admin" Width="1.5" PointX="5.75" PointY="10.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.Banner" Width="1.5" PointX="3" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.Bill" Width="1.5" PointX="16.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.BrandOwner" Width="1.5" PointX="16.75" PointY="13.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.Brand" Width="1.5" PointX="11.25" PointY="13.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.Category" Width="1.5" PointX="14" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.CustomerAddress" Width="1.5" PointX="3" PointY="18.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.CustomerReview" Width="1.5" PointX="3" PointY="24.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.Customer" Width="1.5" PointX="0.75" PointY="21.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.DeliveryBoy" Width="1.5" PointX="3" PointY="28.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.DeliveryBoyShop" Width="1.5" PointX="2.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.DiscountCategory" Width="1.5" PointX="2.75" PointY="14.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.DrugCompoundDetail" Width="1.5" PointX="18.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.MarketingAgent" Width="1.5" PointX="18.75" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.MasterProduct" Width="1.5" PointX="11.25" PointY="2.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.MeasurementUnit" Width="1.5" PointX="9" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.NextSubCategory" Width="1.5" PointX="14.25" PointY="13.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.OrderItem" Width="1.5" PointX="8.25" PointY="34.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.Order" Width="1.5" PointX="6" PointY="21.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.OtpVerification" Width="1.5" PointX="18.75" PointY="15.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.Package" Width="1.5" PointX="9" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.Page" Width="1.5" PointX="4.75" PointY="14.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.Payment" Width="1.5" PointX="0.75" PointY="7" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.PaymentsData" Width="1.5" PointX="18.75" PointY="20.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.PincodeRate" Width="1.5" PointX="20.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.PlatFormCreditRate" Width="1.5" PointX="13.75" PointY="18.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.Portion" Width="1.5" PointX="20.75" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.ProductDishAddOn" Width="1.5" PointX="13.5" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.Product" Width="1.5" PointX="11.25" PointY="20.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.ProductSpecificationItem" Width="1.5" PointX="20.75" PointY="9.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.ProductSpecification" Width="1.5" PointX="20.75" PointY="14.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.ProductType" Width="1.5" PointX="9" PointY="14" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.RefundsData" Width="1.5" PointX="20.75" PointY="18.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.ShopCategory" Width="1.5" PointX="6.75" PointY="18" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.ShopCredit" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.ShopDishAddOn" Width="1.5" PointX="13.5" PointY="22" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.ShopMember" Width="1.5" PointX="15.75" PointY="22.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.Shop" Width="1.5" PointX="9" PointY="17.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.Specification" Width="1.5" PointX="20.75" PointY="22.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.Staff" Width="1.5" PointX="22.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.SubCategory" Width="1.5" PointX="16.25" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShopnowchatEntities.UserEnquiry" Width="1.5" PointX="22.75" PointY="6.5" IsExpanded="true" />
+        <AssociationConnector Association="ShopnowchatEntities.FK_Banners_Payments" ManuallyRouted="false" />
+        <AssociationConnector Association="ShopnowchatEntities.FK_Brands_ProductType" ManuallyRouted="false" />
+        <AssociationConnector Association="ShopnowchatEntities.FK_SubCategories_Categories" ManuallyRouted="false" />
+        <AssociationConnector Association="ShopnowchatEntities.FK_CustomerAddresses_Customers" ManuallyRouted="false" />
+        <AssociationConnector Association="ShopnowchatEntities.FK_CustomerReview_Customers" ManuallyRouted="false" />
+        <AssociationConnector Association="ShopnowchatEntities.FK_CustomerReview_Shops" ManuallyRouted="false" />
+        <AssociationConnector Association="ShopnowchatEntities.FK_DeliveryBoys_Customers" ManuallyRouted="false" />
+        <AssociationConnector Association="ShopnowchatEntities.FK_Orders_Customers" ManuallyRouted="false" />
+        <AssociationConnector Association="ShopnowchatEntities.FK_Shops_Customers" ManuallyRouted="false" />
+        <AssociationConnector Association="ShopnowchatEntities.FK_DeliveryBoyShops_DeliveryBoyShops" ManuallyRouted="false" />
+        <AssociationConnector Association="ShopnowchatEntities.FK_MasterProducts_Brand" ManuallyRouted="false" />
+        <AssociationConnector Association="ShopnowchatEntities.FK_MasterProducts_MeasurementUnits" ManuallyRouted="false" />
+        <AssociationConnector Association="ShopnowchatEntities.FK_MasterProducts_Packages" ManuallyRouted="false" />
+        <AssociationConnector Association="ShopnowchatEntities.FK_MasterProducts_ProductType" ManuallyRouted="false" />
+        <AssociationConnector Association="ShopnowchatEntities.FK_ProductDishAddOns_MasterProducts" ManuallyRouted="false" />
+        <AssociationConnector Association="ShopnowchatEntities.FK_ShopDishAddOns_MasterProducts" ManuallyRouted="false" />
+        <AssociationConnector Association="ShopnowchatEntities.FK_NextSubCategories_ProductType" ManuallyRouted="false" />
+        <AssociationConnector Association="ShopnowchatEntities.FK_NextSubCategories_SubCategories" ManuallyRouted="false" />
+        <AssociationConnector Association="ShopnowchatEntities.FK_OrderItems_Orders" ManuallyRouted="false" />
+        <AssociationConnector Association="ShopnowchatEntities.FK_Orders_Shops" ManuallyRouted="false" />
+        <AssociationConnector Association="ShopnowchatEntities.FK_Products_ProductType" ManuallyRouted="false" />
+        <AssociationConnector Association="ShopnowchatEntities.FK_Products_Shops" ManuallyRouted="false" />
+        <AssociationConnector Association="ShopnowchatEntities.FK_ShopDishAddOns_Products" ManuallyRouted="false" />
+        <AssociationConnector Association="ShopnowchatEntities.FK_SubCategories_ProductType" ManuallyRouted="false" />
+        <AssociationConnector Association="ShopnowchatEntities.FK_Shops_ShopCategories" ManuallyRouted="false" />
+        <AssociationConnector Association="ShopnowchatEntities.FK_ShopCredit_ShopCredit" ManuallyRouted="false" />
+        <AssociationConnector Association="ShopnowchatEntities.FK_ShopDishAddOns_Shops" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

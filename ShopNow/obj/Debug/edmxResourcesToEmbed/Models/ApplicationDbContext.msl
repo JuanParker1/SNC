@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="sncModelStoreContainer" CdmEntityContainer="sncEntities">
+  <EntityContainerMapping StorageEntityContainer="ShopnowchatEntitiesStoreContainer" CdmEntityContainer="ShopnowchatEntities2">
     <EntitySetMapping Name="AccessPolicies">
-      <EntityTypeMapping TypeName="sncModel.AccessPolicy">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.AccessPolicy">
         <MappingFragment StoreEntitySet="AccessPolicies">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="PageCode" ColumnName="PageCode" />
@@ -24,7 +24,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="AddOnCategories">
-      <EntityTypeMapping TypeName="sncModel.AddOnCategory">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.AddOnCategory">
         <MappingFragment StoreEntitySet="AddOnCategories">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -37,7 +37,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Admins">
-      <EntityTypeMapping TypeName="sncModel.Admin">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.Admin">
         <MappingFragment StoreEntitySet="Admins">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Code" ColumnName="Code" />
@@ -50,7 +50,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Banners">
-      <EntityTypeMapping TypeName="sncModel.Banner">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.Banner">
         <MappingFragment StoreEntitySet="Banners">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="ShopId" ColumnName="ShopId" />
@@ -76,7 +76,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Bills">
-      <EntityTypeMapping TypeName="sncModel.Bill">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.Bill">
         <MappingFragment StoreEntitySet="Bills">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
@@ -105,7 +105,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="BrandOwners">
-      <EntityTypeMapping TypeName="sncModel.BrandOwner">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.BrandOwner">
         <MappingFragment StoreEntitySet="BrandOwners">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Code" ColumnName="Code" />
@@ -144,7 +144,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Brands">
-      <EntityTypeMapping TypeName="sncModel.Brand">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.Brand">
         <MappingFragment StoreEntitySet="Brands">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -159,7 +159,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Categories">
-      <EntityTypeMapping TypeName="sncModel.Category">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.Category">
         <MappingFragment StoreEntitySet="Categories">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -175,7 +175,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="CustomerAddresses">
-      <EntityTypeMapping TypeName="sncModel.CustomerAddress">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.CustomerAddress">
         <MappingFragment StoreEntitySet="CustomerAddresses">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -201,7 +201,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="CustomerReviews">
-      <EntityTypeMapping TypeName="sncModel.CustomerReview">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.CustomerReview">
         <MappingFragment StoreEntitySet="CustomerReview">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="ShopId" ColumnName="ShopId" />
@@ -219,7 +219,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Customers">
-      <EntityTypeMapping TypeName="sncModel.Customer">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.Customer">
         <MappingFragment StoreEntitySet="Customers">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -256,7 +256,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="DeliveryBoys">
-      <EntityTypeMapping TypeName="sncModel.DeliveryBoy">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.DeliveryBoy">
         <MappingFragment StoreEntitySet="DeliveryBoys">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -295,7 +295,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="DeliveryBoyShops">
-      <EntityTypeMapping TypeName="sncModel.DeliveryBoyShop">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.DeliveryBoyShop">
         <MappingFragment StoreEntitySet="DeliveryBoyShops">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
@@ -315,7 +315,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="DiscountCategories">
-      <EntityTypeMapping TypeName="sncModel.DiscountCategory">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.DiscountCategory">
         <MappingFragment StoreEntitySet="DiscountCategories">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -331,7 +331,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="DrugCompoundDetails">
-      <EntityTypeMapping TypeName="sncModel.DrugCompoundDetail">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.DrugCompoundDetail">
         <MappingFragment StoreEntitySet="DrugCompoundDetails">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="AliasName" ColumnName="AliasName" />
@@ -354,7 +354,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="MarketingAgents">
-      <EntityTypeMapping TypeName="sncModel.MarketingAgent">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.MarketingAgent">
         <MappingFragment StoreEntitySet="MarketingAgents">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -388,8 +388,57 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="MasterProducts">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.MasterProduct">
+        <MappingFragment StoreEntitySet="MasterProducts">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="BrandId" ColumnName="BrandId" />
+          <ScalarProperty Name="BrandName" ColumnName="BrandName" />
+          <ScalarProperty Name="CategoryIds" ColumnName="CategoryIds" />
+          <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+          <ScalarProperty Name="ShortDescription" ColumnName="ShortDescription" />
+          <ScalarProperty Name="LongDescription" ColumnName="LongDescription" />
+          <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
+          <ScalarProperty Name="ProductTypeName" ColumnName="ProductTypeName" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+          <ScalarProperty Name="Customisation" ColumnName="Customisation" />
+          <ScalarProperty Name="ColorCode" ColumnName="ColorCode" />
+          <ScalarProperty Name="MeasurementUnitId" ColumnName="MeasurementUnitId" />
+          <ScalarProperty Name="MeasurementUnitName" ColumnName="MeasurementUnitName" />
+          <ScalarProperty Name="PriscriptionCategory" ColumnName="PriscriptionCategory" />
+          <ScalarProperty Name="Weight" ColumnName="Weight" />
+          <ScalarProperty Name="SizeLB" ColumnName="SizeLB" />
+          <ScalarProperty Name="DrugCompoundDetailIds" ColumnName="DrugCompoundDetailIds" />
+          <ScalarProperty Name="DrugCompoundDetailName" ColumnName="DrugCompoundDetailName" />
+          <ScalarProperty Name="IBarU" ColumnName="IBarU" />
+          <ScalarProperty Name="OriginCountry" ColumnName="OriginCountry" />
+          <ScalarProperty Name="Manufacturer" ColumnName="Manufacturer" />
+          <ScalarProperty Name="PackageId" ColumnName="PackageId" />
+          <ScalarProperty Name="PackageName" ColumnName="PackageName" />
+          <ScalarProperty Name="GoogleTaxonomyCode" ColumnName="GoogleTaxonomyCode" />
+          <ScalarProperty Name="SubCategoryIds" ColumnName="SubCategoryIds" />
+          <ScalarProperty Name="SubCategoryName" ColumnName="SubCategoryName" />
+          <ScalarProperty Name="NextSubCategoryIds" ColumnName="NextSubCategoryIds" />
+          <ScalarProperty Name="NextSubCategoryName" ColumnName="NextSubCategoryName" />
+          <ScalarProperty Name="ASIN" ColumnName="ASIN" />
+          <ScalarProperty Name="ImagePath1" ColumnName="ImagePath1" />
+          <ScalarProperty Name="ImagePath2" ColumnName="ImagePath2" />
+          <ScalarProperty Name="ImagePath3" ColumnName="ImagePath3" />
+          <ScalarProperty Name="ImagePath4" ColumnName="ImagePath4" />
+          <ScalarProperty Name="ImagePath5" ColumnName="ImagePath5" />
+          <ScalarProperty Name="Adscore" ColumnName="Adscore" />
+          <ScalarProperty Name="NickName" ColumnName="NickName" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+          <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+          <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="MeasurementUnits">
-      <EntityTypeMapping TypeName="sncModel.MeasurementUnit">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.MeasurementUnit">
         <MappingFragment StoreEntitySet="MeasurementUnits">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="UnitName" ColumnName="UnitName" />
@@ -407,7 +456,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="NextSubCategories">
-      <EntityTypeMapping TypeName="sncModel.NextSubCategory">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.NextSubCategory">
         <MappingFragment StoreEntitySet="NextSubCategories">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -425,9 +474,9 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="OrderItems">
-      <EntityTypeMapping TypeName="sncModel.OrderItem">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.OrderItem">
         <MappingFragment StoreEntitySet="OrderItems">
-          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="OrderId" ColumnName="OrderId" />
           <ScalarProperty Name="OrdeNumber" ColumnName="OrdeNumber" />
           <ScalarProperty Name="ProductId" ColumnName="ProductId" />
@@ -445,7 +494,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Orders">
-      <EntityTypeMapping TypeName="sncModel.Order">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.Order">
         <MappingFragment StoreEntitySet="Orders">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
@@ -484,7 +533,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="OtpVerifications">
-      <EntityTypeMapping TypeName="sncModel.OtpVerification">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.OtpVerification">
         <MappingFragment StoreEntitySet="OtpVerifications">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
@@ -504,7 +553,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Packages">
-      <EntityTypeMapping TypeName="sncModel.Package">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.Package">
         <MappingFragment StoreEntitySet="Packages">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -518,7 +567,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Pages">
-      <EntityTypeMapping TypeName="sncModel.Page">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.Page">
         <MappingFragment StoreEntitySet="Pages">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Code" ColumnName="Code" />
@@ -532,7 +581,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Payments">
-      <EntityTypeMapping TypeName="sncModel.Payment">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.Payment">
         <MappingFragment StoreEntitySet="Payments">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="CorporateID" ColumnName="CorporateID" />
@@ -572,11 +621,11 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="PaymentsDatas">
-      <EntityTypeMapping TypeName="sncModel.PaymentsData">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.PaymentsData">
         <MappingFragment StoreEntitySet="PaymentsData">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
-          <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
+          <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
           <ScalarProperty Name="Entity" ColumnName="Entity" />
           <ScalarProperty Name="Amount" ColumnName="Amount" />
           <ScalarProperty Name="Currency" ColumnName="Currency" />
@@ -591,7 +640,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="PincodeRates">
-      <EntityTypeMapping TypeName="sncModel.PincodeRate">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.PincodeRate">
         <MappingFragment StoreEntitySet="PincodeRates">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="PinCode" ColumnName="PinCode" />
@@ -606,7 +655,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="PlatFormCreditRates">
-      <EntityTypeMapping TypeName="sncModel.PlatFormCreditRate">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.PlatFormCreditRate">
         <MappingFragment StoreEntitySet="PlatFormCreditRates">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="RatePerOrder" ColumnName="RatePerOrder" />
@@ -620,7 +669,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Portions">
-      <EntityTypeMapping TypeName="sncModel.Portion">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.Portion">
         <MappingFragment StoreEntitySet="Portions">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -633,7 +682,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="ProductDishAddOns">
-      <EntityTypeMapping TypeName="sncModel.ProductDishAddOn">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.ProductDishAddOn">
         <MappingFragment StoreEntitySet="ProductDishAddOns">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="AddOnItemName" ColumnName="AddOnItemName" />
@@ -659,7 +708,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Products">
-      <EntityTypeMapping TypeName="sncModel.Product">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.Product">
         <MappingFragment StoreEntitySet="Products">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -675,8 +724,8 @@
           <ScalarProperty Name="ISBN" ColumnName="ISBN" />
           <ScalarProperty Name="Price" ColumnName="Price" />
           <ScalarProperty Name="Qty" ColumnName="Qty" />
-          <ScalarProperty Name="TypeName" ColumnName="TypeName" />
-          <ScalarProperty Name="TypeId" ColumnName="TypeId" />
+          <ScalarProperty Name="ProductTypeName" ColumnName="ProductTypeName" />
+          <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
           <ScalarProperty Name="MinSelectionLimit" ColumnName="MinSelectionLimit" />
           <ScalarProperty Name="MaxSelectionLimit" ColumnName="MaxSelectionLimit" />
           <ScalarProperty Name="Customisation" ColumnName="Customisation" />
@@ -705,7 +754,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="ProductSpecificationItems">
-      <EntityTypeMapping TypeName="sncModel.ProductSpecificationItem">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.ProductSpecificationItem">
         <MappingFragment StoreEntitySet="ProductSpecificationItems">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="ProductId" ColumnName="ProductId" />
@@ -726,7 +775,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="ProductSpecifications">
-      <EntityTypeMapping TypeName="sncModel.ProductSpecification">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.ProductSpecification">
         <MappingFragment StoreEntitySet="ProductSpecifications">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Value" ColumnName="Value" />
@@ -742,8 +791,16 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="ProductTypes">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.ProductType">
+        <MappingFragment StoreEntitySet="ProductType">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="RefundsDatas">
-      <EntityTypeMapping TypeName="sncModel.RefundsData">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.RefundsData">
         <MappingFragment StoreEntitySet="RefundsData">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="RefundId" ColumnName="RefundId" />
@@ -757,7 +814,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="ShopCategories">
-      <EntityTypeMapping TypeName="sncModel.ShopCategory">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.ShopCategory">
         <MappingFragment StoreEntitySet="ShopCategories">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -769,8 +826,20 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="ShopCredits">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.ShopCredit">
+        <MappingFragment StoreEntitySet="ShopCredit">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="PlatformCredit" ColumnName="PlatformCredit" />
+          <ScalarProperty Name="DeliveryCredit" ColumnName="DeliveryCredit" />
+          <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+          <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="ShopDishAddOns">
-      <EntityTypeMapping TypeName="sncModel.ShopDishAddOn">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.ShopDishAddOn">
         <MappingFragment StoreEntitySet="ShopDishAddOns">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="AddOnItemName" ColumnName="AddOnItemName" />
@@ -802,7 +871,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="ShopMembers">
-      <EntityTypeMapping TypeName="sncModel.ShopMember">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.ShopMember">
         <MappingFragment StoreEntitySet="ShopMembers">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="ShopId" ColumnName="ShopId" />
@@ -825,7 +894,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Shops">
-      <EntityTypeMapping TypeName="sncModel.Shop">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.Shop">
         <MappingFragment StoreEntitySet="Shops">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -902,7 +971,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Specifications">
-      <EntityTypeMapping TypeName="sncModel.Specification">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.Specification">
         <MappingFragment StoreEntitySet="Specifications">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -915,7 +984,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Staffs">
-      <EntityTypeMapping TypeName="sncModel.Staff">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.Staff">
         <MappingFragment StoreEntitySet="Staffs">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -936,7 +1005,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="SubCategories">
-      <EntityTypeMapping TypeName="sncModel.SubCategory">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.SubCategory">
         <MappingFragment StoreEntitySet="SubCategories">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -954,7 +1023,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="UserEnquiries">
-      <EntityTypeMapping TypeName="sncModel.UserEnquiry">
+      <EntityTypeMapping TypeName="ShopnowchatEntities.UserEnquiry">
         <MappingFragment StoreEntitySet="UserEnquiries">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
@@ -973,78 +1042,18 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <FunctionImportMapping FunctionName="sncModel.Store.GetTableVAlueString" FunctionImportName="GetTableVAlueString">
+    <FunctionImportMapping FunctionName="ShopnowchatEntities.Store.GetTableVAlueString" FunctionImportName="GetTableVAlueString">
       <ResultMapping>
-        <ComplexTypeMapping TypeName="sncModel.GetTableVAlueString_Result">
+        <ComplexTypeMapping TypeName="ShopnowchatEntities.GetTableVAlueString_Result">
           <ScalarProperty Name="Name" ColumnName="Name" />
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
-    <FunctionImportMapping FunctionImportName="getCategoryListbyShopcode" FunctionName="sncModel.Store.getCategoryListbyShopcode" />
-    <FunctionImportMapping FunctionImportName="GetCategoryProductsList" FunctionName="sncModel.Store.GetCategoryProductsList" />
-    <FunctionImportMapping FunctionImportName="GetProductList" FunctionName="sncModel.Store.GetProductList" />
-    <FunctionImportMapping FunctionImportName="GetProductListCount" FunctionName="sncModel.Store.GetProductListCount" />
-    <FunctionImportMapping FunctionImportName="GetShopCategoryList" FunctionName="sncModel.Store.GetShopCategoryList" />
-    <FunctionImportMapping FunctionImportName="GetShopCategoryProductCount" FunctionName="sncModel.Store.GetShopCategoryProductCount" />
-    <FunctionImportMapping FunctionImportName="GetShopCategoryProducts" FunctionName="sncModel.Store.GetShopCategoryProducts" />
-    <FunctionImportMapping FunctionImportName="GetShopCategoryProductsList" FunctionName="sncModel.Store.GetShopCategoryProductsList" />
-    <FunctionImportMapping FunctionImportName="GetShopname" FunctionName="sncModel.Store.GetShopname" />
-    <FunctionImportMapping FunctionImportName="ReatillerPaymentReport" FunctionName="sncModel.Store.ReatillerPaymentReport" />
-    <FunctionImportMapping FunctionImportName="ReatillerPaymentReportAdmin" FunctionName="sncModel.Store.ReatillerPaymentReportAdmin" />
-    <FunctionImportMapping FunctionImportName="ReatillerPaymentReports" FunctionName="sncModel.Store.ReatillerPaymentReports" />
-    <FunctionImportMapping FunctionImportName="Sp_TB_SelectMedicineName" FunctionName="sncModel.Store.Sp_TB_SelectMedicineName" />
-    <FunctionImportMapping FunctionImportName="test" FunctionName="sncModel.Store.test">
+    <FunctionImportMapping FunctionImportName="getCategoryListbyShopcode" FunctionName="ShopnowchatEntities.Store.getCategoryListbyShopcode" />
+    <FunctionImportMapping FunctionImportName="GetCategoryProductsList" FunctionName="ShopnowchatEntities.Store.GetCategoryProductsList" />
+    <FunctionImportMapping FunctionImportName="GetDEliveryBoyList" FunctionName="ShopnowchatEntities.Store.GetDEliveryBoyList">
       <ResultMapping>
-        <ComplexTypeMapping TypeName="sncModel.test_Result">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
-          <ScalarProperty Name="BrandId" ColumnName="BrandId" />
-          <ScalarProperty Name="BrandName" ColumnName="BrandName" />
-          <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
-          <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
-          <ScalarProperty Name="ShortDescription" ColumnName="ShortDescription" />
-          <ScalarProperty Name="LongDescription" ColumnName="LongDescription" />
-          <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
-          <ScalarProperty Name="ProductTypeName" ColumnName="ProductTypeName" />
-          <ScalarProperty Name="Price" ColumnName="Price" />
-          <ScalarProperty Name="Customisation" ColumnName="Customisation" />
-          <ScalarProperty Name="ColorCode" ColumnName="ColorCode" />
-          <ScalarProperty Name="MeasurementUnitId" ColumnName="MeasurementUnitId" />
-          <ScalarProperty Name="MeasurementUnitName" ColumnName="MeasurementUnitName" />
-          <ScalarProperty Name="PriscriptionCategory" ColumnName="PriscriptionCategory" />
-          <ScalarProperty Name="Weight" ColumnName="Weight" />
-          <ScalarProperty Name="SizeLB" ColumnName="SizeLB" />
-          <ScalarProperty Name="DrugCompoundDetailId" ColumnName="DrugCompoundDetailId" />
-          <ScalarProperty Name="DrugCompoundDetailName" ColumnName="DrugCompoundDetailName" />
-          <ScalarProperty Name="IBarU" ColumnName="IBarU" />
-          <ScalarProperty Name="OriginCountry" ColumnName="OriginCountry" />
-          <ScalarProperty Name="Manufacturer" ColumnName="Manufacturer" />
-          <ScalarProperty Name="PackageId" ColumnName="PackageId" />
-          <ScalarProperty Name="PackageName" ColumnName="PackageName" />
-          <ScalarProperty Name="GoogleTaxonomyCode" ColumnName="GoogleTaxonomyCode" />
-          <ScalarProperty Name="SubCategoryId" ColumnName="SubCategoryId" />
-          <ScalarProperty Name="SubCategoryName" ColumnName="SubCategoryName" />
-          <ScalarProperty Name="NextSubCategoryId" ColumnName="NextSubCategoryId" />
-          <ScalarProperty Name="NextSubCategoryName" ColumnName="NextSubCategoryName" />
-          <ScalarProperty Name="ASIN" ColumnName="ASIN" />
-          <ScalarProperty Name="ImagePath1" ColumnName="ImagePath1" />
-          <ScalarProperty Name="ImagePath2" ColumnName="ImagePath2" />
-          <ScalarProperty Name="ImagePath3" ColumnName="ImagePath3" />
-          <ScalarProperty Name="ImagePath4" ColumnName="ImagePath4" />
-          <ScalarProperty Name="ImagePath5" ColumnName="ImagePath5" />
-          <ScalarProperty Name="Adscore" ColumnName="Adscore" />
-          <ScalarProperty Name="NickName" ColumnName="NickName" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-          <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-          <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-        </ComplexTypeMapping>
-      </ResultMapping>
-    </FunctionImportMapping>
-    <FunctionImportMapping FunctionImportName="GetDEliveryBoyList" FunctionName="sncModel.Store.GetDEliveryBoyList">
-      <ResultMapping>
-        <ComplexTypeMapping TypeName="sncModel.GetDEliveryBoyList_Result">
+        <ComplexTypeMapping TypeName="ShopnowchatEntities.GetDEliveryBoyList_Result">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Active" ColumnName="Active" />
@@ -1053,65 +1062,17 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
-    <EntitySetMapping Name="ShopCredits">
-      <EntityTypeMapping TypeName="sncModel.ShopCredit">
-        <MappingFragment StoreEntitySet="ShopCredit">
-          <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-          <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-          <ScalarProperty Name="DeliveryCredit" ColumnName="DeliveryCredit" />
-          <ScalarProperty Name="PlatformCredit" ColumnName="PlatformCredit" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="MasterProducts">
-      <EntityTypeMapping TypeName="sncModel.MasterProduct">
-        <MappingFragment StoreEntitySet="MasterProducts">
-          <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-          <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-          <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-          <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="NickName" ColumnName="NickName" />
-          <ScalarProperty Name="Adscore" ColumnName="Adscore" />
-          <ScalarProperty Name="ImagePath5" ColumnName="ImagePath5" />
-          <ScalarProperty Name="ImagePath4" ColumnName="ImagePath4" />
-          <ScalarProperty Name="ImagePath3" ColumnName="ImagePath3" />
-          <ScalarProperty Name="ImagePath2" ColumnName="ImagePath2" />
-          <ScalarProperty Name="ImagePath1" ColumnName="ImagePath1" />
-          <ScalarProperty Name="ASIN" ColumnName="ASIN" />
-          <ScalarProperty Name="NextSubCategoryName" ColumnName="NextSubCategoryName" />
-          <ScalarProperty Name="NextSubCategoryId" ColumnName="NextSubCategoryId" />
-          <ScalarProperty Name="SubCategoryName" ColumnName="SubCategoryName" />
-          <ScalarProperty Name="SubCategoryId" ColumnName="SubCategoryId" />
-          <ScalarProperty Name="GoogleTaxonomyCode" ColumnName="GoogleTaxonomyCode" />
-          <ScalarProperty Name="PackageName" ColumnName="PackageName" />
-          <ScalarProperty Name="PackageId" ColumnName="PackageId" />
-          <ScalarProperty Name="Manufacturer" ColumnName="Manufacturer" />
-          <ScalarProperty Name="OriginCountry" ColumnName="OriginCountry" />
-          <ScalarProperty Name="IBarU" ColumnName="IBarU" />
-          <ScalarProperty Name="DrugCompoundDetailName" ColumnName="DrugCompoundDetailName" />
-          <ScalarProperty Name="DrugCompoundDetailId" ColumnName="DrugCompoundDetailId" />
-          <ScalarProperty Name="SizeLB" ColumnName="SizeLB" />
-          <ScalarProperty Name="Weight" ColumnName="Weight" />
-          <ScalarProperty Name="PriscriptionCategory" ColumnName="PriscriptionCategory" />
-          <ScalarProperty Name="MeasurementUnitName" ColumnName="MeasurementUnitName" />
-          <ScalarProperty Name="MeasurementUnitId" ColumnName="MeasurementUnitId" />
-          <ScalarProperty Name="ColorCode" ColumnName="ColorCode" />
-          <ScalarProperty Name="Customisation" ColumnName="Customisation" />
-          <ScalarProperty Name="Price" ColumnName="Price" />
-          <ScalarProperty Name="ProductTypeName" ColumnName="ProductTypeName" />
-          <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
-          <ScalarProperty Name="LongDescription" ColumnName="LongDescription" />
-          <ScalarProperty Name="ShortDescription" ColumnName="ShortDescription" />
-          <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
-          <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
-          <ScalarProperty Name="CategoryIds" ColumnName="CategoryIds" />
-          <ScalarProperty Name="BrandName" ColumnName="BrandName" />
-          <ScalarProperty Name="BrandId" ColumnName="BrandId" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="GetProductList" FunctionName="ShopnowchatEntities.Store.GetProductList" />
+    <FunctionImportMapping FunctionImportName="GetProductListCount" FunctionName="ShopnowchatEntities.Store.GetProductListCount" />
+    <FunctionImportMapping FunctionImportName="GetShopCategoryList" FunctionName="ShopnowchatEntities.Store.GetShopCategoryList" />
+    <FunctionImportMapping FunctionImportName="GetShopCategoryProductCount" FunctionName="ShopnowchatEntities.Store.GetShopCategoryProductCount" />
+    <FunctionImportMapping FunctionImportName="GetShopCategoryProducts" FunctionName="ShopnowchatEntities.Store.GetShopCategoryProducts" />
+    <FunctionImportMapping FunctionImportName="GetShopCategoryProductsList" FunctionName="ShopnowchatEntities.Store.GetShopCategoryProductsList" />
+    <FunctionImportMapping FunctionImportName="GetShopname" FunctionName="ShopnowchatEntities.Store.GetShopname" />
+    <FunctionImportMapping FunctionImportName="ReatillerPaymentReport" FunctionName="ShopnowchatEntities.Store.ReatillerPaymentReport" />
+    <FunctionImportMapping FunctionImportName="ReatillerPaymentReportAdmin" FunctionName="ShopnowchatEntities.Store.ReatillerPaymentReportAdmin" />
+    <FunctionImportMapping FunctionImportName="ReatillerPaymentReports" FunctionName="ShopnowchatEntities.Store.ReatillerPaymentReports" />
+    <FunctionImportMapping FunctionImportName="Sp_TB_SelectMedicineName" FunctionName="ShopnowchatEntities.Store.Sp_TB_SelectMedicineName" />
+    <FunctionImportMapping FunctionImportName="test" FunctionName="ShopnowchatEntities.Store.test" />
   </EntityContainerMapping>
 </Mapping>

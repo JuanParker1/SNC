@@ -37,9 +37,9 @@ namespace ShopNow.ViewModels
         public int Id { get; set; }
         public string Name { get; set; }
         public string NickName { get; set; }
-        public int CategoryId { get; set; }
+        public string CategoryId { get; set; }
         public string CategoryName { get; set; }
-        public int SubCategoryCode1 { get; set; }
+        public string SubCategoryCode1 { get; set; }
         public string SubCategoryName1 { get; set; }
         public string SubCategoryName2 { get; set; }
         public string weight { get; set; }
@@ -158,9 +158,9 @@ namespace ShopNow.ViewModels
         public string ImagePath5 { get; set; }
         public string Price { get; set; }
         public string PriscriptionCategory { get; set; }
-        public int DrugCompoundDetailId{ get; set; }
+        public string DrugCompoundDetailIds { get; set; }
         public string CombinationDrugCompound { get; set; }
-        public string iBarU { get; set; }
+        public int IBarU { get; set; }
         public string OriginCountry { get; set; }
         public string Manufacturer { get; set; }
         public string weight { get; set; }
@@ -350,7 +350,7 @@ namespace ShopNow.ViewModels
         public int Id { get; set; }
         public string Name { get; set; }
         public string NickName { get; set; }
-        public int CategoryId { get; set; }
+        public string CategoryIds { get; set; }
         public string CategoryName { get; set; }
         public string ProductType { get; set; }
         public int MinSelectionLimit { get; set; }
@@ -521,7 +521,7 @@ namespace ShopNow.ViewModels
         public string NickName { get; set; }
         public int BrandId { get; set; }
         public string BrandName { get; set; }
-        public int CategoryId { get; set; }
+        public string CategoryIds { get; set; }
         public string[] CategoryCode { get; set; }
         public string CategoryCode1 { get; set; }
         public string CategoryName { get; set; }

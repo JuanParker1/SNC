@@ -261,7 +261,8 @@ namespace ShopNow.ViewModels
         public string CategoryName { get; set; }
         public string BrandId { get; set; }
         public string BrandName { get; set; }
-        public string ProductType { get; set; }
+        public int ProductTypeId { get; set; }
+        public string ProductTypeName { get; set; }
         public double Price { get; set; }
         public double MenuPrice { get; set; }
         public int Qty { get; set; }

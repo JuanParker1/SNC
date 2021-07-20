@@ -40,5 +40,9 @@ namespace ShopNow.Models
         public string ShopName { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public int ProductDishAddonId { get; set; }
+    
+        public virtual MasterProduct MasterProduct { get; set; }
+        public virtual Product Product { get; set; }
+        public virtual Shop Shop { get; set; }
     }
 }

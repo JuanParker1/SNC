@@ -17,7 +17,10 @@ namespace ShopNow.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Shop()
         {
+            this.CustomerReviews = new HashSet<CustomerReview>();
+            this.Orders = new HashSet<Order>();
             this.Products = new HashSet<Product>();
+            this.ShopDishAddOns = new HashSet<ShopDishAddOn>();
         }
     
         public int Id { get; set; }
@@ -93,6 +96,14 @@ namespace ShopNow.Models
         public System.DateTime DateUpdated { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CustomerReview> CustomerReviews { get; set; }
+        public virtual Customer Customer { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Order> Orders { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Product> Products { get; set; }
+        public virtual ShopCategory ShopCategory { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ShopDishAddOn> ShopDishAddOns { get; set; }
     }
 }

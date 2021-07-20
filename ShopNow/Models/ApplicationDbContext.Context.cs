@@ -43,6 +43,7 @@ namespace ShopNow.Models
         public virtual DbSet<DiscountCategory> DiscountCategories { get; set; }
         public virtual DbSet<DrugCompoundDetail> DrugCompoundDetails { get; set; }
         public virtual DbSet<MarketingAgent> MarketingAgents { get; set; }
+        public virtual DbSet<MasterProduct> MasterProducts { get; set; }
         public virtual DbSet<MeasurementUnit> MeasurementUnits { get; set; }
         public virtual DbSet<NextSubCategory> NextSubCategories { get; set; }
         public virtual DbSet<OrderItem> OrderItems { get; set; }
@@ -59,8 +60,10 @@ namespace ShopNow.Models
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductSpecificationItem> ProductSpecificationItems { get; set; }
         public virtual DbSet<ProductSpecification> ProductSpecifications { get; set; }
+        public virtual DbSet<ProductType> ProductTypes { get; set; }
         public virtual DbSet<RefundsData> RefundsDatas { get; set; }
         public virtual DbSet<ShopCategory> ShopCategories { get; set; }
+        public virtual DbSet<ShopCredit> ShopCredits { get; set; }
         public virtual DbSet<ShopDishAddOn> ShopDishAddOns { get; set; }
         public virtual DbSet<ShopMember> ShopMembers { get; set; }
         public virtual DbSet<Shop> Shops { get; set; }
@@ -68,19 +71,15 @@ namespace ShopNow.Models
         public virtual DbSet<Staff> Staffs { get; set; }
         public virtual DbSet<SubCategory> SubCategories { get; set; }
         public virtual DbSet<UserEnquiry> UserEnquiries { get; set; }
-        public virtual DbSet<ShopCredit> ShopCredits { get; set; }
-
-        public virtual DbSet<MasterProduct> MasterProducts { get; set; }
-
     
-        [DbFunction("sncEntities", "GetTableVAlueString")]
+        [DbFunction("ShopnowchatEntities2", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)
         {
             var keyParameter = key != null ?
                 new ObjectParameter("key", key) :
                 new ObjectParameter("key", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<GetTableVAlueString_Result>("[sncEntities].[GetTableVAlueString](@key)", keyParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<GetTableVAlueString_Result>("[ShopnowchatEntities2].[GetTableVAlueString](@key)", keyParameter);
         }
     
         public virtual int getCategoryListbyShopcode(string code)
@@ -115,6 +114,11 @@ namespace ShopNow.Models
                 new ObjectParameter("pageSize", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GetCategoryProductsList", shopCodeParameter, categoryCodeParameter, strParameter, pageParameter, pageSizeParameter);
+        }
+    
+        public virtual ObjectResult<GetDEliveryBoyList_Result> GetDEliveryBoyList()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetDEliveryBoyList_Result>("GetDEliveryBoyList");
         }
     
         public virtual int GetProductList(Nullable<double> longitude, Nullable<double> latitude, string str, Nullable<int> page, Nullable<int> pagesize)
@@ -336,18 +340,13 @@ namespace ShopNow.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Sp_TB_SelectMedicineName", searchParameter, pageNumberParameter, rowofpageParameter);
         }
     
-        public virtual ObjectResult<test_Result> test(string str)
+        public virtual int test(string str)
         {
             var strParameter = str != null ?
                 new ObjectParameter("str", str) :
                 new ObjectParameter("str", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<test_Result>("test", strParameter);
-        }
-    
-        public virtual ObjectResult<GetDEliveryBoyList_Result> GetDEliveryBoyList()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetDEliveryBoyList_Result>("GetDEliveryBoyList");
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("test", strParameter);
         }
     }
 }

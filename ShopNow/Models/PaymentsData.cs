@@ -16,7 +16,7 @@ namespace ShopNow.Models
     {
         public long Id { get; set; }
         public string PaymentId { get; set; }
-        public Nullable<int> OrderNo { get; set; }
+        public Nullable<int> OrderNumber { get; set; }
         public string Entity { get; set; }
         public Nullable<decimal> Amount { get; set; }
         public string Currency { get; set; }

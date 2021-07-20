@@ -14,7 +14,7 @@ namespace ShopNow.Models
     
     public partial class OrderItem
     {
-        public int id { get; set; }
+        public int Id { get; set; }
         public int OrderId { get; set; }
         public int OrdeNumber { get; set; }
         public int ProductId { get; set; }
@@ -29,8 +29,6 @@ namespace ShopNow.Models
         public double Price { get; set; }
         public int Status { get; set; }
     
-        public virtual OrderItem OrderItems1 { get; set; }
-        public virtual OrderItem OrderItem1 { get; set; }
-        public virtual Product Product { get; set; }
+        public virtual Order Order { get; set; }
     }
 }

@@ -14,10 +14,21 @@ namespace ShopNow.Models
     
     public partial class ShopCredit
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public ShopCredit()
+        {
+            this.ShopCredit1 = new HashSet<ShopCredit>();
+        }
+    
         public int Id { get; set; }
         public double PlatformCredit { get; set; }
         public double DeliveryCredit { get; set; }
         public int ShopId { get; set; }
+        public int CustomerId { get; set; }
         public Nullable<System.DateTime> DateUpdated { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ShopCredit> ShopCredit1 { get; set; }
+        public virtual ShopCredit ShopCredit2 { get; set; }
     }
 }

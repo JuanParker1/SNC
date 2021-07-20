@@ -14,6 +14,12 @@ namespace ShopNow.Models
     
     public partial class MeasurementUnit
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public MeasurementUnit()
+        {
+            this.MasterProducts = new HashSet<MasterProduct>();
+        }
+    
         public int Id { get; set; }
         public string UnitName { get; set; }
         public string UnitSymbol { get; set; }
@@ -26,5 +32,8 @@ namespace ShopNow.Models
         public System.DateTime DateUpdated { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MasterProduct> MasterProducts { get; set; }
     }
 }

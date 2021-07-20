@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Schema Namespace="sncModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+<Schema Namespace="ShopnowchatEntities.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
   <EntityType Name="AccessPolicies">
     <Key>
       <PropertyRef Name="Id" />
@@ -380,7 +380,6 @@
     <Property Name="BrandId" Type="int" Nullable="false" />
     <Property Name="BrandName" Type="nvarchar(max)" />
     <Property Name="CategoryIds" Type="nvarchar(max)" />
-    <Property Name="CategoryId" Type="int" Nullable="false" />
     <Property Name="CategoryName" Type="nvarchar(max)" />
     <Property Name="ShortDescription" Type="nvarchar(max)" />
     <Property Name="LongDescription" Type="nvarchar(max)" />
@@ -394,17 +393,17 @@
     <Property Name="PriscriptionCategory" Type="bit" Nullable="false" />
     <Property Name="Weight" Type="float" Nullable="false" />
     <Property Name="SizeLB" Type="nvarchar(max)" />
-    <Property Name="DrugCompoundDetailId" Type="int" Nullable="false" />
+    <Property Name="DrugCompoundDetailIds" Type="nvarchar(max)" Nullable="false" />
     <Property Name="DrugCompoundDetailName" Type="nvarchar(max)" />
-    <Property Name="IBarU" Type="nvarchar(max)" />
+    <Property Name="IBarU" Type="int" />
     <Property Name="OriginCountry" Type="nvarchar(max)" />
     <Property Name="Manufacturer" Type="nvarchar(max)" />
     <Property Name="PackageId" Type="int" />
     <Property Name="PackageName" Type="nvarchar(max)" />
     <Property Name="GoogleTaxonomyCode" Type="nvarchar(max)" />
-    <Property Name="SubCategoryId" Type="int" Nullable="false" />
+    <Property Name="SubCategoryIds" Type="nvarchar(max)" />
     <Property Name="SubCategoryName" Type="nvarchar(max)" />
-    <Property Name="NextSubCategoryId" Type="int" Nullable="false" />
+    <Property Name="NextSubCategoryIds" Type="nvarchar(max)" />
     <Property Name="NextSubCategoryName" Type="nvarchar(max)" />
     <Property Name="ASIN" Type="nvarchar(max)" />
     <Property Name="ImagePath1" Type="nvarchar(max)" />
@@ -456,9 +455,9 @@
   </EntityType>
   <EntityType Name="OrderItems">
     <Key>
-      <PropertyRef Name="id" />
+      <PropertyRef Name="Id" />
     </Key>
-    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="OrderId" Type="int" Nullable="false" />
     <Property Name="OrdeNumber" Type="int" Nullable="false" />
     <Property Name="ProductId" Type="int" Nullable="false" />
@@ -601,7 +600,7 @@
     </Key>
     <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="PaymentId" Type="nvarchar" MaxLength="100" />
-    <Property Name="OrderNo" Type="int" />
+    <Property Name="OrderNumber" Type="int" />
     <Property Name="Entity" Type="varchar" MaxLength="100" />
     <Property Name="Amount" Type="decimal" Precision="18" Scale="2" />
     <Property Name="Currency" Type="varchar" MaxLength="50" />
@@ -695,8 +694,8 @@
     <Property Name="ISBN" Type="nvarchar(max)" />
     <Property Name="Price" Type="float" Nullable="false" />
     <Property Name="Qty" Type="int" Nullable="false" />
-    <Property Name="TypeName" Type="nvarchar(max)" />
-    <Property Name="TypeId" Type="int" Nullable="false" />
+    <Property Name="ProductTypeName" Type="nvarchar(max)" />
+    <Property Name="ProductTypeId" Type="int" Nullable="false" />
     <Property Name="MinSelectionLimit" Type="int" Nullable="false" />
     <Property Name="MaxSelectionLimit" Type="int" Nullable="false" />
     <Property Name="Customisation" Type="bit" Nullable="false" />
@@ -758,6 +757,13 @@
     <Property Name="DateUpdated" Type="datetime" Nullable="false" />
     <Property Name="DateEncoded" Type="datetime" Nullable="false" />
   </EntityType>
+  <EntityType Name="ProductType">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="150" />
+  </EntityType>
   <EntityType Name="RefundsData">
     <Key>
       <PropertyRef Name="Id" />
@@ -771,6 +777,12 @@
     <Property Name="OrderNumber" Type="int" />
     <Property Name="DateEncoded" Type="datetime" />
   </EntityType>
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="SearchData">
+          <Property Name="source" Type="nvarchar" MaxLength="500" />
+          <Property Name="keyValue" Type="nvarchar" MaxLength="500" />
+        </EntityType>-->
   <EntityType Name="ShopCategories">
     <Key>
       <PropertyRef Name="Id" />
@@ -791,6 +803,7 @@
     <Property Name="PlatformCredit" Type="float" Nullable="false" />
     <Property Name="DeliveryCredit" Type="float" Nullable="false" />
     <Property Name="ShopId" Type="int" Nullable="false" />
+    <Property Name="CustomerId" Type="int" Nullable="false" />
     <Property Name="DateUpdated" Type="datetime" />
   </EntityType>
   <EntityType Name="ShopDishAddOns">
@@ -971,6 +984,12 @@
     <Property Name="DateEncoded" Type="datetime" Nullable="false" />
     <Property Name="DateUpdated" Type="datetime" Nullable="false" />
   </EntityType>
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="tbl">
+          <Property Name="name" Type="nvarchar" MaxLength="500" />
+          <Property Name="percentage" Type="float" />
+        </EntityType>-->
   <EntityType Name="UserEnquiries">
     <Key>
       <PropertyRef Name="Id" />
@@ -1002,39 +1021,207 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_OrderItems_OrderItems">
-    <End Role="OrderItems" Type="Self.OrderItems" Multiplicity="1" />
-    <End Role="OrderItems1" Type="Self.OrderItems" Multiplicity="0..1" />
+  <Association Name="FK_Brands_ProductType">
+    <End Role="ProductType" Type="Self.ProductType" Multiplicity="1" />
+    <End Role="Brands" Type="Self.Brands" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="OrderItems">
-        <PropertyRef Name="id" />
+      <Principal Role="ProductType">
+        <PropertyRef Name="Id" />
       </Principal>
-      <Dependent Role="OrderItems1">
-        <PropertyRef Name="id" />
+      <Dependent Role="Brands">
+        <PropertyRef Name="ProductTypeId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_OrderItems_Products">
-    <End Role="Products" Type="Self.Products" Multiplicity="1" />
+  <Association Name="FK_CustomerAddresses_Customers">
+    <End Role="Customers" Type="Self.Customers" Multiplicity="1" />
+    <End Role="CustomerAddresses" Type="Self.CustomerAddresses" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CustomerAddresses">
+        <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CustomerReview_Customers">
+    <End Role="Customers" Type="Self.Customers" Multiplicity="1" />
+    <End Role="CustomerReview" Type="Self.CustomerReview" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CustomerReview">
+        <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CustomerReview_Shops">
+    <End Role="Shops" Type="Self.Shops" Multiplicity="1" />
+    <End Role="CustomerReview" Type="Self.CustomerReview" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Shops">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CustomerReview">
+        <PropertyRef Name="ShopId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DeliveryBoys_Customers">
+    <End Role="Customers" Type="Self.Customers" Multiplicity="1" />
+    <End Role="DeliveryBoys" Type="Self.DeliveryBoys" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DeliveryBoys">
+        <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DeliveryBoyShops_DeliveryBoyShops">
+    <End Role="DeliveryBoyShops" Type="Self.DeliveryBoyShops" Multiplicity="1" />
+    <End Role="DeliveryBoyShops1" Type="Self.DeliveryBoyShops" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="DeliveryBoyShops">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DeliveryBoyShops1">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MasterProducts_Brand">
+    <End Role="ProductType" Type="Self.ProductType" Multiplicity="1" />
+    <End Role="MasterProducts" Type="Self.MasterProducts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductType">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="MasterProducts">
+        <PropertyRef Name="ProductTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MasterProducts_MeasurementUnits">
+    <End Role="MeasurementUnits" Type="Self.MeasurementUnits" Multiplicity="1" />
+    <End Role="MasterProducts" Type="Self.MasterProducts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MeasurementUnits">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="MasterProducts">
+        <PropertyRef Name="MeasurementUnitId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MasterProducts_Packages">
+    <End Role="Packages" Type="Self.Packages" Multiplicity="0..1" />
+    <End Role="MasterProducts" Type="Self.MasterProducts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Packages">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="MasterProducts">
+        <PropertyRef Name="PackageId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MasterProducts_ProductType">
+    <End Role="ProductType" Type="Self.ProductType" Multiplicity="1" />
+    <End Role="MasterProducts" Type="Self.MasterProducts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductType">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="MasterProducts">
+        <PropertyRef Name="ProductTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_NextSubCategories_ProductType">
+    <End Role="ProductType" Type="Self.ProductType" Multiplicity="1" />
+    <End Role="NextSubCategories" Type="Self.NextSubCategories" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductType">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="NextSubCategories">
+        <PropertyRef Name="ProductTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_NextSubCategories_SubCategories">
+    <End Role="SubCategories" Type="Self.SubCategories" Multiplicity="1" />
+    <End Role="NextSubCategories" Type="Self.NextSubCategories" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SubCategories">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="NextSubCategories">
+        <PropertyRef Name="SubCategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrderItems_Orders">
+    <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
     <End Role="OrderItems" Type="Self.OrderItems" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="Products">
+      <Principal Role="Orders">
         <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="OrderItems">
-        <PropertyRef Name="ProductId" />
+        <PropertyRef Name="OrderId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_Orders_Orders">
-    <End Role="DeliveryBoys" Type="Self.DeliveryBoys" Multiplicity="1" />
+  <Association Name="FK_Orders_Customers">
+    <End Role="Customers" Type="Self.Customers" Multiplicity="1" />
     <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="DeliveryBoys">
+      <Principal Role="Customers">
         <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="Orders">
-        <PropertyRef Name="DeliveryBoyId" />
+        <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Orders_Shops">
+    <End Role="Shops" Type="Self.Shops" Multiplicity="1" />
+    <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Shops">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="ShopId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductDishAddOns_MasterProducts">
+    <End Role="MasterProducts" Type="Self.MasterProducts" Multiplicity="0..1" />
+    <End Role="ProductDishAddOns" Type="Self.ProductDishAddOns" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MasterProducts">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ProductDishAddOns">
+        <PropertyRef Name="MasterProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Products_ProductType">
+    <End Role="ProductType" Type="Self.ProductType" Multiplicity="1" />
+    <End Role="Products" Type="Self.Products" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductType">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Products">
+        <PropertyRef Name="ProductTypeId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1047,6 +1234,102 @@
       </Principal>
       <Dependent Role="Products">
         <PropertyRef Name="ShopId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ShopCredit_ShopCredit">
+    <End Role="ShopCredit" Type="Self.ShopCredit" Multiplicity="1" />
+    <End Role="ShopCredit1" Type="Self.ShopCredit" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ShopCredit">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ShopCredit1">
+        <PropertyRef Name="ShopId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ShopDishAddOns_MasterProducts">
+    <End Role="MasterProducts" Type="Self.MasterProducts" Multiplicity="1" />
+    <End Role="ShopDishAddOns" Type="Self.ShopDishAddOns" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MasterProducts">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ShopDishAddOns">
+        <PropertyRef Name="MasterProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ShopDishAddOns_Products">
+    <End Role="Products" Type="Self.Products" Multiplicity="1" />
+    <End Role="ShopDishAddOns" Type="Self.ShopDishAddOns" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ShopDishAddOns">
+        <PropertyRef Name="ProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ShopDishAddOns_Shops">
+    <End Role="Shops" Type="Self.Shops" Multiplicity="1" />
+    <End Role="ShopDishAddOns" Type="Self.ShopDishAddOns" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Shops">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ShopDishAddOns">
+        <PropertyRef Name="ShopId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Shops_Customers">
+    <End Role="Customers" Type="Self.Customers" Multiplicity="1" />
+    <End Role="Shops" Type="Self.Shops" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Shops">
+        <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Shops_ShopCategories">
+    <End Role="ShopCategories" Type="Self.ShopCategories" Multiplicity="1" />
+    <End Role="Shops" Type="Self.Shops" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ShopCategories">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Shops">
+        <PropertyRef Name="ShopCategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SubCategories_Categories">
+    <End Role="Categories" Type="Self.Categories" Multiplicity="1" />
+    <End Role="SubCategories" Type="Self.SubCategories" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Categories">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="SubCategories">
+        <PropertyRef Name="CategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SubCategories_ProductType">
+    <End Role="ProductType" Type="Self.ProductType" Multiplicity="1" />
+    <End Role="SubCategories" Type="Self.SubCategories" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductType">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="SubCategories">
+        <PropertyRef Name="ProductTypeId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -1143,7 +1426,7 @@
   <Function Name="test" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="str" Type="nvarchar" Mode="In" />
   </Function>
-  <EntityContainer Name="sncModelStoreContainer">
+  <EntityContainer Name="ShopnowchatEntitiesStoreContainer">
     <EntitySet Name="AccessPolicies" EntityType="Self.AccessPolicies" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AddOnCategories" EntityType="Self.AddOnCategories" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Admins" EntityType="Self.Admins" Schema="dbo" store:Type="Tables" />
@@ -1177,6 +1460,7 @@
     <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProductSpecificationItems" EntityType="Self.ProductSpecificationItems" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProductSpecifications" EntityType="Self.ProductSpecifications" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProductType" EntityType="Self.ProductType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RefundsData" EntityType="Self.RefundsData" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ShopCategories" EntityType="Self.ShopCategories" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ShopCredit" EntityType="Self.ShopCredit" Schema="dbo" store:Type="Tables" />
@@ -1191,21 +1475,109 @@
       <End Role="Payments" EntitySet="Payments" />
       <End Role="Banners" EntitySet="Banners" />
     </AssociationSet>
-    <AssociationSet Name="FK_OrderItems_OrderItems" Association="Self.FK_OrderItems_OrderItems">
-      <End Role="OrderItems" EntitySet="OrderItems" />
-      <End Role="OrderItems1" EntitySet="OrderItems" />
+    <AssociationSet Name="FK_Brands_ProductType" Association="Self.FK_Brands_ProductType">
+      <End Role="ProductType" EntitySet="ProductType" />
+      <End Role="Brands" EntitySet="Brands" />
     </AssociationSet>
-    <AssociationSet Name="FK_OrderItems_Products" Association="Self.FK_OrderItems_Products">
-      <End Role="Products" EntitySet="Products" />
-      <End Role="OrderItems" EntitySet="OrderItems" />
+    <AssociationSet Name="FK_CustomerAddresses_Customers" Association="Self.FK_CustomerAddresses_Customers">
+      <End Role="Customers" EntitySet="Customers" />
+      <End Role="CustomerAddresses" EntitySet="CustomerAddresses" />
     </AssociationSet>
-    <AssociationSet Name="FK_Orders_Orders" Association="Self.FK_Orders_Orders">
+    <AssociationSet Name="FK_CustomerReview_Customers" Association="Self.FK_CustomerReview_Customers">
+      <End Role="Customers" EntitySet="Customers" />
+      <End Role="CustomerReview" EntitySet="CustomerReview" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CustomerReview_Shops" Association="Self.FK_CustomerReview_Shops">
+      <End Role="Shops" EntitySet="Shops" />
+      <End Role="CustomerReview" EntitySet="CustomerReview" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DeliveryBoys_Customers" Association="Self.FK_DeliveryBoys_Customers">
+      <End Role="Customers" EntitySet="Customers" />
       <End Role="DeliveryBoys" EntitySet="DeliveryBoys" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DeliveryBoyShops_DeliveryBoyShops" Association="Self.FK_DeliveryBoyShops_DeliveryBoyShops">
+      <End Role="DeliveryBoyShops" EntitySet="DeliveryBoyShops" />
+      <End Role="DeliveryBoyShops1" EntitySet="DeliveryBoyShops" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MasterProducts_Brand" Association="Self.FK_MasterProducts_Brand">
+      <End Role="ProductType" EntitySet="ProductType" />
+      <End Role="MasterProducts" EntitySet="MasterProducts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MasterProducts_MeasurementUnits" Association="Self.FK_MasterProducts_MeasurementUnits">
+      <End Role="MeasurementUnits" EntitySet="MeasurementUnits" />
+      <End Role="MasterProducts" EntitySet="MasterProducts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MasterProducts_Packages" Association="Self.FK_MasterProducts_Packages">
+      <End Role="Packages" EntitySet="Packages" />
+      <End Role="MasterProducts" EntitySet="MasterProducts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MasterProducts_ProductType" Association="Self.FK_MasterProducts_ProductType">
+      <End Role="ProductType" EntitySet="ProductType" />
+      <End Role="MasterProducts" EntitySet="MasterProducts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_NextSubCategories_ProductType" Association="Self.FK_NextSubCategories_ProductType">
+      <End Role="ProductType" EntitySet="ProductType" />
+      <End Role="NextSubCategories" EntitySet="NextSubCategories" />
+    </AssociationSet>
+    <AssociationSet Name="FK_NextSubCategories_SubCategories" Association="Self.FK_NextSubCategories_SubCategories">
+      <End Role="SubCategories" EntitySet="SubCategories" />
+      <End Role="NextSubCategories" EntitySet="NextSubCategories" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrderItems_Orders" Association="Self.FK_OrderItems_Orders">
       <End Role="Orders" EntitySet="Orders" />
+      <End Role="OrderItems" EntitySet="OrderItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Orders_Customers" Association="Self.FK_Orders_Customers">
+      <End Role="Customers" EntitySet="Customers" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Orders_Shops" Association="Self.FK_Orders_Shops">
+      <End Role="Shops" EntitySet="Shops" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductDishAddOns_MasterProducts" Association="Self.FK_ProductDishAddOns_MasterProducts">
+      <End Role="MasterProducts" EntitySet="MasterProducts" />
+      <End Role="ProductDishAddOns" EntitySet="ProductDishAddOns" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Products_ProductType" Association="Self.FK_Products_ProductType">
+      <End Role="ProductType" EntitySet="ProductType" />
+      <End Role="Products" EntitySet="Products" />
     </AssociationSet>
     <AssociationSet Name="FK_Products_Shops" Association="Self.FK_Products_Shops">
       <End Role="Shops" EntitySet="Shops" />
       <End Role="Products" EntitySet="Products" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ShopCredit_ShopCredit" Association="Self.FK_ShopCredit_ShopCredit">
+      <End Role="ShopCredit" EntitySet="ShopCredit" />
+      <End Role="ShopCredit1" EntitySet="ShopCredit" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ShopDishAddOns_MasterProducts" Association="Self.FK_ShopDishAddOns_MasterProducts">
+      <End Role="MasterProducts" EntitySet="MasterProducts" />
+      <End Role="ShopDishAddOns" EntitySet="ShopDishAddOns" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ShopDishAddOns_Products" Association="Self.FK_ShopDishAddOns_Products">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="ShopDishAddOns" EntitySet="ShopDishAddOns" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ShopDishAddOns_Shops" Association="Self.FK_ShopDishAddOns_Shops">
+      <End Role="Shops" EntitySet="Shops" />
+      <End Role="ShopDishAddOns" EntitySet="ShopDishAddOns" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Shops_Customers" Association="Self.FK_Shops_Customers">
+      <End Role="Customers" EntitySet="Customers" />
+      <End Role="Shops" EntitySet="Shops" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Shops_ShopCategories" Association="Self.FK_Shops_ShopCategories">
+      <End Role="ShopCategories" EntitySet="ShopCategories" />
+      <End Role="Shops" EntitySet="Shops" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SubCategories_Categories" Association="Self.FK_SubCategories_Categories">
+      <End Role="Categories" EntitySet="Categories" />
+      <End Role="SubCategories" EntitySet="SubCategories" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SubCategories_ProductType" Association="Self.FK_SubCategories_ProductType">
+      <End Role="ProductType" EntitySet="ProductType" />
+      <End Role="SubCategories" EntitySet="SubCategories" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

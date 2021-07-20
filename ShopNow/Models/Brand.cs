@@ -23,5 +23,7 @@ namespace ShopNow.Models
         public string ProductTypeName { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
+    
+        public virtual ProductType ProductType { get; set; }
     }
 }

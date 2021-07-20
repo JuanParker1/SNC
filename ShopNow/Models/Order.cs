@@ -14,6 +14,12 @@ namespace ShopNow.Models
     
     public partial class Order
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Order()
+        {
+            this.OrderItems = new HashSet<OrderItem>();
+        }
+    
         public int Id { get; set; }
         public int CustomerId { get; set; }
         public string CustomerName { get; set; }
@@ -48,6 +54,9 @@ namespace ShopNow.Models
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
     
-        public virtual DeliveryBoy DeliveryBoy { get; set; }
+        public virtual Customer Customer { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<OrderItem> OrderItems { get; set; }
+        public virtual Shop Shop { get; set; }
     }
 }

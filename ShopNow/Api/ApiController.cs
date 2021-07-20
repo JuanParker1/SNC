@@ -1040,7 +1040,7 @@ namespace ShopNow.Controllers
                         var s = varpayment.Fetch(model.ReferenceCode);
                         PaymentsData pay = new PaymentsData();
 
-                        pay.OrderNo = Convert.ToInt32(model.OrderNo);
+                        pay.OrderNumber = Convert.ToInt32(model.OrderNo);
                         pay.PaymentId = model.ReferenceCode;
 
                         pay.Invoice_Id = s["invoice_id"];
@@ -2550,7 +2550,7 @@ namespace ShopNow.Controllers
                                           Name = m.Name,
                                           ShopId = pl.ShopId,
                                           ShopName = pl.ShopName,
-                                          CategoryId = m.CategoryId,
+                                          CategoryIds = m.CategoryIds,
                                           CategoryName = m.CategoryName,
                                           ColorCode = m.ColorCode,
                                           Price = pl.Price,
@@ -2598,8 +2598,8 @@ namespace ShopNow.Controllers
                                           Name = m.Name,
                                           ShopId = pl.ShopId,
                                           ShopName = pl.ShopName,
-                                          CategoryId = m.NextSubCategoryId,
-                                          CategoryName = m.NextSubCategoryName,
+                                          CategoryIds = m.CategoryIds,
+                                          CategoryName = m.CategoryName,
                                           //ColorCode = pl.ColorCode,
                                           Price = pl.Price,
                                           ImagePath = m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23"),
