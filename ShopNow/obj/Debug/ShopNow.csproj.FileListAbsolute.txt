@@ -757,3 +757,4 @@ C:\Users\Gigabyte\source\repos\SNC-NEW\WebAppShopnowAdmin\ShopNow\obj\Debug\Shop
 C:\Users\Gigabyte\source\repos\SNC-NEW\WebAppShopnowAdmin\ShopNow\obj\Debug\ShopNow.pdb
 E:\Beno\SNC\ShopNow\obj\Debug\ShopNow.Properties.Resources.resources
 E:\Beno\SNC\ShopNow\obj\Debug\ShopNow.csproj.GenerateResource.cache
+E:\Beno\SNC\ShopNow\obj\Debug\ShopNow.csprojAssemblyReference.cache

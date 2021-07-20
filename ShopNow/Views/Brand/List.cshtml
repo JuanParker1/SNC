@@ -13,7 +13,7 @@
         padding: .4rem 1.25rem;
     }
 </style>
-      @*////*@
+@*////*@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-2">
@@ -30,8 +30,8 @@
 {
 columns.Add(b => b.Name).Titled("Name").Filterable(true).SetWidth(20);
 columns.Add(b => b.ProductTypeName).Titled("Product Type").Filterable(true).SetWidth(20);
-columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(b => @<div><a href="javascript:void(0)" data-id="@b.Id" data-name="@b.Name" data-productTypeId="@b.ProductTypeId" data-productTypeName="@b.ProductTypeName" class="btn-sm btn-warning edit-prompt" data-toggle="modal" data-target="#editModal" style="padding: 3px 26px">Edit</a> <a href="javascript:void(0)" data-code="@b.Id" class="btn-sm btn-danger delete-prompt" data-toggle="modal" data-target="#deleteModal" style="padding: 3px 18px">Delete</a></div>);    
-}).WithPaging(20).Sortable(true)
+columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(b => @<div><a href="javascript:void(0)" data-id="@b.Id" data-name="@b.Name" data-productTypeId="@b.ProductTypeId" data-productTypeName="@b.ProductTypeName" class="btn-sm btn-warning edit-prompt" data-toggle="modal" data-target="#editModal" style="padding: 3px 26px">Edit</a> <a href="javascript:void(0)" data-code="@b.Id" class="btn-sm btn-danger delete-prompt" data-toggle="modal" data-target="#deleteModal" style="padding: 3px 18px">Delete</a></div>);
+            }).WithPaging(20).Sortable(true)
 </div>
 
 
@@ -74,12 +74,12 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
                     <div class="col-md-6">
                         <label class="col-form-label"><strong class="text-secondary">Item Type</strong></label>
                         <select name="ProductType" class="form-control" id="ProductTypeId">
-                            <option value="0" disabled selected>Select</option>
-                            <option value="4">Product</option>
-                            <option value="1">Dish</option>
-                            <option value="3">Medical</option>
-                            <option value="2">FMCG</option>
-                            <option value="5">Service</option>
+                            @*<option value="0" disabled selected>Select</option>
+                                <option value="4">Product</option>
+                                <option value="1">Dish</option>
+                                <option value="3">Medical</option>
+                                <option value="2">FMCG</option>
+                                <option value="5">Service</option>*@
                         </select>
                         <input type="hidden" name="ProductTypeName" id="ProductTypeName" />
                     </div>
@@ -118,7 +118,7 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
                             <option value="2">FMCG</option>
                             <option value="5">Service</option>
                         </select>
-                        <input type="hidden" id="edit-ProductTypeName"/>
+                        <input type="hidden" id="edit-ProductTypeName" />
                     </div>
                 </div>
             </div>
@@ -135,17 +135,44 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
     <script src="~/Scripts/ValidateRequiredFields.js"></script>
     <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
-
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
-            $('#ProductTypeId').on('change', function () {
-                let selectedType = $(this).find("option:selected").text();
-                $('[name="ProductTypeName"]').val(selectedType);
+            $('#ProductTypeId').select2({
+                placeholder: "Search Type",
+                width: '100%',
+                ajax: {
+                    url: "/ProductType/GetSelect2List",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ProductTypeName"]').val(e.params.data.text);
+                });
+
+            $('#edit-ProductTypeId').select2({
+                placeholder: "Search Type",
+                width: '100%',
+                ajax: {
+                    url: "/ProductType/GetSelect2List",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('#edit-ProductTypeName').val(e.params.data.text);
             });
-            $('#edit-ProductTypeId').on('change', function () {
-                let selectedType = $(this).find("option:selected").text();
-                $('#edit-ProductTypeName').val(selectedType);
-            });
+
+
+            //$('#ProductTypeId').on('change', function () {
+            //    let selectedType = $(this).find("option:selected").text();
+            //    $('[name="ProductTypeName"]').val(selectedType);
+            //});
+            //$('#edit-ProductTypeId').on('change', function () {
+            //    let selectedType = $(this).find("option:selected").text();
+            //    $('#edit-ProductTypeName').val(selectedType);
+            //});
             $('#Create').on('click', function () {
                 var isValidate = false;
                 var requiredArr = [
@@ -182,7 +209,7 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
             $(".edit-prompt").click(function () {
                 $("#BrandId").val($(this).attr('data-id'));
                 $("#edit-Name").val($(this).attr('data-name'));
-                $('#edit-ProductTypeId').val($(this).attr('data-productTypeId'));
+                $('#edit-ProductTypeId').val($(this).attr('data-productTypeId')).trigger('change');
                 $('#edit-ProductTypeName').val($(this).attr('data-productTypeName'));
             });
 
@@ -211,9 +238,9 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
                 }
             });
 
-            $("#editModal").on("hidden.bs.modal", function () {
-                window.location.reload();
-            });
+            //$("#editModal").on("hidden.bs.modal", function () {
+            //    window.location.reload();
+            //});
 
             $(".delete-prompt").click(function () {
                 var code = $(this).attr('data-id');
