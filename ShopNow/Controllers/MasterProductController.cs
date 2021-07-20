@@ -2,6 +2,7 @@
 using Amazon.S3;
 using AutoMapper;
 using ExcelDataReader;
+using ShopNow.Base;
 using ShopNow.Filters;
 using ShopNow.Helpers;
 using ShopNow.Models;
@@ -24,31 +25,20 @@ namespace ShopNow.Controllers
     public class MasterProductController : Controller
     {
         private ShopnowchatEntities _db = new ShopnowchatEntities();
-        
         UploadContent uc = new UploadContent();
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
-        private const string _prefix = "MPR";
         private static readonly RegionEndpoint bucketRegion = RegionEndpoint.APSouth1;
         private static readonly string accesskey = ConfigurationManager.AppSettings["AWSAccessKey"];
         private static readonly string secretkey = ConfigurationManager.AppSettings["AWSSecretKey"];
-        private static string _generatedCode(string _prefix)
-        {
-            
-                return ShopNow.Helpers.DRC.Generate(_prefix);
-           
-        }
+        
         public MasterProductController()
-        {
-            //_db.Database.ExecuteSqlCommand("SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
-            
+        {            
             _mapperConfiguration = new MapperConfiguration(config =>
             {
-                config.CreateMap<MasterProduct, MasterProductListViewModel.MasterProductList>();
                 config.CreateMap<MasterElectronicCreateViewModel, MasterProduct>();
                 config.CreateMap<MasterElectronicEditViewModel, MasterProduct>();
                 config.CreateMap<MasterProduct, MasterElectronicEditViewModel>();
-                config.CreateMap<MasterProduct, MedicalDrugListViewModel.MedicalDrugList>();
                 config.CreateMap<MedicalDrugCreateEditViewModel, MasterProduct>();
                 config.CreateMap<MasterProduct, MedicalDrugCreateEditViewModel>();
                 config.CreateMap<Product, ItemMappingViewModel>();
@@ -158,32 +148,34 @@ namespace ShopNow.Controllers
 
             List<MasterAddOnsCreateViewModel> addOns = Session["AddOns"] as List<MasterAddOnsCreateViewModel>;
             var productDishaddOn = new ProductDishAddOn();
-            foreach (var s in addOns)
+            if (addOns != null)
             {
-                productDishaddOn.AddOnItemName = s.AddOnItemName;
-                productDishaddOn.MasterProductId = prod.Id;
-                productDishaddOn.MasterProductName = prod.Name;
-                productDishaddOn.AddOnCategoryId = s.AddOnCategoryId;
-                productDishaddOn.AddOnCategoryName = s.AddOnCategoryName;
-                productDishaddOn.PortionId = s.PortionId;
-                productDishaddOn.PortionName = s.PortionName;
-                productDishaddOn.MinSelectionLimit = s.MinSelectionLimit;
-                productDishaddOn.MaxSelectionLimit = s.MaxSelectionLimit;
-                productDishaddOn.CrustName = s.CrustName;
-                productDishaddOn.AddOnsPrice = s.AddOnsPrice;
-                productDishaddOn.PortionPrice = s.PortionPrice;
-                productDishaddOn.CrustPrice = s.CrustPrice;
-                productDishaddOn.CreatedBy = user.Name;
-                productDishaddOn.UpdatedBy = user.Name;
-                productDishaddOn.DateEncoded = DateTime.Now;
-                productDishaddOn.DateUpdated = DateTime.Now;
-                productDishaddOn.Status = 0;
-                productDishaddOn.AddOnType = s.AddOnType;
-                productDishaddOn.MasterProductId = prod.Id;
-                _db.ProductDishAddOns.Add(productDishaddOn);
-                _db.SaveChanges();
+                foreach (var s in addOns)
+                {
+                    productDishaddOn.AddOnItemName = s.AddOnItemName;
+                    productDishaddOn.MasterProductId = prod.Id;
+                    productDishaddOn.MasterProductName = prod.Name;
+                    productDishaddOn.AddOnCategoryId = s.AddOnCategoryId;
+                    productDishaddOn.AddOnCategoryName = s.AddOnCategoryName;
+                    productDishaddOn.PortionId = s.PortionId;
+                    productDishaddOn.PortionName = s.PortionName;
+                    productDishaddOn.MinSelectionLimit = s.MinSelectionLimit;
+                    productDishaddOn.MaxSelectionLimit = s.MaxSelectionLimit;
+                    productDishaddOn.CrustName = s.CrustName;
+                    productDishaddOn.AddOnsPrice = s.AddOnsPrice;
+                    productDishaddOn.PortionPrice = s.PortionPrice;
+                    productDishaddOn.CrustPrice = s.CrustPrice;
+                    productDishaddOn.CreatedBy = user.Name;
+                    productDishaddOn.UpdatedBy = user.Name;
+                    productDishaddOn.DateEncoded = DateTime.Now;
+                    productDishaddOn.DateUpdated = DateTime.Now;
+                    productDishaddOn.Status = 0;
+                    productDishaddOn.AddOnType = s.AddOnType;
+                    productDishaddOn.MasterProductId = prod.Id;
+                    _db.ProductDishAddOns.Add(productDishaddOn);
+                    _db.SaveChanges();
+                }
             }
-
             return View();
         }
 
@@ -265,32 +257,35 @@ namespace ShopNow.Controllers
 
             List<MasterAddOnsCreateViewModel> addOns = Session["EditAddOns"] as List<MasterAddOnsCreateViewModel>;
             var productDishaddOn = new ProductDishAddOn();
-            foreach (var s in addOns)
+            if (addOns != null)
             {
-                if (s.Id == 0)
+                foreach (var s in addOns)
                 {
-                    productDishaddOn.AddOnItemName = s.AddOnItemName;
-                    productDishaddOn.MasterProductId = prod.Id;
-                    productDishaddOn.MasterProductName = prod.Name;
-                    productDishaddOn.AddOnCategoryId = s.AddOnCategoryId;
-                    productDishaddOn.AddOnCategoryName = s.AddOnCategoryName;
-                    productDishaddOn.PortionId = s.PortionId;
-                    productDishaddOn.PortionName = s.PortionName;
-                    productDishaddOn.MinSelectionLimit = s.MinSelectionLimit;
-                    productDishaddOn.MaxSelectionLimit = s.MaxSelectionLimit;
-                    productDishaddOn.CrustName = s.CrustName;
-                    productDishaddOn.AddOnsPrice = s.AddOnsPrice;
-                    productDishaddOn.PortionPrice = s.PortionPrice;
-                    productDishaddOn.CrustPrice = s.CrustPrice;
-                    productDishaddOn.CreatedBy = user.Name;
-                    productDishaddOn.UpdatedBy = user.Name;
-                    productDishaddOn.DateEncoded = DateTime.Now;
-                    productDishaddOn.DateUpdated = DateTime.Now;
-                    productDishaddOn.Status = 0;
-                    productDishaddOn.AddOnType = s.AddOnType;
-                    productDishaddOn.MasterProductId = prod.Id;
-                    _db.ProductDishAddOns.Add(productDishaddOn);
-                    _db.SaveChanges();
+                    if (s.Id == 0)
+                    {
+                        productDishaddOn.AddOnItemName = s.AddOnItemName;
+                        productDishaddOn.MasterProductId = prod.Id;
+                        productDishaddOn.MasterProductName = prod.Name;
+                        productDishaddOn.AddOnCategoryId = s.AddOnCategoryId;
+                        productDishaddOn.AddOnCategoryName = s.AddOnCategoryName;
+                        productDishaddOn.PortionId = s.PortionId;
+                        productDishaddOn.PortionName = s.PortionName;
+                        productDishaddOn.MinSelectionLimit = s.MinSelectionLimit;
+                        productDishaddOn.MaxSelectionLimit = s.MaxSelectionLimit;
+                        productDishaddOn.CrustName = s.CrustName;
+                        productDishaddOn.AddOnsPrice = s.AddOnsPrice;
+                        productDishaddOn.PortionPrice = s.PortionPrice;
+                        productDishaddOn.CrustPrice = s.CrustPrice;
+                        productDishaddOn.CreatedBy = user.Name;
+                        productDishaddOn.UpdatedBy = user.Name;
+                        productDishaddOn.DateEncoded = DateTime.Now;
+                        productDishaddOn.DateUpdated = DateTime.Now;
+                        productDishaddOn.Status = 0;
+                        productDishaddOn.AddOnType = s.AddOnType;
+                        productDishaddOn.MasterProductId = prod.Id;
+                        _db.ProductDishAddOns.Add(productDishaddOn);
+                        _db.SaveChanges();
+                    }
                 }
             }
             return RedirectToAction("FoodList", "MasterProduct");
@@ -2449,7 +2444,7 @@ namespace ShopNow.Controllers
 
         public int CheckBrand(string BrandName, int ProductTypeId, string ProductTypeName)
         {
-            var brand = _db.Brands.FirstOrDefault(i => i.Name == BrandName && i.Status == 0);// Brand.GetName(BrandName);
+            var brand = _db.Brands.FirstOrDefault(i => i.Name == BrandName && i.Status == 0);
             if (brand != null)
             {
                 return brand.Id;
@@ -2503,7 +2498,7 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
 
-            var nextSubCategory = _db.NextSubCategories.FirstOrDefault(i => i.Name == SubCategoryName2 && i.Status == 0);// NextSubCategory.GetName(SubCategoryName2);
+            var nextSubCategory = _db.NextSubCategories.FirstOrDefault(i => i.Name == SubCategoryName2 && i.Status == 0);
             if (nextSubCategory != null)
             {
 
@@ -2531,7 +2526,7 @@ namespace ShopNow.Controllers
 
         public int CheckCategory(string CategoryName, int ProductTypeId, string ProductTypeName)
         {
-            var category = _db.Categories.FirstOrDefault(i => i.Name == CategoryName && i.Status == 0);// Category.GetName(CategoryName);
+            var category = _db.Categories.FirstOrDefault(i => i.Name == CategoryName && i.Status == 0);
             if (category != null)
             {
 

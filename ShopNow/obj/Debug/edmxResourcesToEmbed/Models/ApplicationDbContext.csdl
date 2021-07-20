@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Schema Namespace="ShopnowchatEntities" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+<Schema Namespace="sncModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
   <ComplexType Name="GetTableVAlueString_Result">
     <Property Name="Name" Type="String" MaxLength="600" FixedLength="false" Unicode="true" />
   </ComplexType>
@@ -410,7 +410,7 @@
     <Property Name="PriscriptionCategory" Type="Boolean" Nullable="false" />
     <Property Name="Weight" Type="Double" Nullable="false" />
     <Property Name="SizeLB" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="DrugCompoundDetailIds" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="DrugCompoundDetailIds" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="DrugCompoundDetailName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="IBarU" Type="Int32" />
     <Property Name="OriginCountry" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -435,10 +435,7 @@
     <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
     <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="ProductType" Relationship="Self.FK_MasterProducts_Brand" FromRole="MasterProducts" ToRole="ProductType" />
-    <NavigationProperty Name="MeasurementUnit" Relationship="Self.FK_MasterProducts_MeasurementUnits" FromRole="MasterProducts" ToRole="MeasurementUnits" />
-    <NavigationProperty Name="Package" Relationship="Self.FK_MasterProducts_Packages" FromRole="MasterProducts" ToRole="Packages" />
-    <NavigationProperty Name="ProductType1" Relationship="Self.FK_MasterProducts_ProductType" FromRole="MasterProducts" ToRole="ProductType" />
+    <NavigationProperty Name="ProductType" Relationship="Self.FK_MasterProducts_ProductType" FromRole="MasterProducts" ToRole="ProductType" />
     <NavigationProperty Name="ProductDishAddOns" Relationship="Self.FK_ProductDishAddOns_MasterProducts" FromRole="MasterProducts" ToRole="ProductDishAddOns" />
     <NavigationProperty Name="ShopDishAddOns" Relationship="Self.FK_ShopDishAddOns_MasterProducts" FromRole="MasterProducts" ToRole="ShopDishAddOns" />
   </EntityType>
@@ -458,7 +455,6 @@
     <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
     <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="MasterProducts" Relationship="Self.FK_MasterProducts_MeasurementUnits" FromRole="MeasurementUnits" ToRole="MasterProducts" />
   </EntityType>
   <EntityType Name="NextSubCategory">
     <Key>
@@ -571,7 +567,6 @@
     <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
     <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-    <NavigationProperty Name="MasterProducts" Relationship="Self.FK_MasterProducts_Packages" FromRole="Packages" ToRole="MasterProducts" />
   </EntityType>
   <EntityType Name="Page">
     <Key>
@@ -800,8 +795,7 @@
     <Property Name="Id" Type="Int32" Nullable="false" />
     <Property Name="Name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="Brands" Relationship="Self.FK_Brands_ProductType" FromRole="ProductType" ToRole="Brands" />
-    <NavigationProperty Name="MasterProducts" Relationship="Self.FK_MasterProducts_Brand" FromRole="ProductType" ToRole="MasterProducts" />
-    <NavigationProperty Name="MasterProducts1" Relationship="Self.FK_MasterProducts_ProductType" FromRole="ProductType" ToRole="MasterProducts" />
+    <NavigationProperty Name="MasterProducts" Relationship="Self.FK_MasterProducts_ProductType" FromRole="ProductType" ToRole="MasterProducts" />
     <NavigationProperty Name="NextSubCategories" Relationship="Self.FK_NextSubCategories_ProductType" FromRole="ProductType" ToRole="NextSubCategories" />
     <NavigationProperty Name="Products" Relationship="Self.FK_Products_ProductType" FromRole="ProductType" ToRole="Products" />
     <NavigationProperty Name="SubCategories" Relationship="Self.FK_SubCategories_ProductType" FromRole="ProductType" ToRole="SubCategories" />
@@ -1174,42 +1168,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_MasterProducts_Brand">
-    <End Role="ProductType" Type="Self.ProductType" Multiplicity="1" />
-    <End Role="MasterProducts" Type="Self.MasterProduct" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ProductType">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="MasterProducts">
-        <PropertyRef Name="ProductTypeId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_MasterProducts_MeasurementUnits">
-    <End Role="MeasurementUnits" Type="Self.MeasurementUnit" Multiplicity="1" />
-    <End Role="MasterProducts" Type="Self.MasterProduct" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="MeasurementUnits">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="MasterProducts">
-        <PropertyRef Name="MeasurementUnitId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_MasterProducts_Packages">
-    <End Role="Packages" Type="Self.Package" Multiplicity="0..1" />
-    <End Role="MasterProducts" Type="Self.MasterProduct" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Packages">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="MasterProducts">
-        <PropertyRef Name="PackageId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_MasterProducts_ProductType">
     <End Role="ProductType" Type="Self.ProductType" Multiplicity="1" />
     <End Role="MasterProducts" Type="Self.MasterProduct" Multiplicity="*" />
@@ -1378,7 +1336,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityContainer Name="ShopnowchatEntities2" annotation:LazyLoadingEnabled="true">
+  <EntityContainer Name="sncEntities1" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="AccessPolicies" EntityType="Self.AccessPolicy" />
     <EntitySet Name="AddOnCategories" EntityType="Self.AddOnCategory" />
     <EntitySet Name="Admins" EntityType="Self.Admin" />
@@ -1463,18 +1421,6 @@
       <End Role="DeliveryBoyShops" EntitySet="DeliveryBoyShops" />
       <End Role="DeliveryBoyShops1" EntitySet="DeliveryBoyShops" />
     </AssociationSet>
-    <AssociationSet Name="FK_MasterProducts_Brand" Association="Self.FK_MasterProducts_Brand">
-      <End Role="ProductType" EntitySet="ProductTypes" />
-      <End Role="MasterProducts" EntitySet="MasterProducts" />
-    </AssociationSet>
-    <AssociationSet Name="FK_MasterProducts_MeasurementUnits" Association="Self.FK_MasterProducts_MeasurementUnits">
-      <End Role="MeasurementUnits" EntitySet="MeasurementUnits" />
-      <End Role="MasterProducts" EntitySet="MasterProducts" />
-    </AssociationSet>
-    <AssociationSet Name="FK_MasterProducts_Packages" Association="Self.FK_MasterProducts_Packages">
-      <End Role="Packages" EntitySet="Packages" />
-      <End Role="MasterProducts" EntitySet="MasterProducts" />
-    </AssociationSet>
     <AssociationSet Name="FK_MasterProducts_ProductType" Association="Self.FK_MasterProducts_ProductType">
       <End Role="ProductType" EntitySet="ProductTypes" />
       <End Role="MasterProducts" EntitySet="MasterProducts" />
@@ -1531,7 +1477,7 @@
       <End Role="Shops" EntitySet="Shops" />
       <End Role="ShopDishAddOns" EntitySet="ShopDishAddOns" />
     </AssociationSet>
-    <FunctionImport Name="GetTableVAlueString" IsComposable="true" ReturnType="Collection(ShopnowchatEntities.GetTableVAlueString_Result)">
+    <FunctionImport Name="GetTableVAlueString" IsComposable="true" ReturnType="Collection(sncModel.GetTableVAlueString_Result)">
       <Parameter Name="key" Mode="In" Type="String" />
     </FunctionImport>
     <FunctionImport Name="getCategoryListbyShopcode">
@@ -1544,7 +1490,7 @@
       <Parameter Name="page" Mode="In" Type="Int32" />
       <Parameter Name="pageSize" Mode="In" Type="Int32" />
     </FunctionImport>
-    <FunctionImport Name="GetDEliveryBoyList" ReturnType="Collection(ShopnowchatEntities.GetDEliveryBoyList_Result)" />
+    <FunctionImport Name="GetDEliveryBoyList" ReturnType="Collection(sncModel.GetDEliveryBoyList_Result)" />
     <FunctionImport Name="GetProductList">
       <Parameter Name="Longitude" Mode="In" Type="Double" />
       <Parameter Name="Latitude" Mode="In" Type="Double" />

@@ -347,63 +347,16 @@ namespace ShopNow.ViewModels
     public class MasterFoodCreateViewModel
     {
         public HttpPostedFileBase DishImage { get; set; }
-        public int Id { get; set; }
         public string Name { get; set; }
-        public string NickName { get; set; }
         public string CategoryIds { get; set; }
         public string CategoryName { get; set; }
-        public string ProductType { get; set; }
-        public int MinSelectionLimit { get; set; }
-        public int MaxSelectionLimit { get; set; }
-        public string ColorCode { get; set; }
-        public bool Customisation { get; set; }
         public double Price { get; set; }
+        public bool Customisation { get; set; }
+        public string ColorCode { get; set; }
         public string GoogleTaxonomyCode { get; set; }
         public string ImagePath1 { get; set; }
         public int Adscore { get; set; }
-        public int BrandId { get; set; }
-        public string BrandName { get; set; }
-        public string ShortDescription { get; set; }
-        public string LongDescription { get; set; }
-        public int ProductTypeId { get; set; }
-        public string ProductTypeName { get; set; }
-        public int MeasurementUnitId { get; set; }
-        public string MeasurementUnitName { get; set; }
-        public bool PriscriptionCategory { get; set; }
-        public double Weight { get; set; }
-        public string SizeLB { get; set; }
-        public int DrugCompoundDetailId { get; set; }
-        public string DrugCompoundDetailName { get; set; }
-        public string IBarU { get; set; }
-        public string OriginCountry { get; set; }
-        public string Manufacturer { get; set; }
-        public Nullable<int> PackageId { get; set; }
-        public string PackageName { get; set; }
-        public int SubCategoryId { get; set; }
-        public string SubCategoryName { get; set; }
-        public int NextSubCategoryId { get; set; }
-        public string NextSubCategoryName { get; set; }
-        public string ASIN { get; set; }
-       
-        public List<AddonList> AddonLists { get; set; }
-        public class AddonList
-        {
-            public int Id { get; set; }
-            public string AddOnItemName { get; set; }
-            public Nullable<int> MasterProductId { get; set; }
-            public string MasterProductName { get; set; }
-            public int AddOnCategoryId { get; set; }
-            public string AddOnCategoryName { get; set; }
-            public string CrustName { get; set; }
-            public int PortionId { get; set; }
-            public string PortionName { get; set; }
-            public int MinSelectionLimit { get; set; }
-            public int MaxSelectionLimit { get; set; }
-            public double PortionPrice { get; set; }
-            public double AddOnsPrice { get; set; }
-            public double CrustPrice { get; set; }
-            public int AddOnType { get; set; }
-        }
+        public string NickName { get; set; }
     }
 
     public class MasterFoodEditViewModel
@@ -411,41 +364,17 @@ namespace ShopNow.ViewModels
         public HttpPostedFileBase DishImage { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
-        public string NickName { get; set; }
-        public int CategoryId { get; set; }
+        public string CategoryIds { get; set; }
         public string CategoryName { get; set; }
-        public string ProductType { get; set; }
-        public int MinSelectionLimit { get; set; }
-        public int MaxSelectionLimit { get; set; }
-        public string ColorCode { get; set; }
-        public bool Customisation { get; set; }
         public double Price { get; set; }
+        public bool Customisation { get; set; }
+        public string ColorCode { get; set; }
         public string GoogleTaxonomyCode { get; set; }
         public string ImagePath1 { get; set; }
         public int Adscore { get; set; }
-        public int BrandId { get; set; }
-        public string BrandName { get; set; }
-        public string ShortDescription { get; set; }
-        public string LongDescription { get; set; }
+        public string NickName { get; set; }
         public int ProductTypeId { get; set; }
         public string ProductTypeName { get; set; }
-        public int MeasurementUnitId { get; set; }
-        public string MeasurementUnitName { get; set; }
-        public bool PriscriptionCategory { get; set; }
-        public double Weight { get; set; }
-        public string SizeLB { get; set; }
-        public int DrugCompoundDetailId { get; set; }
-        public string DrugCompoundDetailName { get; set; }
-        public string IBarU { get; set; }
-        public string OriginCountry { get; set; }
-        public string Manufacturer { get; set; }
-        public Nullable<int> PackageId { get; set; }
-        public string PackageName { get; set; }
-        public int SubCategoryId { get; set; }
-        public string SubCategoryName { get; set; }
-        public int NextSubCategoryId { get; set; }
-        public string NextSubCategoryName { get; set; }
-        public string ASIN { get; set; }
 
         public List<AddonList> AddonLists { get; set; }
         public class AddonList

@@ -19,7 +19,6 @@ namespace ShopNow.Models
         {
             this.Brands = new HashSet<Brand>();
             this.MasterProducts = new HashSet<MasterProduct>();
-            this.MasterProducts1 = new HashSet<MasterProduct>();
             this.NextSubCategories = new HashSet<NextSubCategory>();
             this.Products = new HashSet<Product>();
             this.SubCategories = new HashSet<SubCategory>();
@@ -32,8 +31,6 @@ namespace ShopNow.Models
         public virtual ICollection<Brand> Brands { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MasterProduct> MasterProducts { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MasterProduct> MasterProducts1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<NextSubCategory> NextSubCategories { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

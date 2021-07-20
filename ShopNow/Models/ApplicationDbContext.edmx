@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="ShopnowchatEntities.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="sncModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AccessPolicies">
           <Key>
             <PropertyRef Name="Id" />
@@ -398,7 +398,7 @@
           <Property Name="PriscriptionCategory" Type="bit" Nullable="false" />
           <Property Name="Weight" Type="float" Nullable="false" />
           <Property Name="SizeLB" Type="nvarchar(max)" />
-          <Property Name="DrugCompoundDetailIds" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="DrugCompoundDetailIds" Type="nvarchar(max)" />
           <Property Name="DrugCompoundDetailName" Type="nvarchar(max)" />
           <Property Name="IBarU" Type="int" />
           <Property Name="OriginCountry" Type="nvarchar(max)" />
@@ -1098,42 +1098,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_MasterProducts_Brand">
-          <End Role="ProductType" Type="Self.ProductType" Multiplicity="1" />
-          <End Role="MasterProducts" Type="Self.MasterProducts" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ProductType">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="MasterProducts">
-              <PropertyRef Name="ProductTypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MasterProducts_MeasurementUnits">
-          <End Role="MeasurementUnits" Type="Self.MeasurementUnits" Multiplicity="1" />
-          <End Role="MasterProducts" Type="Self.MasterProducts" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="MeasurementUnits">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="MasterProducts">
-              <PropertyRef Name="MeasurementUnitId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MasterProducts_Packages">
-          <End Role="Packages" Type="Self.Packages" Multiplicity="0..1" />
-          <End Role="MasterProducts" Type="Self.MasterProducts" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Packages">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="MasterProducts">
-              <PropertyRef Name="PackageId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_MasterProducts_ProductType">
           <End Role="ProductType" Type="Self.ProductType" Multiplicity="1" />
           <End Role="MasterProducts" Type="Self.MasterProducts" Multiplicity="*" />
@@ -1431,7 +1395,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
         <Function Name="test" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="str" Type="nvarchar" Mode="In" />
         </Function>
-        <EntityContainer Name="ShopnowchatEntitiesStoreContainer">
+        <EntityContainer Name="sncModelStoreContainer">
           <EntitySet Name="AccessPolicies" EntityType="Self.AccessPolicies" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AddOnCategories" EntityType="Self.AddOnCategories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Admins" EntityType="Self.Admins" Schema="dbo" store:Type="Tables" />
@@ -1503,18 +1467,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <AssociationSet Name="FK_DeliveryBoyShops_DeliveryBoyShops" Association="Self.FK_DeliveryBoyShops_DeliveryBoyShops">
             <End Role="DeliveryBoyShops" EntitySet="DeliveryBoyShops" />
             <End Role="DeliveryBoyShops1" EntitySet="DeliveryBoyShops" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MasterProducts_Brand" Association="Self.FK_MasterProducts_Brand">
-            <End Role="ProductType" EntitySet="ProductType" />
-            <End Role="MasterProducts" EntitySet="MasterProducts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MasterProducts_MeasurementUnits" Association="Self.FK_MasterProducts_MeasurementUnits">
-            <End Role="MeasurementUnits" EntitySet="MeasurementUnits" />
-            <End Role="MasterProducts" EntitySet="MasterProducts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MasterProducts_Packages" Association="Self.FK_MasterProducts_Packages">
-            <End Role="Packages" EntitySet="Packages" />
-            <End Role="MasterProducts" EntitySet="MasterProducts" />
           </AssociationSet>
           <AssociationSet Name="FK_MasterProducts_ProductType" Association="Self.FK_MasterProducts_ProductType">
             <End Role="ProductType" EntitySet="ProductType" />
@@ -1589,7 +1541,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="ShopnowchatEntities" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="sncModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <ComplexType Name="GetTableVAlueString_Result">
           <Property Name="Name" Type="String" MaxLength="600" FixedLength="false" Unicode="true" />
         </ComplexType>
@@ -2000,7 +1952,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="PriscriptionCategory" Type="Boolean" Nullable="false" />
           <Property Name="Weight" Type="Double" Nullable="false" />
           <Property Name="SizeLB" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DrugCompoundDetailIds" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DrugCompoundDetailIds" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="DrugCompoundDetailName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="IBarU" Type="Int32" />
           <Property Name="OriginCountry" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -2025,10 +1977,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="ProductType" Relationship="Self.FK_MasterProducts_Brand" FromRole="MasterProducts" ToRole="ProductType" />
-          <NavigationProperty Name="MeasurementUnit" Relationship="Self.FK_MasterProducts_MeasurementUnits" FromRole="MasterProducts" ToRole="MeasurementUnits" />
-          <NavigationProperty Name="Package" Relationship="Self.FK_MasterProducts_Packages" FromRole="MasterProducts" ToRole="Packages" />
-          <NavigationProperty Name="ProductType1" Relationship="Self.FK_MasterProducts_ProductType" FromRole="MasterProducts" ToRole="ProductType" />
+          <NavigationProperty Name="ProductType" Relationship="Self.FK_MasterProducts_ProductType" FromRole="MasterProducts" ToRole="ProductType" />
           <NavigationProperty Name="ProductDishAddOns" Relationship="Self.FK_ProductDishAddOns_MasterProducts" FromRole="MasterProducts" ToRole="ProductDishAddOns" />
           <NavigationProperty Name="ShopDishAddOns" Relationship="Self.FK_ShopDishAddOns_MasterProducts" FromRole="MasterProducts" ToRole="ShopDishAddOns" />
         </EntityType>
@@ -2048,7 +1997,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="MasterProducts" Relationship="Self.FK_MasterProducts_MeasurementUnits" FromRole="MeasurementUnits" ToRole="MasterProducts" />
         </EntityType>
         <EntityType Name="NextSubCategory">
           <Key>
@@ -2161,7 +2109,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="MasterProducts" Relationship="Self.FK_MasterProducts_Packages" FromRole="Packages" ToRole="MasterProducts" />
         </EntityType>
         <EntityType Name="Page">
           <Key>
@@ -2390,8 +2337,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Brands" Relationship="Self.FK_Brands_ProductType" FromRole="ProductType" ToRole="Brands" />
-          <NavigationProperty Name="MasterProducts" Relationship="Self.FK_MasterProducts_Brand" FromRole="ProductType" ToRole="MasterProducts" />
-          <NavigationProperty Name="MasterProducts1" Relationship="Self.FK_MasterProducts_ProductType" FromRole="ProductType" ToRole="MasterProducts" />
+          <NavigationProperty Name="MasterProducts" Relationship="Self.FK_MasterProducts_ProductType" FromRole="ProductType" ToRole="MasterProducts" />
           <NavigationProperty Name="NextSubCategories" Relationship="Self.FK_NextSubCategories_ProductType" FromRole="ProductType" ToRole="NextSubCategories" />
           <NavigationProperty Name="Products" Relationship="Self.FK_Products_ProductType" FromRole="ProductType" ToRole="Products" />
           <NavigationProperty Name="SubCategories" Relationship="Self.FK_SubCategories_ProductType" FromRole="ProductType" ToRole="SubCategories" />
@@ -2764,42 +2710,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_MasterProducts_Brand">
-          <End Role="ProductType" Type="Self.ProductType" Multiplicity="1" />
-          <End Role="MasterProducts" Type="Self.MasterProduct" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ProductType">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="MasterProducts">
-              <PropertyRef Name="ProductTypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MasterProducts_MeasurementUnits">
-          <End Role="MeasurementUnits" Type="Self.MeasurementUnit" Multiplicity="1" />
-          <End Role="MasterProducts" Type="Self.MasterProduct" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="MeasurementUnits">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="MasterProducts">
-              <PropertyRef Name="MeasurementUnitId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MasterProducts_Packages">
-          <End Role="Packages" Type="Self.Package" Multiplicity="0..1" />
-          <End Role="MasterProducts" Type="Self.MasterProduct" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Packages">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="MasterProducts">
-              <PropertyRef Name="PackageId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_MasterProducts_ProductType">
           <End Role="ProductType" Type="Self.ProductType" Multiplicity="1" />
           <End Role="MasterProducts" Type="Self.MasterProduct" Multiplicity="*" />
@@ -2968,7 +2878,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="ShopnowchatEntities2" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="sncEntities1" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AccessPolicies" EntityType="Self.AccessPolicy" />
           <EntitySet Name="AddOnCategories" EntityType="Self.AddOnCategory" />
           <EntitySet Name="Admins" EntityType="Self.Admin" />
@@ -3053,18 +2963,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             <End Role="DeliveryBoyShops" EntitySet="DeliveryBoyShops" />
             <End Role="DeliveryBoyShops1" EntitySet="DeliveryBoyShops" />
           </AssociationSet>
-          <AssociationSet Name="FK_MasterProducts_Brand" Association="Self.FK_MasterProducts_Brand">
-            <End Role="ProductType" EntitySet="ProductTypes" />
-            <End Role="MasterProducts" EntitySet="MasterProducts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MasterProducts_MeasurementUnits" Association="Self.FK_MasterProducts_MeasurementUnits">
-            <End Role="MeasurementUnits" EntitySet="MeasurementUnits" />
-            <End Role="MasterProducts" EntitySet="MasterProducts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MasterProducts_Packages" Association="Self.FK_MasterProducts_Packages">
-            <End Role="Packages" EntitySet="Packages" />
-            <End Role="MasterProducts" EntitySet="MasterProducts" />
-          </AssociationSet>
           <AssociationSet Name="FK_MasterProducts_ProductType" Association="Self.FK_MasterProducts_ProductType">
             <End Role="ProductType" EntitySet="ProductTypes" />
             <End Role="MasterProducts" EntitySet="MasterProducts" />
@@ -3121,7 +3019,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             <End Role="Shops" EntitySet="Shops" />
             <End Role="ShopDishAddOns" EntitySet="ShopDishAddOns" />
           </AssociationSet>
-          <FunctionImport Name="GetTableVAlueString" IsComposable="true" ReturnType="Collection(ShopnowchatEntities.GetTableVAlueString_Result)">
+          <FunctionImport Name="GetTableVAlueString" IsComposable="true" ReturnType="Collection(sncModel.GetTableVAlueString_Result)">
             <Parameter Name="key" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="getCategoryListbyShopcode">
@@ -3134,7 +3032,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             <Parameter Name="page" Mode="In" Type="Int32" />
             <Parameter Name="pageSize" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="GetDEliveryBoyList" ReturnType="Collection(ShopnowchatEntities.GetDEliveryBoyList_Result)" />
+          <FunctionImport Name="GetDEliveryBoyList" ReturnType="Collection(sncModel.GetDEliveryBoyList_Result)" />
           <FunctionImport Name="GetProductList">
             <Parameter Name="Longitude" Mode="In" Type="Double" />
             <Parameter Name="Latitude" Mode="In" Type="Double" />
@@ -3214,9 +3112,9 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="ShopnowchatEntitiesStoreContainer" CdmEntityContainer="ShopnowchatEntities2">
+        <EntityContainerMapping StorageEntityContainer="sncModelStoreContainer" CdmEntityContainer="sncEntities1">
           <EntitySetMapping Name="AccessPolicies">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.AccessPolicy">
+            <EntityTypeMapping TypeName="sncModel.AccessPolicy">
               <MappingFragment StoreEntitySet="AccessPolicies">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="PageCode" ColumnName="PageCode" />
@@ -3238,7 +3136,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AddOnCategories">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.AddOnCategory">
+            <EntityTypeMapping TypeName="sncModel.AddOnCategory">
               <MappingFragment StoreEntitySet="AddOnCategories">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -3251,7 +3149,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Admins">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.Admin">
+            <EntityTypeMapping TypeName="sncModel.Admin">
               <MappingFragment StoreEntitySet="Admins">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
@@ -3264,7 +3162,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Banners">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.Banner">
+            <EntityTypeMapping TypeName="sncModel.Banner">
               <MappingFragment StoreEntitySet="Banners">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
@@ -3290,7 +3188,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Bills">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.Bill">
+            <EntityTypeMapping TypeName="sncModel.Bill">
               <MappingFragment StoreEntitySet="Bills">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
@@ -3319,7 +3217,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="BrandOwners">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.BrandOwner">
+            <EntityTypeMapping TypeName="sncModel.BrandOwner">
               <MappingFragment StoreEntitySet="BrandOwners">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
@@ -3358,7 +3256,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Brands">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.Brand">
+            <EntityTypeMapping TypeName="sncModel.Brand">
               <MappingFragment StoreEntitySet="Brands">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -3373,7 +3271,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Categories">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.Category">
+            <EntityTypeMapping TypeName="sncModel.Category">
               <MappingFragment StoreEntitySet="Categories">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -3389,7 +3287,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CustomerAddresses">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.CustomerAddress">
+            <EntityTypeMapping TypeName="sncModel.CustomerAddress">
               <MappingFragment StoreEntitySet="CustomerAddresses">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -3415,7 +3313,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CustomerReviews">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.CustomerReview">
+            <EntityTypeMapping TypeName="sncModel.CustomerReview">
               <MappingFragment StoreEntitySet="CustomerReview">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
@@ -3433,7 +3331,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Customers">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.Customer">
+            <EntityTypeMapping TypeName="sncModel.Customer">
               <MappingFragment StoreEntitySet="Customers">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -3470,7 +3368,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="DeliveryBoys">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.DeliveryBoy">
+            <EntityTypeMapping TypeName="sncModel.DeliveryBoy">
               <MappingFragment StoreEntitySet="DeliveryBoys">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -3509,7 +3407,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="DeliveryBoyShops">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.DeliveryBoyShop">
+            <EntityTypeMapping TypeName="sncModel.DeliveryBoyShop">
               <MappingFragment StoreEntitySet="DeliveryBoyShops">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
@@ -3529,7 +3427,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="DiscountCategories">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.DiscountCategory">
+            <EntityTypeMapping TypeName="sncModel.DiscountCategory">
               <MappingFragment StoreEntitySet="DiscountCategories">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -3545,7 +3443,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="DrugCompoundDetails">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.DrugCompoundDetail">
+            <EntityTypeMapping TypeName="sncModel.DrugCompoundDetail">
               <MappingFragment StoreEntitySet="DrugCompoundDetails">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="AliasName" ColumnName="AliasName" />
@@ -3568,7 +3466,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="MarketingAgents">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.MarketingAgent">
+            <EntityTypeMapping TypeName="sncModel.MarketingAgent">
               <MappingFragment StoreEntitySet="MarketingAgents">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -3603,7 +3501,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="MasterProducts">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.MasterProduct">
+            <EntityTypeMapping TypeName="sncModel.MasterProduct">
               <MappingFragment StoreEntitySet="MasterProducts">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -3652,7 +3550,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="MeasurementUnits">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.MeasurementUnit">
+            <EntityTypeMapping TypeName="sncModel.MeasurementUnit">
               <MappingFragment StoreEntitySet="MeasurementUnits">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="UnitName" ColumnName="UnitName" />
@@ -3670,7 +3568,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="NextSubCategories">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.NextSubCategory">
+            <EntityTypeMapping TypeName="sncModel.NextSubCategory">
               <MappingFragment StoreEntitySet="NextSubCategories">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -3688,7 +3586,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="OrderItems">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.OrderItem">
+            <EntityTypeMapping TypeName="sncModel.OrderItem">
               <MappingFragment StoreEntitySet="OrderItems">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="OrderId" ColumnName="OrderId" />
@@ -3708,7 +3606,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Orders">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.Order">
+            <EntityTypeMapping TypeName="sncModel.Order">
               <MappingFragment StoreEntitySet="Orders">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
@@ -3747,7 +3645,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="OtpVerifications">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.OtpVerification">
+            <EntityTypeMapping TypeName="sncModel.OtpVerification">
               <MappingFragment StoreEntitySet="OtpVerifications">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
@@ -3767,7 +3665,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Packages">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.Package">
+            <EntityTypeMapping TypeName="sncModel.Package">
               <MappingFragment StoreEntitySet="Packages">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -3781,7 +3679,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Pages">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.Page">
+            <EntityTypeMapping TypeName="sncModel.Page">
               <MappingFragment StoreEntitySet="Pages">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
@@ -3795,7 +3693,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Payments">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.Payment">
+            <EntityTypeMapping TypeName="sncModel.Payment">
               <MappingFragment StoreEntitySet="Payments">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="CorporateID" ColumnName="CorporateID" />
@@ -3835,7 +3733,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PaymentsDatas">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.PaymentsData">
+            <EntityTypeMapping TypeName="sncModel.PaymentsData">
               <MappingFragment StoreEntitySet="PaymentsData">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
@@ -3854,7 +3752,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PincodeRates">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.PincodeRate">
+            <EntityTypeMapping TypeName="sncModel.PincodeRate">
               <MappingFragment StoreEntitySet="PincodeRates">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="PinCode" ColumnName="PinCode" />
@@ -3869,7 +3767,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PlatFormCreditRates">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.PlatFormCreditRate">
+            <EntityTypeMapping TypeName="sncModel.PlatFormCreditRate">
               <MappingFragment StoreEntitySet="PlatFormCreditRates">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="RatePerOrder" ColumnName="RatePerOrder" />
@@ -3883,7 +3781,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Portions">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.Portion">
+            <EntityTypeMapping TypeName="sncModel.Portion">
               <MappingFragment StoreEntitySet="Portions">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -3896,7 +3794,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ProductDishAddOns">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.ProductDishAddOn">
+            <EntityTypeMapping TypeName="sncModel.ProductDishAddOn">
               <MappingFragment StoreEntitySet="ProductDishAddOns">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="AddOnItemName" ColumnName="AddOnItemName" />
@@ -3922,7 +3820,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Products">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.Product">
+            <EntityTypeMapping TypeName="sncModel.Product">
               <MappingFragment StoreEntitySet="Products">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -3968,7 +3866,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ProductSpecificationItems">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.ProductSpecificationItem">
+            <EntityTypeMapping TypeName="sncModel.ProductSpecificationItem">
               <MappingFragment StoreEntitySet="ProductSpecificationItems">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ProductId" ColumnName="ProductId" />
@@ -3989,7 +3887,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ProductSpecifications">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.ProductSpecification">
+            <EntityTypeMapping TypeName="sncModel.ProductSpecification">
               <MappingFragment StoreEntitySet="ProductSpecifications">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Value" ColumnName="Value" />
@@ -4006,7 +3904,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ProductTypes">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.ProductType">
+            <EntityTypeMapping TypeName="sncModel.ProductType">
               <MappingFragment StoreEntitySet="ProductType">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -4014,7 +3912,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="RefundsDatas">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.RefundsData">
+            <EntityTypeMapping TypeName="sncModel.RefundsData">
               <MappingFragment StoreEntitySet="RefundsData">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="RefundId" ColumnName="RefundId" />
@@ -4028,7 +3926,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ShopCategories">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.ShopCategory">
+            <EntityTypeMapping TypeName="sncModel.ShopCategory">
               <MappingFragment StoreEntitySet="ShopCategories">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -4041,7 +3939,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ShopCredits">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.ShopCredit">
+            <EntityTypeMapping TypeName="sncModel.ShopCredit">
               <MappingFragment StoreEntitySet="ShopCredit">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="PlatformCredit" ColumnName="PlatformCredit" />
@@ -4053,7 +3951,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ShopDishAddOns">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.ShopDishAddOn">
+            <EntityTypeMapping TypeName="sncModel.ShopDishAddOn">
               <MappingFragment StoreEntitySet="ShopDishAddOns">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="AddOnItemName" ColumnName="AddOnItemName" />
@@ -4085,7 +3983,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ShopMembers">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.ShopMember">
+            <EntityTypeMapping TypeName="sncModel.ShopMember">
               <MappingFragment StoreEntitySet="ShopMembers">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
@@ -4108,7 +4006,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Shops">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.Shop">
+            <EntityTypeMapping TypeName="sncModel.Shop">
               <MappingFragment StoreEntitySet="Shops">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -4185,7 +4083,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Specifications">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.Specification">
+            <EntityTypeMapping TypeName="sncModel.Specification">
               <MappingFragment StoreEntitySet="Specifications">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -4198,7 +4096,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Staffs">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.Staff">
+            <EntityTypeMapping TypeName="sncModel.Staff">
               <MappingFragment StoreEntitySet="Staffs">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -4219,7 +4117,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="SubCategories">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.SubCategory">
+            <EntityTypeMapping TypeName="sncModel.SubCategory">
               <MappingFragment StoreEntitySet="SubCategories">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -4237,7 +4135,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="UserEnquiries">
-            <EntityTypeMapping TypeName="ShopnowchatEntities.UserEnquiry">
+            <EntityTypeMapping TypeName="sncModel.UserEnquiry">
               <MappingFragment StoreEntitySet="UserEnquiries">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
@@ -4256,18 +4154,18 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionName="ShopnowchatEntities.Store.GetTableVAlueString" FunctionImportName="GetTableVAlueString">
+          <FunctionImportMapping FunctionName="sncModel.Store.GetTableVAlueString" FunctionImportName="GetTableVAlueString">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="ShopnowchatEntities.GetTableVAlueString_Result">
+              <ComplexTypeMapping TypeName="sncModel.GetTableVAlueString_Result">
                 <ScalarProperty Name="Name" ColumnName="Name" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="getCategoryListbyShopcode" FunctionName="ShopnowchatEntities.Store.getCategoryListbyShopcode" />
-          <FunctionImportMapping FunctionImportName="GetCategoryProductsList" FunctionName="ShopnowchatEntities.Store.GetCategoryProductsList" />
-          <FunctionImportMapping FunctionImportName="GetDEliveryBoyList" FunctionName="ShopnowchatEntities.Store.GetDEliveryBoyList">
+          <FunctionImportMapping FunctionImportName="getCategoryListbyShopcode" FunctionName="sncModel.Store.getCategoryListbyShopcode" />
+          <FunctionImportMapping FunctionImportName="GetCategoryProductsList" FunctionName="sncModel.Store.GetCategoryProductsList" />
+          <FunctionImportMapping FunctionImportName="GetDEliveryBoyList" FunctionName="sncModel.Store.GetDEliveryBoyList">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="ShopnowchatEntities.GetDEliveryBoyList_Result">
+              <ComplexTypeMapping TypeName="sncModel.GetDEliveryBoyList_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Active" ColumnName="Active" />
@@ -4276,18 +4174,18 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GetProductList" FunctionName="ShopnowchatEntities.Store.GetProductList" />
-          <FunctionImportMapping FunctionImportName="GetProductListCount" FunctionName="ShopnowchatEntities.Store.GetProductListCount" />
-          <FunctionImportMapping FunctionImportName="GetShopCategoryList" FunctionName="ShopnowchatEntities.Store.GetShopCategoryList" />
-          <FunctionImportMapping FunctionImportName="GetShopCategoryProductCount" FunctionName="ShopnowchatEntities.Store.GetShopCategoryProductCount" />
-          <FunctionImportMapping FunctionImportName="GetShopCategoryProducts" FunctionName="ShopnowchatEntities.Store.GetShopCategoryProducts" />
-          <FunctionImportMapping FunctionImportName="GetShopCategoryProductsList" FunctionName="ShopnowchatEntities.Store.GetShopCategoryProductsList" />
-          <FunctionImportMapping FunctionImportName="GetShopname" FunctionName="ShopnowchatEntities.Store.GetShopname" />
-          <FunctionImportMapping FunctionImportName="ReatillerPaymentReport" FunctionName="ShopnowchatEntities.Store.ReatillerPaymentReport" />
-          <FunctionImportMapping FunctionImportName="ReatillerPaymentReportAdmin" FunctionName="ShopnowchatEntities.Store.ReatillerPaymentReportAdmin" />
-          <FunctionImportMapping FunctionImportName="ReatillerPaymentReports" FunctionName="ShopnowchatEntities.Store.ReatillerPaymentReports" />
-          <FunctionImportMapping FunctionImportName="Sp_TB_SelectMedicineName" FunctionName="ShopnowchatEntities.Store.Sp_TB_SelectMedicineName" />
-          <FunctionImportMapping FunctionImportName="test" FunctionName="ShopnowchatEntities.Store.test" />
+          <FunctionImportMapping FunctionImportName="GetProductList" FunctionName="sncModel.Store.GetProductList" />
+          <FunctionImportMapping FunctionImportName="GetProductListCount" FunctionName="sncModel.Store.GetProductListCount" />
+          <FunctionImportMapping FunctionImportName="GetShopCategoryList" FunctionName="sncModel.Store.GetShopCategoryList" />
+          <FunctionImportMapping FunctionImportName="GetShopCategoryProductCount" FunctionName="sncModel.Store.GetShopCategoryProductCount" />
+          <FunctionImportMapping FunctionImportName="GetShopCategoryProducts" FunctionName="sncModel.Store.GetShopCategoryProducts" />
+          <FunctionImportMapping FunctionImportName="GetShopCategoryProductsList" FunctionName="sncModel.Store.GetShopCategoryProductsList" />
+          <FunctionImportMapping FunctionImportName="GetShopname" FunctionName="sncModel.Store.GetShopname" />
+          <FunctionImportMapping FunctionImportName="ReatillerPaymentReport" FunctionName="sncModel.Store.ReatillerPaymentReport" />
+          <FunctionImportMapping FunctionImportName="ReatillerPaymentReportAdmin" FunctionName="sncModel.Store.ReatillerPaymentReportAdmin" />
+          <FunctionImportMapping FunctionImportName="ReatillerPaymentReports" FunctionName="sncModel.Store.ReatillerPaymentReports" />
+          <FunctionImportMapping FunctionImportName="Sp_TB_SelectMedicineName" FunctionName="sncModel.Store.Sp_TB_SelectMedicineName" />
+          <FunctionImportMapping FunctionImportName="test" FunctionName="sncModel.Store.test" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
