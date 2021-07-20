@@ -14,12 +14,6 @@ namespace ShopNow.Models
     
     public partial class Package
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Package()
-        {
-            this.MasterProducts = new HashSet<MasterProduct>();
-        }
-    
         public int Id { get; set; }
         public string Name { get; set; }
         public int Type { get; set; }
@@ -28,8 +22,5 @@ namespace ShopNow.Models
         public string UpdatedBy { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MasterProduct> MasterProducts { get; set; }
     }
 }

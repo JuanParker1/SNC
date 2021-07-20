@@ -66,9 +66,6 @@ namespace ShopNow.Models
         public string UpdatedBy { get; set; }
     
         public virtual ProductType ProductType { get; set; }
-        public virtual MeasurementUnit MeasurementUnit { get; set; }
-        public virtual Package Package { get; set; }
-        public virtual ProductType ProductType1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductDishAddOn> ProductDishAddOns { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

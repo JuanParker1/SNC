@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Schema Namespace="ShopnowchatEntities.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+<Schema Namespace="sncModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
   <EntityType Name="AccessPolicies">
     <Key>
       <PropertyRef Name="Id" />
@@ -393,7 +393,7 @@
     <Property Name="PriscriptionCategory" Type="bit" Nullable="false" />
     <Property Name="Weight" Type="float" Nullable="false" />
     <Property Name="SizeLB" Type="nvarchar(max)" />
-    <Property Name="DrugCompoundDetailIds" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="DrugCompoundDetailIds" Type="nvarchar(max)" />
     <Property Name="DrugCompoundDetailName" Type="nvarchar(max)" />
     <Property Name="IBarU" Type="int" />
     <Property Name="OriginCountry" Type="nvarchar(max)" />
@@ -1093,42 +1093,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_MasterProducts_Brand">
-    <End Role="ProductType" Type="Self.ProductType" Multiplicity="1" />
-    <End Role="MasterProducts" Type="Self.MasterProducts" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ProductType">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="MasterProducts">
-        <PropertyRef Name="ProductTypeId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_MasterProducts_MeasurementUnits">
-    <End Role="MeasurementUnits" Type="Self.MeasurementUnits" Multiplicity="1" />
-    <End Role="MasterProducts" Type="Self.MasterProducts" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="MeasurementUnits">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="MasterProducts">
-        <PropertyRef Name="MeasurementUnitId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_MasterProducts_Packages">
-    <End Role="Packages" Type="Self.Packages" Multiplicity="0..1" />
-    <End Role="MasterProducts" Type="Self.MasterProducts" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Packages">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="MasterProducts">
-        <PropertyRef Name="PackageId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_MasterProducts_ProductType">
     <End Role="ProductType" Type="Self.ProductType" Multiplicity="1" />
     <End Role="MasterProducts" Type="Self.MasterProducts" Multiplicity="*" />
@@ -1426,7 +1390,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
   <Function Name="test" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="str" Type="nvarchar" Mode="In" />
   </Function>
-  <EntityContainer Name="ShopnowchatEntitiesStoreContainer">
+  <EntityContainer Name="sncModelStoreContainer">
     <EntitySet Name="AccessPolicies" EntityType="Self.AccessPolicies" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AddOnCategories" EntityType="Self.AddOnCategories" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Admins" EntityType="Self.Admins" Schema="dbo" store:Type="Tables" />
@@ -1498,18 +1462,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
     <AssociationSet Name="FK_DeliveryBoyShops_DeliveryBoyShops" Association="Self.FK_DeliveryBoyShops_DeliveryBoyShops">
       <End Role="DeliveryBoyShops" EntitySet="DeliveryBoyShops" />
       <End Role="DeliveryBoyShops1" EntitySet="DeliveryBoyShops" />
-    </AssociationSet>
-    <AssociationSet Name="FK_MasterProducts_Brand" Association="Self.FK_MasterProducts_Brand">
-      <End Role="ProductType" EntitySet="ProductType" />
-      <End Role="MasterProducts" EntitySet="MasterProducts" />
-    </AssociationSet>
-    <AssociationSet Name="FK_MasterProducts_MeasurementUnits" Association="Self.FK_MasterProducts_MeasurementUnits">
-      <End Role="MeasurementUnits" EntitySet="MeasurementUnits" />
-      <End Role="MasterProducts" EntitySet="MasterProducts" />
-    </AssociationSet>
-    <AssociationSet Name="FK_MasterProducts_Packages" Association="Self.FK_MasterProducts_Packages">
-      <End Role="Packages" EntitySet="Packages" />
-      <End Role="MasterProducts" EntitySet="MasterProducts" />
     </AssociationSet>
     <AssociationSet Name="FK_MasterProducts_ProductType" Association="Self.FK_MasterProducts_ProductType">
       <End Role="ProductType" EntitySet="ProductType" />
