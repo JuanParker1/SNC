@@ -775,6 +775,7 @@ namespace ShopNow.Controllers
 
         public JsonResult GetProductDishAddOns(int masterProductId)
         {
+            db.Configuration.ProxyCreationEnabled = false;
             var list = db.ProductDishAddOns.Where(i => i.MasterProductId == masterProductId && i.Status == 0).ToList();
             return Json(list, JsonRequestBehavior.AllowGet);
         }

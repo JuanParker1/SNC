@@ -326,7 +326,7 @@
                 $.getJSON('/Product/GetProductDishAddOns', { masterProductId: e.params.data.MasterId }, function (data) {
                     if (data != "") {
                         $.each(data, function (index, item) {
-                            var tableData = '<tr class="d-none type_' + item.AddOnType + '" data-code=' + item.Code + '> \
+                            var tableData = '<tr class="d-none type_' + item.AddOnType + '" data-code=' + item.Id + '> \
                                     <td>' + item.PortionName + '</td> \
                                     <td><input class="textbox-sm portion-price" type="number" value=' + item.PortionPrice + '></td> \
                                     <td>' + item.AddOnCategoryName + '</td> \
@@ -336,7 +336,7 @@
                                     <td><input class="textbox-sm crust-price" type="number" value=' + item.CrustPrice + '></td>\
                                     <td>' + item.MinSelectionLimit + '</td>\
                                     <td>' + item.MaxSelectionLimit + '</td>\
-                                    <td><input type="checkbox" class="chk-select chk_'+ item.AddOnType + '" value="true" name="IsActive" data-code=' + item.Code + '></td>\
+                                    <td><input type="checkbox" class="chk-select chk_'+ item.AddOnType + '" value="true" name="IsActive" data-code=' + item.Id + '></td>\
                                 </tr>';
 
                             $('#tbl-addOns tbody').append(tableData);
