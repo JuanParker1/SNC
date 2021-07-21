@@ -296,7 +296,38 @@ namespace ShopNow.ViewModels
         }
     }
 
-    public class MasterFMCGCreateEditViewModel
+    public class MasterFMCGCreateViewModel
+    {
+        public HttpPostedFileBase FMCGImage1 { get; set; }
+        public HttpPostedFileBase FMCGImage2 { get; set; }
+        public HttpPostedFileBase FMCGImage3 { get; set; }
+        public HttpPostedFileBase FMCGImage4 { get; set; }
+        public HttpPostedFileBase FMCGImage5 { get; set; }
+        public string Name { get; set; }
+        public int BrandId { get; set; }
+        public string BrandName { get; set; }
+        public string ASIN { get; set; }
+        public string[] CategoryIds { get; set; }
+        public string CategoryName { get; set; }
+        public string[] SubCategoryIds { get; set; }
+        public string SubCategoryName { get; set; }
+        public string[] NextSubCategoryIds { get; set; }
+        public string NextSubCategoryName { get; set; }
+        public string GoogleTaxonomyCode { get; set; }
+        public int Adscore { get; set; }
+        public double Price { get; set; }
+        public double Weight { get; set; }
+        public string SizeLB { get; set; }
+        public int MeasurementUnitId { get; set; }
+        public string MeasurementUnitName { get; set; }
+        public Nullable<int> PackageId { get; set; }
+        public string PackageName { get; set; }
+        public string ShortDescription { get; set; }
+        public string LongDescription { get; set; }
+        public string NickName { get; set; }
+    }
+
+    public class MasterFMCGEditViewModel
     {
         public HttpPostedFileBase FMCGImage1 { get; set; }
         public HttpPostedFileBase FMCGImage2 { get; set; }
@@ -305,43 +336,32 @@ namespace ShopNow.ViewModels
         public HttpPostedFileBase FMCGImage5 { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
-        public string NickName { get; set; }
-        public string[] CategoryCode { get; set; }
-        public string CategoryCode1 { get; set; }
-        public string CategoryName { get; set; }
-        public string[] SubCategoryCode { get; set; }
-        public string SubCategoryCode1 { get; set; }
-        public string SubCategoryName { get; set; }
-        public string[] NextSubCategoryCode { get; set; }
-        public string NextSubCategoryCode1 { get; set; }
-        public string NextSubCategoryName { get; set; }
-        public string PackageCode { get; set; }
-        public string PackageName { get; set; }
-        public string MeasurementUnitCode { get; set; }
-        public string MeasurementUnitName { get; set; }
-        public string GoogleTaxonomyCode { get; set; }
-        public string BrandCode { get; set; }
+        public int BrandId { get; set; }
         public string BrandName { get; set; }
+        public string ASIN { get; set; }
+        public string[] CategoryIds { get; set; }
+        public string CategoryName { get; set; }
+        public string[] SubCategoryIds { get; set; }
+        public string SubCategoryName { get; set; }
+        public string[] NextSubCategoryIds { get; set; }
+        public string NextSubCategoryName { get; set; }
+        public string GoogleTaxonomyCode { get; set; }
+        public int Adscore { get; set; }
+        public double Price { get; set; }
+        public double Weight { get; set; }
+        public string SizeLB { get; set; }
+        public int MeasurementUnitId { get; set; }
+        public string MeasurementUnitName { get; set; }
+        public Nullable<int> PackageId { get; set; }
+        public string PackageName { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
-        public int Adscore { get; set; }
-        public string ImagePath { get; set; }
+        public string NickName { get; set; }
         public string ImagePath1 { get; set; }
         public string ImagePath2 { get; set; }
         public string ImagePath3 { get; set; }
         public string ImagePath4 { get; set; }
         public string ImagePath5 { get; set; }
-        public double Price { get; set; }
-        public string ASIN { get; set; }
-        public double weight { get; set; }
-        public string SizeLB { get; set; }
-        public int ProductTypeId { get; set; }
-        public string CreatedBy { get; set; }
-        public string UpdatedBy { get; set; }
-        public int Status { get; set; }
-        public string iBarU { get; set; }
-        public string OriginCountry { get; set; }
-        public string Manufacturer { get; set; }
     }
 
     public class MasterFoodCreateViewModel

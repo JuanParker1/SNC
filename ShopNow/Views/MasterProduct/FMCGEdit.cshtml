@@ -1,4 +1,4 @@
-﻿@model ShopNow.ViewModels.MasterFMCGCreateEditViewModel
+﻿@model ShopNow.ViewModels.MasterFMCGEditViewModel
 @{
     ViewBag.Title = "FMCG Update";
 }
@@ -38,8 +38,7 @@
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">FMCG Name</strong></label>
                                         <input id="Name" type="text" class="form-control" name="Name" value="@Model.Name" />
-                                        <input type="hidden" name="Code" value="@Model.Code" />
-                                        <input type="hidden" name="ProductType" value="@Model.ProductType" />
+                                        <input type="hidden" name="Id" value="@Model.Id" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Nick Name</strong></label>
@@ -47,8 +46,8 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Brand Name</strong></label>
-                                        <select name="BrandCode" id="BrandCode" class="form-control">
-                                            <option value="@Model.BrandCode">@Model.BrandName</option>
+                                        <select name="BrandId" id="BrandId" class="form-control">
+                                            <option value="@Model.BrandId">@Model.BrandName</option>
                                         </select>
                                         <input type="hidden" name="BrandName" id="BrandName" value="@Model.BrandName" />
                                     </div>
@@ -58,17 +57,17 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Category Name</strong></label>
-                                        <select name="CategoryCode" id="CategoryCode" class="form-control" multiple></select>
+                                        <select name="CategoryIds" id="CategoryIds" class="form-control" multiple></select>
                                         <input type="hidden" name="CategoryName" id="CategoryName" value="@Model.CategoryName" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Sub Category I Name</strong></label>
-                                        <select name="SubCategoryCode" id="SubCategoryCode" class="form-control" multiple></select>
+                                        <select name="SubCategoryIds" id="SubCategoryIds" class="form-control" multiple></select>
                                         <input type="hidden" name="SubCategoryName" id="SubCategoryName" value="@Model.SubCategoryName" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Sub Category II Name</strong></label>
-                                        <select name="NextSubCategoryCode" id="NextSubCategoryCode" class="form-control" multiple></select>
+                                        <select name="NextSubCategoryIds" id="NextSubCategoryIds" class="form-control" multiple></select>
                                         <input type="hidden" name="NextSubCategoryName" id="NextSubCategoryName" value="@Model.NextSubCategoryName" />
                                     </div>
                                     <div class="col-md-3">
@@ -88,23 +87,23 @@
 
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="Weight"><strong class="text-secondary">Weight</strong></label>
-                                        <input id="Weight" type="number" class="form-control" name="Weight" min="0" value="@Model.weight" />
+                                        <input id="Weight" type="number" class="form-control" name="Weight" min="0" value="@Model.Weight" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="SizeLB"><strong class="text-secondary">Size LB</strong></label>
                                         <input id="SizeLB" type="text" class="form-control" name="SizeLB" min="0" value="@Model.SizeLB" />
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="col-form-label" for="MeasurementUnitCode"><strong class="text-secondary">Measurement Unit Name</strong></label>
-                                        <select name="MeasurementUnitCode" class="form-control" id="MeasurementUnitCode">
-                                            <option value="@Model.MeasurementUnitCode">@Model.MeasurementUnitName</option>
+                                        <label class="col-form-label" for="MeasurementUnitId"><strong class="text-secondary">Measurement Unit Name</strong></label>
+                                        <select name="MeasurementUnitId" class="form-control" id="MeasurementUnitId">
+                                            <option value="@Model.MeasurementUnitId">@Model.MeasurementUnitName</option>
                                         </select>
                                         <input type="hidden" name="MeasurementUnitName" id="MeasurementUnitName" value="@Model.MeasurementUnitName" />
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="col-form-label" for="PackageCode"><strong class="text-secondary">Package Name</strong></label>
-                                        <select name="PackageCode" class="form-control" id="PackageCode">
-                                            <option value="@Model.PackageCode">@Model.PackageName</option>
+                                        <label class="col-form-label" for="PackageId"><strong class="text-secondary">Package Name</strong></label>
+                                        <select name="PackageId" class="form-control" id="PackageId">
+                                            <option value="@Model.PackageId">@Model.PackageName</option>
                                         </select>
                                         <input type="hidden" name="PackageName" id="PackageName" value="@Model.PackageName" />
                                     </div>
@@ -131,17 +130,17 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="img-upload-container ml-2">
-                                                    @if (Model.ImagePathLarge1 != null)
+                                                    @if (Model.ImagePath1 != null)
                                                     {
-                                                        <img class="img-container w-100 h-100" id="img-FMCGLargeImage1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge1" onerror="this.onerror=null;this.src='/Images/No Photo.png'" />
+                                                        <img class="img-container w-100 h-100" id="img-FMCGImage1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath1" onerror="this.onerror=null;this.src='/Images/No Photo.png'" />
                                                     }
                                                     else
                                                     {
-                                                        <img class="img-container w-100 h-100" id="img-FMCGLargeImage1" />
+                                                        <img class="img-container w-100 h-100" id="img-FMCGImage1" />
                                                     }
-                                                    <input type="file" id="FMCGLargeImage1" name="FMCGLargeImage1" class="d-none" />
-                                                    <label for="FMCGLargeImage1" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                                    <input type="hidden" name="ImagePathLarge1" id="ImagePathLarge1" value="@Model.ImagePathLarge1" />
+                                                    <input type="file" id="FMCGImage1" name="FMCGImage1" class="d-none" />
+                                                    <label for="FMCGImage1" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                    <input type="hidden" name="ImagePath1" id="ImagePath1" value="@Model.ImagePath1" />
                                                 </div>
                                             </div>
                                         </div>
@@ -152,17 +151,17 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="img-upload-container ml-2">
-                                                    @if (Model.ImagePathLarge2 != null)
+                                                    @if (Model.ImagePath2 != null)
                                                     {
-                                                        <img class="img-container w-100 h-100" id="img-FMCGLargeImage2" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge2" onerror="this.onerror=null;this.src='/Images/No Photo.png'" />
+                                                        <img class="img-container w-100 h-100" id="img-FMCGImage2" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath2" onerror="this.onerror=null;this.src='/Images/No Photo.png'" />
                                                     }
                                                     else
                                                     {
-                                                        <img class="img-container w-100 h-100" id="img-FMCGLargeImage2" />
+                                                        <img class="img-container w-100 h-100" id="img-FMCGImage2" />
                                                     }
-                                                    <input type="file" id="FMCGLargeImage2" name="FMCGLargeImage2" class="d-none" />
-                                                    <label for="FMCGLargeImage2" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                                    <input type="hidden" name="ImagePathLarge2" id="ImagePathLarge2" value="@Model.ImagePathLarge2" />
+                                                    <input type="file" id="FMCGImage2" name="FMCGImage2" class="d-none" />
+                                                    <label for="FMCGImage2" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                    <input type="hidden" name="ImagePath2" id="ImagePath2" value="@Model.ImagePath2" />
                                                 </div>
                                             </div>
                                         </div>
@@ -172,17 +171,17 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="img-upload-container ml-2">
-                                                    @if (Model.ImagePathLarge3 != null)
+                                                    @if (Model.ImagePath3 != null)
                                                     {
-                                                        <img class="img-container w-100 h-100" id="img-FMCGLargeImage3" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge3" onerror="this.onerror=null;this.src='/Images/No Photo.png'" />
+                                                        <img class="img-container w-100 h-100" id="img-FMCGImage3" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath3" onerror="this.onerror=null;this.src='/Images/No Photo.png'" />
                                                     }
                                                     else
                                                     {
-                                                        <img class="img-container w-100 h-100" id="img-FMCGLargeImage3" />
+                                                        <img class="img-container w-100 h-100" id="img-FMCGImage3" />
                                                     }
-                                                    <input type="file" id="FMCGLargeImage3" name="FMCGLargeImage3" class="d-none" />
-                                                    <label for="FMCGLargeImage3" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                                    <input type="hidden" name="ImagePathLarge3" id="ImagePathLarge3" value="@Model.ImagePathLarge3" />
+                                                    <input type="file" id="FMCGImage3" name="FMCGImage3" class="d-none" />
+                                                    <label for="FMCGImage3" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                    <input type="hidden" name="ImagePath3" id="ImagePath3" value="@Model.ImagePath3" />
                                                 </div>
                                             </div>
                                         </div>
@@ -192,17 +191,17 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="img-upload-container ml-2">
-                                                    @if (Model.ImagePathLarge4 != null)
+                                                    @if (Model.ImagePath4 != null)
                                                     {
-                                                        <img class="img-container w-100 h-100" id="img-FMCGLargeImage4" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge4" onerror="this.onerror=null;this.src='/Images/No Photo.png'" />
+                                                        <img class="img-container w-100 h-100" id="img-FMCGImage4" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath4" onerror="this.onerror=null;this.src='/Images/No Photo.png'" />
                                                     }
                                                     else
                                                     {
-                                                        <img class="img-container w-100 h-100" id="img-FMCGLargeImage4" />
+                                                        <img class="img-container w-100 h-100" id="img-FMCGImage4" />
                                                     }
-                                                    <input type="file" id="FMCGLargeImage4" name="FMCGLargeImage4" class="d-none" />
-                                                    <label for="FMCGLargeImage4" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                                    <input type="hidden" name="ImagePathLarge4" id="ImagePathLarge4" value="@Model.ImagePathLarge4" />
+                                                    <input type="file" id="FMCGImage4" name="FMCGImage4" class="d-none" />
+                                                    <label for="FMCGImage4" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                    <input type="hidden" name="ImagePath4" id="ImagePath4" value="@Model.ImagePath4" />
                                                 </div>
                                             </div>
                                         </div>
@@ -212,17 +211,17 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="img-upload-container ml-2">
-                                                    @if (Model.ImagePathLarge5 != null)
+                                                    @if (Model.ImagePath5 != null)
                                                     {
-                                                        <img class="img-container w-100 h-100" id="img-FMCGLargeImage5" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge5" onerror="this.onerror=null;this.src='/Images/No Photo.png'" />
+                                                        <img class="img-container w-100 h-100" id="img-FMCGImage5" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath5" onerror="this.onerror=null;this.src='/Images/No Photo.png'" />
                                                     }
                                                     else
                                                     {
-                                                        <img class="img-container w-100 h-100" id="img-FMCGLargeImage5" />
+                                                        <img class="img-container w-100 h-100" id="img-FMCGImage5" />
                                                     }
-                                                    <input type="file" id="FMCGLargeImage5" name="FMCGLargeImage5" class="d-none" />
-                                                    <label for="FMCGLargeImage5" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                                    <input type="hidden" name="ImagePathLarge5" id="ImagePathLarge5" value="@Model.ImagePathLarge5" />
+                                                    <input type="file" id="FMCGImage5" name="FMCGImage5" class="d-none" />
+                                                    <label for="FMCGImage5" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                    <input type="hidden" name="ImagePath5" id="ImagePath5" value="@Model.ImagePath5" />
                                                 </div>
                                             </div>
                                         </div>
@@ -256,44 +255,44 @@
     <script>
         $(document).ready(function () {
 
-             var categorySelect = $('#CategoryCode');
-            var categorycode = "@Model.CategoryCode1";
+             var categorySelect = $('#CategoryIds');
+            var CategoryIds = "@Model.CategoryIds";
             var categoryname = "@Model.CategoryName";
-            if (categorycode) {
-                var array_code = categorycode.split(',');
+            if (CategoryIds) {
+                var array_code = CategoryIds.split(',');
                 var array_name = categoryname.split(',');
                 $.each(array_code, function (i) {
-                    $('select[name="CategoryCode"] option[value=' + array_code[i] + ']').attr('selected', 'selected');
+                    $('select[name="CategoryIds"] option[value=' + array_code[i] + ']').attr('selected', 'selected');
                     var option = new Option(array_name[i], array_code[i], true, true);
                     categorySelect.append(option).trigger('change');
                 });
             }
-            var scategorySelect = $('#SubCategoryCode');
-            var scategorycode = "@Model.SubCategoryCode1";
+            var scategorySelect = $('#SubCategoryIds');
+            var sCategoryIds = "@Model.SubCategoryIds";
             var scategoryname = "@Model.SubCategoryName";
-            if (scategorycode) {
-                var array_code = scategorycode.split(',');
+            if (sCategoryIds) {
+                var array_code = sCategoryIds.split(',');
                 var array_name = scategoryname.split(',');
                 $.each(array_code, function (i) {
-                    $('select[name="SubCategoryCode"] option[value=' + array_code[i] + ']').attr('selected', 'selected');
+                    $('select[name="SubCategoryIds"] option[value=' + array_code[i] + ']').attr('selected', 'selected');
                     var option = new Option(array_name[i], array_code[i], true, true);
                     scategorySelect.append(option).trigger('change');
                 });
             }
 
-            var nscategorySelect = $('#NextSubCategoryCode');
-            var nscategorycode = "@Model.NextSubCategoryCode1";
+            var nscategorySelect = $('#NextSubCategoryIds');
+            var nsCategoryIds = "@Model.NextSubCategoryIds";
             var nscategoryname = "@Model.NextSubCategoryName";
-            if (nscategorycode) {
-                var array_code = nscategorycode.split(',');
+            if (nsCategoryIds) {
+                var array_code = nsCategoryIds.split(',');
                 var array_name = nscategoryname.split(',');
                 $.each(array_code, function (i) {
-                    $('select[name="NextSubCategoryCode"] option[value=' + array_code[i] + ']').attr('selected', 'selected');
+                    $('select[name="NextSubCategoryIds"] option[value=' + array_code[i] + ']').attr('selected', 'selected');
                     var option = new Option(array_name[i], array_code[i], true, true);
                     nscategorySelect.append(option).trigger('change');
                 });
             }
-            $('#BrandCode').select2({
+            $('#BrandId').select2({
                 placeholder: "Search Brand",
                 ajax: {
                     url: "/MasterProduct/GetFMCGBrandSelect2",
@@ -305,7 +304,7 @@
                 $('input[name="BrandName"]').val(e.params.data.text);
             });
 
-            $('#CategoryCode').select2({
+            $('#CategoryIds').select2({
                 placeholder: "Search Category",
                 ajax: {
                     url: "/MasterProduct/GetCategorySelect2",
@@ -317,7 +316,7 @@
                 $('input[name="CategoryName"]').val(e.params.data.text);
             });
 
-            $('#SubCategoryCode').select2({
+            $('#SubCategoryIds').select2({
                 placeholder: "Search I Sub Category",
                 ajax: {
                     url: "/MasterProduct/GetSubCategorySelect2",
@@ -329,7 +328,7 @@
                 $('input[name="SubCategoryName"]').val(e.params.data.text);
             });
 
-            $('#NextSubCategoryCode').select2({
+            $('#NextSubCategoryIds').select2({
                 placeholder: "Search II Sub Category",
                 ajax: {
                     url: "/MasterProduct/GetNextSubCategorySelect2",
@@ -341,7 +340,7 @@
                 $('input[name="NextSubCategoryName"]').val(e.params.data.text);
             });
 
-            $('#PackageCode').select2({
+            $('#PackageId').select2({
                 placeholder: "Search Package",
                 ajax: {
                     url: "/MasterProduct/GetFMCGPackageSelect2",
@@ -353,7 +352,7 @@
                 $('input[name="PackageName"]').val(e.params.data.text);
             });
 
-            $('#MeasurementUnitCode').select2({
+            $('#MeasurementUnitId').select2({
                 placeholder: "Search Unit",
                 ajax: {
                     url: "/MasterProduct/GetFMCGMeasurementUnitSelect2",
@@ -377,72 +376,72 @@
                 };
             });
 
-            function readURLFMCGLargeImage1(input) {
+            function readURLFMCGImage1(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
                     reader.onload = function (e) {
-                        $('#img-FMCGLargeImage1').attr('src', e.target.result);
+                        $('#img-FMCGImage1').attr('src', e.target.result);
                     }
                     reader.readAsDataURL(input.files[0]);
                 }
             }
 
-            function readURLFMCGLargeImage2(input) {
+            function readURLFMCGImage2(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
                     reader.onload = function (e) {
-                        $('#img-FMCGLargeImage2').attr('src', e.target.result);
+                        $('#img-FMCGImage2').attr('src', e.target.result);
                     }
                     reader.readAsDataURL(input.files[0]);
                 }
             }
 
-            function readURLFMCGLargeImage3(input) {
+            function readURLFMCGImage3(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
                     reader.onload = function (e) {
-                        $('#img-FMCGLargeImage3').attr('src', e.target.result);
+                        $('#img-FMCGImage3').attr('src', e.target.result);
                     }
                     reader.readAsDataURL(input.files[0]);
                 }
             }
 
-            function readURLFMCGLargeImage4(input) {
+            function readURLFMCGImage4(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
                     reader.onload = function (e) {
-                        $('#img-FMCGLargeImage4').attr('src', e.target.result);
+                        $('#img-FMCGImage4').attr('src', e.target.result);
                     }
                     reader.readAsDataURL(input.files[0]);
                 }
             }
 
-            function readURLFMCGLargeImage5(input) {
+            function readURLFMCGImage5(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
                     reader.onload = function (e) {
-                        $('#img-FMCGLargeImage5').attr('src', e.target.result);
+                        $('#img-FMCGImage5').attr('src', e.target.result);
                     }
                     reader.readAsDataURL(input.files[0]);
                 }
             }
 
-            $("#FMCGLargeImage1").change(function () {
-                readURLFMCGLargeImage1(this);
+            $("#FMCGImage1").change(function () {
+                readURLFMCGImage1(this);
             });
-            $("#FMCGLargeImage2").change(function () {
-                readURLFMCGLargeImage2(this);
+            $("#FMCGImage2").change(function () {
+                readURLFMCGImage2(this);
             });
-            $("#FMCGLargeImage3").change(function () {
-                readURLFMCGLargeImage3(this);
-            });
-
-            $("#FMCGLargeImage4").change(function () {
-                readURLFMCGLargeImage4(this);
+            $("#FMCGImage3").change(function () {
+                readURLFMCGImage3(this);
             });
 
-            $("#FMCGLargeImage5").change(function () {
-                readURLFMCGLargeImage5(this);
+            $("#FMCGImage4").change(function () {
+                readURLFMCGImage4(this);
+            });
+
+            $("#FMCGImage5").change(function () {
+                readURLFMCGImage5(this);
             });
 
         });
