@@ -21,14 +21,8 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <input type="text" class="form-control" name="ShopName" id="ShopName" value="@Model.ShopName" readonly />
-                    <input type="hidden" name="ShopId" id="ShopId" value="@Model.ShopId" />
-                    <input type="hidden" name="Id" id="Code" value="@Model.Id" />
+                    <input type="hidden" name="ShopId" value="@Model.ShopId" />
                     <input type="hidden" name="Id" value="@Model.Id" />
-                    <input type="hidden" name="ShopCategoryCode" id="ShopCategoryCode" value="@Model.ShopCategoryCode" />
-                    <input type="hidden" name="ShopCategoryName" id="ShopCategoryName" value="@Model.ShopCategoryName" />
-                    <input type="hidden" name="ProductType" id="ProductType" value="@Model.ProductType" />
-                    <input type="hidden" name="ShortDescription" id="ShortDescription" value="@Model.ShortDescription" />
-                    <input type="hidden" name="LongDescription" id="LongDescription" value="@Model.LongDescription" />
                 </div>
             </div>
             <div class="col-md-4 text-right">
@@ -128,15 +122,15 @@
                                 <label class="control-label" for="PackagingType"><strong class="text-secondary">Packing Type</strong></label>
                                 <div class="form-check-inline ml-3">
                                     <label class="form-check-label">
-                                        <input type="radio" class="form-check-input" name="PackagingType" value="0" @if(Model.PackagingType == 0) { <text> checked </text> }>Item Qty
+                                        <input type="radio" class="form-check-input" name="PackingType" value="0" @if(Model.PackingType == 0) { <text> checked </text> }>Item Qty
                                     </label>
                                 </div>
                                 <div class="form-check-inline">
                                     <label class="form-check-label">
-                                        <input type="radio" class="form-check-input" name="PackagingType" value="1" @if(Model.PackagingType == 1) { <text> checked </text> }>SKU
+                                        <input type="radio" class="form-check-input" name="PackingType" value="1" @if(Model.PackingType == 1) { <text> checked </text> }>SKU
                                     </label>
                                 </div>
-                                <input type="number" class="form-control" name="PackagingCharge" id="PackagingCharge" value="@Model.PackagingCharge" />
+                                <input type="number" class="form-control" name="PackingCharge" id="PackingCharge" value="@Model.PackingCharge" />
                             </div>
                         </div>
                         <div class="d-none" id="divAddOns">
@@ -226,8 +220,9 @@
 @section Scripts
 {
     <script>
-
         $(document).ready(function () {
+
+
             $('#tbl-addOns tbody').empty();
 
             $('#Price').on('change keyup', function () {
@@ -256,7 +251,7 @@
             $.getJSON('/Product/GetProductDishAddOnsFoodEdit', { masterProductId: @Model.MasterProductId  }, function (data) {
                 if (data != "") {
                     $.each(data, function (index, item) {
-                        var tableData = '<tr class="d-none type_' + item.AddOnType + '" data-code=' + item.Code + '> \
+                        var tableData = '<tr class="d-none type_' + item.AddOnType + '" data-code=' + item.Id + '> \
                                     <td>' + item.PortionName + '</td> \
                                     <td><input class="textbox-sm portion-price" type="number" value=' + item.PortionPrice + '></td> \
                                     <td>' + item.AddOnCategoryName + '</td> \
@@ -266,7 +261,7 @@
                                     <td><input class="textbox-sm crust-price" type="number" value=' + item.CrustPrice + '></td>\
                                     <td>' + item.MinSelectionLimit + '</td>\
                                     <td>' + item.MaxSelectionLimit + '</td>\
-                                    <td><input type="checkbox" class="chk-select chk_'+ item.AddOnType + '" value="true" name="IsActive" data-code=' + item.Code + '></td>\
+                                    <td><input type="checkbox" class="chk-select chk_'+ item.AddOnType + '" value="true" name="IsActive" data-code=' + item.Id + '></td>\
                                 </tr>';
 
                         $('#tbl-addOns tbody').append(tableData);
@@ -278,7 +273,7 @@
                 if (data != "") {
                     $.each(data, function (index, item) {
                         if (item.IsActive == false) {
-                            var tableData = '<tr class="d-none type_' + item.AddOnType + '" data-code=' + item.Code + '> \
+                            var tableData = '<tr class="d-none type_' + item.AddOnType + '" data-code=' + item.Id + '> \
                                     <td>' + item.PortionName + '</td> \
                                     <td><input class="textbox-sm portion-price" type="number" value=' + item.PortionPrice + '></td> \
                                     <td>' + item.AddOnCategoryName + '</td> \
@@ -288,11 +283,11 @@
                                     <td><input class="textbox-sm crust-price" type="number" value=' + item.CrustPrice + '></td>\
                                     <td>' + item.MinSelectionLimit + '</td>\
                                     <td>' + item.MaxSelectionLimit + '</td>\
-                                    <td><input type="checkbox" class="chk-select chk_' + item.AddOnType + '" value="true" name="IsActive" data-code=' + item.Code + '></td>\
+                                    <td><input type="checkbox" class="chk-select chk_' + item.AddOnType + '" value="true" name="IsActive" data-code=' + item.Id + '></td>\
                                 </tr>';
                             $('#tbl-addOns tbody').append(tableData);
                         } else {
-                            var tableData = '<tr class="d-none type_' + item.AddOnType + '" data-code=' + item.Code + '> \
+                            var tableData = '<tr class="d-none type_' + item.AddOnType + '" data-code=' + item.Id + '> \
                                     <td>' + item.PortionName + '</td> \
                                     <td><input class="textbox-sm portion-price" type="number" value=' + item.PortionPrice + '></td> \
                                     <td>' + item.AddOnCategoryName + '</td> \
@@ -302,7 +297,7 @@
                                     <td><input class="textbox-sm crust-price" type="number" value=' + item.CrustPrice + '></td>\
                                     <td>' + item.MinSelectionLimit + '</td>\
                                     <td>' + item.MaxSelectionLimit + '</td>\
-                                    <td><input type="checkbox" class="chk-select chk_' + item.AddOnType + '" value="true" name="IsActive" data-code=' + item.Code + ' data-type="Shop" checked ></td>\
+                                    <td><input type="checkbox" class="chk-select chk_' + item.AddOnType + '" value="true" name="IsActive" data-code=' + item.Id + ' data-type="Shop" checked ></td>\
                                 </tr>';
                             $('#tbl-addOns tbody').append(tableData);
                         }
@@ -363,7 +358,7 @@
                     if ($(this).is(':checked') == true) {
                         addonDisableCheckbox();
                         let data = {
-                            Code: $(this).data('code'),
+                            Id: $(this).data('code'),
                             PortionPrice: parseFloat($tr.find('.portion-price').val()),
                             AddOnsPrice: parseFloat($tr.find('.addon-price').val()),
                             CrustPrice: parseFloat($tr.find('.crust-price').val()),
@@ -372,14 +367,14 @@
                         $.post('/Product/EditShopAddOns', { model: data }, function () { });
                     } else {
                         addonDisableCheckbox();
-                        $.post('/Product/RemoveFromEditShopAddOns', { code: code }, function () { });
+                        $.post('/Product/RemoveFromEditShopAddOns', { id: code }, function () { });
                     }
                 } else {
                     addonDisableCheckbox();
                     if ($(this).is(':checked') == true) {
                         addonDisableCheckbox();
                         let data = {
-                            Code: $(this).data('code'),
+                            Id: $(this).data('code'),
                             PortionPrice: parseFloat($tr.find('.portion-price').val()),
                             AddOnsPrice: parseFloat($tr.find('.addon-price').val()),
                             CrustPrice: parseFloat($tr.find('.crust-price').val()),
@@ -389,7 +384,7 @@
                     } else {
                         addonDisableCheckbox();
                         let data = {
-                            Code: $(this).data('code'),
+                            Id: $(this).data('code'),
                             PortionPrice: parseFloat($tr.find('.portion-price').val()),
                             AddOnsPrice: parseFloat($tr.find('.addon-price').val()),
                             CrustPrice: parseFloat($tr.find('.crust-price').val()),

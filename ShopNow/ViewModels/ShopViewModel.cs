@@ -31,7 +31,7 @@ namespace ShopNow.ViewModels
         public HttpPostedFileBase AuthorisedDistributorImage { get; set; }
         public string Otp { get; set; }
 
-        public string Code { get; set; }
+        //public string Code { get; set; }
         public string Name { get; set; }
         public string OwnerPhoneNumber { get; set; }
         public string PhoneNumber { get; set; }
@@ -73,7 +73,7 @@ namespace ShopNow.ViewModels
         public string OfficialEmail { get; set; }
         public string Website { get; set; }
         public string ManualWebsite { get; set; }
-        public string CustomerCode { get; set; }
+        public string CustomerId { get; set; }
         public string CustomerName { get; set; }
         public string CountryName { get; set; }
         public string StateName { get; set; }
@@ -107,7 +107,7 @@ namespace ShopNow.ViewModels
         public bool Verify { get; set; }
         public int Status { get; set; }
         public DateTime DateUpdated { get; set; }
-        public string ShopCategoryCode { get; set; }
+        public string ShopCategoryId { get; set; }
         public string ShopCategoryName { get; set; }
         public string Password { get; set; }
         public string FSSAIStatus { get; set; }
@@ -144,7 +144,7 @@ namespace ShopNow.ViewModels
         public HttpPostedFileBase AuthorisedDistributorImage { get; set; }
         public string Otp { get; set; }
         public int Adscore { get; set; }
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string OwnerPhoneNumber { get; set; }
         public string PhoneNumber { get; set; }
@@ -186,7 +186,7 @@ namespace ShopNow.ViewModels
         public string OfficialEmail { get; set; }
         public string Website { get; set; }
         public string ManualWebsite { get; set; }
-        public string CustomerCode { get; set; }
+        public string CustomerId { get; set; }
         public string CustomerName { get; set; }
         public string CountryName { get; set; }
         public string StateName { get; set; }
@@ -219,7 +219,7 @@ namespace ShopNow.ViewModels
         public string MemberCode { get; set; }
         public int Status { get; set; }
         public DateTime DateUpdated { get; set; }
-        public string ShopCategoryCode { get; set; }
+        public string ShopCategoryId { get; set; }
         public string ShopCategoryName { get; set; }
         public string Password { get; set; }
         public string FSSAIStatus { get; set; }
@@ -305,7 +305,7 @@ namespace ShopNow.ViewModels
         public string OfficialEmail { get; set; }
         public string Website { get; set; }
         public string ManualWebsite { get; set; }
-        public string CustomerCode { get; set; }
+        public string CustomerId { get; set; }
         public string CustomerName { get; set; }
         public string CountryName { get; set; }
         public string StateName { get; set; }
@@ -325,7 +325,7 @@ namespace ShopNow.ViewModels
         public bool Verify { get; set; }
         public int Status { get; set; }
         public DateTime DateUpdated { get; set; }
-        public string ShopCategoryCode { get; set; }
+        public string ShopCategoryId { get; set; }
         public string ShopCategoryName { get; set; }
         public string Password { get; set; }
         public string FSSAIStatus { get; set; }
@@ -364,7 +364,7 @@ namespace ShopNow.ViewModels
             public string CustomerName { get; set; }
             public string StateName { get; set; }
             public string DistrictName { get; set; }
-            public string ShopCategoryCode { get; set; }
+            public string ShopCategoryId { get; set; }
             public string MemberCode { get; set; }
             public string FSSAIStatus { get; set; }
             public string DrugStatus { get; set; }
@@ -540,7 +540,7 @@ namespace ShopNow.ViewModels
 
     public class ShopSingleUpdateViewModel
     {
-        public string Code { get; set; }
+        public string Id { get; set; }
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
         public string CountryName { get; set; }
@@ -668,7 +668,7 @@ namespace ShopNow.ViewModels
 
         public class ShopList
         {
-            public string Code { get; set; }
+            public string Id { get; set; }
             public string Name { get; set; }
             public int CustomerReview { get; set; }
             public double Rating { get; set; }
@@ -684,7 +684,7 @@ namespace ShopNow.ViewModels
             public string DistrictName { get; set; }
             public string StreetName { get; set; }
             public string Address { get; set; }
-            public string ShopCategoryCode { get; set; }
+            public string ShopCategoryId { get; set; }
             public string ShopCategoryName { get; set; }
 
         }
@@ -719,7 +719,7 @@ namespace ShopNow.ViewModels
         }
         public class VerifyList
         {
-            public string CustomerCode { get; set; }
+            public int CustomerId { get; set; }
             public string PhoneNumber { get; set; }
             public string Otp { get; set; }
             public bool Verify { get; set; }
@@ -735,7 +735,7 @@ namespace ShopNow.ViewModels
     }
     public class ShopDetails
     {
-        public string Code { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public int CustomerReview { get; set; }
         public double Rating { get; set; }
@@ -769,7 +769,7 @@ namespace ShopNow.ViewModels
         }
         public class CategoryList
         {
-            public string Code { get; set; }
+            public string Id { get; set; }
             public string Name { get; set; }
         }
         public class ProductList

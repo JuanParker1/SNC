@@ -628,6 +628,8 @@
     <Content Include="Images\No Photo.png" />
     <Content Include="Images\ShopNowChat.png" />
     <Content Include="Images\503.png" />
+    <Content Include="Images\undraw_authentication_fsn5.svg" />
+    <Content Include="Images\undraw_press_play_bx2d.svg" />
     <Content Include="Models\ApplicationDbContext.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>ApplicationDbContext.edmx</DependentUpon>
@@ -2788,9 +2790,7 @@
     <Content Include="Views\MobileAppVersion\Details.cshtml" />
     <Content Include="Views\MobileAppVersion\Edit.cshtml" />
     <Content Include="Views\MobileAppVersion\Index.cshtml" />
-    <Content Include="Views\Product\Create.cshtml" />
     <Content Include="Views\Product\Details.cshtml" />
-    <Content Include="Views\Product\Edit.cshtml" />
     <Content Include="Views\Product\List.cshtml" />
     <Content Include="Scripts\umd\popper-utils.js.map" />
     <Content Include="Scripts\umd\popper-utils.min.js.map" />
