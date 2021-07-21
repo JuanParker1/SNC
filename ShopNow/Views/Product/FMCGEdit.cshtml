@@ -44,7 +44,6 @@
                                         <input type="hidden" name="MasterProductId" id="MasterProductId" value="@Model.MasterProductId" />
                                         <input type="hidden" name="Id" value="@Model.Id" />
                                         <input type="hidden" name="Name" value="@Model.Name" />
-                                        <input type="hidden" name="ProductType" value="@Model.ProductType" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Brand Name</strong></label>
@@ -55,17 +54,17 @@
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Category Name</strong></label>
                                         <input type="text" class="form-control" name="CategoryName" id="CategoryName" value="@Model.CategoryName" readonly />
-                                        <input type="hidden" name="CategoryId" id="CategoryId" value="@Model.CategoryId" />
+                                        <input type="hidden" name="CategoryIds" id="CategoryIds" value="@Model.CategoryIds" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Sub Category I Name</strong></label>
                                         <input type="text" class="form-control" name="SubCategoryName" id="SubCategoryName" value="@Model.SubCategoryName" readonly />
-                                        <input type="hidden" name="SubCategoryCode" id="SubCategoryCode" value="@Model.SubCategoryCode" />
+                                        <input type="hidden" name="SubCategoryIds" id="SubCategoryIds" value="@Model.SubCategoryIds" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Sub Category II Name</strong></label>
                                         <input type="text" class="form-control" name="NextSubCategoryName" id="NextSubCategoryName" value="@Model.NextSubCategoryName" readonly />
-                                        <input type="hidden" name="NextSubCategoryCode" id="NextSubCategoryCode" value="@Model.NextSubCategoryCode" />
+                                        <input type="hidden" name="NextSubCategoryIds" id="NextSubCategoryIds" value="@Model.NextSubCategoryIds" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="Price"><strong class="text-secondary">Menu Price</strong></label>
@@ -87,7 +86,7 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="Weight"><strong class="text-secondary">Weight</strong></label>
-                                        <input id="weight" type="number" class="form-control" name="weight" min="0" step="any" value="@Model.weight" />
+                                        <input id="weight" type="number" class="form-control" name="Weight" min="0" step="any" value="@Model.Weight" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="SizeLB"><strong class="text-secondary">Size LB</strong></label>
@@ -95,18 +94,18 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="MeasurementUnitCode"><strong class="text-secondary">Measurement Unit Name</strong></label>
-                                        <input type="hidden" name="MeasurementUnitCode" id="MeasurementUnitCode" value="@Model.MeasurementUnitCode" />
+                                        <input type="hidden" name="MeasurementUnitId" id="MeasurementUnitId" value="@Model.MeasurementUnitId" />
                                         <input type="text" class="form-control" name="MeasurementUnitName" id="MeasurementUnitName" value="@Model.MeasurementUnitName" readonly />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="PackageCode"><strong class="text-secondary">Package Name</strong></label>
-                                        <input type="hidden" name="PackageCode" id="PackageCode" value="@Model.PackageCode" />
+                                        <input type="hidden" name="PackageId" id="PackageId" value="@Model.PackageId" />
                                         <input type="text" class="form-control" name="PackageName" id="PackageName" value="@Model.PackageName" readonly />
                                     </div>
-                                    <div class="col-md-3">
+                                    @*<div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">ASIN / EAN</strong></label>
                                         <input id="ASIN" type="text" class="form-control" name="ASIN" value="@Model.ASIN" readonly />
-                                    </div>
+                                    </div>*@
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="GoogleTaxonomyCode"><strong class="text-secondary">Google Taxonomy Code</strong></label>
                                         <input id="GoogleTaxonomyCode" type="text" class="form-control" name="GoogleTaxonomyCode" value="@Model.GoogleTaxonomyCode" readonly />
@@ -115,15 +114,15 @@
                                         <label class="control-label" for="PackagingType"><strong class="text-secondary">Packing Type</strong></label>
                                         <div class="form-check-inline ml-3">
                                             <label class="form-check-label">
-                                                <input type="radio" class="form-check-input" name="PackagingType" value="0" @if (Model.PackagingType == 0) { <text> checked </text> }>Item Qty
+                                                <input type="radio" class="form-check-input" name="PackingType" value="0" @if (Model.PackingType == 0) { <text> checked </text> }>Item Qty
                                             </label>
                                         </div>
                                         <div class="form-check-inline">
                                             <label class="form-check-label">
-                                                <input type="radio" class="form-check-input" name="PackagingType" value="1" @if (Model.PackagingType == 1) { <text> checked </text> }>SKU
+                                                <input type="radio" class="form-check-input" name="PackingType" value="1" @if (Model.PackingType == 1) { <text> checked </text> }>SKU
                                             </label>
                                         </div>
-                                        <input type="number" class="form-control" name="PackagingCharge" id="PackagingCharge" value="@Model.PackagingCharge" />
+                                        <input type="number" class="form-control" name="PackingCharge" id="PackingCharge" value="@Model.PackingCharge" />
                                     </div>
                                 </div>
                             </div>

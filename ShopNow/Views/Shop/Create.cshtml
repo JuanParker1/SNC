@@ -61,7 +61,7 @@
                 @using (Html.BeginForm("Create", "Shop", FormMethod.Post, new { id = "ShopForm", role = "form", enctype = "multipart/form-data" }))
                 {
                     @Html.AntiForgeryToken()
-                    <input type="hidden" name="CustomerCode" id="CustomerCode" />
+                    <input type="hidden" name="CustomerId" id="CustomerCode" />
                     <input type="hidden" name="CustomerName" id="CustomerName" />
                     <input type="hidden" name="shopduplicateCount" id="shopduplicateCount" value="@ViewBag.shopduplicateCount" />
                     <input type="hidden" name="shopbeforeApprovalCount" id="shopbeforeApprovalCount" value="@ViewBag.shopbeforeApprovalCount" />
@@ -142,7 +142,7 @@
                                         <label class="col-form-label"><strong class="text-secondary">Shop Type</strong></label>
                                     </div>
                                     <div class="col-md-8">
-                                        <select id="ShopCategoryCode" name="ShopCategoryCode" class="form-control" style="width:100%;"></select>
+                                        <select id="ShopCategoryId" name="ShopCategoryId" class="form-control" style="width:100%;"></select>
                                         <input type="hidden" name="ShopCategoryName" id="ShopCategoryName" />
                                     </div>
                                 </div>
@@ -819,7 +819,7 @@
                         if (data.data == true) {
                             $(".divContainer").removeClass("d-none");
                             $('input[name="CustomerName"]').val(data.CustomerName);
-                            $('input[name="CustomerCode"]').val(data.CustomerCode);
+                            $('input[name="CustomerId"]').val(data.CustomerCode);
                             $("#OwnerPhoneNumber").val(data.PhoneNumber);
                             $("#AadharName").val(data.AadharName);
                             $("#AadharNumber").val(data.AadharNumber);
@@ -873,7 +873,7 @@
                 });
 
 
-                $('#ShopCategoryCode').select2({
+                $('#ShopCategoryId').select2({
                     placeholder: "Search Shop Type",
                     ajax: {
                         url: "/Shop/GetShopCategorySelect2",
@@ -883,7 +883,7 @@
                     }
                 }).on('select2:select', function (e) {
                     $('input[name="ShopCategoryName"]').val(e.params.data.text);
-                    var val = $('#ShopCategoryCode').val();
+                    var val = $('#ShopCategoryId').val();
                     if (val == 0 || val == 1 || val == 2) {
                         $('.fssi').removeClass('d-none');
                         var radioValue = $("input[name='FssaiLicense']:checked").val();
@@ -1071,7 +1071,7 @@
                     var adharNumber = $("#AadharNumber").val();
                     var adharImage = $("#AadharImage").val();
                     var adharPdf = $("#AadharPdf").val();
-                    var shoptype = $("#ShopCategoryCode").val();
+                    var shoptype = $("#ShopCategoryId").val();
                     if (shoptype == null || shoptype == "") {
                         swal("Notice!", "Please Select Shop Type!", "warning");
                     } else if (adharName != "" && adharNumber != "" && (adharImage != "" || adharPdf != "")) {
