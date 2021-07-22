@@ -73,14 +73,14 @@ namespace ShopNow.Controllers
 
         // All MasterItem Delete
         [AccessPolicy(PageCode = "SHNMPRD004")]
-        public ActionResult Delete(string Id)
+        public JsonResult Delete(string Id)
         {
             var dCode = AdminHelpers.DCodeInt(Id);
             var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dCode);
             master.Status = 2;
             _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
             _db.SaveChanges();
-            return RedirectToAction("List");
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         // Dish Create
@@ -459,6 +459,7 @@ namespace ShopNow.Controllers
                 return HttpNotFound();
             var masterProduct = _db.MasterProducts.FirstOrDefault(i => i.Id == dCode);
             var model = _mapper.Map<MasterProduct, MasterElectronicEditViewModel>(masterProduct);
+
             return View(model);
         }
 
@@ -559,14 +560,14 @@ namespace ShopNow.Controllers
 
         // Electronic Delete
         [AccessPolicy(PageCode = "SHNMPRED021")]
-        public ActionResult ElectronicDelete(string Id)
+        public JsonResult ElectronicDelete(string Id)
         {
             var dCode = AdminHelpers.DCodeInt(Id);
-            var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dCode);// MasterProduct.Get(dCode);
+            var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dCode);
             master.Status = 2;
             _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
             _db.SaveChanges();
-            return RedirectToAction("ElectronicList");
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         // Medical List
@@ -743,6 +744,8 @@ namespace ShopNow.Controllers
                 model.ImagePath4 = model.ImagePath4.Replace("%", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
             if (model.ImagePath5 != null)
                 model.ImagePath5 = model.ImagePath5.Replace("%", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
+            model.DrugCompoundDetailIds1 = masterProduct.DrugCompoundDetailIds;
+            model.CategoryIds1 = masterProduct.CategoryIds;
             return View(model);
         }
 
@@ -1705,10 +1708,13 @@ namespace ShopNow.Controllers
             if (masterProduct.ImagePath5 != null)
                 masterProduct.ImagePath5 = masterProduct.ImagePath5.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
             var model = _mapper.Map<MasterProduct, MasterFMCGEditViewModel>(masterProduct);
+            model.CategoryIds1 = masterProduct.CategoryIds;
+            model.SubCategoryIds1 = masterProduct.SubCategoryIds;
+            model.NextSubCategoryIds1 = masterProduct.NextSubCategoryIds;
             return View(model);
         }
 
-        [HttpPost]
+        [HttpPost, ValidateInput(false)]
         [ValidateAntiForgeryToken]
         [AccessPolicy(PageCode = "SHNMPRFE024")]
         public ActionResult FMCGEdit(MasterFMCGEditViewModel model)

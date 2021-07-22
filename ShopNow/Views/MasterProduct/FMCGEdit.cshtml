@@ -256,7 +256,7 @@
         $(document).ready(function () {
 
              var categorySelect = $('#CategoryIds');
-            var CategoryIds = "@Model.CategoryIds";
+            var CategoryIds = "@Model.CategoryIds1";
             var categoryname = "@Model.CategoryName";
             if (CategoryIds) {
                 var array_code = CategoryIds.split(',');
@@ -268,7 +268,7 @@
                 });
             }
             var scategorySelect = $('#SubCategoryIds');
-            var sCategoryIds = "@Model.SubCategoryIds";
+            var sCategoryIds = "@Model.SubCategoryIds1";
             var scategoryname = "@Model.SubCategoryName";
             if (sCategoryIds) {
                 var array_code = sCategoryIds.split(',');
@@ -281,7 +281,7 @@
             }
 
             var nscategorySelect = $('#NextSubCategoryIds');
-            var nsCategoryIds = "@Model.NextSubCategoryIds";
+            var nsCategoryIds = "@Model.NextSubCategoryIds1";
             var nscategoryname = "@Model.NextSubCategoryName";
             if (nsCategoryIds) {
                 var array_code = nsCategoryIds.split(',');

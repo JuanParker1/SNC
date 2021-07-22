@@ -366,10 +366,13 @@ namespace ShopNow.ViewModels
         public int BrandId { get; set; }
         public string BrandName { get; set; }
         public string ASIN { get; set; }
+        public string CategoryIds1 { get; set; }
         public string[] CategoryIds { get; set; }
         public string CategoryName { get; set; }
+        public string SubCategoryIds1 { get; set; }
         public string[] SubCategoryIds { get; set; }
         public string SubCategoryName { get; set; }
+        public string NextSubCategoryIds1 { get; set; }
         public string[] NextSubCategoryIds { get; set; }
         public string NextSubCategoryName { get; set; }
         public string GoogleTaxonomyCode { get; set; }
@@ -434,10 +437,12 @@ namespace ShopNow.ViewModels
         public string NickName { get; set; }
         public int BrandId { get; set; }
         public string BrandName { get; set; }
+        public string CategoryIds1 { get; set; }
         public string[] CategoryIds { get; set; }
         public string CategoryName { get; set; }
         public int MeasurementUnitId { get; set; }
         public string MeasurementUnitName { get; set; }
+        public string DrugCompoundDetailIds1 { get; set; }
         public string[] DrugCompoundDetailIds { get; set; }
         public string DrugCompoundDetailName { get; set; }
         public bool PriscriptionCategory { get; set; }
