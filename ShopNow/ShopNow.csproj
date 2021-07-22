@@ -2986,6 +2986,7 @@
     <Content Include="Views\Product\ElectronicCreate.cshtml" />
     <Content Include="Views\Product\ElectronicEdit.cshtml" />
     <Content Include="Views\Product\ElectronicList.cshtml" />
+    <Content Include="Views\DiscountCategory\List.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

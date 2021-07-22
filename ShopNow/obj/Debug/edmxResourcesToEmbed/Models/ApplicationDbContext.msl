@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="sncModelStoreContainer" CdmEntityContainer="sncEntities1">
+  <EntityContainerMapping StorageEntityContainer="sncModelStoreContainer" CdmEntityContainer="sncEntities">
     <EntitySetMapping Name="AccessPolicies">
       <EntityTypeMapping TypeName="sncModel.AccessPolicy">
         <MappingFragment StoreEntitySet="AccessPolicies">
@@ -320,8 +320,8 @@
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Percentage" ColumnName="Percentage" />
-          <ScalarProperty Name="CategoryType" ColumnName="CategoryType" />
-          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+          <ScalarProperty Name="ShopName" ColumnName="ShopName" />
           <ScalarProperty Name="Status" ColumnName="Status" />
           <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
           <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
@@ -733,6 +733,7 @@
           <ScalarProperty Name="IBarU" ColumnName="IBarU" />
           <ScalarProperty Name="ItemId" ColumnName="ItemId" />
           <ScalarProperty Name="Percentage" ColumnName="Percentage" />
+          <ScalarProperty Name="DiscountCategoryId" ColumnName="DiscountCategoryId" />
           <ScalarProperty Name="DiscountCategoryName" ColumnName="DiscountCategoryName" />
           <ScalarProperty Name="DataEntry" ColumnName="DataEntry" />
           <ScalarProperty Name="AppliesOnline" ColumnName="AppliesOnline" />

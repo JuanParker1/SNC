@@ -499,7 +499,6 @@ E:\Beno\SNC\ShopNow\bin\System.Web.WebPages.Razor.xml
 E:\Beno\SNC\ShopNow\bin\Antlr3.Runtime.pdb
 E:\Beno\SNC\ShopNow\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
 E:\Beno\SNC\ShopNow\obj\Debug\ShopNow.csproj.App.config
-E:\Beno\SNC\ShopNow\obj\Debug\ShopNow.csprojAssemblyReference.cache
 E:\Beno\SNC\ShopNow\obj\Debug\ShopNow.Properties.Resources.resources
 E:\Beno\SNC\ShopNow\obj\Debug\ShopNow.csproj.GenerateResource.cache
 E:\Beno\SNC\ShopNow\obj\Debug\ShopNow.csproj.CoreCompileInputs.cache

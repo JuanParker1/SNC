@@ -43,6 +43,7 @@ namespace ShopNow.Models
         public int IBarU { get; set; }
         public int ItemId { get; set; }
         public double Percentage { get; set; }
+        public int DiscountCategoryId { get; set; }
         public string DiscountCategoryName { get; set; }
         public int DataEntry { get; set; }
         public int AppliesOnline { get; set; }

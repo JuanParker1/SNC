@@ -217,8 +217,8 @@ namespace ShopNow.Controllers
             {
                 DiscountCategory cat = new DiscountCategory();
                 cat.Name = CategoryName;
-                cat.CategoryType = 0;
-                cat.Type = 0;
+                //cat.CategoryType = 0;
+                //cat.Type = 0;
                 cat.Percentage = percentage;
                 cat.DateEncoded = DateTime.Now;
                 cat.DateUpdated = DateTime.Now;
