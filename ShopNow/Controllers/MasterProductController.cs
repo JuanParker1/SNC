@@ -383,39 +383,39 @@ namespace ShopNow.Controllers
                 //        prod.CategoryName = model.CategoryName;
                 //    }
                 //}
-                //ProductImage1
-                if (model.ProductImage1 != null)
+                //ElectronicImage1
+                if (model.ElectronicImage1 != null)
                 {
-                    uc.UploadFiles(model.ProductImage1.InputStream, prod.Id + "_" + model.ProductImage1.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath1 = prod.Id + "_" + model.ProductImage1.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.ElectronicImage1.InputStream, prod.Id + "_" + model.ElectronicImage1.FileName, accesskey, secretkey, "image");
+                    prod.ImagePath1 = prod.Id + "_" + model.ElectronicImage1.FileName.Replace(" ", "");
                 }
 
-                //ProductImage2
-                if (model.ProductImage2 != null)
+                //ElectronicImage2
+                if (model.ElectronicImage2 != null)
                 {
-                    uc.UploadFiles(model.ProductImage2.InputStream, prod.Id + "_" + model.ProductImage2.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath2 = prod.Id + "_" + model.ProductImage2.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.ElectronicImage2.InputStream, prod.Id + "_" + model.ElectronicImage2.FileName, accesskey, secretkey, "image");
+                    prod.ImagePath2 = prod.Id + "_" + model.ElectronicImage2.FileName.Replace(" ", "");
                 }
 
-                //ProductImage3
-                if (model.ProductImage3 != null)
+                //ElectronicImage3
+                if (model.ElectronicImage3 != null)
                 {
-                    uc.UploadFiles(model.ProductImage3.InputStream, prod.Id + "_" + model.ProductImage3.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath3 = prod.Id + "_" + model.ProductImage3.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.ElectronicImage3.InputStream, prod.Id + "_" + model.ElectronicImage3.FileName, accesskey, secretkey, "image");
+                    prod.ImagePath3 = prod.Id + "_" + model.ElectronicImage3.FileName.Replace(" ", "");
                 }
 
-                //ProductImage4
-                if (model.ProductImage4 != null)
+                //ElectronicImage4
+                if (model.ElectronicImage4 != null)
                 {
-                    uc.UploadFiles(model.ProductImage4.InputStream, prod.Id + "_" + model.ProductImage4.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath4 = prod.Id + "_" + model.ProductImage4.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.ElectronicImage4.InputStream, prod.Id + "_" + model.ElectronicImage4.FileName, accesskey, secretkey, "image");
+                    prod.ImagePath4 = prod.Id + "_" + model.ElectronicImage4.FileName.Replace(" ", "");
                 }
 
-                //ProductImage5
-                if (model.ProductImage5 != null)
+                //ElectronicImage5
+                if (model.ElectronicImage5 != null)
                 {
-                    uc.UploadFiles(model.ProductImage5.InputStream, prod.Id + "_" + model.ProductImage5.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath5 = prod.Id + "_" + model.ProductImage5.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.ElectronicImage5.InputStream, prod.Id + "_" + model.ElectronicImage5.FileName, accesskey, secretkey, "image");
+                    prod.ImagePath5 = prod.Id + "_" + model.ElectronicImage5.FileName.Replace(" ", "");
                 }
                 if (name == null)
                 {
@@ -502,39 +502,39 @@ namespace ShopNow.Controllers
                 //    }
                 //}
 
-                //ProductImage1
-                if (model.ProductImage1 != null)
+                //ElectronicImage1
+                if (model.ElectronicImage1 != null)
                 {
-                    uc.UploadFiles(model.ProductImage1.InputStream, prod.Id + "_" + model.ProductImage1.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath1 = prod.Id + "_" + model.ProductImage1.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.ElectronicImage1.InputStream, prod.Id + "_" + model.ElectronicImage1.FileName, accesskey, secretkey, "image");
+                    prod.ImagePath1 = prod.Id + "_" + model.ElectronicImage1.FileName.Replace(" ", "");
                 }
 
-                //ProductImage2
-                if (model.ProductImage2 != null)
+                //ElectronicImage2
+                if (model.ElectronicImage2 != null)
                 {
-                    uc.UploadFiles(model.ProductImage2.InputStream, prod.Id + "_" + model.ProductImage2.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath2 = prod.Id + "_" + model.ProductImage2.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.ElectronicImage2.InputStream, prod.Id + "_" + model.ElectronicImage2.FileName, accesskey, secretkey, "image");
+                    prod.ImagePath2 = prod.Id + "_" + model.ElectronicImage2.FileName.Replace(" ", "");
                 }
 
-                //ProductImage3
-                if (model.ProductImage3 != null)
+                //ElectronicImage3
+                if (model.ElectronicImage3 != null)
                 {
-                    uc.UploadFiles(model.ProductImage3.InputStream, prod.Id + "_" + model.ProductImage3.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath3 = prod.Id + "_" + model.ProductImage3.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.ElectronicImage3.InputStream, prod.Id + "_" + model.ElectronicImage3.FileName, accesskey, secretkey, "image");
+                    prod.ImagePath3 = prod.Id + "_" + model.ElectronicImage3.FileName.Replace(" ", "");
                 }
 
-                //ProductImage4
-                if (model.ProductImage4 != null)
+                //ElectronicImage4
+                if (model.ElectronicImage4 != null)
                 {
-                    uc.UploadFiles(model.ProductImage4.InputStream, prod.Id + "_" + model.ProductImage4.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath4 = prod.Id + "_" + model.ProductImage4.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.ElectronicImage4.InputStream, prod.Id + "_" + model.ElectronicImage4.FileName, accesskey, secretkey, "image");
+                    prod.ImagePath4 = prod.Id + "_" + model.ElectronicImage4.FileName.Replace(" ", "");
                 }
 
-                //ProductImage5
-                if (model.ProductImage5 != null)
+                //ElectronicImage5
+                if (model.ElectronicImage5 != null)
                 {
-                    uc.UploadFiles(model.ProductImage5.InputStream, prod.Id + "_" + model.ProductImage5.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath5 = prod.Id + "_" + model.ProductImage5.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.ElectronicImage5.InputStream, prod.Id + "_" + model.ElectronicImage5.FileName, accesskey, secretkey, "image");
+                    prod.ImagePath5 = prod.Id + "_" + model.ElectronicImage5.FileName.Replace(" ", "");
                 }
                 prod.DateUpdated = DateTime.Now;
                 _db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
