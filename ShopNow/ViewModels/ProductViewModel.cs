@@ -427,9 +427,8 @@ namespace ShopNow.ViewModels
 
     }
 
-    public class FMCGCreateEditViewModel
+    public class FMCGCreateViewModel
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public int MasterProductId { get; set; }
         public string MasterProductName { get; set; }
@@ -441,7 +440,7 @@ namespace ShopNow.ViewModels
         public string SubCategoryName { get; set; }
         public string NextSubCategoryIds { get; set; }
         public string NextSubCategoryName { get; set; }
-        public int PackageId { get; set; }
+        public int? PackageId { get; set; }
         public string PackageName { get; set; }
         public int MeasurementUnitId { get; set; }
         public string MeasurementUnitName { get; set; }
@@ -450,7 +449,6 @@ namespace ShopNow.ViewModels
         public string BrandName { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
-        public string ImagePath { get; set; }
         public string ImagePathLarge1 { get; set; }
         public string ImagePathLarge2 { get; set; }
         public string ImagePathLarge3 { get; set; }
@@ -461,12 +459,15 @@ namespace ShopNow.ViewModels
         public double Weight { get; set; }
         public string SizeLB { get; set; }
         public int IBarU { get; set; }
-        public int Shopid { get; set; }
         public int Qty { get; set; }
         public int Percentage { get; set; }
         public int PackingType { get; set; }
         public double PackingCharge { get; set; }
+    }
 
+    public class FMCGEditViewModel : FMCGCreateViewModel
+    {
+        public int Id { get; set; }
     }
 
     public class ElectronicCreateEditViewModel
@@ -498,13 +499,13 @@ namespace ShopNow.ViewModels
         public double Price { get; set; }
         public double MenuPrice { get; set; }
         public string ASIN { get; set; }
-        public double weight { get; set; }
+        public double Weight { get; set; }
         public string SizeLB { get; set; }
         public string ProductType { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
         public int Status { get; set; }
-        public string iBarU { get; set; }
+        public string IBarU { get; set; }
         public string OriginCountry { get; set; }
         public string Manufacturer { get; set; }
         public Nullable<int> shopid { get; set; }
