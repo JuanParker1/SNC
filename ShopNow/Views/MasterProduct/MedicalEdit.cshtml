@@ -1,4 +1,4 @@
-﻿@model ShopNow.ViewModels.MedicalDrugCreateEditViewModel
+﻿@model ShopNow.ViewModels.MasterMedicalEditViewModel
 @{
     ViewBag.Title = "Medical Update";
 }
@@ -45,9 +45,9 @@
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="control-label text-secondary font-weight-bold" for="CategoryId">Category Name</label>
+                                        <label class="control-label text-secondary font-weight-bold" for="CategoryIds">Category Name</label>
                                         <div class="form-group">
-                                            <select class="form-control" name="CategoryId" id="CategoryId" multiple></select>
+                                            <select class="form-control" name="CategoryIds" id="CategoryIds" multiple></select>
                                             <input type="hidden" name="CategoryName" id="CategoryName" value="@Model.CategoryName" />
                                         </div>
                                     </div>
@@ -61,10 +61,10 @@
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="control-label text-secondary font-weight-bold" for="DrugCompoundDetailId">Combination DrugCompound</label>
+                                        <label class="control-label text-secondary font-weight-bold" for="DrugCompoundDetailIdss">Combination DrugCompound</label>
                                         <div class="form-group">
-                                            <select class="form-control DrugCompoundDetailId" name="DrugCompoundDetailId" id="DrugCompoundDetailId" multiple></select>
-                                            <input type="hidden" name="CombinationDrugCompound" id="CombinationDrugCompound" value="@Model.CombinationDrugCompound" />
+                                            <select class="form-control DrugCompoundDetailIds" name="DrugCompoundDetailIdss" id="DrugCompoundDetailIdss" multiple></select>
+                                            <input type="hidden" name="DrugCompoundDetailName" id="DrugCompoundDetailName" value="@Model.DrugCompoundDetailName" />
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -98,7 +98,7 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="control-label"><strong class="text-secondary">Weight</strong></label>
-                                            <input type="number" class="form-control" name="weight" id="weight" value="@Model.weight" />
+                                            <input type="number" class="form-control" name="Weight" id="Weight" value="@Model.Weight" />
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -120,10 +120,10 @@
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="control-label text-secondary font-weight-bold" for="PackageCode">Package Name</label>
+                                        <label class="control-label text-secondary font-weight-bold" for="PackageId">Package Name</label>
                                         <div class="form-group">
-                                            <select class="form-control" name="PackageCode" id="PackageCode">
-                                                <option value="@Model.PackageCode">@Model.PackageName</option>
+                                            <select class="form-control" name="PackageId" id="PackageId">
+                                                <option value="@Model.PackageId">@Model.PackageName</option>
                                             </select>
                                             <input type="hidden" name="PackageName" id="PackageName" value="@Model.PackageName" />
                                         </div>
@@ -141,81 +141,81 @@
                                     <div class="col-md-2">
                                         <label class="control-label"><strong class="text-secondary">Drug Image 1</strong></label>
                                         <div class="img-upload-container ml-2">
-                                            @if (Model.ImagePathLarge1 != null)
+                                            @if (Model.ImagePath1 != null)
                                             {
-                                                <img class="img-container w-100 h-100" id="img-drug1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge1" onerror="this.src='/Images/No Photo.png'" />
+                                                <img class="img-container w-100 h-100" id="img-drug1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath1" onerror="this.src='/Images/No Photo.png'" />
                                             }
                                             else
                                             {
                                                 <img class="img-container w-100 h-100" id="img-drug1" />
                                             }
-                                            <input type="file" id="ProductImage1" name="ProductImage1" class="d-none" />
-                                            <label for="ProductImage1" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePathLarge1" id="ImagePathLarge1" value="@Model.ImagePathLarge1" />
+                                            <input type="file" id="MedicalImage1" name="MedicalImage1" class="d-none" />
+                                            <label for="MedicalImage1" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            <input type="hidden" name="ImagePath1" id="ImagePath1" value="@Model.ImagePath1" />
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <label class="control-label"><strong class="text-secondary">Drug Image 2</strong></label>
                                         <div class="img-upload-container ml-2">
-                                            @if (Model.ImagePathLarge2 != null)
+                                            @if (Model.ImagePath2 != null)
                                             {
-                                                <img class="img-container w-100 h-100" id="img-drug2" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge2" onerror="this.src='/Images/No Photo.png'" />
+                                                <img class="img-container w-100 h-100" id="img-drug2" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath2" onerror="this.src='/Images/No Photo.png'" />
                                             }
                                             else
                                             {
                                                 <img class="img-container w-100 h-100" id="img-drug2" />
                                             }
-                                            <input type="file" id="ProductImage2" name="ProductImage2" class="d-none" />
-                                            <label for="ProductImage2" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePathLarge2" id="ImagePathLarge2" value="@Model.ImagePathLarge2" />
+                                            <input type="file" id="MedicalImage2" name="MedicalImage2" class="d-none" />
+                                            <label for="MedicalImage2" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            <input type="hidden" name="ImagePath2" id="ImagePath2" value="@Model.ImagePath2" />
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <label class="control-label"><strong class="text-secondary">Drug Image 3</strong></label>
                                         <div class="img-upload-container ml-2">
-                                            @if (Model.ImagePathLarge3 != null)
+                                            @if (Model.ImagePath3 != null)
                                             {
-                                                <img class="img-container w-100 h-100" id="img-drug3" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge3" onerror="this.src='/Images/No Photo.png'" />
+                                                <img class="img-container w-100 h-100" id="img-drug3" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath3" onerror="this.src='/Images/No Photo.png'" />
                                             }
                                             else
                                             {
                                                 <img class="img-container w-100 h-100" id="img-drug3" />
                                             }
-                                            <input type="file" id="ProductImage3" name="ProductImage3" class="d-none" />
-                                            <label for="ProductImage3" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePathLarge3" id="ImagePathLarge3" value="@Model.ImagePathLarge3" />
+                                            <input type="file" id="MedicalImage3" name="MedicalImage3" class="d-none" />
+                                            <label for="MedicalImage3" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            <input type="hidden" name="ImagePath3" id="ImagePath3" value="@Model.ImagePath3" />
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <label class="control-label"><strong class="text-secondary">Drug Image 4</strong></label>
                                         <div class="img-upload-container ml-2">
-                                            @if (Model.ImagePathLarge4 != null)
+                                            @if (Model.ImagePath4 != null)
                                             {
-                                                <img class="img-container w-100 h-100" id="img-drug4" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge4" onerror="this.src='/Images/No Photo.png'" />
+                                                <img class="img-container w-100 h-100" id="img-drug4" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath4" onerror="this.src='/Images/No Photo.png'" />
                                             }
                                             else
                                             {
                                                 <img class="img-container w-100 h-100" id="img-drug4" />
                                             }
-                                            <input type="file" id="ProductImage4" name="ProductImage4" class="d-none" />
-                                            <label for="ProductImage4" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePathLarge4" id="ImagePathLarge4" value="@Model.ImagePathLarge4" />
+                                            <input type="file" id="MedicalImage4" name="MedicalImage4" class="d-none" />
+                                            <label for="MedicalImage4" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            <input type="hidden" name="ImagePath4" id="ImagePath4" value="@Model.ImagePath4" />
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <label class="control-label"><strong class="text-secondary">Drug Image 5</strong></label>
                                         <div class="img-upload-container ml-2">
-                                            @if (Model.ImagePathLarge5 != null)
+                                            @if (Model.ImagePath5 != null)
                                             {
-                                                <img class="img-container w-100 h-100" id="img-drug5" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge5" onerror="this.src='/Images/No Photo.png'" />
+                                                <img class="img-container w-100 h-100" id="img-drug5" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath5" onerror="this.src='/Images/No Photo.png'" />
                                             }
                                             else
                                             {
                                                 <img class="img-container w-100 h-100" id="img-drug5" />
                                             }
-                                            <input type="file" id="ProductImage5" name="ProductImage5" class="d-none" />
-                                            <label for="ProductImage5" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePathLarge5" id="ImagePathLarge5" value="@Model.ImagePathLarge5" />
+                                            <input type="file" id="MedicalImage5" name="MedicalImage5" class="d-none" />
+                                            <label for="MedicalImage5" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            <input type="hidden" name="ImagePath5" id="ImagePath5" value="@Model.ImagePath5" />
                                         </div>
                                     </div>
                                 </div>
@@ -248,27 +248,27 @@
     <script>
         $(document).ready(function () {
             
-             var categorySelect = $('#CategoryId');
-            var CategoryId = "@Model.CategoryId1";
+             var categorySelect = $('#CategoryIds');
+            var CategoryIds = "@Model.CategoryIds";
             var categoryname = "@Model.CategoryName";
-            if (CategoryId) {
-                var array_code = CategoryId.split(',');
+            if (CategoryIds) {
+                var array_code = CategoryIds.split(',');
                 var array_name = categoryname.split(',');
                 $.each(array_code, function (i) {
-                    $('select[name="CategoryId"] option[value=' + array_code[i] + ']').attr('selected', 'selected');
+                    $('select[name="CategoryIds"] option[value=' + array_code[i] + ']').attr('selected', 'selected');
                     var option = new Option(array_name[i], array_code[i], true, true);
                     categorySelect.append(option).trigger('change');
                 });
             }
 
-            var drugSelect = $('#DrugCompoundDetailId');
-            var DrugCompoundDetailId = "@Model.DrugCompoundDetailId1";
-            var drugcompounddetailname = "@Model.CombinationDrugCompound";
-            if (DrugCompoundDetailId) {
-                var array_code = DrugCompoundDetailId.split(',');
+            var drugSelect = $('#DrugCompoundDetailIds');
+            var DrugCompoundDetailIds = "@Model.DrugCompoundDetailIds";
+            var drugcompounddetailname = "@Model.DrugCompoundDetailName";
+            if (DrugCompoundDetailIds) {
+                var array_code = DrugCompoundDetailIds.split(',');
                 var array_name = drugcompounddetailname.split(',');
                 $.each(array_code, function (i) {
-                    $('select[name="DrugCompoundDetailId"] option[value=' + array_code[i] + ']').attr('selected', 'selected');
+                    $('select[name="DrugCompoundDetailIds"] option[value=' + array_code[i] + ']').attr('selected', 'selected');
                     var option = new Option(array_name[i], array_code[i], true, true);
                     drugSelect.append(option).trigger('change');
                 });
@@ -290,7 +290,7 @@
                 $('input[name="BrandName"]').val(e.params.data.text);
             });
 
-            $('#CategoryId').select2({
+            $('#CategoryIds').select2({
                 placeholder: "Search Category",
                 ajax: {
                     url: "/MasterProduct/GetMedicalCategorySelect2",
@@ -314,7 +314,7 @@
                 $('input[name="MeasurementUnitName"]').val(e.params.data.text);
             });
 
-            $('#DrugCompoundDetailId').select2({
+            $('#DrugCompoundDetailIds').select2({
                 placeholder: "Search Combination",
                 ajax: {
                     url: "/MasterProduct/GetDrugCompoundDetailSelect2",
@@ -323,10 +323,10 @@
                     dataType: 'json'
                 }
             }).on('select2:select', function (e) {
-                $('input[name="CombinationDrugCompound"]').val(e.params.data.text);
+                $('input[name="DrugCompoundDetailName"]').val(e.params.data.text);
             });
 
-            $('#PackageCode').select2({
+            $('#PackageId').select2({
                 placeholder: "Search Package",
                 ajax: {
                     url: "/MasterProduct/GetMedicalPackageSelect2",
@@ -338,62 +338,7 @@
                 $('input[name="PackageName"]').val(e.params.data.text);
             });
 
-            //function readURLThumbnail(input) {
-            //    if (input.files && input.files[0]) {
-            //        var reader = new FileReader();
-            //        reader.onload = function (e) {
-            //            $('#img-thumbnail').attr('src', e.target.result);
-            //        }
-            //        reader.readAsDataURL(input.files[0]);
-            //    }
-            //}
-
-            //$("#ThumbnailImage").change(function () {
-            //    readURLThumbnail(this);
-            //});
-
-            //$("#ThumbnailImage").change(function () {
-            //    var fileUpload = $("#ThumbnailImage")[0];
-            //    var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(.jpg|.jpeg|.png|.gif)$");
-            //    if (regex.test(fileUpload.value.toLowerCase())) {
-            //        //Initiate the FileReader object.
-            //        var reader = new FileReader();
-            //        //Read the contents of Image File.
-            //        reader.readAsDataURL(fileUpload.files[0]);
-            //        reader.onload = function (e) {
-            //            //Initiate the JavaScript Image object.
-            //            var image = new Image();
-            //            //Set the Base64 string return from FileReader as source.
-            //            image.src = e.target.result;
-            //            image.onload = function () {
-            //                //Determine the Height and Width.
-            //                var height = this.height;
-            //                var width = this.width;
-            //                var size = fileUpload.files[0].size;
-            //                //alert(height);
-            //                //alert(size);
-            //                if (height > 113 || width > 113) {
-            //                    swal("Height (" + height + "px) and Width(" + width + "px) are exceed the limit.", "", "warning");
-            //                    return false;
-            //                }
-            //                else if (size > 7168) {
-            //                    swal("size" + size + "exceed the limit(7kb) ", "", "warning");
-            //                    return false;
-            //                }
-            //                else {
-            //                    //swal("success","","warning")
-            //                    readURLThumbnail(fileUpload);
-            //                    return true;
-            //                }
-            //            };
-            //        }
-            //    } else {
-            //        swal("Please select a valid Image file (jpg,png,gif).", "", "warning");
-            //        return false;
-            //    }
-            //});
-
-
+            
             function readURLDrug1(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
@@ -403,7 +348,7 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-            $("#ProductImage1").change(function () {
+            $("#MedicalImage1").change(function () {
                 readURLDrug1(this);
             });
 
@@ -417,7 +362,7 @@
                 }
             }
 
-            $("#ProductImage2").change(function () {
+            $("#MedicalImage2").change(function () {
                 readURLDrug2(this);
             });
 
@@ -430,7 +375,7 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-            $("#ProductImage3").change(function () {
+            $("#MedicalImage3").change(function () {
                 readURLDrug3(this);
             });
 
@@ -443,7 +388,7 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-            $("#ProductImage4").change(function () {
+            $("#MedicalImage4").change(function () {
                 readURLDrug4(this);
             });
 
@@ -456,7 +401,7 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-            $("#ProductImage5").change(function () {
+            $("#MedicalImage5").change(function () {
                 readURLDrug5(this);
             });
 

@@ -39,8 +39,9 @@ namespace ShopNow.Controllers
                 config.CreateMap<MasterElectronicCreateViewModel, MasterProduct>();
                 config.CreateMap<MasterElectronicEditViewModel, MasterProduct>();
                 config.CreateMap<MasterProduct, MasterElectronicEditViewModel>();
-                config.CreateMap<MedicalDrugCreateEditViewModel, MasterProduct>();
-                config.CreateMap<MasterProduct, MedicalDrugCreateEditViewModel>();
+                config.CreateMap<MasterMedicalCreateViewModel, MasterProduct>();
+                config.CreateMap<MasterMedicalEditViewModel, MasterProduct>();
+                config.CreateMap<MasterProduct, MasterMedicalEditViewModel>();
                 config.CreateMap<Product, ItemMappingViewModel>();
                 config.CreateMap<MasterFMCGCreateViewModel, MasterProduct>();
                 config.CreateMap<MasterProduct, MasterFMCGEditViewModel>();
@@ -595,105 +596,106 @@ namespace ShopNow.Controllers
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
         [AccessPolicy(PageCode = "SHNMPRMC007")]
-        public ActionResult MedicalCreate(MedicalDrugCreateEditViewModel model)
+        public ActionResult MedicalCreate(MasterMedicalCreateViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var prod = _mapper.Map<MedicalDrugCreateEditViewModel, MasterProduct>(model);
-            prod.CreatedBy = user.Name;
-            prod.UpdatedBy = user.Name;
-            prod.ProductTypeName = "Medical";
-            prod.ProductTypeId = 3;
-          //  prod.Code = _generatedCode("MPR");
+            var master = _mapper.Map<MasterMedicalCreateViewModel, MasterProduct>(model);
+            master.CreatedBy = user.Name;
+            master.UpdatedBy = user.Name;
+            master.ProductTypeName = "Medical";
+            master.ProductTypeId = 3;
             if (model.NickName == null)
             {
-                prod.NickName = model.Name;
+                master.NickName = model.Name;
             }
             var name = _db.MasterProducts.FirstOrDefault(i => i.Name == model.Name && i.Status == 0 && i.ProductTypeId == 3);
             try
             {
-                //if (model.CategoryCode != null)
-                //{
-                //    prod.CategoryCode = String.Join(",", model.CategoryCode);
-                //    StringBuilder sb = new StringBuilder();
-                //    foreach (var s in model.CategoryCode)
-                //    {
-                //        var cat = _db.Categories.FirstOrDefault(i => i.Code == s);// Category.Get(s);
-                //        sb.Append(cat.Name);
-                //        sb.Append(",");
-                //    }
-                //    if (sb.Length >= 1)
-                //    {
-                //        model.CategoryName = sb.ToString().Remove(sb.Length - 1);
-                //        prod.CategoryName = model.CategoryName;
-                //    }
-                //    else
-                //    {
-                //        model.CategoryName = sb.ToString();
-                //        prod.CategoryName = model.CategoryName;
-                //    }
-                //}
-                //if (model.DrugCompoundDetailCode != null)
-                //{
-                //    prod.DrugCompoundDetailCode = String.Join(",", model.DrugCompoundDetailCode);
-                //    StringBuilder sb = new StringBuilder();
-                //    foreach (var s in model.DrugCompoundDetailCode)
-                //    {
-                //        var dcd = _db.DrugCompoundDetails.FirstOrDefault(i => i.Code == s && i.Status == 0); // DrugCompoundDetail.Get(s);
-                //        sb.Append(dcd.AliasName);
-                //        sb.Append(",");
-                //    }
-                //    if (sb.Length >= 1)
-                //    {
-                //        model.CombinationDrugCompound = sb.ToString().Remove(sb.Length - 1);
-                //        prod.CombinationDrugCompound = model.CombinationDrugCompound;
-                //    }
-                //    else
-                //    {
-                //        model.CombinationDrugCompound = sb.ToString();
-                //        prod.CombinationDrugCompound = model.CombinationDrugCompound;
-                //    }
-                //}
-               
-                //ProductImage1
-                if (model.ProductImage1 != null)
+                if (model.CategoryIds != null)
                 {
-                    uc.UploadFiles(model.ProductImage1.InputStream, prod.Id + "_" + model.ProductImage1.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath1 = prod.Id + "_" + model.ProductImage1.FileName.Replace(" ", "");
+                    master.CategoryIds = String.Join(",", model.CategoryIds);
+                    StringBuilder sb = new StringBuilder();
+                    foreach (var s in model.CategoryIds)
+                    {
+                        var sid = Convert.ToInt32(s);
+                        var cat = _db.Categories.FirstOrDefault(i => i.Id == sid);
+                        sb.Append(cat.Name);
+                        sb.Append(",");
+                    }
+                    if (sb.Length >= 1)
+                    {
+                        model.CategoryName = sb.ToString().Remove(sb.Length - 1);
+                        master.CategoryName = model.CategoryName;
+                    }
+                    else
+                    {
+                        model.CategoryName = sb.ToString();
+                        master.CategoryName = model.CategoryName;
+                    }
+                }
+                if (model.DrugCompoundDetailIds != null)
+                {
+                    master.DrugCompoundDetailIds = String.Join(",", model.DrugCompoundDetailIds);
+                    StringBuilder sb = new StringBuilder();
+                    foreach (var s in model.DrugCompoundDetailIds)
+                    {
+                        var sid = Convert.ToInt32(s);
+                        var dcd = _db.DrugCompoundDetails.FirstOrDefault(i => i.Id == sid && i.Status == 0);
+                        sb.Append(dcd.AliasName);
+                        sb.Append(",");
+                    }
+                    if (sb.Length >= 1)
+                    {
+                        model.DrugCompoundDetailName = sb.ToString().Remove(sb.Length - 1);
+                        master.DrugCompoundDetailName = model.DrugCompoundDetailName;
+                    }
+                    else
+                    {
+                        model.DrugCompoundDetailName = sb.ToString();
+                        master.DrugCompoundDetailName = model.DrugCompoundDetailName;
+                    }
                 }
 
-                //ProductImage2
-                if (model.ProductImage2 != null)
+                //MedicalImage1
+                if (model.MedicalImage1 != null)
                 {
-                    uc.UploadFiles(model.ProductImage2.InputStream, prod.Id + "_" + model.ProductImage2.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath2 = prod.Id + "_" + model.ProductImage2.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.MedicalImage1.InputStream, master.Id + "_" + model.MedicalImage1.FileName, accesskey, secretkey, "image");
+                    master.ImagePath1 = master.Id + "_" + model.MedicalImage1.FileName.Replace(" ", "");
                 }
 
-                //ProductImage3
-                if (model.ProductImage3 != null)
+                //MedicalImage2
+                if (model.MedicalImage2 != null)
                 {
-                    uc.UploadFiles(model.ProductImage3.InputStream, prod.Id + "_" + model.ProductImage3.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath3 = prod.Id + "_" + model.ProductImage3.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.MedicalImage2.InputStream, master.Id + "_" + model.MedicalImage2.FileName, accesskey, secretkey, "image");
+                    master.ImagePath2 = master.Id + "_" + model.MedicalImage2.FileName.Replace(" ", "");
                 }
 
-                //ProductImage4
-                if (model.ProductImage4 != null)
+                //MedicalImage3
+                if (model.MedicalImage3 != null)
                 {
-                    uc.UploadFiles(model.ProductImage4.InputStream, prod.Id + "_" + model.ProductImage4.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath4 = prod.Id + "_" + model.ProductImage4.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.MedicalImage3.InputStream, master.Id + "_" + model.MedicalImage3.FileName, accesskey, secretkey, "image");
+                    master.ImagePath3 = master.Id + "_" + model.MedicalImage3.FileName.Replace(" ", "");
                 }
 
-                //ProductImage5
-                if (model.ProductImage5 != null)
+                //MedicalImage4
+                if (model.MedicalImage4 != null)
                 {
-                    uc.UploadFiles(model.ProductImage5.InputStream, prod.Id + "_" + model.ProductImage5.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath5 = prod.Id + "_" + model.ProductImage5.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.MedicalImage4.InputStream, master.Id + "_" + model.MedicalImage4.FileName, accesskey, secretkey, "image");
+                    master.ImagePath4 = master.Id + "_" + model.MedicalImage4.FileName.Replace(" ", "");
+                }
+
+                //MedicalImage5
+                if (model.MedicalImage5 != null)
+                {
+                    uc.UploadFiles(model.MedicalImage5.InputStream, master.Id + "_" + model.MedicalImage5.FileName, accesskey, secretkey, "image");
+                    master.ImagePath5 = master.Id + "_" + model.MedicalImage5.FileName.Replace(" ", "");
                 }
                 if (name == null)
                 {
-                    prod.DateEncoded = DateTime.Now;
-                    prod.DateUpdated = DateTime.Now;
-                    prod.Status = 0;
-                    _db.MasterProducts.Add(prod);
+                    master.DateEncoded = DateTime.Now;
+                    master.DateUpdated = DateTime.Now;
+                    master.Status = 0;
+                    _db.MasterProducts.Add(master);
                     _db.SaveChanges();
                     ViewBag.Message = model.Name + " Saved Successfully!";
                 }
@@ -730,7 +732,7 @@ namespace ShopNow.Controllers
             if (string.IsNullOrEmpty(dCode.ToString()))
                 return HttpNotFound();
             var masterProduct = _db.MasterProducts.FirstOrDefault(i => i.Id == dCode);
-            var model = _mapper.Map<MasterProduct, MedicalDrugCreateEditViewModel>(masterProduct);
+            var model = _mapper.Map<MasterProduct, MasterMedicalEditViewModel>(masterProduct);
             if(model.ImagePath1 !=null)
             model.ImagePath1 = model.ImagePath1.Replace("%", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
             if (model.ImagePath2 != null)
@@ -748,119 +750,97 @@ namespace ShopNow.Controllers
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
         [AccessPolicy(PageCode = "SHNMPRME008")]
-        public ActionResult MedicalEdit(MedicalDrugCreateEditViewModel model)
+        public ActionResult MedicalEdit(MasterMedicalEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var prod = _db.MasterProducts.FirstOrDefault(i => i.Id == model.Id);
-            _mapper.Map(model, prod);
-            prod.UpdatedBy = user.Name;
-            prod.DateUpdated = DateTime.Now;
+            var master = _db.MasterProducts.FirstOrDefault(i => i.Id == model.Id);
+            _mapper.Map(model, master);
+            master.UpdatedBy = user.Name;
+            master.DateUpdated = DateTime.Now;
             try
             {
-                //if (model.CategoryCode != null)
-                //{
-                //    prod.CategoryCode = String.Join(",", model.CategoryCode);
-                //    StringBuilder sb = new StringBuilder();
-                //    foreach (var s in model.CategoryCode)
-                //    {
-                //        var cat = _db.Categories.FirstOrDefault(i => i.Id == s);// Category.Get(s);
-                //        if (cat != null)
-                //        {
-                //            sb.Append(cat.Name);
-                //            sb.Append(",");
-                //        }
-                //    }
-                //    if (sb.Length >= 1)
-                //    {
-                //        model.CategoryName = sb.ToString().Remove(sb.Length - 1);
-                //        prod.CategoryName = model.CategoryName;
-                //    }
-                //    else
-                //    {
-                //        model.CategoryName = sb.ToString();
-                //        prod.CategoryName = model.CategoryName;
-                //    }
-                //}
-
-                //if (model.DrugCompoundDetailCode != null)
-                //{
-                //    prod.DrugCompoundDetailCode = String.Join(",", model.DrugCompoundDetailCode);
-                //    StringBuilder sb = new StringBuilder();
-                //    foreach (var s in model.DrugCompoundDetailCode)
-                //    {
-                //        var dcd = _db.DrugCompoundDetails.FirstOrDefault(i => i.Code == s.Replace(" ","") && i.Status == 0);// DrugCompoundDetail.Get(s);
-                //        if (dcd != null)
-                //        {
-                //            sb.Append(dcd.AliasName);
-                //            sb.Append(",");
-                //        }
-                //    }
-                //    if (sb.Length >= 1)
-                //    {
-                //        model.CombinationDrugCompound = sb.ToString().Remove(sb.Length - 1);
-                //        prod.CombinationDrugCompound = model.CombinationDrugCompound;
-                //    }
-                //    else
-                //    {
-                //        model.CombinationDrugCompound = sb.ToString();
-                //        prod.CombinationDrugCompound = model.CombinationDrugCompound;
-                //    }
-                //}
-
-                //ProductImage1
-                if (model.ProductImage1 != null)
+                if (model.CategoryIds != null)
                 {
-                    uc.UploadFiles(model.ProductImage1.InputStream, prod.Id + "_" + model.ProductImage1.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath1 = prod.Id + "_" + model.ProductImage1.FileName.Replace(" ", "");
-                    //if (product != null)
-                    //product.ImagePath1 = prod.Code + "_" + model.ProductImage1.FileName.Replace(" ", "");
+                    master.CategoryIds = String.Join(",", model.CategoryIds);
+                    StringBuilder sb = new StringBuilder();
+                    foreach (var s in model.CategoryIds)
+                    {
+                        var sid = Convert.ToInt32(s);
+                        var cat = _db.Categories.FirstOrDefault(i => i.Id == sid);
+                        sb.Append(cat.Name);
+                        sb.Append(",");
+                    }
+                    if (sb.Length >= 1)
+                    {
+                        model.CategoryName = sb.ToString().Remove(sb.Length - 1);
+                        master.CategoryName = model.CategoryName;
+                    }
+                    else
+                    {
+                        model.CategoryName = sb.ToString();
+                        master.CategoryName = model.CategoryName;
+                    }
+                }
+                if (model.DrugCompoundDetailIds != null)
+                {
+                    master.DrugCompoundDetailIds = String.Join(",", model.DrugCompoundDetailIds);
+                    StringBuilder sb = new StringBuilder();
+                    foreach (var s in model.DrugCompoundDetailIds)
+                    {
+                        var sid = Convert.ToInt32(s);
+                        var dcd = _db.DrugCompoundDetails.FirstOrDefault(i => i.Id == sid && i.Status == 0);
+                        sb.Append(dcd.AliasName);
+                        sb.Append(",");
+                    }
+                    if (sb.Length >= 1)
+                    {
+                        model.DrugCompoundDetailName = sb.ToString().Remove(sb.Length - 1);
+                        master.DrugCompoundDetailName = model.DrugCompoundDetailName;
+                    }
+                    else
+                    {
+                        model.DrugCompoundDetailName = sb.ToString();
+                        master.DrugCompoundDetailName = model.DrugCompoundDetailName;
+                    }
                 }
 
-                //ProductImage2
-                if (model.ProductImage2 != null)
+                //MedicalImage1
+                if (model.MedicalImage1 != null)
                 {
-                    uc.UploadFiles(model.ProductImage2.InputStream, prod.Id + "_" + model.ProductImage2.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath2 = prod.Id + "_" + model.ProductImage2.FileName.Replace(" ", "");
-                    //if (product != null)
-                    //    product.ImagePath2 = prod.Code + "_" + model.ProductImage2.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.MedicalImage1.InputStream, master.Id + "_" + model.MedicalImage1.FileName, accesskey, secretkey, "image");
+                    master.ImagePath1 = master.Id + "_" + model.MedicalImage1.FileName.Replace(" ", "");
                 }
 
-                //ProductImage3
-                if (model.ProductImage3 != null)
+                //MedicalImage2
+                if (model.MedicalImage2 != null)
                 {
-                    uc.UploadFiles(model.ProductImage3.InputStream, prod.Id + "_" + model.ProductImage3.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath3 = prod.Id + "_" + model.ProductImage3.FileName.Replace(" ", "");
-                    //if (product != null)
-                    //    product.ImagePath3 = prod.Code + "_" + model.ProductImage3.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.MedicalImage2.InputStream, master.Id + "_" + model.MedicalImage2.FileName, accesskey, secretkey, "image");
+                    master.ImagePath2 = master.Id + "_" + model.MedicalImage2.FileName.Replace(" ", "");
                 }
 
-                //ProductImage4
-                if (model.ProductImage4 != null)
+                //MedicalImage3
+                if (model.MedicalImage3 != null)
                 {
-                    uc.UploadFiles(model.ProductImage4.InputStream, prod.Id + "_" + model.ProductImage4.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath4 = prod.Id + "_" + model.ProductImage4.FileName.Replace(" ", "");
-                    //if (product != null)
-                    //    product.ImagePath4 = prod.Code + "_" + model.ProductImage4.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.MedicalImage3.InputStream, master.Id + "_" + model.MedicalImage3.FileName, accesskey, secretkey, "image");
+                    master.ImagePath3 = master.Id + "_" + model.MedicalImage3.FileName.Replace(" ", "");
                 }
 
-                //ProductImage5
-                if (model.ProductImage5 != null)
+                //MedicalImage4
+                if (model.MedicalImage4 != null)
                 {
-                    uc.UploadFiles(model.ProductImage5.InputStream, prod.Id + "_" + model.ProductImage5.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath5 = prod.Id + "_" + model.ProductImage5.FileName.Replace(" ", "");
-                    //if (product != null)
-                    //    product.ImagePath5 = prod.Code + "_" + model.ProductImage5.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.MedicalImage4.InputStream, master.Id + "_" + model.MedicalImage4.FileName, accesskey, secretkey, "image");
+                    master.ImagePath4 = master.Id + "_" + model.MedicalImage4.FileName.Replace(" ", "");
                 }
-                _db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
+
+                //MedicalImage5
+                if (model.MedicalImage5 != null)
+                {
+                    uc.UploadFiles(model.MedicalImage5.InputStream, master.Id + "_" + model.MedicalImage5.FileName, accesskey, secretkey, "image");
+                    master.ImagePath5 = master.Id + "_" + model.MedicalImage5.FileName.Replace(" ", "");
+                }
+
+                _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
                 _db.SaveChanges();
-                //  MasterProduct.Edit(prod, out int error);
-                //if (product != null)
-                //{
-                //    product.MasterProductCode = prod.Code;
-                //    product.MasterProductCode = prod.Name;
-                //    _db.Entry(product).State = EntityState.Modified;
-                //    _db.SaveChanges();
-                //}
             }
             catch (AmazonS3Exception amazonS3Exception)
             {
@@ -882,14 +862,14 @@ namespace ShopNow.Controllers
 
         // Medical Update
         [AccessPolicy(PageCode = "SHNMPRMD009")]
-        public ActionResult MedicalDelete(string Id)
+        public JsonResult MedicalDelete(string Id)
         {
             var dCode = AdminHelpers.DCodeInt(Id);
             var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dCode);
             master.Status = 2;
             _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
             _db.SaveChanges();
-            return RedirectToAction("MedicalList");
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         // Upload Medical MasterItems
@@ -1174,7 +1154,7 @@ namespace ShopNow.Controllers
             var model = new ItemMappingViewModel();
             if (shopId != 0)
             {
-                var shop = _db.Shops.FirstOrDefault(i => i.Id == shopId);// Shop.Get(shopcode);
+                var shop = _db.Shops.FirstOrDefault(i => i.Id == shopId);
                 model.ShopId = shopId;
                 if (shop != null)
                 {
@@ -1871,14 +1851,14 @@ namespace ShopNow.Controllers
 
         // FMCG Delete
         [AccessPolicy(PageCode = "SHNMPRFD025")]
-        public ActionResult FMCGDelete(string Id)
+        public JsonResult FMCGDelete(string Id)
         {
             var dCode = AdminHelpers.DCodeInt(Id);
             var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dCode);
             master.Status = 2;
             _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
             _db.SaveChanges();
-            return RedirectToAction("FMCGList");
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         // Json Results
