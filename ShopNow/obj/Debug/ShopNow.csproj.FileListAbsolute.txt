@@ -505,3 +505,4 @@ E:\Beno\SNC\ShopNow\obj\Debug\ShopNow.csproj.CoreCompileInputs.cache
 E:\Beno\SNC\ShopNow\obj\Debug\ShopNow.csproj.CopyComplete
 E:\Beno\SNC\ShopNow\obj\Debug\ShopNow.dll
 E:\Beno\SNC\ShopNow\obj\Debug\ShopNow.pdb
+E:\Beno\SNC\ShopNow\obj\Debug\ShopNow.csprojAssemblyReference.cache

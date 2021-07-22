@@ -28,7 +28,6 @@ namespace ShopNow.ViewModels
 
     public class MedicalCreateViewModel
     {
-         
         public string Name { get; set; }
         public int MasterProductId { get; set; }
         public string MasterProductName { get; set; }
@@ -48,50 +47,51 @@ namespace ShopNow.ViewModels
         public string ImagePathLarge3 { get; set; }
         public string ImagePathLarge4 { get; set; }
         public string ImagePathLarge5 { get; set; }
-        public string DrugMeasurementUnitCode { get; set; }
+        public int DrugMeasurementUnitId{ get; set; }
         public string DrugMeasurementUnitName { get; set; }
         public bool PriscriptionCategory { get; set; }
-        public string DrugCompoundDetailCode { get; set; }
-        public string CombinationDrugCompound { get; set; }
-        public string iBarU { get; set; }
+        public string DrugCompoundDetailIds { get; set; }
+        public string DrugCompoundDetailName { get; set; }
+        public int IBarU { get; set; }
         public string Manufacturer { get; set; }
         public string OriginCountry { get; set; }
-        public double weight { get; set; }
+        public double Weight { get; set; }
         public string SizeLB { get; set; }
-        public string PackageCode { get; set; }
+        public int PackageId { get; set; }
         public string PackageName { get; set; }
         public int DiscountCategoryId { get; set; }
         public string DiscountCategoryName { get; set; }
         public double DiscountCategoryPercentage { get; set; }
-        public int DiscountType { get; set; }
-        public int DiscountCategoryType { get; set; }
         public int PackingType { get; set; }
         public double PackingCharge { get; set; }
-
-        public List<MedicalStockList> MedicalStockLists { get; set; }
-        public class MedicalStockList
-        {
-            public string ProductId { get; set; }
-            public string ProductName { get; set; }
-            public double Stock { get; set; }
-            public string SupplierName { get; set; }
-            public double MRP { get; set; }
-            public double SalePrice { get; set; }
-            public double TaxPercentage { get; set; }
-            public double DiscountPercentage { get; set; }
-            public double LoyaltyPointsper100Value { get; set; }
-            public double MinimumLoyaltyReducationPercentage { get; set; }
-            public double SpecialCostOfDelivery { get; set; }
-            public int OutLetId { get; set; }
-            public double SpecialPrice { get; set; }
-            public int MinSaleQty { get; set; }
-            public Nullable<int> productid { get; set; }
-        }
+        public double TaxPercentage { get; set; }
+        public double SpecialCostOfDelivery { get; set; }
+        public double LoyaltyPoints { get; set; }
+        //public List<MedicalStockList> MedicalStockLists { get; set; }
+        //public class MedicalStockList
+        //{
+        //    public string ProductId { get; set; }
+        //    public string ProductName { get; set; }
+        //    public double Stock { get; set; }
+        //    public string SupplierName { get; set; }
+        //    public double MRP { get; set; }
+        //    public double SalePrice { get; set; }
+        //    public double TaxPercentage { get; set; }
+        //    public double DiscountPercentage { get; set; }
+        //    public double LoyaltyPointsper100Value { get; set; }
+        //    public double MinimumLoyaltyReducationPercentage { get; set; }
+        //    public double SpecialCostOfDelivery { get; set; }
+        //    public int OutLetId { get; set; }
+        //    public double SpecialPrice { get; set; }
+        //    public int MinSaleQty { get; set; }
+        //    public Nullable<int> productid { get; set; }
+        //}
     }
 
     public class MedicalEditViewModel
     {
         public int Id { get; set; }
+        public string Name { get; set; }
         public int MasterProductId { get; set; }
         public string MasterProductName { get; set; }
         public int ShopId { get; set; }
@@ -110,46 +110,47 @@ namespace ShopNow.ViewModels
         public string ImagePathLarge3 { get; set; }
         public string ImagePathLarge4 { get; set; }
         public string ImagePathLarge5 { get; set; }
-        public string DrugMeasurementUnitCode { get; set; }
+        public int DrugMeasurementUnitId { get; set; }
         public string DrugMeasurementUnitName { get; set; }
         public bool PriscriptionCategory { get; set; }
-        public string DrugCompoundDetailCode { get; set; }
-        public string CombinationDrugCompound { get; set; }
-        public string iBarU { get; set; }
+        public string DrugCompoundDetailIds { get; set; }
+        public string DrugCompoundDetailName { get; set; }
+        public int IBarU { get; set; }
         public string Manufacturer { get; set; }
         public string OriginCountry { get; set; }
-        public double weight { get; set; }
+        public double Weight { get; set; }
         public string SizeLB { get; set; }
-        public string PackageCode { get; set; }
+        public int? PackageId { get; set; }
         public string PackageName { get; set; }
-        public string DiscountCategoryCode { get; set; }
+        public int DiscountCategoryId { get; set; }
         public string DiscountCategoryName { get; set; }
-        public double DiscountCategoryPercentage { get; set; }
-        public int DiscountType { get; set; }
-        public int DiscountCategoryType { get; set; }
+        public double? DiscountCategoryPercentage { get; set; }
         public int PackingType { get; set; }
         public double PackingCharge { get; set; }
+        public double TaxPercentage { get; set; }
+        public double SpecialCostOfDelivery { get; set; }
+        public double LoyaltyPoints { get; set; }
 
-        public List<MedicalStockList> MedicalStockLists { get; set; }
-        public class MedicalStockList
-        {
+        //public List<MedicalStockList> MedicalStockLists { get; set; }
+        //public class MedicalStockList
+        //{
              
-            public string ProductCode { get; set; }
-            public string ProductName { get; set; }
-            public double Stock { get; set; }
-            public string SupplierName { get; set; }
-            public double MRP { get; set; }
-            public double SalePrice { get; set; }
-            public double TaxPercentage { get; set; }
-            public double DiscountPercentage { get; set; }
-            public double LoyaltyPointsper100Value { get; set; }
-            public double MinimumLoyaltyReducationPercentage { get; set; }
-            public double SpecialCostOfDelivery { get; set; }
-            public int OutLetId { get; set; }
-            public double SpecialPrice { get; set; }
-            public int MinSaleQty { get; set; }
-            public Nullable<int> productid { get; set; }
-        }
+        //    public string ProductCode { get; set; }
+        //    public string ProductName { get; set; }
+        //    public double Stock { get; set; }
+        //    public string SupplierName { get; set; }
+        //    public double MRP { get; set; }
+        //    public double SalePrice { get; set; }
+        //    public double TaxPercentage { get; set; }
+        //    public double DiscountPercentage { get; set; }
+        //    public double LoyaltyPointsper100Value { get; set; }
+        //    public double MinimumLoyaltyReducationPercentage { get; set; }
+        //    public double SpecialCostOfDelivery { get; set; }
+        //    public int OutLetId { get; set; }
+        //    public double SpecialPrice { get; set; }
+        //    public int MinSaleQty { get; set; }
+        //    public Nullable<int> productid { get; set; }
+        //}
     }
 
     public class ElectronicListViewModel
@@ -332,45 +333,45 @@ namespace ShopNow.ViewModels
         }
     }
 
-    public class DefaultMedicalStockViewModel
-    {
-        public int Id { get; set; }
+    //public class DefaultMedicalStockViewModel
+    //{
+    //    public int Id { get; set; }
          
-        public string ProductCode { get; set; }
-        public string ProductName { get; set; }
-        public double Stock { get; set; }
-        public string SupplierName { get; set; }
-        public double MRP { get; set; }
-        public double SalePrice { get; set; }
-        public double TaxPercentage { get; set; }
-        public double DiscountPercentage { get; set; }
-        public double LoyaltyPointsper100Value { get; set; }
-        public double MinimumLoyaltyReducationPercentage { get; set; }
-        public double SpecialCostOfDelivery { get; set; }
-        public int OutLetId { get; set; }
-        public double SpecialPrice { get; set; }
-        public int MinSaleQty { get; set; }
-    }
+    //    public string ProductCode { get; set; }
+    //    public string ProductName { get; set; }
+    //    public double Stock { get; set; }
+    //    public string SupplierName { get; set; }
+    //    public double MRP { get; set; }
+    //    public double SalePrice { get; set; }
+    //    public double TaxPercentage { get; set; }
+    //    public double DiscountPercentage { get; set; }
+    //    public double LoyaltyPointsper100Value { get; set; }
+    //    public double MinimumLoyaltyReducationPercentage { get; set; }
+    //    public double SpecialCostOfDelivery { get; set; }
+    //    public int OutLetId { get; set; }
+    //    public double SpecialPrice { get; set; }
+    //    public int MinSaleQty { get; set; }
+    //}
 
-    public class ManualMedicalStockViewModel
-    {
-        public int Id { get; set; }
+    //public class ManualMedicalStockViewModel
+    //{
+    //    public int Id { get; set; }
          
-        public string ProductCode { get; set; }
-        public string ProductName { get; set; }
-        public double Stock1 { get; set; }
-        public string SupplierName1 { get; set; }
-        public double MRP1 { get; set; }
-        public double SalePrice1 { get; set; }
-        public double TaxPercentage1 { get; set; }
-        public double DiscountPercentage1 { get; set; }
-        public double LoyaltyPointsper100Value1 { get; set; }
-        public double MinimumLoyaltyReducationPercentage1 { get; set; }
-        public double SpecialCostOfDelivery1 { get; set; }
-        public int OutLetId1 { get; set; }
-        public double SpecialPrice1 { get; set; }
-        public int MinSaleQty1 { get; set; }
-    }
+    //    public string ProductCode { get; set; }
+    //    public string ProductName { get; set; }
+    //    public double Stock1 { get; set; }
+    //    public string SupplierName1 { get; set; }
+    //    public double MRP1 { get; set; }
+    //    public double SalePrice1 { get; set; }
+    //    public double TaxPercentage1 { get; set; }
+    //    public double DiscountPercentage1 { get; set; }
+    //    public double LoyaltyPointsper100Value1 { get; set; }
+    //    public double MinimumLoyaltyReducationPercentage1 { get; set; }
+    //    public double SpecialCostOfDelivery1 { get; set; }
+    //    public int OutLetId1 { get; set; }
+    //    public double SpecialPrice1 { get; set; }
+    //    public int MinSaleQty1 { get; set; }
+    //}
 
     public class ProductMappingViewModel
     {

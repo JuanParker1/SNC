@@ -55,7 +55,7 @@ namespace ShopNow.Controllers
                 config.CreateMap<Product, MedicalEditViewModel>();
                 config.CreateMap<MedicalEditViewModel, Product>();
                 config.CreateMap<ProductDishAddOn, ShopDishAddOn>();
-                config.CreateMap<MedicalEditViewModel.MedicalStockList, DefaultMedicalStockViewModel>();
+                //config.CreateMap<MedicalEditViewModel.MedicalStockList, DefaultMedicalStockViewModel>();
                 config.CreateMap<Product, ElectronicCreateEditViewModel>();
                 config.CreateMap<ElectronicCreateEditViewModel, Product>();
             });
@@ -157,7 +157,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNPROC001")]
         public ActionResult MedicalCreate()
         {
-            Session["MedicalStock"] = new List<DefaultMedicalStockViewModel>();
+           // Session["MedicalStock"] = new List<DefaultMedicalStockViewModel>();
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var shop = db.Shops.Any(i => i.Id == user.Id);
@@ -207,7 +207,7 @@ namespace ShopNow.Controllers
                 ViewBag.ErrorMessage = model.MasterProductName + " Already Exist";
             }
 
-            List<DefaultMedicalStockViewModel> dms = Session["MedicalStock"] as List<DefaultMedicalStockViewModel>;
+            //List<DefaultMedicalStockViewModel> dms = Session["MedicalStock"] as List<DefaultMedicalStockViewModel>;
 
             if (model.ShopId != 0)
             {
@@ -252,36 +252,36 @@ namespace ShopNow.Controllers
         public ActionResult MedicalEdit(string id)
         {
             var dCode = AdminHelpers.DCodeInt(id);
-            Session["MedicalStock"] = new List<DefaultMedicalStockViewModel>();
-            var Medicalstocks = new List<DefaultMedicalStockViewModel>();
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var product = db.Products.FirstOrDefault(i => i.Id == dCode);
             var model = _mapper.Map<Product, MedicalEditViewModel>(product);
-            //model.MedicalStockLists = db.ProductMedicalStocks.Where(i => i.productid == dCode && i.Status == 0).Select(i => new MedicalEditViewModel.MedicalStockList
-            //{
-            //   ProductCode = i.ProductCode,
-            //   ProductName = i.ProductName,
-            //   Stock = i.Stock,
-            //   SupplierName = i.SupplierName,
-            //   LoyaltyPointsper100Value = i.LoyaltyPointsper100Value,
-            //   MinimumLoyaltyReducationPercentage = i.MinimumLoyaltyReducationPercentage,
-            //   TaxPercentage = i.TaxPercentage,
-            //   DiscountPercentage = i.DiscountPercentage,
-            //   MRP = i.MRP,
-            //   SalePrice = i.SalePrice,
-            //   SpecialPrice = i.SpecialPrice,
-            //   MinSaleQty = i.MinSaleQty,
-            //   OutLetId = i.OutLetId,
-            //   SpecialCostOfDelivery = i.SpecialCostOfDelivery,
-            //   productid = i.productid
-            //}).ToList();
-            //foreach (var s in model.MedicalStockLists)
-            //{
-            //    var stock = _mapper.Map<MedicalEditViewModel.MedicalStockList, DefaultMedicalStockViewModel>(s);
-            //    Medicalstocks.Add(stock);
-            //}
-            //Session["MedicalStock"] = Medicalstocks;
+            var masterProduct = db.MasterProducts.FirstOrDefault(i => i.Id == product.MasterProductId);
+            if (masterProduct != null)
+            {
+                model.MasterProductName = masterProduct.Name;
+                model.BrandId = masterProduct.BrandId;
+                model.BrandName = masterProduct.BrandName;
+                model.CategoryIds = masterProduct.CategoryIds;
+                model.CategoryName = masterProduct.CategoryName;
+                model.GoogleTaxonomyCode = masterProduct.GoogleTaxonomyCode;
+                model.ImagePathLarge1 = masterProduct.ImagePath1;
+                model.ImagePathLarge2 = masterProduct.ImagePath2;
+                model.ImagePathLarge3 = masterProduct.ImagePath3;
+                model.ImagePathLarge4 = masterProduct.ImagePath4;
+                model.ImagePathLarge5 = masterProduct.ImagePath5;
+                model.DrugMeasurementUnitId = masterProduct.MeasurementUnitId;
+                model.DrugMeasurementUnitName = masterProduct.MeasurementUnitName;
+                model.PackageId = masterProduct.PackageId;
+                model.PackageName = masterProduct.PackageName;
+                model.Weight = masterProduct.Weight;
+                model.SizeLB = masterProduct.SizeLB;
+                model.DrugCompoundDetailIds = masterProduct.DrugCompoundDetailIds;
+                model.DrugCompoundDetailName = masterProduct.DrugCompoundDetailName;
+                model.OriginCountry = masterProduct.OriginCountry;
+                model.Manufacturer = masterProduct.Manufacturer;
+            }
+            model.DiscountCategoryPercentage = db.DiscountCategories.FirstOrDefault(i => i.Id == product.DiscountCategoryId)?.Percentage;
             return View(model);
         }
 
@@ -299,38 +299,6 @@ namespace ShopNow.Controllers
             prod.UpdatedBy = user.Name;
             db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
-
-            //List<DefaultMedicalStockViewModel> dms = Session["MedicalStock"] as List<DefaultMedicalStockViewModel>;
-            //var pms = new ProductMedicalStock();
-            //foreach (var s in dms)
-            //{
-            //    if (s.Code == null)
-            //    {
-            //        pms.Code = ShopNow.Helpers.DRC.Generate("PMS");
-            //        pms.ProductCode = prod.Code;
-            //        pms.productid = prod.Id;
-            //        pms.ProductName = prod.Name;
-            //        pms.Stock = s.Stock;
-            //        pms.SupplierName = s.SupplierName;
-            //        pms.MRP = s.MRP;
-            //        pms.SalePrice = s.SalePrice;
-            //        pms.TaxPercentage = s.TaxPercentage;
-            //        pms.DiscountPercentage = s.DiscountPercentage;
-            //        pms.LoyaltyPointsper100Value = s.LoyaltyPointsper100Value;
-            //        pms.MinimumLoyaltyReducationPercentage = s.MinimumLoyaltyReducationPercentage;
-            //        pms.SpecialCostOfDelivery = s.SpecialCostOfDelivery;
-            //        pms.OutLetId = s.OutLetId;
-            //        pms.SpecialPrice = s.SpecialPrice;
-            //        pms.MinSaleQty = s.MinSaleQty;
-            //        pms.CreatedBy = user.Name;
-            //        pms.UpdatedBy = user.Name;
-            //        pms.Status = 0;
-            //        pms.DateEncoded = DateTime.Now;
-            //        pms.DateUpdated = DateTime.Now;
-            //        db.ProductMedicalStocks.Add(pms);
-            //        db.SaveChanges();
-            //    }
-            //}
             return RedirectToAction("MedicalList", "Product");
         }
 
@@ -1050,29 +1018,6 @@ namespace ShopNow.Controllers
             }
         }
 
-        // Food Create(Dish) Json Result
-
-        //[AccessPolicy(PageCode = "SHNPROAO014")]
-        //public JsonResult AddOns(int id)
-        //{
-        //    var model = new AddOnsCreateViewModel();
-        //    model.DishLists = db.DishAddOns.Where(i => i.MasterProductId == id && i.Status == 0).Select(i => new AddOnsCreateViewModel.DishList
-        //    {
-        //        Name = i.Name,
-        //        Id = i.Id,
-        //        MasterProductId = i.MasterProductId,
-        //        MasterProductName = i.MasterProductName,
-        //        AddOnCategoryId = i.AddOnCategoryId,
-        //        AddOnCategoryName = i.AddOnCategoryName,
-        //        PortionId = i.PortionId,
-        //        PortionName = i.PortionName,
-        //        CrustName = i.CrustName,
-        //        Price = i.Price,
-        //        Qty = i.Qty
-        //    }).ToList();
-        //    return Json(model.DishLists, JsonRequestBehavior.AllowGet);
-        //}
-
         [HttpPost]
         [AccessPolicy(PageCode = "SHNPROATA015")]
         public JsonResult AddToAddOns(AddOnsCreateViewModel model)
@@ -1217,133 +1162,6 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        // Medical Product Json Result
-
-        [HttpPost]
-        [AccessPolicy(PageCode = "SHNPROADC011")]
-        public JsonResult AddToDefaultMedicalStock(DefaultMedicalStockViewModel model)
-        {
-            List<DefaultMedicalStockViewModel> medicalStock = Session["MedicalStock"] as List<DefaultMedicalStockViewModel>;
-            if (medicalStock == null)
-            {
-                medicalStock = new List<DefaultMedicalStockViewModel>();
-            }
-            var id = medicalStock.Count() + 1;
-            model.Id = id;
-            medicalStock.Add(model);
-            Session["MedicalStock"] = medicalStock;
-
-            return Json(new
-            {
-                Id = id,
-                Stock = model.Stock,
-                SupplierName = model.SupplierName,
-                MRP = model.MRP,
-                SalePrice= model.SalePrice,
-                TaxPercentage = model.TaxPercentage,
-                DiscountPercentage = model.DiscountPercentage,
-                LoyaltyPointsper100Value = model.LoyaltyPointsper100Value,
-                MinimumLoyaltyReducationPercentage = model.MinimumLoyaltyReducationPercentage,
-                SpecialCostOfDelivery = model.SpecialCostOfDelivery,
-                OutLetId = model.OutLetId,
-                SpecialPrice = model.SpecialPrice,
-                MinSaleQty = model.MinSaleQty
-            }, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        [AccessPolicy(PageCode = "SHNPRORDC012")]
-        public JsonResult RemoveFromDefaultMedicalStock(int id)
-        {
-            List<DefaultMedicalStockViewModel> medicalStock = Session["MedicalStock"] as List<DefaultMedicalStockViewModel>;
-
-            if (medicalStock.Remove(medicalStock.SingleOrDefault(i => i.Id == id)))
-            {
-                this.Session["MedicalStock"] = medicalStock;
-                return Json(true, JsonRequestBehavior.AllowGet);
-            }
-
-            return Json(false, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        [AccessPolicy(PageCode = "SHNPROADC011")]
-        public JsonResult AddToManualMedicalStock(ManualMedicalStockViewModel model)
-        {
-            List<ManualMedicalStockViewModel> medicalStock = Session["ManualMedicalStock"] as List<ManualMedicalStockViewModel>;
-            if (medicalStock == null)
-            {
-                medicalStock = new List<ManualMedicalStockViewModel>();
-            }
-            var id = medicalStock.Count() + 1;
-            model.Id = id;
-            medicalStock.Add(model);
-            Session["ManualMedicalStock"] = medicalStock;
-
-            return Json(new
-            {
-                Id = id,
-                Stock = model.Stock1,
-                SupplierName = model.SupplierName1,
-                MRP = model.MRP1,
-                SalePrice = model.SalePrice1,
-                TaxPercentage = model.TaxPercentage1,
-                DiscountPercentage = model.DiscountPercentage1,
-                LoyaltyPointsper100Value = model.LoyaltyPointsper100Value1,
-                MinimumLoyaltyReducationPercentage = model.MinimumLoyaltyReducationPercentage1,
-                SpecialCostOfDelivery = model.SpecialCostOfDelivery1,
-                OutLetId = model.OutLetId1,
-                SpecialPrice = model.SpecialPrice1,
-                MinSaleQty = model.MinSaleQty1
-            }, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        [AccessPolicy(PageCode = "SHNPRORDC012")]
-        public JsonResult RemoveFromManualMedicalStock(int id)
-        {
-            List<ManualMedicalStockViewModel> medicalStock = Session["ManualMedicalStock"] as List<ManualMedicalStockViewModel>;
-
-            if (medicalStock.Remove(medicalStock.SingleOrDefault(i => i.Id == id)))
-            {
-                this.Session["ManualMedicalStock"] = medicalStock;
-                return Json(true, JsonRequestBehavior.AllowGet);
-            }
-
-            return Json(false, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        [AccessPolicy(PageCode = "SHNPROERDC013")]
-        public JsonResult EditRemoveMedicalStock(int id, string code)
-        {
-            List<DefaultMedicalStockViewModel> medicalStock = Session["MedicalStock"] as List<DefaultMedicalStockViewModel>;
-            if (medicalStock == null)
-            {
-                medicalStock = new List<DefaultMedicalStockViewModel>();
-            }
-            if (medicalStock.Remove(medicalStock.SingleOrDefault(i => i.Id == id)))
-            {
-                this.Session["MedicalStock"] = medicalStock;
-                return Json(true, JsonRequestBehavior.AllowGet);
-            }
-            if (code != null)
-            {
-                //var pms = db.ProductMedicalStocks.FirstOrDefault(i => i.Id == code && i.Status == 0);// ProductMedicalStock.Get(code);
-                //pms.Status = 2;
-                //// ProductMedicalStock.Edit(pms, out int error);
-                //pms.DateUpdated = DateTime.Now;
-                //db.Entry(pms).State = System.Data.Entity.EntityState.Modified;
-                //db.SaveChanges();
-                //if (medicalStock.Remove(medicalStock.SingleOrDefault(i => i.Id == code)))
-                //{
-                //    this.Session["MedicalStock"] = medicalStock;
-                //}
-                return Json(true, JsonRequestBehavior.AllowGet);
-            }
-            return Json(false, JsonRequestBehavior.AllowGet);
-        }
-
         // Product Select2
 
         [AccessPolicy(PageCode = "SHNPROC001")]
@@ -1470,8 +1288,8 @@ namespace ShopNow.Controllers
                 ImagePath4 = i.ImagePath4,
                 ImagePath5 = i.ImagePath5,
                 ProductTypeId = i.ProductTypeId,
-                GoogleTaxonomyCode = i.GoogleTaxonomyCode
-            }).Take(500).ToListAsync();
+                GoogleTaxonomyCode = i.GoogleTaxonomyCode,
+            }).ToListAsync();
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
