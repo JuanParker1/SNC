@@ -45,15 +45,12 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new ShopDiscountCategoryViewModel();
-            model.CategoryLists = db.DiscountCategories.Where(i=> i.Status == 0 && i.Type != 0)
+            model.CategoryLists = db.DiscountCategories.Where(i=> i.Status == 0)
                    .Select(i => new ShopDiscountCategoryViewModel.CategoryList
                    {
                        Id = i.Id,
-                       CategoryId = i.CategoryType,
                        CategoryName = i.Name,
                        DiscountPercentage = i.Percentage,
-                       Type = i.Type,
-                       CategoryType = i.CategoryType
                    }).ToList();
 
             return View(model.CategoryLists);

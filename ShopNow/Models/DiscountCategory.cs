@@ -17,8 +17,8 @@ namespace ShopNow.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public double Percentage { get; set; }
-        public int CategoryType { get; set; }
-        public int Type { get; set; }
+        public int ShopId { get; set; }
+        public string ShopName { get; set; }
         public int Status { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }

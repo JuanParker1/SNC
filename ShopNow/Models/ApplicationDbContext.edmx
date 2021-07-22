@@ -312,8 +312,8 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar(max)" />
           <Property Name="Percentage" Type="float" Nullable="false" />
-          <Property Name="CategoryType" Type="int" Nullable="false" />
-          <Property Name="Type" Type="int" Nullable="false" />
+          <Property Name="ShopId" Type="int" Nullable="false" />
+          <Property Name="ShopName" Type="nvarchar" MaxLength="250" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="CreatedBy" Type="nvarchar(max)" />
           <Property Name="UpdatedBy" Type="nvarchar(max)" />
@@ -708,6 +708,7 @@
           <Property Name="IBarU" Type="int" Nullable="false" />
           <Property Name="ItemId" Type="int" Nullable="false" />
           <Property Name="Percentage" Type="float" Nullable="false" />
+          <Property Name="DiscountCategoryId" Type="int" Nullable="false" />
           <Property Name="DiscountCategoryName" Type="nvarchar(max)" />
           <Property Name="DataEntry" Type="int" Nullable="false" />
           <Property Name="AppliesOnline" Type="int" Nullable="false" />
@@ -1866,8 +1867,8 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Percentage" Type="Double" Nullable="false" />
-          <Property Name="CategoryType" Type="Int32" Nullable="false" />
-          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="ShopId" Type="Int32" Nullable="false" />
+          <Property Name="ShopName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -2273,6 +2274,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="IBarU" Type="Int32" Nullable="false" />
           <Property Name="ItemId" Type="Int32" Nullable="false" />
           <Property Name="Percentage" Type="Double" Nullable="false" />
+          <Property Name="DiscountCategoryId" Type="Int32" Nullable="false" />
           <Property Name="DiscountCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="DataEntry" Type="Int32" Nullable="false" />
           <Property Name="AppliesOnline" Type="Int32" Nullable="false" />
@@ -2878,7 +2880,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="sncEntities1" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="sncEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AccessPolicies" EntityType="Self.AccessPolicy" />
           <EntitySet Name="AddOnCategories" EntityType="Self.AddOnCategory" />
           <EntitySet Name="Admins" EntityType="Self.Admin" />
@@ -3112,7 +3114,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="sncModelStoreContainer" CdmEntityContainer="sncEntities1">
+        <EntityContainerMapping StorageEntityContainer="sncModelStoreContainer" CdmEntityContainer="sncEntities">
           <EntitySetMapping Name="AccessPolicies">
             <EntityTypeMapping TypeName="sncModel.AccessPolicy">
               <MappingFragment StoreEntitySet="AccessPolicies">
@@ -3432,8 +3434,8 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Percentage" ColumnName="Percentage" />
-                <ScalarProperty Name="CategoryType" ColumnName="CategoryType" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
@@ -3845,6 +3847,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
                 <ScalarProperty Name="IBarU" ColumnName="IBarU" />
                 <ScalarProperty Name="ItemId" ColumnName="ItemId" />
                 <ScalarProperty Name="Percentage" ColumnName="Percentage" />
+                <ScalarProperty Name="DiscountCategoryId" ColumnName="DiscountCategoryId" />
                 <ScalarProperty Name="DiscountCategoryName" ColumnName="DiscountCategoryName" />
                 <ScalarProperty Name="DataEntry" ColumnName="DataEntry" />
                 <ScalarProperty Name="AppliesOnline" ColumnName="AppliesOnline" />

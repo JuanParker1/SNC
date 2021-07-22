@@ -1548,9 +1548,7 @@ namespace ShopNow.Controllers
             {
                 id = i.Id,
                 text = i.Name,
-                percentage = i.Percentage,
-                type = i.Type,
-                categorytype = i.CategoryType
+                percentage = i.Percentage
             }).OrderBy(i => i.text).ToListAsync();
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);

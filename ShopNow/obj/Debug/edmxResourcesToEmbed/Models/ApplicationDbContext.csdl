@@ -324,8 +324,8 @@
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="Percentage" Type="Double" Nullable="false" />
-    <Property Name="CategoryType" Type="Int32" Nullable="false" />
-    <Property Name="Type" Type="Int32" Nullable="false" />
+    <Property Name="ShopId" Type="Int32" Nullable="false" />
+    <Property Name="ShopName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
     <Property Name="Status" Type="Int32" Nullable="false" />
     <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -731,6 +731,7 @@
     <Property Name="IBarU" Type="Int32" Nullable="false" />
     <Property Name="ItemId" Type="Int32" Nullable="false" />
     <Property Name="Percentage" Type="Double" Nullable="false" />
+    <Property Name="DiscountCategoryId" Type="Int32" Nullable="false" />
     <Property Name="DiscountCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="DataEntry" Type="Int32" Nullable="false" />
     <Property Name="AppliesOnline" Type="Int32" Nullable="false" />
@@ -1336,7 +1337,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityContainer Name="sncEntities1" annotation:LazyLoadingEnabled="true">
+  <EntityContainer Name="sncEntities" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="AccessPolicies" EntityType="Self.AccessPolicy" />
     <EntitySet Name="AddOnCategories" EntityType="Self.AddOnCategory" />
     <EntitySet Name="Admins" EntityType="Self.Admin" />

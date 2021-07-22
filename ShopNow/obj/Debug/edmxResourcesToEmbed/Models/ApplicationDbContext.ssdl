@@ -307,8 +307,8 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Name" Type="nvarchar(max)" />
     <Property Name="Percentage" Type="float" Nullable="false" />
-    <Property Name="CategoryType" Type="int" Nullable="false" />
-    <Property Name="Type" Type="int" Nullable="false" />
+    <Property Name="ShopId" Type="int" Nullable="false" />
+    <Property Name="ShopName" Type="nvarchar" MaxLength="250" />
     <Property Name="Status" Type="int" Nullable="false" />
     <Property Name="CreatedBy" Type="nvarchar(max)" />
     <Property Name="UpdatedBy" Type="nvarchar(max)" />
@@ -703,6 +703,7 @@
     <Property Name="IBarU" Type="int" Nullable="false" />
     <Property Name="ItemId" Type="int" Nullable="false" />
     <Property Name="Percentage" Type="float" Nullable="false" />
+    <Property Name="DiscountCategoryId" Type="int" Nullable="false" />
     <Property Name="DiscountCategoryName" Type="nvarchar(max)" />
     <Property Name="DataEntry" Type="int" Nullable="false" />
     <Property Name="AppliesOnline" Type="int" Nullable="false" />
