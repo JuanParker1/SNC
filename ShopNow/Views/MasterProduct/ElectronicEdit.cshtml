@@ -1,4 +1,4 @@
-﻿@model ShopNow.ViewModels.MasterProductCreateEditViewModel
+﻿@model ShopNow.ViewModels.MasterElectronicEditViewModel
 @{
     ViewBag.Title = "Electronic Update";
 }
@@ -35,7 +35,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <label class="col-form-label"><strong class="text-secondary">Category Name</strong></label>
-                                        <select name="CategoryId" id="CategoryId" class="form-control" multiple></select>
+                                        <select name="CategoryIds" id="CategoryIds" class="form-control" multiple></select>
                                         <input type="hidden" name="CategoryName" id="CategoryName" value="@Model.CategoryName" />
                                     </div>
                                     <div class="col-md-4">
@@ -202,14 +202,14 @@
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
-             var categorySelect = $('#CategoryId');
-            var CategoryId = "@Model.CategoryId1";
+             var categorySelect = $('#CategoryIds');
+            var CategoryIds = "@Model.CategoryIds1";
             var categoryname = "@Model.CategoryName";
-            if (CategoryId) {
-                var array_code = CategoryId.split(',');
+            if (CategoryIds) {
+                var array_code = CategoryIds.split(',');
                 var array_name = categoryname.split(',');
                 $.each(array_code, function (i) {
-                    $('select[name="CategoryId"] option[value=' + array_code[i] + ']').attr('selected', 'selected');
+                    $('select[name="CategoryIds"] option[value=' + array_code[i] + ']').attr('selected', 'selected');
                     var option = new Option(array_name[i], array_code[i], true, true);
                     categorySelect.append(option).trigger('change');
                 });
@@ -240,7 +240,7 @@
                 $('input[name="BrandName"]').val(e.params.data.text);
             });
 
-            $('#CategoryId').select2({
+            $('#CategoryIds').select2({
                 placeholder: "Search Category",
                 ajax: {
                     url: "/Product/GetCategorySelect2",
