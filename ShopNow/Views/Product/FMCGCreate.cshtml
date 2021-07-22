@@ -1,4 +1,4 @@
-﻿@model ShopNow.ViewModels.FMCGCreateEditViewModel
+﻿@model ShopNow.ViewModels.FMCGCreateViewModel
 @{
     ViewBag.Title = "FMCG Entry";
 }
@@ -65,7 +65,7 @@
                                         <input type="hidden" name="NextSubCategoryIds" id="NextSubCategoryId" />
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="col-form-label" for="Price"><strong class="text-secondary">Menu Price</strong></label>
+                                        <label class="col-form-label" for="MenuPrice"><strong class="text-secondary">Menu Price</strong></label>
                                         <input id="MenuPrice" type="number" class="form-control" name="MenuPrice" step="any" min="0" />
                                     </div>
                                     <div class="col-md-3">
@@ -84,11 +84,11 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="Weight"><strong class="text-secondary">Weight</strong></label>
-                                        <input id="weight" type="number" class="form-control" name="Weight" step="any" min="0" />
+                                        <input id="Weight" type="number" class="form-control" name="Weight" step="any" min="0"  readonly/>
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="SizeLB"><strong class="text-secondary">Size LB</strong></label>
-                                        <input id="SizeLB" type="text" class="form-control" name="SizeLB" min="0" />
+                                        <input id="SizeLB" type="text" class="form-control" name="SizeLB" min="0" readonly/>
                                     </div>
                                     <div class="col-md-3">
                                         <label><strong class="text-secondary">Measurement Unit Name</strong></label>
@@ -269,7 +269,7 @@
                 $('#CategoryName').val(e.params.data.CategoryName);
                 $('#SubCategoryId').val(e.params.data.SubCategoryIds);
                 $('#SubCategoryName').val(e.params.data.SubCategoryName);
-                $('#NextSubCategoryCode').val(e.params.data.NextSubCategoryIds);
+                $('#NextSubCategoryId').val(e.params.data.NextSubCategoryIds);
                 $('#NextSubCategoryName').val(e.params.data.NextSubCategoryName);
                 $('#GoogleTaxonomyCode').val(e.params.data.GoogleTaxonomyCode);
                 $('#img-FMCGLargeImage1').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePathLarge1);
@@ -282,7 +282,7 @@
                 $('input[name="ImagePathLarge3"]').val(e.params.data.ImagePathLarge3);
                 $('input[name="ImagePathLarge4"]').val(e.params.data.ImagePathLarge4);
                 $('input[name="ImagePathLarge5"]').val(e.params.data.ImagePathLarge5);
-                $('#Price').val(e.params.data.Price);
+                $('#MenuPrice').val(e.params.data.Price);
                 $('#Weight').val(e.params.data.Weight);
                 $('#SizeLB').val(e.params.data.SizeLB);
                 $('#ShortDescription').val(e.params.data.ShortDescription);

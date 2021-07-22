@@ -48,8 +48,9 @@ namespace ShopNow.Controllers
                 config.CreateMap<FoodEditViewModel, Product>();
                 config.CreateMap<ProductMappingViewModel, Product>();
                 config.CreateMap<Product, ProductMappingViewModel.List>();
-                config.CreateMap<FMCGCreateEditViewModel, Product>();
-                config.CreateMap<Product, FMCGCreateEditViewModel>();
+                config.CreateMap<FMCGCreateViewModel, Product>();
+                config.CreateMap<Product, FMCGEditViewModel>();
+                config.CreateMap<FMCGEditViewModel, Product>();
                 config.CreateMap<MedicalCreateViewModel, Product>();
                 config.CreateMap<Product, MedicalEditViewModel>();
                 config.CreateMap<MedicalEditViewModel, Product>();
@@ -692,7 +693,7 @@ namespace ShopNow.Controllers
         [HttpPost, ValidateInput(false)]
         [ValidateAntiForgeryToken]
         [AccessPolicy(PageCode = "")]
-        public ActionResult FMCGCreate(FMCGCreateEditViewModel model)
+        public ActionResult FMCGCreate(FMCGCreateViewModel model)
         {
             //Return to View if product already exist
             var name = db.Products.FirstOrDefault(i => i.Name == model.Name && i.Status == 0 && i.ProductTypeId == 2 && i.ShopId == model.ShopId);
@@ -703,7 +704,7 @@ namespace ShopNow.Controllers
             }
 
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var product = _mapper.Map<FMCGCreateEditViewModel, Product>(model);
+            var product = _mapper.Map<FMCGCreateViewModel, Product>(model);
             product.CreatedBy = user.Name;
             product.UpdatedBy = user.Name;
             product.ProductTypeId = 2;
@@ -761,43 +762,55 @@ namespace ShopNow.Controllers
             return View();
         }
 
-        public ActionResult FMCGEdit(int id)
+        public ActionResult FMCGEdit(string id)
         {
-            var dCode = AdminHelpers.DCodeInt(id.ToString());
+            var dCode = AdminHelpers.DCodeInt(id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             if (string.IsNullOrEmpty(dCode.ToString()))
                 return HttpNotFound();
             var product = db.Products.FirstOrDefault(i => i.Id == dCode);
-            //if (product != null)
-            //{
-            //    if (product.ImagePathLarge1 != null)
-            //        product.ImagePathLarge1 = product.ImagePathLarge1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-            //    if (product.ImagePathLarge2 != null)
-            //        product.ImagePathLarge2 = product.ImagePathLarge2.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-            //    if (product.ImagePathLarge3 != null)
-            //        product.ImagePathLarge3 = product.ImagePathLarge3.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-            //    if (product.ImagePathLarge4 != null)
-            //        product.ImagePathLarge4 = product.ImagePathLarge4.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-            //    if (product.ImagePathLarge5 != null)
-            //        product.ImagePathLarge5 = product.ImagePathLarge5.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-            //}
-            var model = _mapper.Map<Product, FMCGCreateEditViewModel>(product);
-            model.MasterProductName = CommonHelpers.GetMasterProductName(model.MasterProductId);
+            var model = _mapper.Map<Product, FMCGEditViewModel>(product);
+            var masterProduct = db.MasterProducts.FirstOrDefault(i => i.Id == product.MasterProductId);
+            if (masterProduct != null)
+            {
+                model.MasterProductName = masterProduct.Name;
+                model.BrandId = masterProduct.BrandId;
+                model.BrandName = masterProduct.BrandName;
+                model.CategoryIds = masterProduct.CategoryIds;
+                model.CategoryName = masterProduct.CategoryName;
+                model.GoogleTaxonomyCode = masterProduct.GoogleTaxonomyCode;
+                model.ImagePathLarge1 = masterProduct.ImagePath1;
+                model.ImagePathLarge2 = masterProduct.ImagePath2;
+                model.ImagePathLarge3 = masterProduct.ImagePath3;
+                model.ImagePathLarge4 = masterProduct.ImagePath4;
+                model.ImagePathLarge5 = masterProduct.ImagePath5;
+                model.LongDescription = masterProduct.LongDescription;
+                model.ShortDescription = masterProduct.ShortDescription;
+                model.SubCategoryIds = masterProduct.SubCategoryIds;
+                model.SubCategoryName = masterProduct.SubCategoryName;
+                model.NextSubCategoryIds = masterProduct.NextSubCategoryIds;
+                model.NextSubCategoryName = masterProduct.NextSubCategoryName;
+                model.MeasurementUnitId = masterProduct.MeasurementUnitId;
+                model.MeasurementUnitName = masterProduct.MeasurementUnitName;
+                model.PackageId = masterProduct.PackageId;
+                model.PackageName = masterProduct.PackageName;
+                model.Weight = masterProduct.Weight;
+                model.SizeLB = masterProduct.SizeLB;
+            }
             return View(model);
         }
 
-        [HttpPost]
+        [HttpPost, ValidateInput(false)]
         [ValidateAntiForgeryToken]
         [AccessPolicy(PageCode = "")]
-        public ActionResult FMCGEdit(FMCGCreateEditViewModel model)
+        public ActionResult FMCGEdit(FMCGEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var prod = db.Products.FirstOrDefault(i => i.Id == model.Id);
             _mapper.Map(model, prod);
             prod.Name = model.Name;
             prod.UpdatedBy = user.Name;
-            prod.DateUpdated = DateTime.Now;
             prod.DateUpdated = DateTime.Now;
             db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();

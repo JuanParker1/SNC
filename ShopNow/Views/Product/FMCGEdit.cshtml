@@ -1,4 +1,4 @@
-﻿@model ShopNow.ViewModels.FMCGCreateEditViewModel
+﻿@model ShopNow.ViewModels.FMCGEditViewModel
 @{
     ViewBag.Title = "FMCG Update";
 }
@@ -86,11 +86,11 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="Weight"><strong class="text-secondary">Weight</strong></label>
-                                        <input id="weight" type="number" class="form-control" name="Weight" min="0" step="any" value="@Model.Weight" />
+                                        <input id="Weight" type="number" class="form-control" name="Weight" min="0" step="any" value="@Model.Weight" readonly/>
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="SizeLB"><strong class="text-secondary">Size LB</strong></label>
-                                        <input id="SizeLB" type="text" class="form-control" name="SizeLB" min="0" value="@Model.SizeLB" />
+                                        <input id="SizeLB" type="text" class="form-control" name="SizeLB" min="0" value="@Model.SizeLB" readonly/>
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="MeasurementUnitCode"><strong class="text-secondary">Measurement Unit Name</strong></label>
@@ -145,112 +145,22 @@
                                     <div class="col-md-4 form-group">
                                         <label class="control-label text-secondary font-weight-bold ml-2">FMCG Image</label>
                                         <img id="img-FMCGLargeImage1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge1" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                                        <input type="hidden" name="ImagePathLarge1" value="@Model.ImagePathLarge1" />
-                                        @*<div class="row">
-                                    <div class="col-md-12">
-                                        <div class="img-upload-container ml-2">
-                                            @if (Model.ImagePathLarge1 != null)
-                                            {
-                                                <img class="img-container w-100 h-100" id="img-FMCGLargeImage1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge1" onerror="this.onerror=null;this.src='/Images/No Photo.png'" />
-                                            }
-                                            else
-                                            {
-                                                <img class="img-container w-100 h-100" id="img-FMCGLargeImage1" />
-                                            }
-                                            <input type="file" id="FMCGLargeImage1" name="FMCGLargeImage1" class="d-none" />
-                                            <label for="FMCGLargeImage1" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePathLarge1" id="ImagePathLarge1" value="@Model.ImagePathLarge1" />
-                                        </div>
-                                    </div>
-                                </div>*@
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label class="control-label text-secondary font-weight-bold ml-2">FMCG Image-2</label>
                                         <img id="img-FMCGLargeImage2" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge2" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                                        <input type="hidden" name="ImagePathLarge2" value="@Model.ImagePathLarge2" />
-                                        @*<div class="row">
-                                    <div class="col-md-12">
-                                        <div class="img-upload-container ml-2">
-                                            @if (Model.ImagePathLarge2 != null)
-                                            {
-                                                <img class="img-container w-100 h-100" id="img-FMCGLargeImage2" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge2" onerror="this.onerror=null;this.src='/Images/No Photo.png'" />
-                                            }
-                                            else
-                                            {
-                                                <img class="img-container w-100 h-100" id="img-FMCGLargeImage2" />
-                                            }
-                                            <input type="file" id="FMCGLargeImage2" name="FMCGLargeImage2" class="d-none" />
-                                            <label for="FMCGLargeImage2" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePathLarge2" id="ImagePathLarge2" value="@Model.ImagePathLarge2" />
-                                        </div>
-                                    </div>
-                                </div>*@
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label class="control-label text-secondary font-weight-bold ml-2">FMCG Image-3</label>
-                                        <img id="img-FMCGLargeImage3" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge3" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                                        <input type="hidden" name="ImagePathLarge3" value="@Model.ImagePathLarge3" />
-                                        @*<div class="row">
-                                    <div class="col-md-12">
-                                        <div class="img-upload-container ml-2">
-                                            @if (Model.ImagePathLarge3 != null)
-                                            {
-                                                <img class="img-container w-100 h-100" id="img-FMCGLargeImage3" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge3" onerror="this.onerror=null;this.src='/Images/No Photo.png'" />
-                                            }
-                                            else
-                                            {
-                                                <img class="img-container w-100 h-100" id="img-FMCGLargeImage3" />
-                                            }
-                                            <input type="file" id="FMCGLargeImage3" name="FMCGLargeImage3" class="d-none" />
-                                            <label for="FMCGLargeImage3" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePathLarge3" id="ImagePathLarge3" value="@Model.ImagePathLarge3" />
-                                        </div>
-                                    </div>
-                                </div>*@
+                                        <img id="img-FMCGLargeImage3" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge3" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />                                     
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label class="control-label text-secondary font-weight-bold ml-2">FMCG Image-4</label>
                                         <img id="img-FMCGLargeImage4" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge4" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                                        <input type="hidden" name="ImagePathLarge4" value="@Model.ImagePathLarge4" />
-                                        @*<div class="row">
-                                    <div class="col-md-12">
-                                        <div class="img-upload-container ml-2">
-                                            @if (Model.ImagePathLarge4 != null)
-                                            {
-                                                <img class="img-container w-100 h-100" id="img-FMCGLargeImage4" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge4" onerror="this.onerror=null;this.src='/Images/No Photo.png'" />
-                                            }
-                                            else
-                                            {
-                                                <img class="img-container w-100 h-100" id="img-FMCGLargeImage4" />
-                                            }
-                                            <input type="file" id="FMCGLargeImage4" name="FMCGLargeImage4" class="d-none" />
-                                            <label for="FMCGLargeImage4" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePathLarge4" id="ImagePathLarge4" value="@Model.ImagePathLarge4" />
-                                        </div>
-                                    </div>
-                                </div>*@
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label class="control-label text-secondary font-weight-bold ml-2">FMCG Image-5</label>
                                         <img id="img-FMCGLargeImage5" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge5" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                                        <input type="hidden" name="ImagePathLarge5" value="@Model.ImagePathLarge5" />
-                                        @*<div class="row">
-                                    <div class="col-md-12">
-                                        <div class="img-upload-container ml-2">
-                                            @if (Model.ImagePathLarge5 != null)
-                                            {
-                                                <img class="img-container w-100 h-100" id="img-FMCGLargeImage5" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge5" onerror="this.onerror=null;this.src='/Images/No Photo.png'" />
-                                            }
-                                            else
-                                            {
-                                                <img class="img-container w-100 h-100" id="img-FMCGLargeImage5" />
-                                            }
-                                            <input type="file" id="FMCGLargeImage5" name="FMCGLargeImage5" class="d-none" />
-                                            <label for="FMCGLargeImage5" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePathLarge5" id="ImagePathLarge5" value="@Model.ImagePathLarge5" />
-                                        </div>
-                                    </div>
-                                </div>*@
                                     </div>
                                 </div>
                             </div>
@@ -269,15 +179,6 @@
 
 @section Scripts
 {
-    <!--Select2-->
-    <script src="~/Scripts/select2/js/select2.js"></script>
-    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
-    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
-    <!--Select2 End-->
-    <script src="~/Scripts/ValidateRequiredFields.js"></script>
-    <script src="~/Scripts/multiple-image-upload.js"></script>
-    <link href="~/Content/multiple-image-upload.css" rel="stylesheet" />
-    <script src="~/Scripts/ckeditor/ckeditor.js"></script>
     <script>
         $(document).ready(function () {
             $('#Price').on('change keyup', function () {
