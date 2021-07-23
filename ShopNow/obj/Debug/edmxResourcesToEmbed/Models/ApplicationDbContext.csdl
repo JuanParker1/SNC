@@ -834,11 +834,8 @@
     <Property Name="Id" Type="Int32" Nullable="false" />
     <Property Name="PlatformCredit" Type="Double" Nullable="false" />
     <Property Name="DeliveryCredit" Type="Double" Nullable="false" />
-    <Property Name="ShopId" Type="Int32" Nullable="false" />
     <Property Name="CustomerId" Type="Int32" Nullable="false" />
     <Property Name="DateUpdated" Type="DateTime" Precision="3" />
-    <NavigationProperty Name="ShopCredit1" Relationship="Self.FK_ShopCredit_ShopCredit" FromRole="ShopCredit" ToRole="ShopCredit1" />
-    <NavigationProperty Name="ShopCredit2" Relationship="Self.FK_ShopCredit_ShopCredit" FromRole="ShopCredit1" ToRole="ShopCredit" />
   </EntityType>
   <EntityType Name="ShopDishAddOn">
     <Key>
@@ -1313,18 +1310,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_ShopCredit_ShopCredit">
-    <End Role="ShopCredit" Type="Self.ShopCredit" Multiplicity="1" />
-    <End Role="ShopCredit1" Type="Self.ShopCredit" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ShopCredit">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="ShopCredit1">
-        <PropertyRef Name="ShopId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_ShopDishAddOns_Shops">
     <End Role="Shops" Type="Self.Shop" Multiplicity="1" />
     <End Role="ShopDishAddOns" Type="Self.ShopDishAddOn" Multiplicity="*" />
@@ -1337,7 +1322,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityContainer Name="sncEntities" annotation:LazyLoadingEnabled="true">
+  <EntityContainer Name="ShopnowchatEntities1" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="AccessPolicies" EntityType="Self.AccessPolicy" />
     <EntitySet Name="AddOnCategories" EntityType="Self.AddOnCategory" />
     <EntitySet Name="Admins" EntityType="Self.Admin" />
@@ -1469,10 +1454,6 @@
     <AssociationSet Name="FK_Shops_ShopCategories" Association="Self.FK_Shops_ShopCategories">
       <End Role="ShopCategories" EntitySet="ShopCategories" />
       <End Role="Shops" EntitySet="Shops" />
-    </AssociationSet>
-    <AssociationSet Name="FK_ShopCredit_ShopCredit" Association="Self.FK_ShopCredit_ShopCredit">
-      <End Role="ShopCredit" EntitySet="ShopCredits" />
-      <End Role="ShopCredit1" EntitySet="ShopCredits" />
     </AssociationSet>
     <AssociationSet Name="FK_ShopDishAddOns_Shops" Association="Self.FK_ShopDishAddOns_Shops">
       <End Role="Shops" EntitySet="Shops" />
