@@ -32,46 +32,6 @@ namespace ShopNow.ViewModels
         public string Filename { get; set; }
     }
 
-    public class GroceryPageModel
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string NickName { get; set; }
-        public string CategoryId { get; set; }
-        public string CategoryName { get; set; }
-        public string SubCategoryCode1 { get; set; }
-        public string SubCategoryName1 { get; set; }
-        public string SubCategoryName2 { get; set; }
-        public string weight { get; set; }
-        public string SizeLB { get; set; }
-        public string BrandName { get; set; }
-        public string ShortDescription { get; set; }
-        public string LongDescription { get; set; }
-        public string Specification { get; set; }
-        public string ImagePath { get; set; }
-        public string ImagePath1 { get; set; }
-        public string ImagePath2 { get; set; }
-        public string ImagePath3 { get; set; }
-        public string ImagePath4 { get; set; }
-        public string ImagePath5 { get; set; }
-        public int ProductTypeId { get; set; }
-        public string ProductTypeName { get; set; }
-        public string ASIN { get; set; }
-        public string GoogleTaxonomyCode { get; set; }
-        public string Price { get; set; }
-        public System.Data.DataTable DataTable { get; set; }
-        public string button { get; set; }
-        public string Filename { get; set; }
-
-        public string PackageCode { get; set; }
-        public string PackageName { get; set; }
-        public string MeasurementUnitCode { get; set; }
-        public string MeasurementUnitName { get; set; }
-
-        public string BrandCode { get; set; }
-
-    }
-    
     public class MasterProductListViewModel
     {
         public List<MasterProductList> List { get; set; }
@@ -94,16 +54,15 @@ namespace ShopNow.ViewModels
             public int Id { get; set; }
             public string Name { get; set; }
             public int ItemId { get; set; }
-            public string TypeName { get; set; }
+            public string ProductTypeName { get; set; }
         }
         public List<MappedList> MappedLists { get; set; }
         public class MappedList
         {
             public int Id { get; set; }
             public string Name { get; set; }
-            public string MasterProductCode { get; set; }
             public string MasterProductName { get; set; }
-            public string ProductType { get; set; }
+            public string ProductTypeName { get; set; }
         }
     }
   
@@ -111,32 +70,42 @@ namespace ShopNow.ViewModels
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string NickName { get; set; }
-        public string CategoryCode { get; set; }
-        public string CategoryName { get; set; }
-        public int DrugMeasurementUnitId { get; set; }
-        public string DrugMeasurementUnitName { get; set; }
-        public string GoogleTaxonomyCode { get; set; }
-        public string BrandCode { get; set; }
+        public int BrandId { get; set; }
         public string BrandName { get; set; }
-        public string ImagePath { get; set; }
+        public string CategoryIds { get; set; }
+        public string CategoryName { get; set; }
+        public string ShortDescription { get; set; }
+        public string LongDescription { get; set; }
+        public int ProductTypeId { get; set; }
+        public string ProductTypeName { get; set; }
+        public double Price { get; set; }
+        public bool Customisation { get; set; }
+        public string ColorCode { get; set; }
+        public int MeasurementUnitId { get; set; }
+        public string MeasurementUnitName { get; set; }
+        public bool PriscriptionCategory { get; set; }
+        public double Weight { get; set; }
+        public string SizeLB { get; set; }
+        public string DrugCompoundDetailIds { get; set; }
+        public string DrugCompoundDetailName { get; set; }
+        public Nullable<int> IBarU { get; set; }
+        public string OriginCountry { get; set; }
+        public string Manufacturer { get; set; }
+        public Nullable<int> PackageId { get; set; }
+        public string PackageName { get; set; }
+        public string GoogleTaxonomyCode { get; set; }
+        public string SubCategoryIds { get; set; }
+        public string SubCategoryName { get; set; }
+        public string NextSubCategoryIds { get; set; }
+        public string NextSubCategoryName { get; set; }
+        public string ASIN { get; set; }
         public string ImagePath1 { get; set; }
         public string ImagePath2 { get; set; }
         public string ImagePath3 { get; set; }
         public string ImagePath4 { get; set; }
         public string ImagePath5 { get; set; }
-        public string Price { get; set; }
-        public string PriscriptionCategory { get; set; }
-        public string DrugCompoundDetailIds { get; set; }
-        public string CombinationDrugCompound { get; set; }
-        public int IBarU { get; set; }
-        public string OriginCountry { get; set; }
-        public string Manufacturer { get; set; }
-        public string weight { get; set; }
-        public string SizeLB { get; set; }
-        public int ProductTypeId { get; set; }
-        public string ProductTypeName { get; set; }
-        public string PackageName { get; set; }
+        public int Adscore { get; set; }
+        public string NickName { get; set; }
         public System.Data.DataTable DataTable { get; set; }
         public string button { get; set; }
         public string Filename { get; set; }
@@ -213,8 +182,8 @@ namespace ShopNow.ViewModels
         public int Status { get; set; }
         public DateTime DateEncoded { get; set; }
         public DateTime DateUpdated { get; set; }
-        public string ItemCode { get; set; }
-        public string ItemName { get; set; }
+        public int ProductId { get; set; }
+        public string ProductName { get; set; }
         public string IsCheck { get; set; }
 
         public List<ItemMappingList> List { get; set; }
@@ -392,6 +361,51 @@ namespace ShopNow.ViewModels
         public string ImagePath3 { get; set; }
         public string ImagePath4 { get; set; }
         public string ImagePath5 { get; set; }
+    }
+
+    public class MasterFMCGUploadViewModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int BrandId { get; set; }
+        public string BrandName { get; set; }
+        public string CategoryIds { get; set; }
+        public string CategoryName { get; set; }
+        public string ShortDescription { get; set; }
+        public string LongDescription { get; set; }
+        public int ProductTypeId { get; set; }
+        public string ProductTypeName { get; set; }
+        public double Price { get; set; }
+        public bool Customisation { get; set; }
+        public string ColorCode { get; set; }
+        public int MeasurementUnitId { get; set; }
+        public string MeasurementUnitName { get; set; }
+        public bool PriscriptionCategory { get; set; }
+        public double Weight { get; set; }
+        public string SizeLB { get; set; }
+        public string DrugCompoundDetailIds { get; set; }
+        public string DrugCompoundDetailName { get; set; }
+        public Nullable<int> IBarU { get; set; }
+        public string OriginCountry { get; set; }
+        public string Manufacturer { get; set; }
+        public Nullable<int> PackageId { get; set; }
+        public string PackageName { get; set; }
+        public string GoogleTaxonomyCode { get; set; }
+        public string SubCategoryIds { get; set; }
+        public string SubCategoryName { get; set; }
+        public string NextSubCategoryIds { get; set; }
+        public string NextSubCategoryName { get; set; }
+        public string ASIN { get; set; }
+        public string ImagePath1 { get; set; }
+        public string ImagePath2 { get; set; }
+        public string ImagePath3 { get; set; }
+        public string ImagePath4 { get; set; }
+        public string ImagePath5 { get; set; }
+        public int Adscore { get; set; }
+        public string NickName { get; set; }
+        public System.Data.DataTable DataTable { get; set; }
+        public string button { get; set; }
+        public string Filename { get; set; }
     }
 
     // Master Medical - 3

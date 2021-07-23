@@ -331,7 +331,7 @@ namespace ShopNow.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AccessPolicy(PageCode = "SHNMPRI005")]
-        public ActionResult GroceryEntry(HttpPostedFileBase upload, GroceryPageModel model)
+        public ActionResult GroceryEntry(HttpPostedFileBase upload, MasterFMCGUploadViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -434,11 +434,11 @@ namespace ShopNow.Controllers
                             Weight = Convert.ToDouble(row[model.weight]),
                             GoogleTaxonomyCode = row[model.GoogleTaxonomyCode].ToString(),
                             ASIN = row[model.ASIN].ToString(),
-                            CategoryIds = model.CategoryId,
+                            CategoryIds = model.CategoryIds,
                             CategoryName = row[model.CategoryName].ToString(),
                             ShortDescription = row[model.ShortDescription].ToString(),
                             LongDescription = row[model.LongDescription].ToString(),
-                            Price = Convert.ToDouble(row[model.Price]),
+                            Price = row[model.Price],
                             ImagePath1 = row[model.ImagePath1].ToString(),
                             ImagePath2 = row[model.ImagePath2].ToString(),
                             ImagePath3 = row[model.ImagePath3].ToString(),
@@ -1690,7 +1690,7 @@ namespace ShopNow.Controllers
                      Id = i.Id,
                      Name = i.Name,
                      ItemId = i.ItemId,
-                     TypeName = i.ProductTypeName
+                     ProductTypeName = i.ProductTypeName
                  }).ToList();
             return View(model);
         }
@@ -1700,11 +1700,18 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
+            var model = new MasterProductListViewModel();
 
-            var List = (from p in _db.Products
-                        where (p.ShopId == shopId && p.Status == 0 && p.MasterProductId != 0)
-                        select p).ToList();
-            return View(List);
+            model.MappedLists = _db.Products.Join(_db.MasterProducts, p=> p.MasterProductId, mp=> mp.Id, (p,mp)=> { p,mp})
+                .Where(a => a.ShopId == shopId && a.Status == 0 && a.MasterProductId != 0)
+                .OrderBy(i => i.Name).Select(i => new MasterProductListViewModel.MappedList
+                {
+                    Id = i.p.Id,
+                    Name = i.p.Name,
+                    MasterProductName = i.mp.Name,
+                    ProductTypeName = i.p.ProductTypeName
+                }).ToList();
+            return View(model);
         }
 
         [AccessPolicy(PageCode = "SHNMPRMU014")]
@@ -1725,9 +1732,9 @@ namespace ShopNow.Controllers
             {
                 var user = ((Helpers.Sessions.User)Session["USER"]);
                 ViewBag.Name = user.Name;
-                var masterproduct = _db.MasterProducts.FirstOrDefault(i => i.Id == masterproductId);// MasterProduct.Get(masterproductcode);
+                var masterproduct = _db.MasterProducts.FirstOrDefault(i => i.Id == masterproductId);
 
-                var product = _db.Products.FirstOrDefault(i => i.Id == itemId);// Product.Get(itemcode);
+                var product = _db.Products.FirstOrDefault(i => i.Id == itemId);
                 if (product != null)
                 {
                     product.MasterProductId = masterproductId;
@@ -1785,8 +1792,6 @@ namespace ShopNow.Controllers
                 _db.Dispose();
                
             }
-
-            
         }
 
         [AccessPolicy(PageCode = "SHNMPRMU014")]
@@ -1820,12 +1825,10 @@ namespace ShopNow.Controllers
                     {
                         product.Price = masterproduct.Price;
                     }
-
                     if (product.IBarU == 0 && masterproduct.IBarU != null)
                     {
                         product.IBarU = Convert.ToInt32(masterproduct.IBarU);
                     }
-
                     if (product.ProductTypeId == 0 && masterproduct.ProductTypeId != 0)
                     {
                         product.ProductTypeId = masterproduct.ProductTypeId;
@@ -1834,12 +1837,10 @@ namespace ShopNow.Controllers
                     {
                         product.Price = masterproduct.Price;
                     }
-
                     if (masterproduct.IBarU != null)
                     {
                         product.IBarU = Convert.ToInt32(masterproduct.IBarU);
                     }
-
                     if (masterproduct.ProductTypeId != 0)
                     {
                         product.ProductTypeId = masterproduct.ProductTypeId;
