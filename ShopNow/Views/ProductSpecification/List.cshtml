@@ -25,8 +25,8 @@
                columns.Add(b => b.SpecificationName).Titled("Specification").Filterable(true).SetWidth(20);
                columns.Add(b => b.Value).Titled("Value").Filterable(true).SetWidth(20);               
                columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(b => @<div>
-    <a href="~/ProductSpecification/Edit?code=@ShopNow.Helpers.AdminHelpers.ECode(b.Code)" class="btn btn-warning text-center btn-sm text-nowrap" style="padding: 3px 26px">Edit</a>
-    <a href="~/ProductSpecification/Delete?code=@ShopNow.Helpers.AdminHelpers.ECode(b.Code)" class="btn btn-danger text-center btn-sm text-nowrap" style="padding: 3px 18px">Delete</a>
+    <a href="~/ProductSpecification/Edit?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(b.Id)" class="btn btn-warning text-center btn-sm text-nowrap" style="padding: 3px 26px">Edit</a>
+    <a href="~/ProductSpecification/Delete?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(b.Id)" class="btn btn-danger text-center btn-sm text-nowrap" style="padding: 3px 18px">Delete</a>
 </div>);
          }).WithPaging(20).Sortable(true)
                 </div>

@@ -21,13 +21,13 @@
                 <div class="card mb-3">
                     <div class="card-body">
                         @Html.AntiForgeryToken()
-                        <input type="hidden" name="Code" value="@Model.Code" />
+                        <input type="hidden" name="Id" value="@Model.Id" />
                         <input type="hidden" name="DateEncoded" value="@Model.DateEncoded" />
                         <input type="hidden" name="DateUpdated" value="@Model.DateUpdated" />
                         <input type="hidden" name="CreatedBy" value="@Model.CreatedBy" />
                         <input type="hidden" name="UpdatedBy" value="@Model.UpdatedBy" />
                         <input type="hidden" name="Status" value="@Model.Status" />
-                        <input type="hidden" name="CustomerCode" value="@Model.CustomerCode" />
+                        <input type="hidden" name="CustomerId" value="@Model.CustomerId" />
                         <input type="hidden" name="CustomerName" value="@Model.CustomerName" />
                         <input type="hidden" name="NameOfBill" value="@Model.NameOfBill" />
                         <input type="hidden" name="DeliveryRateSet" value="@Model.DeliveryRateSet" />
@@ -43,10 +43,10 @@
                                                     <label class="col-form-label text-secondary font-weight-bold">Shop Name</label>
                                                 </div>
                                                 <div class="col-md-7">
-                                                    <select id="ShopCode" name="ShopCode" class="form-control">
-                                                        @if (Model.ShopCode != null)
+                                                    <select id="ShopId" name="ShopId" class="form-control">
+                                                        @if (Model.ShopId != 0)
                                                         {
-                                                            <option value="@Model.ShopCode">@Model.ShopName</option>
+                                                            <option value="@Model.ShopId">@Model.ShopName</option>
                                                         }
                                                     </select>
                                                     <input type="hidden" name="ShopName" id="ShopName" value="@Model.ShopName" />
@@ -164,7 +164,7 @@
                                                 <div class="col-md-5 text-md-left">
                                                     <label class="col-form-label text-secondary font-weight-bold">Levy Convenience Charge order below Rs.</label>
                                                     <label class="small text-secondary font-italic">( <span class="font-weight-bold font-italic">Note : </span>Current rate is <span class="text-theme_light font-weight-bold">Rs.@Model.PlatformCreditRate</span> per order )</label>
-                                                    <input type="hidden" name="PlatformCreditRateCode" value="@Model.PlatformCreditRateCode" />
+                                                    <input type="hidden" name="PlatformCreditRateCode" value="@Model.PlatformCreditRateId" />
                                                     <input type="hidden" name="PlatformCreditRate" value="@Model.PlatformCreditRate" />
                                                 </div>
                                                 <div class="col-md-7">
@@ -282,7 +282,7 @@
                 var itemtype = $('input[type=radio][name=ItemType]:checked').val();
                 var isValidate = false;
                 var requiredArr = [
-                    'ShopCode',
+                    'ShopId',
                     'DeliveryChargeCustomer',
                     'ConvenientCharge'
                 ];
@@ -306,7 +306,7 @@
                     }
                 }
             });
-            $('#ShopCode').select2({
+            $('#ShopId').select2({
                 placeholder: "Search Shop",
                 ajax: {
                     url: "/Bill/GetBillShopSelect2",
