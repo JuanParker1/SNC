@@ -988,31 +988,18 @@ namespace ShopNow.Controllers
         [HttpPost]
         public JsonResult AddPayment(PaymentCreateApiViewModel model)
         {
-          
-                var payment = _mapper.Map<PaymentCreateApiViewModel, Models.Payment>(model);
-                var perOrderAmount = db.PlatFormCreditRates.Where(s => s.Status == 0).FirstOrDefault();
-                if (model.CustomerId != 0)
-                {
-                    var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
-                    payment.CustomerName = customer.Name;
-                    payment.CreatedBy = customer.Name;
-                    payment.UpdatedBy = customer.Name;
+
+            var payment = _mapper.Map<PaymentCreateApiViewModel, Models.Payment>(model);
+            var perOrderAmount = db.PlatFormCreditRates.Where(s => s.Status == 0).FirstOrDefault();
+            if (model.CustomerId != 0)
+            {
+                var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
+                payment.CustomerName = customer.Name;
+                payment.CreatedBy = customer.Name;
+                payment.UpdatedBy = customer.Name;
 
                 if (model.OrderNo != 0)
                 {
-                    //var cartList = db.Carts.Where(i => i.OrderNo == model.OrderNo).ToList();
-                    //foreach (var c in cartList)
-                    //{
-                    //    var cart = db.Carts.FirstOrDefault(i => i.Code == c.Code);
-
-                    //    cart.CartStatus = 2;
-                    //    cart.UpdatedBy = customer.Name;
-                    //    cart.Rateperorder = Convert.ToDouble(perOrderAmount.RatePerOrder);
-                    //    cart.DateUpdated = DateTime.Now;
-                    //    db.Entry(cart).State = System.Data.Entity.EntityState.Modified;
-                    //    db.SaveChanges();
-
-                    //}
                     var order = db.Orders.FirstOrDefault(i => i.OrderNumber == model.OrderNo);
                     order.Status = 2;
                     order.UpdatedBy = customer.Name;
@@ -1025,6 +1012,13 @@ namespace ShopNow.Controllers
                     order.Packingcharge = model.PackagingCharge;
                     order.Convinenientcharge = model.ConvenientCharge;
                     db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+
+                    //Reducing Platformcredits
+                    var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
+                    var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
+                    shopCredits.PlatformCredit -= payment.RatePerOrder.Value;
+                    db.Entry(shopCredits).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
 
                     if (model.PaymentMode == "Online Payment")
@@ -1074,76 +1068,35 @@ namespace ShopNow.Controllers
                         db.PaymentsDatas.Add(pay);
                         db.SaveChanges();
                     }
-                    var fcmToken = (from c in db.Customers
-                                    join s in db.Shops on c.Id equals s.CustomerId
-                                    where s.Id == model.ShopId
-                                    select c.FcmTocken ?? "" ).FirstOrDefault().ToString();
-                    string rtnMessage = Helpers.PushNotification.SendbydeviceId("You have a new Order", "ShopNowChat", "../../assets/a.mp3", fcmToken.ToString());
-                  
-                }
-                    
-                    if (model.CreditType == 0 || model.CreditType == 1)
-                    {
-                        payment.PaymentCategoryType = 1;
-                        payment.Credits = model.OriginalAmount.ToString();
-                        //var top = db.TopUps.OrderByDescending(q => q.Id).FirstOrDefault(i => i.CustomerCode == model.CustomerCode && i.CreditType == model.CreditType && i.Status == 0); //TopUp.GetCustomer(model.CustomerCode, model.CreditType);
-                        //if (top == null)
-                        //{
-                        //    TopUp topup = new TopUp();
-                        //    topup.CustomerCode = model.CustomerCode;
-                        //    topup.CustomerName = model.CustomerName;
-                        //    topup.CustomerPhoneNumber = customer.PhoneNumber;
-                        //    topup.CreditType = model.CreditType;
-                        //    topup.CreditAmount = model.OriginalAmount;
-                        //    topup.CreatedBy = customer.Name;
-                        //    topup.UpdatedBy = customer.Name;
-                        //    topup.Code = _generateCode("TOP");
-                        //    topup.DateEncoded = DateTime.Now;
-                        //    topup.DateUpdated = DateTime.Now;
-                        //    topup.Status = 0;
-                        //    db.TopUps.Add(topup);
-                        //    db.SaveChanges();
-                        //}
-                        //else
-                        //{
-                        //    top.CreditAmount = top.CreditAmount + model.OriginalAmount;
-                        //    top.UpdatedBy = customer.Name;
-                        //    top.DateUpdated = DateTime.Now;
-                        //    db.Entry(top).State = System.Data.Entity.EntityState.Modified;
-                        //    db.SaveChanges();
-                        //}
-                    }
-                    else
-                    {
-                        payment.PaymentCategoryType = 0;
-                        payment.Credits = "N/A";
-
-                    
-                       
-                        //detail.DateEncoded = DateTime.Now;
-                        //detail.DateUpdated = DateTime.Now;
-                        //detail.Status = 0;
-                        //db.ShopCharges.Add(detail);
-                        //db.SaveChanges();
-                    }
-
-                    payment.DateEncoded = DateTime.Now;
-                    payment.DateUpdated = DateTime.Now;
-                    payment.Status = 0;
-                    payment.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
-                    payment.RefundStatus = 1;
-                    db.Payments.Add(payment);
-                    db.SaveChanges();
-
-                    return Json(new { message = "Successfully Added to Payment!", Details = model });
 
                 }
 
+                if (model.CreditType == 0 || model.CreditType == 1)
+                {
+                    payment.PaymentCategoryType = 1;
+                    payment.Credits = model.OriginalAmount.ToString();
+                }
                 else
-                    return Json(new { message = "Failed to Add Payment !" });
-        
+                {
+                    payment.PaymentCategoryType = 0;
+                    payment.Credits = "N/A";
+                }
+                payment.DateEncoded = DateTime.Now;
+                payment.DateUpdated = DateTime.Now;
+                payment.Status = 0;
+                payment.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
+                payment.RefundStatus = 1;
+                db.Payments.Add(payment);
+                db.SaveChanges();
+
+                return Json(new { message = "Successfully Added to Payment!", Details = model });
+            }
+            else
+                return Json(new { message = "Failed to Add Payment !" });
+
 
         }
+
         [HttpPost]
         public JsonResult AddPaymentCreateOrder(razorpayOrderCreate model)
         {
@@ -1194,144 +1147,14 @@ namespace ShopNow.Controllers
                 return Json(new { message = "Failed to Update Cart Payment !" });
 
         }
-
-        //[HttpPost]
-        //public JsonResult AddCart(CartCreateViewModel model)
-        //{
-        //    var shop = db.Shops.FirstOrDefault(i => i.Code == model.ShopCode);
-        //    var orderCount = (from s in db.Carts
-        //                      join sh in db.Shops on s.ShopCode equals sh.Code
-        //                      join c in db.Customers on sh.CustomerCode equals c.Code
-        //                      where sh.CustomerCode == shop.CustomerCode && (s.CartStatus >= 2)
-        //                      group s by s.OrderNo into g
-        //                      select g).Count();
-
-        //    var platform = (from ss in db.Payments
-        //                    join sh in db.Shops on ss.ShopCode equals sh.Code
-        //                    join c in db.Customers on sh.CustomerCode equals c.Code
-        //                    where sh.CustomerCode == shop.CustomerCode && ss.Status == 0 && ss.CreditType == 0
-        //                    select (Double?)ss.OriginalAmount).Sum() ?? 0;
-
-        //    var platformorder = (Convert.ToInt32(orderCount) * (db.PlatFormCreditRates.FirstOrDefault().RatePerOrder));
-        //    var varDelivery = (from ss in db.Payments
-        //                       join sh in db.Shops on ss.ShopCode equals sh.Code
-        //                       join c in db.Customers on sh.CustomerCode equals c.Code
-        //                       where sh.CustomerCode == shop.CustomerCode && ss.Status == 0 && ss.CreditType == 1
-        //                       select (Double?)ss.OriginalAmount).Sum() ?? 0;
-
-        //    var varDeliveryCharges = (from ss in db.ShopCharges
-        //                              join sh in db.Shops on ss.ShopCode equals sh.Code
-        //                              join c in db.Customers on sh.CustomerCode equals c.Code
-        //                              where sh.CustomerCode == shop.CustomerCode && ss.CartStatus >= 2
-        //                              select (Double?)ss.GrossDeliveryCharge).Sum() ?? 0;
-        //    var DeliveryCredits = varDelivery - varDeliveryCharges;
-        //    var PlatformCredits = platform - platformorder;
-
-        //    if ((PlatformCredits < 26 && DeliveryCredits < 67))
-        //    {
-        //        //Shop DeActivate
-
-        //        shop.Status = 6;
-        //        db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
-        //        db.SaveChanges();
-
-        //        return Json(new { message = "This shop is currently unservicable." }, JsonRequestBehavior.AllowGet);
-        //    }
-        //    else
-        //    {
-        //        if (model.ItemId != 0) //model.ItemId != "N/A"
-        //        {
-        //            var product = db.Products.FirstOrDefault(i => i.ItemId == model.ItemId && i.Status == 0); // ProductMedicalStock.GetItemId(model.ItemId);
-        //            product.HoldOnStok = Convert.ToInt32(model.Qty);
-        //            product.Qty = product.Qty - Convert.ToInt32(model.Qty);
-        //            db.Entry(product).State = System.Data.Entity.EntityState.Modified;
-        //            db.SaveChanges();
-
-        //            var cart = _mapper.Map<CartCreateViewModel, Cart>(model);
-        //            cart.CartStatus = 0;
-        //            if (model.CustomerCode != null)
-        //            {
-        //                var customer = db.Customers.FirstOrDefault(i => i.Code == model.CustomerCode);// Customer.Get(model.CustomerCode);
-        //                cart.CreatedBy = customer.Name;
-        //                cart.UpdatedBy = customer.Name;
-        //                cart.CustomerName = customer.Name;
-        //            }
-
-        //            cart.Code = _generateCode("CAR");
-        //            cart.DateEncoded = DateTime.Now;
-        //            cart.DateUpdated = DateTime.Now;
-        //            db.Carts.Add(cart);
-        //            db.SaveChanges();
-        //            if (cart.Code != null || cart.Code != "")
-        //            {
-        //                return Json(new { message = "Successfully Added to Cart!", Details = cart });
-        //            }
-        //            else
-
-        //                return Json(new { message = "Network Issue!" });
-        //        }
-        //        else
-        //        {
-        //            var carts = _mapper.Map<CartCreateViewModel, Cart>(model);
-        //            carts.CartStatus = 0;
-        //            if (model.CustomerCode != null)
-        //            {
-        //                var customer = db.Customers.FirstOrDefault(i => i.Code == model.CustomerCode);// Customer.Get(model.CustomerCode);
-        //                carts.CreatedBy = customer.Name;
-        //                carts.UpdatedBy = customer.Name;
-        //                carts.CustomerName = customer.Name;
-        //            }
-        //            carts.Code = _generateCode("CAR");
-        //            carts.DateEncoded = DateTime.Now;
-        //            carts.DateUpdated = DateTime.Now;
-        //            db.Carts.Add(carts);
-        //            db.SaveChanges();
-
-        //            if (carts.Code != null || carts.Code != "")
-        //            {
-        //                return Json(new { message = "Successfully Added to Cart!", Details = carts });
-        //            }
-        //            else
-        //                return Json(new { message = "Failed to Add Cart!" });
-        //        }
-
-        //    }
-
-        //}
-
-
+        
         [HttpPost]
         public JsonResult AddOrder(OrderCreateViewModel model)
         {
             var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
-            var orderCount = (from s in db.Orders
-                              join sh in db.Shops on s.ShopId equals sh.Id
-                              join c in db.Customers on sh.CustomerId equals c.Id
-                              where sh.CustomerId == shop.CustomerId && (s.Status >= 2)
-                              select s).Count();
 
-            var platform = (from ss in db.Payments
-                            join sh in db.Shops on ss.ShopId equals sh.Id
-                            join c in db.Customers on sh.CustomerId equals c.Id
-                            where sh.CustomerId == shop.CustomerId && ss.Status == 0 && ss.CreditType == 0
-                            select (Double?)ss.OriginalAmount).Sum() ?? 0;
-
-            var platformorder = (Convert.ToInt32(orderCount) * (db.PlatFormCreditRates.FirstOrDefault().RatePerOrder));
-            var varDelivery = (from ss in db.Payments
-                               join sh in db.Shops on ss.ShopId equals sh.Id
-                               join c in db.Customers on sh.CustomerId equals c.Id
-                               where sh.CustomerId == shop.CustomerId && ss.Status == 0 && ss.CreditType == 1
-                               select (Double?)ss.OriginalAmount).Sum() ?? 0;
-
-            var varDeliveryCharges = (from ss in db.Orders
-                                      join sh in db.Shops on ss.ShopId equals sh.Id
-                                      join c in db.Customers on sh.CustomerId equals c.Id
-                                      where sh.CustomerId == shop.CustomerId && ss.Status >= 2
-                                      select (Double?)ss.DeliveryCharge).Sum() ?? 0;
-            var DeliveryCredits = varDelivery - varDeliveryCharges;
-            var PlatformCredits = platform - platformorder;
-
-            if ((PlatformCredits < 26 && DeliveryCredits < 67))
+            var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
+            if ((shopCredits.PlatformCredit < 26 || shopCredits.DeliveryCredit < 67))
             {
                 //Shop DeActivate
                 shop.Status = 6;
@@ -1364,6 +1187,7 @@ namespace ShopNow.Controllers
                 order.TotalQuantity = model.ListItems.Sum(i => Convert.ToInt32(i.Quantity));
                 order.DateEncoded = DateTime.Now;
                 order.DateUpdated = DateTime.Now;
+                order.Status = 0;
                 db.Orders.Add(order);
                 db.SaveChanges();
 
@@ -1388,96 +1212,26 @@ namespace ShopNow.Controllers
                 }
 
                 if (order != null)
+                {
+                    var fcmToken = (from c in db.Customers
+                                    join s in db.Shops on c.Id equals s.CustomerId
+                                    where s.Id == model.ShopId
+                                    select c.FcmTocken ?? "").FirstOrDefault().ToString();
+                    Helpers.PushNotification.SendbydeviceId("You have a new Order", "ShopNowChat", "../../assets/a.mp3", fcmToken.ToString());
                     return Json(new { message = "Successfully Added to Cart!", Details = order });
+
+                }
                 else
                     return Json(new { message = "Failed to Add Cart!" });
             }
 
         }
         
-        //public JsonResult GetUpdateCart(string code, string qty, double amount, string customercode, int isupdate, string deliveryBoyCode = "")
-        //{
-        //    var cart = db.Carts.FirstOrDefault(i => i.Code == code); // Cart.Get(code);
-        //    cart.UpdatedQty = qty;
-        //    cart.UpdatedPrice = amount;
-        //    cart.isUpdate = isupdate;
-        //    if (customercode != null)
-        //    {
-        //        var customer = db.Customers.FirstOrDefault(i => i.Code == customercode);// Customer.Get(customercode);
-        //        cart.UpdatedBy = customer.Name;
-        //    }
-        //    if (isupdate == 2)
-        //    {
-        //        cart.CartStatus = 2;
-        //    }
-        //    if (isupdate == 4)
-        //    {
-        //        cart.CartStatus = 4;
-        //        var delivery = db.DeliveryBoys.FirstOrDefault(i => i.Code == deliveryBoyCode); // DeliveryBoy.Get(deliveryBoyCode);
-        //        cart.DeliveryBoyCode = delivery.Code;
-        //        cart.DeliveryBoyName = delivery.Name;
-        //        cart.DeliveryBoyPhoneNumber = delivery.PhoneNumber;
-
-        //    }
-        //    cart.DateUpdated = DateTime.Now;
-        //    db.Entry(cart).State = System.Data.Entity.EntityState.Modified;
-        //    db.SaveChanges();
-
-
-        //    if (code != null || code != "")
-        //    {
-        //        return Json(new { message = "Successfully Updated the Order!" }, JsonRequestBehavior.AllowGet);
-        //    }
-        //    else
-        //    {
-        //        return Json(new { message = "Failed to Updated the order!" }, JsonRequestBehavior.AllowGet);
-        //    }
-        //}
-        //public JsonResult GetRemoveCart(string code, int isdelete)
-        //{
-        //    var cart = db.Carts.FirstOrDefault(i => i.Code == code); // Cart.Get(code);
-        //    cart.Status = 1;
-        //    cart.isDelete = isdelete;
-        //    db.Entry(cart).State = System.Data.Entity.EntityState.Modified;
-        //    db.SaveChanges();
-
-        //    if (code != null || code != "")
-        //    {
-        //        return Json(new { message = "Successfully Removed from Cart!" }, JsonRequestBehavior.AllowGet);
-        //    }
-        //    else
-        //    {
-        //        return Json(new { message = "Failed to Remove from Cart!" }, JsonRequestBehavior.AllowGet);
-        //    }
-        //}
-
         public JsonResult GetAcceptOrder(int orderNo, int customerId, int status, int priority)
         {
 
             if (orderNo != 0 && customerId != 0 && status != 0)
             {
-                //if (status == 3)
-                //{
-                //    var topup = db.TopUps.OrderByDescending(q => q.Id).FirstOrDefault(i => i.CustomerCode == customerId && i.CreditType == 0 && i.Status == 0);
-                //    if (topup == null)
-                //    {
-
-                //    }
-                //    else
-                //    {
-                //        var list = db.PlatFormCreditRates.Where(i => i.Status == 0).ToList();
-                //        topup.CreditAmount = topup.CreditAmount - list.FirstOrDefault().RatePerOrder;
-                //        topup.DateUpdated = DateTime.Now;
-                //        db.Entry(topup).State = System.Data.Entity.EntityState.Modified;
-                //        db.SaveChanges();
-                //    }
-                //}
-                //var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
-                //detail.OrderStatus = status;
-                //detail.DateUpdated = DateTime.Now;
-                //db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
-                //db.SaveChanges();
-               
                 var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
                 var order = db.Orders.FirstOrDefault(i => i.OrderNumber == orderNo);
                 order.Status = status;
@@ -1504,6 +1258,16 @@ namespace ShopNow.Controllers
                     payment.UpdatedBy = customer.Name;
                     payment.DateUpdated = DateTime.Now;
                     db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+
+                if (status == 6)
+                {
+                    //Reducing Platformcredits
+                    var shop = db.Shops.FirstOrDefault(i => i.Id == order.ShopId);
+                    var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
+                    shopCredits.DeliveryCredit -= payment.DelivaryCharge;
+                    db.Entry(shopCredits).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }
                 return Json(new { message = "Successfully Updated the Order!" }, JsonRequestBehavior.AllowGet);
