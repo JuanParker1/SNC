@@ -1260,16 +1260,7 @@ namespace ShopNow.Controllers
                     db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }
-
-                if (status == 6)
-                {
-                    //Reducing Platformcredits
-                    var shop = db.Shops.FirstOrDefault(i => i.Id == order.ShopId);
-                    var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
-                    shopCredits.DeliveryCredit -= payment.DelivaryCharge;
-                    db.Entry(shopCredits).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-                }
+               
                 return Json(new { message = "Successfully Updated the Order!" }, JsonRequestBehavior.AllowGet);
             }
             else
@@ -1693,11 +1684,14 @@ namespace ShopNow.Controllers
             db.Entry(order).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
-            //var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
-            //detail.OrderStatus = 6;
-            //detail.DateUpdated = DateTime.Now;
-            //db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
-            //db.SaveChanges();
+            //Reducing Platformcredits
+            var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == orderNo);
+            var shop = db.Shops.FirstOrDefault(i => i.Id == order.ShopId);
+            var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
+            shopCredits.DeliveryCredit -= payment.DelivaryCharge;
+            db.Entry(shopCredits).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+
             return Json(new { message = "Successfully DelivaryBoy Delivered!" }, JsonRequestBehavior.AllowGet);
         }
 

@@ -985,18 +985,6 @@ namespace ShopNow.Controllers
                 delivary.DateUpdated = DateTime.Now;
                 db.Entry(delivary).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-
-
-                //var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == cart.OrderNumber);
-                //detail.CustomerId = delivary.CustomerId;
-                //detail.CustomerName = delivary.CustomerName;
-                //detail.DeliveryBoyId = delivary.Id;
-                //detail.DeliveryBoyName = delivary.Name;
-                //detail.Status = 4;
-                //detail.UpdatedBy = user.Name;
-                //detail.DateUpdated = DateTime.Now;
-                //db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
-                //db.SaveChanges();
                 return RedirectToAction("List");
             }
             else
@@ -1467,23 +1455,6 @@ namespace ShopNow.Controllers
                 order.DateUpdated = DateTime.Now;
                 db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-
-                //var topup = db.TopUps.OrderByDescending(q => q.Id).FirstOrDefault(i => i.CustomerCode == customerId && i.CreditType == 0 && i.Status == 0);//TopUp.GetCustomerPlatform(customerCode);
-                //if (topup != null)
-                //{
-                //    var list = db.PlatFormCreditRates.Where(i => i.Status == 0).ToList();
-                //    topup.CreditAmount = topup.CreditAmount - list.FirstOrDefault().RatePerOrder;
-                //    topup.DateUpdated = DateTime.Now;
-                //    db.Entry(topup).State = System.Data.Entity.EntityState.Modified;
-                //    db.SaveChanges();
-                //}
-
-                //var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
-                //detail.OrderStatus = 3;
-                //detail.DateUpdated = DateTime.Now;
-                //db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
-                //db.SaveChanges();
-
                 return Json(new { message = "Order Confirmed!" }, JsonRequestBehavior.AllowGet);
             }
             else
@@ -1526,12 +1497,6 @@ namespace ShopNow.Controllers
                 db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
-                // update Shopcharge cartstatus 7
-                //var sc = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
-                //sc.OrderStatus = 7;
-                //sc.DateUpdated = DateTime.Now;
-                //db.Entry(sc).State = System.Data.Entity.EntityState.Modified;
-                //db.SaveChanges();
                 return Json(new { message = "Order Cancelled!" }, JsonRequestBehavior.AllowGet);
             }
             else
@@ -1600,19 +1565,7 @@ namespace ShopNow.Controllers
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
         }
-
-        // Cart GetCart(string code)
-        //{
-        //    try
-        //    {
-
-        //        return db.Carts.Where(i => i.Code == code).FirstOrDefault();
-        //    }
-        //    catch
-        //    {
-        //        return (Cart)null;
-        //    }
-        //}
+        
 
         public ActionResult UnAssignDeliveryBoy(int orderNo)
         {
@@ -1751,13 +1704,6 @@ namespace ShopNow.Controllers
             order.DateUpdated = DateTime.Now;
             db.Entry(order).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
-
-            //var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
-            //detail.OrderStatus = 6;
-            //detail.DateUpdated = DateTime.Now;
-            //db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
-            //db.SaveChanges();
-
             return RedirectToAction("Edit", "Cart", new { orderno = orderNo, id = id });
         }
 
