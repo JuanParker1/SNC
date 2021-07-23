@@ -24,7 +24,7 @@
                                     <div class="col-md-12">
                                         <label class="col-form-label text-secondary font-weight-bold">Shop Name: </label>
                                         <label class="control-label font-weight-bold"> @Model.ShopName</label>
-                                        <input type="hidden" name="ShopCode" id="ShopCode" value="@Model.ShopCode" />
+                                        <input type="hidden" name="ShopId" id="ShopId" value="@Model.ShopId" />
                                         <input type="hidden" name="ShopName" id="ShopName" value="@Model.ShopName" />
                                     </div>
                                 </div>
@@ -33,14 +33,14 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <label class="col-form-label"><strong class="text-secondary">Shop Item Name</strong></label>
-                                        <select name="ItemCode" id="ItemCode" class="form-control"></select>
-                                        <input type="hidden" name="ItemName" id="ItemName" />
+                                        <select name="ProductId" id="ProductId" class="form-control"></select>
+                                        <input type="hidden" name="ProductName" id="ProductName" />
                                     </div>
                                     <div class="col-md-6">
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <label class="col-form-label"><strong class="text-secondary">Master Item </strong></label>
-                                                <select name="MasterProductCode" id="MasterProductCode" class="form-control"></select>
+                                                <select name="MasterProductId" id="MasterProductId" class="form-control"></select>
                                                 <input type="hidden" name="MasterProductName" id="MasterProductName" />
                                             </div>
                                             <div class="col-md-6 mx-auto">
@@ -121,10 +121,10 @@
         $(document).ready(function () {
 
             $(document).on('click', '.Save', function () {
-                var masterproductcode = $('#MasterProductCode').val();
-                var itemcode = $('#ItemCode').val();
-                var shopcode = $('#ShopCode').val();
-                $.post('/MasterProduct/MappingProduct', { masterproductcode: masterproductcode, itemcode: itemcode, shopcode: shopcode }, function (data) {
+                var MasterProductId = $('#MasterProductId').val();
+                var ProductId = $('#ProductId').val();
+                var ShopId = $('#ShopId').val();
+                $.post('/MasterProduct/MappingProduct', { MasterProductId: MasterProductId, ProductId: ProductId, ShopId: ShopId }, function (data) {
                     if (data == true) {
                         window.location.reload();
                       //  swal("Information!", "Succesfully mapped", "warning");
@@ -159,42 +159,42 @@
 
 
             $(document).on('click', '#Pending', function () {
-                var shopcode = $('#ShopCode').val();
-                if (shopcode == null || shopcode == "") {
+                var ShopId = $('#ShopId').val();
+                if (ShopId == null || ShopId == "") {
                     swal("Warning!", "Please Select Shop Name!", "warning");
                 } else {
-                    window.location.replace('/MasterProduct/PendingList?shopcode=' + shopcode);
+                    window.location.replace('/MasterProduct/PendingList?ShopId=' + ShopId);
                 }
             });
 
             $(document).on('click', '#Mapped', function () {
-                var shopcode = $('#ShopCode').val();
-                if (shopcode == null || shopcode == "") {
+                var ShopId = $('#ShopId').val();
+                if (ShopId == null || ShopId == "") {
                     swal("Warning!", "Please Select Shop Name!", "warning");
                 } else {
-                    window.location.replace('/MasterProduct/MappedList?shopcode=' + shopcode);
+                    window.location.replace('/MasterProduct/MappedList?ShopId=' + ShopId);
                 }
             });
 
-            var shopcode = $('#ShopCode').val();
+            var ShopId = $('#ShopId').val();
             var shoptype = "";
-            $("#ItemCode").select2({
+            $("#ProductId").select2({
                 placeholder: "Search Items",
                 ajax: {
-                    url: "/MasterProduct/GetProductItemSelect2?shopcode=" + shopcode,
+                    url: "/MasterProduct/GetProductItemSelect2?ShopId=" + ShopId,
                     width: "100%",
                     delay: 250,
                     dataType: 'json'
                 }
             }).on("select2:select", function (e) {
-                $('input[name="ItemName"]').val(e.params.data.text);
+                $('input[name="ProductName"]').val(e.params.data.text);
                
             });
             function getURL() {
                 return "/MasterProduct/GetMasterItemSelect2";
             }
-           // url: "/MasterProduct/GetMasterItemSelect2?type=" + $('input[name="ItemName"]').val(),
-            $('#MasterProductCode').select2({
+           // url: "/MasterProduct/GetMasterItemSelect2?type=" + $('input[name="ProductName"]').val(),
+            $('#MasterProductId').select2({
                 placeholder: "Search Items",
                 ajax: {
                     url: function () {
@@ -214,9 +214,9 @@
                 $('#BrandName').text(e.params.data.brandname);
                 $('#CategoryName').text(e.params.data.categoryname);
                 $('#Price').text("Rs. " + e.params.data.price);
-                var shop = $('#ShopCode').val();
-                var item = $('#ItemCode').val();
-                var masterproduct = $('#MasterProductCode').val();
+                var shop = $('#ShopId').val();
+                var item = $('#ProductId').val();
+                var masterproduct = $('#MasterProductId').val();
                 if (shop != null && item != null && masterproduct != null) {
                     $('#Create').prop('disabled', false);
                 }

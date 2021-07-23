@@ -1,38 +1,57 @@
-﻿@model IEnumerable<ShopNow.Models.Product>
-@using GridMvc.Html;
+﻿@model ShopNow.ViewModels.MasterProductListViewModel
 @{
     ViewBag.Title = "Mapped List";
 }
 <title>ShopNow | Mapped List</title>
-<link href="~/Content/Gridmvc.css" rel="stylesheet" />
-<script src="~/Scripts/gridmvc.js"></script>
 
 <div class="container-fluid">
     <div class="row mb-2">
-        <div class="col-md-3">
-            <h5 class="text-success" style="letter-spacing:1px">MAPPED PRODUCT LIST</h5>
+        <div class="col-md-2">
+            <h5 class="text-success" style="letter-spacing:1px">Mapped List</h5>
         </div>
         <div class="col-md-2">
             <div class="mb-1 data-search">
             </div>
         </div>
-        <div class="col-md-7 text-right">
+        <div class="col-md-8 text-right">
             <a href="~/MasterProduct/ItemMapping" target="_blank"> Item Mapping</a>
         </div>
     </div>
-
-    @Html.Grid(Model).Columns(columns =>
-{
-   columns.Add(c => c.Name).Titled("Shop Product Name").Filterable(true).SetWidth(30);
-   columns.Add(c => c.MasterProductName).Titled("Product Name").Filterable(true).SetWidth(30);
-   columns.Add(c => c.ProductType).Titled("Product Type").Filterable(true).SetWidth(30);
-   columns.Add()
-.Encoded(false)
-.Sanitized(false)
-.RenderValueAs(c => Html.ActionLink("Edit", "ItemMappingUpdate", new { code = @ShopNow.Helpers.AdminHelpers.ECode(c.Code) }, new { @class = "btn btn-sm btn-warning" }).ToHtmlString()).Titled("Action").SetWidth(20);
-}).WithPaging(10).Sortable(true)
- 
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="table-responsive">
+                            <table class="table table-borderless table-striped table-condensed" id="MappedList">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th class="text-nowrap">Shop Product Name</th>
+                                        <th>Product Name</th>
+                                        <th>Product Type</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.MappedLists)
+                                    {
+                                        <tr>
+                                            <td></td>
+                                            <td class="text-nowrap">@item.Name</td>
+                                            <td>@item.MasterProductName</td>
+                                            <td>@item.ProductTypeName</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
 
 @section Scripts
 {
@@ -45,7 +64,7 @@
     <script>
         $(document).ready(function () {
 
-            $('#ShopCode').select2({
+            $('#ShopId').select2({
                 placeholder: "Search Shop",
                 ajax: {
                     url: "/MasterProduct/GetShopSelect2",
@@ -87,3 +106,38 @@
     </script>
 }
 
+@*@model IEnumerable<ShopNow.Models.Product>
+@using GridMvc.Html;
+@{
+    ViewBag.Title = "Mapped List";
+}
+<title>ShopNow | Mapped List</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-md-3">
+            <h5 class="text-success" style="letter-spacing:1px">MAPPED PRODUCT LIST</h5>
+        </div>
+        <div class="col-md-2">
+            <div class="mb-1 data-search">
+            </div>
+        </div>
+        <div class="col-md-7 text-right">
+            <a href="~/MasterProduct/ItemMapping" target="_blank"> Item Mapping</a>
+        </div>
+    </div>
+
+    @Html.Grid(Model).Columns(columns =>
+{
+   columns.Add(c => c.Name).Titled("Shop Product Name").Filterable(true).SetWidth(30);
+   columns.Add(c => c.MasterProductName).Titled("Product Name").Filterable(true).SetWidth(30);
+   columns.Add(c => c.ProductType).Titled("Product Type").Filterable(true).SetWidth(30);
+   columns.Add()
+.Encoded(false)
+.Sanitized(false)
+.RenderValueAs(c => Html.ActionLink("Edit", "ItemMappingUpdate", new { code = @ShopNow.Helpers.AdminHelpers.ECode(c.Code) }, new { @class = "btn btn-sm btn-warning" }).ToHtmlString()).Titled("Action").SetWidth(20);
+}).WithPaging(10).Sortable(true)
+
+</div>*@
