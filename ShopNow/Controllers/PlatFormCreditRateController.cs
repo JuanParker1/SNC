@@ -35,7 +35,7 @@ namespace ShopNow.Controllers
             model.List = db.PlatFormCreditRates.Where(i => i.Status == 0).ToList().AsQueryable().ProjectTo<PlatFormCreditRateListViewModel.PlatFormCreditRateList>(_mapperConfiguration).ToList();
             model.Count = db.PlatFormCreditRates.Where(i => i.Status == 0).Count();
             ViewBag.Count = db.PlatFormCreditRates.Where(i => i.Status == 0).Count();
-            return View(model.List);
+            return View(model);
         }
 
         [AccessPolicy(PageCode = "SHNPFCS002")]
@@ -53,10 +53,8 @@ namespace ShopNow.Controllers
             platFormCreaditRate.DateEncoded = DateTime.Now;
             platFormCreaditRate.DateUpdated = DateTime.Now;
             db.PlatFormCreditRates.Add(platFormCreaditRate);
-
             db.SaveChanges();
-
-           // string code = PlatFormCreditRate.Add(platFormCreaditRate, out int error);
+            
            IsAdded = platFormCreaditRate.Id !=0 ? true : false;
             message = RatePerOrder + " Successfully Added";
 
@@ -68,17 +66,23 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             string message = "";
-            PlatFormCreditRate platFormCR = db.PlatFormCreditRates.FirstOrDefault(i => i.Id == code);// PlatFormCreditRate.Get(code);
+            PlatFormCreditRate platFormCR = db.PlatFormCreditRates.FirstOrDefault(i => i.Id == code);
             if (platFormCR != null)
             {
-                platFormCR.RatePerOrder = ratePerOrder;
-                platFormCR.DailyViewer = dailyViewer;
-                platFormCR.DateUpdated = DateTime.Now;
-                platFormCR.UpdatedBy = user.Name;
-                platFormCR.DateUpdated = DateTime.Now;
+                platFormCR.Status = 2;
                 db.Entry(platFormCR).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                // bool result = PlatFormCreditRate.Edit(platFormCR, out int error);
+
+                var platFormCreditRate = new PlatFormCreditRate();
+                platFormCreditRate.RatePerOrder = ratePerOrder;
+                platFormCreditRate.DailyViewer = dailyViewer;
+                platFormCreditRate.CreatedBy = user.Name;
+                platFormCreditRate.UpdatedBy = user.Name;
+                platFormCreditRate.Status = 0;
+                platFormCreditRate.DateEncoded = DateTime.Now;
+                platFormCreditRate.DateUpdated = DateTime.Now;
+                db.PlatFormCreditRates.Add(platFormCreditRate);
+                db.SaveChanges();
                 message = ratePerOrder + " Updated Successfully";
             }
             return Json(new { message = message }, JsonRequestBehavior.AllowGet);
