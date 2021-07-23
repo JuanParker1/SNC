@@ -431,23 +431,23 @@ namespace ShopNow.Controllers
                             BrandId = CheckBrand(row[model.BrandName].ToString(), model.ProductTypeId, model.ProductTypeName),
                             BrandName = row[model.BrandName].ToString(),
                             SizeLB = row[model.SizeLB].ToString(),
-                            Weight = Convert.ToDouble(row[model.weight]),
+                            //Weight = Convert.ToDouble(row[model.Weight]),
                             GoogleTaxonomyCode = row[model.GoogleTaxonomyCode].ToString(),
                             ASIN = row[model.ASIN].ToString(),
                             CategoryIds = model.CategoryIds,
                             CategoryName = row[model.CategoryName].ToString(),
                             ShortDescription = row[model.ShortDescription].ToString(),
                             LongDescription = row[model.LongDescription].ToString(),
-                            Price = row[model.Price],
+                            //Price = row[model.Price],
                             ImagePath1 = row[model.ImagePath1].ToString(),
                             ImagePath2 = row[model.ImagePath2].ToString(),
                             ImagePath3 = row[model.ImagePath3].ToString(),
                             ImagePath4 = row[model.ImagePath4].ToString(),
                             ImagePath5 = row[model.ImagePath5].ToString(),
-                            SubCategoryIds = model.SubCategoryCode1,
-                            SubCategoryName = row[model.SubCategoryName1].ToString(),
+                            //SubCategoryIds = model.SubCategoryCode1,
+                           // SubCategoryName = row[model.SubCategoryName1].ToString(),
                             // NextSubCategoryIds = CheckNextSubCategory(model.SubCategoryCode1, row[model.SubCategoryName1].ToString(), row[model.SubCategoryName2].ToString(), model.ProductTypeId, model.ProductTypeName),
-                            NextSubCategoryName = row[model.SubCategoryName2].ToString(),
+                            //NextSubCategoryName = row[model.SubCategoryName2].ToString(),
                             ProductTypeId = model.ProductTypeId,
                             PackageId = CheckPackage(row[model.PackageName].ToString()),
                             PackageName = row[model.PackageName].ToString(),
@@ -1240,12 +1240,12 @@ namespace ShopNow.Controllers
                             BrandName = row[model.BrandName].ToString(),
                            // CategoryIds = MedicalCheckCategory(row[model.CategoryName].ToString(), model.ProductTypeId),
                             CategoryName = row[model.CategoryName].ToString(),
-                            MeasurementUnitId = Convert.ToInt32(row[model.DrugMeasurementUnitId]),
-                            MeasurementUnitName = row[model.DrugMeasurementUnitName].ToString(),
-                            PriscriptionCategory = Convert.ToBoolean(row[model.PriscriptionCategory]),
+                            //MeasurementUnitId = Convert.ToInt32(row[model.DrugMeasurementUnitId]),
+                           // MeasurementUnitName = row[model.DrugMeasurementUnitName].ToString(),
+                           // PriscriptionCategory = Convert.ToBoolean(row[model.PriscriptionCategory]),
                            // DrugCompoundDetailIds = Convert.ToInt32(row[model.DrugCompoundDetailIds]),
-                            DrugCompoundDetailName = row[model.CombinationDrugCompound].ToString(),
-                            Price = Convert.ToDouble(row[model.Price]),
+                            //DrugCompoundDetailName = row[model.CombinationDrugCompound].ToString(),
+                            //Price = Convert.ToDouble(row[model.Price]),
                             ImagePath1 = row[model.ImagePath1].ToString(),
                             ImagePath2 = row[model.ImagePath2].ToString(),
                             ImagePath3 = row[model.ImagePath3].ToString(),
@@ -1253,9 +1253,9 @@ namespace ShopNow.Controllers
                             ImagePath5 = row[model.ImagePath5].ToString(),
                             OriginCountry = row[model.OriginCountry].ToString(),
                             Manufacturer = row[model.Manufacturer].ToString(),
-                            IBarU = Convert.ToInt32(row[model.IBarU]),
+                            //IBarU = Convert.ToInt32(row[model.IBarU]),
                             SizeLB = row[model.SizeLB].ToString(),
-                            Weight = Convert.ToDouble(row[model.weight]),
+                            //Weight = Convert.ToDouble(row[model.Weight]),
                             PackageId = CheckMedicalPackage(row[model.PackageName].ToString()),
                             PackageName = row[model.PackageName].ToString(),
                             ProductTypeId = model.ProductTypeId,
@@ -1649,6 +1649,7 @@ namespace ShopNow.Controllers
             _db.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);
         }
+
         // Item Mapping
         [AccessPolicy(PageCode = "SHNMPRIM011")]
         public ActionResult ItemMapping()
@@ -1701,10 +1702,9 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new MasterProductListViewModel();
-
-            model.MappedLists = _db.Products.Join(_db.MasterProducts, p=> p.MasterProductId, mp=> mp.Id, (p,mp)=> { p,mp})
-                .Where(a => a.ShopId == shopId && a.Status == 0 && a.MasterProductId != 0)
-                .OrderBy(i => i.Name).Select(i => new MasterProductListViewModel.MappedList
+            model.MappedLists = _db.Products.Join(_db.MasterProducts, p=> p.MasterProductId, mp=> mp.Id, (p,mp)=>new {p,mp})
+                .Where(a => a.p.ShopId == shopId && a.p.Status == 0 && a.p.MasterProductId != 0)
+                .OrderBy(i => i.p.Name).Select(i => new MasterProductListViewModel.MappedList
                 {
                     Id = i.p.Id,
                     Name = i.p.Name,
@@ -1844,11 +1844,6 @@ namespace ShopNow.Controllers
                     if (masterproduct.ProductTypeId != 0)
                     {
                         product.ProductTypeId = masterproduct.ProductTypeId;
-                    }
-                    if (shopId == 0)
-                    {
-                        product.ShopId = 0;
-                        product.ShopName = "Admin";
                     }
                     if (shopId != 0)
                     {

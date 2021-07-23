@@ -28,7 +28,6 @@ namespace ShopNow.Controllers
         private MapperConfiguration _mapperConfiguration;
         UploadContent uc = new UploadContent();
         private const string _prefix = "REF";
-       // private static readonly string bucketName = "shopnowchat.com/";
         private static readonly RegionEndpoint bucketRegion = RegionEndpoint.APSouth1;
         private static readonly string accesskey = ConfigurationManager.AppSettings["AWSAccessKey"];
         private static readonly string secretkey = ConfigurationManager.AppSettings["AWSSecretKey"];
@@ -65,7 +64,6 @@ namespace ShopNow.Controllers
             {
                 config.CreateMap<Shop, ShopListViewModel.ShopList>();
                 config.CreateMap<ShopRegisterViewModel, Shop>();
-                config.CreateMap<ShopPostEditViewModel, Shop>();
                 config.CreateMap<ShopEditViewModel, Shop>();
                 config.CreateMap<Shop, ShopEditViewModel>();
                 config.CreateMap<OtpViewModel, OtpVerification>();
@@ -80,7 +78,6 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            //var model = new ShopListViewModel();
             var List = (from s in db.Shops
                         select s).OrderBy(s => s.Name).Where(i=> i.Status == 0).ToList();
 
@@ -95,8 +92,6 @@ namespace ShopNow.Controllers
             var List = (from s in db.Shops
                         select s).OrderBy(s => s.Name).Where(i => i.Status == 1) .ToList();
             return View(List);
-
-           
         }
 
         [AccessPolicy(PageCode = "SHNSHPC001")]
@@ -131,10 +126,10 @@ namespace ShopNow.Controllers
             }
 
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var customer = db.Customers.FirstOrDefault(i => i.Id == user.Id); //Customer.Get(user.Code);
+            var customer = db.Customers.FirstOrDefault(i => i.Id == user.Id);
             var shop = _mapper.Map<ShopRegisterViewModel, Shop>(model);
             shop.Status = 1;
-            var custom = db.Customers.FirstOrDefault(i => i.Id == shop.CustomerId); // Customer.Get(shop.CustomerCode);
+            var custom = db.Customers.FirstOrDefault(i => i.Id == shop.CustomerId);
             if (custom != null)
             {
                 shop.CustomerId = custom.Id;
