@@ -20,7 +20,7 @@
     @Html.Grid(Model).Columns(columns =>
 {
 columns.Add(b => b.Name).Titled("Name").Filterable(true).SetWidth(20);
-columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(b => @<div><a href="javascript:void(0)" data-id="@b.Code" data-id1="@b.Name" class="btn-sm btn-warning edit-prompt" data-toggle="modal" data-target="#editModal" style="padding: 3px 26px">Edit</a> <a href="javascript:void(0)" data-id="@b.Code" data-id1="@b.Name" class="btn-sm btn-danger delete-prompt" data-toggle="modal" data-target="#deleteModel" style="padding: 3px 18px">Delete</a></div>);
+columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(b => @<div><a href="javascript:void(0)" data-id="@b.Id" data-id1="@b.Name" class="btn-sm btn-warning edit-prompt" data-toggle="modal" data-target="#editModal" style="padding: 3px 26px">Edit</a> <a href="javascript:void(0)" data-id="@b.Id" data-id1="@b.Name" class="btn-sm btn-danger delete-prompt" data-toggle="modal" data-target="#deleteModel" style="padding: 3px 18px">Delete</a></div>);
             }).WithPaging(20).Sortable(true)
 </div>
 
@@ -143,7 +143,7 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
                     swal("Name is Empty.", "Please Enter a Specification Name", "warning");
                 }
                 else if (specificationName != "" || specificationName != null) {
-                    $.getJSON("/Specification/Edit", { code: Code, name: specificationName }, function (data) {
+                    $.getJSON("/Specification/Edit", { id: Code, name: specificationName }, function (data) {
                         if (data.message != null || data.message != "") {
                             swal({
                                 title: data.message,
@@ -168,7 +168,7 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
 
             $(".delete-confirm").click(function () {
                 var code = $("#Code").val();
-                $.getJSON("/Specification/Delete", { code: code }, function (data) {
+                $.getJSON("/Specification/Delete", { id: code }, function (data) {
                     window.location.reload();
                 });
             });

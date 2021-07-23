@@ -17,7 +17,7 @@
         <div class="col-md-12 mx-auto">
             @using (Html.BeginForm("Edit", "DrugCompoundDetail", FormMethod.Post, new { id = "DrugCompoundDetailEditForm" }))
             {
-                <input type="hidden" name="Code" value="@Model.Code" />
+                <input type="hidden" name="Id" value="@Model.Id" />
                 <input type="hidden" name="CreatedBy" value="@Model.CreatedBy" />
                 <input type="hidden" name="UpdatedBy" value="@Model.UpdatedBy" />
                 <input type="hidden" name="DateEncoded" value="@Model.DateEncoded" />

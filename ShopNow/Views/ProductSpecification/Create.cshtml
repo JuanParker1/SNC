@@ -1,4 +1,4 @@
-﻿@model ShopNow.ViewModels.ProductSpecificationCreateEditViewModel
+﻿@model ShopNow.ViewModels.ProductSpecificationCreateViewModel
 @{
     ViewBag.Title = "Product Specification Entry";
 }
@@ -25,14 +25,14 @@
                             <div class="col-md-4">
                                 <label class="control-label text-secondary font-weight-bold">Master Product Name</label>
                                 <div class="form-group">
-                                    <select name="MasterProductCode" id="MasterProductCode" class="form-control"></select>
+                                    <select name="MasterProductId" id="MasterProductId" class="form-control"></select>
                                     <input type="hidden" class="form-control" name="MasterProductName" id="MasterProductName" />
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <label class="control-label text-secondary font-weight-bold">Specification Name</label>
                                 <div class="form-group">
-                                    <select name="SpecificationCode" id="SpecificationCode" class="form-control"></select>
+                                    <select name="SpecificationId" id="SpecificationId" class="form-control"></select>
                                     <input type="hidden" class="form-control" name="SpecificationName" id="SpecificationName" />
                                 </div>
                             </div>
@@ -79,7 +79,7 @@
                 };
             });
 
-            $('#MasterProductCode').select2({
+            $('#MasterProductId').select2({
                 placeholder: "Search Product",
                 ajax: {
                     url: "/ProductSpecification/GetMasterProductSelect2",
@@ -91,7 +91,7 @@
                 $('input[name="MasterProductName"]').val(e.params.data.text);
             });
 
-            $('#SpecificationCode').select2({
+            $('#SpecificationId').select2({
                 placeholder: "Search Specification",
                 ajax: {
                     url: "/ProductSpecification/GetSpecificationSelect2",

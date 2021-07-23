@@ -28,8 +28,10 @@ namespace ShopNow.Controllers
             _mapperConfiguration = new MapperConfiguration(config =>
             {
                 config.CreateMap<ProductSpecification, ProductSpecificationListViewModel.ProductSpecificationList>();
-                config.CreateMap<ProductSpecificationCreateEditViewModel, ProductSpecification>();
-                config.CreateMap<ProductSpecification, ProductSpecificationCreateEditViewModel>();
+                config.CreateMap<ProductSpecificationCreateViewModel, ProductSpecification>();
+                config.CreateMap<ProductSpecification, ProductSpecificationEditViewModel>();
+                config.CreateMap<ProductSpecificationEditViewModel, ProductSpecification>();
+
             });
             _mapper = _mapperConfiguration.CreateMapper();
         }
@@ -57,14 +59,14 @@ namespace ShopNow.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AccessPolicy(PageCode = "SHNPSFC002")]
-        public ActionResult Create(ProductSpecificationCreateEditViewModel model)
+        public ActionResult Create(ProductSpecificationCreateViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             int errorCode = 0;
             try
             {
-                var ps = _mapper.Map<ProductSpecificationCreateEditViewModel, ProductSpecification>(model);
+                var ps = _mapper.Map<ProductSpecificationCreateViewModel, ProductSpecification>(model);
                 ps.CreatedBy = user.Name;
                 ps.UpdatedBy = user.Name;
                 ps.Status = 0;
@@ -81,36 +83,35 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNPSFE003")]
-        public ActionResult Edit(string code)
+        public ActionResult Edit(string id)
         {
-            var dCode = AdminHelpers.DCodeInt(code);
+            var dCode = AdminHelpers.DCodeInt(id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             if (dCode==0)
                 return HttpNotFound();
-            var ps = _db.ProductSpecifications.FirstOrDefault(i => i.Id == dCode && i.Status == 0);// ProductSpecification.Get(dCode);
-            var model = _mapper.Map<ProductSpecification, ProductSpecificationCreateEditViewModel>(ps);
+            var ps = _db.ProductSpecifications.FirstOrDefault(i => i.Id == dCode && i.Status == 0);
+            var model = _mapper.Map<ProductSpecification, ProductSpecificationEditViewModel>(ps);
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AccessPolicy(PageCode = "SHNPSFE003")]
-        public ActionResult Edit(ProductSpecificationCreateEditViewModel model)
+        public ActionResult Edit(ProductSpecificationEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             int errorCode = 0;
             try
             {
-                ProductSpecification ps = _db.ProductSpecifications.FirstOrDefault(i => i.Id == model.Id && i.Status == 0);// ProductSpecification.Get(model.Code);
+                ProductSpecification ps = _db.ProductSpecifications.FirstOrDefault(i => i.Id == model.Id && i.Status == 0);
                 _mapper.Map(model, ps);
                 ps.UpdatedBy = user.Name;
                 ps.DateUpdated = DateTime.Now;
                 ps.DateUpdated = DateTime.Now;
                 _db.Entry(ps).State = System.Data.Entity.EntityState.Modified;
                 _db.SaveChanges();
-                //ProductSpecification.Edit(ps, out errorCode);
 
                 return RedirectToAction("List");
             }
@@ -121,10 +122,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNPSFD004")]
-        public ActionResult Delete(string code)
+        public ActionResult Delete(string id)
         {
-            var dCode = AdminHelpers.DCodeInt(code);
-            var ps = _db.ProductSpecifications.FirstOrDefault(i => i.Id == dCode && i.Status == 0);// ProductSpecification.Get(dCode);
+            var dCode = AdminHelpers.DCodeInt(id);
+            var ps = _db.ProductSpecifications.FirstOrDefault(i => i.Id == dCode && i.Status == 0);
             ps.Status = 2;
             _db.Entry(ps).State = System.Data.Entity.EntityState.Modified;
             _db.SaveChanges();

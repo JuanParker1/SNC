@@ -26,7 +26,7 @@ columns.Add(c => c.IntakeContraindication).Titled("Brand Name").Filterable(true)
 columns.Add()
 .Encoded(false)
 .Sanitized(false)
-.RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code) }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
-               + Html.ActionLink("Delete", "Delete", new { code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code) }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(20);
+.RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { Id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
+               + Html.ActionLink("Delete", "Delete", new { Id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(20);
 }).WithPaging(20).Sortable(true)
 </div>

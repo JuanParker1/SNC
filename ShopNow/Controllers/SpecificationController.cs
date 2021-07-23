@@ -48,7 +48,7 @@ namespace ShopNow.Controllers
             bool IsAdded = false;
             string message = "";
             string message1 = "";
-            var specificationName = db.Specifications.FirstOrDefault(i => i.Name == name); // Specification.GetName(name);
+            var specificationName = db.Specifications.FirstOrDefault(i => i.Name == name);
             if (specificationName == null)
             {
                 var specification = new Specification();
@@ -60,7 +60,6 @@ namespace ShopNow.Controllers
                 specification.DateUpdated = DateTime.Now;
                 db.Specifications.Add(specification);
                 db.SaveChanges();
-                //string code = Specification.Add(specification, out int error);
                 IsAdded = specification.Id != 0 ? true : false;
                 message = name + " Successfully Added";
             }
@@ -73,12 +72,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNSPFE003")]
-        public JsonResult Edit(string code, string name)
+        public JsonResult Edit(int id, string name)
         {
-            var dCode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             string message = "";
-            Specification specification = db.Specifications.FirstOrDefault(i => i.Id == dCode); // Specification.Get(code);
+            Specification specification = db.Specifications.FirstOrDefault(i => i.Id == id);
             if (specification != null)
             {
                 specification.Name = name;
@@ -87,18 +85,16 @@ namespace ShopNow.Controllers
 
                 db.Entry(specification).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-               // bool result = Specification.Edit(specification, out int error);
                 message = name + " Updated Successfully";
             }
             return Json(new { message = message }, JsonRequestBehavior.AllowGet);
         }
 
         [AccessPolicy(PageCode = "SHNSPFD004")]
-        public JsonResult Delete(string code)
+        public JsonResult Delete(int id)
         {
-            var dCode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var specification = db.Specifications.FirstOrDefault(i => i.Id == dCode); // Specification.Get(code);
+            var specification = db.Specifications.FirstOrDefault(i => i.Id == id);
             if (specification != null)
             {
                 specification.Status = 2;
