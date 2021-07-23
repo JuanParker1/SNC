@@ -1,6 +1,10 @@
 ﻿<link href="~/Scripts/CustomScript/CustomNavBar.css" rel="stylesheet" />
 <script src="~/Scripts/CustomScript/init.js"></script>
-
+<style>
+    .dropdown-menu {
+        z-index: 999999 !important;
+    }
+</style>
 <div class="preloader-it">
     <div class="loader-pendulums"></div>
 </div>
@@ -21,7 +25,7 @@
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Admin
                 </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="">
                     <div class="container">
                         <div class="row">
                             <div class="col-md-6">

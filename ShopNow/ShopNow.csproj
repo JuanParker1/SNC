@@ -2958,7 +2958,6 @@
     <Content Include="Views\WebAPI\TSUpdate.cshtml" />
     <Content Include="Views\Customer\AadharPending.cshtml" />
     <Content Include="Views\MasterProduct\FMCGEdit.cshtml" />
-    <Content Include="Views\Banner\Create.cshtml" />
     <Content Include="Views\Banner\List.cshtml" />
     <Content Include="Views\MasterProduct\DishList.cshtml" />
     <Content Include="Views\MasterProduct\ElectronicList.cshtml" />

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="sncModelStoreContainer" CdmEntityContainer="sncEntities">
+  <EntityContainerMapping StorageEntityContainer="sncModelStoreContainer" CdmEntityContainer="ShopnowchatEntities1">
     <EntitySetMapping Name="AccessPolicies">
       <EntityTypeMapping TypeName="sncModel.AccessPolicy">
         <MappingFragment StoreEntitySet="AccessPolicies">
@@ -833,7 +833,6 @@
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="PlatformCredit" ColumnName="PlatformCredit" />
           <ScalarProperty Name="DeliveryCredit" ColumnName="DeliveryCredit" />
-          <ScalarProperty Name="ShopId" ColumnName="ShopId" />
           <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
           <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
         </MappingFragment>

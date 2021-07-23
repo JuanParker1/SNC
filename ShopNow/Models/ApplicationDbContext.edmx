@@ -808,7 +808,6 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="PlatformCredit" Type="float" Nullable="false" />
           <Property Name="DeliveryCredit" Type="float" Nullable="false" />
-          <Property Name="ShopId" Type="int" Nullable="false" />
           <Property Name="CustomerId" Type="int" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" />
         </EntityType>
@@ -1207,18 +1206,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ShopCredit_ShopCredit">
-          <End Role="ShopCredit" Type="Self.ShopCredit" Multiplicity="1" />
-          <End Role="ShopCredit1" Type="Self.ShopCredit" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ShopCredit">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ShopCredit1">
-              <PropertyRef Name="ShopId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_ShopDishAddOns_MasterProducts">
           <End Role="MasterProducts" Type="Self.MasterProducts" Multiplicity="1" />
           <End Role="ShopDishAddOns" Type="Self.ShopDishAddOns" Multiplicity="*" />
@@ -1504,10 +1491,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <AssociationSet Name="FK_Products_Shops" Association="Self.FK_Products_Shops">
             <End Role="Shops" EntitySet="Shops" />
             <End Role="Products" EntitySet="Products" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ShopCredit_ShopCredit" Association="Self.FK_ShopCredit_ShopCredit">
-            <End Role="ShopCredit" EntitySet="ShopCredit" />
-            <End Role="ShopCredit1" EntitySet="ShopCredit" />
           </AssociationSet>
           <AssociationSet Name="FK_ShopDishAddOns_MasterProducts" Association="Self.FK_ShopDishAddOns_MasterProducts">
             <End Role="MasterProducts" EntitySet="MasterProducts" />
@@ -2377,11 +2360,8 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="PlatformCredit" Type="Double" Nullable="false" />
           <Property Name="DeliveryCredit" Type="Double" Nullable="false" />
-          <Property Name="ShopId" Type="Int32" Nullable="false" />
           <Property Name="CustomerId" Type="Int32" Nullable="false" />
           <Property Name="DateUpdated" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="ShopCredit1" Relationship="Self.FK_ShopCredit_ShopCredit" FromRole="ShopCredit" ToRole="ShopCredit1" />
-          <NavigationProperty Name="ShopCredit2" Relationship="Self.FK_ShopCredit_ShopCredit" FromRole="ShopCredit1" ToRole="ShopCredit" />
         </EntityType>
         <EntityType Name="ShopDishAddOn">
           <Key>
@@ -2856,18 +2836,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ShopCredit_ShopCredit">
-          <End Role="ShopCredit" Type="Self.ShopCredit" Multiplicity="1" />
-          <End Role="ShopCredit1" Type="Self.ShopCredit" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ShopCredit">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ShopCredit1">
-              <PropertyRef Name="ShopId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_ShopDishAddOns_Shops">
           <End Role="Shops" Type="Self.Shop" Multiplicity="1" />
           <End Role="ShopDishAddOns" Type="Self.ShopDishAddOn" Multiplicity="*" />
@@ -2880,7 +2848,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="sncEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="ShopnowchatEntities1" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AccessPolicies" EntityType="Self.AccessPolicy" />
           <EntitySet Name="AddOnCategories" EntityType="Self.AddOnCategory" />
           <EntitySet Name="Admins" EntityType="Self.Admin" />
@@ -3013,10 +2981,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             <End Role="ShopCategories" EntitySet="ShopCategories" />
             <End Role="Shops" EntitySet="Shops" />
           </AssociationSet>
-          <AssociationSet Name="FK_ShopCredit_ShopCredit" Association="Self.FK_ShopCredit_ShopCredit">
-            <End Role="ShopCredit" EntitySet="ShopCredits" />
-            <End Role="ShopCredit1" EntitySet="ShopCredits" />
-          </AssociationSet>
           <AssociationSet Name="FK_ShopDishAddOns_Shops" Association="Self.FK_ShopDishAddOns_Shops">
             <End Role="Shops" EntitySet="Shops" />
             <End Role="ShopDishAddOns" EntitySet="ShopDishAddOns" />
@@ -3114,7 +3078,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="sncModelStoreContainer" CdmEntityContainer="sncEntities">
+        <EntityContainerMapping StorageEntityContainer="sncModelStoreContainer" CdmEntityContainer="ShopnowchatEntities1">
           <EntitySetMapping Name="AccessPolicies">
             <EntityTypeMapping TypeName="sncModel.AccessPolicy">
               <MappingFragment StoreEntitySet="AccessPolicies">
@@ -3947,7 +3911,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="PlatformCredit" ColumnName="PlatformCredit" />
                 <ScalarProperty Name="DeliveryCredit" ColumnName="DeliveryCredit" />
-                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
               </MappingFragment>
