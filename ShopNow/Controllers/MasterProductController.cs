@@ -319,23 +319,9 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        // Electronic List
-        [AccessPolicy(PageCode = "SHNMPREL018")]
-        public ActionResult ElectronicList()
-        {
-            if (Session["USER"] == null)
-            {
-                return RedirectToAction("LogOut", "Home");
-            }
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            var List = (from mp in _db.MasterProducts select mp).OrderBy(mp => mp.Name).Where(mp => mp.Status == 0 && mp.ProductTypeId == 4).ToList();
-            return View(List);
-        }
-
-        // Electronic Create
-        [AccessPolicy(PageCode = "SHNMPREC019")]
-        public ActionResult ElectronicCreate()
+        // Upload FMCG MasterItems
+        [AccessPolicy(PageCode = "SHNMPRI005")]
+        public ActionResult GroceryEntry()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -344,85 +330,296 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [ValidateInput(false)]
-        [AccessPolicy(PageCode = "SHNMPREC019")]
-        public ActionResult ElectronicCreate(MasterElectronicCreateViewModel model)
+        [AccessPolicy(PageCode = "SHNMPRI005")]
+        public ActionResult GroceryEntry(HttpPostedFileBase upload, GroceryPageModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var prod = _mapper.Map<MasterElectronicCreateViewModel, MasterProduct>(model);
-            prod.CreatedBy = user.Name;
-            prod.UpdatedBy = user.Name;
-            prod.ProductTypeName = "Electronic";
-            prod.ProductTypeId = 4;
-            var name = _db.MasterProducts.FirstOrDefault(i => i.Name == model.Name && i.Status == 0 && i.ProductTypeId == 1 && i.CategoryIds == model.CategoryIds);
-            prod.Name = model.Name;
+            ViewBag.Name = user.Name;
+            DataTable dt = new DataTable();
+
+            if (model.button == "upload")
+            {
+                string path = Server.MapPath("~/Content/ExcelUpload/" + upload.FileName);
+                upload.SaveAs(path);
+                if (ModelState.IsValid)
+                {
+                    if (upload != null && upload.ContentLength > 0)
+                    {
+                        Stream stream = upload.InputStream;
+                        IExcelDataReader reader = null;
+
+                        if (upload.FileName.EndsWith(".xls"))
+                        {
+                            reader = ExcelReaderFactory.CreateBinaryReader(stream);
+                        }
+                        else if (upload.FileName.EndsWith(".xlsx"))
+                        {
+                            reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("File", "This file format is not supported");
+                            return View();
+                        }
+                        DataSet result = reader.AsDataSet(new ExcelDataSetConfiguration()
+                        {
+                            ConfigureDataTable = (_) => new ExcelDataTableConfiguration()
+                            {
+                                UseHeaderRow = true
+                            }
+                        });
+
+                        // reader.IsFirstRowAsColumnNames = true;
+
+                        reader.Close();
+
+                        model.DataTable = result.Tables[0];
+                        model.Filename = upload.FileName;
+                        return View(model);
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("File", "Please Upload Your file");
+                    }
+
+                }
+            }
+            else
+            {
+                string path = Server.MapPath("~/Content/ExcelUpload/" + model.Filename);
+                string excelConnectionString = @"Provider='Microsoft.ACE.OLEDB.12.0';Data Source='" + path + "';Extended Properties='Excel 12.0 Xml;IMEX=1'";
+
+                OleDbConnection excelConnection = new OleDbConnection(excelConnectionString);
+                using (OleDbConnection connExcel = new OleDbConnection(excelConnectionString))
+                {
+                    using (OleDbCommand cmdExcel = new OleDbCommand())
+                    {
+                        using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
+                        {
+                            cmdExcel.Connection = connExcel;
+
+                            //Get the name of First Sheet.
+                            connExcel.Open();
+                            DataTable dtExcelSchema;
+                            dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                            string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+                            connExcel.Close();
+
+                            //Read Data from First Sheet.
+                            connExcel.Open();
+                            cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
+                            odaExcel.SelectCommand = cmdExcel;
+                            odaExcel.Fill(dt);
+                            connExcel.Close();
+                        }
+                    }
+                }
+
+                // Insert records to database table.
+                // MainPageModel entities = new MainPageModel();
+                foreach (DataRow row in dt.Rows)
+                {
+                    var masterProduct = _db.MasterProducts.FirstOrDefault(i => i.Name == row[model.Name].ToString() && i.Status == 0);// MasterProduct.GetName(row[model.Name].ToString());
+                    if (masterProduct == null)
+                    {
+                        // model.CategoryId = CheckCategory(row[model.CategoryName].ToString(), model.ProductTypeId, model.ProductTypeName);
+                        // model.SubCategoryCode1 = CheckSubCategory(model.CategoryId, row[model.CategoryName].ToString(), row[model.SubCategoryName1].ToString(), model.ProductTypeId, model.ProductTypeName);
+                        _db.MasterProducts.Add(new MasterProduct
+                        {
+                            Name = row[model.Name].ToString(),
+                            // Code = _generatedCode("MPR"),
+                            BrandId = CheckBrand(row[model.BrandName].ToString(), model.ProductTypeId, model.ProductTypeName),
+                            BrandName = row[model.BrandName].ToString(),
+                            SizeLB = row[model.SizeLB].ToString(),
+                            Weight = Convert.ToDouble(row[model.weight]),
+                            GoogleTaxonomyCode = row[model.GoogleTaxonomyCode].ToString(),
+                            ASIN = row[model.ASIN].ToString(),
+                            CategoryIds = model.CategoryId,
+                            CategoryName = row[model.CategoryName].ToString(),
+                            ShortDescription = row[model.ShortDescription].ToString(),
+                            LongDescription = row[model.LongDescription].ToString(),
+                            Price = Convert.ToDouble(row[model.Price]),
+                            ImagePath1 = row[model.ImagePath1].ToString(),
+                            ImagePath2 = row[model.ImagePath2].ToString(),
+                            ImagePath3 = row[model.ImagePath3].ToString(),
+                            ImagePath4 = row[model.ImagePath4].ToString(),
+                            ImagePath5 = row[model.ImagePath5].ToString(),
+                            SubCategoryIds = model.SubCategoryCode1,
+                            SubCategoryName = row[model.SubCategoryName1].ToString(),
+                            // NextSubCategoryIds = CheckNextSubCategory(model.SubCategoryCode1, row[model.SubCategoryName1].ToString(), row[model.SubCategoryName2].ToString(), model.ProductTypeId, model.ProductTypeName),
+                            NextSubCategoryName = row[model.SubCategoryName2].ToString(),
+                            ProductTypeId = model.ProductTypeId,
+                            PackageId = CheckPackage(row[model.PackageName].ToString()),
+                            PackageName = row[model.PackageName].ToString(),
+                            MeasurementUnitId = CheckFMCGMeasurementUnit(row[model.MeasurementUnitName].ToString()),
+                            MeasurementUnitName = row[model.MeasurementUnitName].ToString(),
+                            Status = 0,
+                            CreatedBy = user.Name,
+                            UpdatedBy = user.Name,
+                            DateEncoded = DateTime.Now,
+                            DateUpdated = DateTime.Now,
+                        });
+                        _db.SaveChanges();
+                    }
+                }
+            }
+
+            return View();
+        }
+
+        // FMCG List
+        [AccessPolicy(PageCode = "SHNMPRFL022")]
+        public ActionResult FMCGList()
+        {
+            if (Session["USER"] == null)
+            {
+                return RedirectToAction("LogOut", "Home");
+            }
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var List = (from mp in _db.MasterProducts select mp).OrderBy(mp => mp.Name).Where(mp => mp.Status == 0 && mp.ProductTypeId == 2).ToList();
+            return View(List);
+        }
+
+        // FMCG Create
+        [AccessPolicy(PageCode = "SHNMPRFC023")]
+        public ActionResult FMCGCreate()
+        {
+
+            if (Session["USER"] == null)
+            {
+                return RedirectToAction("LogOut", "Home");
+            }
+
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            return View();
+        }
+
+        [HttpPost, ValidateInput(false)]
+        [ValidateAntiForgeryToken]
+        [AccessPolicy(PageCode = "SHNMPRFC023")]
+        public ActionResult FMCGCreate(MasterFMCGCreateViewModel model)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var master = _mapper.Map<MasterFMCGCreateViewModel, MasterProduct>(model);
+            master.CreatedBy = user.Name;
+            master.UpdatedBy = user.Name;
+            master.ProductTypeId = 2;
+            master.ProductTypeName = "FMCG";
             if (model.NickName == null)
             {
-                prod.NickName = model.Name;
+                master.NickName = model.Name;
             }
+            var name = _db.MasterProducts.FirstOrDefault(i => i.Name == model.Name && i.Status == 0 && i.ProductTypeId == 2);
             try
             {
-                //if (model.CategoryCode != null)
-                //{
-                //    prod.CategoryCode = String.Join(",", model.CategoryCode);
-                //    StringBuilder sb = new StringBuilder();
-                //    foreach (var s in model.CategoryCode)
-                //    {
-                //        var cat = _db.Categories.FirstOrDefault(i => i.Code == s);// Category.Get(s);
-                //        sb.Append(cat.Name);
-                //        sb.Append(",");
-                //    }
-                //    if (sb.Length >= 1)
-                //    {
-                //        model.CategoryName = sb.ToString().Remove(sb.Length - 1);
-                //        prod.CategoryName = model.CategoryName;
-                //    }
-                //    else
-                //    {
-                //        model.CategoryName = sb.ToString();
-                //        prod.CategoryName = model.CategoryName;
-                //    }
-                //}
-                //ElectronicImage1
-                if (model.ElectronicImage1 != null)
+                if (model.CategoryIds != null)
                 {
-                    uc.UploadFiles(model.ElectronicImage1.InputStream, prod.Id + "_" + model.ElectronicImage1.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath1 = prod.Id + "_" + model.ElectronicImage1.FileName.Replace(" ", "");
+                    master.CategoryIds = String.Join(",", model.CategoryIds);
+                    StringBuilder sb = new StringBuilder();
+                    foreach (var s in model.CategoryIds)
+                    {
+                        var sid = Convert.ToInt32(s);
+                        var cat = _db.Categories.FirstOrDefault(i => i.Id == sid);
+                        sb.Append(cat.Name);
+                        sb.Append(",");
+                    }
+                    if (sb.Length >= 1)
+                    {
+                        model.CategoryName = sb.ToString().Remove(sb.Length - 1);
+                        master.CategoryName = model.CategoryName;
+                    }
+                    else
+                    {
+                        model.CategoryName = sb.ToString();
+                        master.CategoryName = model.CategoryName;
+                    }
                 }
-
-                //ElectronicImage2
-                if (model.ElectronicImage2 != null)
+                if (model.SubCategoryIds != null)
                 {
-                    uc.UploadFiles(model.ElectronicImage2.InputStream, prod.Id + "_" + model.ElectronicImage2.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath2 = prod.Id + "_" + model.ElectronicImage2.FileName.Replace(" ", "");
+                    master.SubCategoryIds = String.Join(",", model.SubCategoryIds);
+                    StringBuilder sb = new StringBuilder();
+                    foreach (var s in model.SubCategoryIds)
+                    {
+                        var sid = Convert.ToInt32(s);
+                        var scat = _db.SubCategories.FirstOrDefault(i => i.Id == sid);
+                        sb.Append(scat.Name);
+                        sb.Append(",");
+                    }
+                    if (sb.Length >= 1)
+                    {
+                        model.SubCategoryName = sb.ToString().Remove(sb.Length - 1);
+                        master.SubCategoryName = model.SubCategoryName;
+                    }
+                    else
+                    {
+                        model.SubCategoryName = sb.ToString();
+                        master.SubCategoryName = model.SubCategoryName;
+                    }
                 }
-
-                //ElectronicImage3
-                if (model.ElectronicImage3 != null)
+                if (model.NextSubCategoryIds != null)
                 {
-                    uc.UploadFiles(model.ElectronicImage3.InputStream, prod.Id + "_" + model.ElectronicImage3.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath3 = prod.Id + "_" + model.ElectronicImage3.FileName.Replace(" ", "");
+                    master.NextSubCategoryIds = String.Join(",", model.NextSubCategoryIds);
+                    StringBuilder sb = new StringBuilder();
+                    foreach (var s in model.NextSubCategoryIds)
+                    {
+                        var sid = Convert.ToInt32(s);
+                        var nscat = _db.NextSubCategories.FirstOrDefault(i => i.Id == sid);
+                        sb.Append(nscat.Name);
+                        sb.Append(",");
+                    }
+                    if (sb.Length >= 1)
+                    {
+                        model.NextSubCategoryName = sb.ToString().Remove(sb.Length - 1);
+                        master.NextSubCategoryName = model.NextSubCategoryName;
+                    }
+                    else
+                    {
+                        model.NextSubCategoryName = sb.ToString();
+                        master.NextSubCategoryName = model.NextSubCategoryName;
+                    }
                 }
-
-                //ElectronicImage4
-                if (model.ElectronicImage4 != null)
+                //ProductImage1
+                if (model.FMCGImage1 != null)
                 {
-                    uc.UploadFiles(model.ElectronicImage4.InputStream, prod.Id + "_" + model.ElectronicImage4.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath4 = prod.Id + "_" + model.ElectronicImage4.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.FMCGImage1.InputStream, master.Id + "_" + model.FMCGImage1.FileName, accesskey, secretkey, "image");
+                    master.ImagePath1 = master.Id + "_" + model.FMCGImage1.FileName.Replace(" ", "");
+
                 }
-
-                //ElectronicImage5
-                if (model.ElectronicImage5 != null)
+                //ProductImage2
+                if (model.FMCGImage2 != null)
                 {
-                    uc.UploadFiles(model.ElectronicImage5.InputStream, prod.Id + "_" + model.ElectronicImage5.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath5 = prod.Id + "_" + model.ElectronicImage5.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.FMCGImage2.InputStream, master.Id + "_" + model.FMCGImage2.FileName, accesskey, secretkey, "image");
+                    master.ImagePath2 = master.Id + "_" + model.FMCGImage2.FileName.Replace(" ", "");
+
+                }
+                //ProductImage3
+                if (model.FMCGImage3 != null)
+                {
+                    uc.UploadFiles(model.FMCGImage3.InputStream, master.Id + "_" + model.FMCGImage3.FileName, accesskey, secretkey, "image");
+                    master.ImagePath3 = master.Id + "_" + model.FMCGImage3.FileName.Replace(" ", "");
+
+                }
+                //ProductImage4
+                if (model.FMCGImage4 != null)
+                {
+                    uc.UploadFiles(model.FMCGImage4.InputStream, master.Id + "_" + model.FMCGImage4.FileName, accesskey, secretkey, "image");
+                    master.ImagePath4 = master.Id + "_" + model.FMCGImage4.FileName.Replace(" ", "");
+
+                }
+                //ProductImage5
+                if (model.FMCGImage5 != null)
+                {
+                    uc.UploadFiles(model.FMCGImage5.InputStream, master.Id + "_" + model.FMCGImage5.FileName, accesskey, secretkey, "image");
+                    master.ImagePath5 = master.Id + "_" + model.FMCGImage5.FileName.Replace(" ", "");
                 }
                 if (name == null)
                 {
-                    prod.DateEncoded = DateTime.Now;
-                    prod.DateUpdated = DateTime.Now;
-                    prod.Status = 0;
-                    _db.MasterProducts.Add(prod);
+                    master.DateEncoded = DateTime.Now;
+                    master.DateUpdated = DateTime.Now;
+                    master.Status = 0;
+                    _db.MasterProducts.Add(master);
                     _db.SaveChanges();
                     ViewBag.Message = model.Name + " Saved Successfully!";
                 }
@@ -448,9 +645,9 @@ namespace ShopNow.Controllers
             return View();
         }
 
-        // Electronic Update
-        [AccessPolicy(PageCode = "SHNMPREE020")]
-        public ActionResult ElectronicEdit(string Id)
+        // FMCG Update
+        [AccessPolicy(PageCode = "SHNMPRFE024")]
+        public ActionResult FMCGEdit(string Id)
         {
             var dCode = AdminHelpers.DCodeInt(Id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -458,87 +655,144 @@ namespace ShopNow.Controllers
             if (string.IsNullOrEmpty(dCode.ToString()))
                 return HttpNotFound();
             var masterProduct = _db.MasterProducts.FirstOrDefault(i => i.Id == dCode);
-            var model = _mapper.Map<MasterProduct, MasterElectronicEditViewModel>(masterProduct);
-
+            if (masterProduct.ImagePath1 != null)
+                masterProduct.ImagePath1 = masterProduct.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
+            if (masterProduct.ImagePath2 != null)
+                masterProduct.ImagePath2 = masterProduct.ImagePath2.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
+            if (masterProduct.ImagePath3 != null)
+                masterProduct.ImagePath3 = masterProduct.ImagePath3.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
+            if (masterProduct.ImagePath4 != null)
+                masterProduct.ImagePath4 = masterProduct.ImagePath4.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
+            if (masterProduct.ImagePath5 != null)
+                masterProduct.ImagePath5 = masterProduct.ImagePath5.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
+            var model = _mapper.Map<MasterProduct, MasterFMCGEditViewModel>(masterProduct);
+            model.CategoryIds1 = masterProduct.CategoryIds;
+            model.SubCategoryIds1 = masterProduct.SubCategoryIds;
+            model.NextSubCategoryIds1 = masterProduct.NextSubCategoryIds;
             return View(model);
         }
 
-        [HttpPost]
+        [HttpPost, ValidateInput(false)]
         [ValidateAntiForgeryToken]
-        [ValidateInput(false)]
-        [AccessPolicy(PageCode = "SHNMPREE020")]
-        public ActionResult ElectronicEdit(MasterElectronicEditViewModel model)
+        [AccessPolicy(PageCode = "SHNMPRFE024")]
+        public ActionResult FMCGEdit(MasterFMCGEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var prod = _db.MasterProducts.FirstOrDefault(i => i.Id == model.Id);
-            _mapper.Map(model, prod);
-            prod.Name = model.Name;
-            prod.ProductTypeId = model.ProductTypeId;
-            prod.UpdatedBy = user.Name;
-            prod.DateUpdated = DateTime.Now;
+            var master = _db.MasterProducts.FirstOrDefault(i => i.Id == model.Id);
+            _mapper.Map(model, master);
+            master.Name = model.Name;
+            master.ProductTypeId = 2;
+
+            master.UpdatedBy = user.Name;
+            master.DateUpdated = DateTime.Now;
+            if (model.NickName == null)
+            {
+                master.NickName = model.Name;
+            }
             try
             {
-                //if (model.CategoryCode != null)
-                //{
-                //    prod.CategoryCode = String.Join(",", model.CategoryCode);
-                //    StringBuilder sb = new StringBuilder();
-                //    foreach (var s in model.CategoryCode)
-                //    {
-                //        var cat = _db.Categories.FirstOrDefault(i => i.Code == s);// Category.Get(s);
-                //        if (cat != null)
-                //        {
-                //            sb.Append(cat.Name);
-                //            sb.Append(",");
-                //        }
-                //    }
-                //    if (sb.Length >= 1)
-                //    {
-                //        model.CategoryName = sb.ToString().Remove(sb.Length - 1);
-                //        prod.CategoryName = model.CategoryName;
-                //    }
-                //    else
-                //    {
-                //        model.CategoryName = sb.ToString();
-                //        prod.CategoryName = model.CategoryName;
-                //    }
-                //}
-
-                //ElectronicImage1
-                if (model.ElectronicImage1 != null)
+                if (model.CategoryIds != null)
                 {
-                    uc.UploadFiles(model.ElectronicImage1.InputStream, prod.Id + "_" + model.ElectronicImage1.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath1 = prod.Id + "_" + model.ElectronicImage1.FileName.Replace(" ", "");
+                    master.CategoryIds = String.Join(",", model.CategoryIds);
+                    StringBuilder sb = new StringBuilder();
+                    foreach (var s in model.CategoryIds)
+                    {
+                        var sid = Convert.ToInt32(s);
+                        var cat = _db.Categories.FirstOrDefault(i => i.Id == sid);
+                        sb.Append(cat.Name);
+                        sb.Append(",");
+                    }
+                    if (sb.Length >= 1)
+                    {
+                        model.CategoryName = sb.ToString().Remove(sb.Length - 1);
+                        master.CategoryName = model.CategoryName;
+                    }
+                    else
+                    {
+                        model.CategoryName = sb.ToString();
+                        master.CategoryName = model.CategoryName;
+                    }
+                }
+                if (model.SubCategoryIds != null)
+                {
+                    master.SubCategoryIds = String.Join(",", model.SubCategoryIds);
+                    StringBuilder sb = new StringBuilder();
+                    foreach (var s in model.SubCategoryIds)
+                    {
+                        var sid = Convert.ToInt32(s);
+                        var scat = _db.SubCategories.FirstOrDefault(i => i.Id == sid);
+                        sb.Append(scat.Name);
+                        sb.Append(",");
+                    }
+                    if (sb.Length >= 1)
+                    {
+                        model.SubCategoryName = sb.ToString().Remove(sb.Length - 1);
+                        master.SubCategoryName = model.SubCategoryName;
+                    }
+                    else
+                    {
+                        model.SubCategoryName = sb.ToString();
+                        master.SubCategoryName = model.SubCategoryName;
+                    }
+                }
+                if (model.NextSubCategoryIds != null)
+                {
+                    master.NextSubCategoryIds = String.Join(",", model.NextSubCategoryIds);
+                    StringBuilder sb = new StringBuilder();
+                    foreach (var s in model.NextSubCategoryIds)
+                    {
+                        var sid = Convert.ToInt32(s);
+                        var nscat = _db.NextSubCategories.FirstOrDefault(i => i.Id == sid);
+                        sb.Append(nscat.Name);
+                        sb.Append(",");
+                    }
+                    if (sb.Length >= 1)
+                    {
+                        model.NextSubCategoryName = sb.ToString().Remove(sb.Length - 1);
+                        master.NextSubCategoryName = model.NextSubCategoryName;
+                    }
+                    else
+                    {
+                        model.NextSubCategoryName = sb.ToString();
+                        master.NextSubCategoryName = model.NextSubCategoryName;
+                    }
+                }
+                //ProductImage1
+                if (model.FMCGImage1 != null)
+                {
+                    uc.UploadFiles(model.FMCGImage1.InputStream, master.Id + "_" + model.FMCGImage1.FileName, accesskey, secretkey, "image");
+                    master.ImagePath1 = master.Id + "_" + model.FMCGImage1.FileName.Replace(" ", "");
                 }
 
-                //ElectronicImage2
-                if (model.ElectronicImage2 != null)
+                //ProductImage2
+                if (model.FMCGImage2 != null)
                 {
-                    uc.UploadFiles(model.ElectronicImage2.InputStream, prod.Id + "_" + model.ElectronicImage2.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath2 = prod.Id + "_" + model.ElectronicImage2.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.FMCGImage2.InputStream, master.Id + "_" + model.FMCGImage2.FileName, accesskey, secretkey, "image");
+                    master.ImagePath2 = master.Id + "_" + model.FMCGImage2.FileName.Replace(" ", "");
                 }
 
-                //ElectronicImage3
-                if (model.ElectronicImage3 != null)
+                //ProductImage3
+                if (model.FMCGImage3 != null)
                 {
-                    uc.UploadFiles(model.ElectronicImage3.InputStream, prod.Id + "_" + model.ElectronicImage3.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath3 = prod.Id + "_" + model.ElectronicImage3.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.FMCGImage3.InputStream, master.Id + "_" + model.FMCGImage3.FileName, accesskey, secretkey, "image");
+                    master.ImagePath3 = master.Id + "_" + model.FMCGImage3.FileName.Replace(" ", "");
                 }
 
-                //ElectronicImage4
-                if (model.ElectronicImage4 != null)
+                //ProductImage4
+                if (model.FMCGImage4 != null)
                 {
-                    uc.UploadFiles(model.ElectronicImage4.InputStream, prod.Id + "_" + model.ElectronicImage4.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath4 = prod.Id + "_" + model.ElectronicImage4.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.FMCGImage4.InputStream, master.Id + "_" + model.FMCGImage4.FileName, accesskey, secretkey, "image");
+                    master.ImagePath4 = master.Id + "_" + model.FMCGImage4.FileName.Replace(" ", "");
                 }
 
-                //ElectronicImage5
-                if (model.ElectronicImage5 != null)
+                //ProductImage5
+                if (model.FMCGImage5 != null)
                 {
-                    uc.UploadFiles(model.ElectronicImage5.InputStream, prod.Id + "_" + model.ElectronicImage5.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath5 = prod.Id + "_" + model.ElectronicImage5.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.FMCGImage5.InputStream, master.Id + "_" + model.FMCGImage5.FileName, accesskey, secretkey, "image");
+                    master.ImagePath5 = master.Id + "_" + model.FMCGImage5.FileName.Replace(" ", "");
                 }
-                prod.DateUpdated = DateTime.Now;
-                _db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
+                master.DateUpdated = DateTime.Now;
+                _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
                 _db.SaveChanges();
             }
             catch (AmazonS3Exception amazonS3Exception)
@@ -555,12 +809,13 @@ namespace ShopNow.Controllers
                     ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
                 }
             }
-            return RedirectToAction("List");
+
+            return RedirectToAction("FMCGList");
         }
 
-        // Electronic Delete
-        [AccessPolicy(PageCode = "SHNMPRED021")]
-        public JsonResult ElectronicDelete(string Id)
+        // FMCG Delete
+        [AccessPolicy(PageCode = "SHNMPRFD025")]
+        public JsonResult FMCGDelete(string Id)
         {
             var dCode = AdminHelpers.DCodeInt(Id);
             var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dCode);
@@ -887,7 +1142,7 @@ namespace ShopNow.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AccessPolicy(PageCode = "SHNMPRMI010")]
-        public ActionResult MedicalIndex(HttpPostedFileBase upload, MedicalDrugViewModel model)
+        public ActionResult MedicalIndex(HttpPostedFileBase upload, MasterMedicalUploadViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -975,13 +1230,12 @@ namespace ShopNow.Controllers
                 // MainPageModel entities = new MainPageModel();
                 foreach (DataRow row in dt.Rows)
                 {
-                    var masterProduct = _db.MasterProducts.FirstOrDefault(i => i.Name == row[model.Name].ToString() && i.Status == 0);// MasterProduct.GetName(row[model.Name].ToString());
+                    var masterProduct = _db.MasterProducts.FirstOrDefault(i => i.Name == row[model.Name].ToString() && i.Status == 0);
                     if (masterProduct == null)
                     {
                         _db.MasterProducts.Add(new MasterProduct
                         {
                             Name = row[model.Name].ToString(),
-                           // Code = _generatedCode("MPR"),
                             BrandId = MedicalCheckBrand(row[model.BrandName].ToString(), model.ProductTypeId),
                             BrandName = row[model.BrandName].ToString(),
                            // CategoryIds = MedicalCheckCategory(row[model.CategoryName].ToString(), model.ProductTypeId),
@@ -1045,29 +1299,34 @@ namespace ShopNow.Controllers
 
         }
 
-        public int MedicalCheckCategory(string CategoryName, int ProductType)
-        {
-            var category = _db.Categories.FirstOrDefault(i => i.Name == CategoryName && i.Status == 0);// Category.GetName(CategoryName);
-            if (category != null)
-            {
+        //public int MedicalCheckCategory(string CategoryName, int ProductType)
+        //{
+        //    string[] cids = CategoryName.Split(',');
+        //    if (cids.Length > 1)
+        //    {
+        //        foreach (var s in cids)
+        //        {
+        //            var category = _db.Categories.FirstOrDefault(i => i.Name == CategoryName && i.Status == 0);
+        //            if (category != null)
+        //            {
 
-                return category.Id;
-            }
-            else
-            {
-                Category cat = new Category();
-                cat.Name = CategoryName;
-                cat.ProductTypeId = ProductType;
-               // cat.Code = _generatedCode("CAT");
-                cat.Status = 0;
-                cat.DateEncoded = DateTime.Now;
-                cat.DateUpdated = DateTime.Now;
-                _db.Categories.Add(cat);
-                _db.SaveChanges();
-                return cat.Id;
-            }
-
-        }
+        //                return category.Id;
+        //            }
+        //            else
+        //            {
+        //                Category cat = new Category();
+        //                cat.Name = CategoryName;
+        //                cat.ProductTypeId = ProductType;
+        //                cat.Status = 0;
+        //                cat.DateEncoded = DateTime.Now;
+        //                cat.DateUpdated = DateTime.Now;
+        //                _db.Categories.Add(cat);
+        //                _db.SaveChanges();
+        //                return cat.Id;
+        //            }
+        //        }
+        //    }
+        //}
 
         public int CheckMedicalPackage(string PackageName)
         {
@@ -1140,6 +1399,256 @@ namespace ShopNow.Controllers
 
         }
 
+        // Electronic List
+        [AccessPolicy(PageCode = "SHNMPREL018")]
+        public ActionResult ElectronicList()
+        {
+            if (Session["USER"] == null)
+            {
+                return RedirectToAction("LogOut", "Home");
+            }
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var List = (from mp in _db.MasterProducts select mp).OrderBy(mp => mp.Name).Where(mp => mp.Status == 0 && mp.ProductTypeId == 4).ToList();
+            return View(List);
+        }
+
+        // Electronic Create
+        [AccessPolicy(PageCode = "SHNMPREC019")]
+        public ActionResult ElectronicCreate()
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(false)]
+        [AccessPolicy(PageCode = "SHNMPREC019")]
+        public ActionResult ElectronicCreate(MasterElectronicCreateViewModel model)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var prod = _mapper.Map<MasterElectronicCreateViewModel, MasterProduct>(model);
+            prod.CreatedBy = user.Name;
+            prod.UpdatedBy = user.Name;
+            prod.ProductTypeName = "Electronic";
+            prod.ProductTypeId = 4;
+            var name = _db.MasterProducts.FirstOrDefault(i => i.Name == model.Name && i.Status == 0 && i.ProductTypeId == 1 && i.CategoryIds == model.CategoryIds);
+            prod.Name = model.Name;
+            if (model.NickName == null)
+            {
+                prod.NickName = model.Name;
+            }
+            try
+            {
+                //if (model.CategoryCode != null)
+                //{
+                //    prod.CategoryCode = String.Join(",", model.CategoryCode);
+                //    StringBuilder sb = new StringBuilder();
+                //    foreach (var s in model.CategoryCode)
+                //    {
+                //        var cat = _db.Categories.FirstOrDefault(i => i.Code == s);// Category.Get(s);
+                //        sb.Append(cat.Name);
+                //        sb.Append(",");
+                //    }
+                //    if (sb.Length >= 1)
+                //    {
+                //        model.CategoryName = sb.ToString().Remove(sb.Length - 1);
+                //        prod.CategoryName = model.CategoryName;
+                //    }
+                //    else
+                //    {
+                //        model.CategoryName = sb.ToString();
+                //        prod.CategoryName = model.CategoryName;
+                //    }
+                //}
+                //ElectronicImage1
+                if (model.ElectronicImage1 != null)
+                {
+                    uc.UploadFiles(model.ElectronicImage1.InputStream, prod.Id + "_" + model.ElectronicImage1.FileName, accesskey, secretkey, "image");
+                    prod.ImagePath1 = prod.Id + "_" + model.ElectronicImage1.FileName.Replace(" ", "");
+                }
+
+                //ElectronicImage2
+                if (model.ElectronicImage2 != null)
+                {
+                    uc.UploadFiles(model.ElectronicImage2.InputStream, prod.Id + "_" + model.ElectronicImage2.FileName, accesskey, secretkey, "image");
+                    prod.ImagePath2 = prod.Id + "_" + model.ElectronicImage2.FileName.Replace(" ", "");
+                }
+
+                //ElectronicImage3
+                if (model.ElectronicImage3 != null)
+                {
+                    uc.UploadFiles(model.ElectronicImage3.InputStream, prod.Id + "_" + model.ElectronicImage3.FileName, accesskey, secretkey, "image");
+                    prod.ImagePath3 = prod.Id + "_" + model.ElectronicImage3.FileName.Replace(" ", "");
+                }
+
+                //ElectronicImage4
+                if (model.ElectronicImage4 != null)
+                {
+                    uc.UploadFiles(model.ElectronicImage4.InputStream, prod.Id + "_" + model.ElectronicImage4.FileName, accesskey, secretkey, "image");
+                    prod.ImagePath4 = prod.Id + "_" + model.ElectronicImage4.FileName.Replace(" ", "");
+                }
+
+                //ElectronicImage5
+                if (model.ElectronicImage5 != null)
+                {
+                    uc.UploadFiles(model.ElectronicImage5.InputStream, prod.Id + "_" + model.ElectronicImage5.FileName, accesskey, secretkey, "image");
+                    prod.ImagePath5 = prod.Id + "_" + model.ElectronicImage5.FileName.Replace(" ", "");
+                }
+                if (name == null)
+                {
+                    prod.DateEncoded = DateTime.Now;
+                    prod.DateUpdated = DateTime.Now;
+                    prod.Status = 0;
+                    _db.MasterProducts.Add(prod);
+                    _db.SaveChanges();
+                    ViewBag.Message = model.Name + " Saved Successfully!";
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = model.Name + " Already Exist";
+                }
+            }
+            catch (AmazonS3Exception amazonS3Exception)
+            {
+                if (amazonS3Exception.ErrorCode != null &&
+                    (amazonS3Exception.ErrorCode.Equals("InvalidAccessKeyId")
+                    ||
+                    amazonS3Exception.ErrorCode.Equals("InvalidSecurity")))
+                {
+                    ViewBag.Message = "Check the provided AWS Credentials.";
+                }
+                else
+                {
+                    ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
+                }
+            }
+            return View();
+        }
+
+        // Electronic Update
+        [AccessPolicy(PageCode = "SHNMPREE020")]
+        public ActionResult ElectronicEdit(string Id)
+        {
+            var dCode = AdminHelpers.DCodeInt(Id);
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            if (string.IsNullOrEmpty(dCode.ToString()))
+                return HttpNotFound();
+            var masterProduct = _db.MasterProducts.FirstOrDefault(i => i.Id == dCode);
+            var model = _mapper.Map<MasterProduct, MasterElectronicEditViewModel>(masterProduct);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(false)]
+        [AccessPolicy(PageCode = "SHNMPREE020")]
+        public ActionResult ElectronicEdit(MasterElectronicEditViewModel model)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var prod = _db.MasterProducts.FirstOrDefault(i => i.Id == model.Id);
+            _mapper.Map(model, prod);
+            prod.Name = model.Name;
+            prod.ProductTypeId = model.ProductTypeId;
+            prod.UpdatedBy = user.Name;
+            prod.DateUpdated = DateTime.Now;
+            try
+            {
+                //if (model.CategoryCode != null)
+                //{
+                //    prod.CategoryCode = String.Join(",", model.CategoryCode);
+                //    StringBuilder sb = new StringBuilder();
+                //    foreach (var s in model.CategoryCode)
+                //    {
+                //        var cat = _db.Categories.FirstOrDefault(i => i.Code == s);// Category.Get(s);
+                //        if (cat != null)
+                //        {
+                //            sb.Append(cat.Name);
+                //            sb.Append(",");
+                //        }
+                //    }
+                //    if (sb.Length >= 1)
+                //    {
+                //        model.CategoryName = sb.ToString().Remove(sb.Length - 1);
+                //        prod.CategoryName = model.CategoryName;
+                //    }
+                //    else
+                //    {
+                //        model.CategoryName = sb.ToString();
+                //        prod.CategoryName = model.CategoryName;
+                //    }
+                //}
+
+                //ElectronicImage1
+                if (model.ElectronicImage1 != null)
+                {
+                    uc.UploadFiles(model.ElectronicImage1.InputStream, prod.Id + "_" + model.ElectronicImage1.FileName, accesskey, secretkey, "image");
+                    prod.ImagePath1 = prod.Id + "_" + model.ElectronicImage1.FileName.Replace(" ", "");
+                }
+
+                //ElectronicImage2
+                if (model.ElectronicImage2 != null)
+                {
+                    uc.UploadFiles(model.ElectronicImage2.InputStream, prod.Id + "_" + model.ElectronicImage2.FileName, accesskey, secretkey, "image");
+                    prod.ImagePath2 = prod.Id + "_" + model.ElectronicImage2.FileName.Replace(" ", "");
+                }
+
+                //ElectronicImage3
+                if (model.ElectronicImage3 != null)
+                {
+                    uc.UploadFiles(model.ElectronicImage3.InputStream, prod.Id + "_" + model.ElectronicImage3.FileName, accesskey, secretkey, "image");
+                    prod.ImagePath3 = prod.Id + "_" + model.ElectronicImage3.FileName.Replace(" ", "");
+                }
+
+                //ElectronicImage4
+                if (model.ElectronicImage4 != null)
+                {
+                    uc.UploadFiles(model.ElectronicImage4.InputStream, prod.Id + "_" + model.ElectronicImage4.FileName, accesskey, secretkey, "image");
+                    prod.ImagePath4 = prod.Id + "_" + model.ElectronicImage4.FileName.Replace(" ", "");
+                }
+
+                //ElectronicImage5
+                if (model.ElectronicImage5 != null)
+                {
+                    uc.UploadFiles(model.ElectronicImage5.InputStream, prod.Id + "_" + model.ElectronicImage5.FileName, accesskey, secretkey, "image");
+                    prod.ImagePath5 = prod.Id + "_" + model.ElectronicImage5.FileName.Replace(" ", "");
+                }
+                prod.DateUpdated = DateTime.Now;
+                _db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
+                _db.SaveChanges();
+            }
+            catch (AmazonS3Exception amazonS3Exception)
+            {
+                if (amazonS3Exception.ErrorCode != null &&
+                    (amazonS3Exception.ErrorCode.Equals("InvalidAccessKeyId")
+                    ||
+                    amazonS3Exception.ErrorCode.Equals("InvalidSecurity")))
+                {
+                    ViewBag.Message = "Check the provided AWS Credentials.";
+                }
+                else
+                {
+                    ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
+                }
+            }
+            return RedirectToAction("List");
+        }
+
+        // Electronic Delete
+        [AccessPolicy(PageCode = "SHNMPRED021")]
+        public JsonResult ElectronicDelete(string Id)
+        {
+            var dCode = AdminHelpers.DCodeInt(Id);
+            var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dCode);
+            master.Status = 2;
+            _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
+            _db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
         // Item Mapping
         [AccessPolicy(PageCode = "SHNMPRIM011")]
         public ActionResult ItemMapping()
@@ -1359,512 +1868,6 @@ namespace ShopNow.Controllers
             }
             bool results = true;
             return Json(new { results, shopId }, JsonRequestBehavior.AllowGet);
-        }
-
-        // Upload FMCG MasterItems
-        [AccessPolicy(PageCode = "SHNMPRI005")]
-        public ActionResult GroceryEntry()
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNMPRI005")]
-        public ActionResult GroceryEntry(HttpPostedFileBase upload, GroceryPageModel model)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            DataTable dt = new DataTable();
-
-            if (model.button == "upload")
-            {
-                string path = Server.MapPath("~/Content/ExcelUpload/" + upload.FileName);
-                upload.SaveAs(path);
-                if (ModelState.IsValid)
-                {
-                    if (upload != null && upload.ContentLength > 0)
-                    {
-                        Stream stream = upload.InputStream;
-                        IExcelDataReader reader = null;
-
-                        if (upload.FileName.EndsWith(".xls"))
-                        {
-                            reader = ExcelReaderFactory.CreateBinaryReader(stream);
-                        }
-                        else if (upload.FileName.EndsWith(".xlsx"))
-                        {
-                            reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
-                        }
-                        else
-                        {
-                            ModelState.AddModelError("File", "This file format is not supported");
-                            return View();
-                        }
-                        DataSet result = reader.AsDataSet(new ExcelDataSetConfiguration()
-                        {
-                            ConfigureDataTable = (_) => new ExcelDataTableConfiguration()
-                            {
-                                UseHeaderRow = true
-                            }
-                        });
-
-                        // reader.IsFirstRowAsColumnNames = true;
-
-                        reader.Close();
-
-                        model.DataTable = result.Tables[0];
-                        model.Filename = upload.FileName;
-                        return View(model);
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("File", "Please Upload Your file");
-                    }
-
-                }
-            }
-            else
-            {
-                string path = Server.MapPath("~/Content/ExcelUpload/" + model.Filename);
-                string excelConnectionString = @"Provider='Microsoft.ACE.OLEDB.12.0';Data Source='" + path + "';Extended Properties='Excel 12.0 Xml;IMEX=1'";
-
-                OleDbConnection excelConnection = new OleDbConnection(excelConnectionString);
-                using (OleDbConnection connExcel = new OleDbConnection(excelConnectionString))
-                {
-                    using (OleDbCommand cmdExcel = new OleDbCommand())
-                    {
-                        using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
-                        {
-                            cmdExcel.Connection = connExcel;
-
-                            //Get the name of First Sheet.
-                            connExcel.Open();
-                            DataTable dtExcelSchema;
-                            dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
-                            string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
-                            connExcel.Close();
-
-                            //Read Data from First Sheet.
-                            connExcel.Open();
-                            cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
-                            odaExcel.SelectCommand = cmdExcel;
-                            odaExcel.Fill(dt);
-                            connExcel.Close();
-                        }
-                    }
-                }
-
-                // Insert records to database table.
-                // MainPageModel entities = new MainPageModel();
-                foreach (DataRow row in dt.Rows)
-                {
-                    var masterProduct = _db.MasterProducts.FirstOrDefault(i => i.Name == row[model.Name].ToString() && i.Status == 0);// MasterProduct.GetName(row[model.Name].ToString());
-                    if (masterProduct == null)
-                    {
-                       // model.CategoryId = CheckCategory(row[model.CategoryName].ToString(), model.ProductTypeId, model.ProductTypeName);
-                       // model.SubCategoryCode1 = CheckSubCategory(model.CategoryId, row[model.CategoryName].ToString(), row[model.SubCategoryName1].ToString(), model.ProductTypeId, model.ProductTypeName);
-                        _db.MasterProducts.Add(new MasterProduct
-                        {
-                            Name = row[model.Name].ToString(),
-                           // Code = _generatedCode("MPR"),
-                            BrandId = CheckBrand(row[model.BrandName].ToString(), model.ProductTypeId, model.ProductTypeName),
-                            BrandName = row[model.BrandName].ToString(),
-                            SizeLB = row[model.SizeLB].ToString(),
-                            Weight = Convert.ToDouble(row[model.weight]),
-                            GoogleTaxonomyCode = row[model.GoogleTaxonomyCode].ToString(),
-                            ASIN = row[model.ASIN].ToString(),
-                            CategoryIds = model.CategoryId,
-                            CategoryName = row[model.CategoryName].ToString(),
-                            ShortDescription = row[model.ShortDescription].ToString(),
-                            LongDescription = row[model.LongDescription].ToString(),
-                            Price = Convert.ToDouble(row[model.Price]),
-                            ImagePath1 = row[model.ImagePath1].ToString(),
-                            ImagePath2 = row[model.ImagePath2].ToString(),
-                            ImagePath3 = row[model.ImagePath3].ToString(),
-                            ImagePath4 = row[model.ImagePath4].ToString(),
-                            ImagePath5 = row[model.ImagePath5].ToString(),
-                            SubCategoryIds = model.SubCategoryCode1,
-                            SubCategoryName = row[model.SubCategoryName1].ToString(),
-                          // NextSubCategoryIds = CheckNextSubCategory(model.SubCategoryCode1, row[model.SubCategoryName1].ToString(), row[model.SubCategoryName2].ToString(), model.ProductTypeId, model.ProductTypeName),
-                            NextSubCategoryName = row[model.SubCategoryName2].ToString(),
-                            ProductTypeId = model.ProductTypeId,
-                            PackageId = CheckPackage(row[model.PackageName].ToString()),
-                            PackageName = row[model.PackageName].ToString(),
-                            MeasurementUnitId = CheckFMCGMeasurementUnit(row[model.MeasurementUnitName].ToString()),
-                            MeasurementUnitName = row[model.MeasurementUnitName].ToString(),
-                            Status = 0,
-                            CreatedBy = user.Name,
-                            UpdatedBy = user.Name,
-                            DateEncoded = DateTime.Now,
-                            DateUpdated = DateTime.Now,
-                        });
-                        _db.SaveChanges();
-                    }
-                }
-            }
-
-            return View();
-        }
-
-        // FMCG List
-        [AccessPolicy(PageCode = "SHNMPRFL022")]
-        public ActionResult FMCGList()
-        {
-            if (Session["USER"] == null)
-            {
-                return RedirectToAction("LogOut", "Home");
-            }
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            var List = (from mp in _db.MasterProducts select mp).OrderBy(mp => mp.Name).Where(mp => mp.Status == 0 && mp.ProductTypeId == 2).ToList();
-            return View(List);
-        }
-
-        // FMCG Create
-        [AccessPolicy(PageCode = "SHNMPRFC023")]
-        public ActionResult FMCGCreate()
-        {
-
-            if (Session["USER"] == null)
-            {
-                return RedirectToAction("LogOut", "Home");
-            }
-
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            return View();
-        }
-
-        [HttpPost, ValidateInput(false)]
-        [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNMPRFC023")]
-        public ActionResult FMCGCreate(MasterFMCGCreateViewModel model)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            var master = _mapper.Map<MasterFMCGCreateViewModel, MasterProduct>(model);
-            master.CreatedBy = user.Name;
-            master.UpdatedBy = user.Name;
-            master.ProductTypeId = 2;
-            master.ProductTypeName = "FMCG";
-            if(model.NickName == null)
-            {
-                master.NickName = model.Name;
-            }
-            var name = _db.MasterProducts.FirstOrDefault(i => i.Name == model.Name && i.Status == 0 && i.ProductTypeId == 2);
-            try
-            {
-                if (model.CategoryIds != null)
-                {
-                    master.CategoryIds = String.Join(",", model.CategoryIds);
-                    StringBuilder sb = new StringBuilder();
-                    foreach (var s in model.CategoryIds)
-                    {
-                        var sid = Convert.ToInt32(s);
-                        var cat = _db.Categories.FirstOrDefault(i => i.Id == sid);
-                        sb.Append(cat.Name);
-                        sb.Append(",");
-                    }
-                    if (sb.Length >= 1)
-                    {
-                        model.CategoryName = sb.ToString().Remove(sb.Length - 1);
-                        master.CategoryName = model.CategoryName;
-                    }
-                    else
-                    {
-                        model.CategoryName = sb.ToString();
-                        master.CategoryName = model.CategoryName;
-                    }
-                }
-                if (model.SubCategoryIds != null)
-                {
-                    master.SubCategoryIds = String.Join(",", model.SubCategoryIds);
-                    StringBuilder sb = new StringBuilder();
-                    foreach (var s in model.SubCategoryIds)
-                    {
-                        var sid = Convert.ToInt32(s);
-                        var scat = _db.SubCategories.FirstOrDefault(i => i.Id == sid);
-                        sb.Append(scat.Name);
-                        sb.Append(",");
-                    }
-                    if (sb.Length >= 1)
-                    {
-                        model.SubCategoryName = sb.ToString().Remove(sb.Length - 1);
-                        master.SubCategoryName = model.SubCategoryName;
-                    }
-                    else
-                    {
-                        model.SubCategoryName = sb.ToString();
-                        master.SubCategoryName = model.SubCategoryName;
-                    }
-                }
-                if (model.NextSubCategoryIds != null)
-                {
-                    master.NextSubCategoryIds = String.Join(",", model.NextSubCategoryIds);
-                    StringBuilder sb = new StringBuilder();
-                    foreach (var s in model.NextSubCategoryIds)
-                    {
-                        var sid = Convert.ToInt32(s);
-                        var nscat = _db.NextSubCategories.FirstOrDefault(i => i.Id == sid);
-                        sb.Append(nscat.Name);
-                        sb.Append(",");
-                    }
-                    if (sb.Length >= 1)
-                    {
-                        model.NextSubCategoryName = sb.ToString().Remove(sb.Length - 1);
-                        master.NextSubCategoryName = model.NextSubCategoryName;
-                    }
-                    else
-                    {
-                        model.NextSubCategoryName = sb.ToString();
-                        master.NextSubCategoryName = model.NextSubCategoryName;
-                    }
-                }
-                //ProductImage1
-                if (model.FMCGImage1 != null)
-                {
-                    uc.UploadFiles(model.FMCGImage1.InputStream, master.Id + "_" + model.FMCGImage1.FileName, accesskey, secretkey, "image");
-                    master.ImagePath1 = master.Id + "_" + model.FMCGImage1.FileName.Replace(" ","");
-                    
-                }
-                //ProductImage2
-                if (model.FMCGImage2 != null)
-                {
-                    uc.UploadFiles(model.FMCGImage2.InputStream, master.Id + "_" + model.FMCGImage2.FileName, accesskey, secretkey, "image");
-                    master.ImagePath2 = master.Id + "_" + model.FMCGImage2.FileName.Replace(" ", "");
-                  
-                }
-                //ProductImage3
-                if (model.FMCGImage3 != null)
-                {
-                    uc.UploadFiles(model.FMCGImage3.InputStream, master.Id + "_" + model.FMCGImage3.FileName, accesskey, secretkey, "image");
-                    master.ImagePath3 = master.Id + "_" + model.FMCGImage3.FileName.Replace(" ", "");
-                  
-                }
-                //ProductImage4
-                if (model.FMCGImage4 != null)
-                {
-                    uc.UploadFiles(model.FMCGImage4.InputStream, master.Id + "_" + model.FMCGImage4.FileName, accesskey, secretkey, "image");
-                    master.ImagePath4 = master.Id + "_" + model.FMCGImage4.FileName.Replace(" ", "");
-                    
-                }
-                //ProductImage5
-                if (model.FMCGImage5 != null)
-                {
-                    uc.UploadFiles(model.FMCGImage5.InputStream, master.Id + "_" + model.FMCGImage5.FileName, accesskey, secretkey, "image");
-                    master.ImagePath5 = master.Id + "_" + model.FMCGImage5.FileName.Replace(" ", "");
-                }
-                if (name == null)
-                {
-                    master.DateEncoded = DateTime.Now;
-                    master.DateUpdated = DateTime.Now;
-                    master.Status = 0;
-                    _db.MasterProducts.Add(master);
-                    _db.SaveChanges();
-                    ViewBag.Message = model.Name + " Saved Successfully!";
-                }
-                else
-                {
-                    ViewBag.ErrorMessage = model.Name + " Already Exist";
-                }
-            }
-            catch (AmazonS3Exception amazonS3Exception)
-            {
-                if (amazonS3Exception.ErrorCode != null &&
-                    (amazonS3Exception.ErrorCode.Equals("InvalidAccessKeyId")
-                    ||
-                    amazonS3Exception.ErrorCode.Equals("InvalidSecurity")))
-                {
-                    ViewBag.Message = "Check the provided AWS Credentials.";
-                }
-                else
-                {
-                    ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
-                }
-            }
-            return View();
-        }
-
-        // FMCG Update
-        [AccessPolicy(PageCode = "SHNMPRFE024")]
-        public ActionResult FMCGEdit(string Id)
-        {
-            var dCode = AdminHelpers.DCodeInt(Id);
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            if (string.IsNullOrEmpty(dCode.ToString()))
-                return HttpNotFound();
-            var masterProduct = _db.MasterProducts.FirstOrDefault(i => i.Id == dCode);
-            if (masterProduct.ImagePath1 != null)
-                masterProduct.ImagePath1 = masterProduct.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-            if (masterProduct.ImagePath2 != null)
-                masterProduct.ImagePath2 = masterProduct.ImagePath2.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-            if (masterProduct.ImagePath3 != null)
-                masterProduct.ImagePath3 = masterProduct.ImagePath3.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-            if (masterProduct.ImagePath4 != null)
-                masterProduct.ImagePath4 = masterProduct.ImagePath4.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-            if (masterProduct.ImagePath5 != null)
-                masterProduct.ImagePath5 = masterProduct.ImagePath5.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-            var model = _mapper.Map<MasterProduct, MasterFMCGEditViewModel>(masterProduct);
-            model.CategoryIds1 = masterProduct.CategoryIds;
-            model.SubCategoryIds1 = masterProduct.SubCategoryIds;
-            model.NextSubCategoryIds1 = masterProduct.NextSubCategoryIds;
-            return View(model);
-        }
-
-        [HttpPost, ValidateInput(false)]
-        [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNMPRFE024")]
-        public ActionResult FMCGEdit(MasterFMCGEditViewModel model)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            var master = _db.MasterProducts.FirstOrDefault(i => i.Id == model.Id);
-            _mapper.Map(model, master);
-            master.Name = model.Name;
-            master.ProductTypeId = 2;
-
-            master.UpdatedBy = user.Name;
-            master.DateUpdated = DateTime.Now;
-            if (model.NickName == null)
-            {
-                master.NickName = model.Name;
-            }
-            try
-            {
-                if (model.CategoryIds != null)
-                {
-                    master.CategoryIds = String.Join(",", model.CategoryIds);
-                    StringBuilder sb = new StringBuilder();
-                    foreach (var s in model.CategoryIds)
-                    {
-                        var sid = Convert.ToInt32(s);
-                        var cat = _db.Categories.FirstOrDefault(i => i.Id == sid);
-                        sb.Append(cat.Name);
-                        sb.Append(",");
-                    }
-                    if (sb.Length >= 1)
-                    {
-                        model.CategoryName = sb.ToString().Remove(sb.Length - 1);
-                        master.CategoryName = model.CategoryName;
-                    }
-                    else
-                    {
-                        model.CategoryName = sb.ToString();
-                        master.CategoryName = model.CategoryName;
-                    }
-                }
-                if (model.SubCategoryIds != null)
-                {
-                    master.SubCategoryIds = String.Join(",", model.SubCategoryIds);
-                    StringBuilder sb = new StringBuilder();
-                    foreach (var s in model.SubCategoryIds)
-                    {
-                        var sid = Convert.ToInt32(s);
-                        var scat = _db.SubCategories.FirstOrDefault(i => i.Id == sid);
-                        sb.Append(scat.Name);
-                        sb.Append(",");
-                    }
-                    if (sb.Length >= 1)
-                    {
-                        model.SubCategoryName = sb.ToString().Remove(sb.Length - 1);
-                        master.SubCategoryName = model.SubCategoryName;
-                    }
-                    else
-                    {
-                        model.SubCategoryName = sb.ToString();
-                        master.SubCategoryName = model.SubCategoryName;
-                    }
-                }
-                if (model.NextSubCategoryIds != null)
-                {
-                    master.NextSubCategoryIds = String.Join(",", model.NextSubCategoryIds);
-                    StringBuilder sb = new StringBuilder();
-                    foreach (var s in model.NextSubCategoryIds)
-                    {
-                        var sid = Convert.ToInt32(s);
-                        var nscat = _db.NextSubCategories.FirstOrDefault(i => i.Id == sid);
-                        sb.Append(nscat.Name);
-                        sb.Append(",");
-                    }
-                    if (sb.Length >= 1)
-                    {
-                        model.NextSubCategoryName = sb.ToString().Remove(sb.Length - 1);
-                        master.NextSubCategoryName = model.NextSubCategoryName;
-                    }
-                    else
-                    {
-                        model.NextSubCategoryName = sb.ToString();
-                        master.NextSubCategoryName = model.NextSubCategoryName;
-                    }
-                }
-                //ProductImage1
-                if (model.FMCGImage1 != null)
-                {
-                    uc.UploadFiles(model.FMCGImage1.InputStream, master.Id + "_" + model.FMCGImage1.FileName, accesskey, secretkey, "image");
-                    master.ImagePath1 = master.Id + "_" + model.FMCGImage1.FileName.Replace(" ", "");
-                }
-
-                //ProductImage2
-                if (model.FMCGImage2 != null)
-                {
-                    uc.UploadFiles(model.FMCGImage2.InputStream, master.Id + "_" + model.FMCGImage2.FileName, accesskey, secretkey, "image");
-                    master.ImagePath2 = master.Id + "_" + model.FMCGImage2.FileName.Replace(" ", "");
-                }
-
-                //ProductImage3
-                if (model.FMCGImage3 != null)
-                {
-                    uc.UploadFiles(model.FMCGImage3.InputStream, master.Id + "_" + model.FMCGImage3.FileName, accesskey, secretkey, "image");
-                    master.ImagePath3 = master.Id + "_" + model.FMCGImage3.FileName.Replace(" ", "");
-                }
-
-                //ProductImage4
-                if (model.FMCGImage4 != null)
-                {
-                    uc.UploadFiles(model.FMCGImage4.InputStream, master.Id + "_" + model.FMCGImage4.FileName, accesskey, secretkey, "image");
-                    master.ImagePath4 = master.Id + "_" + model.FMCGImage4.FileName.Replace(" ", "");
-                }
-
-                //ProductImage5
-                if (model.FMCGImage5 != null)
-                {
-                    uc.UploadFiles(model.FMCGImage5.InputStream, master.Id + "_" + model.FMCGImage5.FileName, accesskey, secretkey, "image");
-                    master.ImagePath5 = master.Id + "_" + model.FMCGImage5.FileName.Replace(" ", "");
-                }
-                master.DateUpdated = DateTime.Now;
-                _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
-                _db.SaveChanges();
-            }
-            catch (AmazonS3Exception amazonS3Exception)
-            {
-                if (amazonS3Exception.ErrorCode != null &&
-                    (amazonS3Exception.ErrorCode.Equals("InvalidAccessKeyId")
-                    ||
-                    amazonS3Exception.ErrorCode.Equals("InvalidSecurity")))
-                {
-                    ViewBag.Message = "Check the provided AWS Credentials.";
-                }
-                else
-                {
-                    ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
-                }
-            }
-
-            return RedirectToAction("FMCGList");
-        }
-
-        // FMCG Delete
-        [AccessPolicy(PageCode = "SHNMPRFD025")]
-        public JsonResult FMCGDelete(string Id)
-        {
-            var dCode = AdminHelpers.DCodeInt(Id);
-            var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dCode);
-            master.Status = 2;
-            _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
-            _db.SaveChanges();
-            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         // Json Results

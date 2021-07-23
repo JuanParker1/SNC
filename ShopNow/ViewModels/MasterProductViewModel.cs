@@ -107,7 +107,7 @@ namespace ShopNow.ViewModels
         }
     }
   
-    public class MedicalDrugViewModel
+    public class MasterMedicalUploadViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
