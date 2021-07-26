@@ -85,7 +85,7 @@ namespace ShopNow.Controllers
             var model = new BillCreateEditViewModel();
             ViewBag.Name = user.Name;
             var ratecode = db.PlatFormCreditRates.Where(i => i.Status == 0).Select(i => i.Id).FirstOrDefault();
-            ViewBag.PlatformCreditRateCode = ratecode;
+            ViewBag.PlatformCreditRateId = ratecode;
             var platFormCreaditRate = db.PlatFormCreditRates.Where(i => i.Id == ratecode).FirstOrDefault();//PlatFormCreditRate.Get(model.PlatformCreditRateCode);
             if (platFormCreaditRate != null)
             {
@@ -301,9 +301,9 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNBILDD008")]
-        public ActionResult DeliveryChargeDelete(string code)
+        public ActionResult DeliveryChargeDelete(string id)
         {
-            var dCode = AdminHelpers.DCodeInt(code);
+            var dCode = AdminHelpers.DCodeInt(id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var bill = db.Bills.Where(b => b.Id == dCode && b.Status == 0).FirstOrDefault();
             if (bill != null)

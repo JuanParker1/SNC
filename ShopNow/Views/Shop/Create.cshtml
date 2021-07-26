@@ -14,560 +14,538 @@
     .focused {
         border: solid 1px red;
     }
-    /*.btn-file {
-        position: relative;
-        overflow: hidden;
-    }
-
-        .btn-file input[type=file] {
-            position: absolute;
-            top: 0;
-            right: 0;
-            min-width: 100%;
-            min-height: 100%;
-            font-size: 100px;
-            text-align: right;
-            filter: alpha(opacity=0);
-            opacity: 0;
-            outline: none;
-            background: white;
-            cursor: inherit;
-            display: block;
-        }*/
 </style>
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-md-3">
-                <h5 class="mt-1 text-success" style="letter-spacing:1px">SHOP ENTRY</h5>
-            </div>
-            <div class="col-md-2">
-                <label class="font-weight-bold text-secondary">Customer Phone No.</label>
-            </div>
-            <div class="col-md-2">
-                <input type="text" class="form-control" id="phoneNumber" autofocus />
-                @*<input type="hidden" id="CustomerName" />*@
-            </div>
-            <div class="col-md-1">
-                <input type="button" class="form-control btn btn-sm btn-success" id="btnCustomer" value="Check" />
-            </div>
-            <div class="col-md-4 text-right">
-                <a href="~/Shop/List" target="_self"><span class="fa fa-bars"></span>&nbsp;Shop List</a>
-            </div>
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-md-3">
+            <h5 class="mt-1 text-success" style="letter-spacing:1px">SHOP ENTRY</h5>
+        </div>
+        <div class="col-md-2">
+            <label class="font-weight-bold text-secondary">Customer Phone No.</label>
+        </div>
+        <div class="col-md-2">
+            <input type="text" class="form-control" id="phoneNumber" autofocus />
+        </div>
+        <div class="col-md-1">
+            <input type="button" class="form-control btn btn-sm btn-success" id="btnCustomer" value="Check" />
+        </div>
+        <div class="col-md-4 text-right">
+            <a href="~/Shop/List" target="_self"><span class="fa fa-bars"></span>&nbsp;Shop List</a>
         </div>
     </div>
-    <div class="container-fluid my-0 d-none divContainer">
-        <div class="row">
-            <div class="col-md-12 mx-auto">
-                @using (Html.BeginForm("Create", "Shop", FormMethod.Post, new { id = "ShopForm", role = "form", enctype = "multipart/form-data" }))
-                {
-                    @Html.AntiForgeryToken()
-                    <input type="hidden" name="CustomerCode" id="CustomerCode" />
-                    <input type="hidden" name="CustomerName" id="CustomerName" />
-                    <input type="hidden" name="shopduplicateCount" id="shopduplicateCount" value="@ViewBag.shopduplicateCount" />
-                    <input type="hidden" name="shopbeforeApprovalCount" id="shopbeforeApprovalCount" value="@ViewBag.shopbeforeApprovalCount" />
-                    <input type="hidden" name="shopownerphonenumber" id="shopownerphonenumber" value="@ViewBag.shopownerphonenumber" />
-                    <input type="hidden" name="shopname" id="shopname" value="@ViewBag.shopname" />
-                    <div class="card mb-4">
-                        <div class="card-body row">
-                            <div class="col-md-6">
-                                <div class="row ml-2">
-                                    <input class="col-11 mb-2" id="pac-input" type="text" placeholder="Select your Shop" />
-                                    <div id="location-error"></div>
-                                    <div class="mb-4" id="map" style="width: 92%; height: 250px;"></div>
+</div>
+<div class="container-fluid my-0 d-none divContainer">
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            @using (Html.BeginForm("Create", "Shop", FormMethod.Post, new { id = "ShopForm", role = "form", enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="CustomerCode" id="CustomerCode" />
+                <input type="hidden" name="CustomerName" id="CustomerName" />
+                <input type="hidden" name="shopduplicateCount" id="shopduplicateCount" value="@ViewBag.shopduplicateCount" />
+                <input type="hidden" name="shopbeforeApprovalCount" id="shopbeforeApprovalCount" value="@ViewBag.shopbeforeApprovalCount" />
+                <input type="hidden" name="shopownerphonenumber" id="shopownerphonenumber" value="@ViewBag.shopownerphonenumber" />
+                <input type="hidden" name="shopname" id="shopname" value="@ViewBag.shopname" />
+                <div class="card mb-4">
+                    <div class="card-body row">
+                        <div class="col-md-6">
+                            <div class="row ml-2">
+                                <input class="col-11 mb-2" id="pac-input" type="text" placeholder="Select your Shop" />
+                                <div id="location-error"></div>
+                                <div class="mb-4" id="map" style="width: 92%; height: 250px;"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Name</strong></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input id="Name" type="text" class="form-control" name="Name" />
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group row">
-                                    <div class="col-md-4 text-md-left">
-                                        <label class="col-form-label"><strong class="text-secondary">Name</strong></label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input id="Name" type="text" class="form-control" name="Name" />
-                                    </div>
+                            <div class="form-group row mobile">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Mobile Number</strong></label>
                                 </div>
-                                <div class="form-group row mobile">
-                                    <div class="col-md-4 text-md-left">
-                                        <label class="col-form-label"><strong class="text-secondary">Mobile Number</strong></label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input id="PhoneNumber" type="text" class="form-control" name="PhoneNumber" />
-                                    </div>
-                                </div>
-                                <div class="form-group row d-none manualmobile">
-                                    <div class="col-md-4 text-md-left">
-                                        <label class="col-form-label"><strong class="text-secondary">Mobile Number</strong></label>
-                                    </div>
-                                    <div class="col-md-5">
-                                        <input id="ManualPhoneNumber" type="text" class="form-control" name="ManualPhoneNumber" />
-                                    </div>
-                                    <div class="col-md-2 OtpButton px-0">
-                                        <input type="button" value="OTP" class="btn btn-info btn-sm form-control" id="btnOTP" />
-                                    </div>
-                                    <div class="col-md-2 d-none OtpNumber px-0">
-                                        <input id="Otp" type="text" class="form-control" name="Otp" />
-                                    </div>
-                                    <div class="col-md-1 d-none GoIcon p-1 pl-2">
-                                        <a href="#"><i class="fa fa-arrow-circle-right fa-2x text-dark" id="OtpGoIcon"></i></a>
-                                    </div>
-                                    <div class="col-md-1 OkIcon d-none p-1 pl-2">
-                                        <a href="#"><i class="fa fa-check fa-2x text-success"></i></a>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-md-4 text-md-left">
-                                        <label class="col-form-label"><strong class="text-secondary">Official Email</strong></label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input id="OfficialEmail" type="text" class="form-control" name="OfficialEmail" />
-                                    </div>
-                                </div>
-                                <div class="form-group row website">
-                                    <div class="col-md-4 text-md-left">
-                                        <label class="col-form-label"><strong class="text-secondary">Website</strong></label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input id="Website" type="text" class="form-control" name="Website" readonly />
-                                    </div>
-                                </div>
-                                <div class="form-group row d-none manualwebsite">
-                                    <div class="col-md-4 text-md-left">
-                                        <label class="col-form-label"><strong class="text-secondary">Manual Website</strong></label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input id="ManualWebsite" type="text" class="form-control" name="ManualWebsite" />
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-md-4 text-md-left">
-                                        <label class="col-form-label"><strong class="text-secondary">Shop Type</strong></label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <select id="ShopCategoryCode" name="ShopCategoryCode" class="form-control" style="width:100%;"></select>
-                                        <input type="hidden" name="ShopCategoryName" id="ShopCategoryName" />
-                                    </div>
+                                <div class="col-md-8">
+                                    <input id="PhoneNumber" type="text" class="form-control" name="PhoneNumber" />
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group row">
-                                    <div class="col-md-4 text-md-left">
-                                        <label class="col-form-label"><strong class="text-secondary">Address</strong></label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input id="Address" type="text" class="form-control" placeholder="Address" name="Address" readonly />
-                                    </div>
+                            <div class="form-group row d-none manualmobile">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Mobile Number</strong></label>
                                 </div>
-                                <div class="form-group row">
-                                    <div class="col-md-4 text-md-left">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <small class="control-label col-sm-12" for="StreetName"><i class="text-secondary">Locality</i></small>
-                                        <input id="StreetName" type="text" class="form-control mb-2" placeholder="Street Name" name="StreetName" readonly />
-                                    </div>
-                                    <div class="col-md-4">
-                                        <small class="control-label col-sm-12" for="DistrictName"><i class="text-secondary">District</i></small>
-                                        <input id="DistrictName" type="text" class="form-control" placeholder="District Name" name="DistrictName" readonly />
-                                    </div>
+                                <div class="col-md-5">
+                                    <input id="ManualPhoneNumber" type="text" class="form-control" name="ManualPhoneNumber" />
                                 </div>
-                                <div class="form-group row">
-                                    <div class="col-md-4 text-md-left">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <small class="control-label col-sm-12" for="StateName"><i class="text-secondary">State / Province</i></small>
-                                        <input id="StateName" type="text" class="form-control mb-2" placeholder="State Name" name="StateName" readonly />
-                                    </div>
-                                    <div class="col-md-4">
-                                        <small class="control-label col-sm-12" for="CountryName"><i class="text-secondary">Country</i></small>
-                                        <input id="CountryName" type="text" class="form-control" placeholder="Country Name" name="CountryName" readonly />
-                                    </div>
+                                <div class="col-md-2 OtpButton px-0">
+                                    <input type="button" value="OTP" class="btn btn-info btn-sm form-control" id="btnOTP" />
                                 </div>
-                                <div class="form-group row">
-                                    <div class="col-md-4 text-md-left">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <small class="control-label col-sm-12" for="PinCode"><i class="text-secondary">PIN Code</i></small>
-                                        <input id="PinCode" type="text" class="form-control" placeholder="PIN Code" name="PinCode" readonly />
-                                    </div>
+                                <div class="col-md-2 d-none OtpNumber px-0">
+                                    <input id="Otp" type="text" class="form-control" name="Otp" />
                                 </div>
-                                <div class="form-group row">
-                                    <div class="col-md-4 text-md-left">
-                                        <label class="col-form-label"><strong class="text-secondary">Location</strong></label>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <small class="control-label col-sm-12" for="Latitude"><i class="text-secondary">Latitude</i></small>
-                                        <input id="Latitude" type="text" class="form-control mb-2" placeholder="Latitude" name="Latitude" readonly />
-                                    </div>
-                                    <div class="col-md-4">
-                                        <small class="control-label col-sm-12" for="Longitude"><i class="text-secondary">Longitude</i></small>
-                                        <input id="Longitude" type="text" class="form-control" placeholder="Longitude" name="Longitude" readonly />
-                                        <input type="hidden" name="GooglePlaceId" id="GooglePlaceId" />
-                                    </div>
+                                <div class="col-md-1 d-none GoIcon p-1 pl-2">
+                                    <a href="#"><i class="fa fa-arrow-circle-right fa-2x text-dark" id="OtpGoIcon"></i></a>
                                 </div>
-                                <div class="form-group row">
-                                    <div class="col-md-4">
-                                        <label class="col-form-label"><strong class="text-secondary">IP Address</strong></label>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input id="IpAddress" type="text" class="form-control" placeholder="IP Address" name="IpAddress" />
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-md-4">
-                                        <label class="text-secondary font-weight-bold ml-2">Shop Image</label><br />
-                                        <div class="img-upload-container">
-                                            <img class="img-container w-100 h-100" id="img-upload" onerror="this.src='/Images/No Photo.png'" />
-                                            <input type="file" id="ShopImage" name="ShopImage" class="d-none" />
-                                            <label for="ShopImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="text-secondary font-weight-bold ml-2">Logo Image</label><br />
-                                        <div class="img-upload-container">
-                                            <img class="img-container w-100 h-100" id="img-logo" onerror="this.src='/Images/No Photo.png'" />
-                                            <input type="file" id="LogoImage" name="LogoImage" class="d-none" />
-                                            <label for="LogoImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="text-secondary font-weight-bold ml-2">Banner Image</label><br />
-                                        <div class="img-upload-container">
-                                            <img class="img-container w-100 h-100" id="img-banner" onerror="this.src='/Images/No Photo.png'" />
-                                            <input type="file" id="BannerImage" name="BannerImage" class="d-none" />
-                                            <label for="BannerImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                        </div>
-                                    </div>
+                                <div class="col-md-1 OkIcon d-none p-1 pl-2">
+                                    <a href="#"><i class="fa fa-check fa-2x text-success"></i></a>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="row">
-                                    <div class="col-md-12 form-group row">
-                                        <div class="col-md-5 text-md-left">
-                                            <label class="col-form-label"><strong class="text-secondary">Google Rating</strong></label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <input id="Rating" type="text" class="form-control" placeholder="Rating" name="Rating" readonly />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 form-group row">
-                                        <div class="col-md-5 text-md-left">
-                                            <label class="col-form-label"><strong class="text-secondary">Google Review</strong></label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <input id="CustomerReview" type="text" class="form-control" placeholder="Customer Review" name="CustomerReview" readonly />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 form-group row">
-                                        <div class="col-md-5 text-md-left">
-                                            <label class="col-form-label text-secondary font-weight-bold">Adscore</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <input id="Adscore" type="number" min="1" value="1" class="form-control" name="Adscore" />
-                                        </div>
-
-                                    </div>
-                                    <div class="col-md-12 form-group row">
-                                        <div class="col-md-5 text-md-left">
-                                            <label class="col-form-label"><strong class="text-secondary">Opening Hours</strong></label>
-                                        </div>
-                                        <div class="col-md-7">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 form-group row">
-                                        <div class="col-md-1 text-md-left">
-                                        </div>
-                                        <div class="col-md-4 text-md-left">
-                                            <label class="col-form-label text-secondary font-weight-bold">Monday</label>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <input id="MondayOpenTime" type="text" class="form-control" name="MondayOpenTime" />
-                                        </div>
-                                        <div class="col-md-1">
-                                            <h5 class="font-weight-bold">-</h5>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <input id="MondayCloseTime" type="text" class="form-control" name="MondayCloseTime" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 form-group row">
-                                        <div class="col-md-1 text-md-left">
-                                        </div>
-                                        <div class="col-md-4 text-md-left">
-                                            <label class="col-form-label text-secondary font-weight-bold">Tuesday</label>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <input id="TuesdayOpenTime" type="text" class="form-control" name="TuesdayOpenTime" />
-                                        </div>
-                                        <div class="col-md-1">
-                                            <h5 class="font-weight-bold">-</h5>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <input id="TuesdayCloseTime" type="text" class="form-control" name="TuesdayCloseTime" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 form-group row">
-                                        <div class="col-md-1 text-md-left">
-                                        </div>
-                                        <div class="col-md-4 text-md-left">
-                                            <label class="col-form-label text-secondary font-weight-bold">Wednesday</label>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <input id="WednesdayOpenTime" type="text" class="form-control" name="WednesdayOpenTime" />
-                                        </div>
-                                        <div class="col-md-1">
-                                            <h5 class="font-weight-bold">-</h5>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <input id="WednesdayCloseTime" type="text" class="form-control" name="WednesdayCloseTime" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 form-group row">
-                                        <div class="col-md-1 text-md-left">
-                                        </div>
-                                        <div class="col-md-4 text-md-left">
-                                            <label class="col-form-label text-secondary font-weight-bold">Thursday</label>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <input id="ThursdayOpenTime" type="text" class="form-control" name="ThursdayOpenTime" />
-                                        </div>
-                                        <div class="col-md-1">
-                                            <h5 class="font-weight-bold">-</h5>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <input id="ThursdayCloseTime" type="text" class="form-control" name="ThursdayCloseTime" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 form-group row">
-                                        <div class="col-md-1 text-md-left">
-                                        </div>
-                                        <div class="col-md-4 text-md-left">
-                                            <label class="col-form-label text-secondary font-weight-bold">Friday</label>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <input id="FridayOpenTime" type="text" class="form-control" name="FridayOpenTime" />
-                                        </div>
-                                        <div class="col-md-1">
-                                            <h5 class="font-weight-bold">-</h5>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <input id="FridayCloseTime" type="text" class="form-control" name="FridayCloseTime" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 form-group row">
-                                        <div class="col-md-1 text-md-left">
-                                        </div>
-                                        <div class="col-md-4 text-md-left">
-                                            <label class="col-form-label text-secondary font-weight-bold">Saturday</label>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <input id="SaturdayOpenTime" type="text" class="form-control" name="SaturdayOpenTime" />
-                                        </div>
-                                        <div class="col-md-1">
-                                            <h5 class="font-weight-bold">-</h5>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <input id="SaturdayCloseTime" type="text" class="form-control" name="SaturdayCloseTime" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 form-group row">
-                                        <div class="col-md-1 text-md-left">
-                                        </div>
-                                        <div class="col-md-4 text-md-left">
-                                            <label class="col-form-label text-secondary font-weight-bold">Sunday</label>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <input id="SundayOpenTime" type="text" class="form-control" name="SundayOpenTime" />
-                                        </div>
-                                        <div class="col-md-1">
-                                            <h5 class="font-weight-bold">-</h5>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <input id="SundayCloseTime" type="text" class="form-control" name="SundayCloseTime" />
-                                        </div>
-                                    </div>
-
+                            <div class="form-group row">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Official Email</strong></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input id="OfficialEmail" type="text" class="form-control" name="OfficialEmail" />
+                                </div>
+                            </div>
+                            <div class="form-group row website">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Website</strong></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input id="Website" type="text" class="form-control" name="Website" readonly />
+                                </div>
+                            </div>
+                            <div class="form-group row d-none manualwebsite">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Manual Website</strong></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input id="ManualWebsite" type="text" class="form-control" name="ManualWebsite" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Shop Type</strong></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <select id="ShopCategoryCode" name="ShopCategoryCode" class="form-control" style="width:100%;" required></select>
+                                    <input type="hidden" name="ShopCategoryName" id="ShopCategoryName" />
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="card mb-4">
-                        <div class="row">
-                            <h5 class="text-success ml-4 mt-2">Proprietor Details</h5>
-                            <div class="col-md-12 mx-auto">
-                                <div class="card-body row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Address</strong></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input id="Address" type="text" class="form-control" placeholder="Address" name="Address" readonly />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4 text-md-left">
+                                </div>
+                                <div class="col-md-4">
+                                    <small class="control-label col-sm-12" for="StreetName"><i class="text-secondary">Locality</i></small>
+                                    <input id="StreetName" type="text" class="form-control mb-2" placeholder="Street Name" name="StreetName" readonly />
+                                </div>
+                                <div class="col-md-4">
+                                    <small class="control-label col-sm-12" for="DistrictName"><i class="text-secondary">District</i></small>
+                                    <input id="DistrictName" type="text" class="form-control" placeholder="District Name" name="DistrictName" readonly />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4 text-md-left">
+                                </div>
+                                <div class="col-md-4">
+                                    <small class="control-label col-sm-12" for="StateName"><i class="text-secondary">State / Province</i></small>
+                                    <input id="StateName" type="text" class="form-control mb-2" placeholder="State Name" name="StateName" readonly />
+                                </div>
+                                <div class="col-md-4">
+                                    <small class="control-label col-sm-12" for="CountryName"><i class="text-secondary">Country</i></small>
+                                    <input id="CountryName" type="text" class="form-control" placeholder="Country Name" name="CountryName" readonly />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4 text-md-left">
+                                </div>
+                                <div class="col-md-4">
+                                    <small class="control-label col-sm-12" for="PinCode"><i class="text-secondary">PIN Code</i></small>
+                                    <input id="PinCode" type="text" class="form-control" placeholder="PIN Code" name="PinCode" readonly />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Location</strong></label>
+                                </div>
+                                <div class="col-md-4">
+                                    <small class="control-label col-sm-12" for="Latitude"><i class="text-secondary">Latitude</i></small>
+                                    <input id="Latitude" type="text" class="form-control mb-2" placeholder="Latitude" name="Latitude" />
+                                </div>
+                                <div class="col-md-4">
+                                    <small class="control-label col-sm-12" for="Longitude"><i class="text-secondary">Longitude</i></small>
+                                    <input id="Longitude" type="text" class="form-control" placeholder="Longitude" name="Longitude" />
+                                    <input type="hidden" name="GooglePlaceId" id="GooglePlaceId" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <label class="col-form-label"><strong class="text-secondary">IP Address</strong></label>
+                                </div>
+                                <div class="col-md-4">
+                                    <input id="IpAddress" type="text" class="form-control" placeholder="IP Address" name="IpAddress" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <label class="text-secondary font-weight-bold ml-2">Shop Image</label><br />
+                                    <div class="img-upload-container">
+                                        <img class="img-container w-100 h-100" id="img-upload" onerror="this.src='/Images/No Photo.png'" />
+                                        <input type="file" id="ShopImage" name="ShopImage" class="d-none" />
+                                        <label for="ShopImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="text-secondary font-weight-bold ml-2">Logo Image</label><br />
+                                    <div class="img-upload-container">
+                                        <img class="img-container w-100 h-100" id="img-logo" onerror="this.src='/Images/No Photo.png'" />
+                                        <input type="file" id="LogoImage" name="LogoImage" class="d-none" />
+                                        <label for="LogoImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="text-secondary font-weight-bold ml-2">Banner Image</label><br />
+                                    <div class="img-upload-container">
+                                        <img class="img-container w-100 h-100" id="img-banner" onerror="this.src='/Images/No Photo.png'" />
+                                        <input type="file" id="BannerImage" name="BannerImage" class="d-none" />
+                                        <label for="BannerImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-12 form-group row">
+                                    <div class="col-md-5 text-md-left">
+                                        <label class="col-form-label"><strong class="text-secondary">Google Rating</strong></label>
+                                    </div>
                                     <div class="col-md-7">
-                                        <div class="form-group row">
-                                            <div class="col-md-4 mt-4 text-md-left">
-                                                <label class="col-form-label"><strong class="text-secondary">Name</strong></label>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <small class="control-label col-sm-12" for="AadharName"><i class="text-secondary">*  As in Aadhar</i></small>
-                                                <input id="AadharName" type="text" class="form-control" name="AadharName" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <div class="col-md-4 text-md-left">
-                                                <label class="col-form-label"><strong class="text-secondary">Aadhar Number</strong></label>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <input id="AadharNumber" type="text" class="form-control" name="AadharNumber" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <div class="col-md-4 text-md-left">
-                                                <label class="col-form-label"><strong class="text-secondary">Mobile Number *</strong></label>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <input id="OwnerPhoneNumber" type="text" class="form-control" name="OwnerPhoneNumber" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <div class="col-md-4 text-md-left">
-                                                <label class="col-form-label"><strong class="text-secondary">Personal Email</strong></label>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <input id="Email" type="text" class="form-control" name="Email" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-1"></div>
-                                    <div class="col-md-4">
-                                        <label class="text-secondary font-weight-bold ml-2">Aadhar Image</label><br />
-                                        <input type="radio" class="ml-3" name="AadharDocument" id="AadharDocumentImage" value="Image" checked> <label for="AadharDocumentImage"> Image</label>
-                                        <input type="radio" class="ml-3" name="AadharDocument" id="AadharDocumentPDF" value="PDF"> <label for="AadharDocumentPDF"> PDF</label>
-                                        <div class="row ml-3 AadharDocumentPdf d-none mt-2 mb-3">
-                                            <input type="file" id="AadharPdf" name="AadharPdf" />
-                                        </div>
-                                        <div class="row ml-3 AadharDocumentImg mt-2">
-                                            <div class="img-upload-container">
-                                                <img class="img-container w-100 h-100 mb-2" id="img-aadhar" onerror="this.src='/Images/No Photo.png'" />
-                                                <input type="file" id="AadharImage" name="AadharImage" class="d-none" />
-                                                <label for="AadharImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            </div>
-                                        </div>
+                                        <input id="Rating" type="text" class="form-control" placeholder="Rating" name="Rating" readonly />
                                     </div>
                                 </div>
+                                <div class="col-md-12 form-group row">
+                                    <div class="col-md-5 text-md-left">
+                                        <label class="col-form-label"><strong class="text-secondary">Google Review</strong></label>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <input id="CustomerReview" type="text" class="form-control" placeholder="Customer Review" name="CustomerReview" readonly />
+                                    </div>
+                                </div>
+                                <div class="col-md-12 form-group row">
+                                    <div class="col-md-5 text-md-left">
+                                        <label class="col-form-label text-secondary font-weight-bold">Adscore</label>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <input id="Adscore" type="number" min="1" value="1" class="form-control" name="Adscore" />
+                                    </div>
+
+                                </div>
+                                <div class="col-md-12 form-group row">
+                                    <div class="col-md-5 text-md-left">
+                                        <label class="col-form-label"><strong class="text-secondary">Opening Hours</strong></label>
+                                    </div>
+                                    <div class="col-md-7">
+                                    </div>
+                                </div>
+                                <div class="col-md-12 form-group row">
+                                    <div class="col-md-1 text-md-left">
+                                    </div>
+                                    <div class="col-md-4 text-md-left">
+                                        <label class="col-form-label text-secondary font-weight-bold">Monday</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input id="MondayOpenTime" type="text" class="form-control" name="MondayOpenTime" />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <h5 class="font-weight-bold">-</h5>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input id="MondayCloseTime" type="text" class="form-control" name="MondayCloseTime" />
+                                    </div>
+                                </div>
+                                <div class="col-md-12 form-group row">
+                                    <div class="col-md-1 text-md-left">
+                                    </div>
+                                    <div class="col-md-4 text-md-left">
+                                        <label class="col-form-label text-secondary font-weight-bold">Tuesday</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input id="TuesdayOpenTime" type="text" class="form-control" name="TuesdayOpenTime" />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <h5 class="font-weight-bold">-</h5>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input id="TuesdayCloseTime" type="text" class="form-control" name="TuesdayCloseTime" />
+                                    </div>
+                                </div>
+                                <div class="col-md-12 form-group row">
+                                    <div class="col-md-1 text-md-left">
+                                    </div>
+                                    <div class="col-md-4 text-md-left">
+                                        <label class="col-form-label text-secondary font-weight-bold">Wednesday</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input id="WednesdayOpenTime" type="text" class="form-control" name="WednesdayOpenTime" />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <h5 class="font-weight-bold">-</h5>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input id="WednesdayCloseTime" type="text" class="form-control" name="WednesdayCloseTime" />
+                                    </div>
+                                </div>
+                                <div class="col-md-12 form-group row">
+                                    <div class="col-md-1 text-md-left">
+                                    </div>
+                                    <div class="col-md-4 text-md-left">
+                                        <label class="col-form-label text-secondary font-weight-bold">Thursday</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input id="ThursdayOpenTime" type="text" class="form-control" name="ThursdayOpenTime" />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <h5 class="font-weight-bold">-</h5>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input id="ThursdayCloseTime" type="text" class="form-control" name="ThursdayCloseTime" />
+                                    </div>
+                                </div>
+                                <div class="col-md-12 form-group row">
+                                    <div class="col-md-1 text-md-left">
+                                    </div>
+                                    <div class="col-md-4 text-md-left">
+                                        <label class="col-form-label text-secondary font-weight-bold">Friday</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input id="FridayOpenTime" type="text" class="form-control" name="FridayOpenTime" />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <h5 class="font-weight-bold">-</h5>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input id="FridayCloseTime" type="text" class="form-control" name="FridayCloseTime" />
+                                    </div>
+                                </div>
+                                <div class="col-md-12 form-group row">
+                                    <div class="col-md-1 text-md-left">
+                                    </div>
+                                    <div class="col-md-4 text-md-left">
+                                        <label class="col-form-label text-secondary font-weight-bold">Saturday</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input id="SaturdayOpenTime" type="text" class="form-control" name="SaturdayOpenTime" />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <h5 class="font-weight-bold">-</h5>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input id="SaturdayCloseTime" type="text" class="form-control" name="SaturdayCloseTime" />
+                                    </div>
+                                </div>
+                                <div class="col-md-12 form-group row">
+                                    <div class="col-md-1 text-md-left">
+                                    </div>
+                                    <div class="col-md-4 text-md-left">
+                                        <label class="col-form-label text-secondary font-weight-bold">Sunday</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input id="SundayOpenTime" type="text" class="form-control" name="SundayOpenTime" />
+                                    </div>
+                                    <div class="col-md-1">
+                                        <h5 class="font-weight-bold">-</h5>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input id="SundayCloseTime" type="text" class="form-control" name="SundayCloseTime" />
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="card mb-4">
-                        <h5 class="text-success ml-2 mt-2">License Details</h5>
+                <div class="card mb-4">
+                    <div class="row">
+                        <h5 class="text-success ml-4 mt-2">Proprietor Details</h5>
                         <div class="col-md-12 mx-auto">
                             <div class="card-body row">
-                                <div class="col-md-3">
-                                    <div class="card-columns mr-1 form-group row">
-                                        <div class="card border-primary bg-muted">
-                                            <div class="card-body">
-                                                <div class="alert alert-warning alert-dismissible fade show d-none fssi">
-                                                    <strong>Warning!</strong> It is Required Field.Please upload license
-                                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <div class="col-md-7">
+                                    <div class="form-group row">
+                                        <div class="col-md-4 mt-4 text-md-left">
+                                            <label class="col-form-label"><strong class="text-secondary">Name</strong></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <small class="control-label col-sm-12" for="AadharName"><i class="text-secondary">*  As in Aadhar</i></small>
+                                            <input id="AadharName" type="text" class="form-control" name="AadharName" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4 text-md-left">
+                                            <label class="col-form-label"><strong class="text-secondary">Aadhar Number</strong></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input id="AadharNumber" type="text" class="form-control" name="AadharNumber" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4 text-md-left">
+                                            <label class="col-form-label"><strong class="text-secondary">Mobile Number *</strong></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input id="OwnerPhoneNumber" type="text" class="form-control" name="OwnerPhoneNumber" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4 text-md-left">
+                                            <label class="col-form-label"><strong class="text-secondary">Personal Email</strong></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input id="Email" type="text" class="form-control" name="Email" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-1"></div>
+                                <div class="col-md-4">
+                                    <label class="text-secondary font-weight-bold ml-2">Aadhar Image</label><br />
+                                    <input type="radio" class="ml-3" name="AadharDocument" id="AadharDocumentImage" value="Image" checked> <label for="AadharDocumentImage"> Image</label>
+                                    <input type="radio" class="ml-3" name="AadharDocument" id="AadharDocumentPDF" value="PDF"> <label for="AadharDocumentPDF"> PDF</label>
+                                    <div class="row ml-3 AadharDocumentPdf d-none mt-2 mb-3">
+                                        <input type="file" id="AadharPdf" name="AadharPdf" />
+                                    </div>
+                                    <div class="row ml-3 AadharDocumentImg mt-2">
+                                        <div class="img-upload-container">
+                                            <img class="img-container w-100 h-100 mb-2" id="img-aadhar" onerror="this.src='/Images/No Photo.png'" />
+                                            <input type="file" id="AadharImage" name="AadharImage" class="d-none" />
+                                            <label for="AadharImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <h5 class="text-success ml-2 mt-2">License Details</h5>
+                    <div class="col-md-12 mx-auto">
+                        <div class="card-body row">
+                            <div class="col-md-3">
+                                <div class="card-columns mr-1 form-group row">
+                                    <div class="card border-primary bg-muted">
+                                        <div class="card-body">
+                                            <div class="alert alert-warning alert-dismissible fade show d-none fssi">
+                                                <strong>Warning!</strong> It is Required Field.Please upload license
+                                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                            </div>
+                                            <label class="col-md-12 text-center"><strong class="text-secondary">FSSAI License</strong></label>
+                                            <label class="col-md-12 text-left"><small class="text-secondary text-left"><i>License Number</i></small></label>
+                                            <input id="FSSAINumber" type="text" class="form-control col-md-12" name="FSSAINumber" />
+                                            <label class="col-md-12 text-left"><small class="text-secondary"><i>License Image</i></small></label>
+                                            <input type="radio" class="ml-3" name="FssaiLicense" id="FssaiLicenseImage" value="Image" checked> <label for="FssaiLicenseImage"> Image</label>
+                                            <input type="radio" class="ml-3" name="FssaiLicense" id="FssaiLicensePDF" value="PDF"> <label for="FssaiLicensePDF"> PDF</label>
+                                            <div class="row ml-3 FssaiPdf d-none mt-2 mb-3">
+                                                <input type="file" id="FSSAIPdf" name="FSSAIPdf" />
+                                            </div>
+                                            <div class="row ml-3 FssaiImg mt-2">
+                                                <div class="img-upload-container mb-3">
+                                                    <img class="img-container w-100 h-100 mb-2" id="img-fssai" onerror="this.src='/Images/No Photo.png'" />
+                                                    <input type="file" id="FSSAIImage" name="FSSAIImage" class="d-none" />
+                                                    <label for="FSSAIImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                                 </div>
-                                                <label class="col-md-12 text-center"><strong class="text-secondary">FSSAI License</strong></label>
-                                                <label class="col-md-12 text-left"><small class="text-secondary text-left"><i>License Number</i></small></label>
-                                                <input id="FSSAINumber" type="text" class="form-control col-md-12" name="FSSAINumber" />
-                                                <label class="col-md-12 text-left"><small class="text-secondary"><i>License Image</i></small></label>
-                                                <input type="radio" class="ml-3" name="FssaiLicense" id="FssaiLicenseImage" value="Image" checked> <label for="FssaiLicenseImage"> Image</label>
-                                                <input type="radio" class="ml-3" name="FssaiLicense" id="FssaiLicensePDF" value="PDF"> <label for="FssaiLicensePDF"> PDF</label>
-                                                <div class="row ml-3 FssaiPdf d-none mt-2 mb-3">
-                                                    <input type="file" id="FSSAIPdf" name="FSSAIPdf" />
-                                                </div>
-                                                <div class="row ml-3 FssaiImg mt-2">
-                                                    <div class="img-upload-container mb-3">
-                                                        <img class="img-container w-100 h-100 mb-2" id="img-fssai" onerror="this.src='/Images/No Photo.png'" />
-                                                        <input type="file" id="FSSAIImage" name="FSSAIImage" class="d-none" />
-                                                        <label for="FSSAIImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                                    </div>
-                                                </div>
-                                                <div class="alert alert-danger d-none penFssi p-2">
-                                                    <strong>Pending Verification!</strong>
-                                                </div>
+                                            </div>
+                                            <div class="alert alert-danger d-none penFssi p-2">
+                                                <strong>Pending Verification!</strong>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
-                                    <div class="card-columns mr-1 form-group row">
-                                        <div class="card border-primary bg-muted">
-                                            <div class="card-body">
-                                                <div class="alert alert-warning alert-dismissible fade show d-none drug">
-                                                    <strong>Warning!</strong> It is Required Field.Please upload license
-                                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card-columns mr-1 form-group row">
+                                    <div class="card border-primary bg-muted">
+                                        <div class="card-body">
+                                            <div class="alert alert-warning alert-dismissible fade show d-none drug">
+                                                <strong>Warning!</strong> It is Required Field.Please upload license
+                                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                            </div>
+                                            <label class="col-md-12 text-center"><strong class="text-secondary">Drug License</strong></label>
+                                            <label class="col-md-12 text-left"><small class="text-secondary"><i>License Number</i></small></label>
+                                            <input id="DrugNumber" type="text" class="form-control" name="DrugNumber" />
+                                            <label class="col-md-12 text-left"><small class="text-secondary"><i>License Image</i></small></label>
+                                            <input type="radio" class="ml-3" name="DrugLicense" id="DrugLicenseImage" value="Image" checked> <label for="DrugLicenseImage"> Image</label>
+                                            <input type="radio" class="ml-3" name="DrugLicense" id="DrugLicensePDF" value="PDF"> <label for="DrugLicensePDF"> PDF</label>
+                                            <div class="row ml-3 DrugPdf d-none mt-2 mb-3">
+                                                <input type="file" id="DrugPdf" name="DrugPdf" />
+                                            </div>
+                                            <div class="row ml-3 DrugImg mt-2">
+                                                <div class="img-upload-container text-center mb-3">
+                                                    <img class="img-container w-100 h-100 mb-2" id="img-drug" onerror="this.src='/Images/No Photo.png'" />
+                                                    <input type="file" id="DrugImage" name="DrugImage" class="d-none" />
+                                                    <label for="DrugImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                                 </div>
-                                                <label class="col-md-12 text-center"><strong class="text-secondary">Drug License</strong></label>
-                                                <label class="col-md-12 text-left"><small class="text-secondary"><i>License Number</i></small></label>
-                                                <input id="DrugNumber" type="text" class="form-control" name="DrugNumber" />
-                                                <label class="col-md-12 text-left"><small class="text-secondary"><i>License Image</i></small></label>
-                                                <input type="radio" class="ml-3" name="DrugLicense" id="DrugLicenseImage" value="Image" checked> <label for="DrugLicenseImage"> Image</label>
-                                                <input type="radio" class="ml-3" name="DrugLicense" id="DrugLicensePDF" value="PDF"> <label for="DrugLicensePDF"> PDF</label>
-                                                <div class="row ml-3 DrugPdf d-none mt-2 mb-3">
-                                                    <input type="file" id="DrugPdf" name="DrugPdf" />
-                                                </div>
-                                                <div class="row ml-3 DrugImg mt-2">
-                                                    <div class="img-upload-container text-center mb-3">
-                                                        <img class="img-container w-100 h-100 mb-2" id="img-drug" onerror="this.src='/Images/No Photo.png'" />
-                                                        <input type="file" id="DrugImage" name="DrugImage" class="d-none" />
-                                                        <label for="DrugImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                                    </div>
-                                                </div>
-                                                <div class="alert alert-danger d-none penDrug p-2">
-                                                    <strong>Pending Verification!</strong>
-                                                </div>
+                                            </div>
+                                            <div class="alert alert-danger d-none penDrug p-2">
+                                                <strong>Pending Verification!</strong>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
-                                    <div class="card-columns mr-1 form-group row">
-                                        <div class="card border-primary  bg-muted">
-                                            <div class="card-body">
-                                                <label class="col-md-12 text-center"><strong class="text-secondary">Establish License</strong></label>
-                                                <label class="col-md-12 text-left"><small class="text-secondary"><i>License Number</i></small></label>
-                                                <input id="EstablishNumber" type="text" class="form-control" name="EstablishNumber" />
-                                                <label class="col-md-12"><small class="text-secondary"><i>License Image</i></small></label>
-                                                <input type="radio" class="ml-3" name="EstablishLicense" id="EstablishLicenseImage" value="Image" checked> <label for="EstablishLicenseImage"> Image</label>
-                                                <input type="radio" class="ml-3" name="EstablishLicense" id="EstablishLicensePDF" value="PDF"> <label for="EstablishLicensePDF"> PDF</label>
-                                                <div class="row ml-3 EstPdf d-none mt-2 mb-3">
-                                                    <input type="file" id="EstablishPdf" name="EstablishPdf" />
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card-columns mr-1 form-group row">
+                                    <div class="card border-primary  bg-muted">
+                                        <div class="card-body">
+                                            <label class="col-md-12 text-center"><strong class="text-secondary">Establish License</strong></label>
+                                            <label class="col-md-12 text-left"><small class="text-secondary"><i>License Number</i></small></label>
+                                            <input id="EstablishNumber" type="text" class="form-control" name="EstablishNumber" />
+                                            <label class="col-md-12"><small class="text-secondary"><i>License Image</i></small></label>
+                                            <input type="radio" class="ml-3" name="EstablishLicense" id="EstablishLicenseImage" value="Image" checked> <label for="EstablishLicenseImage"> Image</label>
+                                            <input type="radio" class="ml-3" name="EstablishLicense" id="EstablishLicensePDF" value="PDF"> <label for="EstablishLicensePDF"> PDF</label>
+                                            <div class="row ml-3 EstPdf d-none mt-2 mb-3">
+                                                <input type="file" id="EstablishPdf" name="EstablishPdf" />
+                                            </div>
+                                            <div class="row ml-3 EstImg mt-2">
+                                                <div class="img-upload-container mb-3">
+                                                    <img class="img-container w-100 h-100 mb-2" id="img-establish" onerror="this.src='/Images/No Photo.png'" />
+                                                    <input type="file" id="EstablishImage" name="EstablishImage" class="d-none" />
+                                                    <label for="EstablishImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                                 </div>
-                                                <div class="row ml-3 EstImg mt-2">
-                                                    <div class="img-upload-container mb-3">
-                                                        <img class="img-container w-100 h-100 mb-2" id="img-establish" onerror="this.src='/Images/No Photo.png'" />
-                                                        <input type="file" id="EstablishImage" name="EstablishImage" class="d-none" />
-                                                        <label for="EstablishImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                                    </div>
-                                                </div>
-                                                <div class="alert alert-danger d-none penEsta p-2">
-                                                    <strong>Pending Verification!</strong>
-                                                </div>
+                                            </div>
+                                            <div class="alert alert-danger d-none penEsta p-2">
+                                                <strong>Pending Verification!</strong>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
-                                    <div class="card-columns mr-1 form-group row">
-                                        <div class="card border-primary bg-muted">
-                                            <div class="card-body">
-                                                <label class="col-md-12 text-center"><strong class="text-secondary">Other License</strong></label>
-                                                <label class="col-md-12 text-left"><small class="text-secondary"><i>License Name</i></small></label>
-                                                <input id="OtherLicenseName" type="text" class="form-control" name="OtherLicenseName" />
-                                                <label class="col-md-12 text-left"><small class="text-secondary"><i>License Number</i></small></label>
-                                                <input id="OtherLicenseNumber" type="text" class="form-control" name="OtherLicenseNumber" />
-                                                <label class="col-md-12"><small class="text-secondary"><i>License Image</i></small></label>
-                                                <input type="radio" class="ml-3" name="OtherLicense" id="OtherImage" value="Image" checked> <label for="OtherImage"> Image</label>
-                                                <input type="radio" class="ml-3" name="OtherLicense" id="OtherPDF" value="PDF"> <label for="OtherPDF"> PDF</label>
-                                                <div class="row ml-3 OtherPdf d-none mt-2 mb-3">
-                                                    <input type="file" id="OtherLicensePdf" name="OtherLicensePdf" />
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card-columns mr-1 form-group row">
+                                    <div class="card border-primary bg-muted">
+                                        <div class="card-body">
+                                            <label class="col-md-12 text-center"><strong class="text-secondary">Other License</strong></label>
+                                            <label class="col-md-12 text-left"><small class="text-secondary"><i>License Name</i></small></label>
+                                            <input id="OtherLicenseName" type="text" class="form-control" name="OtherLicenseName" />
+                                            <label class="col-md-12 text-left"><small class="text-secondary"><i>License Number</i></small></label>
+                                            <input id="OtherLicenseNumber" type="text" class="form-control" name="OtherLicenseNumber" />
+                                            <label class="col-md-12"><small class="text-secondary"><i>License Image</i></small></label>
+                                            <input type="radio" class="ml-3" name="OtherLicense" id="OtherImage" value="Image" checked> <label for="OtherImage"> Image</label>
+                                            <input type="radio" class="ml-3" name="OtherLicense" id="OtherPDF" value="PDF"> <label for="OtherPDF"> PDF</label>
+                                            <div class="row ml-3 OtherPdf d-none mt-2 mb-3">
+                                                <input type="file" id="OtherLicensePdf" name="OtherLicensePdf" />
+                                            </div>
+                                            <div class="row ml-3 OtherImg mt-2">
+                                                <div class="img-upload-container mb-3">
+                                                    <img class="img-container w-100 h-100 mb-2" id="img-other" onerror="this.src='/Images/No Photo.png'" />
+                                                    <input type="file" id="OtherLicenseImage" name="OtherLicenseImage" class="d-none" />
+                                                    <label for="OtherLicenseImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                                 </div>
-                                                <div class="row ml-3 OtherImg mt-2">
-                                                    <div class="img-upload-container mb-3">
-                                                        <img class="img-container w-100 h-100 mb-2" id="img-other" onerror="this.src='/Images/No Photo.png'" />
-                                                        <input type="file" id="OtherLicenseImage" name="OtherLicenseImage" class="d-none" />
-                                                        <label for="OtherLicenseImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                                    </div>
-                                                </div>
-                                                <div class="alert alert-danger d-none penOther p-2">
-                                                    <strong>Pending Verification!</strong>
-                                                </div>
+                                            </div>
+                                            <div class="alert alert-danger d-none penOther p-2">
+                                                <strong>Pending Verification!</strong>
                                             </div>
                                         </div>
                                     </div>
@@ -575,815 +553,810 @@
                             </div>
                         </div>
                     </div>
+                </div>
 
 
-                    <div class="card mb-4">
-                        <div class="col-md-12">
+                <div class="card mb-4">
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                Authorised Distributer of any Brand :   <input type="radio" name="distributorCheck" value="yes"> Yes
+                                <input type="radio" name="distributorCheck" value="no"> No
+                            </div>
+                        </div>
+                        <div class="card-columns d-none form-group row col-md-4 distributor">
+                            <div class="card bg-muted">
+                                <div class="card-body text-center">
+                                    <div class="alert alert-warning alert-dismissible fade show d-none brand">
+                                        <strong>Warning!</strong> It is Required Field.Please upload license
+                                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                    </div>
+                                    <label class="col-md-12"><small class="text-secondary"><i>Authorised Brand Name</i></small></label>
+                                    <select id="AuthorisedBrandCode" name="AuthorisedBrandCode" class="form-control"></select>
+                                    <input type="hidden" name="AuthorisedBrandName" id="AuthorisedBrandName" />
+                                    <label class="col-md-12"><small class="text-secondary"><i>Authorised Certificate Upload</i></small></label>
+                                    <input type="radio" class="ml-3" name="AuthLicense" id="AuthLicenseImage" value="Image" checked> <label for="AuthLicenseImage"> Image</label>
+                                    <input type="radio" class="ml-3" name="AuthLicense" id="AuthLicensePDF" value="PDF"> <label for="AuthLicensePDF"> PDF</label>
+                                    <div class="row ml-3 AuthLicensePdf d-none mt-2 mb-3">
+                                        <input type="file" id="AuthorisedDistributorPdf" name="AuthorisedDistributorPdf" />
+                                    </div>
+                                    <div class="row ml-lg-5 AuthLicenseImg mt-2">
+                                        <div class="img-upload-container">
+                                            <img class="img-container w-100 h-100 mb-2" id="img-authorise" onerror="this.src='/Images/No Photo.png'" />
+                                            <input type="file" id="AuthorisedDistributorImage" name="AuthorisedDistributorImage" class="d-none" />
+                                            <label for="AuthorisedDistributorImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                        </div>
+                                    </div>
+                                    <div class="alert alert-danger d-none penAuth p-2">
+                                        <strong>Pending Verification!</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <h5 class="text-success ml-2 mt-2">Tax Details</h5>
+                    <div class="col-md-12 mx-auto row">
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">GSTIN Number</strong></label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" name="GSTINNumber" id="GSTINNumber" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">PAN Number</strong></label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" name="PanNumber" id="PanNumber" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-columns mr-1 form-group row col-md-3">
+                            <div class="card border-primary bg-muted">
+                                <div class="card-body text-center">
+                                    <label class="col-md-12"><small class="text-secondary"><i>GSTIN Image</i></small></label>
+                                    <input type="radio" class="ml-3" name="GstinLicense" id="GstinLicenseImage" value="Image" checked> <label for="GstinLicenseImage"> Image</label>
+                                    <input type="radio" class="ml-3" name="GstinLicense" id="GstinLicensePDF" value="PDF"> <label for="GstinLicensePDF"> PDF</label>
+                                    <div class="row ml-3 GstinLicensePdf d-none mt-2 mb-3">
+                                        <input type="file" id="GSTINPdf" name="GSTINPdf" />
+                                    </div>
+                                    <div class="row GstinLicenseImg mt-2 ml-3">
+                                        <div class="img-upload-container mb-3">
+                                            <img class="img-container w-100 h-100 mb-2" id="img-gstin" onerror="this.src='/Images/No Photo.png'" />
+                                            <input type="file" id="GSTINImage" name="GSTINImage" class="d-none" />
+                                            <label for="GSTINImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                        </div>
+                                    </div>
+                                    <div class="alert alert-danger d-none penGstn p-2">
+                                        <strong>Pending Verification!</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-columns form-group row col-md-3">
+                            <div class="card border-primary bg-muted">
+                                <div class="card-body text-center">
+                                    <label class="col-md-12"><small class="text-secondary"><i>PAN Image</i></small></label>
+                                    <input type="radio" class="ml-3" name="PanLicense" id="PanLicenseImage" value="Image" checked> <label for="PanLicenseImage"> Image</label>
+                                    <input type="radio" class="ml-3" name="PanLicense" id="PanLicensePDF" value="PDF"> <label for="PanLicensePDF"> PDF</label>
+                                    <div class="row ml-3 PanLicensePdf d-none mt-2 mb-3">
+                                        <input type="file" id="PanPdf" name="PanPdf" />
+                                    </div>
+                                    <div class="row PanLicenseImg ml-3 mt-2">
+                                        <div class="img-upload-container mb-3">
+                                            <img class="img-container w-100 h-100 mb-2" id="img-pan" onerror="this.src='/Images/No Photo.png'" />
+                                            <input type="file" id="PanImage" name="PanImage" class="d-none" />
+                                            <label for="PanImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                        </div>
+                                    </div>
+                                    <div class="alert alert-danger d-none penPan p-2">
+                                        <strong>Pending Verification!</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    <h5 class="text-success ml-2 mt-2">Bank Details</h5>
+                    <div class="col-md-12 row">
+                        <div class="col-md-8">
                             <div class="form-group row">
                                 <div class="col-md-6">
-                                    Authorised Distributer of any Brand :   <input type="radio" name="distributorCheck" value="yes"> Yes
-                                    <input type="radio" name="distributorCheck" value="no"> No
+                                    <small class="control-label col-sm-12" for="BankName"><i class="text-secondary">Bank Name</i></small>
+                                    <input id="BankName" type="text" class="form-control" name="BankName" />
+                                </div>
+                                <div class="col-md-6">
+                                    <small class="control-label col-sm-12" for="AccountName"><i class="text-secondary">Account Name</i></small>
+                                    <input id="AccountName" type="text" class="form-control" name="AccountName" />
                                 </div>
                             </div>
-                            <div class="card-columns d-none form-group row col-md-4 distributor">
-                                <div class="card bg-muted">
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <small class="control-label col-sm-12" for="AccountNumber"><i class="text-secondary">Account Number</i></small>
+                                    <input id="AccountNumber" type="text" class="form-control" name="AccountNumber" />
+                                </div>
+                                <div class="col-md-6">
+                                    <small class="control-label col-sm-12" for="IFSCCode"><i class="text-secondary">IFSC Code</i></small>
+                                    <input id="IFSCCode" type="text" class="form-control" name="IFSCCode" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <small class="control-label col-sm-12" for="SwiftCode"><i class="text-secondary">SWIFT Code</i></small>
+                                    <input id="SwiftCode" type="text" class="form-control" name="SwiftCode" />
+                                </div>
+                                <div class="col-md-6">
+                                    <small class="control-label col-sm-12" for="UPIID"><i class="text-secondary">UPI Code</i></small>
+                                    <input id="UPIID" type="text" class="form-control" name="UPIID" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="ml-3"> Saving Type:</label>
+                                <p>
+                                    &nbsp; <input type="radio" name="AcountType" id="SA" value="SA"><label for="SA"> Saving Account</label><br />
+                                    &nbsp; <input type="radio" name="AcountType" id="CA" value="CA"><label for="CA"> Current Account</label>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card-columns form-group row col-md-12">
+                                <div class="card border-success bg-muted">
                                     <div class="card-body text-center">
-                                        <div class="alert alert-warning alert-dismissible fade show d-none brand">
-                                            <strong>Warning!</strong> It is Required Field.Please upload license
-                                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                        <label class="col-md-12 text-center"><strong class="text-secondary">Bank Account</strong></label>
+                                        <label class="col-md-12 text-center"><small class="text-secondary"><i>Account Proof Image</i></small></label>
+                                        <input type="radio" class="ml-3" name="AccountDocument" id="AccountDocumentImage" value="Image" checked> <label for="AccountDocumentImage"> Image</label>
+                                        <input type="radio" class="ml-3" name="AccountDocument" id="AccountDocumentPDF" value="PDF"> <label for="AccountDocumentPDF"> PDF</label>
+                                        <div class="row ml-3 AccountDocumentPdf d-none mt-2 mb-3">
+                                            <input type="file" id="AccountPdf" name="AccountPdf" />
                                         </div>
-                                        <label class="col-md-12"><small class="text-secondary"><i>Authorised Brand Name</i></small></label>
-                                        <select id="AuthorisedBrandCode" name="AuthorisedBrandCode" class="form-control"></select>
-                                        <input type="hidden" name="AuthorisedBrandName" id="AuthorisedBrandName" />
-                                        <label class="col-md-12"><small class="text-secondary"><i>Authorised Certificate Upload</i></small></label>
-                                        <input type="radio" class="ml-3" name="AuthLicense" id="AuthLicenseImage" value="Image" checked> <label for="AuthLicenseImage"> Image</label>
-                                        <input type="radio" class="ml-3" name="AuthLicense" id="AuthLicensePDF" value="PDF"> <label for="AuthLicensePDF"> PDF</label>
-                                        <div class="row ml-3 AuthLicensePdf d-none mt-2 mb-3">
-                                            <input type="file" id="AuthorisedDistributorPdf" name="AuthorisedDistributorPdf" />
-                                        </div>
-                                        <div class="row ml-lg-5 AuthLicenseImg mt-2">
-                                            <div class="img-upload-container">
-                                                <img class="img-container w-100 h-100 mb-2" id="img-authorise" onerror="this.src='/Images/No Photo.png'" />
-                                                <input type="file" id="AuthorisedDistributorImage" name="AuthorisedDistributorImage" class="d-none" />
-                                                <label for="AuthorisedDistributorImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            </div>
-                                        </div>
-                                        <div class="alert alert-danger d-none penAuth p-2">
-                                            <strong>Pending Verification!</strong>
+                                        <div class="img-upload-container ml-lg-5 mb-3 AccountDocumentImg">
+                                            <img class="img-container w-100 h-100 mb-2" id="img-account" onerror="this.src='/Images/No Photo.png'" />
+                                            <input type="file" id="AccountImage" name="AccountImage" class="d-none" />
+                                            <label for="AccountImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card mb-4">
-                        <h5 class="text-success ml-2 mt-2">Tax Details</h5>
-                        <div class="col-md-12 mx-auto row">
-                            <div class="col-md-6">
-                                <div class="form-group row">
-                                    <div class="col-md-4 text-md-left">
-                                        <label class="col-form-label"><strong class="text-secondary">GSTIN Number</strong></label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="text" name="GSTINNumber" id="GSTINNumber" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-md-4 text-md-left">
-                                        <label class="col-form-label"><strong class="text-secondary">PAN Number</strong></label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input type="text" name="PanNumber" id="PanNumber" class="form-control" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-columns mr-1 form-group row col-md-3">
-                                <div class="card border-primary bg-muted">
-                                    <div class="card-body text-center">
-                                        <label class="col-md-12"><small class="text-secondary"><i>GSTIN Image</i></small></label>
-                                        <input type="radio" class="ml-3" name="GstinLicense" id="GstinLicenseImage" value="Image" checked> <label for="GstinLicenseImage"> Image</label>
-                                        <input type="radio" class="ml-3" name="GstinLicense" id="GstinLicensePDF" value="PDF"> <label for="GstinLicensePDF"> PDF</label>
-                                        <div class="row ml-3 GstinLicensePdf d-none mt-2 mb-3">
-                                            <input type="file" id="GSTINPdf" name="GSTINPdf" />
-                                        </div>
-                                        <div class="row GstinLicenseImg mt-2 ml-3">
-                                            <div class="img-upload-container mb-3">
-                                                <img class="img-container w-100 h-100 mb-2" id="img-gstin" onerror="this.src='/Images/No Photo.png'" />
-                                                <input type="file" id="GSTINImage" name="GSTINImage" class="d-none" />
-                                                <label for="GSTINImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            </div>
-                                        </div>
-                                        <div class="alert alert-danger d-none penGstn p-2">
-                                            <strong>Pending Verification!</strong>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-columns form-group row col-md-3">
-                                <div class="card border-primary bg-muted">
-                                    <div class="card-body text-center">
-                                        <label class="col-md-12"><small class="text-secondary"><i>PAN Image</i></small></label>
-                                        <input type="radio" class="ml-3" name="PanLicense" id="PanLicenseImage" value="Image" checked> <label for="PanLicenseImage"> Image</label>
-                                        <input type="radio" class="ml-3" name="PanLicense" id="PanLicensePDF" value="PDF"> <label for="PanLicensePDF"> PDF</label>
-                                        <div class="row ml-3 PanLicensePdf d-none mt-2 mb-3">
-                                            <input type="file" id="PanPdf" name="PanPdf" />
-                                        </div>
-                                        <div class="row PanLicenseImg ml-3 mt-2">
-                                            <div class="img-upload-container mb-3">
-                                                <img class="img-container w-100 h-100 mb-2" id="img-pan" onerror="this.src='/Images/No Photo.png'" />
-                                                <input type="file" id="PanImage" name="PanImage" class="d-none" />
-                                                <label for="PanImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            </div>
-                                        </div>
-                                        <div class="alert alert-danger d-none penPan p-2">
-                                            <strong>Pending Verification!</strong>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group row mx-2">
+                        Release the Restrict: <input class="mx-2 mt-2" type="checkbox" id="myCheck" onclick="myFunction()">
+                    </div>
+                    <div class="form-group row Restrict">
+                        <div class="col-md-4 mx-auto">
+                            <button type="button" id="SaveR" class="btn btn-block btn-success Save"><span class="glyphicon glyphicon-file"></span> Save</button>
                         </div>
                     </div>
-                    <div class="card mb-4">
-                        <h5 class="text-success ml-2 mt-2">Bank Details</h5>
-                        <div class="col-md-12 row">
-                            <div class="col-md-8">
-                                <div class="form-group row">
-                                    <div class="col-md-6">
-                                        <small class="control-label col-sm-12" for="BankName"><i class="text-secondary">Bank Name</i></small>
-                                        <input id="BankName" type="text" class="form-control" name="BankName" />
-                                    </div>
-                                    <div class="col-md-6">
-                                        <small class="control-label col-sm-12" for="AccountName"><i class="text-secondary">Account Name</i></small>
-                                        <input id="AccountName" type="text" class="form-control" name="AccountName" />
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-md-6">
-                                        <small class="control-label col-sm-12" for="AccountNumber"><i class="text-secondary">Account Number</i></small>
-                                        <input id="AccountNumber" type="text" class="form-control" name="AccountNumber" />
-                                    </div>
-                                    <div class="col-md-6">
-                                        <small class="control-label col-sm-12" for="IFSCCode"><i class="text-secondary">IFSC Code</i></small>
-                                        <input id="IFSCCode" type="text" class="form-control" name="IFSCCode" />
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-md-6">
-                                        <small class="control-label col-sm-12" for="SwiftCode"><i class="text-secondary">SWIFT Code</i></small>
-                                        <input id="SwiftCode" type="text" class="form-control" name="SwiftCode" />
-                                    </div>
-                                    <div class="col-md-6">
-                                        <small class="control-label col-sm-12" for="UPIID"><i class="text-secondary">UPI Code</i></small>
-                                        <input id="UPIID" type="text" class="form-control" name="UPIID" />
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="ml-3"> Saving Type:</label>
-                                    <p>
-                                        &nbsp; <input type="radio" name="AcountType" id="SA" value="SA"><label for="SA"> Saving Account</label><br />
-                                        &nbsp; <input type="radio" name="AcountType" id="CA" value="CA"><label for="CA"> Current Account</label>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card-columns form-group row col-md-12">
-                                    <div class="card border-success bg-muted">
-                                        <div class="card-body text-center">
-                                            <label class="col-md-12 text-center"><strong class="text-secondary">Bank Account</strong></label>
-                                            <label class="col-md-12 text-center"><small class="text-secondary"><i>Account Proof Image</i></small></label>
-                                            <input type="radio" class="ml-3" name="AccountDocument" id="AccountDocumentImage" value="Image" checked> <label for="AccountDocumentImage"> Image</label>
-                                            <input type="radio" class="ml-3" name="AccountDocument" id="AccountDocumentPDF" value="PDF"> <label for="AccountDocumentPDF"> PDF</label>
-                                            <div class="row ml-3 AccountDocumentPdf d-none mt-2 mb-3">
-                                                <input type="file" id="AccountPdf" name="AccountPdf" />
-                                            </div>
-                                            <div class="img-upload-container ml-lg-5 mb-3 AccountDocumentImg">
-                                                <img class="img-container w-100 h-100 mb-2" id="img-account" onerror="this.src='/Images/No Photo.png'" />
-                                                <input type="file" id="AccountImage" name="AccountImage" class="d-none" />
-                                                <label for="AccountImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="form-group row d-none NoRestrict">
+                        <div class="col-md-4 mx-auto">
+                            <button type="submit" id="Save" class="btn btn-block btn-success SaveNR"><span class="glyphicon glyphicon-file"></span> Save</button>
                         </div>
                     </div>
-                    <div class="col-md-12">
-                        <div class="form-group row mx-2">
-                            Release the Restrict: <input class="mx-2 mt-2" type="checkbox" id="myCheck" onclick="myFunction()">
-                        </div>
-                        <div class="form-group row Restrict">
-                            <div class="col-md-4 mx-auto">
-                                <button type="button" id="SaveR" class="btn btn-block btn-success Save"><span class="glyphicon glyphicon-file"></span> Save</button>
-                            </div>
-                        </div>
-                        <div class="form-group row d-none NoRestrict">
-                            <div class="col-md-4 mx-auto">
-                                <button type="submit" id="Save" class="btn btn-block btn-success"><span class="glyphicon glyphicon-file"></span> Save</button>
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
+                </div>
+            }
         </div>
     </div>
+</div>
 
-    @section Scripts
+@section Scripts
 {
-        <!--Select2-->
-        <script src="~/Scripts/select2/js/select2.js"></script>
-        <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
-        <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
-        <!--Select2 End-->
-        <script src="~/Scripts/multiple-image-upload.js"></script>
-        <link href="~/Content/multiple-image-upload.css" rel="stylesheet" />
-        <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
-        <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRsR3Wpkj_Vofy5FSU0otOx-6k-YFiNBk&libraries=places&callback=initMap"
-                async defer></script>
-        <script>
-            $('#AuthorisedBrandCode').select2();
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script src="~/Scripts/multiple-image-upload.js"></script>
+    <link href="~/Content/multiple-image-upload.css" rel="stylesheet" />
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRsR3Wpkj_Vofy5FSU0otOx-6k-YFiNBk&libraries=places&callback=initMap"
+            async defer></script>
+    <script>
+        $('#AuthorisedBrandCode').select2();
 
-            function myFunction() {
-                var checkBox = document.getElementById("myCheck");
-                if (checkBox.checked == true) {
-                    $('.Restrict').addClass('d-none');
-                    $('.NoRestrict').removeClass('d-none');
+        function myFunction() {
+            var checkBox = document.getElementById("myCheck");
+            if (checkBox.checked == true) {
+                $('.Restrict').addClass('d-none');
+                $('.NoRestrict').removeClass('d-none');
+            } else {
+                $('.NoRestrict').addClass('d-none');
+                $('.Restrict').removeClass('d-none');
+            }
+        }
+
+        $(document).ready(function () {
+            var shopduplicateCount = $("#shopduplicateCount").val();
+            var shopbeforeApprovalCount = $("#shopbeforeApprovalCount").val();
+            var shopname = $("#shopname").val();
+            var shopownerphonenumber = $("#shopownerphonenumber").val();
+            var results = shopownerphonenumber.substring(6, 10);
+            if (shopduplicateCount != 0) {
+                swal("Warning!", "You have already started process for Registering this shop you can not create same again!", "warning");
+            }
+            if (shopbeforeApprovalCount > 0) {
+                swal("Warning!", "This Shop \"" + shopname + "\" is already Registered with Owner PhoneNumber ending with ******" + results, "warning")
+            }
+
+            $('#phoneNumber').on("keypress", function (e) {
+                if (e.keyCode == 13) {
+                    $("#btnCustomer").click();
+                }
+            });
+
+            $("#btnCustomer").click(function () {
+                var phoneNumber = $("#phoneNumber").val();
+                $.getJSON("/Shop/CustomerCheck", { phoneNumber: phoneNumber }, function (data) {
+                    if (data.data == true) {
+                        $(".divContainer").removeClass("d-none");
+                        $('input[name="CustomerName"]').val(data.CustomerName);
+                        $('input[name="CustomerCode"]').val(data.CustomerCode);
+                        $("#OwnerPhoneNumber").val(data.PhoneNumber);
+                        $("#AadharName").val(data.AadharName);
+                        $("#AadharNumber").val(data.AadharNumber);
+                        $("#Email").val(data.Email);
+                        $("#phoneNumber").prop("readonly", true);
+                        $("#btnCustomer").addClass("d-none");
+                    } else {
+                        $(".divContainer").addClass("d-none");
+                        // alert('Please Enter a Valid Customer Phone Number!');
+                        swal("Notice!", "Please Enter a Valid Customer Phone Number!", "warning");
+                        $("#phoneNumber").val("");
+                        $("#phoneNumber").focus();
+                    }
+                });
+            });
+
+            $('#btnOTP').click(function () {
+                var mobileNo = $('#ManualPhoneNumber').val();
+                var customercode = $('input[name="CustomerCode"]').val();
+                if (mobileNo.length != 10) {
+                    //alert("Please Enter 10 digits of Mobile number");
+                    swal("Notice!", "Please Enter 10 digits of Mobile number!", "warning");
+                    $('#ManualPhoneNumber').val("");
+                    $('#ManualPhoneNumber').focus();
                 } else {
-                    $('.NoRestrict').addClass('d-none');
-                    $('.Restrict').removeClass('d-none');
+                    $.getJSON("/Shop/OTPGenerate?MobileNo=" + mobileNo + "&CustomerCode=" + customercode, function (data) {
+                        // $('#Otp').val(data.data);
+                        if (data.data != null) {
+                            $(".OtpButton").addClass("d-none");
+                            $(".OtpNumber").removeClass("d-none");
+                            $('#ManualPhoneNumber').prop("readonly", true);
+                            $(".GoIcon").removeClass("d-none");
+                        }
+                    });
+                }
+            });
+
+            $('#OtpGoIcon').click(function () {
+                var Otp = $('#Otp').val();
+                $.getJSON("/Shop/OTPVerify?Otp=" + Otp, function (data) {
+                    if (data.data == true) {
+                        $(".GoIcon").addClass("d-none");
+                        $(".OkIcon").removeClass("d-none");
+                        $('#Otp').prop("readonly", true);
+                        $("#Otp").removeClass("focused");
+                    } else {
+                        $(".OkIcon").addClass("d-none");
+                        $("#Otp").addClass("focused");
+                    }
+                });
+            });
+
+
+            $('#ShopCategoryCode').select2({
+                placeholder: "Search Shop Type",
+                ajax: {
+                    url: "/Shop/GetShopCategorySelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ShopCategoryName"]').val(e.params.data.text);
+                var val = $('#ShopCategoryCode').val();
+                if (val == 0 || val == 1 || val == 2) {
+                    $('.fssi').removeClass('d-none');
+                    var radioValue = $("input[name='FssaiLicense']:checked").val();
+                    if (radioValue == 'Image') {
+                        document.getElementById("FSSAIImage").required = true;
+                    } else {
+                        document.getElementById("FSSAIPdf").required = true;
+                    }
+                    document.getElementById("SaveR").disabled = true;
+                    document.getElementById("Save").disabled = true;
+                    $('.drug').addClass('d-none');
+                } else if (val == 3) {
+                    $('.fssi').addClass('d-none');
+                    var radioValue = $("input[name='DrugLicense']:checked").val();
+                    if (radioValue == 'Image') {
+                        document.getElementById("DrugImage").required = true;
+                    } else {
+                        document.getElementById("DrugPdf").required = true;
+                    }
+                    document.getElementById("SaveR").disabled = true;
+                    document.getElementById("Save").disabled = true;
+                    $('.drug').removeClass('d-none');
+                }
+            });
+
+            $('input:radio[name="distributorCheck"]').change(
+                function () {
+                    if (this.checked && this.value == 'yes') {
+                        $('.distributor').removeClass('d-none');
+                        $('.brand').removeClass('d-none');
+                    } else {
+                        $('.distributor').addClass('d-none');
+                        $('.brand').addClass('d-none');
+                    }
+                });
+
+            $('input:radio[name="FssaiLicense"]').change(
+                function () {
+                    if (this.checked && this.value == 'Image') {
+                        $('.FssaiImg').removeClass('d-none');
+                        $('.FssaiPdf').addClass('d-none');
+                        $("#FSSAIPdf").val("");
+                        $('.penFssi').addClass('d-none');
+                    } else {
+                        $('.FssaiImg').addClass('d-none');
+                        $('.FssaiPdf').removeClass('d-none');
+                        $("#FSSAIImage").val("");
+                        $("#img-fssai").attr('src', '');
+                        $('.penFssi').addClass('d-none');
+                    }
+                });
+            $('input:radio[name="DrugLicense"]').change(
+                function () {
+                    if (this.checked && this.value == 'Image') {
+                        $('.DrugImg').removeClass('d-none');
+                        $('.DrugPdf').addClass('d-none');
+                        $("#DrugPdf").val("");
+                        $('.penDrug').addClass('d-none');
+                    } else {
+                        $('.DrugImg').addClass('d-none');
+                        $('.DrugPdf').removeClass('d-none');
+                        $("#DrugImage").val("");
+                        $("#img-drug").attr('src', '');
+                        $('.penDrug').addClass('d-none');
+                    }
+                });
+            $('input:radio[name="EstablishLicense"]').change(
+                function () {
+                    if (this.checked && this.value == 'Image') {
+                        $('.EstImg').removeClass('d-none');
+                        $('.EstPdf').addClass('d-none');
+                        $("#EstablishPdf").val("");
+                        $('.penEsta').addClass('d-none');
+                    } else {
+                        $('.EstImg').addClass('d-none');
+                        $('.EstPdf').removeClass('d-none');
+                        $("#EstablishImage").val("");
+                        $("#img-establish").attr('src', '');
+                        $('.penEsta').addClass('d-none');
+                    }
+                });
+            $('input:radio[name="OtherLicense"]').change(
+                function () {
+                    if (this.checked && this.value == 'Image') {
+                        $('.OtherImg').removeClass('d-none');
+                        $('.OtherPdf').addClass('d-none');
+                        $("#OtherLicensePdf").val("");
+                        $('.penOther').addClass('d-none');
+                    } else {
+                        $('.OtherImg').addClass('d-none');
+                        $('.OtherPdf').removeClass('d-none');
+                        $("#OtherLicenseImage").val("");
+                        $("#img-other").attr('src', '');
+                        $('.penOther').addClass('d-none');
+                    }
+                });
+            $('input:radio[name="AuthLicense"]').change(
+                function () {
+                    if (this.checked && this.value == 'Image') {
+                        $('.AuthLicenseImg').removeClass('d-none');
+                        $('.AuthLicensePdf').addClass('d-none');
+                        $("#AuthorisedDistributorPdf").val("");
+                        $('.penAuth').addClass('d-none');
+                    } else {
+                        $('.AuthLicenseImg').addClass('d-none');
+                        $('.AuthLicensePdf').removeClass('d-none');
+                        $("#AuthorisedDistributorImage").val("");
+                        $("#img-authorise").attr('src', '');
+                        $('.penAuth').addClass('d-none');
+                    }
+                });
+            $('input:radio[name="GstinLicense"]').change(
+                function () {
+                    if (this.checked && this.value == 'Image') {
+                        $('.GstinLicenseImg').removeClass('d-none');
+                        $('.GstinLicensePdf').addClass('d-none');
+                        $("#GSTINPdf").val("");
+                        $('.penGstn').addClass('d-none');
+                    } else {
+                        $('.GstinLicenseImg').addClass('d-none');
+                        $('.GstinLicensePdf').removeClass('d-none');
+                        $("#GSTINImage").val("");
+                        $("#img-gstin").attr('src', '');
+                        $('.penGstn').addClass('d-none');
+                    }
+                });
+            $('input:radio[name="PanLicense"]').change(
+                function () {
+                    if (this.checked && this.value == 'Image') {
+                        $('.PanLicenseImg').removeClass('d-none');
+                        $('.PanLicensePdf').addClass('d-none');
+                        $("#PanPdf").val("");
+                        $('.penPan').addClass('d-none');
+                    } else {
+                        $('.PanLicenseImg').addClass('d-none');
+                        $('.PanLicensePdf').removeClass('d-none');
+                        $("#PanImage").val("");
+                        $("#img-pan").attr('src', '');
+                        $('.penPan').addClass('d-none');
+                    }
+                });
+            $('input:radio[name="AadharDocument"]').change(
+                function () {
+                    if (this.checked && this.value == 'Image') {
+                        $('.AadharDocumentImg').removeClass('d-none');
+                        $('.AadharDocumentPdf').addClass('d-none');
+                        $("#AadharPdf").val("");
+                    } else {
+                        $('.AadharDocumentImg').addClass('d-none');
+                        $('.AadharDocumentPdf').removeClass('d-none');
+                        $("#AadharImage").val("");
+                        $("#img-aadhar").attr('src', '');
+                    }
+                });
+            $('input:radio[name="AccountDocument"]').change(
+                function () {
+                    if (this.checked && this.value == 'Image') {
+                        $('.AccountDocumentImg').removeClass('d-none');
+                        $('.AccountDocumentPdf').addClass('d-none');
+                        $("#AccountPdf").val("");
+                    } else {
+                        $('.AccountDocumentImg').addClass('d-none');
+                        $('.AccountDocumentPdf').removeClass('d-none');
+                        $("#AccountImage").val("");
+                        $("#img-account").attr('src', '');
+                    }
+                });
+            $('#AuthorisedBrandCode').select2({
+                placeholder: "Search Brand",
+                ajax: {
+                    url: "/Shop/GetBrandSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="AuthorisedBrandName"]').val(e.params.data.text);
+            });
+
+            $(".Save").click(function () {
+                var rate = $('#Rating').val();
+                var review = $('#CustomerReview').val();
+                var ownerphonenumber = $("#OwnerPhoneNumber").val();
+                var adharName = $("#AadharName").val();
+                var adharNumber = $("#AadharNumber").val();
+                var adharImage = $("#AadharImage").val();
+                var adharPdf = $("#AadharPdf").val();
+                var shoptype = $("#ShopCategoryCode").val();
+                if (shoptype == null || shoptype == "") {
+                    swal("Notice!", "Please Select Shop Type!", "warning");
+                } else if (adharName != "" && adharNumber != "" && (adharImage != "" || adharPdf != "")) {
+                    if (rate >= 3.2 && review >= 30) {
+                        if (ownerphonenumber != "" && ownerphonenumber != null) {
+                            $('#ShopForm').submit();
+                        } else {
+                            //alert("You must type your Owner Mobile Number");
+                            swal("Notice!", "You must type your Owner Mobile Number!", "warning");
+                            $("#OwnerPhoneNumber").focus();
+                        }
+                    }
+                    else {
+                        //alert("Your Online Presence is not sufficient for Registration");
+                        swal("Notice!", "Your Online Presence is not sufficient for Registration!", "warning");
+                        return false;
+                    }
+                } else {
+                    if (adharName == "" && adharNumber != "") {
+                        swal("Notice!", "You must type your Aadhaar Name!", "warning");
+                        $("#AadharName").focus();
+                    }
+                    else if (adharName != "" && adharNumber == "") {
+                        swal("Notice!", "You must type your Aadhaar Number!", "warning");
+                        $("#AadharNumber").focus();
+                    } else {
+                        swal("Notice!", "You must type your Aadhaar Details!", "warning");
+                    }
+                }
+            });
+
+            $(".SaveNR").click(function () {
+                var shoptype = $("#ShopCategoryCode").val();
+                if (shoptype == null || shoptype == "") {
+                    swal("Notice!", "Please Select Shop Type!", "warning");
+                } else {
+                    $('#ShopForm').submit();
+                }
+            });
+
+            function readAuthoriseURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#img-authorise').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
                 }
             }
 
-            $(document).ready(function () {
-                var shopduplicateCount = $("#shopduplicateCount").val();
-                var shopbeforeApprovalCount = $("#shopbeforeApprovalCount").val();
-                var shopname = $("#shopname").val();
-                var shopownerphonenumber = $("#shopownerphonenumber").val();
-                var results = shopownerphonenumber.substring(6, 10);
-                if (shopduplicateCount != 0) {
-                    swal("Warning!", "You have already started process for Registering this shop you can not create same again!", "warning");
+            $("#AuthorisedDistributorImage").change(function () {
+                readAuthoriseURL(this);
+                $('.penAuth').removeClass('d-none');
+            });
+            $("#AuthorisedDistributorPdf").change(function () {
+                $('.penAuth').removeClass('d-none');
+            });
+            function readOtherLicenseURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#img-other').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
                 }
-                if (shopbeforeApprovalCount > 0) {
-                    swal("Warning!", "This Shop \"" + shopname + "\" is already Registered with Owner PhoneNumber ending with ******" + results, "warning")
+            }
+
+            $("#OtherLicenseImage").change(function () {
+                readOtherLicenseURL(this);
+                $('.penOther').removeClass('d-none');
+            });
+            $("#OtherLicensePdf").change(function () {
+                $('.penOther').removeClass('d-none');
+            });
+            function readEstablishURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#img-establish').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
                 }
+            }
 
-                $('#phoneNumber').on("keypress", function (e) {
-                    if (e.keyCode == 13) {
-                        $("#btnCustomer").click();
+            $("#EstablishImage").change(function () {
+                readEstablishURL(this);
+                $('.penEsta').removeClass('d-none');
+            });
+            $("#EstablishPdf").change(function () {
+                $('.penEsta').removeClass('d-none');
+            });
+            function readDrugURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#img-drug').attr('src', e.target.result);
                     }
-                });
 
-                $("#btnCustomer").click(function () {
-                    var phoneNumber = $("#phoneNumber").val();
-                    $.getJSON("/Shop/CustomerCheck", { phoneNumber: phoneNumber }, function (data) {
-                        if (data.data == true) {
-                            $(".divContainer").removeClass("d-none");
-                            $('input[name="CustomerName"]').val(data.CustomerName);
-                            $('input[name="CustomerCode"]').val(data.CustomerCode);
-                            $("#OwnerPhoneNumber").val(data.PhoneNumber);
-                            $("#AadharName").val(data.AadharName);
-                            $("#AadharNumber").val(data.AadharNumber);
-                            $("#Email").val(data.Email);
-                            $("#phoneNumber").prop("readonly", true);
-                            $("#btnCustomer").addClass("d-none");
-                        } else {
-                            $(".divContainer").addClass("d-none");
-                            // alert('Please Enter a Valid Customer Phone Number!');
-                            swal("Notice!", "Please Enter a Valid Customer Phone Number!", "warning");
-                            $("#phoneNumber").val("");
-                            $("#phoneNumber").focus();
-                        }
-                    });
-                });
-
-                $('#btnOTP').click(function () {
-                    var mobileNo = $('#ManualPhoneNumber').val();
-                    var customercode = $('input[name="CustomerCode"]').val();
-                    if (mobileNo.length != 10) {
-                        //alert("Please Enter 10 digits of Mobile number");
-                        swal("Notice!", "Please Enter 10 digits of Mobile number!", "warning");
-                        $('#ManualPhoneNumber').val("");
-                        $('#ManualPhoneNumber').focus();
-                    } else {
-                        $.getJSON("/Shop/OTPGenerate?MobileNo=" + mobileNo + "&CustomerCode=" + customercode, function (data) {
-                            // $('#Otp').val(data.data);
-                            if (data.data != null) {
-                                $(".OtpButton").addClass("d-none");
-                                $(".OtpNumber").removeClass("d-none");
-                                $('#ManualPhoneNumber').prop("readonly", true);
-                                $(".GoIcon").removeClass("d-none");
-                            }
-                        });
-                    }
-                });
-
-                $('#OtpGoIcon').click(function () {
-                    var Otp = $('#Otp').val();
-                    $.getJSON("/Shop/OTPVerify?Otp=" + Otp, function (data) {
-                        if (data.data == true) {
-                            $(".GoIcon").addClass("d-none");
-                            $(".OkIcon").removeClass("d-none");
-                            $('#Otp').prop("readonly", true);
-                            $("#Otp").removeClass("focused");
-                        } else {
-                            $(".OkIcon").addClass("d-none");
-                            $("#Otp").addClass("focused");
-                        }
-                    });
-                });
-
-
-                $('#ShopCategoryCode').select2({
-                    placeholder: "Search Shop Type",
-                    ajax: {
-                        url: "/Shop/GetShopCategorySelect2",
-                        width: '100%',
-                        delay: 250,
-                        dataType: 'json'
-                    }
-                }).on('select2:select', function (e) {
-                    $('input[name="ShopCategoryName"]').val(e.params.data.text);
-                    var val = $('#ShopCategoryCode').val();
-                    if (val == 0 || val == 1 || val == 2) {
-                        $('.fssi').removeClass('d-none');
-                        var radioValue = $("input[name='FssaiLicense']:checked").val();
-                        if (radioValue == 'Image') {
-                            document.getElementById("FSSAIImage").required = true;
-                        } else {
-                            document.getElementById("FSSAIPdf").required = true;
-                        }
-                        document.getElementById("SaveR").disabled = true;
-                        document.getElementById("Save").disabled = true;
-                        $('.drug').addClass('d-none');
-                    } else if (val == 3) {
-                        $('.fssi').addClass('d-none');
-                        var radioValue = $("input[name='DrugLicense']:checked").val();
-                        if (radioValue == 'Image') {
-                            document.getElementById("DrugImage").required = true;
-                        } else {
-                            document.getElementById("DrugPdf").required = true;
-                        }
-                        document.getElementById("SaveR").disabled = true;
-                        document.getElementById("Save").disabled = true;
-                        $('.drug').removeClass('d-none');
-                    }
-                });
-
-                $('input:radio[name="distributorCheck"]').change(
-                    function () {
-                        if (this.checked && this.value == 'yes') {
-                            $('.distributor').removeClass('d-none');
-                            $('.brand').removeClass('d-none');
-                        } else {
-                            $('.distributor').addClass('d-none');
-                            $('.brand').addClass('d-none');
-                        }
-                    });
-
-                $('input:radio[name="FssaiLicense"]').change(
-                    function () {
-                        if (this.checked && this.value == 'Image') {
-                            $('.FssaiImg').removeClass('d-none');
-                            $('.FssaiPdf').addClass('d-none');
-                            $("#FSSAIPdf").val("");
-                            $('.penFssi').addClass('d-none');
-                        } else {
-                            $('.FssaiImg').addClass('d-none');
-                            $('.FssaiPdf').removeClass('d-none');
-                            $("#FSSAIImage").val("");
-                            $("#img-fssai").attr('src', '');
-                            $('.penFssi').addClass('d-none');
-                        }
-                    });
-                $('input:radio[name="DrugLicense"]').change(
-                    function () {
-                        if (this.checked && this.value == 'Image') {
-                            $('.DrugImg').removeClass('d-none');
-                            $('.DrugPdf').addClass('d-none');
-                            $("#DrugPdf").val("");
-                            $('.penDrug').addClass('d-none');
-                        } else {
-                            $('.DrugImg').addClass('d-none');
-                            $('.DrugPdf').removeClass('d-none');
-                            $("#DrugImage").val("");
-                            $("#img-drug").attr('src', '');
-                            $('.penDrug').addClass('d-none');
-                        }
-                    });
-                $('input:radio[name="EstablishLicense"]').change(
-                    function () {
-                        if (this.checked && this.value == 'Image') {
-                            $('.EstImg').removeClass('d-none');
-                            $('.EstPdf').addClass('d-none');
-                            $("#EstablishPdf").val("");
-                            $('.penEsta').addClass('d-none');
-                        } else {
-                            $('.EstImg').addClass('d-none');
-                            $('.EstPdf').removeClass('d-none');
-                            $("#EstablishImage").val("");
-                            $("#img-establish").attr('src', '');
-                            $('.penEsta').addClass('d-none');
-                        }
-                    });
-                $('input:radio[name="OtherLicense"]').change(
-                    function () {
-                        if (this.checked && this.value == 'Image') {
-                            $('.OtherImg').removeClass('d-none');
-                            $('.OtherPdf').addClass('d-none');
-                            $("#OtherLicensePdf").val("");
-                            $('.penOther').addClass('d-none');
-                        } else {
-                            $('.OtherImg').addClass('d-none');
-                            $('.OtherPdf').removeClass('d-none');
-                            $("#OtherLicenseImage").val("");
-                            $("#img-other").attr('src', '');
-                            $('.penOther').addClass('d-none');
-                        }
-                    });
-                $('input:radio[name="AuthLicense"]').change(
-                    function () {
-                        if (this.checked && this.value == 'Image') {
-                            $('.AuthLicenseImg').removeClass('d-none');
-                            $('.AuthLicensePdf').addClass('d-none');
-                            $("#AuthorisedDistributorPdf").val("");
-                            $('.penAuth').addClass('d-none');
-                        } else {
-                            $('.AuthLicenseImg').addClass('d-none');
-                            $('.AuthLicensePdf').removeClass('d-none');
-                            $("#AuthorisedDistributorImage").val("");
-                            $("#img-authorise").attr('src', '');
-                            $('.penAuth').addClass('d-none');
-                        }
-                    });
-                $('input:radio[name="GstinLicense"]').change(
-                    function () {
-                        if (this.checked && this.value == 'Image') {
-                            $('.GstinLicenseImg').removeClass('d-none');
-                            $('.GstinLicensePdf').addClass('d-none');
-                            $("#GSTINPdf").val("");
-                            $('.penGstn').addClass('d-none');
-                        } else {
-                            $('.GstinLicenseImg').addClass('d-none');
-                            $('.GstinLicensePdf').removeClass('d-none');
-                            $("#GSTINImage").val("");
-                            $("#img-gstin").attr('src', '');
-                            $('.penGstn').addClass('d-none');
-                        }
-                    });
-                $('input:radio[name="PanLicense"]').change(
-                    function () {
-                        if (this.checked && this.value == 'Image') {
-                            $('.PanLicenseImg').removeClass('d-none');
-                            $('.PanLicensePdf').addClass('d-none');
-                            $("#PanPdf").val("");
-                            $('.penPan').addClass('d-none');
-                        } else {
-                            $('.PanLicenseImg').addClass('d-none');
-                            $('.PanLicensePdf').removeClass('d-none');
-                            $("#PanImage").val("");
-                            $("#img-pan").attr('src', '');
-                            $('.penPan').addClass('d-none');
-                        }
-                    });
-                $('input:radio[name="AadharDocument"]').change(
-                    function () {
-                        if (this.checked && this.value == 'Image') {
-                            $('.AadharDocumentImg').removeClass('d-none');
-                            $('.AadharDocumentPdf').addClass('d-none');
-                            $("#AadharPdf").val("");
-                        } else {
-                            $('.AadharDocumentImg').addClass('d-none');
-                            $('.AadharDocumentPdf').removeClass('d-none');
-                            $("#AadharImage").val("");
-                            $("#img-aadhar").attr('src', '');
-                        }
-                    });
-                $('input:radio[name="AccountDocument"]').change(
-                    function () {
-                        if (this.checked && this.value == 'Image') {
-                            $('.AccountDocumentImg').removeClass('d-none');
-                            $('.AccountDocumentPdf').addClass('d-none');
-                            $("#AccountPdf").val("");
-                        } else {
-                            $('.AccountDocumentImg').addClass('d-none');
-                            $('.AccountDocumentPdf').removeClass('d-none');
-                            $("#AccountImage").val("");
-                            $("#img-account").attr('src', '');
-                        }
-                    });
-                $('#AuthorisedBrandCode').select2({
-                    placeholder: "Search Brand",
-                    ajax: {
-                        url: "/Shop/GetBrandSelect2",
-                        width: '100%',
-                        delay: 250,
-                        dataType: 'json'
-                    }
-                }).on('select2:select', function (e) {
-                    $('input[name="AuthorisedBrandName"]').val(e.params.data.text);
-                });
-
-                $(".Save").click(function () {
-                    var rate = $('#Rating').val();
-                    var review = $('#CustomerReview').val();
-                    var ownerphonenumber = $("#OwnerPhoneNumber").val();
-                    var adharName = $("#AadharName").val();
-                    var adharNumber = $("#AadharNumber").val();
-                    var adharImage = $("#AadharImage").val();
-                    var adharPdf = $("#AadharPdf").val();
-                    var shoptype = $("#ShopCategoryCode").val();
-                    if (shoptype == null || shoptype == "") {
-                        swal("Notice!", "Please Select Shop Type!", "warning");
-                    } else if (adharName != "" && adharNumber != "" && (adharImage != "" || adharPdf != "")) {
-                        if (rate >= 3.2 && review >= 30) {
-                            if (ownerphonenumber != "" && ownerphonenumber != null) {
-                                $('#ShopForm').submit();
-                            } else {
-                                //alert("You must type your Owner Mobile Number");
-                                swal("Notice!", "You must type your Owner Mobile Number!", "warning");
-                                $("#OwnerPhoneNumber").focus();
-                            }
-                        }
-                        else {
-                            //alert("Your Online Presence is not sufficient for Registration");
-                            swal("Notice!", "Your Online Presence is not sufficient for Registration!", "warning");
-                            return false;
-                        }
-                    } else {
-                        if (adharName == "" && adharNumber != "") {
-                            swal("Notice!", "You must type your Aadhaar Name!", "warning");
-                            $("#AadharName").focus();
-                        }
-                        else if (adharName != "" && adharNumber == "") {
-                            swal("Notice!", "You must type your Aadhaar Number!", "warning");
-                            $("#AadharNumber").focus();
-                        } else {
-                            swal("Notice!", "You must type your Aadhaar Details!", "warning");
-                        }
-                    }
-                });
-
-
-                //$(document).on('change', '.btn-file :file', function () {
-                //    var input = $(this),
-                //        label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-                //    input.trigger('fileselect', [label]);
-                //});
-
-                //$('.btn-file :file').on('fileselect', function (event, label) {
-
-                //    var input = $(this).parents('.input-group').find(':text'),
-                //        log = label;
-
-                //    if (input.length) {
-                //        input.val(log);
-                //    } else {
-                //        if (log) alert(log);
-                //    }
-
-                //});
-
-                function readAuthoriseURL(input) {
-                    if (input.files && input.files[0]) {
-                        var reader = new FileReader();
-
-                        reader.onload = function (e) {
-                            $('#img-authorise').attr('src', e.target.result);
-                        }
-
-                        reader.readAsDataURL(input.files[0]);
-                    }
+                    reader.readAsDataURL(input.files[0]);
                 }
+            }
 
-                $("#AuthorisedDistributorImage").change(function () {
-                    readAuthoriseURL(this);
-                    $('.penAuth').removeClass('d-none');
-                });
-                $("#AuthorisedDistributorPdf").change(function () {
-                    $('.penAuth').removeClass('d-none');
-                });
-                function readOtherLicenseURL(input) {
-                    if (input.files && input.files[0]) {
-                        var reader = new FileReader();
-
-                        reader.onload = function (e) {
-                            $('#img-other').attr('src', e.target.result);
-                        }
-
-                        reader.readAsDataURL(input.files[0]);
-                    }
-                }
-
-                $("#OtherLicenseImage").change(function () {
-                    readOtherLicenseURL(this);
-                    $('.penOther').removeClass('d-none');
-                });
-                $("#OtherLicensePdf").change(function () {
-                    $('.penOther').removeClass('d-none');
-                });
-                function readEstablishURL(input) {
-                    if (input.files && input.files[0]) {
-                        var reader = new FileReader();
-
-                        reader.onload = function (e) {
-                            $('#img-establish').attr('src', e.target.result);
-                        }
-
-                        reader.readAsDataURL(input.files[0]);
-                    }
-                }
-
-                $("#EstablishImage").change(function () {
-                    readEstablishURL(this);
-                    $('.penEsta').removeClass('d-none');
-                });
-                $("#EstablishPdf").change(function () {
-                    $('.penEsta').removeClass('d-none');
-                });
-                function readDrugURL(input) {
-                    if (input.files && input.files[0]) {
-                        var reader = new FileReader();
-
-                        reader.onload = function (e) {
-                            $('#img-drug').attr('src', e.target.result);
-                        }
-
-                        reader.readAsDataURL(input.files[0]);
-                    }
-                }
-
-                $("#DrugImage").change(function () {
-                    readDrugURL(this);
-                    document.getElementById("SaveR").disabled = false;
-                    document.getElementById("Save").disabled = false;
-                    $('.drug').addClass('d-none');
-                    $('.penDrug').removeClass('d-none');
-
-                });
-                $("#DrugPdf").change(function () {
-                    document.getElementById("SaveR").disabled = false;
-                    document.getElementById("Save").disabled = false;
-                    $('.drug').addClass('d-none');
-                    $('.penDrug').removeClass('d-none');
-                });
-
-                function readFssaiURL(input) {
-                    if (input.files && input.files[0]) {
-                        var reader = new FileReader();
-
-                        reader.onload = function (e) {
-                            $('#img-fssai').attr('src', e.target.result);
-                        }
-
-                        reader.readAsDataURL(input.files[0]);
-                    }
-                }
-
-                $("#FSSAIImage").change(function () {
-                    readFssaiURL(this);
-                    document.getElementById("SaveR").disabled = false;
-                    document.getElementById("Save").disabled = false;
-                    $('.fssi').addClass('d-none');
-                    $('.penFssi').removeClass('d-none');
-                });
-                $("#FSSAIPdf").change(function () {
-                    document.getElementById("SaveR").disabled = false;
-                    document.getElementById("Save").disabled = false;
-                    $('.fssi').addClass('d-none');
-                    $('.penFssi').removeClass('d-none');
-                });
-
-                function readURLPan(input) {
-                    if (input.files && input.files[0]) {
-                        var reader = new FileReader();
-
-                        reader.onload = function (e) {
-                            $('#img-pan').attr('src', e.target.result);
-                        }
-
-                        reader.readAsDataURL(input.files[0]);
-                    }
-                }
-
-                $("#PanImage").change(function () {
-                    readURLPan(this);
-                    $('.penPan').removeClass('d-none');
-                });
-                $("#PanPdf").change(function () {
-                    $('.penPan').removeClass('d-none');
-                });
-                function readURLGstin(input) {
-                    if (input.files && input.files[0]) {
-                        var reader = new FileReader();
-
-                        reader.onload = function (e) {
-                            $('#img-gstin').attr('src', e.target.result);
-                        }
-
-                        reader.readAsDataURL(input.files[0]);
-                    }
-                }
-
-                $("#GSTINImage").change(function () {
-                    readURLGstin(this);
-                    $('.penGstn').removeClass('d-none');
-                });
-                $("#GSTINPdf").change(function () {
-                    $('.penGstn').removeClass('d-none');
-                });
-                function readURLAccount(input) {
-                    if (input.files && input.files[0]) {
-                        var reader = new FileReader();
-
-                        reader.onload = function (e) {
-                            $('#img-account').attr('src', e.target.result);
-                        }
-
-                        reader.readAsDataURL(input.files[0]);
-                    }
-                }
-
-                $("#AccountImage").change(function () {
-                    readURLAccount(this);
-                });
-
-                function readURL(input) {
-                    if (input.files && input.files[0]) {
-                        var reader = new FileReader();
-
-                        reader.onload = function (e) {
-                            $('#img-upload').attr('src', e.target.result);
-                        }
-
-                        reader.readAsDataURL(input.files[0]);
-                    }
-                }
-
-                $("#ShopImage").change(function () {
-                    readURL(this);
-                });
-
-                function readURLLogo(input) {
-                    if (input.files && input.files[0]) {
-                        var reader = new FileReader();
-
-                        reader.onload = function (e) {
-                            $('#img-logo').attr('src', e.target.result);
-                        }
-
-                        reader.readAsDataURL(input.files[0]);
-                    }
-                }
-
-                $("#LogoImage").change(function () {
-                    readURLLogo(this);
-                });
-
-                function readURLBanner(input) {
-                    if (input.files && input.files[0]) {
-                        var reader = new FileReader();
-
-                        reader.onload = function (e) {
-                            $('#img-banner').attr('src', e.target.result);
-                        }
-
-                        reader.readAsDataURL(input.files[0]);
-                    }
-                }
-
-                $("#BannerImage").change(function () {
-                    readURLBanner(this);
-                });
-
-
-                function readURLAadhar(input) {
-                    if (input.files && input.files[0]) {
-                        var reader = new FileReader();
-
-                        reader.onload = function (e) {
-                            $('#img-aadhar').attr('src', e.target.result);
-                        }
-
-                        reader.readAsDataURL(input.files[0]);
-                    }
-                }
-
-                $("#AadharImage").change(function () {
-                    readURLAadhar(this);
-                });
+            $("#DrugImage").change(function () {
+                readDrugURL(this);
+                document.getElementById("SaveR").disabled = false;
+                document.getElementById("Save").disabled = false;
+                $('.drug').addClass('d-none');
+                $('.penDrug').removeClass('d-none');
 
             });
-            var map, infoWindow, markers = [];
-            function initMap() {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(function (position) {
-                        var card = document.getElementById('pac-card');
-                        var input = document.getElementById('pac-input');
-                        var autocomplete = new google.maps.places.Autocomplete(input);
-                        map = new google.maps.Map(document.getElementById('map'), {
-                            center: { lat: position.coords.latitude, lng: position.coords.longitude },
-                            zoom: 6
-                        });
+            $("#DrugPdf").change(function () {
+                document.getElementById("SaveR").disabled = false;
+                document.getElementById("Save").disabled = false;
+                $('.drug').addClass('d-none');
+                $('.penDrug').removeClass('d-none');
+            });
 
-                        infoWindow = new google.maps.InfoWindow;
+            function readFssaiURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
 
-                        if (navigator.geolocation) {
-                            navigator.geolocation.getCurrentPosition(function (position) {
-                                var pos = {
-                                    lat: position.coords.latitude,
-                                    lng: position.coords.longitude
-                                };
+                    reader.onload = function (e) {
+                        $('#img-fssai').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#FSSAIImage").change(function () {
+                readFssaiURL(this);
+                document.getElementById("SaveR").disabled = false;
+                document.getElementById("Save").disabled = false;
+                $('.fssi').addClass('d-none');
+                $('.penFssi').removeClass('d-none');
+            });
+            $("#FSSAIPdf").change(function () {
+                document.getElementById("SaveR").disabled = false;
+                document.getElementById("Save").disabled = false;
+                $('.fssi').addClass('d-none');
+                $('.penFssi').removeClass('d-none');
+            });
+
+            function readURLPan(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#img-pan').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#PanImage").change(function () {
+                readURLPan(this);
+                $('.penPan').removeClass('d-none');
+            });
+            $("#PanPdf").change(function () {
+                $('.penPan').removeClass('d-none');
+            });
+            function readURLGstin(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#img-gstin').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#GSTINImage").change(function () {
+                readURLGstin(this);
+                $('.penGstn').removeClass('d-none');
+            });
+            $("#GSTINPdf").change(function () {
+                $('.penGstn').removeClass('d-none');
+            });
+            function readURLAccount(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#img-account').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#AccountImage").change(function () {
+                readURLAccount(this);
+            });
+
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#img-upload').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#ShopImage").change(function () {
+                readURL(this);
+            });
+
+            function readURLLogo(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#img-logo').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#LogoImage").change(function () {
+                readURLLogo(this);
+            });
+
+            function readURLBanner(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#img-banner').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#BannerImage").change(function () {
+                readURLBanner(this);
+            });
 
 
-                                var marker = new google.maps.Marker({
-                                    position: pos,
-                                    map: map,
-                                    title: "your place"
-                                });
-                                google.maps.event.addListener(marker, 'click', function () {
-                                    infowindow.open(map, marker);
-                                });
-                                markers.push(marker);
+            function readURLAadhar(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#img-aadhar').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#AadharImage").change(function () {
+                readURLAadhar(this);
+            });
+
+        });
+
+        var map, infoWindow, markers = [];
+        function initMap() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var card = document.getElementById('pac-card');
+                    var input = document.getElementById('pac-input');
+                    var autocomplete = new google.maps.places.Autocomplete(input);
+                    map = new google.maps.Map(document.getElementById('map'), {
+                        center: { lat: position.coords.latitude, lng: position.coords.longitude },
+                        zoom: 6
+                    });
+
+                    infoWindow = new google.maps.InfoWindow;
+
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(function (position) {
+                            var pos = {
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude
+                            };
+
+
+                            var marker = new google.maps.Marker({
+                                position: pos,
+                                map: map,
+                                title: "your place",
+                                draggable: true
+                            });
+                            google.maps.event.addListener(marker, 'click', function () {
+                                infowindow.open(map, marker);
+                            });
+                            markers.push(marker);
+                            google.maps.event.addListener(marker, 'dragend', function () {
+                                pos = this.position;
+                                marker.position = pos;
 
                                 var google_maps_geocoder = new google.maps.Geocoder();
                                 google_maps_geocoder.geocode(
@@ -1500,36 +1473,16 @@
                                         });
                                     }
                                 );
+                            });
 
-                                autocomplete.addListener('place_changed', function () {
-                                    document.getElementById("location-error").style.display = 'none';
-                                    markers.forEach(function (marker) {
-                                        marker.setMap(null);
-                                    });
 
-                                    var place = autocomplete.getPlace();
-                                    if (!place.geometry) {
-                                        document.getElementById("location-error").style.display = 'inline-block';
-                                        document.getElementById("location-error").innerHTML = "Cannot Locate '" + input.value + "' on map";
-                                        return;
-                                    }
-                                    var marker = new google.maps.Marker({
-                                        position: pos,
-                                        map: map,
-                                        title: "your place"
-                                    });
-
-                                    google.maps.event.addListener(marker, 'click', function () {
-                                        infowindow.open(map, marker);
-                                    });
-                                    markers.push(marker);
-
-                                    map.fitBounds(place.geometry.viewport);
-                                    marker.setPosition(place.geometry.location);
-                                    marker.setVisible(true);
-                                    console.log(place);
-                                    $('#Address').val(place.formatted_address);
-                                    var address = place.address_components;
+                            var google_maps_geocoder = new google.maps.Geocoder();
+                            google_maps_geocoder.geocode(
+                                { 'latLng': pos },
+                                function (results, status) {
+                                    console.log(results);
+                                    $('#Address').val(results[0].formatted_address);
+                                    var address = results[0].address_components;
                                     $.each(address, function () {
 
                                         if (this.types[0] == "locality") {
@@ -1544,36 +1497,25 @@
                                         if (this.types[0] == "country") {
                                             $('#CountryName').val(this.long_name);
                                         }
+
                                         if (this.types[0] == "postal_code") {
                                             $('#PinCode').val(this.long_name);
                                         }
 
                                     });
 
-                                    $('#Latitude').val(place.geometry.location.lat);
-                                    $('#Longitude').val(place.geometry.location.lng);
-                                    $('#GooglePlaceId').val(place.place_id);
-                                    $('#IpAddress').val("");
+                                    $('#Latitude').val(results[0].geometry.location.lat);
+                                    $('#Longitude').val(results[0].geometry.location.lng);
+                                    $('#GooglePlaceId').val(results[0].place_id);
                                     $.getJSON("https://api.ipify.org/?format=json", function (e) {
                                         $('#IpAddress').val(e.ip);
                                     });
-                                    $.getJSON('/Shop/GetShop?placeid=' + place.place_id, null, function (data) {
+                                    $.getJSON('/Shop/GetShop?placeid=' + results[0].place_id, null, function (data) {
                                         $('#Rating').val(data.result.result.rating);
                                         $('#CustomerReview').val(data.result.result.user_ratings_total);
-                                        $('#PhoneNumber').val(data.result.result.international_phone_number);
-                                        var phonenumber = $('#PhoneNumber').val();
-                                        var phone = phonenumber.replace(/\s/g, '');
-                                        phone = phonenumber.slice(3);
-                                        var phoneNWS = phone.replace(/\s/g, '');
-                                        $('#PhoneNumber').val(phoneNWS);
-                                        // $('#PhoneNumber').val(data.result.result.international_phone_number);
-                                        $('#Name').val(data.result.result.name);
-                                        $('#Website').val(data.result.result.website);
 
                                         if (data.result.result.international_phone_number != null) {
                                             $('.manualmobile').addClass('d-none');
-                                            $('.mobile').removeClass('d-none');
-                                            //$('#PhoneNumber').val(data.result.result.international_phone_number);
                                             $('#PhoneNumber').val(data.result.result.international_phone_number);
                                             var phonenumber = $('#PhoneNumber').val();
                                             var phone = phonenumber.replace(/\s/g, '');
@@ -1586,88 +1528,242 @@
                                         }
 
                                         if (data.result.result.website != null) {
-                                            $('.website').removeClass('d-none');
                                             $('.manualwebsite').addClass('d-none');
                                             $('#Website').val(data.result.result.website);
                                         } else {
                                             $('.website').addClass('d-none');
                                             $('.manualwebsite').removeClass('d-none');
                                         }
-                                        var monday = data.result.result.opening_hours.weekday_text[0];
-                                        var mon = monday.split(" ");
-                                        var amm = mon[1] + " " + mon[2];
-                                        var pmm = mon[4] + " " + mon[5];
-                                        $('#MondayOpenTime').val(amm);
-                                        $('#MondayCloseTime').val(pmm);
+                                        $('#Name').val(data.result.result.name);
 
-                                        var tuesday = data.result.result.opening_hours.weekday_text[1];
-                                        var tue = tuesday.split(" ");
-                                        var amt = tue[1] + " " + tue[2];
-                                        var pmt = tue[4] + " " + tue[5];
-                                        $('#TuesdayOpenTime').val(amt);
-                                        $('#TuesdayCloseTime').val(pmt);
-                                        var wednesday = data.result.result.opening_hours.weekday_text[2];
-                                        var wed = wednesday.split(" ");
-                                        var amw = wed[1] + " " + wed[2];
-                                        var pmw = wed[4] + " " + wed[5];
-                                        $('#WednesdayOpenTime').val(amw);
-                                        $('#WednesdayCloseTime').val(pmw);
-                                        var thursday = data.result.result.opening_hours.weekday_text[3];
-                                        var thu = thursday.split(" ");
-                                        var amt = thu[1] + " " + thu[2];
-                                        var pmt = thu[4] + " " + thu[5];
-                                        $('#ThursdayOpenTime').val(amt);
-                                        $('#ThursdayCloseTime').val(pmt);
+                                        if (data.result.result.opening_hours != null) {
 
-                                        var friday = data.result.result.opening_hours.weekday_text[4];
-                                        var fri = friday.split(" ");
-                                        var amf = fri[1] + " " + fri[2];
-                                        var pmf = fri[4] + " " + fri[5];
-                                        $('#FridayOpenTime').val(amf);
-                                        $('#FridayCloseTime').val(pmf);
+                                            var monday = data.result.result.opening_hours.weekday_text[0];
+                                            var mon = monday.split(" ");
+                                            var amm = mon[1] + " " + mon[2];
+                                            var pmm = mon[4] + " " + mon[5];
+                                            $('#MondayOpenTime').val(amm);
+                                            $('#MondayCloseTime').val(pmm);
 
-                                        var saturday = data.result.result.opening_hours.weekday_text[5];
-                                        var sat = saturday.split(" ");
-                                        var ams = sat[1] + " " + sat[2];
-                                        var pms = sat[4] + " " + sat[5];
-                                        $('#SaturdayOpenTime').val(ams);
-                                        $('#SaturdayCloseTime').val(pms);
+                                            var tuesday = data.result.result.opening_hours.weekday_text[1];
+                                            var tue = tuesday.split(" ");
+                                            var amt = tue[1] + " " + tue[2];
+                                            var pmt = tue[4] + " " + tue[5];
+                                            $('#TuesdayOpenTime').val(amt);
+                                            $('#TuesdayCloseTime').val(pmt);
+                                            var wednesday = data.result.result.opening_hours.weekday_text[2];
+                                            var wed = wednesday.split(" ");
+                                            var amw = wed[1] + " " + wed[2];
+                                            var pmw = wed[4] + " " + wed[5];
+                                            $('#WednesdayOpenTime').val(amw);
+                                            $('#WednesdayCloseTime').val(pmw);
+                                            var thursday = data.result.result.opening_hours.weekday_text[3];
+                                            var thu = thursday.split(" ");
+                                            var amt = thu[1] + " " + thu[2];
+                                            var pmt = thu[4] + " " + thu[5];
+                                            $('#ThursdayOpenTime').val(amt);
+                                            $('#ThursdayCloseTime').val(pmt);
 
-                                        var sunday = data.result.result.opening_hours.weekday_text[6];
-                                        var sun = sunday.split(" ");
-                                        var amu = sun[1] + " " + sun[2];
-                                        var pmu = sun[4] + " " + sun[5];
-                                        $('#SundayOpenTime').val(amu);
-                                        $('#SundayCloseTime').val(pmu);
+                                            var friday = data.result.result.opening_hours.weekday_text[4];
+                                            var fri = friday.split(" ");
+                                            var amf = fri[1] + " " + fri[2];
+                                            var pmf = fri[4] + " " + fri[5];
+                                            $('#FridayOpenTime').val(amf);
+                                            $('#FridayCloseTime').val(pmf);
+
+                                            var saturday = data.result.result.opening_hours.weekday_text[5];
+                                            var sat = saturday.split(" ");
+                                            var ams = sat[1] + " " + sat[2];
+                                            var pms = sat[4] + " " + sat[5];
+                                            $('#SaturdayOpenTime').val(ams);
+                                            $('#SaturdayCloseTime').val(pms);
+
+                                            var sunday = data.result.result.opening_hours.weekday_text[6];
+                                            var sun = sunday.split(" ");
+                                            var amu = sun[1] + " " + sun[2];
+                                            var pmu = sun[4] + " " + sun[5];
+                                            $('#SundayOpenTime').val(amu);
+                                            $('#SundayCloseTime').val(pmu);
+
+                                        }
 
 
                                     });
+                                }
+                            );
+
+                            autocomplete.addListener('place_changed', function () {
+                                document.getElementById("location-error").style.display = 'none';
+                                markers.forEach(function (marker) {
+                                    marker.setMap(null);
+                                });
+
+                                var place = autocomplete.getPlace();
+                                if (!place.geometry) {
+                                    document.getElementById("location-error").style.display = 'inline-block';
+                                    document.getElementById("location-error").innerHTML = "Cannot Locate '" + input.value + "' on map";
+                                    return;
+                                }
+                                var marker = new google.maps.Marker({
+                                    position: pos,
+                                    map: map,
+                                    title: "your place",
+                                    draggable: true
+                                });
+
+                                google.maps.event.addListener(marker, 'click', function () {
+                                    infowindow.open(map, marker);
+                                });
+                                markers.push(marker);
+                                google.maps.event.addListener(marker, 'dragend', function () {
+                                    pos = this.position;
+                                    markers.push(marker);
+                                    //infowindow.open(map, marker);
+                                });
+
+
+                                map.fitBounds(place.geometry.viewport);
+                                marker.setPosition(place.geometry.location);
+                                marker.setVisible(true);
+                                console.log(place);
+                                $('#Address').val(place.formatted_address);
+                                var address = place.address_components;
+                                $.each(address, function () {
+
+                                    if (this.types[0] == "locality") {
+                                        $('#StreetName').val(this.long_name);
+                                    }
+                                    if (this.types[0] == "administrative_area_level_2") {
+                                        $('#DistrictName').val(this.long_name);
+                                    }
+                                    if (this.types[0] == "administrative_area_level_1") {
+                                        $('#StateName').val(this.long_name);
+                                    }
+                                    if (this.types[0] == "country") {
+                                        $('#CountryName').val(this.long_name);
+                                    }
+                                    if (this.types[0] == "postal_code") {
+                                        $('#PinCode').val(this.long_name);
+                                    }
 
                                 });
-                            }, function () {
-                                handleLocationError(true, infoWindow, map.getCenter());
+
+                                $('#Latitude').val(place.geometry.location.lat);
+                                $('#Longitude').val(place.geometry.location.lng);
+                                $('#GooglePlaceId').val(place.place_id);
+                                $('#IpAddress').val("");
+                                $.getJSON("https://api.ipify.org/?format=json", function (e) {
+                                    $('#IpAddress').val(e.ip);
+                                });
+                                $.getJSON('/Shop/GetShop?placeid=' + place.place_id, null, function (data) {
+                                    $('#Rating').val(data.result.result.rating);
+                                    $('#CustomerReview').val(data.result.result.user_ratings_total);
+                                    $('#PhoneNumber').val(data.result.result.international_phone_number);
+                                    var phonenumber = $('#PhoneNumber').val();
+                                    var phone = phonenumber.replace(/\s/g, '');
+                                    phone = phonenumber.slice(3);
+                                    var phoneNWS = phone.replace(/\s/g, '');
+                                    $('#PhoneNumber').val(phoneNWS);
+                                    // $('#PhoneNumber').val(data.result.result.international_phone_number);
+                                    $('#Name').val(data.result.result.name);
+                                    $('#Website').val(data.result.result.website);
+
+                                    if (data.result.result.international_phone_number != null) {
+                                        $('.manualmobile').addClass('d-none');
+                                        $('.mobile').removeClass('d-none');
+                                        //$('#PhoneNumber').val(data.result.result.international_phone_number);
+                                        $('#PhoneNumber').val(data.result.result.international_phone_number);
+                                        var phonenumber = $('#PhoneNumber').val();
+                                        var phone = phonenumber.replace(/\s/g, '');
+                                        phone = phonenumber.slice(3);
+                                        var phoneNWS = phone.replace(/\s/g, '');
+                                        $('#PhoneNumber').val(phoneNWS);
+                                    } else {
+                                        $('.mobile').addClass('d-none');
+                                        $('.manualmobile').removeClass('d-none');
+                                    }
+
+                                    if (data.result.result.website != null) {
+                                        $('.website').removeClass('d-none');
+                                        $('.manualwebsite').addClass('d-none');
+                                        $('#Website').val(data.result.result.website);
+                                    } else {
+                                        $('.website').addClass('d-none');
+                                        $('.manualwebsite').removeClass('d-none');
+                                    }
+                                    var monday = data.result.result.opening_hours.weekday_text[0];
+                                    var mon = monday.split(" ");
+                                    var amm = mon[1] + " " + mon[2];
+                                    var pmm = mon[4] + " " + mon[5];
+                                    $('#MondayOpenTime').val(amm);
+                                    $('#MondayCloseTime').val(pmm);
+
+                                    var tuesday = data.result.result.opening_hours.weekday_text[1];
+                                    var tue = tuesday.split(" ");
+                                    var amt = tue[1] + " " + tue[2];
+                                    var pmt = tue[4] + " " + tue[5];
+                                    $('#TuesdayOpenTime').val(amt);
+                                    $('#TuesdayCloseTime').val(pmt);
+                                    var wednesday = data.result.result.opening_hours.weekday_text[2];
+                                    var wed = wednesday.split(" ");
+                                    var amw = wed[1] + " " + wed[2];
+                                    var pmw = wed[4] + " " + wed[5];
+                                    $('#WednesdayOpenTime').val(amw);
+                                    $('#WednesdayCloseTime').val(pmw);
+                                    var thursday = data.result.result.opening_hours.weekday_text[3];
+                                    var thu = thursday.split(" ");
+                                    var amt = thu[1] + " " + thu[2];
+                                    var pmt = thu[4] + " " + thu[5];
+                                    $('#ThursdayOpenTime').val(amt);
+                                    $('#ThursdayCloseTime').val(pmt);
+
+                                    var friday = data.result.result.opening_hours.weekday_text[4];
+                                    var fri = friday.split(" ");
+                                    var amf = fri[1] + " " + fri[2];
+                                    var pmf = fri[4] + " " + fri[5];
+                                    $('#FridayOpenTime').val(amf);
+                                    $('#FridayCloseTime').val(pmf);
+
+                                    var saturday = data.result.result.opening_hours.weekday_text[5];
+                                    var sat = saturday.split(" ");
+                                    var ams = sat[1] + " " + sat[2];
+                                    var pms = sat[4] + " " + sat[5];
+                                    $('#SaturdayOpenTime').val(ams);
+                                    $('#SaturdayCloseTime').val(pms);
+
+                                    var sunday = data.result.result.opening_hours.weekday_text[6];
+                                    var sun = sunday.split(" ");
+                                    var amu = sun[1] + " " + sun[2];
+                                    var pmu = sun[4] + " " + sun[5];
+                                    $('#SundayOpenTime').val(amu);
+                                    $('#SundayCloseTime').val(pmu);
+
+
+                                });
+
                             });
-                        } else {
+                        }, function () {
+                            handleLocationError(true, infoWindow, map.getCenter());
+                        });
+                    } else {
 
-                            handleLocationError(false, infoWindow, map.getCenter());
-                        }
+                        handleLocationError(false, infoWindow, map.getCenter());
+                    }
 
-                    });
-                } else {
-                    x.innerHTML = "Geolocation is not supported by this browser.";
-                }
-
+                });
+            } else {
+                x.innerHTML = "Geolocation is not supported by this browser.";
             }
 
-            function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-                infoWindow.setPosition(pos);
-                infoWindow.setContent(browserHasGeolocation ?
-                    'Error: The Geolocation service failed.' :
-                    'Error: Your browser doesn\'t support geolocation.');
-                infoWindow.open(map);
-            }
+        }
 
+        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+            infoWindow.setPosition(pos);
+            infoWindow.setContent(browserHasGeolocation ?
+                'Error: The Geolocation service failed.' :
+                'Error: Your browser doesn\'t support geolocation.');
+            infoWindow.open(map);
+        }
 
-
-        </script>
-    }
+    </script>
+}

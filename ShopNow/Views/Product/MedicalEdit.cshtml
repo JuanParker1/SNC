@@ -40,6 +40,7 @@
                                         @*<select id="MasterProductCode" name="MasterProductCode" class="form-control"></select>*@
                                         <input type="text" name="MasterProductName" id="MasterProductName" class="form-control" value="@Model.MasterProductName" readonly />
                                         <input type="hidden" name="MasterProductId" id="MasterProductId" value="@Model.MasterProductId" />
+                                        <input type="hidden" name="Name" value="@Model.Name" />
                                     </div>
                                 </div>
                             </div>
@@ -53,14 +54,14 @@
                             <div class="col-md-3">
                                 <label class="control-label text-secondary font-weight-bold" for="CategoryCode">Category Name</label>
                                 <div class="form-group">
-                                    <input type="hidden" name="CategoryId" id="CategoryId" value="@Model.CategoryId" />
+                                    <input type="hidden" name="CategoryIds" id="CategoryIds" value="@Model.CategoryIds" />
                                     <input type="text" class="form-control" name="CategoryName" id="CategoryName" value="@Model.CategoryName" readonly />
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <label class="control-label text-secondary font-weight-bold" for="DrugMeasurementUnitCode">Drug Measurement Unit Name</label>
                                 <div class="form-group">
-                                    <input type="hidden" name="DrugMeasurementUnitCode" id="DrugMeasurementUnitCode" value="@Model.DrugMeasurementUnitCode" />
+                                    <input type="hidden" name="DrugMeasurementUnitId" id="DrugMeasurementUnitId" value="@Model.DrugMeasurementUnitId" />
                                     <input type="text" class="form-control" name="DrugMeasurementUnitName" id="DrugMeasurementUnitName" value="@Model.DrugMeasurementUnitName" readonly />
                                 </div>
                             </div>
@@ -68,8 +69,8 @@
                                 <label class="control-label text-secondary font-weight-bold" for="DrugCompoundDetailCode">Combination DrugCompound</label>
                                 <div class="form-group">
                                     @*<select class="form-control" name="DrugCompoundDetailCode" id="DrugCompoundDetailCode" multiple></select>*@
-                                    <input type="text" class="form-control" name="CombinationDrugCompound" id="CombinationDrugCompound" value="@Model.CombinationDrugCompound" readonly />
-                                    <input type="hidden" name="DrugCompoundDetailCode" id="DrugCompoundDetailCode" value="@Model.DrugCompoundDetailCode" />
+                                    <input type="text" class="form-control" name="DrugCompoundDetailName" id="DrugCompoundDetailName" value="@Model.DrugCompoundDetailName" readonly />
+                                    <input type="hidden" name="DrugCompoundDetailIds" id="DrugCompoundDetailIds" value="@Model.DrugCompoundDetailIds" />
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -85,7 +86,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="control-label"><strong class="text-secondary">iBarU</strong></label>
-                                    <input type="text" class="form-control" name="iBarU" id="iBarU" value="@Model.iBarU" readonly />
+                                    <input type="text" class="form-control" name="IBarU" id="iBarU" value="@Model.IBarU" readonly />
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -108,19 +109,17 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label class="control-label" for="Qty1"><strong class="text-secondary">Quantity</strong></label>
-                                    <input id="Qty1" type="number" class="form-control" name="Qty1" min="1" value="@Model.Qty" />
+                                    <label class="control-label" for="Qty"><strong class="text-secondary">Quantity</strong></label>
+                                    <input id="Qty" type="number" class="form-control" name="Qty" min="1" value="@Model.Qty" />
                                 </div>
                             </div>
                             <div class="col-md-3">
-                                <label class="control-label text-secondary font-weight-bold" for="DiscountCategoryCode">Discount Category Name</label>
+                                <label class="control-label text-secondary font-weight-bold" for="DiscountCategoryId">Discount Category Name</label>
                                 <div class="form-group">
-                                    <select class="form-control" name="DiscountCategoryCode" id="DiscountCategoryCode">
-                                        <option value="@Model.DiscountCategoryCode">@Model.DiscountCategoryName</option>
+                                    <select class="form-control" name="DiscountCategoryId" id="DiscountCategoryId">
+                                        <option value="@Model.DiscountCategoryId">@Model.DiscountCategoryName</option>
                                     </select>
                                     <input type="hidden" name="DiscountCategoryName" id="DiscountCategoryName" value="@Model.DiscountCategoryName" />
-                                    <input type="hidden" name="DiscountType" id="DiscountType" value="@Model.DiscountType" />
-                                    <input type="hidden" name="DiscountCategoryType" id="DiscountCategoryType" value="@Model.DiscountCategoryType" />
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -132,7 +131,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="control-label"><strong class="text-secondary">Weight</strong></label>
-                                    <input type="number" class="form-control" name="weight" id="weight" step="any" value="@Model.weight" readonly />
+                                    <input type="number" class="form-control" name="Weight" id="weight" step="any" value="@Model.Weight" readonly />
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -145,7 +144,7 @@
                                 <div class="form-group">
                                     <label class="control-label"><strong class="text-secondary">Package Name</strong></label>
                                     <input type="text" class="form-control" name="PackageName" id="PackageName" value="@Model.PackageName" readonly />
-                                    <input type="hidden" name="PackageCode" id="PackageCode" value="@Model.PackageCode" />
+                                    <input type="hidden" name="PackageId" id="PackageId" value="@Model.PackageId" />
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -168,164 +167,33 @@
                                 <label class="control-label" for="PackagingType"><strong class="text-secondary">Packing Type</strong></label>
                                 <div class="form-check-inline ml-3">
                                     <label class="form-check-label">
-                                        <input type="radio" class="form-check-input" name="PackagingType" value="0" @if (Model.PackagingType == 0) { <text> checked </text> }>Item Qty
+                                        <input type="radio" class="form-check-input" name="PackingType" value="0" @if (Model.PackingType == 0) { <text> checked </text> }>Item Qty
                                     </label>
                                 </div>
                                 <div class="form-check-inline">
                                     <label class="form-check-label">
-                                        <input type="radio" class="form-check-input" name="PackagingType" value="1" @if (Model.PackagingType == 1) { <text> checked </text> }>SKU
+                                        <input type="radio" class="form-check-input" name="PackingType" value="1" @if (Model.PackingType == 1) { <text> checked </text> }>SKU
                                     </label>
                                 </div>
-                                <input type="number" class="form-control" name="PackagingCharge" id="PackagingCharge" value="@Model.PackagingCharge" />
+                                <input type="number" class="form-control" name="PackingCharge" id="PackingCharge" value="@Model.PackingCharge" />
                             </div>
-                        </div>
-                        <hr />
-                        <div class="row">
-                            <div class="col-md-1">
-                                <input type="button" id="AddStock" class="btn btn-success" value=" + Add Stock" />
-                            </div>
-                        </div>
-                        <div class="row d-none mt-2" id="divStock">
-                            <div class="col-md-10">
-                                <div class="row">
-                                    @*<div class="col-md-3">
-                                            <div class="form-group">
-                                                <label class="control-label"><strong class="text-secondary">Shop Name</strong></label>
-                                                <input type="text" class="form-control" name="SupplierName" id="SupplierName" />
-                                            </div>
-                                        </div>*@
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label class="control-label"><strong class="text-secondary">Stock</strong></label>
-                                            <input type="number" class="form-control" name="Stock" id="Stock" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label class="control-label"><strong class="text-secondary">Loyalty Points per 100 Value</strong></label>
-                                            <input type="number" class="form-control" name="LoyaltyPointsper100Value" id="LoyaltyPointsper100Value" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="control-label"><strong class="text-secondary">Min. Loyalty Reducation %</strong></label>
-                                        <div class="form-group">
-                                            <input type="number" class="form-control" name="MinimumLoyaltyReducationPercentage" id="MinimumLoyaltyReducationPercentage" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="control-label"><strong class="text-secondary">MRP</strong></label>
-                                        <div class="form-group">
-                                            <input type="number" class="form-control" name="MRP" id="MRP" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="control-label"><strong class="text-secondary">Tax %</strong></label>
-                                        <div class="form-group">
-                                            <input type="number" class="form-control" name="TaxPercentage" id="TaxPercentage" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="control-label"><strong class="text-secondary">Discount %</strong></label>
-                                        <div class="form-group">
-                                            <input type="number" class="form-control" name="DiscountPercentage" id="DiscountPercentage" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="control-label"><strong class="text-secondary">Sale Price</strong></label>
-                                        <div class="form-group">
-                                            <input type="number" class="form-control" step="any" name="SalePrice" id="SalePrice" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="control-label"><strong class="text-secondary">Special Price</strong></label>
-                                        <div class="form-group">
-                                            <input type="number" class="form-control" step="any" name="SpecialPrice" id="SpecialPrice" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="control-label"><strong class="text-secondary">Special Cost Of Delivery</strong></label>
-                                        <div class="form-group">
-                                            <input type="number" class="form-control" name="SpecialCostOfDelivery" id="SpecialCostOfDelivery" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="control-label"><strong class="text-secondary">Min. Sale Qty</strong></label>
-                                        <div class="form-group">
-                                            <input type="number" class="form-control" name="MinSaleQty" id="MinSaleQty" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="control-label"><strong class="text-secondary">OutLet Id</strong></label>
-                                        <div class="form-group">
-                                            <input type="number" class="form-control" name="OutLetId" id="OutLetId" />
-                                        </div>
-                                    </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label"><strong class="text-secondary">Loyalty Points per 100 Value</strong></label>
+                                    <input type="number" class="form-control" name="LoyaltyPoints" id="LoyaltyPoints" value="@Model.LoyaltyPoints"/>
                                 </div>
                             </div>
-                            <div class="col-md-2">
-                                <div class="row">
-                                    <div class="col-md-12"><label></label></div>
-                                    <div class="col-md-12"><label></label></div>
-                                    <div class="col-md-12"><label></label></div>
-                                    <div class="col-md-12"><label></label></div>
-                                    <div class="col-md-12"><label></label></div>
-                                    <div class="col-md-12"><label></label></div>
-                                    <div class="col-md-12"><label></label></div>
-                                    <div class="col-md-12 mt-2">
-                                        <label></label>
-                                        <input type="button" class="btn btn-success btn-block" id="addToDefaultMedicalStock" value="Add" />
-                                    </div>
+                            <div class="col-md-3">
+                                <label class="control-label"><strong class="text-secondary">Tax %</strong></label>
+                                <div class="form-group">
+                                    <input type="number" class="form-control" name="TaxPercentage" id="TaxPercentage" value="@Model.TaxPercentage"/>
                                 </div>
                             </div>
-                        </div>
-                        <hr />
-                        <div class="row">
-                            <div class="table-responsive " id="divDefaultMedicalStock">
-                                <table class="table table-borderless table-striped table-condensed" id="tbl-defaultMedical">
-                                    <thead>
-                                        <tr>
-                                            <th>No.</th>
-                                            <th>Shop Name</th>
-                                            <th>Stock</th>
-                                            <th>Loyalty Points per 100 Value</th>
-                                            <th>Min.Loyalty Reducation %</th>
-                                            <th>MRP</th>
-                                            <th>Tax %</th>
-                                            <th>Discount %</th>
-                                            <th>Sale Price</th>
-                                            <th>Special Price</th>
-                                            <th>Special Cost Of Delivery</th>
-                                            <th>Min.Sale Qty</th>
-                                            <th>OutLet Id</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var s in Model.MedicalStockLists)
-                                        {
-                                            var totalcount = Model.MedicalStockLists.Count();
-                                            var count = Model.MedicalStockLists.IndexOf(s);
-                                            count++;
-                                        <tr>
-                                            <td>@count</td>
-                                            <td>@s.SupplierName</td>
-                                            <td>@s.Stock</td>
-                                            <td>@s.LoyaltyPointsper100Value</td>
-                                            <td>@s.MinimumLoyaltyReducationPercentage</td>
-                                            <td>@s.MRP</td>
-                                            <td>@s.TaxPercentage</td>
-                                            <td>@s.DiscountPercentage</td>
-                                            <td>@s.SalePrice</td>
-                                            <td>@s.SpecialPrice</td>
-                                            <td>@s.SpecialCostOfDelivery</td>
-                                            <td>@s.MinSaleQty</td>
-                                            <td>@s.OutLetId</td>
-                                            <td>
-                                                <button class="btn removeFromDefaultMedicalStock" type="button" data-code="@s.OutLetId" data-id="@count"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                                            </td>
-                                        </tr>
-                                        }
-                                    </tbody>
-                                </table>
+                            <div class="col-md-3">
+                                <label class="control-label"><strong class="text-secondary">Special Cost Of Delivery</strong></label>
+                                <div class="form-group">
+                                    <input type="number" class="form-control" name="SpecialCostOfDelivery" id="SpecialCostOfDelivery" value="@Model.SpecialCostOfDelivery"/>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -339,27 +207,22 @@
                             <div class="col-md-2">
                                 <label class="control-label"><strong class="text-secondary">Drug Image 1</strong></label>
                                 <img id="img-ProductImage1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge1" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                                <input type="hidden" name="ImagePathLarge1" value="@Model.ImagePathLarge1" />
                             </div>
                             <div class="col-md-2">
                                 <label class="control-label"><strong class="text-secondary">Drug Image 2</strong></label>
                                 <img id="img-ProductImage2" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge2" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                                <input type="hidden" name="ImagePathLarge2" value="@Model.ImagePathLarge2" />
                             </div>
                             <div class="col-md-2">
                                 <label class="control-label"><strong class="text-secondary">Drug Image 3</strong></label>
                                 <img id="img-ProductImage3" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge3" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                                <input type="hidden" name="ImagePathLarge3" value="@Model.ImagePathLarge3" />
                             </div>
                             <div class="col-md-2">
                                 <label class="control-label"><strong class="text-secondary">Drug Image 4</strong></label>
                                 <img id="img-ProductImage4" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge4" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                                <input type="hidden" name="ImagePathLarge4" value="@Model.ImagePathLarge4" />
                             </div>
                             <div class="col-md-2">
                                 <label class="control-label"><strong class="text-secondary">Drug Image 5</strong></label>
                                 <img id="img-ProductImage5" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge5" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                                <input type="hidden" name="ImagePathLarge5" value="@Model.ImagePathLarge5" />
                             </div>
                         </div>
                         <div class="row mt-3">
@@ -400,16 +263,6 @@
             jQuery(document).ready(function ($) {
                  $("#PriscriptionCategory").find('option[value="@Model.PriscriptionCategory"]').attr('selected', 'selected');
             });
-             var count = @Model.MedicalStockLists.Count();
-            if (count != 0) {
-                $("#divDefaultMedicalStock").removeClass("d-none");
-            } else {
-                $("#divDefaultMedicalStock").addClass("d-none");
-            }
-           
-            $("#AddStock").on('click', function () {
-                $("#divStock").toggleClass('d-none');
-            });
 
             $('#Price').on('change keyup', function () {
                 var menuprice = $("#MenuPrice").val();
@@ -425,19 +278,7 @@
                 $("#Percentage").val(results);
             });
 
-            //$('#ShopCode').select2({
-            //    placeholder: "Search Shop",
-            //    ajax: {
-            //        url: "/Product/GetProductShopSelect2",
-            //        width: '100%',
-            //        delay: 250,
-            //        dataType: 'json'
-            //    }
-            //}).on('select2:select', function (e) {
-            //    $('input[name="ShopName"]').val(e.params.data.text);
-            //});
-
-            $('#DiscountCategoryCode').select2({
+            $('#DiscountCategoryId').select2({
                 placeholder: "Search Discount Category",
                 ajax: {
                     url: "/Product/GetDiscountCategorySelect2",
@@ -448,109 +289,16 @@
             }).on('select2:select', function (e) {
                 $('input[name="DiscountCategoryName"]').val(e.params.data.text);
                 $('input[name="DiscountCategoryPercentage"]').val(e.params.data.percentage);
-                $('input[name="DiscountType"]').val(e.params.data.Type);
-                $('input[name="DiscountCategoryType"]').val(e.params.data.categorytype);
             });
 
             $(".Save").click(function () {
-                var shopcode = $("#ShopCode").val();
+                var shopcode = $("#ShopId").val();
                 if (shopcode != null) {
                     $('#ProductForm').submit();
                 } else {
                     swal("Notice!", "Please Select Shop Name!", "warning");
                 }
             });
-            
-            $('#addToDefaultMedicalStock').on('click', function () {
-                var Stock = $("#Stock").val();
-                var SupplierName = $("#ShopName").val();
-                var MRP = $("#MRP").val();
-                var SalePrice = $("#SalePrice").val();
-                var TaxPercentage = $("#TaxPercentage").val();
-                var DiscountPercentage = $("#DiscountPercentage").val();
-                var LoyaltyPointsper100Value = $("#LoyaltyPointsper100Value").val();
-                var MinimumLoyaltyReducationPercentage = $("#MinimumLoyaltyReducationPercentage").val();
-                var SpecialCostOfDelivery = $("#SpecialCostOfDelivery").val();
-                var OutLetId = $("#OutLetId").val();
-                var SpecialPrice = $("#SpecialPrice").val();
-                var MinSaleQty = $("#MinSaleQty").val();
-
-                var fd = new FormData();
-                fd.append('Stock', Stock);
-                fd.append('SupplierName', SupplierName);
-                fd.append('MRP', MRP);
-                fd.append('SalePrice', SalePrice);
-                fd.append('TaxPercentage', TaxPercentage);
-                fd.append('DiscountPercentage', DiscountPercentage);
-                fd.append('LoyaltyPointsper100Value', LoyaltyPointsper100Value);
-                fd.append('MinimumLoyaltyReducationPercentage', MinimumLoyaltyReducationPercentage);
-                fd.append('SpecialCostOfDelivery', SpecialCostOfDelivery);
-                fd.append('OutLetId', OutLetId);
-                fd.append('SpecialPrice', SpecialPrice);
-                fd.append('MinSaleQty', MinSaleQty);
-                $.ajax({
-                    url: '/Product/AddToDefaultMedicalStock',
-                    data: fd,
-                    type: 'post',
-                    dataType: 'json',
-                    contentType: false,
-                    enctype: 'multipart/form-data',
-                    processData: false,
-                    success: function (data) {
-                        var supplierName;
-                        if (data.SupplierName == null || data.SupplierName == "") { supplierName = "N/A" } else { supplierName = data.SupplierName }
-                        var tableData = '<tr> \
-                                                                            <td>'+ data.Id + '</td> \
-                                                                            <td>'+ supplierName + '</td> \
-                                                                            <td>'+ data.Stock + '</td> \
-                                                                            <td>'+ data.LoyaltyPointsper100Value + '</td> \
-                                                                            <td>'+ data.MinimumLoyaltyReducationPercentage + '</td> \
-                                                                            <td>'+ data.MRP + '</td> \
-                                                                            <td>'+ data.TaxPercentage + '</td> \
-                                                                            <td>'+ data.DiscountPercentage + '</td> \
-                                                                            <td>'+ data.SalePrice + '</td> \
-                                                                            <td>'+ data.SpecialPrice + '</td> \
-                                                                            <td>'+ data.SpecialCostOfDelivery + '</td> \
-                                                                            <td>'+ data.MinSaleQty + '</td> \
-                                                                            <td>'+ data.OutLetId + '</td> \
-                                                                            <td><button class="btn btn-link text-dark removeFromDefaultMedicalStock" type="button" data-id='+ data.Id + '><i class="fa fa-trash" aria-hidden="true"></i></button></td>\
-                                                                        </tr> ';
-
-                        $('#tbl-defaultMedical tbody').append(tableData);
-                        $('#divDefaultMedicalStock').removeClass('d-none');
-                        $('#SupplierName').val("");
-                        $('#Stock').val("");
-                        $('#LoyaltyPointsper100Value').val("");
-                        $('#MinimumLoyaltyReducationPercentage').val("");
-                        $('#MRP').val("");
-                        $('#TaxPercentage').val("");
-                        $('#DiscountPercentage').val("");
-                        $('#SalePrice').val("");
-                        $('#SpecialPrice').val("");
-                        $('#SpecialCostOfDelivery').val("");
-                        $('#MinSaleQty').val("");
-                        $('#OutLetId').val("");
-                    }
-                })
-            });
-
-            $(document).on('click', '.removeFromDefaultMedicalStock', function () {
-                var id = $(this).data('id');
-                var code = $(this).data('code');
-                var thisRow = $(this).closest("tr");
-                $.post('/Product/EditRemoveMedicalStock', { id: id, code: code }, function (data) {
-                    if (data == true) {
-                        thisRow.remove();
-                        var count = $('#tbl-defaultMedical tr').length;
-                        if (count == 1) {
-                            $("#divDefaultMedicalStock").addClass("d-none");
-                        }
-                    }
-                    else
-                        swal("Warning!", "Something went wrong please try again!", "error");
-                });
-            });
-
         });
 
     </script>

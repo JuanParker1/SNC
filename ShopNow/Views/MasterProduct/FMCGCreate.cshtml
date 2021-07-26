@@ -1,4 +1,4 @@
-﻿@model ShopNow.ViewModels.MasterFMCGCreateEditViewModel
+﻿@model ShopNow.ViewModels.MasterFMCGCreateViewModel
 @{
     ViewBag.Title = "FMCG Create";
 }
@@ -48,7 +48,7 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Brand Name</strong></label>
-                                        <select name="BrandCode" id="BrandCode" class="form-control"></select>
+                                        <select name="BrandId" id="BrandId" class="form-control"></select>
                                         <input type="hidden" name="BrandName" id="BrandName" />
                                     </div>
                                     <div class="col-md-3">
@@ -57,17 +57,17 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Category Name</strong></label>
-                                        <select name="CategoryCode" id="CategoryCode" class="form-control" multiple></select>
+                                        <select name="CategoryIds" id="CategoryIds" class="form-control" multiple></select>
                                         <input type="hidden" name="CategoryName" id="CategoryName" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Sub Category I Name</strong></label>
-                                        <select name="SubCategoryCode" id="SubCategoryCode" class="form-control" multiple></select>
+                                        <select name="SubCategoryIds" id="SubCategoryIds" class="form-control" multiple></select>
                                         <input type="hidden" name="SubCategoryName" id="SubCategoryName" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Sub Category II Name</strong></label>
-                                        <select name="NextSubCategoryCode" id="NextSubCategoryCode" class="form-control" multiple></select>
+                                        <select name="NextSubCategoryIds" id="NextSubCategoryIds" class="form-control" multiple></select>
                                         <input type="hidden" name="NextSubCategoryName" id="NextSubCategoryName" />
                                     </div>
                                     <div class="col-md-3">
@@ -93,13 +93,13 @@
                                         <input id="SizeLB" type="text" class="form-control" name="SizeLB" min="0" />
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="col-form-label" for="MeasurementUnitCode"><strong class="text-secondary">Measurement Unit Name</strong></label>
-                                        <select name="MeasurementUnitCode" class="form-control" id="MeasurementUnitCode"></select>
+                                        <label class="col-form-label" for="MeasurementUnitId"><strong class="text-secondary">Measurement Unit Name</strong></label>
+                                        <select name="MeasurementUnitId" class="form-control" id="MeasurementUnitId"></select>
                                         <input type="hidden" name="MeasurementUnitName" id="MeasurementUnitName" />
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="col-form-label" for="PackageCode"><strong class="text-secondary">Package Name</strong></label>
-                                        <select name="PackageCode" class="form-control" id="PackageCode"></select>
+                                        <label class="col-form-label" for="PackageId"><strong class="text-secondary">Package Name</strong></label>
+                                        <select name="PackageId" class="form-control" id="PackageId"></select>
                                         <input type="hidden" name="PackageName" id="PackageName" />
                                     </div>
                                 </div>
@@ -125,9 +125,9 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="img-upload-container ml-2">
-                                                    <img class="img-container w-100 h-100" id="img-FMCGLargeImage1" onerror="this.src='/Images/No Photo.png'" />
-                                                    <input type="file" id="FMCGLargeImage1" name="FMCGLargeImage1" class="d-none" />
-                                                    <label for="FMCGLargeImage1" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                    <img class="img-container w-100 h-100" id="img-FMCGImage1" onerror="this.src='/Images/No Photo.png'" />
+                                                    <input type="file" id="FMCGImage1" name="FMCGImage1" class="d-none" />
+                                                    <label for="FMCGImage1" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                                     <input type="hidden" name="ImagePathLarge1" id="ImagePathLarge1" />
                                                 </div>
                                             </div>
@@ -138,9 +138,9 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="img-upload-container ml-2">
-                                                    <img class="img-container w-100 h-100" id="img-FMCGLargeImage2" onerror="this.src='/Images/No Photo.png'" />
-                                                    <input type="file" id="FMCGLargeImage2" name="FMCGLargeImage2" class="d-none" />
-                                                    <label for="FMCGLargeImage2" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                    <img class="img-container w-100 h-100" id="img-FMCGImage2" onerror="this.src='/Images/No Photo.png'" />
+                                                    <input type="file" id="FMCGImage2" name="FMCGImage2" class="d-none" />
+                                                    <label for="FMCGImage2" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                                     <input type="hidden" name="ImagePathLarge2" id="ImagePathLarge2" />
                                                 </div>
                                             </div>
@@ -151,9 +151,9 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="img-upload-container ml-2">
-                                                    <img class="img-container w-100 h-100" id="img-FMCGLargeImage3" onerror="this.src='/Images/No Photo.png'" />
-                                                    <input type="file" id="FMCGLargeImage3" name="FMCGLargeImage3" class="d-none" />
-                                                    <label for="FMCGLargeImage3" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                    <img class="img-container w-100 h-100" id="img-FMCGImage3" onerror="this.src='/Images/No Photo.png'" />
+                                                    <input type="file" id="FMCGImage3" name="FMCGImage3" class="d-none" />
+                                                    <label for="FMCGImage3" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                                     <input type="hidden" name="ImagePathLarge3" id="ImagePathLarge3" />
                                                 </div>
                                             </div>
@@ -164,9 +164,9 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="img-upload-container ml-2">
-                                                    <img class="img-container w-100 h-100" id="img-FMCGLargeImage4" onerror="this.src='/Images/No Photo.png'" />
-                                                    <input type="file" id="FMCGLargeImage4" name="FMCGLargeImage4" class="d-none" />
-                                                    <label for="FMCGLargeImage4" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                    <img class="img-container w-100 h-100" id="img-FMCGImage4" onerror="this.src='/Images/No Photo.png'" />
+                                                    <input type="file" id="FMCGImage4" name="FMCGImage4" class="d-none" />
+                                                    <label for="FMCGImage4" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                                     <input type="hidden" name="ImagePathLarge4" id="ImagePathLarge4" />
                                                 </div>
                                             </div>
@@ -177,9 +177,9 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="img-upload-container ml-2">
-                                                    <img class="img-container w-100 h-100" id="img-FMCGLargeImage5" onerror="this.src='/Images/No Photo.png'" />
-                                                    <input type="file" id="FMCGLargeImage5" name="FMCGLargeImage5" class="d-none" />
-                                                    <label for="FMCGLargeImage5" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                    <img class="img-container w-100 h-100" id="img-FMCGImage5" onerror="this.src='/Images/No Photo.png'" />
+                                                    <input type="file" id="FMCGImage5" name="FMCGImage5" class="d-none" />
+                                                    <label for="FMCGImage5" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                                     <input type="hidden" name="ImagePathLarge5" id="ImagePathLarge5" />
                                                 </div>
                                             </div>
@@ -222,7 +222,7 @@
             if (msg != "") {
                 swal("Success!", msg, "success")
             }
-            $('#BrandCode').select2({
+            $('#BrandId').select2({
                 placeholder: "Search Brand",
                 ajax: {
                     url: "/MasterProduct/GetFMCGBrandSelect2",
@@ -234,7 +234,7 @@
                 $('input[name="BrandName"]').val(e.params.data.text);
             });
 
-            $('#CategoryCode').select2({
+            $('#CategoryIds').select2({
                 placeholder: "Search Category",
                 ajax: {
                     url: "/MasterProduct/GetCategorySelect2",
@@ -246,7 +246,7 @@
                 $('input[name="CategoryName"]').val(e.params.data.text);
             });
 
-            $('#SubCategoryCode').select2({
+            $('#SubCategoryIds').select2({
                 placeholder: "Search I Sub Category",
                 ajax: {
                     url: "/MasterProduct/GetSubCategorySelect2",
@@ -258,7 +258,7 @@
                 $('input[name="SubCategoryName"]').val(e.params.data.text);
                 });
 
-            $('#NextSubCategoryCode').select2({
+            $('#NextSubCategoryIds').select2({
                 placeholder: "Search II Sub Category",
                 ajax: {
                     url: "/MasterProduct/GetNextSubCategorySelect2",
@@ -270,7 +270,7 @@
                 $('input[name="NextSubCategoryName"]').val(e.params.data.text);
             });
 
-            $('#PackageCode').select2({
+            $('#PackageId').select2({
                 placeholder: "Search Package",
                 ajax: {
                     url: "/MasterProduct/GetFMCGPackageSelect2",
@@ -282,7 +282,7 @@
                 $('input[name="PackageName"]').val(e.params.data.text);
                 }); 
 
-            $('#MeasurementUnitCode').select2({
+            $('#MeasurementUnitId').select2({
                 placeholder: "Search Unit",
                 ajax: {
                     url: "/MasterProduct/GetFMCGMeasurementUnitSelect2",
@@ -307,72 +307,72 @@
                 };
             });
 
-            function readURLFMCGLargeImage1(input) {
+            function readURLFMCGImage1(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
                     reader.onload = function (e) {
-                        $('#img-FMCGLargeImage1').attr('src', e.target.result);
+                        $('#img-FMCGImage1').attr('src', e.target.result);
                     }
                     reader.readAsDataURL(input.files[0]);
                 }
             }
 
-            function readURLFMCGLargeImage2(input) {
+            function readURLFMCGImage2(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
                     reader.onload = function (e) {
-                        $('#img-FMCGLargeImage2').attr('src', e.target.result);
+                        $('#img-FMCGImage2').attr('src', e.target.result);
                     }
                     reader.readAsDataURL(input.files[0]);
                 }
             }
 
-            function readURLFMCGLargeImage3(input) {
+            function readURLFMCGImage3(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
                     reader.onload = function (e) {
-                        $('#img-FMCGLargeImage3').attr('src', e.target.result);
+                        $('#img-FMCGImage3').attr('src', e.target.result);
                     }
                     reader.readAsDataURL(input.files[0]);
                 }
             }
 
-            function readURLFMCGLargeImage4(input) {
+            function readURLFMCGImage4(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
                     reader.onload = function (e) {
-                        $('#img-FMCGLargeImage4').attr('src', e.target.result);
+                        $('#img-FMCGImage4').attr('src', e.target.result);
                     }
                     reader.readAsDataURL(input.files[0]);
                 }
             }
 
-            function readURLFMCGLargeImage5(input) {
+            function readURLFMCGImage5(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
                     reader.onload = function (e) {
-                        $('#img-FMCGLargeImage5').attr('src', e.target.result);
+                        $('#img-FMCGImage5').attr('src', e.target.result);
                     }
                     reader.readAsDataURL(input.files[0]);
                 }
             }
 
-            $("#FMCGLargeImage1").change(function () {
-                readURLFMCGLargeImage1(this);
+            $("#FMCGImage1").change(function () {
+                readURLFMCGImage1(this);
             });
-            $("#FMCGLargeImage2").change(function () {
-                readURLFMCGLargeImage2(this);
+            $("#FMCGImage2").change(function () {
+                readURLFMCGImage2(this);
             });
-            $("#FMCGLargeImage3").change(function () {
-                readURLFMCGLargeImage3(this);
-            });
-
-            $("#FMCGLargeImage4").change(function () {
-                readURLFMCGLargeImage4(this);
+            $("#FMCGImage3").change(function () {
+                readURLFMCGImage3(this);
             });
 
-            $("#FMCGLargeImage5").change(function () {
-                readURLFMCGLargeImage5(this);
+            $("#FMCGImage4").change(function () {
+                readURLFMCGImage4(this);
+            });
+
+            $("#FMCGImage5").change(function () {
+                readURLFMCGImage5(this);
             });
 
         });

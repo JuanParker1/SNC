@@ -29,7 +29,7 @@
                                     <label><span class="text-secondary font-weight-bold">Shop Name:</span><span class="font-weight-bold"> @Model.ShopName</span></label>
                                 </div>
                                 <div class="col-md-6">
-                                    <label><span class="text-secondary font-weight-bold">Address:</span><span class="font-weight-bold"> @Model.DeliveryAddress</span></label>
+                                    <label><span class="text-secondary font-weight-bold">Address:</span> <a onclick="gotomap(@Model.Latitude,@Model.Longtitude)" href="" target="_blank"> <span class="font-weight-bold"> @Model.DeliveryAddress</span></a></label>
                                 </div>
                                 <div class="col-md-2">
                                     <label><span class="text-secondary font-weight-bold">Phone Number:</span><span class="font-weight-bold"> @Model.PhoneNumber</span></label>
@@ -132,6 +132,9 @@
     <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
     <script>
+        function gotomap(lat, lng) {
+            window.open('https://www.google.com/maps/place/' + lat + ',' + lng, "_blank");
+        }
         $(document).ready(function () {
             var t = $('#Cart-list').DataTable({
                 "dom": "<'row'<'col-sm-6'f>>" +

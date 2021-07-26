@@ -341,6 +341,7 @@
     <Compile Include="Controllers\PlatFormCreditRateController.cs" />
     <Compile Include="Controllers\PortionController.cs" />
     <Compile Include="Controllers\ProductSpecificationController.cs" />
+    <Compile Include="Controllers\ProductTypeController.cs" />
     <Compile Include="Controllers\RefundController.cs" />
     <Compile Include="Controllers\SalesController.cs" />
     <Compile Include="Controllers\ShopDiscountCategoryController.cs" />
@@ -495,6 +496,9 @@
     <Compile Include="Models\ProductSpecificationItem.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ProductType.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\RefundsData.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
@@ -522,9 +526,6 @@
     <Compile Include="Models\SubCategory.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\test_Result.cs">
-      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\UserEnquiry.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
@@ -544,6 +545,7 @@
     <Compile Include="ViewModels\DeliveryBoyViewModel.cs" />
     <Compile Include="ViewModels\DiscountCategoryViewModel.cs" />
     <Compile Include="ViewModels\DrugCompoundDetailViewModel.cs" />
+    <Compile Include="ViewModels\LocationDetailsViewModels.cs" />
     <Compile Include="ViewModels\MeasurementUnitViewModel.cs" />
     <Compile Include="ViewModels\MarketingAgentViewModel.cs" />
     <Compile Include="ViewModels\MasterProductViewModel.cs" />
@@ -627,6 +629,8 @@
     <Content Include="Images\No Photo.png" />
     <Content Include="Images\ShopNowChat.png" />
     <Content Include="Images\503.png" />
+    <Content Include="Images\undraw_authentication_fsn5.svg" />
+    <Content Include="Images\undraw_press_play_bx2d.svg" />
     <Content Include="Models\ApplicationDbContext.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>ApplicationDbContext.edmx</DependentUpon>
@@ -2787,9 +2791,7 @@
     <Content Include="Views\MobileAppVersion\Details.cshtml" />
     <Content Include="Views\MobileAppVersion\Edit.cshtml" />
     <Content Include="Views\MobileAppVersion\Index.cshtml" />
-    <Content Include="Views\Product\Create.cshtml" />
     <Content Include="Views\Product\Details.cshtml" />
-    <Content Include="Views\Product\Edit.cshtml" />
     <Content Include="Views\Product\List.cshtml" />
     <Content Include="Scripts\umd\popper-utils.js.map" />
     <Content Include="Scripts\umd\popper-utils.min.js.map" />
@@ -2957,7 +2959,6 @@
     <Content Include="Views\WebAPI\TSUpdate.cshtml" />
     <Content Include="Views\Customer\AadharPending.cshtml" />
     <Content Include="Views\MasterProduct\FMCGEdit.cshtml" />
-    <Content Include="Views\Banner\Create.cshtml" />
     <Content Include="Views\Banner\List.cshtml" />
     <Content Include="Views\MasterProduct\DishList.cshtml" />
     <Content Include="Views\MasterProduct\ElectronicList.cshtml" />
@@ -2985,6 +2986,7 @@
     <Content Include="Views\Product\ElectronicCreate.cshtml" />
     <Content Include="Views\Product\ElectronicEdit.cshtml" />
     <Content Include="Views\Product\ElectronicList.cshtml" />
+    <Content Include="Views\DiscountCategory\List.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -3013,6 +3015,7 @@
     <Folder Include="Scripts\ckeditor\samples\plugins\htmlwriter\assets\outputforflash\" />
     <Folder Include="Scripts\ckeditor\samples\plugins\magicline\" />
     <Folder Include="Uploads\" />
+    <Folder Include="Views\ProductType\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

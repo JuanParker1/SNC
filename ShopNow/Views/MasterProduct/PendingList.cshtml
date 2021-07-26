@@ -1,135 +1,134 @@
-﻿@*@model IEnumerable<ShopNow.Models.Product>
-@using GridMvc.Html
+﻿@model ShopNow.ViewModels.MasterProductListViewModel
 @{
-    ViewBag.Title = "Pending Product List";
+    ViewBag.Title = "Pending List";
 }
-<title>ShopNow | Pending Product List</title>
-<link href="~/Content/Gridmvc.css" rel="stylesheet" />
-<script src="~/Scripts/gridmvc.js"></script>
+<title>ShopNow | Pending List</title>
 
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-md-3">
-            <h5 class="text-theme_dark" style="letter-spacing:1px">PENDING PRODUCT LIST</h5>
+    <div class="row mb-2">
+        <div class="col-md-2">
+            <h5 class="text-success" style="letter-spacing:1px">Pending List</h5>
         </div>
-        <div class="col-md-9 text-right">
+        <div class="col-md-2">
+            <div class="mb-1 data-search">
+            </div>
+        </div>
+        <div class="col-md-8 text-right">
             <a href="~/MasterProduct/ItemMapping" target="_blank"> Item Mapping</a>
         </div>
     </div>
-
-    @Html.Grid(Model).Columns(columns =>
-{
-    columns.Add(c => c.ItemId).Titled("Item Id").Filterable(true).SetWidth(10);
-    columns.Add(c => c.Name).Titled("Item Name").Filterable(true).SetWidth(50);
-    columns.Add(c => c.ProductType).Titled("Item Type").Filterable(true).SetWidth(20);
-}).WithPaging(20).Sortable(true)
-</div>*@
-
-
-@model ShopNow.ViewModels.MasterProductListViewModel
-    @{
-        ViewBag.Title = "Pending List";
-    }
-    <title>ShopNow | Pending List</title>
-
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-md-2">
-                <h5 class="text-success" style="letter-spacing:1px">Pending List</h5>
-            </div>
-            <div class="col-md-2">
-                <div class="mb-1 data-search">
-                </div>
-            </div>
-            <div class="col-md-8 text-right">
-                <a href="~/MasterProduct/ItemMapping" target="_blank"> Item Mapping</a>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12 mx-auto">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <div class="form-group row">
-                            <div class="table-responsive">
-                                <table class="table table-borderless table-striped table-condensed" id="PendingList">
-                                    <thead>
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="table-responsive">
+                            <table class="table table-borderless table-striped table-condensed" id="PendingList">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th class="text-nowrap">Name</th>
+                                        <th>Item Id</th>
+                                        <th>Product Type</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Lists)
+                                    {
                                         <tr>
-                                            <th>No</th>
-                                            <th class="text-nowrap">Name</th>
-                                            <th>Item Id</th>
-                                            <th>Product Type</th>
+                                            <td></td>
+                                            <td class="text-nowrap">@item.Name</td>
+                                            <td>@item.ItemId</td>
+                                            <td>@item.ProductTypeName</td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var item in Model.Lists)
-                                        {
-                                            <tr>
-                                                <td></td>
-                                                <td class="text-nowrap">@item.Name</td>
-                                                <td>@item.ItemId</td>
-                                                <td>@item.ProductType</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
+                                    }
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    @section Scripts
+@section Scripts
     {
-        <!--Select2-->
-        <script src="~/Scripts/select2/js/select2.js"></script>
-        <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
-        <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
-        <!--Select2 End-->
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
 
-        <script>
-            $(document).ready(function () {
+    <script>
+        $(document).ready(function () {
 
-                $('#ShopCode').select2({
-                    placeholder: "Search Shop",
-                    ajax: {
-                        url: "/MasterProduct/GetShopSelect2",
-                        width: '100%',
-                        delay: 250,
-                        dataType: 'json'
-                    }
-                }).on('select2:select', function (e) {
-                    $('input[name="ShopName"]').val(e.params.data.text);
-                });
-
-                var t = $('#PendingList').DataTable({
-                    "dom": "<'row'<'col-sm-6'f>>" +
-                        "<'row'<'col-sm-5'i><'col-sm-3'l><'col-sm-4'p>>" +
-                        "<'row'<'col-sm-12'tr>>",
-                    "bPaginate": false,
-                    "scrollY": 400,
-                    "paging": true,
-                    "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "ALL"]],
-                    "pageLength": 10,
-                    initComplete: function (settings, json) {
-                        $('.index input').remove();
-                        $('.action-btn input').remove();
-                        $('.dataTables_filter input').appendTo('.data-search');
-                        $('.dataTables_filter label').remove();
-                        $('.data-search input').attr('placeholder', 'Quick Search');
-                        $('.data-search input').addClass('form-control');
-                        $('.data-search input').removeClass('form-control-sm');
-                    },
-                });
-
-                t.on('order.dt search.dt', function () {
-                    t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
-                        cell.innerHTML = i + 1;
-                    });
-                }).draw();
-
+            $('#ShopCode').select2({
+                placeholder: "Search Shop",
+                ajax: {
+                    url: "/MasterProduct/GetShopSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ShopName"]').val(e.params.data.text);
             });
-        </script>
+
+            var t = $('#PendingList').DataTable({
+                "dom": "<'row'<'col-sm-6'f>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-3'l><'col-sm-4'p>>" +
+                    "<'row'<'col-sm-12'tr>>",
+                "bPaginate": false,
+                "scrollY": 400,
+                "paging": true,
+                "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "ALL"]],
+                "pageLength": 10,
+                initComplete: function (settings, json) {
+                    $('.index input').remove();
+                    $('.action-btn input').remove();
+                    $('.dataTables_filter input').appendTo('.data-search');
+                    $('.dataTables_filter label').remove();
+                    $('.data-search input').attr('placeholder', 'Quick Search');
+                    $('.data-search input').addClass('form-control');
+                    $('.data-search input').removeClass('form-control-sm');
+                },
+            });
+
+            t.on('order.dt search.dt', function () {
+                t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+
+        });
+    </script>
+}
+
+@*@model IEnumerable<ShopNow.Models.Product>
+    @using GridMvc.Html
+    @{
+        ViewBag.Title = "Pending Product List";
     }
+    <title>ShopNow | Pending Product List</title>
+    <link href="~/Content/Gridmvc.css" rel="stylesheet" />
+    <script src="~/Scripts/gridmvc.js"></script>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <h5 class="text-theme_dark" style="letter-spacing:1px">PENDING PRODUCT LIST</h5>
+            </div>
+            <div class="col-md-9 text-right">
+                <a href="~/MasterProduct/ItemMapping" target="_blank"> Item Mapping</a>
+            </div>
+        </div>
+
+        @Html.Grid(Model).Columns(columns =>
+    {
+        columns.Add(c => c.ItemId).Titled("Item Id").Filterable(true).SetWidth(10);
+        columns.Add(c => c.Name).Titled("Item Name").Filterable(true).SetWidth(50);
+        columns.Add(c => c.ProductType).Titled("Item Type").Filterable(true).SetWidth(20);
+    }).WithPaging(20).Sortable(true)
+    </div>*@
 

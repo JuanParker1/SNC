@@ -67,14 +67,12 @@ namespace ShopNow.Controllers
                 addOnCategory.Name = name;
                 addOnCategory.CreatedBy = user.Name;
                 addOnCategory.UpdatedBy = user.Name;
-               //addOnCategory.Code = _generatedCode;
                 addOnCategory.DateEncoded = DateTime.Now;
                 addOnCategory.DateUpdated = DateTime.Now;
                 db.AddOnCategories.Add(addOnCategory);
                 db.SaveChanges();
-               // string code = AddOnCategory.Add(addOnCategory, out int error);
 
-            //    IsAdded = addOnCategory.Code != String.Empty ? true : false;
+                IsAdded = addOnCategory.Id != 0 ? true : false;
                 message = name + " Successfully Added";
             }
             else
@@ -106,10 +104,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNCTAD005")]
-        public JsonResult Delete(int code)
+        public JsonResult Delete(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var addOnCategory = db.AddOnCategories.Where(i=>i.Id ==code).FirstOrDefault();
+            var addOnCategory = db.AddOnCategories.Where(i=>i.Id ==id).FirstOrDefault();
             if (addOnCategory != null)
             {
                 addOnCategory.Status = 2;

@@ -1,12 +1,12 @@
-﻿@model ShopNow.ViewModels.MedicalDrugCreateEditViewModel
+﻿@model ShopNow.ViewModels.MasterMedicalCreateViewModel
 @{
     ViewBag.Title = "Medical Entry";
 }
-<title>ShopNow | Medical Create</title>
+<title>ShopNow | @ViewBag.Title</title>
 <div class="container-fluid my-4">
     <div class="row">
         <div class="col-md-9">
-            <h5 class="mt-1 text-success" style="letter-spacing:1px">MEDICAL ENTRY</h5>
+            <h5 class="mt-1 text-success">@ViewBag.Title</h5>
         </div>
         <div class="col-md-2 text-right">
             <a href="~/MasterProduct/MedicalList" target="_self"><span class="fa fa-list-ul"></span> Medical List</a>
@@ -45,9 +45,9 @@
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="control-label text-secondary font-weight-bold" for="CategoryId">Category Name</label>
+                                        <label class="control-label text-secondary font-weight-bold" for="CategoryIds">Category Name</label>
                                         <div class="form-group">
-                                            <select class="form-control" name="CategoryId" id="CategoryId" multiple></select>
+                                            <select class="form-control" name="CategoryIds" id="CategoryIds" multiple></select>
                                             <input type="hidden" name="CategoryName" id="CategoryName" />
                                         </div>
                                     </div>
@@ -59,10 +59,10 @@
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="control-label text-secondary font-weight-bold" for="DrugCompoundDetailId">Combination DrugCompound</label>
+                                        <label class="control-label text-secondary font-weight-bold" for="DrugCompoundDetailIds">Drug Combination</label>
                                         <div class="form-group">
-                                            <select class="form-control" name="DrugCompoundDetailId" id="DrugCompoundDetailId" multiple></select>
-                                            <input type="hidden" name="CombinationDrugCompound" id="CombinationDrugCompound" />
+                                            <select class="form-control" name="DrugCompoundDetailIds" id="DrugCompoundDetailIds" multiple></select>
+                                            <input type="hidden" name="DrugCompoundDetailName" id="DrugCompoundDetailName" />
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -138,45 +138,40 @@
                                         <label class="control-label"><strong class="text-secondary">Drug Image 1</strong></label>
                                         <div class="img-upload-container ml-2">
                                             <img class="img-container w-100 h-100" id="img-drug1" onerror="this.src='/Images/No Photo.png'" />
-                                            <input type="file" id="ProductImage1" name="ProductImage1" class="d-none" />
-                                            <label for="ProductImage1" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePathLarge1" id="ImagePathLarge1" />
+                                            <input type="file" id="MedicalImage1" name="MedicalImage1" class="d-none" />
+                                            <label for="MedicalImage1" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <label class="control-label"><strong class="text-secondary">Drug Image 2</strong></label>
                                         <div class="img-upload-container ml-2">
                                             <img class="img-container w-100 h-100" id="img-drug2" onerror="this.src='/Images/No Photo.png'" />
-                                            <input type="file" id="ProductImage2" name="ProductImage2" class="d-none" />
-                                            <label for="ProductImage2" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePathLarge2" id="ImagePathLarge2" />
+                                            <input type="file" id="MedicalImage2" name="MedicalImage2" class="d-none" />
+                                            <label for="MedicalImage2" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <label class="control-label"><strong class="text-secondary">Drug Image 3</strong></label>
                                         <div class="img-upload-container ml-2">
                                             <img class="img-container w-100 h-100" id="img-drug3" onerror="this.src='/Images/No Photo.png'" />
-                                            <input type="file" id="ProductImage3" name="ProductImage3" class="d-none" />
-                                            <label for="ProductImage3" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePathLarge3" id="ImagePathLarge3" />
+                                            <input type="file" id="MedicalImage3" name="MedicalImage3" class="d-none" />
+                                            <label for="MedicalImage3" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <label class="control-label"><strong class="text-secondary">Drug Image 4</strong></label>
                                         <div class="img-upload-container ml-2">
                                             <img class="img-container w-100 h-100" id="img-drug4" onerror="this.src='/Images/No Photo.png'" />
-                                            <input type="file" id="ProductImage4" name="ProductImage4" class="d-none" />
-                                            <label for="ProductImage4" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePathLarge4" id="ImagePathLarge4" />
+                                            <input type="file" id="MedicalImage4" name="MedicalImage4" class="d-none" />
+                                            <label for="MedicalImage4" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <label class="control-label"><strong class="text-secondary">Drug Image 5</strong></label>
                                         <div class="img-upload-container ml-2">
                                             <img class="img-container w-100 h-100" id="img-drug5" onerror="this.src='/Images/No Photo.png'" />
-                                            <input type="file" id="ProductImage5" name="ProductImage5" class="d-none" />
-                                            <label for="ProductImage5" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePathLarge5" id="ImagePathLarge5" />
+                                            <input type="file" id="MedicalImage5" name="MedicalImage5" class="d-none" />
+                                            <label for="MedicalImage5" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                         </div>
                                     </div>
                                 </div>
@@ -242,7 +237,7 @@
                 $('input[name="BrandName"]').val(e.params.data.text);
             });
 
-            $('#CategoryId').select2({
+            $('#CategoryIds').select2({
                 placeholder: "Search Category",
                 ajax: {
                     url: "/MasterProduct/GetMedicalCategorySelect2",
@@ -266,7 +261,7 @@
                 $('input[name="MeasurementUnitName"]').val(e.params.data.text);
             });
 
-            $('#DrugCompoundDetailId').select2({
+            $('#DrugCompoundDetailIds').select2({
                 placeholder: "Search Combination",
                 ajax: {
                     url: "/MasterProduct/GetDrugCompoundDetailSelect2",
@@ -275,7 +270,7 @@
                     dataType: 'json'
                 }
             }).on('select2:select', function (e) {
-                $('input[name="CombinationDrugCompound"]').val(e.params.data.text);
+                $('input[name="DrugCompoundDetailName"]').val(e.params.data.text);
             });
 
             $('#PackageId').select2({
@@ -290,60 +285,7 @@
                 $('input[name="PackageName"]').val(e.params.data.text);
             });
 
-            //function readURLThumbnail(input) {
-            //    if (input.files && input.files[0]) {
-            //        var reader = new FileReader();
-            //        reader.onload = function (e) {
-            //            $('#img-thumbnail').attr('src', e.target.result);
-            //        }
-            //        reader.readAsDataURL(input.files[0]);
-            //    }
-            //}
-
-            //$("#ThumbnailImage").change(function () {
-            //    readURLThumbnail(this);
-            //});
-
-            //$("#ThumbnailImage").change(function () {
-            //    var fileUpload = $("#ThumbnailImage")[0];
-            //        var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(.jpg|.jpeg|.png|.gif)$");
-            //        if (regex.test(fileUpload.value.toLowerCase())) {
-            //                //Initiate the FileReader object.
-            //                var reader = new FileReader();
-            //                //Read the contents of Image File.
-            //                reader.readAsDataURL(fileUpload.files[0]);
-            //                reader.onload = function (e) {
-            //                    //Initiate the JavaScript Image object.
-            //                    var image = new Image();
-            //                    //Set the Base64 string return from FileReader as source.
-            //                    image.src = e.target.result;
-            //                    image.onload = function () {
-            //                        //Determine the Height and Width.
-            //                        var height = this.height;
-            //                        var width = this.width;
-            //                        var size = fileUpload.files[0].size;
-            //                        if (height > 113 || width > 113) {
-            //                            swal("Height (" + height + "px) and Width(" + width + "px) are exceed the limit.", "", "warning");
-            //                            return false;
-            //                        }
-            //                        else if (size > 7168) {
-            //                            swal("size" + size + "exceed the limit(7kb) ", "", "warning");
-            //                            return false;
-            //                        }
-            //                        else {
-            //                            //swal("success","","warning")
-            //                            readURLThumbnail(fileUpload);
-            //                            return true;
-            //                        }
-            //                    };
-            //                }
-            //        } else {
-            //            swal("Please select a valid Image file (jpg,png,gif).","","warning");
-            //            return false;
-            //        }
-            //    });
-
-
+           
             function readURLDrug1(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
@@ -354,7 +296,7 @@
                 }
             }
 
-            $("#ProductImage1").change(function () {
+            $("#MedicalImage1").change(function () {
                 readURLDrug1(this);
             });
 
@@ -368,7 +310,7 @@
                 }
             }
 
-            $("#ProductImage2").change(function () {
+            $("#MedicalImage2").change(function () {
                 readURLDrug2(this);
             });
 
@@ -381,7 +323,7 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-            $("#ProductImage3").change(function () {
+            $("#MedicalImage3").change(function () {
                 readURLDrug3(this);
             });
 
@@ -394,7 +336,7 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-            $("#ProductImage4").change(function () {
+            $("#MedicalImage4").change(function () {
                 readURLDrug4(this);
             });
 
@@ -407,7 +349,7 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-            $("#ProductImage5").change(function () {
+            $("#MedicalImage5").change(function () {
                 readURLDrug5(this);
             });
 

@@ -117,7 +117,7 @@
                 <input type="hidden" name="ImageOtherLicensePath" id="ImageOtherLicensePath" value="@Model.ImageOtherLicensePath" />
                 <input type="hidden" name="ImageAuthoriseBrandPath" id="ImageAuthoriseBrandPath" value="@Model.ImageAuthoriseBrandPath" />
                 <input type="hidden" name="Count" id="Count" value="@Model.Count" />
-                <input type="hidden" name="CustomerCode" id="CustomerCode" value="@Model.CustomerCode" />
+                <input type="hidden" name="CustomerId" id="CustomerCode" value="@Model.CustomerId" />
                 <input type="hidden" name="CustomerName" id="CustomerName" value="@Model.CustomerName" />
                 <input type="hidden" name="Status" id="Status" value="@Model.Status" />
 
@@ -184,8 +184,8 @@
                                     <label class="col-form-label"><strong class="text-secondary">Shop Type</strong></label>
                                 </div>
                                 <div class="col-md-8">
-                                    <select id="ShopCategoryCode" name="ShopCategoryCode" class="form-control" style="width:100%;">
-                                        <option value="@Model.ShopCategoryCode">@Model.ShopCategoryName</option>
+                                    <select id="ShopCategoryCode" name="ShopCategoryId" class="form-control" style="width:100%;">
+                                        <option value="@Model.ShopCategoryId">@Model.ShopCategoryName</option>
                                     </select>
                                     <input type="hidden" name="ShopCategoryName" id="ShopCategoryName" value="@Model.ShopCategoryName" />
                                 </div>

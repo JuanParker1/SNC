@@ -24,7 +24,7 @@ namespace ShopNow.Controllers
             model.ListItems = db.Payments.Where(i => (i.RefundAmount != 0 && i.RefundStatus == 1 &&i.RefundAmount != null) && i.PaymentMode == "Online Payment" &&
                (model.OrderDate != null ? DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(model.OrderDate.Value) : true) &&
               (model.ShopId != 0 ? i.ShopId == model.ShopId : true))
-                .Join(db.PaymentsDatas, p => p.OrderNumber, pd => pd.OrderNo, (p, pd) => new { p, pd })
+                .Join(db.PaymentsDatas, p => p.OrderNumber, pd => pd.OrderNumber, (p, pd) => new { p, pd })
                 .Join(db.Customers, p => p.p.CustomerId, c => c.Id, (p, c) => new { p, c })
                 .Select(i => new RefundPendingViewModel.ListItem
                 {

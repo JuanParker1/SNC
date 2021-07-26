@@ -38,7 +38,7 @@
                             }
                             else
                             {
-                                <select id="ShopCode" name="ShopCode" class="form-control"></select>
+                                <select id="ShopId" name="ShopId" class="form-control"></select>
                                 <input type="hidden" name="ShopName" id="ShopName" />
                                 <input type="hidden" name="ShopId" id="ShopId" />
                             }
@@ -53,20 +53,18 @@
                                 <strong class="text-secondary">Dish Name</strong>
                             </label>
                             <div class="form-group">
-                                <select id="MasterProductCode" name="MasterProductCode" class="form-control"></select>
+                                <select id="MasterProductId" name="MasterProductId" class="form-control"></select>
                                 <input type="hidden" name="MasterProductName" id="MasterProductName" />
-                                <input type="hidden" name="MasterProductId" id="MasterProductId" />
                                 <input type="hidden" name="Name" id="Name" />
-                                <input type="hidden" name="ProductType" id="ProductType" />
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <label class="control-label" for="CategoryCode">
+                            <label class="control-label" for="CategoryId">
                                 <strong class="text-secondary">Category Name</strong>
                             </label>
                             <div class="form-group">
                                 <input type="text" name="CategoryName" id="CategoryName" class="form-control" readonly />
-                                <input type="hidden" name="CategoryCode" id="CategoryCode" />
+                                <input type="hidden" name="CategoryId" id="CategoryId" />
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -137,15 +135,15 @@
                             <label class="control-label" for="PackagingType"><strong class="text-secondary">Packing Type</strong></label>
                             <div class="form-check-inline ml-3">
                                 <label class="form-check-label">
-                                    <input type="radio" class="form-check-input" name="PackagingType" value="0" checked>Item Qty
+                                    <input type="radio" class="form-check-input" name="PackingType" value="0" checked>Item Qty
                                 </label>
                             </div>
                             <div class="form-check-inline">
                                 <label class="form-check-label">
-                                    <input type="radio" class="form-check-input" name="PackagingType" value="1">SKU
+                                    <input type="radio" class="form-check-input" name="PackingType" value="1">SKU
                                 </label>
                             </div>
-                            <input type="number" class="form-control" name="PackagingCharge" id="PackagingCharge" />
+                            <input type="number" class="form-control" name="PackingCharge" id="PackingCharge" />
                         </div>
                     </div>
                     <div class="d-none" id="divAddOns">
@@ -274,7 +272,7 @@
 
             
 
-            $('#ShopCode').select2({
+            $('#ShopId').select2({
                 placeholder: "Search Shop",
                 ajax: {
                     url: "/Product/GetDishShopSelect2",
@@ -284,13 +282,12 @@
                 }
             }).on('select2:select', function (e) {
                 $('input[name="ShopName"]').val(e.params.data.text);
-                $('input[name="ShopId"]').val(e.params.data.shopid);
             });
 
             $(".Save").click(function () {
-                var shopcode = $("#ShopCode").val();
+                var shopcode = $("#ShopId").val();
                 if (shopcode != null) {
-                    if ($('#MasterProductCode').val()) {
+                    if ($('#MasterProductId').val()) {
                         $('#ProductForm').submit();
                     } else {
                         swal("Notice!", "Please Select Product!", "warning");
@@ -300,7 +297,7 @@
                 }
             });
             
-            $('#MasterProductCode').select2({
+            $('#MasterProductId').select2({
                 placeholder: "Search Product",
                 ajax: {
                     url: "/Product/GetDishMasterProductSelect2",
@@ -310,23 +307,22 @@
                 }
             }).on('select2:select', function (e) {
                 $('input[name="MasterProductName"]').val(e.params.data.text);
-                $('input[name="MasterProductId"]').val(e.params.data.MasterId);
+              //  $('input[name="MasterProductId"]').val(e.params.data.MasterId);
                 $('input[name="Name"]').val(e.params.data.text);
-                $('input[name="CategoryCode"]').val(e.params.data.CategoryCode);
+                $('input[name="CategoryId"]').val(e.params.data.CategoryIds);
                 $('input[name="CategoryName"]').val(e.params.data.CategoryName);
                 $('select[name="Customisation"] option[value=' + e.params.data.Customisation + ']').attr("selected", "selected");
                 $('select[name="ColorCode"] option[value="' + e.params.data.ColorCode + '"]').attr("selected", "selected");
                 $('#img-ProductImage1').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePathLarge1);
                 $('input[name="ImagePathLarge1"]').val(e.params.data.ImagePathLarge1);
                 $('input[name="MenuPrice"]').val(e.params.data.Price);
-                $('input[name="ProductType"]').val(e.params.data.ProductType); 
                 $('input[name="GoogleTaxonomyCode"]').val(e.params.data.GoogleTaxonomyCode);
                 $('#divAddOns').addClass('d-none');
                 $('#tbl-addOns tbody').empty();
                 $.getJSON('/Product/GetProductDishAddOns', { masterProductId: e.params.data.MasterId }, function (data) {
                     if (data != "") {
                         $.each(data, function (index, item) {
-                            var tableData = '<tr class="d-none type_' + item.AddOnType + '" data-code=' + item.Code + '> \
+                            var tableData = '<tr class="d-none type_' + item.AddOnType + '" data-code=' + item.Id + '> \
                                     <td>' + item.PortionName + '</td> \
                                     <td><input class="textbox-sm portion-price" type="number" value=' + item.PortionPrice + '></td> \
                                     <td>' + item.AddOnCategoryName + '</td> \
@@ -336,7 +332,7 @@
                                     <td><input class="textbox-sm crust-price" type="number" value=' + item.CrustPrice + '></td>\
                                     <td>' + item.MinSelectionLimit + '</td>\
                                     <td>' + item.MaxSelectionLimit + '</td>\
-                                    <td><input type="checkbox" class="chk-select chk_'+ item.AddOnType + '" value="true" name="IsActive" data-code=' + item.Code + '></td>\
+                                    <td><input type="checkbox" class="chk-select chk_'+ item.AddOnType + '" value="true" name="IsActive" data-code=' + item.Id + '></td>\
                                 </tr>';
 
                             $('#tbl-addOns tbody').append(tableData);
@@ -425,7 +421,7 @@
                 if ($(this).is(':checked') == true) {
                     addonDisableCheckbox();
                     let data = {
-                        Code: $(this).data('code'),
+                        Id: $(this).data('code'),
                         PortionPrice: parseFloat($tr.find('.portion-price').val()),
                         AddOnsPrice: parseFloat($tr.find('.addon-price').val()),
                         CrustPrice: parseFloat($tr.find('.crust-price').val()),
@@ -433,7 +429,7 @@
                     $.post('/Product/AddShopAddOns', { model: data }, function () { });
                 } else {
                     addonDisableCheckbox();
-                    $.post('/Product/RemoveFromShopAddOns', { code: code }, function () { });
+                    $.post('/Product/RemoveFromShopAddOns', { id: code }, function () { });
                 }
             });
 

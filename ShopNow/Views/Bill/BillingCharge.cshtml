@@ -30,7 +30,7 @@
                                                     <label class="col-form-label text-secondary font-weight-bold">Shop Name</label>
                                                 </div>
                                                 <div class="col-md-7">
-                                                    <select id="ShopCode" name="ShopCode" class="form-control"></select>
+                                                    <select id="ShopId" name="ShopId" class="form-control"></select>
                                                     <input type="hidden" name="ShopName" id="ShopName" />
                                                 </div>
                                             </div>
@@ -146,7 +146,7 @@
                                                 <div class="col-md-5 text-md-left">
                                                     <label class="col-form-label text-secondary font-weight-bold">Levy Convenience Charge for order below Rs.</label>
                                                     <label class="small text-secondary font-italic">( <span class="font-weight-bold font-italic">Note : </span>Current rate is <span class="text-theme_light font-weight-bold">Rs.@ViewBag.PlatformCreditRate</span> per order )</label>
-                                                    <input type="hidden" name="PlatformCreditRateCode" value="@ViewBag.PlatformCreditRateCode" />
+                                                    <input type="hidden" name="PlatformCreditRateId" value="@ViewBag.PlatformCreditRateId" />
                                                     <input type="hidden" name="PlatformCreditRate" value="@ViewBag.PlatformCreditRate" />
                                                 </div>
                                                 <div class="col-md-7">
@@ -267,7 +267,7 @@
                 var itemtype = $('input[type=radio][name=ItemType]:checked').val();
                 var isValidate = false;
                 var requiredArr = [
-                    'ShopCode',
+                    'ShopId',
                     'DeliveryChargeCustomer',
                     'ConvenientCharge'
                 ];
@@ -291,7 +291,7 @@
                     }
                 }
             });
-            $('#ShopCode').select2({
+            $('#ShopId').select2({
                 placeholder: "Search Shop",
                 ajax: {
                     url: "/Bill/GetBillShopSelect2",

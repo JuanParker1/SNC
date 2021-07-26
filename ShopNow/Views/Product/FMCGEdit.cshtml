@@ -1,4 +1,4 @@
-﻿@model ShopNow.ViewModels.FMCGCreateEditViewModel
+﻿@model ShopNow.ViewModels.FMCGEditViewModel
 @{
     ViewBag.Title = "FMCG Update";
 }
@@ -44,7 +44,6 @@
                                         <input type="hidden" name="MasterProductId" id="MasterProductId" value="@Model.MasterProductId" />
                                         <input type="hidden" name="Id" value="@Model.Id" />
                                         <input type="hidden" name="Name" value="@Model.Name" />
-                                        <input type="hidden" name="ProductType" value="@Model.ProductType" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Brand Name</strong></label>
@@ -55,17 +54,17 @@
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Category Name</strong></label>
                                         <input type="text" class="form-control" name="CategoryName" id="CategoryName" value="@Model.CategoryName" readonly />
-                                        <input type="hidden" name="CategoryId" id="CategoryId" value="@Model.CategoryId" />
+                                        <input type="hidden" name="CategoryIds" id="CategoryIds" value="@Model.CategoryIds" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Sub Category I Name</strong></label>
                                         <input type="text" class="form-control" name="SubCategoryName" id="SubCategoryName" value="@Model.SubCategoryName" readonly />
-                                        <input type="hidden" name="SubCategoryCode" id="SubCategoryCode" value="@Model.SubCategoryCode" />
+                                        <input type="hidden" name="SubCategoryIds" id="SubCategoryIds" value="@Model.SubCategoryIds" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Sub Category II Name</strong></label>
                                         <input type="text" class="form-control" name="NextSubCategoryName" id="NextSubCategoryName" value="@Model.NextSubCategoryName" readonly />
-                                        <input type="hidden" name="NextSubCategoryCode" id="NextSubCategoryCode" value="@Model.NextSubCategoryCode" />
+                                        <input type="hidden" name="NextSubCategoryIds" id="NextSubCategoryIds" value="@Model.NextSubCategoryIds" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="Price"><strong class="text-secondary">Menu Price</strong></label>
@@ -87,26 +86,26 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="Weight"><strong class="text-secondary">Weight</strong></label>
-                                        <input id="weight" type="number" class="form-control" name="weight" min="0" step="any" value="@Model.weight" />
+                                        <input id="Weight" type="number" class="form-control" name="Weight" min="0" step="any" value="@Model.Weight" readonly/>
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="SizeLB"><strong class="text-secondary">Size LB</strong></label>
-                                        <input id="SizeLB" type="text" class="form-control" name="SizeLB" min="0" value="@Model.SizeLB" />
+                                        <input id="SizeLB" type="text" class="form-control" name="SizeLB" min="0" value="@Model.SizeLB" readonly/>
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="MeasurementUnitCode"><strong class="text-secondary">Measurement Unit Name</strong></label>
-                                        <input type="hidden" name="MeasurementUnitCode" id="MeasurementUnitCode" value="@Model.MeasurementUnitCode" />
+                                        <input type="hidden" name="MeasurementUnitId" id="MeasurementUnitId" value="@Model.MeasurementUnitId" />
                                         <input type="text" class="form-control" name="MeasurementUnitName" id="MeasurementUnitName" value="@Model.MeasurementUnitName" readonly />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="PackageCode"><strong class="text-secondary">Package Name</strong></label>
-                                        <input type="hidden" name="PackageCode" id="PackageCode" value="@Model.PackageCode" />
+                                        <input type="hidden" name="PackageId" id="PackageId" value="@Model.PackageId" />
                                         <input type="text" class="form-control" name="PackageName" id="PackageName" value="@Model.PackageName" readonly />
                                     </div>
-                                    <div class="col-md-3">
+                                    @*<div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">ASIN / EAN</strong></label>
                                         <input id="ASIN" type="text" class="form-control" name="ASIN" value="@Model.ASIN" readonly />
-                                    </div>
+                                    </div>*@
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="GoogleTaxonomyCode"><strong class="text-secondary">Google Taxonomy Code</strong></label>
                                         <input id="GoogleTaxonomyCode" type="text" class="form-control" name="GoogleTaxonomyCode" value="@Model.GoogleTaxonomyCode" readonly />
@@ -115,15 +114,15 @@
                                         <label class="control-label" for="PackagingType"><strong class="text-secondary">Packing Type</strong></label>
                                         <div class="form-check-inline ml-3">
                                             <label class="form-check-label">
-                                                <input type="radio" class="form-check-input" name="PackagingType" value="0" @if (Model.PackagingType == 0) { <text> checked </text> }>Item Qty
+                                                <input type="radio" class="form-check-input" name="PackingType" value="0" @if (Model.PackingType == 0) { <text> checked </text> }>Item Qty
                                             </label>
                                         </div>
                                         <div class="form-check-inline">
                                             <label class="form-check-label">
-                                                <input type="radio" class="form-check-input" name="PackagingType" value="1" @if (Model.PackagingType == 1) { <text> checked </text> }>SKU
+                                                <input type="radio" class="form-check-input" name="PackingType" value="1" @if (Model.PackingType == 1) { <text> checked </text> }>SKU
                                             </label>
                                         </div>
-                                        <input type="number" class="form-control" name="PackagingCharge" id="PackagingCharge" value="@Model.PackagingCharge" />
+                                        <input type="number" class="form-control" name="PackingCharge" id="PackingCharge" value="@Model.PackingCharge" />
                                     </div>
                                 </div>
                             </div>
@@ -146,112 +145,22 @@
                                     <div class="col-md-4 form-group">
                                         <label class="control-label text-secondary font-weight-bold ml-2">FMCG Image</label>
                                         <img id="img-FMCGLargeImage1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge1" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                                        <input type="hidden" name="ImagePathLarge1" value="@Model.ImagePathLarge1" />
-                                        @*<div class="row">
-                                    <div class="col-md-12">
-                                        <div class="img-upload-container ml-2">
-                                            @if (Model.ImagePathLarge1 != null)
-                                            {
-                                                <img class="img-container w-100 h-100" id="img-FMCGLargeImage1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge1" onerror="this.onerror=null;this.src='/Images/No Photo.png'" />
-                                            }
-                                            else
-                                            {
-                                                <img class="img-container w-100 h-100" id="img-FMCGLargeImage1" />
-                                            }
-                                            <input type="file" id="FMCGLargeImage1" name="FMCGLargeImage1" class="d-none" />
-                                            <label for="FMCGLargeImage1" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePathLarge1" id="ImagePathLarge1" value="@Model.ImagePathLarge1" />
-                                        </div>
-                                    </div>
-                                </div>*@
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label class="control-label text-secondary font-weight-bold ml-2">FMCG Image-2</label>
                                         <img id="img-FMCGLargeImage2" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge2" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                                        <input type="hidden" name="ImagePathLarge2" value="@Model.ImagePathLarge2" />
-                                        @*<div class="row">
-                                    <div class="col-md-12">
-                                        <div class="img-upload-container ml-2">
-                                            @if (Model.ImagePathLarge2 != null)
-                                            {
-                                                <img class="img-container w-100 h-100" id="img-FMCGLargeImage2" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge2" onerror="this.onerror=null;this.src='/Images/No Photo.png'" />
-                                            }
-                                            else
-                                            {
-                                                <img class="img-container w-100 h-100" id="img-FMCGLargeImage2" />
-                                            }
-                                            <input type="file" id="FMCGLargeImage2" name="FMCGLargeImage2" class="d-none" />
-                                            <label for="FMCGLargeImage2" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePathLarge2" id="ImagePathLarge2" value="@Model.ImagePathLarge2" />
-                                        </div>
-                                    </div>
-                                </div>*@
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label class="control-label text-secondary font-weight-bold ml-2">FMCG Image-3</label>
-                                        <img id="img-FMCGLargeImage3" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge3" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                                        <input type="hidden" name="ImagePathLarge3" value="@Model.ImagePathLarge3" />
-                                        @*<div class="row">
-                                    <div class="col-md-12">
-                                        <div class="img-upload-container ml-2">
-                                            @if (Model.ImagePathLarge3 != null)
-                                            {
-                                                <img class="img-container w-100 h-100" id="img-FMCGLargeImage3" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge3" onerror="this.onerror=null;this.src='/Images/No Photo.png'" />
-                                            }
-                                            else
-                                            {
-                                                <img class="img-container w-100 h-100" id="img-FMCGLargeImage3" />
-                                            }
-                                            <input type="file" id="FMCGLargeImage3" name="FMCGLargeImage3" class="d-none" />
-                                            <label for="FMCGLargeImage3" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePathLarge3" id="ImagePathLarge3" value="@Model.ImagePathLarge3" />
-                                        </div>
-                                    </div>
-                                </div>*@
+                                        <img id="img-FMCGLargeImage3" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge3" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />                                     
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label class="control-label text-secondary font-weight-bold ml-2">FMCG Image-4</label>
                                         <img id="img-FMCGLargeImage4" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge4" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                                        <input type="hidden" name="ImagePathLarge4" value="@Model.ImagePathLarge4" />
-                                        @*<div class="row">
-                                    <div class="col-md-12">
-                                        <div class="img-upload-container ml-2">
-                                            @if (Model.ImagePathLarge4 != null)
-                                            {
-                                                <img class="img-container w-100 h-100" id="img-FMCGLargeImage4" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge4" onerror="this.onerror=null;this.src='/Images/No Photo.png'" />
-                                            }
-                                            else
-                                            {
-                                                <img class="img-container w-100 h-100" id="img-FMCGLargeImage4" />
-                                            }
-                                            <input type="file" id="FMCGLargeImage4" name="FMCGLargeImage4" class="d-none" />
-                                            <label for="FMCGLargeImage4" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePathLarge4" id="ImagePathLarge4" value="@Model.ImagePathLarge4" />
-                                        </div>
-                                    </div>
-                                </div>*@
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label class="control-label text-secondary font-weight-bold ml-2">FMCG Image-5</label>
                                         <img id="img-FMCGLargeImage5" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge5" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                                        <input type="hidden" name="ImagePathLarge5" value="@Model.ImagePathLarge5" />
-                                        @*<div class="row">
-                                    <div class="col-md-12">
-                                        <div class="img-upload-container ml-2">
-                                            @if (Model.ImagePathLarge5 != null)
-                                            {
-                                                <img class="img-container w-100 h-100" id="img-FMCGLargeImage5" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePathLarge5" onerror="this.onerror=null;this.src='/Images/No Photo.png'" />
-                                            }
-                                            else
-                                            {
-                                                <img class="img-container w-100 h-100" id="img-FMCGLargeImage5" />
-                                            }
-                                            <input type="file" id="FMCGLargeImage5" name="FMCGLargeImage5" class="d-none" />
-                                            <label for="FMCGLargeImage5" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePathLarge5" id="ImagePathLarge5" value="@Model.ImagePathLarge5" />
-                                        </div>
-                                    </div>
-                                </div>*@
                                     </div>
                                 </div>
                             </div>
@@ -270,15 +179,6 @@
 
 @section Scripts
 {
-    <!--Select2-->
-    <script src="~/Scripts/select2/js/select2.js"></script>
-    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
-    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
-    <!--Select2 End-->
-    <script src="~/Scripts/ValidateRequiredFields.js"></script>
-    <script src="~/Scripts/multiple-image-upload.js"></script>
-    <link href="~/Content/multiple-image-upload.css" rel="stylesheet" />
-    <script src="~/Scripts/ckeditor/ckeditor.js"></script>
     <script>
         $(document).ready(function () {
             $('#Price').on('change keyup', function () {

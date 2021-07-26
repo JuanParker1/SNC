@@ -1,4 +1,4 @@
-﻿@model ShopNow.ViewModels.ProductSpecificationCreateEditViewModel
+﻿@model ShopNow.ViewModels.ProductSpecificationEditViewModel
 @{
     /**/
 
@@ -26,15 +26,11 @@
                         <div class="form-group row">
                             <div class="col-md-4">
                                 <label class="col-form-label"><strong class="text-secondary">Master Product Name</strong></label>
-                                <select name="MasterProductCode" id="MasterProductCode" class="form-control">
-                                    <option value="@Model.MasterProductCode">@Model.MasterProductName</option>
+                                <select name="MasterProductId" id="MasterProductId" class="form-control">
+                                    <option value="@Model.MasterProductId">@Model.MasterProductName</option>
                                 </select>
                                 <input type="hidden" class="form-control" name="MasterProductName" id="MasterProductName" value="@Model.MasterProductName" />
-                                <input type="hidden" name="Code" value="@Model.Code" />
-                                <input type="hidden" name="CreatedBy" value="@Model.CreatedBy" />
-                                <input type="hidden" name="UpdatedBy" value="@Model.UpdatedBy" />
-                                <input type="hidden" name="DateEncoded" value="@Model.DateEncoded" />
-                                <input type="hidden" name="DateUpdated" value="@Model.DateUpdated" />
+                                <input type="hidden" name="Id" value="@Model.Id" />
                             </div>
                             <div class="col-md-4">
                                 <label class="col-form-label"><strong class="text-secondary">Specification Name</strong></label>

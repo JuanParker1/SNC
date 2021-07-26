@@ -1,5 +1,4 @@
-﻿@*@model ShopNow.ViewModels.PlatFormCreditRateListViewModel*@
-@model IEnumerable<ShopNow.ViewModels.PlatFormCreditRateListViewModel.PlatFormCreditRateList>
+﻿@model ShopNow.ViewModels.PlatFormCreditRateListViewModel
 @using GridMvc.Html
 @{
     ViewBag.Title = "PlatFormCreditRate";
@@ -15,12 +14,14 @@
         </div>
         <div class="col-md-2 col-sm-4 mb-2 data-search">
         </div>
+        @if (Model.Count == 0)
+        {
         <div class="col-md-7 text-right" id="Platform">
             <a data-toggle="modal" data-target="#createModal" href="createModal"><span class="fa fa-plus"></span> New PlatForm Credit Rate</a>
-            <input type="hidden" name="Count" id="Count" value="@ViewBag.Count" />
         </div>
+        }
     </div>
-    @Html.Grid(Model).Columns(columns =>
+    @Html.Grid(Model.List).Columns(columns =>
 {
  columns.Add(b => b.RatePerOrder).Titled("Rate Per Order").Filterable(true).SetWidth(10);
  columns.Add(b => b.DailyViewer).Titled("Daily Viewer").Filterable(true).SetWidth(10);
@@ -113,38 +114,7 @@
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
-            var count = $("#Count").val();
-            if (count >= 1) {
-                $("#Platform").addClass("d-none");
-            } else {
-                $("#Platform").removeClass("d-none");
-            }
-            var t = $('#PlatFormCreditRate-list').DataTable({
-                "dom": "<'row'<'col-sm-6'f>>" +
-                    "<'row'<'col-sm-5'i><'col-sm-3'l><'col-sm-4'p>>" +
-                    "<'row'<'col-sm-12'tr>>",
-                "bPaginate": false,
-                "scrollY": 400,
-                "paging": true,
-                "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "ALL"]],
-                "pageLength": -1,
-                initComplete: function (settings, json) {
-                    $('.index input').remove();
-                    $('.action-btn input').remove();
-                    $('.dataTables_filter input').appendTo('.data-search');
-                    $('.dataTables_filter label').remove();
-                    $('.data-search input').attr('placeholder', 'Quick Search');
-                    $('.data-search input').addClass('form-control');
-                    $('.data-search input').removeClass('form-control-sm');
-                },
-            });
-
-            t.on('order.dt search.dt', function () {
-                t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
-                    cell.innerHTML = i + 1;
-                });
-            }).draw();
-
+            
             $('#Create').on('click', function () {
                 var ratePerOrder = $('#RatePerOrder').val();
                 var dailyViewer = $('#DailyViewer').val();

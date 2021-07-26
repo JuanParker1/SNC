@@ -29,7 +29,7 @@ columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(20);
 columns.Add(c => c.ProductTypeName).Titled("Product Type").Filterable(true).SetWidth(20);
 columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
 columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(c => @<div><a href="" data-id="@c.Id" data-name="@c.Name" data-producttypeid="@c.ProductTypeId" data-producttypename="@c.ProductTypeName" data-orderno="@c.OrderNo" class="btn-sm btn-warning edit-prompt" data-toggle="modal" data-target="#editModal" style="padding: 3px 26px">Edit</a> <a href="" data-id="@c.Id" class="btn-sm btn-danger delete-prompt" data-toggle="modal" data-target="#deleteModal" style="padding: 3px 18px">Delete</a></div>);
-    }).WithPaging(20).Sortable(true)
+            }).WithPaging(20).Sortable(true)
 </div>
 
 <div class="modal fade" id="deleteModal" role="dialog" aria-labelledby="myModalLabel">
@@ -70,14 +70,14 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
                     <div class="col-md-6">
                         <label class="col-form-label"><strong class="text-secondary">Item Type</strong></label>
                         <select name="ProductType" class="form-control" id="ProductTypeId">
-                            <option value="0">Select</option>
-                            <option value="4">Product</option>
-                            <option value="1">Dish</option>
-                            <option value="5">Service</option>
-                            <option value="3">Medical</option>
-                            <option value="2">FMCG</option>
+                            @*<option value="0">Select</option>
+                                <option value="4">Product</option>
+                                <option value="1">Dish</option>
+                                <option value="5">Service</option>
+                                <option value="3">Medical</option>
+                                <option value="2">FMCG</option>*@
                         </select>
-                        <input type="hidden" id="ProductTypeName" name="ProductTypeName"/>
+                        <input type="hidden" id="ProductTypeName" name="ProductTypeName" />
                     </div>
                     <div class="col-md-6">
                         <label class="col-form-label font-weight-bold text-secondary">Adscore</label>
@@ -111,11 +111,11 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
                         <label class="col-form-label font-weight-bold text-secondary">Item Type</label>
                         <select name="ProductType" class="form-control" id="edit-ProductTypeId">
                             <option value="0">Select</option>
-                            <option value="4">Product</option>
-                            <option value="1">Dish</option>
-                            <option value="3">Medical</option>
-                            <option value="2">FMCG</option>
-                            <option value="5">Service</option>
+                                <option value="4">Product</option>
+                                <option value="1">Dish</option>
+                                <option value="3">Medical</option>
+                                <option value="2">FMCG</option>
+                                <option value="5">Service</option>
                         </select>
                         <input type="hidden" id="edit-ProductTypeName" name="ProductTypeName" />
                     </div>
@@ -136,15 +136,41 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
     <script src="~/Scripts/ValidateRequiredFields.js"></script>
     <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
-            $('#ProductTypeId').on('change', function () {
-                let selectedType = $(this).find("option:selected").text();
-                $('[name="ProductTypeName"]').val(selectedType);
+            //$('#ProductTypeId').on('change', function () {
+            //    let selectedType = $(this).find("option:selected").text();
+            //    $('[name="ProductTypeName"]').val(selectedType);
+            //});
+            //$('#edit-ProductTypeId').on('change', function () {
+            //    let selectedType = $(this).find("option:selected").text();
+            //    $('#edit-ProductTypeName').val(selectedType);
+            //});
+            $('#ProductTypeId').select2({
+                placeholder: "Search Type",
+                width: '100%',
+                ajax: {
+                    url: "/ProductType/GetSelect2List",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ProductTypeName"]').val(e.params.data.text);
             });
-            $('#edit-ProductTypeId').on('change', function () {
-                let selectedType = $(this).find("option:selected").text();
-                $('#edit-ProductTypeName').val(selectedType);
+
+            $('#edit-ProductTypeId').select2({
+                placeholder: "Search Type",
+                width: '100%',
+                ajax: {
+                    url: "/ProductType/GetSelect2List",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('#edit-ProductTypeName').val(e.params.data.text);
             });
 
             $('#Create').on('click', function () {
@@ -185,7 +211,7 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
             $("table").on('click', '.edit-prompt', function () {
                 $("#CategoryId").val($(this).attr('data-id'));
                 $("#edit-Name").val($(this).attr('data-name'));
-                $('#edit-ProductTypeId').val($(this).attr('data-producttypeid'));
+                $('#edit-ProductTypeId').val($(this).attr('data-producttypeid')).trigger('change');
                 $('#edit-ProductTypeName').val($(this).attr('data-producttypename'));
                 $('#edit-OrderNo').val($(this).attr('data-orderno'));
             });
