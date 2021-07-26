@@ -442,6 +442,9 @@
     <Compile Include="Models\GetTableVAlueString_Result.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\LocationDetail.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\MarketingAgent.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>

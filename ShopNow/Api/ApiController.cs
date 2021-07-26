@@ -4060,10 +4060,10 @@ namespace ShopNow.Controllers
 
         public JsonResult GetLocationDetails(double sourceLatitude, double sourceLongitude, double destinationLatitude, double destinationLongitude)
         {
-            bool isAvailable = db.LocationDetails.Any(i => i.SourceLatitude == sourceLatitude && i.SourceLontitude == sourceLongitude && i.DestinationLatitude == destinationLatitude && i.DestinationLontitude == destinationLongitude);
+            bool isAvailable = db.LocationDetails.Any(i => i.SourceLatitude == sourceLatitude && i.SourceLongitude == sourceLongitude && i.DestinationLatitude == destinationLatitude && i.DestinationLongitude == destinationLongitude);
             if (isAvailable)
             {
-                var location = db.LocationDetails.FirstOrDefault(i => i.SourceLatitude == sourceLatitude && i.SourceLontitude == sourceLongitude && i.DestinationLatitude == destinationLatitude && i.DestinationLontitude == destinationLongitude);
+                var location = db.LocationDetails.FirstOrDefault(i => i.SourceLatitude == sourceLatitude && i.SourceLongitude == sourceLongitude && i.DestinationLatitude == destinationLatitude && i.DestinationLongitude == destinationLongitude);
                 return Json(location, JsonRequestBehavior.AllowGet);
             }
             return Json(isAvailable, JsonRequestBehavior.AllowGet);

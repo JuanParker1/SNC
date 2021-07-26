@@ -342,6 +342,26 @@
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="LocationDetails">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="SourceLatitude" />
+            <PropertyRef Name="SourceLongitude" />
+            <PropertyRef Name="DestinationLatitude" />
+            <PropertyRef Name="DestinationLongitude" />
+            <PropertyRef Name="Distance" />
+            <PropertyRef Name="Duration" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="SourceLatitude" Type="float" Nullable="false" />
+          <Property Name="SourceLongitude" Type="float" Nullable="false" />
+          <Property Name="DestinationLatitude" Type="float" Nullable="false" />
+          <Property Name="DestinationLongitude" Type="float" Nullable="false" />
+          <Property Name="Distance" Type="float" Nullable="false" />
+          <Property Name="Duration" Type="float" Nullable="false" />
+        </EntityType>
         <EntityType Name="MarketingAgents">
           <Key>
             <PropertyRef Name="Id" />
@@ -1428,6 +1448,17 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <EntitySet Name="Staffs" EntityType="Self.Staffs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SubCategories" EntityType="Self.SubCategories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserEnquiries" EntityType="Self.UserEnquiries" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LocationDetails" EntityType="Self.LocationDetails" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [LocationDetails].[Id] AS [Id], 
+    [LocationDetails].[SourceLatitude] AS [SourceLatitude], 
+    [LocationDetails].[SourceLongitude] AS [SourceLongitude], 
+    [LocationDetails].[DestinationLatitude] AS [DestinationLatitude], 
+    [LocationDetails].[DestinationLongitude] AS [DestinationLongitude], 
+    [LocationDetails].[Distance] AS [Distance], 
+    [LocationDetails].[Duration] AS [Duration]
+    FROM [dbo].[LocationDetails] AS [LocationDetails]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_Banners_Payments" Association="Self.FK_Banners_Payments">
             <End Role="Payments" EntitySet="Payments" />
             <End Role="Banners" EntitySet="Banners" />
@@ -2572,6 +2603,24 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="LocationDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="SourceLatitude" />
+            <PropertyRef Name="SourceLongitude" />
+            <PropertyRef Name="DestinationLatitude" />
+            <PropertyRef Name="DestinationLongitude" />
+            <PropertyRef Name="Distance" />
+            <PropertyRef Name="Duration" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="SourceLatitude" Type="Double" Nullable="false" />
+          <Property Name="SourceLongitude" Type="Double" Nullable="false" />
+          <Property Name="DestinationLatitude" Type="Double" Nullable="false" />
+          <Property Name="DestinationLongitude" Type="Double" Nullable="false" />
+          <Property Name="Distance" Type="Double" Nullable="false" />
+          <Property Name="Duration" Type="Double" Nullable="false" />
+        </EntityType>
         <Association Name="FK_Banners_Payments">
           <End Role="Payments" Type="Self.Payment" Multiplicity="1" />
           <End Role="Banners" Type="Self.Banner" Multiplicity="*" />
@@ -2848,7 +2897,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="ShopnowchatEntities1" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="sncEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AccessPolicies" EntityType="Self.AccessPolicy" />
           <EntitySet Name="AddOnCategories" EntityType="Self.AddOnCategory" />
           <EntitySet Name="Admins" EntityType="Self.Admin" />
@@ -2893,6 +2942,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <EntitySet Name="Staffs" EntityType="Self.Staff" />
           <EntitySet Name="SubCategories" EntityType="Self.SubCategory" />
           <EntitySet Name="UserEnquiries" EntityType="Self.UserEnquiry" />
+          <EntitySet Name="LocationDetails" EntityType="Self.LocationDetail" />
           <AssociationSet Name="FK_Banners_Payments" Association="Self.FK_Banners_Payments">
             <End Role="Payments" EntitySet="Payments" />
             <End Role="Banners" EntitySet="Banners" />
@@ -3078,7 +3128,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="sncModelStoreContainer" CdmEntityContainer="ShopnowchatEntities1">
+        <EntityContainerMapping StorageEntityContainer="sncModelStoreContainer" CdmEntityContainer="sncEntities">
           <EntitySetMapping Name="AccessPolicies">
             <EntityTypeMapping TypeName="sncModel.AccessPolicy">
               <MappingFragment StoreEntitySet="AccessPolicies">
@@ -4117,6 +4167,19 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
                 <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
                 <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LocationDetails">
+            <EntityTypeMapping TypeName="sncModel.LocationDetail">
+              <MappingFragment StoreEntitySet="LocationDetails">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="SourceLatitude" ColumnName="SourceLatitude" />
+                <ScalarProperty Name="SourceLongitude" ColumnName="SourceLongitude" />
+                <ScalarProperty Name="DestinationLatitude" ColumnName="DestinationLatitude" />
+                <ScalarProperty Name="DestinationLongitude" ColumnName="DestinationLongitude" />
+                <ScalarProperty Name="Distance" ColumnName="Distance" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
