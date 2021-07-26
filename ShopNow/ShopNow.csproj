@@ -545,6 +545,7 @@
     <Compile Include="ViewModels\DeliveryBoyViewModel.cs" />
     <Compile Include="ViewModels\DiscountCategoryViewModel.cs" />
     <Compile Include="ViewModels\DrugCompoundDetailViewModel.cs" />
+    <Compile Include="ViewModels\LocationDetailsViewModels.cs" />
     <Compile Include="ViewModels\MeasurementUnitViewModel.cs" />
     <Compile Include="ViewModels\MarketingAgentViewModel.cs" />
     <Compile Include="ViewModels\MasterProductViewModel.cs" />
