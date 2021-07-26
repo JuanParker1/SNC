@@ -515,33 +515,36 @@ namespace ShopNow.Controllers
             if (prod.Customisation == true)
             {
                 List<ShopAddOnSessionEditViewModel> shopAddOns = Session["ShopAddOnsEdit"] as List<ShopAddOnSessionEditViewModel> ?? new List<ShopAddOnSessionEditViewModel>();
-                foreach (var item in shopAddOns)
+                if (shopAddOns.Count() > 0)
                 {
-                    var shopDishAddon = db.ShopDishAddOns.FirstOrDefault(i => i.Id == item.Id);
-                    if (shopDishAddon != null)
+                    foreach (var item in shopAddOns)
                     {
-                        shopDishAddon.AddOnsPrice = item.AddOnsPrice;
-                        shopDishAddon.PortionPrice = item.PortionPrice;
-                        shopDishAddon.CrustPrice = item.CrustPrice;
-                        shopDishAddon.IsActive = item.IsActive;
-                        db.Entry(shopDishAddon).State = EntityState.Modified;
-                        db.SaveChanges();
-                    }
-                    else
-                    {
-                        var productDishAddon = db.ProductDishAddOns.FirstOrDefault(i => i.Id == item.Id);
-                        var shopdishAddOn = _mapper.Map<ProductDishAddOn, ShopDishAddOn>(productDishAddon);
-                        shopdishAddOn.PortionPrice = item.PortionPrice;
-                        shopdishAddOn.AddOnsPrice = item.AddOnsPrice;
-                        shopdishAddOn.CrustPrice = item.CrustPrice;
-                        shopdishAddOn.IsActive = true;
-                        shopdishAddOn.ProductId = prod.Id;
-                        shopdishAddOn.ProductName = prod.Name;
-                        shopdishAddOn.ShopId = prod.ShopId;
-                        shopdishAddOn.ShopName = prod.ShopName;
-                        shopdishAddOn.ProductDishAddonId = productDishAddon.Id;
-                        db.ShopDishAddOns.Add(shopdishAddOn);
-                        db.SaveChanges();
+                        var shopDishAddon = db.ShopDishAddOns.FirstOrDefault(i => i.Id == item.Id);
+                        if (shopDishAddon != null)
+                        {
+                            shopDishAddon.AddOnsPrice = item.AddOnsPrice;
+                            shopDishAddon.PortionPrice = item.PortionPrice;
+                            shopDishAddon.CrustPrice = item.CrustPrice;
+                            shopDishAddon.IsActive = item.IsActive;
+                            db.Entry(shopDishAddon).State = EntityState.Modified;
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            var productDishAddon = db.ProductDishAddOns.FirstOrDefault(i => i.Id == item.Id);
+                            var shopdishAddOn = _mapper.Map<ProductDishAddOn, ShopDishAddOn>(productDishAddon);
+                            shopdishAddOn.PortionPrice = item.PortionPrice;
+                            shopdishAddOn.AddOnsPrice = item.AddOnsPrice;
+                            shopdishAddOn.CrustPrice = item.CrustPrice;
+                            shopdishAddOn.IsActive = true;
+                            shopdishAddOn.ProductId = prod.Id;
+                            shopdishAddOn.ProductName = prod.Name;
+                            shopdishAddOn.ShopId = prod.ShopId;
+                            shopdishAddOn.ShopName = prod.ShopName;
+                            shopdishAddOn.ProductDishAddonId = productDishAddon.Id;
+                            db.ShopDishAddOns.Add(shopdishAddOn);
+                            db.SaveChanges();
+                        }
                     }
                 }
             }
@@ -555,6 +558,15 @@ namespace ShopNow.Controllers
                     db.Entry(shopDishAddon).State = EntityState.Modified;
                     db.SaveChanges();
                 }
+            }
+
+            //check addons Inactive and make customisation false
+            var hasShopDishAddons = db.ShopDishAddOns.Any(i => i.ProductId == prod.Id && i.IsActive == true);
+            if (!hasShopDishAddons)
+            {
+                prod.Customisation = false;
+                db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
             }
             Session["ShopAddOnsEdit"] = null;
             return RedirectToAction("FoodList", "Product",new { ShopId = prod.ShopId,ShopName = prod.ShopName });

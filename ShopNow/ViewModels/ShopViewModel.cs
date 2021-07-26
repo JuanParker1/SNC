@@ -724,32 +724,8 @@ namespace ShopNow.ViewModels
         public double Rating { get; set; }
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
-        public List<AddOnsList> AddOnsLists { get; set; }
         public List<ProductList> ProductLists { get; set; }
         public List<CategoryList> CategoryLists { get; set; }
-        //public List<DrugCompundDetailList> DrugLists { get; set; }
-        public class AddOnsList
-        {
-            public int Id { get; set; }
-            public string Name { get; set; }
-            public int ProductId { get; set; }
-            public string ProductName { get; set; }
-            public int ShopId { get; set; }
-            public string ShopName { get; set; }
-            public int AddOnCategoryId { get; set; }
-            public string AddOnCategoryName { get; set; }
-            public int PortionId { get; set; }
-            public string PortionName { get; set; }
-            public int MinSelectionLimit { get; set; }
-            public int MaxSelectionLimit { get; set; }
-            public string CrustName { get; set; }
-            public double PortionPrice { get; set; }
-            public double AddOnsPrice { get; set; }
-            public double CrustPrice { get; set; }
-            public int Status { get; set; }
-            public int AddOnType { get; set; }
-
-        }
         public class CategoryList
         {
             public string Id { get; set; }
@@ -767,28 +743,7 @@ namespace ShopNow.ViewModels
             public double Price { get; set; }
             public string ImagePath { get; set; }
             public int Status { get; set; }
-
-            public List<AddOnsList> AddOnLists { get; set; }
-            public class AddOnsList
-            {
-                public string Code { get; set; }
-                public string Name { get; set; }
-               // public string ProductCode { get; set; }
-                public string ProductName { get; set; }
-                //public string ShopCode { get; set; }
-                public string ShopName { get; set; }
-                public string AddOnCategoryCode { get; set; }
-                public string AddOnCategoryName { get; set; }
-                public string PortionCode { get; set; }
-                public string PortionName { get; set; }
-                public int MinSelectionLimit { get; set; }
-                public int MaxSelectionLimit { get; set; }
-                public string CrustName { get; set; }
-                public double PortionPrice { get; set; }
-                public double AddOnsPrice { get; set; }
-                public double CrustPrice { get; set; }
-                public int Status { get; set; }
-            }
+            public bool Customisation { get; set; }
         }
         public class DrugCompundDetailList
         {
