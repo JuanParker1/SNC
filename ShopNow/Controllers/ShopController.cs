@@ -128,185 +128,153 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var customer = db.Customers.FirstOrDefault(i => i.Id == user.Id);
             var shop = _mapper.Map<ShopRegisterViewModel, Shop>(model);
-            shop.Status = 1;
+            
             var custom = db.Customers.FirstOrDefault(i => i.Id == shop.CustomerId);
             if (custom != null)
             {
                 shop.CustomerId = custom.Id;
                 shop.CustomerName = custom.Name;
-                custom.Position = custom.Position;
-                custom.DateUpdated = DateTime.Now;
-                db.Entry(custom).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                //Customer.Edit(custom, out errorCode);
             }
+            shop.Status = 1;
             shop.CreatedBy = user.Name;
             shop.UpdatedBy = user.Name;
-
-
             shop.DateEncoded = DateTime.Now;
             shop.DateUpdated = DateTime.Now;
-            db.Shops.Add(shop);
-            db.SaveChanges();
-           // shop.Code = Shop.Add(shop, out errorCode);
-
-            Admin admin = new Admin();
-            admin.Status = 0;
-            admin.DateEncoded = DateTime.Now;
-            admin.DateUpdated = DateTime.Now;
-            db.Admins.Add(admin);
-            db.SaveChanges();
-            //Admin.Add(admin, out errorCode);
+           
             //Image
-
             try
             {
-                var ShopImg = db.Shops.FirstOrDefault(i => i.Id == shop.Id); // Shop.Get(shop.Code);
                 // Shop Image
                 if (model.ShopImage != null)
                 {
                     uc.UploadFiles(model.ShopImage.InputStream, shop.Id + "_" + model.ShopImage.FileName, accesskey, secretkey, "image");
-                    ShopImg.ImagePath = shop.Id + "_" + model.ShopImage.FileName.Replace(" ", "");
+                    shop.ImagePath = shop.Id + "_" + model.ShopImage.FileName.Replace(" ", "");
                 }
 
                 // Logo Image
                 if (model.LogoImage != null)
                 {
                     uc.UploadFiles(model.LogoImage.InputStream, shop.Id + "_" + model.LogoImage.FileName, accesskey, secretkey, "image");
-                    ShopImg.ImageLogoPath = shop.Id + "_" + model.LogoImage.FileName.Replace(" ", "");
+                    shop.ImageLogoPath = shop.Id + "_" + model.LogoImage.FileName.Replace(" ", "");
                 }
-
-                // Banner Image // clarify
-                //if (model.BannerImage != null)
-                //{
-                //    uc.UploadFiles(model.BannerImage.InputStream, shop.id + "_" + model.BannerImage.FileName, accesskey, secretkey, "image");
-                //    ShopImg.im = shop.Id + "_" + model.BannerImage.FileName.Replace(" ", "");
-                //}
-
+                
                 // Pan Image
-               
                 if (model.PanImage != null)
                 {
                     uc.UploadFiles(model.PanImage.InputStream, shop.Id + "_" + model.PanImage.FileName, accesskey, secretkey, "image");
-                    ShopImg.ImagePanPath = shop.Id + "_" + model.PanImage.FileName.Replace(" ", "");
+                    shop.ImagePanPath = shop.Id + "_" + model.PanImage.FileName.Replace(" ", "");
                 }
 
                 if (model.PanPdf != null)
                 {
                     uc.UploadFiles(model.PanPdf.InputStream, shop.Id + "_" + model.PanPdf.FileName, accesskey, secretkey, "pdf");
-                    ShopImg.ImagePanPath = shop.Id + "_" + model.PanPdf.FileName.Replace(" ", "");
+                    shop.ImagePanPath = shop.Id + "_" + model.PanPdf.FileName.Replace(" ", "");
                 }
 
                 // GSTIN Image
-
                 if (model.GSTINImage != null)
                 {
                     uc.UploadFiles(model.GSTINImage.InputStream, shop.Id + "_" + model.GSTINImage.FileName, accesskey, secretkey, "image");
-                    ShopImg.ImageGSTINPath = shop.Id + "_" + model.GSTINImage.FileName.Replace(" ", "");
+                    shop.ImageGSTINPath = shop.Id + "_" + model.GSTINImage.FileName.Replace(" ", "");
                 }
 
                 if (model.GSTINPdf != null)
                 {
                     uc.UploadFiles(model.GSTINPdf.InputStream, shop.Id + "_" + model.GSTINPdf.FileName, accesskey, secretkey, "pdf");
-                    ShopImg.ImageGSTINPath = shop.Id + "_" + model.GSTINPdf.FileName.Replace(" ", "");
+                    shop.ImageGSTINPath = shop.Id + "_" + model.GSTINPdf.FileName.Replace(" ", "");
                 }
 
-               
                 // Account Image
-
                 if (model.AccountImage != null)
                 {
                     uc.UploadFiles(model.AccountImage.InputStream, shop.Id + "_" + model.AccountImage.FileName, accesskey, secretkey, "image");
-                    ShopImg.ImageAccountPath = shop.Id + "_" + model.AccountImage.FileName.Replace(" ", "");
+                    shop.ImageAccountPath = shop.Id + "_" + model.AccountImage.FileName.Replace(" ", "");
                 }
 
                 if (model.AccountPdf != null)
                 {
                     uc.UploadFiles(model.AccountPdf.InputStream, shop.Id + "_" + model.AccountPdf.FileName, accesskey, secretkey, "pdf");
-                    ShopImg.ImageAccountPath = shop.Id + "_" + model.AccountPdf.FileName.Replace(" ", "");
+                    shop.ImageAccountPath = shop.Id + "_" + model.AccountPdf.FileName.Replace(" ", "");
                 }
 
                 // FSSAI Image
-
                 if (model.FSSAIImage != null)
                 {
                     uc.UploadFiles(model.FSSAIImage.InputStream, shop.Id + "_" + model.FSSAIImage.FileName, accesskey, secretkey, "image");
-                    ShopImg.ImageFSSAIPath = shop.Id + "_" + model.FSSAIImage.FileName.Replace(" ", "");
+                    shop.ImageFSSAIPath = shop.Id + "_" + model.FSSAIImage.FileName.Replace(" ", "");
                 }
 
                 if (model.FSSAIPdf != null)
                 {
                     uc.UploadFiles(model.FSSAIPdf.InputStream, shop.Id + "_" + model.FSSAIPdf.FileName, accesskey, secretkey, "pdf");
-                    ShopImg.ImageFSSAIPath = shop.Id + "_" + model.FSSAIPdf.FileName.Replace(" ", "");
+                    shop.ImageFSSAIPath = shop.Id + "_" + model.FSSAIPdf.FileName.Replace(" ", "");
                 }
 
                 // Drug Image
-
                 if (model.DrugImage != null)
                 {
                     uc.UploadFiles(model.DrugImage.InputStream, shop.Id + "_" + model.DrugImage.FileName, accesskey, secretkey, "image");
-                    ShopImg.ImageDrugPath = shop.Id + "_" + model.DrugImage.FileName.Replace(" ", "");
+                    shop.ImageDrugPath = shop.Id + "_" + model.DrugImage.FileName.Replace(" ", "");
                 }
                 if (model.DrugPdf != null)
                 {
                     uc.UploadFiles(model.DrugPdf.InputStream, shop.Id + "_" + model.DrugPdf.FileName, accesskey, secretkey, "pdf");
-                    ShopImg.ImageDrugPath = shop.Id + "_" + model.DrugPdf.FileName.Replace(" ", "");
+                    shop.ImageDrugPath = shop.Id + "_" + model.DrugPdf.FileName.Replace(" ", "");
                 }
                 
                 // Establish Image
-
                 if (model.EstablishImage != null)
                 {
                     uc.UploadFiles(model.EstablishImage.InputStream, shop.Id + "_" + model.EstablishImage.FileName, accesskey, secretkey, "image");
-                    ShopImg.ImageEstablishPath = shop.Id + "_" + model.EstablishImage.FileName.Replace(" ", "");
+                    shop.ImageEstablishPath = shop.Id + "_" + model.EstablishImage.FileName.Replace(" ", "");
                 }
 
                 if (model.EstablishPdf != null)
                 {
                     uc.UploadFiles(model.EstablishPdf.InputStream, shop.Id + "_" + model.EstablishPdf.FileName, accesskey, secretkey, "pdf");
-                    ShopImg.ImageEstablishPath = shop.Id + "_" + model.EstablishPdf.FileName.Replace(" ", "");
+                    shop.ImageEstablishPath = shop.Id + "_" + model.EstablishPdf.FileName.Replace(" ", "");
                 }
 
                 // Other License Image
-
                 if (model.OtherLicenseImage != null)
                 {
                     uc.UploadFiles(model.OtherLicenseImage.InputStream, shop.Id + "_" + model.OtherLicenseImage.FileName, accesskey, secretkey, "image");
-                    ShopImg.ImageOtherLicensePath = shop.Id + "_" + model.OtherLicenseImage.FileName.Replace(" ", "");
+                    shop.ImageOtherLicensePath = shop.Id + "_" + model.OtherLicenseImage.FileName.Replace(" ", "");
                 }
                 if (model.OtherLicensePdf != null)
                 {
                     uc.UploadFiles(model.OtherLicensePdf.InputStream, shop.Id + "_" + model.OtherLicensePdf.FileName, accesskey, secretkey, "pdf");
-                    ShopImg.ImageOtherLicensePath = shop.Id + "_" + model.OtherLicensePdf.FileName.Replace(" ", "");
+                    shop.ImageOtherLicensePath = shop.Id + "_" + model.OtherLicensePdf.FileName.Replace(" ", "");
                 }
                 
                 // Authorised Distributor Image
                 if (model.AuthorisedDistributorImage != null)
                 {
                     uc.UploadFiles(model.AuthorisedDistributorImage.InputStream, shop.Id + "_" + model.AuthorisedDistributorImage.FileName, accesskey, secretkey, "image");
-                    ShopImg.ImageAuthoriseBrandPath = shop.Id + "_" + model.AuthorisedDistributorImage.FileName.Replace(" ", "");
+                    shop.ImageAuthoriseBrandPath = shop.Id + "_" + model.AuthorisedDistributorImage.FileName.Replace(" ", "");
                 }
                 if (model.AuthorisedDistributorPdf != null)
                 {
                     uc.UploadFiles(model.AuthorisedDistributorPdf.InputStream, shop.Id + "_" + model.AuthorisedDistributorPdf.FileName, accesskey, secretkey, "pdf");
-                    ShopImg.ImageAuthoriseBrandPath = shop.Id + "_" + model.AuthorisedDistributorPdf.FileName.Replace(" ", "");
+                    shop.ImageAuthoriseBrandPath = shop.Id + "_" + model.AuthorisedDistributorPdf.FileName.Replace(" ", "");
                 }
                 
                 // Aadhar Image
                 if (model.AadharImage != null)
                 {
                     uc.UploadFiles(model.AadharImage.InputStream, shop.Id + "_" + model.AadharImage.FileName, accesskey, secretkey, "image");
-                    ShopImg.ImageAadharPath = shop.Id + "_" + model.AadharImage.FileName.Replace(" ", "");
+                    shop.ImageAadharPath = shop.Id + "_" + model.AadharImage.FileName.Replace(" ", "");
                 }
 
                 if (model.AadharPdf != null)
                 {
                     uc.UploadFiles(model.AadharPdf.InputStream, shop.Id + "_" + model.AadharPdf.FileName, accesskey, secretkey, "pdf");
-                    ShopImg.ImageAadharPath = shop.Id + "_" + model.AadharPdf.FileName.Replace(" ", "");
+                    shop.ImageAadharPath = shop.Id + "_" + model.AadharPdf.FileName.Replace(" ", "");
                 }
-                db.Entry(ShopImg).State = System.Data.Entity.EntityState.Modified;
+                db.Shops.Add(shop);
                 db.SaveChanges();
-               // Shop.Edit(ShopImg, out int error);
+
                 return RedirectToAction("InActiveList", "Shop");
             }
             catch (AmazonS3Exception amazonS3Exception)
@@ -335,8 +303,8 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             if (dCode==0)
                 return HttpNotFound();
-            var shop = db.Shops.FirstOrDefault(i => i.Id == dCode); // Shop.Get(dCode);
-            var customer = db.Customers.FirstOrDefault(i => i.Id == shop.CustomerId); // Customer.Get(shop.CustomerCode);
+            var shop = db.Shops.FirstOrDefault(i => i.Id == dCode);
+            var customer = db.Customers.FirstOrDefault(i => i.Id == shop.CustomerId);
             ViewBag.count = db.Products.Where(i => i.ShopId == dCode).Count();
             var model = _mapper.Map<Shop, ShopEditViewModel>(shop);
             if (model.Password == null)
@@ -344,13 +312,13 @@ namespace ShopNow.Controllers
                 model.Password = customer.Password;
             }
             var otp = new OtpVerification();
-            if (model.ManualPhoneNumber != null)
+            if (model.PhoneNumber != null)
             {
-                otp = db.OtpVerifications.FirstOrDefault(i => i.PhoneNumber == model.ManualPhoneNumber & i.Verify == true) ?? (OtpVerification)null;
+                otp = db.OtpVerifications.FirstOrDefault(i => i.PhoneNumber == model.PhoneNumber && i.Verify == true) ?? (OtpVerification)null;
             }
             else
             {
-                otp = db.OtpVerifications.FirstOrDefault(i => i.PhoneNumber == model.OwnerPhoneNumber & i.Verify == false) ?? (OtpVerification)null;
+                otp = db.OtpVerifications.FirstOrDefault(i => i.PhoneNumber == model.OwnerPhoneNumber && i.Verify == false) ?? (OtpVerification)null;
             }
             if (otp != null)
             {
@@ -369,6 +337,14 @@ namespace ShopNow.Controllers
                 if (model.ImageAccountPath != null) { count++; }
                 model.Count = count;
             }
+            var verifyPhoneNumber = db.OtpVerifications.FirstOrDefault(i=> i.PhoneNumber == model.PhoneNumber && i.Verify == true);
+            if(verifyPhoneNumber != null){
+                model.PhoneVerify = true;
+            }
+            else
+            {
+                model.PhoneVerify = false;
+            }
             var bill = db.Bills.Where(i => i.ShopId == shop.Id && i.NameOfBill == 0 && i.Status == 0).FirstOrDefault();
             if (bill != null)
                 model.Type = bill.Type;
@@ -382,7 +358,7 @@ namespace ShopNow.Controllers
         public ActionResult Edit(ShopEditViewModel model)
         {
             var shop = db.Shops.FirstOrDefault(i => i.Id == model.Id); 
-            model.DateUpdated = DateTime.Now;
+            shop.DateUpdated = DateTime.Now;
             _mapper.Map(model, shop);
 
             try
@@ -401,15 +377,7 @@ namespace ShopNow.Controllers
                     shop.ImageLogoPath = shop.Id + "_" + model.LogoImage.FileName.Replace(" ", "");
                 }
 
-                // Banner Image //clarify
-                //if (model.BannerImage != null)
-                //{
-                //    uc.UploadFiles(model.BannerImage.InputStream, shop.Id + "_" + model.BannerImage.FileName, accesskey, secretkey, "image");
-                //    shop.ImageBannerPath = shop.Id + "_" + model.BannerImage.FileName.Replace(" ", "");
-                //}
-
                 // Pan Image
-
                 if (model.PanImage != null)
                 {
                     uc.UploadFiles(model.PanImage.InputStream, shop.Id + "_" + model.PanImage.FileName, accesskey, secretkey, "image");
@@ -423,7 +391,6 @@ namespace ShopNow.Controllers
                 }
 
                 // GSTIN Image
-
                 if (model.GSTINImage != null)
                 {
                     uc.UploadFiles(model.GSTINImage.InputStream, shop.Id + "_" + model.GSTINImage.FileName, accesskey, secretkey, "image");
@@ -436,9 +403,7 @@ namespace ShopNow.Controllers
                     shop.ImageGSTINPath = shop.Id + "_" + model.GSTINPdf.FileName.Replace(" ", "");
                 }
 
-
                 // Account Image
-
                 if (model.AccountImage != null)
                 {
                     uc.UploadFiles(model.AccountImage.InputStream, shop.Id + "_" + model.AccountImage.FileName, accesskey, secretkey, "image");
@@ -452,7 +417,6 @@ namespace ShopNow.Controllers
                 }
 
                 // FSSAI Image
-
                 if (model.FSSAIImage != null)
                 {
                     uc.UploadFiles(model.FSSAIImage.InputStream, shop.Id + "_" + model.FSSAIImage.FileName, accesskey, secretkey, "image");
@@ -466,7 +430,6 @@ namespace ShopNow.Controllers
                 }
 
                 // Drug Image
-
                 if (model.DrugImage != null)
                 {
                     uc.UploadFiles(model.DrugImage.InputStream, shop.Id + "_" + model.DrugImage.FileName, accesskey, secretkey, "image");
@@ -479,7 +442,6 @@ namespace ShopNow.Controllers
                 }
 
                 // Establish Image
-
                 if (model.EstablishImage != null)
                 {
                     uc.UploadFiles(model.EstablishImage.InputStream, shop.Id + "_" + model.EstablishImage.FileName, accesskey, secretkey, "image");
@@ -493,7 +455,6 @@ namespace ShopNow.Controllers
                 }
 
                 // Other License Image
-
                 if (model.OtherLicenseImage != null)
                 {
                     uc.UploadFiles(model.OtherLicenseImage.InputStream, shop.Id + "_" + model.OtherLicenseImage.FileName, accesskey, secretkey, "image");
@@ -606,7 +567,7 @@ namespace ShopNow.Controllers
             var dCode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            Shop sh = db.Shops.FirstOrDefault(i => i.Id == dCode); // Shop.Get(dCode);
+            Shop sh = db.Shops.FirstOrDefault(i => i.Id == dCode);
             var model = new ShopEditViewModel();
             _mapper.Map(sh, model);
             return View(model);
@@ -617,7 +578,7 @@ namespace ShopNow.Controllers
         {
             var dCode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var shop = db.Shops.FirstOrDefault(i => i.Id == dCode); // Shop.Get(dCode);
+            var shop = db.Shops.FirstOrDefault(i => i.Id == dCode);
             shop.Status = 2;
             shop.DateUpdated = DateTime.Now;
             shop.UpdatedBy = user.Name;
@@ -630,7 +591,7 @@ namespace ShopNow.Controllers
         public ActionResult InActive(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var shop = db.Shops.FirstOrDefault(i => i.Id == Id); // Shop.Get(code);
+            var shop = db.Shops.FirstOrDefault(i => i.Id == Id);
             shop.Status = 1;
             shop.DateUpdated = DateTime.Now;
             shop.UpdatedBy = user.Name;
@@ -643,7 +604,7 @@ namespace ShopNow.Controllers
         public ActionResult Active(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var shop = db.Shops.FirstOrDefault(i => i.Id == id);  //Shop.Get(code);
+            var shop = db.Shops.FirstOrDefault(i => i.Id == id);
             shop.Status = 0;
             shop.DateUpdated = DateTime.Now;
             shop.UpdatedBy = user.Name;
@@ -656,7 +617,7 @@ namespace ShopNow.Controllers
         public ActionResult Activate(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var shop = db.Shops.FirstOrDefault(i => i.Id == id); // Shop.Get(code);
+            var shop = db.Shops.FirstOrDefault(i => i.Id == id);
             shop.Status = 0;
             shop.DateUpdated = DateTime.Now;
             shop.UpdatedBy = user.Name;
@@ -680,14 +641,13 @@ namespace ShopNow.Controllers
         public ActionResult AssignFranchise(ShopFranchiseViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId); // Shop.Get(model.ShopCode);
+            var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
             if (shop != null)
             {
                 shop.MarketingAgentId= model.MarketingAgentId;
                 shop.MarketingAgentName = model.MarketingAgentName;
                 db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                //Shop.Edit(shop, out int error);
             }
 
             return RedirectToAction("AssignedFranchiseList");
@@ -699,7 +659,7 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new ShopFranchiseViewModel();
-            model.List = db.Shops.Where(i => i.Status == 0 && i.MarketingAgentId != null && i.MarketingAgentName != null)
+            model.List = db.Shops.Where(i => i.Status == 0 && i.MarketingAgentId != 0 && i.MarketingAgentName != null)
                 .Select(i => new ShopFranchiseViewModel.FranchiseList
                 {
                     Name = i.Name,
@@ -717,7 +677,7 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new ShopFranchiseViewModel();
-            var shop = db.Shops.FirstOrDefault(i => i.Id == dCode); // Shop.Get(dCode);
+            var shop = db.Shops.FirstOrDefault(i => i.Id == dCode);
             _mapper.Map(shop, model);
             if (shop != null)
             {
@@ -733,7 +693,7 @@ namespace ShopNow.Controllers
         public ActionResult FranchiseUpdate(ShopFranchiseViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId); // Shop.Get(model.ShopCode);
+            var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
             if (shop != null)
             {
                 shop.MarketingAgentId = model.MarketingAgentId;
@@ -742,7 +702,6 @@ namespace ShopNow.Controllers
                 shop.DateUpdated = DateTime.Now;
                 db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-               // Shop.Edit(shop, out int error);
             }
 
             return RedirectToAction("AssignedFranchiseList");
@@ -753,14 +712,13 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             bool IsAdded = false;
-            var shop = db.Shops.FirstOrDefault(i => i.Id == id); // Shop.Get(code);
+            var shop = db.Shops.FirstOrDefault(i => i.Id == id);
             if (shop != null)
             {
                 shop.MarketingAgentId = 0;
                 shop.MarketingAgentName = null;
                 db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                //Shop.Edit(shop, out int error);
                 IsAdded = true;
             }
             return Json(new { IsAdded = IsAdded }, JsonRequestBehavior.AllowGet);
@@ -772,10 +730,9 @@ namespace ShopNow.Controllers
         public JsonResult GenerateOTP(string MobileNo, int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            //int errorCode = 0;
             var model = new OtpViewModel();
-            var customer = db.Customers.FirstOrDefault(i => i.PhoneNumber == MobileNo); // Customer.GetPhoneNumber(MobileNo);
-            var shop = db.Shops.FirstOrDefault(i => i.Id == id); // Shop.Get(Code);
+            var customer = db.Customers.FirstOrDefault(i => i.PhoneNumber == MobileNo);
+            var shop = db.Shops.FirstOrDefault(i => i.Id == id);
             var models = _mapper.Map<OtpViewModel, OtpVerification>(model);
             if (customer != null)
             {
@@ -793,7 +750,6 @@ namespace ShopNow.Controllers
                 models.DateUpdated = DateTime.Now;
                 db.OtpVerifications.Add(models);
                 db.SaveChanges();
-               // OtpVerification.Add(models, out errorCode);
             }
             else
             {
@@ -807,9 +763,8 @@ namespace ShopNow.Controllers
         public JsonResult OTPGenerate(string MobileNo, int Customerid)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            //int errorCode = 0;
             var model = new OtpViewModel();
-            var customer = db.Customers.FirstOrDefault(i => i.Id == Customerid); // Customer.Get(CustomerCode);
+            var customer = db.Customers.FirstOrDefault(i => i.Id == Customerid);
             var models = _mapper.Map<OtpViewModel, OtpVerification>(model);
             if (customer != null)
             {
@@ -827,7 +782,6 @@ namespace ShopNow.Controllers
 
                 string joyra = "04448134440";
                 string Msg = "Hi, " + models.Otp + " is the OTP for (Shop Now Chat) Verification at " + time + " with " + models.ReferenceCode + " reference - Joyra";
-                //string Msg = "ShopNowChat[#] " + models.Otp + " is the verification OTP " + time + " time " + date + " date " + models.ReferenceCode + " reference";
 
                 string result = SendSMS.execute(joyra, MobileNo, Msg);
                 models.Status = 0;
@@ -835,7 +789,6 @@ namespace ShopNow.Controllers
                 models.DateUpdated = DateTime.Now;
                 db.OtpVerifications.Add(models);
                 db.SaveChanges();
-              //  OtpVerification.Add(models, out errorCode);
 
             }
             return Json(new { data = models.Otp, models.Verify, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
@@ -855,7 +808,6 @@ namespace ShopNow.Controllers
                 otpverification.UpdatedBy = user.Name;
                 db.Entry(otpverification).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                // OtpVerification.Edit(otpverification, out int error);
             }
 
             return Json(new { data, otp = Otp, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
@@ -866,7 +818,7 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             SmtpClient client = new SmtpClient();
-            var customer = db.Customers.FirstOrDefault(i => i.Id == id); // Customer.Get(code);
+            var customer = db.Customers.FirstOrDefault(i => i.Id == id);
             customer.Password = _generatedPassword;
             customer.Position = 1;
             customer.DateUpdated = DateTime.Now;
@@ -885,18 +837,18 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNSHPOV011")]
-        public JsonResult VerifyOTP(int code, string phoneNumber)
+        public JsonResult VerifyOTP(int Id, string phoneNumber)
         {
             bool Verify = false;
             var otp = "";
             int otpcode;
-            var otpverification = db.OtpVerifications.Where(i => i.ShopId == code && i.PhoneNumber == phoneNumber).OrderByDescending(i => i.DateEncoded).ToList();
+            var otpverification = db.OtpVerifications.Where(i => i.ShopId == Id && i.PhoneNumber == phoneNumber).OrderByDescending(i => i.DateEncoded).ToList();
             if (otpverification.Count != 0)
             {
                 otpcode = otpverification[0].Id;
                 var otpverify = (from o in db.OtpVerifications
                                  where o.Id == otpcode
-                                 select o).FirstOrDefault(); //db.OtpVerifications.Where(i => i.Code == otpverification.FirstOrDefault().Code).FirstOrDefault(); // OtpVerification.Get(otpverification.FirstOrDefault().Code);
+                                 select o).FirstOrDefault();
                 if (otpverify != null && otpverify.Verify == true)
                 {
                     Verify = true;
@@ -923,7 +875,7 @@ namespace ShopNow.Controllers
         public JsonResult VerifyImage(int code)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var shop = db.Shops.FirstOrDefault(i => i.Id == code); // Shop.Get(code);
+            var shop = db.Shops.FirstOrDefault(i => i.Id == code);
             shop.Verify = true;
             shop.DateUpdated = DateTime.Now;
             shop.UpdatedBy = user.Name;
@@ -939,15 +891,15 @@ namespace ShopNow.Controllers
             bool code = false;
             var PhoneNumber = "";
             var CustomerName = "";
-            int CustomerCode = 0;
             var AadharName = "";
             var AadharNumber = "";
             var Email = "";
-            var customer = db.Customers.FirstOrDefault(i => i.PhoneNumber == phoneNumber); // Customer.GetPhoneNumber(customerCode);
+            int CustomerId = 0;
+            var customer = db.Customers.FirstOrDefault(i => i.PhoneNumber == phoneNumber);
             if (customer != null)
             {
                 code = true;
-                CustomerCode = customer.Id;
+                CustomerId = customer.Id;
                 CustomerName = customer.Name;
                 PhoneNumber = customer.PhoneNumber;
                 AadharName = customer.AadharName;
@@ -955,7 +907,7 @@ namespace ShopNow.Controllers
                 Email = customer.Email;
             }
 
-            return Json(new { data = code, CustomerCode, CustomerName, PhoneNumber, AadharName, AadharNumber, Email, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+            return Json(new { data = code, CustomerId, CustomerName, PhoneNumber, AadharName, AadharNumber, Email, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
         // Select2
@@ -1009,7 +961,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNSHPAF015")]
         public async Task<JsonResult> GetShopSelect2(string q = "")
         {
-            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.MarketingAgentId == null && a.MarketingAgentName == null).Select(i => new
+            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.MarketingAgentName == null).Select(i => new
             {
                 id = i.Id,
                 text = i.Name
