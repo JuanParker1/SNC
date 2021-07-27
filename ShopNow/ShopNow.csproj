@@ -435,11 +435,29 @@
     <Compile Include="Models\DrugCompoundDetail.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\GetDeliveryBoy.cs" />
-    <Compile Include="Models\GetDEliveryBoyList_Result.cs">
+    <Compile Include="Models\getCategoryListbyShopcode.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\GetTableVAlueString_Result.cs">
+    <Compile Include="Models\GetDeliveryBoy.cs" />
+    <Compile Include="Models\GetProductList.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetProductListCount.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetShopCategoryList.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetShopCategoryProductCount.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetShopCategoryProducts.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetShopCategoryProductsList.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LocationDetail.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\MarketingAgent.cs">
@@ -499,6 +517,9 @@
     <Compile Include="Models\ProductType.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ReatillerPaymentReportAdmin.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\RefundsData.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
@@ -545,6 +566,7 @@
     <Compile Include="ViewModels\DeliveryBoyViewModel.cs" />
     <Compile Include="ViewModels\DiscountCategoryViewModel.cs" />
     <Compile Include="ViewModels\DrugCompoundDetailViewModel.cs" />
+    <Compile Include="ViewModels\LocationDetailsViewModels.cs" />
     <Compile Include="ViewModels\MeasurementUnitViewModel.cs" />
     <Compile Include="ViewModels\MarketingAgentViewModel.cs" />
     <Compile Include="ViewModels\MasterProductViewModel.cs" />

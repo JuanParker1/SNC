@@ -8,7 +8,7 @@ namespace ShopNow.Helpers
 {
     public class CommonHelpers
     {
-        private static ShopnowchatEntities db = new ShopnowchatEntities();
+        private static sncEntities db = new sncEntities();
 
         public static string GetMasterProductName(int code)
         {

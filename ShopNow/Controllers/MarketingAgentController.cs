@@ -19,7 +19,7 @@ namespace ShopNow.Controllers
 {
     public class MarketingAgentController : Controller
     {
-        private ShopnowchatEntities _db = new ShopnowchatEntities();
+        private sncEntities _db = new sncEntities();
         UploadContent uc = new UploadContent();
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;

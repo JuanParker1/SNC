@@ -17,7 +17,7 @@ namespace ShopNow.Controllers
 {
     public class WebApiController : Controller
     {
-        private ShopnowchatEntities db = new ShopnowchatEntities();
+        private sncEntities db = new sncEntities();
         
         private static string _generatedCode(string _prefix)
         {

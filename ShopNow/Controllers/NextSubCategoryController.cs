@@ -14,7 +14,7 @@ namespace ShopNow.Controllers
 {
     public class NextSubCategoryController : Controller
     {
-        private ShopnowchatEntities db = new ShopnowchatEntities();
+        private sncEntities db = new sncEntities();
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
         public NextSubCategoryController()

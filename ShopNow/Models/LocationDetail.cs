@@ -10,9 +10,16 @@
 namespace ShopNow.Models
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class GetTableVAlueString_Result
+    public partial class LocationDetail
     {
-        public string Name { get; set; }
+        public int Id { get; set; }
+        public double SourceLatitude { get; set; }
+        public double SourceLongitude { get; set; }
+        public double DestinationLatitude { get; set; }
+        public double DestinationLongitude { get; set; }
+        public double Distance { get; set; }
+        public double Duration { get; set; }
     }
 }

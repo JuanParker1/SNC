@@ -33,7 +33,7 @@ namespace ShopNow.Models
 
         //Default Methods
 
-        private static ShopnowchatEntities _db = new ShopnowchatEntities();
+        private static sncEntities _db = new sncEntities();
 
         public static CustomerReview Get(int id)
         {

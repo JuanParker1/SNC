@@ -14,7 +14,7 @@ namespace ShopNow.Controllers
 {
     public class CartController : Controller
     {
-        private ShopnowchatEntities db = new ShopnowchatEntities();
+        private sncEntities db = new sncEntities();
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
         private static string _generatedDelivaryId
@@ -355,6 +355,8 @@ namespace ShopNow.Controllers
                     model.isAssign = deliveryBoy.isAssign;
                     model.OnWork = deliveryBoy.OnWork;
                 }
+                model.Latitude = cart.Latitude;
+                model.Longtitude = cart.Longitude;
             }
             model.List = db.OrderItems.Where(i => i.OrdeNumber == orderno && i.Status == 0).Select(i => new CartListViewModel.CartList
             {
@@ -985,18 +987,10 @@ namespace ShopNow.Controllers
                 delivary.DateUpdated = DateTime.Now;
                 db.Entry(delivary).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-
-
-                //var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == cart.OrderNumber);
-                //detail.CustomerId = delivary.CustomerId;
-                //detail.CustomerName = delivary.CustomerName;
-                //detail.DeliveryBoyId = delivary.Id;
-                //detail.DeliveryBoyName = delivary.Name;
-                //detail.Status = 4;
-                //detail.UpdatedBy = user.Name;
-                //detail.DateUpdated = DateTime.Now;
-                //db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
-                //db.SaveChanges();
+                var fcmToken = (from c in db.Customers
+                                where c.Id == delivary.CustomerId
+                                select c.FcmTocken ?? "").FirstOrDefault().ToString();
+                Helpers.PushNotification.SendbydeviceId("You have received new order. Accept Soon", "ShopNowChat", "a.mp3", fcmToken.ToString());
                 return RedirectToAction("List");
             }
             else
@@ -1456,10 +1450,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNCARAC011")]
-        public JsonResult Accept(int orderNo, int customerId)
+        public JsonResult Accept(int orderNo)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-            if (orderNo != 0 && customerId != 0)
+            if (orderNo != 0)
             {
                 var order = db.Orders.FirstOrDefault(i => i.OrderNumber == orderNo);
                 order.Status = 3;
@@ -1468,21 +1462,11 @@ namespace ShopNow.Controllers
                 db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
-                //var topup = db.TopUps.OrderByDescending(q => q.Id).FirstOrDefault(i => i.CustomerCode == customerId && i.CreditType == 0 && i.Status == 0);//TopUp.GetCustomerPlatform(customerCode);
-                //if (topup != null)
-                //{
-                //    var list = db.PlatFormCreditRates.Where(i => i.Status == 0).ToList();
-                //    topup.CreditAmount = topup.CreditAmount - list.FirstOrDefault().RatePerOrder;
-                //    topup.DateUpdated = DateTime.Now;
-                //    db.Entry(topup).State = System.Data.Entity.EntityState.Modified;
-                //    db.SaveChanges();
-                //}
-
-                //var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
-                //detail.OrderStatus = 3;
-                //detail.DateUpdated = DateTime.Now;
-                //db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
-                //db.SaveChanges();
+                //Customer
+                var fcmToken = (from c in db.Customers
+                                where c.Id == order.CustomerId
+                                select c.FcmTocken ?? "").FirstOrDefault().ToString();
+                Helpers.PushNotification.SendbydeviceId("You order has been accepted by shop.", "ShopNowChat", "a.mp3", fcmToken.ToString());
 
                 return Json(new { message = "Order Confirmed!" }, JsonRequestBehavior.AllowGet);
             }
@@ -1526,12 +1510,16 @@ namespace ShopNow.Controllers
                 db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
-                // update Shopcharge cartstatus 7
-                //var sc = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
-                //sc.OrderStatus = 7;
-                //sc.DateUpdated = DateTime.Now;
-                //db.Entry(sc).State = System.Data.Entity.EntityState.Modified;
-                //db.SaveChanges();
+                var fcmToken = (from c in db.Customers
+                                where c.Id == order.CustomerId
+                                select c.FcmTocken ?? "").FirstOrDefault().ToString();
+                //order cancel
+                Helpers.PushNotification.SendbydeviceId("Shop has rejected your order. Kindly contact shop for details or try another order.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+
+                //Refund notification
+                if (payment.PaymentMode == "Online Payment")
+                    Helpers.PushNotification.SendbydeviceId($"Your refund of amount {payment.Amount} for order no {payment.OrderNumber} is for {payment.RefundRemark} initiated and you will get credited with in 7 working days.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+
                 return Json(new { message = "Order Cancelled!" }, JsonRequestBehavior.AllowGet);
             }
             else
@@ -1600,19 +1588,7 @@ namespace ShopNow.Controllers
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
         }
-
-        // Cart GetCart(string code)
-        //{
-        //    try
-        //    {
-
-        //        return db.Carts.Where(i => i.Code == code).FirstOrDefault();
-        //    }
-        //    catch
-        //    {
-        //        return (Cart)null;
-        //    }
-        //}
+        
 
         public ActionResult UnAssignDeliveryBoy(int orderNo)
         {
@@ -1634,7 +1610,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("DeliveryAgentAssigned");
         }
 
-        public ActionResult AddRefundFromShopOrderProcessing(int id, double amount, string remark)
+        public ActionResult AddRefundFromShopOrderProcessing(int id, double amount, string remark, int redirection = 0)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
 
@@ -1648,7 +1624,26 @@ namespace ShopNow.Controllers
             db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
-            return RedirectToAction("OrderPrepared");
+            var fcmToken = (from c in db.Customers
+                            where c.Id == order.CustomerId
+                            select c.FcmTocken ?? "").FirstOrDefault().ToString();
+            if (payment.PaymentMode == "Online Payment")
+                Helpers.PushNotification.SendbydeviceId($"Your refund of amount {payment.RefundAmount} for order no {payment.OrderNumber} is for {payment.RefundRemark} initiated and you will get credited with in 7 working days.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+            else
+                Helpers.PushNotification.SendbydeviceId($"Your order is reduced with {payment.RefundAmount} amount for {payment.RefundRemark}", "ShopNowChat", "a.mp3", fcmToken.ToString());
+
+            if (redirection == 0)
+                return RedirectToAction("Pending");
+            else if (redirection == 1)
+                return RedirectToAction("OrderPrepared");
+            else if (redirection == 2)
+                return RedirectToAction("DeliveryAgentAssigned");
+            else if (redirection == 3)
+                return RedirectToAction("WaitingForPickup");
+            else if (redirection == 4)
+                return RedirectToAction("OntheWay");
+            else
+                return RedirectToAction("Delivered");
         }
 
         public ActionResult DeliveryBoyAccept(int orderNo, int id)
@@ -1695,18 +1690,12 @@ namespace ShopNow.Controllers
                 db.Entry(product).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
-
-            //var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
-            //detail.OrderStatus = 5;
-            //detail.DateUpdated = DateTime.Now;
-            //db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
-            //db.SaveChanges();
+            
 
             var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == orderNo);
             if (payment.PaymentMode == "Online Payment" && payment.Amount > 1000)
             {
                 var otpVerification = new OtpVerification();
-               //otpVerification.Code = Helpers.DRC.Generate("SMS");
                 otpVerification.ShopId = order.ShopId;
                 otpVerification.Id = user.Id;
                 otpVerification.CustomerName = user.Name;
@@ -1721,6 +1710,10 @@ namespace ShopNow.Controllers
                 db.OtpVerifications.Add(otpVerification);
                 db.SaveChanges();
             }
+            var fcmToken = (from c in db.Customers
+                            where c.Id == order.CustomerId
+                            select c.FcmTocken ?? "").FirstOrDefault().ToString();
+            Helpers.PushNotification.SendbydeviceId("You order is on the way.", "ShopNowChat", "a.mp3", fcmToken.ToString());
             return RedirectToAction("Edit", "Cart", new { orderno = orderNo, id = id });
         }
 
@@ -1739,11 +1732,14 @@ namespace ShopNow.Controllers
             db.Entry(delivaryBoy).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
-            otpVerify.Verify = true;
-            otpVerify.UpdatedBy = user.Name;
-            otpVerify.DateUpdated = DateTime.Now;
-            db.Entry(otpVerify).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
+            if (otpVerify != null)
+            {
+                otpVerify.Verify = true;
+                otpVerify.UpdatedBy = user.Name;
+                otpVerify.DateUpdated = DateTime.Now;
+                db.Entry(otpVerify).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
 
 
             order.Status = 6;
@@ -1752,12 +1748,10 @@ namespace ShopNow.Controllers
             db.Entry(order).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
-            //var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
-            //detail.OrderStatus = 6;
-            //detail.DateUpdated = DateTime.Now;
-            //db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
-            //db.SaveChanges();
-
+            var fcmToken = (from c in db.Customers
+                            where c.Id == order.CustomerId
+                            select c.FcmTocken ?? "").FirstOrDefault().ToString();
+            Helpers.PushNotification.SendbydeviceId("You order has been delivered.", "ShopNowChat", "a.mp3", fcmToken.ToString());
             return RedirectToAction("Edit", "Cart", new { orderno = orderNo, id = id });
         }
 

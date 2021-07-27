@@ -22,7 +22,7 @@ namespace ShopNow.Controllers
 
     public class DeliveryBoyController : Controller
     {
-        private ShopnowchatEntities db = new ShopnowchatEntities();
+        private sncEntities db = new sncEntities();
         UploadContent uc = new UploadContent();
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;

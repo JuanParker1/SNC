@@ -29,7 +29,7 @@ namespace ShopNow.Controllers
     public class ApiController : Controller
     {
         
-        private ShopnowchatEntities db = new ShopnowchatEntities();
+        private sncEntities db = new sncEntities();
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
         private string apipath= "https://admin.shopnowchat.in/";
@@ -105,44 +105,6 @@ namespace ShopNow.Controllers
 
         }
 
-        public static String SendNotificationFromFirebaseCloud(string key, string title,string body)
-        {
-            var serverKey = string.Format("key={0}", "AAAASx4c4GY:APA91bEYyUEFT9F1XhO44epVtF0Mxq2SNbqIZUSQ3Xroov65JF9TzH7v9TghwG4JiWVa8HgqJVJnfklHIqhFuCQfW9T8b8TzrOOMYJd9eh2H1HcJFg06Vnjqz0aJk1tCSSuUL9BeUrsD");
-            var result = "-1";
-            var webAddr = "https://fcm.googleapis.com/fcm/send";
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create(webAddr);
-            httpWebRequest.ContentType = "application/json";
-            httpWebRequest.Headers.Add(HttpRequestHeader.Authorization, serverKey);
-            httpWebRequest.Method = "POST";
-            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
-            {
-                string strNJson = @"{
-                    ""to"": ""cKxMgjNfjR4:APA91bHLw_jaHPk7bJW7ScG4ZKj6IbZ8bdX09bJqXpYNhDsdobhyWDw8dV_ZV63JExoVanzpB_ctkzhr341J3G1Ohj66gu4_0ntzLRCDKN6O5HMNgRJkLAcVJYiO3XbpDkCGkbV1rGNt"",
-  ""notification"": {
-                    ""title"": title,
-    ""text"": body,
-""sound"":""default""
-  }
-            }
-            ";
-                string not_title, not_body;
-                not_title = title;
-                not_body = body;
-                string strNJsonn = @"{{'to':'{0}','notification':{{'title':'{1}','text':'{2}','sound': 'default'}}}}";
-
-                strNJsonn = string.Format(strNJsonn, key, not_title, not_body);
-
-                streamWriter.Write(strNJson);
-                streamWriter.Flush();
-            }
-
-            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-            {
-                result = streamReader.ReadToEnd();
-            }
-            return result;
-        }
         public JsonResult NotifyAsync()
         {
            // SendNotificationFromFirebaseCloud();
@@ -1217,7 +1179,7 @@ namespace ShopNow.Controllers
                                     join s in db.Shops on c.Id equals s.CustomerId
                                     where s.Id == model.ShopId
                                     select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                    Helpers.PushNotification.SendbydeviceId("You have a new Order", "ShopNowChat", "../../assets/a.mp3", fcmToken.ToString());
+                    Helpers.PushNotification.SendbydeviceId("You have received new order.Accept Soon", "ShopNowChat", "a.mp3", fcmToken.ToString());
                     return Json(new { message = "Successfully Added to Cart!", Details = order });
 
                 }
@@ -1250,26 +1212,25 @@ namespace ShopNow.Controllers
                     db.SaveChanges();
                 }
                 //Refund
-                var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == order.OrderNumber);
-                if (payment.PaymentMode == "Online Payment")
+                if (status == 7)
                 {
-                    payment.RefundAmount = payment.Amount;
-                    payment.RefundRemark = "Your order has been cancelled by shop.";
-                    payment.UpdatedBy = customer.Name;
-                    payment.DateUpdated = DateTime.Now;
-                    db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
+                    var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == order.OrderNumber);
+                    if (payment.PaymentMode == "Online Payment")
+                    {
+                        payment.RefundAmount = payment.Amount;
+                        payment.RefundRemark = "Your order has been cancelled by shop.";
+                        payment.UpdatedBy = customer.Name;
+                        payment.DateUpdated = DateTime.Now;
+                        db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                        
+                        var fcmToken = (from c in db.Customers
+                                        where c.Id == order.CustomerId
+                                        select c.FcmTocken ?? "").FirstOrDefault().ToString();
+                        Helpers.PushNotification.SendbydeviceId($"Your refund of amount {payment.Amount} for order no {payment.OrderNumber} is for {payment.RefundRemark} initiated and you will get credited with in 7 working days.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+                    }
                 }
-
-                if (status == 6)
-                {
-                    //Reducing Platformcredits
-                    var shop = db.Shops.FirstOrDefault(i => i.Id == order.ShopId);
-                    var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
-                    shopCredits.DeliveryCredit -= payment.DelivaryCharge;
-                    db.Entry(shopCredits).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-                }
+               
                 return Json(new { message = "Successfully Updated the Order!" }, JsonRequestBehavior.AllowGet);
             }
             else
@@ -1586,11 +1547,6 @@ namespace ShopNow.Controllers
                     db.Entry(product).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }
-                //var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
-                //detail.Status = 5;
-                //detail.DateUpdated = DateTime.Now;
-                //db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
-                //db.SaveChanges();
 
                 if (PaymentMode == "Online Payment" && Amount > 1000)
                 {
@@ -1611,6 +1567,10 @@ namespace ShopNow.Controllers
                     db.SaveChanges();
                 }
 
+                var fcmToken = (from c in db.Customers
+                                where c.Id == order.CustomerId
+                                select c.FcmTocken ?? "").FirstOrDefault().ToString();
+                Helpers.PushNotification.SendbydeviceId("You order is on the way.", "ShopNowChat", "a.mp3", fcmToken.ToString());
                 return Json(new { message = "Successfully DelivaryBoy PickUp!" }, JsonRequestBehavior.AllowGet);
             }
             else
@@ -1693,11 +1653,19 @@ namespace ShopNow.Controllers
             db.Entry(order).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
-            //var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
-            //detail.OrderStatus = 6;
-            //detail.DateUpdated = DateTime.Now;
-            //db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
-            //db.SaveChanges();
+            //Reducing Platformcredits
+            var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == orderNo);
+            var shop = db.Shops.FirstOrDefault(i => i.Id == order.ShopId);
+            var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
+            shopCredits.DeliveryCredit -= payment.DelivaryCharge;
+            db.Entry(shopCredits).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+
+            var fcmToken = (from c in db.Customers
+                            where c.Id == order.CustomerId
+                            select c.FcmTocken ?? "").FirstOrDefault().ToString();
+            Helpers.PushNotification.SendbydeviceId("You order has been delivered.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+
             return Json(new { message = "Successfully DelivaryBoy Delivered!" }, JsonRequestBehavior.AllowGet);
         }
 
@@ -2264,6 +2232,80 @@ namespace ShopNow.Controllers
             return Json(new { message = "Your Todays OTP is: " + otpmodel.Otp }, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetShopDetailsNew(int id, string categoryId, string str = "")
+        {
+
+            var shop = db.Shops.FirstOrDefault(i => i.Id == id);
+            //shop.Code = ss[0].Code;
+            //shop.Address = ss[0].Address;
+            //shop.CustomerReview = ss[0].CustomerReview;
+            //shop.Rating = ss[0].Rating;
+            //shop.PhoneNumber = ss[0].PhoneNumber;
+            //shop.Name = ss[0].Name;
+            //shop.ShopCategoryCode = ss[0].ShopCategoryCode;
+
+            ShopDetails model = _mapper.Map<Shop, ShopDetails>(shop);
+            var rate = db.CustomerReviews.Where(j => j.ShopId == shop.Id).ToList();
+            var reviewCount = db.CustomerReviews.Where(j => j.ShopId == shop.Id).Count();
+            if (reviewCount > 0)
+                model.Rating = rate.Sum(l => l.Rating) / reviewCount;
+            else
+                reviewCount = 0;
+            model.CustomerReview = reviewCount;
+
+            model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryCode as Code, CategoryName as Name from Products p join Categories c on c.Code = p.CategoryCode where shopid ={id}  and c.Status = 0 and CategoryCode is not null and CategoryName is not null group by CategoryCode,CategoryName order by Name").ToList<ShopDetails.CategoryList>();
+
+            if (shop.ShopCategoryId == 0)
+            {
+                model.ProductLists = (from pl in db.Products
+                                      join m in db.MasterProducts on pl.MasterProductId equals m.Id
+                                      where pl.ShopId == id && pl.Status == 0 && (categoryId != "" ? m.CategoryIds == categoryId : true)
+                                      select new ShopDetails.ProductList
+                                      {
+                                          Id = pl.Id,
+                                          Name = m.Name,
+                                          ShopId = pl.ShopId,
+                                          ShopName = pl.ShopName,
+                                          CategoryIds = m.CategoryIds,
+                                          CategoryName = m.CategoryName,
+                                          ColorCode = m.ColorCode,
+                                          Price = pl.Price,
+                                          ImagePath = ((!string.IsNullOrEmpty(m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                                          Status = pl.Status,
+                                          Customisation = pl.Customisation
+                                      }).Where(i => str != "" ? i.Name.ToLower().Contains(str) : true).ToList();
+
+            }
+            else if (shop.ShopCategoryId == 1)
+            {
+                model.ProductLists = (from pl in db.Products
+                                      join m in db.MasterProducts on pl.MasterProductId equals m.Id
+                                      where pl.ShopId == id && pl.Status == 0 && m.Name.ToLower().Contains(str) && (categoryId != "" ? m.CategoryIds == categoryId : true)
+                                      select new ShopDetails.ProductList
+                                      {
+                                          Id = pl.Id,
+                                          Name = m.Name,
+                                          ShopId = pl.ShopId,
+                                          ShopName = pl.ShopName,
+                                          CategoryIds = m.CategoryIds,
+                                          CategoryName = m.CategoryName,
+                                          ColorCode = m.ColorCode,
+                                          Price = pl.Price,
+                                          ImagePath = ((!string.IsNullOrEmpty(m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                                          Status = pl.Status,
+                                          Customisation = pl.Customisation
+                                      }).ToList();
+
+            }
+            return new JsonResult()
+            {
+                ContentType = "application/json",
+                Data = model,
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+                MaxJsonLength = int.MaxValue
+            };
+        }
+
 
         public JsonResult GetShopDetails(int id, int categoryId, string str = "")
         {
@@ -2322,33 +2364,7 @@ namespace ShopNow.Controllers
                                           Status = pl.Status
 
                                       }).Where(i => str != "" ? i.Name.ToLower().Contains(str) : true).ToList();
-
                 
-                model.AddOnsLists = db.Products.Where(i=>i.Status ==0)
-               .Join(db.ShopDishAddOns, p => p.Id, d => d.ProductId, (p, d) => new { p, d })
-                           .AsEnumerable()
-                           .Where(i => i.p.ShopId == id && i.p.Status == 0 && i.d.IsActive == true)
-                           .Select(i => new ShopDetails.AddOnsList
-                           {
-                               Id = i.d.Id,
-                               Name = i.d.AddOnItemName,
-                               ProductId = i.p.Id,
-                                // ProductName = i.p.Name,
-                                ProductName = GetMasterProductName(i.p.MasterProductId),
-                               ShopId = i.p.ShopId,
-                               ShopName = i.p.ShopName,
-                               AddOnCategoryId = i.d.AddOnCategoryId,
-                               AddOnCategoryName = i.d.AddOnCategoryName,
-                               PortionId = i.d.PortionId,
-                               PortionName = i.d.PortionName,
-                               MinSelectionLimit = i.d.MinSelectionLimit,
-                               MaxSelectionLimit = i.d.MaxSelectionLimit,
-                               CrustName = i.d.CrustName,
-                               AddOnsPrice = i.d.AddOnsPrice,
-                               PortionPrice = i.d.PortionPrice,
-                               CrustPrice = i.d.CrustPrice,
-                               Status = i.p.Status,
-                           }).ToList();
 
             }
             else if (shop.ShopCategoryId == 1)
@@ -2370,33 +2386,6 @@ namespace ShopNow.Controllers
                                           Status = pl.Status
 
                                       }).ToList();
-
-                model.AddOnsLists = db.Products
-               .Join(db.ShopDishAddOns, p => p.Id, d => d.ProductId, (p, d) => new { p, d })
-                           .AsEnumerable()
-                           .Where(i => i.p.ShopId == id && i.p.Status == 0 && i.d.Status == 0)
-                           .Select(i => new ShopDetails.AddOnsList
-                           {
-                               Id = i.d.Id,
-                               Name = i.d.AddOnItemName,
-                               ProductId = i.p.Id,
-                               // ProductName = i.p.Name,
-                               ProductName =GetMasterProductName(i.p.MasterProductId),
-                               ShopId = i.p.ShopId,
-                               ShopName = i.p.ShopName,
-                               AddOnCategoryId = i.d.AddOnCategoryId,
-                               AddOnCategoryName = i.d.AddOnCategoryName,
-                               PortionId = i.d.PortionId,
-                               PortionName = i.d.PortionName,
-                               MinSelectionLimit = i.d.MinSelectionLimit,
-                               MaxSelectionLimit = i.d.MaxSelectionLimit,
-                               CrustName = i.d.CrustName,
-                               AddOnsPrice = i.d.AddOnsPrice,
-                               PortionPrice = i.d.PortionPrice,
-                               CrustPrice = i.d.CrustPrice,
-                               Status = i.p.Status,
-                               AddOnType =i.d.AddOnType
-                           }).ToList();
 
             }
             return new JsonResult()
@@ -2440,8 +2429,8 @@ namespace ShopNow.Controllers
                 ShopStatus=i.Status
                 }).ToList();
 
-            //var productrCount = db.GetProductListCount(varlongitude, varlatitude, str).ToList();
-            //int  count =Convert.ToInt32(productrCount[0]);
+            var productrCount = db.GetProductListCount(varlongitude, varlatitude, str).ToList();
+            int  count =Convert.ToInt32(productrCount[0]);
 
             int CurrentPage = page;
 
@@ -2530,7 +2519,7 @@ namespace ShopNow.Controllers
 
         }
 
-        public JsonResult GetShopCategoryList(int shopId, string categoryCode, string str = "", int page = 1, int pageSize = 20)
+        public JsonResult GetShopCategoryList(int shopId, string categoryIds, string str = "", int page = 1, int pageSize = 20)
         {
             var shid = db.Shops.Where(s => s.Id == shopId).FirstOrDefault();
             int count = 0;
@@ -2540,7 +2529,7 @@ namespace ShopNow.Controllers
             
             var skip = page-1;
             
-            //var model = db.GetShopCategoryProducts(shopCode, categoryCode, str, skip, pageSize).ToList();
+            var model = db.GetShopCategoryProducts(shopId, categoryIds, str, skip, pageSize).ToList();
             
 
             int CurrentPage = page;
@@ -3393,12 +3382,11 @@ namespace ShopNow.Controllers
 
             model.List = db.Orders.Where(i => i.Status == 6)
                  .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
-                      //.Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
                   .AsEnumerable()
                 .Where(i => i.c.DeliveryBoyPhoneNumber == phoneNumber && i.p.PaymentMode != "Online Payment" && i.c.DeliveryOrderPaymentStatus == 0)
                 .Select(i => new DelivaryCreditAmountApiViewModel.CartList
                 {
-                    Amount = i.p.Amount.ToString(),
+                    Amount = (i.p.Amount - (i.p.RefundAmount ?? 0)).ToString()
                     
                 }).ToList();
             if (model.List.Count() != 0)
@@ -3417,7 +3405,6 @@ namespace ShopNow.Controllers
             {
                 dt = DateTime.Now.ToString("dd-MMM-yyyy");
                 model.List = db.Orders.Where(i => i.Status == 6)
-                         //.Join(db.ShopCharges, c => c.OrderNumber, sc => sc.OrderNo, (c, sc) => new { c, sc })
                             .Join(db.Shops, scc => scc.ShopId, s => s.Id, (scc, s) => new { scc, s })
                      .AsEnumerable()
                    .Where(i => i.scc.DeliveryBoyPhoneNumber == phoneNumber && i.scc.DateEncoded.ToString("dd-MMM-yyyy") == dt)
@@ -4027,6 +4014,31 @@ namespace ShopNow.Controllers
                 return 0;
         }
 
+        public JsonResult GetAddonList(int productId)
+        {
+            var list = db.ShopDishAddOns.Where(i => i.ProductId == productId && i.IsActive == true).ToList();
+            return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetLocationDetails(double sourceLatitude, double sourceLongitude, double destinationLatitude, double destinationLongitude)
+        {
+            bool isAvailable = db.LocationDetails.Any(i => i.SourceLatitude == sourceLatitude && i.SourceLongitude == sourceLongitude && i.DestinationLatitude == destinationLatitude && i.DestinationLongitude == destinationLongitude);
+            if (isAvailable)
+            {
+                var location = db.LocationDetails.FirstOrDefault(i => i.SourceLatitude == sourceLatitude && i.SourceLongitude == sourceLongitude && i.DestinationLatitude == destinationLatitude && i.DestinationLongitude == destinationLongitude);
+                return Json(location, JsonRequestBehavior.AllowGet);
+            }
+            return Json(isAvailable, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult SaveLocationDetails(LocationDetailsCreateViewModel model)
+        {
+            var locationDetails = _mapper.Map<LocationDetailsCreateViewModel, LocationDetail>(model);
+            db.LocationDetails.Add(locationDetails);
+            db.SaveChanges();
+            return Json(new { message = "Saved Successfully" }, JsonRequestBehavior.AllowGet);
+        }
 
     }
 }
