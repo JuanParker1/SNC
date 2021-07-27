@@ -1466,7 +1466,7 @@ namespace ShopNow.Controllers
                 var fcmToken = (from c in db.Customers
                                 where c.Id == order.CustomerId
                                 select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                Helpers.PushNotification.SendbydeviceId("You order has been accepted by shop.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+                Helpers.PushNotification.SendbydeviceId("Your order has been accepted by shop.", "ShopNowChat", "a.mp3", fcmToken.ToString());
 
                 return Json(new { message = "Order Confirmed!" }, JsonRequestBehavior.AllowGet);
             }
@@ -1713,7 +1713,7 @@ namespace ShopNow.Controllers
             var fcmToken = (from c in db.Customers
                             where c.Id == order.CustomerId
                             select c.FcmTocken ?? "").FirstOrDefault().ToString();
-            Helpers.PushNotification.SendbydeviceId("You order is on the way.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+            Helpers.PushNotification.SendbydeviceId("Your order is on the way.", "ShopNowChat", "a.mp3", fcmToken.ToString());
             return RedirectToAction("Edit", "Cart", new { orderno = orderNo, id = id });
         }
 
@@ -1751,7 +1751,7 @@ namespace ShopNow.Controllers
             var fcmToken = (from c in db.Customers
                             where c.Id == order.CustomerId
                             select c.FcmTocken ?? "").FirstOrDefault().ToString();
-            Helpers.PushNotification.SendbydeviceId("You order has been delivered.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+            Helpers.PushNotification.SendbydeviceId("Your order has been delivered.", "ShopNowChat", "a.mp3", fcmToken.ToString());
             return RedirectToAction("Edit", "Cart", new { orderno = orderNo, id = id });
         }
 

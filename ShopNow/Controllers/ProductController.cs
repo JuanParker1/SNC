@@ -551,7 +551,7 @@ namespace ShopNow.Controllers
             }
             else
             {
-                var shopDishAddonList = db.ShopDishAddOns.Where(i => i.ProductId == prod.Id);
+                var shopDishAddonList = db.ShopDishAddOns.Where(i => i.ProductId == prod.Id).ToList();
                 foreach (var item in shopDishAddonList)
                 {
                     var shopDishAddon = db.ShopDishAddOns.FirstOrDefault(i => i.Id == item.Id);
