@@ -299,7 +299,8 @@ namespace ShopNow.Controllers
             prod.UpdatedBy = user.Name;
             db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
-            return RedirectToAction("MedicalList", "Product");
+            //return RedirectToAction("MedicalList", "Product");
+            return RedirectToAction("MedicalEdit", new { id = AdminHelpers.ECodeInt(prod.Id) });
         }
 
         public ActionResult FMCGList(FMCGListViewModel model)
@@ -569,7 +570,8 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
             }
             Session["ShopAddOnsEdit"] = null;
-            return RedirectToAction("FoodList", "Product",new { ShopId = prod.ShopId,ShopName = prod.ShopName });
+            //return RedirectToAction("FoodList", "Product",new { ShopId = prod.ShopId,ShopName = prod.ShopName });
+            return RedirectToAction("FoodEdit", new { id = AdminHelpers.ECodeInt(model.Id) });
         }
 
         public JsonResult GetProductDishAddOns(int masterProductId)
@@ -795,7 +797,8 @@ namespace ShopNow.Controllers
             db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
-            return RedirectToAction("FMCGList", new { ShopId = prod.ShopId, shopName = prod.ShopName });
+            //return RedirectToAction("FMCGList", new { ShopId = prod.ShopId, shopName = prod.ShopName });
+            return RedirectToAction("FMCGEdit", new { id = AdminHelpers.ECodeInt(model.Id) });
         }
 
         [AccessPolicy(PageCode = "")]
