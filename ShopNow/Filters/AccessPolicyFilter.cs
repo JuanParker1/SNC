@@ -9,7 +9,7 @@ namespace ShopNow.Filters
 {
     public class AccessPolicyAttribute : ActionFilterAttribute
     {
-        private ShopnowchatEntities db = new ShopnowchatEntities();
+        private sncEntities db = new sncEntities();
         public string PageCode { get; set; }
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)

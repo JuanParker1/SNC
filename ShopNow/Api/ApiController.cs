@@ -29,7 +29,7 @@ namespace ShopNow.Controllers
     public class ApiController : Controller
     {
         
-        private ShopnowchatEntities db = new ShopnowchatEntities();
+        private sncEntities db = new sncEntities();
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
         private string apipath= "https://admin.shopnowchat.in/";
@@ -105,44 +105,6 @@ namespace ShopNow.Controllers
 
         }
 
-        public static String SendNotificationFromFirebaseCloud(string key, string title,string body)
-        {
-            var serverKey = string.Format("key={0}", "AAAASx4c4GY:APA91bEYyUEFT9F1XhO44epVtF0Mxq2SNbqIZUSQ3Xroov65JF9TzH7v9TghwG4JiWVa8HgqJVJnfklHIqhFuCQfW9T8b8TzrOOMYJd9eh2H1HcJFg06Vnjqz0aJk1tCSSuUL9BeUrsD");
-            var result = "-1";
-            var webAddr = "https://fcm.googleapis.com/fcm/send";
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create(webAddr);
-            httpWebRequest.ContentType = "application/json";
-            httpWebRequest.Headers.Add(HttpRequestHeader.Authorization, serverKey);
-            httpWebRequest.Method = "POST";
-            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
-            {
-                string strNJson = @"{
-                    ""to"": ""cKxMgjNfjR4:APA91bHLw_jaHPk7bJW7ScG4ZKj6IbZ8bdX09bJqXpYNhDsdobhyWDw8dV_ZV63JExoVanzpB_ctkzhr341J3G1Ohj66gu4_0ntzLRCDKN6O5HMNgRJkLAcVJYiO3XbpDkCGkbV1rGNt"",
-  ""notification"": {
-                    ""title"": title,
-    ""text"": body,
-""sound"":""default""
-  }
-            }
-            ";
-                string not_title, not_body;
-                not_title = title;
-                not_body = body;
-                string strNJsonn = @"{{'to':'{0}','notification':{{'title':'{1}','text':'{2}','sound': 'default'}}}}";
-
-                strNJsonn = string.Format(strNJsonn, key, not_title, not_body);
-
-                streamWriter.Write(strNJson);
-                streamWriter.Flush();
-            }
-
-            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-            {
-                result = streamReader.ReadToEnd();
-            }
-            return result;
-        }
         public JsonResult NotifyAsync()
         {
            // SendNotificationFromFirebaseCloud();
@@ -2467,8 +2429,8 @@ namespace ShopNow.Controllers
                 ShopStatus=i.Status
                 }).ToList();
 
-            //var productrCount = db.GetProductListCount(varlongitude, varlatitude, str).ToList();
-            //int  count =Convert.ToInt32(productrCount[0]);
+            var productrCount = db.GetProductListCount(varlongitude, varlatitude, str).ToList();
+            int  count =Convert.ToInt32(productrCount[0]);
 
             int CurrentPage = page;
 
@@ -2557,7 +2519,7 @@ namespace ShopNow.Controllers
 
         }
 
-        public JsonResult GetShopCategoryList(int shopId, string categoryCode, string str = "", int page = 1, int pageSize = 20)
+        public JsonResult GetShopCategoryList(int shopId, string categoryIds, string str = "", int page = 1, int pageSize = 20)
         {
             var shid = db.Shops.Where(s => s.Id == shopId).FirstOrDefault();
             int count = 0;
@@ -2567,7 +2529,7 @@ namespace ShopNow.Controllers
             
             var skip = page-1;
             
-            //var model = db.GetShopCategoryProducts(shopCode, categoryCode, str, skip, pageSize).ToList();
+            var model = db.GetShopCategoryProducts(shopId, categoryIds, str, skip, pageSize).ToList();
             
 
             int CurrentPage = page;

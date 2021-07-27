@@ -14,15 +14,12 @@ namespace ShopNow.Models
     
     public partial class SubCategory
     {
-<<<<<<< HEAD
-=======
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SubCategory()
         {
             this.NextSubCategories = new HashSet<NextSubCategory>();
         }
     
->>>>>>> d7be78ab4f051b3b50a76c44674996fa0f054a47
         public int Id { get; set; }
         public string Name { get; set; }
         public int CategoryId { get; set; }
@@ -35,13 +32,10 @@ namespace ShopNow.Models
         public string UpdatedBy { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }
-<<<<<<< HEAD
-=======
     
         public virtual Category Category { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<NextSubCategory> NextSubCategories { get; set; }
         public virtual ProductType ProductType { get; set; }
->>>>>>> d7be78ab4f051b3b50a76c44674996fa0f054a47
     }
 }

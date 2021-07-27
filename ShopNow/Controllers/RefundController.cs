@@ -14,7 +14,7 @@ namespace ShopNow.Controllers
 
     public class RefundController : Controller
     {
-        private ShopnowchatEntities db = new ShopnowchatEntities();
+        private sncEntities db = new sncEntities();
 
         [AccessPolicy(PageCode = "SHNRFNP001")]
         public ActionResult Pending(RefundPendingViewModel model)

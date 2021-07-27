@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="sncModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="sncModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AccessPolicies">
           <Key>
             <PropertyRef Name="Id" />
@@ -803,12 +803,6 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
           <Property Name="OrderNumber" Type="int" />
           <Property Name="DateEncoded" Type="datetime" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="SearchData">
-          <Property Name="source" Type="nvarchar" MaxLength="500" />
-          <Property Name="keyValue" Type="nvarchar" MaxLength="500" />
-        </EntityType>-->
         <EntityType Name="ShopCategories">
           <Key>
             <PropertyRef Name="Id" />
@@ -1009,12 +1003,6 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tbl">
-          <Property Name="name" Type="nvarchar" MaxLength="500" />
-          <Property Name="percentage" Type="float" />
-        </EntityType>-->
         <EntityType Name="UserEnquiries">
           <Key>
             <PropertyRef Name="Id" />
@@ -1313,20 +1301,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
         <Function Name="getCategoryListbyShopcode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="code" Type="nvarchar" Mode="In" />
         </Function>
-        <Function Name="GetCategoryProductsList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="shopCode" Type="varchar" Mode="In" />
-          <Parameter Name="categoryCode" Type="varchar" Mode="In" />
-          <Parameter Name="str" Type="varchar" Mode="In" />
-          <Parameter Name="page" Type="int" Mode="In" />
-          <Parameter Name="pageSize" Type="int" Mode="In" />
-        </Function>
-        <Function Name="GetDEliveryBoyList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="GetKeyname" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="nvarchar">
-          <Parameter Name="key" Type="nvarchar" Mode="In" />
-        </Function>
-        <Function Name="GetKeynameWithsearchdata" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="nvarchar">
-          <Parameter Name="key" Type="nvarchar" Mode="In" />
-        </Function>
         <Function Name="GetProductList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Longitude" Type="float" Mode="In" />
           <Parameter Name="Latitude" Type="float" Mode="In" />
@@ -1365,43 +1339,10 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Parameter Name="page" Type="int" Mode="In" />
           <Parameter Name="pageSize" Type="int" Mode="In" />
         </Function>
-        <Function Name="GetShopname" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="shopcode" Type="varchar" Mode="In" />
-        </Function>
-        <Function Name="GetTableVAlueString" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="key" Type="nvarchar" Mode="In" />
-          <ReturnType>
-            <CollectionType>
-              <RowType>
-                <Property Name="Name" Type="nvarchar" MaxLength="600" />
-              </RowType>
-            </CollectionType>
-          </ReturnType>
-        </Function>
-        <Function Name="ReatillerPaymentReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="from" Type="date" Mode="In" />
-          <Parameter Name="to" Type="date" Mode="In" />
-          <Parameter Name="shopcode" Type="nvarchar" Mode="In" />
-          <Parameter Name="user" Type="nvarchar" Mode="In" />
-        </Function>
         <Function Name="ReatillerPaymentReportAdmin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="from" Type="date" Mode="In" />
           <Parameter Name="to" Type="date" Mode="In" />
           <Parameter Name="shopcode" Type="nvarchar" Mode="In" />
-        </Function>
-        <Function Name="ReatillerPaymentReports" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="from" Type="date" Mode="In" />
-          <Parameter Name="to" Type="date" Mode="In" />
-          <Parameter Name="shopcode" Type="nvarchar" Mode="In" />
-          <Parameter Name="user" Type="nvarchar" Mode="In" />
-        </Function>
-        <Function Name="Sp_TB_SelectMedicineName" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="search" Type="varchar" Mode="In" />
-          <Parameter Name="pageNumber" Type="int" Mode="In" />
-          <Parameter Name="Rowofpage" Type="int" Mode="In" />
-        </Function>
-        <Function Name="test" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="str" Type="nvarchar" Mode="In" />
         </Function>
         <EntityContainer Name="sncModelStoreContainer">
           <EntitySet Name="AccessPolicies" EntityType="Self.AccessPolicies" Schema="dbo" store:Type="Tables" />
@@ -1552,14 +1493,10 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             <End Role="SubCategories" EntitySet="SubCategories" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="sncModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <ComplexType Name="GetTableVAlueString_Result">
-          <Property Name="Name" Type="String" MaxLength="600" FixedLength="false" Unicode="true" />
-        </ComplexType>
         <EntityType Name="AccessPolicy">
           <Key>
             <PropertyRef Name="Id" />
@@ -3035,94 +2972,61 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             <End Role="Shops" EntitySet="Shops" />
             <End Role="ShopDishAddOns" EntitySet="ShopDishAddOns" />
           </AssociationSet>
-          <FunctionImport Name="GetTableVAlueString" IsComposable="true" ReturnType="Collection(sncModel.GetTableVAlueString_Result)">
-            <Parameter Name="key" Mode="In" Type="String" />
+          <FunctionImport Name="getCategoryListbyShopcode" ReturnType="Collection(sncModel.getCategoryListbyShopcode)">
+          <Parameter Name="code" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="getCategoryListbyShopcode">
-            <Parameter Name="code" Mode="In" Type="String" />
+          <FunctionImport Name="ReatillerPaymentReportAdmin" ReturnType="Collection(sncModel.ReatillerPaymentReportAdmin)">
+            <Parameter Name="from" Mode="In" Type="DateTime" />
+            <Parameter Name="to" Mode="In" Type="DateTime" />
+            <Parameter Name="shopcode" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="GetCategoryProductsList">
-            <Parameter Name="shopCode" Mode="In" Type="String" />
-            <Parameter Name="categoryCode" Mode="In" Type="String" />
-            <Parameter Name="str" Mode="In" Type="String" />
-            <Parameter Name="page" Mode="In" Type="Int32" />
-            <Parameter Name="pageSize" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="GetDEliveryBoyList" ReturnType="Collection(sncModel.GetDEliveryBoyList_Result)" />
-          <FunctionImport Name="GetProductList">
+          <FunctionImport Name="GetProductList" ReturnType="Collection(sncModel.GetProductList)">
             <Parameter Name="Longitude" Mode="In" Type="Double" />
             <Parameter Name="Latitude" Mode="In" Type="Double" />
             <Parameter Name="str" Mode="In" Type="String" />
             <Parameter Name="page" Mode="In" Type="Int32" />
             <Parameter Name="pagesize" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="GetProductListCount">
+          <FunctionImport Name="GetProductListCount" ReturnType="Collection(sncModel.GetProductListCount)">
             <Parameter Name="Longitude" Mode="In" Type="Double" />
             <Parameter Name="Latitude" Mode="In" Type="Double" />
             <Parameter Name="str" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="GetShopCategoryList">
+          <FunctionImport Name="GetShopCategoryList" ReturnType="Collection(sncModel.GetShopCategoryList)">
             <Parameter Name="shop" Mode="In" Type="String" />
             <Parameter Name="CategoryCode" Mode="In" Type="String" />
             <Parameter Name="str" Mode="In" Type="String" />
             <Parameter Name="Page" Mode="In" Type="Int32" />
             <Parameter Name="Size" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="GetShopCategoryProductCount">
+          <FunctionImport Name="GetShopCategoryProductCount" ReturnType="Collection(sncModel.GetShopCategoryProductCount)">
             <Parameter Name="shopCode" Mode="In" Type="String" />
             <Parameter Name="categoryCode" Mode="In" Type="String" />
             <Parameter Name="str" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="GetShopCategoryProducts">
-            <Parameter Name="shopCode" Mode="In" Type="String" />
-            <Parameter Name="categoryCode" Mode="In" Type="String" />
-            <Parameter Name="str" Mode="In" Type="String" />
-            <Parameter Name="page" Mode="In" Type="Int32" />
-            <Parameter Name="pageSize" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="GetShopCategoryProductsList">
+          <FunctionImport Name="GetShopCategoryProducts" ReturnType="Collection(sncModel.GetShopCategoryProducts)">
             <Parameter Name="shopCode" Mode="In" Type="String" />
             <Parameter Name="categoryCode" Mode="In" Type="String" />
             <Parameter Name="str" Mode="In" Type="String" />
             <Parameter Name="page" Mode="In" Type="Int32" />
             <Parameter Name="pageSize" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="GetShopname">
-            <Parameter Name="shopcode" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="ReatillerPaymentReport">
-            <Parameter Name="from" Mode="In" Type="DateTime" />
-            <Parameter Name="to" Mode="In" Type="DateTime" />
-            <Parameter Name="shopcode" Mode="In" Type="String" />
-            <Parameter Name="user" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="ReatillerPaymentReportAdmin">
-            <Parameter Name="from" Mode="In" Type="DateTime" />
-            <Parameter Name="to" Mode="In" Type="DateTime" />
-            <Parameter Name="shopcode" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="ReatillerPaymentReports">
-            <Parameter Name="from" Mode="In" Type="DateTime" />
-            <Parameter Name="to" Mode="In" Type="DateTime" />
-            <Parameter Name="shopcode" Mode="In" Type="String" />
-            <Parameter Name="user" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="Sp_TB_SelectMedicineName">
-            <Parameter Name="search" Mode="In" Type="String" />
-            <Parameter Name="pageNumber" Mode="In" Type="Int32" />
-            <Parameter Name="Rowofpage" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="test">
+          <FunctionImport Name="GetShopCategoryProductsList" ReturnType="Collection(sncModel.GetShopCategoryProductsList)">
+            <Parameter Name="shopCode" Mode="In" Type="String" />
+            <Parameter Name="categoryCode" Mode="In" Type="String" />
             <Parameter Name="str" Mode="In" Type="String" />
+            <Parameter Name="page" Mode="In" Type="Int32" />
+            <Parameter Name="pageSize" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
-        <ComplexType Name="GetDEliveryBoyList_Result">
-          <Property Type="Int32" Name="Id" Nullable="false" />
-          <Property Type="String" Name="Name" Nullable="true" />
-          <Property Type="Int32" Name="Active" Nullable="false" />
-          <Property Type="String" Name="PhoneNumber" Nullable="true" />
-          <Property Type="String" Name="ImagePath" Nullable="true" />
-        </ComplexType>
+        <ComplexType Name="getCategoryListbyShopcode" />
+        <ComplexType Name="ReatillerPaymentReportAdmin" />
+        <ComplexType Name="GetProductList" />
+        <ComplexType Name="GetProductListCount" />
+        <ComplexType Name="GetShopCategoryList" />
+        <ComplexType Name="GetShopCategoryProductCount" />
+        <ComplexType Name="GetShopCategoryProducts" />
+        <ComplexType Name="GetShopCategoryProductsList" />
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4183,38 +4087,46 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionName="sncModel.Store.GetTableVAlueString" FunctionImportName="GetTableVAlueString">
+          <FunctionImportMapping FunctionImportName="getCategoryListbyShopcode" FunctionName="sncModel.Store.getCategoryListbyShopcode" >
             <ResultMapping>
-              <ComplexTypeMapping TypeName="sncModel.GetTableVAlueString_Result">
-                <ScalarProperty Name="Name" ColumnName="Name" />
-              </ComplexTypeMapping>
+              <ComplexTypeMapping TypeName="sncModel.getCategoryListbyShopcode" />
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="getCategoryListbyShopcode" FunctionName="sncModel.Store.getCategoryListbyShopcode" />
-          <FunctionImportMapping FunctionImportName="GetCategoryProductsList" FunctionName="sncModel.Store.GetCategoryProductsList" />
-          <FunctionImportMapping FunctionImportName="GetDEliveryBoyList" FunctionName="sncModel.Store.GetDEliveryBoyList">
+          <FunctionImportMapping FunctionImportName="ReatillerPaymentReportAdmin" FunctionName="sncModel.Store.ReatillerPaymentReportAdmin">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="sncModel.GetDEliveryBoyList_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Active" ColumnName="Active" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
-              </ComplexTypeMapping>
+              <ComplexTypeMapping TypeName="sncModel.ReatillerPaymentReportAdmin" />
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GetProductList" FunctionName="sncModel.Store.GetProductList" />
-          <FunctionImportMapping FunctionImportName="GetProductListCount" FunctionName="sncModel.Store.GetProductListCount" />
-          <FunctionImportMapping FunctionImportName="GetShopCategoryList" FunctionName="sncModel.Store.GetShopCategoryList" />
-          <FunctionImportMapping FunctionImportName="GetShopCategoryProductCount" FunctionName="sncModel.Store.GetShopCategoryProductCount" />
-          <FunctionImportMapping FunctionImportName="GetShopCategoryProducts" FunctionName="sncModel.Store.GetShopCategoryProducts" />
-          <FunctionImportMapping FunctionImportName="GetShopCategoryProductsList" FunctionName="sncModel.Store.GetShopCategoryProductsList" />
-          <FunctionImportMapping FunctionImportName="GetShopname" FunctionName="sncModel.Store.GetShopname" />
-          <FunctionImportMapping FunctionImportName="ReatillerPaymentReport" FunctionName="sncModel.Store.ReatillerPaymentReport" />
-          <FunctionImportMapping FunctionImportName="ReatillerPaymentReportAdmin" FunctionName="sncModel.Store.ReatillerPaymentReportAdmin" />
-          <FunctionImportMapping FunctionImportName="ReatillerPaymentReports" FunctionName="sncModel.Store.ReatillerPaymentReports" />
-          <FunctionImportMapping FunctionImportName="Sp_TB_SelectMedicineName" FunctionName="sncModel.Store.Sp_TB_SelectMedicineName" />
-          <FunctionImportMapping FunctionImportName="test" FunctionName="sncModel.Store.test" />
+          <FunctionImportMapping FunctionImportName="GetProductList" FunctionName="sncModel.Store.GetProductList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="sncModel.GetProductList" />
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetProductListCount" FunctionName="sncModel.Store.GetProductListCount" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="sncModel.GetProductListCount" />
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetShopCategoryList" FunctionName="sncModel.Store.GetShopCategoryList" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="sncModel.GetShopCategoryList" />
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetShopCategoryProductCount" FunctionName="sncModel.Store.GetShopCategoryProductCount" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="sncModel.GetShopCategoryProductCount" />
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetShopCategoryProducts" FunctionName="sncModel.Store.GetShopCategoryProducts" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="sncModel.GetShopCategoryProducts" />
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetShopCategoryProductsList" FunctionName="sncModel.Store.GetShopCategoryProductsList" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="sncModel.GetShopCategoryProductsList" />
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
