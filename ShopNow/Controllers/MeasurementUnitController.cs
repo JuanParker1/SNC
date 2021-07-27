@@ -17,7 +17,7 @@ namespace ShopNow.Controllers
 {
     public class MeasurementUnitController : Controller
     {
-        private ShopnowchatEntities db = new ShopnowchatEntities();
+        private sncEntities db = new sncEntities();
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
         

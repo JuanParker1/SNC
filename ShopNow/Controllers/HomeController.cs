@@ -13,7 +13,7 @@ namespace ShopNow.Controllers
     public class HomeController : Controller
     {
 
-        private ShopnowchatEntities _db = new ShopnowchatEntities();
+        private sncEntities _db = new sncEntities();
         UploadContent uc = new UploadContent();
 
         [AllowAnonymous]

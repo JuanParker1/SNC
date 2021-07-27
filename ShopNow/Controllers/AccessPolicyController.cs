@@ -22,7 +22,7 @@ namespace ShopNow.Controllers
     public class AccessPolicyController : Controller
     {
 
-        private ShopnowchatEntities db = new ShopnowchatEntities();
+        private sncEntities db = new sncEntities();
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
         private const string _prefix = "APG";

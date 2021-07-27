@@ -11,7 +11,7 @@ namespace ShopNow.Controllers
 {
     public class ProductTypeController : Controller
     {
-        private ShopnowchatEntities db = new ShopnowchatEntities();
+        private sncEntities db = new sncEntities();
 
         public async Task<JsonResult> GetSelect2List(string q = "")
         {

@@ -78,7 +78,7 @@ namespace ShopNow.Helpers
         {
             try
             {
-                ShopnowchatEntities db = new ShopnowchatEntities();
+                sncEntities db = new sncEntities();
                 System.Web.HttpContext.Current.Session.Timeout = 120;
                 User user = System.Web.HttpContext.Current.Session == null ? null : ((ShopNow.Helpers.Sessions.User)System.Web.HttpContext.Current.Session["USER"]);
 
@@ -131,7 +131,7 @@ namespace ShopNow.Helpers
                     return true;
                 }
 
-                ShopnowchatEntities db = new ShopnowchatEntities();
+                sncEntities db = new sncEntities();
 
                 user = db.BrandOwners.Where(i => i.PhoneNumber == username && i.Status == 0)
                      .Select(i => new Helpers.Sessions.User
@@ -161,7 +161,7 @@ namespace ShopNow.Helpers
                     return true;
                 }
 
-                ShopnowchatEntities db = new ShopnowchatEntities();
+                sncEntities db = new sncEntities();
 
                 user = db.MarketingAgents.Where(i => i.PhoneNumber == username && i.Status == 0)
                      .Select(i => new Helpers.Sessions.User

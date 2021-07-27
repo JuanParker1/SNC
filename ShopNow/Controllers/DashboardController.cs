@@ -8,7 +8,7 @@ namespace ShopNow.Controllers
     // [Authorize]
     public class DashboardController : Controller
     {
-        private ShopnowchatEntities _db = new ShopnowchatEntities();
+        private sncEntities _db = new sncEntities();
 
         [AccessPolicy(PageCode = "SHNDASI001")]
         public ActionResult Index()

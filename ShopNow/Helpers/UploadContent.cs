@@ -130,7 +130,7 @@ namespace ShopNow.Helpers
 
         /// Uploading and resizing an image, Currently it is used to upload member profile pic, provider service banner image and category image
 
-        public void UploadImage(HttpPostedFileBase originalImage, string imagePrefix, string rootPath, HttpServerUtilityBase server, ShopnowchatEntities _db, string memberId, string productId = "", string categoryId = "")
+        public void UploadImage(HttpPostedFileBase originalImage, string imagePrefix, string rootPath, HttpServerUtilityBase server, sncEntities _db, string memberId, string productId = "", string categoryId = "")
         {
             bool existsOriginal = System.IO.Directory.Exists(server.MapPath("~/" + rootPath + "Original/"));
             if (!existsOriginal)
@@ -173,7 +173,7 @@ namespace ShopNow.Helpers
 
         /// Save an image at specified path 
 
-        public string UploadImage1(HttpPostedFileBase image, string imageSubPath, HttpServerUtilityBase server, ShopnowchatEntities _db, int memberId = 0)
+        public string UploadImage1(HttpPostedFileBase image, string imageSubPath, HttpServerUtilityBase server, sncEntities _db, int memberId = 0)
         {
             string ImgPath = imageSubPath + memberId + "_" + image.FileName;
             var imgnew = server.MapPath(ImgPath);

@@ -10,7 +10,7 @@ namespace ShopNowPay.Controllers
 {
     public class SalesController : Controller
     {
-        private ShopnowchatEntities db = new ShopnowchatEntities();
+        private sncEntities db = new sncEntities();
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
 

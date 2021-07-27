@@ -19,7 +19,7 @@ namespace ShopNow.Controllers
 {
     public class ProductSpecificationController : Controller
     {
-        private ShopnowchatEntities _db = new ShopnowchatEntities();
+        private sncEntities _db = new sncEntities();
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
      

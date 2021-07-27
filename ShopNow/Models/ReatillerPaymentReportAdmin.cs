@@ -11,8 +11,7 @@ namespace ShopNow.Models
 {
     using System;
     
-    public partial class GetTableVAlueString_Result
+    public partial class ReatillerPaymentReportAdmin
     {
-        public string Name { get; set; }
     }
 }
