@@ -38,7 +38,7 @@
 </style>
 <div class="px-3 row col-md-12">
     <div class="col-md-6 row text-center">
-        @if (Model.Status == 1 && Model.Verify == false && Model.ManualPhoneNumber != "")
+        @if (Model.Status == 1 && Model.Verify == false && Model.PhoneNumber != "" && Model.PhoneVerify == false)
         {
             <div class="col-md-4 generateOTP">
                 <button type="button" id="OTP" class="btn btn-block btn-success">Generated OTP</button>
@@ -56,32 +56,26 @@
                 <h6 class="text-success"> OTP Verified</h6>
             </div>
         }
-        @*@if (Model.Status == 1 && ViewBag.count >= 10)
-            {
-                <div class="col-md-6 d-none verifyOTP">
-                    <a href="~/Shop/Activate?code=@Model.Code" class="btn btn-success">Activate</a>
-                </div>
-
-            }*@
-        @if (Model.Status == 1 && Model.Verify == true)
+        @if (Model.Status == 1 && Model.Verify == true && Model.Password != null)
         {
             <div class="col-md-12 NotverifyOTP">
                 <div class="alert alert-warning font-weight-bold p-2">Please Go to <a href="https://shopnowpay.com/" target="_blank">ShopNowPay</a> and Enter your Products for Shop Activation.</div>
             </div>
         }
     </div>
-    @if (Model.Status == 1 && Model.Verify == true && Model.Password == null)
+    @if (Model.Status == 1 && Model.Verify == true)
     {
-        <div class="row text-center generatePassword">
+        <div class="row text-center">
             <div class="col-md-6">
-                <button type="button" id="GeneratePassword" class="btn btn-success">Generate Password</button>
+                <button type="button" id="GeneratePassword" class="btn btn-success showPasswordtext">Generate Password</button>
+                <button type="button" class="btn btn-success disablePasswordtext" disabled>Password</button>
             </div>
             <div class="col-md-6">
                 <input type="text" class="form-control" id="Password" value="@Model.Password" readonly />
             </div>
         </div>
     }
-    @if (Model.Status == 1 && Model.Verify == false && Model.ManualPhoneNumber != "")
+    @if (Model.Status == 1 && Model.Verify == false && (Model.PhoneNumber != "" || Model.PhoneNumber != null))
     {
         <div class="col-md-5 PhoneVerify">
             <h6 class="text-success">Phone Verification</h6>
@@ -103,9 +97,9 @@
             @using (Html.BeginForm("Edit", "Shop", FormMethod.Post, new { id = "ShopForm", role = "form", enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
-                <input type="hidden" name="Code" id="Id" value="@Model.Id" />
+                <input type="hidden" name="Id" id="Id" value="@Model.Id" />
+                <input type="hidden" name="CustomerId" id="CustomerId" value="@Model.CustomerId" />
                 <input type="hidden" name="ImageLogoPath" value="@Model.ImageLogoPath" />
-                <input type="hidden" name="ImageBannerPath" value="@Model.ImageBannerPath" />
                 <input type="hidden" name="ImagePath" value="@Model.ImagePath" />
                 <input type="hidden" name="ImageAadharPath" id="ImageAadharPath" value="@Model.ImageAadharPath" />
                 <input type="hidden" name="ImageAccountPath" id="ImageAccountPath" value="@Model.ImageAccountPath" />
@@ -117,8 +111,6 @@
                 <input type="hidden" name="ImageOtherLicensePath" id="ImageOtherLicensePath" value="@Model.ImageOtherLicensePath" />
                 <input type="hidden" name="ImageAuthoriseBrandPath" id="ImageAuthoriseBrandPath" value="@Model.ImageAuthoriseBrandPath" />
                 <input type="hidden" name="Count" id="Count" value="@Model.Count" />
-                <input type="hidden" name="CustomerId" id="CustomerCode" value="@Model.CustomerId" />
-                <input type="hidden" name="CustomerName" id="CustomerName" value="@Model.CustomerName" />
                 <input type="hidden" name="Status" id="Status" value="@Model.Status" />
 
                 <div class="card mb-4">
@@ -147,14 +139,6 @@
                                     <input id="PhoneNumber" type="text" class="form-control" name="PhoneNumber" value="@Model.PhoneNumber" readonly />
                                 </div>
                             </div>
-                            <div class="form-group row d-none manualmobile">
-                                <div class="col-md-4 text-md-left">
-                                    <label class="col-form-label"><strong class="text-secondary">Mobile Number</strong></label>
-                                </div>
-                                <div class="col-md-8">
-                                    <input id="ManualPhoneNumber" type="text" class="form-control" name="ManualPhoneNumber" value="@Model.ManualPhoneNumber" />
-                                </div>
-                            </div>
                             <div class="form-group row">
                                 <div class="col-md-4 text-md-left">
                                     <label class="col-form-label"><strong class="text-secondary">Official Email</strong></label>
@@ -171,20 +155,12 @@
                                     <input id="Website" type="text" class="form-control" name="Website" value="@Model.Website" readonly />
                                 </div>
                             </div>
-                            <div class="form-group row d-none manualwebsite">
-                                <div class="col-md-4 text-md-left">
-                                    <label class="col-form-label"><strong class="text-secondary">Manual Website</strong></label>
-                                </div>
-                                <div class="col-md-8">
-                                    <input id="ManualWebsite" type="text" class="form-control" name="ManualWebsite" value="@Model.ManualWebsite" />
-                                </div>
-                            </div>
                             <div class="form-group row">
                                 <div class="col-md-4 text-md-left">
                                     <label class="col-form-label"><strong class="text-secondary">Shop Type</strong></label>
                                 </div>
                                 <div class="col-md-8">
-                                    <select id="ShopCategoryCode" name="ShopCategoryId" class="form-control" style="width:100%;">
+                                    <select id="ShopCategoryId" name="ShopCategoryId" class="form-control" style="width:100%;">
                                         <option value="@Model.ShopCategoryId">@Model.ShopCategoryName</option>
                                     </select>
                                     <input type="hidden" name="ShopCategoryName" id="ShopCategoryName" value="@Model.ShopCategoryName" />
@@ -193,64 +169,56 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group row">
-                                <div class="col-md-4 text-md-left">
+                                <div class="col-md-2 text-md-left">
                                     <label class="col-form-label"><strong class="text-secondary">Address</strong></label>
                                 </div>
-                                <div class="col-md-8">
-                                    <input id="Address" type="text" class="form-control" placeholder="Address" name="Address" value="@Model.Address" readonly />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-4 text-md-left">
-                                </div>
-                                <div class="col-md-4">
-                                    <small class="control-label col-sm-12" for="StreetName"><i class="text-secondary">Locality</i></small>
-                                    <input id="StreetName" type="text" class="form-control mb-2" placeholder="Street Name" name="StreetName" value="@Model.StreetName" readonly />
-                                </div>
-                                <div class="col-md-4">
-                                    <small class="control-label col-sm-12" for="DistrictName"><i class="text-secondary">District</i></small>
-                                    <input id="DistrictName" type="text" class="form-control" placeholder="District Name" name="DistrictName" value="@Model.DistrictName" readonly />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-4 text-md-left">
-                                </div>
-                                <div class="col-md-4">
-                                    <small class="control-label col-sm-12" for="StateName"><i class="text-secondary">State / Province</i></small>
-                                    <input id="StateName" type="text" class="form-control mb-2" placeholder="State Name" name="StateName" value="@Model.StateName" readonly />
-                                </div>
-                                <div class="col-md-4">
-                                    <small class="control-label col-sm-12" for="CountryName"><i class="text-secondary">Country</i></small>
-                                    <input id="CountryName" type="text" class="form-control" placeholder="Country Name" name="CountryName" value="@Model.CountryName" readonly />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-4 text-md-left">
-                                </div>
-                                <div class="col-md-4">
-                                    <small class="control-label col-sm-12" for="PinCode"><i class="text-secondary">PIN Code</i></small>
-                                    <input id="PinCode" type="text" class="form-control" placeholder="PIN Code" name="PinCode" value="@Model.PinCode" readonly />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-4 text-md-left">
-                                    <label class="col-form-label"><strong class="text-secondary">Location</strong></label>
-                                </div>
-                                <div class="col-md-4">
-                                    <small class="control-label col-sm-12" for="Latitude"><i class="text-secondary">Latitude</i></small>
-                                    <input id="Latitude" type="text" class="form-control mb-2" placeholder="Latitude" name="Latitude" value="@Model.Latitude" readonly />
-                                </div>
-                                <div class="col-md-4">
-                                    <small class="control-label col-sm-12" for="Longitude"><i class="text-secondary">Longitude</i></small>
-                                    <input id="Longitude" type="text" class="form-control" placeholder="Longitude" name="Longitude" value="@Model.Longitude" readonly />
+                                <div class="col-md-10">
+                                    <textarea class="form-control" name="Address" id="Address" style="resize: none;" readonly>@Model.Address</textarea>
                                 </div>
                             </div>
                             @*<div class="form-group row">
-                                <div class="col-md-4">
-                                    <label class="col-form-label"><strong class="text-secondary">IP Address</strong></label>
+                            <div class="col-md-4 text-md-left">
+                            </div>
+                            <div class="col-md-4">
+                                <small class="control-label col-sm-12" for="StreetName"><i class="text-secondary">Locality</i></small>
+                                <input id="StreetName" type="text" class="form-control mb-2" placeholder="Street Name" name="StreetName" value="@Model.StreetName" readonly />
+                            </div>
+                            <div class="col-md-4">
+                                <small class="control-label col-sm-12" for="DistrictName"><i class="text-secondary">District</i></small>
+                                <input id="DistrictName" type="text" class="form-control" placeholder="District Name" name="DistrictName" value="@Model.DistrictName" readonly />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4 text-md-left">
+                            </div>
+                            <div class="col-md-4">
+                                <small class="control-label col-sm-12" for="StateName"><i class="text-secondary">State / Province</i></small>
+                                <input id="StateName" type="text" class="form-control mb-2" placeholder="State Name" name="StateName" value="@Model.StateName" readonly />
+                            </div>
+                            <div class="col-md-4">
+                                <small class="control-label col-sm-12" for="CountryName"><i class="text-secondary">Country</i></small>
+                                <input id="CountryName" type="text" class="form-control" placeholder="Country Name" name="CountryName" value="@Model.CountryName" readonly />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-4 text-md-left">
+                            </div>
+                            <div class="col-md-4">
+                                <small class="control-label col-sm-12" for="PinCode"><i class="text-secondary">PIN Code</i></small>
+                                <input id="PinCode" type="text" class="form-control" placeholder="PIN Code" name="PinCode" value="@Model.PinCode" readonly />
+                            </div>
+                        </div>*@
+                            <div class="form-group row">
+                                <div class="col-md-2 mt-2 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Location</strong></label>
                                 </div>
-                                <div class="col-md-4">
-                                    <input id="IpAddress" type="text" class="form-control" placeholder="IP Address" name="IpAddress" value="@Model.IpAddress" />
+                                <div class="col-md-5">
+                                    <small class="control-label col-sm-12" for="Latitude"><i class="text-secondary">Latitude</i></small>
+                                    <input id="Latitude" type="text" class="form-control mb-2" placeholder="Latitude" name="Latitude" value="@Model.Latitude" readonly />
+                                </div>
+                                <div class="col-md-5">
+                                    <small class="control-label col-sm-12" for="Longitude"><i class="text-secondary">Longitude</i></small>
+                                    <input id="Longitude" type="text" class="form-control" placeholder="Longitude" name="Longitude" value="@Model.Longitude" readonly />
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -274,17 +242,7 @@
                                         </a>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <label class="text-secondary font-weight-bold ml-2">Banner Image</label><br />
-                                    <div class="img-upload-container">
-                                        <a href="~/Home/ImageDenied">
-                                            <img class="img-container w-100 h-100" id="img-banner" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageBannerPath" onerror="this.src='/Images/No Photo.png'" />
-                                            <input type="file" id="BannerImage" name="BannerImage" class="d-none" />
-                                            <label for="BannerImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>*@
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <div class="row">
@@ -312,165 +270,6 @@
                                         <input id="Adscore" type="number" min="1" value="@Model.Adscore" class="form-control" name="Adscore" />
                                     </div>
                                 </div>
-                                <div class="form-group row col-md-12">
-                                    <div class="col-md-5">
-                                        <label class="col-form-label"><strong class="text-secondary">IP Address</strong></label>
-                                    </div>
-                                    <div class="col-md-7">
-                                        <input id="IpAddress" type="text" class="form-control" placeholder="IP Address" name="IpAddress" value="@Model.IpAddress" />
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-md-4">
-                                        <label class="text-secondary font-weight-bold ml-2">Shop Image</label><br />
-                                        <div class="img-upload-container">
-                                            <a href="~/Home/ImageDenied">
-                                                <img class="img-container w-100 h-100" id="img-upload" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath" onerror="this.src='/Images/No Photo.png'" />
-                                                <input type="file" id="ShopImage" name="ShopImage" class="d-none" />
-                                                <label for="ShopImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="text-secondary font-weight-bold ml-2">Logo Image</label><br />
-                                        <div class="img-upload-container">
-                                            <a href="~/Home/ImageDenied">
-                                                <img class="img-container w-100 h-100" id="img-logo" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageLogoPath" onerror="this.src='/Images/No Photo.png'" />
-                                                <input type="file" id="LogoImage" name="LogoImage" class="d-none" />
-                                                <label for="LogoImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label class="text-secondary font-weight-bold ml-2">Banner Image</label><br />
-                                        <div class="img-upload-container">
-                                            <a href="~/Home/ImageDenied">
-                                                <img class="img-container w-100 h-100" id="img-banner" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageBannerPath" onerror="this.src='/Images/No Photo.png'" />
-                                                <input type="file" id="BannerImage" name="BannerImage" class="d-none" />
-                                                <label for="BannerImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                @*<div class="col-md-12 form-group row">
-            <div class="col-md-5 text-md-left">
-                <label class="col-form-label"><strong class="text-secondary">Opening Hours</strong></label>
-            </div>
-            <div class="col-md-7">
-            </div>
-        </div>*@
-                                @*<div class="col-md-12 form-group row">
-            <div class="col-md-1 text-md-left">
-            </div>
-            <div class="col-md-4 text-md-left">
-                <label class="col-form-label text-secondary font-weight-bold">Monday</label>
-            </div>
-            <div class="col-md-3">
-                <input id="MondayOpenTime" type="text" class="form-control" name="MondayOpenTime" value="@Model.MondayOpenTime" />
-            </div>
-            <div class="col-md-1">
-                <h5 class="font-weight-bold">-</h5>
-            </div>
-            <div class="col-md-3">
-                <input id="MondayCloseTime" type="text" class="form-control" name="MondayCloseTime" value="@Model.MondayCloseTime" />
-            </div>
-        </div>
-        <div class="col-md-12 form-group row">
-            <div class="col-md-1 text-md-left">
-            </div>
-            <div class="col-md-4 text-md-left">
-                <label class="col-form-label text-secondary font-weight-bold">Tuesday</label>
-            </div>
-            <div class="col-md-3">
-                <input id="TuesdayOpenTime" type="text" class="form-control" name="TuesdayOpenTime" value="@Model.TuesdayOpenTime" />
-            </div>
-            <div class="col-md-1">
-                <h5 class="font-weight-bold">-</h5>
-            </div>
-            <div class="col-md-3">
-                <input id="TuesdayCloseTime" type="text" class="form-control" name="TuesdayCloseTime" value="@Model.TuesdayCloseTime" />
-            </div>
-        </div>
-        <div class="col-md-12 form-group row">
-            <div class="col-md-1 text-md-left">
-            </div>
-            <div class="col-md-4 text-md-left">
-                <label class="col-form-label text-secondary font-weight-bold">Wednesday</label>
-            </div>
-            <div class="col-md-3">
-                <input id="WednesdayOpenTime" type="text" class="form-control" name="WednesdayOpenTime" value="@Model.WednesdayOpenTime" />
-            </div>
-            <div class="col-md-1">
-                <h5 class="font-weight-bold">-</h5>
-            </div>
-            <div class="col-md-3">
-                <input id="WednesdayCloseTime" type="text" class="form-control" name="WednesdayCloseTime" value="@Model.WednesdayCloseTime" />
-            </div>
-        </div>
-        <div class="col-md-12 form-group row">
-            <div class="col-md-1 text-md-left">
-            </div>
-            <div class="col-md-4 text-md-left">
-                <label class="col-form-label text-secondary font-weight-bold">Thursday</label>
-            </div>
-            <div class="col-md-3">
-                <input id="ThursdayOpenTime" type="text" class="form-control" name="ThursdayOpenTime" value="@Model.ThursdayOpenTime" />
-            </div>
-            <div class="col-md-1">
-                <h5 class="font-weight-bold">-</h5>
-            </div>
-            <div class="col-md-3">
-                <input id="ThursdayCloseTime" type="text" class="form-control" name="ThursdayCloseTime" value="@Model.ThursdayCloseTime" />
-            </div>
-        </div>
-        <div class="col-md-12 form-group row">
-            <div class="col-md-1 text-md-left">
-            </div>
-            <div class="col-md-4 text-md-left">
-                <label class="col-form-label text-secondary font-weight-bold">Friday</label>
-            </div>
-            <div class="col-md-3">
-                <input id="FridayOpenTime" type="text" class="form-control" name="FridayOpenTime" value="@Model.FridayOpenTime" />
-            </div>
-            <div class="col-md-1">
-                <h5 class="font-weight-bold">-</h5>
-            </div>
-            <div class="col-md-3">
-                <input id="FridayCloseTime" type="text" class="form-control" name="FridayCloseTime" value="@Model.FridayCloseTime" />
-            </div>
-        </div>
-        <div class="col-md-12 form-group row">
-            <div class="col-md-1 text-md-left">
-            </div>
-            <div class="col-md-4 text-md-left">
-                <label class="col-form-label text-secondary font-weight-bold">Saturday</label>
-            </div>
-            <div class="col-md-3">
-                <input id="SaturdayOpenTime" type="text" class="form-control" name="SaturdayOpenTime" value="@Model.SaturdayOpenTime" />
-            </div>
-            <div class="col-md-1">
-                <h5 class="font-weight-bold">-</h5>
-            </div>
-            <div class="col-md-3">
-                <input id="SaturdayCloseTime" type="text" class="form-control" name="SaturdayCloseTime" value="@Model.SaturdayCloseTime" />
-            </div>
-        </div>
-        <div class="col-md-12 form-group row">
-            <div class="col-md-1 text-md-left">
-            </div>
-            <div class="col-md-4 text-md-left">
-                <label class="col-form-label text-secondary font-weight-bold">Sunday</label>
-            </div>
-            <div class="col-md-3">
-                <input id="SundayOpenTime" type="text" class="form-control" name="SundayOpenTime" value="@Model.SundayOpenTime" />
-            </div>
-            <div class="col-md-1">
-                <h5 class="font-weight-bold">-</h5>
-            </div>
-            <div class="col-md-3">
-                <input id="SundayCloseTime" type="text" class="form-control" name="SundayCloseTime" value="@Model.SundayCloseTime" />
-            </div>
-        </div>*@
                             </div>
                         </div>
                     </div>
@@ -758,8 +557,8 @@
                                         <button type="button" class="close" data-dismiss="alert">&times;</button>
                                     </div>
                                     <label class="col-md-12"><small class="text-secondary"><i>Authorised Brand Name</i></small></label>
-                                    <select id="AuthorisedBrandCode" name="AuthorisedBrandCode" class="form-control">
-                                        <option value="@Model.AuthorisedBrandCode">@Model.AuthorisedBrandName</option>
+                                    <select id="AuthorisedBrandId" name="AuthorisedBrandId" class="form-control">
+                                        <option value="@Model.AuthorisedBrandId">@Model.AuthorisedBrandName</option>
                                     </select>
                                     <input type="hidden" name="AuthorisedBrandName" id="AuthorisedBrandName" value="@Model.AuthorisedBrandName" />
                                     <label class="col-md-12"><small class="text-secondary"><i>Authorised Certificate Upload</i></small></label>
@@ -936,17 +735,17 @@
                                     <input id="AccountNumber" type="text" class="form-control" name="AccountNumber" value="@Model.AccountNumber" />
                                 </div>
                                 <div class="col-md-6">
-                                    <small class="control-label col-sm-12" for="IFSCCode"><i class="text-secondary">IFSC Code</i></small>
+                                    <small class="control-label col-sm-12" for="IFSCCode"><i class="text-secondary">IFSC Id</i></small>
                                     <input id="IFSCCode" type="text" class="form-control" name="IFSCCode" value="@Model.IFSCCode" />
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-md-6">
-                                    <small class="control-label col-sm-12" for="SwiftCode"><i class="text-secondary">SWIFT Code</i></small>
+                                    <small class="control-label col-sm-12" for="SwiftCode"><i class="text-secondary">SWIFT Id</i></small>
                                     <input id="SwiftCode" type="text" class="form-control" name="SwiftCode" value="@Model.SwiftCode" />
                                 </div>
                                 <div class="col-md-6">
-                                    <small class="control-label col-sm-12" for="UPIID"><i class="text-secondary">UPI Code</i></small>
+                                    <small class="control-label col-sm-12" for="UPIID"><i class="text-secondary">UPI Id</i></small>
                                     <input id="UPIID" type="text" class="form-control" name="UPIID" value="@Model.UPIID" />
                                 </div>
                             </div>
@@ -1298,7 +1097,7 @@
                         <input type="text" class="form-control col-md-8" value="@Model.AccountName" readonly />
                         <label class="col-md-4 text-left text-secondary font-weight-bold mt-1"><i>Account Number</i></label>
                         <input type="text" class="form-control col-md-8" value="@Model.AccountNumber" readonly />
-                        <label class="col-md-4 text-left text-secondary font-weight-bold mt-1"><i>IFSC Code</i></label>
+                        <label class="col-md-4 text-left text-secondary font-weight-bold mt-1"><i>IFSC Id</i></label>
                         <input type="text" class="form-control col-md-8" value="@Model.IFSCCode" readonly />
                     </div>
                 </div>
@@ -1375,8 +1174,8 @@
         $(function () {
             $('#OTP').click(function () {
                 var mobileNo = $('#OwnerPhoneNumber').val();
-                var code = $("#Code").val();
-                $.getJSON("/Shop/GenerateOTP?MobileNo=" + mobileNo + "&Code=" + code, function (data) {
+                var Id = $("#Id").val();
+                $.getJSON("/Shop/GenerateOTP?MobileNo=" + mobileNo + "&Id=" + Id, function (data) {
                     $('#OTPNumber').val(data.data);
                     if (data.data != null) {
                         $("#OTP").attr('disabled', true);
@@ -1391,27 +1190,28 @@
 
         $(function () {
             $('#GeneratePassword').click(function () {
-                var code = $('#CustomerCode').val();
-                $.getJSON("/Shop/GeneratePassword?Code=" + code, function (data) {
+                var Id = $('#CustomerId').val();
+                $.getJSON("/Shop/GeneratePassword?Id=" + Id, function (data) {
                     $('#Password').val(data.data);
                     $("#GeneratePassword").attr('disabled', true);
+                    $(".showPasswordtext").addClass("d-none");
+                    $(".disablePasswordtext").removeClass("d-none");
                 });
             });
         });
 
         $(document).ready(function () {
 
-            var code = $('#Code').val();
+            var Id = $('#Id').val();
             var password = $('#Password').val();
             var PhoneNumber = $('#PhoneNumber').val();
             var imgcount = $('#Count').val();
-            $.getJSON("/Shop/VerifyOTP?Code=" + code + "&PhoneNumber=" + PhoneNumber, function (data) {
+            $.getJSON("/Shop/VerifyOTP?Id=" + Id + "&PhoneNumber=" + PhoneNumber, function (data) {
                 if (data.Verify == true) {
                     $(".generateOTP").addClass("d-none");
                     $(".verifyOTP").addClass("d-none");
                     $(".PhoneVerify").addClass("d-none");
                     $(".documentVerifyPending").removeClass("d-none");
-                    //$(".generatePassword").removeClass("d-none");
                     $(".NotverifyOTP").removeClass("d-none");
                 }
                 if (data.otp != "") {
@@ -1427,8 +1227,12 @@
 
             if (password != "") {
                 $("#GeneratePassword").attr('disabled', true);
+                $(".showPasswordtext").addClass("d-none");
+                $(".disablePasswordtext").removeClass("d-none");
             } else {
                 $("#GeneratePassword").attr('disabled', false);
+                $(".showPasswordtext").removeClass("d-none");
+                $(".disablePasswordtext").addClass("d-none");
             }
 
             var verify = "@Model.Verify";
@@ -1809,7 +1613,7 @@
                 $('#Count').val(imgcount);
                 //if (imgcount == 0) {
 
-                //    $.getJSON("/Shop/VerifyImage?Code=" + code, function (data) {
+                //    $.getJSON("/Shop/VerifyImage?Id=" + Id, function (data) {
                 //        if (data.data == true) {
 
                 //            //$(".generatePassword").removeClass("d-none");
@@ -1838,7 +1642,7 @@
                 $('#Count').val(imgcount);
                 //if (imgcount == 0) {
 
-                //    $.getJSON("/Shop/VerifyImage?Code=" + code, function (data) {
+                //    $.getJSON("/Shop/VerifyImage?Id=" + Id, function (data) {
                 //        if (data.data == true) {
                 //            //$(".generatePassword").removeClass("d-none");
                 //        }
@@ -1867,7 +1671,7 @@
                 $('#Count').val(imgcount);
                 //if (imgcount == 0) {
 
-                //    $.getJSON("/Shop/VerifyImage?Code=" + code, function (data) {
+                //    $.getJSON("/Shop/VerifyImage?Id=" + Id, function (data) {
                 //        if (data.data == true) {
                 //            //$(".generatePassword").removeClass("d-none");
                 //        }
@@ -1896,7 +1700,7 @@
                 $('#Count').val(imgcount);
                 //if (imgcount == 0) {
 
-                //    $.getJSON("/Shop/VerifyImage?Code=" + code, function (data) {
+                //    $.getJSON("/Shop/VerifyImage?Id=" + Id, function (data) {
                 //        if (data.data == true) {
                 //            //$(".generatePassword").removeClass("d-none");
                 //        }
@@ -1926,7 +1730,7 @@
                 $('#Count').val(imgcount);
                 //if (imgcount == 0) {
 
-                //    $.getJSON("/Shop/VerifyImage?Code=" + code, function (data) {
+                //    $.getJSON("/Shop/VerifyImage?Id=" + Id, function (data) {
                 //        if (data.data == true) {
 
                 //            //$(".generatePassword").removeClass("d-none");
@@ -1956,7 +1760,7 @@
                 $('#Count').val(imgcount);
                 //if (imgcount == 0) {
 
-                //    $.getJSON("/Shop/VerifyImage?Code=" + code, function (data) {
+                //    $.getJSON("/Shop/VerifyImage?Id=" + Id, function (data) {
                 //        if (data.data == true) {
                 //            //$(".generatePassword").removeClass("d-none");
                 //        }
@@ -1985,7 +1789,7 @@
                 $('#Count').val(imgcount);
                 //if (imgcount == 0) {
 
-                //    $.getJSON("/Shop/VerifyImage?Code=" + code, function (data) {
+                //    $.getJSON("/Shop/VerifyImage?Id=" + Id, function (data) {
                 //        if (data.data == true) {
                 //            //$(".generatePassword").removeClass("d-none");
                 //        }
@@ -2014,7 +1818,7 @@
                 $('#Count').val(imgcount);
                 //if (imgcount == 0) {
 
-                //    $.getJSON("/Shop/VerifyImage?Code=" + code, function (data) {
+                //    $.getJSON("/Shop/VerifyImage?Id=" + Id, function (data) {
                 //        if (data.data == true) {
                 //            //$(".generatePassword").removeClass("d-none");
                 //        }
@@ -2036,8 +1840,8 @@
             });
 
             //$(function () {
-            //    var code = $('#Code').val();
-            //    $.getJSON("/Shop/Activation?Code=" + code, function (data) {
+            //    var Id = $('#Id').val();
+            //    $.getJSON("/Shop/Activation?Id=" + Id, function (data) {
             //        if (data.count >= 10) {
             //            $(".generateOTP").addClass("d-none");
             //            $(".verifyOTP").removeClass("d-none");
@@ -2065,7 +1869,7 @@
                     }
                 });
 
-            $('#ShopCategoryCode').select2({
+            $('#ShopCategoryId').select2({
                 placeholder: "Search Shop Type",
                 ajax: {
                     url: "/Shop/GetShopCategorySelect2",
@@ -2077,7 +1881,7 @@
                 $('input[name="ShopCategoryName"]').val(e.params.data.text);
             });
 
-            $('#AuthorisedBrandCode').select2({
+            $('#AuthorisedBrandId').select2({
                 placeholder: "Search Brand",
                 ajax: {
                     url: "/Shop/GetBrandSelect2",
@@ -2088,24 +1892,6 @@
             }).on('select2:select', function (e) {
                 $('input[name="AuthorisedBrandName"]').val(e.params.data.text);
             });
-
-            var phone = $('#PhoneNumber').val();
-            if (phone != "") {
-                $('.manualmobile').addClass('d-none');
-                $('.mobile').removeClass('d-none');
-            } else {
-                $('.mobile').addClass('d-none');
-                $('.manualmobile').removeClass('d-none');
-            }
-            var website = $('#Website').val();
-            if (website != null) {
-                $('.website').removeClass('d-none');
-                $('.manualwebsite').addClass('d-none');
-            } else {
-                $('.website').addClass('d-none');
-                $('.manualwebsite').removeClass('d-none');
-            }
-
 
             $(document).on('change', '.btn-file :file', function () {
                 var input = $(this),
@@ -2361,8 +2147,8 @@
             });
             markers.push(marker);
 
-            //var google_maps_geocoder = new google.maps.Geocoder();
-            //google_maps_geocoder.geocode(
+            //var google_maps_geoIdr = new google.maps.GeoIdr();
+            //google_maps_geoIdr.geoId(
             //    { 'latLng': pos },
             //    function (results, status) {
             //        console.log(results);
@@ -2414,7 +2200,7 @@
                     if (this.types[0] == "country") {
                         $('#CountryName').val(this.long_name);
                     }
-                    if (this.types[0] == "postal_code") {
+                    if (this.types[0] == "postal_Id") {
                         $('#PinCode').val(this.long_name);
                     }
                 });
@@ -2428,25 +2214,9 @@
                     $('#Rating').val(data.result.result.rating);
                     $('#CustomerReview').val(data.result.result.user_ratings_total);
                     $('#Name').val(data.result.result.name);
-
-                    if (data.result.result.international_phone_number != null) {
-                        $('.manualmobile').addClass('d-none');
-                        $('.mobile').removeClass('d-none');
-                        $('#PhoneNumber').val(data.result.result.international_phone_number);
-                    } else {
-                        $('.mobile').addClass('d-none');
-                        $('.manualmobile').removeClass('d-none');
-                    }
-
-                    if (data.result.result.website != null) {
-                        $('.website').removeClass('d-none');
-                        $('.manualwebsite').addClass('d-none');
-                        $('#Website').val(data.result.result.website);
-                    } else {
-                        $('.website').addClass('d-none');
-                        $('.manualwebsite').removeClass('d-none');
-                    }
-
+                    $('#PhoneNumber').val(data.result.result.international_phone_number);
+                    $('#Website').val(data.result.result.website);
+                    
                     var monday = data.result.result.opening_hours.weekday_text[0];
                     var mon = monday.split(" ");
                     var amm = mon[1] + " " + mon[2];

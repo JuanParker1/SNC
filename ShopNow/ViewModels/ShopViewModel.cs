@@ -30,8 +30,7 @@ namespace ShopNow.ViewModels
         public HttpPostedFileBase OtherLicenseImage { get; set; }
         public HttpPostedFileBase AuthorisedDistributorImage { get; set; }
         public string Otp { get; set; }
-
-
+        
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
         public string ImagePath { get; set; }
@@ -97,128 +96,8 @@ namespace ShopNow.ViewModels
         public int Adscore { get; set; }
         public Nullable<bool> IsOnline { get; set; }
         public string GooglePlaceId { get; set; }
-       
         public int Count { get; set; }
     }
-
-    public class ShopPostEditViewModel
-    {
-        public HttpPostedFileBase AadharPdf { get; set; }
-        public HttpPostedFileBase FSSAIPdf { get; set; }
-        public HttpPostedFileBase DrugPdf { get; set; }
-        public HttpPostedFileBase EstablishPdf { get; set; }
-        public HttpPostedFileBase OtherLicensePdf { get; set; }
-        public HttpPostedFileBase AuthorisedDistributorPdf { get; set; }
-        public HttpPostedFileBase GSTINPdf { get; set; }
-        public HttpPostedFileBase PanPdf { get; set; }
-        public HttpPostedFileBase AccountPdf { get; set; }
-        public HttpPostedFileBase AadharImage { get; set; }
-        public HttpPostedFileBase ShopImage { get; set; }
-        public HttpPostedFileBase LogoImage { get; set; }
-        public HttpPostedFileBase BannerImage { get; set; }
-        public HttpPostedFileBase LicenseImage { get; set; }
-        public HttpPostedFileBase PanImage { get; set; }
-        public HttpPostedFileBase AccountImage { get; set; }
-        public HttpPostedFileBase GSTINImage { get; set; }
-        public HttpPostedFileBase FSSAIImage { get; set; }
-        public HttpPostedFileBase DrugImage { get; set; }
-        public HttpPostedFileBase EstablishImage { get; set; }
-        public HttpPostedFileBase OtherLicenseImage { get; set; }
-        public HttpPostedFileBase AuthorisedDistributorImage { get; set; }
-        public string Otp { get; set; }
-        public int Adscore { get; set; }
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string OwnerPhoneNumber { get; set; }
-        public string PhoneNumber { get; set; }
-        public string ManualPhoneNumber { get; set; }
-        public string ImageLogoPath { get; set; }
-        public string ImageBannerPath { get; set; }
-        public string ImagePath { get; set; }
-        public string ImageAadharPath { get; set; }
-        public string ImageAccountPath { get; set; }
-        public string ImageGSTINPath { get; set; }
-        public string ImagePanPath { get; set; }
-        public string ImageFSSAIPath { get; set; }
-        public string ImageDrugPath { get; set; }
-        public string ImageEstablishPath { get; set; }
-        public string ImageOtherLicensePath { get; set; }
-        public string ImageAuthoriseBrandPath { get; set; }
-        public string EstablishNumber { get; set; }
-        public string OtherLicenseNumber { get; set; }
-        public string AadharName { get; set; }
-        public string AadharNumber { get; set; }
-        public string FSSAINumber { get; set; }
-        public string DrugNumber { get; set; }
-        public string GSTINNumber { get; set; }
-        public string PanNumber { get; set; }
-        public string GSTStateCode { get; set; }
-        public string GSTStateName { get; set; }
-        public string OtherLicenseName { get; set; }
-        public string AuthorisedDistributorNumber { get; set; }
-        public string AuthorisedBrandCode { get; set; }
-        public string AuthorisedBrandName { get; set; }
-        public string BankName { get; set; }
-        public string AccountName { get; set; }
-        public string AccountNumber { get; set; }
-        public string AcountType { get; set; }
-        public string IFSCCode { get; set; }
-        public string SwiftCode { get; set; }
-        public string UPIID { get; set; }
-        public string Email { get; set; }
-        public string OfficialEmail { get; set; }
-        public string Website { get; set; }
-        public string ManualWebsite { get; set; }
-        public string CustomerId { get; set; }
-        public string CustomerName { get; set; }
-        public string CountryName { get; set; }
-        public string StateName { get; set; }
-        public string DistrictName { get; set; }
-        public string StreetName { get; set; }
-        public string Address { get; set; }
-        public string PinCode { get; set; }
-        public string IpAddress { get; set; }
-        public int CustomerReview { get; set; }
-        public double Rating { get; set; }
-        public string MondayOpenTime { get; set; }
-        public string TuesdayOpenTime { get; set; }
-        public string WednesdayOpenTime { get; set; }
-        public string ThursdayOpenTime { get; set; }
-        public string FridayOpenTime { get; set; }
-        public string SaturdayOpenTime { get; set; }
-        public string SundayOpenTime { get; set; }
-        public string MondayCloseTime { get; set; }
-        public string TuesdayCloseTime { get; set; }
-        public string WednesdayCloseTime { get; set; }
-        public string ThursdayCloseTime { get; set; }
-        public string FridayCloseTime { get; set; }
-        public string SaturdayCloseTime { get; set; }
-        public string SundayCloseTime { get; set; }
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
-        public bool AccessStaff { get; set; }
-        public int StaffMembers { get; set; }
-        public int ShopType { get; set; }
-        public string MemberCode { get; set; }
-        public int Status { get; set; }
-        public DateTime DateUpdated { get; set; }
-        public string ShopCategoryId { get; set; }
-        public string ShopCategoryName { get; set; }
-        public string Password { get; set; }
-        public string FSSAIStatus { get; set; }
-        public string DrugStatus { get; set; }
-        public string AuthorisedDistributorStatus { get; set; }
-        public int Count { get; set; }
-        public bool FSSIApprove { get; set; }
-        public bool DrugApprove { get; set; }
-        public bool EstablishApprove { get; set; }
-        public bool OtherApprove { get; set; }
-        public bool AuthApprove { get; set; }
-        public bool GstinApprove { get; set; }
-        public bool PanApprove { get; set; }
-        public bool AccountApprove { get; set; }
-    }
-
 
     public class ShopEditViewModel
     {
@@ -248,13 +127,31 @@ namespace ShopNow.ViewModels
 
         public int Id { get; set; }
         public string Name { get; set; }
-        public string OwnerPhoneNumber { get; set; }
         public string PhoneNumber { get; set; }
-        public string ManualPhoneNumber { get; set; }
-        public string ImageLogoPath { get; set; }
-        public string ImageBannerPath { get; set; }
         public string ImagePath { get; set; }
-        public string ImageAadharPath { get; set; }
+        public int CustomerId { get; set; }
+        public string CountryName { get; set; }
+        public string StateName { get; set; }
+        public string DistrictName { get; set; }
+        public string StreetName { get; set; }
+        public string Address { get; set; }
+        public string PinCode { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public bool AccessStaff { get; set; }
+        public int StaffMembers { get; set; }
+        public string MemberCode { get; set; }
+        public string Email { get; set; }
+        public int CustomerReview { get; set; }
+        public double Rating { get; set; }
+        public string ImageLogoPath { get; set; }
+        public string OwnerPhoneNumber { get; set; }
+        public string OfficialEmail { get; set; }
+        public string Website { get; set; }
+        public bool Verify { get; set; }
+        public string BankName { get; set; }
+        public string AccountName { get; set; }
+        public string IFSCCode { get; set; }
         public string ImageAccountPath { get; set; }
         public string ImageGSTINPath { get; set; }
         public string ImagePanPath { get; set; }
@@ -262,58 +159,38 @@ namespace ShopNow.ViewModels
         public string ImageDrugPath { get; set; }
         public string ImageEstablishPath { get; set; }
         public string ImageOtherLicensePath { get; set; }
-        public string ImageAuthoriseBrandPath { get; set; }
-        public string EstablishNumber { get; set; }
-        public string OtherLicenseNumber { get; set; }
-        public string AadharName { get; set; }
-        public string AadharNumber { get; set; }
         public string FSSAINumber { get; set; }
         public string DrugNumber { get; set; }
+        public string EstablishNumber { get; set; }
+        public string OtherLicenseNumber { get; set; }
+        public string ImageAadharPath { get; set; }
+        public string AadharNumber { get; set; }
+        public string ImageAuthoriseBrandPath { get; set; }
+        public string AadharName { get; set; }
         public string GSTINNumber { get; set; }
         public string PanNumber { get; set; }
-        public string GSTStateCode { get; set; }
-        public string GSTStateName { get; set; }
         public string OtherLicenseName { get; set; }
         public string AuthorisedDistributorNumber { get; set; }
-        public string AuthorisedBrandCode { get; set; }
+        public Nullable<int> AuthorisedBrandId { get; set; }
         public string AuthorisedBrandName { get; set; }
-        public string BankName { get; set; }
-        public string AccountName { get; set; }
-        public string AccountNumber { get; set; }
         public string AcountType { get; set; }
-        public string IFSCCode { get; set; }
         public string SwiftCode { get; set; }
         public string UPIID { get; set; }
-        public string Email { get; set; }
-        public string OfficialEmail { get; set; }
-        public string Website { get; set; }
-        public string ManualWebsite { get; set; }
-        public string CustomerId { get; set; }
-        public string CustomerName { get; set; }
-        public string CountryName { get; set; }
-        public string StateName { get; set; }
-        public string DistrictName { get; set; }
-        public string StreetName { get; set; }
-        public string Address { get; set; }
-        public string PinCode { get; set; }
-        public string IpAddress { get; set; }
-        public int CustomerReview { get; set; }
-        public double Rating { get; set; }
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
-        public bool AccessStaff { get; set; }
-        public int StaffMembers { get; set; }
-        public int ShopType { get; set; }
-        public string MemberCode { get; set; }
-        public bool Verify { get; set; }
-        public int Status { get; set; }
-        public DateTime DateUpdated { get; set; }
-        public string ShopCategoryId { get; set; }
-        public string ShopCategoryName { get; set; }
-        public string Password { get; set; }
         public string FSSAIStatus { get; set; }
         public string DrugStatus { get; set; }
         public string AuthorisedDistributorStatus { get; set; }
+        public string AccountNumber { get; set; }
+        public int ShopCategoryId { get; set; }
+        public string ShopCategoryName { get; set; }
+        public int PincodeRateId { get; set; }
+        public int PincodeRateDeliveryRateSet { get; set; }
+        public int MarketingAgentId { get; set; }
+        public string MarketingAgentName { get; set; }
+        public int Adscore { get; set; }
+        public Nullable<bool> IsOnline { get; set; }
+        public string GooglePlaceId { get; set; }
+        public int Status { get; set; }
+        public string Password { get; set; }
         public int Count { get; set; }
         public bool FSSIApprove { get; set; }
         public bool DrugApprove { get; set; }
@@ -323,8 +200,8 @@ namespace ShopNow.ViewModels
         public bool GstinApprove { get; set; }
         public bool PanApprove { get; set; }
         public bool AccountApprove { get; set; }
-        public int Adscore { get; set; }
         public int Type { get; set; }
+        public bool PhoneVerify { get; set; }
     }
 
     public class ShopListViewModel
