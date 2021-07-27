@@ -37,14 +37,14 @@
                                 {
                                     <tr>
                                         <td></td>
-                                        <td><a class="text-theme_light" href="~/Customer/Details?code=@ShopNow.Helpers.AdminHelpers.ECode(item.Code)">@item.Name</a></td>
+                                        <td><a class="text-theme_light" href="~/Customer/Details?code=@ShopNow.Helpers.AdminHelpers.ECodeInt(item.Id)">@item.Name</a></td>
                                         <td>@item.PhoneNumber</td>
                                         <td class="w-25">@item.Address</td>
                                         <td>@item.DistrictName</td>
                                         <td>@item.StateName</td>
                                         <td class="text-break">
-                                            <a href="~/Customer/Edit?code=@ShopNow.Helpers.AdminHelpers.ECode(item.Code)" class="btn btn-warning text-center text-nowrap btn-sm mb-1 mr-2" style="padding: 3px 26px">Edit</a>
-                                            <a href="~/Customer/Delete?code=@ShopNow.Helpers.AdminHelpers.ECode(item.Code)" class="btn btn-danger text-center text-nowrap mb-1 btn-sm" style="padding: 3px 18px">Delete</a>
+                                            <a href="~/Customer/Edit?code=@ShopNow.Helpers.AdminHelpers.ECodeInt(item.Id)" class="btn btn-warning text-center text-nowrap btn-sm mb-1 mr-2" style="padding: 3px 26px">Edit</a>
+                                            <a href="~/Customer/Delete?code=@ShopNow.Helpers.AdminHelpers.ECodeInt(item.Id)" class="btn btn-danger text-center text-nowrap mb-1 btn-sm" style="padding: 3px 18px">Delete</a>
                                         </td>
                                     </tr>
                                 }
@@ -92,14 +92,14 @@
                         {
                             <tr>
                                 <td></td>
-                                <td><a class="text-theme_light" href="~/Customer/Details?code=@item.Code">@item.Name</a></td>
+                                <td><a class="text-theme_light" href="~/Customer/Details?code=@item.Id">@item.Name</a></td>
                                 <td>@item.PhoneNumber</td>
                                 <td class="w-25">@item.Address</td>
                                 <td>@item.DistrictName</td>
                                 <td>@item.StateName</td>
                                 <td class="text-break">
-                                    <a href="~/Customer/Edit?code=@item.Code" class="btn btn-warning text-center text-nowrap btn-sm mb-1 mr-2" style="padding: 3px 26px">Edit</a>
-                                    <a href="~/Customer/Delete?code=@item.Code" class="btn btn-danger text-center text-nowrap mb-1 btn-sm" style="padding: 3px 18px">Delete</a>
+                                    <a href="~/Customer/Edit?code=@item.Id" class="btn btn-warning text-center text-nowrap btn-sm mb-1 mr-2" style="padding: 3px 26px">Edit</a>
+                                    <a href="~/Customer/Delete?code=@item.Id" class="btn btn-danger text-center text-nowrap mb-1 btn-sm" style="padding: 3px 18px">Delete</a>
                                 </td>
                             </tr>
                         }
