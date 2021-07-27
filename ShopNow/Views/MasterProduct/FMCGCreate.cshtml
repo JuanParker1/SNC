@@ -211,6 +211,8 @@
     <script src="~/Scripts/multiple-image-upload.js"></script>
     <link href="~/Content/multiple-image-upload.css" rel="stylesheet" />
     <script src="~/Scripts/ckeditor/ckeditor.js"></script>
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
 
     <script>
         $(document).ready(function () {
@@ -280,7 +282,7 @@
                 }
             }).on('select2:select', function (e) {
                 $('input[name="PackageName"]').val(e.params.data.text);
-                }); 
+                });
 
             $('#MeasurementUnitId').select2({
                 placeholder: "Search Unit",
