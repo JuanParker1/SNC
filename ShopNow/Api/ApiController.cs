@@ -32,7 +32,8 @@ namespace ShopNow.Controllers
         private sncEntities db = new sncEntities();
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
-        private string apipath= "https://admin.shopnowchat.in/";
+        //private string apipath= "https://admin.shopnowchat.in/";
+        private string apipath = "http://117.221.69.52:85/";
 
         private const string _prefix = "";
 
