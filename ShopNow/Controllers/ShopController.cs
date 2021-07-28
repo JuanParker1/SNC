@@ -1003,6 +1003,26 @@ namespace ShopNow.Controllers
             return RedirectToAction("List");
         }
 
+        [AccessPolicy(PageCode = "")]
+        public ActionResult CreditList()
+        {
+            var model = new ShopCreditViewModel();
+            model.ListItems = db.ShopCredits
+                .Join(db.Shops, sc => sc.CustomerId, s => s.CustomerId, (sc, s) => new { sc, s })
+                .Select(i => new ShopCreditViewModel.ListItem
+                {
+                    DeliveryCredit = i.sc.DeliveryCredit,
+                    Id = i.sc.Id,
+                    PlatformCredit = i.sc.PlatformCredit,
+                    ShopName = i.s.Name,
+                    ShopOwnerName = i.s.CustomerName,
+                    ShopOwnerPhoneNumber = i.s.OwnerPhoneNumber,
+                    DeliveryCreditCssColor = i.sc.DeliveryCredit <= 150 ? "text-danger" : (i.sc.DeliveryCredit <= 250 && i.sc.DeliveryCredit > 150) ? "text-warning" : "text-success",
+                    PlatformCreditCssColor = i.sc.PlatformCredit <= 100 ? "text-danger" : (i.sc.PlatformCredit <= 200 && i.sc.PlatformCredit > 100) ? "text-warning" : "text-success"
+                }).ToList();
+            return View(model);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

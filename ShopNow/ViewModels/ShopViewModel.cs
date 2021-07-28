@@ -250,6 +250,22 @@ namespace ShopNow.ViewModels
         }
     }
 
+    public class ShopCreditViewModel
+    {
+        public List<ListItem> ListItems { get; set; }
+        public class ListItem
+        {
+            public int Id { get; set; }
+            public string ShopName { get; set; }
+            public string ShopOwnerName{ get; set; }
+            public string ShopOwnerPhoneNumber { get; set; }
+            public double PlatformCredit { get; set; }
+            public double DeliveryCredit { get; set; }
+            public string PlatformCreditCssColor { get; set; }
+            public string DeliveryCreditCssColor { get; set; }
+        }
+    }
+
     //Api
     public class ShopCreateViewModel
     {
