@@ -370,6 +370,10 @@ namespace ShopNow.Controllers
             db.SaveChanges();
 
             // DeliveryBoy.Edit(deliveryBoy, out int error);
+            var fcmToken = (from c in db.Customers
+                            where c.Id == deliveryBoy.CustomerId
+                            select c.FcmTocken ?? "").FirstOrDefault().ToString();
+            Helpers.PushNotification.SendbydeviceId("Your registration has been accepted. Go online to receive order.", "ShopNowChat", "a.mp3", fcmToken.ToString());
 
             return RedirectToAction("List");
         }
@@ -394,6 +398,10 @@ namespace ShopNow.Controllers
             db.SaveChanges();
             // DeliveryBoy.Edit(deliveryBoy, out int error);
 
+            var fcmToken = (from c in db.Customers
+                            where c.Id == deliveryBoy.CustomerId
+                            select c.FcmTocken ?? "").FirstOrDefault().ToString();
+            Helpers.PushNotification.SendbydeviceId("Your registration has been rejected.", "ShopNowChat", "a.mp3", fcmToken.ToString());
             return RedirectToAction("List");
         }
 

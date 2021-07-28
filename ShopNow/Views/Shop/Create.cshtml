@@ -4,13 +4,10 @@
 }
 <title>ShopNow | Shop Entry</title>
 <style>
-
-
     #map {
         height: 100%;
         position: inherit;
     }
-
     .focused {
         border: solid 1px red;
     }
@@ -40,7 +37,7 @@
             @using (Html.BeginForm("Create", "Shop", FormMethod.Post, new { id = "ShopForm", role = "form", enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
-                <input type="hidden" name="CustomerCode" id="CustomerCode" />
+                <input type="hidden" name="CustomerId" id="CustomerId" />
                 <input type="hidden" name="CustomerName" id="CustomerName" />
                 <input type="hidden" name="shopduplicateCount" id="shopduplicateCount" value="@ViewBag.shopduplicateCount" />
                 <input type="hidden" name="shopbeforeApprovalCount" id="shopbeforeApprovalCount" value="@ViewBag.shopbeforeApprovalCount" />
@@ -64,7 +61,7 @@
                                     <input id="Name" type="text" class="form-control" name="Name" />
                                 </div>
                             </div>
-                            <div class="form-group row mobile">
+                            <div class="form-group row">
                                 <div class="col-md-4 text-md-left">
                                     <label class="col-form-label"><strong class="text-secondary">Mobile Number</strong></label>
                                 </div>
@@ -72,60 +69,47 @@
                                     <input id="PhoneNumber" type="text" class="form-control" name="PhoneNumber" />
                                 </div>
                             </div>
-                            <div class="form-group row d-none manualmobile">
-                                <div class="col-md-4 text-md-left">
-                                    <label class="col-form-label"><strong class="text-secondary">Mobile Number</strong></label>
-                                </div>
-                                <div class="col-md-5">
-                                    <input id="ManualPhoneNumber" type="text" class="form-control" name="ManualPhoneNumber" />
-                                </div>
-                                <div class="col-md-2 OtpButton px-0">
+                            <div class="form-group row manualmobile">
+                                <div class="col-md-4"></div>
+                                <div class="col-md-3 OtpButton">
                                     <input type="button" value="OTP" class="btn btn-info btn-sm form-control" id="btnOTP" />
                                 </div>
-                                <div class="col-md-2 d-none OtpNumber px-0">
-                                    <input id="Otp" type="text" class="form-control" name="Otp" />
+                                <div class="col-md-6 d-none OtpNumber">
+                                    <input id="Otp" type="text" class="form-control" name="Otp" placeholder="Enter OTP" />
                                 </div>
-                                <div class="col-md-1 d-none GoIcon p-1 pl-2">
+                                <div class="col-md-1 d-none GoIcon">
                                     <a href="#"><i class="fa fa-arrow-circle-right fa-2x text-dark" id="OtpGoIcon"></i></a>
                                 </div>
-                                <div class="col-md-1 OkIcon d-none p-1 pl-2">
+                                <div class="col-md-1 OkIcon d-none">
                                     <a href="#"><i class="fa fa-check fa-2x text-success"></i></a>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <div class="col-md-4 text-md-left">
-                                    <label class="col-form-label"><strong class="text-secondary">Official Email</strong></label>
+                                <div class="form-group row">
+                                    <div class="col-md-4 text-md-left">
+                                        <label class="col-form-label"><strong class="text-secondary">Official Email</strong></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input id="OfficialEmail" type="text" class="form-control" name="OfficialEmail" />
+                                    </div>
                                 </div>
-                                <div class="col-md-8">
-                                    <input id="OfficialEmail" type="text" class="form-control" name="OfficialEmail" />
+                                <div class="form-group row">
+                                    <div class="col-md-4 text-md-left">
+                                        <label class="col-form-label"><strong class="text-secondary">Website</strong></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input id="Website" type="text" class="form-control" name="Website" />
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group row website">
-                                <div class="col-md-4 text-md-left">
-                                    <label class="col-form-label"><strong class="text-secondary">Website</strong></label>
-                                </div>
-                                <div class="col-md-8">
-                                    <input id="Website" type="text" class="form-control" name="Website" readonly />
-                                </div>
-                            </div>
-                            <div class="form-group row d-none manualwebsite">
-                                <div class="col-md-4 text-md-left">
-                                    <label class="col-form-label"><strong class="text-secondary">Manual Website</strong></label>
-                                </div>
-                                <div class="col-md-8">
-                                    <input id="ManualWebsite" type="text" class="form-control" name="ManualWebsite" />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-4 text-md-left">
-                                    <label class="col-form-label"><strong class="text-secondary">Shop Type</strong></label>
-                                </div>
-                                <div class="col-md-8">
-                                    <select id="ShopCategoryCode" name="ShopCategoryCode" class="form-control" style="width:100%;" required></select>
-                                    <input type="hidden" name="ShopCategoryName" id="ShopCategoryName" />
+                                <div class="form-group row">
+                                    <div class="col-md-4 text-md-left">
+                                        <label class="col-form-label"><strong class="text-secondary">Shop Type</strong></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <select id="ShopCategoryId" name="ShopCategoryId" class="form-control" style="width:100%;" required></select>
+                                        <input type="hidden" name="ShopCategoryName" id="ShopCategoryName" />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         <div class="col-md-6">
                             <div class="form-group row">
                                 <div class="col-md-4 text-md-left">
@@ -163,8 +147,8 @@
                                 <div class="col-md-4 text-md-left">
                                 </div>
                                 <div class="col-md-4">
-                                    <small class="control-label col-sm-12" for="PinCode"><i class="text-secondary">PIN Code</i></small>
-                                    <input id="PinCode" type="text" class="form-control" placeholder="PIN Code" name="PinCode" readonly />
+                                    <small class="control-label col-sm-12" for="PinId"><i class="text-secondary">PIN Id</i></small>
+                                    <input id="PinId" type="text" class="form-control" placeholder="PIN Id" name="PinId" readonly />
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -182,14 +166,6 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <div class="col-md-3">
-                                    <label class="col-form-label"><strong class="text-secondary">IP Address</strong></label>
-                                </div>
-                                <div class="col-md-4">
-                                    <input id="IpAddress" type="text" class="form-control" placeholder="IP Address" name="IpAddress" />
-                                </div>
-                            </div>
-                            <div class="form-group row">
                                 <div class="col-md-4">
                                     <label class="text-secondary font-weight-bold ml-2">Shop Image</label><br />
                                     <div class="img-upload-container">
@@ -204,14 +180,6 @@
                                         <img class="img-container w-100 h-100" id="img-logo" onerror="this.src='/Images/No Photo.png'" />
                                         <input type="file" id="LogoImage" name="LogoImage" class="d-none" />
                                         <label for="LogoImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="text-secondary font-weight-bold ml-2">Banner Image</label><br />
-                                    <div class="img-upload-container">
-                                        <img class="img-container w-100 h-100" id="img-banner" onerror="this.src='/Images/No Photo.png'" />
-                                        <input type="file" id="BannerImage" name="BannerImage" class="d-none" />
-                                        <label for="BannerImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                     </div>
                                 </div>
                             </div>
@@ -241,128 +209,7 @@
                                     <div class="col-md-7">
                                         <input id="Adscore" type="number" min="1" value="1" class="form-control" name="Adscore" />
                                     </div>
-
                                 </div>
-                                <div class="col-md-12 form-group row">
-                                    <div class="col-md-5 text-md-left">
-                                        <label class="col-form-label"><strong class="text-secondary">Opening Hours</strong></label>
-                                    </div>
-                                    <div class="col-md-7">
-                                    </div>
-                                </div>
-                                <div class="col-md-12 form-group row">
-                                    <div class="col-md-1 text-md-left">
-                                    </div>
-                                    <div class="col-md-4 text-md-left">
-                                        <label class="col-form-label text-secondary font-weight-bold">Monday</label>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input id="MondayOpenTime" type="text" class="form-control" name="MondayOpenTime" />
-                                    </div>
-                                    <div class="col-md-1">
-                                        <h5 class="font-weight-bold">-</h5>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input id="MondayCloseTime" type="text" class="form-control" name="MondayCloseTime" />
-                                    </div>
-                                </div>
-                                <div class="col-md-12 form-group row">
-                                    <div class="col-md-1 text-md-left">
-                                    </div>
-                                    <div class="col-md-4 text-md-left">
-                                        <label class="col-form-label text-secondary font-weight-bold">Tuesday</label>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input id="TuesdayOpenTime" type="text" class="form-control" name="TuesdayOpenTime" />
-                                    </div>
-                                    <div class="col-md-1">
-                                        <h5 class="font-weight-bold">-</h5>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input id="TuesdayCloseTime" type="text" class="form-control" name="TuesdayCloseTime" />
-                                    </div>
-                                </div>
-                                <div class="col-md-12 form-group row">
-                                    <div class="col-md-1 text-md-left">
-                                    </div>
-                                    <div class="col-md-4 text-md-left">
-                                        <label class="col-form-label text-secondary font-weight-bold">Wednesday</label>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input id="WednesdayOpenTime" type="text" class="form-control" name="WednesdayOpenTime" />
-                                    </div>
-                                    <div class="col-md-1">
-                                        <h5 class="font-weight-bold">-</h5>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input id="WednesdayCloseTime" type="text" class="form-control" name="WednesdayCloseTime" />
-                                    </div>
-                                </div>
-                                <div class="col-md-12 form-group row">
-                                    <div class="col-md-1 text-md-left">
-                                    </div>
-                                    <div class="col-md-4 text-md-left">
-                                        <label class="col-form-label text-secondary font-weight-bold">Thursday</label>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input id="ThursdayOpenTime" type="text" class="form-control" name="ThursdayOpenTime" />
-                                    </div>
-                                    <div class="col-md-1">
-                                        <h5 class="font-weight-bold">-</h5>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input id="ThursdayCloseTime" type="text" class="form-control" name="ThursdayCloseTime" />
-                                    </div>
-                                </div>
-                                <div class="col-md-12 form-group row">
-                                    <div class="col-md-1 text-md-left">
-                                    </div>
-                                    <div class="col-md-4 text-md-left">
-                                        <label class="col-form-label text-secondary font-weight-bold">Friday</label>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input id="FridayOpenTime" type="text" class="form-control" name="FridayOpenTime" />
-                                    </div>
-                                    <div class="col-md-1">
-                                        <h5 class="font-weight-bold">-</h5>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input id="FridayCloseTime" type="text" class="form-control" name="FridayCloseTime" />
-                                    </div>
-                                </div>
-                                <div class="col-md-12 form-group row">
-                                    <div class="col-md-1 text-md-left">
-                                    </div>
-                                    <div class="col-md-4 text-md-left">
-                                        <label class="col-form-label text-secondary font-weight-bold">Saturday</label>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input id="SaturdayOpenTime" type="text" class="form-control" name="SaturdayOpenTime" />
-                                    </div>
-                                    <div class="col-md-1">
-                                        <h5 class="font-weight-bold">-</h5>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input id="SaturdayCloseTime" type="text" class="form-control" name="SaturdayCloseTime" />
-                                    </div>
-                                </div>
-                                <div class="col-md-12 form-group row">
-                                    <div class="col-md-1 text-md-left">
-                                    </div>
-                                    <div class="col-md-4 text-md-left">
-                                        <label class="col-form-label text-secondary font-weight-bold">Sunday</label>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input id="SundayOpenTime" type="text" class="form-control" name="SundayOpenTime" />
-                                    </div>
-                                    <div class="col-md-1">
-                                        <h5 class="font-weight-bold">-</h5>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input id="SundayCloseTime" type="text" class="form-control" name="SundayCloseTime" />
-                                    </div>
-                                </div>
-
                             </div>
                         </div>
                     </div>
@@ -572,7 +419,7 @@
                                         <button type="button" class="close" data-dismiss="alert">&times;</button>
                                     </div>
                                     <label class="col-md-12"><small class="text-secondary"><i>Authorised Brand Name</i></small></label>
-                                    <select id="AuthorisedBrandCode" name="AuthorisedBrandCode" class="form-control"></select>
+                                    <select id="AuthorisedBrandId" name="AuthorisedBrandId" class="form-control"></select>
                                     <input type="hidden" name="AuthorisedBrandName" id="AuthorisedBrandName" />
                                     <label class="col-md-12"><small class="text-secondary"><i>Authorised Certificate Upload</i></small></label>
                                     <input type="radio" class="ml-3" name="AuthLicense" id="AuthLicenseImage" value="Image" checked> <label for="AuthLicenseImage"> Image</label>
@@ -682,17 +529,17 @@
                                     <input id="AccountNumber" type="text" class="form-control" name="AccountNumber" />
                                 </div>
                                 <div class="col-md-6">
-                                    <small class="control-label col-sm-12" for="IFSCCode"><i class="text-secondary">IFSC Code</i></small>
-                                    <input id="IFSCCode" type="text" class="form-control" name="IFSCCode" />
+                                    <small class="control-label col-sm-12" for="IFSCId"><i class="text-secondary">IFSC Id</i></small>
+                                    <input id="IFSCId" type="text" class="form-control" name="IFSCId" />
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-md-6">
-                                    <small class="control-label col-sm-12" for="SwiftCode"><i class="text-secondary">SWIFT Code</i></small>
-                                    <input id="SwiftCode" type="text" class="form-control" name="SwiftCode" />
+                                    <small class="control-label col-sm-12" for="SwiftId"><i class="text-secondary">SWIFT Id</i></small>
+                                    <input id="SwiftId" type="text" class="form-control" name="SwiftId" />
                                 </div>
                                 <div class="col-md-6">
-                                    <small class="control-label col-sm-12" for="UPIID"><i class="text-secondary">UPI Code</i></small>
+                                    <small class="control-label col-sm-12" for="UPIID"><i class="text-secondary">UPI Id</i></small>
                                     <input id="UPIID" type="text" class="form-control" name="UPIID" />
                                 </div>
                             </div>
@@ -760,7 +607,7 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRsR3Wpkj_Vofy5FSU0otOx-6k-YFiNBk&libraries=places&callback=initMap"
             async defer></script>
     <script>
-        $('#AuthorisedBrandCode').select2();
+        $('#AuthorisedBrandId').select2();
 
         function myFunction() {
             var checkBox = document.getElementById("myCheck");
@@ -787,7 +634,7 @@
             }
 
             $('#phoneNumber').on("keypress", function (e) {
-                if (e.keyCode == 13) {
+                if (e.keyId == 13) {
                     $("#btnCustomer").click();
                 }
             });
@@ -798,7 +645,7 @@
                     if (data.data == true) {
                         $(".divContainer").removeClass("d-none");
                         $('input[name="CustomerName"]').val(data.CustomerName);
-                        $('input[name="CustomerCode"]').val(data.CustomerCode);
+                        $('input[name="CustomerId"]').val(data.CustomerId);
                         $("#OwnerPhoneNumber").val(data.PhoneNumber);
                         $("#AadharName").val(data.AadharName);
                         $("#AadharNumber").val(data.AadharNumber);
@@ -807,7 +654,6 @@
                         $("#btnCustomer").addClass("d-none");
                     } else {
                         $(".divContainer").addClass("d-none");
-                        // alert('Please Enter a Valid Customer Phone Number!');
                         swal("Notice!", "Please Enter a Valid Customer Phone Number!", "warning");
                         $("#phoneNumber").val("");
                         $("#phoneNumber").focus();
@@ -816,20 +662,19 @@
             });
 
             $('#btnOTP').click(function () {
-                var mobileNo = $('#ManualPhoneNumber').val();
-                var customercode = $('input[name="CustomerCode"]').val();
+                var mobileNo = $('#PhoneNumber').val();
+                var customerId = $('input[name="CustomerId"]').val();
                 if (mobileNo.length != 10) {
-                    //alert("Please Enter 10 digits of Mobile number");
                     swal("Notice!", "Please Enter 10 digits of Mobile number!", "warning");
-                    $('#ManualPhoneNumber').val("");
-                    $('#ManualPhoneNumber').focus();
+                    $('#PhoneNumber').val("");
+                    $('#PhoneNumber').focus();
                 } else {
-                    $.getJSON("/Shop/OTPGenerate?MobileNo=" + mobileNo + "&CustomerCode=" + customercode, function (data) {
+                    $.getJSON("/Shop/OTPGenerate?MobileNo=" + mobileNo + "&CustomerId=" + customerId, function (data) {
                         // $('#Otp').val(data.data);
                         if (data.data != null) {
                             $(".OtpButton").addClass("d-none");
                             $(".OtpNumber").removeClass("d-none");
-                            $('#ManualPhoneNumber').prop("readonly", true);
+                            $('#PhoneNumber').prop("readonly", true);
                             $(".GoIcon").removeClass("d-none");
                         }
                     });
@@ -852,7 +697,7 @@
             });
 
 
-            $('#ShopCategoryCode').select2({
+            $('#ShopCategoryId').select2({
                 placeholder: "Search Shop Type",
                 ajax: {
                     url: "/Shop/GetShopCategorySelect2",
@@ -862,7 +707,7 @@
                 }
             }).on('select2:select', function (e) {
                 $('input[name="ShopCategoryName"]').val(e.params.data.text);
-                var val = $('#ShopCategoryCode').val();
+                var val = $('#ShopCategoryId').val();
                 if (val == 0 || val == 1 || val == 2) {
                     $('.fssi').removeClass('d-none');
                     var radioValue = $("input[name='FssaiLicense']:checked").val();
@@ -1030,7 +875,7 @@
                         $("#img-account").attr('src', '');
                     }
                 });
-            $('#AuthorisedBrandCode').select2({
+            $('#AuthorisedBrandId').select2({
                 placeholder: "Search Brand",
                 ajax: {
                     url: "/Shop/GetBrandSelect2",
@@ -1050,7 +895,7 @@
                 var adharNumber = $("#AadharNumber").val();
                 var adharImage = $("#AadharImage").val();
                 var adharPdf = $("#AadharPdf").val();
-                var shoptype = $("#ShopCategoryCode").val();
+                var shoptype = $("#ShopCategoryId").val();
                 if (shoptype == null || shoptype == "") {
                     swal("Notice!", "Please Select Shop Type!", "warning");
                 } else if (adharName != "" && adharNumber != "" && (adharImage != "" || adharPdf != "")) {
@@ -1083,7 +928,7 @@
             });
 
             $(".SaveNR").click(function () {
-                var shoptype = $("#ShopCategoryCode").val();
+                var shoptype = $("#ShopCategoryId").val();
                 if (shoptype == null || shoptype == "") {
                     swal("Notice!", "Please Select Shop Type!", "warning");
                 } else {
@@ -1321,7 +1166,6 @@
             });
 
         });
-
         var map, infoWindow, markers = [];
         function initMap() {
             if (navigator.geolocation) {
@@ -1342,7 +1186,6 @@
                                 lat: position.coords.latitude,
                                 lng: position.coords.longitude
                             };
-
 
                             var marker = new google.maps.Marker({
                                 position: pos,
@@ -1389,9 +1232,7 @@
                                         $('#Latitude').val(results[0].geometry.location.lat);
                                         $('#Longitude').val(results[0].geometry.location.lng);
                                         $('#GooglePlaceId').val(results[0].place_id);
-                                        $.getJSON("https://api.ipify.org/?format=json", function (e) {
-                                            $('#IpAddress').val(e.ip);
-                                        });
+                                       
                                         $.getJSON('/Shop/GetShop?placeid=' + results[0].place_id, null, function (data) {
                                             $('#Rating').val(data.result.result.rating);
                                             $('#CustomerReview').val(data.result.result.user_ratings_total);
@@ -1405,70 +1246,11 @@
                                                 var phoneNWS = phone.replace(/\s/g, '');
                                                 $('#PhoneNumber').val(phoneNWS);
                                             } else {
-                                                $('.mobile').addClass('d-none');
+                                                $('.mobile').removeClass('d-none');
                                                 $('.manualmobile').removeClass('d-none');
                                             }
-
-                                            if (data.result.result.website != null) {
-                                                $('.manualwebsite').addClass('d-none');
-                                                $('#Website').val(data.result.result.website);
-                                            } else {
-                                                $('.website').addClass('d-none');
-                                                $('.manualwebsite').removeClass('d-none');
-                                            }
+                                            $('#Website').val(data.result.result.website);
                                             $('#Name').val(data.result.result.name);
-
-                                            if (data.result.result.opening_hours != null) {
-
-                                                var monday = data.result.result.opening_hours.weekday_text[0];
-                                                var mon = monday.split(" ");
-                                                var amm = mon[1] + " " + mon[2];
-                                                var pmm = mon[4] + " " + mon[5];
-                                                $('#MondayOpenTime').val(amm);
-                                                $('#MondayCloseTime').val(pmm);
-
-                                                var tuesday = data.result.result.opening_hours.weekday_text[1];
-                                                var tue = tuesday.split(" ");
-                                                var amt = tue[1] + " " + tue[2];
-                                                var pmt = tue[4] + " " + tue[5];
-                                                $('#TuesdayOpenTime').val(amt);
-                                                $('#TuesdayCloseTime').val(pmt);
-                                                var wednesday = data.result.result.opening_hours.weekday_text[2];
-                                                var wed = wednesday.split(" ");
-                                                var amw = wed[1] + " " + wed[2];
-                                                var pmw = wed[4] + " " + wed[5];
-                                                $('#WednesdayOpenTime').val(amw);
-                                                $('#WednesdayCloseTime').val(pmw);
-                                                var thursday = data.result.result.opening_hours.weekday_text[3];
-                                                var thu = thursday.split(" ");
-                                                var amt = thu[1] + " " + thu[2];
-                                                var pmt = thu[4] + " " + thu[5];
-                                                $('#ThursdayOpenTime').val(amt);
-                                                $('#ThursdayCloseTime').val(pmt);
-
-                                                var friday = data.result.result.opening_hours.weekday_text[4];
-                                                var fri = friday.split(" ");
-                                                var amf = fri[1] + " " + fri[2];
-                                                var pmf = fri[4] + " " + fri[5];
-                                                $('#FridayOpenTime').val(amf);
-                                                $('#FridayCloseTime').val(pmf);
-
-                                                var saturday = data.result.result.opening_hours.weekday_text[5];
-                                                var sat = saturday.split(" ");
-                                                var ams = sat[1] + " " + sat[2];
-                                                var pms = sat[4] + " " + sat[5];
-                                                $('#SaturdayOpenTime').val(ams);
-                                                $('#SaturdayCloseTime').val(pms);
-
-                                                var sunday = data.result.result.opening_hours.weekday_text[6];
-                                                var sun = sunday.split(" ");
-                                                var amu = sun[1] + " " + sun[2];
-                                                var pmu = sun[4] + " " + sun[5];
-                                                $('#SundayOpenTime').val(amu);
-                                                $('#SundayCloseTime').val(pmu);
-
-                                            }
-
 
                                         });
                                     }
@@ -1507,9 +1289,7 @@
                                     $('#Latitude').val(results[0].geometry.location.lat);
                                     $('#Longitude').val(results[0].geometry.location.lng);
                                     $('#GooglePlaceId').val(results[0].place_id);
-                                    $.getJSON("https://api.ipify.org/?format=json", function (e) {
-                                        $('#IpAddress').val(e.ip);
-                                    });
+                                   
                                     $.getJSON('/Shop/GetShop?placeid=' + results[0].place_id, null, function (data) {
                                         $('#Rating').val(data.result.result.rating);
                                         $('#CustomerReview').val(data.result.result.user_ratings_total);
@@ -1526,67 +1306,8 @@
                                             $('.mobile').addClass('d-none');
                                             $('.manualmobile').removeClass('d-none');
                                         }
-
-                                        if (data.result.result.website != null) {
-                                            $('.manualwebsite').addClass('d-none');
-                                            $('#Website').val(data.result.result.website);
-                                        } else {
-                                            $('.website').addClass('d-none');
-                                            $('.manualwebsite').removeClass('d-none');
-                                        }
+                                        $('#Website').val(data.result.result.website);
                                         $('#Name').val(data.result.result.name);
-
-                                        if (data.result.result.opening_hours != null) {
-
-                                            var monday = data.result.result.opening_hours.weekday_text[0];
-                                            var mon = monday.split(" ");
-                                            var amm = mon[1] + " " + mon[2];
-                                            var pmm = mon[4] + " " + mon[5];
-                                            $('#MondayOpenTime').val(amm);
-                                            $('#MondayCloseTime').val(pmm);
-
-                                            var tuesday = data.result.result.opening_hours.weekday_text[1];
-                                            var tue = tuesday.split(" ");
-                                            var amt = tue[1] + " " + tue[2];
-                                            var pmt = tue[4] + " " + tue[5];
-                                            $('#TuesdayOpenTime').val(amt);
-                                            $('#TuesdayCloseTime').val(pmt);
-                                            var wednesday = data.result.result.opening_hours.weekday_text[2];
-                                            var wed = wednesday.split(" ");
-                                            var amw = wed[1] + " " + wed[2];
-                                            var pmw = wed[4] + " " + wed[5];
-                                            $('#WednesdayOpenTime').val(amw);
-                                            $('#WednesdayCloseTime').val(pmw);
-                                            var thursday = data.result.result.opening_hours.weekday_text[3];
-                                            var thu = thursday.split(" ");
-                                            var amt = thu[1] + " " + thu[2];
-                                            var pmt = thu[4] + " " + thu[5];
-                                            $('#ThursdayOpenTime').val(amt);
-                                            $('#ThursdayCloseTime').val(pmt);
-
-                                            var friday = data.result.result.opening_hours.weekday_text[4];
-                                            var fri = friday.split(" ");
-                                            var amf = fri[1] + " " + fri[2];
-                                            var pmf = fri[4] + " " + fri[5];
-                                            $('#FridayOpenTime').val(amf);
-                                            $('#FridayCloseTime').val(pmf);
-
-                                            var saturday = data.result.result.opening_hours.weekday_text[5];
-                                            var sat = saturday.split(" ");
-                                            var ams = sat[1] + " " + sat[2];
-                                            var pms = sat[4] + " " + sat[5];
-                                            $('#SaturdayOpenTime').val(ams);
-                                            $('#SaturdayCloseTime').val(pms);
-
-                                            var sunday = data.result.result.opening_hours.weekday_text[6];
-                                            var sun = sunday.split(" ");
-                                            var amu = sun[1] + " " + sun[2];
-                                            var pmu = sun[4] + " " + sun[5];
-                                            $('#SundayOpenTime').val(amu);
-                                            $('#SundayCloseTime').val(pmu);
-
-                                        }
-
 
                                     });
                                 }
@@ -1621,7 +1342,6 @@
                                     //infowindow.open(map, marker);
                                 });
 
-
                                 map.fitBounds(place.geometry.viewport);
                                 marker.setPosition(place.geometry.location);
                                 marker.setVisible(true);
@@ -1645,33 +1365,17 @@
                                     if (this.types[0] == "postal_code") {
                                         $('#PinCode').val(this.long_name);
                                     }
-
                                 });
 
                                 $('#Latitude').val(place.geometry.location.lat);
                                 $('#Longitude').val(place.geometry.location.lng);
                                 $('#GooglePlaceId').val(place.place_id);
-                                $('#IpAddress').val("");
-                                $.getJSON("https://api.ipify.org/?format=json", function (e) {
-                                    $('#IpAddress').val(e.ip);
-                                });
+                               
                                 $.getJSON('/Shop/GetShop?placeid=' + place.place_id, null, function (data) {
                                     $('#Rating').val(data.result.result.rating);
                                     $('#CustomerReview').val(data.result.result.user_ratings_total);
-                                    $('#PhoneNumber').val(data.result.result.international_phone_number);
-                                    var phonenumber = $('#PhoneNumber').val();
-                                    var phone = phonenumber.replace(/\s/g, '');
-                                    phone = phonenumber.slice(3);
-                                    var phoneNWS = phone.replace(/\s/g, '');
-                                    $('#PhoneNumber').val(phoneNWS);
-                                    // $('#PhoneNumber').val(data.result.result.international_phone_number);
-                                    $('#Name').val(data.result.result.name);
-                                    $('#Website').val(data.result.result.website);
-
                                     if (data.result.result.international_phone_number != null) {
                                         $('.manualmobile').addClass('d-none');
-                                        $('.mobile').removeClass('d-none');
-                                        //$('#PhoneNumber').val(data.result.result.international_phone_number);
                                         $('#PhoneNumber').val(data.result.result.international_phone_number);
                                         var phonenumber = $('#PhoneNumber').val();
                                         var phone = phonenumber.replace(/\s/g, '');
@@ -1682,63 +1386,8 @@
                                         $('.mobile').addClass('d-none');
                                         $('.manualmobile').removeClass('d-none');
                                     }
-
-                                    if (data.result.result.website != null) {
-                                        $('.website').removeClass('d-none');
-                                        $('.manualwebsite').addClass('d-none');
-                                        $('#Website').val(data.result.result.website);
-                                    } else {
-                                        $('.website').addClass('d-none');
-                                        $('.manualwebsite').removeClass('d-none');
-                                    }
-                                    var monday = data.result.result.opening_hours.weekday_text[0];
-                                    var mon = monday.split(" ");
-                                    var amm = mon[1] + " " + mon[2];
-                                    var pmm = mon[4] + " " + mon[5];
-                                    $('#MondayOpenTime').val(amm);
-                                    $('#MondayCloseTime').val(pmm);
-
-                                    var tuesday = data.result.result.opening_hours.weekday_text[1];
-                                    var tue = tuesday.split(" ");
-                                    var amt = tue[1] + " " + tue[2];
-                                    var pmt = tue[4] + " " + tue[5];
-                                    $('#TuesdayOpenTime').val(amt);
-                                    $('#TuesdayCloseTime').val(pmt);
-                                    var wednesday = data.result.result.opening_hours.weekday_text[2];
-                                    var wed = wednesday.split(" ");
-                                    var amw = wed[1] + " " + wed[2];
-                                    var pmw = wed[4] + " " + wed[5];
-                                    $('#WednesdayOpenTime').val(amw);
-                                    $('#WednesdayCloseTime').val(pmw);
-                                    var thursday = data.result.result.opening_hours.weekday_text[3];
-                                    var thu = thursday.split(" ");
-                                    var amt = thu[1] + " " + thu[2];
-                                    var pmt = thu[4] + " " + thu[5];
-                                    $('#ThursdayOpenTime').val(amt);
-                                    $('#ThursdayCloseTime').val(pmt);
-
-                                    var friday = data.result.result.opening_hours.weekday_text[4];
-                                    var fri = friday.split(" ");
-                                    var amf = fri[1] + " " + fri[2];
-                                    var pmf = fri[4] + " " + fri[5];
-                                    $('#FridayOpenTime').val(amf);
-                                    $('#FridayCloseTime').val(pmf);
-
-                                    var saturday = data.result.result.opening_hours.weekday_text[5];
-                                    var sat = saturday.split(" ");
-                                    var ams = sat[1] + " " + sat[2];
-                                    var pms = sat[4] + " " + sat[5];
-                                    $('#SaturdayOpenTime').val(ams);
-                                    $('#SaturdayCloseTime').val(pms);
-
-                                    var sunday = data.result.result.opening_hours.weekday_text[6];
-                                    var sun = sunday.split(" ");
-                                    var amu = sun[1] + " " + sun[2];
-                                    var pmu = sun[4] + " " + sun[5];
-                                    $('#SundayOpenTime').val(amu);
-                                    $('#SundayCloseTime').val(pmu);
-
-
+                                    $('#Website').val(data.result.result.website);
+                                    $('#Name').val(data.result.result.name);
                                 });
 
                             });
@@ -1764,6 +1413,7 @@
                 'Error: Your browser doesn\'t support geolocation.');
             infoWindow.open(map);
         }
+  
 
     </script>
 }
