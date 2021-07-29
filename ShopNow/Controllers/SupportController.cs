@@ -52,6 +52,7 @@ namespace ShopNow.Controllers
             model.OrderCount = db.Orders.Where(i => i.Status == 0 && i.OrderNumber !=0 && i.Status != 7 && i.Status != 6 && i.Status != 0).Count();
             model.DeliveryBoyLiveCount = db.DeliveryBoys.Where(i => i.Status == 0 && i.isAssign == 0 && i.OnWork == 0 && i.Active == 1).Count();
             model.RefundCount = db.Payments.Where(i => i.RefundAmount != 0 && i.RefundStatus == 1 && i.RefundAmount != null && i.PaymentMode == "Online Payment").Count();
+            model.ShopLowCreditCount = db.ShopCredits.Where(i => i.PlatformCredit <= 200 || i.DeliveryCredit <= 250).Count();
             return View(model);
         }
 
