@@ -82,8 +82,7 @@ namespace ShopNow.Controllers
                 Name = i.Name,
                 PhoneNumber = i.PhoneNumber,
                 ImagePath = i.ImagePath,
-               // ShopId = i.ShopId,
-               // ShopName = i.ShopName
+                Email = i.Email
             }).ToList();
 
             return View(model);
