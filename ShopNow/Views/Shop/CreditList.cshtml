@@ -1,0 +1,30 @@
+﻿@model ShopNow.ViewModels.ShopCreditViewModel
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Shop Credits List";
+}
+<title>ShopNow | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            @Html.Grid(Model.ListItems).Columns(columns =>
+       {
+           columns.Add(c => c.ShopName).Titled("Name").Filterable(true).SetWidth(15);
+           columns.Add(c => c.ShopOwnerName).Titled("Owner Name").Filterable(true).SetWidth(10);
+           columns.Add(c => c.ShopOwnerPhoneNumber).Titled("PhoneNo").Filterable(true).SetWidth(12);
+           columns.Add()
+        .Encoded(false)
+        .Sanitized(false)
+            .RenderValueAs(c => "<b class=" + c.PlatformCreditCssColor + ">" + "₹ " + c.PlatformCredit + "</b>").Titled("Platform Credit").SetWidth(10);
+           columns.Add()
+       .Encoded(false)
+       .Sanitized(false)
+           .RenderValueAs(c => "<b class=" + c.DeliveryCreditCssColor + ">" + "₹ " + c.DeliveryCredit + "</b>").Titled("Delivery Credit").SetWidth(10);
+       }).WithPaging(20).Sortable(true)
+        </div>
+    </div>
+</div>
+

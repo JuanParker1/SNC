@@ -2849,8 +2849,6 @@
     <Content Include="Views\Category\Index.cshtml" />
     <Content Include="Views\Shop\Details.cshtml" />
     <Content Include="Views\DeliveryBoy\Create.cshtml" />
-    <Content Include="Views\MasterProduct\Create.cshtml" />
-    <Content Include="Views\MasterProduct\Edit.cshtml" />
     <Content Include="Views\MasterProduct\List.cshtml" />
     <Content Include="Views\Portion\Index.cshtml" />
     <Content Include="Views\Portion\List.cshtml" />
@@ -2981,7 +2979,6 @@
     <Content Include="Views\Customer\AadharPending.cshtml" />
     <Content Include="Views\MasterProduct\FMCGEdit.cshtml" />
     <Content Include="Views\Banner\List.cshtml" />
-    <Content Include="Views\MasterProduct\DishList.cshtml" />
     <Content Include="Views\MasterProduct\ElectronicList.cshtml" />
     <Content Include="Views\MasterProduct\ElectronicCreate.cshtml" />
     <Content Include="Views\MasterProduct\ElectronicEdit.cshtml" />
@@ -3008,6 +3005,7 @@
     <Content Include="Views\Product\ElectronicEdit.cshtml" />
     <Content Include="Views\Product\ElectronicList.cshtml" />
     <Content Include="Views\DiscountCategory\List.cshtml" />
+    <Content Include="Views\Shop\CreditList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

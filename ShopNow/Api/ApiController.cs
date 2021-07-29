@@ -32,7 +32,8 @@ namespace ShopNow.Controllers
         private sncEntities db = new sncEntities();
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
-        private string apipath= "https://admin.shopnowchat.in/";
+        //private string apipath= "https://admin.shopnowchat.in/";
+        private string apipath = "http://117.221.69.52:85/";
 
         private const string _prefix = "";
 
@@ -1211,6 +1212,18 @@ namespace ShopNow.Controllers
                     db.Entry(product).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }
+
+                var fcmToken = (from c in db.Customers
+                                where c.Id == order.CustomerId
+                                select c.FcmTocken ?? "").FirstOrDefault().ToString();
+
+                //accept
+                if (status == 3)
+                {
+                    Helpers.PushNotification.SendbydeviceId("Your order has been accepted by shop.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+                }
+
+
                 //Refund
                 if (status == 7)
                 {
@@ -1224,9 +1237,6 @@ namespace ShopNow.Controllers
                         db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
                         db.SaveChanges();
                         
-                        var fcmToken = (from c in db.Customers
-                                        where c.Id == order.CustomerId
-                                        select c.FcmTocken ?? "").FirstOrDefault().ToString();
                         Helpers.PushNotification.SendbydeviceId($"Your refund of amount {payment.Amount} for order no {payment.OrderNumber} is for {payment.RefundRemark} initiated and you will get credited with in 7 working days.", "ShopNowChat", "a.mp3", fcmToken.ToString());
                     }
                 }
@@ -1570,7 +1580,7 @@ namespace ShopNow.Controllers
                 var fcmToken = (from c in db.Customers
                                 where c.Id == order.CustomerId
                                 select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                Helpers.PushNotification.SendbydeviceId("You order is on the way.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+                Helpers.PushNotification.SendbydeviceId("Your order is on the way.", "ShopNowChat", "a.mp3", fcmToken.ToString());
                 return Json(new { message = "Successfully DelivaryBoy PickUp!" }, JsonRequestBehavior.AllowGet);
             }
             else
@@ -1664,7 +1674,7 @@ namespace ShopNow.Controllers
             var fcmToken = (from c in db.Customers
                             where c.Id == order.CustomerId
                             select c.FcmTocken ?? "").FirstOrDefault().ToString();
-            Helpers.PushNotification.SendbydeviceId("You order has been delivered.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+            Helpers.PushNotification.SendbydeviceId("Your order has been delivered.", "ShopNowChat", "a.mp3", fcmToken.ToString());
 
             return Json(new { message = "Successfully DelivaryBoy Delivered!" }, JsonRequestBehavior.AllowGet);
         }
@@ -2955,28 +2965,28 @@ namespace ShopNow.Controllers
         {
             var model = new PlacesListView();
             string query = "SELECT top(6) * " +
-                               " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryCode = '0' and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
+                               " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 0 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
                                " order by Rating";
             string querySuperMarketList = "SELECT top(6) * " +
-            " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryCode = '2' and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
+            " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 2 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
             " order by Rating";
             string queryGroceriesList = "SELECT top(6) * " +
-            " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryCode = '1' and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
+            " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 1 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
             " order by Rating";
             string queryHealthList = "SELECT top(6) * " +
-            " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryCode = '3' and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
+            " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 3 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
             " order by Rating";
             string queryElectronicsList = "SELECT top(6) * " +
-            " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryCode = '4' and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
+            " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 4 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
             " order by Rating";
             string qServicesList = "SELECT top(6) * " +
-            " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryCode = '5' and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
+            " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 5 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
             " order by Rating";
             if (a == "-1")
             {
 
                 string queryOtherList = "SELECT top(6) * " +
-                " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryCode = '6' and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
+                " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 6 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
                 " order by Rating";
 
 
@@ -3241,7 +3251,7 @@ namespace ShopNow.Controllers
             else
             {
                 string queryOtherList = "SELECT top(6) * " +
-              " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryCode = '6' and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0 " +
+              " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 6 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0 " +
               " order by Rating";
     
                 model.OtherList = db.Shops.SqlQuery(queryOtherList,

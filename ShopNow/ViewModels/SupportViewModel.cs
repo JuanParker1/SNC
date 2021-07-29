@@ -18,6 +18,7 @@ namespace ShopNow.ViewModels
         public int OrderCount { get; set; }
         public int DeliveryBoyLiveCount { get; set; }
         public int RefundCount { get; set; }
+        public int ShopLowCreditCount { get; set; }
 
 
         //Verification Count

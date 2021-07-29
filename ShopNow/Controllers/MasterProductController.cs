@@ -305,7 +305,8 @@ namespace ShopNow.Controllers
                 }
             }
             Session["EditAddOns"] = null;
-            return RedirectToAction("FoodList", "MasterProduct");
+            //return RedirectToAction("FoodList", "MasterProduct");
+            return RedirectToAction("FoodEdit", new { id = AdminHelpers.ECodeInt(model.Id) });
         }
 
         // Dish List
@@ -825,7 +826,8 @@ namespace ShopNow.Controllers
                 }
             }
 
-            return RedirectToAction("FMCGList");
+            //return RedirectToAction("FMCGList");
+            return RedirectToAction("FMCGEdit", new { id = AdminHelpers.ECodeInt(model.Id) });
         }
 
         // FMCG Delete
@@ -1129,8 +1131,8 @@ namespace ShopNow.Controllers
                     ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
                 }
             }
-            return RedirectToAction("MedicalList");
-
+            // return RedirectToAction("MedicalList");
+            return RedirectToAction("MedicalEdit", new { id = AdminHelpers.ECodeInt(model.Id) });
         }
 
         // Medical Update
