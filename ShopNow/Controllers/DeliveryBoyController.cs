@@ -105,78 +105,66 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
 
             var deliveryboy = _mapper.Map<DeliveryBoyCreateEditViewModel, DeliveryBoy>(model);
-            //if (model.Name == null && model.StaffCode != null)
-            //{
-            //    deliveryboy.Name = model.StaffName;
-            //}
-            var dboy = db.Customers.Where(i => i.PhoneNumber == model.PhoneNumber).FirstOrDefault();
-            if (dboy != null)
+            var customer = db.Customers.Where(i => i.PhoneNumber == model.PhoneNumber).FirstOrDefault();
+            if (customer != null)
             {
-                dboy.Position = 3;
-                dboy.DateUpdated = DateTime.Now;
-                db.Entry(dboy).State = System.Data.Entity.EntityState.Modified;
+                customer.Position = 3;
+                customer.DateUpdated = DateTime.Now;
+                db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-
-                deliveryboy.CustomerId = dboy.Id;
-                deliveryboy.CustomerName = dboy.Name;
+                deliveryboy.CustomerId = customer.Id;
+                deliveryboy.CustomerName = customer.Name;
             }
-
             deliveryboy.CreatedBy = user.Name;
             deliveryboy.UpdatedBy = user.Name;
             deliveryboy.DateEncoded = DateTime.Now;
             deliveryboy.DateUpdated = DateTime.Now;
             deliveryboy.Status = 1;
-            db.DeliveryBoys.Add(deliveryboy);
-            db.SaveChanges();
-            deliveryboy.Id = deliveryboy.Id;// DeliveryBoy.Add(deliveryboy, out int error);
             try
             {
-                var deliveryBoyImage = db.DeliveryBoys.FirstOrDefault(i => i.Id == deliveryboy.Id);//DeliveryBoy.Get(deliveryboy.Code);
                 // DeliveryBoy Image
                 if (model.DeliveryBoyImage != null)
                 {
                     uc.UploadFiles(model.DeliveryBoyImage.InputStream, deliveryboy.Id + "_" + model.DeliveryBoyImage.FileName, accesskey, secretkey, "image");
-                    deliveryBoyImage.ImagePath = deliveryboy.Id + "_" + model.DeliveryBoyImage.FileName.Replace(" ", "");
+                    deliveryboy.ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryboy.Id + "_" + model.DeliveryBoyImage.FileName.Replace(" ", "");
                 }
 
                 // DrivingLicense Image
                 if (model.DrivingLicenseImage != null)
                 {
                     uc.UploadFiles(model.DrivingLicenseImage.InputStream, deliveryboy.Id + "_" + model.DrivingLicenseImage.FileName, accesskey, secretkey, "image");
-                    deliveryBoyImage.DrivingLicenseImagePath = deliveryboy.Id + "_" + model.DrivingLicenseImage.FileName.Replace(" ", "");
+                    deliveryboy.DrivingLicenseImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryboy.Id + "_" + model.DrivingLicenseImage.FileName.Replace(" ", "");
                 }
 
                 // DrivingLicense Pdf
                 if (model.DrivingLicensePdf != null)
                 {
                     uc.UploadFiles(model.DrivingLicensePdf.InputStream, deliveryboy.Id + "_" + model.DrivingLicensePdf.FileName, accesskey, secretkey, "pdf");
-                    deliveryBoyImage.DrivingLicenseImagePath = deliveryboy.Id + "_" + model.DrivingLicensePdf.FileName.Replace(" ", "");
+                    deliveryboy.DrivingLicenseImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryboy.Id + "_" + model.DrivingLicensePdf.FileName.Replace(" ", "");
                 }
 
                 // BankPassbook Image
                 if (model.BankPassbookImage != null)
                 {
                     uc.UploadFiles(model.BankPassbookImage.InputStream, deliveryboy.Id + "_" + model.BankPassbookImage.FileName, accesskey, secretkey, "image");
-                    deliveryBoyImage.BankPassbookPath = deliveryboy.Id + "_" + model.BankPassbookImage.FileName.Replace(" ", "");
+                    deliveryboy.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryboy.Id + "_" + model.BankPassbookImage.FileName.Replace(" ", "");
                 }
 
                 // BankPassbook Pdf
                 if (model.BankPassbookPdf != null)
                 {
                     uc.UploadFiles(model.BankPassbookPdf.InputStream, deliveryboy.Id + "_" + model.BankPassbookPdf.FileName, accesskey, secretkey, "pdf");
-                    deliveryBoyImage.BankPassbookPath = deliveryboy.Id + "_" + model.BankPassbookPdf.FileName.Replace(" ", "");
+                    deliveryboy.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryboy.Id + "_" + model.BankPassbookPdf.FileName.Replace(" ", "");
                 }
 
                 // CV Pdf
                 if (model.CVPdf != null)
                 {
                     uc.UploadFiles(model.CVPdf.InputStream, deliveryboy.Id + "_" + model.CVPdf.FileName, accesskey, secretkey, "pdf");
-                    deliveryBoyImage.CVPath = deliveryboy.Id + "_" + model.CVPdf.FileName.Replace(" ", "");
+                    deliveryboy.CVPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryboy.Id + "_" + model.CVPdf.FileName.Replace(" ", "");
                 }
-                deliveryBoyImage.DateUpdated = DateTime.Now;
-                db.Entry(deliveryBoyImage).State = System.Data.Entity.EntityState.Modified;
+                db.DeliveryBoys.Add(deliveryboy);
                 db.SaveChanges();
-
                 return RedirectToAction("List");
             }
             catch (AmazonS3Exception amazonS3Exception)
@@ -203,9 +191,8 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             if (dCode==0)
                 return HttpNotFound();
-            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == dCode);// DeliveryBoy.Get(dCode);
+            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == dCode);
             var model = _mapper.Map<DeliveryBoy, DeliveryBoyCreateEditViewModel>(deliveryBoy);
-           // model.DeliveryBoyShopCount = db.DeliveryBoyShops.Where(i => i.DeliveryBoyCode == deliveryBoy.Code && i.Status == 0).Count();
             if (model.Status == 1)
             {
                 int count = 0;
@@ -234,72 +221,55 @@ namespace ShopNow.Controllers
         public ActionResult Edit(DeliveryBoyCreateEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-
-            DeliveryBoy deliveryboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == model.Id);// DeliveryBoy.Get(model.Code);
+            DeliveryBoy deliveryboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == model.Id);
             _mapper.Map(model, deliveryboy);
-
-            //if (model.Name == null && model.StaffCode != null)
-            //{
-            //    deliveryboy.Name = model.StaffName;
-            //}
-
             deliveryboy.DateUpdated = DateTime.Now;
             deliveryboy.UpdatedBy = user.Name;
-            deliveryboy.DateUpdated = DateTime.Now;
-            db.Entry(deliveryboy).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
-
-            // DeliveryBoy.Edit(deliveryboy, out int errorCode);
-
             try
             {
-                var deliveryBoyImage = db.DeliveryBoys.FirstOrDefault(i => i.Id == deliveryboy.Id); //DeliveryBoy.Get(deliveryboy.Code);
                 // DeliveryBoy Image
                 if (model.DeliveryBoyImage != null)
                 {
                     uc.UploadFiles(model.DeliveryBoyImage.InputStream, deliveryboy.Id + "_" + model.DeliveryBoyImage.FileName, accesskey, secretkey, "image");
-                    deliveryBoyImage.ImagePath = deliveryboy.Id + "_" + model.DeliveryBoyImage.FileName.Replace(" ", "");
+                    deliveryboy.ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryboy.Id + "_" + model.DeliveryBoyImage.FileName.Replace(" ", "");
                 }
 
                 // DrivingLicense Image
                 if (model.DrivingLicenseImage != null)
                 {
                     uc.UploadFiles(model.DrivingLicenseImage.InputStream, deliveryboy.Id + "_" + model.DrivingLicenseImage.FileName, accesskey, secretkey, "image");
-                    deliveryBoyImage.DrivingLicenseImagePath = deliveryboy.Id + "_" + model.DrivingLicenseImage.FileName.Replace(" ", "");
+                    deliveryboy.DrivingLicenseImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryboy.Id + "_" + model.DrivingLicenseImage.FileName.Replace(" ", "");
                 }
 
                 // DrivingLicense Pdf
                 if (model.DrivingLicensePdf != null)
                 {
                     uc.UploadFiles(model.DrivingLicensePdf.InputStream, deliveryboy.Id + "_" + model.DrivingLicensePdf.FileName, accesskey, secretkey, "pdf");
-                    deliveryBoyImage.DrivingLicenseImagePath = deliveryboy.Id + "_" + model.DrivingLicensePdf.FileName.Replace(" ", "");
+                    deliveryboy.DrivingLicenseImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryboy.Id + "_" + model.DrivingLicensePdf.FileName.Replace(" ", "");
                 }
 
                 // BankPassbook Image
                 if (model.BankPassbookImage != null)
                 {
                     uc.UploadFiles(model.BankPassbookImage.InputStream, deliveryboy.Id + "_" + model.BankPassbookImage.FileName, accesskey, secretkey, "image");
-                    deliveryBoyImage.BankPassbookPath = deliveryboy.Id + "_" + model.BankPassbookImage.FileName.Replace(" ", "");
+                    deliveryboy.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryboy.Id + "_" + model.BankPassbookImage.FileName.Replace(" ", "");
                 }
 
                 // BankPassbook Pdf
                 if (model.BankPassbookPdf != null)
                 {
                     uc.UploadFiles(model.BankPassbookPdf.InputStream, deliveryboy.Id + "_" + model.BankPassbookPdf.FileName, accesskey, secretkey, "pdf");
-                    deliveryBoyImage.BankPassbookPath = deliveryboy.Id + "_" + model.BankPassbookPdf.FileName.Replace(" ", "");
+                    deliveryboy.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryboy.Id + "_" + model.BankPassbookPdf.FileName.Replace(" ", "");
                 }
 
                 // CV Pdf
                 if (model.CVPdf != null)
                 {
                     uc.UploadFiles(model.CVPdf.InputStream, deliveryboy.Id + "_" + model.CVPdf.FileName, accesskey, secretkey, "pdf");
-                    deliveryBoyImage.CVPath = deliveryboy.Id + "_" + model.CVPdf.FileName.Replace(" ", "");
+                    deliveryboy.CVPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryboy.Id + "_" + model.CVPdf.FileName.Replace(" ", "");
                 }
-                deliveryBoyImage.DateUpdated = DateTime.Now;
-                db.Entry(deliveryBoyImage).State = System.Data.Entity.EntityState.Modified;
+                db.Entry(deliveryboy).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-
-                //DeliveryBoy.Edit(deliveryBoyImage, out int error);
                 return RedirectToAction("List");
             }
             catch (AmazonS3Exception amazonS3Exception)
@@ -324,7 +294,7 @@ namespace ShopNow.Controllers
             var dCode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            DeliveryBoy deliverBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == dCode); //DeliveryBoy.Get(dCode);
+            DeliveryBoy deliverBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == dCode);
             var model = new DeliveryBoyCreateEditViewModel();
             _mapper.Map(deliverBoy, model);
             return View(model);
@@ -353,7 +323,6 @@ namespace ShopNow.Controllers
                 db.Entry(deliveryBoy).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
-
             return RedirectToAction("List");
         }
 
@@ -361,15 +330,13 @@ namespace ShopNow.Controllers
         public ActionResult Approve(int code)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == code);//DeliveryBoy.Get(code);
+            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == code);
             deliveryBoy.Status = 0;
             deliveryBoy.UpdatedBy = user.Name;
             deliveryBoy.DateUpdated = DateTime.Now;
             deliveryBoy.DateUpdated = DateTime.Now;
             db.Entry(deliveryBoy).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
-
-            // DeliveryBoy.Edit(deliveryBoy, out int error);
             var fcmToken = (from c in db.Customers
                             where c.Id == deliveryBoy.CustomerId
                             select c.FcmTocken ?? "").FirstOrDefault().ToString();
@@ -382,21 +349,19 @@ namespace ShopNow.Controllers
         public ActionResult Reject(int code)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == code);// DeliveryBoy.Get(code);
-            var customer = db.Customers.FirstOrDefault(i => i.Id == deliveryBoy.CustomerId);// Customer.Get(deliveryBoy.CustomerCode);
+            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == code);
+            var customer = db.Customers.FirstOrDefault(i => i.Id == deliveryBoy.CustomerId);
             customer.Position = 0;
             customer.DateUpdated = DateTime.Now;
             db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
-
-           // Customer.Edit(customer, out int errors);
+            
             deliveryBoy.Status = 3;
             deliveryBoy.UpdatedBy = user.Name;
             deliveryBoy.DateUpdated = DateTime.Now;
             deliveryBoy.DateUpdated = DateTime.Now;
             db.Entry(deliveryBoy).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
-            // DeliveryBoy.Edit(deliveryBoy, out int error);
 
             var fcmToken = (from c in db.Customers
                             where c.Id == deliveryBoy.CustomerId
@@ -409,15 +374,13 @@ namespace ShopNow.Controllers
         public ActionResult DeActivate(int code)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == code);// DeliveryBoy.Get(code);
+            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == code);
             deliveryBoy.Status = 4;
             deliveryBoy.UpdatedBy = user.Name;
             deliveryBoy.DateUpdated = DateTime.Now;
             deliveryBoy.DateUpdated = DateTime.Now;
             db.Entry(deliveryBoy).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
-            // DeliveryBoy.Edit(deliveryBoy, out int error);
-
             return RedirectToAction("List");
         }
 
@@ -426,7 +389,7 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            DeliveryBoy deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == code);// DeliveryBoy.Get(code);
+            DeliveryBoy deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == code);
             var model = new DeliveryBoyPlacesListViewModel();
 
             _mapper.Map(deliveryBoy, model);
@@ -489,7 +452,6 @@ namespace ShopNow.Controllers
                 dbs.DateUpdated = DateTime.Now;
                 db.DeliveryBoyShops.Add(dbs);
                 db.SaveChanges();
-                //DeliveryBoyShop.Add(dbs, out int error);
             }
 
             return RedirectToAction("List");
@@ -510,7 +472,7 @@ namespace ShopNow.Controllers
         public ActionResult AssignFranchise(FranchiseViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == model.DeliveryBoyId);// DeliveryBoy.Get(model.DeliveryBoyCode);
+            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == model.DeliveryBoyId);
             if (deliveryBoy != null)
             {
                 deliveryBoy.MarketingAgentId = model.MarketingAgentId;
@@ -518,7 +480,6 @@ namespace ShopNow.Controllers
                 deliveryBoy.DateUpdated = DateTime.Now;
                 db.Entry(deliveryBoy).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                //DeliveryBoy.Edit(deliveryBoy, out int error);
             }
 
             return RedirectToAction("AssignedFranchiseList");
@@ -530,7 +491,7 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new FranchiseViewModel();
-            model.Lists = db.DeliveryBoys.Where(i => i.Status == 0 && i.MarketingAgentId != null && i.MarketingAgentName != null)
+            model.Lists = db.DeliveryBoys.Where(i => i.Status == 0 && i.MarketingAgentName != null)
                 .Select(i=> new FranchiseViewModel.FranchiseList
                 {
                     Name = i.Name,
@@ -547,7 +508,7 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new FranchiseViewModel();
-            var deliveryboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == code);// DeliveryBoy.Get(code);
+            var deliveryboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == code);
             _mapper.Map(deliveryboy, model);
             if (deliveryboy != null)
             {
@@ -563,7 +524,7 @@ namespace ShopNow.Controllers
         public ActionResult FranchiseUpdate(FranchiseViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == model.DeliveryBoyId);// DeliveryBoy.Get(model.DeliveryBoyCode);
+            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == model.DeliveryBoyId);
             if (deliveryBoy != null)
             {
                 deliveryBoy.MarketingAgentId = model.MarketingAgentId;
@@ -573,7 +534,6 @@ namespace ShopNow.Controllers
                 deliveryBoy.DateUpdated = DateTime.Now;
                 db.Entry(deliveryBoy).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                //DeliveryBoy.Edit(deliveryBoy, out int error);
             }
 
             return RedirectToAction("AssignedFranchiseList");
@@ -624,7 +584,7 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             bool IsAdded = false;
-            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == id);// DeliveryBoy.Get(code);
+            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == id);
 
             if (deliveryBoy != null)
             {
@@ -633,8 +593,6 @@ namespace ShopNow.Controllers
                 deliveryBoy.DateUpdated = DateTime.Now;
                 db.Entry(deliveryBoy).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-
-                // DeliveryBoy.Edit(deliveryBoy, out int error);
                 IsAdded = true;
             }
             return Json(new { IsAdded = IsAdded }, JsonRequestBehavior.AllowGet);
@@ -646,7 +604,7 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             bool IsExist = false;
             string message = "";
-            var shop = db.Shops.FirstOrDefault(i => i.PhoneNumber == PhoneNumber);// Shop.GetPhoneNumber(PhoneNumber);
+            var shop = db.Shops.FirstOrDefault(i => i.PhoneNumber == PhoneNumber);
             if (shop == null)
             {
                 IsExist = false;
@@ -686,7 +644,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNDBYAF011")]
         public async Task<JsonResult> GetDeliveryBoySelect2(string q = "")
         {
-            var model = await db.DeliveryBoys.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.MarketingAgentId == null && a.MarketingAgentName == null).Select(i => new
+            var model = await db.DeliveryBoys.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.MarketingAgentName == null).Select(i => new
             {
                 id = i.Id,
                 text = i.Name
@@ -711,7 +669,7 @@ namespace ShopNow.Controllers
 
         public JsonResult GetDeliveryBoyShop(int code, double latitude, double longitude)
         {
-            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == code);//DeliveryBoy.Get(code);
+            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == code);
             if (deliveryBoy.Latitude == latitude && deliveryBoy.Longitude == longitude)
             {
                 return Json(true, JsonRequestBehavior.AllowGet);
@@ -720,7 +678,6 @@ namespace ShopNow.Controllers
             {
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
-
         }
 
         [AccessPolicy(PageCode = "SHNDBYE002")]
@@ -739,7 +696,6 @@ namespace ShopNow.Controllers
                     dbshops.DateUpdated = DateTime.Now;
                     db.Entry(dbshops).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
-                  //  DeliveryBoyShop.Edit(dbshops, out int error);
                 }
             }
             return Json(true, JsonRequestBehavior.AllowGet);
@@ -749,8 +705,7 @@ namespace ShopNow.Controllers
         public JsonResult VerifyImage(int Code)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var dboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == Code); // DeliveryBoy.Get(code);
-            dboy.Status = 5;
+            var dboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == Code);
             dboy.DateUpdated = DateTime.Now;
             dboy.UpdatedBy = user.Name;
             db.Entry(dboy).State = System.Data.Entity.EntityState.Modified;

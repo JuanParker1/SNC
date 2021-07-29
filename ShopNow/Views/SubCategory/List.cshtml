@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<ShopNow.Models.SubCategory>
 @using GridMvc.Html
 @{
-    ViewBag.Title = "Sub Category";
+    ViewBag.Title = "SubCategory";
 }
 <title>ShopNow | Sub Category List</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
@@ -62,7 +62,7 @@ columns.Add(s => s.Adscore).Titled("Adscore").Filterable(true).SetWidth(10);
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header alert alert-info">
-                <h5 class="modal-title" id="createModalLabel">New Category</h5>
+                <h5 class="modal-title" id="createModalLabel">SubCategory Entry</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -77,18 +77,8 @@ columns.Add(s => s.Adscore).Titled("Adscore").Filterable(true).SetWidth(10);
                         <label class="col-form-label font-weight-bold text-secondary">Category Name</label>
                         <select name="CategoryId" class="form-control" id="CategoryId"></select>
                         <input type="hidden" name="CategoryName" id="CategoryName" />
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-form-label"><strong class="text-secondary">Item Type</strong></label>
-                        <select name="ProductType" class="form-control" id="ProductTypeId">
-                            <option value="0">Select</option>
-                            <option value="4">Product</option>
-                            <option value="1">Dish</option>
-                            <option value="5">Service</option>
-                            <option value="3">Medical</option>
-                            <option value="2">FMCG</option>
-                        </select>
-                        <input type="hidden" name="ProductTypeName" id="ProductTypeName"/>
+                        <input type="hidden" name="ProductTypeId" id="ProductTypeId" />
+                        <input type="hidden" name="ProductTypeName" id="ProductTypeName" />
                     </div>
                     <div class="col-md-6">
                         <label class="col-form-label font-weight-bold text-secondary">Adscore</label>
@@ -128,6 +118,8 @@ columns.Add(s => s.Adscore).Titled("Adscore").Filterable(true).SetWidth(10);
                 }
             }).on('select2:select', function (e) {
                 $('input[name="CategoryName"]').val(e.params.data.text);
+                $('input[name="ProductTypeId"]').val(e.params.data.ProductTypeId);
+                $('input[name="ProductTypeName"]').val(e.params.data.ProductTypeName);
             });
         
             $('#Create').on('click', function () {

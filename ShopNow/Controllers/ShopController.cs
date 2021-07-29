@@ -107,8 +107,9 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNSHPC001")]
         public ActionResult Create(ShopRegisterViewModel model)
         {
-           
-            var shopduplicateCount = db.Shops.Where(m => m.GooglePlaceId == model.GooglePlaceId).Count();
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var shopduplicateCount = db.Shops.Where(m => m.GooglePlaceId == model.GooglePlaceId ).Count();
             var shopbeforeApprovalCount = db.Shops.Where(m => m.GooglePlaceId == model.GooglePlaceId && m.Status == 0).Count();
             if (shopduplicateCount != 0)
             {
@@ -125,24 +126,13 @@ namespace ShopNow.Controllers
                 return View(model);
             }
 
-            var user = ((Helpers.Sessions.User)Session["USER"]);
             var customer = db.Customers.FirstOrDefault(i => i.Id == user.Id);
             var shop = _mapper.Map<ShopRegisterViewModel, Shop>(model);
-            
-            var custom = db.Customers.FirstOrDefault(i => i.Id == shop.CustomerId);
-            if (custom != null)
-            {
-                shop.CustomerId = custom.Id;
-                shop.CustomerName = custom.Name;
-                db.SaveChanges();
-            }
             shop.Status = 1;
             shop.CreatedBy = user.Name;
             shop.UpdatedBy = user.Name;
             shop.DateEncoded = DateTime.Now;
             shop.DateUpdated = DateTime.Now;
-           
-            //Image
             try
             {
                 // Shop Image

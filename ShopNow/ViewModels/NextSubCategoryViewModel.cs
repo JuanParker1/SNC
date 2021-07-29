@@ -25,8 +25,6 @@ namespace ShopNow.ViewModels
         public string Name { get; set; }
         public string SubCategoryId { get; set; }
         public string SubCategoryName { get; set; }
-        public int ProductTypeId { get; set; }
-        public string ProductTypeName { get; set; }
         public int Adscore { get; set; }
     }
 }
