@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using LinqToDB;
 using Newtonsoft.Json;
 using Razorpay.Api;
 using ShopNow.Filters;
@@ -235,36 +236,34 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
                 if (user.Id !=0)
                 {
-                    var otpmodel = new OtpViewModel();
-                    var models = _mapper.Map<OtpViewModel, OtpVerification>(otpmodel);
-                    models.CustomerId = user.Id;
-                    models.CustomerName = user.Name;
-                    models.PhoneNumber = model.PhoneNumber;
-                    models.Otp = _generatedCode;
-                    models.ReferenceCode = _referenceCode;
-                    models.Verify = false;
-                    models.CreatedBy = user.Name;
-                    models.UpdatedBy = user.Name;
-                    models.DateEncoded = DateTime.Now;
+                    var otpmodel = new OtpVerification();
+                    otpmodel.CustomerId = user.Id;
+                    otpmodel.CustomerName = user.Name;
+                    otpmodel.PhoneNumber = model.PhoneNumber;
+                    otpmodel.Otp = _generatedCode;
+                    otpmodel.ReferenceCode = _referenceCode;
+                    otpmodel.Verify = false;
+                    otpmodel.CreatedBy = user.Name;
+                    otpmodel.UpdatedBy = user.Name;
+                    otpmodel.DateEncoded = DateTime.Now;
                     var dateAndTime = DateTime.Now;
                     var date = dateAndTime.ToString("d");
                     var time = dateAndTime.ToString("HH:mm");
 
                     string joyra = "04448134440";
-                    string Msg = "Hi, " + models.Otp + " is the OTP for (Shop Now Chat) Verification at " + time + " with " + models.ReferenceCode + " reference - Joyra";
+                    string Msg = "Hi, " + otpmodel.Otp + " is the OTP for (Shop Now Chat) Verification at " + time + " with " + otpmodel.ReferenceCode + " reference - Joyra";
 
                     string result = SendSMS.execute(joyra, model.PhoneNumber, Msg);
-                    models.Status = 0;
-                    models.DateEncoded = DateTime.Now;
-                    models.DateUpdated = DateTime.Now;
-                    db.OtpVerifications.Add(models);
+                    otpmodel.Status = 0;
+                    otpmodel.DateEncoded = DateTime.Now;
+                    otpmodel.DateUpdated = DateTime.Now;
+                    db.OtpVerifications.Add(otpmodel);
                     db.SaveChanges();
 
-                    if (model.Id != 0)
+                    if (otpmodel != null)
                     {
                         return Json(new { message = "Successfully Registered and OTP send!", id = user.Id, user.Position });
-
-
+                        
                     }
                     else
                         return Json("Otp Failed to send!");
@@ -275,30 +274,29 @@ namespace ShopNow.Controllers
             }
             else
             {
-                var otpmodel = new OtpViewModel();
+                var otpmodel = new OtpVerification();
                 var customer = db.Customers.FirstOrDefault(i => i.PhoneNumber == model.PhoneNumber);
-                var models = _mapper.Map<OtpViewModel, OtpVerification>(otpmodel);
-                models.CustomerId = customer.Id;
-                models.CustomerName = customer.Name;
-                models.PhoneNumber = model.PhoneNumber;
-                models.Otp = _generatedCode;
-                models.ReferenceCode = _referenceCode;
-                models.Verify = false;
+                otpmodel.CustomerId = customer.Id;
+                otpmodel.CustomerName = customer.Name;
+                otpmodel.PhoneNumber = model.PhoneNumber;
+                otpmodel.Otp = _generatedCode;
+                otpmodel.ReferenceCode = _referenceCode;
+                otpmodel.Verify = false;
 
                 var dateAndTime = DateTime.Now;
                 var date = dateAndTime.ToString("d");
                 var time = dateAndTime.ToString("HH:mm");
 
                 string joyra = "04448134440";
-                string Msg = "Hi, " + models.Otp + " is the OTP for (Shop Now Chat) Verification at " + time + " with " + models.ReferenceCode + " reference - Joyra";
+                string Msg = "Hi, " + otpmodel.Otp + " is the OTP for (Shop Now Chat) Verification at " + time + " with " + otpmodel.ReferenceCode + " reference - Joyra";
 
                 string result = SendSMS.execute(joyra, model.PhoneNumber, Msg);
-                models.Status = 0;
-                models.DateEncoded = DateTime.Now;
-                models.DateUpdated = DateTime.Now;
-                db.OtpVerifications.Add(models);
+                otpmodel.Status = 0;
+                otpmodel.DateEncoded = DateTime.Now;
+                otpmodel.DateUpdated = DateTime.Now;
+                db.OtpVerifications.Add(otpmodel);
                 db.SaveChanges();
-                if (models.Id != 0)
+                if (otpmodel != null)
                 {
                     return Json(new { message = "Already Customer and OTP send!", id = customer.Id, Position = customer.Position });
 
@@ -2415,7 +2413,8 @@ namespace ShopNow.Controllers
             double? varlatitude = latitude;
             int? varpage = page;
             int? varPagesize = pageSize;
-           //var s = db.GetProductList(varlongitude, varlatitude, str, varpage, varPagesize).ToList();
+            var s = db.GetProductList(varlongitude, varlatitude, str, varpage, varPagesize).ToList();
+          
 
             string queryOtherList = "SELECT  * " +
 " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8  and Status = 0 and Latitude != 0 and Longitude != 0" +
@@ -2439,8 +2438,8 @@ namespace ShopNow.Controllers
                 ShopStatus=i.Status
                 }).ToList();
 
-            var productrCount = db.GetProductListCount(varlongitude, varlatitude, str).ToList();
-            int  count =Convert.ToInt32(productrCount[0]);
+            var productrCount =  db.GetProductListCount(varlongitude, varlatitude, str).ToList();
+            int count = Convert.ToInt32(productrCount[0]);
 
             int CurrentPage = page;
 
@@ -2488,7 +2487,7 @@ namespace ShopNow.Controllers
 
             var current1 = CurrentPage1 + 1;
 
-            var nexturl1 = "https://admin.shopnowchat.in/Api/GetProductList?latitude=" + latitude + "&longitude=" + longitude + "&str=" + str + "&page=" + current;
+            var nexturl1 = apipath +"/ Api/GetProductList?latitude=" + latitude + "&longitude=" + longitude + "&str=" + str + "&page=" + current;
             var nextPage1 = CurrentPage1 < TotalPages1 ? nexturl1 : "No";
             var paginationMetadata1 = new
             {
@@ -2529,9 +2528,9 @@ namespace ShopNow.Controllers
 
         }
 
-        public JsonResult GetShopCategoryList(int shopId, string categoryIds, string str = "", int page = 1, int pageSize = 20)
+        public JsonResult GetShopCategoryList(string shopId, string categoryIds, string str = "", int page = 1, int pageSize = 20)
         {
-            var shid = db.Shops.Where(s => s.Id == shopId).FirstOrDefault();
+          //  var shid = db.Shops.Where(s => s.Id == shopId).FirstOrDefault();
             int count = 0;
             //var total = db.GetShopCategoryProductCount(shopCode, categoryCode, str).ToList();
             //if (total.Count > 0)
@@ -2539,7 +2538,7 @@ namespace ShopNow.Controllers
             
             var skip = page-1;
             
-            var model = db.GetShopCategoryProducts(shopId, categoryIds, str, skip, pageSize).ToList();
+            //var model = db.GetShopCategoryProducts(shopId, categoryIds, str, skip, pageSize).ToList();
             
 
             int CurrentPage = page;

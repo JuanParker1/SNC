@@ -11,7 +11,12 @@ namespace ShopNow.Models
 {
     using System;
     
-    public partial class GetShopCategoryProductCount
+    public partial class GetDEliveryBoyList_Result
     {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int Active { get; set; }
+        public string PhoneNumber { get; set; }
+        public string ImagePath { get; set; }
     }
 }
