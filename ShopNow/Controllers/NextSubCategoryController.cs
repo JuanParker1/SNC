@@ -114,7 +114,9 @@ namespace ShopNow.Controllers
             var model = await db.SubCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 2).Select(i => new
             {
                 id = i.Id,
-                text = i.Name
+                text = i.Name,
+                ProductTypeId = i.ProductTypeId,
+                ProductTypeName = i.ProductTypeId
             }).ToListAsync();
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }

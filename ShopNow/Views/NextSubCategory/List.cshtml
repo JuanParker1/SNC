@@ -1,9 +1,9 @@
 ﻿@model IEnumerable<ShopNow.Models.NextSubCategory>
 @using GridMvc.Html
 @{
-    ViewBag.Title = "List";
+    ViewBag.Title = "SubCategory2 List";
 }
-<title>ShopNow | Next SubCategory</title>
+<title>ShopNow | Sub CategoryName-2 List</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 <style>
@@ -15,19 +15,19 @@
 </style>
 
 <div class="container-fluid">
-    <div class="row">
+    <div class="row mb-2">
         <div class="col-md-6">
-            <h5 style="letter-spacing:1px">SUB CATEGORY II LIST</h5>
+            <h5 class="text-success">SubCategory2 List</h5>
         </div>
         <div class="col-md-6 text-right">
-            <a data-toggle="modal" data-target="#createModal" href="createModal"><span class="fa fa-plus"></span> New Next Sub Category</a>
+            <a data-toggle="modal" data-target="#createModal" href="createModal"><span class="fa fa-plus"></span> New SubCategory2</a>
         </div>
     </div>
 
     @Html.Grid(Model).Columns(columns =>
 {
-columns.Add(n=> n.Name).Titled("Name").Filterable(true).SetWidth(10);
-columns.Add(n => n.SubCategoryName).Titled("SubCategory Name").Filterable(true).SetWidth(10);
+columns.Add(n=> n.SubCategoryName).Titled("SubCategory1").Filterable(true).SetWidth(10);
+columns.Add(n => n.Name).Titled("SubCategory2").Filterable(true).SetWidth(10);
 columns.Add(s => s.ProductTypeName).Titled("Item Type").Filterable(true).SetWidth(10);
 columns.Add(s => s.Adscore).Titled("Adscore").Filterable(true).SetWidth(10);
     columns.Add()
@@ -40,10 +40,10 @@ columns.Add(s => s.Adscore).Titled("Adscore").Filterable(true).SetWidth(10);
 
 
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header alert alert-info">
-                <h5 class="modal-title">SUB CATEGORY II Entry</h5>
+                <h5 class="modal-title">SubCategory2 Entry</h5>
                 <button type="button" class="btnClose close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -59,19 +59,9 @@ columns.Add(s => s.Adscore).Titled("Adscore").Filterable(true).SetWidth(10);
                             <label class="col-form-label font-weight-bold text-secondary">SubCategory</label>
                             <select name="SubCategoryId" class="form-control" id="SubCategoryId"></select>
                             <input type="hidden" name="SubCategoryName" id="SubCategoryName" />
+                            <input type="hidden" name="ProductTypeId" id="ProductTypeId" />
+                            <input type="hidden" name="ProductTypeName" id="ProductTypeName" />
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-form-label font-weight-bold text-secondary">Item Type</label>
-                        <select name="ProductTypeId" class="form-control" id="ProductTypeId">
-                            <option value="0">Select Item Type</option>
-                            <option value="4">Product</option>
-                            <option value="1">Dish</option>
-                            <option value="5">Service</option>
-                            <option value="3">Medical</option>
-                            <option value="2">FMCG</option>
-                        </select>
-                        <input type="hidden" name="ProductTypeName" id="ProductTypeName" />
                     </div>
                     <div class="col-md-6">
                         <label class="col-form-label font-weight-bold text-secondary">Adscore</label>
@@ -131,6 +121,8 @@ columns.Add(s => s.Adscore).Titled("Adscore").Filterable(true).SetWidth(10);
                 }
             }).on('select2:select', function (e) {
                 $('input[name="SubCategoryName"]').val(e.params.data.text);
+                $('input[name="ProductTypeId"]').val(e.params.data.ProductTypeId);
+                $('input[name="ProductTypeName"]').val(e.params.data.ProductTypeName);
             });
 
             $('#Create').on('click', function () {

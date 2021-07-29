@@ -69,14 +69,14 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNCUSD002")]
-        public ActionResult Details(string code)
+        public ActionResult Details(string id)
         {
-            var dCode = AdminHelpers.DCodeInt(code);
+            var dCode = AdminHelpers.DCodeInt(id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             if (dCode==0)
                 return HttpNotFound();
-            var customer = db.Customers.Where(m => m.Id == dCode).FirstOrDefault();//Customer.Get(dCode);         
+            var customer = db.Customers.Where(m => m.Id == dCode).FirstOrDefault();
             var model = _mapper.Map<Customer, CustomerDetailsViewModel>(customer);
             model.List = db.CustomerAddresses.Where(i => i.Status == 0 && i.CustomerId == dCode).ToList().AsQueryable().ProjectTo<CustomerDetailsViewModel.AddressList>(_mapperConfiguration).ToList();
             return View(model);
@@ -92,6 +92,7 @@ namespace ShopNow.Controllers
                 return HttpNotFound();
             var customer = db.Customers.Where(m => m.Id == dCode).FirstOrDefault();//Customer.Get(dCode);
             var model = _mapper.Map<Customer, CustomerEditViewModel>(customer);
+            model.DOB = customer.DOB != null ? customer.DOB.Value.ToString("dd-MM-yyyy") : "N/A";
             return View(model);
         }
 

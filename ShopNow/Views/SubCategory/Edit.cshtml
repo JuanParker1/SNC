@@ -32,18 +32,6 @@
                                 </select>
                                 <input type="hidden" name="CategoryName" id="CategoryName" value="@Model.CategoryName" />
                             </div>
-                            <div class="col-md-3 mt-1">
-                                <label class="control-label"><strong class="text-secondary">Item Type</strong></label>
-                                <select name="ProductTypeId" class="form-control" id="ProductTypeId">
-                                    <option value="0">Select Item Type</option>
-                                    <option value="4">Product</option>
-                                    <option value="1">Dish</option>
-                                    <option value="5">Service</option>
-                                    <option value="3">Medical</option>
-                                    <option value="2">FMCG</option>
-                                </select>
-                                <input type="hidden" name="ProductTypeName" value="@Model.ProductTypeName" />
-                            </div>
                             <div class="col-md-3">
                                 <label class="col-form-label"><strong class="text-secondary">Adscore</strong></label>
                                 <input type="text" class="form-control" min="1" name="Adscore" id="Adscore" value="@Model.Adscore" />
@@ -70,11 +58,7 @@
     <script src="~/Scripts/ValidateRequiredFields.js"></script>
     <script>
         $(document).ready(function () {
-            $("#ProductTypeId").val('@Model.ProductTypeId');
-            $('#ProductTypeId').on('change', function () {
-                let selectedType = $(this).find("option:selected").text();
-                $('[name="ProductTypeName"]').val(selectedType);
-            });
+          
             $('#CategoryId').select2({
                 placeholder: "Search Category",
                 ajax: {

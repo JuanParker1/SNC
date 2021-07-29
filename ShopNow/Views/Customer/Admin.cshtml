@@ -21,12 +21,12 @@
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
 {
-columns.Add().RenderValueAs(o => Html.ActionLink(o.Name, "Details", new { code = @ShopNow.Helpers.AdminHelpers.ECode(o.Code) }).ToHtmlString()).Titled("Name").Encoded(false).Sanitized(false).Filterable(true).SetWidth(10);
+columns.Add().RenderValueAs(o => Html.ActionLink(o.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }).ToHtmlString()).Titled("Name").Encoded(false).Sanitized(false).Filterable(true).SetWidth(10);
 columns.Add(c => c.PhoneNumber).Titled("Phone Number").Filterable(true).SetWidth(10);
 columns.Add(c => c.Address).Titled("Address").Filterable(true).SetWidth(10);
 columns.Add(c => c.DistrictName).Titled("District").Filterable(true).SetWidth(10);
 columns.Add(c => c.StateName).Titled("State").Filterable(true).SetWidth(10);
-columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(c => @<div><button type="button" class="btn btn-sm btn-danger Remove" data-id="@c.Code">Remove</button></div>);
+columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(c => @<div><button type="button" class="btn btn-sm btn-danger Remove" data-id="@c.Id">Remove</button></div>);
 }).WithPaging(20).Sortable(true)
 
                 </div>

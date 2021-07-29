@@ -63,7 +63,7 @@
             </div>
         }
     </div>
-    @if (Model.Status == 1 && Model.Verify == true)
+    @if (Model.Status == 1 && Model.Verify == true )
     {
         <div class="row text-center">
             <div class="col-md-6">
@@ -75,7 +75,7 @@
             </div>
         </div>
     }
-    @if (Model.Status == 1 && Model.Verify == false && (Model.PhoneNumber != "" || Model.PhoneNumber != null))
+    @if (Model.Status == 1 && Model.Verify == false && (Model.PhoneNumber != "" || Model.PhoneNumber != null) && Model.PhoneVerify == false)
     {
         <div class="col-md-5 PhoneVerify">
             <h6 class="text-success">Phone Verification</h6>
@@ -1196,6 +1196,7 @@
                     $("#GeneratePassword").attr('disabled', true);
                     $(".showPasswordtext").addClass("d-none");
                     $(".disablePasswordtext").removeClass("d-none");
+                    location.reload();
                 });
             });
         });

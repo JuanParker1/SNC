@@ -2124,9 +2124,10 @@ namespace ShopNow.Controllers
 
         // Sub Category Select2
         [AccessPolicy(PageCode = "")]
-        public async Task<JsonResult> GetSubCategorySelect2(string q = "")
+        public async Task<JsonResult> GetSubCategorySelect2(string categoryIds, string q = "")
         {
-            var model = await _db.SubCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 2).Select(i => new
+            int [] categoriesId = categoryIds.Split(',').Select(int.Parse).ToArray();
+            var model = await _db.SubCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && categoriesId.Contains(a.Id) && a.Status == 0 && a.ProductTypeId == 2).Select(i => new
             {
                 id = i.Id,
                 text = i.Name
@@ -2137,9 +2138,10 @@ namespace ShopNow.Controllers
 
         // NextSub Category Select2
         [AccessPolicy(PageCode = "")]
-        public async Task<JsonResult> GetNextSubCategorySelect2(string q = "")
+        public async Task<JsonResult> GetNextSubCategorySelect2(string subcategoryIds, string q = "")
         {
-            var model = await _db.NextSubCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 2).Select(i => new
+            int[] subcategoriesId = subcategoryIds.Split(',').Select(int.Parse).ToArray();
+            var model = await _db.NextSubCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && subcategoriesId.Contains(a.Id) && a.Status == 0 && a.ProductTypeId == 2).Select(i => new
             {
                 id = i.Id,
                 text = i.Name

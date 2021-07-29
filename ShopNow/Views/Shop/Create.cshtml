@@ -21,7 +21,7 @@
             <label class="font-weight-bold text-secondary">Customer Phone No.</label>
         </div>
         <div class="col-md-2">
-            <input type="text" class="form-control" id="phoneNumber" autofocus />
+            <input type="text" class="form-control" id="phoneNumber" maxlength="10"  oninput="this.value=this.value.replace(/[^0-9]/g,'');" autofocus />
         </div>
         <div class="col-md-1">
             <input type="button" class="form-control btn btn-sm btn-success" id="btnCustomer" value="Check" />
@@ -66,7 +66,7 @@
                                     <label class="col-form-label"><strong class="text-secondary">Mobile Number</strong></label>
                                 </div>
                                 <div class="col-md-8">
-                                    <input id="PhoneNumber" type="text" class="form-control" name="PhoneNumber" />
+                                    <input id="PhoneNumber" type="text" class="form-control" name="PhoneNumber" maxlength="10"  oninput="this.value=this.value.replace(/[^0-9]/g,'');" />
                                 </div>
                             </div>
                             <div class="form-group row manualmobile">
@@ -147,8 +147,8 @@
                                 <div class="col-md-4 text-md-left">
                                 </div>
                                 <div class="col-md-4">
-                                    <small class="control-label col-sm-12" for="PinId"><i class="text-secondary">PIN Id</i></small>
-                                    <input id="PinId" type="text" class="form-control" placeholder="PIN Id" name="PinId" readonly />
+                                    <small class="control-label col-sm-12" for="PinId"><i class="text-secondary">PIN Code</i></small>
+                                    <input id="PinId" type="text" class="form-control" placeholder="PIN Code" name="PinId" readonly />
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -235,7 +235,7 @@
                                             <label class="col-form-label"><strong class="text-secondary">Aadhar Number</strong></label>
                                         </div>
                                         <div class="col-md-8">
-                                            <input id="AadharNumber" type="text" class="form-control" name="AadharNumber" />
+                                            <input id="AadharNumber" type="text" maxlength="12"  class="form-control" name="AadharNumber" oninput="this.value=this.value.replace(/[^0-9]/g,'');" />
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -634,7 +634,7 @@
             }
 
             $('#phoneNumber').on("keypress", function (e) {
-                if (e.keyId == 13) {
+                if (e.keyCode == 13) {
                     $("#btnCustomer").click();
                 }
             });
@@ -1190,17 +1190,22 @@
                             var marker = new google.maps.Marker({
                                 position: pos,
                                 map: map,
-                                title: "your place",
-                                draggable: true
-                            });
-                            google.maps.event.addListener(marker, 'click', function () {
-                                infowindow.open(map, marker);
+                                draggable: true,
+                                title: "your place"
                             });
                             markers.push(marker);
-                            google.maps.event.addListener(marker, 'dragend', function () {
-                                pos = this.position;
-                                marker.position = pos;
 
+                            //google.maps.event.addListener(marker, 'click', function () {
+                            //    infowindow.open(map, marker);
+                            //});
+                            google.maps.event.addListener(marker, 'dragend', function (evt) {
+                                geocodePosition(marker.position);
+                            });
+                            google.maps.event.addListener(marker, 'drag', function () {
+                                geocodePosition(marker.position);
+                            });
+
+                            function geocodePosition(pos) {
                                 var google_maps_geocoder = new google.maps.Geocoder();
                                 google_maps_geocoder.geocode(
                                     { 'latLng': pos },
@@ -1232,7 +1237,7 @@
                                         $('#Latitude').val(results[0].geometry.location.lat);
                                         $('#Longitude').val(results[0].geometry.location.lng);
                                         $('#GooglePlaceId').val(results[0].place_id);
-                                       
+
                                         $.getJSON('/Shop/GetShop?placeid=' + results[0].place_id, null, function (data) {
                                             $('#Rating').val(data.result.result.rating);
                                             $('#CustomerReview').val(data.result.result.user_ratings_total);
@@ -1255,63 +1260,7 @@
                                         });
                                     }
                                 );
-                            });
-
-
-                            var google_maps_geocoder = new google.maps.Geocoder();
-                            google_maps_geocoder.geocode(
-                                { 'latLng': pos },
-                                function (results, status) {
-                                    console.log(results);
-                                    $('#Address').val(results[0].formatted_address);
-                                    var address = results[0].address_components;
-                                    $.each(address, function () {
-
-                                        if (this.types[0] == "locality") {
-                                            $('#StreetName').val(this.long_name);
-                                        }
-                                        if (this.types[0] == "administrative_area_level_2") {
-                                            $('#DistrictName').val(this.long_name);
-                                        }
-                                        if (this.types[0] == "administrative_area_level_1") {
-                                            $('#StateName').val(this.long_name);
-                                        }
-                                        if (this.types[0] == "country") {
-                                            $('#CountryName').val(this.long_name);
-                                        }
-
-                                        if (this.types[0] == "postal_code") {
-                                            $('#PinCode').val(this.long_name);
-                                        }
-
-                                    });
-
-                                    $('#Latitude').val(results[0].geometry.location.lat);
-                                    $('#Longitude').val(results[0].geometry.location.lng);
-                                    $('#GooglePlaceId').val(results[0].place_id);
-                                   
-                                    $.getJSON('/Shop/GetShop?placeid=' + results[0].place_id, null, function (data) {
-                                        $('#Rating').val(data.result.result.rating);
-                                        $('#CustomerReview').val(data.result.result.user_ratings_total);
-
-                                        if (data.result.result.international_phone_number != null) {
-                                            $('.manualmobile').addClass('d-none');
-                                            $('#PhoneNumber').val(data.result.result.international_phone_number);
-                                            var phonenumber = $('#PhoneNumber').val();
-                                            var phone = phonenumber.replace(/\s/g, '');
-                                            phone = phonenumber.slice(3);
-                                            var phoneNWS = phone.replace(/\s/g, '');
-                                            $('#PhoneNumber').val(phoneNWS);
-                                        } else {
-                                            $('.mobile').addClass('d-none');
-                                            $('.manualmobile').removeClass('d-none');
-                                        }
-                                        $('#Website').val(data.result.result.website);
-                                        $('#Name').val(data.result.result.name);
-
-                                    });
-                                }
-                            );
+                            }
 
                             autocomplete.addListener('place_changed', function () {
                                 document.getElementById("location-error").style.display = 'none';
@@ -1328,20 +1277,20 @@
                                 var marker = new google.maps.Marker({
                                     position: pos,
                                     map: map,
-                                    title: "your place",
-                                    draggable: true
-                                });
-
-                                google.maps.event.addListener(marker, 'click', function () {
-                                    infowindow.open(map, marker);
+                                    draggable: true,
+                                    title: "your place"
                                 });
                                 markers.push(marker);
-                                google.maps.event.addListener(marker, 'dragend', function () {
-                                    pos = this.position;
-                                    markers.push(marker);
-                                    //infowindow.open(map, marker);
+                                //google.maps.event.addListener(marker, 'click', function () {
+                                //    infowindow.open(map, marker);
+                                //});
+                                google.maps.event.addListener(marker, 'dragend', function (evt) {
+                                    geocodePosition(marker.position);
                                 });
-
+                                google.maps.event.addListener(marker, 'drag', function () {
+                                    geocodePosition(marker.position);
+                                });
+                                
                                 map.fitBounds(place.geometry.viewport);
                                 marker.setPosition(place.geometry.location);
                                 marker.setVisible(true);
