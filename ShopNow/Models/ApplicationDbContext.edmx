@@ -1301,6 +1301,20 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
         <Function Name="getCategoryListbyShopcode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="code" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="GetCategoryProductsList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="shopCode" Type="varchar" Mode="In" />
+          <Parameter Name="categoryCode" Type="varchar" Mode="In" />
+          <Parameter Name="str" Type="varchar" Mode="In" />
+          <Parameter Name="page" Type="int" Mode="In" />
+          <Parameter Name="pageSize" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetDEliveryBoyList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetKeyname" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="nvarchar">
+          <Parameter Name="key" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="GetKeynameWithsearchdata" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="nvarchar">
+          <Parameter Name="key" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="GetProductList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Longitude" Type="float" Mode="In" />
           <Parameter Name="Latitude" Type="float" Mode="In" />
@@ -1339,10 +1353,38 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
           <Parameter Name="page" Type="int" Mode="In" />
           <Parameter Name="pageSize" Type="int" Mode="In" />
         </Function>
+        <Function Name="GetShopname" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="shopId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetTableVAlueString" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="key" Type="nvarchar" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="Name" Type="nvarchar" MaxLength="600" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <Function Name="ReatillerPaymentReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="from" Type="date" Mode="In" />
+          <Parameter Name="to" Type="date" Mode="In" />
+          <Parameter Name="shopcode" Type="nvarchar" Mode="In" />
+          <Parameter Name="user" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="ReatillerPaymentReportAdmin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="from" Type="date" Mode="In" />
           <Parameter Name="to" Type="date" Mode="In" />
           <Parameter Name="shopcode" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="ReatillerPaymentReports" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="from" Type="date" Mode="In" />
+          <Parameter Name="to" Type="date" Mode="In" />
+          <Parameter Name="shopcode" Type="nvarchar" Mode="In" />
+          <Parameter Name="user" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="test" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="str" Type="nvarchar" Mode="In" />
         </Function>
         <EntityContainer Name="sncModelStoreContainer">
           <EntitySet Name="AccessPolicies" EntityType="Self.AccessPolicies" Schema="dbo" store:Type="Tables" />
@@ -1497,6 +1539,9 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="sncModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <ComplexType Name="GetTableVAlueString_Result">
+          <Property Name="Name" Type="String" MaxLength="600" FixedLength="false" Unicode="true" />
+        </ComplexType>
         <EntityType Name="AccessPolicy">
           <Key>
             <PropertyRef Name="Id" />
@@ -2972,61 +3017,168 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
             <End Role="Shops" EntitySet="Shops" />
             <End Role="ShopDishAddOns" EntitySet="ShopDishAddOns" />
           </AssociationSet>
-          <FunctionImport Name="getCategoryListbyShopcode" ReturnType="Collection(sncModel.getCategoryListbyShopcode)">
+          <FunctionImport Name="GetTableVAlueString" IsComposable="true" ReturnType="Collection(sncModel.GetTableVAlueString_Result)">
+          <Parameter Name="key" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="getCategoryListbyShopcode">
           <Parameter Name="code" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="ReatillerPaymentReportAdmin" ReturnType="Collection(sncModel.ReatillerPaymentReportAdmin)">
-            <Parameter Name="from" Mode="In" Type="DateTime" />
-            <Parameter Name="to" Mode="In" Type="DateTime" />
-            <Parameter Name="shopcode" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="GetProductList" ReturnType="Collection(sncModel.GetProductList)">
-            <Parameter Name="Longitude" Mode="In" Type="Double" />
-            <Parameter Name="Latitude" Mode="In" Type="Double" />
+          <FunctionImport Name="GetCategoryProductsList">
+            <Parameter Name="shopCode" Mode="In" Type="String" />
+            <Parameter Name="categoryCode" Mode="In" Type="String" />
             <Parameter Name="str" Mode="In" Type="String" />
             <Parameter Name="page" Mode="In" Type="Int32" />
-            <Parameter Name="pagesize" Mode="In" Type="Int32" />
+            <Parameter Name="pageSize" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="GetProductListCount" ReturnType="Collection(sncModel.GetProductListCount)">
-            <Parameter Name="Longitude" Mode="In" Type="Double" />
-            <Parameter Name="Latitude" Mode="In" Type="Double" />
-            <Parameter Name="str" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="GetShopCategoryList" ReturnType="Collection(sncModel.GetShopCategoryList)">
+          <FunctionImport Name="GetDEliveryBoyList" ReturnType="Collection(sncModel.GetDEliveryBoyList_Result)" />
+          <FunctionImport Name="GetShopCategoryList">
             <Parameter Name="shop" Mode="In" Type="String" />
             <Parameter Name="CategoryCode" Mode="In" Type="String" />
             <Parameter Name="str" Mode="In" Type="String" />
             <Parameter Name="Page" Mode="In" Type="Int32" />
             <Parameter Name="Size" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="GetShopCategoryProductCount" ReturnType="Collection(sncModel.GetShopCategoryProductCount)">
+          <FunctionImport Name="GetShopCategoryProductCount">
             <Parameter Name="shopCode" Mode="In" Type="String" />
             <Parameter Name="categoryCode" Mode="In" Type="String" />
             <Parameter Name="str" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="GetShopCategoryProducts" ReturnType="Collection(sncModel.GetShopCategoryProducts)">
+          <FunctionImport Name="GetShopCategoryProducts">
             <Parameter Name="shopCode" Mode="In" Type="String" />
             <Parameter Name="categoryCode" Mode="In" Type="String" />
             <Parameter Name="str" Mode="In" Type="String" />
             <Parameter Name="page" Mode="In" Type="Int32" />
             <Parameter Name="pageSize" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="GetShopCategoryProductsList" ReturnType="Collection(sncModel.GetShopCategoryProductsList)">
+          <FunctionImport Name="GetShopCategoryProductsList">
             <Parameter Name="shopCode" Mode="In" Type="String" />
             <Parameter Name="categoryCode" Mode="In" Type="String" />
             <Parameter Name="str" Mode="In" Type="String" />
             <Parameter Name="page" Mode="In" Type="Int32" />
             <Parameter Name="pageSize" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ReatillerPaymentReport">
+            <Parameter Name="from" Mode="In" Type="DateTime" />
+            <Parameter Name="to" Mode="In" Type="DateTime" />
+            <Parameter Name="shopcode" Mode="In" Type="String" />
+            <Parameter Name="user" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ReatillerPaymentReportAdmin">
+            <Parameter Name="from" Mode="In" Type="DateTime" />
+            <Parameter Name="to" Mode="In" Type="DateTime" />
+            <Parameter Name="shopcode" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ReatillerPaymentReports">
+            <Parameter Name="from" Mode="In" Type="DateTime" />
+            <Parameter Name="to" Mode="In" Type="DateTime" />
+            <Parameter Name="shopcode" Mode="In" Type="String" />
+            <Parameter Name="user" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="test" ReturnType="Collection(sncModel.test_Result)">
+          <Parameter Name="str" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetShopname" ReturnType="Collection(sncModel.GetShopname_Result)">
+          <Parameter Name="shopId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetProductList" ReturnType="Collection(sncModel.GetProductList_Result)">
+            <Parameter Name="Longitude" Mode="In" Type="Double" />
+            <Parameter Name="Latitude" Mode="In" Type="Double" />
+            <Parameter Name="str" Mode="In" Type="String" />
+            <Parameter Name="page" Mode="In" Type="Int32" />
+            <Parameter Name="pagesize" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetProductListCount" ReturnType="Collection(Int32)">
+            <Parameter Name="Longitude" Mode="In" Type="Double" />
+            <Parameter Name="Latitude" Mode="In" Type="Double" />
+            <Parameter Name="str" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
-        <ComplexType Name="getCategoryListbyShopcode" />
-        <ComplexType Name="ReatillerPaymentReportAdmin" />
-        <ComplexType Name="GetProductList" />
-        <ComplexType Name="GetProductListCount" />
-        <ComplexType Name="GetShopCategoryList" />
-        <ComplexType Name="GetShopCategoryProductCount" />
-        <ComplexType Name="GetShopCategoryProducts" />
-        <ComplexType Name="GetShopCategoryProductsList" />
+        <ComplexType Name="GetDEliveryBoyList_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="true" />
+          <Property Type="Int32" Name="Active" Nullable="false" />
+          <Property Type="String" Name="PhoneNumber" Nullable="true" />
+          <Property Type="String" Name="ImagePath" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="test_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="true" />
+          <Property Type="Int32" Name="BrandId" Nullable="false" />
+          <Property Type="String" Name="BrandName" Nullable="true" />
+          <Property Type="String" Name="CategoryIds" Nullable="true" />
+          <Property Type="String" Name="CategoryName" Nullable="true" />
+          <Property Type="String" Name="ShortDescription" Nullable="true" />
+          <Property Type="String" Name="LongDescription" Nullable="true" />
+          <Property Type="Int32" Name="ProductTypeId" Nullable="false" />
+          <Property Type="String" Name="ProductTypeName" Nullable="true" MaxLength="200" />
+          <Property Type="Double" Name="Price" Nullable="false" />
+          <Property Type="Boolean" Name="Customisation" Nullable="false" />
+          <Property Type="String" Name="ColorCode" Nullable="true" />
+          <Property Type="Int32" Name="MeasurementUnitId" Nullable="false" />
+          <Property Type="String" Name="MeasurementUnitName" Nullable="true" />
+          <Property Type="Boolean" Name="PriscriptionCategory" Nullable="false" />
+          <Property Type="Double" Name="Weight" Nullable="false" />
+          <Property Type="String" Name="SizeLB" Nullable="true" />
+          <Property Type="String" Name="DrugCompoundDetailIds" Nullable="true" />
+          <Property Type="String" Name="DrugCompoundDetailName" Nullable="true" />
+          <Property Type="Int32" Name="IBarU" Nullable="true" />
+          <Property Type="String" Name="OriginCountry" Nullable="true" />
+          <Property Type="String" Name="Manufacturer" Nullable="true" />
+          <Property Type="Int32" Name="PackageId" Nullable="true" />
+          <Property Type="String" Name="PackageName" Nullable="true" />
+          <Property Type="String" Name="GoogleTaxonomyCode" Nullable="true" />
+          <Property Type="String" Name="SubCategoryIds" Nullable="true" />
+          <Property Type="String" Name="SubCategoryName" Nullable="true" />
+          <Property Type="String" Name="NextSubCategoryIds" Nullable="true" />
+          <Property Type="String" Name="NextSubCategoryName" Nullable="true" />
+          <Property Type="String" Name="ASIN" Nullable="true" />
+          <Property Type="String" Name="ImagePath1" Nullable="true" />
+          <Property Type="String" Name="ImagePath2" Nullable="true" />
+          <Property Type="String" Name="ImagePath3" Nullable="true" />
+          <Property Type="String" Name="ImagePath4" Nullable="true" />
+          <Property Type="String" Name="ImagePath5" Nullable="true" />
+          <Property Type="Int32" Name="Adscore" Nullable="false" />
+          <Property Type="String" Name="NickName" Nullable="true" />
+          <Property Type="Int32" Name="Status" Nullable="false" />
+          <Property Type="DateTime" Name="DateEncoded" Nullable="false" Precision="23" />
+          <Property Type="DateTime" Name="DateUpdated" Nullable="false" Precision="23" />
+          <Property Type="String" Name="CreatedBy" Nullable="true" />
+          <Property Type="String" Name="UpdatedBy" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="GetShopname_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Address" Nullable="true" />
+          <Property Type="Int32" Name="CustomerReview" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="true" />
+          <Property Type="String" Name="PhoneNumber" Nullable="true" />
+          <Property Type="Double" Name="Rating" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GetProductList_Result">
+          <Property Type="Int32" Name="ProductId" Nullable="false" />
+          <Property Type="String" Name="ProductName" Nullable="true" />
+          <Property Type="Int32" Name="ShopId" Nullable="false" />
+          <Property Type="String" Name="ShopName" Nullable="true" />
+          <Property Type="Int32" Name="iBarU" Nullable="false" />
+          <Property Type="String" Name="CategoryCode" Nullable="true" />
+          <Property Type="String" Name="CategoryName" Nullable="true" />
+          <Property Type="Int32" Name="DiscountCategoryId" Nullable="false" />
+          <Property Type="String" Name="DiscountCategoryName" Nullable="true" />
+          <Property Type="Double" Name="DiscountCategoryPercentage" Nullable="true" />
+          <Property Type="Double" Name="MRP" Nullable="false" />
+          <Property Type="Double" Name="Price" Nullable="false" />
+          <Property Type="Int32" Name="Status" Nullable="false" />
+          <Property Type="Decimal" Name="Quantity" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Boolean" Name="isOnline" Nullable="false" />
+          <Property Type="Int32" Name="ItemId" Nullable="false" />
+          <Property Type="Double" Name="Latitude" Nullable="false" />
+          <Property Type="Double" Name="Longitude" Nullable="false" />
+          <Property Type="Int32" Name="ShopCategoryId" Nullable="false" />
+          <Property Type="String" Name="ImagePath" Nullable="true" />
+          <Property Type="String" Name="ShopImagePath" Nullable="false" />
+          <Property Type="Int32" Name="Meters" Nullable="false" />
+          <Property Type="Boolean" Name="ShopOnline" Nullable="true" />
+          <Property Type="Int32" Name="ShopStatus" Nullable="false" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4087,46 +4239,125 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="getCategoryListbyShopcode" FunctionName="sncModel.Store.getCategoryListbyShopcode" >
+          <FunctionImportMapping FunctionName="sncModel.Store.GetTableVAlueString" FunctionImportName="GetTableVAlueString">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="sncModel.getCategoryListbyShopcode" />
+              <ComplexTypeMapping TypeName="sncModel.GetTableVAlueString_Result">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="ReatillerPaymentReportAdmin" FunctionName="sncModel.Store.ReatillerPaymentReportAdmin">
+          <FunctionImportMapping FunctionImportName="getCategoryListbyShopcode" FunctionName="sncModel.Store.getCategoryListbyShopcode" />
+          <FunctionImportMapping FunctionImportName="GetCategoryProductsList" FunctionName="sncModel.Store.GetCategoryProductsList" />
+          <FunctionImportMapping FunctionImportName="GetDEliveryBoyList" FunctionName="sncModel.Store.GetDEliveryBoyList">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="sncModel.ReatillerPaymentReportAdmin" />
+              <ComplexTypeMapping TypeName="sncModel.GetDEliveryBoyList_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetShopCategoryList" FunctionName="sncModel.Store.GetShopCategoryList" />
+          <FunctionImportMapping FunctionImportName="GetShopCategoryProductCount" FunctionName="sncModel.Store.GetShopCategoryProductCount" />
+          <FunctionImportMapping FunctionImportName="GetShopCategoryProducts" FunctionName="sncModel.Store.GetShopCategoryProducts" />
+          <FunctionImportMapping FunctionImportName="GetShopCategoryProductsList" FunctionName="sncModel.Store.GetShopCategoryProductsList" />
+          <FunctionImportMapping FunctionImportName="ReatillerPaymentReport" FunctionName="sncModel.Store.ReatillerPaymentReport" />
+          <FunctionImportMapping FunctionImportName="ReatillerPaymentReportAdmin" FunctionName="sncModel.Store.ReatillerPaymentReportAdmin" />
+          <FunctionImportMapping FunctionImportName="ReatillerPaymentReports" FunctionName="sncModel.Store.ReatillerPaymentReports" />
+          <FunctionImportMapping FunctionImportName="test" FunctionName="sncModel.Store.test">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="sncModel.test_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
+                <ScalarProperty Name="BrandName" ColumnName="BrandName" />
+                <ScalarProperty Name="CategoryIds" ColumnName="CategoryIds" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="ShortDescription" ColumnName="ShortDescription" />
+                <ScalarProperty Name="LongDescription" ColumnName="LongDescription" />
+                <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
+                <ScalarProperty Name="ProductTypeName" ColumnName="ProductTypeName" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Customisation" ColumnName="Customisation" />
+                <ScalarProperty Name="ColorCode" ColumnName="ColorCode" />
+                <ScalarProperty Name="MeasurementUnitId" ColumnName="MeasurementUnitId" />
+                <ScalarProperty Name="MeasurementUnitName" ColumnName="MeasurementUnitName" />
+                <ScalarProperty Name="PriscriptionCategory" ColumnName="PriscriptionCategory" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="SizeLB" ColumnName="SizeLB" />
+                <ScalarProperty Name="DrugCompoundDetailIds" ColumnName="DrugCompoundDetailIds" />
+                <ScalarProperty Name="DrugCompoundDetailName" ColumnName="DrugCompoundDetailName" />
+                <ScalarProperty Name="IBarU" ColumnName="IBarU" />
+                <ScalarProperty Name="OriginCountry" ColumnName="OriginCountry" />
+                <ScalarProperty Name="Manufacturer" ColumnName="Manufacturer" />
+                <ScalarProperty Name="PackageId" ColumnName="PackageId" />
+                <ScalarProperty Name="PackageName" ColumnName="PackageName" />
+                <ScalarProperty Name="GoogleTaxonomyCode" ColumnName="GoogleTaxonomyCode" />
+                <ScalarProperty Name="SubCategoryIds" ColumnName="SubCategoryIds" />
+                <ScalarProperty Name="SubCategoryName" ColumnName="SubCategoryName" />
+                <ScalarProperty Name="NextSubCategoryIds" ColumnName="NextSubCategoryIds" />
+                <ScalarProperty Name="NextSubCategoryName" ColumnName="NextSubCategoryName" />
+                <ScalarProperty Name="ASIN" ColumnName="ASIN" />
+                <ScalarProperty Name="ImagePath1" ColumnName="ImagePath1" />
+                <ScalarProperty Name="ImagePath2" ColumnName="ImagePath2" />
+                <ScalarProperty Name="ImagePath3" ColumnName="ImagePath3" />
+                <ScalarProperty Name="ImagePath4" ColumnName="ImagePath4" />
+                <ScalarProperty Name="ImagePath5" ColumnName="ImagePath5" />
+                <ScalarProperty Name="Adscore" ColumnName="Adscore" />
+                <ScalarProperty Name="NickName" ColumnName="NickName" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetShopname" FunctionName="sncModel.Store.GetShopname">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="sncModel.GetShopname_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="CustomerReview" ColumnName="CustomerReview" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Rating" ColumnName="Rating" />
+              </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GetProductList" FunctionName="sncModel.Store.GetProductList">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="sncModel.GetProductList" />
+              <ComplexTypeMapping TypeName="sncModel.GetProductList_Result">
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
+                <ScalarProperty Name="iBarU" ColumnName="iBarU" />
+                <ScalarProperty Name="CategoryCode" ColumnName="CategoryCode" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="DiscountCategoryId" ColumnName="DiscountCategoryId" />
+                <ScalarProperty Name="DiscountCategoryName" ColumnName="DiscountCategoryName" />
+                <ScalarProperty Name="DiscountCategoryPercentage" ColumnName="DiscountCategoryPercentage" />
+                <ScalarProperty Name="MRP" ColumnName="MRP" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="isOnline" ColumnName="isOnline" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="ShopCategoryId" ColumnName="ShopCategoryId" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="ShopImagePath" ColumnName="ShopImagePath" />
+                <ScalarProperty Name="Meters" ColumnName="Meters" />
+                <ScalarProperty Name="ShopOnline" ColumnName="ShopOnline" />
+                <ScalarProperty Name="ShopStatus" ColumnName="ShopStatus" />
+              </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GetProductListCount" FunctionName="sncModel.Store.GetProductListCount" >
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="sncModel.GetProductListCount" />
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GetShopCategoryList" FunctionName="sncModel.Store.GetShopCategoryList" >
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="sncModel.GetShopCategoryList" />
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GetShopCategoryProductCount" FunctionName="sncModel.Store.GetShopCategoryProductCount" >
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="sncModel.GetShopCategoryProductCount" />
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GetShopCategoryProducts" FunctionName="sncModel.Store.GetShopCategoryProducts" >
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="sncModel.GetShopCategoryProducts" />
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GetShopCategoryProductsList" FunctionName="sncModel.Store.GetShopCategoryProductsList" >
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="sncModel.GetShopCategoryProductsList" />
-            </ResultMapping>
-          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetProductListCount" FunctionName="sncModel.Store.GetProductListCount" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

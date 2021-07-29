@@ -11,7 +11,8 @@ namespace ShopNow.Models
 {
     using System;
     
-    public partial class GetShopCategoryProducts
+    public partial class GetTableVAlueString_Result
     {
+        public string Name { get; set; }
     }
 }

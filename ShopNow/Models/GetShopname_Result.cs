@@ -11,7 +11,13 @@ namespace ShopNow.Models
 {
     using System;
     
-    public partial class ReatillerPaymentReportAdmin
+    public partial class GetShopname_Result
     {
+        public int Id { get; set; }
+        public string Address { get; set; }
+        public int CustomerReview { get; set; }
+        public string Name { get; set; }
+        public string PhoneNumber { get; set; }
+        public double Rating { get; set; }
     }
 }

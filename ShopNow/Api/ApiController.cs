@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using LinqToDB;
 using Newtonsoft.Json;
 using Razorpay.Api;
 using ShopNow.Filters;
@@ -2415,7 +2416,8 @@ namespace ShopNow.Controllers
             double? varlatitude = latitude;
             int? varpage = page;
             int? varPagesize = pageSize;
-           //var s = db.GetProductList(varlongitude, varlatitude, str, varpage, varPagesize).ToList();
+            var s = db.GetProductList(varlongitude, varlatitude, str, varpage, varPagesize).ToList();
+          
 
             string queryOtherList = "SELECT  * " +
 " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8  and Status = 0 and Latitude != 0 and Longitude != 0" +
@@ -2439,8 +2441,8 @@ namespace ShopNow.Controllers
                 ShopStatus=i.Status
                 }).ToList();
 
-            var productrCount = db.GetProductListCount(varlongitude, varlatitude, str).ToList();
-            int  count =Convert.ToInt32(productrCount[0]);
+            var productrCount =  db.GetProductListCount(varlongitude, varlatitude, str).ToList();
+            int count = Convert.ToInt32(productrCount[0]);
 
             int CurrentPage = page;
 
@@ -2488,7 +2490,7 @@ namespace ShopNow.Controllers
 
             var current1 = CurrentPage1 + 1;
 
-            var nexturl1 = "https://admin.shopnowchat.in/Api/GetProductList?latitude=" + latitude + "&longitude=" + longitude + "&str=" + str + "&page=" + current;
+            var nexturl1 = apipath +"/ Api/GetProductList?latitude=" + latitude + "&longitude=" + longitude + "&str=" + str + "&page=" + current;
             var nextPage1 = CurrentPage1 < TotalPages1 ? nexturl1 : "No";
             var paginationMetadata1 = new
             {
@@ -2529,9 +2531,9 @@ namespace ShopNow.Controllers
 
         }
 
-        public JsonResult GetShopCategoryList(int shopId, string categoryIds, string str = "", int page = 1, int pageSize = 20)
+        public JsonResult GetShopCategoryList(string shopId, string categoryIds, string str = "", int page = 1, int pageSize = 20)
         {
-            var shid = db.Shops.Where(s => s.Id == shopId).FirstOrDefault();
+          //  var shid = db.Shops.Where(s => s.Id == shopId).FirstOrDefault();
             int count = 0;
             //var total = db.GetShopCategoryProductCount(shopCode, categoryCode, str).ToList();
             //if (total.Count > 0)
@@ -2539,7 +2541,7 @@ namespace ShopNow.Controllers
             
             var skip = page-1;
             
-            var model = db.GetShopCategoryProducts(shopId, categoryIds, str, skip, pageSize).ToList();
+            //var model = db.GetShopCategoryProducts(shopId, categoryIds, str, skip, pageSize).ToList();
             
 
             int CurrentPage = page;
