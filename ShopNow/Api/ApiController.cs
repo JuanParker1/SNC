@@ -235,36 +235,34 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
                 if (user.Id !=0)
                 {
-                    var otpmodel = new OtpViewModel();
-                    var models = _mapper.Map<OtpViewModel, OtpVerification>(otpmodel);
-                    models.CustomerId = user.Id;
-                    models.CustomerName = user.Name;
-                    models.PhoneNumber = model.PhoneNumber;
-                    models.Otp = _generatedCode;
-                    models.ReferenceCode = _referenceCode;
-                    models.Verify = false;
-                    models.CreatedBy = user.Name;
-                    models.UpdatedBy = user.Name;
-                    models.DateEncoded = DateTime.Now;
+                    var otpmodel = new OtpVerification();
+                    otpmodel.CustomerId = user.Id;
+                    otpmodel.CustomerName = user.Name;
+                    otpmodel.PhoneNumber = model.PhoneNumber;
+                    otpmodel.Otp = _generatedCode;
+                    otpmodel.ReferenceCode = _referenceCode;
+                    otpmodel.Verify = false;
+                    otpmodel.CreatedBy = user.Name;
+                    otpmodel.UpdatedBy = user.Name;
+                    otpmodel.DateEncoded = DateTime.Now;
                     var dateAndTime = DateTime.Now;
                     var date = dateAndTime.ToString("d");
                     var time = dateAndTime.ToString("HH:mm");
 
                     string joyra = "04448134440";
-                    string Msg = "Hi, " + models.Otp + " is the OTP for (Shop Now Chat) Verification at " + time + " with " + models.ReferenceCode + " reference - Joyra";
+                    string Msg = "Hi, " + otpmodel.Otp + " is the OTP for (Shop Now Chat) Verification at " + time + " with " + otpmodel.ReferenceCode + " reference - Joyra";
 
                     string result = SendSMS.execute(joyra, model.PhoneNumber, Msg);
-                    models.Status = 0;
-                    models.DateEncoded = DateTime.Now;
-                    models.DateUpdated = DateTime.Now;
-                    db.OtpVerifications.Add(models);
+                    otpmodel.Status = 0;
+                    otpmodel.DateEncoded = DateTime.Now;
+                    otpmodel.DateUpdated = DateTime.Now;
+                    db.OtpVerifications.Add(otpmodel);
                     db.SaveChanges();
 
-                    if (model.Id != 0)
+                    if (otpmodel != null)
                     {
                         return Json(new { message = "Successfully Registered and OTP send!", id = user.Id, user.Position });
-
-
+                        
                     }
                     else
                         return Json("Otp Failed to send!");
@@ -275,30 +273,29 @@ namespace ShopNow.Controllers
             }
             else
             {
-                var otpmodel = new OtpViewModel();
+                var otpmodel = new OtpVerification();
                 var customer = db.Customers.FirstOrDefault(i => i.PhoneNumber == model.PhoneNumber);
-                var models = _mapper.Map<OtpViewModel, OtpVerification>(otpmodel);
-                models.CustomerId = customer.Id;
-                models.CustomerName = customer.Name;
-                models.PhoneNumber = model.PhoneNumber;
-                models.Otp = _generatedCode;
-                models.ReferenceCode = _referenceCode;
-                models.Verify = false;
+                otpmodel.CustomerId = customer.Id;
+                otpmodel.CustomerName = customer.Name;
+                otpmodel.PhoneNumber = model.PhoneNumber;
+                otpmodel.Otp = _generatedCode;
+                otpmodel.ReferenceCode = _referenceCode;
+                otpmodel.Verify = false;
 
                 var dateAndTime = DateTime.Now;
                 var date = dateAndTime.ToString("d");
                 var time = dateAndTime.ToString("HH:mm");
 
                 string joyra = "04448134440";
-                string Msg = "Hi, " + models.Otp + " is the OTP for (Shop Now Chat) Verification at " + time + " with " + models.ReferenceCode + " reference - Joyra";
+                string Msg = "Hi, " + otpmodel.Otp + " is the OTP for (Shop Now Chat) Verification at " + time + " with " + otpmodel.ReferenceCode + " reference - Joyra";
 
                 string result = SendSMS.execute(joyra, model.PhoneNumber, Msg);
-                models.Status = 0;
-                models.DateEncoded = DateTime.Now;
-                models.DateUpdated = DateTime.Now;
-                db.OtpVerifications.Add(models);
+                otpmodel.Status = 0;
+                otpmodel.DateEncoded = DateTime.Now;
+                otpmodel.DateUpdated = DateTime.Now;
+                db.OtpVerifications.Add(otpmodel);
                 db.SaveChanges();
-                if (models.Id != 0)
+                if (otpmodel != null)
                 {
                     return Json(new { message = "Already Customer and OTP send!", id = customer.Id, Position = customer.Position });
 
