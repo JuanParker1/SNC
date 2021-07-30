@@ -2180,13 +2180,12 @@ namespace ShopNow.Controllers
         [HttpPost]
         public JsonResult ShopUpdate(ShopUpdateViewModel model)
         {
-            //int errorCode = 0;
-            var shop = db.Shops.FirstOrDefault(i => i.Id == model.Id);// Shop.Get(model.Code);
+            var shop = db.Shops.FirstOrDefault(i => i.Id == model.Id);
             _mapper.Map(model, shop);
             if (model.AuthorisedBrandName != null)
             {
 
-                var bran = db.Brands.FirstOrDefault(i => i.Name == model.AuthorisedBrandName); // Brand.GetName(model.AuthorisedBrandName);
+                var bran = db.Brands.FirstOrDefault(i => i.Name == model.AuthorisedBrandName);
                 if (bran != null)
                 {
                     shop.AuthorisedBrandId = bran.Id;
@@ -2215,9 +2214,8 @@ namespace ShopNow.Controllers
             }
             else
                 return Json(new { message = "Your Shop Updation Failed!" });
-
-
         }
+
         public JsonResult GetNextVerify(string OwnerPhoneNumber, string PhoneNumber, int shopId)
         {
             var otpmodel = new OtpVerification();
@@ -2231,7 +2229,6 @@ namespace ShopNow.Controllers
             otpmodel.Verify = false;
             otpmodel.CreatedBy = customer.Name;
             otpmodel.UpdatedBy = customer.Name;
-            //otpmodel.Code = _generateCode("SMS");
             otpmodel.Status = 0;
             otpmodel.DateEncoded = DateTime.Now;
             otpmodel.DateUpdated = DateTime.Now;
@@ -2244,13 +2241,6 @@ namespace ShopNow.Controllers
         {
 
             var shop = db.Shops.FirstOrDefault(i => i.Id == id);
-            //shop.Code = ss[0].Code;
-            //shop.Address = ss[0].Address;
-            //shop.CustomerReview = ss[0].CustomerReview;
-            //shop.Rating = ss[0].Rating;
-            //shop.PhoneNumber = ss[0].PhoneNumber;
-            //shop.Name = ss[0].Name;
-            //shop.ShopCategoryCode = ss[0].ShopCategoryCode;
 
             ShopDetails model = _mapper.Map<Shop, ShopDetails>(shop);
             var rate = db.CustomerReviews.Where(j => j.ShopId == shop.Id).ToList();
@@ -2341,13 +2331,6 @@ namespace ShopNow.Controllers
             shop.ShopCategoryId = ss[0].ShopCategoryId;
 
             ShopDetails model = _mapper.Map<Shop, ShopDetails>(shop);
-            //var rate = db.CustomerReviews.Where(j => j.ShopCode == shop.Code).ToList();
-            //var reviewCount = db.CustomerReviews.Where(j => j.ShopCode == shop.Code).Count();
-            //if (reviewCount > 0)
-            //    model.Rating = rate.Sum(l => l.Rating) / reviewCount ?? 0;
-            //else
-            //    reviewCount = 0;
-            //model.CustomerReview = reviewCount;
 
             model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryCode as Code, CategoryName as Name from Products p join Categories c on c.Code = p.CategoryCode where shopid ={id}  and c.Status = 0 and CategoryCode is not null and CategoryName is not null group by CategoryCode,CategoryName order by Name").ToList<ShopDetails.CategoryList>();
             
