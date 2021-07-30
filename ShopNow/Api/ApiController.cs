@@ -2682,15 +2682,14 @@ namespace ShopNow.Controllers
             return Json(new { message = "Successfully Updated to Rating!", Details = model });
 
         }
-        public JsonResult GetAllReview(int id, int customerId, int page = 1, int pageSize = 9)
+        public JsonResult GetAllReview(int shopId, int customerId, int page = 1, int pageSize = 9)
         {
             var model = new ReviewListViewModel();
             model.CustomerList = db.CustomerReviews
-                             .Where(i => i.Status == 0 && i.ShopId == id && i.CustomerId == customerId)
-                           .AsEnumerable()
+                             .Where(i => i.Status == 0 && i.ShopId == shopId && i.CustomerId == customerId)
                          .Select(i => new ReviewListViewModel.ReviewlList
                          {
-                             Id = Convert.ToInt32(i.Id),
+                             Id = i.Id,
                              ShopName = i.ShopName,
                              CustomerName = i.CustomerName,
                              CustomerRemark = i.CustomerRemark,
@@ -2698,11 +2697,10 @@ namespace ShopNow.Controllers
                          }).ToList();
 
             model.ReviewlLists = db.CustomerReviews
-                             .Where(i => i.Status == 0 && i.ShopId == id && i.CustomerId != customerId)
-                           .AsEnumerable()
+                             .Where(i => i.Status == 0 && i.ShopId == shopId && i.CustomerId != customerId)
                          .Select(i => new ReviewListViewModel.ReviewlList
                          {
-                             Id = Convert.ToInt32(i.Id),
+                             Id = i.Id,
                              ShopName = i.ShopName,
                              CustomerName = i.CustomerName,
                              CustomerRemark = i.CustomerRemark,
@@ -2724,12 +2722,12 @@ namespace ShopNow.Controllers
             var items = model.ReviewlLists.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
             var previous = CurrentPage - 1;
 
-            var previousurl = "http://192.168.0.111/WebAdmin/Api/GetAllReview?id=" + id + "&page=" + previous;
+            var previousurl = apipath + "/Api/GetAllReview?shopId=" + shopId + "&customerId=" + customerId + "&page=" + previous;
             var previousPage = CurrentPage > 1 ? previousurl : "No";
 
             var current = CurrentPage + 1;
 
-            var nexturl = "http://192.168.0.111/WebAdmin/Api/GetAllReview?id=" + id + "&page=" + current;
+            var nexturl = apipath + "/Api/GetAllReview?shopId=" + shopId + "&customerId=" + customerId + "&page=" + current;
             var nextPage = CurrentPage < TotalPages ? nexturl : "No";
             var paginationMetadata = new
             {

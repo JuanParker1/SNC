@@ -90,7 +90,7 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             if (dCode==0)
                 return HttpNotFound();
-            var customer = db.Customers.Where(m => m.Id == dCode).FirstOrDefault();//Customer.Get(dCode);
+            var customer = db.Customers.Where(m => m.Id == dCode).FirstOrDefault();
             var model = _mapper.Map<Customer, CustomerEditViewModel>(customer);
             model.DOB = customer.DOB != null ? customer.DOB.Value.ToString("dd-MM-yyyy") : "N/A";
             return View(model);
@@ -99,7 +99,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNCUSIA005")]
         public ActionResult InActive(int code)
         {
-            var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault(); //Customer.Get(code);
+            var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();
             customer.Status = 1;
             db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
@@ -109,7 +109,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNCUSA006")]
         public ActionResult Active(int code)
         {
-            var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();// Customer.Get(code);
+            var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();
             customer.Status = 0;
             db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
@@ -121,7 +121,7 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var dCode = AdminHelpers.DCodeInt(code);
-            var customer = db.Customers.FirstOrDefault(i => i.Id == dCode);// db.Customers.Where(m => m.Code == code).FirstOrDefault();// Customer.Get(code);
+            var customer = db.Customers.FirstOrDefault(i => i.Id == dCode);
             customer.Status = 2;
             customer.UpdatedBy = user.Name;
             db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
@@ -133,7 +133,7 @@ namespace ShopNow.Controllers
         public JsonResult VerifyAadharImage(int code)
         {
            
-            var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();//Customer.Get(code);
+            var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();
             bool IsAdded = false;
             string message = "";
             if (customer != null)
@@ -177,7 +177,6 @@ namespace ShopNow.Controllers
                 customer.DateUpdated = DateTime.Now;
                 db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                //Customer.Edit(customer, out int error);
             }
             
             return Json(new { IsAdded = IsAdded, message = message }, JsonRequestBehavior.AllowGet);
@@ -186,19 +185,18 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNCUSVA008")]
         public JsonResult VerifyAge(int code)
         {
-            var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();//Customer.Get(code);
+            var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();
             customer.AgeVerify = true;
             customer.DateUpdated = DateTime.Now;
             db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
-            // Customer.Edit(customer, out int error);
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [AccessPolicy(PageCode = "SHNCUSRAI009")]
         public JsonResult RejectAadharImage(int code)
         {
-            var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();//Customer.Get(code);
+            var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();
             customer.AadharVerify = false;
             customer.AadharName = "Rejected";
             customer.AadharNumber = "Rejected";
@@ -213,7 +211,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNCUSCAI010")]
         public JsonResult CheckAadharImage(int code)
         {
-            var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();//Customer.Get(code);
+            var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();
             if (customer.AadharVerify == true)
             {
                 return Json(true, JsonRequestBehavior.AllowGet);
@@ -254,7 +252,7 @@ namespace ShopNow.Controllers
             string message = "";
             string message1 = "";
 
-            var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();//Customer.Get(code);
+            var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();
             if (customer != null && customer.Position != 4)
             {
                 customer.Position = 4;
@@ -263,8 +261,6 @@ namespace ShopNow.Controllers
                 customer.DateUpdated = DateTime.Now;
                 db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-
-                //Customer.Edit(customer, out int error);
                 IsAdded = true;
                 message = customer.Name + " Added Successfully";
             }
@@ -281,7 +277,7 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             bool IsAdded = false;
-            var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();//Customer.Get(code);
+            var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();
             if (customer != null)
             {
                 customer.Position = 0;

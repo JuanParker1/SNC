@@ -142,8 +142,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNBAND004")]
         public ActionResult Delete(int id)
         {
-            var dCode = AdminHelpers.DCodeInt(id.ToString());
-            var banner = db.Banners.FirstOrDefault(i => i.Id == dCode);  //Product.Get(dCode);
+            var banner = db.Banners.FirstOrDefault(i => i.Id == id);
             banner.Status = 2;
             db.Entry(banner).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();

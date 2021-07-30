@@ -1596,6 +1596,7 @@ namespace ShopNow.Controllers
             var order = db.Orders.FirstOrDefault(i => i.OrderNumber == orderNo);
             var deliveryboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId);
             deliveryboy.isAssign = 0;
+            deliveryboy.OnWork = 0;
             deliveryboy.DateUpdated = DateTime.Now;
             db.Entry(deliveryboy).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
