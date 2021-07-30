@@ -35,7 +35,6 @@ namespace ShopNow.Controllers
         private MapperConfiguration _mapperConfiguration;
         //private string apipath= "https://admin.shopnowchat.in/";
         private string apipath = "http://117.221.69.52:85/";
-
         private const string _prefix = "";
 
         private static string _generateCode(string _prefix)
@@ -501,6 +500,7 @@ namespace ShopNow.Controllers
         [HttpPost]
         public JsonResult CustomerAddressUpdate(CustomerAddressViewModel model)
         {
+            db.Configuration.ProxyCreationEnabled = false;
             int checkCustomerAddTypeExist = db.CustomerAddresses.Where(i => i.Id != model.Id && i.CustomerId == model.CustomerId && i.AddressType == model.AddressType && i.Status == 0).Count();
             var customerAddress = db.CustomerAddresses.Where(i => i.Id == model.Id && i.Status == 0).FirstOrDefault();
             if (checkCustomerAddTypeExist > 0)
@@ -528,7 +528,7 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
             }
 
-            return Json(new { message = "Successfully Updated Your Address!", Details = customerAddress });
+            return Json(new { message = "Successfully Updated Your Address!", Details = customerAddress },JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetShopVerify(string FromNumber, string digits)
@@ -2147,7 +2147,6 @@ namespace ShopNow.Controllers
 
                 Admin admin = new Admin();
                 admin.AnonymisedID = shop.Id.ToString();
-                //admin.Code = _generateCode("ADM");
                 admin.Status = 0;
                 admin.DateEncoded = DateTime.Now;
                 admin.DateUpdated = DateTime.Now;
@@ -2164,7 +2163,6 @@ namespace ShopNow.Controllers
                 otpmodel.Verify = false;
                 otpmodel.CreatedBy = customer.Name;
                 otpmodel.UpdatedBy = customer.Name;
-                //otpmodel.Code = _generateCode("SMS");
                 otpmodel.Status = 0;
                 otpmodel.DateEncoded = DateTime.Now;
                 otpmodel.DateUpdated = DateTime.Now;
@@ -2247,9 +2245,9 @@ namespace ShopNow.Controllers
             return Json(new { message = "Your Todays OTP is: " + otpmodel.Otp }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetShopDetailsNew(int shopId, string categoryId, string str = "")
-        {
 
+        public JsonResult GetShopDetailsNew(int shopId, string categoryId="", string str = "")
+        {
             var shop = db.Shops.FirstOrDefault(i => i.Id == shopId);
             //shop.Code = ss[0].Code;
             //shop.Address = ss[0].Address;
@@ -2267,9 +2265,7 @@ namespace ShopNow.Controllers
             else
                 reviewCount = 0;
             model.CustomerReview = reviewCount;
-
-            model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryCode as Code, CategoryName as Name from Products p join Categories c on c.Code = p.CategoryCode where shopid ={shopId}  and c.Status = 0 and CategoryCode is not null and CategoryName is not null group by CategoryCode,CategoryName order by Name").ToList<ShopDetails.CategoryList>();
-
+            model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryId as Id, CategoryName as Name from MasterProducts p join Categories c on c.Id = p.CategoryId where shopid ={shopId}  and c.Status = 0 and CategoryId !=0 and CategoryName is not null group by CategoryId,CategoryName order by Name").ToList<ShopDetails.CategoryList>();
             if (shop.ShopCategoryId == 0)
             {
                 model.ProductLists = (from pl in db.Products
@@ -2673,12 +2669,11 @@ namespace ShopNow.Controllers
         [HttpPost]
         public JsonResult UpdateReview(ShopReviewUpdateViewModel model)
         {
-            int errorCode = 0;
-            //var review = ClassCustomerReview.Get(model.Code);
             var review = db.CustomerReviews.FirstOrDefault(i => i.Id == model.Id);
             review.CustomerRemark = model.CustomerRemark;
             review.Rating = model.Rating;
-            ClassCustomerReview.Edit(review, out errorCode);
+            db.Entry(review).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
             return Json(new { message = "Successfully Updated to Rating!", Details = model });
 
         }
