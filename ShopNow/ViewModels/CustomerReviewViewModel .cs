@@ -30,7 +30,7 @@ namespace ShopNow.ViewModels
         public List<ReviewlList> ReviewlLists { get; set; }
         public class ReviewlList
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
             public string ShopName { get; set; }
             public string CustomerName { get; set; }
             public string CustomerRemark { get; set; }
