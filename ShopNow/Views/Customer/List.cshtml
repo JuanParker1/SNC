@@ -30,7 +30,9 @@
     columns.Add()
 .Encoded(false)
 .Sanitized(false)
-.RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
-               + Html.ActionLink("Delete", "Delete", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
+.RenderValueAs(b => @<div>
+        <a href="~/Customer/Edit?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(b.Id)" class="btn btn-warning text-center btn-sm text-nowrap" style="padding: 3px 26px">Edit</a>
+        <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(b.Id)" class="btn btn-danger text-center btn-sm text-nowrap btnDelete" style="padding: 3px 18px">Delete</a>
+    </div>);
 }).WithPaging(20).Sortable(true)
 </div>
