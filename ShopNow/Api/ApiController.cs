@@ -223,16 +223,6 @@ namespace ShopNow.Controllers
                 user.DateUpdated = DateTime.Now;
                 db.Customers.Add(user);
                 db.SaveChanges();
-                Admin admin = new Admin();
-                admin.AnonymisedID = user.Id.ToString();
-                //admin.Code = ShopNow.Helpers.DRC.Generate("ADM");
-                admin.OfficialID = AdminHelpers.SecureData(admin.Id.ToString());
-                admin.AnonymisedID = AdminHelpers.SecureData(admin.AnonymisedID);
-                admin.Status = 0;
-                admin.DateEncoded = DateTime.Now;
-                admin.DateUpdated = DateTime.Now;
-                db.Admins.Add(admin);
-                db.SaveChanges();
                 if (user.Id !=0)
                 {
                     var otpmodel = new OtpVerification();
@@ -2145,14 +2135,6 @@ namespace ShopNow.Controllers
                 db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
-                Admin admin = new Admin();
-                admin.AnonymisedID = shop.Id.ToString();
-                admin.Status = 0;
-                admin.DateEncoded = DateTime.Now;
-                admin.DateUpdated = DateTime.Now;
-                db.Admins.Add(admin);
-                db.SaveChanges();
-
                 var otpmodel = new OtpVerification();
                 otpmodel.ShopId = shop.Id;
                 otpmodel.CustomerId = customer.Id;
@@ -2246,7 +2228,7 @@ namespace ShopNow.Controllers
         }
 
 
-        public JsonResult GetShopDetailsNew(int shopId, string categoryId="", string str = "")
+        public JsonResult GetShopDetailsNew(int shopId, int categoryId, string str = "")
         {
             var shop = db.Shops.FirstOrDefault(i => i.Id == shopId);
             //shop.Code = ss[0].Code;
@@ -2270,15 +2252,15 @@ namespace ShopNow.Controllers
             {
                 model.ProductLists = (from pl in db.Products
                                       join m in db.MasterProducts on pl.MasterProductId equals m.Id
-                                      where pl.ShopId == shopId && pl.Status == 0 && (categoryId != "" ? m.CategoryIds == categoryId : true)
+                                      where pl.ShopId == shopId && pl.Status == 0 && (categoryId != 0 ? m.CategoryId == categoryId : true)
                                       select new ShopDetails.ProductList
                                       {
                                           Id = pl.Id,
                                           Name = m.Name,
                                           ShopId = pl.ShopId,
                                           ShopName = pl.ShopName,
-                                          CategoryIds = m.CategoryIds,
-                                          CategoryName = m.CategoryName,
+                                          CategoryId = m.CategoryId,
+                                         // CategoryName = m.CategoryName,
                                           ColorCode = m.ColorCode,
                                           Price = pl.Price,
                                           ImagePath = ((!string.IsNullOrEmpty(m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
@@ -2291,15 +2273,15 @@ namespace ShopNow.Controllers
             {
                 model.ProductLists = (from pl in db.Products
                                       join m in db.MasterProducts on pl.MasterProductId equals m.Id
-                                      where pl.ShopId == shopId && pl.Status == 0 && m.Name.ToLower().Contains(str) && (categoryId != "" ? m.CategoryIds == categoryId : true)
+                                      where pl.ShopId == shopId && pl.Status == 0 && m.Name.ToLower().Contains(str) && (categoryId != 0 ? m.CategoryId == categoryId : true)
                                       select new ShopDetails.ProductList
                                       {
                                           Id = pl.Id,
                                           Name = m.Name,
                                           ShopId = pl.ShopId,
                                           ShopName = pl.ShopName,
-                                          CategoryIds = m.CategoryIds,
-                                          CategoryName = m.CategoryName,
+                                          CategoryId = m.CategoryId,
+                                          //CategoryName = m.CategoryName,
                                           ColorCode = m.ColorCode,
                                           Price = pl.Price,
                                           ImagePath = ((!string.IsNullOrEmpty(m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
@@ -2367,8 +2349,8 @@ namespace ShopNow.Controllers
                                           Name = m.Name,
                                           ShopId = pl.ShopId,
                                           ShopName = pl.ShopName,
-                                          CategoryIds = m.CategoryIds,
-                                          CategoryName = m.CategoryName,
+                                          CategoryId = m.CategoryId,
+                                          //CategoryName = m.CategoryName,
                                           ColorCode = m.ColorCode,
                                           Price = pl.Price,
                                           ImagePath = m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23"),
@@ -2389,8 +2371,8 @@ namespace ShopNow.Controllers
                                           Name = m.Name,
                                           ShopId = pl.ShopId,
                                           ShopName = pl.ShopName,
-                                          CategoryIds = m.CategoryIds,
-                                          CategoryName = m.CategoryName,
+                                          CategoryId = m.CategoryId,
+                                         // CategoryName = m.CategoryName,
                                           //ColorCode = pl.ColorCode,
                                           Price = pl.Price,
                                           ImagePath = m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23"),
@@ -2416,7 +2398,7 @@ namespace ShopNow.Controllers
             double? varlatitude = latitude;
             int? varpage = page;
             int? varPagesize = pageSize;
-            var s = db.GetProductList(varlongitude, varlatitude, str, varpage, varPagesize).ToList();
+            var s = db.GetProductList(varlongitude, varlatitude, str, varpage, varPagesize);
           
 
             string queryOtherList = "SELECT  * " +
@@ -2531,7 +2513,7 @@ namespace ShopNow.Controllers
 
         }
 
-        public JsonResult GetShopCategoryList(string shopId, string categoryIds, string str = "", int page = 1, int pageSize = 20)
+        public JsonResult GetShopCategoryList(string shopId, string CategoryId, string str = "", int page = 1, int pageSize = 20)
         {
           //  var shid = db.Shops.Where(s => s.Id == shopId).FirstOrDefault();
             int count = 0;
@@ -2541,7 +2523,7 @@ namespace ShopNow.Controllers
             
             var skip = page-1;
             
-            //var model = db.GetShopCategoryProducts(shopId, categoryIds, str, skip, pageSize).ToList();
+            //var model = db.GetShopCategoryProducts(shopId, CategoryId, str, skip, pageSize).ToList();
             
 
             int CurrentPage = page;
@@ -3855,7 +3837,7 @@ namespace ShopNow.Controllers
                 var d = DateTime.Now.Date.Date;
             var teenStudentsName = (from s in db.Banners
             where (s.Status== 0 || s.Status == 6) && s.ShopId == id && (DbFunctions.TruncateTime(s.FromDate) <= DbFunctions.TruncateTime(DateTime.Now) && DbFunctions.TruncateTime(s.Todate) >= DbFunctions.TruncateTime(DateTime.Now))
-            select  new BannerImages { Bannerpath = (s.BannerPath !=null)?s.BannerPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23"):"", ShopId = s.ShopId, ProductName = s.MasterProductName, ShopName = s.ShopName, ProductId = s.MasterProductId }).ToList();
+            select  new BannerImages { Bannerpath = (s.BannerPath !=null)?s.BannerPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23"):"", ShopId = s.ShopId, ProductId = s.MasterProductId }).ToList();
           
                 return teenStudentsName;
             }

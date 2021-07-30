@@ -71,26 +71,26 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNCUSD002")]
         public ActionResult Details(string id)
         {
-            var dCode = AdminHelpers.DCodeInt(id);
+            var dId = AdminHelpers.DCodeInt(id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            if (dCode==0)
+            if (dId==0)
                 return HttpNotFound();
-            var customer = db.Customers.Where(m => m.Id == dCode).FirstOrDefault();
+            var customer = db.Customers.Where(m => m.Id == dId).FirstOrDefault();
             var model = _mapper.Map<Customer, CustomerDetailsViewModel>(customer);
-            model.List = db.CustomerAddresses.Where(i => i.Status == 0 && i.CustomerId == dCode).ToList().AsQueryable().ProjectTo<CustomerDetailsViewModel.AddressList>(_mapperConfiguration).ToList();
+            model.List = db.CustomerAddresses.Where(i => i.Status == 0 && i.CustomerId == dId).ToList().AsQueryable().ProjectTo<CustomerDetailsViewModel.AddressList>(_mapperConfiguration).ToList();
             return View(model);
         }
 
         [AccessPolicy(PageCode = "SHNCUSE003")]
-        public ActionResult Edit(string code)
+        public ActionResult Edit(string id)
         {
-            var dCode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            if (dCode==0)
+            var dId = AdminHelpers.DCodeInt(id);
+            if (dId==0)
                 return HttpNotFound();
-            var customer = db.Customers.Where(m => m.Id == dCode).FirstOrDefault();
+            var customer = db.Customers.Where(m => m.Id == dId).FirstOrDefault();
             var model = _mapper.Map<Customer, CustomerEditViewModel>(customer);
             model.DOB = customer.DOB != null ? customer.DOB.Value.ToString("dd-MM-yyyy") : "N/A";
             return View(model);
@@ -117,16 +117,17 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNCUSR004")]
-        public ActionResult Delete(string code)
+        public JsonResult Delete(string id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var dCode = AdminHelpers.DCodeInt(code);
-            var customer = db.Customers.FirstOrDefault(i => i.Id == dCode);
+            var dId = AdminHelpers.DCodeInt(id);
+            var customer = db.Customers.FirstOrDefault(i => i.Id == dId && i.Status == 0);
             customer.Status = 2;
             customer.UpdatedBy = user.Name;
+            customer.DateUpdated = DateTime.Now;
             db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
-            return RedirectToAction("List", "Customer");
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [AccessPolicy(PageCode = "SHNCUSVAI007")]

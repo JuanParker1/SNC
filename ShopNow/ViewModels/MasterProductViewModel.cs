@@ -201,7 +201,7 @@ namespace ShopNow.ViewModels
     {
         public HttpPostedFileBase DishImage { get; set; }
         public string Name { get; set; }
-        public string CategoryIds { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public double Price { get; set; }
         public bool Customisation { get; set; }
@@ -217,7 +217,7 @@ namespace ShopNow.ViewModels
         public HttpPostedFileBase DishImage { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
-        public string CategoryIds { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public double Price { get; set; }
         public bool Customisation { get; set; }
@@ -303,7 +303,7 @@ namespace ShopNow.ViewModels
         public int BrandId { get; set; }
         public string BrandName { get; set; }
         public string ASIN { get; set; }
-        public string[] CategoryIds { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public string[] SubCategoryIds { get; set; }
         public string SubCategoryName { get; set; }
@@ -335,8 +335,7 @@ namespace ShopNow.ViewModels
         public int BrandId { get; set; }
         public string BrandName { get; set; }
         public string ASIN { get; set; }
-        public string CategoryIds1 { get; set; }
-        public string[] CategoryIds { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public string SubCategoryIds1 { get; set; }
         public string[] SubCategoryIds { get; set; }
@@ -369,7 +368,7 @@ namespace ShopNow.ViewModels
         public string Name { get; set; }
         public int BrandId { get; set; }
         public string BrandName { get; set; }
-        public string CategoryIds { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
@@ -391,7 +390,7 @@ namespace ShopNow.ViewModels
         public Nullable<int> PackageId { get; set; }
         public string PackageName { get; set; }
         public string GoogleTaxonomyCode { get; set; }
-        public string SubCategoryIds { get; set; }
+        public string SubCategoryId { get; set; }
         public string SubCategoryName { get; set; }
         public string NextSubCategoryIds { get; set; }
         public string NextSubCategoryName { get; set; }
@@ -420,7 +419,7 @@ namespace ShopNow.ViewModels
         public string NickName { get; set; }
         public int BrandId { get; set; }
         public string BrandName { get; set; }
-        public string[] CategoryIds { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public int MeasurementUnitId { get; set; }
         public string MeasurementUnitName { get; set; }
@@ -451,8 +450,7 @@ namespace ShopNow.ViewModels
         public string NickName { get; set; }
         public int BrandId { get; set; }
         public string BrandName { get; set; }
-        public string CategoryIds1 { get; set; }
-        public string[] CategoryIds { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public int MeasurementUnitId { get; set; }
         public string MeasurementUnitName { get; set; }
@@ -488,7 +486,7 @@ namespace ShopNow.ViewModels
         public string Name { get; set; }
         public int BrandId { get; set; }
         public string BrandName { get; set; }
-        public string CategoryIds { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
@@ -519,7 +517,7 @@ namespace ShopNow.ViewModels
         public string Name { get; set; }
         public int BrandId { get; set; }
         public string BrandName { get; set; }
-        public string CategoryIds { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }

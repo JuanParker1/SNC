@@ -47,9 +47,9 @@ namespace ShopNow.Controllers
                 FromDate = i.FromDate,
                 Position = i.Position,
                 ProductId = i.ProductId,
-                ProductName = i.ProductName,
+               // ProductName = i.ProductName,
                 ShopId = i.ShopId,
-                ShopName = i.ShopName,
+               // ShopName = i.ShopName,
                 ToDate = i.Todate,
                 CreditType = i.CreditType
             }).ToList();
@@ -73,9 +73,9 @@ namespace ShopNow.Controllers
                 FromDate = i.FromDate,
                 Position = i.Position,
                 ProductId = i.ProductId,
-                ProductName = i.ProductName,
+               // ProductName = i.ProductName,
                 ShopId = i.ShopId,
-                ShopName = i.ShopName,
+               // ShopName = i.ShopName,
                 ToDate = i.Todate,
                 CreditType = i.CreditType
             }).ToList();
@@ -108,7 +108,7 @@ namespace ShopNow.Controllers
             {
                 var product = db.Products.FirstOrDefault(i => i.Id == banner.ProductId && i.Status == 0);
                 banner.MasterProductId = product.MasterProductId;
-                banner.MasterProductName = product.Name;
+               // banner.MasterProductName = product.Name;
             }
             try
             {

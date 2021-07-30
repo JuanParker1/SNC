@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="sncModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="sncModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AccessPolicies">
           <Key>
             <PropertyRef Name="Id" />
@@ -38,27 +38,14 @@
           <Property Name="CreatedBy" Type="nvarchar(max)" />
           <Property Name="UpdatedBy" Type="nvarchar(max)" />
         </EntityType>
-        <EntityType Name="Admins">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Code" Type="nvarchar(max)" />
-          <Property Name="AnonymisedID" Type="nvarchar(max)" />
-          <Property Name="OfficialID" Type="nvarchar(max)" />
-          <Property Name="Status" Type="int" Nullable="false" />
-          <Property Name="DateEncoded" Type="datetime" Nullable="false" />
-          <Property Name="DateUpdated" Type="datetime" Nullable="false" />
-        </EntityType>
         <EntityType Name="Banners">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ShopId" Type="int" Nullable="false" />
-          <Property Name="ShopName" Type="nvarchar(max)" />
-          <Property Name="ProductId" Type="int" Nullable="false" />
-          <Property Name="ProductName" Type="nvarchar(max)" />
+          <Property Name="ProductId" Type="bigint" Nullable="false" />
+          <Property Name="MasterProductId" Type="bigint" Nullable="false" />
           <Property Name="Position" Type="int" Nullable="false" />
           <Property Name="BannerPath" Type="nvarchar(max)" />
           <Property Name="FromDate" Type="datetime" Nullable="false" />
@@ -67,8 +54,6 @@
           <Property Name="BannerName" Type="nvarchar(max)" />
           <Property Name="PaymentId" Type="int" Nullable="false" />
           <Property Name="CreditType" Type="int" />
-          <Property Name="MasterProductId" Type="int" Nullable="false" />
-          <Property Name="MasterProductName" Type="varchar" MaxLength="50" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="CreatedBy" Type="nvarchar(max)" />
           <Property Name="UpdatedBy" Type="nvarchar(max)" />
@@ -342,19 +327,11 @@
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="LocationDetails">
           <Key>
             <PropertyRef Name="Id" />
-            <PropertyRef Name="SourceLatitude" />
-            <PropertyRef Name="SourceLongitude" />
-            <PropertyRef Name="DestinationLatitude" />
-            <PropertyRef Name="DestinationLongitude" />
-            <PropertyRef Name="Distance" />
-            <PropertyRef Name="Duration" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="SourceLatitude" Type="float" Nullable="false" />
           <Property Name="SourceLongitude" Type="float" Nullable="false" />
           <Property Name="DestinationLatitude" Type="float" Nullable="false" />
@@ -404,8 +381,7 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
           <Property Name="Name" Type="nvarchar(max)" />
           <Property Name="BrandId" Type="int" Nullable="false" />
           <Property Name="BrandName" Type="nvarchar(max)" />
-          <Property Name="CategoryIds" Type="nvarchar(max)" />
-          <Property Name="CategoryName" Type="nvarchar(max)" />
+          <Property Name="CategoryId" Type="int" Nullable="false" />
           <Property Name="ShortDescription" Type="nvarchar(max)" />
           <Property Name="LongDescription" Type="nvarchar(max)" />
           <Property Name="ProductTypeId" Type="int" Nullable="false" />
@@ -426,10 +402,8 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
           <Property Name="PackageId" Type="int" />
           <Property Name="PackageName" Type="nvarchar(max)" />
           <Property Name="GoogleTaxonomyCode" Type="nvarchar(max)" />
-          <Property Name="SubCategoryIds" Type="nvarchar(max)" />
-          <Property Name="SubCategoryName" Type="nvarchar(max)" />
-          <Property Name="NextSubCategoryIds" Type="nvarchar(max)" />
-          <Property Name="NextSubCategoryName" Type="nvarchar(max)" />
+          <Property Name="SubCategoryId" Type="int" Nullable="false" />
+          <Property Name="NextSubCategoryId" Type="int" Nullable="false" />
           <Property Name="ASIN" Type="nvarchar(max)" />
           <Property Name="ImagePath1" Type="nvarchar(max)" />
           <Property Name="ImagePath2" Type="nvarchar(max)" />
@@ -803,6 +777,12 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
           <Property Name="OrderNumber" Type="int" />
           <Property Name="DateEncoded" Type="datetime" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="SearchData">
+          <Property Name="source" Type="nvarchar" MaxLength="500" />
+          <Property Name="keyValue" Type="nvarchar" MaxLength="500" />
+        </EntityType>-->
         <EntityType Name="ShopCategories">
           <Key>
             <PropertyRef Name="Id" />
@@ -819,7 +799,7 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PlatformCredit" Type="float" Nullable="false" />
           <Property Name="DeliveryCredit" Type="float" Nullable="false" />
           <Property Name="CustomerId" Type="int" Nullable="false" />
@@ -1003,6 +983,12 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="tbl">
+          <Property Name="name" Type="nvarchar" MaxLength="500" />
+          <Property Name="percentage" Type="float" />
+        </EntityType>-->
         <EntityType Name="UserEnquiries">
           <Key>
             <PropertyRef Name="Id" />
@@ -1103,18 +1089,6 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
             </Principal>
             <Dependent Role="DeliveryBoyShops1">
               <PropertyRef Name="Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MasterProducts_ProductType">
-          <End Role="ProductType" Type="Self.ProductType" Multiplicity="1" />
-          <End Role="MasterProducts" Type="Self.MasterProducts" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ProductType">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="MasterProducts">
-              <PropertyRef Name="ProductTypeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1335,7 +1309,7 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
           <Parameter Name="Size" Type="int" Mode="In" />
         </Function>
         <Function Name="GetShopCategoryProductCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="shopCode" Type="varchar" Mode="In" />
+          <Parameter Name="shopCode" Type="int" Mode="In" />
           <Parameter Name="categoryCode" Type="varchar" Mode="In" />
           <Parameter Name="str" Type="varchar" Mode="In" />
         </Function>
@@ -1383,13 +1357,17 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
           <Parameter Name="shopcode" Type="nvarchar" Mode="In" />
           <Parameter Name="user" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="Sp_TB_SelectMedicineName" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="search" Type="varchar" Mode="In" />
+          <Parameter Name="pageNumber" Type="int" Mode="In" />
+          <Parameter Name="Rowofpage" Type="int" Mode="In" />
+        </Function>
         <Function Name="test" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="str" Type="nvarchar" Mode="In" />
         </Function>
         <EntityContainer Name="sncModelStoreContainer">
           <EntitySet Name="AccessPolicies" EntityType="Self.AccessPolicies" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AddOnCategories" EntityType="Self.AddOnCategories" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Admins" EntityType="Self.Admins" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Banners" EntityType="Self.Banners" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Bills" EntityType="Self.Bills" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BrandOwners" EntityType="Self.BrandOwners" Schema="dbo" store:Type="Tables" />
@@ -1402,6 +1380,7 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
           <EntitySet Name="DeliveryBoyShops" EntityType="Self.DeliveryBoyShops" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DiscountCategories" EntityType="Self.DiscountCategories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DrugCompoundDetails" EntityType="Self.DrugCompoundDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LocationDetails" EntityType="Self.LocationDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MarketingAgents" EntityType="Self.MarketingAgents" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MasterProducts" EntityType="Self.MasterProducts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MeasurementUnits" EntityType="Self.MeasurementUnits" Schema="dbo" store:Type="Tables" />
@@ -1431,17 +1410,6 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
           <EntitySet Name="Staffs" EntityType="Self.Staffs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SubCategories" EntityType="Self.SubCategories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserEnquiries" EntityType="Self.UserEnquiries" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="LocationDetails" EntityType="Self.LocationDetails" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [LocationDetails].[Id] AS [Id], 
-    [LocationDetails].[SourceLatitude] AS [SourceLatitude], 
-    [LocationDetails].[SourceLongitude] AS [SourceLongitude], 
-    [LocationDetails].[DestinationLatitude] AS [DestinationLatitude], 
-    [LocationDetails].[DestinationLongitude] AS [DestinationLongitude], 
-    [LocationDetails].[Distance] AS [Distance], 
-    [LocationDetails].[Duration] AS [Duration]
-    FROM [dbo].[LocationDetails] AS [LocationDetails]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK_Banners_Payments" Association="Self.FK_Banners_Payments">
             <End Role="Payments" EntitySet="Payments" />
             <End Role="Banners" EntitySet="Banners" />
@@ -1469,10 +1437,6 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
           <AssociationSet Name="FK_DeliveryBoyShops_DeliveryBoyShops" Association="Self.FK_DeliveryBoyShops_DeliveryBoyShops">
             <End Role="DeliveryBoyShops" EntitySet="DeliveryBoyShops" />
             <End Role="DeliveryBoyShops1" EntitySet="DeliveryBoyShops" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MasterProducts_ProductType" Association="Self.FK_MasterProducts_ProductType">
-            <End Role="ProductType" EntitySet="ProductType" />
-            <End Role="MasterProducts" EntitySet="MasterProducts" />
           </AssociationSet>
           <AssociationSet Name="FK_NextSubCategories_ProductType" Association="Self.FK_NextSubCategories_ProductType">
             <End Role="ProductType" EntitySet="ProductType" />
@@ -1535,7 +1499,8 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
             <End Role="SubCategories" EntitySet="SubCategories" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="sncModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -1575,27 +1540,14 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="Admin">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Code" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="AnonymisedID" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="OfficialID" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
         <EntityType Name="Banner">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ShopId" Type="Int32" Nullable="false" />
-          <Property Name="ShopName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ProductId" Type="Int32" Nullable="false" />
-          <Property Name="ProductName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ProductId" Type="Int64" Nullable="false" />
+          <Property Name="MasterProductId" Type="Int64" Nullable="false" />
           <Property Name="Position" Type="Int32" Nullable="false" />
           <Property Name="BannerPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="FromDate" Type="DateTime" Nullable="false" Precision="3" />
@@ -1604,8 +1556,6 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
           <Property Name="BannerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="PaymentId" Type="Int32" Nullable="false" />
           <Property Name="CreditType" Type="Int32" />
-          <Property Name="MasterProductId" Type="Int32" Nullable="false" />
-          <Property Name="MasterProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -1893,6 +1843,18 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
+        <EntityType Name="LocationDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SourceLatitude" Type="Double" Nullable="false" />
+          <Property Name="SourceLongitude" Type="Double" Nullable="false" />
+          <Property Name="DestinationLatitude" Type="Double" Nullable="false" />
+          <Property Name="DestinationLongitude" Type="Double" Nullable="false" />
+          <Property Name="Distance" Type="Double" Nullable="false" />
+          <Property Name="Duration" Type="Double" Nullable="false" />
+        </EntityType>
         <EntityType Name="MarketingAgent">
           <Key>
             <PropertyRef Name="Id" />
@@ -1935,8 +1897,7 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
           <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="BrandId" Type="Int32" Nullable="false" />
           <Property Name="BrandName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CategoryIds" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
           <Property Name="ShortDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="LongDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ProductTypeId" Type="Int32" Nullable="false" />
@@ -1957,10 +1918,8 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
           <Property Name="PackageId" Type="Int32" />
           <Property Name="PackageName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="GoogleTaxonomyCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="SubCategoryIds" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="SubCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="NextSubCategoryIds" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="NextSubCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SubCategoryId" Type="Int32" Nullable="false" />
+          <Property Name="NextSubCategoryId" Type="Int32" Nullable="false" />
           <Property Name="ASIN" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ImagePath1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ImagePath2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -1974,7 +1933,6 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="ProductType" Relationship="Self.FK_MasterProducts_ProductType" FromRole="MasterProducts" ToRole="ProductType" />
           <NavigationProperty Name="ProductDishAddOns" Relationship="Self.FK_ProductDishAddOns_MasterProducts" FromRole="MasterProducts" ToRole="ProductDishAddOns" />
           <NavigationProperty Name="ShopDishAddOns" Relationship="Self.FK_ShopDishAddOns_MasterProducts" FromRole="MasterProducts" ToRole="ShopDishAddOns" />
         </EntityType>
@@ -2335,7 +2293,6 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Brands" Relationship="Self.FK_Brands_ProductType" FromRole="ProductType" ToRole="Brands" />
-          <NavigationProperty Name="MasterProducts" Relationship="Self.FK_MasterProducts_ProductType" FromRole="ProductType" ToRole="MasterProducts" />
           <NavigationProperty Name="NextSubCategories" Relationship="Self.FK_NextSubCategories_ProductType" FromRole="ProductType" ToRole="NextSubCategories" />
           <NavigationProperty Name="Products" Relationship="Self.FK_Products_ProductType" FromRole="ProductType" ToRole="Products" />
           <NavigationProperty Name="SubCategories" Relationship="Self.FK_SubCategories_ProductType" FromRole="ProductType" ToRole="SubCategories" />
@@ -2370,7 +2327,7 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PlatformCredit" Type="Double" Nullable="false" />
           <Property Name="DeliveryCredit" Type="Double" Nullable="false" />
           <Property Name="CustomerId" Type="Int32" Nullable="false" />
@@ -2585,24 +2542,6 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="LocationDetail">
-          <Key>
-            <PropertyRef Name="Id" />
-            <PropertyRef Name="SourceLatitude" />
-            <PropertyRef Name="SourceLongitude" />
-            <PropertyRef Name="DestinationLatitude" />
-            <PropertyRef Name="DestinationLongitude" />
-            <PropertyRef Name="Distance" />
-            <PropertyRef Name="Duration" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="SourceLatitude" Type="Double" Nullable="false" />
-          <Property Name="SourceLongitude" Type="Double" Nullable="false" />
-          <Property Name="DestinationLatitude" Type="Double" Nullable="false" />
-          <Property Name="DestinationLongitude" Type="Double" Nullable="false" />
-          <Property Name="Distance" Type="Double" Nullable="false" />
-          <Property Name="Duration" Type="Double" Nullable="false" />
-        </EntityType>
         <Association Name="FK_Banners_Payments">
           <End Role="Payments" Type="Self.Payment" Multiplicity="1" />
           <End Role="Banners" Type="Self.Banner" Multiplicity="*" />
@@ -2720,18 +2659,6 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
             </Principal>
             <Dependent Role="DeliveryBoyShops1">
               <PropertyRef Name="Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_MasterProducts_ProductType">
-          <End Role="ProductType" Type="Self.ProductType" Multiplicity="1" />
-          <End Role="MasterProducts" Type="Self.MasterProduct" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ProductType">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="MasterProducts">
-              <PropertyRef Name="ProductTypeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2879,10 +2806,9 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="sncEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="sncEntities1" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AccessPolicies" EntityType="Self.AccessPolicy" />
           <EntitySet Name="AddOnCategories" EntityType="Self.AddOnCategory" />
-          <EntitySet Name="Admins" EntityType="Self.Admin" />
           <EntitySet Name="Banners" EntityType="Self.Banner" />
           <EntitySet Name="Bills" EntityType="Self.Bill" />
           <EntitySet Name="BrandOwners" EntityType="Self.BrandOwner" />
@@ -2895,6 +2821,7 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
           <EntitySet Name="DeliveryBoyShops" EntityType="Self.DeliveryBoyShop" />
           <EntitySet Name="DiscountCategories" EntityType="Self.DiscountCategory" />
           <EntitySet Name="DrugCompoundDetails" EntityType="Self.DrugCompoundDetail" />
+          <EntitySet Name="LocationDetails" EntityType="Self.LocationDetail" />
           <EntitySet Name="MarketingAgents" EntityType="Self.MarketingAgent" />
           <EntitySet Name="MasterProducts" EntityType="Self.MasterProduct" />
           <EntitySet Name="MeasurementUnits" EntityType="Self.MeasurementUnit" />
@@ -2924,7 +2851,6 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
           <EntitySet Name="Staffs" EntityType="Self.Staff" />
           <EntitySet Name="SubCategories" EntityType="Self.SubCategory" />
           <EntitySet Name="UserEnquiries" EntityType="Self.UserEnquiry" />
-          <EntitySet Name="LocationDetails" EntityType="Self.LocationDetail" />
           <AssociationSet Name="FK_Banners_Payments" Association="Self.FK_Banners_Payments">
             <End Role="Payments" EntitySet="Payments" />
             <End Role="Banners" EntitySet="Banners" />
@@ -2964,10 +2890,6 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
           <AssociationSet Name="FK_DeliveryBoyShops_DeliveryBoyShops" Association="Self.FK_DeliveryBoyShops_DeliveryBoyShops">
             <End Role="DeliveryBoyShops" EntitySet="DeliveryBoyShops" />
             <End Role="DeliveryBoyShops1" EntitySet="DeliveryBoyShops" />
-          </AssociationSet>
-          <AssociationSet Name="FK_MasterProducts_ProductType" Association="Self.FK_MasterProducts_ProductType">
-            <End Role="ProductType" EntitySet="ProductTypes" />
-            <End Role="MasterProducts" EntitySet="MasterProducts" />
           </AssociationSet>
           <AssociationSet Name="FK_ProductDishAddOns_MasterProducts" Association="Self.FK_ProductDishAddOns_MasterProducts">
             <End Role="MasterProducts" EntitySet="MasterProducts" />
@@ -3018,10 +2940,10 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
             <End Role="ShopDishAddOns" EntitySet="ShopDishAddOns" />
           </AssociationSet>
           <FunctionImport Name="GetTableVAlueString" IsComposable="true" ReturnType="Collection(sncModel.GetTableVAlueString_Result)">
-          <Parameter Name="key" Mode="In" Type="String" />
+            <Parameter Name="key" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="getCategoryListbyShopcode">
-          <Parameter Name="code" Mode="In" Type="String" />
+            <Parameter Name="code" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetCategoryProductsList">
             <Parameter Name="shopCode" Mode="In" Type="String" />
@@ -3031,6 +2953,18 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
             <Parameter Name="pageSize" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetDEliveryBoyList" ReturnType="Collection(sncModel.GetDEliveryBoyList_Result)" />
+          <FunctionImport Name="GetProductList">
+            <Parameter Name="Longitude" Mode="In" Type="Double" />
+            <Parameter Name="Latitude" Mode="In" Type="Double" />
+            <Parameter Name="str" Mode="In" Type="String" />
+            <Parameter Name="page" Mode="In" Type="Int32" />
+            <Parameter Name="pagesize" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetProductListCount" ReturnType="Collection(Int32)">
+            <Parameter Name="Longitude" Mode="In" Type="Double" />
+            <Parameter Name="Latitude" Mode="In" Type="Double" />
+            <Parameter Name="str" Mode="In" Type="String" />
+          </FunctionImport>
           <FunctionImport Name="GetShopCategoryList">
             <Parameter Name="shop" Mode="In" Type="String" />
             <Parameter Name="CategoryCode" Mode="In" Type="String" />
@@ -3039,7 +2973,7 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
             <Parameter Name="Size" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetShopCategoryProductCount">
-            <Parameter Name="shopCode" Mode="In" Type="String" />
+            <Parameter Name="shopCode" Mode="In" Type="Int32" />
             <Parameter Name="categoryCode" Mode="In" Type="String" />
             <Parameter Name="str" Mode="In" Type="String" />
           </FunctionImport>
@@ -3056,6 +2990,9 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
             <Parameter Name="str" Mode="In" Type="String" />
             <Parameter Name="page" Mode="In" Type="Int32" />
             <Parameter Name="pageSize" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetShopname" ReturnType="Collection(sncModel.GetShopname_Result)">
+            <Parameter Name="shopId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ReatillerPaymentReport">
             <Parameter Name="from" Mode="In" Type="DateTime" />
@@ -3074,22 +3011,12 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
             <Parameter Name="shopcode" Mode="In" Type="String" />
             <Parameter Name="user" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="Sp_TB_SelectMedicineName">
+            <Parameter Name="search" Mode="In" Type="String" />
+            <Parameter Name="pageNumber" Mode="In" Type="Int32" />
+            <Parameter Name="Rowofpage" Mode="In" Type="Int32" />
+          </FunctionImport>
           <FunctionImport Name="test" ReturnType="Collection(sncModel.test_Result)">
-          <Parameter Name="str" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="GetShopname" ReturnType="Collection(sncModel.GetShopname_Result)">
-          <Parameter Name="shopId" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="GetProductList" ReturnType="Collection(sncModel.GetProductList_Result)">
-            <Parameter Name="Longitude" Mode="In" Type="Double" />
-            <Parameter Name="Latitude" Mode="In" Type="Double" />
-            <Parameter Name="str" Mode="In" Type="String" />
-            <Parameter Name="page" Mode="In" Type="Int32" />
-            <Parameter Name="pagesize" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="GetProductListCount" ReturnType="Collection(Int32)">
-            <Parameter Name="Longitude" Mode="In" Type="Double" />
-            <Parameter Name="Latitude" Mode="In" Type="Double" />
             <Parameter Name="str" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
@@ -3100,13 +3027,20 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
           <Property Type="String" Name="PhoneNumber" Nullable="true" />
           <Property Type="String" Name="ImagePath" Nullable="true" />
         </ComplexType>
+        <ComplexType Name="GetShopname_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Address" Nullable="true" />
+          <Property Type="Int32" Name="CustomerReview" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="true" />
+          <Property Type="String" Name="PhoneNumber" Nullable="true" />
+          <Property Type="Double" Name="Rating" Nullable="false" />
+        </ComplexType>
         <ComplexType Name="test_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
           <Property Type="String" Name="Name" Nullable="true" />
           <Property Type="Int32" Name="BrandId" Nullable="false" />
           <Property Type="String" Name="BrandName" Nullable="true" />
-          <Property Type="String" Name="CategoryIds" Nullable="true" />
-          <Property Type="String" Name="CategoryName" Nullable="true" />
+          <Property Type="Int32" Name="CategoryId" Nullable="false" />
           <Property Type="String" Name="ShortDescription" Nullable="true" />
           <Property Type="String" Name="LongDescription" Nullable="true" />
           <Property Type="Int32" Name="ProductTypeId" Nullable="false" />
@@ -3127,10 +3061,8 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
           <Property Type="Int32" Name="PackageId" Nullable="true" />
           <Property Type="String" Name="PackageName" Nullable="true" />
           <Property Type="String" Name="GoogleTaxonomyCode" Nullable="true" />
-          <Property Type="String" Name="SubCategoryIds" Nullable="true" />
-          <Property Type="String" Name="SubCategoryName" Nullable="true" />
-          <Property Type="String" Name="NextSubCategoryIds" Nullable="true" />
-          <Property Type="String" Name="NextSubCategoryName" Nullable="true" />
+          <Property Type="Int32" Name="SubCategoryId" Nullable="false" />
+          <Property Type="Int32" Name="NextSubCategoryId" Nullable="false" />
           <Property Type="String" Name="ASIN" Nullable="true" />
           <Property Type="String" Name="ImagePath1" Nullable="true" />
           <Property Type="String" Name="ImagePath2" Nullable="true" />
@@ -3145,46 +3077,12 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
           <Property Type="String" Name="CreatedBy" Nullable="true" />
           <Property Type="String" Name="UpdatedBy" Nullable="true" />
         </ComplexType>
-        <ComplexType Name="GetShopname_Result">
-          <Property Type="Int32" Name="Id" Nullable="false" />
-          <Property Type="String" Name="Address" Nullable="true" />
-          <Property Type="Int32" Name="CustomerReview" Nullable="false" />
-          <Property Type="String" Name="Name" Nullable="true" />
-          <Property Type="String" Name="PhoneNumber" Nullable="true" />
-          <Property Type="Double" Name="Rating" Nullable="false" />
-        </ComplexType>
-        <ComplexType Name="GetProductList_Result">
-          <Property Type="Int32" Name="ProductId" Nullable="false" />
-          <Property Type="String" Name="ProductName" Nullable="true" />
-          <Property Type="Int32" Name="ShopId" Nullable="false" />
-          <Property Type="String" Name="ShopName" Nullable="true" />
-          <Property Type="Int32" Name="iBarU" Nullable="false" />
-          <Property Type="String" Name="CategoryCode" Nullable="true" />
-          <Property Type="String" Name="CategoryName" Nullable="true" />
-          <Property Type="Int32" Name="DiscountCategoryId" Nullable="false" />
-          <Property Type="String" Name="DiscountCategoryName" Nullable="true" />
-          <Property Type="Double" Name="DiscountCategoryPercentage" Nullable="true" />
-          <Property Type="Double" Name="MRP" Nullable="false" />
-          <Property Type="Double" Name="Price" Nullable="false" />
-          <Property Type="Int32" Name="Status" Nullable="false" />
-          <Property Type="Decimal" Name="Quantity" Nullable="true" Precision="18" Scale="0" />
-          <Property Type="Boolean" Name="isOnline" Nullable="false" />
-          <Property Type="Int32" Name="ItemId" Nullable="false" />
-          <Property Type="Double" Name="Latitude" Nullable="false" />
-          <Property Type="Double" Name="Longitude" Nullable="false" />
-          <Property Type="Int32" Name="ShopCategoryId" Nullable="false" />
-          <Property Type="String" Name="ImagePath" Nullable="true" />
-          <Property Type="String" Name="ShopImagePath" Nullable="false" />
-          <Property Type="Int32" Name="Meters" Nullable="false" />
-          <Property Type="Boolean" Name="ShopOnline" Nullable="true" />
-          <Property Type="Int32" Name="ShopStatus" Nullable="false" />
-        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="sncModelStoreContainer" CdmEntityContainer="sncEntities">
+        <EntityContainerMapping StorageEntityContainer="sncModelStoreContainer" CdmEntityContainer="sncEntities1">
           <EntitySetMapping Name="AccessPolicies">
             <EntityTypeMapping TypeName="sncModel.AccessPolicy">
               <MappingFragment StoreEntitySet="AccessPolicies">
@@ -3220,27 +3118,13 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Admins">
-            <EntityTypeMapping TypeName="sncModel.Admin">
-              <MappingFragment StoreEntitySet="Admins">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="AnonymisedID" ColumnName="AnonymisedID" />
-                <ScalarProperty Name="OfficialID" ColumnName="OfficialID" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Banners">
             <EntityTypeMapping TypeName="sncModel.Banner">
               <MappingFragment StoreEntitySet="Banners">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
                 <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="MasterProductId" ColumnName="MasterProductId" />
                 <ScalarProperty Name="Position" ColumnName="Position" />
                 <ScalarProperty Name="BannerPath" ColumnName="BannerPath" />
                 <ScalarProperty Name="FromDate" ColumnName="FromDate" />
@@ -3249,8 +3133,6 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
                 <ScalarProperty Name="BannerName" ColumnName="BannerName" />
                 <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
                 <ScalarProperty Name="CreditType" ColumnName="CreditType" />
-                <ScalarProperty Name="MasterProductId" ColumnName="MasterProductId" />
-                <ScalarProperty Name="MasterProductName" ColumnName="MasterProductName" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
@@ -3537,6 +3419,19 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="LocationDetails">
+            <EntityTypeMapping TypeName="sncModel.LocationDetail">
+              <MappingFragment StoreEntitySet="LocationDetails">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="SourceLatitude" ColumnName="SourceLatitude" />
+                <ScalarProperty Name="SourceLongitude" ColumnName="SourceLongitude" />
+                <ScalarProperty Name="DestinationLatitude" ColumnName="DestinationLatitude" />
+                <ScalarProperty Name="DestinationLongitude" ColumnName="DestinationLongitude" />
+                <ScalarProperty Name="Distance" ColumnName="Distance" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="MarketingAgents">
             <EntityTypeMapping TypeName="sncModel.MarketingAgent">
               <MappingFragment StoreEntitySet="MarketingAgents">
@@ -3579,8 +3474,7 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="BrandId" ColumnName="BrandId" />
                 <ScalarProperty Name="BrandName" ColumnName="BrandName" />
-                <ScalarProperty Name="CategoryIds" ColumnName="CategoryIds" />
-                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
                 <ScalarProperty Name="ShortDescription" ColumnName="ShortDescription" />
                 <ScalarProperty Name="LongDescription" ColumnName="LongDescription" />
                 <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
@@ -3601,10 +3495,8 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
                 <ScalarProperty Name="PackageId" ColumnName="PackageId" />
                 <ScalarProperty Name="PackageName" ColumnName="PackageName" />
                 <ScalarProperty Name="GoogleTaxonomyCode" ColumnName="GoogleTaxonomyCode" />
-                <ScalarProperty Name="SubCategoryIds" ColumnName="SubCategoryIds" />
-                <ScalarProperty Name="SubCategoryName" ColumnName="SubCategoryName" />
-                <ScalarProperty Name="NextSubCategoryIds" ColumnName="NextSubCategoryIds" />
-                <ScalarProperty Name="NextSubCategoryName" ColumnName="NextSubCategoryName" />
+                <ScalarProperty Name="SubCategoryId" ColumnName="SubCategoryId" />
+                <ScalarProperty Name="NextSubCategoryId" ColumnName="NextSubCategoryId" />
                 <ScalarProperty Name="ASIN" ColumnName="ASIN" />
                 <ScalarProperty Name="ImagePath1" ColumnName="ImagePath1" />
                 <ScalarProperty Name="ImagePath2" ColumnName="ImagePath2" />
@@ -4226,19 +4118,6 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="LocationDetails">
-            <EntityTypeMapping TypeName="sncModel.LocationDetail">
-              <MappingFragment StoreEntitySet="LocationDetails">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="SourceLatitude" ColumnName="SourceLatitude" />
-                <ScalarProperty Name="SourceLongitude" ColumnName="SourceLongitude" />
-                <ScalarProperty Name="DestinationLatitude" ColumnName="DestinationLatitude" />
-                <ScalarProperty Name="DestinationLongitude" ColumnName="DestinationLongitude" />
-                <ScalarProperty Name="Distance" ColumnName="Distance" />
-                <ScalarProperty Name="Duration" ColumnName="Duration" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionName="sncModel.Store.GetTableVAlueString" FunctionImportName="GetTableVAlueString">
             <ResultMapping>
               <ComplexTypeMapping TypeName="sncModel.GetTableVAlueString_Result">
@@ -4259,13 +4138,28 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetProductList" FunctionName="sncModel.Store.GetProductList" />
+          <FunctionImportMapping FunctionImportName="GetProductListCount" FunctionName="sncModel.Store.GetProductListCount" />
           <FunctionImportMapping FunctionImportName="GetShopCategoryList" FunctionName="sncModel.Store.GetShopCategoryList" />
           <FunctionImportMapping FunctionImportName="GetShopCategoryProductCount" FunctionName="sncModel.Store.GetShopCategoryProductCount" />
           <FunctionImportMapping FunctionImportName="GetShopCategoryProducts" FunctionName="sncModel.Store.GetShopCategoryProducts" />
           <FunctionImportMapping FunctionImportName="GetShopCategoryProductsList" FunctionName="sncModel.Store.GetShopCategoryProductsList" />
+          <FunctionImportMapping FunctionImportName="GetShopname" FunctionName="sncModel.Store.GetShopname">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="sncModel.GetShopname_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="CustomerReview" ColumnName="CustomerReview" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Rating" ColumnName="Rating" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="ReatillerPaymentReport" FunctionName="sncModel.Store.ReatillerPaymentReport" />
           <FunctionImportMapping FunctionImportName="ReatillerPaymentReportAdmin" FunctionName="sncModel.Store.ReatillerPaymentReportAdmin" />
           <FunctionImportMapping FunctionImportName="ReatillerPaymentReports" FunctionName="sncModel.Store.ReatillerPaymentReports" />
+          <FunctionImportMapping FunctionImportName="Sp_TB_SelectMedicineName" FunctionName="sncModel.Store.Sp_TB_SelectMedicineName" />
           <FunctionImportMapping FunctionImportName="test" FunctionName="sncModel.Store.test">
             <ResultMapping>
               <ComplexTypeMapping TypeName="sncModel.test_Result">
@@ -4273,8 +4167,7 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="BrandId" ColumnName="BrandId" />
                 <ScalarProperty Name="BrandName" ColumnName="BrandName" />
-                <ScalarProperty Name="CategoryIds" ColumnName="CategoryIds" />
-                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
                 <ScalarProperty Name="ShortDescription" ColumnName="ShortDescription" />
                 <ScalarProperty Name="LongDescription" ColumnName="LongDescription" />
                 <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
@@ -4295,10 +4188,8 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
                 <ScalarProperty Name="PackageId" ColumnName="PackageId" />
                 <ScalarProperty Name="PackageName" ColumnName="PackageName" />
                 <ScalarProperty Name="GoogleTaxonomyCode" ColumnName="GoogleTaxonomyCode" />
-                <ScalarProperty Name="SubCategoryIds" ColumnName="SubCategoryIds" />
-                <ScalarProperty Name="SubCategoryName" ColumnName="SubCategoryName" />
-                <ScalarProperty Name="NextSubCategoryIds" ColumnName="NextSubCategoryIds" />
-                <ScalarProperty Name="NextSubCategoryName" ColumnName="NextSubCategoryName" />
+                <ScalarProperty Name="SubCategoryId" ColumnName="SubCategoryId" />
+                <ScalarProperty Name="NextSubCategoryId" ColumnName="NextSubCategoryId" />
                 <ScalarProperty Name="ASIN" ColumnName="ASIN" />
                 <ScalarProperty Name="ImagePath1" ColumnName="ImagePath1" />
                 <ScalarProperty Name="ImagePath2" ColumnName="ImagePath2" />
@@ -4315,49 +4206,6 @@ warning 6002: The table/view 'snc.dbo.LocationDetails' does not have a primary k
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GetShopname" FunctionName="sncModel.Store.GetShopname">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="sncModel.GetShopname_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="CustomerReview" ColumnName="CustomerReview" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="Rating" ColumnName="Rating" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GetProductList" FunctionName="sncModel.Store.GetProductList">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="sncModel.GetProductList_Result">
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
-                <ScalarProperty Name="iBarU" ColumnName="iBarU" />
-                <ScalarProperty Name="CategoryCode" ColumnName="CategoryCode" />
-                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
-                <ScalarProperty Name="DiscountCategoryId" ColumnName="DiscountCategoryId" />
-                <ScalarProperty Name="DiscountCategoryName" ColumnName="DiscountCategoryName" />
-                <ScalarProperty Name="DiscountCategoryPercentage" ColumnName="DiscountCategoryPercentage" />
-                <ScalarProperty Name="MRP" ColumnName="MRP" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="isOnline" ColumnName="isOnline" />
-                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
-                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-                <ScalarProperty Name="ShopCategoryId" ColumnName="ShopCategoryId" />
-                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
-                <ScalarProperty Name="ShopImagePath" ColumnName="ShopImagePath" />
-                <ScalarProperty Name="Meters" ColumnName="Meters" />
-                <ScalarProperty Name="ShopOnline" ColumnName="ShopOnline" />
-                <ScalarProperty Name="ShopStatus" ColumnName="ShopStatus" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GetProductListCount" FunctionName="sncModel.Store.GetProductListCount" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
