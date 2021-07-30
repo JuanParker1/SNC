@@ -35,7 +35,6 @@ namespace ShopNow.Controllers
         private MapperConfiguration _mapperConfiguration;
         //private string apipath= "https://admin.shopnowchat.in/";
         private string apipath = "http://117.221.69.52:85/";
-
         private const string _prefix = "";
 
         private static string _generateCode(string _prefix)
@@ -501,6 +500,7 @@ namespace ShopNow.Controllers
         [HttpPost]
         public JsonResult CustomerAddressUpdate(CustomerAddressViewModel model)
         {
+            db.Configuration.ProxyCreationEnabled = false;
             int checkCustomerAddTypeExist = db.CustomerAddresses.Where(i => i.Id != model.Id && i.CustomerId == model.CustomerId && i.AddressType == model.AddressType && i.Status == 0).Count();
             var customerAddress = db.CustomerAddresses.Where(i => i.Id == model.Id && i.Status == 0).FirstOrDefault();
             if (checkCustomerAddTypeExist > 0)
@@ -528,7 +528,7 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
             }
 
-            return Json(new { message = "Successfully Updated Your Address!", Details = customerAddress });
+            return Json(new { message = "Successfully Updated Your Address!", Details = customerAddress },JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetShopVerify(string FromNumber, string digits)
@@ -2240,10 +2240,10 @@ namespace ShopNow.Controllers
             return Json(new { message = "Your Todays OTP is: " + otpmodel.Otp }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetShopDetailsNew(int id, string categoryId, string str = "")
+        public JsonResult GetShopDetailsNew(int shopId, string categoryId="", string str = "")
         {
 
-            var shop = db.Shops.FirstOrDefault(i => i.Id == id);
+            var shop = db.Shops.FirstOrDefault(i => i.Id == shopId);
             //shop.Code = ss[0].Code;
             //shop.Address = ss[0].Address;
             //shop.CustomerReview = ss[0].CustomerReview;
@@ -2261,13 +2261,13 @@ namespace ShopNow.Controllers
                 reviewCount = 0;
             model.CustomerReview = reviewCount;
 
-            model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryCode as Code, CategoryName as Name from Products p join Categories c on c.Code = p.CategoryCode where shopid ={id}  and c.Status = 0 and CategoryCode is not null and CategoryName is not null group by CategoryCode,CategoryName order by Name").ToList<ShopDetails.CategoryList>();
+            model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryId as Id, CategoryName as Name from MasterProducts p join Categories c on c.Id = p.CategoryId where shopid ={shopId}  and c.Status = 0 and CategoryId !=0 and CategoryName is not null group by CategoryId,CategoryName order by Name").ToList<ShopDetails.CategoryList>();
 
             if (shop.ShopCategoryId == 0)
             {
                 model.ProductLists = (from pl in db.Products
                                       join m in db.MasterProducts on pl.MasterProductId equals m.Id
-                                      where pl.ShopId == id && pl.Status == 0 && (categoryId != "" ? m.CategoryIds == categoryId : true)
+                                      where pl.ShopId == shopId && pl.Status == 0 && (categoryId != "" ? m.CategoryIds == categoryId : true)
                                       select new ShopDetails.ProductList
                                       {
                                           Id = pl.Id,
@@ -2288,7 +2288,7 @@ namespace ShopNow.Controllers
             {
                 model.ProductLists = (from pl in db.Products
                                       join m in db.MasterProducts on pl.MasterProductId equals m.Id
-                                      where pl.ShopId == id && pl.Status == 0 && m.Name.ToLower().Contains(str) && (categoryId != "" ? m.CategoryIds == categoryId : true)
+                                      where pl.ShopId == shopId && pl.Status == 0 && m.Name.ToLower().Contains(str) && (categoryId != "" ? m.CategoryIds == categoryId : true)
                                       select new ShopDetails.ProductList
                                       {
                                           Id = pl.Id,
