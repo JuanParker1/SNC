@@ -334,9 +334,6 @@ namespace ShopNow.ViewModels
         public int Adscore { get; set; }
         public Nullable<bool> isOnline { get; set; }
         public string GooglePlaceId { get; set; }
-        public int Status { get; set; }
-        public string CreatedBy { get; set; }
-        public string UpdatedBy { get; set; }
     }
 
 

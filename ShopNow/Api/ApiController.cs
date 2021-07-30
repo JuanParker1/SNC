@@ -2147,7 +2147,6 @@ namespace ShopNow.Controllers
 
                 Admin admin = new Admin();
                 admin.AnonymisedID = shop.Id.ToString();
-                //admin.Code = _generateCode("ADM");
                 admin.Status = 0;
                 admin.DateEncoded = DateTime.Now;
                 admin.DateUpdated = DateTime.Now;
@@ -2164,7 +2163,6 @@ namespace ShopNow.Controllers
                 otpmodel.Verify = false;
                 otpmodel.CreatedBy = customer.Name;
                 otpmodel.UpdatedBy = customer.Name;
-                //otpmodel.Code = _generateCode("SMS");
                 otpmodel.Status = 0;
                 otpmodel.DateEncoded = DateTime.Now;
                 otpmodel.DateUpdated = DateTime.Now;
