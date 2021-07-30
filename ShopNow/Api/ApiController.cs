@@ -2669,12 +2669,11 @@ namespace ShopNow.Controllers
         [HttpPost]
         public JsonResult UpdateReview(ShopReviewUpdateViewModel model)
         {
-            int errorCode = 0;
-            //var review = ClassCustomerReview.Get(model.Code);
             var review = db.CustomerReviews.FirstOrDefault(i => i.Id == model.Id);
             review.CustomerRemark = model.CustomerRemark;
             review.Rating = model.Rating;
-            ClassCustomerReview.Edit(review, out errorCode);
+            db.Entry(review).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
             return Json(new { message = "Successfully Updated to Rating!", Details = model });
 
         }
