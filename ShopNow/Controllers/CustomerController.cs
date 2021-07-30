@@ -13,8 +13,7 @@ using System.Web.Mvc;
 namespace ShopNow.Controllers
 {
     public class CustomerController : Controller
-    {
-            
+    {            
             private sncEntities db = new sncEntities();
             private IMapper _mapper;
             private MapperConfiguration _mapperConfiguration;
