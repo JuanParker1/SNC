@@ -30,7 +30,10 @@
 {
 columns.Add(b => b.Name).Titled("Name").Filterable(true).SetWidth(20);
 columns.Add(b => b.ProductTypeName).Titled("Product Type").Filterable(true).SetWidth(20);
-columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(b => @<div><a href="javascript:void(0)" data-id="@b.Id" data-name="@b.Name" data-productTypeId="@b.ProductTypeId" data-productTypeName="@b.ProductTypeName" class="btn-sm btn-warning edit-prompt" data-toggle="modal" data-target="#editModal" style="padding: 3px 26px">Edit</a> <a href="javascript:void(0)" data-code="@b.Id" class="btn-sm btn-danger delete-prompt" data-toggle="modal" data-target="#deleteModal" style="padding: 3px 18px">Delete</a></div>);
+columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20)
+    .RenderValueAs(b => @<div>
+    <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(b.Id)" data-name="@b.Name" data-productTypeId="@b.ProductTypeId" data-productTypeName="@b.ProductTypeName" class="btn-sm btn-warning edit-prompt" data-toggle="modal" data-target="#editModal" style="padding: 3px 26px">Edit</a>
+    <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(b.Id)" class="btn-sm btn-danger delete-prompt" data-toggle="modal" data-target="#deleteModal" style="padding: 3px 18px">Delete</a></div>);
             }).WithPaging(20).Sortable(true)
 </div>
 
@@ -50,7 +53,7 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
             <div class="modal-footer">
                 <button class="btn btn-success delete-confirm">Yes</button>
                 <button class="btn btn-danger" data-dismiss="modal">No</button>
-                <input type="hidden" name="Code" id="Code" data-dismiss="modal" />
+                <input type="hidden" name="Id" id="Id" data-dismiss="modal" />
             </div>
         </div>
     </div>
@@ -243,13 +246,13 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
             //});
 
             $(".delete-prompt").click(function () {
-                var code = $(this).attr('data-id');
-                $("#Code").val(code);
+                var id = $(this).attr('data-id');
+                $("#Id").val(id);
             });
 
             $(".delete-confirm").click(function () {
-                var Code = $("#Code").val();
-                $.getJSON("/Brand/Delete", { id: Code }, function (data) {
+                var Id = $("#Id").val();
+                $.getJSON("/Brand/Delete", { id: Id }, function (data) {
                     window.location.reload();
                 });
             });

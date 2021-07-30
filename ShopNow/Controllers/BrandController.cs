@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ExcelDataReader;
 using ShopNow.Filters;
+using ShopNow.Helpers;
 using ShopNow.Models;
 using ShopNow.ViewModels;
 using System;
@@ -90,10 +91,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNBRAR005")]
-        public JsonResult Delete(int id)
+        public JsonResult Delete(String id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var brand = db.Brands.Where(b => b.Id == id).FirstOrDefault(); //Brand.Get(code);
+            var dId = AdminHelpers.DCodeInt(id);
+            var brand = db.Brands.Where(b => b.Id == dId).FirstOrDefault(); 
             if (brand != null)
             {
                 brand.Status = 2;

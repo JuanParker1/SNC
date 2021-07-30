@@ -33,7 +33,7 @@ namespace ShopNow.ViewModels
         public string MasterProductName { get; set; }
         public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public string CategoryIds { get; set; }
+        public string CategoryId { get; set; }
         public string CategoryName { get; set; }
         public int BrandId { get; set; }
         public string BrandName { get; set; }
@@ -96,7 +96,7 @@ namespace ShopNow.ViewModels
         public string MasterProductName { get; set; }
         public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public string CategoryIds { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public int BrandId { get; set; }
         public string BrandName { get; set; }
@@ -435,11 +435,11 @@ namespace ShopNow.ViewModels
         public string MasterProductName { get; set; }
         public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public string CategoryIds { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
-        public string SubCategoryIds { get; set; }
+        public int SubCategoryId { get; set; }
         public string SubCategoryName { get; set; }
-        public string NextSubCategoryIds { get; set; }
+        public int NextSubCategoryId { get; set; }
         public string NextSubCategoryName { get; set; }
         public int? PackageId { get; set; }
         public string PackageName { get; set; }
@@ -546,7 +546,7 @@ namespace ShopNow.ViewModels
         public string MasterProductName { get; set; }
         public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public string CategoryId { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public int MinSelectionLimit { get; set; }
         public int MaxSelectionLimit { get; set; }

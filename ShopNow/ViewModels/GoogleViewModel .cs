@@ -47,7 +47,7 @@ namespace ShopNow.ViewModels
         public string Bannerpath { get; set; }
         public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public int ProductId { get; set; }
+        public long ProductId { get; set; }
         public string ProductName { get; set; }
 
     }
@@ -87,7 +87,9 @@ namespace ShopNow.ViewModels
             public double Meters { get; set; }
             public bool ? isOnline { get; set; }
             public List<BannerImages> List { get; set; }
-           // public List<Models.Banner> List { get; set; }
+            public int ReviewCount { get; set; }
+            public string Address { get; set; }
+            // public List<Models.Banner> List { get; set; }
         }
     }
 

@@ -17,7 +17,7 @@
             @using (Html.BeginForm("Edit", "Banner", FormMethod.Post, new { id = "BannerForm", enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
-                <input type="hidden" name="Code" id="Code" value="@Model.PaymentId" />
+                @*<input type="hidden" name="Code" id="Code" value="@Model.PaymentId" />*@
                 <input type="hidden" name="Id" id="Id" value="@Model.Id" />
                 <input type="hidden" name="Status" id="Status" value="@Model.Status" />
                 <input type="hidden" name="DateEncoded" id="DateEncoded" value="@Model.DateEncoded" />

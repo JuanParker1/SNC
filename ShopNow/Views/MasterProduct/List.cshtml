@@ -23,7 +23,7 @@
     @Html.Grid(Model).Columns(columns =>
 {
     columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(20);
-    columns.Add(c => c.CategoryName).Titled("Category Name").Filterable(true).SetWidth(10);
+   // columns.Add(c => c.CategoryName).Titled("Category Name").Filterable(true).SetWidth(10);
     columns.Add(c => c.BrandName).Titled("Brand Name").Filterable(true).SetWidth(20);
     columns.Add(c => c.ProductTypeName).Titled("Item Type").Filterable(true).SetWidth(10);
     columns.Add()

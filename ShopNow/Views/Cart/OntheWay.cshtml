@@ -31,7 +31,7 @@
     columns.Add(c => c.PaymentMode).Titled("Payment Mode").Filterable(true).SetWidth(10);
     //columns.Add(c => c.SinglePrice).Titled("Amount").Filterable(true).SetWidth(10);
     //columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(15);
-    columns.Add(c => c.DeliveryPhoneNumber).Titled("DeliveryBoy Phone").Filterable(true).SetWidth(15);
+    columns.Add(c => c.DeliveryPhoneNumber).Titled("D.Boy Phone").Filterable(true).SetWidth(15);
     columns.Add().RenderValueAs(c => c.CartStatus == 5 ? "On The Way" : "On The Way").Titled("Order Status").Filterable(true).SetWidth(10);
     columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(15);
     columns.Add()

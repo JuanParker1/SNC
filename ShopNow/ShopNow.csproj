@@ -383,9 +383,6 @@
     <Compile Include="Models\AddOnCategory.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Admin.cs">
-      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\ApplicationDbContext.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -440,9 +437,6 @@
     </Compile>
     <Compile Include="Models\GetDeliveryBoy.cs" />
     <Compile Include="Models\GetDEliveryBoyList_Result.cs">
-      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\GetProductList_Result.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GetShopname_Result.cs">

@@ -25,8 +25,7 @@ namespace ShopNow.Models
         public string Name { get; set; }
         public int BrandId { get; set; }
         public string BrandName { get; set; }
-        public string CategoryIds { get; set; }
-        public string CategoryName { get; set; }
+        public int CategoryId { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
         public int ProductTypeId { get; set; }
@@ -47,10 +46,8 @@ namespace ShopNow.Models
         public Nullable<int> PackageId { get; set; }
         public string PackageName { get; set; }
         public string GoogleTaxonomyCode { get; set; }
-        public string SubCategoryIds { get; set; }
-        public string SubCategoryName { get; set; }
-        public string NextSubCategoryIds { get; set; }
-        public string NextSubCategoryName { get; set; }
+        public int SubCategoryId { get; set; }
+        public int NextSubCategoryId { get; set; }
         public string ASIN { get; set; }
         public string ImagePath1 { get; set; }
         public string ImagePath2 { get; set; }
@@ -65,7 +62,6 @@ namespace ShopNow.Models
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
     
-        public virtual ProductType ProductType { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductDishAddOn> ProductDishAddOns { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

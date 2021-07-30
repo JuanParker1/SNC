@@ -82,7 +82,7 @@ namespace ShopNow.Controllers
                      Id = i.Id,
                      ProductTypeId = m.ProductTypeId,
                      ProductTypeName = m.ProductTypeName,
-                     CategoryName = m.CategoryName,
+                    // CategoryName = m.CategoryName,
                      BrandName = m.BrandName ?? "N/A",
                      Name = m.Name,
                      //DiscountCategoryPercentage = i.DiscountCategoryPercentage,
@@ -262,8 +262,8 @@ namespace ShopNow.Controllers
                 model.MasterProductName = masterProduct.Name;
                 model.BrandId = masterProduct.BrandId;
                 model.BrandName = masterProduct.BrandName;
-                model.CategoryIds = masterProduct.CategoryIds;
-                model.CategoryName = masterProduct.CategoryName;
+                model.CategoryId = masterProduct.CategoryId;
+               // model.CategoryName = masterProduct.CategoryName;
                 model.GoogleTaxonomyCode = masterProduct.GoogleTaxonomyCode;
                 model.ImagePathLarge1 = masterProduct.ImagePath1;
                 model.ImagePathLarge2 = masterProduct.ImagePath2;
@@ -311,7 +311,7 @@ namespace ShopNow.Controllers
                 .Join(db.MasterProducts,p=>p.MasterProductId,m=>m.Id,(p,m)=>new { p,m})
             .Select(i => new FMCGListViewModel.ListItem
             {
-                CategoryName = i.m.CategoryName,
+               // CategoryName = i.m.CategoryName,
                 Id = i.p.Id,
                 Name = i.m.Name,
                 Percentage = i.p.Percentage,
@@ -331,7 +331,7 @@ namespace ShopNow.Controllers
               .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
             .Select(i => new MedicalListViewModel.ListItem
             {
-                CategoryName = i.m.CategoryName,
+               // CategoryName = i.m.CategoryName,
                 Id = i.p.Id,
                 Name = i.m.Name,
                 Percentage = i.p.Percentage,
@@ -351,7 +351,7 @@ namespace ShopNow.Controllers
              .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
             .Select(i => new FoodListViewModel.ListItem
             {
-                CategoryName = i.m.CategoryName,
+              //  CategoryName = i.m.CategoryName,
                 Id = i.p.Id,
                 Name = i.m.Name,
                 Percentage = i.p.Percentage,
@@ -490,8 +490,8 @@ namespace ShopNow.Controllers
             if (masterProduct != null)
             {
                 model.MasterProductName = masterProduct.Name;
-                model.CategoryId = masterProduct.CategoryIds;
-                model.CategoryName = masterProduct.CategoryName;
+                model.CategoryId = masterProduct.CategoryId;
+              //  model.CategoryName = masterProduct.CategoryName;
             }
             Session["ShopAddOnsEdit"] = new List<ShopAddOnSessionEditViewModel>();
             return View(model);
@@ -759,8 +759,8 @@ namespace ShopNow.Controllers
                 model.MasterProductName = masterProduct.Name;
                 model.BrandId = masterProduct.BrandId;
                 model.BrandName = masterProduct.BrandName;
-                model.CategoryIds = masterProduct.CategoryIds;
-                model.CategoryName = masterProduct.CategoryName;
+                model.CategoryId = masterProduct.CategoryId;
+              //  model.CategoryName = masterProduct.CategoryName;
                 model.GoogleTaxonomyCode = masterProduct.GoogleTaxonomyCode;
                 model.ImagePathLarge1 = masterProduct.ImagePath1;
                 model.ImagePathLarge2 = masterProduct.ImagePath2;
@@ -769,10 +769,10 @@ namespace ShopNow.Controllers
                 model.ImagePathLarge5 = masterProduct.ImagePath5;
                 model.LongDescription = masterProduct.LongDescription;
                 model.ShortDescription = masterProduct.ShortDescription;
-                model.SubCategoryIds = masterProduct.SubCategoryIds;
-                model.SubCategoryName = masterProduct.SubCategoryName;
-                model.NextSubCategoryIds = masterProduct.NextSubCategoryIds;
-                model.NextSubCategoryName = masterProduct.NextSubCategoryName;
+                model.SubCategoryId = masterProduct.SubCategoryId;
+             //   model.SubCategoryName = masterProduct.SubCategoryName;
+                model.NextSubCategoryId = masterProduct.NextSubCategoryId;
+             //   model.NextSubCategoryName = masterProduct.NextSubCategoryName;
                 model.MeasurementUnitId = masterProduct.MeasurementUnitId;
                 model.MeasurementUnitName = masterProduct.MeasurementUnitName;
                 model.PackageId = masterProduct.PackageId;
@@ -940,7 +940,7 @@ namespace ShopNow.Controllers
            .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
             .Select(i => new ElectronicListViewModel.ListItem
             {
-                CategoryName = i.m.CategoryName,
+               // CategoryName = i.m.CategoryName,
                 Id = i.p.Id,
                 Name = i.m.Name,
                 Percentage = i.p.Percentage,
@@ -1156,8 +1156,8 @@ namespace ShopNow.Controllers
             {
                 id = i.Id,
                 text = i.Name,
-                CategoryIds = i.CategoryIds,
-                CategoryName = i.CategoryName,
+                CategoryIds = i.CategoryId,
+             //   CategoryName = i.CategoryName,
                 BrandId = i.BrandId,
                 BrandName = i.BrandName,
                 ShortDescription = i.ShortDescription,
@@ -1258,8 +1258,8 @@ namespace ShopNow.Controllers
             {
                 id = i.Id,
                 text = i.Name,
-                CategoryIds = i.CategoryIds,
-                CategoryName = i.CategoryName,
+                CategoryIds = i.CategoryId,
+             //   CategoryName = i.CategoryName,
                 BrandId = i.BrandId,
                 BrandName = i.BrandName,
                 ShortDescription = i.ShortDescription,
@@ -1280,8 +1280,8 @@ namespace ShopNow.Controllers
             {
                 id = i.Id,
                 text = i.Name,
-                CategoryIds = i.CategoryIds,
-                CategoryName = i.CategoryName,
+                CategoryIds = i.CategoryId,
+             //  CategoryName = i.CategoryName,
                 BrandId = i.BrandId,
                 BrandName = i.BrandName,
                 MeasurementUnitId = i.MeasurementUnitId,
@@ -1428,12 +1428,12 @@ namespace ShopNow.Controllers
             {
                 id = i.Id,
                 text = i.Name,
-                CategoryIds = i.CategoryIds,
-                CategoryName = i.CategoryName,
-                SubCategoryIds = i.SubCategoryIds,
-                SubCategoryName = i.SubCategoryName,
-                NextSubCategoryIds = i.NextSubCategoryIds,
-                NextSubCategoryName = i.NextSubCategoryName,
+                CategoryId = i.CategoryId,
+              //  CategoryName = i.CategoryName,
+                SubCategoryId = i.SubCategoryId,
+              //  SubCategoryName = i.SubCategoryName,
+                NextSubCategoryId = i.NextSubCategoryId,
+              //  NextSubCategoryName = i.NextSubCategoryName,
                 BrandId = i.BrandId,
                 BrandName = i.BrandName,
                 ShortDescription = i.ShortDescription,
@@ -1485,12 +1485,12 @@ namespace ShopNow.Controllers
             {
                 id = i.Id,
                 text = i.Name,
-                CategoryIds = i.CategoryIds,
-                CategoryName = i.CategoryName,
-                SubCategoryIds = i.SubCategoryIds,
-                SubCategoryName = i.SubCategoryName,
-                NextSubCategoryIds = i.NextSubCategoryIds,
-                NextSubCategoryName = i.NextSubCategoryName,
+                CategoryId = i.CategoryId,
+              //  CategoryName = i.CategoryName,
+                SubCategoryId = i.SubCategoryId,
+               // SubCategoryName = i.SubCategoryName,
+                NextSubCategoryId = i.NextSubCategoryId,
+             //   NextSubCategoryName = i.NextSubCategoryName,
                 BrandId = i.BrandId,
                 BrandName = i.BrandName,
                 ShortDescription = i.ShortDescription,

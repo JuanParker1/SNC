@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using LinqToDB;
 using Newtonsoft.Json;
 using Razorpay.Api;
 using ShopNow.Filters;
-using ShopNow.Helpers;
 using ShopNow.MessageHandlers;
 using ShopNow.Models;
 using ShopNow.ViewModels;
@@ -35,7 +33,6 @@ namespace ShopNow.Controllers
         private MapperConfiguration _mapperConfiguration;
         //private string apipath= "https://admin.shopnowchat.in/";
         private string apipath = "http://117.221.69.52:85/";
-
         private const string _prefix = "";
 
         private static string _generateCode(string _prefix)
@@ -223,16 +220,6 @@ namespace ShopNow.Controllers
                 user.DateEncoded = DateTime.Now;
                 user.DateUpdated = DateTime.Now;
                 db.Customers.Add(user);
-                db.SaveChanges();
-                Admin admin = new Admin();
-                admin.AnonymisedID = user.Id.ToString();
-                //admin.Code = ShopNow.Helpers.DRC.Generate("ADM");
-                admin.OfficialID = AdminHelpers.SecureData(admin.Id.ToString());
-                admin.AnonymisedID = AdminHelpers.SecureData(admin.AnonymisedID);
-                admin.Status = 0;
-                admin.DateEncoded = DateTime.Now;
-                admin.DateUpdated = DateTime.Now;
-                db.Admins.Add(admin);
                 db.SaveChanges();
                 if (user.Id !=0)
                 {
@@ -501,6 +488,7 @@ namespace ShopNow.Controllers
         [HttpPost]
         public JsonResult CustomerAddressUpdate(CustomerAddressViewModel model)
         {
+            db.Configuration.ProxyCreationEnabled = false;
             int checkCustomerAddTypeExist = db.CustomerAddresses.Where(i => i.Id != model.Id && i.CustomerId == model.CustomerId && i.AddressType == model.AddressType && i.Status == 0).Count();
             var customerAddress = db.CustomerAddresses.Where(i => i.Id == model.Id && i.Status == 0).FirstOrDefault();
             if (checkCustomerAddTypeExist > 0)
@@ -528,7 +516,7 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
             }
 
-            return Json(new { message = "Successfully Updated Your Address!", Details = customerAddress });
+            return Json(new { message = "Successfully Updated Your Address!", Details = customerAddress },JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetShopVerify(string FromNumber, string digits)
@@ -872,40 +860,47 @@ namespace ShopNow.Controllers
         [HttpPost]
         public JsonResult DeliveryBoyCreate(DeliveryBoyCreateViewModel model)
         {
-            var deliveryBoyExist = db.DeliveryBoys.FirstOrDefault(i => i.Name == model.Name && i.PhoneNumber == model.PhoneNumber && (i.Status == 0 || i.Status == 1));
-            if (deliveryBoyExist == null)
+            try
             {
-                var deliveryBoy = _mapper.Map<DeliveryBoyCreateViewModel, DeliveryBoy>(model);
-                var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
-                if (customer != null)
+                var deliveryBoyExist = db.DeliveryBoys.FirstOrDefault(i => i.Name == model.Name && i.PhoneNumber == model.PhoneNumber && (i.Status == 0 || i.Status == 1));
+                if (deliveryBoyExist == null)
                 {
-                    deliveryBoy.Name = customer.Name;
-                    deliveryBoy.Email = customer.Email;
-                    deliveryBoy.CreatedBy = customer.Name;
-                    deliveryBoy.UpdatedBy = customer.Name;
-                    customer.Position = 3;
-                    customer.UpdatedBy = customer.Name;
-                    customer.DateUpdated = DateTime.Now;
-                    db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                    var deliveryBoy = _mapper.Map<DeliveryBoyCreateViewModel, DeliveryBoy>(model);
+                    var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
+                    if (customer != null)
+                    {
+                        deliveryBoy.Name = customer.Name;
+                        deliveryBoy.Email = customer.Email;
+                        deliveryBoy.CreatedBy = customer.Name;
+                        deliveryBoy.UpdatedBy = customer.Name;
+                        customer.Position = 3;
+                        customer.UpdatedBy = customer.Name;
+                        customer.DateUpdated = DateTime.Now;
+                        db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                    deliveryBoy.Status = 1;
+                    deliveryBoy.DateEncoded = DateTime.Now;
+                    deliveryBoy.DateUpdated = DateTime.Now;
+                    db.DeliveryBoys.Add(deliveryBoy);
                     db.SaveChanges();
-                }
-                deliveryBoy.Status = 1;
-                deliveryBoy.DateEncoded = DateTime.Now;
-                deliveryBoy.DateUpdated = DateTime.Now;
-                db.DeliveryBoys.Add(deliveryBoy);
-                db.SaveChanges();
 
 
-                if (deliveryBoy.Id !=0)
-                {
-                    return Json(new { message = "Successfully Created a Delivery Boy!", Position = customer.Position });
+                    if (deliveryBoy.Id != 0)
+                    {
+                        return Json(new { message = "Successfully Created a Delivery Boy!", Position = customer.Position });
 
+                    }
+                    else
+                        return Json(new { message = "Failed to Create a Delivery Boy!" });
                 }
                 else
-                    return Json(new { message = "Failed to Create a Delivery Boy!" });
+                    return Json(new { message = "This Delivery Boy Already Exist!" });
             }
-            else
-                return Json(new { message = "This Delivery Boy Already Exist!" });
+            catch
+            {
+                return Json(new { message = "Failed to Create a Delivery Boy!" });
+            }
 
         }
 
@@ -2138,15 +2133,6 @@ namespace ShopNow.Controllers
                 db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
-                Admin admin = new Admin();
-                admin.AnonymisedID = shop.Id.ToString();
-                //admin.Code = _generateCode("ADM");
-                admin.Status = 0;
-                admin.DateEncoded = DateTime.Now;
-                admin.DateUpdated = DateTime.Now;
-                db.Admins.Add(admin);
-                db.SaveChanges();
-
                 var otpmodel = new OtpVerification();
                 otpmodel.ShopId = shop.Id;
                 otpmodel.CustomerId = customer.Id;
@@ -2157,7 +2143,6 @@ namespace ShopNow.Controllers
                 otpmodel.Verify = false;
                 otpmodel.CreatedBy = customer.Name;
                 otpmodel.UpdatedBy = customer.Name;
-                //otpmodel.Code = _generateCode("SMS");
                 otpmodel.Status = 0;
                 otpmodel.DateEncoded = DateTime.Now;
                 otpmodel.DateUpdated = DateTime.Now;
@@ -2237,10 +2222,17 @@ namespace ShopNow.Controllers
             return Json(new { message = "Your Todays OTP is: " + otpmodel.Otp }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetShopDetailsNew(int id, string categoryId, string str = "")
+        public JsonResult GetShopDetailsNew(int shopId, int categoryId, string str = "")
         {
+            var shop = db.Shops.FirstOrDefault(i => i.Id == shopId);
+            //shop.Code = ss[0].Code;
+            //shop.Address = ss[0].Address;
+            //shop.CustomerReview = ss[0].CustomerReview;
+            //shop.Rating = ss[0].Rating;
+            //shop.PhoneNumber = ss[0].PhoneNumber;
+            //shop.Name = ss[0].Name;
+            //shop.ShopCategoryCode = ss[0].ShopCategoryCode;
 
-            var shop = db.Shops.FirstOrDefault(i => i.Id == id);
 
             ShopDetails model = _mapper.Map<Shop, ShopDetails>(shop);
             var rate = db.CustomerReviews.Where(j => j.ShopId == shop.Id).ToList();
@@ -2250,22 +2242,20 @@ namespace ShopNow.Controllers
             else
                 reviewCount = 0;
             model.CustomerReview = reviewCount;
-
-            model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryCode as Code, CategoryName as Name from Products p join Categories c on c.Code = p.CategoryCode where shopid ={id}  and c.Status = 0 and CategoryCode is not null and CategoryName is not null group by CategoryCode,CategoryName order by Name").ToList<ShopDetails.CategoryList>();
-
+            model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryId as Id, CategoryName as Name from MasterProducts p join Categories c on c.Id = p.CategoryId where shopid ={shopId}  and c.Status = 0 and CategoryId !=0 and CategoryName is not null group by CategoryId,CategoryName order by Name").ToList<ShopDetails.CategoryList>();
             if (shop.ShopCategoryId == 0)
             {
                 model.ProductLists = (from pl in db.Products
                                       join m in db.MasterProducts on pl.MasterProductId equals m.Id
-                                      where pl.ShopId == id && pl.Status == 0 && (categoryId != "" ? m.CategoryIds == categoryId : true)
+                                      where pl.ShopId == shopId && pl.Status == 0 && (categoryId != 0 ? m.CategoryId == categoryId : true)
                                       select new ShopDetails.ProductList
                                       {
                                           Id = pl.Id,
                                           Name = m.Name,
                                           ShopId = pl.ShopId,
                                           ShopName = pl.ShopName,
-                                          CategoryIds = m.CategoryIds,
-                                          CategoryName = m.CategoryName,
+                                          CategoryId = m.CategoryId,
+                                         // CategoryName = m.CategoryName,
                                           ColorCode = m.ColorCode,
                                           Price = pl.Price,
                                           ImagePath = ((!string.IsNullOrEmpty(m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
@@ -2278,15 +2268,15 @@ namespace ShopNow.Controllers
             {
                 model.ProductLists = (from pl in db.Products
                                       join m in db.MasterProducts on pl.MasterProductId equals m.Id
-                                      where pl.ShopId == id && pl.Status == 0 && m.Name.ToLower().Contains(str) && (categoryId != "" ? m.CategoryIds == categoryId : true)
+                                      where pl.ShopId == shopId && pl.Status == 0 && m.Name.ToLower().Contains(str) && (categoryId != 0 ? m.CategoryId == categoryId : true)
                                       select new ShopDetails.ProductList
                                       {
                                           Id = pl.Id,
                                           Name = m.Name,
                                           ShopId = pl.ShopId,
                                           ShopName = pl.ShopName,
-                                          CategoryIds = m.CategoryIds,
-                                          CategoryName = m.CategoryName,
+                                          CategoryId = m.CategoryId,
+                                          //CategoryName = m.CategoryName,
                                           ColorCode = m.ColorCode,
                                           Price = pl.Price,
                                           ImagePath = ((!string.IsNullOrEmpty(m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
@@ -2347,8 +2337,8 @@ namespace ShopNow.Controllers
                                           Name = m.Name,
                                           ShopId = pl.ShopId,
                                           ShopName = pl.ShopName,
-                                          CategoryIds = m.CategoryIds,
-                                          CategoryName = m.CategoryName,
+                                          CategoryId = m.CategoryId,
+                                          //CategoryName = m.CategoryName,
                                           ColorCode = m.ColorCode,
                                           Price = pl.Price,
                                           ImagePath = m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23"),
@@ -2369,8 +2359,8 @@ namespace ShopNow.Controllers
                                           Name = m.Name,
                                           ShopId = pl.ShopId,
                                           ShopName = pl.ShopName,
-                                          CategoryIds = m.CategoryIds,
-                                          CategoryName = m.CategoryName,
+                                          CategoryId = m.CategoryId,
+                                         // CategoryName = m.CategoryName,
                                           //ColorCode = pl.ColorCode,
                                           Price = pl.Price,
                                           ImagePath = m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23"),
@@ -2396,7 +2386,7 @@ namespace ShopNow.Controllers
             double? varlatitude = latitude;
             int? varpage = page;
             int? varPagesize = pageSize;
-            var s = db.GetProductList(varlongitude, varlatitude, str, varpage, varPagesize).ToList();
+            var s = db.GetProductList(varlongitude, varlatitude, str, varpage, varPagesize);
           
 
             string queryOtherList = "SELECT  * " +
@@ -2511,7 +2501,7 @@ namespace ShopNow.Controllers
 
         }
 
-        public JsonResult GetShopCategoryList(string shopId, string categoryIds, string str = "", int page = 1, int pageSize = 20)
+        public JsonResult GetShopCategoryList(string shopId, string CategoryId, string str = "", int page = 1, int pageSize = 20)
         {
           //  var shid = db.Shops.Where(s => s.Id == shopId).FirstOrDefault();
             int count = 0;
@@ -2521,7 +2511,7 @@ namespace ShopNow.Controllers
             
             var skip = page-1;
             
-            //var model = db.GetShopCategoryProducts(shopId, categoryIds, str, skip, pageSize).ToList();
+            //var model = db.GetShopCategoryProducts(shopId, CategoryId, str, skip, pageSize).ToList();
             
 
             int CurrentPage = page;
@@ -2649,24 +2639,22 @@ namespace ShopNow.Controllers
         [HttpPost]
         public JsonResult UpdateReview(ShopReviewUpdateViewModel model)
         {
-            int errorCode = 0;
-            //var review = ClassCustomerReview.Get(model.Code);
             var review = db.CustomerReviews.FirstOrDefault(i => i.Id == model.Id);
             review.CustomerRemark = model.CustomerRemark;
             review.Rating = model.Rating;
-            ClassCustomerReview.Edit(review, out errorCode);
+            db.Entry(review).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
             return Json(new { message = "Successfully Updated to Rating!", Details = model });
 
         }
-        public JsonResult GetAllReview(int id, int customerId, int page = 1, int pageSize = 9)
+        public JsonResult GetAllReview(int shopId, int customerId, int page = 1, int pageSize = 9)
         {
             var model = new ReviewListViewModel();
             model.CustomerList = db.CustomerReviews
-                             .Where(i => i.Status == 0 && i.ShopId == id && i.CustomerId == customerId)
-                           .AsEnumerable()
+                             .Where(i => i.Status == 0 && i.ShopId == shopId && i.CustomerId == customerId)
                          .Select(i => new ReviewListViewModel.ReviewlList
                          {
-                             Id = Convert.ToInt32(i.Id),
+                             Id = i.Id,
                              ShopName = i.ShopName,
                              CustomerName = i.CustomerName,
                              CustomerRemark = i.CustomerRemark,
@@ -2674,11 +2662,10 @@ namespace ShopNow.Controllers
                          }).ToList();
 
             model.ReviewlLists = db.CustomerReviews
-                             .Where(i => i.Status == 0 && i.ShopId == id && i.CustomerId != customerId)
-                           .AsEnumerable()
+                             .Where(i => i.Status == 0 && i.ShopId == shopId && i.CustomerId != customerId)
                          .Select(i => new ReviewListViewModel.ReviewlList
                          {
-                             Id = Convert.ToInt32(i.Id),
+                             Id = i.Id,
                              ShopName = i.ShopName,
                              CustomerName = i.CustomerName,
                              CustomerRemark = i.CustomerRemark,
@@ -2700,12 +2687,12 @@ namespace ShopNow.Controllers
             var items = model.ReviewlLists.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
             var previous = CurrentPage - 1;
 
-            var previousurl = "http://192.168.0.111/WebAdmin/Api/GetAllReview?id=" + id + "&page=" + previous;
+            var previousurl = apipath + "/Api/GetAllReview?shopId=" + shopId + "&customerId=" + customerId + "&page=" + previous;
             var previousPage = CurrentPage > 1 ? previousurl : "No";
 
             var current = CurrentPage + 1;
 
-            var nexturl = "http://192.168.0.111/WebAdmin/Api/GetAllReview?id=" + id + "&page=" + current;
+            var nexturl = apipath + "/Api/GetAllReview?shopId=" + shopId + "&customerId=" + customerId + "&page=" + current;
             var nextPage = CurrentPage < TotalPages ? nexturl : "No";
             var paginationMetadata = new
             {
@@ -2947,28 +2934,28 @@ namespace ShopNow.Controllers
         {
             var model = new PlacesListView();
             string query = "SELECT top(6) * " +
-                               " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 0 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
+                               " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 1 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
                                " order by Rating";
             string querySuperMarketList = "SELECT top(6) * " +
-            " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 2 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
-            " order by Rating";
-            string queryGroceriesList = "SELECT top(6) * " +
-            " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 1 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
-            " order by Rating";
-            string queryHealthList = "SELECT top(6) * " +
             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 3 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
             " order by Rating";
-            string queryElectronicsList = "SELECT top(6) * " +
+            string queryGroceriesList = "SELECT top(6) * " +
+            " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 2 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
+            " order by Rating";
+            string queryHealthList = "SELECT top(6) * " +
             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 4 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
             " order by Rating";
-            string qServicesList = "SELECT top(6) * " +
+            string queryElectronicsList = "SELECT top(6) * " +
             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 5 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
+            " order by Rating";
+            string qServicesList = "SELECT top(6) * " +
+            " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 6 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
             " order by Rating";
             if (a == "-1")
             {
 
                 string queryOtherList = "SELECT top(6) * " +
-                " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 6 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
+                " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 7 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
                 " order by Rating";
 
 
@@ -2981,14 +2968,16 @@ namespace ShopNow.Controllers
         Name = i.Name,
         DistrictName = i.StreetName,
       //  Rating = RatingCalculation(i.Id),
-        ImagePath = i.ImagePath !=null? i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23"):"",
+        ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
         ShopCategoryId = i.ShopCategoryId,
         ShopCategoryName = i.ShopCategoryName,
         List = GetBannerImageList(i.Id),
         Latitude = i.Latitude,
         Longitude = i.Longitude,
         Status = i.Status,
-        isOnline = i.IsOnline
+        isOnline = i.IsOnline,
+        ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
+        Address = i.Address
     }).ToList();
 
                 model.SuperMarketList = db.Shops.SqlQuery(querySuperMarketList,
@@ -2998,14 +2987,16 @@ namespace ShopNow.Controllers
         Id = i.Id,
         Name = i.Name,
         DistrictName = i.StreetName,
-        ImagePath = i.ImagePath != null ? i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "",
+        ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
         ShopCategoryId = i.ShopCategoryId,
         ShopCategoryName = i.ShopCategoryName,
         List = GetBannerImageList(i.Id),
         Latitude = i.Latitude,
         Longitude = i.Longitude,
         Status = i.Status,
-        isOnline = i.IsOnline
+        isOnline = i.IsOnline,
+        ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
+        Address = i.Address
     }).ToList();
 
                 model.GroceriesList = db.Shops.SqlQuery(queryGroceriesList,
@@ -3016,14 +3007,16 @@ namespace ShopNow.Controllers
             Name = i.Name,
             DistrictName = i.StreetName,
             //Rating = RatingCalculation(i.Code),
-            ImagePath = i.ImagePath != null ? i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "",
+            ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
             ShopCategoryId = i.ShopCategoryId,
             ShopCategoryName = i.ShopCategoryName,
             List = GetBannerImageList(i.Id),
             Latitude = i.Latitude,
             Longitude = i.Longitude,
             Status = i.Status,
-            isOnline = i.IsOnline
+            isOnline = i.IsOnline,
+            ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
+            Address = i.Address
         }).ToList();
 
   
@@ -3034,14 +3027,16 @@ namespace ShopNow.Controllers
             Id = i.Id,
             Name = i.Name,
             DistrictName = i.StreetName,
-            ImagePath = i.ImagePath != null ? i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "",
+            ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
             ShopCategoryId = i.ShopCategoryId,
             ShopCategoryName = i.ShopCategoryName,
             List = GetBannerImageList(i.Id),
             Latitude = i.Latitude,
             Longitude = i.Longitude,
             Status = i.Status,
-            isOnline = i.IsOnline
+            isOnline = i.IsOnline,
+            ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
+            Address = i.Address
         }).ToList();
 
                 model.ElectronicsList = db.Shops.SqlQuery(queryElectronicsList,
@@ -3052,14 +3047,16 @@ namespace ShopNow.Controllers
            Name = i.Name,
            DistrictName = i.StreetName,
            //Rating = RatingCalculation(i.Code),
-           ImagePath = i.ImagePath != null ? i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "",
+           ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
            ShopCategoryId = i.ShopCategoryId,
            ShopCategoryName = i.ShopCategoryName,
            List = GetBannerImageList(i.Id),
            Latitude = i.Latitude,
            Longitude = i.Longitude,
            Status = i.Status,
-           isOnline = i.IsOnline
+           isOnline = i.IsOnline,
+           ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
+           Address = i.Address
        }).ToList();
 
 
@@ -3071,14 +3068,16 @@ namespace ShopNow.Controllers
         Name = i.Name,
         DistrictName = i.StreetName,
         //Rating = RatingCalculation(i.Code),
-        ImagePath = i.ImagePath != null ? i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "",
+        ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
         ShopCategoryId = i.ShopCategoryId,
         ShopCategoryName = i.ShopCategoryName,
         List = GetBannerImageList(i.Id),
         Latitude = i.Latitude,
         Longitude = i.Longitude,
         Status = i.Status,
-        isOnline = i.IsOnline
+        isOnline = i.IsOnline,
+        ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
+        Address = i.Address
     }).ToList();
 
     
@@ -3090,14 +3089,16 @@ namespace ShopNow.Controllers
         Id = i.Id,
         Name = i.Name,
         DistrictName = i.StreetName,
-        ImagePath = i.ImagePath != null ? i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "",
+        ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
         ShopCategoryId = i.ShopCategoryId,
         ShopCategoryName = i.ShopCategoryName,
         Latitude = i.Latitude,
         Longitude = i.Longitude,
         List = GetBannerImageList(i.Id),
         Status = i.Status,
-        isOnline = i.IsOnline
+        isOnline = i.IsOnline,
+        ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
+        Address = i.Address
     }).ToList();
 
                 return Json(model, JsonRequestBehavior.AllowGet);
@@ -3111,14 +3112,16 @@ namespace ShopNow.Controllers
         Name = i.Name,
         DistrictName = i.StreetName,
        // Rating = RatingCalculation(i.Code),
-        ImagePath = i.ImagePath != null ? i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "",
+        ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
         ShopCategoryId = i.ShopCategoryId,
         ShopCategoryName = i.ShopCategoryName,
         List = GetBannerImageList(i.Id),
         Latitude = i.Latitude,
         Longitude = i.Longitude,
         Status = i.Status,
-        isOnline = i.IsOnline
+        isOnline = i.IsOnline,
+        ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
+        Address = i.Address
     }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3132,14 +3135,16 @@ namespace ShopNow.Controllers
        Name = i.Name,
        DistrictName = i.StreetName,
        //Rating = RatingCalculation(i.Code),
-       ImagePath = i.ImagePath != null ? i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "",
+       ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
        ShopCategoryId = i.ShopCategoryId,
        ShopCategoryName = i.ShopCategoryName,
        List = GetBannerImageList(i.Id),// db.Banners.Where(j => j.Status == 0 && j.ShopCode == i.Code).ToList(),
        Latitude = i.Latitude,
        Longitude = i.Longitude,
        Status = i.Status,
-       isOnline = i.IsOnline
+       isOnline = i.IsOnline,
+       ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
+       Address = i.Address
    }).ToList();
 
                 return Json(model, JsonRequestBehavior.AllowGet);
@@ -3154,14 +3159,16 @@ namespace ShopNow.Controllers
           Name = i.Name,
           DistrictName = i.StreetName,
           //Rating = RatingCalculation(i.Code),
-          ImagePath = i.ImagePath != null ? i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "",
+          ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
           ShopCategoryId = i.ShopCategoryId,
           ShopCategoryName = i.ShopCategoryName,
           List = GetBannerImageList(i.Id),
           Latitude = i.Latitude,
           Longitude = i.Longitude,
           Status = i.Status,
-          isOnline = i.IsOnline
+          isOnline = i.IsOnline,
+          ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
+          Address = i.Address
       }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3176,14 +3183,16 @@ namespace ShopNow.Controllers
             Name = i.Name,
             DistrictName = i.StreetName,
            // Rating = RatingCalculation(i.Code),
-            ImagePath = i.ImagePath != null ? i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "",
+            ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
             ShopCategoryId = i.ShopCategoryId,
             ShopCategoryName = i.ShopCategoryName,
             List = GetBannerImageList(i.Id),
             Latitude = i.Latitude,
             Longitude = i.Longitude,
             Status = i.Status,
-            isOnline = i.IsOnline 
+            isOnline = i.IsOnline,
+            ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
+            Address = i.Address
         }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3197,14 +3206,16 @@ namespace ShopNow.Controllers
                 Name = i.Name,
                 DistrictName = i.StreetName,
                 //Rating = RatingCalculation(i.Code),
-                    ImagePath = i.ImagePath != null ? i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "",
+                    ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                     ShopCategoryId = i.ShopCategoryId,
                 ShopCategoryName = i.ShopCategoryName,
                     List = GetBannerImageList(i.Id),
                     Latitude = i.Latitude,
                 Longitude = i.Longitude,
                 Status = i.Status,
-                isOnline = i.IsOnline
+                isOnline = i.IsOnline,
+                    ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
+                    Address = i.Address
                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3218,7 +3229,7 @@ namespace ShopNow.Controllers
         Name = i.Name,
         DistrictName = i.StreetName,
         //Rating = RatingCalculation(i.Code),
-        ImagePath = i.ImagePath != null ? i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "",
+        ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
 
         ShopCategoryId = i.ShopCategoryId,
         ShopCategoryName = i.ShopCategoryName,
@@ -3233,7 +3244,7 @@ namespace ShopNow.Controllers
             else
             {
                 string queryOtherList = "SELECT top(6) * " +
-              " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 6 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0 " +
+              " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 7 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0 " +
               " order by Rating";
     
                 model.OtherList = db.Shops.SqlQuery(queryOtherList,
@@ -3244,14 +3255,16 @@ namespace ShopNow.Controllers
         Name = i.Name,
         DistrictName = i.StreetName,
         //Rating = RatingCalculation(i.Code),
-        ImagePath = i.ImagePath != null ? i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "",
+        ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
         ShopCategoryId = i.ShopCategoryId,
         ShopCategoryName = i.ShopCategoryName,
         List = GetBannerImageList(i.Id),
         Latitude = i.Latitude,
         Longitude = i.Longitude,
         Status = i.Status,
-        isOnline=i.IsOnline
+        isOnline=i.IsOnline,
+        ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
+        Address = i.Address
     }).ToList();
 
                 return Json(model, JsonRequestBehavior.AllowGet);
@@ -3812,7 +3825,7 @@ namespace ShopNow.Controllers
                 var d = DateTime.Now.Date.Date;
             var teenStudentsName = (from s in db.Banners
             where (s.Status== 0 || s.Status == 6) && s.ShopId == id && (DbFunctions.TruncateTime(s.FromDate) <= DbFunctions.TruncateTime(DateTime.Now) && DbFunctions.TruncateTime(s.Todate) >= DbFunctions.TruncateTime(DateTime.Now))
-            select  new BannerImages { Bannerpath = (s.BannerPath !=null)?s.BannerPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23"):"", ShopId = s.ShopId, ProductName = s.MasterProductName, ShopName = s.ShopName, ProductId = s.MasterProductId }).ToList();
+            select  new BannerImages { Bannerpath = (s.BannerPath !=null)?s.BannerPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23"):"", ShopId = s.ShopId, ProductId = s.MasterProductId }).ToList();
           
                 return teenStudentsName;
             }

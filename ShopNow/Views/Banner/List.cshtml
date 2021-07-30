@@ -30,8 +30,8 @@
 columns.Add()
 .Encoded(false)
 .Sanitized(false)
-.RenderValueAs(s => Html.ActionLink("Edit", "Edit", new { code = ShopNow.Helpers.AdminHelpers.ECodeInt(s.Id) }, new { @class = "btn btn-warning btn-vsm mr-1", @Style = "padding:3px 26px" }).ToHtmlString()
-+ Html.ActionLink("Delete", "Delete", new { code = ShopNow.Helpers.AdminHelpers.ECodeInt(s.Id) }, new { @class = "btn btn-danger btn-vsm", @style = "padding:3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(20);
+.RenderValueAs(s => Html.ActionLink("Edit", "Edit", new { id = ShopNow.Helpers.AdminHelpers.ECodeInt(s.Id) }, new { @class = "btn btn-warning btn-vsm mr-1", @Style = "padding:3px 26px" }).ToHtmlString()
++ Html.ActionLink("Delete", "Delete", new { id = s.Id }, new { @class = "btn btn-danger btn-vsm", @style = "padding:3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(20);
 }).WithPaging(10).Sortable(true)
                 </div>
             </div>
