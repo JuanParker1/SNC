@@ -345,6 +345,7 @@
     <Compile Include="Controllers\PortionController.cs" />
     <Compile Include="Controllers\ProductSpecificationController.cs" />
     <Compile Include="Controllers\ProductTypeController.cs" />
+    <Compile Include="Controllers\PushNotificationController.cs" />
     <Compile Include="Controllers\RefundController.cs" />
     <Compile Include="Controllers\SalesController.cs" />
     <Compile Include="Controllers\ShopDiscountCategoryController.cs" />
@@ -2994,6 +2995,7 @@
     <Content Include="Views\Product\ElectronicList.cshtml" />
     <Content Include="Views\DiscountCategory\List.cshtml" />
     <Content Include="Views\Shop\CreditList.cshtml" />
+    <Content Include="Views\PushNotification\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

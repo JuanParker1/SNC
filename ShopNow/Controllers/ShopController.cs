@@ -109,22 +109,22 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var shopduplicateCount = db.Shops.Where(m => m.GooglePlaceId == model.GooglePlaceId ).Count();
-            var shopbeforeApprovalCount = db.Shops.Where(m => m.GooglePlaceId == model.GooglePlaceId && m.Status == 0).Count();
-            if (shopduplicateCount != 0)
-            {
-                ViewBag.shopduplicateCount = shopduplicateCount;
-                return View(model);
-            }
-            if (shopbeforeApprovalCount > 0)
-            {
-                ViewBag.shopbeforeApprovalCount = shopbeforeApprovalCount;
-                var shopownerphonenumber = db.Shops.Where(m => m.GooglePlaceId == model.GooglePlaceId && m.Status == 0).Select(i => i.OwnerPhoneNumber).ToList();
-                var shopname = db.Shops.Where(m => m.GooglePlaceId == model.GooglePlaceId && m.Status == 0).Select(i => i.Name).ToList();
-                ViewBag.shopownerphonenumber = shopownerphonenumber[0].ToString();
-                ViewBag.shopname = shopname[0].ToString();
-                return View(model);
-            }
+            //var shopduplicateCount = db.Shops.Where(m => m.GooglePlaceId == model.GooglePlaceId ).Count();
+            //var shopbeforeApprovalCount = db.Shops.Where(m => m.GooglePlaceId == model.GooglePlaceId && m.Status == 0).Count();
+            //if (shopduplicateCount != 0)
+            //{
+            //    ViewBag.shopduplicateCount = shopduplicateCount;
+            //    return View(model);
+            //}
+            //if (shopbeforeApprovalCount > 0)
+            //{
+            //    ViewBag.shopbeforeApprovalCount = shopbeforeApprovalCount;
+            //    var shopownerphonenumber = db.Shops.Where(m => m.GooglePlaceId == model.GooglePlaceId && m.Status == 0).Select(i => i.OwnerPhoneNumber).ToList();
+            //    var shopname = db.Shops.Where(m => m.GooglePlaceId == model.GooglePlaceId && m.Status == 0).Select(i => i.Name).ToList();
+            //    ViewBag.shopownerphonenumber = shopownerphonenumber[0].ToString();
+            //    ViewBag.shopname = shopname[0].ToString();
+            //    return View(model);
+            //}
 
             var customer = db.Customers.FirstOrDefault(i => i.Id == user.Id);
             var shop = _mapper.Map<ShopRegisterViewModel, Shop>(model);
