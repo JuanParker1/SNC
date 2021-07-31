@@ -1,13 +1,16 @@
 ﻿@model ShopNow.ViewModels.CartListViewModel
 @{
     ViewBag.Title = "PickupSlip";
-}
+} 
+
 <title>ShopNowChat | Pickup Slip</title>
+
 <style>
     .table th, .table td {
         padding: 0.25rem;
     }
 </style>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12 text-center">
@@ -24,7 +27,7 @@
                             <tbody>
                                 <tr>
                                     <td><strong>Order No. & Time</strong></td>
-                                    <td>@Model.OrderNo (@Model.DateEncoded.ToString("dd-MM-yyyy hh:mm tt"))</td>
+                                    <td>@Model.OrderNumber (@Model.DateEncoded.ToString("dd-MM-yyyy hh:mm tt"))</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Customer Name</strong></td>
@@ -61,7 +64,6 @@
                                         {
                                             <td>N/A</td>
                                         }
-
                                         <td>@item.SinglePrice</td>
                                         <td>@item.Qty</td>
                                         <td id="amount">@item.Price</td>
