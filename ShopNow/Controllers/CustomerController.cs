@@ -13,24 +13,24 @@ using System.Web.Mvc;
 namespace ShopNow.Controllers
 {
     public class CustomerController : Controller
-    {            
-            private sncEntities db = new sncEntities();
-            private IMapper _mapper;
-            private MapperConfiguration _mapperConfiguration;
-            UploadContent uc = new UploadContent();
+    {
+        private sncEntities db = new sncEntities();
+        private IMapper _mapper;
+        private MapperConfiguration _mapperConfiguration;
+        UploadContent uc = new UploadContent();
 
         public CustomerController()
+        {
+            _mapperConfiguration = new MapperConfiguration(config =>
             {
-                _mapperConfiguration = new MapperConfiguration(config =>
-                {
-                    config.CreateMap<Customer, CustomerListViewModel.CustomerList>();
-                    config.CreateMap<Customer, CustomerDetailsViewModel>();
-                    config.CreateMap<CustomerEditViewModel, Customer>();
-                    config.CreateMap<Customer, CustomerEditViewModel>();
-                    config.CreateMap<CustomerAddress, CustomerDetailsViewModel.AddressList>();
-                });
-                _mapper = _mapperConfiguration.CreateMapper();
-            }
+                config.CreateMap<Customer, CustomerListViewModel.CustomerList>();
+                config.CreateMap<Customer, CustomerDetailsViewModel>();
+                config.CreateMap<CustomerEditViewModel, Customer>();
+                config.CreateMap<Customer, CustomerEditViewModel>();
+                config.CreateMap<CustomerAddress, CustomerDetailsViewModel.AddressList>();
+            });
+            _mapper = _mapperConfiguration.CreateMapper();
+        }
 
         [AccessPolicy(PageCode = "SHNCUSL001")]
         public ActionResult List()
@@ -63,7 +63,7 @@ namespace ShopNow.Controllers
                 ImagePath = i.ImagePath,
                 PhoneNumber = i.PhoneNumber,
                 StateName = i.StateName
-            }).OrderBy(i=> i.Name).ToList();
+            }).OrderBy(i => i.Name).ToList();
             return View(model);
         }
 
@@ -73,7 +73,7 @@ namespace ShopNow.Controllers
             var dId = AdminHelpers.DCodeInt(id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            if (dId==0)
+            if (dId == 0)
                 return HttpNotFound();
             var customer = db.Customers.Where(m => m.Id == dId).FirstOrDefault();
             var model = _mapper.Map<Customer, CustomerDetailsViewModel>(customer);
@@ -87,7 +87,7 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var dId = AdminHelpers.DCodeInt(id);
-            if (dId==0)
+            if (dId == 0)
                 return HttpNotFound();
             var customer = db.Customers.Where(m => m.Id == dId).FirstOrDefault();
             var model = _mapper.Map<Customer, CustomerEditViewModel>(customer);
@@ -106,9 +106,9 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNCUSA006")]
-        public ActionResult Active(int code)
+        public ActionResult Active(int id)
         {
-            var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();
+            var customer = db.Customers.Where(m => m.Id == id).FirstOrDefault();
             customer.Status = 0;
             db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
@@ -132,7 +132,6 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNCUSVAI007")]
         public JsonResult VerifyAadharImage(int code)
         {
-           
             var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();
             bool IsAdded = false;
             string message = "";
@@ -178,7 +177,6 @@ namespace ShopNow.Controllers
                 db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
-            
             return Json(new { IsAdded = IsAdded, message = message }, JsonRequestBehavior.AllowGet);
         }
 
@@ -216,7 +214,7 @@ namespace ShopNow.Controllers
             {
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
-            else if(customer.AadharVerify == false && customer.ImageAadharPath == "Rejected")
+            else if (customer.AadharVerify == false && customer.ImageAadharPath == "Rejected")
             {
                 return Json(new { data = customer.ImageAadharPath, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
             }
@@ -239,7 +237,7 @@ namespace ShopNow.Controllers
                 DistrictName = i.DistrictName,
                 StateName = i.StateName,
                 ImagePath = i.ImagePath
-            }).OrderBy(i=>i.Name).ToList();
+            }).OrderBy(i => i.Name).ToList();
 
             return View(model.List);
         }
@@ -264,11 +262,11 @@ namespace ShopNow.Controllers
                 IsAdded = true;
                 message = customer.Name + " Added Successfully";
             }
-            else if(customer != null && customer.Position == 4)
+            else if (customer != null && customer.Position == 4)
             {
                 message1 = customer.Name + " Already Exist";
             }
-            
+
             return Json(new { IsAdded = IsAdded, message = message, message1 = message1 }, JsonRequestBehavior.AllowGet);
         }
 

@@ -2,7 +2,9 @@
 @{
     ViewBag.Title = "Cart Details";
 }
+
 <title>ShopNow | Cart Details</title>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6">
@@ -20,9 +22,9 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-9">
-                            <input type="hidden" name="Id" id="Code" value="@Model.Id" />
+                            <input type="hidden" name="Id" id="Id" value="@Model.Id" />
                             <input type="hidden" name="CustomerId" id="CustomerId" value="@Model.CustomerId" />
-                            <input type="hidden" name="OrderNo" id="OrderNo" value="@Model.OrderNo" />
+                            <input type="hidden" name="OrderNumber" id="OrderNumber" value="@Model.OrderNumber" />
                             <input type="hidden" name="Status" id="Status" value="@Model.CartStatus" />
                             <div class="row">
                                 <div class="col-md-4">
@@ -41,7 +43,7 @@
                             {
                                 <button type="button" class="btn btn-sm btn-success mr-3" id="Accept">Accept</button>
                                 <button type="button" class="btn btn-sm btn-danger" id="Cancel">Cancel</button>
-                                <a href="~/Cart/PickupSlip?orderno=@Model.OrderNo&id=@Model.Id" class="btn btn-secondary btn-sm" style="padding: 3px 16px"><span><i class="fa fa-print mr-1" aria-hidden="true"></i></span> Pickup Slip</a>
+                                <a href="~/Cart/PickupSlip?ordernumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-secondary btn-sm" style="padding: 3px 16px"><span><i class="fa fa-print mr-1" aria-hidden="true"></i></span> Pickup Slip</a>
                             }
                             else if (Model.CartStatus == 7)
                             {
@@ -55,17 +57,17 @@
                             else if (Model.CartStatus == 4 && Model.isAssign == 1 && Model.OnWork == 0)
                             {
                                 <span class="text-success">Assigned for Delivery</span>
-                                <a href="Cart/DeliveryBoyAccept?OrderNo=@Model.OrderNo&id=@Model.Id" class="btn btn-info mt-2">Delivery Boy Accept</a>
+                                <a href="Cart/DeliveryBoyAccept?ordernumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-info mt-2">Delivery Boy Accept</a>
                             }
                             else if (Model.CartStatus == 4 && Model.isAssign == 1 && Model.OnWork == 1)
                             {
                                 <span class="text-success">Waiting for Pickup</span>
-                                <a href="Cart/DeliveryBoyPickup?OrderNo=@Model.OrderNo&id=@Model.Id" class="btn btn-info mt-2">Delivery Boy Pickup</a>
+                                <a href="Cart/DeliveryBoyPickup?ordernumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-info mt-2">Delivery Boy Pickup</a>
                             }
                             else if (Model.CartStatus == 5)
                             {
                                 <span class="text-success">On the Way to Delivery</span>
-                                <a href="Cart/MarkAsDelivered?OrderNo=@Model.OrderNo&id=@Model.Id" class="btn btn-info mt-2">Mark as Delivered</a>
+                                <a href="Cart/MarkAsDelivered?ordernumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-info mt-2">Mark as Delivered</a>
                             }
                             else if (Model.CartStatus == 6)
                             {
@@ -127,6 +129,7 @@
         </div>
     </div>
 </div>
+
 @section Scripts
 {
     <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
@@ -162,10 +165,10 @@
                 });
             }).draw();
 
-            var orderNo = $("#OrderNo").val();
+            var ordernumber = $("#OrderNumber").val();
             var customerId = $('#CustomerId').val();
             $("#Accept").click(function () {
-                $.getJSON("/Cart/Accept?orderNo=" + orderNo + "&customerId=" + customerId, function (data) {
+                $.getJSON("/Cart/Accept?ordernumber=" + ordernumber + "&customerId=" + customerId, function (data) {
                     if (data.message != null) {
                         swal({
                             title: data.message,
@@ -177,11 +180,12 @@
                     }
                 });
             });
+
             $("#Cancel").click(function () {
-                var orderNo = $("#OrderNo").val();
+                var ordernumber = $("#OrderNumber").val();
                 var customerId = $('#CustomerId').val();
                 var status = $('#Status').val();
-                $.getJSON("/Cart/Cancel?orderNo=" + orderNo + "&customerId=" + customerId + "&status=" + status, function (data) {
+                $.getJSON("/Cart/Cancel?ordernumber=" + ordernumber + "&customerId=" + customerId + "&status=" + status, function (data) {
                     if (data.message != null) {
                         swal({
                             title: data.message,
@@ -193,13 +197,12 @@
                     }
                 });
             });
+
             $("#Assign").click(function () {
-                var code = $("#OrderNo").val();
-                window.location.href = "/Cart/AssignDeliveryBoy?code=" + code;
+                var id = $("#OrderNumber").val();
+                window.location.href = "/Cart/AssignDeliveryBoy?id=" + id;
             });
         });
-
     </script>
-
 }
 
