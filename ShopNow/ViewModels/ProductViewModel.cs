@@ -33,7 +33,7 @@ namespace ShopNow.ViewModels
         public string MasterProductName { get; set; }
         public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public string CategoryId { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public int BrandId { get; set; }
         public string BrandName { get; set; }
@@ -67,25 +67,6 @@ namespace ShopNow.ViewModels
         public double TaxPercentage { get; set; }
         public double SpecialCostOfDelivery { get; set; }
         public double LoyaltyPoints { get; set; }
-        //public List<MedicalStockList> MedicalStockLists { get; set; }
-        //public class MedicalStockList
-        //{
-        //    public string ProductId { get; set; }
-        //    public string ProductName { get; set; }
-        //    public double Stock { get; set; }
-        //    public string SupplierName { get; set; }
-        //    public double MRP { get; set; }
-        //    public double SalePrice { get; set; }
-        //    public double TaxPercentage { get; set; }
-        //    public double DiscountPercentage { get; set; }
-        //    public double LoyaltyPointsper100Value { get; set; }
-        //    public double MinimumLoyaltyReducationPercentage { get; set; }
-        //    public double SpecialCostOfDelivery { get; set; }
-        //    public int OutLetId { get; set; }
-        //    public double SpecialPrice { get; set; }
-        //    public int MinSaleQty { get; set; }
-        //    public Nullable<int> productid { get; set; }
-        //}
     }
 
     public class MedicalEditViewModel
@@ -130,27 +111,6 @@ namespace ShopNow.ViewModels
         public double TaxPercentage { get; set; }
         public double SpecialCostOfDelivery { get; set; }
         public double LoyaltyPoints { get; set; }
-
-        //public List<MedicalStockList> MedicalStockLists { get; set; }
-        //public class MedicalStockList
-        //{
-             
-        //    public string ProductCode { get; set; }
-        //    public string ProductName { get; set; }
-        //    public double Stock { get; set; }
-        //    public string SupplierName { get; set; }
-        //    public double MRP { get; set; }
-        //    public double SalePrice { get; set; }
-        //    public double TaxPercentage { get; set; }
-        //    public double DiscountPercentage { get; set; }
-        //    public double LoyaltyPointsper100Value { get; set; }
-        //    public double MinimumLoyaltyReducationPercentage { get; set; }
-        //    public double SpecialCostOfDelivery { get; set; }
-        //    public int OutLetId { get; set; }
-        //    public double SpecialPrice { get; set; }
-        //    public int MinSaleQty { get; set; }
-        //    public Nullable<int> productid { get; set; }
-        //}
     }
 
     public class ElectronicListViewModel

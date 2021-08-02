@@ -57,17 +57,17 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Category Name</strong></label>
-                                        <select name="CategoryIds" id="CategoryIds" class="form-control" multiple></select>
+                                        <select name="CategoryId" id="CategoryId" class="form-control"></select>
                                         <input type="hidden" name="CategoryName" id="CategoryName" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Sub Category I Name</strong></label>
-                                        <select name="SubCategoryIds" id="SubCategoryIds" class="form-control" multiple></select>
+                                        <select name="SubCategoryId" id="SubCategoryId" class="form-control"></select>
                                         <input type="hidden" name="SubCategoryName" id="SubCategoryName" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Sub Category II Name</strong></label>
-                                        <select name="NextSubCategoryIds" id="NextSubCategoryIds" class="form-control" multiple></select>
+                                        <select name="NextSubCategoryId" id="NextSubCategoryId" class="form-control"></select>
                                         <input type="hidden" name="NextSubCategoryName" id="NextSubCategoryName" />
                                     </div>
                                     <div class="col-md-3">
@@ -236,7 +236,7 @@
                 $('input[name="BrandName"]').val(e.params.data.text);
             });
            
-            $('#CategoryIds').select2({
+            $('#CategoryId').select2({
                 placeholder: "Search Category",
                 ajax: {
                     url: "/MasterProduct/GetCategorySelect2",
@@ -251,8 +251,8 @@
                     $('input[name="CategoryName"]').val(e.params.data.text);
                     setSubCategories();
                 });
-            $('#SubCategoryIds').select2({});
-            $('#NextSubCategoryIds').select2({});
+            $('#SubCategoryId').select2({});
+            $('#NextSubCategoryId').select2({});
             //$('#SubCategoryIds').select2({
             //    placeholder: "Search I Sub Category",
             //    ajax: {
@@ -389,10 +389,10 @@
 
         });
         function setSubCategories() {
-            $('#SubCategoryIds').val('').trigger('change');
-            $('#NextSubCategoryIds').val('').trigger('change');
-            var category_selected_values = $("#CategoryIds").val();
-            $('#SubCategoryIds').select2({
+            $('#SubCategoryId').val('').trigger('change');
+            $('#NextSubCategoryId').val('').trigger('change');
+            var category_selected_values = $("#CategoryId").val();
+            $('#SubCategoryId').select2({
                 placeholder: "Search Subcategory1",
                 ajax: {
                     url: "/MasterProduct/GetSubCategorySelect2?categoryIds=" + category_selected_values,
@@ -409,9 +409,9 @@
             });
         }
         function setNextSubCategories() {
-            $('#NextSubCategoryIds').val('').trigger('change');
-            var subcategory_selected_values = $("#SubCategoryIds").val();
-            $('#NextSubCategoryIds').select2({
+            $('#NextSubCategoryId').val('').trigger('change');
+            var subcategory_selected_values = $("#SubCategoryId").val();
+            $('#NextSubCategoryId').select2({
                 placeholder: "Search Subcategory2",
                 ajax: {
                     url: "/MasterProduct/GetNextSubCategorySelect2?subcategoryIds=" + subcategory_selected_values,
