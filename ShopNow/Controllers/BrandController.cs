@@ -49,7 +49,7 @@ namespace ShopNow.Controllers
             bool IsAdded = false;
             string message = "";
             string message1 = "";
-            var brandname = db.Brands.FirstOrDefault(i => i.Name == brand.Name && i.ProductTypeId == brand.ProductTypeId && i.Status == 0); //Brand.GetNameType(name, type);
+            var brandname = db.Brands.FirstOrDefault(i => i.Name == brand.Name && i.Status == 0);
             if (brandname == null)
             {
                 brand.CreatedBy = user.Name;
@@ -79,8 +79,6 @@ namespace ShopNow.Controllers
             if (brand != null)
             {
                 brand.Name = brandmodel.Name;
-                brand.ProductTypeId = brandmodel.ProductTypeId;
-                brand.ProductTypeName = brandmodel.ProductTypeName;
                 brand.UpdatedBy = user.Name;
                 brand.DateUpdated = DateTime.Now;
                 db.Entry(brand).State = System.Data.Entity.EntityState.Modified;
@@ -211,7 +209,6 @@ namespace ShopNow.Controllers
                         db.Brands.Add(new Brand
                         {
                             Name = row[model.Name].ToString(),
-                            ProductTypeId = model.ProductType,
                             Status = 0,
                             DateEncoded = DateTime.Now,
                             DateUpdated = DateTime.Now,

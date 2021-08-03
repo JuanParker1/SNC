@@ -15,11 +15,11 @@ namespace ShopNow.Models
     public partial class ProductSpecificationItem
     {
         public int Id { get; set; }
-        public int ProductId { get; set; }
+        public long ProductId { get; set; }
         public string ProductName { get; set; }
         public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public int MasterProductId { get; set; }
+        public long MasterProductId { get; set; }
         public string MasterProductName { get; set; }
         public int SpecificationId { get; set; }
         public string SpecificationName { get; set; }

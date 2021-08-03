@@ -1131,8 +1131,6 @@ namespace ShopNow.Controllers
             {
                 Brand br = new Brand();
                 br.Name = BrandName;
-                br.ProductTypeId = ProductType;
-               // br.Code = _generatedCode("BRA");
                 br.Status = 0;
                 br.DateEncoded = DateTime.Now;
                 br.DateUpdated = DateTime.Now;
@@ -1812,7 +1810,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNMPRMC007")]
         public async Task<JsonResult> GetMedicalBrandSelect2(string q = "")
         {
-            var model = await _db.Brands.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 3).Select(i => new
+            var model = await _db.Brands.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
             {
                 id = i.Id,
                 text = i.Name
@@ -1824,7 +1822,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "")]
         public async Task<JsonResult> GetFMCGBrandSelect2(string q = "")
         {
-            var model = await _db.Brands.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 2).Select(i => new
+            var model = await _db.Brands.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
             {
                 id = i.Id,
                 text = i.Name
@@ -2265,8 +2263,6 @@ namespace ShopNow.Controllers
             {
                 Brand br = new Brand();
                 br.Name = BrandName;
-                br.ProductTypeId = ProductTypeId;
-                br.ProductTypeName = ProductTypeName;
                 br.Status = 0;
                 br.DateEncoded = DateTime.Now;
                 br.DateUpdated = DateTime.Now;

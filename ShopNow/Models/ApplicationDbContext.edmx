@@ -135,8 +135,6 @@
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
-          <Property Name="ProductTypeId" Type="int" Nullable="false" />
-          <Property Name="ProductTypeName" Type="nvarchar" MaxLength="50" />
           <Property Name="CreatedBy" Type="nvarchar(max)" />
           <Property Name="UpdatedBy" Type="nvarchar(max)" />
         </EntityType>
@@ -724,11 +722,11 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="ProductId" Type="bigint" Nullable="false" />
           <Property Name="ProductName" Type="nvarchar(max)" />
           <Property Name="ShopId" Type="int" Nullable="false" />
           <Property Name="ShopName" Type="nvarchar(max)" />
-          <Property Name="MasterProductId" Type="int" Nullable="false" />
+          <Property Name="MasterProductId" Type="bigint" Nullable="false" />
           <Property Name="MasterProductName" Type="nvarchar(max)" />
           <Property Name="SpecificationId" Type="int" Nullable="false" />
           <Property Name="SpecificationName" Type="nvarchar(max)" />
@@ -747,7 +745,7 @@
           <Property Name="Value" Type="nvarchar(max)" />
           <Property Name="SpecificationId" Type="int" Nullable="false" />
           <Property Name="SpecificationName" Type="nvarchar(max)" />
-          <Property Name="MasterProductId" Type="int" Nullable="false" />
+          <Property Name="MasterProductId" Type="bigint" Nullable="false" />
           <Property Name="MasterProductName" Type="nvarchar(max)" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="CreatedBy" Type="nvarchar(max)" />
@@ -1015,18 +1013,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </Principal>
             <Dependent Role="Banners">
               <PropertyRef Name="PaymentId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Brands_ProductType">
-          <End Role="ProductType" Type="Self.ProductType" Multiplicity="1" />
-          <End Role="Brands" Type="Self.Brands" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ProductType">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Brands">
-              <PropertyRef Name="ProductTypeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1412,10 +1398,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             <End Role="Payments" EntitySet="Payments" />
             <End Role="Banners" EntitySet="Banners" />
           </AssociationSet>
-          <AssociationSet Name="FK_Brands_ProductType" Association="Self.FK_Brands_ProductType">
-            <End Role="ProductType" EntitySet="ProductType" />
-            <End Role="Brands" EntitySet="Brands" />
-          </AssociationSet>
           <AssociationSet Name="FK_CustomerAddresses_Customers" Association="Self.FK_CustomerAddresses_Customers">
             <End Role="Customers" EntitySet="Customers" />
             <End Role="CustomerAddresses" EntitySet="CustomerAddresses" />
@@ -1636,11 +1618,8 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="ProductTypeId" Type="Int32" Nullable="false" />
-          <Property Name="ProductTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="ProductType" Relationship="Self.FK_Brands_ProductType" FromRole="Brands" ToRole="ProductType" />
         </EntityType>
         <EntityType Name="Category">
           <Key>
@@ -2251,11 +2230,11 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="ProductId" Type="Int64" Nullable="false" />
           <Property Name="ProductName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ShopId" Type="Int32" Nullable="false" />
           <Property Name="ShopName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="MasterProductId" Type="Int32" Nullable="false" />
+          <Property Name="MasterProductId" Type="Int64" Nullable="false" />
           <Property Name="MasterProductName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="SpecificationId" Type="Int32" Nullable="false" />
           <Property Name="SpecificationName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -2274,7 +2253,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="Value" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="SpecificationId" Type="Int32" Nullable="false" />
           <Property Name="SpecificationName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="MasterProductId" Type="Int32" Nullable="false" />
+          <Property Name="MasterProductId" Type="Int64" Nullable="false" />
           <Property Name="MasterProductName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -2288,7 +2267,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Brands" Relationship="Self.FK_Brands_ProductType" FromRole="ProductType" ToRole="Brands" />
           <NavigationProperty Name="NextSubCategories" Relationship="Self.FK_NextSubCategories_ProductType" FromRole="ProductType" ToRole="NextSubCategories" />
           <NavigationProperty Name="Products" Relationship="Self.FK_Products_ProductType" FromRole="ProductType" ToRole="Products" />
           <NavigationProperty Name="SubCategories" Relationship="Self.FK_SubCategories_ProductType" FromRole="ProductType" ToRole="SubCategories" />
@@ -2547,18 +2525,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </Principal>
             <Dependent Role="Banners">
               <PropertyRef Name="PaymentId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Brands_ProductType">
-          <End Role="ProductType" Type="Self.ProductType" Multiplicity="1" />
-          <End Role="Brands" Type="Self.Brand" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ProductType">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Brands">
-              <PropertyRef Name="ProductTypeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2850,10 +2816,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <AssociationSet Name="FK_Banners_Payments" Association="Self.FK_Banners_Payments">
             <End Role="Payments" EntitySet="Payments" />
             <End Role="Banners" EntitySet="Banners" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Brands_ProductType" Association="Self.FK_Brands_ProductType">
-            <End Role="ProductType" EntitySet="ProductTypes" />
-            <End Role="Brands" EntitySet="Brands" />
           </AssociationSet>
           <AssociationSet Name="FK_SubCategories_Categories" Association="Self.FK_SubCategories_Categories">
             <End Role="Categories" EntitySet="Categories" />
@@ -3213,8 +3175,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
                 <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-                <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
-                <ScalarProperty Name="ProductTypeName" ColumnName="ProductTypeName" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
               </MappingFragment>
