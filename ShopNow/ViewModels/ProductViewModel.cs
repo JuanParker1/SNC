@@ -71,7 +71,7 @@ namespace ShopNow.ViewModels
 
     public class MedicalEditViewModel
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
         public int MasterProductId { get; set; }
         public string MasterProductName { get; set; }

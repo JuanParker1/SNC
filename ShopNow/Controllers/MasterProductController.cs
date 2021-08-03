@@ -385,8 +385,6 @@ namespace ShopNow.Controllers
                             }
                         });
 
-                        // reader.IsFirstRowAsColumnNames = true;
-
                         reader.Close();
 
                         model.DataTable = result.Tables[0];
@@ -479,7 +477,6 @@ namespace ShopNow.Controllers
                     }
                 }
             }
-
             return View();
         }
 
@@ -715,13 +712,24 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNMPRML006")]
         public ActionResult MedicalList()
         {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             if (Session["USER"] == null)
             {
                 return RedirectToAction("LogOut", "Home");
             }
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            var List = (from mp in _db.MasterProducts select mp).OrderBy(mp => mp.Name).Where(mp => mp.Status == 0 && mp.ProductTypeId == 3).ToList();
+            var List = _db.MasterProducts
+                        .OrderBy(mp => mp.Name)
+                        .Where(mp => mp.Status == 0 && mp.ProductTypeId == 3)
+                        .Select(i => new MasterProductMedicalListViewModel.MasterProductMedicalList
+                        {
+                            Id = i.Id,
+                            Name = i.Name,
+                            BrandName = i.BrandName,  
+                      //      CategoryName = _db.Categories.FirstOrDefault(a=> a.Id == a.CategoryId).Name,
+                            DrugCompoundDetailName = i.DrugCompoundDetailName,
+                            ProductTypeName = i.ProductTypeName
+                        }).ToList();
             return View(List);
         }
 
@@ -746,8 +754,6 @@ namespace ShopNow.Controllers
                 ViewBag.ErrorMessage = model.Name + " Already Exist";
                 return View();
             }
-
-
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var master = _mapper.Map<MasterMedicalCreateViewModel, MasterProduct>(model);
             master.CreatedBy = user.Name;
@@ -761,7 +767,6 @@ namespace ShopNow.Controllers
             try
             {
                 long ticks = DateTime.Now.Ticks;
-
                 if (model.DrugCompoundDetailIds != null)
                 {
                     master.DrugCompoundDetailIds = String.Join(",", model.DrugCompoundDetailIds);
@@ -825,7 +830,6 @@ namespace ShopNow.Controllers
                 _db.MasterProducts.Add(master);
                 _db.SaveChanges();
                 ViewBag.Message = model.Name + " Saved Successfully!";
-
             }
             catch (AmazonS3Exception amazonS3Exception)
             {

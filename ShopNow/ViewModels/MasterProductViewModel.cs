@@ -41,12 +41,13 @@ namespace ShopNow.ViewModels
         public int maxRows { get; set; }
         public class MasterProductList
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
             public string Name { get; set; }
             public string CategoryName { get; set; }
             public string BrandName { get; set; }
             public string ProductType { get; set; }
-
+            public string DrugCompoundDetailName { get; set; }
+            public string ProductTypeName { get; set; }
         }
         public List<PendingList> Lists { get; set; }
         public class PendingList
@@ -66,6 +67,26 @@ namespace ShopNow.ViewModels
         }
     }
   
+    public class MasterProductMedicalListViewModel
+    {
+        public List<MasterProductMedicalList> List { get; set; }
+        public int CurrentPageIndex { get; set; }
+        public int ItemCount { get; set; }
+        public int PageCount { get; set; }
+        public int maxRows { get; set; }
+        public class MasterProductMedicalList
+        {
+            public long Id { get; set; }
+            public string Name { get; set; }
+            public string CategoryName { get; set; }
+            public string BrandName { get; set; }
+            public string ProductType { get; set; }
+            public string DrugCompoundDetailName { get; set; }
+            public string ProductTypeName { get; set; }
+        }
+
+    }
+
     public class MasterMedicalUploadViewModel
     {
         public int Id { get; set; }

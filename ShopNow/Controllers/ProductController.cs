@@ -305,7 +305,7 @@ namespace ShopNow.Controllers
             prod.UpdatedBy = user.Name;
             db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
-            return RedirectToAction("MedicalEdit", new { id = AdminHelpers.ECodeInt(prod.Id) });
+            return RedirectToAction("MedicalEdit", new { id = AdminHelpers.ECodeLong(prod.Id) });
         }
 
         public ActionResult FMCGList(FMCGListViewModel model)

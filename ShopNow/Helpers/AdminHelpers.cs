@@ -117,9 +117,20 @@ namespace ShopNow.Helpers
             return i-2;
         }
 
-        internal static object ECodeInt(long id)
+        public static string ECodeLong(long input)
         {
-            throw new NotImplementedException();
+            long encrptInt = input + 2;
+            byte[] b = BitConverter.GetBytes(encrptInt);
+            string str = Convert.ToBase64String(b);
+            return str;
+        }
+        public static long DCodeLong(string input)
+        {
+            byte[] b = Convert.FromBase64String(input);
+
+            // Return the decoded int.
+            long i = BitConverter.ToInt32(b, 0);
+            return i - 2;
         }
     }
 }
