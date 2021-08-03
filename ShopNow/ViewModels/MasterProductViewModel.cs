@@ -305,9 +305,9 @@ namespace ShopNow.ViewModels
         public string ASIN { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
-        public string[] SubCategoryIds { get; set; }
+        public int SubCategoryId { get; set; }
         public string SubCategoryName { get; set; }
-        public string[] NextSubCategoryIds { get; set; }
+        public int NextSubCategoryId { get; set; }
         public string NextSubCategoryName { get; set; }
         public string GoogleTaxonomyCode { get; set; }
         public int Adscore { get; set; }
@@ -337,11 +337,9 @@ namespace ShopNow.ViewModels
         public string ASIN { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
-        public string SubCategoryIds1 { get; set; }
-        public string[] SubCategoryIds { get; set; }
+        public int SubCategoryId { get; set; }
         public string SubCategoryName { get; set; }
-        public string NextSubCategoryIds1 { get; set; }
-        public string[] NextSubCategoryIds { get; set; }
+        public int NextSubCategoryId { get; set; }
         public string NextSubCategoryName { get; set; }
         public string GoogleTaxonomyCode { get; set; }
         public int Adscore { get; set; }

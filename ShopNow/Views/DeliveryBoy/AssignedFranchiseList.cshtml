@@ -10,7 +10,7 @@
     <div class="row my-2">
         <div class="col-md-6">
             <h5 style="letter-spacing:1px">Assigned Deliveryboy List</h5>
-        </div>        
+        </div>
         <div class="col-md-6 text-right">
             <a href="/DeliveryBoy/AssignFranchise"><span class="fa fa-tasks"></span> Assign Franchise</a>
         </div>
@@ -20,14 +20,14 @@
             <div class="card">
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
-{
-columns.Add(b => b.Name).Titled("DeliveryBoy Name").Filterable(true).SetWidth(20);
-columns.Add(b => b.MarketingAgentName).Titled("Franchise").Filterable(true).SetWidth(20);
-columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(b => @<div>
-    <a href="~/DeliveryBoy/FranchiseUpdate?code=@b.Code" class="btn btn-sm btn-warning" style="padding: 3px 26px">Edit</a>
-    <button type="button" class="btn btn-sm btn-danger Remove" data-id="@b.Code">Remove</button>
-</div>);
-}).WithPaging(20).Sortable(true)
+                    {
+                       columns.Add(b => b.Name).Titled("DeliveryBoy Name").Filterable(true).SetWidth(20);
+                       columns.Add(b => b.MarketingAgentName).Titled("Franchise").Filterable(true).SetWidth(20);
+                       columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(b => @<div>
+                       <a href="~/DeliveryBoy/FranchiseUpdate?id=@b.Id" class="btn btn-sm btn-warning" style="padding: 3px 26px">Edit</a>
+                       <button type="button" class="btn btn-sm btn-danger Remove" data-id="@b.Id">Remove</button>
+                       </div>  );
+                     }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
@@ -68,8 +68,8 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
             }).draw();
 
             $('.Remove').on('click', function () {
-                var code = $(this).attr('data-id');
-                $.getJSON("/DeliveryBoy/FranchiseRemove?code=" + code, function (data) {
+                var id = $(this).attr('data-id');
+                $.getJSON("/DeliveryBoy/FranchiseRemove?id=" + id, function (data) {
                     if (data.IsAdded == true) {
                         swal({
                             title: "Removed Successfully",
@@ -81,9 +81,7 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
                     }
                 });
             });
-
         });
-
     </script>
 }
 

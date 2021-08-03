@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "Assign DeliveryBoy";
 }
+
 <title>ShopNowChat | Assign DeliveryBoy</title>
 
 <div class="container-fluid my-0">
@@ -69,6 +70,7 @@
         </div>
     </div>
 </div>
+
 @section Scripts
 {
     <script>
@@ -100,11 +102,10 @@
             }).draw();
 
             $(".assign").click(function () {
-                var code = $(this).data('id');
-                $("#DeliveryBoyId").val(code);
+                var id = $(this).data('id');
+                $("#DeliveryBoyId").val(id);
                 $("#AssignDeliveryBoyForm").submit();
             });
-
         });
     </script>
 }

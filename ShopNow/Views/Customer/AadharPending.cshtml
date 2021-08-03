@@ -1,9 +1,10 @@
-﻿
-@model ShopNow.ViewModels.CustomerListViewModel
+﻿@model ShopNow.ViewModels.CustomerListViewModel
 @{
     ViewBag.Title = "Customer Aadhar Pending List";
 }
+
 <title>ShopNow | Customer Aadhar Pending List</title>
+
 <div class="container-fluid CustomerMax">
     <div class="row">
         <div class="col-md-4">
@@ -37,28 +38,25 @@
                                 {
                                     <tr>
                                         <td></td>
-                                        <td><a class="text-theme_light" href="~/Customer/Details?code=@ShopNow.Helpers.AdminHelpers.ECodeInt(item.Id)">@item.Name</a></td>
+                                        <td><a class="text-theme_light" href="~/Customer/Details?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(item.Id)">@item.Name</a></td>
                                         <td>@item.PhoneNumber</td>
                                         <td class="w-25">@item.Address</td>
                                         <td>@item.DistrictName</td>
                                         <td>@item.StateName</td>
                                         <td class="text-break">
-                                            <a href="~/Customer/Edit?code=@ShopNow.Helpers.AdminHelpers.ECodeInt(item.Id)" class="btn btn-warning text-center text-nowrap btn-sm mb-1 mr-2" style="padding: 3px 26px">Edit</a>
-                                            <a href="~/Customer/Delete?code=@ShopNow.Helpers.AdminHelpers.ECodeInt(item.Id)" class="btn btn-danger text-center text-nowrap mb-1 btn-sm" style="padding: 3px 18px">Delete</a>
+                                            <a href="~/Customer/Edit?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(item.Id)" class="btn btn-warning text-center text-nowrap btn-sm mb-1 mr-2" style="padding: 3px 26px">Edit</a>
+                                            <a href="~/Customer/Delete?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(item.Id)" class="btn btn-danger text-center text-nowrap mb-1 btn-sm" style="padding: 3px 18px">Delete</a>
                                         </td>
                                     </tr>
                                 }
-
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
-
 
 <div class="container-fluid CustomerMin">
     <div class="row">
@@ -92,25 +90,23 @@
                         {
                             <tr>
                                 <td></td>
-                                <td><a class="text-theme_light" href="~/Customer/Details?code=@item.Id">@item.Name</a></td>
+                                <td><a class="text-theme_light" href="~/Customer/Details?id=@item.Id">@item.Name</a></td>
                                 <td>@item.PhoneNumber</td>
                                 <td class="w-25">@item.Address</td>
                                 <td>@item.DistrictName</td>
                                 <td>@item.StateName</td>
                                 <td class="text-break">
-                                    <a href="~/Customer/Edit?code=@item.Id" class="btn btn-warning text-center text-nowrap btn-sm mb-1 mr-2" style="padding: 3px 26px">Edit</a>
-                                    <a href="~/Customer/Delete?code=@item.Id" class="btn btn-danger text-center text-nowrap mb-1 btn-sm" style="padding: 3px 18px">Delete</a>
+                                    <a href="~/Customer/Edit?id=@item.Id" class="btn btn-warning text-center text-nowrap btn-sm mb-1 mr-2" style="padding: 3px 26px">Edit</a>
+                                    <a href="~/Customer/Delete?id=@item.Id" class="btn btn-danger text-center text-nowrap mb-1 btn-sm btnDelete" style="padding: 3px 18px">Delete</a>
                                 </td>
                             </tr>
                         }
-
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 </div>
-
 
 @section Scripts
 {
@@ -143,42 +139,32 @@
             }).draw();
         });
 
-
-
         $(document).ready(function () {
-
-            //$(document).ready(function () {
-            //    $('#Customermin-list').DataTable();
-            //});
-
-            var t = $('#Customermin-list').DataTable({
-                "dom":/* "<'row'<'col-sm-6'f>>" +*/
-                    "<'row'<'col-sm-6'i><'col-sm-6'l>" +
-                    "<'row'<'col-sm-12'tr>>" +
-                    "<'col-sm-12'p>>",
-                //"bPaginate": false,
-                //"scrollY": 400,
-                "paging": true,
-                "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "ALL"]],
-                "pageLength": 10,
-                initComplete: function (settings, json) {
-                    $('.index input').remove();
-                    $('.action-btn input').remove();
-                    $('.dataTables_filter input').appendTo('.data-search');
-                    $('.dataTables_filter label').remove();
-                    $('.data-search input').attr('placeholder', 'Quick Search');
-                    $('.data-search input').addClass('form-control');
-                    $('.data-search input').removeClass('form-control-sm');
+            $(".btnDelete").click(function () {
+                var Id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
                 },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/Customer/Delete", { Id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
             });
-
-            t.on('order.dt search.dt', function () {
-                t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
-                    cell.innerHTML = i + 1;
-                });
-            }).draw();
         });
-
     </script>
 }
 
