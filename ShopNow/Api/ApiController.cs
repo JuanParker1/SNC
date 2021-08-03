@@ -2548,7 +2548,7 @@ namespace ShopNow.Controllers
 
             return Json(new { Page = paginationMetadata, /*items*/ }, JsonRequestBehavior.AllowGet);
         }
-        string GetMasterProductName(int id)
+        string GetMasterProductName(long id)
         {
             var masterProduct = db.MasterProducts.FirstOrDefault(i => i.Id == id);
             var name = "";
@@ -3794,7 +3794,7 @@ namespace ShopNow.Controllers
             }
         }
 
-        List<OrderItem> GetOrderList(int orderId)
+        List<OrderItem> GetOrderList(long orderId)
         {
             try
             {

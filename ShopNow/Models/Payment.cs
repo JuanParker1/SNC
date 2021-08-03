@@ -20,7 +20,7 @@ namespace ShopNow.Models
             this.Banners = new HashSet<Banner>();
         }
     
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string CorporateID { get; set; }
         public double Amount { get; set; }
         public string PaymentMode { get; set; }

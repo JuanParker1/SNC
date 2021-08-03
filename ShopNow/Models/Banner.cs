@@ -24,7 +24,7 @@ namespace ShopNow.Models
         public System.DateTime Todate { get; set; }
         public int Days { get; set; }
         public string BannerName { get; set; }
-        public int PaymentId { get; set; }
+        public long PaymentId { get; set; }
         public Nullable<int> CreditType { get; set; }
         public int Status { get; set; }
         public string CreatedBy { get; set; }

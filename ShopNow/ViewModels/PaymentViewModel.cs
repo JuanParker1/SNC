@@ -53,7 +53,7 @@ namespace ShopNow.ViewModels
         public List<PaymentReportList> List { get; set; }
         public class PaymentReportList
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
             public string CorporateID { get; set; }
             public string ReferenceCode { get; set; }
             public int CustomerId { get; set; }

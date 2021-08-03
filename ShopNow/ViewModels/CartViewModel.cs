@@ -107,7 +107,7 @@ namespace ShopNow.ViewModels
         public List<CartList> List { get; set; }
         public class CartList
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
             public int CustomerId { get; set; }
             public string CustomerName { get; set; }
             public int ShopId { get; set; }
@@ -173,7 +173,7 @@ namespace ShopNow.ViewModels
     public class CartAssignDeliveryBoyViewModel
     {
         public int Id { get; set; }
-        public int OrderId { get; set; }
+        public long OrderId { get; set; }
         public int DeliveryBoyId { get; set; }
 
         public List<CartAssignList> Lists { get; set; }
@@ -200,7 +200,7 @@ namespace ShopNow.ViewModels
         public List<CartReportList> List { get; set; }
         public class CartReportList
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
             public string CustomerCode { get; set; }
             public string CustomerName { get; set; }
             public string ShopCode { get; set; }
@@ -447,7 +447,7 @@ namespace ShopNow.ViewModels
         public List<CartList> List { get; set; }
         public class CartList
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
             public string ShopName { get; set; }
             public int OrderNo { get; set; }
             public string ProductName { get; set; }
@@ -485,7 +485,7 @@ namespace ShopNow.ViewModels
         public List<CartList> List { get; set; }
         public class CartList
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
             public int OrderNo { get; set; }
             public int ShopId { get; set; }
             public string ShopName { get; set; }
@@ -521,7 +521,7 @@ namespace ShopNow.ViewModels
         public List<CartList> List { get; set; }
         public class CartList
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
             public int OrderNo { get; set; }
             public int ShopId { get; set; }
             public string ShopName { get; set; }

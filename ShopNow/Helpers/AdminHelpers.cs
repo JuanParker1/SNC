@@ -116,5 +116,10 @@ namespace ShopNow.Helpers
             int i = BitConverter.ToInt32(b, 0);
             return i-2;
         }
+
+        internal static object ECodeInt(long id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

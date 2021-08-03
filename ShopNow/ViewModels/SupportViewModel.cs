@@ -34,7 +34,7 @@ namespace ShopNow.ViewModels
         public List<AssignList> List { get; set; }
         public class AssignList
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
             public int ShopId { get; set; }
             public string ShopName { get; set; }
             public int OrderNo { get; set; }

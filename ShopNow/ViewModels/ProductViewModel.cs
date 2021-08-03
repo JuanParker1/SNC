@@ -14,7 +14,7 @@ namespace ShopNow.ViewModels
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
             public int ProductTypeId { get; set; }
             public string ProductTypeName { get; set; }
             public string Name { get; set; }
@@ -161,7 +161,7 @@ namespace ShopNow.ViewModels
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {
-             public int Id { get; set; }
+             public long Id { get; set; }
             public string Name { get; set; }
             public string CategoryName { get; set; }
             public int ShopId { get; set; }
@@ -179,7 +179,7 @@ namespace ShopNow.ViewModels
         public class ListItem
         {
              
-            public int Id { get; set; }
+            public long Id { get; set; }
             public string Name { get; set; }
             public string CategoryName { get; set; }
             public int ShopId { get; set; }
@@ -196,7 +196,7 @@ namespace ShopNow.ViewModels
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
             public string Name { get; set; }
             public string CategoryName { get; set; }
             public int ShopId { get; set; }
@@ -213,7 +213,7 @@ namespace ShopNow.ViewModels
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
             public string Name { get; set; }
             public string CategoryName { get; set; }
             public int ShopId { get; set; }
@@ -671,7 +671,7 @@ namespace ShopNow.ViewModels
         public List<ProductList> List { get; set; }
         public class ProductList
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
             public string Name { get; set; }
             public int ShopId { get; set; }
             public string ShopName { get; set; }

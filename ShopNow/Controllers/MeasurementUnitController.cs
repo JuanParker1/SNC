@@ -105,7 +105,6 @@ namespace ShopNow.Controllers
                 drug.UnitType = model.UnitType;
                 drug.ConversionFormula = model.ConversionFormula;
                 drug.ConversionUnit = model.ConversionUnit;
-                drug.Type = model.Type;
                 drug.UpdatedBy = user.Name;
                 drug.DateUpdated = DateTime.Now;
                 db.Entry(drug).State = System.Data.Entity.EntityState.Modified;
@@ -237,7 +236,6 @@ namespace ShopNow.Controllers
                         db.MeasurementUnits.Add(new MeasurementUnit
                         {
                             UnitName = row[model.UnitName].ToString(),
-                            Type = model.Type,
                             ConversionFormula = row[model.ConversionFormula].ToString(),
                             ConversionUnit = row[model.ConversionUnit].ToString(),
                             UnitSymbol = row[model.UnitSymbol].ToString(),

@@ -36,7 +36,7 @@ namespace ShopNow.ViewModels
         public List<SalesReportList> List { get; set; }
         public class SalesReportList
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
             public string CustomerCode { get; set; }
             public string CustomerName { get; set; }
             public int ShopId { get; set; }
