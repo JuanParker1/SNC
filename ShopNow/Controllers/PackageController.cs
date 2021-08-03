@@ -41,7 +41,7 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNMPKS002")]
-        public JsonResult Save(string name, int type)
+        public JsonResult Save(string name)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             bool IsAdded = false;
@@ -71,7 +71,7 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNMPKE003")]
-        public JsonResult Edit(int code, string name, int type)
+        public JsonResult Edit(int code, string name)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             string message = "";

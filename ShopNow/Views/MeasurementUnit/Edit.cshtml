@@ -3,22 +3,21 @@
     ViewBag.Title = "Drug Measurement Unit Edit";
 }
 
-<div class="row my-3">
-    <div class="col-md-10 text-right ml-5">
-        <a href="~/MeasurementUnit/List" target="_blank"><span class="fa fa-bars"></span> Drug Measurement Unit List</a>
-    </div>
-</div>
 
-<div class="container-fluid my-4">
+
+<div class="container-fluid">
+    <div class="row my-3">
+        <div class="col-md-6"> <h5 class="text-success">Drug Measurement Unit Update Form</h5></div>
+        <div class="col-md-6 text-right">
+            <a href="~/MeasurementUnit/List" target="_blank"><span class="fa fa-bars"></span> Drug Measurement Unit List</a>
+        </div>
+    </div>
     <div class="row">
-        <div class="col-md-10 mx-auto">
+        <div class="col-md-12">
             @using (Html.BeginForm("Edit", "MeasurementUnit", FormMethod.Post, new { id = "MeasurementUnitEditForm" }))
             {
                 <input type="hidden" class="form-control" value="@Model.Id" name="Id" />
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="text-success">Drug Measurement Unit Update Form</h5>
-                    </div>
+                <div class="card shadow mt-3">
                     <div class="card-body">
                         @Html.AntiForgeryToken()
                         <div class="form-group row">
@@ -41,14 +40,6 @@
                             <div class="col-md-4">
                                 <label class="col-form-label"><strong class="text-secondary">Conversion Formula</strong></label>
                                 <input id="ConversionFormula" type="text" class="form-control" name="ConversionFormula" value="@Model.ConversionFormula" />
-                            </div>
-                            <div class="col-md-4">
-                                <label class="col-form-label"><strong class="text-secondary">Type</strong></label>
-                                <select name="Type" class="form-control" id="Type">
-                                    <option value="0">Select Type</option>
-                                    <option value="1">Medical</option>
-                                    <option value="2">FMCG</option>
-                                </select>
                             </div>
                         </div>
 
@@ -88,9 +79,6 @@
                     $('#MeasurementUnitEditForm').submit();
                 };
 
-            });
-             $(document).ready(function ($) {
-                $("#Type").find('option[value="@Model.Type"]').attr('selected', 'selected');
             });
         });
     </script>

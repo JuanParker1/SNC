@@ -8,10 +8,10 @@
 <div class="container-fluid my-4">
     <div class="row">
         <div class="col-md-4">
-            <h5 class="mt-1 text-success" style="letter-spacing:1px">ACCESS POLICY ENTRY</h5>
+            <h4 class="mt-1 text-success" style="letter-spacing:1px">ACCESS POLICY ENTRY</h4>
         </div>
         <div class="col-md-8 text-right">
-            <a href="~/AccessPolicy/ItemList" target="_self"><span class="fa fa-bars"></span>AccessPolicy List</a>
+            <a href="~/AccessPolicy/ItemList" target="_self"><span class="fa fa-bars"></span> AccessPolicy List</a>
         </div>
     </div>
 
@@ -19,7 +19,7 @@
         <div class="col-md-12 mx-auto">
             @using (Html.BeginForm("Create", "AccessPolicy", FormMethod.Post, new { id = "AccessPolicyForm" }))
             {
-                <div class="card">
+                <div class="card shadow mt-3">
                     <div class="card-body">
                         @Html.AntiForgeryToken()
                         <div class="form-group row">
