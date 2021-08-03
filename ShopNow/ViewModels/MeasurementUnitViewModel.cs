@@ -16,7 +16,6 @@ namespace ShopNow.ViewModels
             public string UnitType { get; set; }
             public string ConversionUnit { get; set; }
             public string ConversionFormula { get; set; }
-            public int Type { get; set; }
         }
     }
     public class MeasurementUnitCreateEditViewModel
@@ -27,7 +26,6 @@ namespace ShopNow.ViewModels
         public string UnitType { get; set; }
         public string ConversionUnit { get; set; }
         public string ConversionFormula { get; set; }
-        public int Type { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
         public int Status { get; set; }
@@ -42,7 +40,6 @@ namespace ShopNow.ViewModels
         public string UnitType { get; set; }
         public string ConversionUnit { get; set; }
         public string ConversionFormula { get; set; }
-        public int Type { get; set; }
         public System.Data.DataTable DataTable { get; set; }
         public string button { get; set; }
         public string Filename { get; set; }

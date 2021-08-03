@@ -7,10 +7,10 @@
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 
-    <div class="container-fluid">
-        <div class="row my-2">
+    <div class="container-fluid mb-5">
+        <div class="row">
             <div class="col-md-6">
-                <h5 class="" style="letter-spacing:1px">Package List</h5>
+                <h5 class="text-success" style="letter-spacing:1px">Package List</h5>
             </div>
             
             <div class="col-md-6 text-right">
@@ -19,12 +19,11 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <div class="card">
+                <div class="card shadow mt-3">
                     <div class="card-body">
                         @Html.Grid(Model).Columns(columns =>
                    {
-                   columns.Add(b => b.Name).Titled("Package Name").Filterable(true).SetWidth(20);                   
-                   columns.Add().RenderValueAs(b => b.Type == 1 ? "Medical" : b.Type == 2 ? "FMCG" : "N/A").Titled("Type").SetWidth(10);
+                   columns.Add(b => b.Name).Titled("Package Name").Filterable(true).SetWidth(20);   
                    columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(b => @<div>
     <a href="javascript:void(0)" data-id="@b.Id" data-id1="@b.Name" data-id2="@b.Type" class="btn-sm btn-warning edit-prompt" id="edit-prompt" data-toggle="modal" data-target="#editModal" style="padding: 3px 26px">Edit</a>
     <a href="javascript:void(0)" data-id="@b.Id" data-id1="@b.Name" class="btn-sm btn-danger delete-prompt" data-toggle="modal" data-target="#deleteModel" style="padding: 3px 18px">Delete</a>
@@ -69,19 +68,9 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="form-group row">
-                    <div class="col-md-6">
+                <div class="form-group">
                         <label class="col-form-label font-weight-bold text-secondary">Package Name</label>
                         <input type="text" name="Name" id="Name" class="form-control" />
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-form-label font-weight-bold text-secondary">Type</label>
-                        <select name="Type" class="form-control" id="Type">
-                            <option value="0">Select Type</option>
-                            <option value="1">Medical</option>
-                            <option value="2">FMCG</option>
-                        </select>
-                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -102,15 +91,9 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="form-group row">
-                    <div class="col-md-6">
+                <div class="form-group">
                         <label class="col-form-label font-weight-bold text-secondary">Package Name</label>
                         <div id="PackageName"></div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-form-label font-weight-bold text-secondary">Type</label>
-                        <div id="PackageType"></div>
-                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -128,43 +111,16 @@
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
-            var t = $('#Package-list').DataTable({
-                "dom": "<'row'<'col-sm-6'f>>" +
-                    "<'row'<'col-sm-5'i><'col-sm-3'l><'col-sm-4'p>>" +
-                    "<'row'<'col-sm-12'tr>>",
-                "bPaginate": false,
-                "scrollY": 400,
-                "paging": true,
-                "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "ALL"]],
-                "pageLength": -1,
-                initComplete: function (settings, json) {
-                    $('.index input').remove();
-                    $('.action-btn input').remove();
-                    $('.dataTables_filter input').appendTo('.data-search');
-                    $('.dataTables_filter label').remove();
-                    $('.data-search input').attr('placeholder', 'Quick Search');
-                    $('.data-search input').addClass('form-control');
-                    $('.data-search input').removeClass('form-control-sm');
-                },
-            });
-
-            t.on('order.dt search.dt', function () {
-                t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
-                    cell.innerHTML = i + 1;
-                });
-            }).draw();
-
+           
             $('#Create').on('click', function () {
                 var name = $('#Name').val();
-                var type = $('#Type').val();
                 var isValidate = false;
                 var requiredArr = [
-                    'Name',
-                    'Type'
+                    'Name'
                 ];
                 isValidate = ValidateEmptyRequiredFiels(requiredArr);
                 if (isValidate) {
-                    $.getJSON("/Package/Save?name=" + name + "&type=" + type, function (data) {
+                    $.getJSON("/Package/Save?name=" + name, function (data) {
                         if (data.IsAdded == true) {
                             swal({
                                 title: data.message,
@@ -186,22 +142,18 @@
             $(".edit-prompt").click(function () {
                 var code = $(this).attr('data-id');
                 var name = $(this).attr('data-id1');
-                var type = $(this).attr('data-id2');
                 $("#PackageCode").val(code);
                 $("#PackageName").append("<input type=text name=PName id=PName class=form-control value='" + name + "' />");
-                $("#PackageType").append("<select name=PType id=PType class=form-control><option value=0>Select Type</option><option value=1>Medical</option><option value=2>FMCG</option></select>");
-                $("#PType").find('option[value=' + type + ']').attr('selected', 'selected');
             });
 
             $(".Edit").click(function () {
                 var Code = $("#PackageCode").val();
                 var packageName = $("#PName").val();
-                var type = $("#PType").val();
                 if (packageName == "" || packageName == null) {
                     swal("Name is Empty.", "Please Enter a Package Name", "warning");
                 }
                 else if (packageName != "" || packageName != null) {
-                    $.getJSON("/Package/Edit", { code: Code, name: packageName, type: type }, function (data) {
+                    $.getJSON("/Package/Edit", { code: Code, name: packageName }, function (data) {
                         if (data.message != null || data.message != "") {
                             swal({
                                 title: data.message,
@@ -214,10 +166,7 @@
                     });
                 }
             });
-
-            $("#editModal").on("hidden.bs.modal", function () {
-                window.location.reload();
-            });
+            
 
             $(".delete-prompt").click(function () {
                 var code = $(this).attr('data-id');

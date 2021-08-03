@@ -5,109 +5,43 @@
 }
 <title>ShopNow | DeliveryBoy List</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<link href="~/Content/switch.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-<style>
-    .table td, .table th {
-        border-top: 1px solid #eaeaea;
-        vertical-align: middle;
-        padding: .4rem 1.25rem;
-    }
 
-    .toggle.ios, .toggle-on.ios, .toggle-off.ios {
-        border-radius: 20rem;
-    }
-
-        .toggle.ios .toggle-handle {
-            border-radius: 20rem;
-        }
-
-    .switch {
-        position: relative;
-        display: inline-block;
-        width: 60px;
-        height: 34px;
-    }
-
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-    .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: red;
-        -webkit-transition: .4s;
-        transition: .4s;
-    }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 26px;
-            width: 26px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            -webkit-transition: .4s;
-            transition: .4s;
-        }
-
-    input:checked + .slider {
-        background-color: lawngreen;
-    }
-
-    input:focus + .slider {
-        box-shadow: 0 0 1px lawngreen;
-    }
-
-    input:checked + .slider:before {
-        -webkit-transform: translateX(26px);
-        -ms-transform: translateX(26px);
-        transform: translateX(26px);
-    }
-
-    /* Rounded sliders */
-    .slider.round {
-        border-radius: 34px;
-    }
-
-        .slider.round:before {
-            border-radius: 50%;
-        }
-</style>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6">
-            <h5 class="text-success">DeliveryBoy List</h5>
+            <h4 class="text-success">Delivery Boy List</h4>
         </div>
         <div class="col-md-6 ml-auto text-right text-nowrap" style="margin:0">
             <a href="~/DeliveryBoy/InactiveList" class="text-danger mr-2" target="_self"><span class="fa fa-bars"></span> Approval Pending</a>
             <a href="~/DeliveryBoy/Create" class="mr-2" target="_self"><span class="fa fa-plus"></span> New Delivery Boy</a>
             <a href="~/DeliveryBoy/AssignFranchise" target="_self"><span class="fa fa-tasks"></span> Assign Marketing Agent</a>
-        </div>    
+        </div>
+
+        <div class="col-md-12">
+            <div class="card shadow mt-3">
+                <div class="card-body">
+                    @Html.Grid(Model).Columns(columns =>
+            {
+            columns.Add(c => c.Name).Titled("Name").Encoded(false).Sanitized(false).Filterable(true).SetWidth(20).RenderValueAs(model => Html.ActionLink(model.Name, "Details", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(model.Id) }).ToHtmlString());
+            columns.Add(c => c.PhoneNumber).Titled("Phone No.").Filterable(true).SetWidth(15);
+            columns.Add().Encoded(false).Sanitized(false).Titled("Image").Filterable(false).SetWidth(10).RenderValueAs(c => @<div><img alt="Image" data-toggle="modal" data-target="#myModal" class="img-thumbnail DeliveryBoyImage" src="@c.ImagePath" style="width:60px; height:45px" onerror="this.src='/Images/No Photo.png'" /></div>);
+             columns.Add()
+   .Encoded(false)
+   .Sanitized(false)
+   .RenderValueAs(s => new HtmlString
+           ("<label class='switch'> <input type='checkbox' value='" + s.Active + "' Id='Id_" + s.Id + "' class='CheckOnline' data-code='" + s.Id + "' disabled><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(10);
+             columns.Add()
+   .Encoded(false)
+   .Sanitized(false)
+   .RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
+               + Html.ActionLink("Delete", "Delete", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
+         }).WithPaging(20).Sortable(true)
+                </div>
+            </div>
+        </div>
     </div>
-    @Html.Grid(Model).Columns(columns =>
-        {
-        columns.Add(c => c.Name).Titled("Name").Encoded(false).Sanitized(false).Filterable(true).SetWidth(20).RenderValueAs(model => Html.ActionLink(model.Name, "Details", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(model.Id) }).ToHtmlString());
-        columns.Add(c => c.PhoneNumber).Titled("Phone No.").Filterable(true).SetWidth(15);
-        columns.Add().Encoded(false).Sanitized(false).Titled("Image").Filterable(false).SetWidth(10).RenderValueAs(c => @<div><img alt="Image" data-toggle="modal" data-target="#myModal" class="img-thumbnail DeliveryBoyImage" src="@c.ImagePath" style="width:60px; height:45px" onerror="this.src='/Images/No Photo.png'" /></div>);
-        columns.Add()
-            .Encoded(false)
-           .Sanitized(false)
-            .RenderValueAs(s => new HtmlString
-                        ("<label class='switch'> <input type='checkbox' value='" + s.Active + "' Id='Id_" + s.Id + "' class='CheckOnline' data-code='" + s.Id + "' disabled><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(10);
-        columns.Add()
-           .Encoded(false)
-            .Sanitized(false)
-            .RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
-                            + Html.ActionLink("Delete", "Delete", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
-    }).WithPaging(20).Sortable(true)
 </div>
 <div id="myModal" class="modal fade">
     <div class="modal-dialog">

@@ -15,7 +15,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "")]
         public ActionResult Index()
         {
-            var list = db.OtpVerifications.OrderByDescending(i=>i.Id).Take(5).ToList();
+            var list = db.OtpVerifications.Where(i => i.Verify == false).OrderByDescending(i => i.Id).Take(10).ToList();
             return View(list);
         }
     }

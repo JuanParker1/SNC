@@ -6,36 +6,35 @@
 <title>ShopNow | Sub Category List</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-<style>
-    .table td, .table th {
-        border-top: 1px solid #eaeaea;
-        vertical-align: middle;
-        padding: .4rem 1.25rem;
-    }
-</style>
 
-<div class="container-fluid">
+<div class="container-fluid mb-5">
     <div class="row">
         <div class="col-md-6">
-            <h5 style="letter-spacing:1px">SUB CATEGORY LIST</h5>
+            <h5 class="text-success" style="letter-spacing:1px">SUB CATEGORY LIST</h5>
         </div>
         <div class="col-md-6 text-right">
             <a data-toggle="modal" data-target="#createModal" href="createModal"><span class="fa fa-plus"></span> New Sub Category</a>
         </div>
-    </div>
 
-    @Html.Grid(Model).Columns(columns =>
+        <div class="col-md-12">
+            <div class="card shadow mt-3">
+                <div class="card-body">
+                    @Html.Grid(Model).Columns(columns =>
 {
 columns.Add(s => s.CategoryName).Titled("Category Name").Filterable(true).SetWidth(10);
 columns.Add(s => s.Name).Titled("SubCategory Name").Filterable(true).SetWidth(10);
 columns.Add(s => s.ProductTypeName).Titled("Item Type").Filterable(true).SetWidth(10);
 columns.Add(s => s.Adscore).Titled("Adscore").Filterable(true).SetWidth(10);
-    columns.Add()
-    .Encoded(false)
-    .Sanitized(false)
-    .RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
-                   + Html.ActionLink("Delete", "Delete", new { id = o.Id }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
-            }).WithPaging(20).Sortable(true)
+columns.Add()
+.Encoded(false)
+.Sanitized(false)
+.RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
+               + Html.ActionLink("Delete", "Delete", new { id = o.Id }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
+        }).WithPaging(20).Sortable(true)
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @*<div class="modal fade" id="deleteModal" role="dialog" aria-labelledby="myModalLabel">

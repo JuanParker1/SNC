@@ -6,35 +6,32 @@
 <title>ShopNow | Brand List</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-<style>
-    .table td, .table th {
-        border-top: 1px solid #eaeaea;
-        vertical-align: middle;
-        padding: .4rem 1.25rem;
-    }
-</style>
-@*////*@
-<div class="container-fluid">
+
+<div class="container-fluid mb-5">
     <div class="row">
-        <div class="col-md-2">
-            <h5 class="mt-1" style="letter-spacing:1px">BRAND LIST</h5>
-        </div>
-        <div class="col-md-2 col-sm-4 mb-2 data-search">
+        <div class="col-md-4">
+            <h4 class="mt-1 text-success" style="letter-spacing:1px">BRAND LIST</h4>
         </div>
         <div class="col-md-8 text-right">
             <a data-toggle="modal" data-target="#createModal" href="createModal"><span class="fa fa-plus"></span> New Brand</a>
         </div>
-    </div>
 
-    @Html.Grid(Model).Columns(columns =>
-{
-columns.Add(b => b.Name).Titled("Name").Filterable(true).SetWidth(20);
-columns.Add(b => b.ProductTypeName).Titled("Product Type").Filterable(true).SetWidth(20);
-columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20)
-    .RenderValueAs(b => @<div>
-    <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(b.Id)" data-name="@b.Name" data-productTypeId="@b.ProductTypeId" data-productTypeName="@b.ProductTypeName" class="btn-sm btn-warning edit-prompt" data-toggle="modal" data-target="#editModal" style="padding: 3px 26px">Edit</a>
-    <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(b.Id)" class="btn-sm btn-danger delete-prompt" data-toggle="modal" data-target="#deleteModal" style="padding: 3px 18px">Delete</a></div>);
-            }).WithPaging(20).Sortable(true)
+        <div class="col-md-12">
+            <div class="card shadow mt-3">
+                <div class="card-body">
+                    @Html.Grid(Model).Columns(columns =>
+        {
+        columns.Add(b => b.Name).Titled("Name").Filterable(true).SetWidth(20);
+        columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20)
+            .RenderValueAs(b => @<div>
+                    <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(b.Id)" data-name="@b.Name" class="btn-sm btn-warning edit-prompt" data-toggle="modal" data-target="#editModal" style="padding: 3px 26px">Edit</a>
+                    <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(b.Id)" class="btn-sm btn-danger delete-prompt" data-toggle="modal" data-target="#deleteModal" style="padding: 3px 18px">Delete</a>
+                </div>);
+         }).WithPaging(20).Sortable(true)
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -74,18 +71,6 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
                         <label class="col-form-label">Brand Name</label>
                         <input type="text" name="Name" id="Name" class="form-control" />
                     </div>
-                    <div class="col-md-6">
-                        <label class="col-form-label"><strong class="text-secondary">Item Type</strong></label>
-                        <select name="ProductType" class="form-control" id="ProductTypeId">
-                            @*<option value="0" disabled selected>Select</option>
-                                <option value="4">Product</option>
-                                <option value="1">Dish</option>
-                                <option value="3">Medical</option>
-                                <option value="2">FMCG</option>
-                                <option value="5">Service</option>*@
-                        </select>
-                        <input type="hidden" name="ProductTypeName" id="ProductTypeName" />
-                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -111,18 +96,6 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
                         <label class="col-form-label font-weight-bold text-secondary">Brand Name</label>
                         <input type="text" name="Name" id="edit-Name" class="form-control" />
                     </div>
-                    <div class="col-md-6">
-                        <label class="col-form-label font-weight-bold text-secondary">Item Type</label>
-                        <select class="form-control" id="edit-ProductTypeId">
-                            <option value="0">Select</option>
-                            <option value="4">Product</option>
-                            <option value="1">Dish</option>
-                            <option value="3">Medical</option>
-                            <option value="2">FMCG</option>
-                            <option value="5">Service</option>
-                        </select>
-                        <input type="hidden" id="edit-ProductTypeName" />
-                    </div>
                 </div>
             </div>
 
@@ -143,39 +116,7 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
     <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
-            $('#ProductTypeId').select2({
-                placeholder: "Search Type",
-                width: '100%',
-                ajax: {
-                    url: "/ProductType/GetSelect2List",
-                    delay: 250,
-                    dataType: 'json'
-                }
-            }).on('select2:select', function (e) {
-                $('input[name="ProductTypeName"]').val(e.params.data.text);
-                });
-
-            $('#edit-ProductTypeId').select2({
-                placeholder: "Search Type",
-                width: '100%',
-                ajax: {
-                    url: "/ProductType/GetSelect2List",
-                    delay: 250,
-                    dataType: 'json'
-                }
-            }).on('select2:select', function (e) {
-                $('#edit-ProductTypeName').val(e.params.data.text);
-            });
-
-
-            //$('#ProductTypeId').on('change', function () {
-            //    let selectedType = $(this).find("option:selected").text();
-            //    $('[name="ProductTypeName"]').val(selectedType);
-            //});
-            //$('#edit-ProductTypeId').on('change', function () {
-            //    let selectedType = $(this).find("option:selected").text();
-            //    $('#edit-ProductTypeName').val(selectedType);
-            //});
+           
             $('#Create').on('click', function () {
                 var isValidate = false;
                 var requiredArr = [
@@ -185,9 +126,7 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
                 isValidate = ValidateEmptyRequiredFiels(requiredArr);
                 if (isValidate) {
                     var brand = {
-                        Name: $('#Name').val(),
-                        ProductTypeId: $('#ProductTypeId').val(),
-                        ProductTypeName: $('#ProductTypeName').val()
+                        Name: $('#Name').val()
                     }
                     $.post("/Brand/Save", { brand: brand }, function (data) {
                         if (data.IsAdded == true) {
@@ -202,7 +141,6 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
                             if (data.message1 != null || data.message1 != "") {
                                 swal(data.message1, "", "warning");
                                 $('#Name').val("");
-                                $('#ProductType').val("");
                             }
                         }
                     });
@@ -212,16 +150,12 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
             $(".edit-prompt").click(function () {
                 $("#BrandId").val($(this).attr('data-id'));
                 $("#edit-Name").val($(this).attr('data-name'));
-                $('#edit-ProductTypeId').val($(this).attr('data-productTypeId')).trigger('change');
-                $('#edit-ProductTypeName').val($(this).attr('data-productTypeName'));
             });
 
             $(".Edit").click(function () {
                 var brand = {
                     Id: $('#BrandId').val(),
-                    Name: $('#edit-Name').val(),
-                    ProductTypeId: $('#edit-ProductTypeId').val(),
-                    ProductTypeName: $('#edit-ProductTypeName').val()
+                    Name: $('#edit-Name').val()
                 }
                 if ($('#edit-Name').val() == "" || $('#edit-Name').val() == null) {
                     swal("Name is Empty.", "Please Enter a Brand Name", "warning");
@@ -240,10 +174,6 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
                     });
                 }
             });
-
-            //$("#editModal").on("hidden.bs.modal", function () {
-            //    window.location.reload();
-            //});
 
             $(".delete-prompt").click(function () {
                 var id = $(this).attr('data-id');
