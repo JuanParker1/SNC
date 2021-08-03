@@ -25,16 +25,16 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="text-center d-none d-print-block">Payment Report</h4>
-                        @Html.Grid(Model).Columns(columns =>
-                   {
-                       columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
-                       columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
-                       columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(15);
-                       columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(15);
-                       columns.Add().RenderValueAs(c => c.CartStatus == 6 ? "Delivered" : "N/A").Titled("Order Status").Filterable(true).SetWidth(10);
-                       columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10);
-                   }).WithPaging(25).Sortable(true)
+                        <h4 class="text-center d-none d-print-block">@ViewBag.Title</h4>
+                         @Html.Grid(Model).Columns(columns =>
+                         {   
+                             columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
+                             columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
+                             columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(15);
+                             columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(15);
+                             columns.Add().RenderValueAs(c => c.CartStatus == 6 ? "Delivered" : "N/A").Titled("Order Status").Filterable(true).SetWidth(10);
+                             columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10);
+                         }).WithPaging(25).Sortable(true)
                     </div>
                 </div>
             </div>
@@ -92,10 +92,7 @@
             //    window.location.href = "/Payment/Report/?shopcode=" + shopcode;
             //});
 
-
-
         });
-
     </script>
 }
 

@@ -268,17 +268,17 @@ namespace ShopNow.Controllers
                 else
                 {
                     model.List = db.Orders.Where(i => i.ShopId == shopid/* && i.CartStatus == 6*/ && i.Status == 0)
-                  .AsEnumerable().GroupBy(i => i.OrderNumber).Select(i => new CartReportViewModel.CartReportList
-                  {
-                      Id = i.Any() ? i.FirstOrDefault().Id : 0,
-                      ShopName = i.Any() ? i.FirstOrDefault().ShopName : "N/A",
-                      OrderNumber = i.Any() ? i.FirstOrDefault().OrderNumber : 0,
-                      DeliveryAddress = i.Any() ? i.FirstOrDefault().DeliveryAddress : "N/A",
-                      PhoneNumber = i.Any() ? i.FirstOrDefault().ShopOwnerPhoneNumber : "N/A",
-                      CartStatus = i.Any() ? i.FirstOrDefault().Status : 2,
-                      DeliveryBoyName = i.Any() ? i.FirstOrDefault().DeliveryBoyName : "N/A",
-                      DateEncoded = i.Any() ? i.FirstOrDefault().DateEncoded : DateTime.Now
-                  }).OrderByDescending(i => i.DateEncoded).ToList();
+                    .AsEnumerable().GroupBy(i => i.OrderNumber).Select(i => new CartReportViewModel.CartReportList
+                    {
+                        Id = i.Any() ? i.FirstOrDefault().Id : 0,
+                        ShopName = i.Any() ? i.FirstOrDefault().ShopName : "N/A",
+                        OrderNumber = i.Any() ? i.FirstOrDefault().OrderNumber : 0,
+                        DeliveryAddress = i.Any() ? i.FirstOrDefault().DeliveryAddress : "N/A",
+                        PhoneNumber = i.Any() ? i.FirstOrDefault().ShopOwnerPhoneNumber : "N/A",
+                        CartStatus = i.Any() ? i.FirstOrDefault().Status : 2,
+                        DeliveryBoyName = i.Any() ? i.FirstOrDefault().DeliveryBoyName : "N/A",
+                        DateEncoded = i.Any() ? i.FirstOrDefault().DateEncoded : DateTime.Now
+                    }).OrderByDescending(i => i.DateEncoded).ToList();
                     model.ShopId = shopid;
                     model.ShopName = shop.Name;
                 }
@@ -290,17 +290,17 @@ namespace ShopNow.Controllers
                     DateTime startDatetFilter = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day);
                     DateTime endDateFilter = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day).AddDays(1);
                     model.List = db.Orders.Where(i => i.DateEncoded >= startDatetFilter && i.DateEncoded <= endDateFilter /*&& i.CartStatus == 6*/ && i.Status == 0)
-                  .AsEnumerable().GroupBy(i => i.OrderNumber).Select(i => new CartReportViewModel.CartReportList
-                  {
-                      Id = i.Any() ? i.FirstOrDefault().Id : 0,
-                      ShopName = i.Any() ? i.FirstOrDefault().ShopName : "N/A",
-                      OrderNumber = i.Any() ? i.FirstOrDefault().OrderNumber : 0,
-                      DeliveryAddress = i.Any() ? i.FirstOrDefault().DeliveryAddress : "N/A",
-                      PhoneNumber = i.Any() ? i.FirstOrDefault().ShopOwnerPhoneNumber : "N/A",
-                      CartStatus = i.Any() ? i.FirstOrDefault().Status : 2,
-                      DeliveryBoyName = i.Any() ? i.FirstOrDefault().DeliveryBoyName : "N/A",
-                      DateEncoded = i.Any() ? i.FirstOrDefault().DateEncoded : DateTime.Now
-                  }).OrderByDescending(i => i.DateEncoded).ToList();
+                    .AsEnumerable().GroupBy(i => i.OrderNumber).Select(i => new CartReportViewModel.CartReportList
+                    {
+                        Id = i.Any() ? i.FirstOrDefault().Id : 0,
+                        ShopName = i.Any() ? i.FirstOrDefault().ShopName : "N/A",
+                        OrderNumber = i.Any() ? i.FirstOrDefault().OrderNumber : 0,
+                        DeliveryAddress = i.Any() ? i.FirstOrDefault().DeliveryAddress : "N/A",
+                        PhoneNumber = i.Any() ? i.FirstOrDefault().ShopOwnerPhoneNumber : "N/A",
+                        CartStatus = i.Any() ? i.FirstOrDefault().Status : 2,
+                        DeliveryBoyName = i.Any() ? i.FirstOrDefault().DeliveryBoyName : "N/A",
+                        DateEncoded = i.Any() ? i.FirstOrDefault().DateEncoded : DateTime.Now
+                    }).OrderByDescending(i => i.DateEncoded).ToList();
                     model.StartingDate = StartDate.Value.ToString("yyyy/MM/dd");
                     model.EndingDate = EndDate.Value.ToString("yyyy/MM/dd");
                 }
