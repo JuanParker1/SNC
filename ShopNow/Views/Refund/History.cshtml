@@ -3,7 +3,9 @@
 @{
     ViewBag.Title = "Refund History";
 }
+
 <title>ShopNow | @ViewBag.Title</title>
+
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 
@@ -47,8 +49,8 @@
     columns.Add(c => c.OrderDate).Titled("Order Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
     columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
     columns.Add(c => c.OrderNo).Titled("Order No").Filterable(true).SetWidth(10);
-    columns.Add(c => c.CustomerName).Titled("Customer Name").Filterable(true).SetWidth(12);
-    columns.Add(c => c.CustomerPhoneNo).Titled("Customer PhoneNo").Filterable(true).SetWidth(15);
+    columns.Add(c => c.CustomerName).Titled("C . Name").Filterable(true).SetWidth(12);
+    columns.Add(c => c.CustomerPhoneNo).Titled("C . PhoneNo").Filterable(true).SetWidth(15);
     columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(10);
     columns.Add(c => c.Remark).Titled("Remark").Filterable(true).SetWidth(8);
     columns.Add(c => c.RefundDate).Titled("Refund Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
