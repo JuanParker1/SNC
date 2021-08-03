@@ -199,7 +199,7 @@ namespace ShopNow.ViewModels
         public class CartReportList
         {
             public long Id { get; set; }
-            public string CustomerCode { get; set; }
+            public int CustomerId { get; set; }
             public string CustomerName { get; set; }
             public int ShopId { get; set; }
             public string ShopName { get; set; }
