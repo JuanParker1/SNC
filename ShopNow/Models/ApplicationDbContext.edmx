@@ -52,7 +52,7 @@
           <Property Name="Todate" Type="datetime" Nullable="false" />
           <Property Name="Days" Type="int" Nullable="false" />
           <Property Name="BannerName" Type="nvarchar(max)" />
-          <Property Name="PaymentId" Type="int" Nullable="false" />
+          <Property Name="PaymentId" Type="bigint" Nullable="false" />
           <Property Name="CreditType" Type="int" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="CreatedBy" Type="nvarchar(max)" />
@@ -377,7 +377,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar(max)" />
           <Property Name="BrandId" Type="int" Nullable="false" />
           <Property Name="BrandName" Type="nvarchar(max)" />
@@ -428,7 +428,6 @@
           <Property Name="UnitType" Type="nvarchar(max)" />
           <Property Name="ConversionUnit" Type="nvarchar(max)" />
           <Property Name="ConversionFormula" Type="nvarchar(max)" />
-          <Property Name="Type" Type="int" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
@@ -456,8 +455,8 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="OrderId" Type="int" Nullable="false" />
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderId" Type="bigint" Nullable="false" />
           <Property Name="OrdeNumber" Type="int" Nullable="false" />
           <Property Name="ProductId" Type="int" Nullable="false" />
           <Property Name="ProductName" Type="nvarchar" MaxLength="150" />
@@ -475,7 +474,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CustomerId" Type="int" Nullable="false" />
           <Property Name="CustomerName" Type="varchar" MaxLength="100" />
           <Property Name="CustomerPhoneNumber" Type="varchar" MaxLength="50" />
@@ -534,7 +533,6 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar(max)" />
-          <Property Name="Type" Type="int" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="CreatedBy" Type="nvarchar(max)" />
           <Property Name="UpdatedBy" Type="nvarchar(max)" />
@@ -558,7 +556,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CorporateID" Type="nvarchar(max)" />
           <Property Name="Amount" Type="float" Nullable="false" />
           <Property Name="PaymentMode" Type="nvarchar(max)" />
@@ -656,7 +654,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="AddOnItemName" Type="nvarchar" MaxLength="100" />
-          <Property Name="MasterProductId" Type="int" />
+          <Property Name="MasterProductId" Type="bigint" />
           <Property Name="MasterProductName" Type="nvarchar" MaxLength="200" />
           <Property Name="AddOnCategoryId" Type="int" Nullable="false" />
           <Property Name="AddOnCategoryName" Type="nvarchar(max)" />
@@ -679,9 +677,9 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar(max)" />
-          <Property Name="MasterProductId" Type="int" Nullable="false" />
+          <Property Name="MasterProductId" Type="bigint" Nullable="false" />
           <Property Name="ShopId" Type="int" Nullable="false" />
           <Property Name="ShopName" Type="nvarchar(max)" />
           <Property Name="ShopCategoryId" Type="int" Nullable="false" />
@@ -761,7 +759,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="150" />
         </EntityType>
         <EntityType Name="RefundsData">
@@ -811,7 +809,7 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="AddOnItemName" Type="nvarchar" MaxLength="100" />
-          <Property Name="MasterProductId" Type="int" Nullable="false" />
+          <Property Name="MasterProductId" Type="bigint" Nullable="false" />
           <Property Name="MasterProductName" Type="nvarchar" MaxLength="200" />
           <Property Name="AddOnCategoryId" Type="int" Nullable="false" />
           <Property Name="AddOnCategoryName" Type="nvarchar(max)" />
@@ -829,7 +827,7 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
           <Property Name="AddOnsPrice" Type="float" Nullable="false" />
           <Property Name="CrustPrice" Type="float" Nullable="false" />
           <Property Name="AddOnType" Type="int" Nullable="false" />
-          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="ProductId" Type="bigint" Nullable="false" />
           <Property Name="ProductName" Type="nvarchar" MaxLength="200" />
           <Property Name="ShopId" Type="int" Nullable="false" />
           <Property Name="ShopName" Type="nvarchar" MaxLength="150" />
@@ -1554,7 +1552,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="Todate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Days" Type="Int32" Nullable="false" />
           <Property Name="BannerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PaymentId" Type="Int32" Nullable="false" />
+          <Property Name="PaymentId" Type="Int64" Nullable="false" />
           <Property Name="CreditType" Type="Int32" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -1893,7 +1891,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="BrandId" Type="Int32" Nullable="false" />
           <Property Name="BrandName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -1946,7 +1944,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="UnitType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ConversionUnit" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ConversionFormula" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Type" Type="Int32" Nullable="false" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
@@ -1976,8 +1973,8 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OrderId" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderId" Type="Int64" Nullable="false" />
           <Property Name="OrdeNumber" Type="Int32" Nullable="false" />
           <Property Name="ProductId" Type="Int32" Nullable="false" />
           <Property Name="ProductName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
@@ -1996,7 +1993,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CustomerId" Type="Int32" Nullable="false" />
           <Property Name="CustomerName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="CustomerPhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -2058,7 +2055,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Type" Type="Int32" Nullable="false" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -2082,7 +2078,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CorporateID" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Amount" Type="Double" Nullable="false" />
           <Property Name="PaymentMode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -2181,7 +2177,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="AddOnItemName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="MasterProductId" Type="Int32" />
+          <Property Name="MasterProductId" Type="Int64" />
           <Property Name="MasterProductName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="AddOnCategoryId" Type="Int32" Nullable="false" />
           <Property Name="AddOnCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -2205,9 +2201,9 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="MasterProductId" Type="Int32" Nullable="false" />
+          <Property Name="MasterProductId" Type="Int64" Nullable="false" />
           <Property Name="ShopId" Type="Int32" Nullable="false" />
           <Property Name="ShopName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ShopCategoryId" Type="Int32" Nullable="false" />
@@ -2290,7 +2286,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Brands" Relationship="Self.FK_Brands_ProductType" FromRole="ProductType" ToRole="Brands" />
           <NavigationProperty Name="NextSubCategories" Relationship="Self.FK_NextSubCategories_ProductType" FromRole="ProductType" ToRole="NextSubCategories" />
@@ -2339,7 +2335,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="AddOnItemName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="MasterProductId" Type="Int32" Nullable="false" />
+          <Property Name="MasterProductId" Type="Int64" Nullable="false" />
           <Property Name="MasterProductName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="AddOnCategoryId" Type="Int32" Nullable="false" />
           <Property Name="AddOnCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -2357,7 +2353,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="AddOnsPrice" Type="Double" Nullable="false" />
           <Property Name="CrustPrice" Type="Double" Nullable="false" />
           <Property Name="AddOnType" Type="Int32" Nullable="false" />
-          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="ProductId" Type="Int64" Nullable="false" />
           <Property Name="ProductName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="ShopId" Type="Int32" Nullable="false" />
           <Property Name="ShopName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
@@ -3036,7 +3032,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Type="Double" Name="Rating" Nullable="false" />
         </ComplexType>
         <ComplexType Name="test_Result">
-          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="Int64" Name="Id" Nullable="false" />
           <Property Type="String" Name="Name" Nullable="true" />
           <Property Type="Int32" Name="BrandId" Nullable="false" />
           <Property Type="String" Name="BrandName" Nullable="true" />
@@ -3522,7 +3518,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
                 <ScalarProperty Name="UnitType" ColumnName="UnitType" />
                 <ScalarProperty Name="ConversionUnit" ColumnName="ConversionUnit" />
                 <ScalarProperty Name="ConversionFormula" ColumnName="ConversionFormula" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
                 <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
@@ -3633,7 +3628,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
               <MappingFragment StoreEntitySet="Packages">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />

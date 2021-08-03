@@ -20,7 +20,7 @@ namespace ShopNow.Models
             this.OrderItems = new HashSet<OrderItem>();
         }
     
-        public int Id { get; set; }
+        public long Id { get; set; }
         public int CustomerId { get; set; }
         public string CustomerName { get; set; }
         public string CustomerPhoneNumber { get; set; }

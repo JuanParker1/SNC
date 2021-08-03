@@ -16,7 +16,7 @@ namespace ShopNow.Models
     {
         public int Id { get; set; }
         public string AddOnItemName { get; set; }
-        public Nullable<int> MasterProductId { get; set; }
+        public Nullable<long> MasterProductId { get; set; }
         public string MasterProductName { get; set; }
         public int AddOnCategoryId { get; set; }
         public string AddOnCategoryName { get; set; }

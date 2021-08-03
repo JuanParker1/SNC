@@ -20,7 +20,6 @@ namespace ShopNow.Models
         public string UnitType { get; set; }
         public string ConversionUnit { get; set; }
         public string ConversionFormula { get; set; }
-        public int Type { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }

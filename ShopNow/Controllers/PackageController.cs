@@ -47,12 +47,11 @@ namespace ShopNow.Controllers
             bool IsAdded = false;
             string message = "";
             string message1 = "";
-            var package = db.Packages.FirstOrDefault(i => i.Name == name && i.Type == type && i.Status == 0);// Package.GetNameType(name,type);
+            var package = db.Packages.FirstOrDefault(i => i.Name == name && i.Status == 0);
             if (package == null)
             {
                 var medicalPackage = new Package();
                 medicalPackage.Name = name;
-                medicalPackage.Type = type;
                 medicalPackage.CreatedBy = user.Name;
                 medicalPackage.UpdatedBy = user.Name;
 
@@ -61,7 +60,6 @@ namespace ShopNow.Controllers
                 medicalPackage.DateUpdated = DateTime.Now;
                 db.Packages.Add(medicalPackage);
                 db.SaveChanges();
-                //string code = Package.Add(medicalPackage, out int error);
                 IsAdded = medicalPackage.Id != 0 ? true : false;
                 message = name + " Successfully Added";
             }
@@ -76,19 +74,16 @@ namespace ShopNow.Controllers
         public JsonResult Edit(int code, string name, int type)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            //bool result = false;
             string message = "";
             Package medicalPackage = db.Packages.FirstOrDefault(i => i.Id == code && i.Status == 0);// Package.Get(code);
             if (medicalPackage != null)
             {
                 medicalPackage.Name = name;
-                medicalPackage.Type = type;
                 medicalPackage.DateUpdated = DateTime.Now;
                 medicalPackage.UpdatedBy = user.Name;
                 medicalPackage.DateUpdated = DateTime.Now;
                 db.Entry(medicalPackage).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                //result = Package.Edit(medicalPackage, out int error);
                 message = name + " Updated Successfully";
             }
             return Json(new { result = true, message = message }, JsonRequestBehavior.AllowGet);
@@ -207,13 +202,12 @@ namespace ShopNow.Controllers
                 // MainPageModel entities = new MainPageModel();
                 foreach (DataRow row in dt.Rows)
                 {
-                    var medicalPackage = db.Packages.FirstOrDefault(i => i.Name == row[model.Name].ToString() && i.Status == 0);// Package.GetName(row[model.Name].ToString());
+                    var medicalPackage = db.Packages.FirstOrDefault(i => i.Name == row[model.Name].ToString() && i.Status == 0);
                     if (medicalPackage == null)
                     {
                         db.Packages.Add(new Package
                         {
                             Name = row[model.Name].ToString(),
-                            Type = model.Type,
                             Status = 0,
                             DateEncoded = DateTime.Now,
                             DateUpdated = DateTime.Now,

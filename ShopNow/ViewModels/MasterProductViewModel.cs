@@ -51,7 +51,7 @@ namespace ShopNow.ViewModels
         public List<PendingList> Lists { get; set; }
         public class PendingList
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
             public string Name { get; set; }
             public int ItemId { get; set; }
             public string ProductTypeName { get; set; }
@@ -59,7 +59,7 @@ namespace ShopNow.ViewModels
         public List<MappedList> MappedLists { get; set; }
         public class MappedList
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
             public string Name { get; set; }
             public string MasterProductName { get; set; }
             public string ProductTypeName { get; set; }
@@ -189,7 +189,7 @@ namespace ShopNow.ViewModels
         public List<ItemMappingList> List { get; set; }
         public class ItemMappingList
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
             public string Name { get; set; }
             public string ImagePath { get; set; }
             public string LongDescription { get; set; }
@@ -234,7 +234,7 @@ namespace ShopNow.ViewModels
         {
             public int Id { get; set; }
             public string AddOnItemName { get; set; }
-            public Nullable<int> MasterProductId { get; set; }
+            public Nullable<long> MasterProductId { get; set; }
             public string MasterProductName { get; set; }
             public int AddOnCategoryId { get; set; }
             public string AddOnCategoryName { get; set; }

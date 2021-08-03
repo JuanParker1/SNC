@@ -1183,7 +1183,6 @@ namespace ShopNow.Controllers
             {
                 Package mp = new Package();
                 mp.Name = PackageName;
-                mp.Type = 1;
                // mp.Code = _generatedCode("PKG");
                 mp.Status = 0;
                 mp.DateEncoded = DateTime.Now;
@@ -1207,7 +1206,6 @@ namespace ShopNow.Controllers
             {
                 Package mp = new Package();
                 mp.Name = PackageName;
-                mp.Type = 2;
                // mp.Code = _generatedCode("PKG");
                 mp.Status = 0;
                 mp.DateEncoded = DateTime.Now;
@@ -1231,7 +1229,6 @@ namespace ShopNow.Controllers
             {
                 MeasurementUnit mp = new MeasurementUnit();
                 mp.UnitName = MeasurementUnitName;
-                mp.Type = 2;
                // mp.Code = _generatedCode("MSU");
                 mp.Status = 0;
                 mp.DateEncoded = DateTime.Now;
@@ -1877,7 +1874,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNMPRMC007")]
         public async Task<JsonResult> GetDrugUnitSelect2(string q = "")
         {
-            var model = await _db.MeasurementUnits.Where(a => a.UnitName.Contains(q) && a.Status == 0 && a.Type == 1).OrderBy(i => i.UnitName).Select(i => new
+            var model = await _db.MeasurementUnits.Where(a => a.UnitName.Contains(q) && a.Status == 0).OrderBy(i => i.UnitName).Select(i => new
             {
                 id = i.Id,
                 text = i.UnitName
@@ -1889,7 +1886,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "")]
         public async Task<JsonResult> GetFMCGMeasurementUnitSelect2(string q = "")
         {
-            var model = await _db.MeasurementUnits.OrderBy(i => i.UnitName).Where(a => a.UnitName.Contains(q) && a.Status == 0 && a.Type == 2).Select(i => new
+            var model = await _db.MeasurementUnits.OrderBy(i => i.UnitName).Where(a => a.UnitName.Contains(q) && a.Status == 0).Select(i => new
             {
                 id = i.Id,
                 text = i.UnitName
@@ -1915,7 +1912,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNMPRMC007")]
         public async Task<JsonResult> GetMedicalPackageSelect2(string q = "")
         {
-            var model = await _db.Packages.Where(a => a.Name.Contains(q) && a.Status == 0 && a.Type == 1).OrderBy(i => i.Name).Select(i => new
+            var model = await _db.Packages.Where(a => a.Name.Contains(q) && a.Status == 0).OrderBy(i => i.Name).Select(i => new
             {
                 id = i.Id,
                 text = i.Name
@@ -1927,7 +1924,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "")]
         public async Task<JsonResult> GetFMCGPackageSelect2(string q = "")
         {
-            var model = await _db.Packages.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.Type == 2).Select(i => new
+            var model = await _db.Packages.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
             {
                 id = i.Id,
                 text = i.Name

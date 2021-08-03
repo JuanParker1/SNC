@@ -305,7 +305,6 @@ namespace ShopNow.Controllers
             prod.UpdatedBy = user.Name;
             db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
-            //return RedirectToAction("MedicalList", "Product");
             return RedirectToAction("MedicalEdit", new { id = AdminHelpers.ECodeInt(prod.Id) });
         }
 
@@ -1484,7 +1483,7 @@ namespace ShopNow.Controllers
 
         public async Task<JsonResult> GetFMCGPackageSelect2(string q = "")
         {
-            var model = await db.Packages.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.Type == 2).Select(i => new
+            var model = await db.Packages.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
             {
                 id = i.Id,
                 text = i.Name
@@ -1495,7 +1494,7 @@ namespace ShopNow.Controllers
 
         public async Task<JsonResult> GetFMCGMeasurementUnitSelect2(string q = "")
         {
-            var model = await db.MeasurementUnits.OrderBy(i => i.UnitName).Where(a => a.UnitName.Contains(q) && a.Status == 0 && a.Type == 2).Select(i => new
+            var model = await db.MeasurementUnits.OrderBy(i => i.UnitName).Where(a => a.UnitName.Contains(q) && a.Status == 0).Select(i => new
             {
                 id = i.Id,
                 text = i.UnitName
@@ -1511,11 +1510,8 @@ namespace ShopNow.Controllers
                 id = i.Id,
                 text = i.Name,
                 CategoryId = i.CategoryId,
-              //  CategoryName = i.CategoryName,
                 SubCategoryId = i.SubCategoryId,
-               // SubCategoryName = i.SubCategoryName,
                 NextSubCategoryId = i.NextSubCategoryId,
-             //   NextSubCategoryName = i.NextSubCategoryName,
                 BrandId = i.BrandId,
                 BrandName = i.BrandName,
                 ShortDescription = i.ShortDescription,

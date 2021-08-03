@@ -13,7 +13,7 @@ namespace ShopNow.Models
     
     public partial class test_Result
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
         public int BrandId { get; set; }
         public string BrandName { get; set; }

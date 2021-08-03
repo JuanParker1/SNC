@@ -20,9 +20,9 @@ namespace ShopNow.Models
             this.ShopDishAddOns = new HashSet<ShopDishAddOn>();
         }
     
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
-        public int MasterProductId { get; set; }
+        public long MasterProductId { get; set; }
         public int ShopId { get; set; }
         public string ShopName { get; set; }
         public int ShopCategoryId { get; set; }
