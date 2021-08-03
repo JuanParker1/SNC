@@ -1,0 +1,35 @@
+﻿@model ShopNow.ViewModels.ProductUpdateStockViewModel
+
+@{
+    ViewBag.Title = "Update Product Stock";
+}
+<title>ShopNow | @ViewBag.Title</title>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6 mx-auto mt-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+                    <form action="/Product/UpdateStock" method="get">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mr-3">
+                                    <label class="col-form-label">Item Id</label>
+                                    <input type="text" name="ItemId" value="@Model.ItemId" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-2 mt-2"><input type="submit" class="btn btn-info mt-4" value="Get" /></div>
+                        </div>
+                    </form>
+                    <form action="/Product/UpdateStockValue" method="post">
+                        <div class="form-group w-25">
+                            <label class="col-form-label">Quantity</label>
+                            <input type="text" name="Qty" value="@Model.Qty" class="form-control" />
+                        </div>
+                        <input type="submit" class="btn btn-success" value="Update" />
+                    </form>
+                </div>
+            </div></div>
+</div>
+</div>

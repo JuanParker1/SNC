@@ -1548,6 +1548,32 @@ namespace ShopNow.Controllers
         //    base.Dispose(disposing);
         //}
 
+        [HttpGet]
+        public ActionResult UpdateStock(ProductUpdateStockViewModel model)
+        {
+            if (model.ItemId != 0)
+            {
+                var product = db.Products.FirstOrDefault(i => i.ItemId == model.ItemId);
+                model.ProductName = product.Name;
+                model.ItemId = product.ItemId;
+                model.Qty = product.Qty;
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateStockValue(ProductUpdateStockViewModel model)
+        {
+            if (model.ItemId != 0)
+            {
+                var product = db.Products.FirstOrDefault(i => i.ItemId == model.ItemId);
+                product.Qty = model.Qty;
+                db.Entry(product).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return RedirectToAction("UpdateStock");
+        }
+
     }
 
 }

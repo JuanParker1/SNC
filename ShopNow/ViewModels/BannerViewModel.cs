@@ -47,6 +47,7 @@ namespace ShopNow.ViewModels
             public DateTime ToDate { get; set; }
             public int Days { get; set; }
             public int? CreditType { get; set; }
+            public int Status { get; set; }
         }
         
     }

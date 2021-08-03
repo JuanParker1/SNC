@@ -661,6 +661,11 @@ namespace ShopNow.ViewModels
         }
     }
 
-
+    public class ProductUpdateStockViewModel
+    {
+        public int ItemId { get; set; }
+        public string ProductName { get; set; }
+        public int Qty { get; set; }
+    }
 }
 

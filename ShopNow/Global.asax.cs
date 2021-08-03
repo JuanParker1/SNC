@@ -47,7 +47,7 @@ namespace ShopNow
         protected void Session_End(object sender, EventArgs e)
         {
             Session.Abandon();
-            Response.RedirectToRoute("Hom", "Index");
+            Response.RedirectToRoute("Home", "Index");
         }
     }
 

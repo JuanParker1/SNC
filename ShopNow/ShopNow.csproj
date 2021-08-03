@@ -336,6 +336,7 @@
     <Compile Include="Controllers\MarketingAgentController.cs" />
     <Compile Include="Controllers\MasterProductController.cs" />
     <Compile Include="Controllers\BrandOwnerController.cs" />
+    <Compile Include="Controllers\OTPController.cs" />
     <Compile Include="Controllers\PackageController.cs" />
     <Compile Include="Controllers\NextSubCategoryController.cs" />
     <Compile Include="Controllers\PageController.cs" />
@@ -619,6 +620,7 @@
     <Content Include="Content\simple-line-icons.css" />
     <Content Include="Content\style.css" />
     <Content Include="Content\sweetalert\sweetalert.css" />
+    <Content Include="Content\switch.css" />
     <Content Include="ExceptionDetailsFile\10-05-21.txt" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\font-awesome\css\font-awesome.css" />
@@ -2996,6 +2998,8 @@
     <Content Include="Views\DiscountCategory\List.cshtml" />
     <Content Include="Views\Shop\CreditList.cshtml" />
     <Content Include="Views\PushNotification\Index.cshtml" />
+    <Content Include="Views\Product\UpdateStock.cshtml" />
+    <Content Include="Views\OTP\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
