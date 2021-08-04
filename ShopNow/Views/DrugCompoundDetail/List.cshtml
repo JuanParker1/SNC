@@ -7,17 +7,20 @@
 <title>ShopNow | Drug Compound Detail List</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-<div class="container-fluid">
-    <div class="row my-2">
+<div class="container-fluid mb-5">
+    <div class="row">
         <div class="col-md-6">
             <h5 class="text-success" style="letter-spacing:1px">Drug Compound Detail List</h5>
-        </div>        
+        </div>
         <div class="col-md-6 text-right">
             <a href="~/DrugCompoundDetail/Create" target="_blank"><span class="fa fa-plus"></span>&nbsp;New Drug Compound Detail</a>
             @*<input type="button" id="btnExport" class="btn btn-sm btn-secondary" value="Export To Excel" />*@
         </div>
-    </div>
-    @Html.Grid(Model).Columns(columns =>
+
+        <div class="col-md-12">
+            <div class="card shadow mt-3">
+                <div class="card-body">
+                    @Html.Grid(Model).Columns(columns =>
 {
 columns.Add(c => c.AliasName).Titled("Name").Filterable(true).SetWidth(20);
 columns.Add(c => c.InteractingCompounds).Titled("Combination").Filterable(true).SetWidth(20);
@@ -27,6 +30,10 @@ columns.Add()
 .Encoded(false)
 .Sanitized(false)
 .RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { Id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
-               + Html.ActionLink("Delete", "Delete", new { Id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(20);
+           + Html.ActionLink("Delete", "Delete", new { Id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(20);
 }).WithPaging(20).Sortable(true)
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
