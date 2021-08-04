@@ -153,16 +153,16 @@
             });
 
             $(".edit-prompt").click(function () {
-                var code = $(this).attr('data-id');
+                var id = $(this).attr('data-id');
                 var rateperorder = $(this).attr('data-id1');
                 var dailyviewer = $(this).attr('data-id2');
-                $("#PlatFormCreaditRateCode").val(code);
+                $("#PlatFormCreaditRateCode").val(id);
                 $("#CreditRate").append("<input type=text name=PRatePerOrder id=PRatePerOrder class=form-control value='" + rateperorder + "' />");
                 $("#DailyView").append("<input type=text name=PDailyViewer id=PDailyViewer class=form-control value='" + dailyviewer + "' />");
             });
 
             $(".Edit").click(function () {
-                var Code = $("#PlatFormCreaditRateCode").val();
+                var Id = $("#PlatFormCreaditRateCode").val();
                 var ratePerOrder = $("#PRatePerOrder").val();
                 var dailyview = $("#PDailyViewer").val();
                 if (ratePerOrder == "" || ratePerOrder == null) {
@@ -175,7 +175,7 @@
                     swal("Notice!", "Daily Rent per 10,000 Viewers are Minimum Rs.20", "warning");
                 }
                 else if (ratePerOrder != "" || ratePerOrder != null || dailyview != "" || dailyview != null) {
-                    $.getJSON("/PlatFormCreditRate/Edit", { code: Code, ratePerOrder: ratePerOrder, dailyViewer: dailyview }, function (data) {
+                    $.getJSON("/PlatFormCreditRate/Edit", { id: Id, ratePerOrder: ratePerOrder, dailyViewer: dailyview }, function (data) {
                         if (data.message != null || data.message != "") {
                             swal({
                                 title: data.message,
@@ -194,19 +194,17 @@
             });
 
             $(".delete-prompt").click(function () {
-                var code = $(this).attr('data-id');
-                $("#Code").val(code);
+                var id = $(this).attr('data-id');
+                $("#Id").val(id);
             });
 
             $(".delete-confirm").click(function () {
-                var code = $("#Code").val();
-                $.getJSON("/PlatFormCreditRate/Delete", { code: code }, function (data) {
+                var id = $("#Id").val();
+                $.getJSON("/PlatFormCreditRate/Delete", { id: id }, function (data) {
                     window.location.reload();
                 });
             });
-
         });
-
     </script>
 }
 

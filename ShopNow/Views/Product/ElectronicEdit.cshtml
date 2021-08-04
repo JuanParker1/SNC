@@ -2,7 +2,9 @@
 @{
     ViewBag.Title = "Electronic Update";
 }
+
 <title>ShopNow | @ViewBag.Title</title>
+
 <div class="container-fluid">
     <div class="row my-2">
         <div class="col-md-6">
@@ -87,7 +89,7 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="Weight"><strong class="text-secondary">Weight</strong></label>
-                                        <input id="weight" type="number" class="form-control" name="weight" min="0" step="any" value="@Model.weight" />
+                                        <input id="weight" type="number" class="form-control" name="weight" min="0" step="any" value="@Model.Weight" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="SizeLB"><strong class="text-secondary">Size LB</strong></label>
@@ -115,15 +117,15 @@
                                         <label class="control-label" for="PackagingType"><strong class="text-secondary">Packing Type</strong></label>
                                         <div class="form-check-inline ml-3">
                                             <label class="form-check-label">
-                                                <input type="radio" class="form-check-input" name="PackagingType" value="0" @if (Model.PackagingType == 0) { <text> checked </text> }>Item Qty
+                                                <input type="radio" class="form-check-input" name="PackagingType" value="0" @if (Model.PackingType == 0) { <text> checked </text> }>Item Qty
                                             </label>
                                         </div>
                                         <div class="form-check-inline">
                                             <label class="form-check-label">
-                                                <input type="radio" class="form-check-input" name="PackagingType" value="1" @if (Model.PackagingType == 1) { <text> checked </text> }>SKU
+                                                <input type="radio" class="form-check-input" name="PackagingType" value="1" @if (Model.PackingType == 1) { <text> checked </text> }>SKU
                                             </label>
                                         </div>
-                                        <input type="number" class="form-control" name="PackagingCharge" id="PackagingCharge" value="@Model.PackagingCharge" />
+                                        <input type="number" class="form-control" name="PackagingCharge" id="PackagingCharge" value="@Model.PackingCharge" />
                                     </div>
                                 </div>
                             </div>
@@ -207,7 +209,6 @@
                 var results = Math.ceil(((menuprice - sellingprice) / menuprice) * 100);
                 $("#Percentage").val(results);
             });
-
         });
     </script>
 }

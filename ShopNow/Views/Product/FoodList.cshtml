@@ -45,8 +45,8 @@
     columns.Add()
     .Encoded(false)
     .Sanitized(false)
-    .RenderValueAs(o => Html.ActionLink("Edit", "FoodEdit", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-sm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
-    + Html.ActionLink("Delete", "Delete", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id), redirectPage=1 }, new { @class = "btn  btn-sm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
+    .RenderValueAs(o => Html.ActionLink("Edit", "FoodEdit", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
+    + Html.ActionLink("Delete", "Delete", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id), redirectPage=1 }, new { @class = "btn  btn-sm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
 }).WithPaging(20).Sortable(true)
 </div>
 

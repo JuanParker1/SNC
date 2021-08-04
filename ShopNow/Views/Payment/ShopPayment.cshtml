@@ -3,20 +3,23 @@
 @{
     ViewBag.Title = "Shop Payment";
 }
+
 <title>ShopNow | @ViewBag.Title</title>
+
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
+
 <style>
     .dis-none {
         display: none;
     }
 </style>
+
 <div class="container-fluid">
     <div class="row mb-3">
         <div class="col-md-3">
             <h5 class="mt-1 text-uppercase" style="letter-spacing:1px">@ViewBag.Title</h5>
         </div>
-
         <div class="col-md-6">
             <form method="get" action="/Payment/ShopPayment">
                 <div class="row">
@@ -33,40 +36,39 @@
         }
     </div>
     @Html.Grid(Model.ListItems).Columns(columns =>
-{
-    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
-    columns.Add(c => c.ShopOwnerPhoneNumber).Titled("Phone No.").Filterable(true).SetWidth(9);
-    columns.Add(c => c.TransactionType).Titled("Trans Type").Filterable(true).SetWidth(10);
-    columns.Add(c => c.FinalAmount).Titled("Amount").Filterable(true).SetWidth(8);
-    columns.Add(c => c.PaymentDate).Titled("Payment Date").Filterable(true).SetWidth(12).Format("{0:dd-MMM-yyyy}");
-    columns.Add(c => c.AccountName).Titled("Account Name").Filterable(true).SetWidth(12);
-    columns.Add(c => c.AccountNumber).Titled("Account No.").Filterable(true).SetWidth(10);
-    columns.Add(c => c.PaymentId).Titled("Payment Id").Filterable(true).SetWidth(10);
-    columns.Add(c => c.IfscCode).Titled("Ifsc Code").Filterable(true).SetWidth(8);
-    columns.Add(c => c.AccountType).Titled("Account Type").Filterable(true).SetWidth(11);
-}).WithPaging(20).Sortable(true)
-
+    {
+       columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
+       columns.Add(c => c.ShopOwnerPhoneNumber).Titled("Phone No.").Filterable(true).SetWidth(9);
+       columns.Add(c => c.TransactionType).Titled("Trans Type").Filterable(true).SetWidth(10);
+       columns.Add(c => c.FinalAmount).Titled("Amount").Filterable(true).SetWidth(8);
+       columns.Add(c => c.PaymentDate).Titled("Payment Date").Filterable(true).SetWidth(12).Format("{0:dd-MMM-yyyy}");
+       columns.Add(c => c.AccountName).Titled("Account Name").Filterable(true).SetWidth(12);
+       columns.Add(c => c.AccountNumber).Titled("Account No.").Filterable(true).SetWidth(10);
+       columns.Add(c => c.PaymentId).Titled("Payment Id").Filterable(true).SetWidth(10);
+       columns.Add(c => c.IfscCode).Titled("Ifsc Code").Filterable(true).SetWidth(8);
+       columns.Add(c => c.AccountType).Titled("Account Type").Filterable(true).SetWidth(11);
+    }).WithPaging(20).Sortable(true)
 </div>
 
 <table id="table-excel" class="d-none">
-        @foreach (var item in Model.ListItems.GroupBy(i => i.ShopId))
-        {
-            <tr>
-                <td>@item.FirstOrDefault().Identifier</td>
-                <td>@item.Sum(i => i.FinalAmount)</td>
-                <td>@DateTime.Now.ToString("dd-MM-yyyy")</td>
-                <td>@item.FirstOrDefault().AccountName</td>
-                <td type="string">@item.FirstOrDefault().AccountNumber</td>
-                <td>@item.FirstOrDefault().EmailID</td>
-                <td>@item.FirstOrDefault().EmailBody</td>
-                <td type="string">@item.FirstOrDefault().DebitAccountNo</td>
-                <td>@item.FirstOrDefault().PaymentId</td>
-                <td>@item.FirstOrDefault().IfscCode</td>
-                <td>@item.FirstOrDefault().ReceiverACType</td>
-                <td>@item.FirstOrDefault().Remarks</td>
-                <td>@item.FirstOrDefault().ShopOwnerPhoneNumber&nbsp;</td>
-            </tr>
-        }
+    @foreach (var item in Model.ListItems.GroupBy(i => i.ShopId))
+    {
+        <tr>
+            <td>@item.FirstOrDefault().Identifier</td>
+            <td>@item.Sum(i => i.FinalAmount)</td>
+            <td>@DateTime.Now.ToString("dd-MM-yyyy")</td>
+            <td>@item.FirstOrDefault().AccountName</td>
+            <td type="string">@item.FirstOrDefault().AccountNumber</td>
+            <td>@item.FirstOrDefault().EmailID</td>
+            <td>@item.FirstOrDefault().EmailBody</td>
+            <td type="string">@item.FirstOrDefault().DebitAccountNo</td>
+            <td>@item.FirstOrDefault().PaymentId</td>
+            <td>@item.FirstOrDefault().IfscCode</td>
+            <td>@item.FirstOrDefault().ReceiverACType</td>
+            <td>@item.FirstOrDefault().Remarks</td>
+            <td>@item.FirstOrDefault().ShopOwnerPhoneNumber&nbsp;</td>
+        </tr>
+    }
 </table>
 
 @if (Model.ListItems.Count != 0 && Model.ListItems.Any(i => i.ShopPaymentStatus != 1))
@@ -80,28 +82,29 @@
     </form>
 }
 
-<script src = "/Scripts/exporttoexcel/Table2ExcelNew.js" ></script>
-<script>
-    $(document).ready(function () {
-        var selectedDate = $('#date-earning').val();
-        $('#date').val(selectedDate);
+@section Scripts
+{
+    <script src="/Scripts/exporttoexcel/Table2ExcelNew.js"></script>
+    <script>
+        $(document).ready(function () {
+            var selectedDate = $('#date-earning').val();
+            $('#date').val(selectedDate);
 
-        $('#date-earning').on('change', function () {
-            $('#date').val($(this).val());
-        });
-    });
-
-    $("#btnExport").on('click', function () {
-        $(function () {
-            Table2Excel.extend((cell, cellText) => {
-                return $(cell).attr('type') == 'string' ? { t: 's', v: cellText } : { t: 'n', v: cellText };
+            $('#date-earning').on('change', function () {
+                $('#date').val($(this).val());
             });
-            var table2excel = new Table2Excel({
-                defaultFileName: "ShopPayment",
-            });
-            table2excel.export($("#table-excel"));
         });
-    });
 
-   
-</script>
+        $("#btnExport").on('click', function () {
+            $(function () {
+                Table2Excel.extend((cell, cellText) => {
+                    return $(cell).attr('type') == 'string' ? { t: 's', v: cellText } : { t: 'n', v: cellText };
+                });
+                var table2excel = new Table2Excel({
+                    defaultFileName: "ShopPayment",
+                });
+                table2excel.export($("#table-excel"));
+            });
+        });
+    </script>
+}

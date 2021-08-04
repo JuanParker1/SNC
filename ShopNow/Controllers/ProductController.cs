@@ -164,7 +164,6 @@ namespace ShopNow.Controllers
             {
                 ViewBag.user = user.Name;
             }
-
             return View();
         }
 
@@ -585,7 +584,7 @@ namespace ShopNow.Controllers
             }
             Session["ShopAddOnsEdit"] = null;
             //return RedirectToAction("FoodList", "Product",new { ShopId = prod.ShopId,ShopName = prod.ShopName });
-            return RedirectToAction("FoodEdit", new { id = AdminHelpers.ECodeInt(model.Id) });
+            return RedirectToAction("FoodEdit", new { id = AdminHelpers.ECodeLong(model.Id) });
         }
 
         public JsonResult GetProductDishAddOns(int masterProductId)
@@ -822,7 +821,7 @@ namespace ShopNow.Controllers
             db.SaveChanges();
 
             //return RedirectToAction("FMCGList", new { ShopId = prod.ShopId, shopName = prod.ShopName });
-            return RedirectToAction("FMCGEdit", new { id = AdminHelpers.ECodeInt(model.Id) });
+            return RedirectToAction("FMCGEdit", new { id = AdminHelpers.ECodeLong(model.Id) });
         }
 
         [AccessPolicy(PageCode = "")]
@@ -835,7 +834,6 @@ namespace ShopNow.Controllers
             {
                 ViewBag.user = user.Name;
             }
-
             return View();
         }
 
@@ -905,7 +903,6 @@ namespace ShopNow.Controllers
                     sh.DateUpdated = DateTime.Now;
                     db.Entry(sh).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
-
                 }
             }
             return View();
@@ -913,12 +910,12 @@ namespace ShopNow.Controllers
 
         public ActionResult ElectronicEdit(int id)
         {
-            var dCode = AdminHelpers.DCodeInt(id.ToString());
+            var dId = AdminHelpers.DCodeLong(id.ToString());
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            if (string.IsNullOrEmpty(dCode.ToString()))
+            if (string.IsNullOrEmpty(dId.ToString()))
                 return HttpNotFound();
-            var product = db.Products.FirstOrDefault(i => i.Id == dCode);
+            var product = db.Products.FirstOrDefault(i => i.Id == dId);
             //if (product != null)
             //{
             //    if (product.ImagePathLarge1 != null)
@@ -973,6 +970,7 @@ namespace ShopNow.Controllers
             }).ToList();
             return View(model);
         }
+
         [AccessPolicy(PageCode = "SHNPROSC007")]
         public ActionResult ServiceCreate()
         {
@@ -986,8 +984,6 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNPROSC007")]
         public ActionResult ServiceCreate(ServiceCreateEditViewModel pd, HttpPostedFileBase _ProductImage)
         {
-           // int error = 0;
-
             var prod = _mapper.Map<ServiceCreateEditViewModel, Product>(pd);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var shop = db.Shops.Any(i => i.Id == user.Id);
@@ -1003,7 +999,6 @@ namespace ShopNow.Controllers
             //{
             //    prod.CategoryName = cat.Name;
             //}
-
             //prod.ImagePath = _ProductImage != null ? _ProductImage.FileName : prod.ImagePath;
 
             prod.ProductTypeName = "Service";
@@ -1029,14 +1024,13 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
                 return RedirectToAction("List", "Product");
             }
-
         }
 
         [AccessPolicy(PageCode = "SHNPROR010")]
         public ActionResult Delete(string id, int redirectPage=0) //redirectPage : 0-Product List, 1-Food List, 2-Medical List, 3-FMCG List , 4-Electronic List
         {
-            var dCode = AdminHelpers.DCodeInt(id);
-            var product = db.Products.FirstOrDefault(i => i.Id == dCode);
+            var dId = AdminHelpers.DCodeInt(id);
+            var product = db.Products.FirstOrDefault(i => i.Id == dId);
             product.Status = 2;
             product.DateUpdated = DateTime.Now;
             db.Entry(product).State = System.Data.Entity.EntityState.Modified;
@@ -1053,7 +1047,6 @@ namespace ShopNow.Controllers
                     return RedirectToAction("ElectronicList", "Product");
                 default:
                     return RedirectToAction("List", "Product");
-
             }
         }
 
@@ -1081,13 +1074,11 @@ namespace ShopNow.Controllers
         public JsonResult RemoveFromAddOns(int id)
         {
             List<AddOnsCreateViewModel> addOns = Session["AddOns"] as List<AddOnsCreateViewModel>;
-
             if (addOns.Remove(addOns.SingleOrDefault(i => i.Id == id)))
             {
                 this.Session["AddOns"] = addOns;
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
-
             return Json(false, JsonRequestBehavior.AllowGet);
         }
 
@@ -1105,9 +1096,9 @@ namespace ShopNow.Controllers
                 this.Session["AddOns"] = addOns;
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
-            if (code != null)
+            if (id != 0)
             {
-                var addon = db.ProductDishAddOns.FirstOrDefault(i => i.Id == id);// ProductDishAddOn.Get(code);
+                var addon = db.ProductDishAddOns.FirstOrDefault(i => i.Id == id);
                 addon.Status = 2;
                 //ProductDishAddOn.Edit(addon, out int error);
                 addon.DateUpdated = DateTime.Now;
@@ -1124,7 +1115,6 @@ namespace ShopNow.Controllers
         }
         
         // Dish Select2
-
         [AccessPolicy(PageCode = "SHNPROFC004")]
         public async Task<JsonResult> GetPortionSelect2(string q = "")
         {
@@ -1195,7 +1185,6 @@ namespace ShopNow.Controllers
                 ImagePath1 = i.ImagePath1,
                 GoogleTaxonomyCode = i.GoogleTaxonomyCode,
                 MasterId = i.Id
-
             }).ToListAsync();
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
@@ -1441,8 +1430,7 @@ namespace ShopNow.Controllers
                 db.Products.Add(prod);
                 db.SaveChanges();
                 // prod.Code = prod.MainSNCode;
-            }
-                      
+            }                      
             return View(model);
         }
 
@@ -1569,7 +1557,5 @@ namespace ShopNow.Controllers
             }
             return RedirectToAction("UpdateStock");
         }
-
     }
-
 }

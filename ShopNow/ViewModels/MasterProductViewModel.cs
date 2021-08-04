@@ -7,7 +7,7 @@ namespace ShopNow.ViewModels
 {
     public class MainPageModel
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
         public string NickName { get; set; }
         public string Customisation { get; set; }
@@ -84,12 +84,42 @@ namespace ShopNow.ViewModels
             public string DrugCompoundDetailName { get; set; }
             public string ProductTypeName { get; set; }
         }
+    }
 
+    public class MasterProductFMCGListViewModel
+    {
+        public long Id { get; set; }
+        public string Name { get; set; }
+        public List<MasterProductFMCGList> Lists { get; set; }
+        public class MasterProductFMCGList
+        {
+            public long Id { get; set; }
+            public string Name { get; set; }
+            public string CategoryName { get; set; }
+            public string BrandName { get; set; }
+            public string ProductTypeName { get; set; }
+        }
+    }
+
+    public class MasterProductFoodListViewModel
+    {
+        public long Id { get; set; }
+        public string Name { get; set; }
+        public string CategoryName { get; set; }
+        public List<MasterProductFoodList> list { get; set; }
+        public class MasterProductFoodList
+        {
+            public long Id { get; set; }
+            public string Name { get; set; }
+            public string CategoryName { get; set; }
+            public double Price { get; set; }
+            public string ProductTypeName { get; set; }
+        }
     }
 
     public class MasterMedicalUploadViewModel
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
         public int BrandId { get; set; }
         public string BrandName { get; set; }
@@ -137,7 +167,7 @@ namespace ShopNow.ViewModels
         public List<MedicalDrugList> List { get; set; }
         public class MedicalDrugList
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
             public string Name { get; set; }
             public string Combination { get; set; }
             public string CategoryName { get; set; }
@@ -148,7 +178,7 @@ namespace ShopNow.ViewModels
 
     public class ItemMappingViewModel
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string ItemId { get; set; }
         public string Name { get; set; }
         public string NickName { get; set; }
@@ -236,7 +266,7 @@ namespace ShopNow.ViewModels
     public class MasterFoodEditViewModel
     {
         public HttpPostedFileBase DishImage { get; set; }
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
@@ -253,7 +283,7 @@ namespace ShopNow.ViewModels
         public List<AddonList> AddonLists { get; set; }
         public class AddonList
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
             public string AddOnItemName { get; set; }
             public Nullable<long> MasterProductId { get; set; }
             public string MasterProductName { get; set; }
@@ -274,7 +304,7 @@ namespace ShopNow.ViewModels
     public class MasterAddOnsCreateViewModel
     {
         public int Index { get; set; }
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string AddOnItemName { get; set; }
         public int MasterProductId { get; set; }
         public string MasterProductName { get; set; }
@@ -294,7 +324,7 @@ namespace ShopNow.ViewModels
         public List<DishList> DishLists { get; set; }
         public class DishList
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
             public string AddOnItemName { get; set; }
             public int MasterProductId { get; set; }
             public string MasterProductName { get; set; }
@@ -351,7 +381,7 @@ namespace ShopNow.ViewModels
         public HttpPostedFileBase FMCGImage3 { get; set; }
         public HttpPostedFileBase FMCGImage4 { get; set; }
         public HttpPostedFileBase FMCGImage5 { get; set; }
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
         public int BrandId { get; set; }
         public string BrandName { get; set; }
@@ -383,7 +413,7 @@ namespace ShopNow.ViewModels
 
     public class MasterFMCGUploadViewModel
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
         public int BrandId { get; set; }
         public string BrandName { get; set; }
@@ -464,7 +494,7 @@ namespace ShopNow.ViewModels
         public HttpPostedFileBase MedicalImage3 { get; set; }
         public HttpPostedFileBase MedicalImage4 { get; set; }
         public HttpPostedFileBase MedicalImage5 { get; set; }
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
         public string NickName { get; set; }
         public int BrandId { get; set; }
@@ -492,6 +522,21 @@ namespace ShopNow.ViewModels
         public string ImagePath3 { get; set; }
         public string ImagePath4 { get; set; }
         public string ImagePath5 { get; set; }
+    }
+
+    public class MasterElectronicListViewModel
+    {
+        public string Name { get; set; }
+        public string BrandName { get; set; }
+        public List<MasterElectronicList> list { get; set; }
+        public class MasterElectronicList
+        {
+            public long Id { get; set; }
+            public string Name { get; set; }
+            public string BrandName { get; set; }
+            public string CategoryName { get; set; }
+            public string ProductTypeName { get; set; }
+        }
     }
 
     // Master Electronic - 4
@@ -532,7 +577,7 @@ namespace ShopNow.ViewModels
         public HttpPostedFileBase ElectronicImage3 { get; set; }
         public HttpPostedFileBase ElectronicImage4 { get; set; }
         public HttpPostedFileBase ElectronicImage5 { get; set; }
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
         public int BrandId { get; set; }
         public string BrandName { get; set; }

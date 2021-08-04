@@ -44,7 +44,7 @@
                                             <option value="@Model.BrandId">@Model.BrandName</option>
                                         </select>
                                         <input type="hidden" name="BrandName" id="BrandName" value="@Model.BrandName" />
-                                        <input type="hidden" name="ProductType" value="@Model.ProductType" />
+                                        <input type="hidden" name="ProductTypeName" value="@Model.ProductTypeName" />
                                     </div>
                                     <div class="col-md-4">
                                         <div class="form-group">
@@ -203,7 +203,7 @@
     <script>
         $(document).ready(function () {
              var categorySelect = $('#CategoryIds');
-            var CategoryIds = "@Model.CategoryIds1";
+            var CategoryIds = "@Model.CategoryId";
             var categoryname = "@Model.CategoryName";
             if (CategoryIds) {
                 var array_code = CategoryIds.split(',');

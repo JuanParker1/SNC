@@ -865,9 +865,9 @@ namespace ShopNow.Controllers
                 payment.CreatedBy = customer.Name;
                 payment.UpdatedBy = customer.Name;
 
-                if (model.OrderNo != 0)
+                if (model.OrderNumber != 0)
                 {
-                    var order = db.Orders.FirstOrDefault(i => i.OrderNumber == model.OrderNo);
+                    var order = db.Orders.FirstOrDefault(i => i.OrderNumber == model.OrderNumber);
                     order.Status = 2;
                     order.UpdatedBy = customer.Name;
                     order.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
@@ -900,7 +900,7 @@ namespace ShopNow.Controllers
                         var s = varpayment.Fetch(model.ReferenceCode);
                         PaymentsData pay = new PaymentsData();
 
-                        pay.OrderNumber = Convert.ToInt32(model.OrderNo);
+                        pay.OrderNumber = Convert.ToInt32(model.OrderNumber);
                         pay.PaymentId = model.ReferenceCode;
 
                         pay.Invoice_Id = s["invoice_id"];
@@ -982,7 +982,7 @@ namespace ShopNow.Controllers
         public JsonResult UpdatedPayment(PaymentUpdatedApiViewModel model)
         {
             //int errorCode = 0;
-            var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == model.OrderNo); // Payment.GetOrderNo(model.OrderNo);
+            var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == model.OrderNumber); // Payment.GetOrderNo(model.OrderNo);
             payment.UpdatedOriginalAmount = model.UpdatedOriginalAmount;
             payment.UpdatedAmount = model.UpdatedAmount;
             if (model.RefundAmount > 0)
