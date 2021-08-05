@@ -241,19 +241,18 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new CartReportViewModel();
-
             var shop = db.Shops.FirstOrDefault(i => i.Id == shopid);
+
             model.List = db.Orders.Where(i => i.ShopId == shopid && i.Status == 6)
-           .AsEnumerable().GroupBy(i => i.OrderNumber).Select(i => new CartReportViewModel.CartReportList
+           .Select(i => new CartReportViewModel.CartReportList
            {
-               Id = i.Any() ? i.FirstOrDefault().Id : 0,
-               ShopName = i.Any() ? i.FirstOrDefault().ShopName : "N/A",
-               OrderNumber = i.Any() ? i.FirstOrDefault().OrderNumber : 0,
-               DeliveryAddress = i.Any() ? i.FirstOrDefault().DeliveryAddress : "N/A",
-               PhoneNumber = i.Any() ? i.FirstOrDefault().ShopOwnerPhoneNumber : "N/A",
-               CartStatus = i.Any() ? i.FirstOrDefault().Status : 2,
-               DeliveryBoyName = i.Any() ? i.FirstOrDefault().DeliveryBoyName : "N/A",
-               DateEncoded = i.Any() ? i.FirstOrDefault().DateEncoded : DateTime.Now
+               Id = i.Id,
+               ShopName = i.ShopName,
+               OrderNumber = i.OrderNumber,
+               DeliveryAddress = i.DeliveryAddress,
+               PhoneNumber = i.ShopOwnerPhoneNumber,
+               DeliveryBoyName = i.DeliveryBoyName,
+               DateEncoded = i.DateEncoded
            }).OrderByDescending(i => i.DateEncoded).ToList();
             model.ShopId = shopid;
 
@@ -268,16 +267,16 @@ namespace ShopNow.Controllers
             var model = new CartReportViewModel();
             var shop = db.Shops.FirstOrDefault(i => i.Id == shopid);
             model.List = db.Orders.Where(i => i.ShopId == shopid && i.Status == 7)
-            .AsEnumerable().GroupBy(i => i.OrderNumber).Select(i => new CartReportViewModel.CartReportList
-            {
-                Id = i.Any() ? i.FirstOrDefault().Id : 0,
-                ShopName = i.Any() ? i.FirstOrDefault().ShopName : "N/A",
-                OrderNumber = i.Any() ? i.FirstOrDefault().OrderNumber : 0,
-                DeliveryAddress = i.Any() ? i.FirstOrDefault().DeliveryAddress : "N/A",
-                PhoneNumber = i.Any() ? i.FirstOrDefault().ShopOwnerPhoneNumber : "N/A",
-                DeliveryBoyName = i.Any() ? i.FirstOrDefault().DeliveryBoyName : "N/A",
-                DateEncoded = i.Any() ? i.FirstOrDefault().DateEncoded : DateTime.Now
-            }).OrderByDescending(i => i.DateEncoded).ToList();
+           .Select(i => new CartReportViewModel.CartReportList
+           {
+               Id = i.Id,
+               ShopName = i.ShopName,
+               OrderNumber = i.OrderNumber,
+               DeliveryAddress = i.DeliveryAddress,
+               PhoneNumber = i.ShopOwnerPhoneNumber,
+               DeliveryBoyName = i.DeliveryBoyName,
+               DateEncoded = i.DateEncoded
+           }).OrderByDescending(i => i.DateEncoded).ToList();
             model.ShopId = shopid;
             model.ShopName = shop.Name;
             return View(model.List);

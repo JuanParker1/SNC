@@ -20,12 +20,11 @@
                 <input type="hidden" name="ShopName" id="ShopName" />
             </div>
             <div class="col-md-2">
-                <input type="button" class="btn btn-info" id="Filter" value="Apply Filter"/> 
+                <input type="button" class="btn btn-info" id="Filter" value="Apply Filter" />
             </div>
             <div class="col-md-3 text-right">
-                    <button id="btnPrint" class="btn btn-sm btn-secondary mr-2" value="Print"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
-                    <button id="btnExport" class="btn btn-sm btn-secondary" value="Export To Excel"><i class="fa fa-file-excel-o fa-lg" aria-hidden="true"></i></button>
-                
+                <button id="btnPrint" class="btn btn-sm btn-secondary mr-2" value="Print"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
+                <button id="btnExport" class="btn btn-sm btn-secondary" value="Export To Excel"><i class="fa fa-file-excel-o fa-lg" aria-hidden="true"></i></button>
             </div>
         </div>
         <div class="row">
@@ -39,7 +38,7 @@
                             columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
                             columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(15);
                             columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(15);
-                            columns.Add().RenderValueAs(c => c.CartStatus == 6 ? "Delivered" : "N/A").Titled("Order Status").Filterable(true).SetWidth(10);
+                            columns.Add().RenderValueAs(c => c.Status == 6 ? "Delivered" : "N/A").Titled("Order Status").Filterable(true).SetWidth(10);
                             columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10);
                         }).WithPaging(25).Sortable(true)
                     </div>
