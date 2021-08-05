@@ -19,7 +19,7 @@
         <div class="col-md-12 mx-auto">
             @using (Html.BeginForm("MedicalCreate", "MasterProduct", FormMethod.Post, new { id = "MedicalProductForm", enctype = "multipart/form-data" }))
             {
-                <div class="card">
+                <div class="card shadow">
                     <div class="card-body">
                         @Html.AntiForgeryToken()
                         <div class="form-group row">
@@ -45,9 +45,9 @@
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="control-label text-secondary font-weight-bold" for="CategoryIds">Category Name</label>
+                                        <label class="control-label text-secondary font-weight-bold" for="CategoryId">Category Name</label>
                                         <div class="form-group">
-                                            <select class="form-control" name="CategoryIds" id="CategoryIds" multiple></select>
+                                            <select class="form-control" name="CategoryId" id="CategoryId"></select>
                                             <input type="hidden" name="CategoryName" id="CategoryName" />
                                         </div>
                                     </div>
@@ -237,7 +237,7 @@
                 $('input[name="BrandName"]').val(e.params.data.text);
             });
 
-            $('#CategoryIds').select2({
+            $('#CategoryId').select2({
                 placeholder: "Search Category",
                 ajax: {
                     url: "/MasterProduct/GetMedicalCategorySelect2",

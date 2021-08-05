@@ -6,34 +6,33 @@
 <title>ShopNow | Measurement Unit List</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-<div class="container-fluid">
+<div class="container-fluid mb-5">
     <div class="row">
         <div class="col-md-6">
             <h5 class="text-success" style="letter-spacing:1px">Measurement Unit List</h5>
-        </div>        
+        </div>
         <div class="col-md-6 text-right">
-            <a href="~/MeasurementUnit/Create"><span class="fa fa-plus"></span> New Measurement Unit</a>            
+            <a href="~/MeasurementUnit/Create"><span class="fa fa-plus"></span> New Measurement Unit</a>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="card mb-3">
+            <div class="card shadow mt-3">
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
                {
-               columns.Add(b => b.UnitName).Titled("Name").Filterable(true).SetWidth(20);
-               columns.Add(b => b.UnitSymbol).Titled("Symbol").Filterable(true).SetWidth(20);
+               columns.Add(b => b.UnitName).Titled("Name").Filterable(true).SetWidth(25);
+               columns.Add(b => b.UnitSymbol).Titled("Symbol").Filterable(true).SetWidth(15);
                columns.Add(b => b.UnitType).Titled("Type").Filterable(true).SetWidth(20);
-               columns.Add(b => b.ConversionFormula).Titled("Conversion Formula").Filterable(true).SetWidth(20);
+               columns.Add(b => b.ConversionFormula).Titled("ConversionFormula").Filterable(true).SetWidth(20);
                columns.Add(b => b.ConversionUnit).Titled("Conversion Unit").Filterable(true).SetWidth(20);
-               columns.Add().RenderValueAs(b => b.Type == 1 ? "Medical" : b.Type == 2 ? "FMCG" : "N/A").Titled("Type").SetWidth(10);
                columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(b => @<div>
-    <a href="~/MeasurementUnit/Edit?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(b.Id)" class="btn btn-warning text-center btn-sm text-nowrap" style="padding: 3px 26px">Edit</a>
-    <a href="~/MeasurementUnit/Delete?id=@b.Id" class="btn btn-danger text-center btn-sm text-nowrap" style="padding: 3px 18px">Delete</a>
-</div>);
-}).WithPaging(20).Sortable(true)
+                            <a href="~/MeasurementUnit/Edit?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(b.Id)" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(b.Id)" class="btn btn-danger btn-sm btnDelete">Delete</a>
+                        </div>);
+                  }).WithPaging(20).Sortable(true)
 
-               </div>
+                </div>
             </div>
 
         </div>
@@ -42,5 +41,34 @@
 
 @section Scripts
 {
-    <script src="~/Scripts/exporttoexcel/jquery.table2excel.js"></script>
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            $(".btnDelete").click(function () {
+                var id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/MeasurementUnit/Delete", { id: id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
+            });
+        });
+    </script>
 }

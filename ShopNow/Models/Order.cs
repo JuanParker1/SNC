@@ -20,7 +20,7 @@ namespace ShopNow.Models
             this.OrderItems = new HashSet<OrderItem>();
         }
     
-        public int Id { get; set; }
+        public long Id { get; set; }
         public int CustomerId { get; set; }
         public string CustomerName { get; set; }
         public string CustomerPhoneNumber { get; set; }
@@ -48,6 +48,16 @@ namespace ShopNow.Models
         public int DeliveryBoyPaymentStatus { get; set; }
         public int DeliveryOrderPaymentStatus { get; set; }
         public double RatePerOrder { get; set; }
+        public double PenaltyAmount { get; set; }
+        public string PenaltyRemark { get; set; }
+        public double WaitingCharge { get; set; }
+        public int WaitingTime { get; set; }
+        public string WaitingRemark { get; set; }
+        public Nullable<System.DateTime> OrderReadyTime { get; set; }
+        public Nullable<System.DateTime> DeliveryBoyShopReachTime { get; set; }
+        public Nullable<System.DateTime> OrderPickupTime { get; set; }
+        public System.DateTime DeliveryLocationReachTime { get; set; }
+        public Nullable<System.DateTime> DeliveredTime { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }

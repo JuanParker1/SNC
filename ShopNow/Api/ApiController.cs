@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using LinqToDB;
 using Newtonsoft.Json;
 using Razorpay.Api;
 using ShopNow.Filters;
-using ShopNow.Helpers;
 using ShopNow.MessageHandlers;
 using ShopNow.Models;
 using ShopNow.ViewModels;
@@ -29,7 +27,6 @@ namespace ShopNow.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class ApiController : Controller
     {
-        
         private sncEntities db = new sncEntities();
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
@@ -103,14 +100,12 @@ namespace ShopNow.Controllers
                 var result = JsonConvert.DeserializeObject<Results>(getDetails);
                 return Json(new { result, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
             }
-
         }
 
         public JsonResult NotifyAsync()
         {
-           // SendNotificationFromFirebaseCloud();
+            // SendNotificationFromFirebaseCloud();
             var serverKey = string.Format("key={0}", "AAAASx4c4GY:APA91bEYyUEFT9F1XhO44epVtF0Mxq2SNbqIZUSQ3Xroov65JF9TzH7v9TghwG4JiWVa8HgqJVJnfklHIqhFuCQfW9T8b8TzrOOMYJd9eh2H1HcJFg06Vnjqz0aJk1tCSSuUL9BeUrsD");
-
             // Get the sender id from FCM console
             var senderId = string.Format("id={0}", "322627756134");
             string to = "fXdD2vHnDVg:APA91bH0W1Grr4w07ghPmQiD7TtUETiLVupS9DGzryTtly8Y0sj35tiIgH3OsD6CjV5yvJni5lmJZWpsjLpVKV5u67mAuZPNDrCk1Dq1r3lUPCwT5ZBA8k4g4OdmLMbcgLvNgZ8XBySB";
@@ -138,7 +133,6 @@ namespace ShopNow.Controllers
                 streamWriter.Write(strNJson);
                 streamWriter.Flush();
             }
-
             var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
             using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
             {
@@ -146,18 +140,17 @@ namespace ShopNow.Controllers
             }
             return Json(new { result, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
-        
-        public  async Task<bool> NotifyAsynca()
+
+        public async Task<bool> NotifyAsynca()
         {
             try
             {
                 //SendNotificationFromFirebaseCloud();
-                   // Get the server key from FCM console
-                   var serverKey = string.Format("key={0}", "AAAASx4c4GY:APA91bEYyUEFT9F1XhO44epVtF0Mxq2SNbqIZUSQ3Xroov65JF9TzH7v9TghwG4JiWVa8HgqJVJnfklHIqhFuCQfW9T8b8TzrOOMYJd9eh2H1HcJFg06Vnjqz0aJk1tCSSuUL9BeUrsD");
-                
+                // Get the server key from FCM console
+                var serverKey = string.Format("key={0}", "AAAASx4c4GY:APA91bEYyUEFT9F1XhO44epVtF0Mxq2SNbqIZUSQ3Xroov65JF9TzH7v9TghwG4JiWVa8HgqJVJnfklHIqhFuCQfW9T8b8TzrOOMYJd9eh2H1HcJFg06Vnjqz0aJk1tCSSuUL9BeUrsD");
                 // Get the sender id from FCM console
                 var senderId = string.Format("id={0}", "322627756134");
-               string to = "fXdD2vHnDVg:APA91bH0W1Grr4w07ghPmQiD7TtUETiLVupS9DGzryTtly8Y0sj35tiIgH3OsD6CjV5yvJni5lmJZWpsjLpVKV5u67mAuZPNDrCk1Dq1r3lUPCwT5ZBA8k4g4OdmLMbcgLvNgZ8XBySB";
+                string to = "fXdD2vHnDVg:APA91bH0W1Grr4w07ghPmQiD7TtUETiLVupS9DGzryTtly8Y0sj35tiIgH3OsD6CjV5yvJni5lmJZWpsjLpVKV5u67mAuZPNDrCk1Dq1r3lUPCwT5ZBA8k4g4OdmLMbcgLvNgZ8XBySB";
                 string title = "Order Notification";
                 string body = "snc meses You have new order";
                 string sound = "default";
@@ -166,21 +159,18 @@ namespace ShopNow.Controllers
                     to, // Recipient device token
                     notification = new { title, body, sound }
                 };
-
                 // Using Newtonsoft.Json
                 var jsonBody = JsonConvert.SerializeObject(data);
-
                 using (var httpRequest = new HttpRequestMessage(System.Net.Http.HttpMethod.Post, "https://fcm.googleapis.com/fcm/send"))
                 {
                     httpRequest.Headers.TryAddWithoutValidation("Authorization", serverKey);
                     httpRequest.Headers.TryAddWithoutValidation("Sender", senderId);
                     httpRequest.Content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
-
                     using (var httpClient = new HttpClient())
                     {
                         var result = await httpClient.SendAsync(httpRequest);
 
-                         if (result.IsSuccessStatusCode)
+                        if (result.IsSuccessStatusCode)
                         {
                             return true;
                         }
@@ -195,14 +185,12 @@ namespace ShopNow.Controllers
             {
                 Console.WriteLine(ex.Message);
             }
-
             return false;
         }
 
         public JsonResult GetCallVerify(string FromNumber, string to)
         {
             string result = ConnectCall.connectCustomerToAgent(FromNumber, to);
-
             return Json(new { result, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
@@ -223,17 +211,7 @@ namespace ShopNow.Controllers
                 user.DateUpdated = DateTime.Now;
                 db.Customers.Add(user);
                 db.SaveChanges();
-                Admin admin = new Admin();
-                admin.AnonymisedID = user.Id.ToString();
-                //admin.Code = ShopNow.Helpers.DRC.Generate("ADM");
-                admin.OfficialID = AdminHelpers.SecureData(admin.Id.ToString());
-                admin.AnonymisedID = AdminHelpers.SecureData(admin.AnonymisedID);
-                admin.Status = 0;
-                admin.DateEncoded = DateTime.Now;
-                admin.DateUpdated = DateTime.Now;
-                db.Admins.Add(admin);
-                db.SaveChanges();
-                if (user.Id !=0)
+                if (user.Id != 0)
                 {
                     var otpmodel = new OtpVerification();
                     otpmodel.CustomerId = user.Id;
@@ -248,28 +226,24 @@ namespace ShopNow.Controllers
                     var dateAndTime = DateTime.Now;
                     var date = dateAndTime.ToString("d");
                     var time = dateAndTime.ToString("HH:mm");
-
                     string joyra = "04448134440";
                     string Msg = "Hi, " + otpmodel.Otp + " is the OTP for (Shop Now Chat) Verification at " + time + " with " + otpmodel.ReferenceCode + " reference - Joyra";
-
                     string result = SendSMS.execute(joyra, model.PhoneNumber, Msg);
                     otpmodel.Status = 0;
                     otpmodel.DateEncoded = DateTime.Now;
                     otpmodel.DateUpdated = DateTime.Now;
                     db.OtpVerifications.Add(otpmodel);
                     db.SaveChanges();
-
                     if (otpmodel != null)
                     {
                         return Json(new { message = "Successfully Registered and OTP send!", id = user.Id, user.Position });
-                        
+
                     }
                     else
                         return Json("Otp Failed to send!");
                 }
                 else
                     return Json("Registration Failed!");
-
             }
             else
             {
@@ -281,14 +255,11 @@ namespace ShopNow.Controllers
                 otpmodel.Otp = _generatedCode;
                 otpmodel.ReferenceCode = _referenceCode;
                 otpmodel.Verify = false;
-
                 var dateAndTime = DateTime.Now;
                 var date = dateAndTime.ToString("d");
                 var time = dateAndTime.ToString("HH:mm");
-
                 string joyra = "04448134440";
                 string Msg = "Hi, " + otpmodel.Otp + " is the OTP for (Shop Now Chat) Verification at " + time + " with " + otpmodel.ReferenceCode + " reference - Joyra";
-
                 string result = SendSMS.execute(joyra, model.PhoneNumber, Msg);
                 otpmodel.Status = 0;
                 otpmodel.DateEncoded = DateTime.Now;
@@ -298,7 +269,6 @@ namespace ShopNow.Controllers
                 if (otpmodel != null)
                 {
                     return Json(new { message = "Already Customer and OTP send!", id = customer.Id, Position = customer.Position });
-
                 }
                 else
                     return Json("Otp Failed to send!");
@@ -321,7 +291,6 @@ namespace ShopNow.Controllers
                 customer.DateUpdated = DateTime.Now;
                 db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-
                 return Json(new { message = "Successfully Updated Your Details!", Details = customer });
             }
             else
@@ -334,7 +303,6 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
                 return Json(new { message = "Successfully Updated Your Details!", Details = customer });
             }
-
         }
 
         [HttpPost]
@@ -363,7 +331,6 @@ namespace ShopNow.Controllers
                 staff.DateUpdated = DateTime.Now;
                 db.Entry(staff).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-
                 var customer = db.Customers.FirstOrDefault(i => i.Id == staff.CustomerId);
                 customer.Position = 2;
                 customer.UpdatedBy = customer.Name;
@@ -371,14 +338,11 @@ namespace ShopNow.Controllers
                 db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return Json(new { message = "Successfully Your Staff Password Created!" });
-
             }
             else
             {
                 return Json(new { message = "Something went wrong!" });
             }
-
-
         }
 
         public JsonResult GetCustomerAddOnsDelete(int id)
@@ -387,12 +351,10 @@ namespace ShopNow.Controllers
             customerAddress.Status = 2;
             db.Entry(customerAddress).State = System.Data.Entity.EntityState.Modified;
             db.SaveChangesAsync();
-
             if (id != 0)
                 return Json(new { message = "Successfully Deleted Addons Address!", AddressType = customerAddress.AddressType }, JsonRequestBehavior.AllowGet);
             else
                 return Json(new { message = "Failed to Delete Addons Address!" }, JsonRequestBehavior.AllowGet);
-
         }
 
         [HttpPost]
@@ -441,8 +403,6 @@ namespace ShopNow.Controllers
                         db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                         db.SaveChanges();
                     }
-
-
                     if (model.CustomerId != 0)
                     {
                         return Json(new { message = "Successfully Added Addons Address!", Details = customerAdd }, JsonRequestBehavior.AllowGet);
@@ -456,7 +416,6 @@ namespace ShopNow.Controllers
                 {
                     return Json(new { message = "Already This Address Exist!" }, JsonRequestBehavior.AllowGet);
                 }
-
             }
             else
             {
@@ -466,7 +425,6 @@ namespace ShopNow.Controllers
                 user.DateUpdated = DateTime.Now;
                 db.CustomerAddresses.Add(user);
                 db.SaveChanges();
-
                 if (model.AddressType == 0)
                 {
                     var customer = db.Customers.Where(i => i.Id == model.CustomerId).FirstOrDefault();
@@ -506,7 +464,6 @@ namespace ShopNow.Controllers
             if (checkCustomerAddTypeExist > 0)
             {
                 return Json(new { message = "This Addresstype Alreay Exist", Details = customerAddress });
-
             }
             else
             {
@@ -527,16 +484,13 @@ namespace ShopNow.Controllers
                 db.Entry(customerAddress).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
-
-            return Json(new { message = "Successfully Updated Your Address!", Details = customerAddress },JsonRequestBehavior.AllowGet);
+            return Json(new { message = "Successfully Updated Your Address!", Details = customerAddress }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetShopVerify(string FromNumber, string digits)
         {
-
             var otpVerification = db.OtpVerifications.Where(i => i.PhoneNumber == FromNumber && i.Otp == digits && i.Verify == false).OrderByDescending(i => i.DateEncoded).ToList();
             var otpVerificationCheck = db.OtpVerifications.Where(i => i.PhoneNumber == FromNumber && i.Otp == digits && i.Verify == true).OrderByDescending(i => i.DateEncoded).ToList();
-
             if (otpVerification.Count != 0)
             {
                 DateTime currentTime = otpVerification.FirstOrDefault().DateEncoded.Date;
@@ -548,8 +502,6 @@ namespace ShopNow.Controllers
                 {
                     return Json(new { message = "Otp Expired!" }, JsonRequestBehavior.AllowGet);
                 }
-
-
             }
             else if (otpVerificationCheck.Count != 0)
             {
@@ -562,19 +514,13 @@ namespace ShopNow.Controllers
                 {
                     return Json(new { message = "Yesterday Otp Verified!" }, JsonRequestBehavior.AllowGet);
                 }
-
             }
-
             else
                 return Json(new { message = "Your OTP Outdated!" }, JsonRequestBehavior.AllowGet);
-
         }
-
 
         public JsonResult GetVerify(string FromNumber, string digits)
         {
-
-
             var otpVerification = db.OtpVerifications.Where(i => i.PhoneNumber == FromNumber && i.Verify == false).OrderByDescending(i => i.DateEncoded).Take(1).ToList();
 
             if (otpVerification.Count != 0)
@@ -585,20 +531,16 @@ namespace ShopNow.Controllers
                     db.Entry(otpVerification[0]).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                     return Json(new { message = "Successfully Your Phone Number Verified!" }, JsonRequestBehavior.AllowGet);
-
                 }
                 else
                     return Json(new { message = "Failed to Verify Phone Number!" }, JsonRequestBehavior.AllowGet);
-
             }
             else
                 return Json(new { message = "Use Todays OTP. Please try!" }, JsonRequestBehavior.AllowGet);
         }
 
-
         public JsonResult GetDeliveryBoyExist(DeliveryBoyExistViewModel model)
         {
-
             var deliveryBoyExist = db.DeliveryBoys.FirstOrDefault(i => i.PhoneNumber == model.PhoneNumber && (i.Status == 0 || i.Status == 1 || i.Status == 3));
             if (deliveryBoyExist == null)
             {
@@ -622,28 +564,25 @@ namespace ShopNow.Controllers
                 {
                     return Json(new { message = "Unknown Status!" }, JsonRequestBehavior.AllowGet);
                 }
-
             }
         }
 
         public JsonResult GetPaymentCredit(int customerId)
         {
-
-           
             var customerName = (from c in db.Customers
-                               where c.Id == customerId && c.Position ==1
-                               select c.Name).FirstOrDefault();
+                                where c.Id == customerId && c.Position == 1
+                                select c.Name).FirstOrDefault();
             var orderCount = (from s in db.Orders
                               join sh in db.Shops on s.ShopId equals sh.Id
                               join c in db.Customers on sh.CustomerId equals c.Id
                               where sh.CustomerId == customerId && (s.Status >= 2)
-                             select s).Count();
-                
+                              select s).Count();
+
             var platformcredits = (from ss in db.Payments
                                    where ss.CustomerId == customerId && ss.Status == 0 && ss.CreditType == 0
                                    select (Double?)ss.OriginalAmount).Sum() ?? 0;
 
-            var platformorder = (Convert.ToInt32(orderCount)  * (db.PlatFormCreditRates.FirstOrDefault().RatePerOrder));         
+            var platformorder = (Convert.ToInt32(orderCount) * (db.PlatFormCreditRates.FirstOrDefault().RatePerOrder));
             var varDelivery = (from ss in db.Payments
                                where ss.CustomerId == customerId && ss.Status == 0 && ss.CreditType == 1
                                select (Double?)ss.OriginalAmount).Sum() ?? 0;
@@ -658,15 +597,11 @@ namespace ShopNow.Controllers
                 new CreditPaymentViewModel{CustomerId=customerId,CustomerName=customerName,CreditType=0,Credits=Math.Floor(platformcredits - platformorder) },
                 new CreditPaymentViewModel{CustomerId=customerId,CustomerName=customerName,CreditType=1,Credits=Math.Floor(varDelivery - varDeliveryCharges) }
             };
-      
-
             return Json(payment, JsonRequestBehavior.AllowGet);
         }
 
-
         public JsonResult GetProducts(int shopId, int page = 1, int pageSize = 5)
         {
-
             var source = (from p in db.Products
                           join m in db.MasterProducts on p.MasterProductId equals m.Id
                           where p.ShopId == shopId && (p.Status == 0 || p.Status == 1) && p.ShopId != 0
@@ -674,34 +609,23 @@ namespace ShopNow.Controllers
                           {
                               Id = p.Id,
                               // Name = p.Name,
-                              Name=m.Name,
+                              Name = m.Name,
                               ShopId = p.ShopId,
                               ShopName = p.ShopName,
                               Price = p.Price,
                               Qty = p.Qty,
                               Status = p.Status
                           }).ToList();
-
-
-
             int count = source.Count();
-
             int CurrentPage = page;
-
             int PageSize = pageSize;
-
             int TotalCount = count;
-
             int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
-
             var items = source.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
             var previous = CurrentPage - 1;
-            var previousurl =apipath+ "/Api/GetProducts?shopId=" + shopId + "&page=" + previous;
-
+            var previousurl = apipath + "/Api/GetProducts?shopId=" + shopId + "&page=" + previous;
             var previousPage = CurrentPage > 1 ? previousurl : "No";
-
             var current = CurrentPage + 1;
-
             var nexturl = apipath + "/Api/GetProducts?shopId=" + shopId + "&page=" + current;
             var nextPage = CurrentPage < TotalPages ? nexturl : "No";
             var paginationMetadata = new
@@ -713,19 +637,15 @@ namespace ShopNow.Controllers
                 previousPage,
                 nextPage
             };
-
-
             return Json(new { Page = paginationMetadata, items }, JsonRequestBehavior.AllowGet);
-
         }
 
         public JsonResult GetShopItemList(int shopId, string str = "", int page = 1, int pageSize = 20)
         {
             var shid = db.Shops.Where(s => s.Id == shopId).FirstOrDefault();
-            var model = db.Products.Join(db.MasterProducts, p => p.MasterProductId, m =>m.Id,(p,m) => new {p,m })//, (c, p) => new { c, p })
+            var model = db.Products.Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })//, (c, p) => new { c, p })
                             .AsEnumerable()
                             .Where(i => i.p.ShopId == shid.Id && (i.p.Status == 0 || i.p.Status == 1) && (str != "" ? i.m.Name.ToLower().StartsWith(str.ToLower()) : true))
-
                             .Select(i => new ActiveProductListViewModel.ProductList
                             {
                                 Id = i.p.Id,
@@ -737,27 +657,17 @@ namespace ShopNow.Controllers
                                 Qty = i.p.Qty,
                                 Status = i.p.Status
                             }).ToList();
-
-
             int count = model.Count();
-
             int CurrentPage = page;
-
             int PageSize = pageSize;
-
             int TotalCount = count;
-
             int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
-
             var items = model.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
             var previous = CurrentPage - 1;
-            var previousurl = apipath+ "/Api/GetShopItemList?shopId=" + shopId + "&str=" + str + "&page=" + previous;
-
+            var previousurl = apipath + "/Api/GetShopItemList?shopId=" + shopId + "&str=" + str + "&page=" + previous;
             var previousPage = CurrentPage > 1 ? previousurl : "No";
-
             var current = CurrentPage + 1;
-
-            var nexturl = apipath+ "/Api/GetShopItemList?shopId=" + shopId + "&str=" + str + "&page=" + current;
+            var nexturl = apipath + "/Api/GetShopItemList?shopId=" + shopId + "&str=" + str + "&page=" + current;
             var nextPage = CurrentPage < TotalPages ? nexturl : "No";
             var paginationMetadata = new
             {
@@ -768,8 +678,6 @@ namespace ShopNow.Controllers
                 previousPage,
                 nextPage
             };
-
-
             return Json(new { Page = paginationMetadata, items }, JsonRequestBehavior.AllowGet);
         }
 
@@ -798,7 +706,7 @@ namespace ShopNow.Controllers
 
         public JsonResult GetBillOrDelivary(int bill, int shopId)
         {
-            var model = new BillApiListViewModel(); 
+            var model = new BillApiListViewModel();
             model.List = db.Bills.Where(i => i.NameOfBill == bill && i.ShopId == shopId && i.Status == 0).Select(i => new BillApiListViewModel.BillList
             {
                 Id = i.Id,
@@ -819,8 +727,9 @@ namespace ShopNow.Controllers
 
             return Json(model, JsonRequestBehavior.AllowGet);
         }
+
         [HttpPost]
-        public JsonResult SaveCustomerToken(int customerId,string token)
+        public JsonResult SaveCustomerToken(int customerId, string token)
         {
             var customer = db.Customers.Where(c => c.Id == customerId).FirstOrDefault();
             try
@@ -836,6 +745,7 @@ namespace ShopNow.Controllers
                 return Json(token = "", JsonRequestBehavior.AllowGet);
             }
         }
+
         public JsonResult GetInORActive(ProductActiveOrInViewModel model)
         {
             if (model.State == 0)
@@ -866,7 +776,6 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
                 return Json(new { message = "Successfully InActivated the Product!" }, JsonRequestBehavior.AllowGet);
             }
-
         }
 
         [HttpPost]
@@ -896,12 +805,9 @@ namespace ShopNow.Controllers
                     deliveryBoy.DateUpdated = DateTime.Now;
                     db.DeliveryBoys.Add(deliveryBoy);
                     db.SaveChanges();
-
-
                     if (deliveryBoy.Id != 0)
                     {
                         return Json(new { message = "Successfully Created a Delivery Boy!", Position = customer.Position });
-
                     }
                     else
                         return Json(new { message = "Failed to Create a Delivery Boy!" });
@@ -913,17 +819,15 @@ namespace ShopNow.Controllers
             {
                 return Json(new { message = "Failed to Create a Delivery Boy!" });
             }
-
         }
 
         [HttpPost]
         public JsonResult GetStockCheck(ProductStockCheckViewModel model)
         {
-           
             try
             {
                 double stock = 0;
-                 StringBuilder sb = new StringBuilder();
+                StringBuilder sb = new StringBuilder();
                 using (WebClient myData = new WebClient())
                 {
                     myData.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
@@ -931,8 +835,7 @@ namespace ShopNow.Controllers
                     myData.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
                     foreach (var item in model.ListItems)
                     {
-                        
-                             stock =Math.Floor(GetStockQty(item.ItemId.ToString()));
+                        stock = Math.Floor(GetStockQty(item.ItemId.ToString()));
                         if (stock < item.Quantity)
                         {
                             if (stock != 0)
@@ -940,23 +843,19 @@ namespace ShopNow.Controllers
                             else
                                 sb.Append($"{item.ProductName} has no stock available now. <br/>");
                         }
-
                     }
                 }
                 return Json(new { message = sb.ToString() });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-               
                 return Json(new { message = ex.Message });
             }
-
         }
 
         [HttpPost]
         public JsonResult AddPayment(PaymentCreateApiViewModel model)
         {
-
             var payment = _mapper.Map<PaymentCreateApiViewModel, Models.Payment>(model);
             var perOrderAmount = db.PlatFormCreditRates.Where(s => s.Status == 0).FirstOrDefault();
             if (model.CustomerId != 0)
@@ -966,9 +865,9 @@ namespace ShopNow.Controllers
                 payment.CreatedBy = customer.Name;
                 payment.UpdatedBy = customer.Name;
 
-                if (model.OrderNo != 0)
+                if (model.OrderNumber != 0)
                 {
-                    var order = db.Orders.FirstOrDefault(i => i.OrderNumber == model.OrderNo);
+                    var order = db.Orders.FirstOrDefault(i => i.OrderNumber == model.OrderNumber);
                     order.Status = 2;
                     order.UpdatedBy = customer.Name;
                     order.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
@@ -981,7 +880,6 @@ namespace ShopNow.Controllers
                     order.Convinenientcharge = model.ConvenientCharge;
                     db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
-
                     //Reducing Platformcredits
                     var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
                     var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
@@ -1002,7 +900,7 @@ namespace ShopNow.Controllers
                         var s = varpayment.Fetch(model.ReferenceCode);
                         PaymentsData pay = new PaymentsData();
 
-                        pay.OrderNumber = Convert.ToInt32(model.OrderNo);
+                        pay.OrderNumber = Convert.ToInt32(model.OrderNumber);
                         pay.PaymentId = model.ReferenceCode;
 
                         pay.Invoice_Id = s["invoice_id"];
@@ -1036,7 +934,6 @@ namespace ShopNow.Controllers
                         db.PaymentsDatas.Add(pay);
                         db.SaveChanges();
                     }
-
                 }
 
                 if (model.CreditType == 0 || model.CreditType == 1)
@@ -1056,13 +953,10 @@ namespace ShopNow.Controllers
                 payment.RefundStatus = 1;
                 db.Payments.Add(payment);
                 db.SaveChanges();
-
                 return Json(new { message = "Successfully Added to Payment!", Details = model });
             }
             else
                 return Json(new { message = "Failed to Add Payment !" });
-
-
         }
 
         [HttpPost]
@@ -1074,34 +968,29 @@ namespace ShopNow.Controllers
                                        SecurityProtocolType.Tls12;
             string key = "rzp_live_PNoamKp52vzWvR";
             string secret = "yychwOUOsYLsSn3XoNYvD1HY";
-
             Dictionary<string, object> input = new Dictionary<string, object>();
             input.Add("amount", model.Price);
             input.Add("currency", "INR");
             input.Add("receipt", "order_rcptid_11");
             RazorpayClient client = new RazorpayClient(key, secret);
-
             Razorpay.Api.Order order = client.Order.Create(input);
-
-
             Orderid = order["id"].ToString();
-            return Json(new { message = "Success",Orderid= Orderid });
+            return Json(new { message = "Success", Orderid = Orderid });
         }
-    
 
         [HttpPost]
         public JsonResult UpdatedPayment(PaymentUpdatedApiViewModel model)
         {
             //int errorCode = 0;
-            var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == model.OrderNo); // Payment.GetOrderNo(model.OrderNo);
+            var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == model.OrderNumber); // Payment.GetOrderNo(model.OrderNo);
             payment.UpdatedOriginalAmount = model.UpdatedOriginalAmount;
             payment.UpdatedAmount = model.UpdatedAmount;
-            if (model.RefundAmount >0)
+            if (model.RefundAmount > 0)
             {
                 payment.RefundAmount = model.RefundAmount;
                 payment.RefundRemark = model.RefundRemark;
             }
-            if (model.CustomerId !=0)
+            if (model.CustomerId != 0)
             {
                 var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);// Customer.Get(model.CustomerCode);
                 payment.UpdatedBy = customer.Name;
@@ -1113,14 +1002,12 @@ namespace ShopNow.Controllers
             }
             else
                 return Json(new { message = "Failed to Update Cart Payment !" });
-
         }
-        
+
         [HttpPost]
         public JsonResult AddOrder(OrderCreateViewModel model)
         {
             var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
-
             var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
             if ((shopCredits.PlatformCredit < 26 || shopCredits.DeliveryCredit < 67))
             {
@@ -1128,7 +1015,6 @@ namespace ShopNow.Controllers
                 shop.Status = 6;
                 db.Entry(shop).State = EntityState.Modified;
                 db.SaveChanges();
-
                 return Json(new { message = "This shop is currently unservicable." }, JsonRequestBehavior.AllowGet);
             }
             else
@@ -1144,8 +1030,7 @@ namespace ShopNow.Controllers
                     order.CustomerName = customer.Name;
                     order.CustomerPhoneNumber = customer.PhoneNumber;
                 }
-
-                order.OrderNumber = Convert.ToInt32(model.OrderNo);
+                order.OrderNumber = Convert.ToInt32(model.OrderNumber);
                 order.ShopId = shop.Id;
                 order.ShopName = shop.Name;
                 order.ShopPhoneNumber = shop.PhoneNumber ?? shop.ManualPhoneNumber;
@@ -1158,8 +1043,6 @@ namespace ShopNow.Controllers
                 order.Status = 0;
                 db.Orders.Add(order);
                 db.SaveChanges();
-
-
                 foreach (var item in model.ListItems)
                 {
                     if (item.ItemId != 0)
@@ -1170,7 +1053,6 @@ namespace ShopNow.Controllers
                         db.Entry(productMedicalStock).State = System.Data.Entity.EntityState.Modified;
                         db.SaveChanges();
                     }
-
                     var orderItem = _mapper.Map<OrderCreateViewModel.ListItem, OrderItem>(item);
                     orderItem.Status = 0;
                     orderItem.OrderId = order.Id;
@@ -1187,17 +1069,14 @@ namespace ShopNow.Controllers
                                     select c.FcmTocken ?? "").FirstOrDefault().ToString();
                     Helpers.PushNotification.SendbydeviceId("You have received new order.Accept Soon", "ShopNowChat", "a.mp3", fcmToken.ToString());
                     return Json(new { message = "Successfully Added to Cart!", Details = order });
-
                 }
                 else
                     return Json(new { message = "Failed to Add Cart!" });
             }
-
         }
-        
+
         public JsonResult GetAcceptOrder(int orderNo, int customerId, int status, int priority)
         {
-
             if (orderNo != 0 && customerId != 0 && status != 0)
             {
                 var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
@@ -1207,7 +1086,6 @@ namespace ShopNow.Controllers
                 order.DateUpdated = DateTime.Now;
                 db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-
                 var orderList = db.OrderItems.Where(i => i.OrderId == order.Id).ToList();
                 foreach (var item in orderList)
                 {
@@ -1217,17 +1095,14 @@ namespace ShopNow.Controllers
                     db.Entry(product).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }
-
                 var fcmToken = (from c in db.Customers
                                 where c.Id == order.CustomerId
                                 select c.FcmTocken ?? "").FirstOrDefault().ToString();
-
                 //accept
                 if (status == 3)
                 {
                     Helpers.PushNotification.SendbydeviceId("Your order has been accepted by shop.", "ShopNowChat", "a.mp3", fcmToken.ToString());
                 }
-
 
                 //Refund
                 if (status == 7)
@@ -1241,11 +1116,9 @@ namespace ShopNow.Controllers
                         payment.DateUpdated = DateTime.Now;
                         db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
                         db.SaveChanges();
-                        
                         Helpers.PushNotification.SendbydeviceId($"Your refund of amount {payment.Amount} for order no {payment.OrderNumber} is for {payment.RefundRemark} initiated and you will get credited with in 7 working days.", "ShopNowChat", "a.mp3", fcmToken.ToString());
                     }
                 }
-               
                 return Json(new { message = "Successfully Updated the Order!" }, JsonRequestBehavior.AllowGet);
             }
             else
@@ -1257,7 +1130,6 @@ namespace ShopNow.Controllers
         //Have to check later
         //public JsonResult GetShopDeliveredOrders(string shopId, int status, int page = 1, int pageSize = 5)
         //{
-
         //    var model = new CartAcceptListApiViewModel();
         //    model.List = db.Orders.Where(j => j.Status == status)
         //        .Join(db.Payments, c => c.OrderNumber, p => p.OrderNo, (c, p) => new { c, p })
@@ -1297,25 +1169,16 @@ namespace ShopNow.Controllers
         //           OrderList = GetOrderPendingList(i.FirstOrDefault().pay.py.rz.c.OrderNo, status), // Cart.GetOrderPendingList(i.FirstOrDefault().pay.py.rz.c.OrderNo, status),
         //           CartStatus = i.Any() ? i.FirstOrDefault().pay.py.rz.c.CartStatus : -5
         //       }).OrderByDescending(i => i.DateEncoded).ToList();
-
         //    int count = model.List.Count();
-
         //    int CurrentPage = page;
-
         //    int PageSize = pageSize;
-
         //    int TotalCount = count;
-
         //    int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
-
         //    var items = model.List.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
         //    var previous = CurrentPage - 1;
         //    var previousurl = apipath+ "/Api/GetShopDeliveredOrders?shopId=" + shopId + "&status=" + status + "&page=" + previous;
-
         //    var previousPage = CurrentPage > 1 ? previousurl : "No";
-
         //    var current = CurrentPage + 1;
-
         //    var nexturl = apipath+ "/Api/GetShopDeliveredOrders?shopId=" + shopId + "&status=" + status + "&page=" + current;
         //    var nextPage = CurrentPage < TotalPages ? nexturl : "No";
         //    var paginationMetadata = new
@@ -1328,9 +1191,7 @@ namespace ShopNow.Controllers
         //        nextPage
         //    };
         //    return Json(new { Page = paginationMetadata, items }, JsonRequestBehavior.AllowGet);
-        //}
-
-      
+        //}      
 
         public JsonResult GetDelivaryTodayOrders(string phoneNumber)
         {
@@ -1346,7 +1207,7 @@ namespace ShopNow.Controllers
                {
                    ShopName = i.py.ca.c.ShopName,
                    CustomerName = i.py.ca.c.CustomerName,
-                   OrderNo = i.py.ca.c.OrderNumber,
+                   OrderNumber = i.py.ca.c.OrderNumber,
                    ShopAddress = i.py.s.Address,
                    ShopLatitude = i.py.s.Latitude,
                    ShopLongitude = i.py.s.Longitude,
@@ -1359,12 +1220,11 @@ namespace ShopNow.Controllers
                    PaymentMode = GetPayment(i.py.ca.c.OrderNumber).PaymentMode,
                    Amount = GetPayment(i.py.ca.c.OrderNumber).UpdatedAmount == 0 ? GetPayment(i.py.ca.c.OrderNumber).Amount : GetPayment(i.py.ca.c.OrderNumber).UpdatedAmount,
                    OrderList = GetOrderList(i.py.ca.c.Id),
-                   OnWork = i.d.OnWork ,
-                   Date =  i.py.ca.c.DateEncoded.ToString("dd-MMM-yyyy HH:ss"),
-                   RefundAmount= ((GetPayment(i.py.ca.c.OrderNumber).RefundAmount)?? 0),
+                   OnWork = i.d.OnWork,
+                   Date = i.py.ca.c.DateEncoded.ToString("dd-MMM-yyyy HH:ss"),
+                   RefundAmount = ((GetPayment(i.py.ca.c.OrderNumber).RefundAmount) ?? 0),
                    RefundRemark = ((GetPayment(i.py.ca.c.OrderNumber).RefundRemark) ?? "N/A")
                }).ToList();
-
             model.OtherList = db.Orders.Where(j => j.Status == 4 || j.Status == 5)
                .Join(db.Payments, c => c.ShopId, p => p.ShopId, (c, p) => new { c, p })
                .Join(db.Shops, ca => ca.c.ShopId, s => s.Id, (ca, s) => new { ca, s })
@@ -1375,7 +1235,7 @@ namespace ShopNow.Controllers
               {
                   ShopName = i.py.ca.c.ShopName,
                   CustomerName = i.py.ca.c.CustomerName,
-                  OrderNo = i.py.ca.c.OrderNumber,
+                  OrderNumber = i.py.ca.c.OrderNumber,
                   ShopAddress = i.py.s.Address,
                   ShopLatitude = i.py.s.Latitude,
                   ShopLongitude = i.py.s.Longitude,
@@ -1401,44 +1261,39 @@ namespace ShopNow.Controllers
             if (orderNo != 0 && customerId != 0)
             {
                 var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
-
                 var order = db.Orders.FirstOrDefault(i => i.OrderNumber == orderNo);
                 order.Status = 3;
                 order.DeliveryBoyId = customer.Id;
-                order.DeliveryBoyName =  customer.Name;
+                order.DeliveryBoyName = customer.Name;
                 order.DeliveryBoyPhoneNumber = customer.PhoneNumber;
                 order.UpdatedBy = customer.Name;
                 order.DateUpdated = DateTime.Now;
                 db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-
                 var delivery = db.DeliveryBoys.FirstOrDefault(i => i.CustomerId == customerId && i.Status == 0);
                 delivery.isAssign = 0;
                 delivery.DateUpdated = DateTime.Now;
                 db.Entry(delivery).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-
                 return Json(new { message = "Successfully  Rejected Order by Delivery Boy!" }, JsonRequestBehavior.AllowGet);
             }
             else
                 return Json(new { message = "Failed to Reject Order!" }, JsonRequestBehavior.AllowGet);
         }
 
-        public  JsonResult GetShopNotification(int shopId)
+        public JsonResult GetShopNotification(int shopId)
         {
             var customerTocken = (from c in db.Customers
                                   join s in db.Shops on c.Id equals s.CustomerId
                                   where s.Id == shopId
                                   select c.FcmTocken).ToString();
-                       
             if (shopId != 0)
             {
                 var shop = db.Orders.OrderByDescending(q => q.Id).FirstOrDefault(i => i.ShopId == shopId && i.Status == 2 && i.Status == 0);
-
                 if (shop != null)
                 {
                     NotificationMessage("New Order Available! joyra", "Joyra", customerTocken);
-                 // await  NotifyAsync(customerTocken, "Joyra", "New Order Available! joyraa");
+                    // await  NotifyAsync(customerTocken, "Joyra", "New Order Available! joyraa");
                     return Json(new { message = "New Order Available!" }, JsonRequestBehavior.AllowGet);
                 }
                 else
@@ -1458,7 +1313,6 @@ namespace ShopNow.Controllers
             if (customerId != 0)
             {
                 var cart = db.Orders.OrderByDescending(q => q.Id).FirstOrDefault(i => i.CustomerId == customerId && i.Status == 5 && i.Status == 0);// Cart.GetCustomerPickUp(customerCode);
-
                 if (cart != null)
                 {
                     if (cart.DateUpdated.Date.ToString() == DateTime.Now.Date.ToString())
@@ -1474,7 +1328,6 @@ namespace ShopNow.Controllers
                 {
                     return Json(new { message = "No Order Available!" }, JsonRequestBehavior.AllowGet);
                 }
-
             }
             else
             {
@@ -1486,8 +1339,7 @@ namespace ShopNow.Controllers
         {
             if (phoneNo != null || phoneNo != "")
             {
-                var delivaryBoy = db.Orders.OrderByDescending(q => q.Id).FirstOrDefault(i => i.DeliveryBoyPhoneNumber == phoneNo && i.Status  == 4 && i.Status == 0);// Cart.GetDelivaryPhoneNo(phoneNo);
-
+                var delivaryBoy = db.Orders.OrderByDescending(q => q.Id).FirstOrDefault(i => i.DeliveryBoyPhoneNumber == phoneNo && i.Status == 4 && i.Status == 0);// Cart.GetDelivaryPhoneNo(phoneNo);
                 if (delivaryBoy != null)
                 {
                     if (delivaryBoy.DateUpdated.Date.ToString() == DateTime.Now.Date.ToString())
@@ -1503,7 +1355,6 @@ namespace ShopNow.Controllers
                 {
                     return Json(new { message = "No Cart Available!" }, JsonRequestBehavior.AllowGet);
                 }
-
             }
             else
             {
@@ -1513,7 +1364,6 @@ namespace ShopNow.Controllers
 
         public JsonResult GetOrderNoStatus(int orderNo)
         {
-
             var order = db.Orders.Where(i => i.OrderNumber == orderNo).FirstOrDefault();
             var shop = db.Shops.FirstOrDefault(i => i.Id == order.ShopId);
             var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId);
@@ -1533,15 +1383,12 @@ namespace ShopNow.Controllers
                 model.DeliveryBoyName = "N/A";
                 model.DeliveryBoyId = 0;
                 model.DeliveryBoyPhoneNumber = "N/A";
-
             }
-
             model.CartStatus = order.Status;
-
             return Json(new { message = "Status of Cart!", model }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetPickUp(int orderNo, int customerId,double Amount,string PaymentMode)
+        public JsonResult GetPickUp(int orderNo, int customerId, double Amount, string PaymentMode)
         {
             if (orderNo != 0 && customerId != 0)
             {
@@ -1552,7 +1399,6 @@ namespace ShopNow.Controllers
                 order.DateUpdated = DateTime.Now;
                 db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-
                 var orderList = db.OrderItems.Where(i => i.OrderId == order.Id).ToList();
                 foreach (var item in orderList)
                 {
@@ -1562,10 +1408,8 @@ namespace ShopNow.Controllers
                     db.Entry(product).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }
-
                 if (PaymentMode == "Online Payment" && Amount > 1000)
                 {
-                    
                     var models = new OtpVerification();
                     models.ShopId = order.ShopId;
                     models.CustomerId = customer.Id;
@@ -1581,7 +1425,6 @@ namespace ShopNow.Controllers
                     db.OtpVerifications.Add(models);
                     db.SaveChanges();
                 }
-
                 var fcmToken = (from c in db.Customers
                                 where c.Id == order.CustomerId
                                 select c.FcmTocken ?? "").FirstOrDefault().ToString();
@@ -1593,6 +1436,7 @@ namespace ShopNow.Controllers
                 return Json(new { message = "Failed to DelivaryBoy PickUp!" }, JsonRequestBehavior.AllowGet);
             }
         }
+
         public JsonResult GetDelivaryBoyAccept(int orderNo, int customerId)
         {
             if (orderNo != 0 && customerId != 0)
@@ -1604,7 +1448,6 @@ namespace ShopNow.Controllers
                 delivaryBoy.DateUpdated = DateTime.Now;
                 db.Entry(delivaryBoy).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-
                 //var shopCharge = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
                 //var shop = db.Shops.FirstOrDefault(i => i.Id == shopCharge.ShopId);
                 //var topup = db.TopUps.OrderByDescending(q => q.Id).FirstOrDefault(i => i.CustomerCode == shop.CustomerCode && i.CreditType == 1 && i.Status == 0);// TopUp.GetCustomerDelivary(shop.CustomerCode);
@@ -1644,7 +1487,6 @@ namespace ShopNow.Controllers
             {
                 return Json(new { message = "Failed to DelivaryBoy Deliver!" }, JsonRequestBehavior.AllowGet);
             }
-
         Finish:
             var delivaryBoy = db.DeliveryBoys.FirstOrDefault(i => i.CustomerId == customerId && i.Status == 0);
             delivaryBoy.OnWork = 0;
@@ -1660,14 +1502,12 @@ namespace ShopNow.Controllers
                 db.Entry(otpVerify).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
-
             var order = db.Orders.FirstOrDefault(i => i.OrderNumber == orderNo);
             order.Status = 6;
             order.UpdatedBy = delivaryBoy.CustomerName;
             order.DateUpdated = DateTime.Now;
             db.Entry(order).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
-
             //Reducing Platformcredits
             var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == orderNo);
             var shop = db.Shops.FirstOrDefault(i => i.Id == order.ShopId);
@@ -1675,24 +1515,20 @@ namespace ShopNow.Controllers
             shopCredits.DeliveryCredit -= payment.DelivaryCharge;
             db.Entry(shopCredits).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
-
             var fcmToken = (from c in db.Customers
                             where c.Id == order.CustomerId
                             select c.FcmTocken ?? "").FirstOrDefault().ToString();
             Helpers.PushNotification.SendbydeviceId("Your order has been delivered.", "ShopNowChat", "a.mp3", fcmToken.ToString());
-
             return Json(new { message = "Successfully DelivaryBoy Delivered!" }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetDelivaryAssign(int orderNo, int deliveryBoyId, int customerId)
         {
-
             if (orderNo != 0 && deliveryBoyId != 0 && customerId != 0)
             {
                 var order = db.Orders.FirstOrDefault(i => i.OrderNumber == orderNo);
                 var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == deliveryBoyId);
                 var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
-
                 order.DeliveryBoyId = deliveryBoy.Id;
                 order.DeliveryBoyName = deliveryBoy.Name;
                 order.DeliveryBoyPhoneNumber = deliveryBoy.PhoneNumber;
@@ -1701,12 +1537,10 @@ namespace ShopNow.Controllers
                 order.DateUpdated = DateTime.Now;
                 db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-
                 deliveryBoy.isAssign = 1;
                 deliveryBoy.DateUpdated = DateTime.Now;
                 db.Entry(deliveryBoy).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-
                 //var detail = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
                 //detail.CustomerId = deliveryBoy.CustomerId;
                 //detail.CustomerName = deliveryBoy.CustomerName;
@@ -1737,7 +1571,7 @@ namespace ShopNow.Controllers
                {
                    Id = i.Id,
                    ShopName = i.ShopName,
-                   OrderNo = i.OrderNumber,
+                   OrderNumber = i.OrderNumber,
                    CartStatus = i.Status,
                    Date = i.DateUpdated.ToString("dd-MMM-yyyy"),
                    Price = i.TotalPrice,
@@ -1753,7 +1587,7 @@ namespace ShopNow.Controllers
                 .Join(db.OrderItems, o => o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
                 .Join(db.Payments, c => c.o.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
             .Join(db.Products, rz => rz.c.oi.ProductId, pr => pr.Id, (rz, pr) => new { rz, pr })
-             //.Join(db.ShopCharges, pay => pay.rz.c.o.OrderNumber, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
+              //.Join(db.ShopCharges, pay => pay.rz.c.o.OrderNumber, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
               .Join(db.Shops, py => py.rz.c.o.ShopId, s => s.Id, (py, s) => new { py, s })
              .AsEnumerable()
            .Where(i => i.py.rz.c.o.CustomerId == customerId && i.py.rz.p.CreditType == 2)
@@ -1767,7 +1601,7 @@ namespace ShopNow.Controllers
                ShopName = i.py.rz.c.o.ShopName,
                CustomerName = i.py.rz.c.o.CustomerName,
                ProductName = GetMasterProductName(i.py.pr.MasterProductId),
-               OrderNo = i.py.rz.c.o.OrderNumber,
+               OrderNumber = i.py.rz.c.o.OrderNumber,
                Price = i.py.rz.c.o.TotalPrice,
                //OriginalAmount = GetPayment(i.py.pay.rz.c.o.OrderNumber).UpdatedOriginalAmount != 0 ? i.FirstOrDefault().py.pay.rz.p.OriginalAmount : GetPayment(i.FirstOrDefault().py.pay.rz.c.OrderNo).UpdatedOriginalAmount,
                DeliveryBoyId = i.py.rz.c.o.DeliveryBoyId,
@@ -1789,27 +1623,17 @@ namespace ShopNow.Controllers
                CartStatus = i.py.rz.c.o.Status,
                RfAmount = i.py.rz.p.RefundAmount,
                RefundRemark = i.py.rz.p.RefundRemark
-
            }).OrderBy(j => j.CartStatus).OrderByDescending(i => i.DateEncoded).ToList();
-
             int count = model.List.Count();
-
             int CurrentPage = page;
-
             int PageSize = pageSize;
-
             int TotalCount = count;
-
             int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
-
             var items = model.List.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
             var previous = CurrentPage - 1;
             var previousurl = apipath + "/Api/GetAllOrders?customerId=" + customerId + "&page=" + previous;
-
             var previousPage = CurrentPage > 1 ? previousurl : "No";
-
             var current = CurrentPage + 1;
-
             var nexturl = apipath + "/Api/GetAllOrders?customerId=" + customerId + "&page=" + current;
             var nextPage = CurrentPage < TotalPages ? nexturl : "No";
             var paginationMetadata = new
@@ -1821,11 +1645,8 @@ namespace ShopNow.Controllers
                 previousPage,
                 nextPage
             };
-
-
             return Json(new { Page = paginationMetadata, items }, JsonRequestBehavior.AllowGet);
         }
-
 
         public JsonResult GetShopReAssignOrders(int shopId, int page = 1, int pageSize = 5)
         {
@@ -1835,7 +1656,7 @@ namespace ShopNow.Controllers
                 .Join(db.Payments, c => c.o.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Join(db.Products, rz => rz.c.oi.ProductId, pr => pr.Id, (rz, pr) => new { rz, pr })
                 .Join(db.Shops, py => py.rz.c.o.ShopId, s => s.Id, (py, s) => new { py, s })
-               // .Join(db.ShopCharges, pay => pay.py.rz.c.o.OrderNumber, sc => sc.OrderNo, (pay, sc)=> new { pay, sc })
+                   // .Join(db.ShopCharges, pay => pay.py.rz.c.o.OrderNumber, sc => sc.OrderNo, (pay, sc)=> new { pay, sc })
                    .AsEnumerable()
                .Where(i => (i.py.rz.p.PaymentResult == "success" || i.py.rz.p.PaymentMode == "Cash On Hand") && i.py.rz.p.ShopId == shopId)
                .Select(i => new CartAcceptListApiViewModel.CartList
@@ -1844,7 +1665,7 @@ namespace ShopNow.Controllers
                    ProductId = i.py.rz.c.oi.ProductId,
                    ShopId = i.py.rz.c.o.ShopId,
                    ShopName = i.py.rz.c.o.ShopName,
-                   OrderNo = i.py.rz.c.o.OrderNumber,
+                   OrderNumber = i.py.rz.c.o.OrderNumber,
                    PaymentMode = i.py.rz.p.PaymentMode,
                    CustomerName = i.py.rz.c.o.CustomerName,
                    ProductName = GetMasterProductName(i.py.pr.MasterProductId),
@@ -1865,25 +1686,16 @@ namespace ShopNow.Controllers
                    OrderList = GetOrderPendingList(i.py.rz.c.o.OrderNumber),
                    CartStatus = i.py.rz.c.o.Status
                }).OrderByDescending(i => i.DateEncoded).ToList();
-
             int count = model.List.Count();
-
             int CurrentPage = page;
-
             int PageSize = pageSize;
-
             int TotalCount = count;
-
             int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
-
             var items = model.List.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
             var previous = CurrentPage - 1;
             var previousurl = apipath + "/Api/GetShopAcceptOrders?shopId=" + shopId + "&page=" + previous;
-
             var previousPage = CurrentPage > 1 ? previousurl : "No";
-
             var current = CurrentPage + 1;
-
             var nexturl = apipath + "/Api/GetShopAcceptOrders?shopId=" + shopId + "&page=" + current;
             var nextPage = CurrentPage < TotalPages ? nexturl : "No";
             var paginationMetadata = new
@@ -1895,8 +1707,6 @@ namespace ShopNow.Controllers
                 previousPage,
                 nextPage
             };
-
-
             return Json(new { Page = paginationMetadata, items }, JsonRequestBehavior.AllowGet);
         }
 
@@ -1919,7 +1729,7 @@ namespace ShopNow.Controllers
                        ProductId = i.py.rz.c.oi.ProductId,
                        ShopId = i.py.rz.c.o.ShopId,
                        ShopName = i.py.rz.c.o.ShopName,
-                       OrderNo = i.py.rz.c.o.OrderNumber,
+                       OrderNumber = i.py.rz.c.o.OrderNumber,
                        PaymentMode = i.py.rz.p.PaymentMode,
                        CustomerName = i.py.rz.c.o.CustomerName,
                        ProductName = GetMasterProductName(i.py.pr.MasterProductId),
@@ -1943,12 +1753,12 @@ namespace ShopNow.Controllers
             }
             else
             {
-                model.List = db.Orders.Where(j => j.Status ==3 || j.Status ==4)
+                model.List = db.Orders.Where(j => j.Status == 3 || j.Status == 4)
                  .Join(db.OrderItems, o => o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
                 .Join(db.Payments, c => c.o.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Join(db.Products, rz => rz.c.oi.ProductId, pr => pr.Id, (rz, pr) => new { rz, pr })
                 .Join(db.Shops, py => py.rz.c.o.ShopId, s => s.Id, (py, s) => new { py, s })
-               // .Join(db.ShopCharges, pay => pay.py.rz.c.o.OrderNumber, sc => sc.OrderNo, (pay, sc)=> new { pay, sc })
+                   // .Join(db.ShopCharges, pay => pay.py.rz.c.o.OrderNumber, sc => sc.OrderNo, (pay, sc)=> new { pay, sc })
                    .AsEnumerable()
                   .Where(i => (i.py.rz.p.PaymentResult == "success" || i.py.rz.p.PaymentMode == "Cash On Hand" || i.py.rz.p.PaymentMode == "Online Payment" || i.py.rz.p.PaymentMode == "pending") && i.py.rz.p.ShopId == shopId)
                   .Select(i => new CartAcceptListApiViewModel.CartList
@@ -1957,7 +1767,7 @@ namespace ShopNow.Controllers
                       ProductId = i.py.rz.c.oi.ProductId,
                       ShopId = i.py.rz.c.o.ShopId,
                       ShopName = i.py.rz.c.o.ShopName,
-                      OrderNo = i.py.rz.c.o.OrderNumber,
+                      OrderNumber = i.py.rz.c.o.OrderNumber,
                       PaymentMode = i.py.rz.p.PaymentMode,
                       CustomerName = i.py.rz.c.o.CustomerName,
                       ProductName = GetMasterProductName(i.py.pr.MasterProductId),
@@ -1979,25 +1789,16 @@ namespace ShopNow.Controllers
                       CartStatus = i.py.rz.c.o.Status
                   }).OrderByDescending(i => i.DateEncoded).ToList();
             }
-
             int count = model.List.Count();
-
             int CurrentPage = page;
-
             int PageSize = pageSize;
-
             int TotalCount = count;
-
             int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
-
             var items = model.List.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
             var previous = CurrentPage - 1;
             var previousurl = apipath + "/Api/GetShopAcceptOrders?shopId=" + shopId + "&page=" + previous;
-
             var previousPage = CurrentPage > 1 ? previousurl : "No";
-
             var current = CurrentPage + 1;
-
             var nexturl = apipath + "/Api/GetShopAcceptOrders?shopId=" + shopId + "&page=" + current;
             var nextPage = CurrentPage < TotalPages ? nexturl : "No";
             var paginationMetadata = new
@@ -2009,8 +1810,6 @@ namespace ShopNow.Controllers
                 previousPage,
                 nextPage
             };
-
-
             return Json(new { Page = paginationMetadata, items }, JsonRequestBehavior.AllowGet);
         }
 
@@ -2022,7 +1821,7 @@ namespace ShopNow.Controllers
                 .Join(db.Payments, c => c.o.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Join(db.Products, rz => rz.c.oi.ProductId, pr => pr.Id, (rz, pr) => new { rz, pr })
                 .Join(db.Shops, py => py.rz.c.o.ShopId, s => s.Id, (py, s) => new { py, s })
-                //.Join(db.ShopCharges, pay => pay.py.rz.c.o.OrderNumber, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
+                    //.Join(db.ShopCharges, pay => pay.py.rz.c.o.OrderNumber, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
                     //.Join(db.DeliveryBoys, ca => ca.pay.py.rz.c.DeliveryBoyCode, db => db.Code, (ca, db) => new { ca, db })
                     .AsEnumerable()
                .Where(i => (i.py.rz.p.PaymentResult == "success" || i.py.rz.p.PaymentResult == "pending" || i.py.rz.p.PaymentMode == "Cash On Hand" || i.py.rz.p.PaymentMode == "Online Payment") && i.py.rz.c.o.ShopId == shopId)
@@ -2032,7 +1831,7 @@ namespace ShopNow.Controllers
                    ProductId = i.py.rz.c.oi.ProductId,
                    ShopId = i.py.rz.c.o.ShopId,
                    ShopName = i.py.rz.c.o.ShopName,
-                   OrderNo = i.py.rz.c.o.OrderNumber,
+                   OrderNumber = i.py.rz.c.o.OrderNumber,
                    PaymentMode = i.py.rz.p.PaymentMode,
                    CustomerName = i.py.rz.c.o.CustomerName,
                    ProductName = GetMasterProductName(i.py.pr.MasterProductId),
@@ -2055,26 +1854,16 @@ namespace ShopNow.Controllers
                    RfAmount = i.py.rz.p.RefundAmount,
                    RefundRemark = i.py.rz.p.RefundRemark
                }).OrderByDescending(i => i.DateEncoded).ToList();
-
-
             int count = model.List.Count();
-
             int CurrentPage = page;
-
             int PageSize = pageSize;
-
             int TotalCount = count;
-
             int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
-
             var items = model.List.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
             var previous = CurrentPage - 1;
             var previousurl = apipath + "/Api/GetShopAllOrders?shopId=" + shopId + "&page=" + previous;
-
             var previousPage = CurrentPage > 1 ? previousurl : "No";
-
             var current = CurrentPage + 1;
-
             var nexturl = apipath + "/Api/GetShopAllOrders?shopId=" + shopId + "&str=" + current;
             var nextPage = CurrentPage < TotalPages ? nexturl : "No";
             var paginationMetadata = new
@@ -2086,10 +1875,7 @@ namespace ShopNow.Controllers
                 previousPage,
                 nextPage
             };
-
-
             return Json(new { Page = paginationMetadata, items }, JsonRequestBehavior.AllowGet);
-
         }
 
         [HttpPost]
@@ -2111,7 +1897,6 @@ namespace ShopNow.Controllers
                 {
                     shop.PhoneNumber = txt;
                 }
-
                 shop.DateEncoded = DateTime.Now;
                 shop.DateUpdated = DateTime.Now;
                 shop.Status = 1;
@@ -2119,7 +1904,6 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
                 if (model.AuthorisedBrandName != null)
                 {
-
                     var bran = db.Brands.FirstOrDefault(i => i.Name == model.AuthorisedBrandName);
                     if (bran != null)
                     {
@@ -2135,7 +1919,6 @@ namespace ShopNow.Controllers
                         db.Brands.Add(brand);
                         db.SaveChanges();
                         shop.AuthorisedBrandId = brand.Id;
-
                     }
                 }
                 var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
@@ -2144,15 +1927,6 @@ namespace ShopNow.Controllers
                 customer.DateUpdated = DateTime.Now;
                 db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-
-                Admin admin = new Admin();
-                admin.AnonymisedID = shop.Id.ToString();
-                admin.Status = 0;
-                admin.DateEncoded = DateTime.Now;
-                admin.DateUpdated = DateTime.Now;
-                db.Admins.Add(admin);
-                db.SaveChanges();
-
                 var otpmodel = new OtpVerification();
                 otpmodel.ShopId = shop.Id;
                 otpmodel.CustomerId = customer.Id;
@@ -2168,30 +1942,25 @@ namespace ShopNow.Controllers
                 otpmodel.DateUpdated = DateTime.Now;
                 db.OtpVerifications.Add(otpmodel);
                 db.SaveChanges();
-
                 if (shop.Id != 0)
                 {
                     return Json(new { message = "Successfully Registered Your Shop!", Details = shop, Otp = otpmodel.Otp, Position = customer.Position });
-
                 }
                 else
                     return Json(new { message = "Your Shop Registration Failed!" });
             }
             else
                 return Json(new { message = "This Shop Already Exist!" });
-
         }
 
         [HttpPost]
         public JsonResult ShopUpdate(ShopUpdateViewModel model)
         {
-            //int errorCode = 0;
-            var shop = db.Shops.FirstOrDefault(i => i.Id == model.Id);// Shop.Get(model.Code);
+            var shop = db.Shops.FirstOrDefault(i => i.Id == model.Id);
             _mapper.Map(model, shop);
             if (model.AuthorisedBrandName != null)
             {
-
-                var bran = db.Brands.FirstOrDefault(i => i.Name == model.AuthorisedBrandName); // Brand.GetName(model.AuthorisedBrandName);
+                var bran = db.Brands.FirstOrDefault(i => i.Name == model.AuthorisedBrandName);
                 if (bran != null)
                 {
                     shop.AuthorisedBrandId = bran.Id;
@@ -2212,17 +1981,15 @@ namespace ShopNow.Controllers
             shop.DateUpdated = DateTime.Now;
             db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
-            
-            if (shop.Id !=0)
+
+            if (shop.Id != 0)
             {
                 return Json(new { message = "Successfully Updated Your Shop!", Details = shop });
-
             }
             else
                 return Json(new { message = "Your Shop Updation Failed!" });
-
-
         }
+
         public JsonResult GetNextVerify(string OwnerPhoneNumber, string PhoneNumber, int shopId)
         {
             var otpmodel = new OtpVerification();
@@ -2236,7 +2003,6 @@ namespace ShopNow.Controllers
             otpmodel.Verify = false;
             otpmodel.CreatedBy = customer.Name;
             otpmodel.UpdatedBy = customer.Name;
-            //otpmodel.Code = _generateCode("SMS");
             otpmodel.Status = 0;
             otpmodel.DateEncoded = DateTime.Now;
             otpmodel.DateUpdated = DateTime.Now;
@@ -2245,8 +2011,7 @@ namespace ShopNow.Controllers
             return Json(new { message = "Your Todays OTP is: " + otpmodel.Otp }, JsonRequestBehavior.AllowGet);
         }
 
-
-        public JsonResult GetShopDetailsNew(int shopId, string categoryId="", string str = "")
+        public JsonResult GetShopDetailsNew(int shopId, int categoryId, string str = "")
         {
             var shop = db.Shops.FirstOrDefault(i => i.Id == shopId);
             //shop.Code = ss[0].Code;
@@ -2256,7 +2021,6 @@ namespace ShopNow.Controllers
             //shop.PhoneNumber = ss[0].PhoneNumber;
             //shop.Name = ss[0].Name;
             //shop.ShopCategoryCode = ss[0].ShopCategoryCode;
-
             ShopDetails model = _mapper.Map<Shop, ShopDetails>(shop);
             var rate = db.CustomerReviews.Where(j => j.ShopId == shop.Id).ToList();
             var reviewCount = db.CustomerReviews.Where(j => j.ShopId == shop.Id).Count();
@@ -2270,43 +2034,41 @@ namespace ShopNow.Controllers
             {
                 model.ProductLists = (from pl in db.Products
                                       join m in db.MasterProducts on pl.MasterProductId equals m.Id
-                                      where pl.ShopId == shopId && pl.Status == 0 && (categoryId != "" ? m.CategoryIds == categoryId : true)
+                                      where pl.ShopId == shopId && pl.Status == 0 && (categoryId != 0 ? m.CategoryId == categoryId : true)
                                       select new ShopDetails.ProductList
                                       {
                                           Id = pl.Id,
                                           Name = m.Name,
                                           ShopId = pl.ShopId,
                                           ShopName = pl.ShopName,
-                                          CategoryIds = m.CategoryIds,
-                                          CategoryName = m.CategoryName,
+                                          CategoryId = m.CategoryId,
+                                          // CategoryName = m.CategoryName,
                                           ColorCode = m.ColorCode,
                                           Price = pl.Price,
                                           ImagePath = ((!string.IsNullOrEmpty(m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                                           Status = pl.Status,
                                           Customisation = pl.Customisation
                                       }).Where(i => str != "" ? i.Name.ToLower().Contains(str) : true).ToList();
-
             }
             else if (shop.ShopCategoryId == 1)
             {
                 model.ProductLists = (from pl in db.Products
                                       join m in db.MasterProducts on pl.MasterProductId equals m.Id
-                                      where pl.ShopId == shopId && pl.Status == 0 && m.Name.ToLower().Contains(str) && (categoryId != "" ? m.CategoryIds == categoryId : true)
+                                      where pl.ShopId == shopId && pl.Status == 0 && m.Name.ToLower().Contains(str) && (categoryId != 0 ? m.CategoryId == categoryId : true)
                                       select new ShopDetails.ProductList
                                       {
                                           Id = pl.Id,
                                           Name = m.Name,
                                           ShopId = pl.ShopId,
                                           ShopName = pl.ShopName,
-                                          CategoryIds = m.CategoryIds,
-                                          CategoryName = m.CategoryName,
+                                          CategoryId = m.CategoryId,
+                                          //CategoryName = m.CategoryName,
                                           ColorCode = m.ColorCode,
                                           Price = pl.Price,
                                           ImagePath = ((!string.IsNullOrEmpty(m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                                           Status = pl.Status,
                                           Customisation = pl.Customisation
                                       }).ToList();
-
             }
             return new JsonResult()
             {
@@ -2317,10 +2079,8 @@ namespace ShopNow.Controllers
             };
         }
 
-
         public JsonResult GetShopDetails(int id, int categoryId, string str = "")
         {
-            
             Shop shop = new Shop();
             var ss = (from p in db.Shops
                       where p.Id == id
@@ -2334,7 +2094,6 @@ namespace ShopNow.Controllers
                           PhoneNumber = p.PhoneNumber,
                           ShopCategoryId = p.ShopCategoryId
                       }).ToList();
-
             shop.Id = ss[0].id;
             shop.Address = ss[0].Address;
             shop.CustomerReview = ss[0].CustomerReview;
@@ -2342,41 +2101,28 @@ namespace ShopNow.Controllers
             shop.PhoneNumber = ss[0].PhoneNumber;
             shop.Name = ss[0].Name;
             shop.ShopCategoryId = ss[0].ShopCategoryId;
-
             ShopDetails model = _mapper.Map<Shop, ShopDetails>(shop);
-            //var rate = db.CustomerReviews.Where(j => j.ShopCode == shop.Code).ToList();
-            //var reviewCount = db.CustomerReviews.Where(j => j.ShopCode == shop.Code).Count();
-            //if (reviewCount > 0)
-            //    model.Rating = rate.Sum(l => l.Rating) / reviewCount ?? 0;
-            //else
-            //    reviewCount = 0;
-            //model.CustomerReview = reviewCount;
-
             model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryCode as Code, CategoryName as Name from Products p join Categories c on c.Code = p.CategoryCode where shopid ={id}  and c.Status = 0 and CategoryCode is not null and CategoryName is not null group by CategoryCode,CategoryName order by Name").ToList<ShopDetails.CategoryList>();
-            
-
             if (shop.ShopCategoryId == 0)
             {
                 //model.ProductLists = db.Products.Where(i => i.ShopCode == code && i.Status == 0).ToList().Where(i => str != "" ? i.Name.ToLower().StartsWith(str.ToLower()) : true && categoryCode != "" ? i.CategoryCode == categoryCode : true).AsQueryable().ProjectTo<ShopDetails.ProductList>(_mapperConfiguration).OrderBy(i => i.Name).ToList();
                 model.ProductLists = (from pl in db.Products
                                       join m in db.MasterProducts on pl.MasterProductId equals m.Id
-                                      where pl.ShopId == id && pl.Status == 0  && (categoryId != 0 ? pl.ShopCategoryId == categoryId : true)
+                                      where pl.ShopId == id && pl.Status == 0 && (categoryId != 0 ? pl.ShopCategoryId == categoryId : true)
                                       select new ShopDetails.ProductList
                                       {
                                           Id = pl.Id,
                                           Name = m.Name,
                                           ShopId = pl.ShopId,
                                           ShopName = pl.ShopName,
-                                          CategoryIds = m.CategoryIds,
-                                          CategoryName = m.CategoryName,
+                                          CategoryId = m.CategoryId,
+                                          //CategoryName = m.CategoryName,
                                           ColorCode = m.ColorCode,
                                           Price = pl.Price,
                                           ImagePath = m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23"),
                                           Status = pl.Status
 
                                       }).Where(i => str != "" ? i.Name.ToLower().Contains(str) : true).ToList();
-                
-
             }
             else if (shop.ShopCategoryId == 1)
             {
@@ -2389,15 +2135,13 @@ namespace ShopNow.Controllers
                                           Name = m.Name,
                                           ShopId = pl.ShopId,
                                           ShopName = pl.ShopName,
-                                          CategoryIds = m.CategoryIds,
-                                          CategoryName = m.CategoryName,
+                                          CategoryId = m.CategoryId,
+                                          // CategoryName = m.CategoryName,
                                           //ColorCode = pl.ColorCode,
                                           Price = pl.Price,
                                           ImagePath = m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23"),
                                           Status = pl.Status
-
                                       }).ToList();
-
             }
             return new JsonResult()
             {
@@ -2406,7 +2150,7 @@ namespace ShopNow.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet,
                 MaxJsonLength = int.MaxValue
             };
-           // return Json(model, JsonRequestBehavior.AllowGet);
+            // return Json(model, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetProductList(double latitude, double longitude, string str = "", int page = 1, int pageSize = 10)
@@ -2416,52 +2160,38 @@ namespace ShopNow.Controllers
             double? varlatitude = latitude;
             int? varpage = page;
             int? varPagesize = pageSize;
-            var s = db.GetProductList(varlongitude, varlatitude, str, varpage, varPagesize).ToList();
-          
-
+            var s = db.GetProductList(varlongitude, varlatitude, str, varpage, varPagesize);
             string queryOtherList = "SELECT  * " +
-" FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8  and Status = 0 and Latitude != 0 and Longitude != 0" +
-"and Name like '%'+@str+'%' order by Rating";
-
-
-
+             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8  and Status = 0 and Latitude != 0 and Longitude != 0" +
+             "and Name like '%'+@str+'%' order by Rating";
             model.ShopList = db.Shops.SqlQuery(queryOtherList,
                  new SqlParameter("Latitude", latitude),
                  new SqlParameter("Longitude", longitude), new SqlParameter("str", str)).Select(i => new ProductSearchViewModel.ShopLists
                  {
-                ImagePath = i.ImagePath,
-                ShopId = i.Id,
-                ShopName = i.Name,
-                Latitude = i.Latitude,
-                Longitude = i.Longitude,
-                DistrictName = i.DistrictName,
-                Rating = i.Rating,
-                ShopCategoryId = i.ShopCategoryId,
-                ShopOnline=i.IsOnline,
-                ShopStatus=i.Status
-                }).ToList();
-
-            var productrCount =  db.GetProductListCount(varlongitude, varlatitude, str).ToList();
+                     ImagePath = i.ImagePath,
+                     ShopId = i.Id,
+                     ShopName = i.Name,
+                     Latitude = i.Latitude,
+                     Longitude = i.Longitude,
+                     DistrictName = i.DistrictName,
+                     Rating = i.Rating,
+                     ShopCategoryId = i.ShopCategoryId,
+                     ShopOnline = i.IsOnline,
+                     ShopStatus = i.Status
+                 }).ToList();
+            var productrCount = db.GetProductListCount(varlongitude, varlatitude, str).ToList();
             int count = Convert.ToInt32(productrCount[0]);
-
             int CurrentPage = page;
-
             int PageSize = pageSize;
-
             //int TotalCount = count;
-
             //int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
-
             //var items = s;
             var previous = CurrentPage - 1;
-            var previousurl = apipath+ "/Api/GetProductList?latitude=" + latitude + "&longitude=" + longitude + "&str=" + str + "&page=" + previous;
-
+            var previousurl = apipath + "/Api/GetProductList?latitude=" + latitude + "&longitude=" + longitude + "&str=" + str + "&page=" + previous;
             var previousPage = CurrentPage > 1 ? previousurl : "No";
-
             var current = CurrentPage + 1;
-
-            var nexturl = apipath+ "/Api/GetProductList?latitude=" + latitude + "&longitude=" + longitude + "&str=" + str + "&page=" + current;
-           // var nextPage = CurrentPage < TotalPages ? nexturl : "No";
+            var nexturl = apipath + "/Api/GetProductList?latitude=" + latitude + "&longitude=" + longitude + "&str=" + str + "&page=" + current;
+            // var nextPage = CurrentPage < TotalPages ? nexturl : "No";
             var paginationMetadata = new
             {
                 //totalCount = TotalCount,
@@ -2471,26 +2201,17 @@ namespace ShopNow.Controllers
                 previousPage,
                 //nextPage
             };
-
             int count1 = model.ShopList.Count();
-
             int CurrentPage1 = page;
-
             int PageSize1 = pageSize;
-
             int TotalCount1 = count1;
-
             int TotalPages1 = (int)Math.Ceiling(count1 / (double)PageSize1);
-
             var items1 = model.ShopList.Skip((CurrentPage1 - 1) * PageSize1).Take(PageSize1).ToList();
             var previous1 = CurrentPage1 - 1;
-            var previousurl1 = apipath+ "/Api/GetProductList?latitude=" + latitude + "&longitude=" + longitude + "&str=" + str + "&page=" + previous;
-
+            var previousurl1 = apipath + "/Api/GetProductList?latitude=" + latitude + "&longitude=" + longitude + "&str=" + str + "&page=" + previous;
             var previousPage1 = CurrentPage1 > 1 ? previousurl1 : "No";
-
             var current1 = CurrentPage1 + 1;
-
-            var nexturl1 = apipath +"/ Api/GetProductList?latitude=" + latitude + "&longitude=" + longitude + "&str=" + str + "&page=" + current;
+            var nexturl1 = apipath + "/ Api/GetProductList?latitude=" + latitude + "&longitude=" + longitude + "&str=" + str + "&page=" + current;
             var nextPage1 = CurrentPage1 < TotalPages1 ? nexturl1 : "No";
             var paginationMetadata1 = new
             {
@@ -2501,70 +2222,49 @@ namespace ShopNow.Controllers
                 previousPage1,
                 nextPage1
             };
-
             return Json(new { Page = paginationMetadata, /*items,*/ Page1 = paginationMetadata1, items1 }, JsonRequestBehavior.AllowGet);
         }
+
         public static double GetStockQty(string code)
         {
-
-
             using (WebClient myData = new WebClient())
             {
-
                 myData.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
                 myData.Headers[HttpRequestHeader.Accept] = "application/json";
                 myData.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-
-                string getList = myData.DownloadString("http://joyrahq.gofrugal.com/RayMedi_HQ/api/v1/items?q=status==R,outletId==2,itemId=="+code);
-
+                string getList = myData.DownloadString("http://joyrahq.gofrugal.com/RayMedi_HQ/api/v1/items?q=status==R,outletId==2,itemId==" + code);
                 var result = JsonConvert.DeserializeObject<RootObject>(getList);
                 foreach (var pro in result.items)
                 {
                     foreach (var med in pro.stock)
                     {
                         return Convert.ToDouble(med.stock);
-
                     }
                 }
             }
             return 0;
-
         }
 
-        public JsonResult GetShopCategoryList(string shopId, string categoryIds, string str = "", int page = 1, int pageSize = 20)
+        public JsonResult GetShopCategoryList(string shopId, string CategoryId, string str = "", int page = 1, int pageSize = 20)
         {
-          //  var shid = db.Shops.Where(s => s.Id == shopId).FirstOrDefault();
+            //  var shid = db.Shops.Where(s => s.Id == shopId).FirstOrDefault();
             int count = 0;
             //var total = db.GetShopCategoryProductCount(shopCode, categoryCode, str).ToList();
             //if (total.Count > 0)
-            //    count = total[0].Value;
-            
-            var skip = page-1;
-            
-            //var model = db.GetShopCategoryProducts(shopId, categoryIds, str, skip, pageSize).ToList();
-            
-
+            //    count = total[0].Value;            
+            var skip = page - 1;
+            //var model = db.GetShopCategoryProducts(shopId, CategoryId, str, skip, pageSize).ToList();    
             int CurrentPage = page;
-
             int PageSize = pageSize;
-
             int TotalCount = count;
-
             int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
-
-           // var items = model;
+            // var items = model;
             var previous = CurrentPage - 1;
-          //var previousurl = "https://admin.shopnowchat.in/Api/GetShopCategoryList?shopCode=" + shopCode + "&categoryCode=" + categoryCode + "&str=" + str + "&page=" + previous;
-            
-
-           // var previousPage = CurrentPage > 1 ? previousurl : "No";
-
+            //var previousurl = "https://admin.shopnowchat.in/Api/GetShopCategoryList?shopId=" + shopCode + "&categoryCode=" + categoryCode + "&str=" + str + "&page=" + previous;
+            // var previousPage = CurrentPage > 1 ? previousurl : "No";
             var current = CurrentPage + 1;
-
-            //var nexturl = "https://admin.shopnowchat.in/Api/GetShopCategoryList?shopCode=" + shopCode + "&categoryCode=" + categoryCode + "&str=" + str + "&page=" + current;
-            
-
-           // var nextPage = CurrentPage < TotalPages ? nexturl : "No";
+            //var nexturl = "https://admin.shopnowchat.in/Api/GetShopCategoryList?shopId=" + shopCode + "&categoryCode=" + categoryCode + "&str=" + str + "&page=" + current;
+            // var nextPage = CurrentPage < TotalPages ? nexturl : "No";
             var paginationMetadata = new
             {
                 totalCount = TotalCount,
@@ -2572,13 +2272,12 @@ namespace ShopNow.Controllers
                 currentPage = CurrentPage,
                 totalPages = TotalPages,
                 //previousPage,
-               // nextPage
+                // nextPage
             };
-
-
             return Json(new { Page = paginationMetadata, /*items*/ }, JsonRequestBehavior.AllowGet);
         }
-        string GetMasterProductName(int id)
+        string GetMasterProductName(long id)
+
         {
             var masterProduct = db.MasterProducts.FirstOrDefault(i => i.Id == id);
             var name = "";
@@ -2588,6 +2287,7 @@ namespace ShopNow.Controllers
             }
             return name;
         }
+
         public JsonResult GetSingleShopDetails(int id)
         {
             var shid = db.Shops.Where(s => s.Id == id).FirstOrDefault();
@@ -2595,16 +2295,17 @@ namespace ShopNow.Controllers
             ShopSingleUpdateViewModel model = _mapper.Map<Shop, ShopSingleUpdateViewModel>(shop);
             return Json(model, JsonRequestBehavior.AllowGet);
         }
+
         public JsonResult GetShopBalanceNotification(int customerId)
         {
-            var varShopOwner= db.Customers.Where(s => s.Id == customerId && s.Position ==1).FirstOrDefault();
+            var varShopOwner = db.Customers.Where(s => s.Id == customerId && s.Position == 1).FirstOrDefault();
             if (varShopOwner != null)
             {
                 var varCustomer = db.Customers.Where(s => s.Id == customerId && s.Position == 1).FirstOrDefault();
                 var customerName = (from c in db.Customers
-                                    where c.Id == varCustomer.Id && c.Position ==1
+                                    where c.Id == varCustomer.Id && c.Position == 1
                                     select c.Name).FirstOrDefault();
-                
+
                 var orderCount = (from s in db.Orders
                                   join sh in db.Shops on s.ShopId equals sh.Id
                                   join c in db.Customers on sh.CustomerId equals c.Id
@@ -2653,7 +2354,6 @@ namespace ShopNow.Controllers
         public JsonResult AddReview(ShopReviewViewModel model)
         {
             int errorCode = 0;
-
             var review = _mapper.Map<ShopReviewViewModel, CustomerReview>(model);
             ClassCustomerReview.Add(review, out errorCode);
             if (review.Id != 0)
@@ -2677,6 +2377,7 @@ namespace ShopNow.Controllers
             return Json(new { message = "Successfully Updated to Rating!", Details = model });
 
         }
+
         public JsonResult GetAllReview(int shopId, int customerId, int page = 1, int pageSize = 9)
         {
             var model = new ReviewListViewModel();
@@ -2690,7 +2391,6 @@ namespace ShopNow.Controllers
                              CustomerRemark = i.CustomerRemark,
                              Rating = i.Rating
                          }).ToList();
-
             model.ReviewlLists = db.CustomerReviews
                              .Where(i => i.Status == 0 && i.ShopId == shopId && i.CustomerId != customerId)
                          .Select(i => new ReviewListViewModel.ReviewlList
@@ -2701,27 +2401,16 @@ namespace ShopNow.Controllers
                              CustomerRemark = i.CustomerRemark,
                              Rating = i.Rating
                          }).ToList();
-
-            //model.ReviewlLists = CustomerReview.GetList(code).AsQueryable().ProjectTo<ReviewListViewModel.ReviewlList>(_mapperConfiguration).OrderBy(i => i.CustomerName).ToList();
-
             int count = model.ReviewlLists.Count();
-
             int CurrentPage = page;
-
             int PageSize = pageSize;
-
             int TotalCount = count;
-
             int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
-
             var items = model.ReviewlLists.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
             var previous = CurrentPage - 1;
-
             var previousurl = apipath + "/Api/GetAllReview?shopId=" + shopId + "&customerId=" + customerId + "&page=" + previous;
             var previousPage = CurrentPage > 1 ? previousurl : "No";
-
             var current = CurrentPage + 1;
-
             var nexturl = apipath + "/Api/GetAllReview?shopId=" + shopId + "&customerId=" + customerId + "&page=" + current;
             var nextPage = CurrentPage < TotalPages ? nexturl : "No";
             var paginationMetadata = new
@@ -2733,8 +2422,6 @@ namespace ShopNow.Controllers
                 previousPage,
                 nextPage
             };
-
-
             return Json(new { Page = paginationMetadata, items, model.CustomerList }, JsonRequestBehavior.AllowGet);
         }
 
@@ -2742,18 +2429,14 @@ namespace ShopNow.Controllers
         public JsonResult ShopSingleUpdate(ShopSingleEditViewModel model)
         {
             // int errorCode = 0;
-            var shop = db.Shops.FirstOrDefault(i => i.Id == model.Id); // Shop.Get(model.Code);
-            _mapper.Map(model, shop);
+            var shop = db.Shops.FirstOrDefault(i => i.Id == model.Id);
             shop.UpdatedBy = shop.CustomerName;
             shop.DateUpdated = DateTime.Now;
             db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
-            //  Shop.Edit(shop, out errorCode);
-
             if (shop.Id != 0)
             {
                 return Json(new { message = "Successfully Updated Your Shop!", Details = shop });
-
             }
             else
                 return Json(new { message = "Your Shop Updation Failed!" });
@@ -2762,15 +2445,12 @@ namespace ShopNow.Controllers
         [HttpPost]
         public JsonResult SingleShopImgeUpdate(SingleShopImgeUpdateViewModel model)
         {
-            // int errorCode = 0;
-            var shop = db.Shops.FirstOrDefault(i => i.Id == model.Id); // Shop.Get(model.Code);
+            var shop = db.Shops.FirstOrDefault(i => i.Id == model.Id);
             shop.ImagePath = model.ImagePath;
             shop.UpdatedBy = shop.CustomerName;
             shop.DateUpdated = DateTime.Now;
             db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
-            // Shop.Edit(shop, out errorCode);
-
             return Json(new { message = "Successfully Updated Your Shop Image!", Details = shop });
         }
 
@@ -2780,6 +2460,7 @@ namespace ShopNow.Controllers
             ProductDetailsViewModel model = _mapper.Map<Product, ProductDetailsViewModel>(product);
             return Json(model, JsonRequestBehavior.AllowGet);
         }
+
         [HttpPost]
         public JsonResult ProductQuickUpdate(ProductQuickUpdateViewModel model)
         {
@@ -2793,13 +2474,11 @@ namespace ShopNow.Controllers
 
                 product.UpdatedBy = customer.Name;
             }
-
             product.DateUpdated = DateTime.Now;
             db.Entry(product).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
             return Json(new { message = "Successfully Updated Your Shop Image!", Details = product });
-
         }
 
         public JsonResult GetCustomerProfile(int customerId)
@@ -2835,9 +2514,9 @@ namespace ShopNow.Controllers
                                 CustomerId = i.ss.s.CustomerId,
                                 DateEncoded = i.o.Any() ? i.o.LastOrDefault().DateEncoded.ToString("dd/MMM/yyyy") : "N/A"
                             }).ToList();
-
             return Json(model, JsonRequestBehavior.AllowGet);
         }
+
         public JsonResult GetShopInORActive(ShopActiveOrInViewModel model)
         {
             if (model.State == 0)
@@ -2868,26 +2547,23 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
                 return Json(new { message = "Successfully InActivated the Shop!" }, JsonRequestBehavior.AllowGet);
             }
-
         }
 
         public JsonResult GetAllAddress(int customerId)
         {
             var model = new CustomerAddressListViewModel();
-            model.List = db.CustomerAddresses.Where(i => i.CustomerId == customerId && i.Status == 0).ToList().AsQueryable().ProjectTo<CustomerAddressListViewModel.CustomerList>(_mapperConfiguration).OrderBy(i => i.Name).ToList();       
+            model.List = db.CustomerAddresses.Where(i => i.CustomerId == customerId && i.Status == 0).ToList().AsQueryable().ProjectTo<CustomerAddressListViewModel.CustomerList>(_mapperConfiguration).OrderBy(i => i.Name).ToList();
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetDelivaryBoyStatus(int customerId)
         {
-
             var delivaryBoy = db.DeliveryBoys.FirstOrDefault(i => i.CustomerId == customerId && i.Status == 0);
             if (delivaryBoy.Active == 1)
             {
                 return Json("You are Active", JsonRequestBehavior.AllowGet);
             }
             else
-
                 return Json("You are InActive", JsonRequestBehavior.AllowGet);
         }
 
@@ -2906,26 +2582,20 @@ namespace ShopNow.Controllers
             else
             {
                 var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
-
                 var delivaryBoy = db.DeliveryBoys.FirstOrDefault(i => i.CustomerId == customerId && i.Status == 0);
                 delivaryBoy.Active = 0;
                 delivaryBoy.UpdatedBy = customer.Name;
                 db.Entry(delivaryBoy).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 return Json("You are InActive", JsonRequestBehavior.AllowGet);
-
             }
         }
-
 
         public JsonResult GetNearDelivaryBoy(double Latitude, double Longitude)
         {
             var model = new DeliveryBoyApiListViewModel();
             string queryOtherList = "SELECT  * " +
-   " FROM DeliveryBoys where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and OnWork = 0 and isAssign = 0 and Active = 1 and status=0 and Latitude != 0 and Longitude != 0";
-
-
-
+            " FROM DeliveryBoys where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and OnWork = 0 and isAssign = 0 and Active = 1 and status=0 and Latitude != 0 and Longitude != 0";
             model.Lists = db.DeliveryBoys.SqlQuery(queryOtherList,
             new SqlParameter("Latitude", Latitude),
             new SqlParameter("Longitude", Longitude)).Select(i => new DeliveryBoyApiListViewModel.DeliveryBoyViewModel
@@ -2942,25 +2612,25 @@ namespace ShopNow.Controllers
                 Status = i.Status
             }).ToList();
             return Json(model, JsonRequestBehavior.AllowGet);
-
         }
+
         public JsonResult GetNearShops(double Latitude, double Longitude)
         {
             var model = new NearShopImages();
             string query = "SELECT top(6) * " +
                                " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and Status = 0 and Latitude != 0 and Longitude != 0" +
                                " order by Rating";
-                           model.NearShops = db.Shops.SqlQuery(query,
-                            new SqlParameter("Latitude", Latitude),
-                            new SqlParameter("Longitude", Longitude)).Select(i => new NearShopImages.shops
-                            {
-                            id = i.Id,
-                            image =i.ImagePath !=null ? i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23"):"",
+            model.NearShops = db.Shops.SqlQuery(query,
+             new SqlParameter("Latitude", Latitude),
+             new SqlParameter("Longitude", Longitude)).Select(i => new NearShopImages.shops
+             {
+                 id = i.Id,
+                 image = i.ImagePath != null ? i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "",
 
-                            }).ToList();
+             }).ToList();
             return Json(model, JsonRequestBehavior.AllowGet);
         }
-            public JsonResult GetNearPlaces(double Latitude, double Longitude, string a)
+        public JsonResult GetNearPlaces(double Latitude, double Longitude, string a)
         {
             var model = new PlacesListView();
             string query = "SELECT top(6) * " +
@@ -2983,247 +2653,232 @@ namespace ShopNow.Controllers
             " order by Rating";
             if (a == "-1")
             {
-
                 string queryOtherList = "SELECT top(6) * " +
                 " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 7 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
                 " order by Rating";
-
-
-
-   model.ResturantList = db.Shops.SqlQuery(query,
-    new SqlParameter("Latitude", Latitude),
-    new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
-    {
-        Id = i.Id,
-        Name = i.Name,
-        DistrictName = i.StreetName,
-      //  Rating = RatingCalculation(i.Id),
-        ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
-        ShopCategoryId = i.ShopCategoryId,
-        ShopCategoryName = i.ShopCategoryName,
-        List = GetBannerImageList(i.Id),
-        Latitude = i.Latitude,
-        Longitude = i.Longitude,
-        Status = i.Status,
-        isOnline = i.IsOnline,
-        ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-        Address = i.Address
-    }).ToList();
-
+                model.ResturantList = db.Shops.SqlQuery(query,
+                 new SqlParameter("Latitude", Latitude),
+                 new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
+                 {
+                     Id = i.Id,
+                     Name = i.Name,
+                     DistrictName = i.StreetName,
+                 //  Rating = RatingCalculation(i.Id),
+                     ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                     ShopCategoryId = i.ShopCategoryId,
+                     ShopCategoryName = i.ShopCategoryName,
+                     List = GetBannerImageList(i.Id),
+                     Latitude = i.Latitude,
+                     Longitude = i.Longitude,
+                     Status = i.Status,
+                     isOnline = i.IsOnline,
+                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
+                     Address = i.Address
+                 }).ToList();
                 model.SuperMarketList = db.Shops.SqlQuery(querySuperMarketList,
-    new SqlParameter("Latitude", Latitude),
-    new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
-    {
-        Id = i.Id,
-        Name = i.Name,
-        DistrictName = i.StreetName,
-        ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
-        ShopCategoryId = i.ShopCategoryId,
-        ShopCategoryName = i.ShopCategoryName,
-        List = GetBannerImageList(i.Id),
-        Latitude = i.Latitude,
-        Longitude = i.Longitude,
-        Status = i.Status,
-        isOnline = i.IsOnline,
-        ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-        Address = i.Address
-    }).ToList();
-
+                new SqlParameter("Latitude", Latitude),
+                new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
+                {
+                   Id = i.Id,
+                   Name = i.Name,
+                   DistrictName = i.StreetName,
+                   ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                   ShopCategoryId = i.ShopCategoryId,
+                   ShopCategoryName = i.ShopCategoryName,
+                   List = GetBannerImageList(i.Id),
+                   Latitude = i.Latitude,
+                   Longitude = i.Longitude,
+                   Status = i.Status,
+                   isOnline = i.IsOnline,
+                   ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
+                   Address = i.Address
+                }).ToList();
                 model.GroceriesList = db.Shops.SqlQuery(queryGroceriesList,
-        new SqlParameter("Latitude", Latitude),
-        new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
-        {
-            Id = i.Id,
-            Name = i.Name,
-            DistrictName = i.StreetName,
-            //Rating = RatingCalculation(i.Code),
-            ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
-            ShopCategoryId = i.ShopCategoryId,
-            ShopCategoryName = i.ShopCategoryName,
-            List = GetBannerImageList(i.Id),
-            Latitude = i.Latitude,
-            Longitude = i.Longitude,
-            Status = i.Status,
-            isOnline = i.IsOnline,
-            ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-            Address = i.Address
-        }).ToList();
-
-  
+                new SqlParameter("Latitude", Latitude),
+                new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
+                {
+                   Id = i.Id,
+                   Name = i.Name,
+                   DistrictName = i.StreetName,
+                  //Rating = RatingCalculation(i.Code),
+                   ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                   ShopCategoryId = i.ShopCategoryId,
+                   ShopCategoryName = i.ShopCategoryName,
+                   List = GetBannerImageList(i.Id),
+                   Latitude = i.Latitude,
+                   Longitude = i.Longitude,
+                   Status = i.Status,
+                   isOnline = i.IsOnline,
+                   ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
+                   Address = i.Address
+                }).ToList();
                 model.HealthList = db.Shops.SqlQuery(queryHealthList,
-        new SqlParameter("Latitude", Latitude),
-        new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
-        {
-            Id = i.Id,
-            Name = i.Name,
-            DistrictName = i.StreetName,
-            ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
-            ShopCategoryId = i.ShopCategoryId,
-            ShopCategoryName = i.ShopCategoryName,
-            List = GetBannerImageList(i.Id),
-            Latitude = i.Latitude,
-            Longitude = i.Longitude,
-            Status = i.Status,
-            isOnline = i.IsOnline,
-            ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-            Address = i.Address
-        }).ToList();
+                new SqlParameter("Latitude", Latitude),
+                new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
+                {
+                    Id = i.Id,
+                    Name = i.Name,
+                    DistrictName = i.StreetName,
+                    ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                    ShopCategoryId = i.ShopCategoryId,
+                    ShopCategoryName = i.ShopCategoryName,
+                    List = GetBannerImageList(i.Id),
+                    Latitude = i.Latitude,
+                    Longitude = i.Longitude,
+                    Status = i.Status,
+                    isOnline = i.IsOnline,
+                    ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
+                   Address = i.Address
+                }).ToList();
 
                 model.ElectronicsList = db.Shops.SqlQuery(queryElectronicsList,
-       new SqlParameter("Latitude", Latitude),
-       new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
-       {
-           Id = i.Id,
-           Name = i.Name,
-           DistrictName = i.StreetName,
-           //Rating = RatingCalculation(i.Code),
-           ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
-           ShopCategoryId = i.ShopCategoryId,
-           ShopCategoryName = i.ShopCategoryName,
-           List = GetBannerImageList(i.Id),
-           Latitude = i.Latitude,
-           Longitude = i.Longitude,
-           Status = i.Status,
-           isOnline = i.IsOnline,
-           ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-           Address = i.Address
-       }).ToList();
-
-
+                new SqlParameter("Latitude", Latitude),
+                new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
+                {
+                    Id = i.Id,
+                    Name = i.Name,
+                    DistrictName = i.StreetName,
+                  //Rating = RatingCalculation(i.Code),
+                    ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                    ShopCategoryId = i.ShopCategoryId,
+                    ShopCategoryName = i.ShopCategoryName,
+                    List = GetBannerImageList(i.Id),
+                    Latitude = i.Latitude,
+                    Longitude = i.Longitude,
+                    Status = i.Status,
+                    isOnline = i.IsOnline,
+                    ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
+                    Address = i.Address
+                }).ToList();
                 model.ServicesList = db.Shops.SqlQuery(qServicesList,
-    new SqlParameter("Latitude", Latitude),
-    new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
-    {
-        Id = i.Id,
-        Name = i.Name,
-        DistrictName = i.StreetName,
-        //Rating = RatingCalculation(i.Code),
-        ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
-        ShopCategoryId = i.ShopCategoryId,
-        ShopCategoryName = i.ShopCategoryName,
-        List = GetBannerImageList(i.Id),
-        Latitude = i.Latitude,
-        Longitude = i.Longitude,
-        Status = i.Status,
-        isOnline = i.IsOnline,
-        ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-        Address = i.Address
-    }).ToList();
-
-    
-
+                new SqlParameter("Latitude", Latitude),
+                new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
+                {
+                   Id = i.Id,
+                   Name = i.Name,
+                   DistrictName = i.StreetName,
+                  //Rating = RatingCalculation(i.Code),
+                   ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                   ShopCategoryId = i.ShopCategoryId,
+                   ShopCategoryName = i.ShopCategoryName,
+                   List = GetBannerImageList(i.Id),
+                   Latitude = i.Latitude,
+                   Longitude = i.Longitude,
+                   Status = i.Status,
+                   isOnline = i.IsOnline,
+                   ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
+                   Address = i.Address
+                }).ToList();
                 model.OtherList = db.Shops.SqlQuery(queryOtherList,
-    new SqlParameter("Latitude", Latitude),
-    new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
-    {
-        Id = i.Id,
-        Name = i.Name,
-        DistrictName = i.StreetName,
-        ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
-        ShopCategoryId = i.ShopCategoryId,
-        ShopCategoryName = i.ShopCategoryName,
-        Latitude = i.Latitude,
-        Longitude = i.Longitude,
-        List = GetBannerImageList(i.Id),
-        Status = i.Status,
-        isOnline = i.IsOnline,
-        ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-        Address = i.Address
-    }).ToList();
-
+                new SqlParameter("Latitude", Latitude),
+                new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
+                {
+                   Id = i.Id,
+                   Name = i.Name,
+                   DistrictName = i.StreetName,
+                   ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                   ShopCategoryId = i.ShopCategoryId,
+                   ShopCategoryName = i.ShopCategoryName,
+                   Latitude = i.Latitude,
+                   Longitude = i.Longitude,
+                   List = GetBannerImageList(i.Id),
+                   Status = i.Status,
+                   isOnline = i.IsOnline,
+                   ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
+                   Address = i.Address
+                }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
-            else if(a == "0"){
+            else if (a == "0")
+            {
                 model.OtherList = db.Shops.SqlQuery(query,
-    new SqlParameter("Latitude", Latitude),
-    new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
-    {
-        Id = i.Id,
-        Name = i.Name,
-        DistrictName = i.StreetName,
-       // Rating = RatingCalculation(i.Code),
-        ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
-        ShopCategoryId = i.ShopCategoryId,
-        ShopCategoryName = i.ShopCategoryName,
-        List = GetBannerImageList(i.Id),
-        Latitude = i.Latitude,
-        Longitude = i.Longitude,
-        Status = i.Status,
-        isOnline = i.IsOnline,
-        ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-        Address = i.Address
-    }).ToList();
+                new SqlParameter("Latitude", Latitude),
+                new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
+                {
+                   Id = i.Id,
+                   Name = i.Name,
+                   DistrictName = i.StreetName,
+                  // Rating = RatingCalculation(i.Code),
+                   ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                   ShopCategoryId = i.ShopCategoryId,
+                   ShopCategoryName = i.ShopCategoryName,
+                   List = GetBannerImageList(i.Id),
+                   Latitude = i.Latitude,
+                   Longitude = i.Longitude,
+                   Status = i.Status,
+                   isOnline = i.IsOnline,
+                   ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
+                   Address = i.Address
+                }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
             else if (a == "1")
             {
                 model.OtherList = db.Shops.SqlQuery(queryGroceriesList,
-   new SqlParameter("Latitude", Latitude),
-   new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
-   {
-       Id = i.Id,
-       Name = i.Name,
-       DistrictName = i.StreetName,
-       //Rating = RatingCalculation(i.Code),
-       ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
-       ShopCategoryId = i.ShopCategoryId,
-       ShopCategoryName = i.ShopCategoryName,
-       List = GetBannerImageList(i.Id),// db.Banners.Where(j => j.Status == 0 && j.ShopCode == i.Code).ToList(),
-       Latitude = i.Latitude,
-       Longitude = i.Longitude,
-       Status = i.Status,
-       isOnline = i.IsOnline,
-       ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-       Address = i.Address
-   }).ToList();
-
+                new SqlParameter("Latitude", Latitude),
+                new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
+                {
+                   Id = i.Id,
+                   Name = i.Name,
+                   DistrictName = i.StreetName,
+                 //Rating = RatingCalculation(i.Code),
+                   ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                   ShopCategoryId = i.ShopCategoryId,
+                   ShopCategoryName = i.ShopCategoryName,
+                   List = GetBannerImageList(i.Id),// db.Banners.Where(j => j.Status == 0 && j.ShopCode == i.Code).ToList(),
+                   Latitude = i.Latitude,
+                   Longitude = i.Longitude,
+                   Status = i.Status,
+                   isOnline = i.IsOnline,
+                   ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
+                   Address = i.Address
+                }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
             else if (a == "2")
             {
                 model.OtherList = db.Shops.SqlQuery(querySuperMarketList,
-      new SqlParameter("Latitude", Latitude),
-      new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
-      {
-          Id = i.Id,
-          Name = i.Name,
-          DistrictName = i.StreetName,
-          //Rating = RatingCalculation(i.Code),
-          ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
-          ShopCategoryId = i.ShopCategoryId,
-          ShopCategoryName = i.ShopCategoryName,
-          List = GetBannerImageList(i.Id),
-          Latitude = i.Latitude,
-          Longitude = i.Longitude,
-          Status = i.Status,
-          isOnline = i.IsOnline,
-          ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-          Address = i.Address
-      }).ToList();
+                new SqlParameter("Latitude", Latitude),
+                new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
+                {
+                   Id = i.Id,
+                   Name = i.Name,
+                   DistrictName = i.StreetName,
+                  //Rating = RatingCalculation(i.Code),
+                   ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                   ShopCategoryId = i.ShopCategoryId,
+                   ShopCategoryName = i.ShopCategoryName,
+                   List = GetBannerImageList(i.Id),
+                   Latitude = i.Latitude,
+                   Longitude = i.Longitude,
+                   Status = i.Status,
+                   isOnline = i.IsOnline,
+                   ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
+                   Address = i.Address
+                }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
             else if (a == "3")
             {
-
                 model.OtherList = db.Shops.SqlQuery(queryHealthList,
-        new SqlParameter("Latitude", Latitude),
-        new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
-        {
-            Id = i.Id,
-            Name = i.Name,
-            DistrictName = i.StreetName,
-           // Rating = RatingCalculation(i.Code),
-            ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
-            ShopCategoryId = i.ShopCategoryId,
-            ShopCategoryName = i.ShopCategoryName,
-            List = GetBannerImageList(i.Id),
-            Latitude = i.Latitude,
-            Longitude = i.Longitude,
-            Status = i.Status,
-            isOnline = i.IsOnline,
-            ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-            Address = i.Address
-        }).ToList();
+                new SqlParameter("Latitude", Latitude),
+                new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
+                {
+                   Id = i.Id,
+                   Name = i.Name,
+                   DistrictName = i.StreetName,
+                  // Rating = RatingCalculation(i.Code),
+                   ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                   ShopCategoryId = i.ShopCategoryId,
+                   ShopCategoryName = i.ShopCategoryName,
+                   List = GetBannerImageList(i.Id),
+                   Latitude = i.Latitude,
+                   Longitude = i.Longitude,
+                   Status = i.Status,
+                   isOnline = i.IsOnline,
+                   ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
+                   Address = i.Address
+                }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
             else if (a == "4")
@@ -3232,18 +2887,18 @@ namespace ShopNow.Controllers
                 new SqlParameter("Latitude", Latitude),
                 new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
                 {
-                Id = i.Id,
-                Name = i.Name,
-                DistrictName = i.StreetName,
-                //Rating = RatingCalculation(i.Code),
+                    Id = i.Id,
+                    Name = i.Name,
+                    DistrictName = i.StreetName,
+                    //Rating = RatingCalculation(i.Code),
                     ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                     ShopCategoryId = i.ShopCategoryId,
-                ShopCategoryName = i.ShopCategoryName,
+                    ShopCategoryName = i.ShopCategoryName,
                     List = GetBannerImageList(i.Id),
                     Latitude = i.Latitude,
-                Longitude = i.Longitude,
-                Status = i.Status,
-                isOnline = i.IsOnline,
+                    Longitude = i.Longitude,
+                    Status = i.Status,
+                    isOnline = i.IsOnline,
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
                     Address = i.Address
                 }).ToList();
@@ -3252,23 +2907,22 @@ namespace ShopNow.Controllers
             else if (a == "5")
             {
                 model.OtherList = db.Shops.SqlQuery(qServicesList,
-    new SqlParameter("Latitude", Latitude),
-    new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
-    {
-        Id = i.Id,
-        Name = i.Name,
-        DistrictName = i.StreetName,
-        //Rating = RatingCalculation(i.Code),
-        ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
-
-        ShopCategoryId = i.ShopCategoryId,
-        ShopCategoryName = i.ShopCategoryName,
-        List = GetBannerImageList(i.Id),
-        Latitude = i.Latitude,
-        Longitude = i.Longitude,
-        Status = i.Status,
-        isOnline = i.IsOnline
-    }).ToList();
+                new SqlParameter("Latitude", Latitude),
+                new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
+                {
+                   Id = i.Id,
+                   Name = i.Name,
+                   DistrictName = i.StreetName,
+                  //Rating = RatingCalculation(i.Code),
+                   ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                   ShopCategoryId = i.ShopCategoryId,
+                   ShopCategoryName = i.ShopCategoryName,
+                   List = GetBannerImageList(i.Id),
+                   Latitude = i.Latitude,
+                   Longitude = i.Longitude,
+                   Status = i.Status,
+                   isOnline = i.IsOnline
+                }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
             else
@@ -3276,30 +2930,27 @@ namespace ShopNow.Controllers
                 string queryOtherList = "SELECT top(6) * " +
               " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 7 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0 " +
               " order by Rating";
-    
                 model.OtherList = db.Shops.SqlQuery(queryOtherList,
-    new SqlParameter("Latitude", Latitude),
-    new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
-    {
-        Id = i.Id,
-        Name = i.Name,
-        DistrictName = i.StreetName,
-        //Rating = RatingCalculation(i.Code),
-        ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
-        ShopCategoryId = i.ShopCategoryId,
-        ShopCategoryName = i.ShopCategoryName,
-        List = GetBannerImageList(i.Id),
-        Latitude = i.Latitude,
-        Longitude = i.Longitude,
-        Status = i.Status,
-        isOnline=i.IsOnline,
-        ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-        Address = i.Address
-    }).ToList();
-
+                new SqlParameter("Latitude", Latitude),
+                new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
+                {
+                   Id = i.Id,
+                   Name = i.Name,
+                   DistrictName = i.StreetName,
+                  //Rating = RatingCalculation(i.Code),
+                   ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                   ShopCategoryId = i.ShopCategoryId,
+                   ShopCategoryName = i.ShopCategoryName,
+                   List = GetBannerImageList(i.Id),
+                   Latitude = i.Latitude,
+                   Longitude = i.Longitude,
+                   Status = i.Status,
+                   isOnline = i.IsOnline,
+                   ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
+                   Address = i.Address
+                }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
-
         }
 
         #region Reports
@@ -3311,13 +2962,12 @@ namespace ShopNow.Controllers
                 dt = DateTime.Now.ToString("dd-MMM-yyyy");
                 model.List = db.Orders.Where(i => i.Status == 6)
                     .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
-                         //.Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
+                     //.Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
                      .AsEnumerable()
                    .Where(i => i.c.ShopId == shopId && i.c.DateEncoded.ToString("dd-MMM-yyyy") == dt)
                    .Select(i => new ShopOrderAmountApiViewModel.CartList
                    {
-
-                       OrderNo = i.c.OrderNumber,
+                       OrderNumber = i.c.OrderNumber,
                        CartStatus = i.c.Status,
                        ShopPaymentStatus = i.c.ShopPaymentStatus,
                        Amount = i.p.OriginalAmount.ToString(),
@@ -3335,12 +2985,12 @@ namespace ShopNow.Controllers
                 DateTime to1 = DateTime.Parse(to);
                 model.List = db.Orders.Where(i => i.Status == 6)
                     .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
-                        //.Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
+                     //.Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
                      .AsEnumerable()
                    .Where(i => i.c.ShopId == shopId && i.c.DateEncoded >= from1 && i.c.DateEncoded <= to1)
                    .Select(i => new ShopOrderAmountApiViewModel.CartList
                    {
-                       OrderNo = i.c.OrderNumber,
+                       OrderNumber = i.c.OrderNumber,
                        CartStatus = i.c.Status,
                        ShopPaymentStatus = i.c.ShopPaymentStatus,
                        Amount = i.p.OriginalAmount.ToString(),
@@ -3356,12 +3006,12 @@ namespace ShopNow.Controllers
             {
                 model.List = db.Orders.Where(i => i.Status == 6)
                     .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
-                        // .Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
+                     // .Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
                      .AsEnumerable()
                    .Where(i => i.c.ShopId == shopId && i.c.DateEncoded.ToString("dd-MMM-yyyy") == dt)
                    .Select(i => new ShopOrderAmountApiViewModel.CartList
                    {
-                       OrderNo = i.c.OrderNumber,
+                       OrderNumber = i.c.OrderNumber,
                        CartStatus = i.c.Status,
                        ShopPaymentStatus = i.c.ShopPaymentStatus,
                        Amount = i.p.OriginalAmount.ToString(),
@@ -3372,28 +3022,17 @@ namespace ShopNow.Controllers
                     model.TotalAmount = model.List.Sum(i => Convert.ToDouble(i.Amount));
                     model.ShopPaymentStatus = model.List.FirstOrDefault().ShopPaymentStatus;
                 }
-
             }
-
-
             int count = model.List.Count();
-
             int CurrentPage = page;
-
             int PageSize = pageSize;
-
             int TotalCount = count;
-
             int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
-
             var items = model.List.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
             var previous = CurrentPage - 1;
             var previousurl = "https://admin.shopnowchat.in/Api/GetShopOrderReport?shopId=" + shopId + "&dt=" + dt + "&from=" + from + "&to=" + to + "&page=" + previous;
-
             var previousPage = CurrentPage > 1 ? previousurl : "No";
-
             var current = CurrentPage + 1;
-
             var nexturl = "https://admin.shopnowchat.in/Api/GetShopOrderReport?shopId=" + shopId + "&dt=" + dt + "&from=" + from + "&to=" + to + "&page=" + current;
             var nextPage = CurrentPage < TotalPages ? nexturl : "No";
             var paginationMetadata = new
@@ -3405,16 +3044,12 @@ namespace ShopNow.Controllers
                 previousPage,
                 nextPage
             };
-
-
             return Json(new { Page = paginationMetadata, items }, JsonRequestBehavior.AllowGet);
-
         }
 
         public JsonResult GetDelivaryBoyFullReport(string phoneNumber)
         {
             var model = new DelivaryCreditAmountApiViewModel();
-
             model.List = db.Orders.Where(i => i.Status == 6)
                  .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                   .AsEnumerable()
@@ -3422,14 +3057,13 @@ namespace ShopNow.Controllers
                 .Select(i => new DelivaryCreditAmountApiViewModel.CartList
                 {
                     Amount = (i.p.Amount - (i.p.RefundAmount ?? 0)).ToString()
-                    
+
                 }).ToList();
             if (model.List.Count() != 0)
             {
                 model.TotalAmount = model.List.Sum(i => Convert.ToDouble(i.Amount));
                 model.TargetAmount = 1500.00;
             }
-
             return Json(new { model }, JsonRequestBehavior.AllowGet);
         }
 
@@ -3445,10 +3079,10 @@ namespace ShopNow.Controllers
                    .Where(i => i.scc.DeliveryBoyPhoneNumber == phoneNumber && i.scc.DateEncoded.ToString("dd-MMM-yyyy") == dt)
                    .Select(i => new DelivaryBoyReportViewModel.CartList
                    {
-                       OrderNo = i.scc.OrderNumber,
+                       OrderNumber = i.scc.OrderNumber,
                        CartStatus = i.scc.Status,
                        GrossDeliveryCharge = i.scc.DeliveryCharge,
-                       CustomerLatitude =  i.scc.Latitude,
+                       CustomerLatitude = i.scc.Latitude,
                        CustomerLongitude = i.scc.Longitude,
                        ShopLatitude = i.s.Latitude,
                        ShopLongitude = i.s.Longitude,
@@ -3464,17 +3098,15 @@ namespace ShopNow.Controllers
             {
                 DateTime from1 = DateTime.Parse(from);
                 DateTime to1 = DateTime.Parse(to);
-
                 model.List = db.Orders.Where(i => i.Status == 6)
-                        // .Join(db.ShopCharges, c => c.OrderNumber, sc => sc.OrderNo, (c, sc) => new { c, sc })
+                            // .Join(db.ShopCharges, c => c.OrderNumber, sc => sc.OrderNo, (c, sc) => new { c, sc })
                             .Join(db.Shops, scc => scc.ShopId, s => s.Id, (scc, s) => new { scc, s })
                           .Where(i => ((DbFunctions.TruncateTime(i.scc.DateEncoded) >= DbFunctions.TruncateTime(from1)) &&
             (DbFunctions.TruncateTime(i.scc.DateEncoded) <= DbFunctions.TruncateTime(to1))))
                           .AsEnumerable()
                    .Select(i => new DelivaryBoyReportViewModel.CartList
                    {
-
-                       OrderNo = i.scc.OrderNumber,
+                       OrderNumber = i.scc.OrderNumber,
                        CartStatus = i.scc.Status,
                        GrossDeliveryCharge = i.scc.DeliveryCharge,
                        CustomerLatitude = i.scc.Latitude,
@@ -3492,13 +3124,13 @@ namespace ShopNow.Controllers
             else
             {
                 model.List = db.Orders.Where(i => i.Status == 6)
-                        // .Join(db.ShopCharges, c => c.OrderNumber, sc => sc.OrderNo, (c, sc) => new { c, sc })
+                            // .Join(db.ShopCharges, c => c.OrderNumber, sc => sc.OrderNo, (c, sc) => new { c, sc })
                             .Join(db.Shops, scc => scc.ShopId, s => s.Id, (scc, s) => new { scc, s })
                      .AsEnumerable()
                    .Where(i => i.scc.DeliveryBoyPhoneNumber == phoneNumber && i.scc.DateEncoded.ToString("dd-MMM-yyyy") == dt)
                    .Select(i => new DelivaryBoyReportViewModel.CartList
                    {
-                       OrderNo = i.scc.OrderNumber,
+                       OrderNumber = i.scc.OrderNumber,
                        CartStatus = i.scc.Status,
                        GrossDeliveryCharge = i.scc.DeliveryCharge,
                        CustomerLatitude = i.scc.Latitude,
@@ -3512,27 +3144,17 @@ namespace ShopNow.Controllers
                 {
                     model.EarningOfToday = model.List.Sum(i => i.GrossDeliveryCharge);
                 }
-
             }
-
             int count = model.List.Count();
-
             int CurrentPage = page;
-
             int PageSize = pageSize;
-
             int TotalCount = count;
-
             int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
-
             var items = model.List.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
             var previous = CurrentPage - 1;
             var previousurl = "https://admin.shopnowchat.in/Api/GetDelivaryBoyReport?phoneNumber=" + phoneNumber + "&dt=" + dt + "&from=" + from + "&to=" + to + "&page=" + previous;
-
             var previousPage = CurrentPage > 1 ? previousurl : "No";
-
             var current = CurrentPage + 1;
-
             var nexturl = "https://admin.shopnowchat.in/Api/GetDelivaryBoyReport?phoneNumber=" + phoneNumber + "&dt=" + dt + "&from=" + from + "&to=" + to + "&page=" + current;
             var nextPage = CurrentPage < TotalPages ? nexturl : "No";
             var paginationMetadata = new
@@ -3555,12 +3177,12 @@ namespace ShopNow.Controllers
                 dt = DateTime.Now.ToString("dd-MMM-yyyy");
                 model.List = db.Orders.Where(i => i.Status == 6)
                     .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
-                         //.Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
+                     //.Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
                      .AsEnumerable()
                    .Where(i => i.c.DeliveryBoyPhoneNumber == phoneNumber && i.c.DateEncoded.ToString("dd-MMM-yyyy") == dt && i.p.PaymentMode != "Online Payment" && i.c.DeliveryOrderPaymentStatus == 0)
                    .Select(i => new DelivaryCreditAmountApiViewModel.CartList
                    {
-                       OrderNo = i.c.OrderNumber,
+                       OrderNumber = i.c.OrderNumber,
                        CartStatus = i.c.Status,
                        GrossDeliveryCharge = i.c.DeliveryCharge,
                        DeliveryBoyPaymentStatus = i.c.DeliveryBoyPaymentStatus,
@@ -3588,12 +3210,12 @@ namespace ShopNow.Controllers
                 DateTime to1 = DateTime.Parse(to);
                 model.List = db.Orders.Where(i => i.Status == 6)
                     .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
-                         //.Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
+                     //.Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
                      .AsEnumerable()
                    .Where(i => i.c.DeliveryBoyPhoneNumber == phoneNumber && i.p.PaymentMode != "Online Payment" && i.c.DateEncoded >= from1 && i.c.DateEncoded <= to1 && i.c.DeliveryOrderPaymentStatus == 0)
                    .Select(i => new DelivaryCreditAmountApiViewModel.CartList
                    {
-                       OrderNo = i.c.OrderNumber,
+                       OrderNumber = i.c.OrderNumber,
                        CartStatus = i.c.Status,
                        GrossDeliveryCharge = i.c.DeliveryCharge,
                        DeliveryBoyPaymentStatus = i.c.DeliveryBoyPaymentStatus,
@@ -3619,12 +3241,12 @@ namespace ShopNow.Controllers
             {
                 model.List = db.Orders.Where(i => i.Status == 6)
                     .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
-                         //.Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
+                    //.Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
                     .AsEnumerable()
                    .Where(i => i.c.DeliveryBoyPhoneNumber == phoneNumber && i.c.DateEncoded.ToString("dd-MMM-yyyy") == dt && i.p.PaymentMode != "Online Payment" && i.c.DeliveryOrderPaymentStatus == 0)
                    .Select(i => new DelivaryCreditAmountApiViewModel.CartList
                    {
-                       OrderNo = i.c.OrderNumber,
+                       OrderNumber = i.c.OrderNumber,
                        CartStatus = i.c.Status,
                        GrossDeliveryCharge = i.c.DeliveryCharge,
                        DeliveryBoyPaymentStatus = i.c.DeliveryBoyPaymentStatus,
@@ -3646,28 +3268,30 @@ namespace ShopNow.Controllers
                     model.DeliveryPaymentStatus = 1;
                 }
             }
-
             return Json(model, JsonRequestBehavior.AllowGet);
         }
-        #endregion
 
+        #endregion
         #region helpers
         double GetMeters(Double Latitudes, Double Longitudes, Double Latitude, Double Longitude)
         {
             return (((Math.Acos(Math.Sin((Latitude * Math.PI / 180)) * Math.Sin((Latitudes * Math.PI / 180)) + Math.Cos((Latitude * Math.PI / 180)) * Math.Cos((Latitudes * Math.PI / 180))
                     * Math.Cos(((Longitude - Longitudes) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344);
         }
+
         public class Message
         {
             public string[] registration_ids { get; set; }
             public Notification notification { get; set; }
             public object data { get; set; }
         }
+
         public class Notification
         {
             public string title { get; set; }
             public string text { get; set; }
         }
+
         public void SendNotification(string tocken)
         {
             try
@@ -3675,7 +3299,7 @@ namespace ShopNow.Controllers
                 dynamic data = new
                 {
                     to = tocken, // Uncoment this if you want to test for single device
-                                             // registration_ids = singlebatch, // this is for multiple user 
+                                 // registration_ids = singlebatch, // this is for multiple user 
                     notification = new
                     {
                         title = "--title--",     // Notification title
@@ -3683,35 +3307,25 @@ namespace ShopNow.Controllers
                         link = "shopnowpay.com"       // When click on notification user redirect to this link
                     }
                 };
-
                 var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
                 var json = serializer.Serialize(data);
                 Byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(json);
-
                 string SERVER_API_KEY = "AAAASx4c4GY:APA91bEYysUEFT9F1XhO44epVtF0Mxq2SNbqIZUSQ3Xroov65JF9TzH7v9TghwG4JiWVa8HgqJVJnfklHIqhFuCQfW9T8b8TzrOOMYJd9eh2H1HcJFg06Vnjqz0aJk1tCSSuUL9BeUrsD";
                 string SENDER_ID = "322627756134";
-
                 WebRequest tRequest;
                 tRequest = WebRequest.Create("https://fcm.googleapis.com/fcm/send");
                 tRequest.Method = "post";
                 tRequest.ContentType = "application/json";
                 tRequest.Headers.Add(string.Format("Authorization: key={0}", SERVER_API_KEY));
-
                 tRequest.Headers.Add(string.Format("Sender: id={0}", SENDER_ID));
-
                 tRequest.ContentLength = byteArray.Length;
                 Stream dataStream = tRequest.GetRequestStream();
                 dataStream.Write(byteArray, 0, byteArray.Length);
                 dataStream.Close();
-
                 WebResponse tResponse = tRequest.GetResponse();
-
                 dataStream = tResponse.GetResponseStream();
-
                 StreamReader tReader = new StreamReader(dataStream);
-
                 String sResponseFromServer = tReader.ReadToEnd();
-
                 tReader.Close();
                 dataStream.Close();
                 tResponse.Close();
@@ -3721,12 +3335,12 @@ namespace ShopNow.Controllers
                 throw;
             }
         }
-        public void NotificationMessage(string msg, string tag,string token)
+
+        public void NotificationMessage(string msg, string tag, string token)
         {
-        // public string[] registration_ids { get; set; }
+            // public string[] registration_ids { get; set; }
             try
             {
-            
                 var applicationID = "key=AAAASx4c4GY:APA91bEYysUEFT9F1XhO44epVtF0Mxq2SNbqIZUSQ3Xroov65JF9TzH7v9TghwG4JiWVa8HgqJVJnfklHIqhFuCQfW9T8b8TzrOOMYJd9eh2H1HcJFg06Vnjqz0aJk1tCSSuUL9BeUrsD";
 
                 var senderId = "322627756134";
@@ -3740,69 +3354,42 @@ namespace ShopNow.Controllers
                 var data = new
 
                 {
-
                     to = token,
                     //registration_ids = token,
                     notification = new
-
                     {
-
                         body = msg,
-
                         title = tag,
-
                         icon = "myicon"
-
                     }
                 };
 
                 var serializer = new JavaScriptSerializer();
-
                 var json = serializer.Serialize(data);
-
                 Byte[] byteArray = Encoding.UTF8.GetBytes(json);
-
                 tRequest.Headers.Add(string.Format("Authorization: key={0}", applicationID));
-
                 tRequest.Headers.Add(string.Format("Sender: id={0}", senderId));
-
                 tRequest.ContentLength = byteArray.Length;
-
-
                 using (Stream dataStream = tRequest.GetRequestStream())
                 {
-
                     dataStream.Write(byteArray, 0, byteArray.Length);
-
-
                     using (WebResponse tResponse = tRequest.GetResponse())
                     {
-
                         using (Stream dataStreamResponse = tResponse.GetResponseStream())
                         {
-
                             using (StreamReader tReader = new StreamReader(dataStreamResponse))
                             {
-
                                 String sResponseFromServer = tReader.ReadToEnd();
-
                                 string str = sResponseFromServer;
-
                             }
                         }
                     }
                 }
             }
-
             catch (Exception ex)
             {
-
                 string str = ex.Message;
-
             }
-
-
-
         }
 
         string GetOtp(int id)
@@ -3815,7 +3402,6 @@ namespace ShopNow.Controllers
                     return otp.Otp;
                 }
                 else
-
                     return "N/A";
             }
             catch (Exception e)
@@ -3824,7 +3410,7 @@ namespace ShopNow.Controllers
             }
         }
 
-        List<OrderItem> GetOrderList(int orderId)
+        List<OrderItem> GetOrderList(long orderId)
         {
             try
             {
@@ -3840,26 +3426,26 @@ namespace ShopNow.Controllers
         {
             try
             {
-              
-                return  db.Banners.Where(j => j.Status == 0 && j.ShopId == shopId).ToList();
+                return db.Banners.Where(j => j.Status == 0 && j.ShopId == shopId).ToList();
             }
             catch
             {
                 return new List<Banner>();
             }
         }
+
         List<BannerImages> GetBannerImageList(int id)
         {
             try
             {
                 var d = DateTime.Now.Date.Date;
-            var teenStudentsName = (from s in db.Banners
-            where (s.Status== 0 || s.Status == 6) && s.ShopId == id && (DbFunctions.TruncateTime(s.FromDate) <= DbFunctions.TruncateTime(DateTime.Now) && DbFunctions.TruncateTime(s.Todate) >= DbFunctions.TruncateTime(DateTime.Now))
-            select  new BannerImages { Bannerpath = (s.BannerPath !=null)?s.BannerPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23"):"", ShopId = s.ShopId, ProductName = s.MasterProductName, ShopName = s.ShopName, ProductId = s.MasterProductId }).ToList();
-          
+                var teenStudentsName = (from s in db.Banners
+                                        where (s.Status == 0 || s.Status == 6) && s.ShopId == id && (DbFunctions.TruncateTime(s.FromDate) <= DbFunctions.TruncateTime(DateTime.Now) && DbFunctions.TruncateTime(s.Todate) >= DbFunctions.TruncateTime(DateTime.Now))
+                                        select new BannerImages { Bannerpath = (s.BannerPath != null) ? s.BannerPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "", ShopId = s.ShopId, ProductId = s.MasterProductId }).ToList();
+
                 return teenStudentsName;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new List<BannerImages>();
             }
@@ -3876,6 +3462,7 @@ namespace ShopNow.Controllers
                 return new List<OrderItem>();
             }
         }
+
         //List<Cart> GetShopOrderList(string orderNo)
         //{
         //    try
@@ -3898,24 +3485,24 @@ namespace ShopNow.Controllers
         //        return new List<Cart>();
         //    }
         //}
+
         Double RatingCalculation(int id)
         {
             Double rating = 0;
             var ratingCount = db.CustomerReviews.Where(i => i.ShopId == id).Count();
-           var ratingSum= (from ss in db.CustomerReviews
-                           where ss.ShopId == id 
-                          select(Double ?)ss.Rating).Sum() ?? 0;
+            var ratingSum = (from ss in db.CustomerReviews
+                             where ss.ShopId == id
+                             select (Double?)ss.Rating).Sum() ?? 0;
             if (ratingCount == 0)
                 ratingCount = 1;
             rating = (ratingSum * 5) / (ratingCount * 5);
-            return Math.Round(rating,1);
+            return Math.Round(rating, 1);
         }
 
         Models.Payment GetPayment(int code)
         {
             try
             {
-
                 return db.Payments.FirstOrDefault(i => i.OrderNumber == code);
             }
             catch
@@ -3925,12 +3512,11 @@ namespace ShopNow.Controllers
         }
         #endregion
 
-
-        public JsonResult GetDeliveryBoyPayout(DateTime startDate, DateTime endDate,string phoneNo, int page = 1, int pageSize = 5)
+        public JsonResult GetDeliveryBoyPayout(DateTime startDate, DateTime endDate, string phoneNo, int page = 1, int pageSize = 5)
         {
             //DelivaryBoyPayoutReportViewModel
             var model = new DelivaryBoyPayoutReportViewModel();
-            model.List = db.Orders.Where(i=>i.Status ==6 && ((DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(startDate)) &&(DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(endDate))))
+            model.List = db.Orders.Where(i => i.Status == 6 && ((DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(startDate)) && (DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(endDate))))
             .Join(db.DeliveryBoys.Where(i => i.PhoneNumber == phoneNo), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
             .GroupBy(i => DbFunctions.TruncateTime(i.c.DateEncoded))
             .AsEnumerable()
@@ -3938,27 +3524,20 @@ namespace ShopNow.Controllers
             {
                 Date = i.Any() ? i.FirstOrDefault().c.DateEncoded.ToString("dd-MMM-yyyy HH:ss") : "",
                 date = i.FirstOrDefault().c.DateEncoded,
-                totalamount = i.Sum(a=>a.c.DeliveryCharge),
+                totalamount = i.Sum(a => a.c.DeliveryCharge),
                 paidamount = GetPaidAmount(i.Key.Value, phoneNo),
             }).OrderByDescending(j => j.date).ToList();
             int count = model.List.Count();
-
             int CurrentPage = page;
-
             int PageSize = pageSize;
-
             int TotalCount = count;
-
             int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
             var items = model.List;
             //var items = model.List.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
             //var previous = CurrentPage - 1;
             //var previousurl = "https://admin.shopnowchat.in/Api/GetDelivaryBoyReport?startDate=" + startDate + "&endDate=" + endDate + "&phoneNo=" + phoneNo + "&page=" + previous;
-
             //var previousPage = CurrentPage > 1 ? previousurl : "No";
-
             //var current = CurrentPage + 1;
-
             //var nexturl = "https://admin.shopnowchat.in/Api/GetDelivaryBoyReport?startDate=" + startDate + "&endDate=" + endDate + "&phoneNo=" + phoneNo + "&page=" + current;
             //var nextPage = CurrentPage < TotalPages ? nexturl : "No";
             //var paginationMetadata = new
@@ -3971,14 +3550,14 @@ namespace ShopNow.Controllers
             //    nextPage
             //};
             return Json(new { items }, JsonRequestBehavior.AllowGet);
-           // return Json(list, JsonRequestBehavior.AllowGet);
+            // return Json(list, JsonRequestBehavior.AllowGet);
         }
 
         public double GetPaidAmount(DateTime dateEncoded, string phoneNo)
         {
             var list = db.Orders.Where(i => i.Status == 6 && i.DeliveryBoyPaymentStatus == 1 && DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(dateEncoded))
            .Join(db.DeliveryBoys.Where(i => i.PhoneNumber == phoneNo), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
-           .GroupBy(i=> DbFunctions.TruncateTime(dateEncoded))
+           .GroupBy(i => DbFunctions.TruncateTime(dateEncoded))
            .Select(i => new
            {
                amount = i.Any() ? i.Sum(a => a.c.DeliveryCharge) : 0
@@ -4001,7 +3580,7 @@ namespace ShopNow.Controllers
                  .Join(db.Orders.Where(i => i.Status == 6), p => p.p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
                  .GroupBy(i => DbFunctions.TruncateTime(i.p.p.DateEncoded))
                  .AsEnumerable()
-                 .Select(i=> new ShopApiReportsViewModel.EarningListItem
+                 .Select(i => new ShopApiReportsViewModel.EarningListItem
                  {
                      Date = i.Any() ? i.FirstOrDefault().p.p.DateEncoded.ToString("dd-MMM-yyyy HH:ss") : "",
                      DateEncoded = i.FirstOrDefault().p.p.DateEncoded,
@@ -4016,15 +3595,15 @@ namespace ShopNow.Controllers
                     .Where(i => ((DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(startDate)) &&
                 (DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(endDate))))
                 .Join(db.Shops.Where(i => i.Id == shopId), p => p.ShopId, s => s.Id, (p, s) => new { p, s })
-                .Join(db.Orders .Where(i => i.Status == 6), p => p.p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
-               // .Join(db.ShopCharges.Where(i => i.Status == 0), p => p.p.p.OrderNo, sc => sc.OrderNo, (p, sc) => new { p, sc })
+                .Join(db.Orders.Where(i => i.Status == 6), p => p.p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
+                // .Join(db.ShopCharges.Where(i => i.Status == 0), p => p.p.p.OrderNo, sc => sc.OrderNo, (p, sc) => new { p, sc })
                 .AsEnumerable()
                 .Select(i => new ShopApiReportsViewModel.RefundListItem
                 {
                     Date = i.p.p.DateEncoded.ToString("dd-MMM-yyyy HH:ss"),
                     DateEncoded = i.p.p.DateEncoded,
                     Earning = i.p.p.Amount,
-                    Refund = i.p.p.RefundAmount ??0,
+                    Refund = i.p.p.RefundAmount ?? 0,
                     DeliveryCredits = i.c.DeliveryCharge,
                     OrderNo = i.p.p.OrderNumber
                 }).OrderByDescending(i => i.DateEncoded).ToList();
@@ -4037,7 +3616,7 @@ namespace ShopNow.Controllers
         {
             var list = db.Payments.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(dateEncoded))
                 .Join(db.Shops.Where(i => i.Id == shopId), p => p.ShopId, s => s.Id, (p, s) => new { p, s })
-            .Join(db.Orders.Where(i => i.Status == 6 && i.ShopPaymentStatus ==1), p => p.p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
+            .Join(db.Orders.Where(i => i.Status == 6 && i.ShopPaymentStatus == 1), p => p.p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
            .GroupBy(i => DbFunctions.TruncateTime(dateEncoded))
            .Select(i => new
            {
@@ -4074,6 +3653,5 @@ namespace ShopNow.Controllers
             db.SaveChanges();
             return Json(new { message = "Saved Successfully" }, JsonRequestBehavior.AllowGet);
         }
-
     }
 }

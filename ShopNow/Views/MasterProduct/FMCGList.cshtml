@@ -1,9 +1,11 @@
-﻿@model IEnumerable<ShopNow.Models.MasterProduct>
+﻿@model IEnumerable<ShopNow.ViewModels.MasterProductFMCGListViewModel.MasterProductFMCGList>
 @using GridMvc.Html
 @{
     ViewBag.Title = "FMCG List";
 }
+
 <title>ShopNow | FMCG List</title>
+
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 
@@ -23,7 +25,7 @@
     columns.Add(c => c.BrandName).Titled("Brand Name").Filterable(true).SetWidth(10);
     columns.Add(c => c.ProductTypeName).Titled("Item Type").SetWidth(5);
     columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(10)
-    .RenderValueAs(o=> @<div><a href="~/MasterProduct/FMCGEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-3"><i class="fa fa-edit fa-lg"></i></a><a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a></div>);
+    .RenderValueAs(o=> @<div><a href="~/MasterProduct/FMCGEdit?id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-3"><i class="fa fa-edit fa-lg"></i></a><a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a></div>);
 }).WithPaging(20).Sortable(true)
 </div>
 

@@ -39,9 +39,7 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new MeasurementUnitListViewModel();
-
             model.List = db.MeasurementUnits.Where(i => i.Status == 0).ToList().AsQueryable().ProjectTo<MeasurementUnitListViewModel.UnitList>(_mapperConfiguration).OrderBy(i => i.UnitName).ToList();
-
             return View(model.List);
         }
 
@@ -101,13 +99,12 @@ namespace ShopNow.Controllers
             int errorCode = 0;
             try
             {
-                var drug = db.MeasurementUnits.FirstOrDefault(i => i.Id == model.Id && i.Status == 0);// MeasurementUnit.Get(model.Code);
+                var drug = db.MeasurementUnits.FirstOrDefault(i => i.Id == model.Id && i.Status == 0);
                 drug.UnitName = model.UnitName;
                 drug.UnitSymbol = model.UnitSymbol;
                 drug.UnitType = model.UnitType;
                 drug.ConversionFormula = model.ConversionFormula;
                 drug.ConversionUnit = model.ConversionUnit;
-                drug.Type = model.Type;
                 drug.UpdatedBy = user.Name;
                 drug.DateUpdated = DateTime.Now;
                 db.Entry(drug).State = System.Data.Entity.EntityState.Modified;
@@ -122,16 +119,17 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNDMUD004")]
-        public ActionResult Delete(int id)
+        public JsonResult Delete(string id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var drug = db.MeasurementUnits.FirstOrDefault(i => i.Id == id && i.Status == 0);
+            var dId = AdminHelpers.DCodeInt(id);
+            var drug = db.MeasurementUnits.FirstOrDefault(i => i.Id == dId && i.Status == 0);
             drug.Status = 2;
             drug.UpdatedBy = user.Name;
             drug.DateUpdated = DateTime.Now;
             db.Entry(drug).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
-            return RedirectToAction("List");
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [AccessPolicy(PageCode = "SHNDMUI005")]
@@ -238,7 +236,6 @@ namespace ShopNow.Controllers
                         db.MeasurementUnits.Add(new MeasurementUnit
                         {
                             UnitName = row[model.UnitName].ToString(),
-                            Type = model.Type,
                             ConversionFormula = row[model.ConversionFormula].ToString(),
                             ConversionUnit = row[model.ConversionUnit].ToString(),
                             UnitSymbol = row[model.UnitSymbol].ToString(),

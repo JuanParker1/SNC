@@ -3,7 +3,9 @@
 @{
     ViewBag.Title = "On the Way List";
 }
+
 <title>ShopNow | On the Way </title>
+
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 
@@ -23,28 +25,27 @@
             <a href="~/Cart/Pending" class="ml-auto" target="_self"><span class="fa fa-bars"></span> New Order List</a>
         </div>
     </div>
-
-    @Html.Grid(Model).Columns(columns =>
-{
-    columns.Add(c => c.OrderNo).Titled("OrderNo").Filterable(true).SetWidth(10);
-    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
-    columns.Add(c => c.PaymentMode).Titled("Payment Mode").Filterable(true).SetWidth(10);
-    //columns.Add(c => c.SinglePrice).Titled("Amount").Filterable(true).SetWidth(10);
-    //columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(15);
-    columns.Add(c => c.DeliveryPhoneNumber).Titled("DeliveryBoy Phone").Filterable(true).SetWidth(15);
-    columns.Add().RenderValueAs(c => c.CartStatus == 5 ? "On The Way" : "On The Way").Titled("Order Status").Filterable(true).SetWidth(10);
-    columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(15);
-    columns.Add()
-    .Encoded(false)
-    .Sanitized(false)
-    .RenderValueAs(o => Html.ActionLink("View", "Edit", new { orderno=o.OrderNo, id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-info mr-1",  }).ToHtmlString()).Titled("Action").SetWidth(10);
-    columns.Add()
-  .Encoded(false)
-  .Sanitized(false)
-      .RenderValueAs(o => (o.RefundAmount == 0 || o.RefundAmount == null) ? "<a href='#modal-refund' data-code='" + o.Id + "' data-toggle='modal' data-target='#modal-refund' class='btn btn-vsm btn-primary btn-modal-refund'>Refund</a>" : o.RefundAmount.Value > 0 ? "<span>" + o.RefundAmount + "(" + o.RefundRemark + ")" + "</span>" : "N/A").Titled("Refund").SetWidth(10);
-}).WithPaging(20).Sortable(true)
-
+     @Html.Grid(Model).Columns(columns =>
+     {
+         columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
+         columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
+         columns.Add(c => c.PaymentMode).Titled("Payment Mode").Filterable(true).SetWidth(10);
+         //columns.Add(c => c.SinglePrice).Titled("Amount").Filterable(true).SetWidth(10);
+         //columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(15);
+         columns.Add(c => c.DeliveryPhoneNumber).Titled("D.Boy Phone").Filterable(true).SetWidth(15);
+         columns.Add().RenderValueAs(c => c.CartStatus == 5 ? "On The Way" : "On The Way").Titled("Order Status").Filterable(true).SetWidth(10);
+         columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(15);
+         columns.Add()
+         .Encoded(false)
+         .Sanitized(false)
+         .RenderValueAs(o => Html.ActionLink("View", "Edit", new { ordernumber=o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-vsm btn-info mr-1",  }).ToHtmlString()).Titled("Action").SetWidth(10);
+         columns.Add()
+         .Encoded(false)
+         .Sanitized(false)
+         .RenderValueAs(o => (o.RefundAmount == 0 || o.RefundAmount == null) ? "<a href='#modal-refund' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-refund' class='btn btn-vsm btn-primary btn-modal-refund'>Refund</a>" : o.RefundAmount.Value > 0 ? "<span>" + o.RefundAmount + "(" + o.RefundRemark + ")" + "</span>" : "N/A").Titled("Refund").SetWidth(10);
+     }).WithPaging(20).Sortable(true)
 </div>
+
 <div class="modal fade" id="modal-refund" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
@@ -70,6 +71,7 @@
         </div>
     </div>
 </div>
+
 @section Scripts
 {
     <!--Select2-->
@@ -98,8 +100,8 @@
             });
 
             $(".btn-modal-refund").click(function () {
-                var code = $(this).data('code');
-                $('[name="Id"]').val(code);
+                var id = $(this).data('id');
+                $('[name="Id"]').val(id);
                 $('#modal-refund').modal('show');
             });
         });

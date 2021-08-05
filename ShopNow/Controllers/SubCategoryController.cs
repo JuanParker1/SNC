@@ -98,10 +98,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNSUCD004")]
-        public ActionResult Delete(int id)
+        public ActionResult Delete(string Id)
         {
+            var dCode = AdminHelpers.DCodeInt(Id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var subcategory = db.SubCategories.FirstOrDefault(i => i.Id == id);
+            var subcategory = db.SubCategories.FirstOrDefault(i => i.Id == dCode);
             if (subcategory != null)
             {
                 subcategory.Status = 2;

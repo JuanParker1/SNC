@@ -38,15 +38,15 @@
     </div>
     @Html.Grid(Model.ListItems).Columns(columns =>
 {
-    columns.Add(c => c.Name).Titled("Name").Encoded(false).Sanitized(false).RenderValueAs(model => Html.ActionLink(model.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(model.Id) }).ToHtmlString()).Filterable(true).SetWidth(20);
+    columns.Add(c => c.Name).Titled("Name").Encoded(false).Sanitized(false).RenderValueAs(model => Html.ActionLink(model.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(model.Id) }).ToHtmlString()).Filterable(true).SetWidth(20);
     columns.Add(c => c.CategoryName).Titled("Category Name").Filterable(true).SetWidth(12);
     columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
     columns.Add(c => c.Percentage).Titled("Discount %").Filterable(true).SetWidth(10);
     columns.Add()
     .Encoded(false)
     .Sanitized(false)
-    .RenderValueAs(o => Html.ActionLink("Edit", "MedicalEdit", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-sm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
-    + Html.ActionLink("Delete", "Delete", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id), redirectPage=2 }, new { @class = "btn  btn-sm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
+    .RenderValueAs(o => Html.ActionLink("Edit", "MedicalEdit", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
+    + Html.ActionLink("Delete", "Delete", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id), redirectPage=2 }, new { @class = "btn  btn-sm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
 }).WithPaging(20).Sortable(true)
 </div>
 
@@ -59,7 +59,6 @@
     <!--Select2 End-->
     <script>
         $(document).ready(function () {
-
             $('#select-shop').select2({
                 placeholder: "Search Shop",
                 ajax: {

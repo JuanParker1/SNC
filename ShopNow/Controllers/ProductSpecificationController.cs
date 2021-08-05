@@ -255,9 +255,9 @@ namespace ShopNow.Controllers
             return View();
         }
 
-        public int CheckProduct(string ProductName)
+        public long CheckProduct(string ProductName)
         {
-            var master = _db.MasterProducts.FirstOrDefault(i => i.Name == ProductName && i.Status == 0); ;// MasterProduct.GetName(ProductName);
+            var master = _db.MasterProducts.FirstOrDefault(i => i.Name == ProductName && i.Status == 0);
             return master.Id;
         }
         public int CheckSpecification(string SpecificationName)

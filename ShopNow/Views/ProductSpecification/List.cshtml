@@ -9,7 +9,7 @@
 <div class="container-fluid">
     <div class="row my-2">
         <div class="col-md-6">
-            <h5 class="text-theme" style="letter-spacing:1px">Product Specification List</h5>
+            <h5 class="text-success" style="letter-spacing:1px">Product Specification List</h5>
         </div>        
         <div class="col-md-6 text-right">
             <a href="~/ProductSpecification/Create" target="_blank"><span class="fa fa-plus"></span>&nbsp;Product Specification</a>
@@ -17,7 +17,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card shadow mt-3">
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
                {

@@ -336,6 +336,8 @@
     <Compile Include="Controllers\MarketingAgentController.cs" />
     <Compile Include="Controllers\MasterProductController.cs" />
     <Compile Include="Controllers\BrandOwnerController.cs" />
+    <Compile Include="Controllers\OfferController.cs" />
+    <Compile Include="Controllers\OTPController.cs" />
     <Compile Include="Controllers\PackageController.cs" />
     <Compile Include="Controllers\NextSubCategoryController.cs" />
     <Compile Include="Controllers\PageController.cs" />
@@ -345,6 +347,7 @@
     <Compile Include="Controllers\PortionController.cs" />
     <Compile Include="Controllers\ProductSpecificationController.cs" />
     <Compile Include="Controllers\ProductTypeController.cs" />
+    <Compile Include="Controllers\PushNotificationController.cs" />
     <Compile Include="Controllers\RefundController.cs" />
     <Compile Include="Controllers\SalesController.cs" />
     <Compile Include="Controllers\ShopDiscountCategoryController.cs" />
@@ -381,9 +384,6 @@
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AddOnCategory.cs">
-      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Admin.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ApplicationDbContext.Context.cs">
@@ -442,9 +442,6 @@
     <Compile Include="Models\GetDEliveryBoyList_Result.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\GetProductList_Result.cs">
-      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\GetShopname_Result.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
@@ -464,6 +461,12 @@
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\NextSubCategory.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Offer.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OfferShop.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Order.cs">
@@ -565,6 +568,7 @@
     <Compile Include="ViewModels\MarketingAgentViewModel.cs" />
     <Compile Include="ViewModels\MasterProductViewModel.cs" />
     <Compile Include="ViewModels\BrandOwnerViewModel.cs" />
+    <Compile Include="ViewModels\OfferViewModels.cs" />
     <Compile Include="ViewModels\PackageViewModel.cs" />
     <Compile Include="ViewModels\NextSubCategoryViewModel.cs" />
     <Compile Include="ViewModels\PageViewModel.cs" />
@@ -624,6 +628,7 @@
     <Content Include="Content\simple-line-icons.css" />
     <Content Include="Content\style.css" />
     <Content Include="Content\sweetalert\sweetalert.css" />
+    <Content Include="Content\switch.css" />
     <Content Include="ExceptionDetailsFile\10-05-21.txt" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\font-awesome\css\font-awesome.css" />
@@ -3000,6 +3005,11 @@
     <Content Include="Views\Product\ElectronicList.cshtml" />
     <Content Include="Views\DiscountCategory\List.cshtml" />
     <Content Include="Views\Shop\CreditList.cshtml" />
+    <Content Include="Views\PushNotification\Index.cshtml" />
+    <Content Include="Views\Product\UpdateStock.cshtml" />
+    <Content Include="Views\OTP\Index.cshtml" />
+    <Content Include="Views\Offer\Create.cshtml" />
+    <Content Include="Views\Offer\List.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -3,9 +3,12 @@
 @{
     ViewBag.Title = "Delivery Credit Report";
 }
+
 <title>ShopNow | Delivery Credit Report </title>
+
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
+
 @using (Html.BeginForm("DeliveryCreditReport", "Payment", FormMethod.Post, new { id = "DeliveryCreditReportForm", role = "form", enctype = "multipart/form-data" }))
 {
     <div class="container-fluid">
@@ -24,17 +27,18 @@
                     <div class="col-md-12">
                         <h4 class="text-center d-none d-print-block">Delivery Credit Report</h4>
                         @Html.Grid(Model).Columns(columns =>
-{
-columns.Add(c => c.OrderNo).Titled("OrderNo").Filterable(true).SetWidth(10);
-columns.Add(c => c.DeliveryCharge).Titled("Delivery Charge").Filterable(true).SetWidth(10);
-    columns.Add().RenderValueAs(c => c.CartStatus == 6 ? "Delivered" : "N/A").Titled("Order Status").Filterable(true).SetWidth(10);
-}).WithPaging(25).Sortable(true)
+                        {
+                           columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
+                           columns.Add(c => c.DeliveryCharge).Titled("Delivery Charge").Filterable(true).SetWidth(10);
+                           columns.Add().RenderValueAs(c => c.CartStatus == 6 ? "Delivered" : "N/A").Titled("Order Status").Filterable(true).SetWidth(10);
+                        }).WithPaging(25).Sortable(true)
                     </div>
                 </div>
             </div>
         </div>
     </div>
 }
+
 @section Scripts
 {
     <!--Select2-->
@@ -77,7 +81,7 @@ columns.Add(c => c.DeliveryCharge).Titled("Delivery Charge").Filterable(true).Se
                 });
             });
 
-            $('#ShopCode').select2({
+            $('#ShopId').select2({
                 placeholder: "Search Shop",
                 ajax: {
                     url: "/Payment/GetShopSelect2",
@@ -90,13 +94,10 @@ columns.Add(c => c.DeliveryCharge).Titled("Delivery Charge").Filterable(true).Se
             });
 
             $("#Filter").click(function () {
-                var shopcode = $("#ShopCode").val();
-                window.location.href = "/Payment/DeliveryCreditReport/?shopcode=" + shopcode;
+                var shopid = $("#ShopId").val();
+                window.location.href = "/Payment/DeliveryCreditReport/?shopid=" + shopid;
             });
-
-
         });
-
     </script>
 }
 

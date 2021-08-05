@@ -46,7 +46,7 @@ namespace ShopNow.Controllers
                 Address = i.c.DeliveryAddress,
                 DateEncoded = i.c.DateEncoded,
                 Amount = i.p.Amount,
-                OrderNo = i.p.OrderNumber
+                OrderNumber = i.p.OrderNumber
             }).OrderByDescending(i => i.DateEncoded).ToList();
 
             return View(model.List);
@@ -73,7 +73,7 @@ namespace ShopNow.Controllers
                         .AsEnumerable()
                         .Select(i => new PlatformCreditReportViewModel.PlatformCreditReportList
                         {
-                            OrderNo = i.p.OrderNumber,
+                            OrderNumber = i.p.OrderNumber,
                             CartStatus = i.sc.Status,
                             RatePerOrder = rate
                         }).ToList();
@@ -87,7 +87,7 @@ namespace ShopNow.Controllers
                         .AsEnumerable()
                         .Select(i => new PlatformCreditReportViewModel.PlatformCreditReportList
                         {
-                            OrderNo = i.p.OrderNumber,
+                            OrderNumber = i.p.OrderNumber,
                             CartStatus = i.sc.Status,
                             RatePerOrder = rate
                         }).ToList();
@@ -104,7 +104,7 @@ namespace ShopNow.Controllers
                           .Where(i => i.p.DateEncoded >= startDatetFilter && i.p.DateEncoded <= endDateFilter && i.sc.Status == 6)
                           .AsEnumerable().Select(i => new PlatformCreditReportViewModel.PlatformCreditReportList
                           {
-                              OrderNo = i.p.OrderNumber,
+                              OrderNumber = i.p.OrderNumber,
                               CartStatus = i.sc.Status,
                               RatePerOrder = rate
                           }).ToList();
@@ -117,7 +117,7 @@ namespace ShopNow.Controllers
                         .Where(i => i.sc.Status == 6)
                         .AsEnumerable().Select(i => new PlatformCreditReportViewModel.PlatformCreditReportList
                         {
-                            OrderNo = i.p.OrderNumber,
+                            OrderNumber = i.p.OrderNumber,
                             CartStatus = i.sc.Status,
                             RatePerOrder = rate
                         }).ToList();
@@ -141,7 +141,7 @@ namespace ShopNow.Controllers
                     .AsEnumerable()
                     .Select(i => new PlatformCreditReportViewModel.PlatformCreditReportList
                     {
-                        OrderNo = i.p.OrderNumber,
+                        OrderNumber = i.p.OrderNumber,
                         CartStatus = i.sc.Status,
                         RatePerOrder = rate
                     }).ToList();
@@ -153,7 +153,7 @@ namespace ShopNow.Controllers
                     .AsEnumerable()
                     .Select(i => new PlatformCreditReportViewModel.PlatformCreditReportList
                     {
-                        OrderNo = i.p.OrderNumber,
+                        OrderNumber = i.p.OrderNumber,
                         CartStatus = i.sc.Status,
                         RatePerOrder = rate
                     }).ToList();

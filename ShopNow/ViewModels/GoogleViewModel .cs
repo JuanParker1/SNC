@@ -47,7 +47,7 @@ namespace ShopNow.ViewModels
         public string Bannerpath { get; set; }
         public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public int ProductId { get; set; }
+        public long ProductId { get; set; }
         public string ProductName { get; set; }
 
     }

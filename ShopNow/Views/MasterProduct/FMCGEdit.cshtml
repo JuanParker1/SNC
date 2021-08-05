@@ -57,17 +57,23 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Category Name</strong></label>
-                                        <select name="CategoryIds" id="CategoryIds" class="form-control" multiple></select>
+                                        <select name="CategoryId" id="CategoryId" class="form-control">
+                                            <option value="@Model.CategoryId">@Model.CategoryName</option>
+                                        </select>
                                         <input type="hidden" name="CategoryName" id="CategoryName" value="@Model.CategoryName" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Sub Category I Name</strong></label>
-                                        <select name="SubCategoryIds" id="SubCategoryIds" class="form-control" multiple></select>
+                                        <select name="SubCategoryId" id="SubCategoryId" class="form-control">
+                                            <option value="@Model.SubCategoryId">@Model.SubCategoryName</option>
+                                        </select>
                                         <input type="hidden" name="SubCategoryName" id="SubCategoryName" value="@Model.SubCategoryName" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Sub Category II Name</strong></label>
-                                        <select name="NextSubCategoryIds" id="NextSubCategoryIds" class="form-control" multiple></select>
+                                        <select name="NextSubCategoryId" id="NextSubCategoryId" class="form-control">
+                                            <option value="@Model.NextSubCategoryId">@Model.NextSubCategoryName</option>
+                                        </select>
                                         <input type="hidden" name="NextSubCategoryName" id="NextSubCategoryName" value="@Model.NextSubCategoryName" />
                                     </div>
                                     <div class="col-md-3">
@@ -255,7 +261,7 @@
     <script>
         $(document).ready(function () {
 
-             var categorySelect = $('#CategoryIds');
+             @*var categorySelect = $('#CategoryIds');
             var CategoryIds = "@Model.CategoryIds1";
             var categoryname = "@Model.CategoryName";
             if (CategoryIds) {
@@ -291,7 +297,7 @@
                     var option = new Option(array_name[i], array_code[i], true, true);
                     nscategorySelect.append(option).trigger('change');
                 });
-            }
+            }*@
             $('#BrandId').select2({
                 placeholder: "Search Brand",
                 ajax: {
@@ -304,7 +310,7 @@
                 $('input[name="BrandName"]').val(e.params.data.text);
             });
 
-            $('#CategoryIds').select2({
+            $('#CategoryId').select2({
                 placeholder: "Search Category",
                 ajax: {
                     url: "/MasterProduct/GetCategorySelect2",
@@ -316,7 +322,7 @@
                 $('input[name="CategoryName"]').val(e.params.data.text);
             });
 
-            $('#SubCategoryIds').select2({
+            $('#SubCategoryId').select2({
                 placeholder: "Search I Sub Category",
                 ajax: {
                     url: "/MasterProduct/GetSubCategorySelect2",
@@ -328,7 +334,7 @@
                 $('input[name="SubCategoryName"]').val(e.params.data.text);
             });
 
-            $('#NextSubCategoryIds').select2({
+            $('#NextSubCategoryId').select2({
                 placeholder: "Search II Sub Category",
                 ajax: {
                     url: "/MasterProduct/GetNextSubCategorySelect2",

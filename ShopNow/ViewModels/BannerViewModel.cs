@@ -11,7 +11,8 @@ namespace ShopNow.ViewModels
         public int Id { get; set; }
         public string ShopId { get; set; }
         public string ShopName { get; set; }
-        public int ProductId { get; set; }
+        public long ProductId { get; set; }
+        public long MasterProductId { get; set; }
         public string ProductName { get; set; }
         public int Position { get; set; }
         public string Bannerpath { get; set; }
@@ -36,7 +37,8 @@ namespace ShopNow.ViewModels
             public int Id { get; set; }
             public int ShopId { get; set; }
             public string ShopName { get; set; }
-            public int ProductId { get; set; }
+            public long ProductId { get; set; }
+            public long MasterProductId { get; set; }
             public string ProductName { get; set; }
             public int Position { get; set; }
             public string BannerName { get; set; }
@@ -45,6 +47,7 @@ namespace ShopNow.ViewModels
             public DateTime ToDate { get; set; }
             public int Days { get; set; }
             public int? CreditType { get; set; }
+            public int Status { get; set; }
         }
         
     }

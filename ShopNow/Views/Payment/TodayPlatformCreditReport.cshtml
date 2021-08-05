@@ -2,10 +2,13 @@
 @using GridMvc.Html
 @{
     ViewBag.Title = "Today Platform Credit Report";
-}
+} 
+
 <title>ShopNow | Today Platform Credit Report</title>
+
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
+
 @using (Html.BeginForm("TodayPlatformCreditReport", "Payment", FormMethod.Post, new { id = "PlatformCreditReportForm", role = "form", enctype = "multipart/form-data" }))
 {
     <div class="container-fluid">
@@ -24,8 +27,8 @@
                     <div class="col-md-12">
                         <h4 class="text-center d-none d-print-block">Today Platform Credit Report</h4>
                         @Html.Grid(Model).Columns(columns =>
-{
-columns.Add(c => c.OrderNo).Titled("OrderNo").Filterable(true).SetWidth(10);
+                        {
+columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
 columns.Add().RenderValueAs(c => c.CartStatus == 6 ? "Delivered" : "N/A").Titled("Order Status").Filterable(true).SetWidth(10);
 columns.Add(c => c.RatePerOrder).Titled("Platform Credit").Filterable(true).SetWidth(10);
 }).WithPaging(25).Sortable(true)

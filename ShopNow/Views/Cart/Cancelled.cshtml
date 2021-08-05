@@ -2,8 +2,10 @@
 @using GridMvc.Html
 @{
     ViewBag.Title = "Cancelled Order List";
-}
+} 
+
 <title>ShopNow | Cancelled Order </title>
+
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 
@@ -23,20 +25,19 @@
             <a href="~/Cart/Pending" class="ml-auto" target="_self"><span class="fa fa-bars"></span> New Order List</a>
         </divl>
     </div>
-    @Html.Grid(Model).Columns(columns =>
-{
-columns.Add(c => c.OrderNo).Titled("OrderNo").Filterable(true).SetWidth(10);
-columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
-columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(15);
-columns.Add(c => c.PhoneNumber).Titled("Phone").Filterable(true).SetWidth(15);
-columns.Add().RenderValueAs(c => c.CartStatus == 7 ? "Cancelled" : "N/A").Titled("Order Status").Filterable(true).SetWidth(10);
-columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10);
-columns.Add()
-.Encoded(false)
-.Sanitized(false)
-.RenderValueAs(o => Html.ActionLink("View", "Edit", new { orderno=o.OrderNo, id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-info mr-1",  }).ToHtmlString()).Titled("Action").SetWidth(10);
-}).WithPaging(20).Sortable(true)
-
+     @Html.Grid(Model).Columns(columns =>
+     {
+         columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
+         columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
+         columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(15);
+         columns.Add(c => c.PhoneNumber).Titled("Phone").Filterable(true).SetWidth(15);
+         columns.Add().RenderValueAs(c => c.CartStatus == 7 ? "Cancelled" : "N/A").Titled("Order Status").Filterable(true).SetWidth(10);
+         columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10);
+         columns.Add()
+        .Encoded(false)
+        .Sanitized(false)
+        .RenderValueAs(o => Html.ActionLink("View", "Edit", new { orderno=o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-vsm btn-info mr-1",  }).ToHtmlString()).Titled("Action").SetWidth(10);
+      }).WithPaging(20).Sortable(true)
 </div>
 
 @section Scripts
@@ -48,7 +49,6 @@ columns.Add()
     <!--Select2 End-->
     <script>
         $(document).ready(function () {
-
             $('#ShopId').select2({
                 placeholder: "Search Shop",
                 ajax: {
@@ -66,8 +66,6 @@ columns.Add()
                 window.location.href = "/Cart/Cancelled/?shopId=" + shopId;
             });
         });
-
     </script>
-
 }
 

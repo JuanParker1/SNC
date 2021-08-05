@@ -12,14 +12,10 @@ namespace ShopNow.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Admin
+    public partial class OfferShop
     {
         public int Id { get; set; }
-        public string Code { get; set; }
-        public string AnonymisedID { get; set; }
-        public string OfficialID { get; set; }
-        public int Status { get; set; }
-        public System.DateTime DateEncoded { get; set; }
-        public System.DateTime DateUpdated { get; set; }
+        public int OfferId { get; set; }
+        public int ShopId { get; set; }
     }
 }

@@ -12,7 +12,6 @@ namespace ShopNow.Controllers
     // [AuthorizeUser(Roles = "Admin")]
     public class HomeController : Controller
     {
-
         private sncEntities _db = new sncEntities();
         UploadContent uc = new UploadContent();
 
@@ -31,7 +30,6 @@ namespace ShopNow.Controllers
             }
         }
 
-
         private bool CheckAlreadyLoggedIn()
         {
             bool alreadyLoggedIn = false;
@@ -48,8 +46,6 @@ namespace ShopNow.Controllers
             }
             return alreadyLoggedIn;
         }
-
-
 
         [AllowAnonymous]
         [HttpPost]
@@ -172,7 +168,6 @@ namespace ShopNow.Controllers
             return View();
         }
 
-
         public JsonResult ApiAccess()
         {
             return Json("Bad Authorization", JsonRequestBehavior.AllowGet);
@@ -185,8 +180,6 @@ namespace ShopNow.Controllers
             }
             base.Dispose(disposing);
         }
-
-
 
         public string GetIP()
         {

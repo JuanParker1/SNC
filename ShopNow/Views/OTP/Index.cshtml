@@ -1,0 +1,28 @@
+﻿@model IEnumerable<ShopNow.Models.OtpVerification>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "OTP List";
+}
+
+<title>ShopNow | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6 mx-auto mt-3">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+                    @Html.Grid(Model).Columns(columns =>
+               {
+                   columns.Add(c => c.CustomerName).Titled("Name").Filterable(false).SetWidth(15);
+                   columns.Add(c => c.PhoneNumber).Titled("Phone No").Filterable(false).SetWidth(12);
+                   columns.Add(c => c.Otp).Titled("Otp").Filterable(false).SetWidth(10);
+               }).Sortable(false)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

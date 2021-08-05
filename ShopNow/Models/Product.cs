@@ -14,15 +14,9 @@ namespace ShopNow.Models
     
     public partial class Product
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Product()
-        {
-            this.ShopDishAddOns = new HashSet<ShopDishAddOn>();
-        }
-    
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
-        public int MasterProductId { get; set; }
+        public long MasterProductId { get; set; }
         public int ShopId { get; set; }
         public string ShopName { get; set; }
         public int ShopCategoryId { get; set; }
@@ -56,6 +50,8 @@ namespace ShopNow.Models
         public string ItemTimeStamp { get; set; }
         public double LoyaltyPoints { get; set; }
         public double PackingCharge { get; set; }
+        public Nullable<int> BrandOwnerMiddlePercentage { get; set; }
+        public Nullable<double> ShopownnerPrice { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }
@@ -63,8 +59,5 @@ namespace ShopNow.Models
         public string UpdatedBy { get; set; }
     
         public virtual ProductType ProductType { get; set; }
-        public virtual Shop Shop { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ShopDishAddOn> ShopDishAddOns { get; set; }
     }
 }

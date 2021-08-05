@@ -3,9 +3,12 @@
 @{
     ViewBag.Title = "Platform Credit Report";
 }
+
 <title>ShopNow | Platform Credit Report</title>
+
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
+
 @using (Html.BeginForm("PlatformCreditReport", "Payment", FormMethod.Post, new { id = "PlatformCreditReportForm", role = "form", enctype = "multipart/form-data" }))
 {
     <div class="container-fluid">
@@ -24,17 +27,18 @@
                     <div class="col-md-12">
                         <h4 class="text-center d-none d-print-block">Platform Credit Report</h4>
                         @Html.Grid(Model).Columns(columns =>
-                   {
-                       columns.Add(c => c.OrderNo).Titled("OrderNo").Filterable(true).SetWidth(10);
-                       columns.Add().RenderValueAs(c => c.CartStatus == 6 ? "Delivered" : "N/A").Titled("Order Status").Filterable(true).SetWidth(10);
-                       columns.Add(c => c.RatePerOrder).Titled("Platform Credit").Filterable(true).SetWidth(10);
-                   }).WithPaging(25).Sortable(true)
+                       {
+                          columns.Add(c => c.OrderNumber).Titled("OrderNumber").Filterable(true).SetWidth(10);
+                          columns.Add().RenderValueAs(c => c.CartStatus == 6 ? "Delivered" : "N/A").Titled("Order Status").Filterable(true).SetWidth(10);
+                          columns.Add(c => c.RatePerOrder).Titled("Platform Credit").Filterable(true).SetWidth(10);
+                        }).WithPaging(25).Sortable(true)
                     </div>
                 </div>
             </div>
         </div>
     </div>
 }
+
 @section Scripts
 {
     <!--Select2-->
@@ -44,6 +48,7 @@
     <!--Select2 End-->
     <script src="~/Scripts/exporttoexcel/jquery.table2excel.js"></script>
     <script src="~/Scripts/datepicker.js"></script>
+
     <script>
         $(document).ready(function () {
             var startdate = $("#StartDate").val();
@@ -94,6 +99,7 @@
                 //$('.dataTables_paginate').addClass('d-none');
                 window.print();
             });
+
             $("#btnExport").click(function () {
                 $("#PlatformCredit-list").table2excel({
                     name: "Worksheet Name",
@@ -103,7 +109,7 @@
                 });
             });
 
-            $('#ShopCode').select2({
+            $('#ShopId').select2({
                 placeholder: "Search Shop",
                 ajax: {
                     url: "/Payment/GetShopSelect2",
@@ -116,12 +122,9 @@
             });
 
             $("#Filter").click(function () {
-                var shopcode = $("#ShopCode").val();
-                window.location.href = "/Payment/PlatformCreditReport/?shopcode=" + shopcode;
+                var shopid = $("#ShopId").val();
+                window.location.href = "/Payment/PlatformCreditReport/?shopid=" + shopid;
             });
-
-
         });
-
     </script>
 }

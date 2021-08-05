@@ -1,10 +1,11 @@
-﻿@*@model ShopNow.ViewModels.CartListViewModel*@
-@model IEnumerable<ShopNow.ViewModels.CartListViewModel.CartList>
+﻿@model IEnumerable<ShopNow.ViewModels.CartListViewModel.CartList>
 @using GridMvc.Html
 @{
     ViewBag.Title = "Cart List";
 }
+
 <title>ShopNow | Order List</title>
+
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 
@@ -12,7 +13,7 @@
     <div class="row my-2">
         <div class="col-md-4">
             <h5 class="text-success" style="letter-spacing:1px">Order List</h5>
-        </div>        
+        </div>             
         <div class="col-md-8">
             <div class="row">
                 <div class="col-md-4">
@@ -25,19 +26,19 @@
             </div>
         </div>
     </div>
-    @Html.Grid(Model).Columns(columns =>
-{
-    columns.Add(c => c.OrderNo).Titled("OrderNo").Filterable(true).SetWidth(10);
-    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
-    columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(20);
-    columns.Add(c => c.PhoneNumber).Titled("Phone").Filterable(true).SetWidth(10);
-    //columns.Add().RenderValueAs(c => c.CartStatus == 2 ? "Pending" : c.CartStatus == 3 ? "Order is being Prepared" : c.CartStatus==4?"Assigned for Delivery. Waiting for Pickup": c.CartStatus==5? "On the Way to Delivery":c.CartStatus==6? "Delivered": c.CartStatus==7?"Cancelled":"N/A").Titled("Order Status").Filterable(true).SetWidth(10);
-    columns.Add(c => c.CartStatusText).Titled("Order Status").Filterable(true).SetWidth(15);
-    columns.Add()
-    .Encoded(false)
-    .Sanitized(false)
-    .RenderValueAs(o => Html.ActionLink("View", "Edit", new { orderno=o.OrderNo, id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-info mr-1", @style = "padding: 3px 26px" }).ToHtmlString()).Titled("Action").SetWidth(10);
-}).WithPaging(20).Sortable(true)
+     @Html.Grid(Model).Columns(columns =>
+     {
+         columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
+         columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
+         columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(20);
+         columns.Add(c => c.PhoneNumber).Titled("Phone").Filterable(true).SetWidth(10);
+          //columns.Add().RenderValueAs(c => c.CartStatus == 2 ? "Pending" : c.CartStatus == 3 ? "Order is being Prepared" : c.CartStatus==4?"Assigned for Delivery. Waiting for Pickup": c.CartStatus==5? "On the Way to Delivery":c.CartStatus==6? "Delivered": c.CartStatus==7?"Cancelled":"N/A").Titled("Order Status").Filterable(true).SetWidth(10);
+         columns.Add(c => c.CartStatusText).Titled("Order Status").Filterable(true).SetWidth(15);
+         columns.Add()
+         .Encoded(false)
+         .Sanitized(false)
+         .RenderValueAs(o => Html.ActionLink("View", "Edit", new { ordernumber=o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-vsm btn-info mr-1", @style = "padding: 3px 26px" }).ToHtmlString()).Titled("Action").SetWidth(10);
+     }).WithPaging(20).Sortable(true)
     <!--
     <div class="row">
         <div class="col-md-12">
@@ -156,10 +157,7 @@
                 var shopId = $("#ShopId").val();
                 window.location.href = "/Cart/List/?shopid=" + shopId;
             });
-
         });
-
     </script>
-
 }
 

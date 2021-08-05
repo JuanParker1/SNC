@@ -16,7 +16,7 @@ namespace ShopNow.Models
     {
         public int Id { get; set; }
         public string AddOnItemName { get; set; }
-        public int MasterProductId { get; set; }
+        public long MasterProductId { get; set; }
         public string MasterProductName { get; set; }
         public int AddOnCategoryId { get; set; }
         public string AddOnCategoryName { get; set; }
@@ -34,7 +34,7 @@ namespace ShopNow.Models
         public double AddOnsPrice { get; set; }
         public double CrustPrice { get; set; }
         public int AddOnType { get; set; }
-        public int ProductId { get; set; }
+        public long ProductId { get; set; }
         public string ProductName { get; set; }
         public int ShopId { get; set; }
         public string ShopName { get; set; }
@@ -42,7 +42,6 @@ namespace ShopNow.Models
         public int ProductDishAddonId { get; set; }
     
         public virtual MasterProduct MasterProduct { get; set; }
-        public virtual Product Product { get; set; }
         public virtual Shop Shop { get; set; }
     }
 }

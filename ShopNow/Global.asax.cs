@@ -44,11 +44,11 @@ namespace ShopNow
             //    HttpContext.Current.Response.Redirect("~/ErrorPage/PageNotFound");
             //}
         }
-        protected void Session_End(object sender, EventArgs e)
-        {
-            Session.Abandon();
-            Response.RedirectToRoute("Hom", "Index");
-        }
+        //protected void Session_End(object sender, EventArgs e)
+        //{
+        //    Session.Abandon();
+        //    Response.RedirectToRoute("Home", "Index");
+        //}
     }
 
 }

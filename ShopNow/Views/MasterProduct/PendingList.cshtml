@@ -63,7 +63,7 @@
     <script>
         $(document).ready(function () {
 
-            $('#ShopCode').select2({
+            $('#ShopId').select2({
                 placeholder: "Search Shop",
                 ajax: {
                     url: "/MasterProduct/GetShopSelect2",
@@ -100,7 +100,6 @@
                     cell.innerHTML = i + 1;
                 });
             }).draw();
-
         });
     </script>
 }

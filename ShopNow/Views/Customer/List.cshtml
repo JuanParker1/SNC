@@ -3,9 +3,12 @@
 @{
     ViewBag.Title = "Customer List";
 }
+
 <title>ShopNow | Customer List</title>
+
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
+
 <style>
     .table td, .table th {
         border-top: 1px solid #eaeaea;
@@ -13,6 +16,7 @@
         padding: .4rem 1.25rem;
     }
 </style>
+
 <div class="container-fluid CustomerMax">
     <div class="row">
         <div class="col-md-12">
@@ -20,17 +24,61 @@
         </div>
     </div>
 
-    @Html.Grid(Model).Columns(columns =>
-{
-    columns.Add().RenderValueAs(o => Html.ActionLink(o.Name, "Details", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }).ToHtmlString()).Titled("Name").Encoded(false).Sanitized(false).Filterable(true).SetWidth(10);
-    columns.Add(c => c.PhoneNumber).Titled("Phone Number").Filterable(true).SetWidth(10);
-    columns.Add(c => c.Address).Titled("Address").Filterable(true).SetWidth(10);
-    columns.Add(c => c.DistrictName).Titled("District").Filterable(true).SetWidth(10);
-    columns.Add(c => c.StateName).Titled("State").Filterable(true).SetWidth(10);
-    columns.Add()
-.Encoded(false)
-.Sanitized(false)
-.RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
-               + Html.ActionLink("Delete", "Delete", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
-}).WithPaging(20).Sortable(true)
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-3">
+                <div class="card-body">
+                    @Html.Grid(Model).Columns(columns =>
+               {
+               columns.Add().RenderValueAs(o => Html.ActionLink(o.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }).ToHtmlString()).Titled("Name").Encoded(false).Sanitized(false).Filterable(true).SetWidth(10);
+               columns.Add(b => b.PhoneNumber).Titled("Phone No").Filterable(true).SetWidth(20);
+               columns.Add(b => b.Address).Titled("Address").Filterable(true).SetWidth(20);
+               columns.Add(b => b.DistrictName).Titled("District Name").Filterable(true).SetWidth(20);
+               columns.Add(b => b.StateName).Titled("State Name").Filterable(true).SetWidth(20);
+               columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20)
+                   .RenderValueAs(b => @<div>
+                            <a href="~/Customer/Edit?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(b.Id)" class="btn btn-warning text-center btn-sm text-nowrap" style="padding: 3px 26px">Edit</a>
+                            <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(b.Id)" class="btn btn-danger text-center btn-sm text-nowrap btnDelete" style="padding: 3px 18px">Delete</a>
+                        </div>);
+            }).WithPaging(20).Sortable(true)
+
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
+
+@section Scripts
+{
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            $(".btnDelete").click(function () {
+                var Id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/Customer/Delete", { Id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
+            });
+        });
+    </script>
+}

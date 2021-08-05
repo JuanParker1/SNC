@@ -39,7 +39,8 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new BannerListViewModel();
-            model.List = db.Banners.Where(i => i.Status == 0).Select(i => new BannerListViewModel.BannerList {
+            model.List = db.Banners.Where(i => i.Status == 0 || i.Status == 2).Select(i => new BannerListViewModel.BannerList
+            {
                 BannerName = i.BannerName,
                 Bannerpath = i.BannerPath,
                 Id = i.Id,
@@ -47,13 +48,14 @@ namespace ShopNow.Controllers
                 FromDate = i.FromDate,
                 Position = i.Position,
                 ProductId = i.ProductId,
-                ProductName = i.ProductName,
+                // ProductName = i.ProductName,
                 ShopId = i.ShopId,
-                ShopName = i.ShopName,
+                // ShopName = i.ShopName,
                 ToDate = i.Todate,
-                CreditType = i.CreditType
+                CreditType = i.CreditType,
+                Status = i.Status
             }).ToList();
-            
+
             return View(model.List);
         }
 
@@ -73,9 +75,9 @@ namespace ShopNow.Controllers
                 FromDate = i.FromDate,
                 Position = i.Position,
                 ProductId = i.ProductId,
-                ProductName = i.ProductName,
+               // ProductName = i.ProductName,
                 ShopId = i.ShopId,
-                ShopName = i.ShopName,
+               // ShopName = i.ShopName,
                 ToDate = i.Todate,
                 CreditType = i.CreditType
             }).ToList();
@@ -108,7 +110,7 @@ namespace ShopNow.Controllers
             {
                 var product = db.Products.FirstOrDefault(i => i.Id == banner.ProductId && i.Status == 0);
                 banner.MasterProductId = product.MasterProductId;
-                banner.MasterProductName = product.Name;
+               // banner.MasterProductName = product.Name;
             }
             try
             {
@@ -147,6 +149,20 @@ namespace ShopNow.Controllers
             db.Entry(banner).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
             return RedirectToAction("List", "Banner");
+        }
+
+        //[AccessPolicy(PageCode = "")]
+        [HttpPost]
+        public ActionResult UpdateActive(int Id, int status)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var banner = db.Banners.FirstOrDefault(i => i.Id == Id);
+            banner.Status = status;
+            banner.UpdatedBy = user.Name;
+            banner.DateUpdated = DateTime.Now;
+            db.Entry(banner).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("List");
         }
 
         [AccessPolicy(PageCode = "SHNBANE003")]

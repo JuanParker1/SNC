@@ -48,7 +48,7 @@
                                 <strong class="text-secondary">Category Name</strong>
                             </label>
                             <div class="form-group">
-                                <select class="form-control" name="CategoryIds" id="CategoryIds"></select>
+                                <select class="form-control" name="CategoryId" id="CategoryId"></select>
                                 <input type="hidden" name="CategoryName" id="CategoryName" />
                             </div>
                         </div>
@@ -408,7 +408,7 @@
         if (msg != "") {
             swal("Success!", msg, "success")
         }
-        $('#CategoryIds').select2({
+        $('#CategoryId').select2({
             placeholder: "Search Category",
             ajax: {
                 url: "/MasterProduct/GetDishCategorySelect2",

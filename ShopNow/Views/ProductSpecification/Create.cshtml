@@ -18,7 +18,7 @@
         <div class="col-md-12 mx-auto">
             @using (Html.BeginForm("Create", "ProductSpecification", FormMethod.Post, new { id = "ProductSpecificationForm" }))
             {
-                <div class="card">
+                <div class="card shadow mt-3">
                     <div class="card-body">
                         @Html.AntiForgeryToken()
                         <div class="form-group row">

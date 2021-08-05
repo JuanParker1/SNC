@@ -18,7 +18,7 @@ namespace ShopNow.Models
         public string Value { get; set; }
         public int SpecificationId { get; set; }
         public string SpecificationName { get; set; }
-        public int MasterProductId { get; set; }
+        public long MasterProductId { get; set; }
         public string MasterProductName { get; set; }
         public int Status { get; set; }
         public string CreatedBy { get; set; }

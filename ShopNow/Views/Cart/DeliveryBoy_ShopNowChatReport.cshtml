@@ -2,92 +2,95 @@
 @{
     ViewBag.Title = "DeliveryBoy ShopNowChat Report";
 }
+
 <title>ShopNow | DeliveryBoy Cash Handover Report</title>
+
 @using (Html.BeginForm("DeliveryBoy_ShopNowChatReport", "Cart", FormMethod.Post, new { id = "ReportForm", role = "form", enctype = "multipart/form-data" }))
 {
-<div class="container-fluid">
-    <div class="mb-1 d-print-none">
-        <div class="row form-group">
-            <div class="col-md-3">
-                <h5 class="text-success text-nowrap">DeliveryBoy Cash Handover Report</h5>
-            </div>
-            <div class="col-md-2">
-                <div class="mb-1 data-search">
+    <div class="container-fluid">
+        <div class="mb-1 d-print-none">
+            <div class="row form-group">
+                <div class="col-md-3">
+                    <h5 class="text-success text-nowrap">DeliveryBoy Cash Handover Report</h5>
+                </div>
+                <div class="col-md-2">
+                    <div class="mb-1 data-search">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <select name="DeliveryBoyId" id="DeliveryBoyId" class="form-control"></select>
+                    <input type="hidden" name="DeliveryBoyName" id="DeliveryBoyName" />
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <button id="btnPrint" class="btn btn-sm btn-secondary mr-2" value="Print"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
+                        <button id="btnExport" class="btn btn-sm btn-secondary" value="Export To Excel"><i class="fa fa-file-excel-o fa-lg" aria-hidden="true"></i></button>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <select name="DeliveryBoyId" id="DeliveryBoyId" class="form-control"></select>
-                <input type="hidden" name="DeliveryBoyName" id="DeliveryBoyName" />
-            </div>
-            <div class="col-md-4">
-                <div class="input-group">
-                    <button id="btnPrint" class="btn btn-sm btn-secondary mr-2" value="Print"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
-                    <button id="btnExport" class="btn btn-sm btn-secondary" value="Export To Excel"><i class="fa fa-file-excel-o fa-lg" aria-hidden="true"></i></button>
+            <div class="row form-group">
+                <div class="col-md-3"></div>
+                <div class="col-md-5">
+                    <div class="input-daterange input-group">
+                        <input type="date" class="form-control well well-sm" placeholder="From Date" id="datepicker" name="startDate">
+                        <span class="input-group-addon mx-3">to</span>
+                        <input type="date" class="form-control" placeholder="To Date" id="datepicker1" name="endDate">
+                        <input type="hidden" id="StartDate" value="@Model.StartingDate" />
+                        <input type="hidden" id="EndDate" value="@Model.EndingDate" />
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <input type="submit" class="btn btn-info mx-4" value="Apply Filter" />
                 </div>
             </div>
         </div>
-        <div class="row form-group">
-            <div class="col-md-3"></div>
-            <div class="col-md-5">
-                <div class="input-daterange input-group">
-                    <input type="date" class="form-control well well-sm" placeholder="From Date" id="datepicker" name="startDate">
-                    <span class="input-group-addon mx-3">to</span>
-                    <input type="date" class="form-control" placeholder="To Date" id="datepicker1" name="endDate">
-                    <input type="hidden" id="StartDate" value="@Model.StartingDate" />
-                    <input type="hidden" id="EndDate" value="@Model.EndingDate" />
-                </div>
-            </div>
-            <div class="col-md-1">
-                <input type="submit" class="btn btn-info mx-4" value="Apply Filter" />
-            </div>
-        </div>
-    </div>
-    <div class="card" id="divDeliveryBoy">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-12">
-                    <h4 class="text-center d-none d-print-block">DeliveryBoy ShopNowChat Report</h4>
-                    <table class="table table-striped table-hover table-borderless" id="DeliveryBoy-list">
-                        <thead>
-                            <tr>
-                                <th class="font-weight-bold">No.</th>
-                                <th>Date</th>
-                                <th class="font-weight-bold">Order No.</th>
-                                <th class="font-weight-bold">DeliveryBoy Phone No.</th>
-                                <th class="font-weight-bold">DeliveryBoy Name</th>
-                                <th class="font-weight-bold">Cash Amount</th>
-                                <th class="font-weight-bold">Handover Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.List)
-                            {
+        <div class="card" id="divDeliveryBoy">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4 class="text-center d-none d-print-block">DeliveryBoy ShopNowChat Report</h4>
+                        <table class="table table-striped table-hover table-borderless" id="DeliveryBoy-list">
+                            <thead>
                                 <tr>
-                                    <td></td>
-                                    <td>@item.DateUpdated.ToString("dd-MM-yyyy hh:mm tt")</td>
-                                    <td>
-                                       <a href="~/Cart/Edit?orderno=@item.OrderNo&id=@item.Id">@item.OrderNo</a>
-                                    </td>
-                                    <td>@item.DeliveryBoyPhoneNumber</td>
-                                    <td>@item.DeliveryBoyName</td>
-                                    <td>@item.Amount</td>
-                                    <td>
-                                        @if (item.DeliveryOrderPaymentStatus == 0)
-                                        {<span class="text-danger mr-3">Pending</span><input type="button" class="btn btn-sm btn-warning btnPayNow" value="Receive" data-orderno="@item.OrderNo" /> }
-                                        else if (item.DeliveryOrderPaymentStatus == 1)
-                                        {
-                                            <span class="text-success">Received</span>}
-                                    </td>
+                                    <th class="font-weight-bold">No.</th>
+                                    <th>Date</th>
+                                    <th class="font-weight-bold">Order No.</th>
+                                    <th class="font-weight-bold">DeliveryBoy Phone No.</th>
+                                    <th class="font-weight-bold">DeliveryBoy Name</th>
+                                    <th class="font-weight-bold">Cash Amount</th>
+                                    <th class="font-weight-bold">Handover Status</th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.List)
+                                {
+                                    <tr>
+                                        <td></td>
+                                        <td>@item.DateUpdated.ToString("dd-MM-yyyy hh:mm tt")</td>
+                                        <td>
+                                            <a href="~/Cart/Edit?ordernumber=@item.OrderNumber&id=@item.Id">@item.OrderNumber</a>
+                                        </td>
+                                        <td>@item.DeliveryBoyPhoneNumber</td>
+                                        <td>@item.DeliveryBoyName</td>
+                                        <td>@item.Amount</td>
+                                        <td>
+                                            @if (item.DeliveryOrderPaymentStatus == 0)
+                                            {<span class="text-danger mr-3">Pending</span><input type="button" class="btn btn-sm btn-warning btnPayNow" value="Receive" data-ordernumber="@item.OrderNumber" /> }
+                                            else if (item.DeliveryOrderPaymentStatus == 1)
+                                            {
+                                                <span class="text-success">Received</span>}
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 }
+
 @section Scripts
 {
     <!--Select2-->
@@ -154,14 +157,14 @@
             });
 
             $("#Filter").click(function () {
-                var deliveryboyId= $("#DeliveryBoyId").val();
+                var deliveryboyId = $("#DeliveryBoyId").val();
                 window.location.href = "/Cart/DeliveryBoy_ShopNowChatReport/?deliveryboyId=" + deliveryboyId;
             });
 
             $('.btnPayNow').click(function () {
-                var orderno = $(this).attr('data-orderno');
+                var ordernumber = $(this).attr('data-ordernumber');
                 var thisRow = $(this).closest("tr");
-                $.getJSON("/Cart/ShopNowChatPay/?orderno=" + orderno, function (data) {
+                $.getJSON("/Cart/ShopNowChatPay/?ordernumber=" + ordernumber, function (data) {
                     if (data == true) {
                         window.location.reload();
                         //thisRow.remove();
@@ -172,9 +175,7 @@
                     }
                 });
             });
-
         });
-
     </script>
 }
 

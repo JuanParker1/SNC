@@ -19,11 +19,7 @@ namespace ShopNow.Models
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }
-        public int ProductTypeId { get; set; }
-        public string ProductTypeName { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
-    
-        public virtual ProductType ProductType { get; set; }
     }
 }

@@ -54,17 +54,17 @@
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Category Name</strong></label>
                                         <input type="text" class="form-control" name="CategoryName" id="CategoryName" value="@Model.CategoryName" readonly />
-                                        <input type="hidden" name="CategoryIds" id="CategoryIds" value="@Model.CategoryIds" />
+                                        <input type="hidden" name="CategoryId" id="CategoryId" value="@Model.CategoryId" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Sub Category I Name</strong></label>
                                         <input type="text" class="form-control" name="SubCategoryName" id="SubCategoryName" value="@Model.SubCategoryName" readonly />
-                                        <input type="hidden" name="SubCategoryIds" id="SubCategoryIds" value="@Model.SubCategoryIds" />
+                                        <input type="hidden" name="SubCategoryId" id="SubCategoryId" value="@Model.SubCategoryId" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Sub Category II Name</strong></label>
                                         <input type="text" class="form-control" name="NextSubCategoryName" id="NextSubCategoryName" value="@Model.NextSubCategoryName" readonly />
-                                        <input type="hidden" name="NextSubCategoryIds" id="NextSubCategoryIds" value="@Model.NextSubCategoryIds" />
+                                        <input type="hidden" name="NextSubCategoryId" id="NextSubCategoryId" value="@Model.NextSubCategoryId" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="Price"><strong class="text-secondary">Menu Price</strong></label>
@@ -193,8 +193,7 @@
                 var sellingprice = $('#Price').val();
                 var results = Math.ceil(((menuprice - sellingprice) / menuprice) * 100);
                 $("#Percentage").val(results);
-            });
-           
+            });           
         });
     </script>
 }

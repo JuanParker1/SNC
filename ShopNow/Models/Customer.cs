@@ -21,7 +21,6 @@ namespace ShopNow.Models
             this.CustomerReviews = new HashSet<CustomerReview>();
             this.DeliveryBoys = new HashSet<DeliveryBoy>();
             this.Orders = new HashSet<Order>();
-            this.Shops = new HashSet<Shop>();
         }
     
         public int Id { get; set; }
@@ -50,6 +49,9 @@ namespace ShopNow.Models
         public Nullable<System.DateTime> DOB { get; set; }
         public string FcmTocken { get; set; }
         public string IpAddress { get; set; }
+        public double WalletAmount { get; set; }
+        public double PenaltyAmount { get; set; }
+        public double DeliveryWaitingCharge { get; set; }
         public int Status { get; set; }
         public string UpdatedBy { get; set; }
         public string CreatedBy { get; set; }
@@ -64,7 +66,5 @@ namespace ShopNow.Models
         public virtual ICollection<DeliveryBoy> DeliveryBoys { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order> Orders { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Shop> Shops { get; set; }
     }
 }

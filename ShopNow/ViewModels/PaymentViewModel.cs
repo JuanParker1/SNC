@@ -29,9 +29,9 @@ namespace ShopNow.ViewModels
 
     public class OtpViewModel
     {
-        public int Id { get; set; }
-        public string ShopCode { get; set; }
-        public string CustomerCode { get; set; }
+        public long Id { get; set; }
+        public int ShopId { get; set; }
+        public int CustomerId { get; set; }
         public string CustomerName { get; set; }
         public string PhoneNumber { get; set; }
         public string Otp { get; set; }
@@ -47,13 +47,12 @@ namespace ShopNow.ViewModels
     {
         public string StartingDate { get; set; }
         public string EndingDate { get; set; }
-        public string ShopCode { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
-
         public List<PaymentReportList> List { get; set; }
         public class PaymentReportList
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
             public string CorporateID { get; set; }
             public string ReferenceCode { get; set; }
             public int CustomerId { get; set; }
@@ -70,7 +69,7 @@ namespace ShopNow.ViewModels
             public string CountryName { get; set; }
             public string Credits { get; set; }
             public DateTime DateEncoded { get; set; }
-            public int OrderNo { get; set; }
+            public int OrderNumber { get; set; }
         }
     }
 
@@ -81,8 +80,8 @@ namespace ShopNow.ViewModels
         public List<PlatformCreditReportList> List { get; set; }
         public class PlatformCreditReportList
         {
-            public int Id { get; set; }
-            public int OrderNo { get; set; }
+            public long Id { get; set; }
+            public int OrderNumber { get; set; }
             public int CustomerId { get; set; }
             public string CustomerName { get; set; }
             public int CartStatus { get; set; }
@@ -98,8 +97,8 @@ namespace ShopNow.ViewModels
         public List<DeliveryCreditReportList> List { get; set; }
         public class DeliveryCreditReportList
         {
-            public int Id { get; set; }
-            public string OrderNo { get; set; }
+            public long Id { get; set; }
+            public int OrderNumber { get; set; }
             public int CartStatus { get; set; }
             public double DeliveryCharge { get; set; }
         }
@@ -120,7 +119,7 @@ namespace ShopNow.ViewModels
 
     public class PaymentUpdatedApiViewModel
     {        
-        public int OrderNo { get; set; }    
+        public int OrderNumber { get; set; }    
         public int CustomerId { get; set; }
         public string CustomerName { get; set; }
         public double UpdatedAmount { get; set; }
@@ -129,23 +128,25 @@ namespace ShopNow.ViewModels
         public string RefundRemark { get; set; }
 
     }
+
     public class paymentsEntries
     {
-        public int Id { get; set; }
-        public string OrderNo { get; set; }
+        public long Id { get; set; }
+        public int OrderNumber { get; set; }
         public string paymentId { get; set; }
     }
+
     public class razorpayOrderCreate
-    {
-        
+    {        
         public string Price { get; set; }
         public string Email { get; set; }
         public string Mobile { get; set; }
     }
+
     public class PaymentCreateApiViewModel
     {
         public int OrderId { get; set; }
-        public int OrderNo { get; set; }
+        public int OrderNumber { get; set; }
         public string CorporateID { get; set; }
         public string ReferenceCode { get; set; }
         public int CustomerId { get; set; }
@@ -190,7 +191,6 @@ namespace ShopNow.ViewModels
             public string PaymentId { get; set; }
             public string IfscCode { get; set; }
             public string AccountType { get; set; }
-
             public int CartStatus { get; set; }
             public int ShopPaymentStatus { get; set; }
             
@@ -213,7 +213,6 @@ namespace ShopNow.ViewModels
                             return 11;
                     }
                 }
-
             }
             public string Remarks { get; set; }
             public string PhoneNo { get; set; }
@@ -257,7 +256,6 @@ namespace ShopNow.ViewModels
                             return 11;
                     }
                 }
-
             }
         }
     }
@@ -266,16 +264,16 @@ namespace ShopNow.ViewModels
     {
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public string ShopCode { get; set; }
+        public string ShopId { get; set; }
         public string ShopName { get; set; }
-
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {
+            public long Id { get; set; }
             public int No { get; set; }
             public DateTime? OrderDate { get; set; }
             public string ShopName { get; set; }
-            public string OrderNo { get; set; }
+            public int OrderNumber { get; set; }
             public string PaymentType { get; set; }
             public string PaymentId { get; set; }
             public double? OrderFirstAmount { get; set; }
@@ -317,9 +315,7 @@ namespace ShopNow.ViewModels
                             return "N/A";
                     }
                 }
-
             }
-
         }
     }
 }

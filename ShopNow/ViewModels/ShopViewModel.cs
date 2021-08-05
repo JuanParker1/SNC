@@ -623,11 +623,11 @@ namespace ShopNow.ViewModels
         }
         public class ProductList
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
             public string Name { get; set; }
             public int ShopId { get; set; }
             public string ShopName { get; set; }
-            public string CategoryIds { get; set; }
+            public int CategoryId { get; set; }
             public string CategoryName { get; set; }
             public string ColorCode { get; set; }
             public double Price { get; set; }

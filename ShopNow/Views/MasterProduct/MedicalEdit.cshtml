@@ -16,7 +16,7 @@
         <div class="col-md-12 mx-auto">
             @using (Html.BeginForm("MedicalEdit", "MasterProduct", FormMethod.Post, new { id = "MedicalProductForm", enctype = "multipart/form-data" }))
             {
-                <div class="card">
+                <div class="card shadow">
                     <div class="card-body">
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="Id" value="@Model.Id" />
@@ -45,9 +45,11 @@
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="control-label text-secondary font-weight-bold" for="CategoryIds">Category Name</label>
+                                        <label class="control-label text-secondary font-weight-bold" for="CategoryId">Category Name</label>
                                         <div class="form-group">
-                                            <select class="form-control" name="CategoryIds" id="CategoryIds" multiple></select>
+                                            <select class="form-control" name="CategoryId" id="CategoryId">
+                                                <option value="@Model.CategoryId">@Model.CategoryName</option>
+                                            </select>
                                             <input type="hidden" name="CategoryName" id="CategoryName" value="@Model.CategoryName" />
                                         </div>
                                     </div>
@@ -248,19 +250,6 @@
     <script>
         $(document).ready(function () {
             
-             var categorySelect = $('#CategoryIds');
-            var CategoryIds = "@Model.CategoryIds1";
-            var categoryname = "@Model.CategoryName";
-            if (CategoryIds) {
-                var array_code = CategoryIds.split(',');
-                var array_name = categoryname.split(',');
-                $.each(array_code, function (i) {
-                    $('select[name="CategoryIds"] option[value=' + array_code[i] + ']').attr('selected', 'selected');
-                    var option = new Option(array_name[i], array_code[i], true, true);
-                    categorySelect.append(option).trigger('change');
-                });
-            }
-
             var drugSelect = $('#DrugCompoundDetailIds');
             var DrugCompoundDetailIds = "@Model.DrugCompoundDetailIds1";
             var drugcompounddetailname = "@Model.DrugCompoundDetailName";
@@ -290,7 +279,7 @@
                 $('input[name="BrandName"]').val(e.params.data.text);
             });
 
-            $('#CategoryIds').select2({
+            $('#CategoryId').select2({
                 placeholder: "Search Category",
                 ajax: {
                     url: "/MasterProduct/GetMedicalCategorySelect2",

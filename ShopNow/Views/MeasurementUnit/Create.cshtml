@@ -9,15 +9,15 @@
             <h5 class="mt-1 text-success" style="letter-spacing:1px">Measurement Unit Entry</h5>
         </div>
         <div class="col-md-6 text-right">
-            <a href="~/MeasurementUnit/List" target="_blank"><span class="fa fa-bars"></span>Measurement Unit List</a>
+            <a href="~/MeasurementUnit/List" target="_blank"><span class="fa fa-bars"></span> Measurement Unit List</a>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-md-12 mx-auto">
+        <div class="col-md-12">
             @using (Html.BeginForm("Create", "MeasurementUnit", FormMethod.Post, new { id = "MeasurementUnitForm" }))
             {
-                <div class="card">
+                <div class="card shadow mt-3">
                     <div class="card-body">
                         @Html.AntiForgeryToken()
                         <div class="form-group row">
@@ -40,14 +40,6 @@
                             <div class="col-md-4">
                                 <label class="col-form-label"><strong class="text-secondary">Conversion Formula</strong></label>
                                 <input id="ConversionFormula" type="text" class="form-control" name="ConversionFormula" />
-                            </div>
-                            <div class="col-md-4">
-                                <label class="col-form-label"><strong class="text-secondary">Type</strong></label>
-                                <select name="Type" class="form-control" id="Type">
-                                    <option value="0">Select Type</option>
-                                    <option value="1">Medical</option>
-                                    <option value="2">FMCG</option>
-                                </select>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -80,7 +72,6 @@
                     'UnitName',
                     'UnitSymbol',
                     'UnitType',
-                    'Type'
                 ];
                 isValidated = ValidateEmptyRequiredFiels(requiredArr);
 

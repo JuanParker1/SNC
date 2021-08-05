@@ -146,34 +146,40 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-6 mt-5">
-                <img src="~/Images/undraw_authentication_fsn5.svg" class="img-fluid mt-5" />
+                <img src="~/Images/undraw_authentication_fsn5.svg" class="img-fluid mt-4" />
             </div>
             <div class="col-md-4 offset-md-2 mt-5">
-                <h1 class="text-center my-5 text-success">Admin Login</h1>
-                @using (Html.BeginForm("Index", "Home", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                {
-                    @Html.AntiForgeryToken()
-
-                    <div class="input-group mb-4">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-phone text-success"></i></span>@*fa-spin*@
+                    <div class="card mt-5 shadow">
+                        <div class="card-header p-0">
+                            <h3 class="text-center bg-success text-white mb-0 py-3">Admin Login</h3>
                         </div>
-                        <input type="text" class="form-control" placeholder="Enter Phone Number" name="PhoneNumber" id="PhoneNumber">
+                        <div class="card-body mt-3">
+                            @using (Html.BeginForm("Index", "Home", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                            {
+                                @Html.AntiForgeryToken()
 
-                    </div>
-                    <div class="input-group mb-4">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-key text-success"></i></span>
+                                <div class="input-group mb-4">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-phone text-success"></i></span>@*fa-spin*@
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="Enter Phone Number" name="PhoneNumber" id="PhoneNumber">
+
+                                </div>
+                                <div class="input-group mb-4">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-key text-success"></i></span>
+                                    </div>
+                                    <input type="password" class="form-control" placeholder="Enter Password" name="Password" id="Password">
+                                </div>
+                                <div class="form-group">
+                                    <input type="checkbox"> Remember Me
+                                </div>
+                                <div class="form-group text-center">
+                                    <input type="submit" value="Login" class="btn btn-success btn-block login_btn">
+                                </div>
+                            }
                         </div>
-                        <input type="password" class="form-control" placeholder="Enter Password" name="Password" id="Password">
                     </div>
-                    <div class="form-group">
-                        <input type="checkbox"> Remember Me
-                    </div>
-                    <div class="form-group text-center">
-                        <input type="submit" value="Login" class="btn btn-success btn-block login_btn">
-                    </div>
-                }
             </div>
         </div>
     </div>
