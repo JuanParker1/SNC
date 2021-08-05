@@ -11,11 +11,8 @@
 <div class="container-fluid">
     <div class="d-print-none">
         <div class="row">
-            <div class="col-md-2">
+            <div class="col-md-4">
                 <h5 class="text-success text-nowrap">Cancelled Report</h5>
-            </div>
-            <div class="col-md-2">
-                <label class="col-form-label">Shop Name</label>
             </div>
             <div class="col-md-3">
                 <select name="ShopId" class="form-control" id="ShopId"></select>
@@ -25,10 +22,8 @@
                 <input type="button" class="btn btn-sm btn-info form-control" id="Filter" value="Apply Filter" />
             </div>
             <div class="col-md-3 text-right">
-                <div class="input-group">
-                    <button id="btnPrint" class="btn btn-sm btn-secondary mr-2" value="Print"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
-                    <button id="btnExport" class="btn btn-sm btn-secondary" value="Export To Excel"><i class="fa fa-file-excel-o fa-lg" aria-hidden="true"></i></button>
-                </div>
+                <button id="btnPrint" class="btn btn-sm btn-secondary mr-2" value="Print"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
+                <button id="btnExport" class="btn btn-sm btn-secondary" value="Export To Excel"><i class="fa fa-file-excel-o fa-lg" aria-hidden="true"></i></button>
             </div>
         </div>
     </div>
@@ -38,14 +33,14 @@
                 <div class="col-md-12">
                     <h4 class="text-center d-none d-print-block">Cancelled Report</h4>
                     @Html.Grid(Model).Columns(columns =>
-{
-columns.Add(c => c.OrderNo).Titled("OrderNo").Filterable(true).SetWidth(10);
-columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
-columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(15);
-columns.Add(c => c.PhoneNumber).Titled("Phone").Filterable(true).SetWidth(15);
-columns.Add().RenderValueAs(c => c.CartStatus == 7 ? "Cancelled" : "N/A").Titled("Order Status").Filterable(true).SetWidth(10);
-columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10);
-}).WithPaging(25).Sortable(true)
+                   {
+                       columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
+                       columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
+                       columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(15);
+                       columns.Add(c => c.PhoneNumber).Titled("Phone").Filterable(true).SetWidth(15);
+                       columns.Add().RenderValueAs(c => c.CartStatus == 7 ? "Cancelled" : "N/A").Titled("Order Status").Filterable(true).SetWidth(10);
+                       columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10);
+                   }).WithPaging(25).Sortable(true)
                 </div>
             </div>
         </div>
