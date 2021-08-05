@@ -15,6 +15,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "")]
         public ActionResult Index()
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var list = db.OtpVerifications.Where(i => i.Verify == false).OrderByDescending(i => i.Id).Take(10).ToList();
             return View(list);
         }

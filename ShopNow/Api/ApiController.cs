@@ -1512,7 +1512,7 @@ namespace ShopNow.Controllers
             var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == orderNo);
             var shop = db.Shops.FirstOrDefault(i => i.Id == order.ShopId);
             var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
-            shopCredits.DeliveryCredit -= payment.DelivaryCharge;
+            shopCredits.DeliveryCredit -= payment.DeliveryCharge;
             db.Entry(shopCredits).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
             var fcmToken = (from c in db.Customers

@@ -456,7 +456,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="200" />
           <Property Name="OwnerType" Type="int" Nullable="false" />
           <Property Name="DiscountType" Type="int" Nullable="false" />
@@ -468,6 +468,7 @@
           <Property Name="IsForFirstOrder" Type="bit" Nullable="false" />
           <Property Name="IsForOnlinePayment" Type="bit" Nullable="false" />
           <Property Name="IsForBlackListAbusers" Type="bit" Nullable="false" />
+          <Property Name="BrandId" Type="int" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="DateEncoded" Type="date" />
           <Property Name="DateUpdated" Type="date" />
@@ -476,7 +477,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="OfferId" Type="int" Nullable="false" />
           <Property Name="ShopId" Type="int" Nullable="false" />
         </EntityType>
@@ -616,8 +617,8 @@
           <Property Name="PaymentCategoryType" Type="int" Nullable="false" />
           <Property Name="CreditType" Type="int" Nullable="false" />
           <Property Name="ConvenientCharge" Type="float" Nullable="false" />
-          <Property Name="PackagingCharge" Type="float" Nullable="false" />
-          <Property Name="DelivaryCharge" Type="float" Nullable="false" />
+          <Property Name="PackingCharge" Type="float" Nullable="false" />
+          <Property Name="DeliveryCharge" Type="float" Nullable="false" />
           <Property Name="UpdatedAmount" Type="float" Nullable="false" />
           <Property Name="UpdatedOriginalAmount" Type="float" Nullable="false" />
           <Property Name="RefundAmount" Type="float" />
@@ -1936,7 +1937,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="OwnerType" Type="Int32" Nullable="false" />
           <Property Name="DiscountType" Type="Int32" Nullable="false" />
@@ -1948,6 +1949,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="IsForFirstOrder" Type="Boolean" Nullable="false" />
           <Property Name="IsForOnlinePayment" Type="Boolean" Nullable="false" />
           <Property Name="IsForBlackListAbusers" Type="Boolean" Nullable="false" />
+          <Property Name="BrandId" Type="Int32" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="DateEncoded" Type="DateTime" Precision="0" />
           <Property Name="DateUpdated" Type="DateTime" Precision="0" />
@@ -1956,7 +1958,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="OfferId" Type="Int32" Nullable="false" />
           <Property Name="ShopId" Type="Int32" Nullable="false" />
         </EntityType>
@@ -2100,8 +2102,8 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="PaymentCategoryType" Type="Int32" Nullable="false" />
           <Property Name="CreditType" Type="Int32" Nullable="false" />
           <Property Name="ConvenientCharge" Type="Double" Nullable="false" />
-          <Property Name="PackagingCharge" Type="Double" Nullable="false" />
-          <Property Name="DelivaryCharge" Type="Double" Nullable="false" />
+          <Property Name="PackingCharge" Type="Double" Nullable="false" />
+          <Property Name="DeliveryCharge" Type="Double" Nullable="false" />
           <Property Name="UpdatedAmount" Type="Double" Nullable="false" />
           <Property Name="UpdatedOriginalAmount" Type="Double" Nullable="false" />
           <Property Name="RefundAmount" Type="Double" />
@@ -3478,6 +3480,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
                 <ScalarProperty Name="IsForFirstOrder" ColumnName="IsForFirstOrder" />
                 <ScalarProperty Name="IsForOnlinePayment" ColumnName="IsForOnlinePayment" />
                 <ScalarProperty Name="IsForBlackListAbusers" ColumnName="IsForBlackListAbusers" />
+                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
                 <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
@@ -3633,8 +3636,8 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
                 <ScalarProperty Name="PaymentCategoryType" ColumnName="PaymentCategoryType" />
                 <ScalarProperty Name="CreditType" ColumnName="CreditType" />
                 <ScalarProperty Name="ConvenientCharge" ColumnName="ConvenientCharge" />
-                <ScalarProperty Name="PackagingCharge" ColumnName="PackagingCharge" />
-                <ScalarProperty Name="DelivaryCharge" ColumnName="DelivaryCharge" />
+                <ScalarProperty Name="PackingCharge" ColumnName="PackingCharge" />
+                <ScalarProperty Name="DeliveryCharge" ColumnName="DeliveryCharge" />
                 <ScalarProperty Name="UpdatedAmount" ColumnName="UpdatedAmount" />
                 <ScalarProperty Name="UpdatedOriginalAmount" ColumnName="UpdatedOriginalAmount" />
                 <ScalarProperty Name="RefundAmount" ColumnName="RefundAmount" />

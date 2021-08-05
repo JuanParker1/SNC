@@ -28,6 +28,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "")]
         public ActionResult List()
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var model = new OfferListViewModel();
             model.ListItems = db.Offers.Where(i => i.Status == 0)
                 .Select(i => new OfferListViewModel.ListItem
@@ -50,6 +52,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "")]
         public ActionResult Create()
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             return View();
         }
 
@@ -75,6 +79,16 @@ namespace ShopNow.Controllers
                     db.SaveChanges();
                 }
             }
+            return RedirectToAction("List");
+        }
+
+        [AccessPolicy(PageCode = "")]
+        public ActionResult Delete(int id)
+        {
+            var offer = db.Offers.FirstOrDefault(i => i.Id == id);
+            offer.Status = 2;
+            db.Entry(offer).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
             return RedirectToAction("List");
         }
     }

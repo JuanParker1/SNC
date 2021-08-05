@@ -15,6 +15,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "")]
         public ActionResult Index()
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             return View();
         }
 

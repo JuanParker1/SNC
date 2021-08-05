@@ -26,6 +26,7 @@ namespace ShopNow.Models
         public bool IsForFirstOrder { get; set; }
         public bool IsForOnlinePayment { get; set; }
         public bool IsForBlackListAbusers { get; set; }
+        public Nullable<int> BrandId { get; set; }
         public int Status { get; set; }
         public Nullable<System.DateTime> DateEncoded { get; set; }
         public Nullable<System.DateTime> DateUpdated { get; set; }
