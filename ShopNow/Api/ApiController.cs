@@ -2353,10 +2353,17 @@ namespace ShopNow.Controllers
         [HttpPost]
         public JsonResult AddReview(ShopReviewViewModel model)
         {
-            int errorCode = 0;
             var review = _mapper.Map<ShopReviewViewModel, CustomerReview>(model);
-            ClassCustomerReview.Add(review, out errorCode);
-            if (review.Id != 0)
+            //ClassCustomerReview.Add(review, out errorCode);
+            review.DateEncoded = DateTime.Now;
+            review.DateUpdated = DateTime.Now;
+            review.CreatedBy = model.CustomerName;
+            review.UpdatedBy = model.CustomerName;
+            review.Status = 0;
+            db.CustomerReviews.Add(review);
+            db.SaveChanges();
+
+            if (review != null)
             {
                 return Json(new { message = "Successfully Added to Rating!", Details = model });
             }

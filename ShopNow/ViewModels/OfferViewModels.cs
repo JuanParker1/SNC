@@ -88,5 +88,7 @@ namespace ShopNow.ViewModels
         public bool IsForFirstOrder { get; set; }
         public bool IsForOnlinePayment { get; set; }
         public bool IsForBlackListAbusers { get; set; }
+        public int[] ShopIds { get; set; }
+        public int BrandId { get; set; }
     }
 }

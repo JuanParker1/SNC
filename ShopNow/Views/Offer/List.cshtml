@@ -10,11 +10,14 @@
 
 
 <div class="container-fluid">
+    <div class="d-flex justify-content-between">
+        <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+<a href="/Offer/Create"><u>Add New Offer</u></a>
+    </div>
     <div class="row">
-        <div class="col-md-6 mx-auto mt-3">
+        <div class="col-md-12 mt-3">
             <div class="card shadow">
                 <div class="card-body">
-                    <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
                     @Html.Grid(Model.ListItems).Columns(columns =>
                {
                    columns.Add(c => c.OwnerTypeText).Titled("Owner").Filterable(false).SetWidth(10);
