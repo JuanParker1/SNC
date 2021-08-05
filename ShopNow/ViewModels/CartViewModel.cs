@@ -189,6 +189,7 @@ namespace ShopNow.ViewModels
 
     public class CartReportViewModel
     {
+        public DateTime? StartDate { get; set; }
         public string StartingDate { get; set; }
         public string EndingDate { get; set; }
         public int ShopId { get; set; }
@@ -237,6 +238,15 @@ namespace ShopNow.ViewModels
             public int DeliveryOrderPaymentStatus { get; set; }
             public int DeliveryRateSet { get; set; }
             public double Kilometer { get; set; }
+        }
+        public List<DeliveredReportList> DeliveredReportLists { get; set; }
+        public class DeliveredReportList {
+            public long Id { get; set; }
+            public int OrderNumber { get; set; }
+            public string ShopName { get; set; }
+            public string PhoneNumber { get; set; }
+            public string DeliveryAddress { get; set; }
+            public System.DateTime DateEncoded { get; set; }
         }
     }
 
