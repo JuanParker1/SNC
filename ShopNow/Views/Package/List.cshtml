@@ -160,7 +160,7 @@
                 },
                     function (isConfirm) {
                         if (isConfirm) {
-                            $.getJSON("/MeasurementUnit/Delete", { id: id }, function (data) {
+                            $.getJSON("/Package/Delete", { id: id }, function (data) {
                                 if (data == true) {
                                     window.location.reload();
                                 }
