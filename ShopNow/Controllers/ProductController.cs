@@ -173,7 +173,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNPROC001")]
         public ActionResult MedicalCreate(MedicalCreateViewModel model)
         {
-            var isExist = db.Products.Any(i => i.Name == model.MasterProductName && i.Status == 0 && i.ProductTypeId == 3 && i.ShopId == model.ShopId);
+            var isExist = db.Products.Any(i => i.MasterProductId == model.MasterProductId && i.Status == 0 && i.ProductTypeId == 3 && i.ShopId == model.ShopId);
             if (isExist)
             {
                 ViewBag.ErrorMessage = model.MasterProductName + " Already Exist";
@@ -385,7 +385,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNPROFC004")]
         public ActionResult FoodCreate(FoodCreateViewModel model)
         {
-            var isExist = db.Products.Any(i => i.Name == model.Name && i.Status == 0 && i.ProductTypeId == 1 && i.ShopId == model.ShopId);
+            var isExist = db.Products.Any(i => i.MasterProductId == model.MasterProductId && i.Status == 0 && i.ProductTypeId == 1 && i.ShopId == model.ShopId);
             if (isExist)
             {
                 ViewBag.ErrorMessage = model.Name + " Already Exist";
@@ -691,7 +691,7 @@ namespace ShopNow.Controllers
         public ActionResult FMCGCreate(FMCGCreateViewModel model)
         {
             //Return to View if product already exist
-            var isExist = db.Products.Any(i => i.Name == model.Name && i.Status == 0 && i.ProductTypeId == 2 && i.ShopId == model.ShopId);
+            var isExist = db.Products.Any(i => i.MasterProductId == model.MasterProductId && i.Status == 0 && i.ProductTypeId == 2 && i.ShopId == model.ShopId);
             if (isExist)
             {
                 ViewBag.ErrorMessage = model.Name + " Already Exist";
@@ -843,7 +843,7 @@ namespace ShopNow.Controllers
         public ActionResult ElectronicCreate(ElectronicCreateEditViewModel model)
         {
             //Return to View if product already exist
-            var name = db.Products.FirstOrDefault(i => i.Name == model.Name && i.Status == 0 && i.ProductTypeId == 4 && i.ShopId == model.ShopId);
+            var name = db.Products.FirstOrDefault(i => i.MasterProductId == model.MasterProductId && i.Status == 0 && i.ProductTypeId == 4 && i.ShopId == model.ShopId);
             if (name != null)
             {
                 ViewBag.ErrorMessage = model.Name + " Already Exist";
@@ -855,7 +855,6 @@ namespace ShopNow.Controllers
             product.CreatedBy = user.Name;
             product.UpdatedBy = user.Name;
             product.ProductTypeName = "Electronic";
-           // product.Code = _generatedCode("PRO");
             if (model.ShopId != 0)
             {
                 var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);

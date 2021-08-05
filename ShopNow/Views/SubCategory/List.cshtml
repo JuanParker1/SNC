@@ -1,16 +1,16 @@
 ﻿@model IEnumerable<ShopNow.Models.SubCategory>
 @using GridMvc.Html
 @{
-    ViewBag.Title = "SubCategory";
+    ViewBag.Title = "SubCategory List";
 }
-<title>ShopNow | Sub Category List</title>
+<title>ShopNow | @ViewBag.Title</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 
 <div class="container-fluid mb-5">
     <div class="row">
         <div class="col-md-6">
-            <h5 class="text-success" style="letter-spacing:1px">SUB CATEGORY LIST</h5>
+            <h5 class="text-success">@ViewBag.Title</h5>
         </div>
         <div class="col-md-6 text-right">
             <a data-toggle="modal" data-target="#createModal" href="createModal"><span class="fa fa-plus"></span> New Sub Category</a>
@@ -20,43 +20,26 @@
             <div class="card shadow mt-3">
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
-{
-columns.Add(s => s.CategoryName).Titled("Category Name").Filterable(true).SetWidth(10);
-columns.Add(s => s.Name).Titled("SubCategory Name").Filterable(true).SetWidth(10);
-columns.Add(s => s.ProductTypeName).Titled("Item Type").Filterable(true).SetWidth(10);
-columns.Add(s => s.Adscore).Titled("Adscore").Filterable(true).SetWidth(10);
-columns.Add()
-.Encoded(false)
-.Sanitized(false)
-.RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
-               + Html.ActionLink("Delete", "Delete", new { id = o.Id }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
-        }).WithPaging(20).Sortable(true)
+               {
+               columns.Add(s => s.CategoryName).Titled("Category Name").Filterable(true).SetWidth(10);
+               columns.Add(s => s.Name).Titled("SubCategory Name").Filterable(true).SetWidth(10);
+               columns.Add(s => s.ProductTypeName).Titled("Item Type").Filterable(true).SetWidth(10);
+               columns.Add(s => s.Adscore).Titled("Adscore").Filterable(true).SetWidth(10);
+               //columns.Add()
+               //.Encoded(false)
+               //.Sanitized(false)
+               //.RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
+               //               + Html.ActionLink("Delete", "Delete", new { id = o.Id }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
+               columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(15)
+             .RenderValueAs(o=> @<div><a href="~/SubCategory/Edit?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-3"><i class="fa fa-edit fa-lg"></i></a>
+                    <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a></div>);
+}).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-@*<div class="modal fade" id="deleteModal" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header alert alert-danger">
-                <h4 class="modal-title" id="myModalLabel">Warning</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p class="success-message">Are you sure want to delete this record? </p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-success delete-confirm">Yes</button>
-                <button class="btn btn-danger" data-dismiss="modal">No</button>
-                <input type="hidden" name="Code" id="Code" data-dismiss="modal" />
-            </div>
-        </div>
-    </div>
-</div>*@
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -159,18 +142,31 @@ columns.Add()
                 }
             });
 
-            //$(".delete-prompt").click(function () {
-            //    var code = $(this).attr('data-id');
-            //    $("#Code").val(code);
-            //});
-
-            //$(".delete-confirm").click(function () {
-            //    var code = $("#Code").val();
-            //    $.getJSON("/SubCategory/Delete", { id: code }, function (data) {
-            //        window.location.reload();
-            //    });
-            //});
-
+            $(".btnDelete").click(function () {
+                var Id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/SubCategory/Delete", { Id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
+            });
+            
         });
 
     </script>
