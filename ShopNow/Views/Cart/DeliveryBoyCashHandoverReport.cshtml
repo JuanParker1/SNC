@@ -1,11 +1,11 @@
 ﻿@model ShopNow.ViewModels.CartReportViewModel
 @{
-    ViewBag.Title = "DeliveryBoy ShopNowChat Report";
+    ViewBag.Title = "DeliveryBoy Cash Handover Report";
 }
 
 <title>ShopNow | DeliveryBoy Cash Handover Report</title>
 
-@using (Html.BeginForm("DeliveryBoy_ShopNowChatReport", "Cart", FormMethod.Post, new { id = "ReportForm", role = "form", enctype = "multipart/form-data" }))
+@using (Html.BeginForm("DeliveryBoyCashHandoverReport", "Cart", FormMethod.Post, new { id = "ReportForm", role = "form", enctype = "multipart/form-data" }))
 {
     <div class="container-fluid">
         <div class="mb-1 d-print-none">
@@ -21,11 +21,9 @@
                     <select name="DeliveryBoyId" id="DeliveryBoyId" class="form-control"></select>
                     <input type="hidden" name="DeliveryBoyName" id="DeliveryBoyName" />
                 </div>
-                <div class="col-md-4">
-                    <div class="input-group">
-                        <button id="btnPrint" class="btn btn-sm btn-secondary mr-2" value="Print"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
-                        <button id="btnExport" class="btn btn-sm btn-secondary" value="Export To Excel"><i class="fa fa-file-excel-o fa-lg" aria-hidden="true"></i></button>
-                    </div>
+                <div class="col-md-4 text-right">
+                    <button id="btnPrint" class="btn btn-sm btn-secondary mr-2" value="Print"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
+                    <button id="btnExport" class="btn btn-sm btn-secondary" value="Export To Excel"><i class="fa fa-file-excel-o fa-lg" aria-hidden="true"></i></button>
                 </div>
             </div>
             <div class="row form-group">
@@ -48,11 +46,10 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <h4 class="text-center d-none d-print-block">DeliveryBoy ShopNowChat Report</h4>
+                        <h4 class="text-center d-none d-print-block">DeliveryBoy Cash Handover Report</h4>
                         <table class="table table-striped table-hover table-borderless" id="DeliveryBoy-list">
                             <thead>
                                 <tr>
-                                    <th class="font-weight-bold">No.</th>
                                     <th>Date</th>
                                     <th class="font-weight-bold">Order No.</th>
                                     <th class="font-weight-bold">DeliveryBoy Phone No.</th>
@@ -65,7 +62,6 @@
                                 @foreach (var item in Model.List)
                                 {
                                     <tr>
-                                        <td></td>
                                         <td>@item.DateUpdated.ToString("dd-MM-yyyy hh:mm tt")</td>
                                         <td>
                                             <a href="~/Cart/Edit?ordernumber=@item.OrderNumber&id=@item.Id">@item.OrderNumber</a>
@@ -158,7 +154,7 @@
 
             $("#Filter").click(function () {
                 var deliveryboyId = $("#DeliveryBoyId").val();
-                window.location.href = "/Cart/DeliveryBoy_ShopNowChatReport/?deliveryboyId=" + deliveryboyId;
+                window.location.href = "/Cart/DeliveryBoyCashHandoverReport/?deliveryboyId=" + deliveryboyId;
             });
 
             $('.btnPayNow').click(function () {
@@ -167,7 +163,6 @@
                 $.getJSON("/Cart/ShopNowChatPay/?ordernumber=" + ordernumber, function (data) {
                     if (data == true) {
                         window.location.reload();
-                        //thisRow.remove();
                         var count = $('#DeliveryBoy-list tr').length;
                         if (count == 1) {
                             $("#divDeliveryBoy").addClass("d-none");

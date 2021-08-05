@@ -2902,8 +2902,6 @@
     <Content Include="Views\Cart\Details.cshtml" />
     <Content Include="Views\Cart\Edit.cshtml" />
     <Content Include="Views\Cart\OntheWay.cshtml" />
-    <Content Include="Views\Cart\OntheWayReport.cshtml" />
-    <Content Include="Views\Cart\PendingReport.cshtml" />
     <Content Include="Scripts\umd\popper.js.flow" />
     <Content Include="Views\Bill\BillingCharge.cshtml" />
     <Content Include="Views\Bill\BillingChargeList.cshtml" />
@@ -2946,8 +2944,6 @@
     <Content Include="Views\Bill\DeliveryChargeAssignList.cshtml" />
     <Content Include="Views\Home\ErrorPage.cshtml" />
     <Content Include="Views\Cart\WaitingForPickup.cshtml" />
-    <Content Include="Views\Cart\DeliveryAgentAssignedReport.cshtml" />
-    <Content Include="Views\Cart\WaitingForPickupReport.cshtml" />
     <Content Include="Views\MasterProduct\ItemMappingUpdate.cshtml" />
     <Content Include="Views\MasterProduct\SingleItemMapping.cshtml" />
     <Content Include="Views\DeliveryBoy\TodayCreditAmount.cshtml" />
@@ -2960,15 +2956,11 @@
     <Content Include="Views\ShopDiscountCategory\Create.cshtml" />
     <Content Include="Views\ShopDiscountCategory\List.cshtml" />
     <Content Include="Views\ShopDiscountCategory\Edit.cshtml" />
-    <Content Include="Views\Cart\DeliveredAmountReport.cshtml" />
     <Content Include="Views\MasterProduct\GroceryEntry.cshtml" />
     <Content Include="Views\SubCategory\List.cshtml" />
     <Content Include="Views\NextSubCategory\List.cshtml" />
     <Content Include="Views\NextSubCategory\Edit.cshtml" />
     <Content Include="Views\SubCategory\Edit.cshtml" />
-    <Content Include="Views\Cart\DeliveryBoy_ShopNowChatReport.cshtml" />
-    <Content Include="Views\Cart\ShopNowChat_DeliveryBoyReport.cshtml" />
-    <Content Include="Views\Cart\ShopNowChat_ShopReport.cshtml" />
     <Content Include="Views\Support\LiveDeliveryboyAssignment.cshtml" />
     <Content Include="Views\Support\LivePending.cshtml" />
     <Content Include="Views\Package\Index.cshtml" />
@@ -3010,6 +3002,8 @@
     <Content Include="Views\OTP\Index.cshtml" />
     <Content Include="Views\Offer\Create.cshtml" />
     <Content Include="Views\Offer\List.cshtml" />
+    <Content Include="Views\Cart\DeliveryBoyCashHandoverReport.cshtml" />
+    <Content Include="Views\Cart\DeliveryBoyPaymentStatus.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
