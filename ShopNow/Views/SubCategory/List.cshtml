@@ -25,15 +25,10 @@
                columns.Add(s => s.Name).Titled("SubCategory Name").Filterable(true).SetWidth(30);
                columns.Add(s => s.ProductTypeName).Titled("Item Type").Filterable(true).SetWidth(15);
                columns.Add(s => s.Adscore).Titled("Adscore").Filterable(true).SetWidth(10);
-               //columns.Add()
-               //.Encoded(false)
-               //.Sanitized(false)
-               //.RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
-               //               + Html.ActionLink("Delete", "Delete", new { id = o.Id }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
                columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
              .RenderValueAs(o=> @<div><a href="~/SubCategory/Edit?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
                     <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a></div>);
-}).WithPaging(20).Sortable(true)
+                }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>

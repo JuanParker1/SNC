@@ -26,15 +26,14 @@
                columns.Add(b => b.UnitType).Titled("Type").Filterable(true).SetWidth(20);
                columns.Add(b => b.ConversionFormula).Titled("ConversionFormula").Filterable(true).SetWidth(20);
                columns.Add(b => b.ConversionUnit).Titled("Conversion Unit").Filterable(true).SetWidth(20);
-               columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(b => @<div>
-                            <a href="~/MeasurementUnit/Edit?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(b.Id)" class="btn btn-warning btn-sm">Edit</a>
-                            <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(b.Id)" class="btn btn-danger btn-sm btnDelete">Delete</a>
-                        </div>);
-                  }).WithPaging(20).Sortable(true)
-
+                columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
+             .RenderValueAs(o => @<div>
+                    <a href="~/MeasurementUnit/Edit?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
+                    <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+                </div>);
+}).WithPaging(20).Sortable(true)
                 </div>
             </div>
-
         </div>
     </div>
 </div>
