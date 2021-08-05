@@ -48,6 +48,16 @@ namespace ShopNow.Models
         public int DeliveryBoyPaymentStatus { get; set; }
         public int DeliveryOrderPaymentStatus { get; set; }
         public double RatePerOrder { get; set; }
+        public double PenaltyAmount { get; set; }
+        public string PenaltyRemark { get; set; }
+        public double WaitingCharge { get; set; }
+        public int WaitingTime { get; set; }
+        public string WaitingRemark { get; set; }
+        public Nullable<System.DateTime> OrderReadyTime { get; set; }
+        public Nullable<System.DateTime> DeliveryBoyShopReachTime { get; set; }
+        public Nullable<System.DateTime> OrderPickupTime { get; set; }
+        public System.DateTime DeliveryLocationReachTime { get; set; }
+        public Nullable<System.DateTime> DeliveredTime { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }

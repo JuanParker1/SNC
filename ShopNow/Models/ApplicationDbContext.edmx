@@ -113,7 +113,7 @@
           <Property Name="ImageAuthoriseBrandPath" Type="nvarchar(max)" />
           <Property Name="AuthorisedDistributorNumber" Type="nvarchar(max)" />
           <Property Name="AuthorisedBrandName" Type="nvarchar(max)" />
-          <Property Name="AuthorisedBrandCode" Type="nvarchar(max)" />
+          <Property Name="AuthorisedBrandId" Type="int" Nullable="false" />
           <Property Name="AuthorisedDistributorStatus" Type="nvarchar(max)" />
           <Property Name="BankName" Type="nvarchar(max)" />
           <Property Name="AccountName" Type="nvarchar(max)" />
@@ -225,6 +225,9 @@
           <Property Name="DOB" Type="datetime" />
           <Property Name="FcmTocken" Type="nvarchar" MaxLength="250" />
           <Property Name="IpAddress" Type="nvarchar" MaxLength="100" />
+          <Property Name="WalletAmount" Type="float" Nullable="false" />
+          <Property Name="PenaltyAmount" Type="float" Nullable="false" />
+          <Property Name="DeliveryWaitingCharge" Type="float" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="UpdatedBy" Type="nvarchar(max)" />
           <Property Name="CreatedBy" Type="nvarchar(max)" />
@@ -449,6 +452,34 @@
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="Offers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" />
+          <Property Name="OwnerType" Type="int" Nullable="false" />
+          <Property Name="DiscountType" Type="int" Nullable="false" />
+          <Property Name="Type" Type="int" Nullable="false" />
+          <Property Name="Percentage" Type="float" Nullable="false" />
+          <Property Name="QuantityLimit" Type="int" Nullable="false" />
+          <Property Name="AmountLimit" Type="int" Nullable="false" />
+          <Property Name="CustomerCountLimit" Type="int" Nullable="false" />
+          <Property Name="IsForFirstOrder" Type="bit" Nullable="false" />
+          <Property Name="IsForOnlinePayment" Type="bit" Nullable="false" />
+          <Property Name="IsForBlackListAbusers" Type="bit" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DateEncoded" Type="date" />
+          <Property Name="DateUpdated" Type="date" />
+        </EntityType>
+        <EntityType Name="OfferShops">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="OfferId" Type="int" Nullable="false" />
+          <Property Name="ShopId" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="OrderItems">
           <Key>
             <PropertyRef Name="Id" />
@@ -500,6 +531,16 @@
           <Property Name="DeliveryBoyPaymentStatus" Type="int" Nullable="false" />
           <Property Name="DeliveryOrderPaymentStatus" Type="int" Nullable="false" />
           <Property Name="RatePerOrder" Type="float" Nullable="false" />
+          <Property Name="PenaltyAmount" Type="float" Nullable="false" />
+          <Property Name="PenaltyRemark" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="WaitingCharge" Type="float" Nullable="false" />
+          <Property Name="WaitingTime" Type="int" Nullable="false" />
+          <Property Name="WaitingRemark" Type="nvarchar(max)" />
+          <Property Name="OrderReadyTime" Type="datetime" />
+          <Property Name="DeliveryBoyShopReachTime" Type="datetime" />
+          <Property Name="OrderPickupTime" Type="datetime" />
+          <Property Name="DeliveryLocationReachTime" Type="datetime" Nullable="false" />
+          <Property Name="DeliveredTime" Type="datetime" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
@@ -675,7 +716,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="bigint" Nullable="false" />
           <Property Name="Name" Type="nvarchar(max)" />
           <Property Name="MasterProductId" Type="bigint" Nullable="false" />
           <Property Name="ShopId" Type="int" Nullable="false" />
@@ -711,6 +752,8 @@
           <Property Name="ItemTimeStamp" Type="nvarchar" MaxLength="100" />
           <Property Name="LoyaltyPoints" Type="float" Nullable="false" />
           <Property Name="PackingCharge" Type="float" Nullable="false" />
+          <Property Name="BrandOwnerMiddlePercentage" Type="int" />
+          <Property Name="ShopownnerPrice" Type="float" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
@@ -858,7 +901,7 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="Name" Type="nvarchar(max)" />
           <Property Name="PhoneNumber" Type="nvarchar(max)" />
           <Property Name="ImagePath" Type="nvarchar(max)" />
@@ -1160,19 +1203,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Products_Shops">
-          <End Role="Shops" Type="Self.Shops" Multiplicity="1" />
-          <End Role="Products" Type="Self.Products" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Shops">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Products">
-              <PropertyRef Name="ShopId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ShopDishAddOns_MasterProducts">
+        <Association Name="FK_ShopDishAddOns_Products">
           <End Role="MasterProducts" Type="Self.MasterProducts" Multiplicity="1" />
           <End Role="ShopDishAddOns" Type="Self.ShopDishAddOns" Multiplicity="*" />
           <ReferentialConstraint>
@@ -1181,18 +1212,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </Principal>
             <Dependent Role="ShopDishAddOns">
               <PropertyRef Name="MasterProductId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ShopDishAddOns_Products">
-          <End Role="Products" Type="Self.Products" Multiplicity="1" />
-          <End Role="ShopDishAddOns" Type="Self.ShopDishAddOns" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Products">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ShopDishAddOns">
-              <PropertyRef Name="ProductId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1205,30 +1224,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </Principal>
             <Dependent Role="ShopDishAddOns">
               <PropertyRef Name="ShopId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Shops_Customers">
-          <End Role="Customers" Type="Self.Customers" Multiplicity="1" />
-          <End Role="Shops" Type="Self.Shops" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Customers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Shops">
-              <PropertyRef Name="CustomerId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Shops_ShopCategories">
-          <End Role="ShopCategories" Type="Self.ShopCategories" Multiplicity="1" />
-          <End Role="Shops" Type="Self.Shops" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ShopCategories">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Shops">
-              <PropertyRef Name="ShopCategoryId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1266,6 +1261,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Parameter Name="page" Type="int" Mode="In" />
           <Parameter Name="pageSize" Type="int" Mode="In" />
         </Function>
+        <Function Name="GetCustomerCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="GetDEliveryBoyList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="GetKeyname" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="nvarchar">
           <Parameter Name="key" Type="nvarchar" Mode="In" />
@@ -1369,6 +1365,8 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <EntitySet Name="MasterProducts" EntityType="Self.MasterProducts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MeasurementUnits" EntityType="Self.MeasurementUnits" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NextSubCategories" EntityType="Self.NextSubCategories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Offers" EntityType="Self.Offers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OfferShops" EntityType="Self.OfferShops" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderItems" EntityType="Self.OrderItems" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OtpVerifications" EntityType="Self.OtpVerifications" Schema="dbo" store:Type="Tables" />
@@ -1446,29 +1444,13 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             <End Role="ProductType" EntitySet="ProductType" />
             <End Role="Products" EntitySet="Products" />
           </AssociationSet>
-          <AssociationSet Name="FK_Products_Shops" Association="Self.FK_Products_Shops">
-            <End Role="Shops" EntitySet="Shops" />
-            <End Role="Products" EntitySet="Products" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ShopDishAddOns_MasterProducts" Association="Self.FK_ShopDishAddOns_MasterProducts">
-            <End Role="MasterProducts" EntitySet="MasterProducts" />
-            <End Role="ShopDishAddOns" EntitySet="ShopDishAddOns" />
-          </AssociationSet>
           <AssociationSet Name="FK_ShopDishAddOns_Products" Association="Self.FK_ShopDishAddOns_Products">
-            <End Role="Products" EntitySet="Products" />
+            <End Role="MasterProducts" EntitySet="MasterProducts" />
             <End Role="ShopDishAddOns" EntitySet="ShopDishAddOns" />
           </AssociationSet>
           <AssociationSet Name="FK_ShopDishAddOns_Shops" Association="Self.FK_ShopDishAddOns_Shops">
             <End Role="Shops" EntitySet="Shops" />
             <End Role="ShopDishAddOns" EntitySet="ShopDishAddOns" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Shops_Customers" Association="Self.FK_Shops_Customers">
-            <End Role="Customers" EntitySet="Customers" />
-            <End Role="Shops" EntitySet="Shops" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Shops_ShopCategories" Association="Self.FK_Shops_ShopCategories">
-            <End Role="ShopCategories" EntitySet="ShopCategories" />
-            <End Role="Shops" EntitySet="Shops" />
           </AssociationSet>
           <AssociationSet Name="FK_SubCategories_Categories" Association="Self.FK_SubCategories_Categories">
             <End Role="Categories" EntitySet="Categories" />
@@ -1596,7 +1578,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="ImageAuthoriseBrandPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="AuthorisedDistributorNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="AuthorisedBrandName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="AuthorisedBrandCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AuthorisedBrandId" Type="Int32" Nullable="false" />
           <Property Name="AuthorisedDistributorStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="BankName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="AccountName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -1712,6 +1694,9 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="DOB" Type="DateTime" Precision="3" />
           <Property Name="FcmTocken" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="IpAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="WalletAmount" Type="Double" Nullable="false" />
+          <Property Name="PenaltyAmount" Type="Double" Nullable="false" />
+          <Property Name="DeliveryWaitingCharge" Type="Double" Nullable="false" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -1721,7 +1706,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <NavigationProperty Name="CustomerReviews" Relationship="Self.FK_CustomerReview_Customers" FromRole="Customers" ToRole="CustomerReview" />
           <NavigationProperty Name="DeliveryBoys" Relationship="Self.FK_DeliveryBoys_Customers" FromRole="Customers" ToRole="DeliveryBoys" />
           <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Customers" FromRole="Customers" ToRole="Orders" />
-          <NavigationProperty Name="Shops" Relationship="Self.FK_Shops_Customers" FromRole="Customers" ToRole="Shops" />
         </EntityType>
         <EntityType Name="DeliveryBoy">
           <Key>
@@ -1911,7 +1895,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="ProductDishAddOns" Relationship="Self.FK_ProductDishAddOns_MasterProducts" FromRole="MasterProducts" ToRole="ProductDishAddOns" />
-          <NavigationProperty Name="ShopDishAddOns" Relationship="Self.FK_ShopDishAddOns_MasterProducts" FromRole="MasterProducts" ToRole="ShopDishAddOns" />
+          <NavigationProperty Name="ShopDishAddOns" Relationship="Self.FK_ShopDishAddOns_Products" FromRole="MasterProducts" ToRole="ShopDishAddOns" />
         </EntityType>
         <EntityType Name="MeasurementUnit">
           <Key>
@@ -1947,6 +1931,34 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="ProductType" Relationship="Self.FK_NextSubCategories_ProductType" FromRole="NextSubCategories" ToRole="ProductType" />
           <NavigationProperty Name="SubCategory" Relationship="Self.FK_NextSubCategories_SubCategories" FromRole="NextSubCategories" ToRole="SubCategories" />
+        </EntityType>
+        <EntityType Name="Offer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="OwnerType" Type="Int32" Nullable="false" />
+          <Property Name="DiscountType" Type="Int32" Nullable="false" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="Percentage" Type="Double" Nullable="false" />
+          <Property Name="QuantityLimit" Type="Int32" Nullable="false" />
+          <Property Name="AmountLimit" Type="Int32" Nullable="false" />
+          <Property Name="CustomerCountLimit" Type="Int32" Nullable="false" />
+          <Property Name="IsForFirstOrder" Type="Boolean" Nullable="false" />
+          <Property Name="IsForOnlinePayment" Type="Boolean" Nullable="false" />
+          <Property Name="IsForBlackListAbusers" Type="Boolean" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Precision="0" />
+          <Property Name="DateUpdated" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityType Name="OfferShop">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="OfferId" Type="Int32" Nullable="false" />
+          <Property Name="ShopId" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="OrderItem">
           <Key>
@@ -2000,6 +2012,16 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="DeliveryBoyPaymentStatus" Type="Int32" Nullable="false" />
           <Property Name="DeliveryOrderPaymentStatus" Type="Int32" Nullable="false" />
           <Property Name="RatePerOrder" Type="Double" Nullable="false" />
+          <Property Name="PenaltyAmount" Type="Double" Nullable="false" />
+          <Property Name="PenaltyRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="WaitingCharge" Type="Double" Nullable="false" />
+          <Property Name="WaitingTime" Type="Int32" Nullable="false" />
+          <Property Name="WaitingRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OrderReadyTime" Type="DateTime" Precision="3" />
+          <Property Name="DeliveryBoyShopReachTime" Type="DateTime" Precision="3" />
+          <Property Name="OrderPickupTime" Type="DateTime" Precision="3" />
+          <Property Name="DeliveryLocationReachTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DeliveredTime" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
@@ -2180,7 +2202,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="Int64" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="MasterProductId" Type="Int64" Nullable="false" />
           <Property Name="ShopId" Type="Int32" Nullable="false" />
@@ -2216,14 +2238,14 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="ItemTimeStamp" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="LoyaltyPoints" Type="Double" Nullable="false" />
           <Property Name="PackingCharge" Type="Double" Nullable="false" />
+          <Property Name="BrandOwnerMiddlePercentage" Type="Int32" />
+          <Property Name="ShopownnerPrice" Type="Double" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="ProductType" Relationship="Self.FK_Products_ProductType" FromRole="Products" ToRole="ProductType" />
-          <NavigationProperty Name="Shop" Relationship="Self.FK_Products_Shops" FromRole="Products" ToRole="Shops" />
-          <NavigationProperty Name="ShopDishAddOns" Relationship="Self.FK_ShopDishAddOns_Products" FromRole="Products" ToRole="ShopDishAddOns" />
         </EntityType>
         <EntityType Name="ProductSpecificationItem">
           <Key>
@@ -2295,7 +2317,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Shops" Relationship="Self.FK_Shops_ShopCategories" FromRole="ShopCategories" ToRole="Shops" />
         </EntityType>
         <EntityType Name="ShopCredit">
           <Key>
@@ -2337,8 +2358,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="ShopName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="ProductDishAddonId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="MasterProduct" Relationship="Self.FK_ShopDishAddOns_MasterProducts" FromRole="ShopDishAddOns" ToRole="MasterProducts" />
-          <NavigationProperty Name="Product" Relationship="Self.FK_ShopDishAddOns_Products" FromRole="ShopDishAddOns" ToRole="Products" />
+          <NavigationProperty Name="MasterProduct" Relationship="Self.FK_ShopDishAddOns_Products" FromRole="ShopDishAddOns" ToRole="MasterProducts" />
           <NavigationProperty Name="Shop" Relationship="Self.FK_ShopDishAddOns_Shops" FromRole="ShopDishAddOns" ToRole="Shops" />
         </EntityType>
         <EntityType Name="ShopMember">
@@ -2367,7 +2387,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -2439,10 +2459,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="CustomerReviews" Relationship="Self.FK_CustomerReview_Shops" FromRole="Shops" ToRole="CustomerReview" />
-          <NavigationProperty Name="Customer" Relationship="Self.FK_Shops_Customers" FromRole="Shops" ToRole="Customers" />
           <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Shops" FromRole="Shops" ToRole="Orders" />
-          <NavigationProperty Name="Products" Relationship="Self.FK_Products_Shops" FromRole="Shops" ToRole="Products" />
-          <NavigationProperty Name="ShopCategory" Relationship="Self.FK_Shops_ShopCategories" FromRole="Shops" ToRole="ShopCategories" />
           <NavigationProperty Name="ShopDishAddOns" Relationship="Self.FK_ShopDishAddOns_Shops" FromRole="Shops" ToRole="ShopDishAddOns" />
         </EntityType>
         <EntityType Name="Specification">
@@ -2600,18 +2617,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Shops_Customers">
-          <End Role="Customers" Type="Self.Customer" Multiplicity="1" />
-          <End Role="Shops" Type="Self.Shop" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Customers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Shops">
-              <PropertyRef Name="CustomerId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_DeliveryBoyShops_DeliveryBoyShops">
           <End Role="DeliveryBoyShops" Type="Self.DeliveryBoyShop" Multiplicity="1" />
           <End Role="DeliveryBoyShops1" Type="Self.DeliveryBoyShop" Multiplicity="0..1" />
@@ -2636,7 +2641,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ShopDishAddOns_MasterProducts">
+        <Association Name="FK_ShopDishAddOns_Products">
           <End Role="MasterProducts" Type="Self.MasterProduct" Multiplicity="1" />
           <End Role="ShopDishAddOns" Type="Self.ShopDishAddOn" Multiplicity="*" />
           <ReferentialConstraint>
@@ -2708,30 +2713,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Products_Shops">
-          <End Role="Shops" Type="Self.Shop" Multiplicity="1" />
-          <End Role="Products" Type="Self.Product" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Shops">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Products">
-              <PropertyRef Name="ShopId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ShopDishAddOns_Products">
-          <End Role="Products" Type="Self.Product" Multiplicity="1" />
-          <End Role="ShopDishAddOns" Type="Self.ShopDishAddOn" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Products">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="ShopDishAddOns">
-              <PropertyRef Name="ProductId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_SubCategories_ProductType">
           <End Role="ProductType" Type="Self.ProductType" Multiplicity="1" />
           <End Role="SubCategories" Type="Self.SubCategory" Multiplicity="*" />
@@ -2741,18 +2722,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             </Principal>
             <Dependent Role="SubCategories">
               <PropertyRef Name="ProductTypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Shops_ShopCategories">
-          <End Role="ShopCategories" Type="Self.ShopCategory" Multiplicity="1" />
-          <End Role="Shops" Type="Self.Shop" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ShopCategories">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Shops">
-              <PropertyRef Name="ShopCategoryId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2788,6 +2757,8 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <EntitySet Name="MasterProducts" EntityType="Self.MasterProduct" />
           <EntitySet Name="MeasurementUnits" EntityType="Self.MeasurementUnit" />
           <EntitySet Name="NextSubCategories" EntityType="Self.NextSubCategory" />
+          <EntitySet Name="Offers" EntityType="Self.Offer" />
+          <EntitySet Name="OfferShops" EntityType="Self.OfferShop" />
           <EntitySet Name="OrderItems" EntityType="Self.OrderItem" />
           <EntitySet Name="Orders" EntityType="Self.Order" />
           <EntitySet Name="OtpVerifications" EntityType="Self.OtpVerification" />
@@ -2841,10 +2812,6 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             <End Role="Customers" EntitySet="Customers" />
             <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="FK_Shops_Customers" Association="Self.FK_Shops_Customers">
-            <End Role="Customers" EntitySet="Customers" />
-            <End Role="Shops" EntitySet="Shops" />
-          </AssociationSet>
           <AssociationSet Name="FK_DeliveryBoyShops_DeliveryBoyShops" Association="Self.FK_DeliveryBoyShops_DeliveryBoyShops">
             <End Role="DeliveryBoyShops" EntitySet="DeliveryBoyShops" />
             <End Role="DeliveryBoyShops1" EntitySet="DeliveryBoyShops" />
@@ -2853,7 +2820,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             <End Role="MasterProducts" EntitySet="MasterProducts" />
             <End Role="ProductDishAddOns" EntitySet="ProductDishAddOns" />
           </AssociationSet>
-          <AssociationSet Name="FK_ShopDishAddOns_MasterProducts" Association="Self.FK_ShopDishAddOns_MasterProducts">
+          <AssociationSet Name="FK_ShopDishAddOns_Products" Association="Self.FK_ShopDishAddOns_Products">
             <End Role="MasterProducts" EntitySet="MasterProducts" />
             <End Role="ShopDishAddOns" EntitySet="ShopDishAddOns" />
           </AssociationSet>
@@ -2877,21 +2844,9 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             <End Role="ProductType" EntitySet="ProductTypes" />
             <End Role="Products" EntitySet="Products" />
           </AssociationSet>
-          <AssociationSet Name="FK_Products_Shops" Association="Self.FK_Products_Shops">
-            <End Role="Shops" EntitySet="Shops" />
-            <End Role="Products" EntitySet="Products" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ShopDishAddOns_Products" Association="Self.FK_ShopDishAddOns_Products">
-            <End Role="Products" EntitySet="Products" />
-            <End Role="ShopDishAddOns" EntitySet="ShopDishAddOns" />
-          </AssociationSet>
           <AssociationSet Name="FK_SubCategories_ProductType" Association="Self.FK_SubCategories_ProductType">
             <End Role="ProductType" EntitySet="ProductTypes" />
             <End Role="SubCategories" EntitySet="SubCategories" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Shops_ShopCategories" Association="Self.FK_Shops_ShopCategories">
-            <End Role="ShopCategories" EntitySet="ShopCategories" />
-            <End Role="Shops" EntitySet="Shops" />
           </AssociationSet>
           <AssociationSet Name="FK_ShopDishAddOns_Shops" Association="Self.FK_ShopDishAddOns_Shops">
             <End Role="Shops" EntitySet="Shops" />
@@ -2910,6 +2865,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
             <Parameter Name="page" Mode="In" Type="Int32" />
             <Parameter Name="pageSize" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="GetCustomerCount" ReturnType="Collection(Int32)" />
           <FunctionImport Name="GetDEliveryBoyList" ReturnType="Collection(sncModel.GetDEliveryBoyList_Result)" />
           <FunctionImport Name="GetProductList">
             <Parameter Name="Longitude" Mode="In" Type="Double" />
@@ -3152,7 +3108,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
                 <ScalarProperty Name="ImageAuthoriseBrandPath" ColumnName="ImageAuthoriseBrandPath" />
                 <ScalarProperty Name="AuthorisedDistributorNumber" ColumnName="AuthorisedDistributorNumber" />
                 <ScalarProperty Name="AuthorisedBrandName" ColumnName="AuthorisedBrandName" />
-                <ScalarProperty Name="AuthorisedBrandCode" ColumnName="AuthorisedBrandCode" />
+                <ScalarProperty Name="AuthorisedBrandId" ColumnName="AuthorisedBrandId" />
                 <ScalarProperty Name="AuthorisedDistributorStatus" ColumnName="AuthorisedDistributorStatus" />
                 <ScalarProperty Name="BankName" ColumnName="BankName" />
                 <ScalarProperty Name="AccountName" ColumnName="AccountName" />
@@ -3269,6 +3225,9 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
                 <ScalarProperty Name="DOB" ColumnName="DOB" />
                 <ScalarProperty Name="FcmTocken" ColumnName="FcmTocken" />
                 <ScalarProperty Name="IpAddress" ColumnName="IpAddress" />
+                <ScalarProperty Name="WalletAmount" ColumnName="WalletAmount" />
+                <ScalarProperty Name="PenaltyAmount" ColumnName="PenaltyAmount" />
+                <ScalarProperty Name="DeliveryWaitingCharge" ColumnName="DeliveryWaitingCharge" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
@@ -3504,6 +3463,36 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Offers">
+            <EntityTypeMapping TypeName="sncModel.Offer">
+              <MappingFragment StoreEntitySet="Offers">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="OwnerType" ColumnName="OwnerType" />
+                <ScalarProperty Name="DiscountType" ColumnName="DiscountType" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Percentage" ColumnName="Percentage" />
+                <ScalarProperty Name="QuantityLimit" ColumnName="QuantityLimit" />
+                <ScalarProperty Name="AmountLimit" ColumnName="AmountLimit" />
+                <ScalarProperty Name="CustomerCountLimit" ColumnName="CustomerCountLimit" />
+                <ScalarProperty Name="IsForFirstOrder" ColumnName="IsForFirstOrder" />
+                <ScalarProperty Name="IsForOnlinePayment" ColumnName="IsForOnlinePayment" />
+                <ScalarProperty Name="IsForBlackListAbusers" ColumnName="IsForBlackListAbusers" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OfferShops">
+            <EntityTypeMapping TypeName="sncModel.OfferShop">
+              <MappingFragment StoreEntitySet="OfferShops">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="OfferId" ColumnName="OfferId" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="OrderItems">
             <EntityTypeMapping TypeName="sncModel.OrderItem">
               <MappingFragment StoreEntitySet="OrderItems">
@@ -3555,6 +3544,16 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
                 <ScalarProperty Name="DeliveryBoyPaymentStatus" ColumnName="DeliveryBoyPaymentStatus" />
                 <ScalarProperty Name="DeliveryOrderPaymentStatus" ColumnName="DeliveryOrderPaymentStatus" />
                 <ScalarProperty Name="RatePerOrder" ColumnName="RatePerOrder" />
+                <ScalarProperty Name="PenaltyAmount" ColumnName="PenaltyAmount" />
+                <ScalarProperty Name="PenaltyRemark" ColumnName="PenaltyRemark" />
+                <ScalarProperty Name="WaitingCharge" ColumnName="WaitingCharge" />
+                <ScalarProperty Name="WaitingTime" ColumnName="WaitingTime" />
+                <ScalarProperty Name="WaitingRemark" ColumnName="WaitingRemark" />
+                <ScalarProperty Name="OrderReadyTime" ColumnName="OrderReadyTime" />
+                <ScalarProperty Name="DeliveryBoyShopReachTime" ColumnName="DeliveryBoyShopReachTime" />
+                <ScalarProperty Name="OrderPickupTime" ColumnName="OrderPickupTime" />
+                <ScalarProperty Name="DeliveryLocationReachTime" ColumnName="DeliveryLocationReachTime" />
+                <ScalarProperty Name="DeliveredTime" ColumnName="DeliveredTime" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
                 <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
@@ -3776,6 +3775,8 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
                 <ScalarProperty Name="ItemTimeStamp" ColumnName="ItemTimeStamp" />
                 <ScalarProperty Name="LoyaltyPoints" ColumnName="LoyaltyPoints" />
                 <ScalarProperty Name="PackingCharge" ColumnName="PackingCharge" />
+                <ScalarProperty Name="BrandOwnerMiddlePercentage" ColumnName="BrandOwnerMiddlePercentage" />
+                <ScalarProperty Name="ShopownnerPrice" ColumnName="ShopownnerPrice" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
                 <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
@@ -4081,6 +4082,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="getCategoryListbyShopcode" FunctionName="sncModel.Store.getCategoryListbyShopcode" />
           <FunctionImportMapping FunctionImportName="GetCategoryProductsList" FunctionName="sncModel.Store.GetCategoryProductsList" />
+          <FunctionImportMapping FunctionImportName="GetCustomerCount" FunctionName="sncModel.Store.GetCustomerCount" />
           <FunctionImportMapping FunctionImportName="GetDEliveryBoyList" FunctionName="sncModel.Store.GetDEliveryBoyList">
             <ResultMapping>
               <ComplexTypeMapping TypeName="sncModel.GetDEliveryBoyList_Result">

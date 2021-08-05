@@ -12,14 +12,22 @@ namespace ShopNow.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ShopCategory
+    public partial class Offer
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public int OwnerType { get; set; }
+        public int DiscountType { get; set; }
+        public int Type { get; set; }
+        public double Percentage { get; set; }
+        public int QuantityLimit { get; set; }
+        public int AmountLimit { get; set; }
+        public int CustomerCountLimit { get; set; }
+        public bool IsForFirstOrder { get; set; }
+        public bool IsForOnlinePayment { get; set; }
+        public bool IsForBlackListAbusers { get; set; }
         public int Status { get; set; }
-        public System.DateTime DateEncoded { get; set; }
-        public System.DateTime DateUpdated { get; set; }
-        public string CreatedBy { get; set; }
-        public string UpdatedBy { get; set; }
+        public Nullable<System.DateTime> DateEncoded { get; set; }
+        public Nullable<System.DateTime> DateUpdated { get; set; }
     }
 }

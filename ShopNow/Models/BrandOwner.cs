@@ -35,7 +35,7 @@ namespace ShopNow.Models
         public string ImageAuthoriseBrandPath { get; set; }
         public string AuthorisedDistributorNumber { get; set; }
         public string AuthorisedBrandName { get; set; }
-        public string AuthorisedBrandCode { get; set; }
+        public int AuthorisedBrandId { get; set; }
         public string AuthorisedDistributorStatus { get; set; }
         public string BankName { get; set; }
         public string AccountName { get; set; }
