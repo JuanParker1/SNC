@@ -71,12 +71,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNMPKE003")]
-        public JsonResult Edit(int code, string name)
+        public JsonResult Edit(int id, string name)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             string message = "";
-            Package medicalPackage = db.Packages.FirstOrDefault(i => i.Id == code && i.Status == 0);// Package.Get(code);
-            if (medicalPackage != null)
+            Package medicalPackage = db.Packages.FirstOrDefault(i => i.Id == id && i.Status == 0);
             {
                 medicalPackage.Name = name;
                 medicalPackage.DateUpdated = DateTime.Now;
@@ -90,10 +89,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNMPKD004")]
-        public JsonResult Delete(int code)
+        public JsonResult Delete(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var medicalPackage = db.Packages.FirstOrDefault(i => i.Id == code && i.Status == 0);// Package.Get(code);
+            var medicalPackage = db.Packages.FirstOrDefault(i => i.Id == id && i.Status == 0);
             if (medicalPackage != null)
             {
                 medicalPackage.Status = 2;

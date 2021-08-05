@@ -3,56 +3,35 @@
 @{
     ViewBag.Title = "Package";
 }
+
 <title>ShopNow | Package List</title>
+
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 
-    <div class="container-fluid mb-5">
-        <div class="row">
-            <div class="col-md-6">
-                <h5 class="text-success" style="letter-spacing:1px">Package List</h5>
-            </div>
-            
-            <div class="col-md-6 text-right">
-                <a data-toggle="modal" data-target="#createModal" href="createModal"><span class="fa fa-plus"></span> New Package</a>
-            </div>
+<div class="container-fluid mb-5">
+    <div class="row">
+        <div class="col-md-6">
+            <h5 class="text-success" style="letter-spacing:1px">Package List</h5>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card shadow mt-3">
-                    <div class="card-body">
-                        @Html.Grid(Model).Columns(columns =>
-                   {
-                   columns.Add(b => b.Name).Titled("Package Name").Filterable(true).SetWidth(20);   
-                   columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(b => @<div>
-    <a href="javascript:void(0)" data-id="@b.Id" data-id1="@b.Name" data-id2="@b.Type" class="btn-sm btn-warning edit-prompt" id="edit-prompt" data-toggle="modal" data-target="#editModal" style="padding: 3px 26px">Edit</a>
-    <a href="javascript:void(0)" data-id="@b.Id" data-id1="@b.Name" class="btn-sm btn-danger delete-prompt" data-toggle="modal" data-target="#deleteModel" style="padding: 3px 18px">Delete</a>
-</div>);
-                 }).WithPaging(20).Sortable(true)
-
-                    </div>
-                </div>
-            </div>
+        <div class="col-md-6 text-right">
+            <a data-toggle="modal" data-target="#createModal" href="createModal"><span class="fa fa-plus"></span> New Package</a>
         </div>
     </div>
-
-
-<div class="modal fade" id="deleteModel" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header alert alert-danger">
-                <h4 class="modal-title" id="myModalLabel">Warning</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p class="success-message">Are you sure want to delete this record? </p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-success delete-confirm">Yes</button>
-                <button class="btn btn-danger" data-dismiss="modal">No</button>
-                <input type="hidden" name="Code" id="Code" data-dismiss="modal" />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow mt-3">
+                <div class="card-body">
+                    @Html.Grid(Model).Columns(columns =>
+               {
+               columns.Add(b => b.Name).Titled("Package Name").Filterable(true).SetWidth(20);
+                columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
+         .RenderValueAs(o => @<div>
+                <a href="#editModal" data-id=@o.Id data-name="@o.Name" class="text-info edit-prompt mr-5" data-target="#editModal" data-toggle="modal" ><i class="fa fa-edit fa-lg"></i></a>
+                <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+            </div>);
+    }).WithPaging(20).Sortable(true)
+                </div>
             </div>
         </div>
     </div>
@@ -69,8 +48,8 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                        <label class="col-form-label font-weight-bold text-secondary">Package Name</label>
-                        <input type="text" name="Name" id="Name" class="form-control" />
+                    <label class="col-form-label font-weight-bold text-secondary">Package Name</label>
+                    <input type="text" name="Name" id="Name" class="form-control" />
                 </div>
             </div>
             <div class="modal-footer">
@@ -84,7 +63,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header alert alert-info">
-                <input type="hidden" name="PackageCode" id="PackageCode" />
+                <input type="hidden" name="PackageId" id="PackageId" />
                 <h5 class="modal-title" id="editModalLabel">Update Package Name</h5>
                 <button type="button" class="btnClose close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -92,14 +71,13 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                        <label class="col-form-label font-weight-bold text-secondary">Package Name</label>
-                        <div id="PackageName"></div>
+                    <label class="col-form-label font-weight-bold text-secondary">Package Name</label>
+                    <div id="PackageName"></div>
                 </div>
             </div>
             <div class="modal-footer">
                 <input type="button" id="Edit" name="Edit" value="Update" class="btn btn-success float-right Edit" />
             </div>
-
         </div>
     </div>
 </div>
@@ -111,7 +89,7 @@
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
-           
+
             $('#Create').on('click', function () {
                 var name = $('#Name').val();
                 var isValidate = false;
@@ -140,20 +118,20 @@
             });
 
             $(".edit-prompt").click(function () {
-                var code = $(this).attr('data-id');
-                var name = $(this).attr('data-id1');
-                $("#PackageCode").val(code);
+                var id = $(this).attr('data-id');
+                var name = $(this).attr('data-name');
+                $("#PackageId").val(id);
                 $("#PackageName").append("<input type=text name=PName id=PName class=form-control value='" + name + "' />");
             });
 
             $(".Edit").click(function () {
-                var Code = $("#PackageCode").val();
+                var Id = $("#PackageId").val();
                 var packageName = $("#PName").val();
                 if (packageName == "" || packageName == null) {
                     swal("Name is Empty.", "Please Enter a Package Name", "warning");
                 }
                 else if (packageName != "" || packageName != null) {
-                    $.getJSON("/Package/Edit", { code: Code, name: packageName }, function (data) {
+                    $.getJSON("/Package/Edit", { id: Id, name: packageName }, function (data) {
                         if (data.message != null || data.message != "") {
                             swal({
                                 title: data.message,
@@ -166,22 +144,32 @@
                     });
                 }
             });
-            
 
-            $(".delete-prompt").click(function () {
-                var code = $(this).attr('data-id');
-                $("#Code").val(code);
+            $(".btnDelete").click(function () {
+                var id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/MeasurementUnit/Delete", { id: id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
             });
-
-            $(".delete-confirm").click(function () {
-                var code = $("#Code").val();
-                $.getJSON("/Package/Delete", { code: code }, function (data) {
-                    window.location.reload();
-                });
-            });
-
         });
-
     </script>
 }
 

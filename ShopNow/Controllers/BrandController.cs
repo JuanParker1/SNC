@@ -89,11 +89,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNBRAR005")]
-        public JsonResult Delete(String id)
+        public JsonResult Delete(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var dId = AdminHelpers.DCodeInt(id);
-            var brand = db.Brands.Where(b => b.Id == dId).FirstOrDefault(); 
+            var brand = db.Brands.Where(b => b.Id == Id).FirstOrDefault(); 
             if (brand != null)
             {
                 brand.Status = 2;

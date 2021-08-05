@@ -20,37 +20,13 @@
             <div class="card shadow mt-3">
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
-        {
-        columns.Add(b => b.Name).Titled("Name").Filterable(true).SetWidth(20);
-        columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20)
-            .RenderValueAs(b => @<div>
-                    <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(b.Id)" data-name="@b.Name" class="btn-sm btn-warning edit-prompt" data-toggle="modal" data-target="#editModal" style="padding: 3px 26px">Edit</a>
-                    <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(b.Id)" class="btn-sm btn-danger delete-prompt" data-toggle="modal" data-target="#deleteModal" style="padding: 3px 18px">Delete</a>
-                </div>);
-         }).WithPaging(20).Sortable(true)
+                   {
+                       columns.Add(b => b.Name).Titled("Name").Filterable(true).SetWidth(20); columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
+                       .RenderValueAs(o => @<div>
+                    <a href="editModal" class="text-info edit-prompt mr-5" data-id=@o.Id data-name="@o.Name" data-target="#editModal" data-toggle="modal"><i class="fa fa-edit fa-lg"></i></a>
+                    <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a> </div>);
+                   }).WithPaging(20).Sortable(true)
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="modal fade" id="deleteModal" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header alert alert-danger">
-                <h4 class="modal-title" id="myModalLabel">Warning</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p class="success-message">Are you sure want to delete this record? </p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-success delete-confirm">Yes</button>
-                <button class="btn btn-danger" data-dismiss="modal">No</button>
-                <input type="hidden" name="Id" id="Id" data-dismiss="modal" />
             </div>
         </div>
     </div>
@@ -67,8 +43,8 @@
             </div>
             <div class="modal-body">
                 <div class="form-group row">
-                    <div class="col-md-6">
-                        <label class="col-form-label">Brand Name</label>
+                    <div class="col-md-12">
+                        <label class="col-form-label font-weight-bold text-secondary">Brand Name</label>
                         <input type="text" name="Name" id="Name" class="form-control" />
                     </div>
                 </div>
@@ -84,7 +60,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header alert alert-info">
-                <input type="hidden" name="BrandId" id="BrandId" class="form-control" />
+                <input type="hidden" name="BrandId" id="BrandId" />
                 <h5 class="modal-title" id="editModalLabel">Update Brand</h5>
                 <button type="button" class="btnClose close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -92,13 +68,12 @@
             </div>
             <div class="modal-body">
                 <div class="form-group row">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <label class="col-form-label font-weight-bold text-secondary">Brand Name</label>
                         <input type="text" name="Name" id="edit-Name" class="form-control" />
                     </div>
                 </div>
             </div>
-
             <div class="modal-footer">
                 <input type="button" id="Edit" name="Edit" value="Save" class="btn btn-success float-right Edit" />
             </div>
@@ -175,20 +150,32 @@
                 }
             });
 
-            $(".delete-prompt").click(function () {
-                var id = $(this).attr('data-id');
-                $("#Id").val(id);
-            });
-
-            $(".delete-confirm").click(function () {
-                var Id = $("#Id").val();
-                $.getJSON("/Brand/Delete", { id: Id }, function (data) {
-                    window.location.reload();
-                });
+            $(".btnDelete").click(function () {
+                var Id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/Brand/Delete", { Id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
             });
 
         });
-
     </script>
 }
 
