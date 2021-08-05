@@ -42,7 +42,6 @@ namespace ShopNow.Models
         public int ProductDishAddonId { get; set; }
     
         public virtual MasterProduct MasterProduct { get; set; }
-        public virtual Product Product { get; set; }
         public virtual Shop Shop { get; set; }
     }
 }
