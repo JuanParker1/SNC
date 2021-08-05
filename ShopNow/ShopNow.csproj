@@ -336,6 +336,7 @@
     <Compile Include="Controllers\MarketingAgentController.cs" />
     <Compile Include="Controllers\MasterProductController.cs" />
     <Compile Include="Controllers\BrandOwnerController.cs" />
+    <Compile Include="Controllers\OfferController.cs" />
     <Compile Include="Controllers\OTPController.cs" />
     <Compile Include="Controllers\PackageController.cs" />
     <Compile Include="Controllers\NextSubCategoryController.cs" />
@@ -567,6 +568,7 @@
     <Compile Include="ViewModels\MarketingAgentViewModel.cs" />
     <Compile Include="ViewModels\MasterProductViewModel.cs" />
     <Compile Include="ViewModels\BrandOwnerViewModel.cs" />
+    <Compile Include="ViewModels\OfferViewModels.cs" />
     <Compile Include="ViewModels\PackageViewModel.cs" />
     <Compile Include="ViewModels\NextSubCategoryViewModel.cs" />
     <Compile Include="ViewModels\PageViewModel.cs" />
@@ -3006,6 +3008,8 @@
     <Content Include="Views\PushNotification\Index.cshtml" />
     <Content Include="Views\Product\UpdateStock.cshtml" />
     <Content Include="Views\OTP\Index.cshtml" />
+    <Content Include="Views\Offer\Create.cshtml" />
+    <Content Include="Views\Offer\List.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
