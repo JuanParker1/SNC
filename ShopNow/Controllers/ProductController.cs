@@ -1532,6 +1532,7 @@ namespace ShopNow.Controllers
         //    base.Dispose(disposing);
         //}
 
+        [AccessPolicy(PageCode = "")]
         [HttpGet]
         public ActionResult UpdateStock(ProductUpdateStockViewModel model)
         {
@@ -1545,6 +1546,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
+        [AccessPolicy(PageCode = "")]
         [HttpPost]
         public ActionResult UpdateStockValue(ProductUpdateStockViewModel model)
         {
@@ -1556,6 +1558,19 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
             }
             return RedirectToAction("UpdateStock");
+        }
+
+        [AccessPolicy(PageCode = "")]
+        public async Task<JsonResult> GetProductByShopSelect2(string shopIds,string q = "")
+        {
+            string[] shops = shopIds.Split(',');
+            var model = await db.Products.Where(a => a.Name.Contains(q) && a.Status == 0 && shopIds.Contains(a.ShopId.ToString())).OrderBy(i => i.Name).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).OrderBy(i => i.text).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
     }
 }

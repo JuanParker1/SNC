@@ -20,17 +20,17 @@
                 <div class="card-body">
                     @Html.Grid(Model.ListItems).Columns(columns =>
                {
-                   columns.Add(c => c.OwnerTypeText).Titled("Owner").Filterable(false).SetWidth(10);
-                   columns.Add(c => c.Name).Titled("Name").Filterable(false).SetWidth(10);
-                   columns.Add(c => c.TypeText).Titled("Type").Filterable(false).SetWidth(10);
-                   columns.Add(c => c.DiscountTypeText).Titled("Discount Type").Filterable(false).SetWidth(10);
-                   columns.Add(c => c.Percentage).Titled("Percentage Type").Filterable(false).SetWidth(10);
+                   columns.Add(c => c.OwnerTypeText).Titled("Owner").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.TypeText).Titled("Type").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.DiscountTypeText).Titled("Discount Type").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.Percentage).Titled("Percentage Type").Filterable(true).SetWidth(10);
                    columns.Add()
         .Encoded(false)
         .Sanitized(false)
-        .RenderValueAs(o => Html.ActionLink("View", "Edit", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-info mr-1", }).ToHtmlString()
-        + Html.ActionLink("Delete", "Delete", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-secondary mr-1", }).ToHtmlString()).Titled("Action").SetWidth(15);
-               }).Sortable(false)
+        .RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-warning mr-2", }).ToHtmlString()
+        + Html.ActionLink("Delete", "Delete", new { id = o.Id }, new { @class = "btn btn-vsm btn-danger", }).ToHtmlString()).Titled("Action").SetWidth(15);
+               }).Sortable(true)
                 </div>
             </div>
         </div>

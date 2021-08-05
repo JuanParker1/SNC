@@ -41,8 +41,8 @@ namespace ShopNow.Models
         public int PaymentCategoryType { get; set; }
         public int CreditType { get; set; }
         public double ConvenientCharge { get; set; }
-        public double PackagingCharge { get; set; }
-        public double DelivaryCharge { get; set; }
+        public double PackingCharge { get; set; }
+        public double DeliveryCharge { get; set; }
         public double UpdatedAmount { get; set; }
         public double UpdatedOriginalAmount { get; set; }
         public Nullable<double> RefundAmount { get; set; }

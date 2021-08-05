@@ -248,6 +248,31 @@ namespace ShopNow.ViewModels
             public string DeliveryAddress { get; set; }
             public System.DateTime DateEncoded { get; set; }
         }
+        public List<CancelledReportList> CancelledReportLists { get; set; }
+        public class CancelledReportList
+        {
+            public long Id { get; set; }
+            public int OrderNumber { get; set; }
+            public string ShopName { get; set; }
+            public string PhoneNumber { get; set; }
+            public string DeliveryAddress { get; set; }
+            public System.DateTime DateEncoded { get; set; }
+        }
+        public List<DeliveryBoyPaymentStatusList> DeliveryBoyPaymentStatusLists { get; set; }
+        public class DeliveryBoyPaymentStatusList
+        {
+            public long Id { get; set; }
+            public int OrderNumber { get; set; }
+            public System.DateTime DateEncoded { get; set; }
+            public int DeliveryBoyId { get; set; }
+            public string DeliveryBoyName { get; set; }
+            public string DeliveryBoyPhoneNumber { get; set; }
+            public double DeliveryCharge { get; set; }
+            public int DeliveryBoyPaymentStatus { get; set; }
+            public Nullable<double> Distance { get; set; }
+        }
+
+
     }
 
     public class ShopDeliveredAmountReportViewModel
