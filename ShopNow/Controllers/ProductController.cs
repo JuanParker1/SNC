@@ -1408,6 +1408,7 @@ namespace ShopNow.Controllers
             var model = new ProductMappingViewModel();
             return View(model);
         }
+
         [HttpPost]
         [AccessPolicy(PageCode = "SHNPROC001")]
         public ActionResult ShopItemMapping(int originalShopId, int newShopId, string newShopName)
