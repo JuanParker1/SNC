@@ -37,26 +37,28 @@
                         </div>
                         <hr />
                         <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="col-form-label">Name</label>
-                                    <input type="text" name="Name" class="form-control" required />
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div id="div-shop" class="d-none">
+                                <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="col-form-label">Select Shop</label>
-                                        <select id="select-shop" name="ShopIds" class="form-control" multiple></select>
+                                        <label class="col-form-label">Name</label>
+                                        <input type="text" name="Name" class="form-control" required />
                                     </div>
                                 </div>
-                                <div id="div-brand" class="d-none">
-                                    <div class="form-group">
-                                        <label class="col-form-label">Select Brand</label>
-                                        <select id="select-brand" name="BrandId" class="form-control"></select>
+                                <div class="col-md-6">
+                                    <div id="div-shop" class="d-none">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Select Shop</label>
+                                            <select id="select-shop" name="ShopIds" class="form-control" multiple></select>
+                                        </div>
+                                    </div>
+                                    <div id="div-brand" class="d-none">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Select Brand</label>
+                                            <select id="select-brand" name="BrandId" class="form-control"></select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                        <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="col-form-label">Discount Type</label>
@@ -77,46 +79,55 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div id="div-product" class="col-md-4 d-none">
                                 <div class="form-group">
-                                    <label class="col-form-label">Percentage</label>
-                                    <input type="number" name="Percentage" class="form-control" />
+                                    <label class="col-form-label">Select Product</label>
+                                    <select id="select-product" name="ProductIds" class="form-control" multiple></select>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="col-form-label">Quantity Limit</label>
-                                    <input type="number" name="QuantityLimit" class="form-control" />
+                        </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Percentage</label>
+                                        <input type="number" name="Percentage" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Quantity Limit</label>
+                                        <input type="number" name="QuantityLimit" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Amount Limit</label>
+                                        <input type="number" name="AmountLimit" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Customer Count Limit</label>
+                                        <input type="number" name="CustomerCountLimit" class="form-control" />
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="col-form-label">Amount Limit</label>
-                                    <input type="number" name="AmountLimit" class="form-control" />
+                            <div class="row">
+                                <div class="col-md-4 pl-5 my-3">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" class="form-check-input" name="IsForFirstOrder" value="true">Only For First Order?
+                                    </label>
                                 </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="col-form-label">Customer Count Limit</label>
-                                    <input type="number" name="CustomerCountLimit" class="form-control" />
+                                <div class="col-md-4 pl-5 my-3">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" class="form-check-input" name="IsForOnlinePayment" value="true">Only For Online Payment?
+                                    </label>
                                 </div>
-                            </div>
-
-                            <div class="col-md-4 pl-5 my-3">
-                                <label class="form-check-label">
-                                    <input type="checkbox" class="form-check-input" name="IsForFirstOrder" value="true">Only For First Order?
-                                </label>
-                            </div>
-                            <div class="col-md-4 pl-5 my-3">
-                                <label class="form-check-label">
-                                    <input type="checkbox" class="form-check-input" name="IsForOnlinePayment" value="true">Only For Online Payment?
-                                </label>
-                            </div>
-                            <div class="col-md-4 pl-5 my-3">
-                                <label class="form-check-label">
-                                    <input type="checkbox" class="form-check-input" name="IsForBlackListAbusers" value="true">Also For Black List Abusers?
-                                </label>
-                            </div>
+                                <div class="col-md-4 pl-5 my-3">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" class="form-check-input" name="IsForBlackListAbusers" value="true">Also For Black List Abusers?
+                                    </label>
+                                </div>
                         </div>
                         <div class="mx-auto col-6 mt-3"> <input type="submit" value="Create" class="btn btn-success btn-block" /></div>
                     </form>
@@ -133,6 +144,7 @@
 
     <script>
         $(document).ready(function () {
+           
             $('#select-shop').select2({
                 placeholder: "Search Shop",
                 width: '100%',
@@ -156,7 +168,6 @@
             });
 
             $('[name="OwnerType"]').on('change', function () {
-
                 var $value = $(this).val();
                 $('#div-shop').addClass('d-none');
                 $('#div-brand').addClass('d-none');
@@ -171,6 +182,31 @@
                     $('#select-shop').val('').trigger('change');
                 }
             });
+
+            $('[name="Type"]').on('change', function () {
+                var $value = $(this).val();
+                $('#div-product').addClass('d-none');
+
+                if ($value == '2') {
+                    $('#div-product').removeClass('d-none');
+                    var $selectedValues = $('#select-shop').val();
+                    $('#select-product').select2({
+                        placeholder: "Search Products",
+                        width: '100%',
+                        ajax: {
+                            url: "/Product/GetProductByShopSelect2?shopIds=" + $selectedValues,
+                            delay: 250,
+                            dataType: 'json'
+                        }
+                    });
+                } else  {
+                    $('#div-product').addClass('d-none');
+                    $('#select-product').val('').trigger('change');
+                }
+            });
+
+           
+           
         });
     </script>
 }

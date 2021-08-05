@@ -348,9 +348,9 @@ namespace ShopNow.Controllers
             if (payment != null)
             {
                 model.Amount = payment.Amount;
-                model.PackagingCharge = payment.PackagingCharge;
+                model.PackagingCharge = payment.PackingCharge;
                 model.ConvenientCharge = payment.ConvenientCharge;
-                model.DelivaryCharge = payment.DelivaryCharge;
+                model.DelivaryCharge = payment.DeliveryCharge;
             }
                 model.List = db.OrderItems.Where(i => i.OrdeNumber == OrderNumber && i.Status == 0).Select(i => new CartListViewModel.CartList
             {
