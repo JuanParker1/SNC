@@ -2,7 +2,9 @@
 @{
     ViewBag.Title = "Edit";
 }
+
 <title>ShopNow | Sub Category I Update</title>
+
 @using (Html.BeginForm("Edit", "SubCategory", FormMethod.Post, new { id = "SubCategoryForm", role = "form" }))
 {
     <div class="container-fluid">
@@ -48,6 +50,7 @@
         </div>
     </div>
 }
+
 @section Scripts
 {
     <!--Select2-->
@@ -83,7 +86,6 @@
                     $('.Save').prop('disabled', true);
                 };
             });
-
         });
     </script>
 }
