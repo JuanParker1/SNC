@@ -31,10 +31,10 @@
                     @Html.Grid(Model).Columns(columns =>
                {
                columns.Add().RenderValueAs(o => Html.ActionLink(o.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }).ToHtmlString()).Titled("Name").Encoded(false).Sanitized(false).Filterable(true).SetWidth(10);
-               columns.Add(b => b.PhoneNumber).Titled("Symbol").Filterable(true).SetWidth(20);
-               columns.Add(b => b.Address).Titled("Type").Filterable(true).SetWidth(20);
-               columns.Add(b => b.DistrictName).Titled("ConversionFormula").Filterable(true).SetWidth(20);
-               columns.Add(b => b.StateName).Titled("Conversion Unit").Filterable(true).SetWidth(20);
+               columns.Add(b => b.PhoneNumber).Titled("Phone No").Filterable(true).SetWidth(20);
+               columns.Add(b => b.Address).Titled("Address").Filterable(true).SetWidth(20);
+               columns.Add(b => b.DistrictName).Titled("District Name").Filterable(true).SetWidth(20);
+               columns.Add(b => b.StateName).Titled("State Name").Filterable(true).SetWidth(20);
                columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20)
                    .RenderValueAs(b => @<div>
                             <a href="~/Customer/Edit?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(b.Id)" class="btn btn-warning text-center btn-sm text-nowrap" style="padding: 3px 26px">Edit</a>
