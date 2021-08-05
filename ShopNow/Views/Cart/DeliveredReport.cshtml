@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ShopNow.ViewModels.CartReportViewModel.CartReportList>
+﻿@model IEnumerable<ShopNow.ViewModels.CartReportViewModel.DeliveredReportList>
 @using GridMvc.Html
 @{
     ViewBag.Title = "Delivered Report";
@@ -33,14 +33,14 @@
                     <div class="card-body">
                         <h4 class="text-center d-none d-print-block">@ViewBag.Title</h4>
                         @Html.Grid(Model).Columns(columns =>
-                        {
-                            columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
-                            columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
-                            columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(15);
-                            columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(15);
-                            columns.Add().RenderValueAs(c => c.Status == 6 ? "Delivered" : "N/A").Titled("Order Status").Filterable(true).SetWidth(10);
-                            columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10);
-                        }).WithPaging(25).Sortable(true)
+                   {
+                       columns.Add(c => c.OrderNumber).Titled("Order Number").Filterable(true).SetWidth(10);
+                       columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
+                       columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(15);
+                       columns.Add(c => c.PhoneNumber).Titled("Phone Number").Filterable(true).SetWidth(15);
+                       columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => "<span>Delivered</span>").Titled("Order Status").SetWidth(15);
+                       columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10);
+                   }).WithPaging(25).Sortable(true)
                     </div>
                 </div>
             </div>
