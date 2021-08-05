@@ -1,0 +1,95 @@
+﻿@model ShopNow.ViewModels.OfferCreateViewModel
+@{
+    ViewBag.Title = "Offer Entry";
+}
+
+<title>ShopNow | @ViewBag.Title</title>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 mx-auto mt-3">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+                    <form action="/Offer/Create" method="post">
+                        <div class="row">
+                            <h3 class="border-bottom">General Details</h3>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="col-form-label">Owner Type</label>
+                                    <input type="text" name="OwnerType" class="form-control" required />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="col-form-label">Name</label>
+                                    <input type="text" name="Name" class="form-control" required />
+                                </div>
+                            </div>
+                            <h3 class="border-bottom">Discount Details</h3>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="col-form-label">Discount Type</label>
+                                    <input type="text" name="DiscountType" class="form-control" required />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="col-form-label">Type</label>
+                                    <input type="text" name="Type" class="form-control" required />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="col-form-label">Percentage</label>
+                                    <input type="number" name="Percentage" class="form-control" required />
+                                </div>
+                            </div>
+                            <h3 class="border-bottom">Limits</h3>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="col-form-label">Quantity</label>
+                                    <input type="number" name="QuantityLimit" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="col-form-label">Amount</label>
+                                    <input type="number" name="AmountLimit" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="col-form-label">Customer Count</label>
+                                    <input type="number" name="CustomerCountLimit" class="form-control" />
+                                </div>
+                            </div>
+                            <hr />
+                            <h3 class="border-bottom">Valid for</h3>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="col-form-label">Only For First Order?</label>
+                                    <input type="checkbox" name="IsForFirstOrder" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="col-form-label">Only For Online Payment?</label>
+                                    <input type="checkbox" name="IsForOnlinePayment" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="col-form-label">Also For Black List Abusers?</label>
+                                    <input type="checkbox" name="IsForBlackListAbusers" class="form-control" />
+                                </div>
+                            </div>
+                            <hr />
+                        </div>
+                        <div class="mx-auto col-6"> <input type="submit" value="Create" class="btn btn-success btn-block" /></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
