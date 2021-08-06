@@ -27,8 +27,9 @@
     columns.Add(c => c.CategoryName).Titled("Category Name").Filterable(true).SetWidth(12);
     columns.Add(c => c.BrandName).Titled("Brand Name").Filterable(true).SetWidth(16);
     columns.Add(c => c.ProductTypeName).Titled("Item Type").Filterable(true).SetWidth(8);
-    columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(10)
-    .RenderValueAs(o=> @<div><a href="~/MasterProduct/MedicalEdit?id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-3"><i class="fa fa-edit fa-lg"></i></a><a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a></div>);
+    columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(13)
+    .RenderValueAs(o=> @<div><a href="~/MasterProduct/MedicalEdit?id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-3"><i class="fa fa-edit fa-lg"></i></a>
+    <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a></div>);
 }).WithPaging(20).Sortable(true)
                 </div>
             </div>
@@ -43,7 +44,7 @@
     <script>
         $(document).ready(function () {
             $(".btnDelete").click(function () {
-                var Id = $(this).attr('data-id');
+                var id = $(this).attr('data-id');
                 swal({
                     title: "Are you sure want to delete?",
                     text: "You will not be able to recover this file!",
@@ -57,7 +58,7 @@
                 },
                     function (isConfirm) {
                         if (isConfirm) {
-                            $.getJSON("/MasterProduct/MedicalDelete", { Id: Id }, function (data) {
+                            $.getJSON("/MasterProduct/MedicalDelete", { Id: id }, function (data) {
                                 if (data == true) {
                                     window.location.reload();
                                 }
