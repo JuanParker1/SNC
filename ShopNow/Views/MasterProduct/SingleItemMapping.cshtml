@@ -15,7 +15,7 @@
         <div class="col-md-12 mx-auto">
             @using (Html.BeginForm("SingleItemMapping", "MasterProduct", FormMethod.Post, new { id = "ItemMappingForm", enctype = "multipart/form-data" }))
             {
-                <div class="card mb-3">
+                <div class="card mb-3 shadow">
                     <div class="card-body">
                         @Html.AntiForgeryToken()
                         <div class="form-group row">

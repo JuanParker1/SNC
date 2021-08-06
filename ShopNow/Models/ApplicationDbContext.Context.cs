@@ -46,6 +46,7 @@ namespace ShopNow.Models
         public virtual DbSet<MasterProduct> MasterProducts { get; set; }
         public virtual DbSet<MeasurementUnit> MeasurementUnits { get; set; }
         public virtual DbSet<NextSubCategory> NextSubCategories { get; set; }
+        public virtual DbSet<OfferProduct> OfferProducts { get; set; }
         public virtual DbSet<Offer> Offers { get; set; }
         public virtual DbSet<OfferShop> OfferShops { get; set; }
         public virtual DbSet<OrderItem> OrderItems { get; set; }

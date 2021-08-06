@@ -18,7 +18,7 @@
         <div class="col-md-12">
             @using (Html.BeginForm("BillingUpdate", "Bill", FormMethod.Post, new { id = "BillForm" }))
             {
-                <div class="card mb-3">
+                <div class="card mb-3 shadow">
                     <div class="card-body">
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="Id" value="@Model.Id" />

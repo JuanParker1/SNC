@@ -278,6 +278,8 @@ namespace ShopNow.Controllers
         [HttpPost]
         public JsonResult CustomerUpdate(CustomerCreateViewModel model)
         {
+            db.Configuration.ProxyCreationEnabled = false;
+            //db.Configuration.LazyLoadingEnabled = true;
             var customer = db.Customers.FirstOrDefault(i => i.Id == model.Id);
             if ((model.Name == null && model.Email == null) || (model.Name == "" && model.Email == ""))
             {
@@ -2011,7 +2013,7 @@ namespace ShopNow.Controllers
             return Json(new { message = "Your Todays OTP is: " + otpmodel.Otp }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetShopDetailsNew(int shopId, int categoryId, string str = "")
+        public JsonResult GetShopDetailsNew(int shopId=0, int categoryId=0, string str = "")
         {
             var shop = db.Shops.FirstOrDefault(i => i.Id == shopId);
             //shop.Code = ss[0].Code;

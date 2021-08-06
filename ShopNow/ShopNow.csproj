@@ -466,6 +466,9 @@
     <Compile Include="Models\Offer.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\OfferProduct.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\OfferShop.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
@@ -3004,6 +3007,7 @@
     <Content Include="Views\Offer\List.cshtml" />
     <Content Include="Views\Cart\DeliveryBoyCashHandoverReport.cshtml" />
     <Content Include="Views\Cart\DeliveryBoyPaymentStatus.cshtml" />
+    <Content Include="Views\Offer\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
