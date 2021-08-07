@@ -1394,7 +1394,7 @@ namespace ShopNow.Controllers
         {
             if (orderNo != 0 && customerId != 0)
             {
-                var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
+                var customer = db.Customers.FirstOrDefault(i => i.Id == customerId); //This is delivery boy
                 var order = db.Orders.FirstOrDefault(i => i.OrderNumber == orderNo);
                 order.Status = 5;
                 order.UpdatedBy = customer.Name;
@@ -1414,15 +1414,15 @@ namespace ShopNow.Controllers
                 {
                     var models = new OtpVerification();
                     models.ShopId = order.ShopId;
-                    models.CustomerId = customer.Id;
-                    models.CustomerName = customer.Name;
+                    models.CustomerId = order.CustomerId;
+                    models.CustomerName = order.CustomerName;
                     models.PhoneNumber = order.DeliveryBoyPhoneNumber;
                     models.Otp = _generatedCode;
                     models.ReferenceCode = _referenceCode;
                     models.Verify = false;
                     models.OrderNo = orderNo;
-                    models.CreatedBy = customer.Name;
-                    models.UpdatedBy = customer.Name;
+                    models.CreatedBy = order.CustomerName;
+                    models.UpdatedBy = order.CustomerName;
                     models.DateUpdated = DateTime.Now;
                     db.OtpVerifications.Add(models);
                     db.SaveChanges();
@@ -1553,10 +1553,19 @@ namespace ShopNow.Controllers
                 //detail.DateUpdated = DateTime.Now;
                 //db.Entry(detail).State = System.Data.Entity.EntityState.Modified;
                 //db.SaveChanges();
+
+                //delivery boy
                 var fcmToken = (from c in db.Customers
                                 where c.Id == deliveryBoyId
                                 select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                String rtnMessage = Helpers.PushNotification.SendbydeviceId("You have a new Order", "ShopNowChat", "../../assets/b.mp3", fcmToken.ToString());
+                Helpers.PushNotification.SendbydeviceId("You have a new Order. Accept Soon.", "ShopNowChat", "../../assets/b.mp3", fcmToken.ToString());
+
+                //Customer
+                var fcmTokenCustomer = (from c in db.Customers
+                                        where c.Id == order.Id
+                                        select c.FcmTocken ?? "").FirstOrDefault().ToString();
+                Helpers.PushNotification.SendbydeviceId("Delivery Boy is Assigned for your Order.", "ShopNowChat", "../../assets/b.mp3", fcmToken.ToString());
+
                 return Json(new { message = "Successfully DelivaryBoy Assign!" }, JsonRequestBehavior.AllowGet);
             }
             else
