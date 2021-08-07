@@ -43,7 +43,7 @@ namespace ShopNow.Controllers
             model.OrderswithoutDeliveryboyCount = db.Orders.Where(i => i.Status == 3 && i.Status == 0)
                     .AsEnumerable().Count();
 
-            model.CustomerAadhaarVerifyCount = db.Customers.Where(i => i.AadharVerify == false && i.Status == 0 && i.ImageAadharPath != null && i.ImageAadharPath != "Rejected").Count();
+            model.CustomerAadhaarVerifyCount = db.Customers.Where(i => i.AadharVerify == false && i.Status == 0 && i.ImageAadharPath != null && i.ImageAadharPath != "Rejected" && i.ImageAadharPath != "NULL").Count();
             model.ShopOnBoardingVerifyCount = db.Shops.Where(i => i.Status == 1).Count();
             model.DeliveryBoyVerifyCount = db.DeliveryBoys.Where(i => i.Status == 1).Count();
             model.BannerPendingCount = db.Banners.Where(i => i.Status == 1).Count();

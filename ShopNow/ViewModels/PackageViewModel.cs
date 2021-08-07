@@ -4,8 +4,7 @@ using System.Linq;
 using System.Web;
 
 namespace ShopNow.ViewModels
-{
-    
+{    
     public class PackageListViewModel
     {
         public List<PackageList> List { get; set; }

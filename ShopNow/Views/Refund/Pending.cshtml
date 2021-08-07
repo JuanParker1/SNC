@@ -10,9 +10,8 @@
 <div class="container-fluid">
     <div class="row mb-3">
         <div class="col-md-3">
-            <h5 class="mt-1 text-uppercase" style="letter-spacing:1px">@ViewBag.Title</h5>
+            <h5 class="mt-1 text-uppercase text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
         </div>
-
         <div class="col-md-6">
             <form method="get" action="/Refund/Pending">
                 <div class="row">
@@ -30,9 +29,10 @@
                 </div>
             </form>
         </div>
-
-    </div>
-    @Html.Grid(Model.ListItems).Columns(columns =>
+        <div class="col-md-12">
+            <div class="card shadow mt-3">
+                <div class="card-body">
+                    @Html.Grid(Model.ListItems).Columns(columns =>
 {
     columns.Add(c => c.PaymentId).Titled("Payment Id").Filterable(true).SetWidth(10);
     columns.Add(c => c.OrderNo).Titled("Order No").Filterable(true).SetWidth(10);
@@ -44,7 +44,10 @@
    .Sanitized(false)
    .RenderValueAs(o => Html.ActionLink("Refund", "SendRefund", new { paymentId = o.PaymentId,amount=o.Amount,orderNo = o.OrderNo }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()).Titled("Action").SetWidth(15);
 }).WithPaging(20).Sortable(true)
-
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 @section Scripts
 {

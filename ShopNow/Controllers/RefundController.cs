@@ -41,10 +41,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNRFNH002")]
         public ActionResult History(RefundHistoryViewModel model)
         {
-
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-           
             model.ListItems = db.Payments
                .Where(i => ((model.StartDate != null ? DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) : true) &&
                (model.EndDate != null ? DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate) : true)) && i.RefundAmount != null && i.RefundAmount > 0)
@@ -57,11 +55,11 @@ namespace ShopNow.Controllers
                    CustomerName = i.p.p.CustomerName,
                    CustomerPhoneNo = i.c.PhoneNumber,
                    OrderDate = i.p.p.DateEncoded,
-                   OrderNo = i.p.p.OrderNumber,
+                   OrderNumber = i.p.p.OrderNumber,
                    PaymentId = i.p.r.Any() ? i.p.r.FirstOrDefault().Payment_Id : "",
                    RefundDate = i.p.r.Any() ? i.p.r.FirstOrDefault().DateEncoded : i.p.p.DateEncoded,
                    RefundId = i.p.r.Any() ? i.p.r.FirstOrDefault().RefundId : "N/A",
-                   Remark = i.p.p.RefundRemark, 
+                   Remark = i.p.p.RefundRemark,
                    ShopName = i.p.p.ShopName
                }).ToList();
             return View(model);

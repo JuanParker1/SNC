@@ -21,23 +21,30 @@
         <div class="col-md-1">
             <input type="button" class="form-control btn btn-sm btn-success" name="Filter" id="Filter" value="Filter" />
         </div>
-        <divl class="col-md-4 text-right">
+        <div class="col-md-4 text-right">
             <a href="~/Cart/Pending" class="ml-auto" target="_self"><span class="fa fa-bars"></span> New Order List</a>
-        </divl>
+        </div>
+        <div class="col-md-12">
+            <div class="card shadow mt-3">
+                <div class="card-body">
+                    @Html.Grid(Model).Columns(columns =>
+    {
+        columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
+        columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
+        columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(15);
+        columns.Add(c => c.PhoneNumber).Titled("Phone").Filterable(true).SetWidth(15);
+        columns.Add().RenderValueAs(c => c.CartStatus == 7 ? "Cancelled" : "N/A").Titled("Order Status").Filterable(true).SetWidth(10);
+        columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10);
+        columns.Add()
+       .Encoded(false)
+       .Sanitized(false)
+       .RenderValueAs(o => Html.ActionLink("View", "Edit", new { orderno=o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-vsm btn-info mr-1",  }).ToHtmlString()).Titled("Action").SetWidth(10);
+     }).WithPaging(20).Sortable(true)
+                </div>
+            </div>
+        </div>
     </div>
-     @Html.Grid(Model).Columns(columns =>
-     {
-         columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
-         columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
-         columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(15);
-         columns.Add(c => c.PhoneNumber).Titled("Phone").Filterable(true).SetWidth(15);
-         columns.Add().RenderValueAs(c => c.CartStatus == 7 ? "Cancelled" : "N/A").Titled("Order Status").Filterable(true).SetWidth(10);
-         columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10);
-         columns.Add()
-        .Encoded(false)
-        .Sanitized(false)
-        .RenderValueAs(o => Html.ActionLink("View", "Edit", new { orderno=o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-vsm btn-info mr-1",  }).ToHtmlString()).Titled("Action").SetWidth(10);
-      }).WithPaging(20).Sortable(true)
+    
 </div>
 
 @section Scripts

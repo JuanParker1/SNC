@@ -3,10 +3,11 @@
 @{
     ViewBag.Title = "Category";
 }
+
 <title>ShopNow | Category List</title>
+
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-
 
 <div class="container-fluid mb-5">
     <div class="row">
@@ -25,7 +26,11 @@
 columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(20);
 columns.Add(c => c.ProductTypeName).Titled("Product Type").Filterable(true).SetWidth(20);
 columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
-columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(c => @<div><a href="" data-id="@c.Id" data-name="@c.Name" data-producttypeid="@c.ProductTypeId" data-producttypename="@c.ProductTypeName" data-orderno="@c.OrderNo" class="btn-sm btn-warning edit-prompt" data-toggle="modal" data-target="#editModal" style="padding: 3px 26px">Edit</a> <a href="" data-id="@c.Id" class="btn-sm btn-danger delete-prompt" data-toggle="modal" data-target="#deleteModal" style="padding: 3px 18px">Delete</a></div>);
+   columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
+             .RenderValueAs(o => @<div>
+                    <a href="editModal" class="text-info edit-prompt mr-5" data-id=@o.Id data-name="@o.Name"  data-producttypeid=@o.ProductTypeId  data-producttypename="@o.ProductTypeName" data-orderno=@o.OrderNo data-target="#editModal" data-toggle="modal" ><i class="fa fa-edit fa-lg"></i></a>
+                    <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+                </div>);
 }).WithPaging(20).Sortable(true)
                 </div>
             </div>
@@ -33,26 +38,6 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
     </div>
 </div>
 
-<div class="modal fade" id="deleteModal" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header alert alert-danger">
-                <h4 class="modal-title" id="myModalLabel">Warning</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p class="success-message">Are you sure want to delete this record? </p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-success delete-confirm">Yes</button>
-                <button class="btn btn-danger" data-dismiss="modal">No</button>
-                <input type="hidden" name="Code" id="Code" data-dismiss="modal" />
-            </div>
-        </div>
-    </div>
-</div>
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -70,13 +55,7 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
                     </div>
                     <div class="col-md-6">
                         <label class="col-form-label"><strong class="text-secondary">Item Type</strong></label>
-                        <select name="ProductType" class="form-control" id="ProductTypeId">
-                            @*<option value="0">Select</option>
-                                <option value="4">Product</option>
-                                <option value="1">Dish</option>
-                                <option value="5">Service</option>
-                                <option value="3">Medical</option>
-                                <option value="2">FMCG</option>*@
+                        <select name="ProductType" class="form-control" id="ProductTypeId">                           
                         </select>
                         <input type="hidden" id="ProductTypeName" name="ProductTypeName" />
                     </div>
@@ -92,6 +71,7 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -247,16 +227,29 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
             //    window.location.reload();
             //});
 
-            $(".delete-prompt").click(function () {
-                var code = $(this).attr('data-id');
-                $("#Code").val(code);
-            });
-
-            $(".delete-confirm").click(function () {
-                var code = $("#Code").val();
-                $.getJSON("/Category/Delete", { id: code }, function (data) {
-                    window.location.reload();
-                });
+            $(".btnDelete").click(function () {
+                var Id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/Category/Delete", { id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
             });
 
         });
