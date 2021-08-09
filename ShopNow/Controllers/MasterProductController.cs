@@ -98,9 +98,9 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNMPRFC015")]
         public ActionResult FoodCreate()
         {
-            Session["AddOns"] = new List<MasterAddOnsCreateViewModel>();
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
+            Session["AddOns"] = new List<MasterAddOnsCreateViewModel>();
             return View();
         }
 
@@ -110,13 +110,13 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNMPRFC015")]
         public ActionResult FoodCreate(MasterFoodCreateViewModel model)
         {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
             var isExist = _db.MasterProducts.Any(i => i.Name == model.Name && i.Status == 0 && i.ProductTypeId == 1 && i.CategoryId == model.CategoryId);
             if (isExist)
             {
                 ViewBag.ErrorMessage = model.Name + " Already Exist";
                 return View();
             }
-            var user = ((Helpers.Sessions.User)Session["USER"]);
             var master = _mapper.Map<MasterFoodCreateViewModel, MasterProduct>(model);
             master.CreatedBy = user.Name;
             master.UpdatedBy = user.Name;
@@ -196,14 +196,14 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNMPRFE016")]
         public ActionResult FoodEdit(string Id)
         {
-            var dId = AdminHelpers.DCodeLong(Id);
-            Session["EditAddOns"] = new List<MasterAddOnsCreateViewModel>();
-            var addOns = new List<MasterAddOnsCreateViewModel>();
-            if (string.IsNullOrEmpty(dId.ToString()))
-                return HttpNotFound();
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var product = _db.MasterProducts.FirstOrDefault(i => i.Id == dId); 
+            var dId = AdminHelpers.DCodeLong(Id);
+            if (string.IsNullOrEmpty(dId.ToString()))
+                return HttpNotFound();
+            var product = _db.MasterProducts.FirstOrDefault(i => i.Id == dId);
+            Session["EditAddOns"] = new List<MasterAddOnsCreateViewModel>();
+            var addOns = new List<MasterAddOnsCreateViewModel>();
             var model = _mapper.Map<MasterProduct, MasterFoodEditViewModel>(product);
             model.AddonLists = _db.ProductDishAddOns.Where(i => i.MasterProductId == product.Id && i.Status == 0).Select(i => new MasterFoodEditViewModel.AddonList
             {
@@ -316,7 +316,8 @@ namespace ShopNow.Controllers
                 return RedirectToAction("LogOut", "Home");
             }
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name; var List = _db.MasterProducts.Join(_db.Categories, mp => mp.CategoryId, c => c.Id, (mp, c) => new { mp, c })
+            ViewBag.Name = user.Name; 
+            var List = _db.MasterProducts.Join(_db.Categories, mp => mp.CategoryId, c => c.Id, (mp, c) => new { mp, c })
                 .Where(i => i.mp.Status == 0 && i.mp.ProductTypeId == 4)
                 .Select(i => new MasterProductFoodListViewModel.MasterProductFoodList
                 {
@@ -325,7 +326,6 @@ namespace ShopNow.Controllers
                     CategoryName = i.c.Name,
                     Price = i.mp.Price,
                     ProductTypeName = i.mp.ProductTypeName
-
                 }).OrderBy(i => i.Name).ToList();
             return View(List);
         }
@@ -2081,7 +2081,6 @@ namespace ShopNow.Controllers
                 Index = model.Index
             }, JsonRequestBehavior.AllowGet);
         }
-
 
         [HttpPost]
         [AccessPolicy(PageCode = "")]

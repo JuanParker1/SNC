@@ -28,11 +28,12 @@
                columns.Add(b => b.DistrictName).Titled("District Name").Filterable(true).SetWidth(20);
                //columns.Add(b => b.StateName).Titled("State Name").Filterable(true).SetWidth(20);
                columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20)
-                   .RenderValueAs(b => @<div>
-                            <a href="~/Customer/Edit?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(b.Id)" class="btn btn-warning text-center btn-sm text-nowrap" style="padding: 3px 26px">Edit</a>
-                            <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(b.Id)" class="btn btn-danger text-center btn-sm text-nowrap btnDelete" style="padding: 3px 18px">Delete</a>
-                        </div>);
-            }).WithPaging(20).Sortable(true)
+                  .RenderValueAs(o => @<div>
+                        <a href="~/Customer/Edit?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
+                        <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+                    </div>);
+}).WithPaging(20).Sortable(true)
+                </div>
                 </div>
             </div>
         </div>
