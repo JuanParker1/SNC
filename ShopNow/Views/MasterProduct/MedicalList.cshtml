@@ -27,7 +27,7 @@
     columns.Add(c => c.BrandName).Titled("Brand Name").Filterable(true).SetWidth(16);
     columns.Add(c => c.ProductTypeName).Titled("Item Type").Filterable(true).SetWidth(8);
     columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(13)
-    .RenderValueAs(o=> @<div><a href="~/MasterProduct/MedicalEdit?id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-3"><i class="fa fa-edit fa-lg"></i></a>
+    .RenderValueAs(o=> @<div><a href="~/MasterProduct/MedicalEdit?id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
     <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a></div>);
 }).WithPaging(20).Sortable(true)
 </div>
