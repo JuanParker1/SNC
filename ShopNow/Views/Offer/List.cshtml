@@ -29,7 +29,7 @@
         .Encoded(false)
         .Sanitized(false)
         .RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-warning mr-2", }).ToHtmlString()
-        + Html.ActionLink("Delete", "Delete", new { id = o.Id }, new { @class = "btn btn-vsm btn-danger", }).ToHtmlString()).Titled("Action").SetWidth(15);
+        + Html.ActionLink("Delete", "Delete", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-danger", }).ToHtmlString()).Titled("Action").SetWidth(15);
                }).Sortable(true)
                 </div>
             </div>

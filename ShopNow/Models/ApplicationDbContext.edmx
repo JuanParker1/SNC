@@ -452,6 +452,14 @@
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="OfferProducts">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OfferId" Type="int" Nullable="false" />
+          <Property Name="ProductId" Type="bigint" Nullable="false" />
+        </EntityType>
         <EntityType Name="Offers">
           <Key>
             <PropertyRef Name="Id" />
@@ -1366,6 +1374,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <EntitySet Name="MasterProducts" EntityType="Self.MasterProducts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MeasurementUnits" EntityType="Self.MeasurementUnits" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NextSubCategories" EntityType="Self.NextSubCategories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OfferProducts" EntityType="Self.OfferProducts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Offers" EntityType="Self.Offers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OfferShops" EntityType="Self.OfferShops" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderItems" EntityType="Self.OrderItems" Schema="dbo" store:Type="Tables" />
@@ -1932,6 +1941,14 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="ProductType" Relationship="Self.FK_NextSubCategories_ProductType" FromRole="NextSubCategories" ToRole="ProductType" />
           <NavigationProperty Name="SubCategory" Relationship="Self.FK_NextSubCategories_SubCategories" FromRole="NextSubCategories" ToRole="SubCategories" />
+        </EntityType>
+        <EntityType Name="OfferProduct">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OfferId" Type="Int32" Nullable="false" />
+          <Property Name="ProductId" Type="Int64" Nullable="false" />
         </EntityType>
         <EntityType Name="Offer">
           <Key>
@@ -2759,6 +2776,7 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
           <EntitySet Name="MasterProducts" EntityType="Self.MasterProduct" />
           <EntitySet Name="MeasurementUnits" EntityType="Self.MeasurementUnit" />
           <EntitySet Name="NextSubCategories" EntityType="Self.NextSubCategory" />
+          <EntitySet Name="OfferProducts" EntityType="Self.OfferProduct" />
           <EntitySet Name="Offers" EntityType="Self.Offer" />
           <EntitySet Name="OfferShops" EntityType="Self.OfferShop" />
           <EntitySet Name="OrderItems" EntityType="Self.OrderItem" />
@@ -3462,6 +3480,15 @@ warning 6013: The table/view 'snc.dbo.tbl' does not have a primary key defined a
                 <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
                 <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
                 <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OfferProducts">
+            <EntityTypeMapping TypeName="sncModel.OfferProduct">
+              <MappingFragment StoreEntitySet="OfferProducts">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="OfferId" ColumnName="OfferId" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

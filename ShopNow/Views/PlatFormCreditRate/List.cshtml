@@ -10,23 +10,30 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-3">
-            <h5 class="" style="letter-spacing:1px">PLATFORM CREDIT RATE LIST</h5>
+            <h5 class="text-success" style="letter-spacing:1px">PLATFORM CREDIT RATE LIST</h5>
         </div>
         <div class="col-md-2 col-sm-4 mb-2 data-search">
         </div>
         @if (Model.Count == 0)
         {
-        <div class="col-md-7 text-right" id="Platform">
-            <a data-toggle="modal" data-target="#createModal" href="createModal"><span class="fa fa-plus"></span> New PlatForm Credit Rate</a>
-        </div>
+            <div class="col-md-7 text-right" id="Platform">
+                <a data-toggle="modal" data-target="#createModal" href="createModal"><span class="fa fa-plus"></span> New PlatForm Credit Rate</a>
+            </div>
         }
-    </div>
-    @Html.Grid(Model.List).Columns(columns =>
+        <div class="col-md-12">
+            <div class="card shadow mt-3">
+                <div class="card-body">
+                    @Html.Grid(Model.List).Columns(columns =>
 {
- columns.Add(b => b.RatePerOrder).Titled("Rate Per Order").Filterable(true).SetWidth(10);
- columns.Add(b => b.DailyViewer).Titled("Daily Viewer").Filterable(true).SetWidth(10);
-        columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(b => @<div><a href="javascript:void(0)" data-id="@b.Id" data-id1="@b.RatePerOrder" data-id2="@b.DailyViewer" class="btn-sm btn-warning edit-prompt" data-toggle="modal" data-target="#editModal" style="padding: 3px 26px">Edit</a> <a href="javascript:void(0)" data-id="@b.Id" data-id1="@b.RatePerOrder" class="btn-sm btn-danger delete-prompt" data-toggle="modal" data-target="#deleteModal" style="padding: 3px 18px">Delete</a></div>);
-            }).WithPaging(20).Sortable(true)
+columns.Add(b => b.RatePerOrder).Titled("Rate Per Order").Filterable(true).SetWidth(10);
+columns.Add(b => b.DailyViewer).Titled("Daily Viewer").Filterable(true).SetWidth(10);
+      columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(b => @<div><a href="javascript:void(0)" data-id="@b.Id" data-id1="@b.RatePerOrder" data-id2="@b.DailyViewer" class="btn-sm btn-warning edit-prompt" data-toggle="modal" data-target="#editModal" style="padding: 3px 26px">Edit</a> <a href="javascript:void(0)" data-id="@b.Id" data-id1="@b.RatePerOrder" class="btn-sm btn-danger delete-prompt" data-toggle="modal" data-target="#deleteModal" style="padding: 3px 18px">Delete</a></div>);
+}).WithPaging(20).Sortable(true)
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <div class="modal fade" id="deleteModal" role="dialog" aria-labelledby="myModalLabel">
@@ -114,7 +121,7 @@
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
-            
+
             $('#Create').on('click', function () {
                 var ratePerOrder = $('#RatePerOrder').val();
                 var dailyViewer = $('#DailyViewer').val();

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ShopNow.Filters;
+using ShopNow.Helpers;
 using ShopNow.Models;
 using ShopNow.ViewModels;
 using System;
@@ -21,6 +22,8 @@ namespace ShopNow.Controllers
             _mapperConfiguration = new MapperConfiguration(config =>
             {
                 config.CreateMap<OfferCreateViewModel, Offer>();
+                config.CreateMap<Offer, OfferEditViewModel>();
+                config.CreateMap<OfferEditViewModel,Offer>();
             });
             _mapper = _mapperConfiguration.CreateMapper();
         }
@@ -44,7 +47,8 @@ namespace ShopNow.Controllers
                     OwnerType = i.OwnerType,
                     Percentage = i.Percentage,
                     QuantityLimit = i.QuantityLimit,
-                    Type = i.Type
+                    Type = i.Type,
+                    Id = i.Id
                 }).ToList();
             return View(model);
         }
@@ -79,17 +83,71 @@ namespace ShopNow.Controllers
                     db.SaveChanges();
                 }
             }
+            if (offer != null && model.ProductIds != null)
+            {
+                foreach (var item in model.ProductIds)
+                {
+                    var offerproduct = new OfferProduct();
+                    offerproduct.ProductId = item;
+                    offerproduct.OfferId = offer.Id;
+                    db.OfferProducts.Add(offerproduct);
+                    db.SaveChanges();
+                }
+            }
             return RedirectToAction("List");
         }
 
         [AccessPolicy(PageCode = "")]
-        public ActionResult Delete(int id)
+        public ActionResult Delete(string id)
         {
-            var offer = db.Offers.FirstOrDefault(i => i.Id == id);
+            int dId = AdminHelpers.DCodeInt(id);
+            var offer = db.Offers.FirstOrDefault(i => i.Id == dId);
             offer.Status = 2;
             db.Entry(offer).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
             return RedirectToAction("List");
+        }
+
+        [AccessPolicy(PageCode = "")]
+        public ActionResult Edit(string id)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            int dId = AdminHelpers.DCodeInt(id);
+            var offer = db.Offers.FirstOrDefault(i => i.Id == dId);
+            var model = _mapper.Map<Offer, OfferEditViewModel>(offer);
+
+            if (model.BrandId != 0)
+                model.BrandName = db.Brands.FirstOrDefault(i => i.Id == model.BrandId)?.Name;
+
+            var offerShops = db.OfferShops.Where(i => i.OfferId == dId).ToList();
+            if (offerShops.Count > 0)
+            {
+                model.ShopIds = offerShops.Select(i => i.ShopId).ToArray();
+                model.ShopIdstring = string.Join(",", offerShops.Select(i => i.ShopId));
+                model.ShopNames = string.Join(",", db.Shops.Where(i => model.ShopIds.Contains(i.Id)).Select(i => i.Name).ToList());
+            }
+
+            var offerProducts = db.OfferProducts.Where(i => i.OfferId == dId).ToList();
+            if (offerProducts.Count > 0)
+            {
+                model.ProductIds = offerProducts.Select(i => i.ProductId).ToArray();
+                model.ProductIdstring = string.Join(",", offerProducts.Select(i => i.ProductId));
+                model.ProductNames = string.Join(",", db.Products.Where(i => model.ProductIds.Contains(i.Id)).Select(i => i.Name).ToList());
+            }
+            return View(model);
+        }
+
+        [AccessPolicy(PageCode = "")]
+        [HttpPost]
+        public ActionResult Edit(OfferEditViewModel model)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var offer = _mapper.Map<OfferEditViewModel, Offer>(model);
+            offer.DateUpdated = DateTime.Now;
+            db.Entry(offer).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Edit", new { id = AdminHelpers.ECodeInt(model.Id) });
         }
     }
 }

@@ -6,34 +6,35 @@
 <title>ShopNow | Staff List</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-<style>
-    .table td, .table th {
-        border-top: 1px solid #eaeaea;
-        vertical-align: middle;
-        padding: .4rem 1.25rem;
-    }
-</style>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6">
-            <h5 class="" style="letter-spacing:1px">STAFF LIST</h5>
+            <h5 class="text-success" style="letter-spacing:1px">STAFF LIST</h5>
         </div>
         <div class="col-md-6 text-right">
             <a href="~/Staff/Create" target="_self"><span class="fa fa-plus"></span>&nbsp;Staff</a>
         </div>
-    </div>
-    @Html.Grid(Model).Columns(columns =>
+        <div class="col-md-12">
+            <div class="card shadow mt-3">
+                <div class="card-body">
+                    @Html.Grid(Model).Columns(columns =>
 {
 columns.Add(c => c.Name).Titled("Name").Encoded(false).Sanitized(false).RenderValueAs(model => Html.ActionLink(model.Name, "Details", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(model.Id) }).ToHtmlString()).Filterable(true).SetWidth(20);
 columns.Add(c => c.PhoneNumber).Titled("Phone No.").Filterable(true).SetWidth(15);
 columns.Add(c => c.ShopName).Titled("Shop").Filterable(true).SetWidth(10);
 columns.Add().Encoded(false).Sanitized(false).Titled("Image").Filterable(false).SetWidth(10).RenderValueAs(c => @<div><img alt="Image" data-toggle="modal" data-target="#myModal" class="img-thumbnail StaffImage" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@c.ImagePath" width="45" height="45" onerror="this.src='/Images/No Photo.png'" /></div>);
-    columns.Add()
-    .Encoded(false)
-    .Sanitized(false)
-    .RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
-                   + Html.ActionLink("Delete", "Delete", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
+columns.Add()
+.Encoded(false)
+.Sanitized(false)
+.RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
+                    + Html.ActionLink("Delete", "Delete", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
 }).WithPaging(20).Sortable(true)
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!--
     <div class="row">

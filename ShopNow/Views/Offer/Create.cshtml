@@ -153,6 +153,8 @@
                     delay: 250,
                     dataType: 'json'
                 }
+            }).on('select2:unselect', function (e) {
+                getProducts();
             });
 
             $('#select-brand').select2({
@@ -172,7 +174,7 @@
                 $('#div-shop').addClass('d-none');
                 $('#div-brand').addClass('d-none');
 
-                if ($value == '2') {
+                if ($value == '1'|| $value == '2') {
                     $('#div-shop').removeClass('d-none');
                     $('#div-brand').addClass('d-none');
                     $('#select-brand').val('').trigger('change');
@@ -189,24 +191,28 @@
 
                 if ($value == '2') {
                     $('#div-product').removeClass('d-none');
-                    var $selectedValues = $('#select-shop').val();
-                    $('#select-product').select2({
-                        placeholder: "Search Products",
-                        width: '100%',
-                        ajax: {
-                            url: "/Product/GetProductByShopSelect2?shopIds=" + $selectedValues,
-                            delay: 250,
-                            dataType: 'json'
-                        }
-                    });
+                    getProducts();
                 } else  {
                     $('#div-product').addClass('d-none');
                     $('#select-product').val('').trigger('change');
                 }
             });
 
-           
-           
+            function getProducts() {
+                var $selectedValues = $('#select-shop').val();
+                $('#select-product').select2({
+                    placeholder: "Search Products",
+                    width: '100%',
+                    ajax: {
+                        url: "/Product/GetProductByShopSelect2?shopIds=" + $selectedValues,
+                        delay: 250,
+                        dataType: 'json'
+                    }
+                });
+            }
+            
         });
+
+       
     </script>
 }

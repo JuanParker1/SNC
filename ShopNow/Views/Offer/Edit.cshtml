@@ -1,0 +1,258 @@
+﻿@model ShopNow.ViewModels.OfferEditViewModel
+@{
+    ViewBag.Title = "Offer Update";
+}
+
+<title>ShopNow | @ViewBag.Title</title>
+
+<div class="container-fluid mb-5">
+    <div class="row">
+        <div class="col-md-10 mx-auto">
+            <div class="d-flex justify-content-between">
+                <h4 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h4>
+                <a href="/Offer/List"><u>Go To List</u></a>
+            </div>
+            <div class="card shadow">
+                <div class="card-body">
+                    <form action="/Offer/Edit" method="post">
+                        <input type="hidden" value="@Model.Id" name="Id" />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="col-form-label d-block">Choose Owner Type</label>
+                                <div class="form-check-inline mr-5">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="OwnerType" value="1" @if (Model.OwnerType == 1) { <text>checked</text> }>Shop Now Chat
+                                    </label>
+                                </div>
+                                <div class="form-check-inline mr-5">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="OwnerType" value="2" @if (Model.OwnerType == 2) { <text>checked</text> }>Shop Owner
+                                    </label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="OwnerType" value="3" @if (Model.OwnerType == 3) { <text>checked</text> }>Brand Owner
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="col-form-label">Name</label>
+                                    <input type="text" name="Name" class="form-control" value="@Model.Name" required />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div id="div-shop" class="d-none">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Select Shop</label>
+                                        <select id="select-shop" name="ShopIds" class="form-control" multiple></select>
+                                    </div>
+                                </div>
+                                <div id="div-brand" class="d-none">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Select Brand</label>
+                                        <select id="select-brand" name="BrandId" class="form-control">
+                                            @if (Model.BrandId != 0)
+                                            {
+                                                <option value="@Model.BrandId">@Model.BrandName</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="col-form-label">Discount Type</label>
+                                    <select name="DiscountType" class="form-control" required>
+                                        @*<option selected disabled>Select Discount Type</option>*@
+                                        <option value="1">Direct Discount</option>
+                                        <option value="2">Wallet Cashback</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="col-form-label">Offer Type</label>
+                                    <select name="Type" class="form-control" required>
+                                        @*<option selected disabled>Select Offer Type</option>*@
+                                        <option value="1">Cart Offer</option>
+                                        <option value="2">Item Offer</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div id="div-product" class="col-md-4 d-none">
+                                <div class="form-group">
+                                    <label class="col-form-label">Select Product</label>
+                                    <select id="select-product" name="ProductIds" class="form-control" multiple></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="col-form-label">Percentage</label>
+                                    <input type="number" name="Percentage" class="form-control" value="@Model.Percentage" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="col-form-label">Quantity Limit</label>
+                                    <input type="number" name="QuantityLimit" class="form-control" value="@Model.QuantityLimit" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="col-form-label">Amount Limit</label>
+                                    <input type="number" name="AmountLimit" class="form-control" value="@Model.AmountLimit" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="col-form-label">Customer Count Limit</label>
+                                    <input type="number" name="CustomerCountLimit" class="form-control" value="@Model.CustomerCountLimit" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 pl-5 my-3">
+                                <label class="form-check-label">
+                                    <input type="checkbox" class="form-check-input" name="IsForFirstOrder" value="true" @if (Model.IsForFirstOrder) { <text>checked</text> } />Only For First Order?
+                                </label>
+                            </div>
+                            <div class="col-md-4 pl-5 my-3">
+                                <label class="form-check-label">
+                                    <input type="checkbox" class="form-check-input" name="IsForOnlinePayment" value="true" @if (Model.IsForOnlinePayment) { <text>checked</text> } />Only For Online Payment?
+                                </label>
+                            </div>
+                            <div class="col-md-4 pl-5 my-3">
+                                <label class="form-check-label">
+                                    <input type="checkbox" class="form-check-input" name="IsForBlackListAbusers" value="true" @if (Model.IsForBlackListAbusers) { <text>checked</text> } />Also For Black List Abusers?
+                                </label>
+                            </div>
+                        </div>
+                        <div class="mx-auto col-6 mt-3"> <input type="submit" value="Create" class="btn btn-success btn-block" /></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
+{
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+
+    <script>
+        $(document).ready(function () {
+            //Shops Select
+            var shopId = "@Model.ShopIdstring";
+            var shopName = "@Model.ShopNames";
+            if (shopId) {
+                var array_code = shopId.split(',');
+                var array_name = shopName.split(',');
+                $.each(array_code, function (i) {
+                    $('select[name="ShopIds"] option[value=' + array_code[i] + ']').attr('selected', 'selected');
+                    var option = new Option(array_name[i], array_code[i], true, true);
+                    $('#select-shop').append(option).trigger('change');
+                });
+            }
+
+            //Prodcuts Select
+            var productId = "@Model.ProductIdstring";
+            var productName = "@Model.ProductNames";
+            if (productId) {
+                var array_code = productId.split(',');
+                var array_name = productName.split(',');
+                $.each(array_code, function (i) {
+                    $('select[name="ProductIds"] option[value=' + array_code[i] + ']').attr('selected', 'selected');
+                    var option = new Option(array_name[i], array_code[i], true, true);
+                    $('#select-product').append(option).trigger('change');
+                });
+            }
+
+
+            $('[name="DiscountType"]').val(@Model.DiscountType);
+            $('[name="Type"]').val(@Model.Type);
+            setOwnerTypeDivs(@Model.OwnerType);
+            setTypeDivs(@Model.Type)
+
+            $('#select-shop').select2({
+                placeholder: "Search Shop",
+                width: '100%',
+                ajax: {
+                    url: "/Cart/GetShopSelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:unselect', function (e) {
+                getProducts();
+            });
+
+            $('#select-brand').select2({
+                placeholder: "Search Brand",
+                width: '100%',
+                ajax: {
+                    url: "/Product/GetBrandSelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ShopName"]').val(e.params.data.text);
+            });
+
+            $('[name="OwnerType"]').on('change', function () {
+                setOwnerTypeDivs($(this).val());
+            });
+
+            $('[name="Type"]').on('change', function () {
+                setTypeDivs($(this).val());
+            });
+        });
+
+        function getProducts() {
+            var $selectedValues = $('#select-shop').val();
+            $('#select-product').select2({
+                placeholder: "Search Products",
+                width: '100%',
+                ajax: {
+                    url: "/Product/GetProductByShopSelect2?shopIds=" + $selectedValues,
+                    delay: 250,
+                    dataType: 'json'
+                }
+            });
+        }
+
+        function setOwnerTypeDivs($value) {
+            //var $value = $(this).val();
+            $('#div-shop').addClass('d-none');
+            $('#div-brand').addClass('d-none');
+
+            if ($value == '1' || $value == '2') {
+                $('#div-shop').removeClass('d-none');
+                $('#div-brand').addClass('d-none');
+                $('#select-brand').val('').trigger('change');
+            } else if ($value == '3') {
+                $('#div-shop').addClass('d-none');
+                $('#div-brand').removeClass('d-none');
+                $('#select-shop').val('').trigger('change');
+            }
+        }
+
+        function setTypeDivs($value) {
+            $('#div-product').addClass('d-none');
+            if ($value == '2') {
+                $('#div-product').removeClass('d-none');
+                getProducts();
+            } else {
+                $('#div-product').addClass('d-none');
+                $('#select-product').val('').trigger('change');
+            }
+        }
+    </script>
+}
