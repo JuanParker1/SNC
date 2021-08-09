@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="3c5dcced5f0f4fae92f3b79210e9202b" Name="Diagram1" ZoomLevel="37">
+      <Diagram DiagramId="2aae56d8df754ff1907f9e17f1ca527b" Name="Diagram1" ZoomLevel="37">
         <EntityTypeShape EntityType="sncModel.AccessPolicy" Width="1.5" PointX="5.75" PointY="12.625" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.AddOnCategory" Width="1.5" PointX="0.75" PointY="13.625" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.Banner" Width="1.5" PointX="18" PointY="24.75" IsExpanded="true" />
@@ -24,33 +24,34 @@
         <EntityTypeShape EntityType="sncModel.MasterProduct" Width="1.5" PointX="3.75" PointY="37.25" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.MeasurementUnit" Width="1.5" PointX="18.75" PointY="18.625" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.NextSubCategory" Width="1.5" PointX="13" PointY="14.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.Offer" Width="1.5" PointX="19.75" PointY="8.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.OfferShop" Width="1.5" PointX="20.75" PointY="13.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="sncModel.OfferProduct" Width="1.5" PointX="19.75" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="sncModel.Offer" Width="1.5" PointX="20.75" PointY="11.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="sncModel.OfferShop" Width="1.5" PointX="20.75" PointY="16.625" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.OrderItem" Width="1.5" PointX="8.25" PointY="22.375" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="6" PointY="19.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.OtpVerification" Width="1.5" PointX="20.75" PointY="16.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.Package" Width="1.5" PointX="20.75" PointY="21.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.Page" Width="1.5" PointX="20.75" PointY="25.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="sncModel.OtpVerification" Width="1.5" PointX="20.75" PointY="19.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="sncModel.Package" Width="1.5" PointX="20.75" PointY="24.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="sncModel.Page" Width="1.5" PointX="20.75" PointY="28.625" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.Payment" Width="1.5" PointX="15.75" PointY="23.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.PaymentsData" Width="1.5" PointX="21.75" PointY="8.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.PincodeRate" Width="1.5" PointX="10.75" PointY="29.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.PlatFormCreditRate" Width="1.5" PointX="12.75" PointY="29.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.Portion" Width="1.5" PointX="20.75" PointY="29.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="sncModel.PaymentsData" Width="1.5" PointX="10.75" PointY="29.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="sncModel.PincodeRate" Width="1.5" PointX="12.75" PointY="29.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="sncModel.PlatFormCreditRate" Width="1.5" PointX="22.75" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="sncModel.Portion" Width="1.5" PointX="22.75" PointY="12.625" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.ProductDishAddOn" Width="1.5" PointX="6" PointY="39.25" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.Product" Width="1.5" PointX="13" PointY="18.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.ProductSpecificationItem" Width="1.5" PointX="22.75" PointY="13.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.ProductSpecification" Width="1.5" PointX="5.75" PointY="30.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="sncModel.ProductSpecificationItem" Width="1.5" PointX="5.75" PointY="30.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="sncModel.ProductSpecification" Width="1.5" PointX="22.75" PointY="16.625" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.ProductType" Width="1.5" PointX="10.75" PointY="18" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.RefundsData" Width="1.5" PointX="22.75" PointY="18.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.ShopCategory" Width="1.5" PointX="22.75" PointY="22.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="sncModel.RefundsData" Width="1.5" PointX="22.75" PointY="20.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="sncModel.ShopCategory" Width="1.5" PointX="22.75" PointY="24.625" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.ShopCredit" Width="1.5" PointX="17.75" PointY="30.625" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.ShopDishAddOn" Width="1.5" PointX="6" PointY="5.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.ShopMember" Width="1.5" PointX="22.75" PointY="26.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="sncModel.ShopMember" Width="1.5" PointX="22.75" PointY="28.625" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.Shop" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.Specification" Width="1.5" PointX="23.75" PointY="8.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.Staff" Width="1.5" PointX="14.75" PointY="31.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="sncModel.Specification" Width="1.5" PointX="14.75" PointY="31.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="sncModel.Staff" Width="1.5" PointX="24.75" PointY="8.625" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.SubCategory" Width="1.5" PointX="16" PointY="17" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.UserEnquiry" Width="1.5" PointX="24.75" PointY="12.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="sncModel.UserEnquiry" Width="1.5" PointX="24.75" PointY="13.625" IsExpanded="true" />
         <AssociationConnector Association="sncModel.FK_Banners_Payments" ManuallyRouted="false" />
         <AssociationConnector Association="sncModel.FK_SubCategories_Categories" ManuallyRouted="false" />
         <AssociationConnector Association="sncModel.FK_CustomerAddresses_Customers" ManuallyRouted="false" />

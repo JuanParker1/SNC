@@ -6,85 +6,12 @@
 <title>ShopNow | Shop List</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-<style>
-    .table td, .table th {
-        border-top: 1px solid #eaeaea;
-        vertical-align: middle;
-        padding: .4rem 1.25rem;
-    }
+<link href="~/Content/switch.css" rel="stylesheet" />
 
-    .toggle.ios, .toggle-on.ios, .toggle-off.ios {
-        border-radius: 20rem;
-    }
-
-        .toggle.ios .toggle-handle {
-            border-radius: 20rem;
-        }
-
-    .switch {
-        position: relative;
-        display: inline-block;
-        width: 60px;
-        height: 34px;
-    }
-
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-    .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: red;
-        -webkit-transition: .4s;
-        transition: .4s;
-    }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 26px;
-            width: 26px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            -webkit-transition: .4s;
-            transition: .4s;
-        }
-
-    input:checked + .slider {
-        background-color: lawngreen;
-    }
-
-    input:focus + .slider {
-        box-shadow: 0 0 1px lawngreen;
-    }
-
-    input:checked + .slider:before {
-        -webkit-transform: translateX(26px);
-        -ms-transform: translateX(26px);
-        transform: translateX(26px);
-    }
-
-    /* Rounded sliders */
-    .slider.round {
-        border-radius: 34px;
-    }
-
-        .slider.round:before {
-            border-radius: 50%;
-        }
-</style>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-3">
-            <h5 class="mt-1" style="letter-spacing:1px">SHOP LIST</h5>
+            <h5 class="mt-1 text-success" style="letter-spacing:1px">SHOP LIST</h5>
         </div>
         <div class="col-md-2 col-sm-4 mb-2 data-search">
         </div>
@@ -95,24 +22,22 @@
     </div>
     @Html.Grid(Model).Columns(columns =>
 {
-    columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(10);
-    columns.Add(c => c.OwnerPhoneNumber).Titled("OwnerPhoneNo").Filterable(true).SetWidth(15);
-    columns.Add().RenderValueAs(c => c.PhoneNumber != null ? c.PhoneNumber : c.ManualPhoneNumber).Titled("PhoneNo.").Filterable(true).SetWidth(10);
+    columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(15);
+    columns.Add(c => c.OwnerPhoneNumber).Titled("OwnerPhoneNo").Filterable(true).SetWidth(18);
+    columns.Add().RenderValueAs(c => c.PhoneNumber != null ? c.PhoneNumber : c.ManualPhoneNumber).Titled("PhoneNo.").Filterable(true).SetWidth(8);
     columns.Add(c => c.ShopCategoryName).Titled("Shop Type").Filterable(true).SetWidth(10);
-    columns.Add(c => c.Address).Titled("Address").Filterable(true).SetWidth(10);
-    //columns.Add(c => c.DistrictName).Titled("District").Filterable(true).SetWidth(10);
-    //columns.Add(c => c.StateName).Titled("State").Filterable(true).SetWidth(10);
-    columns.Add(c => c.PinCode).Titled("PinCode").Filterable(true).SetWidth(10);
+    columns.Add(c => c.Address).Titled("Address").Filterable(true).SetWidth(50);
+    //columns.Add(c => c.PinCode).Titled("PinCode").Filterable(true).SetWidth(8);
     columns.Add()
             .Encoded(false)
             .Sanitized(false)
              .RenderValueAs(s => new HtmlString
-                      ("<label class='switch'> <input type='checkbox' value='" + s.IsOnline + "' Id='Id_" + s.Id + "' class='CheckOnline' data-code='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(10);
+                      ("<label class='switch'> <input type='checkbox' value='" + s.IsOnline + "' Id='Id_" + s.Id + "' class='CheckOnline' data-code='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(8);
     columns.Add()
     .Encoded(false)
     .Sanitized(false)
     .RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
-                   + Html.ActionLink("Delete", "Delete", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
+                   + Html.ActionLink("Delete", "Delete", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(8);
 }).WithPaging(20).Sortable(true)
 
 </div>

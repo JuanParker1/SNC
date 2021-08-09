@@ -89,6 +89,17 @@ namespace ShopNow.ViewModels
         public bool IsForOnlinePayment { get; set; }
         public bool IsForBlackListAbusers { get; set; }
         public int[] ShopIds { get; set; }
+        public long[] ProductIds { get; set; }
         public int BrandId { get; set; }
+    }
+
+    public class OfferEditViewModel : OfferCreateViewModel
+    {
+        public int Id { get; set; }
+        public string BrandName { get; set; }
+        public string ShopIdstring { get; set; }
+        public string ProductIdstring { get; set; }
+        public string ShopNames { get; set; }
+        public string ProductNames { get; set; }
     }
 }

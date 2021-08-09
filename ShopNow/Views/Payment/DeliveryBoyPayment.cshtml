@@ -29,11 +29,11 @@
                 <input type="button" id="btnExport" class="btn btn-vsm btn-secondary" value="Export To Excel" />
             </div>
         }
-
-    </div>
-    @Html.Grid(Model.ListItems).Columns(columns =>
+        <div class="col-md-12">
+            <div class="card shadow mt-3">
+                <div class="card-body">
+                    @Html.Grid(Model.ListItems).Columns(columns =>
 {
-    //columns.Add(c => c.DeliveryBoyId).Titled("Code").Filterable(true).SetWidth(7);
     columns.Add(c => c.DeliveryBoyName).Titled("Name").Filterable(true).SetWidth(10);
     columns.Add(c => c.DeliveryBoyPhoneNumber).Titled("Phone No.").Filterable(true).SetWidth(10);
     columns.Add(c => c.TransactionType).Titled("Trans Type").Filterable(true).SetWidth(10);
@@ -45,6 +45,12 @@
     columns.Add(c => c.IfscCode).Titled("Ifsc Code").Filterable(true).SetWidth(9);
     columns.Add(c => c.AccountType).Titled("Account Type").Filterable(true).SetWidth(12);
 }).WithPaging(20).Sortable(true)
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
 
 </div>
 <table id="table-excel" class="d-none">

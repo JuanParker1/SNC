@@ -21,44 +21,44 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>From Date</label>
-                            <input id="date-start" type="date" class="form-control" name="StartDate" @if(Model.StartDate != null){ <text> value="@Model.StartDate.Value.ToString("yyyy-MM-dd")" </text>}  />
+                            <input id="date-start" type="date" class="form-control" name="StartDate" @if (Model.StartDate != null) { <text> value="@Model.StartDate.Value.ToString("yyyy-MM-dd")" </text> } />
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>To Date</label>
-                            <input id="date-end" type="date" class="form-control" name="EndDate" @if(Model.EndDate != null){ <text> value="@Model.EndDate.Value.ToString("yyyy-MM-dd")" </text>}  />
+                            <input id="date-end" type="date" class="form-control" name="EndDate" @if (Model.EndDate != null) { <text> value="@Model.EndDate.Value.ToString("yyyy-MM-dd")" </text> } />
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>Customer Phone No</label>
-                            <input type="text" class="form-control" name="CustomerPhoneNo" value="@Model.CustomerPhoneNo"/>
+                            <input type="text" class="form-control" name="CustomerPhoneNo" value="@Model.CustomerPhoneNo" />
                         </div>
                     </div>
-                    <div class="mt-1"> 
-                    <input type="submit" class="btn btn-info h-50 mt-4" value="Apply Filter" />
+                    <div class="mt-1">
+                        <input type="submit" class="btn btn-info h-50 mt-4" value="Apply Filter" />
                     </div>
                 </div>
             </form>
         </div>
-
+        <div class="col-md-12">
+            <div class="card shadow mt-3">
+                <div class="card-body">
+                    @Html.Grid(Model.ListItems).Columns(columns =>
+                    {
+                        columns.Add(c => c.OrderDate).Titled("Order Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
+                        columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
+                        columns.Add(c => c.OrderNumber).Titled("Order No").Filterable(true).SetWidth(10);
+                        columns.Add(c => c.CustomerName).Titled("C. Name").Filterable(true).SetWidth(12);
+                        columns.Add(c => c.CustomerPhoneNo).Titled("C. PhoneNo").Filterable(true).SetWidth(15);
+                        columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(10);
+                        columns.Add(c => c.Remark).Titled("Remark").Filterable(true).SetWidth(8);
+                        columns.Add(c => c.RefundDate).Titled("Refund Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
+                        columns.Add(c => c.RefundId).Titled("Refund Id").Filterable(true).SetWidth(10);
+                    }).WithPaging(20).Sortable(true)
+                </div>
+            </div>
+        </div>
     </div>
-    @Html.Grid(Model.ListItems).Columns(columns =>
-{
-    columns.Add(c => c.OrderDate).Titled("Order Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
-    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
-    columns.Add(c => c.OrderNumber).Titled("Order No").Filterable(true).SetWidth(10);
-    columns.Add(c => c.CustomerName).Titled("C . Name").Filterable(true).SetWidth(12);
-    columns.Add(c => c.CustomerPhoneNo).Titled("C . PhoneNo").Filterable(true).SetWidth(15);
-    columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(10);
-    columns.Add(c => c.Remark).Titled("Remark").Filterable(true).SetWidth(8);
-    columns.Add(c => c.RefundDate).Titled("Refund Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
-    columns.Add(c => c.RefundId).Titled("Refund Id").Filterable(true).SetWidth(10);
-}).WithPaging(20).Sortable(true)
-
 </div>
-@section Scripts
-{
-    
-}

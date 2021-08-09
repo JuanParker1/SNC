@@ -52,7 +52,7 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new CustomerListViewModel();
-            model.List = db.Customers.Where(i => i.Status == 0 && i.ImageAadharPath != null && i.ImageAadharPath != "Rejected" && i.AadharVerify == false).Select(i => new CustomerListViewModel.CustomerList
+            model.List = db.Customers.Where(i => i.Status == 0 && i.ImageAadharPath != null && i.ImageAadharPath != "NULL" && i.ImageAadharPath != "Rejected" && i.AadharVerify == false).Select(i => new CustomerListViewModel.CustomerList
             {
                 Id = i.Id,
                 Name = i.Name,
@@ -296,6 +296,21 @@ namespace ShopNow.Controllers
                 id = i.Id,
                 text = i.Name
             }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        [AccessPolicy(PageCode = "")]
+        public async Task<JsonResult> GetDistrictSelect2(string q = "")
+        {
+            var model = await db.Customers
+                .Where(a => a.DistrictName.Contains(q) && a.Status == 0 && a.Position != 4)
+                .GroupBy(i=>i.DistrictName)
+                .Select(i => new
+            {
+                    id=i.Key,
+                text = i.Key
+            }).OrderBy(i=>i.text).ToListAsync();
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }

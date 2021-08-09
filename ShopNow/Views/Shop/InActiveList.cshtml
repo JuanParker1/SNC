@@ -6,17 +6,11 @@
 <title>ShopNow | InActive Shop List</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-<style>
-    .table td, .table th {
-        border-top: 1px solid #eaeaea;
-        vertical-align: middle;
-        padding: .4rem 1.25rem;
-    }
-</style>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6">
-            <h5 style="letter-spacing:1px">APPROVAL PENDING SHOP LIST</h5>
+            <h5  class="text-success" style="letter-spacing:1px">APPROVAL PENDING SHOP LIST</h5>
         </div>
         <div class="col-md-6 text-right">
             <a href="~/Shop/List" target="_blank"><span class="fa fa-bars"></span>&nbsp;Shop List</a>
@@ -28,10 +22,10 @@
     columns.Add(s=>s.OwnerPhoneNumber).Titled("Prop. No.").Filterable(true).SetWidth(10);
     columns.Add(s=>s.PhoneNumber).RenderValueAs(s => s.PhoneNumber != null ? s.PhoneNumber : s.ManualPhoneNumber).Titled("Shop No").Filterable(true).SetWidth(10);
     columns.Add(s=>s.ShopCategoryName).RenderValueAs(s => s.ShopCategoryName != null ? s.ShopCategoryName : "N/A").Titled("Shop Type").Filterable(true).SetWidth(10);
-    columns.Add(s => s.Address).Titled("Address").Filterable(true).SetWidth(10);
+    columns.Add(s => s.Address).Titled("Address").Filterable(true).SetWidth(50);
     //columns.Add(s => s.StateName).Titled("State").Filterable(true).SetWidth(10);
     //columns.Add(s => s.DistrictName).Titled("District").Filterable(true).SetWidth(10);
-    columns.Add(s => s.PinCode).Titled("PIN Code").Filterable(true).SetWidth(10);
+    //columns.Add(s => s.PinCode).Titled("PIN Code").Filterable(true).SetWidth(10);
     //columns.Add(s => s.DateEncoded).Titled("Date").Filterable(true).SetWidth(10);
     columns.Add()
     .Encoded(false)

@@ -98,9 +98,9 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNMPRFC015")]
         public ActionResult FoodCreate()
         {
-            Session["AddOns"] = new List<MasterAddOnsCreateViewModel>();
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
+            Session["AddOns"] = new List<MasterAddOnsCreateViewModel>();
             return View();
         }
 
@@ -110,13 +110,13 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNMPRFC015")]
         public ActionResult FoodCreate(MasterFoodCreateViewModel model)
         {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
             var isExist = _db.MasterProducts.Any(i => i.Name == model.Name && i.Status == 0 && i.ProductTypeId == 1 && i.CategoryId == model.CategoryId);
             if (isExist)
             {
                 ViewBag.ErrorMessage = model.Name + " Already Exist";
                 return View();
             }
-            var user = ((Helpers.Sessions.User)Session["USER"]);
             var master = _mapper.Map<MasterFoodCreateViewModel, MasterProduct>(model);
             master.CreatedBy = user.Name;
             master.UpdatedBy = user.Name;
@@ -196,14 +196,14 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNMPRFE016")]
         public ActionResult FoodEdit(string Id)
         {
-            var dCode = AdminHelpers.DCodeLong(Id);
-            Session["EditAddOns"] = new List<MasterAddOnsCreateViewModel>();
-            var addOns = new List<MasterAddOnsCreateViewModel>();
-            if (string.IsNullOrEmpty(dCode.ToString()))
-                return HttpNotFound();
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var product = _db.MasterProducts.FirstOrDefault(i => i.Id == dCode); 
+            var dId = AdminHelpers.DCodeLong(Id);
+            if (string.IsNullOrEmpty(dId.ToString()))
+                return HttpNotFound();
+            var product = _db.MasterProducts.FirstOrDefault(i => i.Id == dId);
+            Session["EditAddOns"] = new List<MasterAddOnsCreateViewModel>();
+            var addOns = new List<MasterAddOnsCreateViewModel>();
             var model = _mapper.Map<MasterProduct, MasterFoodEditViewModel>(product);
             model.AddonLists = _db.ProductDishAddOns.Where(i => i.MasterProductId == product.Id && i.Status == 0).Select(i => new MasterFoodEditViewModel.AddonList
             {
@@ -316,7 +316,8 @@ namespace ShopNow.Controllers
                 return RedirectToAction("LogOut", "Home");
             }
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name; var List = _db.MasterProducts.Join(_db.Categories, mp => mp.CategoryId, c => c.Id, (mp, c) => new { mp, c })
+            ViewBag.Name = user.Name; 
+            var List = _db.MasterProducts.Join(_db.Categories, mp => mp.CategoryId, c => c.Id, (mp, c) => new { mp, c })
                 .Where(i => i.mp.Status == 0 && i.mp.ProductTypeId == 4)
                 .Select(i => new MasterProductFoodListViewModel.MasterProductFoodList
                 {
@@ -325,7 +326,6 @@ namespace ShopNow.Controllers
                     CategoryName = i.c.Name,
                     Price = i.mp.Price,
                     ProductTypeName = i.mp.ProductTypeName
-
                 }).OrderBy(i => i.Name).ToList();
             return View(List);
         }
@@ -334,8 +334,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "")]
         public JsonResult FoodDelete(string Id)
         {
-            var dCode = AdminHelpers.DCodeLong(Id);
-            var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dCode);
+            var dId = AdminHelpers.DCodeLong(Id);
+            var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dId);
             master.Status = 2;
             _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
             _db.SaveChanges();
@@ -610,12 +610,12 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNMPRFE024")]
         public ActionResult FMCGEdit(string Id)
         {
-            var dCode = AdminHelpers.DCodeLong(Id);
+            var dId = AdminHelpers.DCodeLong(Id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            if (string.IsNullOrEmpty(dCode.ToString()))
+            if (string.IsNullOrEmpty(dId.ToString()))
                 return HttpNotFound();
-            var masterProduct = _db.MasterProducts.FirstOrDefault(i => i.Id == dCode);
+            var masterProduct = _db.MasterProducts.FirstOrDefault(i => i.Id == dId);
             if (masterProduct.ImagePath1 != null)
                 masterProduct.ImagePath1 = masterProduct.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
             if (masterProduct.ImagePath2 != null)
@@ -711,8 +711,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNMPRFD025")]
         public JsonResult FMCGDelete(string Id)
         {
-            var dCode = AdminHelpers.DCodeLong(Id);
-            var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dCode);
+            var dId = AdminHelpers.DCodeLong(Id);
+            var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dId);
             master.Status = 2;
             _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
             _db.SaveChanges();
@@ -860,14 +860,14 @@ namespace ShopNow.Controllers
 
         // Medical Update
         [AccessPolicy(PageCode = "SHNMPRME008")]
-        public ActionResult MedicalEdit(string Id)
+        public ActionResult MedicalEdit(string id)
         {
-            var dCode = AdminHelpers.DCodeLong(Id);
+            var dId = AdminHelpers.DCodeLong(id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            if (string.IsNullOrEmpty(dCode.ToString()))
+            if (string.IsNullOrEmpty(dId.ToString()))
                 return HttpNotFound();
-            var masterProduct = _db.MasterProducts.FirstOrDefault(i => i.Id == dCode);
+            var masterProduct = _db.MasterProducts.FirstOrDefault(i => i.Id == dId);
             var model = _mapper.Map<MasterProduct, MasterMedicalEditViewModel>(masterProduct);
             if(model.ImagePath1 !=null)
             model.ImagePath1 = model.ImagePath1.Replace("%", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
@@ -980,8 +980,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNMPRMD009")]
         public JsonResult MedicalDelete(string Id)
         {
-            var dCode = AdminHelpers.DCodeLong(Id);
-            var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dCode);
+            var dId = AdminHelpers.DCodeLong(Id);
+            var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dId);
             master.Status = 2;
             _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
             _db.SaveChanges();
@@ -1388,9 +1388,9 @@ namespace ShopNow.Controllers
 
         // Electronic Update
         [AccessPolicy(PageCode = "SHNMPREE020")]
-        public ActionResult ElectronicEdit(string Id)
+        public ActionResult ElectronicEdit(string id)
         {
-            var dId = AdminHelpers.DCodeLong(Id);
+            var dId = AdminHelpers.DCodeLong(id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             if (string.IsNullOrEmpty(dId.ToString()))
@@ -1500,8 +1500,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNMPRED021")]
         public JsonResult ElectronicDelete(string Id)
         {
-            var dCode = AdminHelpers.DCodeLong(Id);
-            var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dCode);
+            var dId = AdminHelpers.DCodeLong(Id);
+            var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dId);
             master.Status = 2;
             _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
             _db.SaveChanges();
@@ -2081,7 +2081,6 @@ namespace ShopNow.Controllers
                 Index = model.Index
             }, JsonRequestBehavior.AllowGet);
         }
-
 
         [HttpPost]
         [AccessPolicy(PageCode = "")]

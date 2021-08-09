@@ -1,6 +1,6 @@
 ﻿@model ShopNow.ViewModels.BillCreateEditViewModel
 @{
-    ViewBag.Title = "Delivary Charge Assign";
+    ViewBag.Title = "Delivery Charge Assign";
 }
 <title>ShopNow | @ViewBag.Title</title>
 
@@ -18,7 +18,7 @@
             @using (Html.BeginForm("DeliveryChargeAssign", "Bill", FormMethod.Post, new { id = "DeliveryForm" }))
             {
                 @Html.AntiForgeryToken()
-                <div class="card mb-3">
+                <div class="card mb-3 shadow">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12">

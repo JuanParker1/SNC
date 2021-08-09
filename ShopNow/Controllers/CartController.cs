@@ -468,10 +468,18 @@ namespace ShopNow.Controllers
                 delivary.DateUpdated = DateTime.Now;
                 db.Entry(delivary).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
+
                 var fcmToken = (from c in db.Customers
                                 where c.Id == delivary.CustomerId
                                 select c.FcmTocken ?? "").FirstOrDefault().ToString();
                 Helpers.PushNotification.SendbydeviceId("You have received new order. Accept Soon", "ShopNowChat", "a.mp3", fcmToken.ToString());
+
+               //Customer
+                var fcmTokenCustomer = (from c in db.Customers
+                                        where c.Id == cart.CustomerId
+                                        select c.FcmTocken ?? "").FirstOrDefault().ToString();
+                Helpers.PushNotification.SendbydeviceId("Delivery Boy is Assigned for your Order.", "ShopNowChat", "../../assets/b.mp3", fcmToken.ToString());
+
                 return RedirectToAction("List");
             }
             else
