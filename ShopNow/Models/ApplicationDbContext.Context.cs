@@ -20,6 +20,8 @@ namespace ShopNow.Models
         public sncEntities()
             : base("name=sncEntities")
         {
+            Configuration.ProxyCreationEnabled = false;
+            Configuration.LazyLoadingEnabled = true;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

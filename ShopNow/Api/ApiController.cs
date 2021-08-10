@@ -28,6 +28,7 @@ namespace ShopNow.Controllers
     public class ApiController : Controller
     {
         private sncEntities db = new sncEntities();
+        
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
         //private string apipath= "https://admin.shopnowchat.in/";
@@ -427,6 +428,7 @@ namespace ShopNow.Controllers
                 user.DateUpdated = DateTime.Now;
                 db.CustomerAddresses.Add(user);
                 db.SaveChanges();
+               
                 if (model.AddressType == 0)
                 {
                     var customer = db.Customers.Where(i => i.Id == model.CustomerId).FirstOrDefault();
@@ -446,9 +448,10 @@ namespace ShopNow.Controllers
                     db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }
-                if (user.Id != 0)
+                if (user != null)
                 {
-                    return Json(new { message = "Successfully Added Addons Address!", Details = user }, JsonRequestBehavior.AllowGet);
+                    model.Id = user.Id;
+                    return Json(new { message = "Successfully Added Addons Address!", Details = model });
                 }
                 else
                 {
