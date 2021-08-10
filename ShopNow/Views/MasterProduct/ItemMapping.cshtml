@@ -1,16 +1,14 @@
 ﻿@model ShopNow.ViewModels.ItemMappingViewModel
 @{
-    ViewBag.Title = "Single ItemMapping";
+    ViewBag.Title = "Single Item Mapping";
 }
-<title>ShopNow | Single Item Mapping</title>
-
+<title>ShopNow | @ViewBag.Title</title>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-4">
-            <h5 class="text-success" style="letter-spacing:1px">SINGLE ITEM MAPPING</h5>
+            <h5 class="text-success">@ViewBag.Title</h5>
         </div>
     </div>
-
     <div class="row">
         <div class="col-md-12 mx-auto">
             <div class="card mb-3 shadow">
@@ -59,11 +57,6 @@
                 } else {
                     window.location = "/MasterProduct/SingleItemMapping?ShopId=" + ShopId;
                 }
-                //$.post('/MasterProduct/SingleMapping', { ShopId: ShopId }, function (data) {
-                //    if (data == true) {
-                //        window.location.reload();
-                //    }
-                //});
             });
             $('#ShopId').select2({
                 placeholder: "Search Shop",
