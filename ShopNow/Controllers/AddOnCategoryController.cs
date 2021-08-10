@@ -84,11 +84,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNCTAE004")]
-        public JsonResult Edit(int code, string name)
+        public JsonResult Edit(int Id, string name)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             string message = "";
-            AddOnCategory addOnCategory = db.AddOnCategories.Where(i => i.Id == code).FirstOrDefault();
+            AddOnCategory addOnCategory = db.AddOnCategories.Where(i => i.Id == Id).FirstOrDefault();
             if (addOnCategory != null)
             {
                 addOnCategory.Name = name;
@@ -104,10 +104,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNCTAD005")]
-        public JsonResult Delete(int id)
+        public JsonResult Delete(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var addOnCategory = db.AddOnCategories.Where(i=>i.Id ==id).FirstOrDefault();
+            var addOnCategory = db.AddOnCategories.Where(i=>i.Id == Id).FirstOrDefault();
             if (addOnCategory != null)
             {
                 addOnCategory.Status = 2;
@@ -116,7 +116,7 @@ namespace ShopNow.Controllers
                 db.Entry(addOnCategory).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
-            return Json("Success", JsonRequestBehavior.AllowGet);
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [AccessPolicy(PageCode = "SHNCTAI001")]
