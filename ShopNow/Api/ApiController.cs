@@ -2067,8 +2067,8 @@ namespace ShopNow.Controllers
             {
                 model.ProductLists = (from pl in db.Products
                                       join m in db.MasterProducts on pl.MasterProductId equals m.Id
-                                      join c in db.Categories on m.CategoryId equals c.Id into cat
-                                      from c in cat.DefaultIfEmpty()
+                                      join nsc in db.NextSubCategories on m.NextSubCategoryId equals nsc.Id into cat
+                                      from nsc in cat.DefaultIfEmpty()
                                       where pl.ShopId == shopId && pl.Status == 0 && m.Name.ToLower().Contains(str) && (categoryId != 0 ? m.CategoryId == categoryId : true)
                                       select new ShopDetails.ProductList
                                       {
@@ -2076,8 +2076,8 @@ namespace ShopNow.Controllers
                                           Name = m.Name,
                                           ShopId = pl.ShopId,
                                           ShopName = pl.ShopName,
-                                          CategoryId = m.CategoryId,
-                                          CategoryName = c.Name,
+                                          CategoryId = nsc.Id,
+                                          CategoryName = nsc.Name,
                                           ColorCode = m.ColorCode,
                                           Price = pl.Price,
                                           ImagePath = ((!string.IsNullOrEmpty(m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
