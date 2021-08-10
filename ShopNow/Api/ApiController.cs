@@ -2048,8 +2048,9 @@ namespace ShopNow.Controllers
             {
                 model.ProductLists = (from pl in db.Products
                                       join m in db.MasterProducts on pl.MasterProductId equals m.Id
-                                      join c in db.Categories on m.CategoryId equals c.Id into cat
-                                      from c in cat.DefaultIfEmpty()
+                                      join c in db.Categories on m.CategoryId equals c.Id 
+                                      //into cat
+                                      //from c in cat.DefaultIfEmpty()
                                       where pl.ShopId == shopId && pl.Status == 0 && (categoryId != 0 ? m.CategoryId == categoryId : true)
                                       select new ShopDetails.ProductList
                                       {
