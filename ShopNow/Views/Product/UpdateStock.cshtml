@@ -7,29 +7,68 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-6 mx-auto mt-3">
-            <div class="card">
+        <div class="col-md-8 mx-auto mt-3">
+            <h4 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h4>
+            <div class="card shadow-sm">
                 <div class="card-body">
-                    <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
                     <form action="/Product/UpdateStock" method="get">
                         <div class="row">
                             <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="col-form-label">Select Shop</label>
+                                    <select id="select-shop" class="form-control" name="ShopId">
+                                        @if (Model.ShopId != 0)
+                                        {
+                                            <option value="@Model.ShopId">@Model.ShopName</option>
+                                        }
+                                    </select>
+                                    <input type="hidden" name="ShopName" value="@Model.ShopName" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
                                 <div class="form-group mr-3">
                                     <label class="col-form-label">Item Id</label>
                                     <input type="text" name="ItemId" value="@Model.ItemId" class="form-control" />
                                 </div>
                             </div>
-                            <div class="col-md-2 mt-2"><input type="submit" class="btn btn-info mt-4" value="Get" /></div>
+                            <div class="col-md-2 mt-2"><input type="submit" class="btn btn-info mt-4 btn-block" value="Get" /></div>
                         </div>
                     </form>
                     <form action="/Product/UpdateStockValue" method="post">
+                        <input type="hidden" name="ItemId" value="@Model.ItemId" />
+                        <input type="hidden" name="ShopId" value="@Model.ShopId" />
+                        <h5>@Model.ProductName</h5>
                         <div class="form-group w-25">
                             <label class="col-form-label">Quantity</label>
                             <input type="text" name="Qty" value="@Model.Qty" class="form-control" />
                         </div>
-                        <input type="submit" class="btn btn-success" value="Update" />
+                        <div class="mx-auto col-6"> <input type="submit" value="Update" class="btn btn-success btn-block" /></div>
                     </form>
                 </div>
-            </div></div>
+            </div>
+        </div>
+    </div>
 </div>
-</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            $('#select-shop').select2({
+                placeholder: "Search Shop",
+                ajax: {
+                    url: "/Product/GetActiveShopSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ShopName"]').val(e.params.data.text);
+            });
+            
+        });
+    </script>
+}
