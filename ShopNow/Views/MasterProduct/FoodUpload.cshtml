@@ -1,17 +1,17 @@
-﻿@model ShopNow.ViewModels.MainPageModel
+﻿@model ShopNow.ViewModels.MasterDishUploadViewModel
 @using System.Data;
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<title>Shop Now | Master Product Ecxel Upload</title>
+<title>Shop Now | Master Dish Upload</title>
 <div class="container">
-    @using (Html.BeginForm("Index", "MasterProduct", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("FoodUpload", "MasterProduct", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
         <div class="row">
             <div class="col-md-12">
-                <h5>Master Product Master Excel Upload</h5>
+                <h5>Master Dish Upload</h5>
                 <div class="row mt-3">
                     <div class="col-md-6 mb-2">
                         <input type="file" id="dataFile" name="upload" />
@@ -57,103 +57,85 @@
                                         <td>
                                             <label class="col-md-5">Name</label>
                                             <input id="Name" name="Name" type="text" class="col-md-4" />
-                                            <input id="DBName" name="DBName" type="hidden" class="col-md-3" value="Name" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <label class="col-md-5">Category Name</label>
                                             <input id="CategoryName" name="CategoryName" type="text" class="col-md-4" />
-                                            <input id="DBCategoryName" name="DBCategoryName" type="hidden" value="CategoryName" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <label class="col-md-5">Brand Name</label>
                                             <input id="BrandName" name="BrandName" type="text" class="col-md-4" />
-                                            <input id="DBBrandName" name="DBBrandName" type="hidden" value="BrandName" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <label class="col-md-5">Short Description</label>
                                             <input id="ShortDescription" name="ShortDescription" type="text" class="col-md-4" />
-                                            <input id="DBShortDescription" name="DBShortDescription" type="hidden" value="ShortDescription" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <label class="col-md-5">Long Description</label>
                                             <input id="LongDescription" name="LongDescription" type="text" class="col-md-4" />
-                                            <input id="DBLongDescription" name="DBLongDescription" type="hidden" value="LongDescription" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <label class="col-md-5">Customisation</label>
                                             <input id="Customisation" name="Customisation" type="text" class="col-md-4" />
-                                            <input id="DBCustomisation" name="DBCustomisation" type="hidden" value="Customisation" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <label class="col-md-5">Food Type(ColorCode)</label>
                                             <input id="ColorCode" name="ColorCode" type="text" class="col-md-4" />
-                                            <input id="DBColorCode" name="DBColorCode" type="hidden" value="ColorCode" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <label class="col-md-5">Price</label>
                                             <input id="Price" name="Price" type="text" class="col-md-4" />
-                                            <input id="DBPrice" name="DBPrice" type="hidden" value="Price" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <label class="col-md-5">Product Image1</label>
-                                            <input id="ImagePathLarge1" name="ImagePathLarge1" type="text" class="col-md-4" />
-                                            <input id="DBImagePathLarge1" name="DBImagePathLarge1" type="hidden" value="ImagePathLarge1" />
+                                            <input id="ImagePath1" name="ImagePath1" type="text" class="col-md-4" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <label class="col-md-5">Product Image2</label>
-                                            <input id="ImagePathLarge2" name="ImagePathLarge2" type="text" class="col-md-4" />
-                                            <input id="DBImagePathLarge2" name="DBImagePathLarge2" type="hidden" value="ImagePathLarge2" />
+                                            <input id="ImagePath2" name="ImagePath2" type="text" class="col-md-4" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <label class="col-md-5">Product Image3</label>
-                                            <input id="ImagePathLarge3" name="ImagePathLarge3" type="text" class="col-md-4" />
-                                            <input id="DBImagePathLarge3" name="DBImagePathLarge3" type="hidden" value="ImagePathLarge3" />
+                                            <input id="ImagePath3" name="ImagePath3" type="text" class="col-md-4" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <label class="col-md-5">Product Image4</label>
-                                            <input id="ImagePathLarge4" name="ImagePathLarge4" type="text" class="col-md-4" />
-                                            <input id="DBImagePathLarge4" name="DBImagePathLarge4" type="hidden" value="ImagePathLarge4" />
+                                            <input id="ImagePath4" name="ImagePath4" type="text" class="col-md-4" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <label class="col-md-5">Product Image5</label>
-                                            <input id="ImagePathLarge5" name="ImagePathLarge5" type="text" class="col-md-4" />
-                                            <input id="DBImagePathLarge5" name="DBImagePathLarge5" type="hidden" value="ImagePathLarge5" />
+                                            <input id="ImagePath5" name="ImagePath5" type="text" class="col-md-4" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <label class="col-md-5">Item Type</label>
-                                            <select id="ProductType" name="ProductType" class="col-md-4">
-                                                <option value=" ">Select</option>
-                                                <option value="Product">Product</option>
-                                                <option value="Dish">Dish</option>
-                                                <option value="Service">Service</option>
-                                                <option value="Medical">Medical</option>
-                                            </select>
+                                            <select id="ProductTypeId" name="ProductTypeId" class="col-md-4"></select>
+                                            <input type="hidden" name="ProductTypeName" id="ProductTypeName" />
                                         </td>
                                     </tr>
                                 </tbody>
@@ -170,9 +152,25 @@
 </div>
 @section Scripts
     {
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+
     <script>
         $(document).ready(function () {
-
+            $('#ProductTypeId').select2({
+                placeholder: "Search Product Type",
+                ajax: {
+                    url: "/MasterProduct/GetProductTypeSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ProductTypeName"]').val(e.params.data.text);
+            });
             var tbl = document.getElementById("Product-list");
             if (tbl != null) {
                 for (var i = 0; i < tbl.rows.length; i++) {
@@ -206,20 +204,20 @@
                     $('#Price').on('click', function () {
                         $('#Price').val(cel.innerHTML)
                     });
-                    $('#ImagePathLarge1').on('click', function () {
-                        $('#ImagePathLarge1').val(cel.innerHTML)
+                    $('#ImagePath1').on('click', function () {
+                        $('#ImagePath1').val(cel.innerHTML)
                     });
-                    $('#ImagePathLarge2').on('click', function () {
-                        $('#ImagePathLarge2').val(cel.innerHTML)
+                    $('#ImagePath2').on('click', function () {
+                        $('#ImagePath2').val(cel.innerHTML)
                     });
-                    $('#ImagePathLarge3').on('click', function () {
-                        $('#ImagePathLarge3').val(cel.innerHTML)
+                    $('#ImagePath3').on('click', function () {
+                        $('#ImagePath3').val(cel.innerHTML)
                     });
-                    $('#ImagePathLarge4').on('click', function () {
-                        $('#ImagePathLarge4').val(cel.innerHTML)
+                    $('#ImagePath4').on('click', function () {
+                        $('#ImagePath4').val(cel.innerHTML)
                     });
-                    $('#ImagePathLarge5').on('click', function () {
-                        $('#ImagePathLarge5').val(cel.innerHTML)
+                    $('#ImagePath5').on('click', function () {
+                        $('#ImagePath5').val(cel.innerHTML)
                     });
                 });
             }
