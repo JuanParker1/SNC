@@ -2040,11 +2040,13 @@ namespace ShopNow.Controllers
             else
                 reviewCount = 0;
             model.CustomerReview = reviewCount;
-            model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryId as Id, CategoryName as Name from MasterProducts p join Categories c on c.Id = p.CategoryId where shopid ={shopId}  and c.Status = 0 and CategoryId !=0 and CategoryName is not null group by CategoryId,CategoryName order by Name").ToList<ShopDetails.CategoryList>();
+            model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryId as Id, c.Name as Name from MasterProducts m join Categories c on c.Id = m.CategoryId join Products p on p.MasterProductId = m.id where p.ShopId = {shopId}  and c.Status = 0 and CategoryId !=0 and c.Name is not null group by CategoryId,c.Name order by Name").ToList<ShopDetails.CategoryList>();
             if (shop.ShopCategoryId == 0)
             {
                 model.ProductLists = (from pl in db.Products
                                       join m in db.MasterProducts on pl.MasterProductId equals m.Id
+                                      join c in db.Categories on m.CategoryId equals c.Id into cat
+                                      from c in cat.DefaultIfEmpty()
                                       where pl.ShopId == shopId && pl.Status == 0 && (categoryId != 0 ? m.CategoryId == categoryId : true)
                                       select new ShopDetails.ProductList
                                       {
@@ -2053,7 +2055,7 @@ namespace ShopNow.Controllers
                                           ShopId = pl.ShopId,
                                           ShopName = pl.ShopName,
                                           CategoryId = m.CategoryId,
-                                          // CategoryName = m.CategoryName,
+                                          CategoryName = c.Name,
                                           ColorCode = m.ColorCode,
                                           Price = pl.Price,
                                           ImagePath = ((!string.IsNullOrEmpty(m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
@@ -2065,6 +2067,8 @@ namespace ShopNow.Controllers
             {
                 model.ProductLists = (from pl in db.Products
                                       join m in db.MasterProducts on pl.MasterProductId equals m.Id
+                                      join c in db.Categories on m.CategoryId equals c.Id into cat
+                                      from c in cat.DefaultIfEmpty()
                                       where pl.ShopId == shopId && pl.Status == 0 && m.Name.ToLower().Contains(str) && (categoryId != 0 ? m.CategoryId == categoryId : true)
                                       select new ShopDetails.ProductList
                                       {
@@ -2073,7 +2077,7 @@ namespace ShopNow.Controllers
                                           ShopId = pl.ShopId,
                                           ShopName = pl.ShopName,
                                           CategoryId = m.CategoryId,
-                                          //CategoryName = m.CategoryName,
+                                          CategoryName = c.Name,
                                           ColorCode = m.ColorCode,
                                           Price = pl.Price,
                                           ImagePath = ((!string.IsNullOrEmpty(m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
