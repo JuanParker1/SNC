@@ -2054,7 +2054,7 @@ namespace ShopNow.Controllers
                                           Name = m.Name,
                                           ShopId = pl.ShopId,
                                           ShopName = pl.ShopName,
-                                          CategoryId = m.CategoryId,
+                                          CategoryId = c.Id,
                                           CategoryName = c.Name,
                                           ColorCode = m.ColorCode,
                                           Price = pl.Price,
@@ -2639,7 +2639,7 @@ namespace ShopNow.Controllers
         public JsonResult GetNearShops(double Latitude, double Longitude)
         {
             var model = new NearShopImages();
-            string query = "SELECT top(6) * " +
+            string query = "SELECT * " +
                                " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and Status = 0 and Latitude != 0 and Longitude != 0" +
                                " order by Rating";
             model.NearShops = db.Shops.SqlQuery(query,
@@ -2655,27 +2655,27 @@ namespace ShopNow.Controllers
         public JsonResult GetNearPlaces(double Latitude, double Longitude, string a)
         {
             var model = new PlacesListView();
-            string query = "SELECT top(6) * " +
+            string query = "SELECT * " +
                                " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 1 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
                                " order by Rating";
-            string querySuperMarketList = "SELECT top(6) * " +
+            string querySuperMarketList = "SELECT * " +
             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 3 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
             " order by Rating";
-            string queryGroceriesList = "SELECT top(6) * " +
+            string queryGroceriesList = "SELECT * " +
             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 2 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
             " order by Rating";
-            string queryHealthList = "SELECT top(6) * " +
+            string queryHealthList = "SELECT * " +
             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 4 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
             " order by Rating";
-            string queryElectronicsList = "SELECT top(6) * " +
+            string queryElectronicsList = "SELECT * " +
             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 5 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
             " order by Rating";
-            string qServicesList = "SELECT top(6) * " +
+            string qServicesList = "SELECT * " +
             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 6 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
             " order by Rating";
             if (a == "-1")
             {
-                string queryOtherList = "SELECT top(6) * " +
+                string queryOtherList = "SELECT * " +
                 " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 7 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
                 " order by Rating";
                 model.ResturantList = db.Shops.SqlQuery(query,
