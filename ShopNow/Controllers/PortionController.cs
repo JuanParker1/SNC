@@ -82,17 +82,16 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNCSTE003")]
-        public JsonResult Edit(int code, string name)
+        public JsonResult Edit(int Id, string name)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             string message = "";
-            Portion portion = db.Portions.FirstOrDefault(i => i.Id == code);// Portion.Get(code);
+            Portion portion = db.Portions.FirstOrDefault(i => i.Id == Id);
             if (portion != null)
             {
                 portion.Name = name;
                 portion.DateUpdated = DateTime.Now;
                 portion.UpdatedBy = user.Name;
-                // bool result = Portion.Edit(portion, out int error);
                 portion.DateUpdated = DateTime.Now;
                 db.Entry(portion).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
@@ -102,10 +101,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNCSTD004")]
-        public JsonResult Delete(int code)
+        public JsonResult Delete(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var portion = db.Portions.FirstOrDefault(i => i.Id == code);// Portion.Get(code);
+            var portion = db.Portions.FirstOrDefault(i => i.Id == Id);
             if (portion != null)
             {
                 portion.Status = 2;
@@ -114,7 +113,7 @@ namespace ShopNow.Controllers
                 db.Entry(portion).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
-            return Json("Success", JsonRequestBehavior.AllowGet);
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [AccessPolicy(PageCode = "SHNCSTI005")]

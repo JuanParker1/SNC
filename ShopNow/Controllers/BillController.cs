@@ -16,15 +16,6 @@ namespace ShopNow.Controllers
         private sncEntities db = new sncEntities();
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
-        private const string _prefix = "BIL";
-        private static string _generatedCode
-        {
-            get
-            {
-                return ShopNow.Helpers.DRC.Generate(_prefix);
-            }
-        }
-
         public BillController()
         {
             _mapperConfiguration = new MapperConfiguration(config =>
@@ -86,7 +77,7 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             var ratecode = db.PlatFormCreditRates.Where(i => i.Status == 0).Select(i => i.Id).FirstOrDefault();
             ViewBag.PlatformCreditRateId = ratecode;
-            var platFormCreaditRate = db.PlatFormCreditRates.Where(i => i.Id == ratecode).FirstOrDefault();//PlatFormCreditRate.Get(model.PlatformCreditRateCode);
+            var platFormCreaditRate = db.PlatFormCreditRates.Where(i => i.Id == ratecode).FirstOrDefault();
             if (platFormCreaditRate != null)
             {
                 ViewBag.PlatformCreditRate = platFormCreaditRate.RatePerOrder;
@@ -108,7 +99,8 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var bill = _mapper.Map<BillCreateEditViewModel, Bill>(model);
             var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
-            if (shop != null) {
+            if (shop != null)
+            {
                 bill.CustomerId = shop.CustomerId;
                 bill.CustomerName = shop.CustomerName;
             }
@@ -116,10 +108,6 @@ namespace ShopNow.Controllers
             bill.UpdatedBy = user.Name;
             bill.NameOfBill = 1;                // 1 - BillingCharge
             bill.DeliveryRateSet = 2;           // 2 - N/A
-            if(model.ItemType == 1)
-            {
-                bill.PackingCharge = model.PackingCharge1;
-            }
             bill.Status = 0;
             bill.DateEncoded = DateTime.Now;
             bill.DateUpdated = DateTime.Now;
@@ -174,21 +162,17 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNBILBU005")]
-        public ActionResult BillingUpdate(string code)
+        public ActionResult BillingUpdate(string Id)
         {
-            var dCode = AdminHelpers.DCodeInt(code);
+            var dCode = AdminHelpers.DCodeInt(Id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             if (dCode==0)
                 return HttpNotFound();
-            var bill = db.Bills.Where(b => b.Id == dCode && b.Status==0).FirstOrDefault(); //Bill.Get(dCode);
+            var bill = db.Bills.Where(b => b.Id == dCode && b.Status==0).FirstOrDefault();
             var model = _mapper.Map<Bill, BillCreateEditViewModel>(bill);
-            if(model.ItemType == 1)
-            {
-                model.PackingCharge1 = model.PackingCharge;
-            }
             model.PlatformCreditRateId = db.PlatFormCreditRates.Where(i => i.Status == 0).Select(i => i.Id).FirstOrDefault();
-            var platFormCreaditRate = db.PlatFormCreditRates.Where(p => p.Id == model.PlatformCreditRateId).FirstOrDefault(); //PlatFormCreditRate.Get(model.PlatformCreditRateCode);
+            var platFormCreaditRate = db.PlatFormCreditRates.Where(p => p.Id == model.PlatformCreditRateId).FirstOrDefault();
             if (platFormCreaditRate != null)
             {
                 model.PlatformCreditRate = platFormCreaditRate.RatePerOrder;
@@ -202,7 +186,7 @@ namespace ShopNow.Controllers
         public ActionResult BillingUpdate(BillCreateEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            Bill bill = db.Bills.Where(b => b.Id == model.Id && b.Status == 0).FirstOrDefault(); //Bill.Get(model.Code);
+            Bill bill = db.Bills.Where(b => b.Id == model.Id && b.Status == 0).FirstOrDefault();
             _mapper.Map(model, bill);
             var shop = db.Shops.FirstOrDefault(i => i.Id == bill.ShopId);
             bill.CustomerId = shop.CustomerId;
@@ -211,12 +195,6 @@ namespace ShopNow.Controllers
             {
                 bill.DateUpdated = DateTime.Now;
                 bill.UpdatedBy = user.Name;
-                if (model.ItemType == 1)
-                {
-                    bill.PackingCharge = model.PackingCharge1;
-                }
-                //Bill.Edit(bill, out int errorCode);
-                bill.DateUpdated = DateTime.Now;
                 db.Entry(bill).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
@@ -231,7 +209,7 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             if (dCode==0)
                 return HttpNotFound();
-            var bill = db.Bills.Where(b => b.Id ==dCode && b.Status == 0).FirstOrDefault();// Bill.Get(dCode);
+            var bill = db.Bills.Where(b => b.Id ==dCode && b.Status == 0).FirstOrDefault();
             var model = _mapper.Map<Bill, BillCreateEditViewModel>(bill);
             if(bill.DeliveryRateSet == 1)
             {
@@ -247,7 +225,7 @@ namespace ShopNow.Controllers
         public ActionResult DeliveryUpdate(BillCreateEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            Bill bill = db.Bills.Where(b => b.Id == model.Id && b.Status == 0).FirstOrDefault(); //Bill.Get(model.Code);
+            Bill bill = db.Bills.Where(b => b.Id == model.Id && b.Status == 0).FirstOrDefault();
             _mapper.Map(model, bill);
             if (bill != null)
             {
@@ -258,7 +236,6 @@ namespace ShopNow.Controllers
                     bill.DeliveryChargeKM = model.DeliveryChargeKM1;
                     bill.DeliveryChargeOneKM = model.DeliveryChargeOneKM1;
                 }
-                // Bill.Edit(bill, out int errorCode);
                 bill.DateUpdated = DateTime.Now;
                 db.Entry(bill).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
@@ -268,11 +245,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNBILBD007")]
-        public ActionResult BillingDelete(string code)
+        public JsonResult BillingDelete(int Id)
         {
-            var dCode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var bill = db.Bills.Where(b => b.Id == dCode && b.Status == 0).FirstOrDefault();//Bill.Get(dCode);
+            var bill = db.Bills.Where(b => b.Id == Id && b.Status == 0).FirstOrDefault();
             if (bill != null)
             {
                 bill.Status = 2;
@@ -281,14 +257,14 @@ namespace ShopNow.Controllers
                 db.Entry(bill).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
-            return RedirectToAction("BillingChargeList");
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [AccessPolicy(PageCode = "SHNBILDD008")]
         public ActionResult DeliveryDelete(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var bill = db.Bills.Where(b => b.Id == id && b.Status == 0).FirstOrDefault(); //Bill.Get(dCode);
+            var bill = db.Bills.Where(b => b.Id == id && b.Status == 0).FirstOrDefault();
             if (bill != null)
             {
                 bill.Status = 2;

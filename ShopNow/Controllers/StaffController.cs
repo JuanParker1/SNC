@@ -37,15 +37,6 @@ namespace ShopNow.Controllers
                 return ShopNow.Helpers.DRC.GeneratePassword();
             }
         }
-        private const string _prefix = "STF";
-
-        private static string _generatedCode
-        {
-            get
-            {
-                return ShopNow.Helpers.DRC.Generate(_prefix);
-            }
-        }
         public StaffController()
         {
             _mapperConfiguration = new MapperConfiguration(config =>
@@ -67,6 +58,7 @@ namespace ShopNow.Controllers
                         select s).OrderBy(s => s.Name).Where(i => i.Status == 0).ToList();
             return View(List);
         }
+
         [AccessPolicy(PageCode = "SHNSTFC002")]
         public ActionResult Create()
         {
@@ -81,11 +73,10 @@ namespace ShopNow.Controllers
         public ActionResult Create(StaffCreateEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-
             var staff = _mapper.Map<StaffCreateEditViewModel, Staff>(model);
             if(model.ShopId != 0)
             {
-                var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId); //Get(model.ShopCode);
+                var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
                 staff.CustomerId = shop.CustomerId;
                 staff.CustomerName = shop.CustomerName;
             }
@@ -96,10 +87,8 @@ namespace ShopNow.Controllers
             staff.DateUpdated = DateTime.Now;
             db.Staffs.Add(staff);
             db.SaveChanges();
-            //staff.Code = Staff.Add(staff, out int error);
             try
             {
-                //var staffImg = Staff.Get(staff.Code);
                 // Staff Image
                 if (model.StaffImage != null)
                 {
@@ -108,7 +97,6 @@ namespace ShopNow.Controllers
                 }
                 db.Staffs.Add(staff);
                 db.SaveChanges();
-               //Staff.Edit(staffImg, out int error1);
                 return RedirectToAction("List");
             }
             catch (AmazonS3Exception amazonS3Exception)
@@ -125,18 +113,17 @@ namespace ShopNow.Controllers
                     return ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
                 }
             }
-          
         }
 
         [AccessPolicy(PageCode = "SHNSTFE003")]
-        public ActionResult Edit(string code)
+        public ActionResult Edit(string Id)
         {
-            var dCode = AdminHelpers.DCodeInt(code);
+            var dCode = AdminHelpers.DCodeInt(Id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             if (dCode==0)
                 return HttpNotFound();
-            var staff = db.Staffs.FirstOrDefault(i => i.Id == dCode); //Staff.Get(dCode);
+            var staff = db.Staffs.FirstOrDefault(i => i.Id == dCode);
             var model = _mapper.Map<Staff, StaffCreateEditViewModel>(staff);
             return View(model);
         }
@@ -147,16 +134,14 @@ namespace ShopNow.Controllers
         public ActionResult Edit(StaffCreateEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            Staff staff = db.Staffs.FirstOrDefault(i => i.Id == model.Id); // Staff.Get(model.Code);
+            Staff staff = db.Staffs.FirstOrDefault(i => i.Id == model.Id);
             _mapper.Map(model, staff);
 
             staff.DateUpdated = DateTime.Now;
             staff.UpdatedBy = user.Name;
-           // Staff.Edit(staff, out int errorCode);
 
             try
             {
-               // var staffImg = Staff.Get(staff.Code);
                 // Staff Image
                 if (model.StaffImage != null)
                 {
@@ -165,7 +150,6 @@ namespace ShopNow.Controllers
                 }
                 db.Entry(staff).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                //  Staff.Edit(staffImg, out int error1);
                 return RedirectToAction("List");
             }
             catch (AmazonS3Exception amazonS3Exception)
@@ -191,7 +175,7 @@ namespace ShopNow.Controllers
             var dCode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            Staff staff = db.Staffs.FirstOrDefault(i => i.Id == dCode); //Staff.Get(dCode);
+            Staff staff = db.Staffs.FirstOrDefault(i => i.Id == dCode);
             var model = new StaffCreateEditViewModel();
             _mapper.Map(staff, model);
             model.List = db.Shops.Where(i => i.Id == staff.ShopId).Select(i => new StaffCreateEditViewModel.ShopList
@@ -209,31 +193,32 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNSTFR005")]
-        public ActionResult Delete(string code)
+        public JsonResult Delete(int Id)
         {
-            var dCode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var staff = db.Staffs.FirstOrDefault(i => i.Id == dCode); // Staff.Get(dCode);
-            staff.Status = 2;
-            staff.DateUpdated = DateTime.Now;
-            staff.UpdatedBy = user.Name;
-            db.Entry(staff).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
-            return RedirectToAction("List");
+            var staff = db.Staffs.FirstOrDefault(i => i.Id == Id);
+            if (staff != null)
+            {
+                staff.Status = 2;
+                staff.DateUpdated = DateTime.Now;
+                staff.UpdatedBy = user.Name;
+                db.Entry(staff).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [AccessPolicy(PageCode = "SHNSTFGP006")]
-        public JsonResult GeneratePassword(string code)
+        public JsonResult GeneratePassword(int Id)
         {
-            var dCode = AdminHelpers.DCodeInt(code);
-            var staff = db.Staffs.FirstOrDefault(i => i.Id == dCode); // Staff.Get(code);
-            staff.Password = _generatedPassword;
-            staff.DateUpdated = DateTime.Now;
-            db.Entry(staff).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
-
-           // Staff.Edit(staff, out int error);
-
+            var staff = db.Staffs.FirstOrDefault(i => i.Id == Id);
+            if (staff != null)
+            {
+                staff.Password = _generatedPassword;
+                staff.DateUpdated = DateTime.Now;
+                db.Entry(staff).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
             return Json(new { data = staff.Password, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
@@ -247,13 +232,14 @@ namespace ShopNow.Controllers
             }).ToListAsync();
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
-        //protected override void Dispose(bool disposing)
-        //{
-        //    if (disposing)
-        //    {
-        //        db.Dispose();
-        //    }
-        //    base.Dispose(disposing);
-        //}
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }

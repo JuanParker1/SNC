@@ -25,38 +25,18 @@
                     @Html.Grid(Model).Columns(columns =>
     {
     columns.Add(b => b.Name).Titled("Name").Filterable(true).SetWidth(20);
-    columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(b => @<div>
-                    <a href="javascript:void(0)" data-id="@b.Id" data-id1="@b.Name" class="btn-sm btn-warning edit-prompt" data-toggle="modal" data-target="#editModal" style="padding: 3px 26px">Edit</a>
-                    <a href="javascript:void(0)" data-id="@b.Id" data-id1="@b.Name" class="btn-sm btn-danger delete-prompt" data-toggle="modal" data-target="#deleteModel" style="padding: 3px 18px">Delete</a>
-                </div>);
-         }).WithPaging(20).Sortable(true)
+    columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20)
+                  .RenderValueAs(o => @<div>
+                        <a href="editModal" class="text-info edit-prompt mr-5" data-id=@o.Id data-id1="@o.Name" data-target="#editModal" data-toggle="modal"><i class="fa fa-edit fa-lg"></i></a>
+                        <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+                    </div>);
+}).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
     </div>
 </div>
 }
-
-<div class="modal fade" id="deleteModel" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header alert alert-danger">
-                <h4 class="modal-title" id="myModalLabel">Warning</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p class="success-message">Are you sure want to delete this record? </p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-success delete-confirm">Yes</button>
-                <button class="btn btn-danger" data-dismiss="modal">No</button>
-                <input type="hidden" name="Code" id="Code" data-dismiss="modal" />
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel">
     <div class="modal-dialog" role="document">
@@ -86,7 +66,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header alert alert-info">
-                <input type="hidden" name="ShopCategoryCode" id="ShopCategoryCode" class="form-control" />
+                <input type="hidden" name="ShopCategoryId" id="ShopCategoryId" class="form-control" />
                 <h5 class="modal-title" id="editModalLabel">Update Category</h5>
                 <button type="button" class="btnClose close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -144,20 +124,20 @@
             });
 
             $(".edit-prompt").click(function () {
-                var code = $(this).attr('data-id');
+                var id = $(this).attr('data-id');
                 var name = $(this).attr('data-id1');
-                $("#ShopCategoryCode").val(code);
+                $("#ShopCategoryId").val(id);
                 $("#ShopCategoryName").append("<input type=text name=SCName id=SCName class=form-control value='" + name + "' />");
             });
 
             $(".Edit").click(function () {
-                var Code = $("#ShopCategoryCode").val();
-                var shopCategoryName = $("#SCName").val();
-                if (shopCategoryName == "" || shopCategoryName == null) {
+                var Id = $("#ShopCategoryId").val();
+                var name = $("#SCName").val();
+                if (name == "" || name == null) {
                     swal("Name is Empty.", "Please Enter a Shop Category Name", "warning");
                 }
-                else if (shopCategoryName != "" || shopCategoryName != null) {
-                    $.getJSON("/ShopCategory/Edit", { code: Code, name: shopCategoryName }, function (data) {
+                else if (name != "" || name != null) {
+                    $.getJSON("/ShopCategory/Edit", { Id: Id, name: name }, function (data) {
                         if (data.message != null || data.message != "") {
                             swal({
                                 title: data.message,
@@ -175,18 +155,30 @@
                 window.location.reload();
             });
 
-            $(".delete-prompt").click(function () {
-                var code = $(this).attr('data-id');
-                $("#Code").val(code);
+            $(".btnDelete").click(function () {
+                var Id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/ShopCategory/Delete", { id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
             });
-
-            $(".delete-confirm").click(function () {
-                var code = $("#Code").val();
-                $.getJSON("/ShopCategory/Delete", { code: code }, function (data) {
-                    window.location.reload();
-                });
-            });
-
         });
 
     </script>

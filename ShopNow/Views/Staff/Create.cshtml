@@ -1,12 +1,10 @@
 ﻿@model ShopNow.ViewModels.StaffCreateEditViewModel
 @{
-    /**/
-
     ViewBag.Title = "Staff Entry";
 }
-<title>ShopNow | Staff Entry</title>
+<title>ShopNow | @ViewBag.Title</title>
 
-<style>
+@*<style>
     .img-upload-container {
         position: relative;
         width: 120px;
@@ -36,14 +34,14 @@
         .img-browse:hover {
             opacity: 1.5;
         }
-</style>
+</style>*@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-4">
-            <h5 class="mt-1 text-success" style="letter-spacing:1px">STAFF ENTRY</h5>
+            <h5 class="mt-1 text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
         </div>
         <div class="col-md-8 text-right">
-            <a href="~/Staff/List" target="_blank"><span class="fa fa-bars"></span>&nbsp;Staff List</a>
+            <a href="~/Staff/List" target="_blank"><span class="fa fa-bars"></span> Staff List</a>
         </div>
     </div>
     <div class="row">
@@ -59,15 +57,15 @@
                         <div class="form-group row">
                             <div class="col-md-3">
                                 <label class="col-form-label"><strong class="text-secondary">Staff Name</strong></label>
-                                <input id="Name" type="text" class="form-control" name="Name" />
+                                <input id="Name" type="text" class="form-control" name="Name" maxlength="100" oninput="this.value=this.value.replace(/[^a-zA-Z]/g, '');"/>
                             </div>
                             <div class="col-md-3">
                                 <label class="col-form-label"><strong class="text-secondary">Mobile Number</strong></label>
-                                <input id="PhoneNumber" type="number" class="form-control" name="PhoneNumber" />
+                                <input type="text" class="form-control" name="PhoneNumber" id="PhoneNumber" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'');" />
                             </div>
                             <div class="col-md-3 mt-1">
                                 <label class="control-label" for="ShopName"><strong class="text-secondary">Shop Name</strong></label>
-                                <select id="ShopCode" name="ShopCode" class="form-control"></select>
+                                <select id="ShopId" name="ShopId" class="form-control"></select>
                                 <input type="hidden" name="ShopName" id="ShopName" />
                             </div>
                             <div class="col-md-2">
@@ -108,23 +106,21 @@
 
     <script>
         $(document).ready(function () {
-
             $(".Save").click(function () {
                 var isValidated = false;
                 var requiredArr = [
                     'Name',
                     'PhoneNumber',
-                    'ShopCode'
+                    'ShopId'
                 ];
                 isValidated = ValidateEmptyRequiredFiels(requiredArr);
-
                 if (isValidated) {
-                    $('#StaffForm').submit();
                     $('.Save').prop('disabled', true);
+                    $('#StaffForm').submit();
                 };
             });
 
-            $('#ShopCode').select2({
+            $('#ShopId').select2({
                 placeholder: "Search Shop",
                 ajax: {
                     url: "/Staff/GetShopSelect2",
@@ -139,11 +135,9 @@
             function readURL(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
-
                     reader.onload = function (e) {
                         $('#img-upload').attr('src', e.target.result);
                     }
-
                     reader.readAsDataURL(input.files[0]);
                 }
             }

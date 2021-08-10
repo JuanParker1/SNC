@@ -28,7 +28,7 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="">
                     <div class="container">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <span class="text-uppercase text-white text-nowrap">Human Resource</span>
                                 <ul class="nav flex-column text-nowrap">
                                     <li class="nav-item">
@@ -38,14 +38,14 @@
                                         <a class="nav-link" href="~/DeliveryBoy/List">Delivery Boy</a>
                                     </li>
                                     @*<li class="nav-item">
-                                        <a class="nav-link" href="~/MarketingAgent/List">Marketing Agent</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="~/DeliveryBoy/AssignFranchise">Assign Marketing Agent for DeliveryBoys</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="~/Shop/AssignFranchise">Assign Marketing Agent for Shops</a>
-                                    </li>*@
+                    <a class="nav-link" href="~/MarketingAgent/List">Marketing Agent</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="~/DeliveryBoy/AssignFranchise">Assign Marketing Agent for DeliveryBoys</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="~/Shop/AssignFranchise">Assign Marketing Agent for Shops</a>
+                </li>*@
                                     <li class="nav-item">
                                         <a class="nav-link" href="~/WebAPI/Create">API Upload</a>
                                     </li>
@@ -68,10 +68,18 @@
                                         <a class="nav-link" href="~/AccessPolicy/Create">Access Entry</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="~/Page/List">Page Entry</a>
+                                        <a class="nav-link" href="~/Page/Create">Page Entry</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="~/Page/Index">Page Upload</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <span class="text-uppercase text-white text-nowrap">Customer</span>
+                                <ul class="nav flex-column text-nowrap">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="~/Customer/List">Customer</a>
                                     </li>
                                 </ul>
                             </div>
@@ -274,9 +282,9 @@
                 </div>
             </li>
             <!--Customer-->
-            <li class="nav-item">
+            @*<li class="nav-item">
                 <a class="nav-link" href="~/Customer/List">Customer</a>
-            </li>
+            </li>*@
             <!--Shop-->
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
