@@ -28,6 +28,7 @@ namespace ShopNow.Controllers
     public class ApiController : Controller
     {
         private sncEntities db = new sncEntities();
+        
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
         //private string apipath= "https://admin.shopnowchat.in/";
@@ -427,6 +428,7 @@ namespace ShopNow.Controllers
                 user.DateUpdated = DateTime.Now;
                 db.CustomerAddresses.Add(user);
                 db.SaveChanges();
+               
                 if (model.AddressType == 0)
                 {
                     var customer = db.Customers.Where(i => i.Id == model.CustomerId).FirstOrDefault();
@@ -446,9 +448,10 @@ namespace ShopNow.Controllers
                     db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }
-                if (user.Id != 0)
+                if (user != null)
                 {
-                    return Json(new { message = "Successfully Added Addons Address!", Details = user }, JsonRequestBehavior.AllowGet);
+                    model.Id = user.Id;
+                    return Json(new { message = "Successfully Added Addons Address!", Details = model });
                 }
                 else
                 {
@@ -2041,12 +2044,13 @@ namespace ShopNow.Controllers
                 reviewCount = 0;
             model.CustomerReview = reviewCount;
             model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryId as Id, c.Name as Name from MasterProducts m join Categories c on c.Id = m.CategoryId join Products p on p.MasterProductId = m.id where p.ShopId = {shopId}  and c.Status = 0 and CategoryId !=0 and c.Name is not null group by CategoryId,c.Name order by Name").ToList<ShopDetails.CategoryList>();
-            if (shop.ShopCategoryId == 0)
+            if (shop.ShopCategoryId == 1)
             {
                 model.ProductLists = (from pl in db.Products
                                       join m in db.MasterProducts on pl.MasterProductId equals m.Id
-                                      join c in db.Categories on m.CategoryId equals c.Id into cat
-                                      from c in cat.DefaultIfEmpty()
+                                      join c in db.Categories on m.CategoryId equals c.Id 
+                                      //into cat
+                                      //from c in cat.DefaultIfEmpty()
                                       where pl.ShopId == shopId && pl.Status == 0 && (categoryId != 0 ? m.CategoryId == categoryId : true)
                                       select new ShopDetails.ProductList
                                       {
@@ -2054,7 +2058,7 @@ namespace ShopNow.Controllers
                                           Name = m.Name,
                                           ShopId = pl.ShopId,
                                           ShopName = pl.ShopName,
-                                          CategoryId = m.CategoryId,
+                                          CategoryId = c.Id,
                                           CategoryName = c.Name,
                                           ColorCode = m.ColorCode,
                                           Price = pl.Price,
@@ -2063,12 +2067,12 @@ namespace ShopNow.Controllers
                                           Customisation = pl.Customisation
                                       }).Where(i => str != "" ? i.Name.ToLower().Contains(str) : true).ToList();
             }
-            else if (shop.ShopCategoryId == 1)
+            else if (shop.ShopCategoryId == 2)
             {
                 model.ProductLists = (from pl in db.Products
                                       join m in db.MasterProducts on pl.MasterProductId equals m.Id
-                                      join c in db.Categories on m.CategoryId equals c.Id into cat
-                                      from c in cat.DefaultIfEmpty()
+                                      join nsc in db.NextSubCategories on m.NextSubCategoryId equals nsc.Id into cat
+                                      from nsc in cat.DefaultIfEmpty()
                                       where pl.ShopId == shopId && pl.Status == 0 && m.Name.ToLower().Contains(str) && (categoryId != 0 ? m.CategoryId == categoryId : true)
                                       select new ShopDetails.ProductList
                                       {
@@ -2076,8 +2080,8 @@ namespace ShopNow.Controllers
                                           Name = m.Name,
                                           ShopId = pl.ShopId,
                                           ShopName = pl.ShopName,
-                                          CategoryId = m.CategoryId,
-                                          CategoryName = c.Name,
+                                          CategoryId = nsc.Id,
+                                          CategoryName = nsc.Name,
                                           ColorCode = m.ColorCode,
                                           Price = pl.Price,
                                           ImagePath = ((!string.IsNullOrEmpty(m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
@@ -2260,25 +2264,25 @@ namespace ShopNow.Controllers
             return 0;
         }
 
-        public JsonResult GetShopCategoryList(string shopId, string CategoryId, string str = "", int page = 1, int pageSize = 20)
+        public JsonResult GetShopCategoryList(int shopId=0, int CategoryId=0, string str = "", int page = 1, int pageSize = 20)
         {
             //  var shid = db.Shops.Where(s => s.Id == shopId).FirstOrDefault();
             int count = 0;
-            //var total = db.GetShopCategoryProductCount(shopCode, categoryCode, str).ToList();
+            var total = db.GetShopCategoryProductCount(shopId, CategoryId, str).ToList();
             //if (total.Count > 0)
-            //    count = total[0].Value;            
+                count = total[0].Value;            
             var skip = page - 1;
-            //var model = db.GetShopCategoryProducts(shopId, CategoryId, str, skip, pageSize).ToList();    
+            var model = db.GetShopCategoryProducts(shopId, CategoryId, str, skip, pageSize).ToList();    
             int CurrentPage = page;
             int PageSize = pageSize;
             int TotalCount = count;
             int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
-            // var items = model;
+            var items = model;
             var previous = CurrentPage - 1;
-            //var previousurl = "https://admin.shopnowchat.in/Api/GetShopCategoryList?shopId=" + shopCode + "&categoryCode=" + categoryCode + "&str=" + str + "&page=" + previous;
+            var previousurl =apipath+ "/Api/GetShopCategoryList?shopId=" + shopId + "&categoryId=" + CategoryId + "&str=" + str + "&page=" + previous;
             // var previousPage = CurrentPage > 1 ? previousurl : "No";
             var current = CurrentPage + 1;
-            //var nexturl = "https://admin.shopnowchat.in/Api/GetShopCategoryList?shopId=" + shopCode + "&categoryCode=" + categoryCode + "&str=" + str + "&page=" + current;
+            var nexturl = apipath + "/Api/GetShopCategoryList?shopId=" + shopId + "&categoryId=" + CategoryId + "&str=" + str + "&page=" + current;
             // var nextPage = CurrentPage < TotalPages ? nexturl : "No";
             var paginationMetadata = new
             {
@@ -2286,8 +2290,8 @@ namespace ShopNow.Controllers
                 pageSize = PageSize,
                 currentPage = CurrentPage,
                 totalPages = TotalPages,
-                //previousPage,
-                // nextPage
+                previousurl,
+                nexturl
             };
             return Json(new { Page = paginationMetadata, /*items*/ }, JsonRequestBehavior.AllowGet);
         }
@@ -2639,7 +2643,7 @@ namespace ShopNow.Controllers
         public JsonResult GetNearShops(double Latitude, double Longitude)
         {
             var model = new NearShopImages();
-            string query = "SELECT top(6) * " +
+            string query = "SELECT * " +
                                " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and Status = 0 and Latitude != 0 and Longitude != 0" +
                                " order by Rating";
             model.NearShops = db.Shops.SqlQuery(query,
@@ -2655,27 +2659,27 @@ namespace ShopNow.Controllers
         public JsonResult GetNearPlaces(double Latitude, double Longitude, string a)
         {
             var model = new PlacesListView();
-            string query = "SELECT top(6) * " +
+            string query = "SELECT * " +
                                " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 1 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
                                " order by Rating";
-            string querySuperMarketList = "SELECT top(6) * " +
+            string querySuperMarketList = "SELECT * " +
             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 3 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
             " order by Rating";
-            string queryGroceriesList = "SELECT top(6) * " +
+            string queryGroceriesList = "SELECT * " +
             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 2 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
             " order by Rating";
-            string queryHealthList = "SELECT top(6) * " +
+            string queryHealthList = "SELECT * " +
             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 4 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
             " order by Rating";
-            string queryElectronicsList = "SELECT top(6) * " +
+            string queryElectronicsList = "SELECT * " +
             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 5 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
             " order by Rating";
-            string qServicesList = "SELECT top(6) * " +
+            string qServicesList = "SELECT * " +
             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 6 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
             " order by Rating";
             if (a == "-1")
             {
-                string queryOtherList = "SELECT top(6) * " +
+                string queryOtherList = "SELECT * " +
                 " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 7 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
                 " order by Rating";
                 model.ResturantList = db.Shops.SqlQuery(query,

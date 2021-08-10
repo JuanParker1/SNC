@@ -1597,30 +1597,10 @@ namespace ShopNow.Controllers
                 {
                     product.MasterProductId = masterproductId;
                     product.MasterProductId = masterproduct.Id;
-                   
-                    if (product.Customisation == false && masterproduct.Customisation != false)
-                    {
-                        product.Customisation = masterproduct.Customisation;
-                    }
-                    if (product.Price == 0 && masterproduct.Price != 0)
-                    {
-                        product.Price = masterproduct.Price;
-                    }
-                
-                    if (product.IBarU == 0 && masterproduct.IBarU != null)
-                    {
-                        product.IBarU = Convert.ToInt32(masterproduct.IBarU);
-                    }
-                   
-                    if (product.ProductTypeId == 0 && masterproduct.ProductTypeId != 0)
-                    {
-                        product.ProductTypeId = masterproduct.ProductTypeId;
-                    }
-                    if (shopId == 0)
-                    {
-                        product.ShopId = 0;
-                        product.ShopName = "Admin";
-                    }
+                    product.Customisation = masterproduct.Customisation;
+                    product.Price = masterproduct.Price;
+                    product.IBarU = Convert.ToInt32(masterproduct.IBarU);
+                    product.ProductTypeId = masterproduct.ProductTypeId;
                     if (shopId != 0)
                     {
                         var shop = _db.Shops.FirstOrDefault(i => i.Id == shopId);
@@ -1634,7 +1614,6 @@ namespace ShopNow.Controllers
                     }
                     product.UpdatedBy = user.Name;
                     product.DateUpdated = DateTime.Now;
-
                     _db.Entry(product).State = System.Data.Entity.EntityState.Modified;
                     _db.SaveChanges();
 
