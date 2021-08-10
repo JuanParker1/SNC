@@ -12,6 +12,10 @@
                     <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
                     <form action="/PushNotification/SendBulk" method="post">
                         <div class="form-group">
+                            <label class="col-form-label">Select District</label>
+                            <select id="select-district" class="form-control" name="District" multiple required></select>
+                        </div>
+                        <div class="form-group">
                             <label class="col-form-label">Title</label>
                             <input type="text" name="Title" class="form-control" placeholder="Enter Title" required />
                         </div>
@@ -24,5 +28,32 @@
                 </div>
             </div>
         </div>
-        </div>
     </div>
+</div>
+
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script>
+        $(document).ready(function () {
+
+            $('#select-district').select2({
+                placeholder: "Search District",
+                ajax: {
+                    url: "/Customer/GetDistrictSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            });
+            //    .on('select2:select', function (e) {
+            //    $('input[name="ShopName"]').val(e.params.data.text);
+            //});
+        
+        });
+    </script>
+}

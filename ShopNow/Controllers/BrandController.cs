@@ -101,7 +101,7 @@ namespace ShopNow.Controllers
                 db.Entry(brand).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
-            return Json("Success", JsonRequestBehavior.AllowGet);
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         // GET: Brand

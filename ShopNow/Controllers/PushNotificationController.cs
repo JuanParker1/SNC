@@ -22,9 +22,9 @@ namespace ShopNow.Controllers
 
         [AccessPolicy(PageCode = "")]
         [HttpPost]
-        public ActionResult SendBulk(string title,string message)
+        public ActionResult SendBulk(string title,string message,string[] district)
         {
-            var fcmTokenList = db.Customers.Where(i => !string.IsNullOrEmpty(i.FcmTocken)).Select(i=>i.FcmTocken).ToArray();
+            var fcmTokenList = db.Customers.Where(i => !string.IsNullOrEmpty(i.FcmTocken) && i.FcmTocken != "NULL" && district.Contains(i.DistrictName)).Select(i=>i.FcmTocken).ToArray();
             Helpers.PushNotification.SendBulk(message, title, "a.mp3", fcmTokenList);
             return RedirectToAction("Index");
         }

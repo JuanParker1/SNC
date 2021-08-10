@@ -24,7 +24,6 @@ namespace ShopNow.ViewModels
         public int DeliveryRateSet { get; set; }
         public int DeliveryRateSet1 { get; set; }
         public double PackingCharge { get; set; }
-        public double PackingCharge1 { get; set; }
         public double TotalAmount { get; set; }
         public int Distance { get; set; }
         public int Type { get; set; }
@@ -68,7 +67,7 @@ namespace ShopNow.ViewModels
                     switch (this.ItemType)
                     {
                         case 0:
-                            return "Single Item";
+                            return "Item wise";
                         case 1:
                             return "Total Item";
                         default:
