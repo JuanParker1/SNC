@@ -30,12 +30,12 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="col-form-label"><strong class="text-secondary">Shop Name</strong></label>
-                                <select name="ShopCode" id="ShopCode" class="form-control"></select>
+                                <select name="ShopId" id="ShopId" class="form-control"></select>
                                 <input type="hidden" name="ShopName" id="ShopName" />
                             </div>
                             <div class="col-md-4">
                                 <label class="col-form-label"><strong class="text-secondary">Staff Name</strong></label>
-                                <select name="StaffCode" id="StaffCode" class="form-control"></select>
+                                <select name="StaffId" id="StaffId" class="form-control"></select>
                                 <input type="hidden" name="StaffName" id="StaffName" placeholder="Select Staff" />
                             </div>
                         </div>
@@ -102,8 +102,8 @@
                 var isValidate = false;
                 var requiredArr = [
                     'PageCode',
-                    'ShopCode',
-                    'StaffCode'
+                    'ShopId',
+                    'StaffId'
                 ];
                 isValidate = ValidateEmptyRequiredFiels(requiredArr);
                 if (isValidate) {
@@ -124,7 +124,7 @@
                 $('input[name="PageName"]').val(e.params.data.text);
             });
 
-            $('#ShopCode').select2({
+            $('#ShopId').select2({
                 placeholder: "Search Shop",
                 ajax: {
                     url: "/AccessPolicy/GetShopSelect2",
@@ -134,10 +134,10 @@
                 }
             }).on('select2:select', function (e) {
                 $('input[name="ShopName"]').val(e.params.data.text);
-                $("#StaffCode").select2({
+                $("#StaffId").select2({
                     placeholder: "Search Staff",
                     ajax: {
-                        url: "/AccessPolicy/GetStaffSelect2?shopcode=" + e.params.data.id,
+                        url: "/AccessPolicy/GetStaffSelect2?ShopId=" + e.params.data.id,
                         width: "100%",
                         delay: 250,
                         dataType: 'json'

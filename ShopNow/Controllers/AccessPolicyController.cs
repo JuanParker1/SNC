@@ -25,14 +25,7 @@ namespace ShopNow.Controllers
         private sncEntities db = new sncEntities();
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
-        private const string _prefix = "APG";
-        private static string _generatedCode
-        {
-            get
-            {
-                return ShopNow.Helpers.DRC.Generate(_prefix);
-            }
-        }
+     
         public AccessPolicyController()
         {
             _mapperConfiguration = new MapperConfiguration(config =>
@@ -138,12 +131,17 @@ namespace ShopNow.Controllers
                     {
                         access.Position = cust;
                     }
-                    // string shiftsessioncode = AccessPolicy.Add(access, out int errorCode);
-                    //access.Code = Helpers.DRC.Generate("APG");
                     access.Status = 0;
                     access.DateEncoded = DateTime.Now;
                     access.DateUpdated = DateTime.Now;
                     db.AccessPolicies.Add(access);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    var ap = db.AccessPolicies.FirstOrDefault(i=> i.Id == s.Id);
+                    ap.isAccess = true;
+                    db.Entry(ap).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }
             }
@@ -155,7 +153,6 @@ namespace ShopNow.Controllers
                                PageName = i.p.Name,
                                IsAccess = i.a.Any() ? i.a.FirstOrDefault().isAccess : false
                            }).OrderBy(i=>i.PageName).ToList();
-            //model.List = Page.GetList().AsQueryable().ProjectTo<AccessPolicyListViewModel.AccessPolicy>(_mapperConfiguration).OrderBy(i => i.Name).ToList();
 
             return View(model);
         }
@@ -386,6 +383,59 @@ namespace ShopNow.Controllers
             return Json(false, JsonRequestBehavior.AllowGet);
         }
 
+        [AccessPolicy(PageCode = "")]
+        public JsonResult AddSelectAllSession(int CustomerId, string CustomerName, bool IsAccess)
+        {
+            List<AccessPolicyViewModel> itemList = Session["AccessList"] as List<AccessPolicyViewModel>;
+
+            if (itemList == null)
+            {
+                itemList = new List<AccessPolicyViewModel>();
+            }
+            if (IsAccess)
+            {
+                var List = db.Pages.Where(i => i.Status == 0).Select(i => new AccessPolicyViewModel
+                {
+                    Id = i.Id,
+                    PageCode = i.Code,
+                    PageName = i.Name,
+                    Status = i.Status
+                }).ToList();
+
+                foreach (var ap in List)
+                {
+                    if (itemList == null)
+                    {
+                        itemList = new List<AccessPolicyViewModel>();
+                    }
+                    AccessPolicyViewModel item = new AccessPolicyViewModel();
+                    item.Id = ap.Id;
+                    item.PageCode = ap.PageCode;
+                    item.PageName = ap.PageName;
+                    item.CustomerId = CustomerId;
+                    item.CustomerName = CustomerName;
+                    item.IsAccess = true;
+                    itemList.Add(item);
+                }
+                Session["AccessList"] = itemList;
+            }
+            return Json(new { list = itemList }, JsonRequestBehavior.AllowGet);
+        }
+
+        [AccessPolicy(PageCode = "")]
+        public JsonResult RemoveSelectAllSession(AccessPolicyViewModel model)
+        {
+            List<AccessPolicyViewModel> itemList = Session["AccessList"] as List<AccessPolicyViewModel>;
+            if (itemList == null)
+            {
+                itemList = new List<AccessPolicyViewModel>();
+            }
+            itemList.Remove(model);
+            Session["AccessList"] = itemList.Remove(model);
+
+            return Json(new { list = itemList }, JsonRequestBehavior.AllowGet);
+        }
+
         [AccessPolicy(PageCode = "SHNAPGL001")]
         public async Task<JsonResult> GetStaffSelect2(int shopid)
         {
@@ -481,11 +531,7 @@ namespace ShopNow.Controllers
                                 UseHeaderRow = true
                             }
                         });
-
-                        // reader.IsFirstRowAsColumnNames = true;
-
                         reader.Close();
-
                         model.DataTable = result.Tables[0];
                         model.Filename = upload.FileName;
                         return View(model);
@@ -568,23 +614,6 @@ namespace ShopNow.Controllers
             var List = (from s in db.AccessPolicies
                         select s).OrderBy(s => s.PageName).Where(i => i.Status == 0 || i.Status==3).ToList();
             return View(List);
-            //var user = ((Helpers.Sessions.User)Session["USER"]);
-            //ViewBag.Name = user.Name;
-            //var model = new AccessPolicyItemListViewModel();
-            //model.List = db.AccessPolicyGroups.Where(i=> i.Status == 0 || i.Status == 3).Select(i=> new AccessPolicyItemListViewModel.AccessPolicy
-            //{
-            //    Code = i.Code,
-            //    PageCode = i.PageCode,
-            //    PageName = i.PageName,
-            //    ShopCode = i.ShopCode,
-            //    ShopName = i.ShopName,
-            //    StaffCode = i.StaffCode,
-            //    StaffName = i.StaffName,
-            //    Position = i.Position,
-            //    Status = i.Status
-            //}).OrderBy(i => i.PageName).ToList();
-
-            //return View(model);
         }
 
         [AccessPolicy(PageCode = "SHNAPGC005")]
@@ -601,44 +630,32 @@ namespace ShopNow.Controllers
         public ActionResult Create(AccessPolicyCreateEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            int errorCode = 0;
-            try
+            var access = _mapper.Map<AccessPolicyCreateEditViewModel, AccessPolicy>(model);
+            access.CreatedBy = user.Name;
+            access.UpdatedBy = user.Name;
+            var shop = db.Shops.Where(m => m.Id == model.ShopId).FirstOrDefault();
+            var customer = db.Customers.Where(c => c.Id == shop.CustomerId).FirstOrDefault();
+            if (customer != null)
             {
-                var access = _mapper.Map<AccessPolicyCreateEditViewModel, AccessPolicy>(model);
-                access.CreatedBy = user.Name;
-                access.UpdatedBy = user.Name;
-                var shop = db.Shops.Where(m => m.Id == model.ShopId).FirstOrDefault(); //Shop.Get(model.ShopCode);
-                var customer = db.Customers.Where(c => c.Id == shop.CustomerId).FirstOrDefault(); //Customer.Get(shop.CustomerCode);
-                if (customer != null)
-                {
-                    access.CustomerId = customer.Id;
-                    access.CustomerName = customer.Name;
-                }
-                access.isAccess = true;
-                // access.Code = AccessPolicy.Add(access, out errorCode);
-               // access.Code = Helpers.DRC.Generate("APG");
-                access.Status = 0;
-                access.DateEncoded = DateTime.Now;
-                access.DateUpdated = DateTime.Now;
-                db.AccessPolicies.Add(access);
-                db.SaveChanges();
-                return RedirectToAction("ItemList");
+                access.CustomerId = customer.Id;
+                access.CustomerName = customer.Name;
             }
-            catch (Exception ex)
-            {
-                return HttpNotFound("Error Code: " + errorCode);
-            }
+            access.isAccess = true;
+            access.Status = 0;
+            access.DateEncoded = DateTime.Now;
+            access.DateUpdated = DateTime.Now;
+            db.AccessPolicies.Add(access);
+            db.SaveChanges();
+            return RedirectToAction("ItemList");
         }
 
         [AccessPolicy(PageCode = "SHNAPGE006")]
-        public ActionResult Edit(string id)
+        public ActionResult Edit(string Id)
         {
-            var dCode = AdminHelpers.DCodeInt(id);
+            var dCode = AdminHelpers.DCodeInt(Id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            //if (string.IsNullOrEmpty(dCode))
-            //    return HttpNotFound();
-            var access = db.AccessPolicies.Where(m => m.Id == dCode).FirstOrDefault();//AccessPolicy.Get(dCode);
+            var access = db.AccessPolicies.Where(m => m.Id == dCode).FirstOrDefault();
             var model = _mapper.Map<AccessPolicy, AccessPolicyCreateEditViewModel>(access);
             return View(model);
         }
@@ -649,39 +666,30 @@ namespace ShopNow.Controllers
         public ActionResult Edit(AccessPolicyCreateEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            int errorCode = 0;
-            try
+            AccessPolicy access = db.AccessPolicies.Where(m => m.Id == model.Id).FirstOrDefault();
+            _mapper.Map(model, access);
+            access.DateUpdated = DateTime.Now;
+            access.UpdatedBy = user.Name;
+            access.isAccess = true;
+            var shop = db.Shops.Where(s => s.Id == model.ShopId).FirstOrDefault();
+            var customer = db.Customers.Where(c => c.Id == shop.CustomerId).FirstOrDefault();
+            if (customer != null)
             {
-                AccessPolicy access = db.AccessPolicies.Where(m => m.Id == model.Id).FirstOrDefault();//AccessPolicy.Get(model.Code);
-                _mapper.Map(model, access);
-                access.DateUpdated = DateTime.Now;
-                access.UpdatedBy = user.Name;
-                access.isAccess = true;
-                var shop = db.Shops.Where(s => s.Id == model.ShopId).FirstOrDefault(); //Shop.Get(model.ShopCode);
-                var customer = db.Customers.Where(c => c.Id == shop.CustomerId).FirstOrDefault(); //Customer.Get(shop.CustomerCode);
-                if (customer != null)
-                {
-                    access.CustomerId = customer.Id;
-                    access.CustomerName = customer.Name;
-                }
-                // bool success = AccessPolicy.Edit(access, out errorCode);
-                access.DateUpdated = DateTime.Now;
-                db.Entry(access).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("ItemList");
+                access.CustomerId = customer.Id;
+                access.CustomerName = customer.Name;
             }
-            catch (Exception ex)
-            {
-                return HttpNotFound("Error Code: " + errorCode);
-            }
+            access.DateUpdated = DateTime.Now;
+            db.Entry(access).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("ItemList");
         }
 
         [AccessPolicy(PageCode = "SHNAPGD007")]
-        public ActionResult Delete(string id)
+        public ActionResult Delete(string Id)
         {
-            var dCode = AdminHelpers.DCodeInt(id);
+            var dCode = AdminHelpers.DCodeInt(Id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var access = db.AccessPolicies.Where(m => m.Id == dCode).FirstOrDefault(); //AccessPolicy.Get(dCode);
+            var access = db.AccessPolicies.Where(m => m.Id == dCode).FirstOrDefault();
             access.Status = 2;
             access.DateUpdated = DateTime.Now;
             access.UpdatedBy = user.Name;
@@ -689,6 +697,7 @@ namespace ShopNow.Controllers
             db.SaveChanges();
             return RedirectToAction("ItemList");
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -85,14 +85,12 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNPGEE003")]
-        public ActionResult Edit(string code)
+        public ActionResult Edit(string Id)
         {
-            var dCode = AdminHelpers.DCode(code);
+            var dCode = AdminHelpers.DCodeInt(Id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            if (string.IsNullOrEmpty(dCode))
-                return HttpNotFound();
-            var page = db.Pages.FirstOrDefault(i => i.Code == dCode);// Page.Get(dCode);
+            var page = db.Pages.FirstOrDefault(i => i.Id == dCode);
             var model = _mapper.Map<Page, PageCreateEditViewModel>(page);
             return View(model);
         }
@@ -106,12 +104,11 @@ namespace ShopNow.Controllers
             int errorCode = 0;
             try
             {
-                var page = db.Pages.FirstOrDefault(i => i.Code == model.Code);// Page.Get(model.Code);
+                var page = db.Pages.FirstOrDefault(i => i.Code == model.Code);
                 page.Name = model.Name.ToUpper();
                 page.Status = model.Status;
                 page.DateUpdated = DateTime.Now;
                 page.UpdatedBy = user.Name;
-                // bool success = Page.Edit(page, out errorCode);
                 page.DateUpdated = DateTime.Now;
                 db.Entry(page).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
@@ -124,11 +121,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNPGED005")]
-        public ActionResult Delete(string code)
+        public ActionResult Delete(string Id)
         {
-            var dCode = AdminHelpers.DCode(code);
+            var dCode = AdminHelpers.DCode(Id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var page = db.Pages.FirstOrDefault(i => i.Code == dCode);// Page.Get(dCode);
+            var page = db.Pages.FirstOrDefault(i => i.Code == dCode);
             page.Status = 2;
             page.DateUpdated = DateTime.Now;
             page.UpdatedBy = user.Name;

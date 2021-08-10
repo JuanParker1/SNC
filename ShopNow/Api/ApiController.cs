@@ -2041,7 +2041,7 @@ namespace ShopNow.Controllers
                 reviewCount = 0;
             model.CustomerReview = reviewCount;
             model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryId as Id, c.Name as Name from MasterProducts m join Categories c on c.Id = m.CategoryId join Products p on p.MasterProductId = m.id where p.ShopId = {shopId}  and c.Status = 0 and CategoryId !=0 and c.Name is not null group by CategoryId,c.Name order by Name").ToList<ShopDetails.CategoryList>();
-            if (shop.ShopCategoryId == 0)
+            if (shop.ShopCategoryId == 1)
             {
                 model.ProductLists = (from pl in db.Products
                                       join m in db.MasterProducts on pl.MasterProductId equals m.Id
@@ -2063,7 +2063,7 @@ namespace ShopNow.Controllers
                                           Customisation = pl.Customisation
                                       }).Where(i => str != "" ? i.Name.ToLower().Contains(str) : true).ToList();
             }
-            else if (shop.ShopCategoryId == 1)
+            else if (shop.ShopCategoryId == 2)
             {
                 model.ProductLists = (from pl in db.Products
                                       join m in db.MasterProducts on pl.MasterProductId equals m.Id

@@ -18,7 +18,7 @@
         <div class="col-md-12 mx-auto">
             @using (Html.BeginForm("Create", "Page", FormMethod.Post, new { id = "PageForm" }))
             {
-                <div class="card">
+                <div class="card shadow mt-3">
                     <div class="card-body">
                         @Html.AntiForgeryToken()
                         <div class="form-group row">
@@ -40,8 +40,8 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <div class="col-md-2 mx-auto">
-                                <button type="button" class="btn btn-block btn-success Save"><span class="glyphicon glyphicon-file"></span> Save</button>
+                            <div class="col-md-9">
+                                <button type="button" class="btn btn-block btn-success Save col-md-2 mx-auto"><span class="glyphicon glyphicon-file"></span> Save</button>
                             </div>
                         </div>
                     </div>
