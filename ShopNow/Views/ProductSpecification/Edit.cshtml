@@ -34,8 +34,8 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="col-form-label"><strong class="text-secondary">Specification Name</strong></label>
-                                <select name="SpecificationCode" id="SpecificationCode" class="form-control">
-                                    <option value="@Model.SpecificationCode">@Model.SpecificationName</option>
+                                <select name="SpecificationId" id="SpecificationId" class="form-control">
+                                    <option value="@Model.SpecificationId">@Model.SpecificationName</option>
                                 </select>
                                 <input type="hidden" class="form-control" name="SpecificationName" id="SpecificationName" value="@Model.SpecificationName" />
                             </div>
@@ -69,8 +69,8 @@
             $(".Save").click(function () {
                 var isValidated = false;
                 var requiredArr = [
-                    'MasterProductCode',
-                    'SpecificationCode',
+                    'MasterProductId',
+                    'SpecificationId',
                     'Value'
                 ];
                 isValidated = ValidateEmptyRequiredFiels(requiredArr);
@@ -80,7 +80,7 @@
                 };
             });
 
-            $('#MasterProductCode').select2({
+            $('#MasterProductId').select2({
                 placeholder: "Search Product",
                 ajax: {
                     url: "/ProductSpecification/GetMasterProductSelect2",
@@ -92,7 +92,7 @@
                 $('input[name="MasterProductName"]').val(e.params.data.text);
             });
 
-            $('#SpecificationCode').select2({
+            $('#SpecificationId').select2({
                 placeholder: "Search Specification",
                 ajax: {
                     url: "/ProductSpecification/GetSpecificationSelect2",

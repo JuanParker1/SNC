@@ -43,7 +43,7 @@
                             {
                                 <button type="button" class="btn btn-sm btn-success mr-3" id="Accept">Accept</button>
                                 <button type="button" class="btn btn-sm btn-danger" id="Cancel">Cancel</button>
-                                <a href="~/Cart/PickupSlip?ordernumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-secondary btn-sm" style="padding: 3px 16px"><span><i class="fa fa-print mr-1" aria-hidden="true"></i></span> Pickup Slip</a>
+                                <a href="~/Cart/PickupSlip?ordernumber=@Model.OrderNumber&id=@ShopNow.Helpers.AdminHelpers.ECodeLong(Model.Id)" class="btn btn-secondary btn-sm" style="padding: 3px 16px"><span><i class="fa fa-print mr-1" aria-hidden="true"></i></span> Pickup Slip</a>
                             }
                             else if (Model.CartStatus == 7)
                             {

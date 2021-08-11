@@ -20,15 +20,14 @@
             <div class="card shadow mt-3">
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
-{
-columns.Add(s => s.Name).Titled("Name").Filterable(true).SetWidth(20);
-columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20)
-.RenderValueAs(o => @<div>
-                    <a href="~/Specification/Edit?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" data-id=@o.Id class="text-info mr-5 edit-prompt"><i class="fa fa-edit fa-lg"></i></a>
-                    <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
-                </div>  );
-  }).WithPaging(20).Sortable(true)
-
+                    {
+                        columns.Add(s => s.Name).Titled("Name").Filterable(true).SetWidth(20);
+                        columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20)
+                       .RenderValueAs(o => @<div>
+                      <a href="editModal" data-id=@o.Id data-name="@o.Name" data-target="#editModal" data-toggle="modal" class="text-info mr-5 edit-prompt" ><i class="fa fa-edit fa-lg"></i></a>
+                      <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+                     </div>  );
+                    }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
@@ -63,7 +62,7 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header alert alert-info">
-                <input type="hidden" name="SpecificationCode" id="SpecificationCode" />
+                <input type="hidden" name="SpecificationId" id="SpecificationId" />
                 <h5 class="modal-title" id="editModalLabel">Update Specification</h5>
                 <button type="button" class="btnClose close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -121,13 +120,13 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
 
             $(".edit-prompt").click(function () {
                 var id = $(this).attr('data-id');
-                var name = $(this).attr('data-id1');
-                $("#SpecificationCode").val(id);
+                var name = $(this).attr('data-name');
+                $("#SpecificationId").val(id);
                 $("#SpecificationName").append("<input type=text name=SName id=SName class=form-control value='" + name + "' />");
             });
 
             $(".Edit").click(function () {
-                var Id = $("#SpecificationCode").val();
+                var Id = $("#SpecificationId").val();
                 var specificationName = $("#SName").val();
                 if (specificationName == "" || specificationName == null) {
                     swal("Name is Empty.", "Please Enter a Specification Name", "warning");
