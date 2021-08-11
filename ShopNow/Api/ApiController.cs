@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Newtonsoft.Json;
 using Razorpay.Api;
+using ShopNow.Base;
 using ShopNow.Filters;
 using ShopNow.MessageHandlers;
 using ShopNow.Models;
@@ -84,12 +85,13 @@ namespace ShopNow.Controllers
                 config.CreateMap<OtpVerification, CustomerShopAllListViewModel.VerifyList>();
                 config.CreateMap<DeliveryBoyCreateViewModel, DeliveryBoy>();
                 config.CreateMap<Models.Payment, CreditPaymentViewModel>();
-                //config.CreateMap<CartCreateViewModel, Cart>();
                 config.CreateMap<PaymentCreateApiViewModel, Models.Payment>();
                 config.CreateMap<ShopSingleEditViewModel, Shop>();
                 config.CreateMap<ShopReviewViewModel, CustomerReview>();
 
                 config.CreateMap<LocationDetailsCreateViewModel, LocationDetail>();
+                config.CreateMap<OrderCreateViewModel, Models.Order>();
+                config.CreateMap<OrderCreateViewModel.ListItem, OrderItem>();
             });
 
             _mapper = _mapperConfiguration.CreateMapper();
@@ -103,92 +105,6 @@ namespace ShopNow.Controllers
                 var result = JsonConvert.DeserializeObject<Results>(getDetails);
                 return Json(new { result, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
             }
-        }
-
-        public JsonResult NotifyAsync()
-        {
-            // SendNotificationFromFirebaseCloud();
-            var serverKey = string.Format("key={0}", "AAAASx4c4GY:APA91bEYyUEFT9F1XhO44epVtF0Mxq2SNbqIZUSQ3Xroov65JF9TzH7v9TghwG4JiWVa8HgqJVJnfklHIqhFuCQfW9T8b8TzrOOMYJd9eh2H1HcJFg06Vnjqz0aJk1tCSSuUL9BeUrsD");
-            // Get the sender id from FCM console
-            var senderId = string.Format("id={0}", "322627756134");
-            string to = "fXdD2vHnDVg:APA91bH0W1Grr4w07ghPmQiD7TtUETiLVupS9DGzryTtly8Y0sj35tiIgH3OsD6CjV5yvJni5lmJZWpsjLpVKV5u67mAuZPNDrCk1Dq1r3lUPCwT5ZBA8k4g4OdmLMbcgLvNgZ8XBySB";
-            var result = "-1";
-            var webAddr = "https://fcm.googleapis.com/fcm/send";
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create(webAddr);
-            httpWebRequest.ContentType = "application/json";
-            httpWebRequest.Headers.Add(HttpRequestHeader.Authorization, serverKey);
-            httpWebRequest.Method = "POST";
-            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
-            {
-                string strNJson = @"{
-                    ""to"": ""cKxMgjNfjR4:APA91bHLw_jaHPk7bJW7ScG4ZKj6IbZ8bdX09bJqXpYNhDsdobhyWDw8dV_ZV63JExoVanzpB_ctkzhr341J3G1Ohj66gu4_0ntzLRCDKN6O5HMNgRJkLAcVJYiO3XbpDkCGkbV1rGNt"",
-                    ""data"": {
-                        ""ShortDesc"": ""Some short desc"",
-                        ""IncidentNo"": ""any number"",
-                        ""Description"": ""detail desc""
-},
-  ""notification"": {
-                ""title"": "" You Have a New Order"",
-    ""text"": ""ShopNowChat"",
-""sound"":""default""
-  }
-        }";
-                streamWriter.Write(strNJson);
-                streamWriter.Flush();
-            }
-            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-            {
-                result = streamReader.ReadToEnd();
-            }
-            return Json(new { result, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
-        }
-
-        public async Task<bool> NotifyAsynca()
-        {
-            try
-            {
-                //SendNotificationFromFirebaseCloud();
-                // Get the server key from FCM console
-                var serverKey = string.Format("key={0}", "AAAASx4c4GY:APA91bEYyUEFT9F1XhO44epVtF0Mxq2SNbqIZUSQ3Xroov65JF9TzH7v9TghwG4JiWVa8HgqJVJnfklHIqhFuCQfW9T8b8TzrOOMYJd9eh2H1HcJFg06Vnjqz0aJk1tCSSuUL9BeUrsD");
-                // Get the sender id from FCM console
-                var senderId = string.Format("id={0}", "322627756134");
-                string to = "fXdD2vHnDVg:APA91bH0W1Grr4w07ghPmQiD7TtUETiLVupS9DGzryTtly8Y0sj35tiIgH3OsD6CjV5yvJni5lmJZWpsjLpVKV5u67mAuZPNDrCk1Dq1r3lUPCwT5ZBA8k4g4OdmLMbcgLvNgZ8XBySB";
-                string title = "Order Notification";
-                string body = "snc meses You have new order";
-                string sound = "default";
-                var data = new
-                {
-                    to, // Recipient device token
-                    notification = new { title, body, sound }
-                };
-                // Using Newtonsoft.Json
-                var jsonBody = JsonConvert.SerializeObject(data);
-                using (var httpRequest = new HttpRequestMessage(System.Net.Http.HttpMethod.Post, "https://fcm.googleapis.com/fcm/send"))
-                {
-                    httpRequest.Headers.TryAddWithoutValidation("Authorization", serverKey);
-                    httpRequest.Headers.TryAddWithoutValidation("Sender", senderId);
-                    httpRequest.Content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
-                    using (var httpClient = new HttpClient())
-                    {
-                        var result = await httpClient.SendAsync(httpRequest);
-
-                        if (result.IsSuccessStatusCode)
-                        {
-                            return true;
-                        }
-                        else
-                        {
-                            Console.WriteLine(result.StatusCode);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            return false;
         }
 
         public JsonResult GetCallVerify(string FromNumber, string to)
@@ -867,16 +783,16 @@ namespace ShopNow.Controllers
             var perOrderAmount = db.PlatFormCreditRates.Where(s => s.Status == 0).FirstOrDefault();
             if (model.CustomerId != 0)
             {
-                var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
-                payment.CustomerName = customer.Name;
-                payment.CreatedBy = customer.Name;
-                payment.UpdatedBy = customer.Name;
-
+                //var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
+                //payment.CustomerName = model.CustomerName;
+                payment.CreatedBy = model.CustomerName;
+                payment.UpdatedBy = model.CustomerName;
+                payment.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
                 if (model.OrderNumber != 0)
                 {
                     var order = db.Orders.FirstOrDefault(i => i.OrderNumber == model.OrderNumber);
                     order.Status = 2;
-                    order.UpdatedBy = customer.Name;
+                    order.UpdatedBy = model.CustomerName;
                     order.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
                     order.DateUpdated = DateTime.Now;
                     //
@@ -887,6 +803,7 @@ namespace ShopNow.Controllers
                     order.Convinenientcharge = model.ConvenientCharge;
                     db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
+
                     //Reducing Platformcredits
                     var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
                     var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
@@ -899,8 +816,8 @@ namespace ShopNow.Controllers
                         ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
                                                    SecurityProtocolType.Tls11 |
                                                    SecurityProtocolType.Tls12;
-                        string key = "rzp_live_PNoamKp52vzWvR";
-                        string secret = "yychwOUOsYLsSn3XoNYvD1HY";
+                        string key = BaseClass.razorpaykey;// "rzp_live_PNoamKp52vzWvR";
+                        string secret = BaseClass.razorpaySecretkey;//"yychwOUOsYLsSn3XoNYvD1HY";
 
                         RazorpayClient client = new RazorpayClient(key, secret);
                         Razorpay.Api.Payment varpayment = new Razorpay.Api.Payment();
@@ -956,7 +873,6 @@ namespace ShopNow.Controllers
                 payment.DateEncoded = DateTime.Now;
                 payment.DateUpdated = DateTime.Now;
                 payment.Status = 0;
-                payment.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
                 payment.RefundStatus = 1;
                 db.Payments.Add(payment);
                 db.SaveChanges();
@@ -973,8 +889,8 @@ namespace ShopNow.Controllers
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
                                        SecurityProtocolType.Tls11 |
                                        SecurityProtocolType.Tls12;
-            string key = "rzp_live_PNoamKp52vzWvR";
-            string secret = "yychwOUOsYLsSn3XoNYvD1HY";
+            string key = BaseClass.razorpaykey;//"rzp_live_PNoamKp52vzWvR";
+            string secret = BaseClass.razorpaySecretkey; //"yychwOUOsYLsSn3XoNYvD1HY";
             Dictionary<string, object> input = new Dictionary<string, object>();
             input.Add("amount", model.Price);
             input.Add("currency", "INR");
@@ -1027,7 +943,6 @@ namespace ShopNow.Controllers
             else
             {
                 var order = _mapper.Map<OrderCreateViewModel, Models.Order>(model);
-                order.Status = 2;
                 if (model.CustomerId != 0)
                 {
                     var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
@@ -1064,7 +979,7 @@ namespace ShopNow.Controllers
                     orderItem.Status = 0;
                     orderItem.OrderId = order.Id;
                     orderItem.OrdeNumber = order.OrderNumber;
-                    db.Orders.Add(order);
+                    db.OrderItems.Add(orderItem);
                     db.SaveChanges();
                 }
 
@@ -2200,8 +2115,8 @@ namespace ShopNow.Controllers
                      ShopOnline = i.IsOnline,
                      ShopStatus = i.Status
                  }).ToList();
-            var productrCount = db.GetProductListCount(varlongitude, varlatitude, str).ToList();
-            int count = Convert.ToInt32(productrCount[0]);
+            var productrCount = db.GetProductListCount(varlongitude, varlatitude, str);
+            int count = Convert.ToInt32(productrCount);
             int CurrentPage = page;
             int PageSize = pageSize;
             //int TotalCount = count;
@@ -2270,11 +2185,11 @@ namespace ShopNow.Controllers
         {
             //  var shid = db.Shops.Where(s => s.Id == shopId).FirstOrDefault();
             int count = 0;
-            var total = db.GetShopCategoryProductCount(shopId, CategoryId, str).ToList();
+            var total = db.GetShopCategoryProductCount(shopId, CategoryId, str);
             //if (total.Count > 0)
-            count = total[0].Value;
+            count = total;
             var skip = page - 1;
-            var model = db.GetShopCategoryProducts(shopId, CategoryId, str, skip, pageSize).ToList();
+            var model = db.GetShopCategoryProducts(shopId, CategoryId, str, skip, pageSize);
             int CurrentPage = page;
             int PageSize = pageSize;
             int TotalCount = count;

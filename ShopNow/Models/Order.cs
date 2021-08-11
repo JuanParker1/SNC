@@ -43,7 +43,7 @@ namespace ShopNow.Models
         public double Packingcharge { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public Nullable<double> Distance { get; set; }
+        public double Distance { get; set; }
         public int ShopPaymentStatus { get; set; }
         public int DeliveryBoyPaymentStatus { get; set; }
         public int DeliveryOrderPaymentStatus { get; set; }
@@ -56,7 +56,7 @@ namespace ShopNow.Models
         public Nullable<System.DateTime> OrderReadyTime { get; set; }
         public Nullable<System.DateTime> DeliveryBoyShopReachTime { get; set; }
         public Nullable<System.DateTime> OrderPickupTime { get; set; }
-        public System.DateTime DeliveryLocationReachTime { get; set; }
+        public Nullable<System.DateTime> DeliveryLocationReachTime { get; set; }
         public Nullable<System.DateTime> DeliveredTime { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
@@ -64,9 +64,7 @@ namespace ShopNow.Models
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
     
-        public virtual Customer Customer { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderItem> OrderItems { get; set; }
-        public virtual Shop Shop { get; set; }
     }
 }

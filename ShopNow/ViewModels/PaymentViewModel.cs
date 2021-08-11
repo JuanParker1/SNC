@@ -162,16 +162,16 @@ namespace ShopNow.ViewModels
         public string PaymentResult { get; set; }
         public string Key { get; set; }
         public  int CreditType { get; set; }
+        public double ConvenientCharge { get; set; }
         public double PackagingCharge { get; set; }
         public double GrossDeliveryCharge { get; set; }
         public double ShopDeliveryDiscount { get; set; }
         public double NetDeliveryCharge { get; set; }
         public int PaymentCategoryType { get; set; }
-        public string Currency { get; set; }
-        public string CountryName { get; set; }
-        public string CheckSumString { get; set; }
-        public string QueryString { get; set; }
-        public double ConvenientCharge { get; set; }
+        //public string Currency { get; set; }
+        //public string CountryName { get; set; }
+        //public string CheckSumString { get; set; }
+        //public string QueryString { get; set; }
     }
 
     public class ShopPaymentListViewModel
