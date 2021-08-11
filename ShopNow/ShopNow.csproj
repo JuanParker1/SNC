@@ -2837,7 +2837,6 @@
     <Content Include="Views\AddOnCategory\List.cshtml" />
     <Content Include="Views\ShopCategory\List.cshtml" />
     <Content Include="Views\Specification\List.cshtml" />
-    <Content Include="Views\MasterProduct\Index.cshtml" />
     <Content Include="Views\Staff\List.cshtml" />
     <Content Include="Views\Staff\Create.cshtml" />
     <Content Include="Views\Staff\Edit.cshtml" />
@@ -2885,7 +2884,6 @@
     <Content Include="Views\Product\MedicalEdit.cshtml" />
     <Content Include="Views\MasterProduct\MedicalCreate.cshtml" />
     <Content Include="Views\MasterProduct\MedicalEdit.cshtml" />
-    <Content Include="Views\MasterProduct\MedicalIndex.cshtml" />
     <Content Include="Views\MasterProduct\MedicalList.cshtml" />
     <Content Include="Views\DeliveryBoy\Details.cshtml" />
     <Content Include="Views\DeliveryBoy\Edit.cshtml" />
@@ -2962,7 +2960,6 @@
     <Content Include="Views\ShopDiscountCategory\Create.cshtml" />
     <Content Include="Views\ShopDiscountCategory\List.cshtml" />
     <Content Include="Views\ShopDiscountCategory\Edit.cshtml" />
-    <Content Include="Views\MasterProduct\GroceryEntry.cshtml" />
     <Content Include="Views\SubCategory\List.cshtml" />
     <Content Include="Views\NextSubCategory\List.cshtml" />
     <Content Include="Views\NextSubCategory\Edit.cshtml" />
@@ -3011,6 +3008,9 @@
     <Content Include="Views\Cart\DeliveryBoyCashHandoverReport.cshtml" />
     <Content Include="Views\Cart\DeliveryBoyPaymentStatus.cshtml" />
     <Content Include="Views\Offer\Edit.cshtml" />
+    <Content Include="Views\MasterProduct\FMCGUpload.cshtml" />
+    <Content Include="Views\MasterProduct\MedicalUpload.cshtml" />
+    <Content Include="Views\MasterProduct\FoodUpload.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
