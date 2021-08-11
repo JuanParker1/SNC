@@ -12,7 +12,7 @@
 <div class="container-fluid mb-5">
     <div class="row">
         <div class="col-md-6">
-            <h5 class="text-success" style="letter-spacing:1px">Package List</h5>
+            <h4 class="text-success" style="letter-spacing:1px">PACKAGE LIST</h4>
         </div>
         <div class="col-md-6 text-right">
             <a data-toggle="modal" data-target="#createModal" href="createModal"><span class="fa fa-plus"></span> New Package</a>
@@ -131,7 +131,7 @@
                     swal("Name is Empty.", "Please Enter a Package Name", "warning");
                 }
                 else if (packageName != "" || packageName != null) {
-                    $.getJSON("/Package/Edit", { id: Id, name: packageName }, function (data) {
+                    $.getJSON("/Package/Edit", { Id: Id, name: packageName }, function (data) {
                         if (data.message != null || data.message != "") {
                             swal({
                                 title: data.message,
@@ -146,7 +146,7 @@
             });
 
             $(".btnDelete").click(function () {
-                var id = $(this).attr('data-id');
+                var Id = $(this).attr('data-id');
                 swal({
                     title: "Are you sure want to delete?",
                     text: "You will not be able to recover this file!",
@@ -160,7 +160,7 @@
                 },
                     function (isConfirm) {
                         if (isConfirm) {
-                            $.getJSON("/Package/Delete", { id: id }, function (data) {
+                            $.getJSON("/Package/Delete", { Id: Id }, function (data) {
                                 if (data == true) {
                                     window.location.reload();
                                 }
