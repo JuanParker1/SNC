@@ -85,12 +85,12 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNPSFE003")]
         public ActionResult Edit(string id)
         {
-            var dCode = AdminHelpers.DCodeInt(id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            if (dCode==0)
+            var dId = AdminHelpers.DCodeInt(id);
+            if (dId == 0)
                 return HttpNotFound();
-            var ps = _db.ProductSpecifications.FirstOrDefault(i => i.Id == dCode && i.Status == 0);
+            var ps = _db.ProductSpecifications.FirstOrDefault(i => i.Id == dId && i.Status == 0);
             var model = _mapper.Map<ProductSpecification, ProductSpecificationEditViewModel>(ps);
             return View(model);
         }

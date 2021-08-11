@@ -10,7 +10,7 @@
     <div class="row my-2">
         <div class="col-md-6">
             <h5 class="text-success" style="letter-spacing:1px">Product Specification List</h5>
-        </div>        
+        </div>
         <div class="col-md-6 text-right">
             <a href="~/ProductSpecification/Create" target="_blank"><span class="fa fa-plus"></span>&nbsp;Product Specification</a>
         </div>
@@ -20,15 +20,15 @@
             <div class="card shadow mt-3">
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
-               {
-               columns.Add(b => b.MasterProductName).Titled("MasterProduct").Filterable(true).SetWidth(20);
-               columns.Add(b => b.SpecificationName).Titled("Specification").Filterable(true).SetWidth(20);
-               columns.Add(b => b.Value).Titled("Value").Filterable(true).SetWidth(20);               
-               columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(b => @<div>
-    <a href="~/ProductSpecification/Edit?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(b.Id)" class="btn btn-warning text-center btn-sm text-nowrap" style="padding: 3px 26px">Edit</a>
-    <a href="~/ProductSpecification/Delete?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(b.Id)" class="btn btn-danger text-center btn-sm text-nowrap" style="padding: 3px 18px">Delete</a>
-</div>);
-         }).WithPaging(20).Sortable(true)
+                    {
+                         columns.Add(b => b.MasterProductName).Titled("MasterProduct").Filterable(true).SetWidth(20);
+                         columns.Add(b => b.SpecificationName).Titled("Specification").Filterable(true).SetWidth(20);
+                         columns.Add(b => b.Value).Titled("Value").Filterable(true).SetWidth(20);
+                         columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(b => @<div>
+                                <a href="~/ProductSpecification/Edit?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(b.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
+                                <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(b.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+                            </div>);
+                    }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
@@ -37,6 +37,8 @@
 
 @section Scripts
 {
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
 
     <script>
         $(document).ready(function () {
@@ -66,6 +68,31 @@
                     cell.innerHTML = i + 1;
                 });
             }).draw();
+
+            $(".btnDelete").click(function () {
+                var Id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/MeasurementUnit/Delete", { id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
+            });
 
         });
     </script>
