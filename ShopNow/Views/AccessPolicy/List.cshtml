@@ -178,26 +178,26 @@
                 }
             });
 
-            $("#checkAll").click(function () {
-                var customerId = $("#CustomerId").val();
-                var customerName = $("#CustomerName").val();
-                if ($(this).is(":checked")) {
-                    $('input:checkbox').each(function () {
-                        $(".Access").prop('checked', true);
-                        var IsAccess = true;
-                        $.getJSON("/AccessPolicy/AddSelectAllSession/", { CustomerId: customerId, CustomerName: customerName, IsAccess: IsAccess, }, function (data) {
-                        });
-                    });
-                }
-                else{
-                    $('input:checkbox').each(function () {
-                        $(".Access").prop('checked', false);
-                        var IsAccess = false;
-                        $.getJSON("/AccessPolicy/RemoveSelectAllSession/", { IsAccess: IsAccess, CustomerId: customerId, CustomerName: customerName }, function (data) {
-                        });
-                    });
-                }
-            });
+            //$("#checkAll").click(function () {
+            //    var customerId = $("#CustomerId").val();
+            //    var customerName = $("#CustomerName").val();
+            //    if ($(this).is(":checked")) {
+            //        $('input:checkbox').each(function () {
+            //            $(".Access").prop('checked', true);
+            //            var IsAccess = true;
+            //            $.getJSON("/AccessPolicy/AddSelectAllSession/", { CustomerId: customerId, CustomerName: customerName, IsAccess: IsAccess, }, function (data) {
+            //            });
+            //        });
+            //    }
+            //    else{
+            //        $('input:checkbox').each(function () {
+            //            $(".Access").prop('checked', false);
+            //            var IsAccess = false;
+            //            $.getJSON("/AccessPolicy/RemoveSelectAllSession/", { IsAccess: IsAccess, CustomerId: customerId, CustomerName: customerName }, function (data) {
+            //            });
+            //        });
+            //    }
+            //});
 
         });
     </script>

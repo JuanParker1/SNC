@@ -121,17 +121,20 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNPGED005")]
-        public ActionResult Delete(string Id)
+        public JsonResult Delete(string Id)
         {
-            var dCode = AdminHelpers.DCode(Id);
+            var dCode = AdminHelpers.DCodeInt(Id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var page = db.Pages.FirstOrDefault(i => i.Code == dCode);
-            page.Status = 2;
-            page.DateUpdated = DateTime.Now;
-            page.UpdatedBy = user.Name;
-            db.Entry(page).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
-            return RedirectToAction("List","Page");
+            var page = db.Pages.FirstOrDefault(i => i.Id == dCode);
+            if (page != null)
+            {
+                page.Status = 2;
+                page.DateUpdated = DateTime.Now;
+                page.UpdatedBy = user.Name;
+                db.Entry(page).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [AccessPolicy(PageCode = "SHNPGEI001")]
@@ -222,17 +225,16 @@ namespace ShopNow.Controllers
                     }
                 }
 
-
                 foreach (DataRow row in dt.Rows)
                 {
-                    var page = db.Pages.FirstOrDefault(i => i.Name == row[model.Name].ToString() && i.Status == Convert.ToInt32(row[model.Status]));// Page.GetName(row[model.Name].ToString(), Convert.ToInt32(row[model.Status]));
+                    var page = db.Pages.FirstOrDefault(i => i.Name == row[model.Name].ToString() && i.Status == model.Status);
                     if (page == null)
                     {
                         db.Pages.Add(new Page
                         {
                             Name = row[model.Name].ToString().ToUpper(),
                             Code = row[model.Code].ToString().ToUpper(),
-                            Status = Convert.ToInt32(row[model.Status]),
+                            Status = model.Status,
                             DateEncoded = DateTime.Now,
                             DateUpdated = DateTime.Now,
                             CreatedBy = user.Name,
