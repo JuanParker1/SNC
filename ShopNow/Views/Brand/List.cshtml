@@ -3,16 +3,14 @@
 @{
     ViewBag.Title = "Brand List";
 }
-
-<title>ShopNow | Brand List</title>
-
+<title>ShopNow | @ViewBag.Title</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 
 <div class="container-fluid mb-5">
     <div class="row">
         <div class="col-md-4">
-            <h4 class="mt-1 text-success" style="letter-spacing:1px">BRAND LIST</h4>
+            <h4 class="text-success">@ViewBag.Title</h4>
         </div>
         <div class="col-md-8 text-right">
             <a data-toggle="modal" data-target="#createModal" href="createModal"><span class="fa fa-plus"></span> New Brand</a>
@@ -89,24 +87,19 @@
     <script src="~/Scripts/ValidateRequiredFields.js"></script>
     <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
-    <script src="~/Scripts/select2/js/select2.js"></script>
-    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
-    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+
     <script>
         $(document).ready(function () {
            
             $('#Create').on('click', function () {
                 var isValidate = false;
                 var requiredArr = [
-                    'Name',
-                    'ProductTypeId'
+                    'Name'
                 ];
                 isValidate = ValidateEmptyRequiredFiels(requiredArr);
                 if (isValidate) {
-                    var brand = {
-                        Name: $('#Name').val()
-                    }
-                    $.post("/Brand/Save", { brand: brand }, function (data) {
+                    var name = $('#Name').val();
+                    $.post("/Brand/Save", { name: name }, function (data) {
                         if (data.IsAdded == true) {
                             swal({
                                 title: data.message,

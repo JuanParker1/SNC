@@ -43,15 +43,17 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNBRAC001")]
-        public JsonResult Save(Brand brand)
+        public JsonResult Save(string name)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             bool IsAdded = false;
             string message = "";
             string message1 = "";
-            var brandname = db.Brands.FirstOrDefault(i => i.Name == brand.Name && i.Status == 0);
+            var brandname = db.Brands.FirstOrDefault(i => i.Name == name && i.Status == 0);
+            Brand brand = new Brand();
             if (brandname == null)
             {
+                brand.Name = name;
                 brand.CreatedBy = user.Name;
                 brand.UpdatedBy = user.Name;
                 brand.Status = 0;

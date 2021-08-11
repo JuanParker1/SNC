@@ -108,7 +108,7 @@ namespace ShopNow.Controllers
                 db.Entry(category).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
-            return Json("Success", JsonRequestBehavior.AllowGet);
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [AccessPolicy(PageCode = "SHNCATL002")]
