@@ -32,12 +32,12 @@
    .Sanitized(false)
    .RenderValueAs(s => new HtmlString
            ("<label class='switch'> <input type='checkbox' value='" + s.Active + "' Id='Id_" + s.Id + "' class='CheckOnline' data-code='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(10);
-             columns.Add()
-   .Encoded(false)
-   .Sanitized(false)
-   .RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
-               + Html.ActionLink("Delete", "Delete", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
-         }).WithPaging(20).Sortable(true)
+                columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
+                  .RenderValueAs(o => @<div>
+                    <a href="/DeliveryBoy/Edit?Id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-5" ><i class="fa fa-edit fa-lg"></i></a>
+                    <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+                </div>);
+  }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
@@ -87,6 +87,31 @@
                 else {
                     $('#myModal').modal('show');
                 }
+            });
+
+            $(".btnDelete").click(function () {
+                var Id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/DeliveryBoy/Delete", { Id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
             });
 
         });

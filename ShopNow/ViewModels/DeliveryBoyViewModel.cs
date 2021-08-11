@@ -5,7 +5,32 @@ using System.Web;
 
 namespace ShopNow.ViewModels
 {
-    public class DeliveryBoyCreateEditViewModel
+    public class DeliveryBoyAddViewModel
+    {
+        public HttpPostedFileBase DeliveryBoyImage { get; set; }
+        public HttpPostedFileBase DrivingLicenseImage { get; set; }
+        public HttpPostedFileBase DrivingLicensePdf { get; set; }
+        public HttpPostedFileBase BankPassbookImage { get; set; }
+        public HttpPostedFileBase BankPassbookPdf { get; set; }
+        public HttpPostedFileBase CVPdf { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
+        public string CountryName { get; set; }
+        public string StateName { get; set; }
+        public string DistrictName { get; set; }
+        public string StreetName { get; set; }
+        public string Address { get; set; }
+        public string PinCode { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public string LicenseNumber { get; set; }
+        public string BankName { get; set; }
+        public string AccountName { get; set; }
+        public string AccountNumber { get; set; }
+        public string IFSCCode { get; set; }
+    }
+    public class DeliveryBoyEditViewModel
     {
         public HttpPostedFileBase DeliveryBoyImage { get; set; }
         public HttpPostedFileBase DrivingLicenseImage { get; set; }
@@ -15,25 +40,9 @@ namespace ShopNow.ViewModels
         public HttpPostedFileBase CVPdf { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
-        public string CustomerCode { get; set; }
-        public string CustomerName { get; set; }
-        public string MarketingAgentCode { get; set; }
-        public string MarketingAgentName { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
-        public int ShopId { get; set; }
-        public string ShopName { get; set; }
-        public string StaffCode { get; set; }
-        public string StaffName { get; set; }
         public string ImagePath { get; set; }
-        public string CVPath { get; set; }
-        public string DrivingLicenseImagePath { get; set; }
-        public string BankPassbookPath { get; set; }
-        public string LicenseNumber { get; set; }
-        public string BankName { get; set; }
-        public string AccountName { get; set; }
-        public string AccountNumber { get; set; }
-        public string IFSCCode { get; set; }
         public string CountryName { get; set; }
         public string StateName { get; set; }
         public string DistrictName { get; set; }
@@ -42,11 +51,16 @@ namespace ShopNow.ViewModels
         public string PinCode { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public string CreatedBy { get; set; }
-        public string UpdatedBy { get; set; }
+        public string CVPath { get; set; }
+        public string DrivingLicenseImagePath { get; set; }
+        public string BankPassbookPath { get; set; }
+        public string LicenseNumber { get; set; }
+        public string BankName { get; set; }
+        public string AccountName { get; set; }
+        public string AccountNumber { get; set; }
+        public string IFSCCode { get; set; }
         public int Status { get; set; }
-        public DateTime DateEncoded { get; set; }
-        public DateTime DateUpdated { get; set; }
+
         public int DeliveryBoyShopCount { get; set; }
         public int Count { get; set; }
         public bool LicenseApprove { get; set; }
@@ -75,7 +89,7 @@ namespace ShopNow.ViewModels
         public string PhoneNumber { get; set; }
         public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public string StaffCode { get; set; }
+        public string StaffId { get; set; }
         public string StaffName { get; set; }
         public string ImagePath { get; set; }
         public string CountryName { get; set; }
@@ -125,9 +139,9 @@ namespace ShopNow.ViewModels
     public class DeliveryBoyCreditAmountViewModel
     {
         public int Id { get; set; }
-        public string CustomerCode { get; set; }
+        public string CustomerId { get; set; }
         public string CustomerName { get; set; }
-        public string DeliveryBoyCode { get; set; }
+        public string DeliveryBoyId { get; set; }
         public string DeliveryBoyName { get; set; }
         public int ShopId { get; set; }
         public string ShopName { get; set; }
@@ -143,7 +157,7 @@ namespace ShopNow.ViewModels
         public class CreditAmountList
         {
             public long Id { get; set; }
-            public string CustomerCode { get; set; }
+            public string CustomerId { get; set; }
             public string CustomerName { get; set; }
             public int DeliveryBoyId { get; set; }
             public string DeliveryBoyName { get; set; }

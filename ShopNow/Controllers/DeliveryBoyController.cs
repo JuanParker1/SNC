@@ -26,25 +26,19 @@ namespace ShopNow.Controllers
         UploadContent uc = new UploadContent();
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
-        private const string filePath = null;
         private static readonly string bucketName = ConfigurationManager.AppSettings["BucketName"];
         private static readonly RegionEndpoint bucketRegion = RegionEndpoint.APSouth1;
         private static readonly string accesskey = ConfigurationManager.AppSettings["AWSAccessKey"];
         private static readonly string secretkey = ConfigurationManager.AppSettings["AWSSecretKey"];
-        private static string _generatedCode(string _prefix)
-        {
-
-            return ShopNow.Helpers.DRC.Generate(_prefix);
-
-        }
-
+       
         public DeliveryBoyController()
         {
             _mapperConfiguration = new MapperConfiguration(config =>
             {
                 config.CreateMap<DeliveryBoy, DeliveryBoyListViewModel.DeliveryBoyList>();
-                config.CreateMap<DeliveryBoyCreateEditViewModel, DeliveryBoy>();
-                config.CreateMap<DeliveryBoy, DeliveryBoyCreateEditViewModel>();
+                config.CreateMap<DeliveryBoyAddViewModel, DeliveryBoy>();
+                config.CreateMap<DeliveryBoyEditViewModel, DeliveryBoy>();
+                config.CreateMap<DeliveryBoy, DeliveryBoyEditViewModel>();
                 config.CreateMap<DeliveryBoy, DeliveryBoyPlacesListViewModel>();
                 config.CreateMap<DeliveryBoy, FranchiseViewModel>();
             });
@@ -56,17 +50,17 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-
-            List<GetDeliveryBoy> lstDelivery = db.DeliveryBoys.Where(D => D.Status == 0)
-    .Select(m => new GetDeliveryBoy
-    {
-        Id = m.Id,
-        Name = m.Name,
-        PhoneNumber = m.PhoneNumber,
-        Active = m.Active,
-        ImagePath = m.ImagePath
-    }).ToList();
-            return View(lstDelivery);
+            List<GetDeliveryBoy> list = new List<GetDeliveryBoy>();
+            list = db.DeliveryBoys.Where(D => D.Status == 0)
+                        .Select(m => new GetDeliveryBoy
+                        {
+                            Id = m.Id,
+                            Name = m.Name,
+                            PhoneNumber = m.PhoneNumber,
+                            Active = m.Active,
+                            ImagePath = m.ImagePath
+                        }).ToList();
+            return View(list);
         }
         
         [AccessPolicy(PageCode = "SHNDBYIAL006")]
@@ -75,8 +69,7 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new DeliveryBoyListViewModel();
-
-            model.List = model.List = db.DeliveryBoys.Where(i => i.Status == 1 || i.Status == 5).Select(i => new DeliveryBoyListViewModel.DeliveryBoyList
+            model.List = model.List = db.DeliveryBoys.Where(i => i.Status == 1).Select(i => new DeliveryBoyListViewModel.DeliveryBoyList
             {
                 Id = i.Id,
                 Name = i.Name,
@@ -99,11 +92,10 @@ namespace ShopNow.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AccessPolicy(PageCode = "SHNDBYC001")]
-        public ActionResult Create(DeliveryBoyCreateEditViewModel model)
+        public ActionResult Create(DeliveryBoyAddViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-
-            var deliveryboy = _mapper.Map<DeliveryBoyCreateEditViewModel, DeliveryBoy>(model);
+            var deliveryboy = _mapper.Map<DeliveryBoyAddViewModel, DeliveryBoy>(model);
             var customer = db.Customers.Where(i => i.PhoneNumber == model.PhoneNumber).FirstOrDefault();
             if (customer != null)
             {
@@ -183,15 +175,15 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNDBYE002")]
-        public ActionResult Edit(string code)
+        public ActionResult Edit(string Id)
         {
-            var dCode = AdminHelpers.DCodeInt(code);
+            var dCode = AdminHelpers.DCodeInt(Id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             if (dCode==0)
                 return HttpNotFound();
             var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == dCode);
-            var model = _mapper.Map<DeliveryBoy, DeliveryBoyCreateEditViewModel>(deliveryBoy);
+            var model = _mapper.Map<DeliveryBoy, DeliveryBoyEditViewModel>(deliveryBoy);
             if (model.Status == 1)
             {
                 int count = 0;
@@ -217,7 +209,7 @@ namespace ShopNow.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AccessPolicy(PageCode = "SHNDBYE002")]
-        public ActionResult Edit(DeliveryBoyCreateEditViewModel model)
+        public ActionResult Edit(DeliveryBoyEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             DeliveryBoy deliveryboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == model.Id);
@@ -294,25 +286,17 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             DeliveryBoy deliverBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == dCode);
-            var model = new DeliveryBoyCreateEditViewModel();
+            var model = new DeliveryBoyEditViewModel();
             _mapper.Map(deliverBoy, model);
             return View(model);
         }
 
         [AccessPolicy(PageCode = "SHNDBYR005")]
-        public ActionResult Delete(string code)
+        public JsonResult Delete(int Id)
         {
-            var dCode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == dCode);
+            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == Id);
             var customer = db.Customers.FirstOrDefault(i => i.Id == deliveryBoy.CustomerId);
-            if (customer != null)
-            {
-                customer.Position = 0;
-                customer.DateUpdated = DateTime.Now;
-                db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-            }
             if (deliveryBoy != null)
             {
                 deliveryBoy.Status = 2;
@@ -322,14 +306,21 @@ namespace ShopNow.Controllers
                 db.Entry(deliveryBoy).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
-            return RedirectToAction("List");
+            if (customer != null)
+            {
+                customer.Position = 0;
+                customer.DateUpdated = DateTime.Now;
+                db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [AccessPolicy(PageCode = "SHNDBYAP007")]
-        public ActionResult Approve(int code)
+        public ActionResult Approve(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == code);
+            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == Id);
             deliveryBoy.Status = 0;
             deliveryBoy.UpdatedBy = user.Name;
             deliveryBoy.DateUpdated = DateTime.Now;
@@ -345,10 +336,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNDBYRE008")]
-        public ActionResult Reject(int code)
+        public ActionResult Reject(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == code);
+            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == Id);
             var customer = db.Customers.FirstOrDefault(i => i.Id == deliveryBoy.CustomerId);
             customer.Position = 0;
             customer.DateUpdated = DateTime.Now;
@@ -370,10 +361,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNDBYDA009")]
-        public ActionResult DeActivate(int code)
+        public ActionResult DeActivate(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == code);
+            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == Id);
             deliveryBoy.Status = 4;
             deliveryBoy.UpdatedBy = user.Name;
             deliveryBoy.DateUpdated = DateTime.Now;
@@ -384,11 +375,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNDBYAS010")]
-        public ActionResult Assign(int code)
+        public ActionResult Assign(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            DeliveryBoy deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == code);
+            DeliveryBoy deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == Id);
             var model = new DeliveryBoyPlacesListViewModel();
 
             _mapper.Map(deliveryBoy, model);
@@ -406,9 +397,7 @@ namespace ShopNow.Controllers
                 Meters = (((Math.Acos(Math.Sin((deliveryBoy.Latitude * Math.PI / 180)) * Math.Sin((i.Latitude * Math.PI / 180)) + Math.Cos((deliveryBoy.Latitude * Math.PI / 180)) * Math.Cos((i.Latitude * Math.PI / 180))
                 * Math.Cos(((deliveryBoy.Longitude - i.Longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344)
             }).Where(i => i.Meters < 8000 && i.Status == 0).ToList();
-
-            model.DeliveryBoyShopCount = db.DeliveryBoyShops.Where(i => i.DeliveryBoyId == deliveryBoy.Id && i.Status == 0).Count();
-
+            
             return View(model);
         }
 
@@ -480,7 +469,6 @@ namespace ShopNow.Controllers
                 db.Entry(deliveryBoy).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
-
             return RedirectToAction("AssignedFranchiseList");
         }
 
@@ -701,10 +689,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNDBYE002")]
-        public JsonResult VerifyImage(int Code)
+        public JsonResult VerifyImage(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var dboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == Code);
+            var dboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == Id);
             dboy.DateUpdated = DateTime.Now;
             dboy.UpdatedBy = user.Name;
             db.Entry(dboy).State = System.Data.Entity.EntityState.Modified;

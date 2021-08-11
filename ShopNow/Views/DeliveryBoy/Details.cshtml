@@ -1,12 +1,12 @@
-﻿@model ShopNow.ViewModels.DeliveryBoyCreateEditViewModel
+﻿@model ShopNow.ViewModels.DeliveryBoyEditViewModel
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "DeliveryBoy Detail";
 }
-<title>ShopNow | DeliveryBoy Detail</title>
+<title>ShopNow | @ViewBag.Title</title>
 <div class="container-fluid my-0">
     <div class="row">
         <div class="col-md-3">
-            <h5 class="mt-1" style="letter-spacing:1px">DELIVERYBOY DETAIL</h5>
+            <h5 class="mt-1">@ViewBag.Title</h5>
         </div>
         <div class="col-md-9 text-right">
             <a href="~/DeliveryBoy/List" target="_self"><span class="fa fa-bars"></span>&nbsp;DeliveryBoy List</a>
@@ -31,7 +31,6 @@
                             <h5 class="font-weight-bold">@Model.Name</h5>
                         </div>
                         <div class="col-md-12">
-                            <p><span><i class="fa fa-briefcase text-success mr-2"></i></span>Works at @Model.ShopName</p>
                             <p><span><i class="fa fa-phone text-success mr-2"></i></span>@Model.PhoneNumber</p>
                             <p><span><i class="fa fa-envelope text-success mr-2"></i></span>@Model.Email</p>
                             <p><span><i class="fa fa-map-marker text-success mr-2"></i></span>@Model.StreetName , @Model.DistrictName</p>
