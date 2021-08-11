@@ -3,125 +3,84 @@
     ViewBag.Title = "Access Manage List";
 }
 <title>ShopNow | Access Policy Manage</title>
-
+@using (Html.BeginForm("Manage", "AccessPolicy", FormMethod.Post, new { id = "AccessPolicyForm" }))
+{
 <div class="container-fluid">
     <div class="row">
-        <div class="col">
+        <div class="col-md-2">
             <h5 class="mt-1 text-nowrap text-theme" style="letter-spacing:1px">Manage AccessPolicy</h5>
         </div>
-        <div class="mb-2 data-search">
+        <div class="mb-2 data-search col-md-2">
         </div>
-        <div class="col">
-            <select name="ShopCode" id="ShopCode" class="form-control">
-                @if (Model.ShopCode != null)
-                {
-                    <option value="@Model.ShopCode" selected>@Model.ShopName</option>
+        <div class="col-md-3">
+            <select name="ShopId" id="ShopId" class="form-control">
+                @if(Model.ShopId != 0){
+                <option value="@Model.ShopId">@Model.ShopName</option>
                 }
             </select>
             <input type="hidden" name="ShopName" id="ShopName" value="@Model.ShopName" />
         </div>
-        <div class="col">
-            <select name="StaffCode" id="StaffCode" class="form-control">
-                @if (Model.StaffCode != null)
+        <div class="col-md-2">
+            <select name="StaffId" id="StaffId" class="form-control">
+                @if (Model.StaffId != 0)
                 {
-                    <option value="@Model.StaffCode" selected>@Model.StaffName</option>
+                    <option value="@Model.StaffId">@Model.StaffName</option>
                 }
             </select>
             <input type="hidden" name="StaffName" id="StaffName" value="@Model.StaffName" />
         </div>
-        <div class="col">
-            <button type="button" class="btn btn-sm btn-info" id="btnFilter">Apply Filter</button>        
+        <div class="col-md-1 p-0 m-0">
+            <button type="button" class="btn btn btn-info" id="btnFilter">Apply Filter</button>
         </div>
-        <div class="col text-right">
+        <div class="col-md-2 text-right">
             <a href="~/AccessPolicy/List" target="_blank" class="text-theme_light"><span class="fa fa-user mr-2"></span>Single User Access</a>
         </div>
     </div>
-
-
-    <!--
-    <h3 class="text-success" style="letter-spacing:1px">Update & Manage AccessPolicy</h3>
-
-    <div class="mb-1 row">
-        <div class="col-md-2 col-sm-4">
-            <div class="mb-1 data-search">
-            </div>
-        </div>
-        <div class="col-md-3 float-right">
-            <select name="ShopCode" id="ShopCode" class="form-control">
-                @if (Model.ShopCode != null)
-                {
-                    <option value="@Model.ShopCode" selected>@Model.ShopName</option>
-                }
-            </select>
-            <input type="hidden" name="ShopName" id="ShopName" value="@Model.ShopName" />
-        </div>
-        <div class="col-md-3 float-right">
-            <select name="StaffCode" id="StaffCode" class="form-control">
-                @if (Model.StaffCode != null)
-                {
-                    <option value="@Model.StaffCode" selected>@Model.StaffName</option>
-                }
-            </select>
-            <input type="hidden" name="StaffName" id="StaffName" value="@Model.StaffName" />
-        </div>
-        <div class="col-md-2">
-            <button type="button" class="btn btn-sm btn-info" id="btnFilter">Apply Filter</button>
-        </div>
-        <div class="col-md-2 text-right">
-            <a href="~/AccessPolicy/List" target="_blank"><span class="fa fa-user-cog"></span>Single User Access</a>
-        </div>
-    </div>
-        -->
-
-    @using (Html.BeginForm("Manage", "AccessPolicy", FormMethod.Post, new { id = "AccessPolicyForm" }))
-    {
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-striped table-hover table-borderless table-hover" id="accesspolicy-list">
-                                <thead>
-                                    <tr>
-                                        <th>No.</th>
-                                        <th>Module Name</th>
-                                        <th>Page Name</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.ManageList)
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover table-borderless table-hover" id="accesspolicy-list">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Module Name</th>
+                                    <th>Page Name</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.ManageList)
+                                {
+                                <tr>
+                                    <td></td>
+                                    <td class="td"><input type="hidden" value="@item.PageCode @item.PageName" class="txt">@item.PageName.Split('.')[0]</td>
+                                    <td>@item.PageName.Split('.')[1]</td>
+                                    @if (item.IsAccess == true)
                                     {
-                                        <tr>
-                                            <td></td>
-                                            <td class="td"><input type="hidden" value="@item.PageCode @item.PageName" class="txt">@item.PageName.Split('_')[0]</td>
-                                            <td>@item.PageName.Split('_')[1]</td>
-                                            @if (item.IsAccess == true)
-                                            {
-                                                <td><input id="Access" type="checkbox" class="form-control Access" name="Access" checked /></td>
-                                            }
-                                            else
-                                            {
-                                                <td><input id="Access" type="checkbox" class="form-control Access" name="Access" /></td>
-                                            }
-                                        </tr>
+                                        <td><input id="Access" type="checkbox" class="form-control Access" name="Access" style="height:calc(0.7em + 0.75rem + 2px)" checked /></td>
                                     }
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="form-group mt-3 row">
-                            <div class="col-md-4 mx-auto">
-                                <button type="button" class="btn btn-block btn-success d-none Save"><span class="glyphicon glyphicon-file"></span> Save & Update</button>
-                            </div>
+                                    else
+                                    {
+                                        <td><input id="Access" type="checkbox" class="form-control Access" name="Access" style="height:calc(0.7em + 0.75rem + 2px)" /></td>
+                                    }
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="form-group mt-3 row">
+                        <div class="col-md-4 mx-auto">
+                            <button type="button" class="btn btn-block btn-success d-none Save"><span class="glyphicon glyphicon-file"></span> Save & Update</button>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
-    }
+    </div>
 </div>
-
+}
 
 @section Scripts
 {
@@ -165,7 +124,7 @@
                 });
             }).draw();
 
-            $('#ShopCode').select2({
+            $('#ShopId').select2({
                 placeholder: "Search Shop",
                 ajax: {
                     url: "/AccessPolicy/GetShopSelect2",
@@ -175,38 +134,38 @@
                 }
             }).on('select2:select', function (e) {
                 $('input[name="ShopName"]').val(e.params.data.text);
-                $("#StaffCode").select2({
+                $("#StaffId").select2({
                     placeholder: "Search Staff",
                     ajax: {
-                        url: "/AccessPolicy/GetStaffSelect2?shopcode=" + e.params.data.id,
+                        url: "/AccessPolicy/GetStaffSelect2?ShopId=" + e.params.data.id,
                         width: "100%",
                         delay: 250,
                         dataType: 'json'
                     }
                 }).on("select2:select", function (e) {
-                    //var shopcode = $("#ShopCode").val();
+                    //var ShopId = $("#ShopId").val();
                     $('input[name="StaffName"]').val(e.params.data.text);
-                    //window.location.href = "/AccessPolicy/Manage/?staffcode=" + e.params.data.id + "&shopcode=" + shopcode;
+                    //window.location.href = "/AccessPolicy/Manage/?StaffId=" + e.params.data.id + "&ShopId=" + ShopId;
                 });
             });
             $("#btnFilter").click(function () {
-                var shopcode = $("#ShopCode").val();
-                var staffcode = $("#StaffCode").val();
-                if (shopcode == null || shopcode == "") {
+                var ShopId = $("#ShopId").val();
+                var StaffId = $("#StaffId").val();
+                if (ShopId == null || ShopId == "") {
                     swal("Notice!", "Please Select Shop Name and Staff Name!", "warning");
                 } else {
-                    if (staffcode == null || staffcode == "") {
+                    if (StaffId == null || StaffId == "") {
                         swal("Notice!", "Please Select Staff Name!", "warning");
                     }
                     else {
-                        window.location.href = "/AccessPolicy/Manage/?staffcode=" + staffcode + "&shopcode=" + shopcode;
+                        window.location.href = "/AccessPolicy/Manage/?StaffId=" + StaffId + "&ShopId=" + ShopId;
                     }
                 }
             });
             $(".Save").click(function () {
-                var shopcode = $("#ShopCode").val();
-                var staffcode = $("#StaffCode").val();
-                if (shopcode != null && staffcode != null) {
+                var ShopId = $("#ShopId").val();
+                var StaffId = $("#StaffId").val();
+                if (ShopId != null && StaffId != null) {
                     $('#AccessPolicyForm').submit();
                 } else {
                     swal("Notice!", "Please Select Shop Name and Staff Name!", "warning");
@@ -217,8 +176,8 @@
                 var $row = $(this).closest("tr").find(".td");
                 var $txtValue = $row.find(".txt").val();
                 var geek = $txtValue.split(' ');
-                var shopcode = $("#ShopCode").val();
-                var staffcode = $("#StaffCode").val();
+                var ShopId = $("#ShopId").val();
+                var StaffId = $("#StaffId").val();
                 var shopname = $("#ShopName").val();
                 var staffname = $("#StaffName").val();
                 if ($(this).is(":checked")) {
@@ -227,7 +186,7 @@
                     var IsAccess = true;
                     $.getJSON("/AccessPolicy/AddSession/", {
                         PageCode: PageCode, PageName: PageName, IsAccess: IsAccess,
-                        ShopCode: shopcode, StaffCode: staffcode, ShopName: shopname, StaffName: staffname
+                        ShopId: ShopId, StaffId: StaffId, ShopName: shopname, StaffName: staffname
                     }, function (data) {
                     });
                 }
@@ -237,7 +196,7 @@
                     var IsAccess = false;
                     $.getJSON("/AccessPolicy/RemoveSession/", {
                         PageCode: PageCode, PageName: PageName, IsAccess: IsAccess,
-                        ShopCode: shopcode, StaffCode: staffcode, ShopName: shopname, StaffName: staffname
+                        ShopId: ShopId, StaffId: StaffId, ShopName: shopname, StaffName: staffname
                     }, function (data) {
                     });
                 }

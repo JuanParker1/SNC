@@ -85,8 +85,6 @@ namespace ShopNow.Controllers
             staff.Status = 0;
             staff.DateEncoded = DateTime.Now;
             staff.DateUpdated = DateTime.Now;
-            db.Staffs.Add(staff);
-            db.SaveChanges();
             try
             {
                 // Staff Image

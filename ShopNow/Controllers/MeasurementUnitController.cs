@@ -124,11 +124,14 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var dId = AdminHelpers.DCodeInt(id);
             var drug = db.MeasurementUnits.FirstOrDefault(i => i.Id == dId && i.Status == 0);
-            drug.Status = 2;
-            drug.UpdatedBy = user.Name;
-            drug.DateUpdated = DateTime.Now;
-            db.Entry(drug).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
+            if(drug != null)
+            {           
+                 drug.Status = 2;
+                 drug.UpdatedBy = user.Name;
+                 drug.DateUpdated = DateTime.Now;
+                 db.Entry(drug).State = System.Data.Entity.EntityState.Modified;
+                 db.SaveChanges();
+            }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 

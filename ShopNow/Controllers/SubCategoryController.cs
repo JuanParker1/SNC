@@ -98,11 +98,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNSUCD004")]
-        public ActionResult Delete(string Id)
+        public JsonResult Delete(string Id)
         {
-            var dCode = AdminHelpers.DCodeInt(Id);
+            var dId = AdminHelpers.DCodeInt(Id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var subcategory = db.SubCategories.FirstOrDefault(i => i.Id == dCode);
+            var subcategory = db.SubCategories.FirstOrDefault(i => i.Id == dId);
             if (subcategory != null)
             {
                 subcategory.Status = 2;
@@ -111,7 +111,7 @@ namespace ShopNow.Controllers
                 db.Entry(subcategory).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
-            return RedirectToAction("List");
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [AccessPolicy(PageCode = "SHNSUCL001")]
