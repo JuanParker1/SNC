@@ -5,7 +5,7 @@ using System.Web;
 
 namespace ShopNow.ViewModels
 {
-    public class MainPageModel
+    public class MasterDishUploadViewModel
     {
         public long Id { get; set; }
         public string Name { get; set; }
@@ -439,9 +439,9 @@ namespace ShopNow.ViewModels
         public Nullable<int> PackageId { get; set; }
         public string PackageName { get; set; }
         public string GoogleTaxonomyCode { get; set; }
-        public string SubCategoryId { get; set; }
+        public int SubCategoryId { get; set; }
+        public int NextSubCategoryId { get; set; }
         public string SubCategoryName { get; set; }
-        public string NextSubCategoryIds { get; set; }
         public string NextSubCategoryName { get; set; }
         public string ASIN { get; set; }
         public string ImagePath1 { get; set; }

@@ -192,11 +192,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNSCTE003")]
-        public JsonResult Edit(int code, string name)
+        public JsonResult Edit(int Id, string name)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             string message = "";
-            ShopCategory shopCategory = db.ShopCategories.FirstOrDefault(i => i.Id == code);// ShopCategory.Get(code);
+            ShopCategory shopCategory = db.ShopCategories.FirstOrDefault(i => i.Id == Id);
             if (shopCategory != null)
             {
                 shopCategory.Name = name;
@@ -213,10 +213,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNSCTD005")]
-        public JsonResult Delete(int code)
+        public JsonResult Delete(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var shopCategory = db.ShopCategories.FirstOrDefault(i => i.Id == code);// ShopCategory.Get(code);
+            var shopCategory = db.ShopCategories.FirstOrDefault(i => i.Id == id);
             if (shopCategory != null)
             {
                 shopCategory.Status = 2;

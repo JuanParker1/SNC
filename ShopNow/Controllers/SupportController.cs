@@ -48,7 +48,7 @@ namespace ShopNow.Controllers
             model.DeliveryBoyVerifyCount = db.DeliveryBoys.Where(i => i.Status == 1).Count();
             model.BannerPendingCount = db.Banners.Where(i => i.Status == 1).Count();
             model.ShopCount = db.Shops.Where(i => i.Status == 0).Count();
-            model.CustomerCount = db.Customers.Where(i => i.Status == 0).Count();
+            model.CustomerCount = db.CustomerAddresses.GroupBy(a => a.CustomerId).Count();
             model.OrderCount = db.Orders.Where(i => i.Status == 0 && i.OrderNumber !=0 && i.Status != 7 && i.Status != 6 && i.Status != 0).Count();
             model.DeliveryBoyLiveCount = db.DeliveryBoys.Where(i => i.Status == 0 && i.isAssign == 0 && i.OnWork == 0 && i.Active == 1).Count();
             model.RefundCount = db.Payments.Where(i => i.RefundAmount != 0 && i.RefundStatus == 1 && i.RefundAmount != null && i.PaymentMode == "Online Payment").Count();

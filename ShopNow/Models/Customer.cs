@@ -20,7 +20,6 @@ namespace ShopNow.Models
             this.CustomerAddresses = new HashSet<CustomerAddress>();
             this.CustomerReviews = new HashSet<CustomerReview>();
             this.DeliveryBoys = new HashSet<DeliveryBoy>();
-            this.Orders = new HashSet<Order>();
         }
     
         public int Id { get; set; }
@@ -64,7 +63,5 @@ namespace ShopNow.Models
         public virtual ICollection<CustomerReview> CustomerReviews { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DeliveryBoy> DeliveryBoys { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Order> Orders { get; set; }
     }
 }

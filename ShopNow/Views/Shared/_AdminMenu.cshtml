@@ -28,7 +28,7 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="">
                     <div class="container">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <span class="text-uppercase text-white text-nowrap">Human Resource</span>
                                 <ul class="nav flex-column text-nowrap">
                                     <li class="nav-item">
@@ -38,14 +38,14 @@
                                         <a class="nav-link" href="~/DeliveryBoy/List">Delivery Boy</a>
                                     </li>
                                     @*<li class="nav-item">
-                                        <a class="nav-link" href="~/MarketingAgent/List">Marketing Agent</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="~/DeliveryBoy/AssignFranchise">Assign Marketing Agent for DeliveryBoys</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="~/Shop/AssignFranchise">Assign Marketing Agent for Shops</a>
-                                    </li>*@
+                    <a class="nav-link" href="~/MarketingAgent/List">Marketing Agent</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="~/DeliveryBoy/AssignFranchise">Assign Marketing Agent for DeliveryBoys</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="~/Shop/AssignFranchise">Assign Marketing Agent for Shops</a>
+                </li>*@
                                     <li class="nav-item">
                                         <a class="nav-link" href="~/WebAPI/Create">API Upload</a>
                                     </li>
@@ -68,10 +68,18 @@
                                         <a class="nav-link" href="~/AccessPolicy/Create">Access Entry</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="~/Page/List">Page Entry</a>
+                                        <a class="nav-link" href="~/Page/Create">Page Entry</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="~/Page/Index">Page Upload</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <span class="text-uppercase text-white text-nowrap">Customer</span>
+                                <ul class="nav flex-column text-nowrap">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="~/Customer/List">Customer</a>
                                     </li>
                                 </ul>
                             </div>
@@ -200,16 +208,16 @@
                                 <span class="text-uppercase text-white">Items</span>
                                 <ul class="nav flex-column">
                                     <li class="nav-item">
-                                        <a class="nav-link" href="~/Brand/Index">Item Brand upload</a>
+                                        <a class="nav-link" href="~/Brand/Index">Brand Upload</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="~/Category/Index">Item Category upload</a>
+                                        <a class="nav-link" href="~/Category/Index">Category Upload</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="~/MasterProduct/Index">Item Name upload</a>
+                                        <a class="nav-link" href="~/MeasurementUnit/Index">MeasurementUnit Upload</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="~/MasterProduct/GroceryEntry">FMCG upload</a>
+                                        <a class="nav-link" href="~/Package/Index">Package Upload</a>
                                     </li>
                                 </ul>
                             </div>
@@ -218,13 +226,13 @@
                                 <span class="text-uppercase text-white">Dish</span>
                                 <ul class="nav flex-column">
                                     <li class="nav-item">
-                                        <a class="nav-link" href="~/Portion/Index">Dish Portion upload</a>
+                                        <a class="nav-link" href="~/MasterProduct/FoodUpload">Dish Upload</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="~/AddOnCategory/Index">Dish AddOn Category Name upload</a>
+                                        <a class="nav-link" href="~/Portion/Index">Portion Upload</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="~/DishAddOn/Index">Dish AddOn upload</a>
+                                        <a class="nav-link" href="~/AddOnCategory/Index">AddOn Category Upload</a>
                                     </li>
                                 </ul>
                             </div>
@@ -233,35 +241,32 @@
                                 <span class="text-uppercase text-white">Medical</span>
                                 <ul class="nav flex-column">
                                     <li class="nav-item">
-                                        <a class="nav-link" href="~/MasterProduct/MedicalIndex">Medical Product Name upload</a>
+                                        <a class="nav-link" href="~/MasterProduct/MedicalUpload">Medical Upload</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="~/DrugCompoundDetail/Index">Medical Drug Compound Detail upload</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="~/MeasurementUnit/Index">Measurement Unit upload</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="~/Package/Index">Package upload</a>
+                                        <a class="nav-link" href="~/DrugCompoundDetail/Index">DrugCompoundDetail Upload</a>
                                     </li>
                                 </ul>
                             </div>
                             <div class="col-md-4">
-                                <span class="text-uppercase text-white">Product</span>
+                                <span class="text-uppercase text-white">FMCG</span>
                                 <ul class="nav flex-column">
-                                    <li class="nav-item">
+                                     <li class="nav-item">
+                                        <a class="nav-link" href="~/MasterProduct/FMCGUpload">FMCG Upload</a>
+                                    </li>
+                                    @*<li class="nav-item">
                                         <a class="nav-link" href="~/Specification/Index">Product Categorywise Specification upload</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="~/ProductSpecification/Index">Productwise Specification upload</a>
-                                    </li>
+                                    </li>*@
                                 </ul>
                             </div>
                             <div class="col-md-4">
                                 <span class="text-uppercase text-white">Shops</span>
                                 <ul class="nav flex-column">
                                     <li class="nav-item">
-                                        <a class="nav-link" href="~/ShopCategory/Index">Shop Category upload</a>
+                                        <a class="nav-link" href="~/ShopCategory/Index">Shop Category Upload</a>
                                     </li>
                                 </ul>
                             </div>
@@ -274,9 +279,9 @@
                 </div>
             </li>
             <!--Customer-->
-            <li class="nav-item">
+            @*<li class="nav-item">
                 <a class="nav-link" href="~/Customer/List">Customer</a>
-            </li>
+            </li>*@
             <!--Shop-->
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -437,6 +442,7 @@
                                         <a class="nav-link" href="~/PushNotification/">Push Notification</a>
                                         <a class="nav-link" href="~/OTP/">OTP List</a>
                                         <a class="nav-link" href="~/Offer/List">Offers</a>
+                                        <a class="nav-link" href="~/Product/UpdateStock">Stock Update</a>
                                     </li>
                                 </ul>
                             </div>

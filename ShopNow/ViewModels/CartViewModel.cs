@@ -324,11 +324,17 @@ namespace ShopNow.ViewModels
         public int CustomerId { get; set; }
         public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public string PhoneNumber { get; set; }
         public int OrderNumber { get; set; }
         public string DeliveryAddress { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        public double RatePerOrder { get; set; }
+        public double DeliveryCharge { get; set; }
+        public double ShopDeliveryDiscount { get; set; }
+        public double NetDeliveryCharge { get; set; }
+        public double Convinenientcharge { get; set; }
+        public double Packingcharge { get; set; }
+        public double Distance { get; set; }
 
         public List<ListItem> ListItems { get; set; } 
         public class ListItem

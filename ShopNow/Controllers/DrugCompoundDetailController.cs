@@ -79,12 +79,12 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNDCDE003")]
         public ActionResult Edit(string Id)
         {
-            var dCode = AdminHelpers.DCodeInt(Id);
-            if (dCode==0)
+            var dId = AdminHelpers.DCodeInt(Id);
+            if (dId==0)
                 return HttpNotFound();
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var drug = db.DrugCompoundDetails.FirstOrDefault(i => i.Id == dCode && i.Status == 0);
+            var drug = db.DrugCompoundDetails.FirstOrDefault(i => i.Id == dId && i.Status == 0);
             var model = _mapper.Map<DrugCompoundDetail, DrugCompoundDetailCreateEditViewModel>(drug);
             return View(model);
         }
@@ -116,9 +116,9 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNDCDD004")]
         public ActionResult Delete(string Id)
         {
-            var dCode = AdminHelpers.DCodeInt(Id);
+            var dId = AdminHelpers.DCodeInt(Id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var drug = db.DrugCompoundDetails.FirstOrDefault(i => i.Id == dCode && i.Status == 0);
+            var drug = db.DrugCompoundDetails.FirstOrDefault(i => i.Id == dId && i.Status == 0);
             drug.Status = 2;
             drug.UpdatedBy = user.Name;
             db.Entry(drug).State = System.Data.Entity.EntityState.Modified;

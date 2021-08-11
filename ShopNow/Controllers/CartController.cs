@@ -608,7 +608,7 @@ namespace ShopNow.Controllers
                             DeliveryBoyPhoneNumber = i.DeliveryBoyPhoneNumber,
                             DeliveryCharge = i.DeliveryCharge,
                             DeliveryBoyPaymentStatus = i.DeliveryBoyPaymentStatus,
-                            Distance = i.Distance ?? 0
+                            Distance = i.Distance
                         }).OrderBy(i => i.DeliveryBoyName).ToList();
                 }
                 else
@@ -625,7 +625,7 @@ namespace ShopNow.Controllers
                               DeliveryBoyPhoneNumber = i.DeliveryBoyPhoneNumber,
                               DeliveryCharge = i.DeliveryCharge,
                               DeliveryBoyPaymentStatus = i.DeliveryBoyPaymentStatus,
-                              Distance = i.Distance ?? 0
+                              Distance = i.Distance
                           }).OrderBy(i => i.DeliveryBoyName).ToList();
                 }
             }
@@ -648,7 +648,7 @@ namespace ShopNow.Controllers
                             DeliveryBoyPhoneNumber = i.DeliveryBoyPhoneNumber,
                             DeliveryCharge = i.DeliveryCharge,
                             DeliveryBoyPaymentStatus = i.DeliveryBoyPaymentStatus,
-                            Distance = i.Distance ?? 0
+                            Distance = i.Distance
                         }).OrderBy(i => i.DeliveryBoyName).ToList();
                 }
                 else
@@ -665,7 +665,7 @@ namespace ShopNow.Controllers
                               DeliveryBoyPhoneNumber = i.DeliveryBoyPhoneNumber,
                               DeliveryCharge = i.DeliveryCharge,
                               DeliveryBoyPaymentStatus = i.DeliveryBoyPaymentStatus,
-                              Distance = i.Distance ?? 0
+                              Distance = i.Distance
                           }).OrderBy(i => i.DeliveryBoyName).ToList();
                 }
             }

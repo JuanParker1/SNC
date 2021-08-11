@@ -303,7 +303,6 @@ namespace ShopNow.Controllers
                 }
             }
             Session["EditAddOns"] = null;
-            //return RedirectToAction("FoodList", "MasterProduct");
             return RedirectToAction("FoodEdit", new { id = AdminHelpers.ECodeLong(model.Id) });
         }
 
@@ -318,7 +317,7 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name; 
             var List = _db.MasterProducts.Join(_db.Categories, mp => mp.CategoryId, c => c.Id, (mp, c) => new { mp, c })
-                .Where(i => i.mp.Status == 0 && i.mp.ProductTypeId == 4)
+                .Where(i => i.mp.Status == 0 && i.mp.ProductTypeId == 1)
                 .Select(i => new MasterProductFoodListViewModel.MasterProductFoodList
                 {
                     Id = i.mp.Id,
@@ -344,7 +343,7 @@ namespace ShopNow.Controllers
 
         // Upload FMCG MasterItems
         [AccessPolicy(PageCode = "SHNMPRI005")]
-        public ActionResult GroceryEntry()
+        public ActionResult FMCGUpload()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -354,7 +353,7 @@ namespace ShopNow.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AccessPolicy(PageCode = "SHNMPRI005")]
-        public ActionResult GroceryEntry(HttpPostedFileBase upload, MasterFMCGUploadViewModel model)
+        public ActionResult FMCGUpload(HttpPostedFileBase upload, MasterFMCGUploadViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -436,39 +435,37 @@ namespace ShopNow.Controllers
                 // MainPageModel entities = new MainPageModel();
                 foreach (DataRow row in dt.Rows)
                 {
-                    var masterProduct = _db.MasterProducts.FirstOrDefault(i => i.Name == row[model.Name].ToString() && i.Status == 0);// MasterProduct.GetName(row[model.Name].ToString());
+                    var masterProduct = _db.MasterProducts.FirstOrDefault(i => i.Name == row[model.Name].ToString() && i.Status == 0);
                     if (masterProduct == null)
                     {
-                        // model.CategoryId = CheckCategory(row[model.CategoryName].ToString(), model.ProductTypeId, model.ProductTypeName);
-                        // model.SubCategoryCode1 = CheckSubCategory(model.CategoryId, row[model.CategoryName].ToString(), row[model.SubCategoryName1].ToString(), model.ProductTypeId, model.ProductTypeName);
+                         model.CategoryId = CheckCategory(row[model.CategoryName].ToString(), model.ProductTypeId, model.ProductTypeName);
+                         model.SubCategoryId = CheckSubCategory(model.CategoryId, row[model.CategoryName].ToString(), row[model.SubCategoryName].ToString(), model.ProductTypeId, model.ProductTypeName);
+                        model.NextSubCategoryId = CheckNextSubCategory(model.SubCategoryId, row[model.SubCategoryName].ToString(), row[model.NextSubCategoryName].ToString(), model.ProductTypeId, model.ProductTypeName);
                         _db.MasterProducts.Add(new MasterProduct
                         {
                             Name = row[model.Name].ToString(),
-                            // Code = _generatedCode("MPR"),
                             BrandId = CheckBrand(row[model.BrandName].ToString(), model.ProductTypeId, model.ProductTypeName),
                             BrandName = row[model.BrandName].ToString(),
                             SizeLB = row[model.SizeLB].ToString(),
-                            //Weight = Convert.ToDouble(row[model.Weight]),
+                            Weight = Convert.ToDouble(row[Convert.ToInt32(model.Weight)]),
                             GoogleTaxonomyCode = row[model.GoogleTaxonomyCode].ToString(),
                             ASIN = row[model.ASIN].ToString(),
                             CategoryId = model.CategoryId,
-                           // CategoryName = row[model.CategoryName].ToString(),
                             ShortDescription = row[model.ShortDescription].ToString(),
                             LongDescription = row[model.LongDescription].ToString(),
-                            //Price = row[model.Price],
+                            Price = Convert.ToDouble(row[Convert.ToInt32(model.Price)]),
                             ImagePath1 = row[model.ImagePath1].ToString(),
                             ImagePath2 = row[model.ImagePath2].ToString(),
                             ImagePath3 = row[model.ImagePath3].ToString(),
                             ImagePath4 = row[model.ImagePath4].ToString(),
                             ImagePath5 = row[model.ImagePath5].ToString(),
-                            //SubCategoryId = model.SubCategoryCode1,
-                           // SubCategoryName = row[model.SubCategoryName1].ToString(),
-                            // NextSubCategoryId = CheckNextSubCategory(model.SubCategoryCode1, row[model.SubCategoryName1].ToString(), row[model.SubCategoryName2].ToString(), model.ProductTypeId, model.ProductTypeName),
-                            //NextSubCategoryName = row[model.SubCategoryName2].ToString(),
+                            SubCategoryId = model.SubCategoryId,
+                            NextSubCategoryId = model.NextSubCategoryId,
                             ProductTypeId = model.ProductTypeId,
+                            ProductTypeName = model.ProductTypeName,
                             PackageId = CheckPackage(row[model.PackageName].ToString()),
                             PackageName = row[model.PackageName].ToString(),
-                            MeasurementUnitId = CheckFMCGMeasurementUnit(row[model.MeasurementUnitName].ToString()),
+                            MeasurementUnitId = CheckMeasurementUnit(row[model.MeasurementUnitName].ToString()),
                             MeasurementUnitName = row[model.MeasurementUnitName].ToString(),
                             Status = 0,
                             CreatedBy = user.Name,
@@ -990,7 +987,7 @@ namespace ShopNow.Controllers
 
         // Upload Medical MasterItems
         [AccessPolicy(PageCode = "SHNMPRMI010")]
-        public ActionResult MedicalIndex()
+        public ActionResult MedicalUpload()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -1000,7 +997,7 @@ namespace ShopNow.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AccessPolicy(PageCode = "SHNMPRMI010")]
-        public ActionResult MedicalIndex(HttpPostedFileBase upload, MasterMedicalUploadViewModel model)
+        public ActionResult MedicalUpload(HttpPostedFileBase upload, MasterMedicalUploadViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -1092,16 +1089,15 @@ namespace ShopNow.Controllers
                         _db.MasterProducts.Add(new MasterProduct
                         {
                             Name = row[model.Name].ToString(),
-                            BrandId = MedicalCheckBrand(row[model.BrandName].ToString(), model.ProductTypeId),
+                            BrandId = MedicalCheckBrand(row[model.BrandName].ToString()),
                             BrandName = row[model.BrandName].ToString(),
-                           // CategoryId = MedicalCheckCategory(row[model.CategoryName].ToString(), model.ProductTypeId),
-                            //CategoryName = row[model.CategoryName].ToString(),
-                            //MeasurementUnitId = Convert.ToInt32(row[model.DrugMeasurementUnitId]),
-                           // MeasurementUnitName = row[model.DrugMeasurementUnitName].ToString(),
-                           // PriscriptionCategory = Convert.ToBoolean(row[model.PriscriptionCategory]),
-                           // DrugCompoundDetailIds = Convert.ToInt32(row[model.DrugCompoundDetailIds]),
-                            //DrugCompoundDetailName = row[model.CombinationDrugCompound].ToString(),
-                            //Price = Convert.ToDouble(row[model.Price]),
+                            CategoryId = MedicalCheckCategory(row[model.CategoryName].ToString(), model.ProductTypeId, model.ProductTypeName),
+                            MeasurementUnitId = CheckMeasurementUnit(row[model.MeasurementUnitName].ToString()),
+                            MeasurementUnitName = row[model.MeasurementUnitName].ToString(),
+                            PriscriptionCategory = Convert.ToBoolean(row[Convert.ToInt32(model.PriscriptionCategory)]),
+                            DrugCompoundDetailIds = row[model.DrugCompoundDetailIds].ToString(),
+                            DrugCompoundDetailName = row[model.DrugCompoundDetailName].ToString(),
+                            Price = Convert.ToDouble(row[Convert.ToInt32(model.Price)]),
                             ImagePath1 = row[model.ImagePath1].ToString(),
                             ImagePath2 = row[model.ImagePath2].ToString(),
                             ImagePath3 = row[model.ImagePath3].ToString(),
@@ -1109,12 +1105,13 @@ namespace ShopNow.Controllers
                             ImagePath5 = row[model.ImagePath5].ToString(),
                             OriginCountry = row[model.OriginCountry].ToString(),
                             Manufacturer = row[model.Manufacturer].ToString(),
-                            //IBarU = Convert.ToInt32(row[model.IBarU]),
+                            IBarU = Convert.ToInt32(row[model.IBarU ?? 0]),
                             SizeLB = row[model.SizeLB].ToString(),
-                            //Weight = Convert.ToDouble(row[model.Weight]),
+                            Weight = Convert.ToDouble(row[Convert.ToInt32(model.Weight)]),
                             PackageId = CheckMedicalPackage(row[model.PackageName].ToString()),
                             PackageName = row[model.PackageName].ToString(),
                             ProductTypeId = model.ProductTypeId,
+                            ProductTypeName = model.ProductTypeName,
                             ColorCode = "N/A",
                             LongDescription = "N/A",
                             ShortDescription = "N/A",
@@ -1131,9 +1128,9 @@ namespace ShopNow.Controllers
             return View();
         }
 
-        public int MedicalCheckBrand(string BrandName, int ProductType)
+        public int MedicalCheckBrand(string BrandName)
         {
-            var brand = _db.Brands.FirstOrDefault(i => i.Name == BrandName && i.Status == 0);// Brand.GetName(BrandName);
+            var brand = _db.Brands.FirstOrDefault(i => i.Name == BrandName && i.Status == 0);
             if (brand != null)
             {
                 return brand.Id;
@@ -1152,34 +1149,29 @@ namespace ShopNow.Controllers
 
         }
 
-        //public int MedicalCheckCategory(string CategoryName, int ProductType)
-        //{
-        //    string[] cids = CategoryName.Split(',');
-        //    if (cids.Length > 1)
-        //    {
-        //        foreach (var s in cids)
-        //        {
-        //            var category = _db.Categories.FirstOrDefault(i => i.Name == CategoryName && i.Status == 0);
-        //            if (category != null)
-        //            {
+        public int MedicalCheckCategory(string CategoryName, int ProductTypeId, string ProductTypeName)
+        {
+            var category = _db.Categories.FirstOrDefault(i => i.Name == CategoryName && i.Status == 0 && i.ProductTypeId == ProductTypeId);
+            if (category != null)
+            {
+                return category.Id;
+            }
+            else
+            {
+                Category cat = new Category();
+                cat.Name = CategoryName;
+                cat.ProductTypeId = ProductTypeId;
+                cat.ProductTypeName = ProductTypeName;
+                cat.OrderNo = 0;
+                cat.Status = 0;
+                cat.DateEncoded = DateTime.Now;
+                cat.DateUpdated = DateTime.Now;
+                _db.Categories.Add(cat);
+                _db.SaveChanges();
+                return cat.Id;
+            }
 
-        //                return category.Id;
-        //            }
-        //            else
-        //            {
-        //                Category cat = new Category();
-        //                cat.Name = CategoryName;
-        //                cat.ProductTypeId = ProductType;
-        //                cat.Status = 0;
-        //                cat.DateEncoded = DateTime.Now;
-        //                cat.DateUpdated = DateTime.Now;
-        //                _db.Categories.Add(cat);
-        //                _db.SaveChanges();
-        //                return cat.Id;
-        //            }
-        //        }
-        //    }
-        //}
+        }
 
         public int CheckMedicalPackage(string PackageName)
         {
@@ -1192,13 +1184,11 @@ namespace ShopNow.Controllers
             {
                 Package mp = new Package();
                 mp.Name = PackageName;
-               // mp.Code = _generatedCode("PKG");
                 mp.Status = 0;
                 mp.DateEncoded = DateTime.Now;
                 mp.DateUpdated = DateTime.Now;
                 _db.Packages.Add(mp);
                 _db.SaveChanges();
-                // mp.Code = Package.Add(mp, out int error);
                 return mp.Id;
             }
 
@@ -1206,7 +1196,7 @@ namespace ShopNow.Controllers
 
         public int CheckPackage(string PackageName)
         {
-            var package = _db.Packages.FirstOrDefault(i => i.Name == PackageName && i.Status == 0);// Package.GetName(PackageName);
+            var package = _db.Packages.FirstOrDefault(i => i.Name == PackageName && i.Status == 0);
             if (package != null)
             {
                 return package.Id;
@@ -1215,20 +1205,18 @@ namespace ShopNow.Controllers
             {
                 Package mp = new Package();
                 mp.Name = PackageName;
-               // mp.Code = _generatedCode("PKG");
                 mp.Status = 0;
                 mp.DateEncoded = DateTime.Now;
                 mp.DateUpdated = DateTime.Now;
                 _db.Packages.Add(mp);
                 _db.SaveChanges();
-                // mp.Code = Package.Add(mp, out int error);
                 return mp.Id;
             }
         }
 
-        public int CheckFMCGMeasurementUnit(string MeasurementUnitName)
+        public int CheckMeasurementUnit(string MeasurementUnitName)
         {
-            var mu = _db.MeasurementUnits.FirstOrDefault(i => i.UnitName == MeasurementUnitName && i.Status == 0);// MeasurementUnit.GetName(MeasurementUnitName);
+            var mu = _db.MeasurementUnits.FirstOrDefault(i => i.UnitName == MeasurementUnitName && i.Status == 0);
             if (mu != null)
             {
                 return mu.Id;
@@ -1237,7 +1225,6 @@ namespace ShopNow.Controllers
             {
                 MeasurementUnit mp = new MeasurementUnit();
                 mp.UnitName = MeasurementUnitName;
-               // mp.Code = _generatedCode("MSU");
                 mp.Status = 0;
                 mp.DateEncoded = DateTime.Now;
                 mp.DateUpdated = DateTime.Now;
@@ -1416,31 +1403,6 @@ namespace ShopNow.Controllers
             prod.DateUpdated = DateTime.Now;
             try
             {
-                //if (model.CategoryCode != null)
-                //{
-                //    prod.CategoryCode = String.Join(",", model.CategoryCode);
-                //    StringBuilder sb = new StringBuilder();
-                //    foreach (var s in model.CategoryCode)
-                //    {
-                //        var cat = _db.Categories.FirstOrDefault(i => i.Code == s);// Category.Get(s);
-                //        if (cat != null)
-                //        {
-                //            sb.Append(cat.Name);
-                //            sb.Append(",");
-                //        }
-                //    }
-                //    if (sb.Length >= 1)
-                //    {
-                //        model.CategoryName = sb.ToString().Remove(sb.Length - 1);
-                //        prod.CategoryName = model.CategoryName;
-                //    }
-                //    else
-                //    {
-                //        model.CategoryName = sb.ToString();
-                //        prod.CategoryName = model.CategoryName;
-                //    }
-                //}
-
                 //ElectronicImage1
                 if (model.ElectronicImage1 != null)
                 {
@@ -1597,30 +1559,10 @@ namespace ShopNow.Controllers
                 {
                     product.MasterProductId = masterproductId;
                     product.MasterProductId = masterproduct.Id;
-                   
-                    if (product.Customisation == false && masterproduct.Customisation != false)
-                    {
-                        product.Customisation = masterproduct.Customisation;
-                    }
-                    if (product.Price == 0 && masterproduct.Price != 0)
-                    {
-                        product.Price = masterproduct.Price;
-                    }
-                
-                    if (product.IBarU == 0 && masterproduct.IBarU != null)
-                    {
-                        product.IBarU = Convert.ToInt32(masterproduct.IBarU);
-                    }
-                   
-                    if (product.ProductTypeId == 0 && masterproduct.ProductTypeId != 0)
-                    {
-                        product.ProductTypeId = masterproduct.ProductTypeId;
-                    }
-                    if (shopId == 0)
-                    {
-                        product.ShopId = 0;
-                        product.ShopName = "Admin";
-                    }
+                    product.Customisation = masterproduct.Customisation;
+                    product.Price = masterproduct.Price;
+                    product.IBarU = Convert.ToInt32(masterproduct.IBarU);
+                    product.ProductTypeId = masterproduct.ProductTypeId;
                     if (shopId != 0)
                     {
                         var shop = _db.Shops.FirstOrDefault(i => i.Id == shopId);
@@ -1634,7 +1576,6 @@ namespace ShopNow.Controllers
                     }
                     product.UpdatedBy = user.Name;
                     product.DateUpdated = DateTime.Now;
-
                     _db.Entry(product).State = System.Data.Entity.EntityState.Modified;
                     _db.SaveChanges();
 
@@ -2011,6 +1952,18 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
+        // ProductType Select2
+        public async Task<JsonResult> GetProductTypeSelect2(string q = "")
+        {
+            var model = await _db.ProductTypes.Where(a => a.Name.Contains(q)).OrderBy(i => i.Name).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).OrderBy(i => i.text).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
         // AddOns
         [HttpPost]
         [AccessPolicy(PageCode = "")]
@@ -2132,7 +2085,7 @@ namespace ShopNow.Controllers
 
         // Upload Master Items
         [AccessPolicy(PageCode = "SHNMPRI005")]
-        public ActionResult Index()
+        public ActionResult FoodUpload()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -2142,7 +2095,7 @@ namespace ShopNow.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AccessPolicy(PageCode = "SHNMPRI005")]
-        public ActionResult Index(HttpPostedFileBase upload, MainPageModel model)
+        public ActionResult FoodUpload(HttpPostedFileBase upload, MasterDishUploadViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -2179,11 +2132,7 @@ namespace ShopNow.Controllers
                                 UseHeaderRow = true
                             }
                         });
-
-                        // reader.IsFirstRowAsColumnNames = true;
-
                         reader.Close();
-
                         model.DataTable = result.Tables[0];
                         model.Filename = upload.FileName;
                         return View(model);
@@ -2229,7 +2178,7 @@ namespace ShopNow.Controllers
                 // MainPageModel entities = new MainPageModel();
                 foreach (DataRow row in dt.Rows)
                 {
-                    var masterProduct = _db.MasterProducts.FirstOrDefault(i => i.Name == row[model.Name].ToString() && i.Status == 0);// MasterProduct.GetName(row[model.Name].ToString());
+                    var masterProduct = _db.MasterProducts.FirstOrDefault(i => i.Name == row[model.Name].ToString() && i.Status == 0);
                     if (masterProduct == null)
                     {
                         _db.MasterProducts.Add(new MasterProduct
@@ -2237,10 +2186,11 @@ namespace ShopNow.Controllers
                             Name = row[model.Name].ToString(),
                             BrandId = CheckBrand(row[model.BrandName].ToString(), model.ProductTypeId, model.ProductTypeName),
                             BrandName = row[model.BrandName].ToString(),
-                          //  CategoryId = CheckCategory(row[model.CategoryName].ToString(), model.ProductTypeId, model.ProductTypeName),
-                           // CategoryName = row[model.CategoryName].ToString(),
+                            CategoryId = CheckCategory(row[model.CategoryName].ToString(), model.ProductTypeId, model.ProductTypeName),
                             ShortDescription = row[model.ShortDescription].ToString(),
                             LongDescription = row[model.LongDescription].ToString(),
+                            ProductTypeId = model.ProductTypeId,
+                            ProductTypeName = model.ProductTypeName,
                             Customisation = Convert.ToBoolean(row[model.Customisation]),
                             ColorCode = row[model.ColorCode].ToString(),
                             Price = Convert.ToDouble(row[model.Price]),
@@ -2249,7 +2199,6 @@ namespace ShopNow.Controllers
                             ImagePath3 = row[model.ImagePath3].ToString(),
                             ImagePath4 = row[model.ImagePath4].ToString(),
                             ImagePath5 = row[model.ImagePath5].ToString(),
-                            ProductTypeId = model.ProductTypeId,
                             Status = 0,
                             CreatedBy = user.Name,
                             UpdatedBy = user.Name,
@@ -2283,60 +2232,6 @@ namespace ShopNow.Controllers
             }
         }
 
-        public int CheckSubCategory(int CategoryId, string CategoryName, string SubCategoryName1, int ProductTypeId, string ProductTypeName)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            var subCategory = _db.SubCategories.FirstOrDefault(i => i.Name == SubCategoryName1 && i.Status == 0);
-            if (subCategory != null)
-            {
-                return subCategory.Id;
-            }
-            else
-            {
-                SubCategory sub = new SubCategory();
-                sub.Name = SubCategoryName1;
-                sub.CategoryId = CategoryId;
-                sub.CategoryName = CategoryName;
-                sub.ProductTypeId = ProductTypeId;
-                sub.ProductTypeName = ProductTypeName;
-                sub.CreatedBy = user.Name;
-                sub.UpdatedBy = user.Name;
-                sub.Status = 0;
-                sub.DateEncoded = DateTime.Now;
-                sub.DateUpdated = DateTime.Now;
-                _db.SubCategories.Add(sub);
-                _db.SaveChanges();
-                return sub.Id;
-            }
-        }
-
-        public int CheckNextSubCategory(int subCategoryCode1, string SubCategoryName1, string SubCategoryName2, int ProductTypeId, string ProductTypeName)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            var nextSubCategory = _db.NextSubCategories.FirstOrDefault(i => i.Name == SubCategoryName2 && i.Status == 0);
-            if (nextSubCategory != null)
-            {
-                return nextSubCategory.Id;
-            }
-            else
-            {
-                NextSubCategory sub = new NextSubCategory();
-                sub.Name = SubCategoryName2;
-                sub.SubCategoryId = subCategoryCode1;
-                sub.SubCategoryName = SubCategoryName1;
-                sub.ProductTypeId = ProductTypeId;
-                sub.ProductTypeName = ProductTypeName;
-                sub.CreatedBy = user.Name;
-                sub.UpdatedBy = user.Name;
-                sub.DateEncoded = DateTime.Now;
-                sub.DateUpdated = DateTime.Now;
-                sub.Status = 0;
-                _db.NextSubCategories.Add(sub);
-                _db.SaveChanges();
-                return sub.Id;
-            }
-        }
-
         public int CheckCategory(string CategoryName, int ProductTypeId, string ProductTypeName)
         {
             var category = _db.Categories.FirstOrDefault(i => i.Name == CategoryName && i.Status == 0);
@@ -2358,5 +2253,61 @@ namespace ShopNow.Controllers
                 return cat.Id;
             }
         }
+
+        public int CheckSubCategory(int CategoryId, string CategoryName, string SubCategoryName, int ProductTypeId, string ProductTypeName)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var subCategory = _db.SubCategories.FirstOrDefault(i => i.Name == SubCategoryName && i.Status == 0);
+            if (subCategory != null)
+            {
+                return subCategory.Id;
+            }
+            else
+            {
+                SubCategory sub = new SubCategory();
+                sub.Name = SubCategoryName;
+                sub.CategoryId = CategoryId;
+                sub.CategoryName = CategoryName;
+                sub.ProductTypeId = ProductTypeId;
+                sub.ProductTypeName = ProductTypeName;
+                sub.CreatedBy = user.Name;
+                sub.UpdatedBy = user.Name;
+                sub.Status = 0;
+                sub.DateEncoded = DateTime.Now;
+                sub.DateUpdated = DateTime.Now;
+                _db.SubCategories.Add(sub);
+                _db.SaveChanges();
+                return sub.Id;
+            }
+        }
+
+        public int CheckNextSubCategory(int subCategoryId, string SubCategoryName, string NextSubCategoryName, int ProductTypeId, string ProductTypeName)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var nextSubCategory = _db.NextSubCategories.FirstOrDefault(i => i.Name == NextSubCategoryName && i.Status == 0);
+            if (nextSubCategory != null)
+            {
+                return nextSubCategory.Id;
+            }
+            else
+            {
+                NextSubCategory sub = new NextSubCategory();
+                sub.Name = NextSubCategoryName;
+                sub.SubCategoryId = subCategoryId;
+                sub.SubCategoryName = SubCategoryName;
+                sub.ProductTypeId = ProductTypeId;
+                sub.ProductTypeName = ProductTypeName;
+                sub.CreatedBy = user.Name;
+                sub.UpdatedBy = user.Name;
+                sub.DateEncoded = DateTime.Now;
+                sub.DateUpdated = DateTime.Now;
+                sub.Status = 0;
+                _db.NextSubCategories.Add(sub);
+                _db.SaveChanges();
+                return sub.Id;
+            }
+        }
+
+        
     }
 }

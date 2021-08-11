@@ -3,24 +3,28 @@
 @{
     ViewBag.Title = "Measurement Unit List";
 }
+
 <title>ShopNow | Measurement Unit List</title>
+
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
+
 <div class="container-fluid mb-5">
     <div class="row">
         <div class="col-md-6">
-            <h5 class="text-success" style="letter-spacing:1px">Measurement Unit List</h5>
+            <h5 class="text-success" style="letter-spacing:1px">MEASUREMENT UNIT LIST</h5>
         </div>
         <div class="col-md-6 text-right">
             <a href="~/MeasurementUnit/Create"><span class="fa fa-plus"></span> New Measurement Unit</a>
         </div>
     </div>
+
     <div class="row">
         <div class="col-md-12">
             <div class="card shadow mt-3">
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
-               {
+                    {
                columns.Add(b => b.UnitName).Titled("Name").Filterable(true).SetWidth(25);
                columns.Add(b => b.UnitSymbol).Titled("Symbol").Filterable(true).SetWidth(15);
                columns.Add(b => b.UnitType).Titled("Type").Filterable(true).SetWidth(20);
@@ -29,9 +33,8 @@
                 columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
              .RenderValueAs(o => @<div>
                     <a href="~/MeasurementUnit/Edit?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
-                    <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
-                </div>);
-}).WithPaging(20).Sortable(true)
+                    <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a></div>);
+               }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
