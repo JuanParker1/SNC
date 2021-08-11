@@ -63,7 +63,7 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header alert alert-info">
-                <input type="hidden" name="SpecificationCode" id="SpecificationCode" />
+                <input type="hidden" name="SpecificationId" id="SpecificationId" />
                 <h5 class="modal-title" id="editModalLabel">Update Specification</h5>
                 <button type="button" class="btnClose close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -122,12 +122,12 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
             $(".edit-prompt").click(function () {
                 var id = $(this).attr('data-id');
                 var name = $(this).attr('data-id1');
-                $("#SpecificationCode").val(id);
+                $("#SpecificationId").val(id);
                 $("#SpecificationName").append("<input type=text name=SName id=SName class=form-control value='" + name + "' />");
             });
 
             $(".Edit").click(function () {
-                var Id = $("#SpecificationCode").val();
+                var Id = $("#SpecificationId").val();
                 var specificationName = $("#SName").val();
                 if (specificationName == "" || specificationName == null) {
                     swal("Name is Empty.", "Please Enter a Specification Name", "warning");
