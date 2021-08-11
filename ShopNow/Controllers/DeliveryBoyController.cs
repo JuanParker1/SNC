@@ -64,7 +64,7 @@ namespace ShopNow.Controllers
         Name = m.Name,
         PhoneNumber = m.PhoneNumber,
         Active = m.Active,
-        ImagePath = ((m.ImagePath) != "" ? BaseClass.smallImage + m.ImagePath : m.ImagePath)
+        ImagePath = m.ImagePath
     }).ToList();
             return View(lstDelivery);
         }

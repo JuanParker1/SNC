@@ -43,7 +43,7 @@
                                     <td>@item.OrderNo - @item.ShopName</td>
                                     <td>@item.DateEncoded.ToString("dd/MMM/yyyy hh:mm tt")</td>
                                     <td class="text-nowrap">
-                                        <a href="~/Cart/AssignDeliveryBoy/?id=@item.OrderNo" class="btn btn-warning btn-sm" style="padding: 3px 16px">Assign</a>
+                                        <a href="~/Cart/AssignDeliveryBoy/?OrderNumber=@item.OrderNo" class="btn btn-warning btn-sm" style="padding: 3px 16px">Assign</a>
                                     </td>
                                 </tr>
                             }

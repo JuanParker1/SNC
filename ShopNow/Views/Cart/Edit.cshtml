@@ -8,7 +8,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6">
-            <h5 class="text-dark" style="letter-spacing:1px">CART DETAILS</h5>
+            <h5 class="text-success" style="letter-spacing:1px">CART DETAILS</h5>
         </div>    
         <div class="col-md-6 text-right">
             <a href="~/Cart/Pending" class="ml-auto" target="_self"><span class="fa fa-bars"></span> New Order List</a>
@@ -57,17 +57,17 @@
                             else if (Model.CartStatus == 4 && Model.isAssign == 1 && Model.OnWork == 0)
                             {
                                 <span class="text-success">Assigned for Delivery</span>
-                                <a href="Cart/DeliveryBoyAccept?ordernumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-info mt-2">Delivery Boy Accept</a>
+                                <a href="/Cart/DeliveryBoyAccept?ordernumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-info mt-2">Delivery Boy Accept</a>
                             }
                             else if (Model.CartStatus == 4 && Model.isAssign == 1 && Model.OnWork == 1)
                             {
                                 <span class="text-success">Waiting for Pickup</span>
-                                <a href="Cart/DeliveryBoyPickup?ordernumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-info mt-2">Delivery Boy Pickup</a>
+                                <a href="/Cart/DeliveryBoyPickup?ordernumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-info mt-2">Delivery Boy Pickup</a>
                             }
                             else if (Model.CartStatus == 5)
                             {
                                 <span class="text-success">On the Way to Delivery</span>
-                                <a href="Cart/MarkAsDelivered?ordernumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-info mt-2">Mark as Delivered</a>
+                                <a href="/Cart/MarkAsDelivered?ordernumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-info mt-2">Mark as Delivered</a>
                             }
                             else if (Model.CartStatus == 6)
                             {
@@ -144,7 +144,7 @@
                     "<'row'<'col-sm-5'i><'col-sm-3'l><'col-sm-4'p>>" +
                     "<'row'<'col-sm-12'tr>>",
                 "bPaginate": false,
-                "scrollY": 400,
+                "scrollY": 300,
                 "paging": true,
                 "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "ALL"]],
                 "pageLength": 20,

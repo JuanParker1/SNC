@@ -451,7 +451,7 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var cart = db.Orders.FirstOrDefault(i => i.OrderNumber == model.Id);
+            var cart = db.Orders.FirstOrDefault(i => i.Id == model.OrderId);
             if (cart != null && model.DeliveryBoyId != 0)
             {
                 var cartList = db.OrderItems.Where(i => i.OrderId == cart.Id).ToList();
@@ -911,7 +911,7 @@ namespace ShopNow.Controllers
                 return RedirectToAction("Delivered");
         }
 
-        public ActionResult DeliveryBoyAccept(int OrderNumber, int id)
+        public ActionResult DeliveryBoyAccept(int OrderNumber, long id)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             var order = db.Orders.FirstOrDefault(i => i.Id == id);
@@ -921,18 +921,8 @@ namespace ShopNow.Controllers
             delivaryBoy.DateUpdated = DateTime.Now;
             db.Entry(delivaryBoy).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
-
-            //var shopCharge = db.ShopCharges.FirstOrDefault(i => i.OrderNumber == OrderNumber);
-            //var shop = db.Shops.FirstOrDefault(i => i.Id == shopCharge.ShopId);
-            //var topup = db.TopUps.OrderByDescending(q => q.Id).FirstOrDefault(i => i.CustomerCode == shop.CustomerCode && i.CreditType == 1 && i.Status == 0);
-            //if (topup != null)
-            //{
-            //    topup.CreditAmount = topup.CreditAmount - shopCharge.GrossDeliveryCharge;
-            //    topup.DateUpdated = DateTime.Now;
-            //    db.Entry(topup).State = System.Data.Entity.EntityState.Modified;
-            //    db.SaveChanges();
-            //}
-            return RedirectToAction("Edit", "Cart", new { OrderNumber = OrderNumber, id = id });
+            
+            return RedirectToAction("Edit", "Cart", new { OrderNumber = OrderNumber, id = AdminHelpers.ECodeLong(id )});
         }
 
         public ActionResult DeliveryBoyPickup(int OrderNumber, int id)
@@ -978,7 +968,7 @@ namespace ShopNow.Controllers
                             where c.Id == order.CustomerId
                             select c.FcmTocken ?? "").FirstOrDefault().ToString();
             Helpers.PushNotification.SendbydeviceId("Your order is on the way.", "ShopNowChat", "a.mp3", fcmToken.ToString());
-            return RedirectToAction("Edit", "Cart", new { OrderNumber = OrderNumber, id = id });
+            return RedirectToAction("Edit", "Cart", new { OrderNumber = OrderNumber, id = AdminHelpers.ECodeLong(id) });
         }
 
         public ActionResult MarkAsDelivered(int OrderNumber, int id)
@@ -1016,7 +1006,7 @@ namespace ShopNow.Controllers
                             where c.Id == order.CustomerId
                             select c.FcmTocken ?? "").FirstOrDefault().ToString();
             Helpers.PushNotification.SendbydeviceId("Your order has been delivered.", "ShopNowChat", "a.mp3", fcmToken.ToString());
-            return RedirectToAction("Edit", "Cart", new { OrderNumber = OrderNumber, id = id });
+            return RedirectToAction("Edit", "Cart", new { OrderNumber = OrderNumber, id = AdminHelpers.ECodeLong(id) });
         }
 
         protected override void Dispose(bool disposing)

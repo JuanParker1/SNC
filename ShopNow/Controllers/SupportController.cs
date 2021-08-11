@@ -30,17 +30,17 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             var model = new SupportViewModel();
 
-            model.ShopAcceptanceCount = db.Orders.Where(i => i.Status == 2 && i.Status == 0 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5)
+            model.ShopAcceptanceCount = db.Orders.Where(i => i.Status == 2 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5)
                    .AsEnumerable().Count();
             model.DeliveryAcceptanceCount = db.Orders.Join(db.DeliveryBoys, c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
-                      .Where(i => i.c.Status == 4 && i.c.Status == 0 && i.d.isAssign == 1 && i.d.OnWork == 0 && SqlFunctions.DateDiff("minute", i.c.DateUpdated, DateTime.Now) >= 5)
+                      .Where(i => i.c.Status == 4 && i.d.isAssign == 1 && i.d.OnWork == 0 && SqlFunctions.DateDiff("minute", i.c.DateUpdated, DateTime.Now) >= 5)
                       .AsEnumerable().Count();
             model.ShopPickupCount = db.Orders.Join(db.DeliveryBoys, c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
-                    .Where(i => i.c.Status == 4 && i.c.Status == 0 && i.d.isAssign == 1 && i.d.OnWork == 1 && SqlFunctions.DateDiff("minute", i.c.DateUpdated, DateTime.Now) >= 15)
+                    .Where(i => i.c.Status == 4 && i.d.isAssign == 1 && i.d.OnWork == 1 && SqlFunctions.DateDiff("minute", i.c.DateUpdated, DateTime.Now) >= 15)
                     .AsEnumerable().Count();
-            model.CustomerDeliveryCount = db.Orders.Where(i => i.Status == 5 && i.Status == 0 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 15)
+            model.CustomerDeliveryCount = db.Orders.Where(i => i.Status == 5 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 15)
                     .AsEnumerable().Count();
-            model.OrderswithoutDeliveryboyCount = db.Orders.Where(i => i.Status == 3 && i.Status == 0)
+            model.OrderswithoutDeliveryboyCount = db.Orders.Where(i => i.Status == 3)
                     .AsEnumerable().Count();
 
             model.CustomerAadhaarVerifyCount = db.Customers.Where(i => i.AadharVerify == false && i.Status == 0 && i.ImageAadharPath != null && i.ImageAadharPath != "Rejected" && i.ImageAadharPath != "NULL").Count();
