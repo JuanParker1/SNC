@@ -783,16 +783,16 @@ namespace ShopNow.Controllers
             var perOrderAmount = db.PlatFormCreditRates.Where(s => s.Status == 0).FirstOrDefault();
             if (model.CustomerId != 0)
             {
-                var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
-                payment.CustomerName = customer.Name;
-                payment.CreatedBy = customer.Name;
-                payment.UpdatedBy = customer.Name;
-
+                //var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
+                //payment.CustomerName = model.CustomerName;
+                payment.CreatedBy = model.CustomerName;
+                payment.UpdatedBy = model.CustomerName;
+                payment.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
                 if (model.OrderNumber != 0)
                 {
                     var order = db.Orders.FirstOrDefault(i => i.OrderNumber == model.OrderNumber);
                     order.Status = 2;
-                    order.UpdatedBy = customer.Name;
+                    order.UpdatedBy = model.CustomerName;
                     order.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
                     order.DateUpdated = DateTime.Now;
                     //
@@ -803,6 +803,7 @@ namespace ShopNow.Controllers
                     order.Convinenientcharge = model.ConvenientCharge;
                     db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
+
                     //Reducing Platformcredits
                     var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
                     var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
@@ -872,7 +873,6 @@ namespace ShopNow.Controllers
                 payment.DateEncoded = DateTime.Now;
                 payment.DateUpdated = DateTime.Now;
                 payment.Status = 0;
-                payment.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
                 payment.RefundStatus = 1;
                 db.Payments.Add(payment);
                 db.SaveChanges();
@@ -962,7 +962,7 @@ namespace ShopNow.Controllers
                 order.TotalQuantity = model.ListItems.Sum(i => Convert.ToInt32(i.Quantity));
                 order.DateEncoded = DateTime.Now;
                 order.DateUpdated = DateTime.Now;
-                order.Status = 2;
+                order.Status = 0;
                 db.Orders.Add(order);
                 db.SaveChanges();
                 foreach (var item in model.ListItems)

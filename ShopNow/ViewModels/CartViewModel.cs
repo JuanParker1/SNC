@@ -67,7 +67,7 @@ namespace ShopNow.ViewModels
 
     public class CartListViewModel
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public int CustomerId { get; set; }
         public string CustomerName { get; set; }
         public int ShopId { get; set; }
@@ -328,12 +328,6 @@ namespace ShopNow.ViewModels
         public string DeliveryAddress { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public double RatePerOrder { get; set; }
-        public double DeliveryCharge { get; set; }
-        public double ShopDeliveryDiscount { get; set; }
-        public double NetDeliveryCharge { get; set; }
-        public double Convinenientcharge { get; set; }
-        public double Packingcharge { get; set; }
         public double Distance { get; set; }
 
         public List<ListItem> ListItems { get; set; } 
