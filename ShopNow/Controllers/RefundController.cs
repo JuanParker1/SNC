@@ -1,4 +1,5 @@
 ﻿using Razorpay.Api;
+using ShopNow.Base;
 using ShopNow.Filters;
 using ShopNow.Models;
 using ShopNow.ViewModels;
@@ -74,8 +75,8 @@ namespace ShopNow.Controllers
                 ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
                                                        SecurityProtocolType.Tls11 |
                                                        SecurityProtocolType.Tls12;
-                string key = "rzp_live_PNoamKp52vzWvR";
-                string secret = "yychwOUOsYLsSn3XoNYvD1HY";
+                string key = BaseClass.razorpaykey; //"rzp_live_PNoamKp52vzWvR";
+                string secret = BaseClass.razorpaySecretkey;// "yychwOUOsYLsSn3XoNYvD1HY";
 
                 RazorpayClient client = new RazorpayClient(key, secret);
 
