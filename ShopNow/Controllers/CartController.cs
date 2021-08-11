@@ -287,7 +287,7 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             model.StartDate = model.StartDate == null ? DateTime.Now : model.StartDate;
 
-            model.CancelledReportLists = db.Orders.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(model.StartDate) && i.Status == 6)
+            model.CancelledReportLists = db.Orders.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(model.StartDate) && i.Status == 7)
             .Select(i => new CartReportViewModel.CancelledReportList
             {
                 Id = i.Id,

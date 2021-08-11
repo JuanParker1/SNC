@@ -264,7 +264,7 @@ namespace ShopNow.ViewModels
     {
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public string ShopId { get; set; }
+        public int ShopId { get; set; }
         public string ShopName { get; set; }
         public List<ListItem> ListItems { get; set; }
         public class ListItem
