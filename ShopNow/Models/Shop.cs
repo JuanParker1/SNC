@@ -18,8 +18,6 @@ namespace ShopNow.Models
         public Shop()
         {
             this.CustomerReviews = new HashSet<CustomerReview>();
-            this.Orders = new HashSet<Order>();
-            this.ShopDishAddOns = new HashSet<ShopDishAddOn>();
         }
     
         public int Id { get; set; }
@@ -96,9 +94,5 @@ namespace ShopNow.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CustomerReview> CustomerReviews { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Order> Orders { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ShopDishAddOn> ShopDishAddOns { get; set; }
     }
 }

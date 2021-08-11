@@ -84,12 +84,13 @@ namespace ShopNow.Controllers
                 config.CreateMap<OtpVerification, CustomerShopAllListViewModel.VerifyList>();
                 config.CreateMap<DeliveryBoyCreateViewModel, DeliveryBoy>();
                 config.CreateMap<Models.Payment, CreditPaymentViewModel>();
-                //config.CreateMap<CartCreateViewModel, Cart>();
                 config.CreateMap<PaymentCreateApiViewModel, Models.Payment>();
                 config.CreateMap<ShopSingleEditViewModel, Shop>();
                 config.CreateMap<ShopReviewViewModel, CustomerReview>();
 
                 config.CreateMap<LocationDetailsCreateViewModel, LocationDetail>();
+                config.CreateMap<OrderCreateViewModel, Models.Order>();
+                config.CreateMap<OrderCreateViewModel.ListItem, OrderItem>();
             });
 
             _mapper = _mapperConfiguration.CreateMapper();
@@ -1027,7 +1028,6 @@ namespace ShopNow.Controllers
             else
             {
                 var order = _mapper.Map<OrderCreateViewModel, Models.Order>(model);
-                order.Status = 2;
                 if (model.CustomerId != 0)
                 {
                     var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
@@ -1047,7 +1047,7 @@ namespace ShopNow.Controllers
                 order.TotalQuantity = model.ListItems.Sum(i => Convert.ToInt32(i.Quantity));
                 order.DateEncoded = DateTime.Now;
                 order.DateUpdated = DateTime.Now;
-                order.Status = 0;
+                order.Status = 2;
                 db.Orders.Add(order);
                 db.SaveChanges();
                 foreach (var item in model.ListItems)
@@ -1064,7 +1064,7 @@ namespace ShopNow.Controllers
                     orderItem.Status = 0;
                     orderItem.OrderId = order.Id;
                     orderItem.OrdeNumber = order.OrderNumber;
-                    db.Orders.Add(order);
+                    db.OrderItems.Add(orderItem);
                     db.SaveChanges();
                 }
 
@@ -2200,8 +2200,8 @@ namespace ShopNow.Controllers
                      ShopOnline = i.IsOnline,
                      ShopStatus = i.Status
                  }).ToList();
-            var productrCount = db.GetProductListCount(varlongitude, varlatitude, str).ToList();
-            int count = Convert.ToInt32(productrCount[0]);
+            var productrCount = db.GetProductListCount(varlongitude, varlatitude, str);
+            int count = Convert.ToInt32(productrCount);
             int CurrentPage = page;
             int PageSize = pageSize;
             //int TotalCount = count;
@@ -2270,11 +2270,11 @@ namespace ShopNow.Controllers
         {
             //  var shid = db.Shops.Where(s => s.Id == shopId).FirstOrDefault();
             int count = 0;
-            var total = db.GetShopCategoryProductCount(shopId, CategoryId, str).ToList();
+            var total = db.GetShopCategoryProductCount(shopId, CategoryId, str);
             //if (total.Count > 0)
-            count = total[0].Value;
+            count = total;
             var skip = page - 1;
-            var model = db.GetShopCategoryProducts(shopId, CategoryId, str, skip, pageSize).ToList();
+            var model = db.GetShopCategoryProducts(shopId, CategoryId, str, skip, pageSize);
             int CurrentPage = page;
             int PageSize = pageSize;
             int TotalCount = count;
