@@ -18,11 +18,6 @@
             @using (Html.BeginForm("Edit", "DrugCompoundDetail", FormMethod.Post, new { id = "DrugCompoundDetailEditForm" }))
             {
                 <input type="hidden" name="Id" value="@Model.Id" />
-                <input type="hidden" name="CreatedBy" value="@Model.CreatedBy" />
-                <input type="hidden" name="UpdatedBy" value="@Model.UpdatedBy" />
-                <input type="hidden" name="DateEncoded" value="@Model.DateEncoded" />
-                <input type="hidden" name="DateUpdated" value="@Model.DateUpdated" />
-                <input type="hidden" name="Status" value="@Model.Status" />
                 <div class="card shadow mt-3">                    
                     <div class="card-body">
                         @Html.AntiForgeryToken()

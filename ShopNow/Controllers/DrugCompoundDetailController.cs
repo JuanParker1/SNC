@@ -99,12 +99,13 @@ namespace ShopNow.Controllers
             {
                 DrugCompoundDetail drug = db.DrugCompoundDetails.FirstOrDefault(i => i.Id == model.Id && i.Status == 0);
                 _mapper.Map(model, drug);
-                drug.UpdatedBy = user.Name;
-                drug.DateUpdated = DateTime.Now;
-                
-                db.Entry(drug).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-
+                if (drug != null)
+                {
+                    drug.UpdatedBy = user.Name;
+                    drug.DateUpdated = DateTime.Now;
+                    db.Entry(drug).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
                 return RedirectToAction("List");
             }
             catch (Exception ex)
@@ -114,16 +115,19 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNDCDD004")]
-        public ActionResult Delete(string Id)
+        public JsonResult Delete(string Id)
         {
             var dId = AdminHelpers.DCodeInt(Id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var drug = db.DrugCompoundDetails.FirstOrDefault(i => i.Id == dId && i.Status == 0);
-            drug.Status = 2;
-            drug.UpdatedBy = user.Name;
-            db.Entry(drug).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
-            return RedirectToAction("List");
+            if (drug != null)
+            {
+                drug.Status = 2;
+                drug.UpdatedBy = user.Name;
+                db.Entry(drug).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [AccessPolicy(PageCode = "SHNDCDI005")]

@@ -201,11 +201,12 @@ namespace ShopNow.Controllers
             var dId = AdminHelpers.DCodeLong(Id);
             if (string.IsNullOrEmpty(dId.ToString()))
                 return HttpNotFound();
-            var product = _db.MasterProducts.FirstOrDefault(i => i.Id == dId);
+            var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dId);
             Session["EditAddOns"] = new List<MasterAddOnsCreateViewModel>();
             var addOns = new List<MasterAddOnsCreateViewModel>();
-            var model = _mapper.Map<MasterProduct, MasterFoodEditViewModel>(product);
-            model.AddonLists = _db.ProductDishAddOns.Where(i => i.MasterProductId == product.Id && i.Status == 0).Select(i => new MasterFoodEditViewModel.AddonList
+            var model = _mapper.Map<MasterProduct, MasterFoodEditViewModel>(master);
+            model.CategoryName = _db.Categories.FirstOrDefault(i => i.Id == master.CategoryId).Name;
+            model.AddonLists = _db.ProductDishAddOns.Where(i => i.MasterProductId == master.Id && i.Status == 0).Select(i => new MasterFoodEditViewModel.AddonList
             {
                 Id = i.Id,
                 AddOnItemName = i.AddOnItemName,
@@ -335,9 +336,12 @@ namespace ShopNow.Controllers
         {
             var dId = AdminHelpers.DCodeLong(Id);
             var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dId);
-            master.Status = 2;
-            _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
-            _db.SaveChanges();
+            if (master != null)
+            {
+                master.Status = 2;
+                _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
+                _db.SaveChanges();
+            }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
@@ -624,7 +628,9 @@ namespace ShopNow.Controllers
             if (masterProduct.ImagePath5 != null)
                 masterProduct.ImagePath5 = masterProduct.ImagePath5.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
             var model = _mapper.Map<MasterProduct, MasterFMCGEditViewModel>(masterProduct);
-           
+            model.CategoryName = _db.Categories.FirstOrDefault(i => i.Id == masterProduct.CategoryId).Name;
+            model.SubCategoryName = _db.SubCategories.FirstOrDefault(i => i.Id == masterProduct.SubCategoryId).Name;
+            model.NextSubCategoryName = _db.NextSubCategories.FirstOrDefault(i => i.Id == masterProduct.NextSubCategoryId).Name;
             return View(model);
         }
 
@@ -710,9 +716,12 @@ namespace ShopNow.Controllers
         {
             var dId = AdminHelpers.DCodeLong(Id);
             var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dId);
-            master.Status = 2;
-            _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
-            _db.SaveChanges();
+            if (master != null)
+            {
+                master.Status = 2;
+                _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
+                _db.SaveChanges();
+            }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
@@ -877,6 +886,7 @@ namespace ShopNow.Controllers
             if (model.ImagePath5 != null)
                 model.ImagePath5 = model.ImagePath5.Replace("%", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
             model.DrugCompoundDetailIds1 = masterProduct.DrugCompoundDetailIds;
+            model.CategoryName = _db.Categories.FirstOrDefault(i => i.Id == masterProduct.CategoryId).Name;
             return View(model);
         }
 
@@ -979,9 +989,12 @@ namespace ShopNow.Controllers
         {
             var dId = AdminHelpers.DCodeLong(Id);
             var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dId);
-            master.Status = 2;
-            _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
-            _db.SaveChanges();
+            if (master != null)
+            {
+                master.Status = 2;
+                _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
+                _db.SaveChanges();
+            }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
@@ -1464,9 +1477,12 @@ namespace ShopNow.Controllers
         {
             var dId = AdminHelpers.DCodeLong(Id);
             var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dId);
-            master.Status = 2;
-            _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
-            _db.SaveChanges();
+            if (master != null)
+            {
+                master.Status = 2;
+                _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
+                _db.SaveChanges();
+            }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
@@ -1902,10 +1918,9 @@ namespace ShopNow.Controllers
 
         // Sub Category Select2
         [AccessPolicy(PageCode = "")]
-        public async Task<JsonResult> GetSubCategorySelect2(string CategoryId, string q = "")
+        public async Task<JsonResult> GetSubCategorySelect2(string q = "")
         {
-            int [] categoriesId = CategoryId.Split(',').Select(int.Parse).ToArray();
-            var model = await _db.SubCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && categoriesId.Contains(a.Id) && a.Status == 0 && a.ProductTypeId == 2).Select(i => new
+            var model = await _db.SubCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 2).Select(i => new
             {
                 id = i.Id,
                 text = i.Name
@@ -1916,10 +1931,9 @@ namespace ShopNow.Controllers
 
         // NextSub Category Select2
         [AccessPolicy(PageCode = "")]
-        public async Task<JsonResult> GetNextSubCategorySelect2(string subCategoryId, string q = "")
+        public async Task<JsonResult> GetNextSubCategorySelect2(string q = "")
         {
-            int[] subcategoriesId = subCategoryId.Split(',').Select(int.Parse).ToArray();
-            var model = await _db.NextSubCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && subcategoriesId.Contains(a.Id) && a.Status == 0 && a.ProductTypeId == 2).Select(i => new
+            var model = await _db.NextSubCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 2).Select(i => new
             {
                 id = i.Id,
                 text = i.Name

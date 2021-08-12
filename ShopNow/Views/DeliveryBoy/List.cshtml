@@ -28,16 +28,16 @@
             columns.Add(c => c.PhoneNumber).Titled("Phone No.").Filterable(true).SetWidth(15);
             columns.Add().Encoded(false).Sanitized(false).Titled("Image").Filterable(false).SetWidth(10).RenderValueAs(c => @<div><img alt="Image" data-toggle="modal" data-target="#myModal" class="img-thumbnail DeliveryBoyImage" src="@c.ImagePath" style="width:60px; height:45px" onerror="this.src='/Images/No Photo.png'" /></div>);
              columns.Add()
-   .Encoded(false)
-   .Sanitized(false)
-   .RenderValueAs(s => new HtmlString
-           ("<label class='switch'> <input type='checkbox' value='" + s.Active + "' Id='Id_" + s.Id + "' class='CheckOnline' data-code='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(10);
-                columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
-                  .RenderValueAs(o => @<div>
-                    <a href="/DeliveryBoy/Edit?Id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-5" ><i class="fa fa-edit fa-lg"></i></a>
-                    <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
-                </div>);
-  }).WithPaging(20).Sortable(true)
+      .Encoded(false)
+      .Sanitized(false)
+      .RenderValueAs(s => new HtmlString
+              ("<label class='switch'> <input type='checkbox' value='" + s.Active + "' Id='Id_" + s.Id + "' class='CheckOnline' data-code='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(10);
+             columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
+               .RenderValueAs(o => @<div>
+                <a href="/DeliveryBoy/Edit?Id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
+                <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+            </div>);
+}).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
@@ -54,6 +54,8 @@
 
 @section Scripts
 {
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
 
