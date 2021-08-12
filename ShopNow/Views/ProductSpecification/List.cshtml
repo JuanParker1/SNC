@@ -24,7 +24,8 @@
                          columns.Add(b => b.MasterProductName).Titled("MasterProduct").Filterable(true).SetWidth(20);
                          columns.Add(b => b.SpecificationName).Titled("Specification").Filterable(true).SetWidth(20);
                          columns.Add(b => b.Value).Titled("Value").Filterable(true).SetWidth(20);
-                         columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(b => @<div>
+                         columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20)
+                        .RenderValueAs(b => @<div>
                                 <a href="~/ProductSpecification/Edit?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(b.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
                                 <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(b.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
                             </div>);

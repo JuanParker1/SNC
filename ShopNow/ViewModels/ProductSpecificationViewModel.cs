@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace ShopNow.ViewModels
 {
@@ -35,9 +32,9 @@ namespace ShopNow.ViewModels
         public class ProductSpecificationList
         {
             public int Id { get; set; }
-            public string MasterProductCode { get; set; }
+            public string MasterProductId { get; set; }
             public string MasterProductName { get; set; }
-            public string SpecificationCode { get; set; }
+            public string SpecificationId { get; set; }
             public string SpecificationName { get; set; }
             public string Value { get; set; }
             public string CreatedBy { get; set; }
