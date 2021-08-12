@@ -2184,16 +2184,16 @@ namespace ShopNow.Controllers
         public JsonResult GetShopCategoryList(int shopId = 0, int CategoryId = 0, string str = "", int page = 1, int pageSize = 20)
         {
             //  var shid = db.Shops.Where(s => s.Id == shopId).FirstOrDefault();
-            int count = 0;
-            var total = db.GetShopCategoryProductCount(shopId, CategoryId, str);
-            //if (total.Count > 0)
-            count = total;
+            int ? count = 0;
+            var total = db.GetShopCategoryProductCount(shopId, CategoryId, str).ToList();
+            if (total.Count > 0)
+             count = total[0]; 
             var skip = page - 1;
-            var model = db.GetShopCategoryProducts(shopId, CategoryId, str, skip, pageSize);
+            var model = db.GetShopCategoryProducts(shopId, CategoryId, str, skip, pageSize).ToList();
             int CurrentPage = page;
             int PageSize = pageSize;
-            int TotalCount = count;
-            int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
+            int ? TotalCount = count;
+            int  TotalPages = (int)Math.Ceiling(count.Value / (double)PageSize);
             var items = model;
             var previous = CurrentPage - 1;
             var previousurl = apipath + "/Api/GetShopCategoryList?shopId=" + shopId + "&categoryId=" + CategoryId + "&str=" + str + "&page=" + previous;
