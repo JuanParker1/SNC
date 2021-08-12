@@ -20,66 +20,71 @@
 </style>
 
 <div class="container-fluid">
-    <div class="row mb-3">
-        <div class="col-md-3">
-            <h5 class="mt-1 text-uppercase text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
-        </div>
-        <div class="col-md-9">
-            <form method="get" action="/Payment/RetailerPayment">
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>From Date</label>
-                            <input id="date-start" type="date" class="form-control" name="StartDate" @if (Model.StartDate != null) { <text> value="@Model.StartDate.Value.ToString("yyyy-MM-dd")" </text> } />
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>To Date</label>
-                            <input id="date-end" type="date" class="form-control" name="EndDate" @if (Model.EndDate != null) { <text> value="@Model.EndDate.Value.ToString("yyyy-MM-dd")" </text> } />
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Select Shop</label>
-                            <select class="form-control" id="select-shop" name="ShopCode">
-                                @if (!string.IsNullOrEmpty(Model.ShopName))
-                                {
-                                    <option value="@Model.ShopId">@Model.ShopName</option>
-                                }
-                            </select>
-                            <input type="hidden" name="ShopName" value="@Model.ShopName" />
-                        </div>
-                    </div>
-                    <div class="mt-1">
-                        <input type="submit" class="btn btn-info h-50 mt-4" value="Apply Filter" />
-                    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <h5 class="mt-1 text-uppercase text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
                 </div>
-            </form>
+                <div class="col-md-9">
+                    <form method="get" action="/Payment/RetailerPayment">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>From Date</label>
+                                    <input id="date-start" type="date" class="form-control" name="StartDate" @if (Model.StartDate != null) { <text> value="@Model.StartDate.Value.ToString("yyyy-MM-dd")" </text> } />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>To Date</label>
+                                    <input id="date-end" type="date" class="form-control" name="EndDate" @if (Model.EndDate != null) { <text> value="@Model.EndDate.Value.ToString("yyyy-MM-dd")" </text> } />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Select Shop</label>
+                                    <select class="form-control" id="select-shop" name="ShopId">
+                                        @if (!string.IsNullOrEmpty(Model.ShopName))
+                                        {
+                                            <option value="@Model.ShopId">@Model.ShopName</option>
+                                        }
+                                    </select>
+                                    <input type="hidden" name="ShopName" value="@Model.ShopName" />
+                                </div>
+                            </div>
+                            <div class="mt-1">
+                                <input type="submit" class="btn btn-info h-50 mt-4" value="Apply Filter" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            @Html.Grid(Model.ListItems).Columns(columns =>
+         {
+           columns.Add(c => c.No).Titled("No").SetWidth(3);
+           columns.Add(c => c.OrderDate).Titled("OrderDate").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
+           columns.Add(c => c.ShopName).Titled("ShopName").Filterable(true).SetWidth(10);
+           columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
+           columns.Add(c => c.PaymentType).Titled("Payment Type").Filterable(true).SetWidth(12);
+           columns.Add(c => c.PaymentId).Titled("Customer PaymentId").Filterable(true).SetWidth(12);
+           columns.Add(c => c.OrderFirstAmount).Titled("OrderFirstAmount").Filterable(true).SetWidth(15);
+           columns.Add(c => c.RefundAmount).Titled("RefundAmount").Filterable(true).SetWidth(10);
+           columns.Add(c => c.RefundeRemark).Titled("RefundeRemark").Filterable(true).SetWidth(8);
+           columns.Add(c => c.RefundStatusText).Titled("RefundStatus").Filterable(true).SetWidth(10);
+           columns.Add(c => c.PaidAmount).Titled("PaidAmount").Filterable(true).SetWidth(10);
+           columns.Add(c => c.TransactionFee).Titled("TransactionFee").Filterable(true).SetWidth(15);
+           columns.Add(c => c.TransactionTax).Titled("TransactionTax").Filterable(true).SetWidth(20);
+           columns.Add(c => c.PaymentAmount).Titled("PaymentAmount").Filterable(true).SetWidth(10);
+           //columns.Add(c => c.PaymentStatusText).Titled("PaymentStatus").Filterable(true).SetWidth(20);
+           columns.Add(c => c.PaymentDate).Titled("PaymentDate").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
+           //columns.Add(c => c.ShopPaymentStatusText).Titled("ShopPaymentStatus").Filterable(true).SetWidth(20);
+           columns.Add().Titled("ShopPaymentStatus").Encoded(false).Sanitized(false).RenderValueAs(cs => cs.ShopPaymentStatus == 1 ? Html.Label("Paid", new { @class = "text-success" }).ToHtmlString() : Html.Label("Pending", new { @class = "text-danger" }).ToHtmlString()
+           + Html.ActionLink("PayNow", "ShopPay", new { ordernumber= cs.OrderNumber }, new { @class = "btn btn-warning btn-vsm ml-2", @style = "padding:3px 18px" }).ToHtmlString()).Filterable(true).SetWidth(8);
+         }).WithPaging(20).Sortable(true)
         </div>
     </div>
-        @Html.Grid(Model.ListItems).Columns(columns =>
-     {
-       columns.Add(c => c.No).Titled("No").SetWidth(3);
-       columns.Add(c => c.OrderDate).Titled("OrderDate").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
-       columns.Add(c => c.ShopName).Titled("ShopName").Filterable(true).SetWidth(10);
-       columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
-       columns.Add(c => c.PaymentType).Titled("Payment Type").Filterable(true).SetWidth(12);
-       columns.Add(c => c.PaymentId).Titled("Customer PaymentId").Filterable(true).SetWidth(12);
-       columns.Add(c => c.OrderFirstAmount).Titled("OrderFirstAmount").Filterable(true).SetWidth(15);
-       columns.Add(c => c.RefundAmount).Titled("RefundAmount").Filterable(true).SetWidth(10);
-       columns.Add(c => c.RefundeRemark).Titled("RefundeRemark").Filterable(true).SetWidth(8);
-       columns.Add(c => c.RefundStatusText).Titled("RefundStatus").Filterable(true).SetWidth(10);
-       columns.Add(c => c.PaidAmount).Titled("PaidAmount").Filterable(true).SetWidth(10);
-       columns.Add(c => c.TransactionFee).Titled("TransactionFee").Filterable(true).SetWidth(15);
-       columns.Add(c => c.TransactionTax).Titled("TransactionTax").Filterable(true).SetWidth(20);
-       columns.Add(c => c.PaymentAmount).Titled("PaymentAmount").Filterable(true).SetWidth(10);
-       //columns.Add(c => c.PaymentStatusText).Titled("PaymentStatus").Filterable(true).SetWidth(20);
-       columns.Add(c => c.PaymentDate).Titled("PaymentDate").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
-       //columns.Add(c => c.ShopPaymentStatusText).Titled("ShopPaymentStatus").Filterable(true).SetWidth(20);
-       columns.Add().Titled("ShopPaymentStatus").Encoded(false).Sanitized(false).RenderValueAs(cs => cs.ShopPaymentStatus == 1 ? Html.Label("Paid", new { @class = "text-success" }).ToHtmlString() : Html.Label("Pending", new { @class = "text-danger" }).ToHtmlString()
-       + Html.ActionLink("PayNow", "ShopPay", new { ordernumber= cs.OrderNumber }, new { @class = "btn btn-warning btn-vsm ml-2", @style = "padding:3px 18px" }).ToHtmlString()).Filterable(true).SetWidth(8);
-     }).WithPaging(20).Sortable(true)
+   
 </div>
 
 @section Scripts

@@ -1,75 +1,45 @@
-﻿@model ShopNow.ViewModels.DeliveryBoyCreateEditViewModel
+﻿@model ShopNow.ViewModels.DeliveryBoyEditViewModel
 @{
-    ViewBag.Title = "Update";
+    ViewBag.Title = "DeliveryBoy Update";
 }
-<title>ShopNow | DeliveryBoy Update</title>
+<title>ShopNow | @ViewBag.Title</title>
 
 <div class="container-fluid my-0">
     <div class="row">
         <div class="col-md-3">
-            <h5 class="mt-1" style="letter-spacing:1px">DELIVERYBOY UPDATE</h5>
+            <h5 class="mt-1">@ViewBag.Title</h5>
         </div>
         <div class="col-md-9 text-right">
             <div class="button-group ml-auto">
-                @if (Model.Status == 1 || Model.Status == 5)
+                @if (Model.Status == 1)
                 {
-                    <a href="~/DeliveryBoy/Approve?code=@Model.Id" class="btn btn-success text-center text-nowrap btn-sm mr-2">Approve</a>
-                    <a href="~/DeliveryBoy/Reject?code=@Model.Id" class="btn btn-danger text-center text-nowrap btn-sm mr-2">Reject</a>
-                }
-                @if (Model.Status == 0)
-                {
-                    <a href="~/DeliveryBoy/Assign?code=@Model.Id" class="btn btn-success text-center text-nowrap btn-sm mr-2" target="_blank">Assign</a>
-                    <a href="~/DeliveryBoy/DeActivate?code=@Model.Id" class="btn btn-danger text-center text-nowrap btn-sm mr-2">DeActivate</a>
+                    <a href="~/DeliveryBoy/Approve?Id=@Model.Id" class="btn btn-success text-center text-nowrap btn-sm mr-2">Approve</a>
+                    <a href="~/DeliveryBoy/Reject?Id=@Model.Id" class="btn btn-danger text-center text-nowrap btn-sm mr-2">Reject</a>
                 }
                 <a href="~/DeliveryBoy/List" target="_self"><span class="fa fa-bars"></span> DeliveryBoy List</a>
             </div>
         </div>
     </div>
-
     <div class="row">
         <div class="col-md-12 mx-auto">
             @using (Html.BeginForm("Edit", "DeliveryBoy", FormMethod.Post, new { id = "DeliveryBoyUpdateForm", role = "form", enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
                 <input type="hidden" name="Id" id="Id" value="@Model.Id" />
-                <input type="hidden" name="Code" id="Code" value="@Model.Id" />
                 <input type="hidden" name="ImagePath" value="@Model.ImagePath" />
                 <input type="hidden" name="CVPath" value="@Model.CVPath" />
                 <input type="hidden" name="DrivingLicenseImagePath" id="DrivingLicenseImagePath" value="@Model.DrivingLicenseImagePath" />
                 <input type="hidden" name="BankPassbookPath" id="BankPassbookPath" value="@Model.BankPassbookPath" />
-                <input type="hidden" name="CreatedBy" value="@Model.CreatedBy" />
-                <input type="hidden" name="UpdatedBy" value="@Model.UpdatedBy" />
-                <input type="hidden" name="DateEncoded" value="@Model.DateEncoded" />
-                <input type="hidden" name="DateUpdated" value="@Model.DateUpdated" />
-                <input type="hidden" name="CustomerCode" value="@Model.CustomerCode" />
-                <input type="hidden" name="CustomerName" value="@Model.CustomerName" />
-                <input type="hidden" name="Status" value="@Model.Status" />
-                @*<input type="hidden" name="DeliveryBoyShopCount" id="DeliveryBoyShopCount" value="@Model.DeliveryBoyShopCount" />*@
                 <input type="hidden" name="Count" id="Count" value="@Model.Count" />
                 <div class="card mb-4">
                     <div class="card-body">
                         <div class="col-md-12">
                             <div class="form-group row">
-                                @*<div class="col-md-3">
-                                <label class="col-form-label"><strong class="text-secondary">Shop Name</strong></label>
-                                <select class="form-control" name="ShopCode" id="ShopCode">
-                                    <option value="@Model.ShopCode">@Model.ShopName</option>
-                                </select>
-                                <input type="hidden" name="ShopName" id="ShopName" value="@Model.ShopName" />
-                            </div>*@
                                 <div class="col-md-4">
                                     <label class="col-form-label"><strong class="text-secondary">Delivery Boy Name</strong></label>
                                     <div class="DeliverBoyName">
-                                        <input id="Name" type="text" class="form-control" name="Name" value="@Model.Name" />
+                                        <input id="Name" type="text" class="form-control" name="Name" value="@Model.Name" maxlength="100" oninput="this.value=this.value.replace(/[^a-zA-Z]/g, '');" />
                                     </div>
-                                    @*<div class="Staff d-none">
-                                    <select class="form-control" name="StaffCode" id="StaffCode">
-                                        <option value="@Model.StaffCode">@Model.StaffName</option>
-                                    </select>
-                                    <input type="hidden" name="StaffName" id="StaffName" value="@Model.StaffName" />
-                                </div>
-                                <input type="checkbox" id="IsStaff" name="IsStaff">
-                                <label for="IsStaff">Is he/she Already a Staff</label>*@
                                 </div>
                                 <div class="col-md-4">
                                     <label class="col-form-label"><strong class="text-secondary">Mobile Number</strong></label>
@@ -77,7 +47,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label class="col-form-label"><strong class="text-secondary">Email</strong></label>
-                                    <input type="text" class="form-control" name="Email" id="Email" value="@Model.Email" />
+                                    <input type="email" class="form-control" name="Email" id="Email" value="@Model.Email" />
                                 </div>
                             </div>
                         </div>
@@ -392,7 +362,7 @@
     <script>
         $(document).ready(function () {
             var imgcount = $('#Count').val();
-            var code = $('#Code').val();
+            var Id = $('#Id').val();
             var status = "@Model.Status";
             var license = "@Model.LicenseNumber";
             var account = "@Model.AccountNumber";
@@ -424,24 +394,15 @@
             }
 
             $(".Save").click(function () {
-                var code = $("#Code").val();
+                var Id = $("#Id").val();
                 var latitude = $("#Latitude").val();
                 var longitude = $("#Longitude").val();
-               // var deliveryBoyShopCount = $("#DeliveryBoyShopCount").val();
                 var licensenumber = $('#LicenseNumber').val();
                 var accountnumber = $('#AccountNumber').val();
-                //if (licensenumber == "Rejected") {
-                //    swal("Warning!", "Please enter License Number!", "warning");
-                //} else if (accountnumber == "Rejected") {
-                //    swal("Warning!", "Please enter Account Number!", "warning");
-                //}
-                //else {
-                    $.getJSON('/DeliveryBoy/GetDeliveryBoyShop', { code: code, latitude: latitude, longitude: longitude }, function (data) {
+                    $.getJSON('/DeliveryBoy/GetDeliveryBoyShop', { Id: Id, latitude: latitude, longitude: longitude }, function (data) {
                         if (data == true) {
                             $("#DeliveryBoyUpdateForm").submit();
                         } else {
-                            //swal("lat and lang are different.");
-                            // swal("Warning!", "Your Latitude and Longitude are Different!", "warning");
 
                             swal({
                                 title: "Are you sure?",
@@ -457,32 +418,18 @@
                                 function (isConfirm) {
                                     if (isConfirm) {
                                         swal("Deactivated!", "Your assigned shops are deactivated.", "success");
-                                        //  if (deliveryBoyShopCount != 0) {
-                                        $.getJSON('/DeliveryBoy/DeactivateDeliveryBoyShop', { code: code }, function (data) {
+                                        $.getJSON('/DeliveryBoy/DeactivateDeliveryBoyShop', { Id: Id }, function (data) {
                                             if (data == true) {
                                                 $("#DeliveryBoyUpdateForm").submit();
                                             }
                                         });
-                                        //  }
                                     } else {
                                         swal("Cancelled", "Your assigned shops are not deactivated", "error");
                                     }
                                 });
                         }
                     });
-                //}
             });
-            //var staff = $("#StaffCode").val();
-            //if (staff == null || staff == "") {
-            //    $("#IsStaff").prop("checked", false);
-            //    $(".Staff").addClass("d-none");
-            //    $(".DeliverBoyName").removeClass("d-none");
-            //    $("#StaffCode").val('').trigger('change');
-            //} else {
-            //    $("#IsStaff").prop("checked", true);
-            //    $(".Staff").removeClass("d-none");
-            //    $(".DeliverBoyName").addClass("d-none");
-            //}
 
             $('input:radio[name="DrivingLicense"]').change(
                 function () {
@@ -514,7 +461,6 @@
                         $('.AccountDocumentPdf').removeClass('d-none');
                         $("#BankPassbookImage").val("");
                         $('.account-img').addClass('d-none');
-                        //$('.account-pdf').removeClass('d-none');
                     }
                 });
 
@@ -576,7 +522,7 @@
                 imgcount--;
                 $("#Count").val(imgcount);
                 if (imgcount == 0) {
-                    $.getJSON("/DeliveryBoy/VerifyImage?Code=" + code, function (data) {
+                    $.getJSON("/DeliveryBoy/VerifyImage?Id=" + Id, function (data) {
                         if (data.data == true) {
                            // window.location.reload();
                         }
@@ -585,7 +531,6 @@
             });
             $('#btnLicenseReject').click(function () {
                 $('#LicenseApprove').val("false");
-                //$('#DrivingLicenseImagePath').val("Rejected");
                 $('#LicenseNumber').val("Rejected");
                 $(".LicenseApprovedlbl").addClass("d-none");
                 $(".LicenseRejectedlbl").removeClass("d-none");
@@ -603,7 +548,7 @@
                 imgcount--;
                 $("#Count").val(imgcount);
                 if (imgcount == 0) {
-                    $.getJSON("/DeliveryBoy/VerifyImage?Code=" + code, function (data) {
+                    $.getJSON("/DeliveryBoy/VerifyImage?Id=" + Id, function (data) {
                         if (data.data == true) {
                            // window.location.reload();
                         }

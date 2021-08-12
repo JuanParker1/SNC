@@ -12,25 +12,32 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6">
-            <h5 class="text-theme_dark" style="letter-spacing:1px">@ViewBag.Title</h5>
+            <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
         </div>
         <div class="col-md-6 text-right">
-            <a href="~/MasterProduct/FoodCreate" target="_self"><span class="fa fa-plus"></span> New Dish</a>
+            <a href="~/MasterProduct/FoodCreate"><span class="fa fa-plus"></span> New Dish</a>
         </div>
-    </div>
-
-    @Html.Grid(Model).Columns(columns =>
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    @Html.Grid(Model).Columns(columns =>
 {
-    columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(20);
+    columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(30);
     columns.Add(c => c.CategoryName).Titled("Category Name").Filterable(true).SetWidth(10);
     columns.Add(c => c.Price).Titled("Price").Filterable(true).SetWidth(10);
     columns.Add(c => c.ProductTypeName).Titled("Item Type").SetWidth(10);
     columns.Add()
     .Encoded(false)
     .Sanitized(false).Titled("Action").SetWidth(10)
-    .RenderValueAs(o => @<div><a href="~/MasterProduct/FoodEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
-    <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a></div>);
+    .RenderValueAs(o => @<div>
+                    <a href="~/MasterProduct/FoodEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
+                    <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+                </div>);
 }).WithPaging(20).Sortable(true)
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts

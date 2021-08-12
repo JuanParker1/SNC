@@ -158,70 +158,75 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNAPGM002")]
-        public ActionResult Manage(int shopid, int staffid)
+        public ActionResult Manage(int ShopId=0, int StaffId=0)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             Session["ManageList"] = new List<AccessPolicyViewModel>();
             var model = new AccessPolicyListViewModel();
-
-            if (shopid != 0 && staffid != 0)
+            if (ShopId == 0 && StaffId == 0)
             {
-                model.ManageList = db.Pages.Where(i => i.Status == 0)
-                .GroupJoin(db.AccessPolicies.Where(i => i.ShopId == shopid && i.StaffId == staffid && i.isAccess == true), p => p.Code, a => a.PageCode, (p, a) => new { p, a })
-                            .Select(i => new AccessPolicyListViewModel.AccessManage
-                            {
-                                PageCode = i.p.Code,
-                                PageName = i.p.Name,
-                                IsAccess = i.a.Any() ? i.a.FirstOrDefault().isAccess : false,
-                                Id = i.a.FirstOrDefault().Id,
-                                ShopId = i.a.FirstOrDefault().ShopId,
-                                ShopName = i.a.FirstOrDefault().ShopName,
-                                StaffId = i.a.FirstOrDefault().StaffId,
-                                StaffName = i.a.FirstOrDefault().StaffName,
-                                CustomerId = i.a.FirstOrDefault().CustomerId,
-                                CustomerName = i.a.FirstOrDefault().CustomerName,
-                                Status = i.p.Status,
-                            }).OrderBy(i=> i.PageName).ToList();
-               
-                    model.ShopId = shopid;
-                    model.ShopName = db.Shops.Where(s => s.Id == shopid).Select(s => s.Name).ToString();
-                    model.StaffId = staffid;
-                    model.StaffName = db.Staffs.Where(s => s.Id == shopid).Select(s => s.Name).ToString();//Staff.Get(staffcode).Name;
-                
-                List<AccessPolicyViewModel> itemList = Session["ManageList"] as List<AccessPolicyViewModel>;
-                foreach (var ap in model.ManageList)
+                model.ManageList = db.Pages.Where(i => i.Status == 3).Select(i => new AccessPolicyListViewModel.AccessManage
                 {
-                    if (itemList == null)
-                    {
-                        itemList = new List<AccessPolicyViewModel>();
-                    }
-                    AccessPolicyViewModel item = new AccessPolicyViewModel();
-                    item.Id = ap.Id;
-                    item.PageCode = ap.PageCode;
-                    item.PageName = ap.PageName;
-                    item.ShopId = ap.ShopId;
-                    item.ShopName = ap.ShopName;
-                    item.StaffId = ap.StaffId;
-                    item.StaffName = ap.StaffName;
-                    item.CustomerId = ap.CustomerId;
-                    item.CustomerName = ap.CustomerName;
-                    item.IsAccess = ap.IsAccess;
-                    item.Position = ap.Position;
-                    item.Status = ap.Status;
-                    itemList.Add(item);
-                }
-                Session["ManageList"] = itemList;
+                    PageCode = i.Code,
+                    PageName = i.Name
+                }).OrderBy(i => i.PageName).ToList();
+                model.ShopId = 0;
+                model.ShopName = null;
+                model.StaffId = 0;
+                model.StaffName = null;
             }
             else
             {
-                model.ManageList = db.AccessPolicies.Where(i => i.ShopId == shopid && i.StaffId == staffid).Select(i => new AccessPolicyListViewModel.AccessManage
+                model.ManageList = db.Pages.Where(i=> i.Status == 3)
+                    .GroupJoin(db.AccessPolicies.Where(i => i.ShopId == ShopId && i.StaffId == StaffId && i.isAccess == true), p => p.Code, a => a.PageCode, (p, a) => new { p, a })
+                .Select(i => new AccessPolicyListViewModel.AccessManage
                 {
-                    Id = i.Id,
-                    PageCode = i.PageCode,
-                    PageName = i.PageName,
-                    IsAccess = i.isAccess
+                    PageCode = i.p.Code,
+                    PageName = i.p.Name,
+                    IsAccess = i.a.Any() ? i.a.FirstOrDefault().isAccess : false,
+                    Id = i.a.Any() ? i.a.FirstOrDefault().Id : 0,
+                    CustomerId = i.a.Any() ? i.a.FirstOrDefault().CustomerId:0,
+                    CustomerName = i.a.Any() ? i.a.FirstOrDefault().CustomerName:"",
+                    Position = i.a.Any() ? i.a.FirstOrDefault().Position:0,
+                    ShopId = i.a.Any() ? i.a.FirstOrDefault().ShopId:0,
+                    ShopName = i.a.Any() ? i.a.FirstOrDefault().ShopName:"",
+                    StaffId = i.a.Any() ? i.a.FirstOrDefault().StaffId:0,
+                    StaffName = i.a.Any() ? i.a.FirstOrDefault().StaffName:"",
+                    Status = i.a.Any() ? i.a.FirstOrDefault().Status:0
                 }).ToList();
+
+                model.ShopId = ShopId;
+                model.ShopName = db.Shops.FirstOrDefault(i=> i.Id == ShopId).Name;
+                model.StaffId = StaffId;
+                model.StaffName = db.Staffs.FirstOrDefault(i => i.Id == StaffId).Name;
+
+                List<AccessPolicyViewModel> itemList = Session["ManageList"] as List<AccessPolicyViewModel>;
+                foreach (var ap in model.ManageList)
+                {
+                    if (ap.IsAccess == true)
+                    {
+                        if (itemList == null)
+                        {
+                            itemList = new List<AccessPolicyViewModel>();
+                        }
+                        AccessPolicyViewModel item = new AccessPolicyViewModel();
+                        item.Id = ap.Id;
+                        item.PageCode = ap.PageCode;
+                        item.PageName = ap.PageName;
+                        item.ShopId = ap.ShopId;
+                        item.ShopName = ap.ShopName;
+                        item.StaffId = ap.StaffId;
+                        item.StaffName = ap.StaffName;
+                        item.CustomerId = ap.CustomerId;
+                        item.CustomerName = ap.CustomerName;
+                        item.IsAccess = ap.IsAccess;
+                        item.Position = ap.Position;
+                        item.Status = ap.Status;
+                        itemList.Add(item);
+                    }
+                }
+                Session["ManageList"] = itemList;
             }
             return View(model);
         }
@@ -246,8 +251,8 @@ namespace ShopNow.Controllers
                     access.ShopName = s.ShopName;
                     access.StaffId = s.StaffId;
                     access.StaffName = s.StaffName;
-                    var shop = db.Shops.Where(m => m.Id == s.ShopId).FirstOrDefault();  //Shop.Get(s.ShopCode);
-                    var customer = db.Customers.Where(m => m.Id == shop.CustomerId).FirstOrDefault(); //Customer.Get(shop.CustomerCode);
+                    var shop = db.Shops.Where(m => m.Id == s.ShopId).FirstOrDefault();
+                    var customer = db.Customers.Where(m => m.Id == shop.CustomerId).FirstOrDefault();
                     if (customer != null)
                     {
                         access.CustomerId = customer.Id;
@@ -257,12 +262,12 @@ namespace ShopNow.Controllers
                     access.isAccess = true;
                     access.CreatedBy = user.Name;
                     access.UpdatedBy = user.Name;
-                    access.Status = s.Status;
-                    //string shiftsessioncode = AccessPolicy.Add(access, out int errorCode);
-                   // access.Code = Helpers.DRC.Generate("APG");
-                    access.Status = 0;
                     access.DateEncoded = DateTime.Now;
                     access.DateUpdated = DateTime.Now;
+                    if (access.Position == 1)
+                        access.Status = 3;
+                    else
+                        access.Status = 0;
                     db.AccessPolicies.Add(access);
                     db.SaveChanges();
                 }
@@ -276,14 +281,13 @@ namespace ShopNow.Controllers
                                IsAccess = i.a.Any() ? i.a.FirstOrDefault().isAccess : false
                            }).ToList();
 
-            return RedirectToAction("Manage", "AccessPolicy");
+            return View(model);
         }
 
         [AccessPolicy(PageCode = "SHNAPGL001")]
         public JsonResult AddSession(AccessPolicyViewModel model)
         {
             List<AccessPolicyViewModel> itemList = Session["ManageList"] as List<AccessPolicyViewModel>;
-            
             if (itemList == null)
             {
                 itemList = new List<AccessPolicyViewModel>();
@@ -292,9 +296,9 @@ namespace ShopNow.Controllers
             if (isExisting)
             {
                 itemList.RemoveAll(i => i.PageCode == model.PageCode && i.PageName == model.PageName);
-                itemList.Add(model);
-                Session["ManageList"] = itemList;
             }
+            itemList.Add(model);
+            Session["ManageList"] = itemList;
             return Json(new { list = itemList }, JsonRequestBehavior.AllowGet);
         }
 
@@ -362,14 +366,9 @@ namespace ShopNow.Controllers
                 var code = itemList.FirstOrDefault(i => i.PageCode == pageCode && i.PageName == pageName).Id;
                 if (code != 0)
                 {
-                    //var ap = AccessPolicy.Get(code);
-                    //ap.IsAccess = false;
-                    //ap.Status = 2;
-                    //AccessPolicy.Edit(ap, out int error);
-                    var ap = db.AccessPolicies.Where(m => m.Id == code).FirstOrDefault();//AccessPolicy.Get(code);
+                    var ap = db.AccessPolicies.Where(m => m.Id == code).FirstOrDefault();
                     ap.isAccess = false;
                     ap.Status = 2;
-                    //AccessPolicy.Edit(ap, out int error);
                     ap.DateUpdated = DateTime.Now;
                     db.Entry(ap).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
@@ -582,11 +581,10 @@ namespace ShopNow.Controllers
                     {
                         db.AccessPolicies.Add(new AccessPolicy
                         {
-                           // Id = _generatedCode,
                             PageName = row[model.PageName].ToString(),
                             PageCode = row[model.PageCode].ToString(),
-                            //Status = Convert.ToInt32(row[model.Status]),
-                            //Position = Convert.ToInt32(row[model.Position]),
+                            //Status = Convert.ToInt32(model.Status),
+                            //Position = Convert.ToInt32(model.Position),
                             //Status = 0,
                             //Position = 4,
                             Status = 3,
@@ -685,17 +683,19 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNAPGD007")]
-        public ActionResult Delete(string Id)
+        public JsonResult Delete(int Id)
         {
-            var dCode = AdminHelpers.DCodeInt(Id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var access = db.AccessPolicies.Where(m => m.Id == dCode).FirstOrDefault();
-            access.Status = 2;
-            access.DateUpdated = DateTime.Now;
-            access.UpdatedBy = user.Name;
-            db.Entry(access).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
-            return RedirectToAction("ItemList");
+            var access = db.AccessPolicies.Where(m => m.Id == Id).FirstOrDefault();
+            if (access != null)
+            {
+                access.Status = 2;
+                access.DateUpdated = DateTime.Now;
+                access.UpdatedBy = user.Name;
+                db.Entry(access).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)

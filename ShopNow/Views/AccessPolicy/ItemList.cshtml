@@ -20,10 +20,45 @@
        columns.Add(p => p.PageName).Titled("Name").Filterable(true).SetWidth(20);
        columns.Add().Titled("Shop Name").RenderValueAs(p => p.ShopName != null ? p.ShopName : "N/A").Filterable(true).SetWidth(10);
        columns.Add().Titled("Staff Name").RenderValueAs(p => p.StaffName != null ? p.StaffName : "N/A").Filterable(true).SetWidth(10);
-       columns.Add()
-    .Encoded(false)
-    .Sanitized(false)
-    .RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { Id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
-                  + Html.ActionLink("Delete", "Delete", new { Id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
-    }).WithPaging(20).Sortable(true)
+         columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(10)
+                   .RenderValueAs(o => @<div>
+            <a href="/AccessPolicy/Edit?Id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
+            <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+        </div>);
+ }).WithPaging(20).Sortable(true)
 </div>
+
+@section Scripts
+{
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            $(".btnDelete").click(function () {
+                var Id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/AccessPolicy/Delete", { Id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
+            });
+
+        });
+    </script>
+}
