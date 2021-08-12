@@ -1812,9 +1812,9 @@ namespace ShopNow.Controllers
         [HttpPost]
         public JsonResult ShopRegister(ShopCreateViewModel model)
         {
-            var shopExist = db.Shops.Where(m => m.OwnerPhoneNumber == model.OwnerPhoneNumber && m.Latitude == model.Latitude && m.Longitude == model.Longitude && (m.Status == 0 || m.Status == 6));
-            var shopCustomerExist = db.Shops.FirstOrDefault(i => i.Name == model.Name && i.Status == 1 && i.CustomerId == model.CustomerId);
-            if (shopExist == null && shopCustomerExist == null)
+            //var shopExist = db.Shops.Where(m => m.OwnerPhoneNumber == model.OwnerPhoneNumber && m.Latitude == model.Latitude && m.Longitude == model.Longitude && (m.Status == 0 || m.Status == 6));
+            bool isExist = db.Shops.Any(i => i.Name == model.Name && (i.Status == 1 || i.Status==0));
+            if (!isExist)
             {
                 var shop = _mapper.Map<ShopCreateViewModel, Shop>(model);
                 shop.CreatedBy = model.CustomerName;
@@ -1873,7 +1873,7 @@ namespace ShopNow.Controllers
                 otpmodel.DateUpdated = DateTime.Now;
                 db.OtpVerifications.Add(otpmodel);
                 db.SaveChanges();
-                if (shop.Id != 0)
+                if (shop != null)
                 {
                     return Json(new { message = "Successfully Registered Your Shop!", Details = shop, Otp = otpmodel.Otp, Position = customer.Position });
                 }
@@ -2184,16 +2184,16 @@ namespace ShopNow.Controllers
         public JsonResult GetShopCategoryList(int shopId = 0, int CategoryId = 0, string str = "", int page = 1, int pageSize = 20)
         {
             //  var shid = db.Shops.Where(s => s.Id == shopId).FirstOrDefault();
-            int count = 0;
-            var total = db.GetShopCategoryProductCount(shopId, CategoryId, str);
-            //if (total.Count > 0)
-            count = total;
+            int ? count = 0;
+            var total = db.GetShopCategoryProductCount(shopId, CategoryId, str).ToList();
+            if (total.Count > 0)
+             count = total[0]; 
             var skip = page - 1;
-            var model = db.GetShopCategoryProducts(shopId, CategoryId, str, skip, pageSize);
+            var model = db.GetShopCategoryProducts(shopId, CategoryId, str, skip, pageSize).ToList();
             int CurrentPage = page;
             int PageSize = pageSize;
-            int TotalCount = count;
-            int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
+            int ? TotalCount = count;
+            int  TotalPages = (int)Math.Ceiling(count.Value / (double)PageSize);
             var items = model;
             var previous = CurrentPage - 1;
             var previousurl = apipath + "/Api/GetShopCategoryList?shopId=" + shopId + "&categoryId=" + CategoryId + "&str=" + str + "&page=" + previous;

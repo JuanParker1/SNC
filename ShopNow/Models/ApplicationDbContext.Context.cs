@@ -75,14 +75,14 @@ namespace ShopNow.Models
         public virtual DbSet<SubCategory> SubCategories { get; set; }
         public virtual DbSet<UserEnquiry> UserEnquiries { get; set; }
     
-        [DbFunction("sncEntities1", "GetTableVAlueString")]
+        [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)
         {
             var keyParameter = key != null ?
                 new ObjectParameter("key", key) :
                 new ObjectParameter("key", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<GetTableVAlueString_Result>("[sncEntities1].[GetTableVAlueString](@key)", keyParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<GetTableVAlueString_Result>("[sncEntities].[GetTableVAlueString](@key)", keyParameter);
         }
     
         public virtual int getCategoryListbyShopcode(string code)
@@ -196,73 +196,6 @@ namespace ShopNow.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GetShopCategoryList", shopParameter, categoryCodeParameter, strParameter, pageParameter, sizeParameter);
         }
     
-        public virtual int GetShopCategoryProductCount(Nullable<int> shopCode, Nullable<int> categoryCode, string str)
-        {
-            var shopCodeParameter = shopCode.HasValue ?
-                new ObjectParameter("shopCode", shopCode) :
-                new ObjectParameter("shopCode", typeof(int));
-    
-            var categoryCodeParameter = categoryCode.HasValue ?
-                new ObjectParameter("categoryCode", categoryCode) :
-                new ObjectParameter("categoryCode", typeof(int));
-    
-            var strParameter = str != null ?
-                new ObjectParameter("str", str) :
-                new ObjectParameter("str", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GetShopCategoryProductCount", shopCodeParameter, categoryCodeParameter, strParameter);
-        }
-    
-        public virtual int GetShopCategoryProducts(Nullable<int> shopCode, Nullable<int> categoryCode, string str, Nullable<int> page, Nullable<int> pageSize)
-        {
-            var shopCodeParameter = shopCode.HasValue ?
-                new ObjectParameter("shopCode", shopCode) :
-                new ObjectParameter("shopCode", typeof(int));
-    
-            var categoryCodeParameter = categoryCode.HasValue ?
-                new ObjectParameter("categoryCode", categoryCode) :
-                new ObjectParameter("categoryCode", typeof(int));
-    
-            var strParameter = str != null ?
-                new ObjectParameter("str", str) :
-                new ObjectParameter("str", typeof(string));
-    
-            var pageParameter = page.HasValue ?
-                new ObjectParameter("page", page) :
-                new ObjectParameter("page", typeof(int));
-    
-            var pageSizeParameter = pageSize.HasValue ?
-                new ObjectParameter("pageSize", pageSize) :
-                new ObjectParameter("pageSize", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GetShopCategoryProducts", shopCodeParameter, categoryCodeParameter, strParameter, pageParameter, pageSizeParameter);
-        }
-    
-        public virtual int GetShopCategoryProductsList(string shopCode, string categoryCode, string str, Nullable<int> page, Nullable<int> pageSize)
-        {
-            var shopCodeParameter = shopCode != null ?
-                new ObjectParameter("shopCode", shopCode) :
-                new ObjectParameter("shopCode", typeof(string));
-    
-            var categoryCodeParameter = categoryCode != null ?
-                new ObjectParameter("categoryCode", categoryCode) :
-                new ObjectParameter("categoryCode", typeof(string));
-    
-            var strParameter = str != null ?
-                new ObjectParameter("str", str) :
-                new ObjectParameter("str", typeof(string));
-    
-            var pageParameter = page.HasValue ?
-                new ObjectParameter("page", page) :
-                new ObjectParameter("page", typeof(int));
-    
-            var pageSizeParameter = pageSize.HasValue ?
-                new ObjectParameter("pageSize", pageSize) :
-                new ObjectParameter("pageSize", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GetShopCategoryProductsList", shopCodeParameter, categoryCodeParameter, strParameter, pageParameter, pageSizeParameter);
-        }
-    
         public virtual ObjectResult<GetShopname_Result> GetShopname(Nullable<int> shopId)
         {
             var shopIdParameter = shopId.HasValue ?
@@ -355,6 +288,48 @@ namespace ShopNow.Models
                 new ObjectParameter("str", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<test_Result>("test", strParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> GetShopCategoryProductCount(Nullable<int> shopCode, Nullable<int> categoryCode, string str)
+        {
+            var shopCodeParameter = shopCode.HasValue ?
+                new ObjectParameter("shopCode", shopCode) :
+                new ObjectParameter("shopCode", typeof(int));
+    
+            var categoryCodeParameter = categoryCode.HasValue ?
+                new ObjectParameter("categoryCode", categoryCode) :
+                new ObjectParameter("categoryCode", typeof(int));
+    
+            var strParameter = str != null ?
+                new ObjectParameter("str", str) :
+                new ObjectParameter("str", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("GetShopCategoryProductCount", shopCodeParameter, categoryCodeParameter, strParameter);
+        }
+    
+        public virtual ObjectResult<GetShopCategoryProducts_Result> GetShopCategoryProducts(Nullable<int> shopCode, Nullable<int> categoryCode, string str, Nullable<int> page, Nullable<int> pageSize)
+        {
+            var shopCodeParameter = shopCode.HasValue ?
+                new ObjectParameter("shopCode", shopCode) :
+                new ObjectParameter("shopCode", typeof(int));
+    
+            var categoryCodeParameter = categoryCode.HasValue ?
+                new ObjectParameter("categoryCode", categoryCode) :
+                new ObjectParameter("categoryCode", typeof(int));
+    
+            var strParameter = str != null ?
+                new ObjectParameter("str", str) :
+                new ObjectParameter("str", typeof(string));
+    
+            var pageParameter = page.HasValue ?
+                new ObjectParameter("page", page) :
+                new ObjectParameter("page", typeof(int));
+    
+            var pageSizeParameter = pageSize.HasValue ?
+                new ObjectParameter("pageSize", pageSize) :
+                new ObjectParameter("pageSize", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetShopCategoryProducts_Result>("GetShopCategoryProducts", shopCodeParameter, categoryCodeParameter, strParameter, pageParameter, pageSizeParameter);
         }
     }
 }

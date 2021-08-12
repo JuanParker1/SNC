@@ -12,27 +12,64 @@
 <div class="container-fluid">
     <div class="d-flex justify-content-between">
         <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
-<a href="/Offer/Create"><u>Add New Offer</u></a>
+        <a href="/Offer/Create"><u>Add New Offer</u></a>
     </div>
     <div class="row">
-        <div class="col-md-12 mt-3">
-            <div class="card shadow">
+        <div class="col-md-12">
+            <div class="card shadow mt-3">
                 <div class="card-body">
                     @Html.Grid(Model.ListItems).Columns(columns =>
                {
-                   columns.Add(c => c.OwnerTypeText).Titled("Owner").Filterable(true).SetWidth(10);
-                   columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(10);
-                   columns.Add(c => c.TypeText).Titled("Type").Filterable(true).SetWidth(10);
-                   columns.Add(c => c.DiscountTypeText).Titled("Discount Type").Filterable(true).SetWidth(10);
-                   columns.Add(c => c.Percentage).Titled("Percentage Type").Filterable(true).SetWidth(10);
-                   columns.Add()
-        .Encoded(false)
-        .Sanitized(false)
-        .RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-warning mr-2", }).ToHtmlString()
-        + Html.ActionLink("Delete", "Delete", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-danger", }).ToHtmlString()).Titled("Action").SetWidth(15);
-               }).Sortable(true)
+               columns.Add(s => s.OwnerTypeText).Titled("Owner").Filterable(true).SetWidth(30);
+               columns.Add(s => s.Name).Titled("Name").Filterable(true).SetWidth(30);
+               columns.Add(s => s.TypeText).Titled("Type").Filterable(true).SetWidth(15);
+               columns.Add(s => s.DiscountTypeText).Titled("Discount Type").Filterable(true).SetWidth(10);
+               columns.Add(s => s.Percentage).Titled("Percentage Type").Filterable(true).SetWidth(10);
+               columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
+             .RenderValueAs(o => @<div>
+                    <a href="~/Offer/Edit?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
+                    <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+                </div>);
+  }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts
+{
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+
+    <script>
+        $(document).ready(function () {
+
+            $(".btnDelete").click(function () {
+                var Id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/Offer/Delete", { id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
+            });
+
+        });
+    </script>
+}

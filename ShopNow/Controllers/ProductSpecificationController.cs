@@ -63,7 +63,7 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            int errorCode = 0;
+            //int errorCode = 0;
             try
             {
                 var ps = _mapper.Map<ProductSpecificationCreateViewModel, ProductSpecification>(model);
@@ -78,7 +78,7 @@ namespace ShopNow.Controllers
             }
             catch (Exception ex)
             {
-                return HttpNotFound("Error Code: " + errorCode);
+                return HttpNotFound("Error: " + ex);
             }
         }
 
