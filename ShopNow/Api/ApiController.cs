@@ -1812,9 +1812,9 @@ namespace ShopNow.Controllers
         [HttpPost]
         public JsonResult ShopRegister(ShopCreateViewModel model)
         {
-            var shopExist = db.Shops.Where(m => m.OwnerPhoneNumber == model.OwnerPhoneNumber && m.Latitude == model.Latitude && m.Longitude == model.Longitude && (m.Status == 0 || m.Status == 6));
-            var shopCustomerExist = db.Shops.FirstOrDefault(i => i.Name == model.Name && i.Status == 1 && i.CustomerId == model.CustomerId);
-            if (shopExist == null && shopCustomerExist == null)
+            //var shopExist = db.Shops.Where(m => m.OwnerPhoneNumber == model.OwnerPhoneNumber && m.Latitude == model.Latitude && m.Longitude == model.Longitude && (m.Status == 0 || m.Status == 6));
+            bool isExist = db.Shops.Any(i => i.Name == model.Name && (i.Status == 1 || i.Status==0));
+            if (!isExist)
             {
                 var shop = _mapper.Map<ShopCreateViewModel, Shop>(model);
                 shop.CreatedBy = model.CustomerName;
@@ -1873,7 +1873,7 @@ namespace ShopNow.Controllers
                 otpmodel.DateUpdated = DateTime.Now;
                 db.OtpVerifications.Add(otpmodel);
                 db.SaveChanges();
-                if (shop.Id != 0)
+                if (shop != null)
                 {
                     return Json(new { message = "Successfully Registered Your Shop!", Details = shop, Otp = otpmodel.Otp, Position = customer.Position });
                 }
