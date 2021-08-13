@@ -567,6 +567,7 @@
     </Compile>
     <Compile Include="ViewModels\AccessPolicyViewModel.cs" />
     <Compile Include="ViewModels\AddOnCategoryViewModel.cs" />
+    <Compile Include="ViewModels\ApiViewModels.cs" />
     <Compile Include="ViewModels\BannerViewModel.cs" />
     <Compile Include="ViewModels\BillViewModel.cs" />
     <Compile Include="ViewModels\CartViewModel.cs" />
