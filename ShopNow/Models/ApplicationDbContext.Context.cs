@@ -264,6 +264,7 @@ namespace ShopNow.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("GetShopCategoryProductCount", shopCodeParameter, categoryCodeParameter, strParameter);
         }
+       
     
         public virtual ObjectResult<GetProductList_Result> GetProductList(Nullable<double> longitude, Nullable<double> latitude, string str, Nullable<int> page, Nullable<int> pagesize)
         {
@@ -312,23 +313,23 @@ namespace ShopNow.Models
             var shopCodeParameter = shopCode.HasValue ?
                 new ObjectParameter("shopCode", shopCode) :
                 new ObjectParameter("shopCode", typeof(int));
-    
+
             var categoryCodeParameter = categoryCode.HasValue ?
                 new ObjectParameter("categoryCode", categoryCode) :
                 new ObjectParameter("categoryCode", typeof(int));
-    
+
             var strParameter = str != null ?
                 new ObjectParameter("str", str) :
                 new ObjectParameter("str", typeof(string));
-    
+
             var pageParameter = page.HasValue ?
                 new ObjectParameter("page", page) :
                 new ObjectParameter("page", typeof(int));
-    
+
             var pageSizeParameter = pageSize.HasValue ?
                 new ObjectParameter("pageSize", pageSize) :
                 new ObjectParameter("pageSize", typeof(int));
-    
+
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetShopCategoryProducts_Result1>("GetShopCategoryProducts", shopCodeParameter, categoryCodeParameter, strParameter, pageParameter, pageSizeParameter);
         }
     }
