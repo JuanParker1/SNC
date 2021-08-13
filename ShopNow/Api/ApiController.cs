@@ -2172,12 +2172,13 @@ namespace ShopNow.Controllers
         }
         public JsonResult GetP(string str = "")
         {
+            DataTable dtShops = new DataTable();
+            dtShops.Columns.Add("ShopId");
+            dtShops.Columns.Add("OutletId");
+            dtShops.Columns.Add("CategoryName");
+            dtShops.Rows.Add(123,2,"cat1");
+            dtShops.Rows.Add(203,4,"cat2");
             DataTable dt = new DataTable();
-            dt.Columns.Add("ShopId");
-            dt.Columns.Add("OutletId");
-            dt.Columns.Add("CategoryName");
-            dt.Rows.Add(123,2,"cat1");
-            dt.Rows.Add(203,4,"cat2");
 
             string s = "";
             string Url = "http://joyrahq.gofrugal.com/RayMedi_HQ/api/v1/items?q=status==R,outletId==2&limit=100000";
