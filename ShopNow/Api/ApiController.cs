@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Razorpay.Api;
 using ShopNow.Base;
 using ShopNow.Filters;
@@ -12,6 +13,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.SqlClient;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -2207,7 +2209,13 @@ namespace ShopNow.Controllers
         }
         public JsonResult GetP(string str = "")
         {
-            var sb = new StringBuilder();
+            DataTable dt = new DataTable();
+            dt.Columns.Add("ShopId");
+            dt.Columns.Add("OutletId");
+            dt.Columns.Add("CategoryName");
+            dt.Rows.Add(123,2,"cat1");
+            dt.Rows.Add(203,4,"cat2");
+
             string s = "";
             string Url = "http://joyrahq.gofrugal.com/RayMedi_HQ/api/v1/items?q=status==R,outletId==2&limit=100000";
             using (WebClient client = new WebClient())
@@ -2215,17 +2223,16 @@ namespace ShopNow.Controllers
                 client.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
                
                s=client.DownloadString(Url);
-                //Console.WriteLine(client.DownloadString(Url));
             }
-            var result = JsonConvert.DeserializeObject<RootObject>(s);
-            s = "";
-            int i = 0;
+            
             var lst = db.Products.Where(m => m.ShopId == 123).Select(si => si.ItemId).ToList();
-           // var lstDiscount;
-           // GetDiscoutCatecories:
-           // lstDiscount=db.DiscountCategories.Where(m => m.ShopId == 123).Select(si => si.Percentage).ToList();
+            // var lstDiscount;
+            // GetDiscoutCatecories:
+            // lstDiscount=db.DiscountCategories.Where(m => m.ShopId == 123).Select(si => si.Percentage).ToList();
 
-            foreach (var pro in result.items)
+            dynamic config = JsonConvert.DeserializeObject<ExpandoObject>(s, new ExpandoObjectConverter());
+
+            foreach (var pro in ((IEnumerable<dynamic>)config.items).Where(t => t.status == "R"))
             {
                 int idx = lst.IndexOf(pro.itemId);
                 foreach (var med in pro.stock)
@@ -2241,8 +2248,6 @@ namespace ShopNow.Controllers
                 //Add
                 }
               
-                i = i + 1;
-                s = Convert.ToString(i);
             }
 
             // DownloadString (encoding specified)
