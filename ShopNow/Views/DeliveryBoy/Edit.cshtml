@@ -13,7 +13,7 @@
             <div class="button-group ml-auto">
                 @if (Model.Status == 1)
                 {
-                    <a href="~/DeliveryBoy/Approve?Id=@Model.Id" class="btn btn-success text-center text-nowrap btn-sm mr-2">Approve</a>
+                    <a href="~/DeliveryBoy/Approve?Id=@Model.Id" class="btn btn-success btn-sm mr-2">Approve</a>
                     <a href="~/DeliveryBoy/Reject?Id=@Model.Id" class="btn btn-danger text-center text-nowrap btn-sm mr-2">Reject</a>
                 }
                 <a href="~/DeliveryBoy/List" target="_self"><span class="fa fa-bars"></span> DeliveryBoy List</a>
@@ -257,7 +257,7 @@
                     </div>
                     <div class="form-group row mb-3">
                         <div class="col-md-3 mx-auto">
-                            <button type="button" class="btn btn-block btn-success Save"><span class="glyphicon glyphicon-file"></span>Submit</button>
+                            <button type="submit" class="btn btn-block btn-success"><span class="glyphicon glyphicon-file"></span>Update</button>
                         </div>
                     </div>
                 </div>
@@ -366,70 +366,19 @@
             var status = "@Model.Status";
             var license = "@Model.LicenseNumber";
             var account = "@Model.AccountNumber";
-            if (status == "5") {
-                //License
-                $('.LicenseApprovedlbl').removeClass('d-none');
-                $('.LicenseRejectedlbl').addClass('d-none');
-                $('#btnLicenseApprove').addClass('d-none');
-                $('#btnLicenseReject').addClass('d-none');
-                //Account
-                $('.AccountApprovedlbl').removeClass('d-none');
-                $('.AccountRejectedlbl').addClass('d-none');
-                $('#btnAccountApprove').addClass('d-none');
-                $('#btnAccountReject').addClass('d-none');
-            }
+            
             if (license == "Rejected") {
                 $('.LicenseApprovedlbl').addClass('d-none');
                 $('.LicenseRejectedlbl').removeClass('d-none');
                 $('#btnLicenseApprove').addClass('d-none');
                 $('#btnLicenseReject').addClass('d-none');
-               // $('#LicenseNumber').val("");
             }
             if (account == "Rejected") {
                 $('.AccountApprovedlbl').addClass('d-none');
                 $('.AccountRejectedlbl').removeClass('d-none');
                 $('#btnAccountApprove').addClass('d-none');
                 $('#btnAccountReject').addClass('d-none');
-               // $('#AccountNumber').val("");
             }
-
-            $(".Save").click(function () {
-                var Id = $("#Id").val();
-                var latitude = $("#Latitude").val();
-                var longitude = $("#Longitude").val();
-                var licensenumber = $('#LicenseNumber').val();
-                var accountnumber = $('#AccountNumber').val();
-                    $.getJSON('/DeliveryBoy/GetDeliveryBoyShop', { Id: Id, latitude: latitude, longitude: longitude }, function (data) {
-                        if (data == true) {
-                            $("#DeliveryBoyUpdateForm").submit();
-                        } else {
-
-                            swal({
-                                title: "Are you sure?",
-                                text: "If you Update Latitude and Longitude, your assigned Shops will Deactivated!",
-                                type: "warning",
-                                showCancelButton: true,
-                                confirmButtonClass: "btn-danger",
-                                confirmButtonText: "OK",
-                                cancelButtonText: "Cancel",
-                                closeOnConfirm: false,
-                                closeOnCancel: false
-                            },
-                                function (isConfirm) {
-                                    if (isConfirm) {
-                                        swal("Deactivated!", "Your assigned shops are deactivated.", "success");
-                                        $.getJSON('/DeliveryBoy/DeactivateDeliveryBoyShop', { Id: Id }, function (data) {
-                                            if (data == true) {
-                                                $("#DeliveryBoyUpdateForm").submit();
-                                            }
-                                        });
-                                    } else {
-                                        swal("Cancelled", "Your assigned shops are not deactivated", "error");
-                                    }
-                                });
-                        }
-                    });
-            });
 
             $('input:radio[name="DrivingLicense"]').change(
                 function () {
@@ -444,7 +393,6 @@
                         $('.DrivingPdf').removeClass('d-none');
                         $("#DrivingLicenseImage").val("");
                         $('.license-img').addClass('d-none');
-                        //$('.license-pdf').removeClass('d-none');
                     }
                 });
 
@@ -557,7 +505,6 @@
             });
             $('#btnAccountReject').click(function () {
                 $('#AccountApprove').val("false");
-                //$('#BankPassbookPath').val("Rejected");
                 $('#AccountNumber').val("Rejected");
                 $(".AccountApprovedlbl").addClass("d-none");
                 $(".AccountRejectedlbl").removeClass("d-none");
@@ -565,43 +512,7 @@
                 $("#btnAccountReject").hide();
                 $("#btnAccountApprove").hide();
             });
-            //$('#ShopCode').select2({
-            //    placeholder: "Search Shop",
-            //    ajax: {
-            //        url: "/DeliveryBoy/GetShopSelect2",
-            //        width: '100%',
-            //        delay: 250,
-            //        dataType: 'json'
-            //    }
-            //}).on('select2:select', function (e) {
-            //    $('input[name="ShopName"]').val(e.params.data.text);
-            //    $("#StaffCode").select2({
-            //        placeholder: "Search Staff",
-            //        ajax: {
-            //            url: "/DeliveryBoy/GetStaffSelect2?shopcode=" + e.params.data.id,
-            //            width: "100%",
-            //            delay: 250,
-            //            dataType: 'json'
-            //        }
-            //    }).on("select2:select", function (e) {
-            //        $('input[name="StaffName"]').val(e.params.data.text);
-            //    });
-            //});
-
-            //$("#IsStaff").click(function () {
-            //    var checkBox = document.getElementById("IsStaff");
-            //    if (checkBox.checked == true) {
-            //        $(".Staff").removeClass("d-none");
-            //        $(".DeliverBoyName").addClass("d-none");
-            //        $("#Name").val("");
-            //    }
-            //    else {
-            //        $(".Staff").addClass("d-none");
-            //        $(".DeliverBoyName").removeClass("d-none");
-            //        $("#StaffCode").val('').trigger('change');
-            //    }
-            //});
-
+           
             function readURL(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();

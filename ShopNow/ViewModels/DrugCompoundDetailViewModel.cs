@@ -38,11 +38,6 @@ namespace ShopNow.ViewModels
         public bool Pregnancy { get; set; }
         public bool Breastfeeding { get; set; }
         public bool Driving { get; set; }
-        public string CreatedBy { get; set; }
-        public string UpdatedBy { get; set; }
-        public int Status { get; set; }
-        public DateTime DateEncoded { get; set; }
-        public DateTime DateUpdated { get; set; }
     }
     public class DrugCompoundDetailMasterViewModel
     {

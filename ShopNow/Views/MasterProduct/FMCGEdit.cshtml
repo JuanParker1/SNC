@@ -260,44 +260,6 @@
     <script src="~/Scripts/ckeditor/ckeditor.js"></script>
     <script>
         $(document).ready(function () {
-
-             @*var categorySelect = $('#CategoryIds');
-            var CategoryIds = "@Model.CategoryIds1";
-            var categoryname = "@Model.CategoryName";
-            if (CategoryIds) {
-                var array_code = CategoryIds.split(',');
-                var array_name = categoryname.split(',');
-                $.each(array_code, function (i) {
-                    $('select[name="CategoryIds"] option[value=' + array_code[i] + ']').attr('selected', 'selected');
-                    var option = new Option(array_name[i], array_code[i], true, true);
-                    categorySelect.append(option).trigger('change');
-                });
-            }
-            var scategorySelect = $('#SubCategoryIds');
-            var sCategoryIds = "@Model.SubCategoryIds1";
-            var scategoryname = "@Model.SubCategoryName";
-            if (sCategoryIds) {
-                var array_code = sCategoryIds.split(',');
-                var array_name = scategoryname.split(',');
-                $.each(array_code, function (i) {
-                    $('select[name="SubCategoryIds"] option[value=' + array_code[i] + ']').attr('selected', 'selected');
-                    var option = new Option(array_name[i], array_code[i], true, true);
-                    scategorySelect.append(option).trigger('change');
-                });
-            }
-
-            var nscategorySelect = $('#NextSubCategoryIds');
-            var nsCategoryIds = "@Model.NextSubCategoryIds1";
-            var nscategoryname = "@Model.NextSubCategoryName";
-            if (nsCategoryIds) {
-                var array_code = nsCategoryIds.split(',');
-                var array_name = nscategoryname.split(',');
-                $.each(array_code, function (i) {
-                    $('select[name="NextSubCategoryIds"] option[value=' + array_code[i] + ']').attr('selected', 'selected');
-                    var option = new Option(array_name[i], array_code[i], true, true);
-                    nscategorySelect.append(option).trigger('change');
-                });
-            }*@
             $('#BrandId').select2({
                 placeholder: "Search Brand",
                 ajax: {
@@ -323,7 +285,7 @@
             });
 
             $('#SubCategoryId').select2({
-                placeholder: "Search I Sub Category",
+                placeholder: "Search SubCategory",
                 ajax: {
                     url: "/MasterProduct/GetSubCategorySelect2",
                     width: '100%',

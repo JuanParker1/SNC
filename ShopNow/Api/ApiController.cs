@@ -990,7 +990,7 @@ namespace ShopNow.Controllers
                                     where s.Id == model.ShopId
                                     select c.FcmTocken ?? "").FirstOrDefault().ToString();
                     Helpers.PushNotification.SendbydeviceId("You have received new order.Accept Soon", "ShopNowChat", "a.mp3", fcmToken.ToString());
-                    return Json(new { message = "Successfully Added to Cart!", Details = order });
+                    return Json(new { message = "Successfully Added to Cart!", Details = model });
                 }
                 else
                     return Json(new { message = "Failed to Add Cart!" });
