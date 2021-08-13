@@ -2697,18 +2697,6 @@
           </FunctionImport>
           <FunctionImport Name="GetCustomerCount" ReturnType="Collection(Int32)" />
           <FunctionImport Name="GetDEliveryBoyList" ReturnType="Collection(sncModel.GetDEliveryBoyList_Result)" />
-          <FunctionImport Name="GetProductList">
-            <Parameter Name="Longitude" Mode="In" Type="Double" />
-            <Parameter Name="Latitude" Mode="In" Type="Double" />
-            <Parameter Name="str" Mode="In" Type="String" />
-            <Parameter Name="page" Mode="In" Type="Int32" />
-            <Parameter Name="pagesize" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="GetProductListCount">
-            <Parameter Name="Longitude" Mode="In" Type="Double" />
-            <Parameter Name="Latitude" Mode="In" Type="Double" />
-            <Parameter Name="str" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="GetShopCategoryList">
             <Parameter Name="shop" Mode="In" Type="String" />
             <Parameter Name="CategoryCode" Mode="In" Type="String" />
@@ -2749,7 +2737,19 @@
             <Parameter Name="categoryCode" Mode="In" Type="Int32" />
             <Parameter Name="str" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="GetShopCategoryProducts" ReturnType="Collection(sncModel.GetShopCategoryProducts_Result)">
+          <FunctionImport Name="GetProductList" ReturnType="Collection(sncModel.GetProductList_Result)">
+            <Parameter Name="Longitude" Mode="In" Type="Double" />
+            <Parameter Name="Latitude" Mode="In" Type="Double" />
+            <Parameter Name="str" Mode="In" Type="String" />
+            <Parameter Name="page" Mode="In" Type="Int32" />
+            <Parameter Name="pagesize" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetProductListCount" ReturnType="Collection(Int32)">
+            <Parameter Name="Longitude" Mode="In" Type="Double" />
+            <Parameter Name="Latitude" Mode="In" Type="Double" />
+            <Parameter Name="str" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetShopCategoryProducts" ReturnType="Collection(sncModel.GetShopCategoryProducts_Result1)">
             <Parameter Name="shopCode" Mode="In" Type="Int32" />
             <Parameter Name="categoryCode" Mode="In" Type="Int32" />
             <Parameter Name="str" Mode="In" Type="String" />
@@ -2833,6 +2833,51 @@
           <Property Type="String" Name="DiscountCategoryName" Nullable="true" />
           <Property Type="Double" Name="DiscountCategoryPercentage" Nullable="false" />
           <Property Type="String" Name="DiscountType" Nullable="true" />
+          <Property Type="Double" Name="MRP" Nullable="false" />
+          <Property Type="Double" Name="SalePrice" Nullable="false" />
+          <Property Type="Int32" Name="Status" Nullable="false" />
+          <Property Type="Decimal" Name="Quantity" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Int32" Name="Itemid" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GetProductList_Result">
+          <Property Type="Int64" Name="ProductId" Nullable="false" />
+          <Property Type="String" Name="ProductName" Nullable="true" />
+          <Property Type="Int32" Name="ShopId" Nullable="false" />
+          <Property Type="String" Name="ShopName" Nullable="true" />
+          <Property Type="Int32" Name="iBarU" Nullable="false" />
+          <Property Type="Int32" Name="CategoryId" Nullable="false" />
+          <Property Type="String" Name="CategoryName" Nullable="true" />
+          <Property Type="Double" Name="DiscountCategoryPercentage" Nullable="false" />
+          <Property Type="Double" Name="MRP" Nullable="false" />
+          <Property Type="Double" Name="Price" Nullable="false" />
+          <Property Type="Int32" Name="Status" Nullable="false" />
+          <Property Type="Decimal" Name="Quantity" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Boolean" Name="isOnline" Nullable="false" />
+          <Property Type="Int32" Name="ItemId" Nullable="false" />
+          <Property Type="Double" Name="Latitude" Nullable="false" />
+          <Property Type="Double" Name="Longitude" Nullable="false" />
+          <Property Type="Int32" Name="ShopCategoryId" Nullable="false" />
+          <Property Type="String" Name="ImagePath" Nullable="true" />
+          <Property Type="String" Name="ShopImagePath" Nullable="false" />
+          <Property Type="Int32" Name="Meters" Nullable="false" />
+          <Property Type="Boolean" Name="ShopOnline" Nullable="true" />
+          <Property Type="Int32" Name="ShopStatus" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GetShopCategoryProducts_Result1">
+          <Property Type="Int64" Name="ProductId" Nullable="false" />
+          <Property Type="String" Name="ProductName" Nullable="true" />
+          <Property Type="Int32" Name="ShopId" Nullable="false" />
+          <Property Type="String" Name="ShopName" Nullable="true" />
+          <Property Type="String" Name="ImagePath" Nullable="true" />
+          <Property Type="String" Name="ImagePathLarge1" Nullable="true" />
+          <Property Type="String" Name="ImagePathLarge2" Nullable="true" />
+          <Property Type="String" Name="ImagePathLarge3" Nullable="true" />
+          <Property Type="String" Name="ImagePathLarge4" Nullable="true" />
+          <Property Type="String" Name="ImagePathLarge5" Nullable="true" />
+          <Property Type="Int32" Name="iBarU" Nullable="false" />
+          <Property Type="Int32" Name="CategoryId" Nullable="false" />
+          <Property Type="String" Name="CategoryName" Nullable="true" />
+          <Property Type="Double" Name="DiscountCategoryPercentage" Nullable="false" />
           <Property Type="Double" Name="MRP" Nullable="false" />
           <Property Type="Double" Name="SalePrice" Nullable="false" />
           <Property Type="Int32" Name="Status" Nullable="false" />
@@ -3952,8 +3997,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GetProductList" FunctionName="sncModel.Store.GetProductList" />
-          <FunctionImportMapping FunctionImportName="GetProductListCount" FunctionName="sncModel.Store.GetProductListCount" />
           <FunctionImportMapping FunctionImportName="GetShopCategoryList" FunctionName="sncModel.Store.GetShopCategoryList" />
           <FunctionImportMapping FunctionImportName="GetShopname" FunctionName="sncModel.Store.GetShopname">
             <ResultMapping>
@@ -4018,13 +4061,41 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GetShopCategoryProductCount" FunctionName="sncModel.Store.GetShopCategoryProductCount" />
+          <FunctionImportMapping FunctionImportName="GetProductList" FunctionName="sncModel.Store.GetProductList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="sncModel.GetProductList_Result">
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
+                <ScalarProperty Name="iBarU" ColumnName="iBarU" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="DiscountCategoryPercentage" ColumnName="DiscountCategoryPercentage" />
+                <ScalarProperty Name="MRP" ColumnName="MRP" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="isOnline" ColumnName="isOnline" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="ShopCategoryId" ColumnName="ShopCategoryId" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="ShopImagePath" ColumnName="ShopImagePath" />
+                <ScalarProperty Name="Meters" ColumnName="Meters" />
+                <ScalarProperty Name="ShopOnline" ColumnName="ShopOnline" />
+                <ScalarProperty Name="ShopStatus" ColumnName="ShopStatus" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetProductListCount" FunctionName="sncModel.Store.GetProductListCount" />
           <FunctionImportMapping FunctionImportName="GetShopCategoryProducts" FunctionName="sncModel.Store.GetShopCategoryProducts">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="sncModel.GetShopCategoryProducts_Result">
+              <ComplexTypeMapping TypeName="sncModel.GetShopCategoryProducts_Result1">
                 <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="ProductCode" ColumnName="ProductCode" />
                 <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="ShopCode" ColumnName="ShopCode" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
                 <ScalarProperty Name="ShopName" ColumnName="ShopName" />
                 <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
                 <ScalarProperty Name="ImagePathLarge1" ColumnName="ImagePathLarge1" />
@@ -4033,12 +4104,9 @@
                 <ScalarProperty Name="ImagePathLarge4" ColumnName="ImagePathLarge4" />
                 <ScalarProperty Name="ImagePathLarge5" ColumnName="ImagePathLarge5" />
                 <ScalarProperty Name="iBarU" ColumnName="iBarU" />
-                <ScalarProperty Name="CategoryCode" ColumnName="CategoryCode" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
                 <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
-                <ScalarProperty Name="DiscountCategoryCode" ColumnName="DiscountCategoryCode" />
-                <ScalarProperty Name="DiscountCategoryName" ColumnName="DiscountCategoryName" />
                 <ScalarProperty Name="DiscountCategoryPercentage" ColumnName="DiscountCategoryPercentage" />
-                <ScalarProperty Name="DiscountType" ColumnName="DiscountType" />
                 <ScalarProperty Name="MRP" ColumnName="MRP" />
                 <ScalarProperty Name="SalePrice" ColumnName="SalePrice" />
                 <ScalarProperty Name="Status" ColumnName="Status" />

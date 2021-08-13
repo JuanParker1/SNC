@@ -442,6 +442,15 @@
     <Compile Include="Models\GetDEliveryBoyList_Result.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GetProductList_Result.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetShopCategoryProducts_Result.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetShopCategoryProducts_Result1.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GetShopname_Result.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
