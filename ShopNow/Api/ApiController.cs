@@ -2184,6 +2184,10 @@ namespace ShopNow.Controllers
             s = "";
             int i = 0;
             var lst = db.Products.Where(m => m.ShopId == 123).Select(si => si.ItemId).ToList();
+           // var lstDiscount;
+           // GetDiscoutCatecories:
+           // lstDiscount=db.DiscountCategories.Where(m => m.ShopId == 123).Select(si => si.Percentage).ToList();
+
             foreach (var pro in result.items)
             {
                 int idx = lst.IndexOf(pro.itemId);
@@ -2193,10 +2197,11 @@ namespace ShopNow.Controllers
                 }
                 if (idx >= 0)
                 {
+                    //update
                 }
                 else
                 {
-
+                //Add
                 }
               
                 i = i + 1;
