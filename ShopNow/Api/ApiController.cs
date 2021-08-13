@@ -1514,47 +1514,45 @@ namespace ShopNow.Controllers
         public JsonResult GetAllOrders(int customerId, int page = 1, int pageSize = 5)
         {
             var model = new CartListApiViewModel();
-            model.List = db.Orders
-                .Join(db.OrderItems, o => o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
-                .Join(db.Payments, c => c.o.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
-            .Join(db.Products, rz => rz.c.oi.ProductId, pr => pr.Id, (rz, pr) => new { rz, pr })
-              //.Join(db.ShopCharges, pay => pay.rz.c.o.OrderNumber, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
-              .Join(db.Shops, py => py.rz.c.o.ShopId, s => s.Id, (py, s) => new { py, s })
-             .AsEnumerable()
-           .Where(i => i.py.rz.c.o.CustomerId == customerId && i.py.rz.p.CreditType == 2)
-           .Select(i => new CartListApiViewModel.CartList
-           {
-               Id = i.py.rz.c.o.Id,
-               ProductId = i.py.rz.c.oi.ProductId,
-               ShopPhoneNumber = i.s.PhoneNumber,
-               PaymentMode = i.py.rz.p.PaymentMode,
-               ShopId = i.py.rz.c.o.ShopId,
-               ShopName = i.py.rz.c.o.ShopName,
-               CustomerName = i.py.rz.c.o.CustomerName,
-               ProductName = GetMasterProductName(i.py.pr.MasterProductId),
-               OrderNumber = i.py.rz.c.o.OrderNumber,
-               Price = i.py.rz.c.o.TotalPrice,
-               //OriginalAmount = GetPayment(i.py.pay.rz.c.o.OrderNumber).UpdatedOriginalAmount != 0 ? i.FirstOrDefault().py.pay.rz.p.OriginalAmount : GetPayment(i.FirstOrDefault().py.pay.rz.c.OrderNo).UpdatedOriginalAmount,
-               DeliveryBoyId = i.py.rz.c.o.DeliveryBoyId,
-               DeliveryBoyName = i.py.rz.c.o.DeliveryBoyName,
-               DeliveryBoyPhoneNumber = i.py.rz.c.o.DeliveryBoyPhoneNumber,
-               PhoneNumber = i.py.rz.c.o.ShopPhoneNumber,
-               Otp = GetOtp(i.py.rz.c.o.OrderNumber),
-               DeliveryAddress = i.py.rz.c.o.DeliveryAddress,
-               PackingCharge = i.py.rz.c.o.Packingcharge,
-               ConvinenientCharge = i.py.rz.c.o.Convinenientcharge,
-               Amount = GetPayment(i.py.rz.c.o.OrderNumber).Amount,
-               GrossDeliveryCharge = i.py.rz.c.o.DeliveryCharge,
-               ShopDeliveryDiscount = i.py.rz.c.o.ShopDeliveryDiscount,
-               NetDeliveryCharge = i.py.rz.c.o.NetDeliveryCharge,
-               Qty = i.py.rz.c.o.TotalQuantity,
-               OrderList = GetOrderList(i.py.rz.c.o.OrderNumber),
-               Date = i.py.rz.c.o.DateEncoded.ToString("dd/MMM/yyyy HH:mm"),
-               DateEncoded = i.py.rz.c.o.DateEncoded,
-               CartStatus = i.py.rz.c.o.Status,
-               RfAmount = i.py.rz.p.RefundAmount,
-               RefundRemark = i.py.rz.p.RefundRemark
-           }).OrderBy(j => j.CartStatus).OrderByDescending(i => i.DateEncoded).ToList();
+           // model.List = db.Orders
+           //     .Join(db.OrderItems, o => o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
+           //     .Join(db.Payments, c => c.o.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+           // .Join(db.Products, rz => rz.c.oi.ProductId, pr => pr.Id, (rz, pr) => new { rz, pr })
+           //   .Join(db.Shops, py => py.rz.c.o.ShopId, s => s.Id, (py, s) => new { py, s })
+           //  .AsEnumerable()
+           //.Where(i => i.py.rz.c.o.CustomerId == customerId && i.py.rz.p.CreditType == 2)
+           //.Select(i => new CartListApiViewModel.CartList
+           //{
+           //    Id = i.py.rz.c.o.Id,
+           //    ProductId = i.py.rz.c.oi.ProductId,
+           //    ShopPhoneNumber = i.s.PhoneNumber,
+           //    PaymentMode = i.py.rz.p.PaymentMode,
+           //    ShopId = i.py.rz.c.o.ShopId,
+           //    ShopName = i.py.rz.c.o.ShopName,
+           //    CustomerName = i.py.rz.c.o.CustomerName,
+           //    ProductName = GetMasterProductName(i.py.pr.MasterProductId),
+           //    OrderNumber = i.py.rz.c.o.OrderNumber,
+           //    Price = i.py.rz.c.o.TotalPrice,
+           //    DeliveryBoyId = i.py.rz.c.o.DeliveryBoyId,
+           //    DeliveryBoyName = i.py.rz.c.o.DeliveryBoyName,
+           //    DeliveryBoyPhoneNumber = i.py.rz.c.o.DeliveryBoyPhoneNumber,
+           //    PhoneNumber = i.py.rz.c.o.ShopPhoneNumber,
+           //    Otp = GetOtp(i.py.rz.c.o.OrderNumber),
+           //    DeliveryAddress = i.py.rz.c.o.DeliveryAddress,
+           //    PackingCharge = i.py.rz.c.o.Packingcharge,
+           //    ConvinenientCharge = i.py.rz.c.o.Convinenientcharge,
+           //    Amount = GetPayment(i.py.rz.c.o.OrderNumber).Amount,
+           //    GrossDeliveryCharge = i.py.rz.c.o.DeliveryCharge,
+           //    ShopDeliveryDiscount = i.py.rz.c.o.ShopDeliveryDiscount,
+           //    NetDeliveryCharge = i.py.rz.c.o.NetDeliveryCharge,
+           //    Qty = i.py.rz.c.o.TotalQuantity,
+           //    OrderList = GetOrderList(i.py.rz.c.o.OrderNumber),
+           //    Date = i.py.rz.c.o.DateEncoded.ToString("dd/MMM/yyyy HH:mm"),
+           //    DateEncoded = i.py.rz.c.o.DateEncoded,
+           //    CartStatus = i.py.rz.c.o.Status,
+           //    RfAmount = i.py.rz.p.RefundAmount,
+           //    RefundRemark = i.py.rz.p.RefundRemark
+           //}).OrderBy(j => j.CartStatus).OrderByDescending(i => i.DateEncoded).ToList();
             int count = model.List.Count();
             int CurrentPage = page;
             int PageSize = pageSize;
