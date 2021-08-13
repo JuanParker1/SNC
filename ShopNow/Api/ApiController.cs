@@ -567,7 +567,7 @@ namespace ShopNow.Controllers
         {
             var shid = db.Shops.Where(s => s.Id == shopId).FirstOrDefault();
             var model = db.Products.Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })//, (c, p) => new { c, p })
-                            .AsEnumerable()
+                            //.AsEnumerable()
                             .Where(i => i.p.ShopId == shid.Id && (i.p.Status == 0 || i.p.Status == 1) && (str != "" ? i.m.Name.ToLower().StartsWith(str.ToLower()) : true))
                             .Select(i => new ActiveProductListViewModel.ProductList
                             {
@@ -2096,7 +2096,7 @@ namespace ShopNow.Controllers
             double? varlatitude = latitude;
             int? varpage = page;
             int? varPagesize = pageSize;
-            var s = db.GetProductList(varlongitude, varlatitude, str, varpage, varPagesize);
+            var s = db.GetProductList(varlongitude, varlatitude, str, varpage, varPagesize).ToList();
             string queryOtherList = "SELECT  * " +
              " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8  and Status = 0 and Latitude != 0 and Longitude != 0" +
              "and Name like '%'+@str+'%' order by Rating";
@@ -2115,54 +2115,111 @@ namespace ShopNow.Controllers
                      ShopOnline = i.IsOnline,
                      ShopStatus = i.Status
                  }).ToList();
-            var productrCount = db.GetProductListCount(varlongitude, varlatitude, str);
-            int count = Convert.ToInt32(productrCount);
+            var productrCount = db.GetProductListCount(varlongitude, varlatitude, str).ToList();
+            int count = 0;
+            if(productrCount.Count>0)
+              count = Convert.ToInt32(productrCount[0]);
             int CurrentPage = page;
             int PageSize = pageSize;
-            //int TotalCount = count;
-            //int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
-            //var items = s;
+            int TotalCount = count;
+            int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
+            var items = s;
             var previous = CurrentPage - 1;
             var previousurl = apipath + "/Api/GetProductList?latitude=" + latitude + "&longitude=" + longitude + "&str=" + str + "&page=" + previous;
             var previousPage = CurrentPage > 1 ? previousurl : "No";
             var current = CurrentPage + 1;
             var nexturl = apipath + "/Api/GetProductList?latitude=" + latitude + "&longitude=" + longitude + "&str=" + str + "&page=" + current;
-            // var nextPage = CurrentPage < TotalPages ? nexturl : "No";
+             var nextPage = CurrentPage < TotalPages ? nexturl : "No";
             var paginationMetadata = new
             {
-                //totalCount = TotalCount,
+                totalCount = TotalCount,
                 pageSize = PageSize,
                 currentPage = CurrentPage,
-                //totalPages = TotalPages,
+                totalPages = TotalPages,
                 previousPage,
-                //nextPage
+                nextPage
             };
-            int count1 = model.ShopList.Count();
-            int CurrentPage1 = page;
-            int PageSize1 = pageSize;
-            int TotalCount1 = count1;
-            int TotalPages1 = (int)Math.Ceiling(count1 / (double)PageSize1);
-            var items1 = model.ShopList.Skip((CurrentPage1 - 1) * PageSize1).Take(PageSize1).ToList();
-            var previous1 = CurrentPage1 - 1;
-            var previousurl1 = apipath + "/Api/GetProductList?latitude=" + latitude + "&longitude=" + longitude + "&str=" + str + "&page=" + previous;
-            var previousPage1 = CurrentPage1 > 1 ? previousurl1 : "No";
-            var current1 = CurrentPage1 + 1;
-            var nexturl1 = apipath + "/ Api/GetProductList?latitude=" + latitude + "&longitude=" + longitude + "&str=" + str + "&page=" + current;
-            var nextPage1 = CurrentPage1 < TotalPages1 ? nexturl1 : "No";
-            var paginationMetadata1 = new
+            //int count1 = model.ShopList.Count();
+            //int CurrentPage1 = page;
+            //int PageSize1 = pageSize;
+            //int TotalCount1 = count1;
+            //int TotalPages1 = (int)Math.Ceiling(count1 / (double)PageSize1);
+            //var items1 = model.ShopList.Skip((CurrentPage1 - 1) * PageSize1).Take(PageSize1).ToList();
+            //var previous1 = CurrentPage1 - 1;
+            //var previousurl1 = apipath + "/Api/GetProductList?latitude=" + latitude + "&longitude=" + longitude + "&str=" + str + "&page=" + previous;
+            //var previousPage1 = CurrentPage1 > 1 ? previousurl1 : "No";
+            //var current1 = CurrentPage1 + 1;
+            //var nexturl1 = apipath + "/ Api/GetProductList?latitude=" + latitude + "&longitude=" + longitude + "&str=" + str + "&page=" + current;
+            //var nextPage1 = CurrentPage1 < TotalPages1 ? nexturl1 : "No";
+            //var paginationMetadata1 = new
+            //{
+            //    totalCount = TotalCount1,
+            //    pageSize = PageSize1,
+            //    currentPage = CurrentPage1,
+            //    totalPages = TotalPages1,
+            //    previousPage1,
+            //    nextPage1
+            //};
+            return Json(new { Page = paginationMetadata, items }, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetP(string str = "")
+        {
+            var sb = new StringBuilder();
+            string s = "";
+            string Url = "http://joyrahq.gofrugal.com/RayMedi_HQ/api/v1/items?q=status==R,outletId==2&limit=100000";
+            using (WebClient client = new WebClient())
             {
-                totalCount = TotalCount1,
-                pageSize = PageSize1,
-                currentPage = CurrentPage1,
-                totalPages = TotalPages1,
-                previousPage1,
-                nextPage1
-            };
-            return Json(new { Page = paginationMetadata, /*items,*/ Page1 = paginationMetadata1, items1 }, JsonRequestBehavior.AllowGet);
+                client.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
+               
+               s=client.DownloadString(Url);
+                //Console.WriteLine(client.DownloadString(Url));
+            }
+            var result = JsonConvert.DeserializeObject<RootObject>(s);
+            s = "";
+            int i = 0;
+            var lst = db.Products.Where(m => m.ShopId == 123).Select(si => si.ItemId).ToList();
+            foreach (var pro in result.items)
+            {
+                int idx = lst.IndexOf(pro.itemId);
+                foreach (var med in pro.stock)
+                {
+
+                }
+                if (idx >= 0)
+                {
+                }
+                else
+                {
+
+                }
+              
+                i = i + 1;
+                s = Convert.ToString(i);
+            }
+
+            // DownloadString (encoding specified)
+            using (WebClient client = new WebClient())
+            {
+                client.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
+                // specify encoding
+                client.Encoding = System.Text.UTF8Encoding.UTF8;
+
+                // output
+                Console.WriteLine(client.DownloadString(Url));
+            }
+
+            // DownloadData (encoding specified)
+            using (WebClient client = new WebClient())
+            {
+                client.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
+                Console.WriteLine(System.Text.UTF8Encoding.UTF8.GetString(client.DownloadData(Url)));
+            }
+            return Json(new { Page =""}, JsonRequestBehavior.AllowGet);
         }
 
         public static double GetStockQty(string code)
         {
+         
             using (WebClient myData = new WebClient())
             {
                 myData.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
@@ -2197,20 +2254,20 @@ namespace ShopNow.Controllers
             var items = model;
             var previous = CurrentPage - 1;
             var previousurl = apipath + "/Api/GetShopCategoryList?shopId=" + shopId + "&categoryId=" + CategoryId + "&str=" + str + "&page=" + previous;
-            // var previousPage = CurrentPage > 1 ? previousurl : "No";
+             var previousPage = CurrentPage > 1 ? previousurl : "No";
             var current = CurrentPage + 1;
             var nexturl = apipath + "/Api/GetShopCategoryList?shopId=" + shopId + "&categoryId=" + CategoryId + "&str=" + str + "&page=" + current;
-            // var nextPage = CurrentPage < TotalPages ? nexturl : "No";
+             var nextPage = CurrentPage < TotalPages ? nexturl : "No";
             var paginationMetadata = new
             {
                 totalCount = TotalCount,
                 pageSize = PageSize,
                 currentPage = CurrentPage,
                 totalPages = TotalPages,
-                previousurl,
-                nexturl
+                previousPage,
+                nextPage
             };
-            return Json(new { Page = paginationMetadata, /*items*/ }, JsonRequestBehavior.AllowGet);
+            return Json(new { Page = paginationMetadata, items }, JsonRequestBehavior.AllowGet);
         }
         string GetMasterProductName(long id)
 
