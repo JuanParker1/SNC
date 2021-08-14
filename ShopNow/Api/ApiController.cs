@@ -569,7 +569,7 @@ namespace ShopNow.Controllers
         {
             var shid = db.Shops.Where(s => s.Id == shopId).FirstOrDefault();
             var model = db.Products.Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })//, (c, p) => new { c, p })
-                            //.AsEnumerable()
+                                                                                                                      //.AsEnumerable()
                             .Where(i => i.p.ShopId == shid.Id && (i.p.Status == 0 || i.p.Status == 1) && (str != "" ? i.m.Name.ToLower().StartsWith(str.ToLower()) : true))
                             .Select(i => new ActiveProductListViewModel.ProductList
                             {
@@ -1728,7 +1728,7 @@ namespace ShopNow.Controllers
             //}
             db.Configuration.ProxyCreationEnabled = false;
             var model = new GetAllOrderListViewModel();
-            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && (mode == 0 ? i.Status==2  : (i.Status == 3 || i.Status == 4)))
+            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && (mode == 0 ? i.Status == 2 : (i.Status == 3 || i.Status == 4)))
                  .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
                  .GroupJoin(db.OrderItems, o => o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
                  .Select(i => new GetAllOrderListViewModel.OrderList
@@ -1764,7 +1764,7 @@ namespace ShopNow.Controllers
                      RefundRemark = i.o.p.RefundRemark,
                      OrderItemList = i.oi.ToList()
                  }).ToList();
-            
+
             int count = model.OrderLists.Count();
             int CurrentPage = page;
             int PageSize = pageSize;
@@ -1858,7 +1858,7 @@ namespace ShopNow.Controllers
         public JsonResult ShopRegister(ShopCreateViewModel model)
         {
             //var shopExist = db.Shops.Where(m => m.OwnerPhoneNumber == model.OwnerPhoneNumber && m.Latitude == model.Latitude && m.Longitude == model.Longitude && (m.Status == 0 || m.Status == 6));
-            bool isExist = db.Shops.Any(i => i.Name == model.Name && (i.Status == 1 || i.Status==0));
+            bool isExist = db.Shops.Any(i => i.Name == model.Name && (i.Status == 1 || i.Status == 0));
             if (!isExist)
             {
                 var shop = _mapper.Map<ShopCreateViewModel, Shop>(model);
@@ -2162,8 +2162,8 @@ namespace ShopNow.Controllers
                  }).ToList();
             var productrCount = db.GetProductListCount(varlongitude, varlatitude, str).ToList();
             int count = 0;
-            if(productrCount.Count>0)
-              count = Convert.ToInt32(productrCount[0]);
+            if (productrCount.Count > 0)
+                count = Convert.ToInt32(productrCount[0]);
             int CurrentPage = page;
             int PageSize = pageSize;
             int TotalCount = count;
@@ -2174,7 +2174,7 @@ namespace ShopNow.Controllers
             var previousPage = CurrentPage > 1 ? previousurl : "No";
             var current = CurrentPage + 1;
             var nexturl = apipath + "/Api/GetProductList?latitude=" + latitude + "&longitude=" + longitude + "&str=" + str + "&page=" + current;
-             var nextPage = CurrentPage < TotalPages ? nexturl : "No";
+            var nextPage = CurrentPage < TotalPages ? nexturl : "No";
             var paginationMetadata = new
             {
                 totalCount = TotalCount,
@@ -2215,7 +2215,7 @@ namespace ShopNow.Controllers
             dtShops.Columns.Add("CategoryName");
             dtShops.Rows.Add(123,2,"cat1");
             dtShops.Rows.Add(203,4,"cat2");
-            DataTable dt = new DataTable();
+       
 
             string s = "";
             string Url = "http://joyrahq.gofrugal.com/RayMedi_HQ/api/v1/items?q=status==R,outletId==2&limit=100000";
@@ -2227,6 +2227,9 @@ namespace ShopNow.Controllers
             }
             
             var lst = db.Products.Where(m => m.ShopId == 123).Select(si => si.ItemId).ToList();
+            List<Product> updateList = new List<Product>();
+            List<Product> createList = new List<Product>();
+            Product varProduct = new Product();
             // var lstDiscount;
             // GetDiscoutCatecories:
             // lstDiscount=db.DiscountCategories.Where(m => m.ShopId == 123).Select(si => si.Percentage).ToList();
@@ -2235,11 +2238,24 @@ namespace ShopNow.Controllers
 
             foreach (var pro in ((IEnumerable<dynamic>)config.items).Where(t => t.status == "R"))
             {
-                int idx = lst.IndexOf(pro.itemId);
+                varProduct.Id = Convert.ToString(pro.itemId);
+                varProduct.Name = pro.itemName;
+                varProduct.IBarU = Convert.ToInt32(pro.iBarU);
+                varProduct.DateUpdated = DateTime.Now;
+                varProduct.ShopCategoryId = 4;
+                varProduct.ShopId = 123;
+               
                 foreach (var med in pro.stock)
                 {
-
+                   varProduct.Qty= Convert.ToInt32(Math.Floor(Convert.ToDecimal(med.stock)));
+                   varProduct.MenuPrice = Convert.ToDouble(med.mrp);
+                   varProduct.Price= Convert.ToDouble(med.salePrice);
+                   varProduct.TaxPercentage = Convert.ToDouble(med.taxPercentage);
+                   varProduct.ItemTimeStamp = Convert.ToString(med.itemTimeStamp);
+                   varProduct.AppliesOnline = Convert.ToInt32(pro.appliesOnline);
+                   varProduct.OutletId = Convert.ToInt32(pro.outletId);
                 }
+                int idx = lst.IndexOf(pro.itemId);
                 if (idx >= 0)
                 {
                     //update
@@ -2251,23 +2267,23 @@ namespace ShopNow.Controllers
               
             }
 
-            // DownloadString (encoding specified)
-            using (WebClient client = new WebClient())
-            {
-                client.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
-                // specify encoding
-                client.Encoding = System.Text.UTF8Encoding.UTF8;
+            //// DownloadString (encoding specified)
+            //using (WebClient client = new WebClient())
+            //{
+            //    client.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
+            //    // specify encoding
+            //    client.Encoding = System.Text.UTF8Encoding.UTF8;
 
-                // output
-                Console.WriteLine(client.DownloadString(Url));
-            }
+            //    // output
+            //    Console.WriteLine(client.DownloadString(Url));
+            //}
 
-            // DownloadData (encoding specified)
-            using (WebClient client = new WebClient())
-            {
-                client.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
-                Console.WriteLine(System.Text.UTF8Encoding.UTF8.GetString(client.DownloadData(Url)));
-            }
+            //// DownloadData (encoding specified)
+            //using (WebClient client = new WebClient())
+            //{
+            //    client.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
+            //    Console.WriteLine(System.Text.UTF8Encoding.UTF8.GetString(client.DownloadData(Url)));
+            //}
             return Json(new { Page =""}, JsonRequestBehavior.AllowGet);
         }
 
