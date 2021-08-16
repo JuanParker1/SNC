@@ -75,20 +75,23 @@ namespace ShopNow.Controllers
         {
             var dCode = AdminHelpers.DCodeLong(Id);
             var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dCode);
-            master.Status = 2;
-            _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
-            _db.SaveChanges();
-
-            //product delete
-            var productList = _db.Products.Where(i => i.MasterProductId == master.Id);
-            if (productList != null)
+            if (master != null)
             {
-                foreach (var item in productList)
+                master.Status = 2;
+                _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
+                _db.SaveChanges();
+
+                //product delete
+                var productList = _db.Products.Where(i => i.MasterProductId == master.Id).ToList();
+                if (productList != null)
                 {
-                    var product = _db.Products.FirstOrDefault(i => i.Id == item.Id);
-                    product.Status = 2;
-                    _db.Entry(product).State = System.Data.Entity.EntityState.Modified;
-                    _db.SaveChanges();
+                    foreach (var item in productList)
+                    {
+                        var product = _db.Products.FirstOrDefault(i => i.Id == item.Id);
+                        product.Status = 2;
+                        _db.Entry(product).State = System.Data.Entity.EntityState.Modified;
+                        _db.SaveChanges();
+                    }
                 }
             }
             return Json(true, JsonRequestBehavior.AllowGet);
@@ -341,6 +344,19 @@ namespace ShopNow.Controllers
                 master.Status = 2;
                 _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
                 _db.SaveChanges();
+
+                //product delete
+                var productList = _db.Products.Where(i => i.MasterProductId == dId).ToList();
+                if (productList != null)
+                {
+                    foreach (var item in productList)
+                    {
+                        var product = _db.Products.FirstOrDefault(i => i.Id == item.Id);
+                        product.Status = 2;
+                        _db.Entry(product).State = System.Data.Entity.EntityState.Modified;
+                        _db.SaveChanges();
+                    }
+                }
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
@@ -721,6 +737,19 @@ namespace ShopNow.Controllers
                 master.Status = 2;
                 _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
                 _db.SaveChanges();
+
+                //product delete
+                var productList = _db.Products.Where(i => i.MasterProductId == dId).ToList();
+                if (productList != null)
+                {
+                    foreach (var item in productList)
+                    {
+                        var product = _db.Products.FirstOrDefault(i => i.Id == item.Id);
+                        product.Status = 2;
+                        _db.Entry(product).State = System.Data.Entity.EntityState.Modified;
+                        _db.SaveChanges();
+                    }
+                }
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
@@ -994,6 +1023,19 @@ namespace ShopNow.Controllers
                 master.Status = 2;
                 _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
                 _db.SaveChanges();
+
+                //product delete
+                var productList = _db.Products.Where(i => i.MasterProductId == dId).ToList();
+                if (productList != null)
+                {
+                    foreach (var item in productList)
+                    {
+                        var product = _db.Products.FirstOrDefault(i => i.Id == item.Id);
+                        product.Status = 2;
+                        _db.Entry(product).State = System.Data.Entity.EntityState.Modified;
+                        _db.SaveChanges();
+                    }
+                }
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
@@ -1482,6 +1524,19 @@ namespace ShopNow.Controllers
                 master.Status = 2;
                 _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
                 _db.SaveChanges();
+
+                //product delete
+                var productList = _db.Products.Where(i => i.MasterProductId == dId).ToList();
+                if (productList != null)
+                {
+                    foreach (var item in productList)
+                    {
+                        var product = _db.Products.FirstOrDefault(i => i.Id == item.Id);
+                        product.Status = 2;
+                        _db.Entry(product).State = System.Data.Entity.EntityState.Modified;
+                        _db.SaveChanges();
+                    }
+                }
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
