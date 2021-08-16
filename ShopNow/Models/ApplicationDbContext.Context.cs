@@ -5,7 +5,7 @@
 //     Manual changes to this file may cause unexpected behavior in your application.
 //     Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
-//------------------------------------------------------------------------------  
+//------------------------------------------------------------------------------
 
 namespace ShopNow.Models
 {
@@ -29,7 +29,6 @@ namespace ShopNow.Models
     
         public virtual DbSet<AccessPolicy> AccessPolicies { get; set; }
         public virtual DbSet<AddOnCategory> AddOnCategories { get; set; }
-        public virtual DbSet<ApiSetting> ApiSettings { get; set; }
         public virtual DbSet<Banner> Banners { get; set; }
         public virtual DbSet<Bill> Bills { get; set; }
         public virtual DbSet<BrandOwner> BrandOwners { get; set; }
@@ -75,6 +74,7 @@ namespace ShopNow.Models
         public virtual DbSet<Staff> Staffs { get; set; }
         public virtual DbSet<SubCategory> SubCategories { get; set; }
         public virtual DbSet<UserEnquiry> UserEnquiries { get; set; }
+        public virtual DbSet<ApiSetting> ApiSettings { get; set; }
     
         [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)

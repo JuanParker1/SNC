@@ -41,8 +41,35 @@ namespace ShopNow.ViewModels
             public double? RefundAmount { get; set; }
             public string RefundRemark { get; set; }
             public string PaymentMode { get; set; }
-            public string DateStr { get; set; }
-            public double UpdatedAmount { get; set; }
+            public int Onwork { get; set; }
+            public List<OrderItem> OrderItemList { get; set; }
+        }
+    }
+
+    public class TodayDeliveryListViewModel
+    {
+        public List<OrderList> ResturantList { get; set; }
+        public List<OrderList> OtherList { get; set; }
+        public class OrderList
+        {
+            public string ShopName { get; set; }
+            public string ShopAddress { get; set; }
+            public string ShopPhoneNumber { get; set; }
+            public double ShopLatitude { get; set; }
+            public double ShopLongitude { get; set; }
+            public double CustomerLatitude { get; set; }
+            public double CustomerLongitude { get; set; }
+            public int OrderNumber { get; set; }
+            public double Amount { get; set; }
+            public string CustomerPhoneNumber { get; set; }
+            public string CustomerName { get; set; }
+            public string DeliveryAddress { get; set; }
+            public int Status { get; set; }
+            public DateTime DateEncoded { get; set; }
+            public string PaymentMode { get; set; }
+            public int OnWork { get; set; }
+            public Double? RefundAmount { get; set; }
+            public string RefundRemark { get; set; }
             public List<OrderItem> OrderItemList { get; set; }
         }
     }

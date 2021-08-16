@@ -7,7 +7,6 @@
       <Diagram DiagramId="038d74d10d4142d0ba8e77af1102502d" Name="Diagram1">
         <EntityTypeShape EntityType="sncModel.AccessPolicy" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.AddOnCategory" Width="1.5" PointX="5.75" PointY="5.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.ApiSetting" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.Banner" Width="1.5" PointX="16" PointY="2.875" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.Bill" Width="1.5" PointX="5.75" PointY="14.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.BrandOwner" Width="1.5" PointX="15.75" PointY="17.75" IsExpanded="true" />
@@ -65,6 +64,7 @@
         <AssociationConnector Association="sncModel.FK_OrderItems_Orders" ManuallyRouted="false" />
         <AssociationConnector Association="sncModel.FK_Products_ProductType" ManuallyRouted="false" />
         <AssociationConnector Association="sncModel.FK_SubCategories_ProductType" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="sncModel.ApiSetting" Width="1.5" PointX="20.375" PointY="25.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

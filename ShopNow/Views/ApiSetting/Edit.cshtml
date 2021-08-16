@@ -1,6 +1,6 @@
-﻿@model ShopNow.ViewModels.ApiSettingCreateViewModel
+﻿@model ShopNow.ViewModels.ApiSettingEditViewModel
 @{
-    ViewBag.Title = "Api Setting Entry";
+    ViewBag.Title = "Update Api Setting";
 }
 
 <title>ShopNow | @ViewBag.Title</title>
@@ -14,51 +14,53 @@
             </div>
             <div class="card shadow">
                 <div class="card-body">
-                    <form action="/ApiSetting/Create" method="post">
+                    <form action="/ApiSetting/Edit" method="post">
+                        <input type="hidden" name="Id" value="@Model.Id" />
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="col-form-label">Select Shop</label>
-                                    <select id="select-shop" name="ShopId" class="form-control" required></select>
-                                    <input type="hidden" name="ShopName" />
-                                    <input type="hidden" name="ShopCategoryId" />
+                                    <select id="select-shop" name="ShopId" class="form-control" required>
+                                        <option value="@Model.ShopId">@Model.ShopName</option>
+                                    </select>
+                                    <input type="hidden" name="ShopName" value="@Model.ShopName" />
+                                    <input type="hidden" name="ShopCategoryId" value="@Model.ShopCategoryId" />
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="col-form-label">Provider Name</label>
-                                    <input type="text" name="ProviderName" class="form-control" required />
+                                    <input type="text" name="ProviderName" class="form-control" value="@Model.ProviderName" required />
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="col-form-label">Version</label>
-                                    <input type="text" name="Version" class="form-control" required />
+                                    <input type="text" name="Version" class="form-control" value="@Model.Version" required />
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="col-form-label">Url</label>
-                                    <input type="text" name="Url" class="form-control" required />
+                                    <input type="text" name="Url" class="form-control" value="@Model.Url" required />
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="col-form-label">AuthName</label>
-                                    <input type="text" name="AuthName" class="form-control" required />
+                                    <input type="text" name="AuthName" class="form-control" value="@Model.AuthName" required />
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="col-form-label">AuthKey</label>
-                                    <input type="text" name="AuthKey" class="form-control" required />
+                                    <input type="text" name="AuthKey" class="form-control" value="@Model.AuthKey" required />
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="col-form-label">Category</label>
                                     <select class="form-control" name="Category" required>
-                                        <option disabled selected>Select Category</option>
                                         <option value="1">Category 1</option>
                                         <option value="2">Category 2</option>
                                         <option value="3">Category 3</option>
@@ -75,17 +77,17 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="col-form-label">Outlet Id</label>
-                                    <input type="number" name="OutletId" class="form-control" required />
+                                    <input type="number" name="OutletId" class="form-control" value="@Model.OutletId" required />
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="col-form-label">Remark</label>
-                                    <textarea type="text" name="Remark" class="form-control"></textarea>
+                                    <textarea type="text" name="Remark" class="form-control">@Model.Remark</textarea>
                                 </div>
                             </div>
                         </div>
-                        <div class="mx-auto col-6 mt-3"> <input type="submit" value="Create" class="btn btn-success btn-block" /></div>
+                        <div class="mx-auto col-6 mt-3"> <input type="submit" value="Update" class="btn btn-success btn-block" /></div>
                     </form>
                 </div>
             </div>
@@ -100,7 +102,7 @@
 
     <script>
         $(document).ready(function () {
-
+            $('[name="Category"]').val(@Model.Category);
             $('#select-shop').select2({
                 placeholder: "Search Shop",
                 width: '100%',
@@ -111,7 +113,7 @@
                 }
             }).on('select2:select', function (e) {
                 $('input[name="ShopName"]').val(e.params.data.text);
-                $('input[name="ShopCategoryId"]').val(e.params.data.shopCategoryId);
+                $('input[name="ShopCategoryId"]').val(e.params.data.text);
             });
         });
     </script>
