@@ -34,24 +34,33 @@
         <div class="col-md-2 text-right">
             <a href="/Product/FoodCreate"><span class="fa fa-plus"></span> Dish</a>
         </div>
-
     </div>
-    @Html.Grid(Model.ListItems).Columns(columns =>
-{
-    columns.Add(c => c.Name).Titled("Name").Encoded(false).Sanitized(false).RenderValueAs(model => Html.ActionLink(model.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(model.Id) }).ToHtmlString()).Filterable(true).SetWidth(20);
-    columns.Add(c => c.CategoryName).Titled("Category Name").Filterable(true).SetWidth(12);
-    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
-    columns.Add(c => c.Percentage).Titled("Discount %").Filterable(true).SetWidth(10);
-    columns.Add()
-    .Encoded(false)
-    .Sanitized(false)
-    .RenderValueAs(o => Html.ActionLink("Edit", "FoodEdit", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
-    + Html.ActionLink("Delete", "Delete", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id), redirectPage=1 }, new { @class = "btn  btn-sm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow mt-3">
+                <div class="card-body">
+                    @Html.Grid(Model.ListItems).Columns(columns =>
+               {
+               columns.Add(b => b.Name).Titled("Name").Encoded(false).Sanitized(false).RenderValueAs(model => Html.ActionLink(model.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(model.Id) }).ToHtmlString()).Filterable(true).SetWidth(20);
+               columns.Add(b => b.CategoryName).Titled("Category Name").Filterable(true).SetWidth(15);
+               columns.Add(b => b.ShopName).Titled("Type").Filterable(true).SetWidth(20);
+               columns.Add(b => b.Percentage).Titled("Discount %").Filterable(true).SetWidth(10);
+               columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
+               .RenderValueAs(o => @<div>
+                        <a href="~/Product/FoodEdit?id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
+                        <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-danger btnDelete" redirectPage = 1 ><i class="fa fa-trash fa-lg"></i></a>
+                    </div>);
 }).WithPaging(20).Sortable(true)
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts
 {
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
     <!--Select2-->
     <script src="~/Scripts/select2/js/select2.js"></script>
     <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
@@ -70,6 +79,31 @@
                 }
             }).on('select2:select', function (e) {
                 $('input[name="ShopName"]').val(e.params.data.text);
+            });
+
+            $(".btnDelete").click(function () {
+                var id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/Product/Delete", { id: id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
             });
         });
     </script>

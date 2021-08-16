@@ -700,8 +700,6 @@ namespace ShopNow.Controllers
 
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var product = _mapper.Map<FMCGCreateViewModel, Product>(model);
-            product.CreatedBy = user.Name;
-            product.UpdatedBy = user.Name;
             product.ProductTypeId = 2;
             product.ProductTypeName = "FMCG";
             if (model.ShopId != 0)
@@ -714,6 +712,8 @@ namespace ShopNow.Controllers
             product.DateEncoded = DateTime.Now;
             product.DateUpdated = DateTime.Now;
             product.Status = 0;
+            product.CreatedBy = user.Name;
+            product.UpdatedBy = user.Name;
             db.Products.Add(product);
             db.SaveChanges();
             ViewBag.Message = model.Name + " Saved Successfully!";
@@ -723,27 +723,27 @@ namespace ShopNow.Controllers
                 var productcount = db.Products.Where(i => i.ShopId == model.ShopId && i.Status == 0).Count();
                 if (productcount >= 10 && sh.Status == 1)
                 {
-                    //Payment payment = new Payment();
-                    //payment.CustomerId = sh.CustomerId;
-                    //payment.CustomerName = sh.CustomerName;
-                    //payment.ShopId = sh.Id;
-                    //payment.ShopName = sh.Name;
-                    //payment.CountryName = sh.CountryName;
-                    //payment.CreatedBy = sh.CustomerName;
-                    //payment.UpdatedBy = sh.CustomerName;
-                    //payment.GSTINNumber = sh.GSTINNumber;
-                    //payment.Credits = "PlatForm Credits";
-                    //payment.OriginalAmount = 1000;
-                    //payment.Amount = 1000;
-                    //payment.GSTAmount = 0;
-                    //payment.CreditType = 0;
-                    //payment.PaymentResult = "success";
+                    Payment payment = new Payment();
+                    payment.CustomerId = sh.CustomerId;
+                    payment.CustomerName = sh.CustomerName;
+                    payment.ShopId = sh.Id;
+                    payment.ShopName = sh.Name;
+                    payment.CountryName = sh.CountryName;
+                    payment.CreatedBy = sh.CustomerName;
+                    payment.UpdatedBy = sh.CustomerName;
+                    payment.GSTINNumber = sh.GSTINNumber;
+                    payment.Credits = "PlatForm Credits";
+                    payment.OriginalAmount = 1000;
+                    payment.Amount = 1000;
+                    payment.GSTAmount = 0;
+                    payment.CreditType = 0;
+                    payment.PaymentResult = "success";
 
-                    //payment.DateEncoded = DateTime.Now;
-                    //payment.DateUpdated = DateTime.Now;
-                    //payment.Status = 0;
-                    //db.Payments.Add(payment);
-                    //db.SaveChanges();
+                    payment.DateEncoded = DateTime.Now;
+                    payment.DateUpdated = DateTime.Now;
+                    payment.Status = 0;
+                    db.Payments.Add(payment);
+                    db.SaveChanges();
 
                     ShopCredit shopCredit = new ShopCredit
                     {
@@ -783,7 +783,7 @@ namespace ShopNow.Controllers
                 model.BrandId = masterProduct.BrandId;
                 model.BrandName = masterProduct.BrandName;
                 model.CategoryId = masterProduct.CategoryId;
-              //  model.CategoryName = masterProduct.CategoryName;
+                model.CategoryName = db.Categories.FirstOrDefault(i=> i.Id == masterProduct.CategoryId).Name;
                 model.GoogleTaxonomyCode = masterProduct.GoogleTaxonomyCode;
                 model.ImagePathLarge1 = masterProduct.ImagePath1;
                 model.ImagePathLarge2 = masterProduct.ImagePath2;
@@ -793,9 +793,9 @@ namespace ShopNow.Controllers
                 model.LongDescription = masterProduct.LongDescription;
                 model.ShortDescription = masterProduct.ShortDescription;
                 model.SubCategoryId = masterProduct.SubCategoryId;
-             //   model.SubCategoryName = masterProduct.SubCategoryName;
+                model.SubCategoryName = db.SubCategories.FirstOrDefault(i=> i.Id == masterProduct.SubCategoryId).Name;
                 model.NextSubCategoryId = masterProduct.NextSubCategoryId;
-             //   model.NextSubCategoryName = masterProduct.NextSubCategoryName;
+                model.NextSubCategoryName = db.NextSubCategories.FirstOrDefault(i=> i.Id == masterProduct.NextSubCategoryId).Name;
                 model.MeasurementUnitId = masterProduct.MeasurementUnitId;
                 model.MeasurementUnitName = masterProduct.MeasurementUnitName;
                 model.PackageId = masterProduct.PackageId;
@@ -1026,27 +1026,30 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNPROR010")]
-        public ActionResult Delete(string id, int redirectPage=0) //redirectPage : 0-Product List, 1-Food List, 2-Medical List, 3-FMCG List , 4-Electronic List
+        public ActionResult Delete(string id, int redirectPage=0) //redirectPage : 1-Food List, 2- FMCG List, 3-Medical List , 4-Electronic List
         {
             var dId = AdminHelpers.DCodeInt(id);
             var product = db.Products.FirstOrDefault(i => i.Id == dId);
-            product.Status = 2;
-            product.DateUpdated = DateTime.Now;
-            db.Entry(product).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
-            switch (redirectPage)
+            if (product != null)
             {
-                case 1:
-                    return RedirectToAction("FoodList", "Product");
-                case 2:
-                    return RedirectToAction("MedicalList", "Product");
-                case 3:
-                    return RedirectToAction("FMCGList", "Product");
-                case 4:
-                    return RedirectToAction("ElectronicList", "Product");
-                default:
-                    return RedirectToAction("List", "Product");
+                product.Status = 2;
+                product.DateUpdated = DateTime.Now;
+                db.Entry(product).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
             }
+                switch (redirectPage)
+                {
+                    case 1:
+                        return RedirectToAction("FoodList", "Product");
+                    case 2:
+                        return RedirectToAction("FMCGList", "Product");
+                    case 3:
+                        return RedirectToAction("MedicalList", "Product");
+                    case 4:
+                        return RedirectToAction("ElectronicList", "Product");
+                    default:
+                        return RedirectToAction("List", "Product");
+                }
         }
 
         [HttpPost]
@@ -1436,39 +1439,45 @@ namespace ShopNow.Controllers
 
         public async Task<JsonResult> GetFMCGSelect2(string q = "")
         {
-            var model = await db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 2).Select(i => new
-            {
-                id = i.Id,
-                text = i.Name,
-                CategoryId = i.CategoryId,
-              //  CategoryName = i.CategoryName,
-                SubCategoryId = i.SubCategoryId,
-              //  SubCategoryName = i.SubCategoryName,
-                NextSubCategoryId = i.NextSubCategoryId,
-              //  NextSubCategoryName = i.NextSubCategoryName,
-                BrandId = i.BrandId,
-                BrandName = i.BrandName,
-                ShortDescription = i.ShortDescription,
-                LongDescription = i.LongDescription,
-                ImagePath1 = i.ImagePath1,
-                ImagePath2 = i.ImagePath2,
-                ImagePath3 = i.ImagePath3,
-                ImagePath4 = i.ImagePath4,
-                ImagePath5 = i.ImagePath5,
-                Price = i.Price,
-                ProductTypeId = i.ProductTypeId,
-                ASIN = i.ASIN,
-                GoogleTaxonomyCode = i.GoogleTaxonomyCode,
-                Weight = i.Weight,
-                SizeLB = i.SizeLB,
-                MeasurementUnitId = i.MeasurementUnitId,
-                MeasurementUnitName = i.MeasurementUnitName,
-                PackageId = i.PackageId,
-                PackageName = i.PackageName
-            }).ToListAsync();
+            var model = await db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 2)
+                .Select(i => new
+                {
+                    id = i.Id,
+                    text = i.Name,
+                    CategoryId = i.CategoryId,
+                    SubCategoryId = i.SubCategoryId,
+                    NextSubCategoryId = i.NextSubCategoryId,
+                    BrandId = i.BrandId,
+                    BrandName = i.BrandName,
+                    ShortDescription = i.ShortDescription,
+                    LongDescription = i.LongDescription,
+                    ImagePath1 = i.ImagePath1,
+                    ImagePath2 = i.ImagePath2,
+                    ImagePath3 = i.ImagePath3,
+                    ImagePath4 = i.ImagePath4,
+                    ImagePath5 = i.ImagePath5,
+                    Price = i.Price,
+                    ProductTypeId = i.ProductTypeId,
+                    ASIN = i.ASIN,
+                    GoogleTaxonomyCode = i.GoogleTaxonomyCode,
+                    Weight = i.Weight,
+                    SizeLB = i.SizeLB,
+                    MeasurementUnitId = i.MeasurementUnitId,
+                    MeasurementUnitName = i.MeasurementUnitName,
+                    PackageId = i.PackageId,
+                    PackageName = i.PackageName
+                }).ToListAsync();
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetSelectCategoryNames(int categoryId, int subcategoryId, int nextsubcategoryId)
+        {
+            var categoryName = db.Categories.FirstOrDefault(i => i.Id == categoryId).Name;
+            var subcategoryname = db.SubCategories.FirstOrDefault(i => i.Id == subcategoryId).Name;
+            var nextsubcategoryname = db.NextSubCategories.FirstOrDefault(i => i.Id == nextsubcategoryId).Name;
+            return Json(new { categoryName = categoryName, subcategoryname = subcategoryname, nextsubcategoryname=nextsubcategoryname }, JsonRequestBehavior.AllowGet);
+        }
+        
         public async Task<JsonResult> GetFMCGPackageSelect2(string q = "")
         {
             var model = await db.Packages.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new

@@ -102,7 +102,10 @@
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="MeasurementUnitId"><strong class="text-secondary">Measurement Unit Name</strong></label>
                                         <select name="MeasurementUnitId" class="form-control" id="MeasurementUnitId">
-                                            <option value="@Model.MeasurementUnitId">@Model.MeasurementUnitName</option>
+                                            @if (Model.MeasurementUnitId != 0)
+                                            {
+                                                <option value="@Model.MeasurementUnitId">@Model.MeasurementUnitName</option>
+                                            }
                                         </select>
                                         <input type="hidden" name="MeasurementUnitName" id="MeasurementUnitName" value="@Model.MeasurementUnitName" />
                                     </div>
