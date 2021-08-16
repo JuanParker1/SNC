@@ -1024,10 +1024,13 @@ namespace ShopNow.Controllers
                 foreach (var item in orderList)
                 {
                     //Product Stock Update
-                    var product = db.Products.FirstOrDefault(i => i.Id == item.ProductId);
-                    product.HoldOnStok -= Convert.ToInt32(item.Quantity);
-                    db.Entry(product).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
+                    var product = db.Products.FirstOrDefault(i => i.Id == item.ProductId && i.ProductTypeId == 3);
+                    if (product != null)
+                    {
+                        product.HoldOnStok -= Convert.ToInt32(item.Quantity);
+                        db.Entry(product).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                    }
                 }
                 var fcmToken = (from c in db.Customers
                                 where c.Id == order.CustomerId
@@ -1062,70 +1065,114 @@ namespace ShopNow.Controllers
         }
 
         //Have to check later
-        //public JsonResult GetShopDeliveredOrders(string shopId, int status, int page = 1, int pageSize = 5)
-        //{
-        //    var model = new CartAcceptListApiViewModel();
-        //    model.List = db.Orders.Where(j => j.Status == status)
-        //        .Join(db.Payments, c => c.OrderNumber, p => p.OrderNo, (c, p) => new { c, p })
-        //        .Join(db.Products, rz => rz.c.ProductCode, pr => pr.Id, (rz, pr) => new { rz, pr })
-        //        .Join(db.Shops, py => py.rz.c.ShopCode, s => s.Code, (py, s) => new { py, s })
-        //        .Join(db.ShopCharges, pay => pay.py.rz.c.OrderNo, sc => sc.OrderNo, (pay, sc)
-        //        => new { pay, sc })
-        //        .AsEnumerable()
-        //       .Where(i => (i.pay.py.rz.p.PaymentResult == "success" || i.pay.py.rz.p.PaymentMode == "Cash On Hand") && i.pay.py.rz.p.ShopCode == shopCode)
-        //       .GroupBy(j => j.pay.py.rz.c.OrderNo).Select(i => new CartAcceptListApiViewModel.CartList
-        //       {
-        //           Code = i.Any() ? i.FirstOrDefault().pay.py.rz.c.Code : "N/A",
-        //           ProductCode = i.Any() ? i.FirstOrDefault().pay.py.rz.c.ProductCode : "N/A",
-        //           PaymentMode = i.Any() ? i.FirstOrDefault().pay.py.rz.p.PaymentMode : "N/A",
-        //           ShopCode = i.Any() ? i.FirstOrDefault().pay.py.rz.c.ShopCode : "N/A",
-        //           ShopName = i.Any() ? i.FirstOrDefault().pay.py.rz.c.ShopName : "N/A",
-        //           OrderNo = i.Any() ? i.FirstOrDefault().pay.py.rz.c.OrderNo : "N/A",
-        //           CustomerName = i.Any() ? i.FirstOrDefault().pay.py.rz.c.CustomerName : "N/A",
-        //          // ProductName = i.Any() ? i.FirstOrDefault().pay.py.pr.MasterProductName : "N/A",
-        //           ProductName = i.Any() ? GetMasterProductName(i.FirstOrDefault().pay.py.pr.MasterProductCode) : "N/A",
-        //           PhoneNumber = i.Any() ? i.FirstOrDefault().pay.py.rz.c.PhoneNumber : "N/A",
-        //           DeliveryAddress = i.Any() ? i.FirstOrDefault().pay.py.rz.c.DeliveryAddress : "N/A",
-        //           ShopLatitude = i.Any() ? i.FirstOrDefault().pay.s.Latitude : 0.0,
-        //           ShopLongitude = i.Any() ? i.FirstOrDefault().pay.s.Longitude : 0.0,
-        //           PackingCharge = i.Any() ? i.FirstOrDefault().sc.Packingcharge : 0.0,
-        //           ConvinenientCharge = i.Any() ? i.FirstOrDefault().sc.Convinenientcharge : 0.0,
-        //           SinglePrice = i.Any() ? i.FirstOrDefault().pay.py.rz.c.SinglePrice : 0.0,
-        //           Price = i.FirstOrDefault().pay.py.rz.c.UpdatedPrice != 0 ? i.FirstOrDefault().pay.py.rz.c.Price : i.FirstOrDefault().pay.py.rz.c.UpdatedPrice,
-        //           Amount = GetPayment(i.FirstOrDefault().pay.py.rz.c.OrderNo).UpdatedAmount == 0 ? GetPayment(i.FirstOrDefault().pay.py.rz.c.OrderNo).Amount : GetPayment(i.FirstOrDefault().pay.py.rz.c.OrderNo).UpdatedAmount,
-        //           OriginalAmount = i.FirstOrDefault().pay.py.rz.p.UpdatedOriginalAmount == 0 ? i.FirstOrDefault().pay.py.rz.p.OriginalAmount : i.FirstOrDefault().pay.py.rz.p.UpdatedOriginalAmount,
-        //           GrossDeliveryCharge = i.Any() ? i.FirstOrDefault().sc.GrossDeliveryCharge : 0.0,
-        //           ShopDeliveryDiscount = i.Any() ? i.FirstOrDefault().sc.ShopDeliveryDiscount : 0.0,
-        //           NetDeliveryCharge = i.Any() ? i.FirstOrDefault().sc.NetDeliveryCharge : 0.0,
-        //           Qty = i.FirstOrDefault().pay.py.rz.c.UpdatedQty == "" ? i.FirstOrDefault().pay.py.rz.c.Qty : i.FirstOrDefault().pay.py.rz.c.UpdatedQty,
-        //           Date = i.Any() ? i.FirstOrDefault().pay.py.rz.c.DateEncoded.ToString("dd-MMM-yyyy HH:mm") : "N/A",
-        //           DateEncoded = i.Any() ? i.FirstOrDefault().pay.py.rz.c.DateEncoded : DateTime.Now,
-        //           OrderList = GetOrderPendingList(i.FirstOrDefault().pay.py.rz.c.OrderNo, status), // Cart.GetOrderPendingList(i.FirstOrDefault().pay.py.rz.c.OrderNo, status),
-        //           CartStatus = i.Any() ? i.FirstOrDefault().pay.py.rz.c.CartStatus : -5
-        //       }).OrderByDescending(i => i.DateEncoded).ToList();
-        //    int count = model.List.Count();
-        //    int CurrentPage = page;
-        //    int PageSize = pageSize;
-        //    int TotalCount = count;
-        //    int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
-        //    var items = model.List.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
-        //    var previous = CurrentPage - 1;
-        //    var previousurl = apipath+ "/Api/GetShopDeliveredOrders?shopId=" + shopId + "&status=" + status + "&page=" + previous;
-        //    var previousPage = CurrentPage > 1 ? previousurl : "No";
-        //    var current = CurrentPage + 1;
-        //    var nexturl = apipath+ "/Api/GetShopDeliveredOrders?shopId=" + shopId + "&status=" + status + "&page=" + current;
-        //    var nextPage = CurrentPage < TotalPages ? nexturl : "No";
-        //    var paginationMetadata = new
-        //    {
-        //        totalCount = TotalCount,
-        //        pageSize = PageSize,
-        //        currentPage = CurrentPage,
-        //        totalPages = TotalPages,
-        //        previousPage,
-        //        nextPage
-        //    };
-        //    return Json(new { Page = paginationMetadata, items }, JsonRequestBehavior.AllowGet);
-        //}      
+        public JsonResult GetShopDeliveredOrders(int shopId, int status, int page = 1, int pageSize = 5)
+        {
+            //var model = new CartAcceptListApiViewModel();
+            //model.List = db.Orders.Where(j => j.Status == status)
+            //    .Join(db.Payments, c => c.OrderNumber, p => p.OrderNo, (c, p) => new { c, p })
+            //    .Join(db.Products, rz => rz.c.ProductCode, pr => pr.Id, (rz, pr) => new { rz, pr })
+            //    .Join(db.Shops, py => py.rz.c.ShopCode, s => s.Code, (py, s) => new { py, s })
+            //    .Join(db.ShopCharges, pay => pay.py.rz.c.OrderNo, sc => sc.OrderNo, (pay, sc)
+            //    => new { pay, sc })
+            //    .AsEnumerable()
+            //   .Where(i => (i.pay.py.rz.p.PaymentResult == "success" || i.pay.py.rz.p.PaymentMode == "Cash On Hand") && i.pay.py.rz.p.ShopCode == shopCode)
+            //   .GroupBy(j => j.pay.py.rz.c.OrderNo).Select(i => new CartAcceptListApiViewModel.CartList
+            //   {
+            //       Code = i.Any() ? i.FirstOrDefault().pay.py.rz.c.Code : "N/A",
+            //       ProductCode = i.Any() ? i.FirstOrDefault().pay.py.rz.c.ProductCode : "N/A",
+            //       PaymentMode = i.Any() ? i.FirstOrDefault().pay.py.rz.p.PaymentMode : "N/A",
+            //       ShopCode = i.Any() ? i.FirstOrDefault().pay.py.rz.c.ShopCode : "N/A",
+            //       ShopName = i.Any() ? i.FirstOrDefault().pay.py.rz.c.ShopName : "N/A",
+            //       OrderNo = i.Any() ? i.FirstOrDefault().pay.py.rz.c.OrderNo : "N/A",
+            //       CustomerName = i.Any() ? i.FirstOrDefault().pay.py.rz.c.CustomerName : "N/A",
+            //       // ProductName = i.Any() ? i.FirstOrDefault().pay.py.pr.MasterProductName : "N/A",
+            //       ProductName = i.Any() ? GetMasterProductName(i.FirstOrDefault().pay.py.pr.MasterProductCode) : "N/A",
+            //       PhoneNumber = i.Any() ? i.FirstOrDefault().pay.py.rz.c.PhoneNumber : "N/A",
+            //       DeliveryAddress = i.Any() ? i.FirstOrDefault().pay.py.rz.c.DeliveryAddress : "N/A",
+            //       ShopLatitude = i.Any() ? i.FirstOrDefault().pay.s.Latitude : 0.0,
+            //       ShopLongitude = i.Any() ? i.FirstOrDefault().pay.s.Longitude : 0.0,
+            //       PackingCharge = i.Any() ? i.FirstOrDefault().sc.Packingcharge : 0.0,
+            //       ConvinenientCharge = i.Any() ? i.FirstOrDefault().sc.Convinenientcharge : 0.0,
+            //       SinglePrice = i.Any() ? i.FirstOrDefault().pay.py.rz.c.SinglePrice : 0.0,
+            //       Price = i.FirstOrDefault().pay.py.rz.c.UpdatedPrice != 0 ? i.FirstOrDefault().pay.py.rz.c.Price : i.FirstOrDefault().pay.py.rz.c.UpdatedPrice,
+            //       Amount = GetPayment(i.FirstOrDefault().pay.py.rz.c.OrderNo).UpdatedAmount == 0 ? GetPayment(i.FirstOrDefault().pay.py.rz.c.OrderNo).Amount : GetPayment(i.FirstOrDefault().pay.py.rz.c.OrderNo).UpdatedAmount,
+            //       OriginalAmount = i.FirstOrDefault().pay.py.rz.p.UpdatedOriginalAmount == 0 ? i.FirstOrDefault().pay.py.rz.p.OriginalAmount : i.FirstOrDefault().pay.py.rz.p.UpdatedOriginalAmount,
+            //       GrossDeliveryCharge = i.Any() ? i.FirstOrDefault().sc.GrossDeliveryCharge : 0.0,
+            //       ShopDeliveryDiscount = i.Any() ? i.FirstOrDefault().sc.ShopDeliveryDiscount : 0.0,
+            //       NetDeliveryCharge = i.Any() ? i.FirstOrDefault().sc.NetDeliveryCharge : 0.0,
+            //       Qty = i.FirstOrDefault().pay.py.rz.c.UpdatedQty == "" ? i.FirstOrDefault().pay.py.rz.c.Qty : i.FirstOrDefault().pay.py.rz.c.UpdatedQty,
+            //       Date = i.Any() ? i.FirstOrDefault().pay.py.rz.c.DateEncoded.ToString("dd-MMM-yyyy HH:mm") : "N/A",
+            //       DateEncoded = i.Any() ? i.FirstOrDefault().pay.py.rz.c.DateEncoded : DateTime.Now,
+            //       OrderList = GetOrderPendingList(i.FirstOrDefault().pay.py.rz.c.OrderNo, status), // Cart.GetOrderPendingList(i.FirstOrDefault().pay.py.rz.c.OrderNo, status),
+            //       CartStatus = i.Any() ? i.FirstOrDefault().pay.py.rz.c.CartStatus : -5
+            //   }).OrderByDescending(i => i.DateEncoded).ToList();
+
+
+            db.Configuration.ProxyCreationEnabled = false;
+            var model = new GetAllOrderListViewModel();
+            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && i.Status==status)
+                 .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
+                 .GroupJoin(db.OrderItems, o => o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
+                 .Select(i => new GetAllOrderListViewModel.OrderList
+                 {
+                     Convinenientcharge = i.o.o.Convinenientcharge,
+                     CustomerId = i.o.o.CustomerId,
+                     CustomerName = i.o.o.CustomerName,
+                     CustomerPhoneNumber = i.o.o.CustomerPhoneNumber,
+                     //DateStr = i.o.o.DateEncoded.ToString("dd-MMM-yyyy HH:mm"),
+                     DateEncoded = i.o.o.DateEncoded,
+                     DeliveryAddress = i.o.o.DeliveryAddress,
+                     DeliveryBoyId = i.o.o.DeliveryBoyId,
+                     DeliveryBoyName = i.o.o.DeliveryBoyName,
+                     DeliveryBoyPhoneNumber = i.o.o.DeliveryBoyPhoneNumber,
+                     DeliveryCharge = i.o.o.DeliveryCharge,
+                     Id = i.o.o.Id,
+                     NetDeliveryCharge = i.o.o.NetDeliveryCharge,
+                     OrderNumber = i.o.o.OrderNumber,
+                     Packingcharge = i.o.o.Packingcharge,
+                     PenaltyAmount = i.o.o.PenaltyAmount,
+                     PenaltyRemark = i.o.o.PenaltyRemark,
+                     ShopDeliveryDiscount = i.o.o.ShopDeliveryDiscount,
+                     ShopId = i.o.o.ShopId,
+                     ShopName = i.o.o.ShopName,
+                     ShopOwnerPhoneNumber = i.o.o.ShopOwnerPhoneNumber,
+                     ShopPhoneNumber = i.o.o.ShopPhoneNumber,
+                     Status = i.o.o.Status,
+                     TotalPrice = i.o.o.TotalPrice,
+                     TotalProduct = i.o.o.TotalProduct,
+                     TotalQuantity = i.o.o.TotalQuantity,
+                     WaitingCharge = i.o.o.WaitingCharge,
+                     WaitingRemark = i.o.o.WaitingRemark,
+                     RefundAmount = i.o.p.RefundAmount,
+                     RefundRemark = i.o.p.RefundRemark,
+                     OrderItemList = i.oi.ToList(),
+                     PaymentMode = i.o.p.PaymentMode
+                 }).OrderByDescending(i => i.DateEncoded).ToList();
+
+
+            int count = model.OrderLists.Count();
+            int CurrentPage = page;
+            int PageSize = pageSize;
+            int TotalCount = count;
+            int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
+            var items = model.OrderLists.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
+            var previous = CurrentPage - 1;
+            var previousurl = apipath + "/Api/GetShopDeliveredOrders?shopId=" + shopId + "&status=" + status + "&page=" + previous;
+            var previousPage = CurrentPage > 1 ? previousurl : "No";
+            var current = CurrentPage + 1;
+            var nexturl = apipath + "/Api/GetShopDeliveredOrders?shopId=" + shopId + "&status=" + status + "&page=" + current;
+            var nextPage = CurrentPage < TotalPages ? nexturl : "No";
+            var paginationMetadata = new
+            {
+                totalCount = TotalCount,
+                pageSize = PageSize,
+                currentPage = CurrentPage,
+                totalPages = TotalPages,
+                previousPage,
+                nextPage
+            };
+            return Json(new { Page = paginationMetadata, items }, JsonRequestBehavior.AllowGet);
+        }
 
         public JsonResult GetDelivaryTodayOrders(string phoneNumber)
         {
@@ -1337,10 +1384,13 @@ namespace ShopNow.Controllers
                 foreach (var item in orderList)
                 {
                     //Product Stock Update
-                    var product = db.Products.FirstOrDefault(i => i.Id == item.ProductId);
-                    product.HoldOnStok -= Convert.ToInt32(item.Quantity);
-                    db.Entry(product).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
+                    var product = db.Products.FirstOrDefault(i => i.Id == item.ProductId && i.ProductTypeId==3);
+                    if (product != null)
+                    {
+                        product.HoldOnStok -= Convert.ToInt32(item.Quantity);
+                        db.Entry(product).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                    }
                 }
                 if (PaymentMode == "Online Payment" && Amount > 1000)
                 {
@@ -1793,51 +1843,93 @@ namespace ShopNow.Controllers
 
         public JsonResult GetShopAllOrders(int shopId, int page = 1, int pageSize = 5)
         {
-            var model = new CartListApiViewModel();
-            model.List = db.Orders.Where(j => (j.Status == 4 || j.Status == 3) && j.Status == 0)
-                .Join(db.OrderItems, o => o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
-                .Join(db.Payments, c => c.o.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
-                .Join(db.Products, rz => rz.c.oi.ProductId, pr => pr.Id, (rz, pr) => new { rz, pr })
-                .Join(db.Shops, py => py.rz.c.o.ShopId, s => s.Id, (py, s) => new { py, s })
-                    //.Join(db.ShopCharges, pay => pay.py.rz.c.o.OrderNumber, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
-                    //.Join(db.DeliveryBoys, ca => ca.pay.py.rz.c.DeliveryBoyCode, db => db.Code, (ca, db) => new { ca, db })
-                    .AsEnumerable()
-               .Where(i => (i.py.rz.p.PaymentResult == "success" || i.py.rz.p.PaymentResult == "pending" || i.py.rz.p.PaymentMode == "Cash On Hand" || i.py.rz.p.PaymentMode == "Online Payment") && i.py.rz.c.o.ShopId == shopId)
-               .Select(i => new CartListApiViewModel.CartList
-               {
-                   Id = i.py.rz.c.o.Id,
-                   ProductId = i.py.rz.c.oi.ProductId,
-                   ShopId = i.py.rz.c.o.ShopId,
-                   ShopName = i.py.rz.c.o.ShopName,
-                   OrderNumber = i.py.rz.c.o.OrderNumber,
-                   PaymentMode = i.py.rz.p.PaymentMode,
-                   CustomerName = i.py.rz.c.o.CustomerName,
-                   ProductName = GetMasterProductName(i.py.pr.MasterProductId),
-                   PhoneNumber = i.py.rz.c.o.ShopPhoneNumber,
-                   DeliveryAddress = i.py.rz.c.o.DeliveryAddress,
-                   ShopLatitude = i.s.Latitude,
-                   ShopLongitude = i.s.Longitude,
-                   PackingCharge = i.py.rz.c.o.Packingcharge,
-                   ConvinenientCharge = i.py.rz.c.o.Convinenientcharge,
-                   Amount = GetPayment(i.py.rz.c.o.OrderNumber).Amount,
-                   //OriginalAmount = GetPayment(i.FirstOrDefault().pay.py.rz.c.OrderNo).UpdatedOriginalAmount == 0 ? GetPayment(i.FirstOrDefault().pay.py.rz.c.OrderNo).OriginalAmount : GetPayment(i.FirstOrDefault().pay.py.rz.c.OrderNo).UpdatedOriginalAmount,
-                   GrossDeliveryCharge = i.py.rz.c.o.DeliveryCharge,
-                   ShopDeliveryDiscount = i.py.rz.c.o.ShopDeliveryDiscount,
-                   NetDeliveryCharge = i.py.rz.c.o.NetDeliveryCharge,
-                   Qty = i.py.rz.c.o.TotalQuantity,
-                   Date = i.py.rz.c.o.DateEncoded.ToString("dd-MMM-yyyy HH:mm"),
-                   DateEncoded = i.py.rz.c.o.DateEncoded,
-                   OrderList = GetOrderPendingList(i.py.rz.c.o.OrderNumber),
-                   CartStatus = i.py.rz.c.o.Status,
-                   RfAmount = i.py.rz.p.RefundAmount,
-                   RefundRemark = i.py.rz.p.RefundRemark
-               }).OrderByDescending(i => i.DateEncoded).ToList();
-            int count = model.List.Count();
+            db.Configuration.ProxyCreationEnabled = false;
+            //var model = new CartListApiViewModel();
+            //model.List = db.Orders.Where(j => (j.Status == 4 || j.Status == 3))
+            //    .Join(db.OrderItems, o => o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
+            //    .Join(db.Payments, c => c.o.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+            //    .Join(db.Products, rz => rz.c.oi.ProductId, pr => pr.Id, (rz, pr) => new { rz, pr })
+            //    .Join(db.Shops, py => py.rz.c.o.ShopId, s => s.Id, (py, s) => new { py, s })
+            //        //.Join(db.ShopCharges, pay => pay.py.rz.c.o.OrderNumber, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
+            //        //.Join(db.DeliveryBoys, ca => ca.pay.py.rz.c.DeliveryBoyCode, db => db.Code, (ca, db) => new { ca, db })
+            //        .AsEnumerable()
+            //   .Where(i => (i.py.rz.p.PaymentResult == "success" || i.py.rz.p.PaymentResult == "pending" || i.py.rz.p.PaymentMode == "Cash On Hand" || i.py.rz.p.PaymentMode == "Online Payment") && i.py.rz.c.o.ShopId == shopId)
+            //   .Select(i => new CartListApiViewModel.CartList
+            //   {
+            //       Id = i.py.rz.c.o.Id,
+            //       ProductId = i.py.rz.c.oi.ProductId,
+            //       ShopId = i.py.rz.c.o.ShopId,
+            //       ShopName = i.py.rz.c.o.ShopName,
+            //       OrderNumber = i.py.rz.c.o.OrderNumber,
+            //       PaymentMode = i.py.rz.p.PaymentMode,
+            //       CustomerName = i.py.rz.c.o.CustomerName,
+            //       ProductName = GetMasterProductName(i.py.pr.MasterProductId),
+            //       PhoneNumber = i.py.rz.c.o.ShopPhoneNumber,
+            //       DeliveryAddress = i.py.rz.c.o.DeliveryAddress,
+            //       ShopLatitude = i.s.Latitude,
+            //       ShopLongitude = i.s.Longitude,
+            //       PackingCharge = i.py.rz.c.o.Packingcharge,
+            //       ConvinenientCharge = i.py.rz.c.o.Convinenientcharge,
+            //       Amount = GetPayment(i.py.rz.c.o.OrderNumber).Amount,
+            //       //OriginalAmount = GetPayment(i.FirstOrDefault().pay.py.rz.c.OrderNo).UpdatedOriginalAmount == 0 ? GetPayment(i.FirstOrDefault().pay.py.rz.c.OrderNo).OriginalAmount : GetPayment(i.FirstOrDefault().pay.py.rz.c.OrderNo).UpdatedOriginalAmount,
+            //       GrossDeliveryCharge = i.py.rz.c.o.DeliveryCharge,
+            //       ShopDeliveryDiscount = i.py.rz.c.o.ShopDeliveryDiscount,
+            //       NetDeliveryCharge = i.py.rz.c.o.NetDeliveryCharge,
+            //       Qty = i.py.rz.c.o.TotalQuantity,
+            //       Date = i.py.rz.c.o.DateEncoded.ToString("dd-MMM-yyyy HH:mm"),
+            //       DateEncoded = i.py.rz.c.o.DateEncoded,
+            //       OrderList = GetOrderPendingList(i.py.rz.c.o.OrderNumber),
+            //       CartStatus = i.py.rz.c.o.Status,
+            //       RfAmount = i.py.rz.p.RefundAmount,
+            //       RefundRemark = i.py.rz.p.RefundRemark
+            //   }).OrderByDescending(i => i.DateEncoded).ToList();
+
+
+            var model = new GetAllOrderListViewModel();
+            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && (i.Status == 3 || i.Status == 4))
+                 .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
+                 .GroupJoin(db.OrderItems, o => o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
+                 .Select(i => new GetAllOrderListViewModel.OrderList
+                 {
+                     Convinenientcharge = i.o.o.Convinenientcharge,
+                     CustomerId = i.o.o.CustomerId,
+                     CustomerName = i.o.o.CustomerName,
+                     CustomerPhoneNumber = i.o.o.CustomerPhoneNumber,
+                     DateEncoded = i.o.o.DateEncoded,
+                     DeliveryAddress = i.o.o.DeliveryAddress,
+                     DeliveryBoyId = i.o.o.DeliveryBoyId,
+                     DeliveryBoyName = i.o.o.DeliveryBoyName,
+                     DeliveryBoyPhoneNumber = i.o.o.DeliveryBoyPhoneNumber,
+                     DeliveryCharge = i.o.o.DeliveryCharge,
+                     Id = i.o.o.Id,
+                     NetDeliveryCharge = i.o.o.NetDeliveryCharge,
+                     OrderNumber = i.o.o.OrderNumber,
+                     Packingcharge = i.o.o.Packingcharge,
+                     PenaltyAmount = i.o.o.PenaltyAmount,
+                     PenaltyRemark = i.o.o.PenaltyRemark,
+                     ShopDeliveryDiscount = i.o.o.ShopDeliveryDiscount,
+                     ShopId = i.o.o.ShopId,
+                     ShopName = i.o.o.ShopName,
+                     ShopOwnerPhoneNumber = i.o.o.ShopOwnerPhoneNumber,
+                     ShopPhoneNumber = i.o.o.ShopPhoneNumber,
+                     Status = i.o.o.Status,
+                     TotalPrice = i.o.o.TotalPrice,
+                     TotalProduct = i.o.o.TotalProduct,
+                     TotalQuantity = i.o.o.TotalQuantity,
+                     WaitingCharge = i.o.o.WaitingCharge,
+                     WaitingRemark = i.o.o.WaitingRemark,
+                     RefundAmount = i.o.p.RefundAmount,
+                     RefundRemark = i.o.p.RefundRemark,
+                     OrderItemList = i.oi.ToList(),
+                     PaymentMode = i.o.p.PaymentMode
+                 }).ToList();
+
+            int count = model.OrderLists.Count();
             int CurrentPage = page;
             int PageSize = pageSize;
             int TotalCount = count;
             int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
-            var items = model.List.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
+            var items = model.OrderLists.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
             var previous = CurrentPage - 1;
             var previousurl = apipath + "/Api/GetShopAllOrders?shopId=" + shopId + "&page=" + previous;
             var previousPage = CurrentPage > 1 ? previousurl : "No";

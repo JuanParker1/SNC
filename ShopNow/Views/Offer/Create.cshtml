@@ -153,6 +153,8 @@
                     delay: 250,
                     dataType: 'json'
                 }
+            }).on('select2:select', function (e) {
+                getProducts();
             }).on('select2:unselect', function (e) {
                 getProducts();
             });
@@ -165,8 +167,6 @@
                     delay: 250,
                     dataType: 'json'
                 }
-            }).on('select2:select', function (e) {
-                $('input[name="ShopName"]').val(e.params.data.text);
             });
 
             $('[name="OwnerType"]').on('change', function () {

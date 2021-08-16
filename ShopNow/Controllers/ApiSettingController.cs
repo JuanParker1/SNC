@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ShopNow.Filters;
+using ShopNow.Helpers;
 using ShopNow.Models;
 using ShopNow.ViewModels;
 using System;
@@ -18,7 +19,11 @@ namespace ShopNow.Controllers
 
         public ApiSettingController()
         {
-
+            _mapperConfiguration = new MapperConfiguration(config =>
+            {
+                config.CreateMap<ApiSettingCreateViewModel, ApiSetting>();
+            });
+            _mapper = _mapperConfiguration.CreateMapper();
         }
 
         [AccessPolicy(PageCode = "")]
@@ -49,6 +54,36 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             return View();
+        }
+
+        [AccessPolicy(PageCode = "")]
+        [HttpPost]
+        public ActionResult Create(ApiSettingCreateViewModel model)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var apiSetting = _mapper.Map<ApiSettingCreateViewModel, ApiSetting>(model);
+            apiSetting.CreatedBy = user.Name;
+            apiSetting.UpdatedBy = user.Name;
+            apiSetting.DateEncoded = DateTime.Now;
+            apiSetting.DateUpdated = DateTime.Now;
+            apiSetting.Status = 0;
+            db.ApiSettings.Add(apiSetting);
+            db.SaveChanges();
+            return RedirectToAction("List");
+        }
+
+        [AccessPolicy(PageCode = "")]
+        public JsonResult Delete(string id)
+        {
+            int dId = AdminHelpers.DCodeInt(id);
+            var apiSetting = db.ApiSettings.FirstOrDefault(i => i.Id == dId);
+            if (apiSetting != null)
+            {
+                apiSetting.Status = 2;
+                db.Entry(apiSetting).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
     }
 }
