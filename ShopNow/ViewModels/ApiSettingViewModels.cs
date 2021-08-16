@@ -25,6 +25,7 @@ namespace ShopNow.ViewModels
     {
         public int ShopId { get; set; }
         public string ShopName { get; set; }
+        public int ShopCategoryId { get; set; }
         public string ProviderName { get; set; }
         public string Version { get; set; }
         public string Url { get; set; }
