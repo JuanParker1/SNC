@@ -34,19 +34,19 @@
        .RenderValueAs(o => @<div>
                 @if (o.ProductTypeId == 1)
                             {
-                    <a href="~/MasterProduct/FoodEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-3"><i class="fa fa-edit fa-lg"></i></a>
+                    <a href="~/MasterProduct/FoodEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-4"><i class="fa fa-edit fa-lg"></i></a>
                             }
                             else if (@o.ProductTypeId == 2)
                             {
-                    <a href="~/MasterProduct/FMCGEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-3"><i class="fa fa-edit fa-lg"></i></a>
+                    <a href="~/MasterProduct/FMCGEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-4"><i class="fa fa-edit fa-lg"></i></a>
                             }
                             else if (@o.ProductTypeId == 3)
                             {
-                    <a href="~/MasterProduct/MedicalEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-3"><i class="fa fa-edit fa-lg"></i></a>
+                    <a href="~/MasterProduct/MedicalEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-4"><i class="fa fa-edit fa-lg"></i></a>
                             }
                             else if (@o.ProductTypeId == 4)
                             {
-                    <a href="~/MasterProduct/ElectronicEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-3"><i class="fa fa-edit fa-lg"></i></a>
+                    <a href="~/MasterProduct/ElectronicEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-4"><i class="fa fa-edit fa-lg"></i></a>
                             }
                             else
                             {
