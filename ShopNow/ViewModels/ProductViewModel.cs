@@ -41,11 +41,11 @@ namespace ShopNow.ViewModels
         public int Qty { get; set; }
         public int Percentage { get; set; }
         public string GoogleTaxonomyCode { get; set; }
-        public string ImagePathLarge1 { get; set; }
-        public string ImagePathLarge2 { get; set; }
-        public string ImagePathLarge3 { get; set; }
-        public string ImagePathLarge4 { get; set; }
-        public string ImagePathLarge5 { get; set; }
+        public string ImagePath1 { get; set; }
+        public string ImagePath2 { get; set; }
+        public string ImagePath3 { get; set; }
+        public string ImagePath4 { get; set; }
+        public string ImagePath5 { get; set; }
         public int DrugMeasurementUnitId{ get; set; }
         public string DrugMeasurementUnitName { get; set; }
         public bool PriscriptionCategory { get; set; }
@@ -85,11 +85,11 @@ namespace ShopNow.ViewModels
         public int Qty { get; set; }
         public int Percentage { get; set; }
         public string GoogleTaxonomyCode { get; set; }
-        public string ImagePathLarge1 { get; set; }
-        public string ImagePathLarge2 { get; set; }
-        public string ImagePathLarge3 { get; set; }
-        public string ImagePathLarge4 { get; set; }
-        public string ImagePathLarge5 { get; set; }
+        public string ImagePath1 { get; set; }
+        public string ImagePath2 { get; set; }
+        public string ImagePath3 { get; set; }
+        public string ImagePath4 { get; set; }
+        public string ImagePath5 { get; set; }
         public int DrugMeasurementUnitId { get; set; }
         public string DrugMeasurementUnitName { get; set; }
         public bool PriscriptionCategory { get; set; }
@@ -398,11 +398,11 @@ namespace ShopNow.ViewModels
         public string BrandName { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
-        public string ImagePathLarge1 { get; set; }
-        public string ImagePathLarge2 { get; set; }
-        public string ImagePathLarge3 { get; set; }
-        public string ImagePathLarge4 { get; set; }
-        public string ImagePathLarge5 { get; set; }
+        public string ImagePath1 { get; set; }
+        public string ImagePath2 { get; set; }
+        public string ImagePath3 { get; set; }
+        public string ImagePath4 { get; set; }
+        public string ImagePath5 { get; set; }
         public double Price { get; set; }
         public double MenuPrice { get; set; }
         public double Weight { get; set; }
@@ -482,7 +482,7 @@ namespace ShopNow.ViewModels
         public int Qty { get; set; }
         public int Percentage { get; set; }
         public string GoogleTaxonomyCode { get; set; }
-        public string ImagePathLarge1 { get; set; }
+        public string ImagePath1 { get; set; }
         public int PackingType { get; set; }
         public double PackingCharge { get; set; }
     }
@@ -506,7 +506,7 @@ namespace ShopNow.ViewModels
         public int Qty { get; set; }
         public int Percentage { get; set; }
         public string GoogleTaxonomyCode { get; set; }
-        public string ImagePathLarge1 { get; set; }
+        public string ImagePath1 { get; set; }
         public int PackingType { get; set; }
         public double PackingCharge { get; set; }
     }

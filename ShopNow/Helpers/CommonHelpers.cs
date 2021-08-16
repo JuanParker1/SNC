@@ -10,15 +10,15 @@ namespace ShopNow.Helpers
     {
         private static sncEntities db = new sncEntities();
 
-        public static string GetMasterProductName(int code)
-        {
-            var masterProduct = db.MasterProducts.FirstOrDefault(i => i.Id == code);
-            var name = "N/A";
-            if (masterProduct != null)
-            {
-                name = masterProduct.Name != null ? masterProduct.Name : "N/A";
-            }
-            return name;
-        }
+        //public static string GetMasterProductName(int code)
+        //{
+        //    var masterProduct = db.MasterProducts.FirstOrDefault(i => i.Id == code);
+        //    var name = "N/A";
+        //    if (masterProduct != null)
+        //    {
+        //        name = masterProduct.Name != null ? masterProduct.Name : "N/A";
+        //    }
+        //    return name;
+        //}
     }
 }

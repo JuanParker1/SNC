@@ -2448,7 +2448,7 @@ namespace ShopNow.Controllers
         public JsonResult GetSingleShopDetails(int id)
         {
             var shid = db.Shops.Where(s => s.Id == id).FirstOrDefault();
-            var shop = db.Shops.FirstOrDefault(i => i.Id == shid.Id); // Shop.Get(code);
+            var shop = db.Shops.FirstOrDefault(i => i.Id == shid.Id);
             ShopSingleUpdateViewModel model = _mapper.Map<Shop, ShopSingleUpdateViewModel>(shop);
             return Json(model, JsonRequestBehavior.AllowGet);
         }
