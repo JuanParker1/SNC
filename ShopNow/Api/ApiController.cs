@@ -1176,64 +1176,125 @@ namespace ShopNow.Controllers
 
         public JsonResult GetDelivaryTodayOrders(string phoneNumber)
         {
-            var model = new CartDelivaryListApiViewModel();
-            string dt = DateTime.Now.ToString("dd-MMM-yyyy");
-            model.ResturantList = db.Orders.Where(j => j.Status == 4 || j.Status == 5)
-                .Join(db.Payments, c => c.ShopId, p => p.ShopId, (c, p) => new { c, p })
-                .Join(db.Shops, ca => ca.c.ShopId, s => s.Id, (ca, s) => new { ca, s })
-                 .Join(db.DeliveryBoys, py => py.ca.c.DeliveryBoyId, d => d.Id, (py, d) => new { py, d })
-               .AsEnumerable()
-               .Where(i => i.py.ca.c.DeliveryBoyPhoneNumber == phoneNumber && i.py.s.ShopCategoryId == 0 && i.py.ca.c.DateEncoded.ToString("dd-MMM-yyyy") == dt)
-               .Select(i => new CartDelivaryListApiViewModel.CartList
+            //var model = new CartDelivaryListApiViewModel();
+            //string dt = DateTime.Now.ToString("dd-MMM-yyyy");
+            //model.ResturantList = db.Orders.Where(j => j.Status == 4 || j.Status == 5)
+            //    .Join(db.Payments, c => c.ShopId, p => p.ShopId, (c, p) => new { c, p })
+            //    .Join(db.Shops, ca => ca.c.ShopId, s => s.Id, (ca, s) => new { ca, s })
+            //     .Join(db.DeliveryBoys, py => py.ca.c.DeliveryBoyId, d => d.Id, (py, d) => new { py, d })
+            //   .AsEnumerable()
+            //   .Where(i => i.py.ca.c.DeliveryBoyPhoneNumber == phoneNumber && i.py.s.ShopCategoryId == 1 && i.py.ca.c.DateEncoded.ToString("dd-MMM-yyyy") == dt)
+            //   .Select(i => new CartDelivaryListApiViewModel.CartList
+            //   {
+            //       ShopName = i.py.ca.c.ShopName,
+            //       CustomerName = i.py.ca.c.CustomerName,
+            //       OrderNumber = i.py.ca.c.OrderNumber,
+            //       ShopAddress = i.py.s.Address,
+            //       ShopLatitude = i.py.s.Latitude,
+            //       ShopLongitude = i.py.s.Longitude,
+            //       ShopPhoneNumber = i.py.s.PhoneNumber,
+            //       CartStatus = i.py.ca.c.Status,
+            //       CustomerPhoneNumber = i.py.ca.c.CustomerPhoneNumber,
+            //       CustomerLatitude = i.py.ca.c.Latitude,
+            //       CustomerLongitude = i.py.ca.c.Longitude,
+            //       DeliveryAddress = i.py.ca.c.DeliveryAddress,
+            //       PaymentMode = GetPayment(i.py.ca.c.OrderNumber).PaymentMode,
+            //       Amount = GetPayment(i.py.ca.c.OrderNumber).UpdatedAmount == 0 ? GetPayment(i.py.ca.c.OrderNumber).Amount : GetPayment(i.py.ca.c.OrderNumber).UpdatedAmount,
+            //       OrderList = GetOrderList(i.py.ca.c.Id),
+            //       OnWork = i.d.OnWork,
+            //       Date = i.py.ca.c.DateEncoded.ToString("dd-MMM-yyyy HH:ss"),
+            //       RefundAmount = ((GetPayment(i.py.ca.c.OrderNumber).RefundAmount) ?? 0),
+            //       RefundRemark = ((GetPayment(i.py.ca.c.OrderNumber).RefundRemark) ?? "N/A")
+            //   }).ToList();
+            //model.OtherList = db.Orders.Where(j => j.Status == 4 || j.Status == 5)
+            //   .Join(db.Payments, c => c.ShopId, p => p.ShopId, (c, p) => new { c, p })
+            //   .Join(db.Shops, ca => ca.c.ShopId, s => s.Id, (ca, s) => new { ca, s })
+            //    .Join(db.DeliveryBoys, py => py.ca.c.DeliveryBoyId, d => d.Id, (py, d) => new { py, d })
+            //  .AsEnumerable()
+            //  .Where(i => i.py.ca.c.DeliveryBoyPhoneNumber == phoneNumber && i.py.s.ShopCategoryId != 1)
+            //  .Select(i => new CartDelivaryListApiViewModel.CartList
+            //  {
+            //      ShopName = i.py.ca.c.ShopName,
+            //      CustomerName = i.py.ca.c.CustomerName,
+            //      OrderNumber = i.py.ca.c.OrderNumber,
+            //      ShopAddress = i.py.s.Address,
+            //      ShopLatitude = i.py.s.Latitude,
+            //      ShopLongitude = i.py.s.Longitude,
+            //      ShopPhoneNumber = i.py.s.PhoneNumber,
+            //      CartStatus = i.py.ca.c.Status,
+            //      CustomerPhoneNumber = i.py.ca.c.CustomerPhoneNumber,
+            //      CustomerLatitude = i.py.ca.c.Latitude,
+            //      CustomerLongitude = i.py.ca.c.Longitude,
+            //      DeliveryAddress = i.py.ca.c.DeliveryAddress,
+            //      PaymentMode = GetPayment(i.py.ca.c.OrderNumber).PaymentMode,
+            //      Amount = GetPayment(i.py.ca.c.OrderNumber).UpdatedAmount == 0 ? GetPayment(i.py.ca.c.OrderNumber).Amount : GetPayment(i.py.ca.c.OrderNumber).UpdatedAmount,
+            //      OrderList = GetOrderList(i.py.ca.c.Id),
+            //      OnWork = i.d.OnWork,
+            //      Date = i.py.ca.c.DateEncoded.ToString("dd-MMM-yyyy HH:ss"),
+            //      RefundAmount = ((GetPayment(i.py.ca.c.OrderNumber).RefundAmount) ?? 0),
+            //      RefundRemark = ((GetPayment(i.py.ca.c.OrderNumber).RefundRemark) ?? "N/A")
+            //  }).ToList();
+
+            db.Configuration.ProxyCreationEnabled = false;
+            var model = new TodayDeliveryListViewModel();
+            model.ResturantList = db.Orders.Where(i => (i.Status == 4 || i.Status == 5) && i.DeliveryBoyPhoneNumber == phoneNumber)
+                .Join(db.Shops.Where(i => i.ShopCategoryId == 1), o => o.ShopId, s => s.Id, (o, s) => new { o, s })
+                .Join(db.Payments, o => o.o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
+                .Join(db.DeliveryBoys, o => o.o.o.DeliveryBoyId, d => d.Id, (o, d) => new { o, d })
+                //.Join(db.Customers, o => o.o.o.o.CustomerId, c => c.Id, (o, c) => new { o, c })
+                .GroupJoin(db.OrderItems, o => o.o.o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
+                .Select(i => new TodayDeliveryListViewModel.OrderList
+                {
+                    Amount = i.o.o.p.Amount,
+                    CustomerLatitude = 0,
+                    CustomerLongitude = 0,
+                    CustomerName = i.o.o.o.o.CustomerName,
+                    CustomerPhoneNumber = i.o.o.o.o.CustomerPhoneNumber,
+                    DateEncoded = i.o.o.o.o.DateEncoded,
+                    DeliveryAddress = i.o.o.o.o.DeliveryAddress,
+                    OnWork = i.o.d.OnWork,
+                    OrderNumber = i.o.o.o.o.OrderNumber,
+                    PaymentMode = i.o.o.p.PaymentMode,
+                    RefundAmount = i.o.o.p.RefundAmount,
+                    RefundRemark = i.o.o.p.RefundRemark,
+                    ShopAddress = i.o.o.o.s.Address,
+                    ShopLatitude = i.o.o.o.s.Latitude,
+                    ShopLongitude = i.o.o.o.s.Longitude,
+                    ShopName = i.o.o.o.s.Name,
+                    ShopPhoneNumber = i.o.o.o.o.ShopPhoneNumber,
+                    Status = i.o.o.o.o.Status,
+                    OrderItemList = i.oi.ToList()
+                }).ToList();
+
+            model.OtherList = db.Orders.Where(i => (i.Status == 4 || i.Status == 5) && i.DeliveryBoyPhoneNumber == phoneNumber)
+               .Join(db.Shops.Where(i => i.ShopCategoryId != 1), o => o.ShopId, s => s.Id, (o, s) => new { o, s })
+               .Join(db.Payments, o => o.o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
+               .Join(db.DeliveryBoys, o => o.o.o.DeliveryBoyId, d => d.Id, (o, d) => new { o, d })
+               //.Join(db.Customers, o => o.o.o.o.CustomerId, c => c.Id, (o, c) => new { o, c })
+               .GroupJoin(db.OrderItems, o => o.o.o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
+               .Select(i => new TodayDeliveryListViewModel.OrderList
                {
-                   ShopName = i.py.ca.c.ShopName,
-                   CustomerName = i.py.ca.c.CustomerName,
-                   OrderNumber = i.py.ca.c.OrderNumber,
-                   ShopAddress = i.py.s.Address,
-                   ShopLatitude = i.py.s.Latitude,
-                   ShopLongitude = i.py.s.Longitude,
-                   ShopPhoneNumber = i.py.s.PhoneNumber,
-                   CartStatus = i.py.ca.c.Status,
-                   CustomerPhoneNumber = i.py.ca.c.CustomerPhoneNumber,
-                   CustomerLatitude = i.py.ca.c.Latitude,
-                   CustomerLongitude = i.py.ca.c.Longitude,
-                   DeliveryAddress = i.py.ca.c.DeliveryAddress,
-                   PaymentMode = GetPayment(i.py.ca.c.OrderNumber).PaymentMode,
-                   Amount = GetPayment(i.py.ca.c.OrderNumber).UpdatedAmount == 0 ? GetPayment(i.py.ca.c.OrderNumber).Amount : GetPayment(i.py.ca.c.OrderNumber).UpdatedAmount,
-                   OrderList = GetOrderList(i.py.ca.c.Id),
-                   OnWork = i.d.OnWork,
-                   Date = i.py.ca.c.DateEncoded.ToString("dd-MMM-yyyy HH:ss"),
-                   RefundAmount = ((GetPayment(i.py.ca.c.OrderNumber).RefundAmount) ?? 0),
-                   RefundRemark = ((GetPayment(i.py.ca.c.OrderNumber).RefundRemark) ?? "N/A")
+                   Amount = i.o.o.p.Amount,
+                   CustomerLatitude = 0,
+                   CustomerLongitude = 0,
+                   CustomerName = i.o.o.o.o.CustomerName,
+                   CustomerPhoneNumber = i.o.o.o.o.CustomerPhoneNumber,
+                   DateEncoded = i.o.o.o.o.DateEncoded,
+                   DeliveryAddress = i.o.o.o.o.DeliveryAddress,
+                   OnWork = i.o.d.OnWork,
+                   OrderNumber = i.o.o.o.o.OrderNumber,
+                   PaymentMode = i.o.o.p.PaymentMode,
+                   RefundAmount = i.o.o.p.RefundAmount,
+                   RefundRemark = i.o.o.p.RefundRemark,
+                   ShopAddress = i.o.o.o.s.Address,
+                   ShopLatitude = i.o.o.o.s.Latitude,
+                   ShopLongitude = i.o.o.o.s.Longitude,
+                   ShopName = i.o.o.o.s.Name,
+                   ShopPhoneNumber = i.o.o.o.o.ShopPhoneNumber,
+                   Status = i.o.o.o.o.Status,
+                   OrderItemList = i.oi.ToList()
                }).ToList();
-            model.OtherList = db.Orders.Where(j => j.Status == 4 || j.Status == 5)
-               .Join(db.Payments, c => c.ShopId, p => p.ShopId, (c, p) => new { c, p })
-               .Join(db.Shops, ca => ca.c.ShopId, s => s.Id, (ca, s) => new { ca, s })
-                .Join(db.DeliveryBoys, py => py.ca.c.DeliveryBoyId, d => d.Id, (py, d) => new { py, d })
-              .AsEnumerable()
-              .Where(i => i.py.ca.c.DeliveryBoyPhoneNumber == phoneNumber && i.py.s.ShopCategoryId != 0)
-              .Select(i => new CartDelivaryListApiViewModel.CartList
-              {
-                  ShopName = i.py.ca.c.ShopName,
-                  CustomerName = i.py.ca.c.CustomerName,
-                  OrderNumber = i.py.ca.c.OrderNumber,
-                  ShopAddress = i.py.s.Address,
-                  ShopLatitude = i.py.s.Latitude,
-                  ShopLongitude = i.py.s.Longitude,
-                  ShopPhoneNumber = i.py.s.PhoneNumber,
-                  CartStatus = i.py.ca.c.Status,
-                  CustomerPhoneNumber = i.py.ca.c.CustomerPhoneNumber,
-                  CustomerLatitude = i.py.ca.c.Latitude,
-                  CustomerLongitude = i.py.ca.c.Longitude,
-                  DeliveryAddress = i.py.ca.c.DeliveryAddress,
-                  PaymentMode = GetPayment(i.py.ca.c.OrderNumber).PaymentMode,
-                  Amount = GetPayment(i.py.ca.c.OrderNumber).UpdatedAmount == 0 ? GetPayment(i.py.ca.c.OrderNumber).Amount : GetPayment(i.py.ca.c.OrderNumber).UpdatedAmount,
-                  OrderList = GetOrderList(i.py.ca.c.Id),
-                  OnWork = i.d.OnWork,
-                  Date = i.py.ca.c.DateEncoded.ToString("dd-MMM-yyyy HH:ss"),
-                  RefundAmount = ((GetPayment(i.py.ca.c.OrderNumber).RefundAmount) ?? 0),
-                  RefundRemark = ((GetPayment(i.py.ca.c.OrderNumber).RefundRemark) ?? "N/A")
-              }).ToList();
+
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
@@ -1888,40 +1949,42 @@ namespace ShopNow.Controllers
             var model = new GetAllOrderListViewModel();
             model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && (i.Status == 3 || i.Status == 4))
                  .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
-                 .GroupJoin(db.OrderItems, o => o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
+                 .Join(db.DeliveryBoys, o => o.o.DeliveryBoyId, d => d.Id, (o, d) => new { o, d })
+                 .GroupJoin(db.OrderItems, o => o.o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
                  .Select(i => new GetAllOrderListViewModel.OrderList
                  {
-                     Convinenientcharge = i.o.o.Convinenientcharge,
-                     CustomerId = i.o.o.CustomerId,
-                     CustomerName = i.o.o.CustomerName,
-                     CustomerPhoneNumber = i.o.o.CustomerPhoneNumber,
-                     DateEncoded = i.o.o.DateEncoded,
-                     DeliveryAddress = i.o.o.DeliveryAddress,
-                     DeliveryBoyId = i.o.o.DeliveryBoyId,
-                     DeliveryBoyName = i.o.o.DeliveryBoyName,
-                     DeliveryBoyPhoneNumber = i.o.o.DeliveryBoyPhoneNumber,
-                     DeliveryCharge = i.o.o.DeliveryCharge,
-                     Id = i.o.o.Id,
-                     NetDeliveryCharge = i.o.o.NetDeliveryCharge,
-                     OrderNumber = i.o.o.OrderNumber,
-                     Packingcharge = i.o.o.Packingcharge,
-                     PenaltyAmount = i.o.o.PenaltyAmount,
-                     PenaltyRemark = i.o.o.PenaltyRemark,
-                     ShopDeliveryDiscount = i.o.o.ShopDeliveryDiscount,
-                     ShopId = i.o.o.ShopId,
-                     ShopName = i.o.o.ShopName,
-                     ShopOwnerPhoneNumber = i.o.o.ShopOwnerPhoneNumber,
-                     ShopPhoneNumber = i.o.o.ShopPhoneNumber,
-                     Status = i.o.o.Status,
-                     TotalPrice = i.o.o.TotalPrice,
-                     TotalProduct = i.o.o.TotalProduct,
-                     TotalQuantity = i.o.o.TotalQuantity,
-                     WaitingCharge = i.o.o.WaitingCharge,
-                     WaitingRemark = i.o.o.WaitingRemark,
-                     RefundAmount = i.o.p.RefundAmount,
-                     RefundRemark = i.o.p.RefundRemark,
+                     Convinenientcharge = i.o.o.o.Convinenientcharge,
+                     CustomerId = i.o.o.o.CustomerId,
+                     CustomerName = i.o.o.o.CustomerName,
+                     CustomerPhoneNumber = i.o.o.o.CustomerPhoneNumber,
+                     DateEncoded = i.o.o.o.DateEncoded,
+                     DeliveryAddress = i.o.o.o.DeliveryAddress,
+                     DeliveryBoyId = i.o.o.o.DeliveryBoyId,
+                     DeliveryBoyName = i.o.o.o.DeliveryBoyName,
+                     DeliveryBoyPhoneNumber = i.o.o.o.DeliveryBoyPhoneNumber,
+                     DeliveryCharge = i.o.o.o.DeliveryCharge,
+                     Id = i.o.o.o.Id,
+                     NetDeliveryCharge = i.o.o.o.NetDeliveryCharge,
+                     OrderNumber = i.o.o.o.OrderNumber,
+                     Packingcharge = i.o.o.o.Packingcharge,
+                     PenaltyAmount = i.o.o.o.PenaltyAmount,
+                     PenaltyRemark = i.o.o.o.PenaltyRemark,
+                     ShopDeliveryDiscount = i.o.o.o.ShopDeliveryDiscount,
+                     ShopId = i.o.o.o.ShopId,
+                     ShopName = i.o.o.o.ShopName,
+                     ShopOwnerPhoneNumber = i.o.o.o.ShopOwnerPhoneNumber,
+                     ShopPhoneNumber = i.o.o.o.ShopPhoneNumber,
+                     Status = i.o.o.o.Status,
+                     TotalPrice = i.o.o.o.TotalPrice,
+                     TotalProduct = i.o.o.o.TotalProduct,
+                     TotalQuantity = i.o.o.o.TotalQuantity,
+                     WaitingCharge = i.o.o.o.WaitingCharge,
+                     WaitingRemark = i.o.o.o.WaitingRemark,
+                     RefundAmount = i.o.o.p.RefundAmount,
+                     RefundRemark = i.o.o.p.RefundRemark,
                      OrderItemList = i.oi.ToList(),
-                     PaymentMode = i.o.p.PaymentMode
+                     PaymentMode = i.o.o.p.PaymentMode,
+                     Onwork = i.o.d.OnWork
                  }).ToList();
 
             int count = model.OrderLists.Count();

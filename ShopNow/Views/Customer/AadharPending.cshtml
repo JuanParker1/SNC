@@ -44,8 +44,8 @@
                                         <td>@item.DistrictName</td>
                                         <td>@item.StateName</td>
                                         <td class="text-break">
-                                            <a href="~/Customer/Edit?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(item.Id)" class="btn btn-warning text-center text-nowrap btn-sm mb-1 mr-2" style="padding: 3px 26px">Edit</a>
-                                            <a href="~/Customer/Delete?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(item.Id)" class="btn btn-danger text-center text-nowrap mb-1 btn-sm" style="padding: 3px 18px">Delete</a>
+                                            <a href="~/Customer/Edit?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(item.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
+                                            <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(item.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
                                         </td>
                                     </tr>
                                 }
@@ -96,8 +96,8 @@
                                 <td>@item.DistrictName</td>
                                 <td>@item.StateName</td>
                                 <td class="text-break">
-                                    <a href="~/Customer/Edit?id=@item.Id" class="btn btn-warning text-center text-nowrap btn-sm mb-1 mr-2" style="padding: 3px 26px">Edit</a>
-                                    <a href="~/Customer/Delete?id=@item.Id" class="btn btn-danger text-center text-nowrap mb-1 btn-sm btnDelete" style="padding: 3px 18px">Delete</a>
+                                    <a href="~/Customer/Edit?id=@item.Id" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
+                                    <a href="javascript:void(0)" data-id="@item.Id" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
                                 </td>
                             </tr>
                         }
@@ -110,6 +110,8 @@
 
 @section Scripts
 {
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
             var t = $('#Customer-list').DataTable({
@@ -155,7 +157,7 @@
                 },
                     function (isConfirm) {
                         if (isConfirm) {
-                            $.getJSON("/Customer/Delete", { Id: Id }, function (data) {
+                            $.getJSON("/Customer/Delete", { id: Id }, function (data) {
                                 if (data == true) {
                                     window.location.reload();
                                 }

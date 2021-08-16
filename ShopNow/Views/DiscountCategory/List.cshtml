@@ -40,8 +40,8 @@
                                             <td>@item.Name</td>
                                             <td>@item.Percentage</td>
                                             <td>
-                                                <a href="javascript:void(0)" data-id="@item.Id" data-id1="@item.Name" data-id2="@item.Percentage" class="btn-sm btn-warning edit-prompt" data-toggle="modal" data-target="#editModal" style="padding: 3px 26px">Edit</a>
-                                                <a href="javascript:void(0)" data-id="@item.Id" data-id1="@item.Name" class="btn-sm btn-danger delete-prompt" data-toggle="modal" data-target="#deleteModal" style="padding: 3px 18px">Delete</a>
+                                                <a href="editModal" data-id="@item.Id" data-name="@item.Name" data-percentage="@item.Percentage" class="text-info mr-5 edit-prompt" data-toggle="modal" data-target="#editModal"><i class="fa fa-edit fa-lg"></i></a>
+                                                <a href="javascript:void(0)" data-id="@item.Id" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a> 
                                             </td>
                                         </tr>
                                     }
@@ -54,27 +54,6 @@
         </div>
     </div>
 }
-
-<div class="modal fade" id="deleteModal" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header alert alert-danger">
-                <h4 class="modal-title" id="myModalLabel">Warning</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p class="success-message">Are you sure want to delete this record? </p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-success delete-confirm">Yes</button>
-                <button class="btn btn-danger" data-dismiss="modal">No</button>
-                <input type="hidden" name="Code" id="Code" data-dismiss="modal" />
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel">
     <div class="modal-dialog" role="document">
@@ -127,7 +106,7 @@
             </div>
             <div class="modal-footer">
                 <input type="button" id="Edit" name="Edit" value="Update" class="btn btn-success float-right" />
-                <input type="hidden" name="DiscountCategoryCode" id="DiscountCategoryCode" data-dismiss="modal" />
+                <input type="hidden" name="DiscountCategoryId" id="DiscountCategoryId" data-dismiss="modal" />
             </div>
         </div>
     </div>
@@ -197,16 +176,16 @@
             });
 
             $(".edit-prompt").click(function () {
-                var code = $(this).attr('data-id');
-                var name = $(this).attr('data-id1');
-                var percentage = $(this).attr('data-id2');
-                $("#DiscountCategoryCode").val(code);
+                var id = $(this).attr('data-id');
+                var name = $(this).attr('data-name');
+                var percentage = $(this).attr('data-percentage');
+                $("#DiscountCategoryId").val(id);
                 $("#DiscountCategoryName").append("<input type=text name=DCName id=DCName class=form-control value='" + name + "' />");
                 $("#DiscountPercentage").append("<input type=number name=DPercentage id=DPercentage class=form-control value='" + percentage + "' />");
             });
 
             $("#Edit").click(function () {
-                var code = $("#DiscountCategoryCode").val();
+                var id = $("#DiscountCategoryId").val();
                 var name = $("#DCName").val();
                 var percentage = $("#DPercentage").val();
                 if (name == "" || name == null) {
@@ -216,7 +195,7 @@
                     if (percentage == "" || percentage == null) {
                         swal("Discount Percentage is Empty.", "Please Enter Discount Percentage", "warning");
                     } else {
-                        $.getJSON("/DiscountCategory/Edit", { code: code, name: name, percentage: percentage }, function (data) {
+                        $.getJSON("/DiscountCategory/Edit", { Id: id, name: name, percentage: percentage }, function (data) {
                             if (data.message != null || data.message != "") {
                                 swal({
                                     title: data.message,
@@ -235,20 +214,32 @@
                 window.location.reload();
             });
 
-            $(".delete-prompt").click(function () {
-                var code = $(this).attr('data-id');
-                $("#Code").val(code);
-            });
-
-            $(".delete-confirm").click(function () {
-                var code = $("#Code").val();
-                $.getJSON("/DiscountCategory/Delete", { code: code }, function (data) {
-                    window.location.reload();
-                });
+            $(".btnDelete").click(function () {
+                var Id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/DiscountCategory/Delete", { Id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
             });
 
         });
-
     </script>
 }
 
