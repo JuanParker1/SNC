@@ -1,284 +1,285 @@
 ﻿@model ShopNow.ViewModels.MasterMedicalUploadViewModel
-    @using System.Data;
-    @{
-        Layout = "~/Views/Shared/_Layout.cshtml";
-    }
-    <title>Shop Now | Master Medical Upload</title>
-    <div class="container">
-        @using (Html.BeginForm("MedicalUpload", "MasterProduct", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            @Html.AntiForgeryToken()
-            @Html.ValidationSummary()
-            <div class="row">
-                <div class="col-md-12">
-                    <h5>Master Medical Upload</h5>
-                    <div class="row mt-3">
-                        <div class="col-md-6 mb-2">
-                            <input type="file" id="dataFile" name="upload" />
-                            @if (Model != null)
-                            {
-                                <input type="hidden" value="save" name="button" class="btn btn-secondary" />
-                            }
-                            else
-                            {
-                                <input type="hidden" value="upload" name="button" class="btn btn-success" />
-                            }
-                        </div>
-                        <div class="col-md-6">
-                            <input type="submit" value="Upload" class="btn btn-success" />
-                        </div>
-                    </div>
-                    <div class="row">
+@using System.Data;
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<title>Shop Now | Master Medical Upload</title>
+<div class="container">
+    @using (Html.BeginForm("MedicalUpload", "MasterProduct", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+        <div class="row">
+            <div class="col-md-12">
+                <h5>Master Medical Upload</h5>
+                <div class="row mt-3">
+                    <div class="col-md-6 mb-2">
+                        <input type="file" id="dataFile" name="upload" />
                         @if (Model != null)
                         {
-                            <div class="col-md-12 my-2"> <hr class="border-success" style="border-top: 1px dashed" /></div>
-                            <div class="col-md-5">
-                                <p class="text-success">Excel Headers</p>
-                                <table id="Product-list">
-                                    <thead>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (DataColumn col in Model.DataTable.Columns)
-                                        {
-                                            <tr>
-                                                <td>@col.ColumnName</td>
-                                            </tr>
-                                        }
-                                    </tbody>
-                                </table>
-                                <input id="FileName" name="FileName" type="hidden" value="@Model.Filename" />
-                                <hr class="border-success" style="border-top: 1px dashed" />
-                            </div>
-                            <div class="col-md-6">
-                                <p class="text-success">Choose Excel Headers</p>
-                                <table id="Database-list" class="w-100">
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <label class="col-md-6">Name</label>
-                                                <input id="Name" name="Name" type="text" class="col-md-4" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label class="col-md-6">Category Name</label>
-                                                <input id="CategoryName" name="CategoryName" type="text" class="col-md-4" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label class="col-md-6">Brand Name</label>
-                                                <input id="BrandName" name="BrandName" type="text" class="col-md-4" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label class="col-md-6">Drug Measurement Unit Name</label>
-                                                <input id="DrugMeasurementUnitName" name="DrugMeasurementUnitName" type="text" class="col-md-4" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label class="col-md-6">Drug Compound Detail Id</label>
-                                                <input id="DrugCompoundDetailIds" name="DrugCompoundDetailIds" type="text" class="col-md-4" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label class="col-md-6">Combination Drug Compound</label>
-                                                <input id="DrugCompoundDetailName" name="DrugCompoundDetailName" type="text" class="col-md-4" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label class="col-md-6">Priscription Category </label>
-                                                <input id="PriscriptionCategory" name="PriscriptionCategory" type="text" class="col-md-4" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label class="col-md-6">Origin Country</label>
-                                                <input id="OriginCountry" name="OriginCountry" type="text" class="col-md-4" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label class="col-md-6">Manufacturer</label>
-                                                <input id="Manufacturer" name="Manufacturer" type="text" class="col-md-4" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label class="col-md-6">IBarU</label>
-                                                <input id="IBarU" name="IBarU" type="text" class="col-md-4" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label class="col-md-6">Weight</label>
-                                                <input id="Weight" name="Weight" type="text" class="col-md-4" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label class="col-md-6">SizeLB</label>
-                                                <input id="SizeLB" name="SizeLB" type="text" class="col-md-4" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label class="col-md-6">Price</label>
-                                                <input id="Price" name="Price" type="text" class="col-md-4" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label class="col-md-6">Product Image1</label>
-                                                <input id="ImagePath1" name="ImagePath1" type="text" class="col-md-4" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label class="col-md-6">Product Image2</label>
-                                                <input id="ImagePath2" name="ImagePath2" type="text" class="col-md-4" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label class="col-md-6">Product Image3</label>
-                                                <input id="ImagePath3" name="ImagePath3" type="text" class="col-md-4" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label class="col-md-6">Product Image4</label>
-                                                <input id="ImagePath4" name="ImagePath4" type="text" class="col-md-4" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label class="col-md-6">Product Image5</label>
-                                                <input id="ImagePath5" name="ImagePath5" type="text" class="col-md-4" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label class="col-md-6">Package Name</label>
-                                                <input id="PackageName" name="PackageName" type="text" class="col-md-4" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <label class="col-md-6">Item Type</label>
-                                                <select id="ProductTypeId" name="ProductTypeId" class="col-md-4"></select>
-                                                <input type="hidden" name="ProductTypeName" id="ProductTypeName" />
-                                            </td>
-                                        </tr>
-                                    </tbody>
-
-                                </table>
-                                <div class="col-md-10 text-center my-3">
-                                    <input type="submit" value="submit" class="btn btn-success" />
-                                </div>
-                            </div>
+                            <input type="hidden" value="save" name="button" class="btn btn-secondary" />
+                        }
+                        else
+                        {
+                            <input type="hidden" value="upload" name="button" class="btn btn-success" />
                         }
                     </div>
+                    <div class="col-md-6">
+                        <input type="submit" value="Upload" class="btn btn-success" />
+                    </div>
+                </div>
+                <div class="row">
+                    @if (Model != null)
+                    {
+                        <div class="col-md-12 my-2"> <hr class="border-success" style="border-top: 1px dashed" /></div>
+                        <div class="col-md-5">
+                            <p class="text-success">Excel Headers</p>
+                            <table id="Product-list">
+                                <thead>
+                                </thead>
+                                <tbody>
+                                    @foreach (DataColumn col in Model.DataTable.Columns)
+                                    {
+                                        <tr>
+                                            <td>@col.ColumnName</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <input id="FileName" name="FileName" type="hidden" value="@Model.Filename" />
+                            <hr class="border-success" style="border-top: 1px dashed" />
+                        </div>
+                        <div class="col-md-6">
+                            <p class="text-success">Choose Excel Headers</p>
+                            <table id="Database-list" class="w-100">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Name</label>
+                                            <input id="Name" name="Name" type="text" class="col-md-4" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Category Name</label>
+                                            <input id="CategoryName" name="CategoryName" type="text" class="col-md-4" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Brand Name</label>
+                                            <input id="BrandName" name="BrandName" type="text" class="col-md-4" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Drug Measurement Unit Name</label>
+                                            <input id="DrugMeasurementUnitName" name="DrugMeasurementUnitName" type="text" class="col-md-4" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Drug Compound Detail Id</label>
+                                            <input id="DrugCompoundDetailIds" name="DrugCompoundDetailIds" type="text" class="col-md-4" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Combination Drug Compound</label>
+                                            <input id="DrugCompoundDetailName" name="DrugCompoundDetailName" type="text" class="col-md-4" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Priscription Category </label>
+                                            <input id="PriscriptionCategory" name="PriscriptionCategory" type="text" class="col-md-4" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Origin Country</label>
+                                            <input id="OriginCountry" name="OriginCountry" type="text" class="col-md-4" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Manufacturer</label>
+                                            <input id="Manufacturer" name="Manufacturer" type="text" class="col-md-4" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">IBarU</label>
+                                            <input id="IBarU" name="IBarU" type="text" class="col-md-4" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Weight</label>
+                                            <input id="Weight" name="Weight" type="text" class="col-md-4" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">SizeLB</label>
+                                            <input id="SizeLB" name="SizeLB" type="text" class="col-md-4" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Price</label>
+                                            <input id="Price" name="Price" type="text" class="col-md-4" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Product Image1</label>
+                                            <input id="ImagePath1" name="ImagePath1" type="text" class="col-md-4" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Product Image2</label>
+                                            <input id="ImagePath2" name="ImagePath2" type="text" class="col-md-4" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Product Image3</label>
+                                            <input id="ImagePath3" name="ImagePath3" type="text" class="col-md-4" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Product Image4</label>
+                                            <input id="ImagePath4" name="ImagePath4" type="text" class="col-md-4" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Product Image5</label>
+                                            <input id="ImagePath5" name="ImagePath5" type="text" class="col-md-4" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Package Name</label>
+                                            <input id="PackageName" name="PackageName" type="text" class="col-md-4" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-6">Item Type</label>
+                                            <select id="ProductTypeId" name="ProductTypeId" class="col-md-4"></select>
+                                            <input type="hidden" name="ProductTypeName" id="ProductTypeName" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+                            <div class="col-md-10 text-center my-3">
+                                <input type="submit" value="submit" class="btn btn-success" />
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
-        }
-    </div>
+        </div>
+    }
+</div>
+
 @section Scripts
-{}
-<!--Select2-->
-<script src="~/Scripts/select2/js/select2.js"></script>
-<link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
-<link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
-<!--Select2 End-->
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
 
-<script>
-    $(document).ready(function () {
-        $('#ProductTypeId').select2({
-            placeholder: "Search Product Type",
-            ajax: {
-                url: "/MasterProduct/GetProductTypeSelect2",
-                width: '100%',
-                delay: 250,
-                dataType: 'json'
-            }
-        }).on('select2:select', function (e) {
-            $('input[name="ProductTypeName"]').val(e.params.data.text);
-        });
-
-        var tbl = document.getElementById("Product-list");
-        if (tbl != null) {
-            for (var i = 0; i < tbl.rows.length; i++) {
-                for (var j = 0; j < tbl.rows[i].cells.length; j++)
-                    tbl.rows[i].cells[j].onclick = function () { getval(this); };
-            }
-        }
-        function getval(cel) {
-            $(function () {
-                $('#Name').on('click', function () {
-                    $('#Name').val(cel.innerHTML)
-                });
-                $('#CategoryName').on('click', function () {
-                    $('#CategoryName').val(cel.innerHTML)
-                });
-                $('#BrandName').on('click', function () {
-                    $('#BrandName').val(cel.innerHTML)
-                });
-                $('#DrugMeasurementUnitName').on('click', function () {
-                    $('#DrugMeasurementUnitName').val(cel.innerHTML)
-                });
-                $('#DrugCompoundDetailIds').on('click', function () {
-                    $('#DrugCompoundDetailIds').val(cel.innerHTML)
-                });
-                $('#DrugCompoundDetailName').on('click', function () {
-                    $('#DrugCompoundDetailName').val(cel.innerHTML)
-                });
-                $('#PriscriptionCategory').on('click', function () {
-                    $('#PriscriptionCategory').val(cel.innerHTML)
-                });
-                $('#OriginCountry').on('click', function () {
-                    $('#OriginCountry').val(cel.innerHTML)
-                });
-                $('#Manufacturer').on('click', function () {
-                    $('#Manufacturer').val(cel.innerHTML)
-                });
-                $('#IBarU').on('click', function () {
-                    $('#IBarU').val(cel.innerHTML)
-                });
-                $('#Weight').on('click', function () {
-                    $('#Weight').val(cel.innerHTML)
-                });
-                $('#SizeLB').on('click', function () {
-                    $('#SizeLB').val(cel.innerHTML)
-                });
-                $('#Price').on('click', function () {
-                    $('#Price').val(cel.innerHTML)
-                });
-                $('#ImagePath1').on('click', function () {
-                    $('#ImagePath1').val(cel.innerHTML)
-                });
-                $('#ImagePath2').on('click', function () {
-                    $('#ImagePath2').val(cel.innerHTML)
-                });
-                $('#ImagePath3').on('click', function () {
-                    $('#ImagePath3').val(cel.innerHTML)
-                });
-                $('#ImagePath4').on('click', function () {
-                    $('#ImagePath4').val(cel.innerHTML)
-                });
-                $('#ImagePath5').on('click', function () {
-                    $('#ImagePath5').val(cel.innerHTML)
-                });
-                $('#PackageName').on('click', function () {
-                    $('#PackageName').val(cel.innerHTML)
-                });
+    <script>
+        $(document).ready(function () {
+            $('#ProductTypeId').select2({
+                placeholder: "Search Product Type",
+                ajax: {
+                    url: "/MasterProduct/GetProductTypeSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ProductTypeName"]').val(e.params.data.text);
             });
-        }
 
-    });
-</script>       
+            var tbl = document.getElementById("Product-list");
+            if (tbl != null) {
+                for (var i = 0; i < tbl.rows.length; i++) {
+                    for (var j = 0; j < tbl.rows[i].cells.length; j++)
+                        tbl.rows[i].cells[j].onclick = function () { getval(this); };
+                }
+            }
+            function getval(cel) {
+                $(function () {
+                    $('#Name').on('click', function () {
+                        $('#Name').val(cel.innerHTML)
+                    });
+                    $('#CategoryName').on('click', function () {
+                        $('#CategoryName').val(cel.innerHTML)
+                    });
+                    $('#BrandName').on('click', function () {
+                        $('#BrandName').val(cel.innerHTML)
+                    });
+                    $('#DrugMeasurementUnitName').on('click', function () {
+                        $('#DrugMeasurementUnitName').val(cel.innerHTML)
+                    });
+                    $('#DrugCompoundDetailIds').on('click', function () {
+                        $('#DrugCompoundDetailIds').val(cel.innerHTML)
+                    });
+                    $('#DrugCompoundDetailName').on('click', function () {
+                        $('#DrugCompoundDetailName').val(cel.innerHTML)
+                    });
+                    $('#PriscriptionCategory').on('click', function () {
+                        $('#PriscriptionCategory').val(cel.innerHTML)
+                    });
+                    $('#OriginCountry').on('click', function () {
+                        $('#OriginCountry').val(cel.innerHTML)
+                    });
+                    $('#Manufacturer').on('click', function () {
+                        $('#Manufacturer').val(cel.innerHTML)
+                    });
+                    $('#IBarU').on('click', function () {
+                        $('#IBarU').val(cel.innerHTML)
+                    });
+                    $('#Weight').on('click', function () {
+                        $('#Weight').val(cel.innerHTML)
+                    });
+                    $('#SizeLB').on('click', function () {
+                        $('#SizeLB').val(cel.innerHTML)
+                    });
+                    $('#Price').on('click', function () {
+                        $('#Price').val(cel.innerHTML)
+                    });
+                    $('#ImagePath1').on('click', function () {
+                        $('#ImagePath1').val(cel.innerHTML)
+                    });
+                    $('#ImagePath2').on('click', function () {
+                        $('#ImagePath2').val(cel.innerHTML)
+                    });
+                    $('#ImagePath3').on('click', function () {
+                        $('#ImagePath3').val(cel.innerHTML)
+                    });
+                    $('#ImagePath4').on('click', function () {
+                        $('#ImagePath4').val(cel.innerHTML)
+                    });
+                    $('#ImagePath5').on('click', function () {
+                        $('#ImagePath5').val(cel.innerHTML)
+                    });
+                    $('#PackageName').on('click', function () {
+                        $('#PackageName').val(cel.innerHTML)
+                    });
+                });
+            }
+
+        });
+    </script>
 }
 
