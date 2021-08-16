@@ -316,10 +316,9 @@ namespace ShopNow.Controllers
                 var code = itemList.FirstOrDefault(i => i.PageCode == pageCode && i.PageName == pageName).Id;
                 if (code != 0)
                 {
-                    var ap = db.AccessPolicies.Where(m => m.Id == code).FirstOrDefault();//AccessPolicy.Get(code);
+                    var ap = db.AccessPolicies.Where(m => m.Id == code).FirstOrDefault();
                     ap.isAccess = false;
                     ap.Status = 2;
-                    //AccessPolicy.Edit(ap, out int error);
                     ap.DateUpdated = DateTime.Now;
                     db.Entry(ap).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
