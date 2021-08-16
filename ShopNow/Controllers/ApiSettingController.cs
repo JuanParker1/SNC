@@ -22,6 +22,8 @@ namespace ShopNow.Controllers
             _mapperConfiguration = new MapperConfiguration(config =>
             {
                 config.CreateMap<ApiSettingCreateViewModel, ApiSetting>();
+                config.CreateMap<ApiSetting, ApiSettingEditViewModel>();
+                config.CreateMap<ApiSettingEditViewModel, ApiSetting>();
             });
             _mapper = _mapperConfiguration.CreateMapper();
         }
@@ -84,6 +86,31 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        [AccessPolicy(PageCode = "")]
+        public ActionResult Edit(string id)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            int dId = AdminHelpers.DCodeInt(id);
+            var apiSetting = db.ApiSettings.FirstOrDefault(i => i.Id == dId);
+            var model = _mapper.Map<ApiSetting, ApiSettingEditViewModel>(apiSetting);
+            return View(model);
+        }
+
+        [AccessPolicy(PageCode = "")]
+        [HttpPost]
+        public ActionResult Edit(ApiSettingEditViewModel model)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var apiSetting = db.ApiSettings.FirstOrDefault(i => i.Id == model.Id);
+            _mapper.Map(model, apiSetting);
+            apiSetting.DateUpdated = DateTime.Now;
+            apiSetting.UpdatedBy = user.Name;
+            db.Entry(apiSetting).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Edit", new { id = AdminHelpers.ECodeInt(model.Id) });
         }
     }
 }

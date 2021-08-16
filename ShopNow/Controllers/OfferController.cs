@@ -146,7 +146,8 @@ namespace ShopNow.Controllers
         public ActionResult Edit(OfferEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var offer = _mapper.Map<OfferEditViewModel, Offer>(model);
+            var offer = db.Offers.FirstOrDefault(i => i.Id == model.Id);
+            _mapper.Map(model, offer);
             offer.DateUpdated = DateTime.Now;
             db.Entry(offer).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();

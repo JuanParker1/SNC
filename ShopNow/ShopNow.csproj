@@ -3025,6 +3025,7 @@
     <Content Include="Views\MasterProduct\FoodUpload.cshtml" />
     <Content Include="Views\ApiSetting\Create.cshtml" />
     <Content Include="Views\ApiSetting\List.cshtml" />
+    <Content Include="Views\ApiSetting\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

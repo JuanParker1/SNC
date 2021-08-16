@@ -34,4 +34,9 @@ namespace ShopNow.ViewModels
         public int Category { get; set; }
         public int OutletId { get; set; }
     }
+
+    public class ApiSettingEditViewModel : ApiSettingCreateViewModel
+    {
+        public int Id { get; set; }
+    }
 }
