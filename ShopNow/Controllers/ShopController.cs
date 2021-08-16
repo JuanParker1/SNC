@@ -33,7 +33,7 @@ namespace ShopNow.Controllers
         private static readonly string secretkey = ConfigurationManager.AppSettings["AWSSecretKey"];
         private static string _genCode(string _prefix)
         {
-                return ShopNow.Helpers.DRC.Generate(_prefix);
+            return ShopNow.Helpers.DRC.Generate(_prefix);
         }
         private static string _referenceCode
         {
@@ -79,7 +79,7 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var List = (from s in db.Shops
-                        select s).OrderBy(s => s.Name).Where(i=> i.Status == 0).ToList();
+                        select s).OrderBy(s => s.Name).Where(i => i.Status == 0).ToList();
 
             return View(List);
         }
@@ -90,7 +90,7 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var List = (from s in db.Shops
-                        select s).OrderBy(s => s.Name).Where(i => i.Status == 1) .ToList();
+                        select s).OrderBy(s => s.Name).Where(i => i.Status == 1).ToList();
             return View(List);
         }
 
@@ -148,7 +148,7 @@ namespace ShopNow.Controllers
                     uc.UploadFiles(model.LogoImage.InputStream, shop.Id + "_" + model.LogoImage.FileName, accesskey, secretkey, "image");
                     shop.ImageLogoPath = shop.Id + "_" + model.LogoImage.FileName.Replace(" ", "");
                 }
-                
+
                 // Pan Image
                 if (model.PanImage != null)
                 {
@@ -212,7 +212,7 @@ namespace ShopNow.Controllers
                     uc.UploadFiles(model.DrugPdf.InputStream, shop.Id + "_" + model.DrugPdf.FileName, accesskey, secretkey, "pdf");
                     shop.ImageDrugPath = shop.Id + "_" + model.DrugPdf.FileName.Replace(" ", "");
                 }
-                
+
                 // Establish Image
                 if (model.EstablishImage != null)
                 {
@@ -237,7 +237,7 @@ namespace ShopNow.Controllers
                     uc.UploadFiles(model.OtherLicensePdf.InputStream, shop.Id + "_" + model.OtherLicensePdf.FileName, accesskey, secretkey, "pdf");
                     shop.ImageOtherLicensePath = shop.Id + "_" + model.OtherLicensePdf.FileName.Replace(" ", "");
                 }
-                
+
                 // Authorised Distributor Image
                 if (model.AuthorisedDistributorImage != null)
                 {
@@ -249,7 +249,7 @@ namespace ShopNow.Controllers
                     uc.UploadFiles(model.AuthorisedDistributorPdf.InputStream, shop.Id + "_" + model.AuthorisedDistributorPdf.FileName, accesskey, secretkey, "pdf");
                     shop.ImageAuthoriseBrandPath = shop.Id + "_" + model.AuthorisedDistributorPdf.FileName.Replace(" ", "");
                 }
-                
+
                 // Aadhar Image
                 if (model.AadharImage != null)
                 {
@@ -286,16 +286,16 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNSHPE003")]
-        public ActionResult Edit(string code)
+        public ActionResult Edit(string id)
         {
-            var dCode = AdminHelpers.DCodeInt(code.Trim());
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            if (dCode==0)
+            var dId = AdminHelpers.DCodeInt(id.Trim());
+            if (dId == 0)
                 return HttpNotFound();
-            var shop = db.Shops.FirstOrDefault(i => i.Id == dCode);
+            var shop = db.Shops.FirstOrDefault(i => i.Id == dId);
             var customer = db.Customers.FirstOrDefault(i => i.Id == shop.CustomerId);
-            ViewBag.count = db.Products.Where(i => i.ShopId == dCode).Count();
+            ViewBag.count = db.Products.Where(i => i.ShopId == dId).Count();
             var model = _mapper.Map<Shop, ShopEditViewModel>(shop);
             if (model.Password == null)
             {
@@ -327,8 +327,9 @@ namespace ShopNow.Controllers
                 if (model.ImageAccountPath != null) { count++; }
                 model.Count = count;
             }
-            var verifyPhoneNumber = db.OtpVerifications.FirstOrDefault(i=> i.PhoneNumber == model.PhoneNumber && i.Verify == true);
-            if(verifyPhoneNumber != null){
+            var verifyPhoneNumber = db.OtpVerifications.FirstOrDefault(i => i.PhoneNumber == model.PhoneNumber && i.Verify == true);
+            if (verifyPhoneNumber != null)
+            {
                 model.PhoneVerify = true;
             }
             else
@@ -347,7 +348,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNSHPE003")]
         public ActionResult Edit(ShopEditViewModel model)
         {
-            var shop = db.Shops.FirstOrDefault(i => i.Id == model.Id); 
+            var shop = db.Shops.FirstOrDefault(i => i.Id == model.Id);
             shop.DateUpdated = DateTime.Now;
             _mapper.Map(model, shop);
 
@@ -552,29 +553,32 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNSHPD002")]
-        public ActionResult Details(string code)
+        public ActionResult Details(string Id)
         {
-            var dCode = AdminHelpers.DCodeInt(code);
+            var dId = AdminHelpers.DCodeInt(Id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            Shop sh = db.Shops.FirstOrDefault(i => i.Id == dCode);
+            Shop sh = db.Shops.FirstOrDefault(i => i.Id == dId);
             var model = new ShopEditViewModel();
             _mapper.Map(sh, model);
             return View(model);
         }
 
         [AccessPolicy(PageCode = "SHNSHPR006")]
-        public ActionResult Delete(string code)
+        public JsonResult Delete(string id)
         {
-            var dCode = AdminHelpers.DCodeInt(code);
+            var dId = AdminHelpers.DCodeInt(id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var shop = db.Shops.FirstOrDefault(i => i.Id == dCode);
-            shop.Status = 2;
-            shop.DateUpdated = DateTime.Now;
-            shop.UpdatedBy = user.Name;
-            db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
-            return RedirectToAction("List", "Shop");
+            var shop = db.Shops.FirstOrDefault(i => i.Id == dId);
+            if (shop != null)
+            {
+                shop.Status = 2;
+                shop.DateUpdated = DateTime.Now;
+                shop.UpdatedBy = user.Name;
+                db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [AccessPolicy(PageCode = "SHNSHPIA007")]
@@ -634,7 +638,7 @@ namespace ShopNow.Controllers
             var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
             if (shop != null)
             {
-                shop.MarketingAgentId= model.MarketingAgentId;
+                shop.MarketingAgentId = model.MarketingAgentId;
                 shop.MarketingAgentName = model.MarketingAgentName;
                 db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
@@ -654,7 +658,7 @@ namespace ShopNow.Controllers
                 {
                     Name = i.Name,
                     Id = i.Id,
-                    MarketingAgentId =Convert.ToInt32(i.MarketingAgentId),
+                    MarketingAgentId = Convert.ToInt32(i.MarketingAgentId),
                     MarketingAgentName = i.MarketingAgentName
                 }).OrderBy(i => i.Name).ToList();
             return View(model.List);
@@ -915,7 +919,7 @@ namespace ShopNow.Controllers
 
         public async Task<JsonResult> GetActiveListSelect2(string q = "")
         {
-            var model = await db.Shops.Where(a => a.Name.Contains(q) && a.Status ==0).OrderBy(i => i.Name).Select(i => new
+            var model = await db.Shops.Where(a => a.Name.Contains(q) && a.Status == 0).OrderBy(i => i.Name).Select(i => new
             {
                 id = i.Id,
                 text = i.Name
@@ -983,10 +987,10 @@ namespace ShopNow.Controllers
 
         }
 
-        public ActionResult UpdateShopOnline(int code, bool isOnline)
+        public ActionResult UpdateShopOnline(int Id, bool isOnline)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var shop = db.Shops.Where(i => i.Id == code && i.Status == 0).FirstOrDefault();
+            var shop = db.Shops.Where(i => i.Id == Id && i.Status == 0).FirstOrDefault();
             shop.IsOnline = isOnline;
             db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();

@@ -40,7 +40,9 @@ namespace ShopNow.ViewModels
             public DateTime DateEncoded { get; set; }
             public double? RefundAmount { get; set; }
             public string RefundRemark { get; set; }
-
+            public string PaymentMode { get; set; }
+            public string DateStr { get; set; }
+            public double UpdatedAmount { get; set; }
             public List<OrderItem> OrderItemList { get; set; }
         }
     }
