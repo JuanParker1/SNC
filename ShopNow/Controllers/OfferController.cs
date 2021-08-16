@@ -98,14 +98,17 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "")]
-        public ActionResult Delete(string id)
+        public JsonResult Delete(string id)
         {
             int dId = AdminHelpers.DCodeInt(id);
             var offer = db.Offers.FirstOrDefault(i => i.Id == dId);
-            offer.Status = 2;
-            db.Entry(offer).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
-            return RedirectToAction("List");
+            if(offer != null)
+            {            
+                offer.Status = 2;
+                db.Entry(offer).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [AccessPolicy(PageCode = "")]

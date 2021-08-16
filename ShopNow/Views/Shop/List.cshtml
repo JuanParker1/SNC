@@ -20,46 +20,84 @@
             <a href="~/Shop/Create" target="_self"><span class="fa fa-plus"></span> Shop</a>
         </div>
     </div>
-    @Html.Grid(Model).Columns(columns =>
-{
-    columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(15);
-    columns.Add(c => c.OwnerPhoneNumber).Titled("OwnerPhoneNo").Filterable(true).SetWidth(18);
-    columns.Add().RenderValueAs(c => c.PhoneNumber != null ? c.PhoneNumber : c.ManualPhoneNumber).Titled("PhoneNo.").Filterable(true).SetWidth(8);
-    columns.Add(c => c.ShopCategoryName).Titled("Shop Type").Filterable(true).SetWidth(10);
-    columns.Add(c => c.Address).Titled("Address").Filterable(true).SetWidth(50);
-    //columns.Add(c => c.PinCode).Titled("PinCode").Filterable(true).SetWidth(8);
-    columns.Add()
-            .Encoded(false)
-            .Sanitized(false)
-             .RenderValueAs(s => new HtmlString
-                      ("<label class='switch'> <input type='checkbox' value='" + s.IsOnline + "' Id='Id_" + s.Id + "' class='CheckOnline' data-code='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(8);
-    columns.Add()
-    .Encoded(false)
-    .Sanitized(false)
-    .RenderValueAs(o => Html.ActionLink("Edit", "Edit", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
-                   + Html.ActionLink("Delete", "Delete", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(8);
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow mt-3">
+                <div class="card-body">
+                    @Html.Grid(Model).Columns(columns =>
+               {
+               columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(25);
+               columns.Add(c => c.OwnerPhoneNumber).Titled("OwnerPhoneNo").Filterable(true).SetWidth(15);
+               columns.Add().RenderValueAs(c => c.PhoneNumber != null ? c.PhoneNumber : c.ManualPhoneNumber).Titled("PhoneNo.").Filterable(true).SetWidth(20);
+               columns.Add(c => c.ShopCategoryName).Titled("Shop Type").Filterable(true).SetWidth(20);
+               columns.Add(c => c.Address).Titled("Address").Filterable(true).SetWidth(20);
+               //columns.Add(c => c.PinCode).Titled("PinCode").Filterable(true).SetWidth(8);
+               columns.Add().Encoded(false).Sanitized(false)
+               .RenderValueAs(s => new HtmlString("<label class='switch'> <input type='checkbox' value='" + s.IsOnline + "' Id='Id_" + s.Id + "' class='CheckOnline' data-id='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(8);
+               columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
+            .RenderValueAs(o => @<div>
+                    <a href="~/Shop/Edit?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-4"><i class="fa fa-edit fa-lg"></i></a>
+                    <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+                </div>);
 }).WithPaging(20).Sortable(true)
-
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<script>
-    $(document).ready(function () {
 
-        $('table tbody tr').each(function () {
-            var $this = $(this).find(".CheckOnline");
-            if ($this.val() == 'True')
-                $this.prop('checked', true);
-            else
-                $this.prop('checked', false);
-        });
+@section Scripts
+{
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
 
-        $('.CheckOnline').on('click', function () {
-            var code = $(this).data('code');
-            if ($(this).is(':checked') == true) {
-                $.post('/Shop/UpdateShopOnline', { code: code, isOnline: true }, function () { });
-            }
-            else {
-                $.post('/Shop/UpdateShopOnline', { code: code, isOnline: false }, function () { });
-            }
+    <script>
+        $(document).ready(function () {
+
+            $('table tbody tr').each(function () {
+                var $this = $(this).find(".CheckOnline");
+                if ($this.val() == 'True')
+                    $this.prop('checked', true);
+                else
+                    $this.prop('checked', false);
+            });
+
+            $('.CheckOnline').on('click', function () {
+                var id = $(this).data('id');
+                if ($(this).is(':checked') == true) {
+                    $.post('/Shop/UpdateShopOnline', { Id: id, isOnline: true }, function () { });
+                }
+                else {
+                    $.post('/Shop/UpdateShopOnline', { Id: id, isOnline: false }, function () { });
+                }
+            });
+
+            $(".btnDelete").click(function () {
+                var id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/Shop/Delete", { id: id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
+            });
+
         });
-    });
-</script>
+    </script>
+}
