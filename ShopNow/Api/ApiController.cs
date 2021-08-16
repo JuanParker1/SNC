@@ -1737,6 +1737,7 @@ namespace ShopNow.Controllers
                      CustomerId = i.o.o.CustomerId,
                      CustomerName = i.o.o.CustomerName,
                      CustomerPhoneNumber = i.o.o.CustomerPhoneNumber,
+                     //DateStr = i.o.o.DateEncoded.ToString("dd-MMM-yyyy HH:mm"),
                      DateEncoded = i.o.o.DateEncoded,
                      DeliveryAddress = i.o.o.DeliveryAddress,
                      DeliveryBoyId = i.o.o.DeliveryBoyId,
@@ -1762,7 +1763,8 @@ namespace ShopNow.Controllers
                      WaitingRemark = i.o.o.WaitingRemark,
                      RefundAmount = i.o.p.RefundAmount,
                      RefundRemark = i.o.p.RefundRemark,
-                     OrderItemList = i.oi.ToList()
+                     OrderItemList = i.oi.ToList(),
+                     PaymentMode = i.o.p.PaymentMode
                  }).ToList();
 
             int count = model.OrderLists.Count();
