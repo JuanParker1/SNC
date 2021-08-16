@@ -29,6 +29,7 @@ namespace ShopNow.Models
     
         public virtual DbSet<AccessPolicy> AccessPolicies { get; set; }
         public virtual DbSet<AddOnCategory> AddOnCategories { get; set; }
+        public virtual DbSet<ApiSetting> ApiSettings { get; set; }
         public virtual DbSet<Banner> Banners { get; set; }
         public virtual DbSet<Bill> Bills { get; set; }
         public virtual DbSet<BrandOwner> BrandOwners { get; set; }

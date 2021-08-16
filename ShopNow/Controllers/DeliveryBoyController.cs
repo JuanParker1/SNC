@@ -191,18 +191,6 @@ namespace ShopNow.Controllers
                 if (model.BankPassbookPath != null) { count++; }
                 model.Count = count;
             }
-            if (!string.IsNullOrWhiteSpace(model.DrivingLicenseImagePath))
-            {
-                model.DrivingLicenseImagePath = BaseClass.mediumImage + model.DrivingLicenseImagePath;
-            }
-            if (!string.IsNullOrWhiteSpace(model.BankPassbookPath))
-            {
-                model.BankPassbookPath = BaseClass.mediumImage + model.BankPassbookPath;
-            }
-            if (!string.IsNullOrWhiteSpace(model.ImagePath))
-            {
-                model.ImagePath = BaseClass.mediumImage + model.ImagePath;
-            }
             return View(model);
         }
 
@@ -652,41 +640,40 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNDBYE002")]
+        //[AccessPolicy(PageCode = "SHNDBYE002")]
+        //public JsonResult GetDeliveryBoyShop(int code, double latitude, double longitude)
+        //{
+        //    var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == code);
+        //    if (deliveryBoy.Latitude == latitude && deliveryBoy.Longitude == longitude)
+        //    {
+        //        return Json(true, JsonRequestBehavior.AllowGet);
+        //    }
+        //    else
+        //    {
+        //        return Json(false, JsonRequestBehavior.AllowGet);
+        //    }
+        //}
 
-        public JsonResult GetDeliveryBoyShop(int code, double latitude, double longitude)
-        {
-            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == code);
-            if (deliveryBoy.Latitude == latitude && deliveryBoy.Longitude == longitude)
-            {
-                return Json(true, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                return Json(false, JsonRequestBehavior.AllowGet);
-            }
-        }
-
-        [AccessPolicy(PageCode = "SHNDBYE002")]
-        public JsonResult DeactivateDeliveryBoyShop(int code)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            var list = db.DeliveryBoyShops.Where(i => i.DeliveryBoyId == code && i.Status == 0).ToList();
-            if (list != null)
-            {
-                foreach (var dbs in list)
-                {
-                    var dbshops = db.DeliveryBoyShops.FirstOrDefault(i => i.Id == dbs.Id);// DeliveryBoyShop.Get(dbs.Code);
-                    dbshops.Status = 4;
-                    dbshops.DateUpdated = DateTime.Now;
-                    dbshops.UpdatedBy = user.Name;
-                    dbshops.DateUpdated = DateTime.Now;
-                    db.Entry(dbshops).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-                }
-            }
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
+        //[AccessPolicy(PageCode = "SHNDBYE002")]
+        //public JsonResult DeactivateDeliveryBoyShop(int code)
+        //{
+        //    var user = ((Helpers.Sessions.User)Session["USER"]);
+        //    var list = db.DeliveryBoyShops.Where(i => i.DeliveryBoyId == code && i.Status == 0).ToList();
+        //    if (list != null)
+        //    {
+        //        foreach (var dbs in list)
+        //        {
+        //            var dbshops = db.DeliveryBoyShops.FirstOrDefault(i => i.Id == dbs.Id);// DeliveryBoyShop.Get(dbs.Code);
+        //            dbshops.Status = 4;
+        //            dbshops.DateUpdated = DateTime.Now;
+        //            dbshops.UpdatedBy = user.Name;
+        //            dbshops.DateUpdated = DateTime.Now;
+        //            db.Entry(dbshops).State = System.Data.Entity.EntityState.Modified;
+        //            db.SaveChanges();
+        //        }
+        //    }
+        //    return Json(true, JsonRequestBehavior.AllowGet);
+        //}
 
         [AccessPolicy(PageCode = "SHNDBYE002")]
         public JsonResult VerifyImage(int Id)
@@ -730,6 +717,7 @@ namespace ShopNow.Controllers
             db.SaveChanges();
             return RedirectToAction("List");
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
