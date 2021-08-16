@@ -1,0 +1,75 @@
+﻿@model ShopNow.ViewModels.ApiSettingListViewModel
+@{
+    ViewBag.Title = "Api Setting List";
+}
+
+<title>ShopNow | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between">
+        <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+        <a href="/ApiSetting/Create"><u>Add New</u></a>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow mt-3">
+                <div class="card-body">
+                    @Html.Grid(Model.ListItems).Columns(columns =>
+               {
+               columns.Add(s => s.OwnerTypeText).Titled("Shop").Filterable(true).SetWidth(30);
+               columns.Add(s => s.Name).Titled("Provider").Filterable(true).SetWidth(30);
+               columns.Add(s => s.TypeText).Titled("Version").Filterable(true).SetWidth(15);
+               columns.Add(s => s.DiscountTypeText).Titled("Category").Filterable(true).SetWidth(10);
+               columns.Add(s => s.Percentage).Titled("Url").Filterable(true).SetWidth(10);
+               columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
+             .RenderValueAs(o => @<div>
+                    <a href="~/ApiSetting/Edit?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
+                    <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+                </div>);
+           }).WithPaging(20).Sortable(true)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+
+    <script>
+        $(document).ready(function () {
+
+            $(".btnDelete").click(function () {
+                var Id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/ApiSetting/Delete", { id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
+            });
+
+        });
+    </script>
+}
+
