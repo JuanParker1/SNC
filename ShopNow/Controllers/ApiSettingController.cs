@@ -76,11 +76,11 @@ namespace ShopNow.Controllers
         public JsonResult Delete(string id)
         {
             int dId = AdminHelpers.DCodeInt(id);
-            var offer = db.Offers.FirstOrDefault(i => i.Id == dId);
-            if (offer != null)
+            var apiSetting = db.ApiSettings.FirstOrDefault(i => i.Id == dId);
+            if (apiSetting != null)
             {
-                offer.Status = 2;
-                db.Entry(offer).State = System.Data.Entity.EntityState.Modified;
+                apiSetting.Status = 2;
+                db.Entry(apiSetting).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);

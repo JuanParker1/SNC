@@ -21,10 +21,10 @@
                     @Html.Grid(Model.ListItems).Columns(columns =>
                {
                columns.Add(s => s.ShopName).Titled("Shop").Filterable(true).SetWidth(30);
-               columns.Add(s => s.ProviderName).Titled("Provider").Filterable(true).SetWidth(30);
-               columns.Add(s => s.Version).Titled("Version").Filterable(true).SetWidth(15);
-               columns.Add(s => s.Category).Titled("Category").Filterable(true).SetWidth(10);
-               columns.Add(s => s.Url).Titled("Url").Filterable(true).SetWidth(10);
+               columns.Add(s => s.ProviderName).Titled("Provider").Filterable(true).SetWidth(8);
+               columns.Add(s => s.Version).Titled("Version").Filterable(true).SetWidth(8);
+               columns.Add(s => s.Category).Titled("Category").Filterable(true).SetWidth(8);
+               columns.Add(s => s.Url).Titled("Url").Filterable(true).SetWidth(50);
                columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
              .RenderValueAs(o => @<div>
                     <a href="/ApiSetting/Edit?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
