@@ -3020,6 +3020,7 @@
     <Content Include="Views\MasterProduct\FMCGUpload.cshtml" />
     <Content Include="Views\MasterProduct\MedicalUpload.cshtml" />
     <Content Include="Views\MasterProduct\FoodUpload.cshtml" />
+    <Content Include="Views\ApiSetting\Create.cshtml" />
     <Content Include="Views\ApiSetting\List.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

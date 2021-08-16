@@ -1025,9 +1025,12 @@ namespace ShopNow.Controllers
                 {
                     //Product Stock Update
                     var product = db.Products.FirstOrDefault(i => i.Id == item.ProductId && i.ProductTypeId == 3);
-                    product.HoldOnStok -= Convert.ToInt32(item.Quantity);
-                    db.Entry(product).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
+                    if (product != null)
+                    {
+                        product.HoldOnStok -= Convert.ToInt32(item.Quantity);
+                        db.Entry(product).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                    }
                 }
                 var fcmToken = (from c in db.Customers
                                 where c.Id == order.CustomerId
@@ -1382,9 +1385,12 @@ namespace ShopNow.Controllers
                 {
                     //Product Stock Update
                     var product = db.Products.FirstOrDefault(i => i.Id == item.ProductId && i.ProductTypeId==3);
-                    product.HoldOnStok -= Convert.ToInt32(item.Quantity);
-                    db.Entry(product).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
+                    if (product != null)
+                    {
+                        product.HoldOnStok -= Convert.ToInt32(item.Quantity);
+                        db.Entry(product).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                    }
                 }
                 if (PaymentMode == "Online Payment" && Amount > 1000)
                 {
