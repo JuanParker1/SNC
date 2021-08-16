@@ -1024,7 +1024,7 @@ namespace ShopNow.Controllers
                 foreach (var item in orderList)
                 {
                     //Product Stock Update
-                    var product = db.Products.FirstOrDefault(i => i.Id == item.ProductId);
+                    var product = db.Products.FirstOrDefault(i => i.Id == item.ProductId && i.ProductTypeId == 3);
                     product.HoldOnStok -= Convert.ToInt32(item.Quantity);
                     db.Entry(product).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
@@ -1337,7 +1337,7 @@ namespace ShopNow.Controllers
                 foreach (var item in orderList)
                 {
                     //Product Stock Update
-                    var product = db.Products.FirstOrDefault(i => i.Id == item.ProductId);
+                    var product = db.Products.FirstOrDefault(i => i.Id == item.ProductId && i.ProductTypeId==3);
                     product.HoldOnStok -= Convert.ToInt32(item.Quantity);
                     db.Entry(product).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
