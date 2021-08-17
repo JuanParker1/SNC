@@ -2366,62 +2366,63 @@ namespace ShopNow.Controllers
         }
         public JsonResult GetP(string str = "")
         {
-            DataTable dtShops = new DataTable();
-            dtShops.Columns.Add("ShopId");
-            dtShops.Columns.Add("OutletId");
-            dtShops.Columns.Add("CategoryName");
-            dtShops.Rows.Add(123,2,"cat1");
-            dtShops.Rows.Add(203,4,"cat2");
-       
+            var apiSettings = db.ApiSettings.Where(m => m.Status == 0).ToList();
 
-            string s = "";
-            string Url = "http://joyrahq.gofrugal.com/RayMedi_HQ/api/v1/items?q=status==R,outletId==2&limit=100000";
-            using (WebClient client = new WebClient())
-            {
-                client.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
-               
-               s=client.DownloadString(Url);
-            }
-            
-            var lst = db.Products.Where(m => m.ShopId == 123).Select(si => si.ItemId).ToList();
-            List<Product> updateList = new List<Product>();
-            List<Product> createList = new List<Product>();
-            Product varProduct = new Product();
-            // var lstDiscount;
-            // GetDiscoutCatecories:
-            // lstDiscount=db.DiscountCategories.Where(m => m.ShopId == 123).Select(si => si.Percentage).ToList();
+            if (apiSettings.Count > 0) {
+                foreach (var api in apiSettings)
+                {
+                    string s = "";
+                    string Url =api.Url+ "items?q=status==R,outletId=="+api.OutletId+"&limit=100000";
+                    using (WebClient client = new WebClient())
+                    {
+                        client.Headers["X-Auth-Token"] = api.AuthKey; //"62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
 
-            dynamic config = JsonConvert.DeserializeObject<ExpandoObject>(s, new ExpandoObjectConverter());
+                        s = client.DownloadString(Url);
+                    }
 
-            foreach (var pro in ((IEnumerable<dynamic>)config.items).Where(t => t.status == "R"))
-            {
-                varProduct.Id = Convert.ToString(pro.itemId);
-                varProduct.Name = pro.itemName;
-                varProduct.IBarU = Convert.ToInt32(pro.iBarU);
-                varProduct.DateUpdated = DateTime.Now;
-                varProduct.ShopCategoryId = 4;
-                varProduct.ShopId = 123;
-               
-                foreach (var med in pro.stock)
-                {
-                   varProduct.Qty= Convert.ToInt32(Math.Floor(Convert.ToDecimal(med.stock)));
-                   varProduct.MenuPrice = Convert.ToDouble(med.mrp);
-                   varProduct.Price= Convert.ToDouble(med.salePrice);
-                   varProduct.TaxPercentage = Convert.ToDouble(med.taxPercentage);
-                   varProduct.ItemTimeStamp = Convert.ToString(med.itemTimeStamp);
-                   varProduct.AppliesOnline = Convert.ToInt32(pro.appliesOnline);
-                   varProduct.OutletId = Convert.ToInt32(pro.outletId);
+                    var lst = db.Products.Where(m => m.ShopId == api.ShopId).Select(si => si.ItemId).ToList();
+                    List<Product> updateList = new List<Product>();
+                    List<Product> createList = new List<Product>();
+                    Product varProduct = new Product();
+                    var lstDiscount = (dynamic)null;
+                    goto GetDiscoutCatecories;
+                GetDiscoutCatecories:
+                    lstDiscount = db.DiscountCategories.Where(m => m.ShopId == api.ShopId).Select(si => si.Percentage).ToList();
+
+                    dynamic config = JsonConvert.DeserializeObject<ExpandoObject>(s, new ExpandoObjectConverter());
+
+                    foreach (var pro in ((IEnumerable<dynamic>)config.items).Where(t => t.status == "R"))
+                    {
+                        varProduct.Id = Convert.ToString(pro.itemId);
+                        varProduct.Name = pro.itemName;
+                        varProduct.IBarU = Convert.ToInt32(pro.iBarU);
+                        varProduct.DateUpdated = DateTime.Now;
+                        varProduct.ShopCategoryId = 4;
+                        varProduct.ShopId = api.ShopId;
+
+                        foreach (var med in pro.stock)
+                        {
+                            varProduct.Qty = Convert.ToInt32(Math.Floor(Convert.ToDecimal(med.stock)));
+                            varProduct.MenuPrice = Convert.ToDouble(med.mrp);
+                            varProduct.Price = Convert.ToDouble(med.salePrice);
+                            varProduct.TaxPercentage = Convert.ToDouble(med.taxPercentage);
+                            varProduct.ItemTimeStamp = Convert.ToString(med.itemTimeStamp);
+                            varProduct.AppliesOnline = Convert.ToInt32(pro.appliesOnline);
+                            varProduct.OutletId = Convert.ToInt32(pro.outletId);
+                            varProduct.DiscountCategoryName = Convert.ToString(med.cat + api.Category);
+                        }
+                        int idx = lst.IndexOf(pro.itemId);
+                        if (idx >= 0)
+                        {
+                            //update
+                        }
+                        else
+                        {
+                            //Add
+                        }
+
+                    }
                 }
-                int idx = lst.IndexOf(pro.itemId);
-                if (idx >= 0)
-                {
-                    //update
-                }
-                else
-                {
-                //Add
-                }
-              
             }
 
             //// DownloadString (encoding specified)
