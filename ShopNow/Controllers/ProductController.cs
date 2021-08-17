@@ -67,13 +67,11 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNPROL006")]
         public ActionResult List(ProductItemListViewModel model)
         {
-            
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var shid = db.Shops.Where(s => s.Id == model.ShopId).FirstOrDefault();
             if (shid !=null)
             {
-                var user = ((Helpers.Sessions.User)Session["USER"]);
-                ViewBag.Name = user.Name;
-
                 model.ListItems =     (from i in db.Products
                                        join m in db.MasterProducts on i.MasterProductId equals m.Id
                                        where i.Status == 0 && i.ShopId == shid.Id
@@ -82,27 +80,24 @@ namespace ShopNow.Controllers
                      Id = i.Id,
                      ProductTypeId = m.ProductTypeId,
                      ProductTypeName = m.ProductTypeName,
-                    // CategoryName = m.CategoryName,
+                     CategoryName = db.Categories.FirstOrDefault(i=> i.Id == m.CategoryId).Name,
                      BrandName = m.BrandName ?? "N/A",
                      Name = m.Name,
-                     //DiscountCategoryPercentage = i.DiscountCategoryPercentage,
                      ShopId = i.ShopId,
                      ShopName = i.ShopName
                  }).ToList();
-
-                //    var s=(from p in db.Products where p.Status == 0 && p.shopid == shid.Id)
             }
             else
             {
                 model.ListItems = new List<ProductItemListViewModel.ListItem>();
             }
            
-
             return View(model);
         }
-        string GetMasterProductName(int code)
+
+        string GetMasterProductName(long Id)
         {
-            var masterProduct = db.MasterProducts.FirstOrDefault(i => i.Id == code);
+            var masterProduct = db.MasterProducts.FirstOrDefault(i => i.Id == Id);
             var name = "";
             if (masterProduct != null)
             {
@@ -212,25 +207,28 @@ namespace ShopNow.Controllers
                 var productcount = db.Products.Where(i => i.ShopId == model.ShopId && i.Status == 0).Count();
                 if (productcount >= 10 && sh.Status == 1)
                 {
-                    //Payment payment = new Payment();
-                    //payment.CustomerId = sh.CustomerId;
-                    //payment.CustomerName = sh.CustomerName;
-                    //payment.ShopId = sh.Id;
-                    //payment.ShopName = sh.Name;
-                    //payment.CountryName = sh.CountryName;
-                    //payment.CreatedBy = sh.CustomerName;
-                    //payment.UpdatedBy = sh.CustomerName;
-                    //payment.GSTINNumber = sh.GSTINNumber;
-                    //payment.Credits = "PlatForm Credits";
-                    //payment.OriginalAmount = 1000;
-                    //payment.Amount = 1000;
-                    //payment.PaymentResult = "success";
+                    Payment payment = new Payment();
+                    payment.CustomerId = sh.CustomerId;
+                    payment.CustomerName = sh.CustomerName;
+                    payment.ShopId = sh.Id;
+                    payment.ShopName = sh.Name;
+                    payment.CountryName = sh.CountryName;
+                    payment.CreatedBy = sh.CustomerName;
+                    payment.UpdatedBy = sh.CustomerName;
+                    payment.GSTINNumber = sh.GSTINNumber;
+                    payment.Credits = "PlatForm Credits";
+                    payment.OriginalAmount = 1000;
+                    payment.Amount = 1000;
+                    payment.PaymentResult = "success";
 
-                    //payment.DateEncoded = DateTime.Now;
-                    //payment.DateUpdated = DateTime.Now;
-                    //payment.Status = 0;
-                    //db.Payments.Add(payment);
-                    //db.SaveChanges();
+                    payment.DateEncoded = DateTime.Now;
+                    payment.DateUpdated = DateTime.Now;
+                    payment.Status = 0;
+                    payment.PlatformCreditType = 2;
+                    db.Payments.Add(payment);
+                    db.SaveChanges();
+
+                    // ShopCredit
                     ShopCredit shopCredit = new ShopCredit
                     {
                         CustomerId = sh.CustomerId,
@@ -270,11 +268,11 @@ namespace ShopNow.Controllers
                 model.CategoryId = masterProduct.CategoryId;
                // model.CategoryName = masterProduct.CategoryName;
                 model.GoogleTaxonomyCode = masterProduct.GoogleTaxonomyCode;
-                model.ImagePathLarge1 = masterProduct.ImagePath1;
-                model.ImagePathLarge2 = masterProduct.ImagePath2;
-                model.ImagePathLarge3 = masterProduct.ImagePath3;
-                model.ImagePathLarge4 = masterProduct.ImagePath4;
-                model.ImagePathLarge5 = masterProduct.ImagePath5;
+                model.ImagePath1 = masterProduct.ImagePath1;
+                model.ImagePath2 = masterProduct.ImagePath2;
+                model.ImagePath3 = masterProduct.ImagePath3;
+                model.ImagePath4 = masterProduct.ImagePath4;
+                model.ImagePath5 = masterProduct.ImagePath5;
                 model.DrugMeasurementUnitId = masterProduct.MeasurementUnitId;
                 model.DrugMeasurementUnitName = masterProduct.MeasurementUnitName;
                 model.PackageId = masterProduct.PackageId;
@@ -441,28 +439,29 @@ namespace ShopNow.Controllers
                 var productcount = db.Products.Where(i => i.ShopId == model.ShopId && i.Status == 0).Count();
                 if (productcount >= 10 && sh.Status == 1)
                 {
-                    //Payment payment = new Payment();
-                    //payment.CustomerId = sh.CustomerId;
-                    //payment.CustomerName = sh.CustomerName;
-                    //payment.ShopId = sh.Id;
-                    //payment.ShopName = sh.Name;
+                    Payment payment = new Payment();
+                    payment.CustomerId = sh.CustomerId;
+                    payment.CustomerName = sh.CustomerName;
+                    payment.ShopId = sh.Id;
+                    payment.ShopName = sh.Name;
 
-                    //payment.CountryName = sh.CountryName;
-                    //payment.CreatedBy = sh.CustomerName;
-                    //payment.UpdatedBy = sh.CustomerName;
-                    //payment.GSTINNumber = sh.GSTINNumber;
-                    //payment.Credits = "PlatForm Credits";
-                    //payment.OriginalAmount = 1000;
-                    //payment.Amount = 1000;
-                    //payment.GSTAmount = 0;
-                    //payment.CreditType = 0;
-                    //payment.PaymentResult = "success";
+                    payment.CountryName = sh.CountryName;
+                    payment.CreatedBy = sh.CustomerName;
+                    payment.UpdatedBy = sh.CustomerName;
+                    payment.GSTINNumber = sh.GSTINNumber;
+                    payment.Credits = "PlatForm Credits";
+                    payment.OriginalAmount = 1000;
+                    payment.Amount = 1000;
+                    payment.GSTAmount = 0;
+                    payment.CreditType = 0;
+                    payment.PaymentResult = "success";
 
-                    //payment.DateEncoded = DateTime.Now;
-                    //payment.DateUpdated = DateTime.Now;
-                    //payment.Status = 0;
-                    //db.Payments.Add(payment);
-                    //db.SaveChanges();
+                    payment.DateEncoded = DateTime.Now;
+                    payment.DateUpdated = DateTime.Now;
+                    payment.Status = 0;
+                    payment.PlatformCreditType = 2;
+                    db.Payments.Add(payment);
+                    db.SaveChanges();
 
                     ShopCredit shopCredit = new ShopCredit
                     {
@@ -743,6 +742,7 @@ namespace ShopNow.Controllers
                     payment.DateUpdated = DateTime.Now;
                     payment.Status = 0;
                     db.Payments.Add(payment);
+                    payment.PlatformCreditType = 2;
                     db.SaveChanges();
 
                     ShopCredit shopCredit = new ShopCredit
@@ -785,11 +785,11 @@ namespace ShopNow.Controllers
                 model.CategoryId = masterProduct.CategoryId;
                 model.CategoryName = db.Categories.FirstOrDefault(i=> i.Id == masterProduct.CategoryId).Name;
                 model.GoogleTaxonomyCode = masterProduct.GoogleTaxonomyCode;
-                model.ImagePathLarge1 = masterProduct.ImagePath1;
-                model.ImagePathLarge2 = masterProduct.ImagePath2;
-                model.ImagePathLarge3 = masterProduct.ImagePath3;
-                model.ImagePathLarge4 = masterProduct.ImagePath4;
-                model.ImagePathLarge5 = masterProduct.ImagePath5;
+                model.ImagePath1 = masterProduct.ImagePath1;
+                model.ImagePath2 = masterProduct.ImagePath2;
+                model.ImagePath3 = masterProduct.ImagePath3;
+                model.ImagePath4 = masterProduct.ImagePath4;
+                model.ImagePath5 = masterProduct.ImagePath5;
                 model.LongDescription = masterProduct.LongDescription;
                 model.ShortDescription = masterProduct.ShortDescription;
                 model.SubCategoryId = masterProduct.SubCategoryId;
@@ -893,7 +893,18 @@ namespace ShopNow.Controllers
                     payment.DateEncoded = DateTime.Now;
                     payment.DateUpdated = DateTime.Now;
                     payment.Status = 0;
+                    payment.PlatformCreditType = 2;
                     db.Payments.Add(payment);
+                    db.SaveChanges();
+
+                    ShopCredit shopCredit = new ShopCredit
+                    {
+                        CustomerId = sh.CustomerId,
+                        DateUpdated = DateTime.Now,
+                        DeliveryCredit = 0,
+                        PlatformCredit = 1000
+                    };
+                    db.ShopCredits.Add(shopCredit);
                     db.SaveChanges();
 
                     sh.Status = 0;
@@ -917,19 +928,19 @@ namespace ShopNow.Controllers
             var product = db.Products.FirstOrDefault(i => i.Id == dId);
             //if (product != null)
             //{
-            //    if (product.ImagePathLarge1 != null)
-            //        product.ImagePathLarge1 = product.ImagePathLarge1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-            //    if (product.ImagePathLarge2 != null)
-            //        product.ImagePathLarge2 = product.ImagePathLarge2.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-            //    if (product.ImagePathLarge3 != null)
-            //        product.ImagePathLarge3 = product.ImagePathLarge3.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-            //    if (product.ImagePathLarge4 != null)
-            //        product.ImagePathLarge4 = product.ImagePathLarge4.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-            //    if (product.ImagePathLarge5 != null)
-            //        product.ImagePathLarge5 = product.ImagePathLarge5.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
+            //    if (product.ImagePath1 != null)
+            //        product.ImagePath1 = product.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
+            //    if (product.ImagePath2 != null)
+            //        product.ImagePath2 = product.ImagePath2.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
+            //    if (product.ImagePath3 != null)
+            //        product.ImagePath3 = product.ImagePath3.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
+            //    if (product.ImagePath4 != null)
+            //        product.ImagePath4 = product.ImagePath4.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
+            //    if (product.ImagePath5 != null)
+            //        product.ImagePath5 = product.ImagePath5.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
             //}
             var model = _mapper.Map<Product, ElectronicCreateEditViewModel>(product);
-            model.MasterProductName = CommonHelpers.GetMasterProductName(model.MasterProductId);
+            model.MasterProductName = GetMasterProductName(model.MasterProductId);
             return View(model);
         }
 

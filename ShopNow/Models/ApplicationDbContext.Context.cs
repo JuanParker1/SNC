@@ -47,14 +47,12 @@ namespace ShopNow.Models
         public virtual DbSet<MeasurementUnit> MeasurementUnits { get; set; }
         public virtual DbSet<NextSubCategory> NextSubCategories { get; set; }
         public virtual DbSet<OfferProduct> OfferProducts { get; set; }
-        public virtual DbSet<Offer> Offers { get; set; }
         public virtual DbSet<OfferShop> OfferShops { get; set; }
         public virtual DbSet<OrderItem> OrderItems { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OtpVerification> OtpVerifications { get; set; }
         public virtual DbSet<Package> Packages { get; set; }
         public virtual DbSet<Page> Pages { get; set; }
-        public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<PaymentsData> PaymentsDatas { get; set; }
         public virtual DbSet<PincodeRate> PincodeRates { get; set; }
         public virtual DbSet<PlatFormCreditRate> PlatFormCreditRates { get; set; }
@@ -75,6 +73,8 @@ namespace ShopNow.Models
         public virtual DbSet<SubCategory> SubCategories { get; set; }
         public virtual DbSet<UserEnquiry> UserEnquiries { get; set; }
         public virtual DbSet<ApiSetting> ApiSettings { get; set; }
+        public virtual DbSet<Offer> Offers { get; set; }
+        public virtual DbSet<Payment> Payments { get; set; }
     
         [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)
