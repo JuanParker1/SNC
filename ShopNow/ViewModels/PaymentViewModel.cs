@@ -119,8 +119,7 @@ namespace ShopNow.ViewModels
 
     public class PaymentUpdatedApiViewModel
     {        
-        public int OrderNumber { get; set; }    
-        public int CustomerId { get; set; }
+        public int OrderNumber { get; set; }
         public string CustomerName { get; set; }
         public double UpdatedAmount { get; set; }
         public double UpdatedOriginalAmount { get; set; }
