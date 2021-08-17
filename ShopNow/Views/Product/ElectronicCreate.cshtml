@@ -146,7 +146,7 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <img class="img-container" id="img-ElectronicLargeImage1" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                                                <input type="hidden" name="ImagePathLarge1" />
+                                                <input type="hidden" name="ImagePath1" />
                                             </div>
                                         </div>
                                     </div>
@@ -155,7 +155,7 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <img class="img-container" id="img-ElectronicLargeImage2" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                                                <input type="hidden" name="ImagePathLarge2" />
+                                                <input type="hidden" name="ImagePath2" />
                                             </div>
                                         </div>
                                     </div>
@@ -164,7 +164,7 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <img class="img-container" id="img-ElectronicLargeImage3" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                                                <input type="hidden" name="ImagePathLarge3" />
+                                                <input type="hidden" name="ImagePath3" />
                                             </div>
                                         </div>
                                     </div>
@@ -173,7 +173,7 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <img class="img-container" id="img-ElectronicLargeImage4" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                                                <input type="hidden" name="ImagePathLarge4" />
+                                                <input type="hidden" name="ImagePath4" />
                                             </div>
                                         </div>
                                     </div>
@@ -182,7 +182,7 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <img class="img-container" id="img-ElectronicLargeImage5" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                                                <input type="hidden" name="ImagePathLarge5" />
+                                                <input type="hidden" name="ImagePath5" />
                                             </div>
                                         </div>
                                     </div>
@@ -274,16 +274,16 @@
                 $('#NextSubCategoryCode').val(e.params.data.NextSubCategoryCode);
                 $('#NextSubCategoryName').val(e.params.data.NextSubCategoryName);
                 $('#GoogleTaxonomyCode').val(e.params.data.GoogleTaxonomyCode);
-                $('#img-ElectronicLargeImage1').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePathLarge1);
-                $('#img-ElectronicLargeImage2').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePathLarge2);
-                $('#img-ElectronicLargeImage3').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePathLarge3);
-                $('#img-ElectronicLargeImage4').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePathLarge4);
-                $('#img-ElectronicLargeImage5').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePathLarge5);
-                $('input[name="ImagePathLarge1"]').val(e.params.data.ImagePathLarge1);
-                $('input[name="ImagePathLarge2"]').val(e.params.data.ImagePathLarge2);
-                $('input[name="ImagePathLarge3"]').val(e.params.data.ImagePathLarge3);
-                $('input[name="ImagePathLarge4"]').val(e.params.data.ImagePathLarge4);
-                $('input[name="ImagePathLarge5"]').val(e.params.data.ImagePathLarge5);
+                $('#img-ElectronicLargeImage1').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath1);
+                $('#img-ElectronicLargeImage2').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath2);
+                $('#img-ElectronicLargeImage3').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath3);
+                $('#img-ElectronicLargeImage4').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath4);
+                $('#img-ElectronicLargeImage5').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath5);
+                $('input[name="ImagePath1"]').val(e.params.data.ImagePath1);
+                $('input[name="ImagePath2"]').val(e.params.data.ImagePath2);
+                $('input[name="ImagePath3"]').val(e.params.data.ImagePath3);
+                $('input[name="ImagePath4"]').val(e.params.data.ImagePath4);
+                $('input[name="ImagePath5"]').val(e.params.data.ImagePath5);
                 $('#Price').val(e.params.data.Price);
                 $('#Weight').val(e.params.data.weight);
                 $('#SizeLB').val(e.params.data.SizeLB);

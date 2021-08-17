@@ -199,8 +199,8 @@
             });
 
             $("#Assign").click(function () {
-                var id = $("#OrderNumber").val();
-                window.location.href = "/Cart/AssignDeliveryBoy?id=" + id;
+                var ordernumber = $("#OrderNumber").val();
+                window.location.href = "/Cart/AssignDeliveryBoy?OrderNumber=" + ordernumber;
             });
         });
     </script>

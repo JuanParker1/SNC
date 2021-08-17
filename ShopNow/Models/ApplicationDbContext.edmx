@@ -45,6 +45,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ShopId" Type="int" Nullable="false" />
           <Property Name="ShopName" Type="nvarchar(max)" />
+          <Property Name="ShopCategoryId" Type="int" Nullable="false" />
           <Property Name="ProviderName" Type="nvarchar(max)" />
           <Property Name="Version" Type="nvarchar" MaxLength="50" />
           <Property Name="Url" Type="nvarchar(max)" />
@@ -1442,28 +1443,6 @@
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="ApiSetting">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ShopId" Type="Int32" Nullable="false" />
-          <Property Name="ShopName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ProviderName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Version" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="AuthName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="AuthKey" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Remark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Category" Type="Int32" Nullable="false" />
-          <Property Name="BranchId" Type="Int32" Nullable="false" />
-          <Property Name="OutletId" Type="Int32" Nullable="false" />
-          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-        </EntityType>
         <EntityType Name="Banner">
           <Key>
             <PropertyRef Name="Id" />
@@ -2641,7 +2620,6 @@
         <EntityContainer Name="sncEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AccessPolicies" EntityType="Self.AccessPolicy" />
           <EntitySet Name="AddOnCategories" EntityType="Self.AddOnCategory" />
-          <EntitySet Name="ApiSettings" EntityType="Self.ApiSetting" />
           <EntitySet Name="Banners" EntityType="Self.Banner" />
           <EntitySet Name="Bills" EntityType="Self.Bill" />
           <EntitySet Name="BrandOwners" EntityType="Self.BrandOwner" />
@@ -2809,6 +2787,7 @@
             <Parameter Name="Latitude" Mode="In" Type="Double" />
             <Parameter Name="str" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="ApiSettings" EntityType="sncModel.ApiSetting" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -2936,6 +2915,29 @@
           <Property Type="Boolean" Name="ShopOnline" Nullable="true" />
           <Property Type="Int32" Name="ShopStatus" Nullable="false" />
         </ComplexType>
+        <EntityType Name="ApiSetting">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShopId" Type="Int32" Nullable="false" />
+          <Property Name="ShopName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ShopCategoryId" Type="Int32" Nullable="false" />
+          <Property Name="ProviderName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Version" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AuthName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AuthKey" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Remark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Category" Type="Int32" Nullable="false" />
+          <Property Name="BranchId" Type="Int32" Nullable="false" />
+          <Property Name="OutletId" Type="Int32" Nullable="false" />
+          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2974,29 +2976,6 @@
                 <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ApiSettings">
-            <EntityTypeMapping TypeName="sncModel.ApiSetting">
-              <MappingFragment StoreEntitySet="ApiSettings">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
-                <ScalarProperty Name="ProviderName" ColumnName="ProviderName" />
-                <ScalarProperty Name="Version" ColumnName="Version" />
-                <ScalarProperty Name="Url" ColumnName="Url" />
-                <ScalarProperty Name="AuthName" ColumnName="AuthName" />
-                <ScalarProperty Name="AuthKey" ColumnName="AuthKey" />
-                <ScalarProperty Name="Remark" ColumnName="Remark" />
-                <ScalarProperty Name="Category" ColumnName="Category" />
-                <ScalarProperty Name="BranchId" ColumnName="BranchId" />
-                <ScalarProperty Name="OutletId" ColumnName="OutletId" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4190,6 +4169,30 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GetProductListCount" FunctionName="sncModel.Store.GetProductListCount" />
+          <EntitySetMapping Name="ApiSettings">
+            <EntityTypeMapping TypeName="sncModel.ApiSetting">
+              <MappingFragment StoreEntitySet="ApiSettings">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="OutletId" ColumnName="OutletId" />
+                <ScalarProperty Name="BranchId" ColumnName="BranchId" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+                <ScalarProperty Name="AuthKey" ColumnName="AuthKey" />
+                <ScalarProperty Name="AuthName" ColumnName="AuthName" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="Version" ColumnName="Version" />
+                <ScalarProperty Name="ProviderName" ColumnName="ProviderName" />
+                <ScalarProperty Name="ShopCategoryId" ColumnName="ShopCategoryId" />
+                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

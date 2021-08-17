@@ -121,11 +121,14 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var dId = AdminHelpers.DCodeInt(id);
             var customer = db.Customers.FirstOrDefault(i => i.Id == dId && i.Status == 0);
-            customer.Status = 2;
-            customer.UpdatedBy = user.Name;
-            customer.DateUpdated = DateTime.Now;
-            db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
+            if (customer != null)
+            {
+                customer.Status = 2;
+                customer.UpdatedBy = user.Name;
+                customer.DateUpdated = DateTime.Now;
+                db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
@@ -305,12 +308,12 @@ namespace ShopNow.Controllers
         {
             var model = await db.Customers
                 .Where(a => a.DistrictName.Contains(q) && a.Status == 0 && a.Position != 4)
-                .GroupBy(i=>i.DistrictName)
+                .GroupBy(i => i.DistrictName)
                 .Select(i => new
-            {
-                    id=i.Key,
-                text = i.Key
-            }).OrderBy(i=>i.text).ToListAsync();
+                {
+                    id = i.Key,
+                    text = i.Key
+                }).OrderBy(i => i.text).ToListAsync();
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }

@@ -575,14 +575,10 @@ namespace ShopNow.ViewModels
             public int CustomerId { get; set; }
             public string Password { get; set; }
             public bool? isOnline { get; set; }
-        
             public double Rating { get; set; }
             public string PhoneNumber { get; set; }
-           
             public string ImagePath { get; set; }
-           
             public string DistrictName { get; set; }
-           
             public int ShopCategoryId { get; set; }
             public string ShopCategoryName { get; set; }
             public int Status { get; set; }
@@ -672,12 +668,11 @@ namespace ShopNow.ViewModels
             public string DiscountCategoryName { get; set; }
             public double DiscountCategoryPercentage { get; set; }
             public int DiscountType { get; set; }
-            public string ImagePath { get; set; }
-            public string ImagePathLarge1 { get; set; }
-            public string ImagePathLarge2 { get; set; }
-            public string ImagePathLarge3 { get; set; }
-            public string ImagePathLarge4 { get; set; }
-            public string ImagePathLarge5 { get; set; }
+            public string ImagePath1 { get; set; }
+            public string ImagePath2 { get; set; }
+            public string ImagePath3 { get; set; }
+            public string ImagePath4 { get; set; }
+            public string ImagePath5 { get; set; }
             public int Status { get; set; }
             public double MRP { get; set; }
             public double SalePrice { get; set; }

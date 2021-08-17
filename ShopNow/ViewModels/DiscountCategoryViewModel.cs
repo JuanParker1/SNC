@@ -10,8 +10,6 @@ namespace ShopNow.ViewModels
         public int Id { get; set; }
         public string Name { get; set; }
         public double Percentage { get; set; }
-
-
         public List<DiscountCategoryList> List { get; set; }
         public class DiscountCategoryList
         {

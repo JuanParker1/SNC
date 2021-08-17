@@ -206,7 +206,7 @@
                             <div class="col-md-3">
                                 <h5 class="text-success">Dish Image</h5>
                                 <img class="img-container" id="img-ProductImage1" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                                <input type="hidden" name="ImagePathLarge1" />
+                                <input type="hidden" name="ImagePath1" />
                             </div>
                         </div>
                         <div class="row mt-3">
@@ -310,8 +310,8 @@
                 $('input[name="CategoryName"]').val(e.params.data.CategoryName);
                 $('select[name="Customisation"] option[value=' + e.params.data.Customisation + ']').attr("selected", "selected");
                 $('select[name="ColorCode"] option[value="' + e.params.data.ColorCode + '"]').attr("selected", "selected");
-                $('#img-ProductImage1').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePathLarge1);
-                $('input[name="ImagePathLarge1"]').val(e.params.data.ImagePathLarge1);
+                $('#img-ProductImage1').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath1);
+                $('input[name="ImagePath1"]').val(e.params.data.ImagePath1);
                 $('input[name="MenuPrice"]').val(e.params.data.Price);
                 $('input[name="GoogleTaxonomyCode"]').val(e.params.data.GoogleTaxonomyCode);
                 $('#divAddOns').addClass('d-none');

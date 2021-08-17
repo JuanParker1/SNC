@@ -145,7 +145,7 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <img class="img-container" id="img-FMCGLargeImage1" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                                                <input type="hidden" name="ImagePathLarge1" />
+                                                <input type="hidden" name="ImagePath1" />
                                             </div>
                                         </div>
                                     </div>
@@ -154,7 +154,7 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <img class="img-container" id="img-FMCGLargeImage2" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                                                <input type="hidden" name="ImagePathLarge2" />
+                                                <input type="hidden" name="ImagePath2" />
                                             </div>
                                         </div>
                                     </div>
@@ -163,7 +163,7 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <img class="img-container" id="img-FMCGLargeImage3" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                                                <input type="hidden" name="ImagePathLarge3" />
+                                                <input type="hidden" name="ImagePath3" />
                                             </div>
                                         </div>
                                     </div>
@@ -172,7 +172,7 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <img class="img-container" id="img-FMCGLargeImage4" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                                                <input type="hidden" name="ImagePathLarge4" />
+                                                <input type="hidden" name="ImagePath4" />
                                             </div>
                                         </div>
                                     </div>
@@ -181,7 +181,7 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <img class="img-container" id="img-FMCGLargeImage5" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                                                <input type="hidden" name="ImagePathLarge5" />
+                                                <input type="hidden" name="ImagePath5" />
                                             </div>
                                         </div>
                                     </div>
@@ -269,16 +269,16 @@
                 $('#SubCategoryId').val(e.params.data.SubCategoryId);
                 $('#NextSubCategoryId').val(e.params.data.NextSubCategoryId);
                 $('#GoogleTaxonomyCode').val(e.params.data.GoogleTaxonomyCode);
-                $('#img-FMCGLargeImage1').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePathLarge1);
-                $('#img-FMCGLargeImage2').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePathLarge2);
-                $('#img-FMCGLargeImage3').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePathLarge3);
-                $('#img-FMCGLargeImage4').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePathLarge4);
-                $('#img-FMCGLargeImage5').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePathLarge5);
-                $('input[name="ImagePathLarge1"]').val(e.params.data.ImagePathLarge1);
-                $('input[name="ImagePathLarge2"]').val(e.params.data.ImagePathLarge2);
-                $('input[name="ImagePathLarge3"]').val(e.params.data.ImagePathLarge3);
-                $('input[name="ImagePathLarge4"]').val(e.params.data.ImagePathLarge4);
-                $('input[name="ImagePathLarge5"]').val(e.params.data.ImagePathLarge5);
+                $('#img-FMCGLargeImage1').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath1);
+                $('#img-FMCGLargeImage2').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath2);
+                $('#img-FMCGLargeImage3').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath3);
+                $('#img-FMCGLargeImage4').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath4);
+                $('#img-FMCGLargeImage5').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath5);
+                $('input[name="ImagePath1"]').val(e.params.data.ImagePath1);
+                $('input[name="ImagePath2"]').val(e.params.data.ImagePath2);
+                $('input[name="ImagePath3"]').val(e.params.data.ImagePath3);
+                $('input[name="ImagePath4"]').val(e.params.data.ImagePath4);
+                $('input[name="ImagePath5"]').val(e.params.data.ImagePath5);
                 $('#MenuPrice').val(e.params.data.Price);
                 $('#Weight').val(e.params.data.Weight);
                 $('#SizeLB').val(e.params.data.SizeLB);

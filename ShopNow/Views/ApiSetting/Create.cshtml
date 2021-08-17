@@ -21,6 +21,7 @@
                                     <label class="col-form-label">Select Shop</label>
                                     <select id="select-shop" name="ShopId" class="form-control" required></select>
                                     <input type="hidden" name="ShopName" />
+                                    <input type="hidden" name="ShopCategoryId" />
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -110,6 +111,7 @@
                 }
             }).on('select2:select', function (e) {
                 $('input[name="ShopName"]').val(e.params.data.text);
+                $('input[name="ShopCategoryId"]').val(e.params.data.shopCategoryId);
             });
         });
     </script>
