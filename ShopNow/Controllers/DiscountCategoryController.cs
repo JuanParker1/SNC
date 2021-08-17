@@ -5,7 +5,9 @@ using ShopNow.Models;
 using ShopNow.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -41,7 +43,7 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNDCAS002")]
-        public JsonResult Save(string Name, double Percentage)
+        public JsonResult Save(string Name, double Percentage, int ShopId, string ShopName)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             bool IsAdded = false;
@@ -53,6 +55,8 @@ namespace ShopNow.Controllers
                 var discountCategory = new DiscountCategory();
                 discountCategory.Name = Name;
                 discountCategory.Percentage = Percentage;
+                discountCategory.ShopId = ShopId;
+                discountCategory.ShopName = ShopName;
                 discountCategory.CreatedBy = user.Name;
                 discountCategory.UpdatedBy = user.Name;
                 discountCategory.Status = 0;
@@ -71,7 +75,7 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNDCAE003")]
-        public JsonResult Edit(int Id, string name, double percentage)
+        public JsonResult Edit(int Id, string name, double percentage, int shopid, string shopname)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             string message = "";
@@ -80,6 +84,8 @@ namespace ShopNow.Controllers
             {
                 discountCategory.Name = name;
                 discountCategory.Percentage = percentage;
+                discountCategory.ShopId = shopid;
+                discountCategory.ShopName = shopname;
                 discountCategory.DateUpdated = DateTime.Now;
                 discountCategory.UpdatedBy = user.Name;
                 discountCategory.DateUpdated = DateTime.Now;
@@ -107,5 +113,25 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        [AccessPolicy(PageCode = "SHNCATL002")]
+        public async Task<JsonResult> GetListSelect2(string q = "")
+        {
+            var model = await db.Shops.Where(a => a.Name.Contains(q)).OrderBy(i => i.Name).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).OrderBy(i => i.text).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }
