@@ -547,6 +547,7 @@
           <Property Name="TotalProduct" Type="int" Nullable="false" />
           <Property Name="TotalQuantity" Type="int" Nullable="false" />
           <Property Name="TotalPrice" Type="float" Nullable="false" />
+          <Property Name="NetTotal" Type="float" Nullable="false" />
           <Property Name="OrderNumber" Type="int" Nullable="false" />
           <Property Name="DeliveryBoyId" Type="int" Nullable="false" />
           <Property Name="DeliveryBoyName" Type="nvarchar" MaxLength="50" />
@@ -656,6 +657,8 @@
           <Property Name="RatePerOrder" Type="float" />
           <Property Name="RefundRemark" Type="nvarchar(max)" />
           <Property Name="RefundStatus" Type="int" Nullable="false" />
+          <Property Name="PlatformCreditType" Type="int" Nullable="false" />
+          <Property Name="DeliveryCreditType" Type="int" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="UpdatedBy" Type="nvarchar(max)" />
           <Property Name="CreatedBy" Type="nvarchar(max)" />
@@ -1464,7 +1467,7 @@
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Payment" Relationship="Self.FK_Banners_Payments" FromRole="Banners" ToRole="Payments" />
+          <NavigationProperty Name="Payment" Relationship="sncModel.FK_Banners_Payments" FromRole="Banner" ToRole="Payment" />
         </EntityType>
         <EntityType Name="Bill">
           <Key>
@@ -1878,27 +1881,6 @@
           <Property Name="OfferId" Type="Int32" Nullable="false" />
           <Property Name="ProductId" Type="Int64" Nullable="false" />
         </EntityType>
-        <EntityType Name="Offer">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="OwnerType" Type="Int32" Nullable="false" />
-          <Property Name="DiscountType" Type="Int32" Nullable="false" />
-          <Property Name="Type" Type="Int32" Nullable="false" />
-          <Property Name="Percentage" Type="Double" Nullable="false" />
-          <Property Name="QuantityLimit" Type="Int32" Nullable="false" />
-          <Property Name="AmountLimit" Type="Int32" Nullable="false" />
-          <Property Name="CustomerCountLimit" Type="Int32" Nullable="false" />
-          <Property Name="IsForFirstOrder" Type="Boolean" Nullable="false" />
-          <Property Name="IsForOnlinePayment" Type="Boolean" Nullable="false" />
-          <Property Name="IsForBlackListAbusers" Type="Boolean" Nullable="false" />
-          <Property Name="BrandId" Type="Int32" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="DateEncoded" Type="DateTime" Precision="0" />
-          <Property Name="DateUpdated" Type="DateTime" Precision="0" />
-        </EntityType>
         <EntityType Name="OfferShop">
           <Key>
             <PropertyRef Name="Id" />
@@ -1975,6 +1957,7 @@
           <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="OrderItems" Relationship="Self.FK_OrderItems_Orders" FromRole="Orders" ToRole="OrderItems" />
+          <Property Name="NetTotal" Type="Double" Nullable="false" />
         </EntityType>
         <EntityType Name="OtpVerification">
           <Key>
@@ -2019,46 +2002,6 @@
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="Payment">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CorporateID" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Amount" Type="Double" Nullable="false" />
-          <Property Name="PaymentMode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Key" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ReferenceCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CustomerId" Type="Int32" />
-          <Property Name="CustomerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ShopId" Type="Int32" />
-          <Property Name="ShopName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="GSTINNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="OriginalAmount" Type="Double" Nullable="false" />
-          <Property Name="GSTAmount" Type="Double" Nullable="false" />
-          <Property Name="Currency" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CountryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PaymentResult" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Credits" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="OrderNumber" Type="Int32" Nullable="false" />
-          <Property Name="PaymentCategoryType" Type="Int32" Nullable="false" />
-          <Property Name="CreditType" Type="Int32" Nullable="false" />
-          <Property Name="ConvenientCharge" Type="Double" Nullable="false" />
-          <Property Name="PackingCharge" Type="Double" Nullable="false" />
-          <Property Name="DeliveryCharge" Type="Double" Nullable="false" />
-          <Property Name="UpdatedAmount" Type="Double" Nullable="false" />
-          <Property Name="UpdatedOriginalAmount" Type="Double" Nullable="false" />
-          <Property Name="RefundAmount" Type="Double" />
-          <Property Name="RatePerOrder" Type="Double" />
-          <Property Name="RefundRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="RefundStatus" Type="Int32" Nullable="false" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Banners" Relationship="Self.FK_Banners_Payments" FromRole="Payments" ToRole="Banners" />
         </EntityType>
         <EntityType Name="PaymentsData">
           <Key>
@@ -2473,18 +2416,6 @@
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
-        <Association Name="FK_Banners_Payments">
-          <End Role="Payments" Type="Self.Payment" Multiplicity="1" />
-          <End Role="Banners" Type="Self.Banner" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Payments">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Banners">
-              <PropertyRef Name="PaymentId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_SubCategories_Categories">
           <End Role="Categories" Type="Self.Category" Multiplicity="1" />
           <End Role="SubCategories" Type="Self.SubCategory" Multiplicity="*" />
@@ -2638,14 +2569,12 @@
           <EntitySet Name="MeasurementUnits" EntityType="Self.MeasurementUnit" />
           <EntitySet Name="NextSubCategories" EntityType="Self.NextSubCategory" />
           <EntitySet Name="OfferProducts" EntityType="Self.OfferProduct" />
-          <EntitySet Name="Offers" EntityType="Self.Offer" />
           <EntitySet Name="OfferShops" EntityType="Self.OfferShop" />
           <EntitySet Name="OrderItems" EntityType="Self.OrderItem" />
           <EntitySet Name="Orders" EntityType="Self.Order" />
           <EntitySet Name="OtpVerifications" EntityType="Self.OtpVerification" />
           <EntitySet Name="Packages" EntityType="Self.Package" />
           <EntitySet Name="Pages" EntityType="Self.Page" />
-          <EntitySet Name="Payments" EntityType="Self.Payment" />
           <EntitySet Name="PaymentsDatas" EntityType="Self.PaymentsData" />
           <EntitySet Name="PincodeRates" EntityType="Self.PincodeRate" />
           <EntitySet Name="PlatFormCreditRates" EntityType="Self.PlatFormCreditRate" />
@@ -2665,10 +2594,6 @@
           <EntitySet Name="Staffs" EntityType="Self.Staff" />
           <EntitySet Name="SubCategories" EntityType="Self.SubCategory" />
           <EntitySet Name="UserEnquiries" EntityType="Self.UserEnquiry" />
-          <AssociationSet Name="FK_Banners_Payments" Association="Self.FK_Banners_Payments">
-            <End Role="Payments" EntitySet="Payments" />
-            <End Role="Banners" EntitySet="Banners" />
-          </AssociationSet>
           <AssociationSet Name="FK_SubCategories_Categories" Association="Self.FK_SubCategories_Categories">
             <End Role="Categories" EntitySet="Categories" />
             <End Role="SubCategories" EntitySet="SubCategories" />
@@ -2788,6 +2713,12 @@
             <Parameter Name="str" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="ApiSettings" EntityType="sncModel.ApiSetting" />
+          <EntitySet Name="Offers" EntityType="sncModel.Offer" />
+          <EntitySet Name="Payments" EntityType="sncModel.Payment" />
+          <AssociationSet Name="FK_Banners_Payments" Association="sncModel.FK_Banners_Payments">
+            <End Role="Payment" EntitySet="Payments" />
+            <End Role="Banner" EntitySet="Banners" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -2938,6 +2869,81 @@
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Status" Type="Int32" Nullable="false" />
         </EntityType>
+        <EntityType Name="Offer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="OwnerType" Type="Int32" Nullable="false" />
+          <Property Name="DiscountType" Type="Int32" Nullable="false" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="Percentage" Type="Double" Nullable="false" />
+          <Property Name="QuantityLimit" Type="Int32" Nullable="false" />
+          <Property Name="AmountLimit" Type="Int32" Nullable="false" />
+          <Property Name="CustomerCountLimit" Type="Int32" Nullable="false" />
+          <Property Name="IsForFirstOrder" Type="Boolean" Nullable="false" />
+          <Property Name="IsForOnlinePayment" Type="Boolean" Nullable="false" />
+          <Property Name="IsForBlackListAbusers" Type="Boolean" Nullable="false" />
+          <Property Name="BrandId" Type="Int32" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Precision="0" />
+          <Property Name="DateUpdated" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityType Name="Payment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CorporateID" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Amount" Type="Double" Nullable="false" />
+          <Property Name="PaymentMode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Key" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ReferenceCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerId" Type="Int32" />
+          <Property Name="CustomerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ShopId" Type="Int32" />
+          <Property Name="ShopName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="GSTINNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OriginalAmount" Type="Double" Nullable="false" />
+          <Property Name="GSTAmount" Type="Double" Nullable="false" />
+          <Property Name="Currency" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CountryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PaymentResult" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Credits" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OrderNumber" Type="Int32" Nullable="false" />
+          <Property Name="PaymentCategoryType" Type="Int32" Nullable="false" />
+          <Property Name="CreditType" Type="Int32" Nullable="false" />
+          <Property Name="ConvenientCharge" Type="Double" Nullable="false" />
+          <Property Name="PackingCharge" Type="Double" Nullable="false" />
+          <Property Name="DeliveryCharge" Type="Double" Nullable="false" />
+          <Property Name="UpdatedAmount" Type="Double" Nullable="false" />
+          <Property Name="UpdatedOriginalAmount" Type="Double" Nullable="false" />
+          <Property Name="RefundAmount" Type="Double" />
+          <Property Name="RatePerOrder" Type="Double" />
+          <Property Name="RefundRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="RefundStatus" Type="Int32" Nullable="false" />
+          <Property Name="PlatformCreditType" Type="Int32" Nullable="false" />
+          <Property Name="DeliveryCreditType" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Banners" Relationship="sncModel.FK_Banners_Payments" FromRole="Payment" ToRole="Banner" />
+        </EntityType>
+        <Association Name="FK_Banners_Payments">
+          <End Type="sncModel.Payment" Role="Payment" Multiplicity="1" />
+          <End Type="sncModel.Banner" Role="Banner" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Payment">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Banner">
+              <PropertyRef Name="PaymentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3419,28 +3425,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Offers">
-            <EntityTypeMapping TypeName="sncModel.Offer">
-              <MappingFragment StoreEntitySet="Offers">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="OwnerType" ColumnName="OwnerType" />
-                <ScalarProperty Name="DiscountType" ColumnName="DiscountType" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="Percentage" ColumnName="Percentage" />
-                <ScalarProperty Name="QuantityLimit" ColumnName="QuantityLimit" />
-                <ScalarProperty Name="AmountLimit" ColumnName="AmountLimit" />
-                <ScalarProperty Name="CustomerCountLimit" ColumnName="CustomerCountLimit" />
-                <ScalarProperty Name="IsForFirstOrder" ColumnName="IsForFirstOrder" />
-                <ScalarProperty Name="IsForOnlinePayment" ColumnName="IsForOnlinePayment" />
-                <ScalarProperty Name="IsForBlackListAbusers" ColumnName="IsForBlackListAbusers" />
-                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="OfferShops">
             <EntityTypeMapping TypeName="sncModel.OfferShop">
               <MappingFragment StoreEntitySet="OfferShops">
@@ -3473,6 +3457,7 @@
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="sncModel.Order">
               <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="NetTotal" ColumnName="NetTotal" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
@@ -3563,46 +3548,6 @@
                 <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Payments">
-            <EntityTypeMapping TypeName="sncModel.Payment">
-              <MappingFragment StoreEntitySet="Payments">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="CorporateID" ColumnName="CorporateID" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="PaymentMode" ColumnName="PaymentMode" />
-                <ScalarProperty Name="Key" ColumnName="Key" />
-                <ScalarProperty Name="ReferenceCode" ColumnName="ReferenceCode" />
-                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
-                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
-                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
-                <ScalarProperty Name="GSTINNumber" ColumnName="GSTINNumber" />
-                <ScalarProperty Name="OriginalAmount" ColumnName="OriginalAmount" />
-                <ScalarProperty Name="GSTAmount" ColumnName="GSTAmount" />
-                <ScalarProperty Name="Currency" ColumnName="Currency" />
-                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
-                <ScalarProperty Name="PaymentResult" ColumnName="PaymentResult" />
-                <ScalarProperty Name="Credits" ColumnName="Credits" />
-                <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
-                <ScalarProperty Name="PaymentCategoryType" ColumnName="PaymentCategoryType" />
-                <ScalarProperty Name="CreditType" ColumnName="CreditType" />
-                <ScalarProperty Name="ConvenientCharge" ColumnName="ConvenientCharge" />
-                <ScalarProperty Name="PackingCharge" ColumnName="PackingCharge" />
-                <ScalarProperty Name="DeliveryCharge" ColumnName="DeliveryCharge" />
-                <ScalarProperty Name="UpdatedAmount" ColumnName="UpdatedAmount" />
-                <ScalarProperty Name="UpdatedOriginalAmount" ColumnName="UpdatedOriginalAmount" />
-                <ScalarProperty Name="RefundAmount" ColumnName="RefundAmount" />
-                <ScalarProperty Name="RatePerOrder" ColumnName="RatePerOrder" />
-                <ScalarProperty Name="RefundRemark" ColumnName="RefundRemark" />
-                <ScalarProperty Name="RefundStatus" ColumnName="RefundStatus" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4189,6 +4134,70 @@
                 <ScalarProperty Name="ShopCategoryId" ColumnName="ShopCategoryId" />
                 <ScalarProperty Name="ShopName" ColumnName="ShopName" />
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Offers">
+            <EntityTypeMapping TypeName="sncModel.Offer">
+              <MappingFragment StoreEntitySet="Offers">
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
+                <ScalarProperty Name="IsForBlackListAbusers" ColumnName="IsForBlackListAbusers" />
+                <ScalarProperty Name="IsForOnlinePayment" ColumnName="IsForOnlinePayment" />
+                <ScalarProperty Name="IsForFirstOrder" ColumnName="IsForFirstOrder" />
+                <ScalarProperty Name="CustomerCountLimit" ColumnName="CustomerCountLimit" />
+                <ScalarProperty Name="AmountLimit" ColumnName="AmountLimit" />
+                <ScalarProperty Name="QuantityLimit" ColumnName="QuantityLimit" />
+                <ScalarProperty Name="Percentage" ColumnName="Percentage" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="DiscountType" ColumnName="DiscountType" />
+                <ScalarProperty Name="OwnerType" ColumnName="OwnerType" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Payments">
+            <EntityTypeMapping TypeName="sncModel.Payment">
+              <MappingFragment StoreEntitySet="Payments">
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DeliveryCreditType" ColumnName="DeliveryCreditType" />
+                <ScalarProperty Name="PlatformCreditType" ColumnName="PlatformCreditType" />
+                <ScalarProperty Name="RefundStatus" ColumnName="RefundStatus" />
+                <ScalarProperty Name="RefundRemark" ColumnName="RefundRemark" />
+                <ScalarProperty Name="RatePerOrder" ColumnName="RatePerOrder" />
+                <ScalarProperty Name="RefundAmount" ColumnName="RefundAmount" />
+                <ScalarProperty Name="UpdatedOriginalAmount" ColumnName="UpdatedOriginalAmount" />
+                <ScalarProperty Name="UpdatedAmount" ColumnName="UpdatedAmount" />
+                <ScalarProperty Name="DeliveryCharge" ColumnName="DeliveryCharge" />
+                <ScalarProperty Name="PackingCharge" ColumnName="PackingCharge" />
+                <ScalarProperty Name="ConvenientCharge" ColumnName="ConvenientCharge" />
+                <ScalarProperty Name="CreditType" ColumnName="CreditType" />
+                <ScalarProperty Name="PaymentCategoryType" ColumnName="PaymentCategoryType" />
+                <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
+                <ScalarProperty Name="Credits" ColumnName="Credits" />
+                <ScalarProperty Name="PaymentResult" ColumnName="PaymentResult" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="GSTAmount" ColumnName="GSTAmount" />
+                <ScalarProperty Name="OriginalAmount" ColumnName="OriginalAmount" />
+                <ScalarProperty Name="GSTINNumber" ColumnName="GSTINNumber" />
+                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="ReferenceCode" ColumnName="ReferenceCode" />
+                <ScalarProperty Name="Key" ColumnName="Key" />
+                <ScalarProperty Name="PaymentMode" ColumnName="PaymentMode" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="CorporateID" ColumnName="CorporateID" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

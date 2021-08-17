@@ -803,6 +803,7 @@ namespace ShopNow.Controllers
                     order.ShopDeliveryDiscount = model.ShopDeliveryDiscount;
                     order.Packingcharge = model.PackagingCharge;
                     order.Convinenientcharge = model.ConvenientCharge;
+                    order.NetTotal = model.NetTotal;
                     db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
 
@@ -1140,12 +1141,13 @@ namespace ShopNow.Controllers
                      TotalPrice = i.o.o.TotalPrice,
                      TotalProduct = i.o.o.TotalProduct,
                      TotalQuantity = i.o.o.TotalQuantity,
+                     NetTotal = i.o.o.NetTotal,
                      WaitingCharge = i.o.o.WaitingCharge,
                      WaitingRemark = i.o.o.WaitingRemark,
                      RefundAmount = i.o.p.RefundAmount,
                      RefundRemark = i.o.p.RefundRemark,
+                     PaymentMode = i.o.p.PaymentMode,
                      OrderItemList = i.oi.ToList(),
-                     PaymentMode = i.o.p.PaymentMode
                  }).OrderByDescending(i => i.DateEncoded).ToList();
 
 
@@ -1270,6 +1272,7 @@ namespace ShopNow.Controllers
                     TotalPrice = i.o.o.o.o.TotalPrice,
                     TotalProduct = i.o.o.o.o.TotalProduct,
                     TotalQuantity = i.o.o.o.o.TotalQuantity,
+                    NetTotal = i.o.o.o.o.NetTotal,
                     OrderItemList = i.oi.ToList()
                 }).ToList();
 
@@ -1307,6 +1310,7 @@ namespace ShopNow.Controllers
                    TotalPrice = i.o.o.o.o.TotalPrice,
                    TotalProduct = i.o.o.o.o.TotalProduct,
                    TotalQuantity = i.o.o.o.o.TotalQuantity,
+                   NetTotal = i.o.o.o.o.NetTotal,
                    OrderItemList = i.oi.ToList()
                }).ToList();
 
@@ -1885,6 +1889,7 @@ namespace ShopNow.Controllers
                      TotalPrice = i.o.o.TotalPrice,
                      TotalProduct = i.o.o.TotalProduct,
                      TotalQuantity = i.o.o.TotalQuantity,
+                     NetTotal = i.o.o.NetTotal,
                      WaitingCharge = i.o.o.WaitingCharge,
                      WaitingRemark = i.o.o.WaitingRemark,
                      RefundAmount = i.o.p.RefundAmount,
@@ -1993,6 +1998,7 @@ namespace ShopNow.Controllers
                      TotalPrice = i.o.o.o.TotalPrice,
                      TotalProduct = i.o.o.o.TotalProduct,
                      TotalQuantity = i.o.o.o.TotalQuantity,
+                     NetTotal = i.o.o.o.NetTotal,
                      WaitingCharge = i.o.o.o.WaitingCharge,
                      WaitingRemark = i.o.o.o.WaitingRemark,
                      RefundAmount = i.o.o.p.RefundAmount,
@@ -3932,10 +3938,12 @@ namespace ShopNow.Controllers
                      TotalPrice = i.o.o.TotalPrice,
                      TotalProduct = i.o.o.TotalProduct,
                      TotalQuantity = i.o.o.TotalQuantity,
+                     NetTotal = i.o.o.NetTotal,
                      WaitingCharge = i.o.o.WaitingCharge,
                      WaitingRemark = i.o.o.WaitingRemark,
                      RefundAmount=i.o.p.RefundAmount,
                      RefundRemark = i.o.p.RefundRemark,
+                     PaymentMode = i.o.p.PaymentMode,
                      OrderItemList = i.oi.ToList()
                  }).ToList();
 
