@@ -1244,7 +1244,7 @@ namespace ShopNow.Controllers
                 .GroupJoin(db.OrderItems, o => o.o.o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
                 .Select(i => new TodayDeliveryListViewModel.OrderList
                 {
-                    Amount = i.o.o.p.Amount,
+                    //Amount = i.o.o.p.Amount,
                     CustomerLatitude = 0,
                     CustomerLongitude = 0,
                     CustomerName = i.o.o.o.o.CustomerName,
@@ -1262,6 +1262,14 @@ namespace ShopNow.Controllers
                     ShopName = i.o.o.o.s.Name,
                     ShopPhoneNumber = i.o.o.o.o.ShopPhoneNumber,
                     Status = i.o.o.o.o.Status,
+                    Convinenientcharge = i.o.o.o.o.Convinenientcharge,
+                    DeliveryCharge = i.o.o.o.o.DeliveryCharge,
+                    NetDeliveryCharge = i.o.o.o.o.NetDeliveryCharge,
+                    Packingcharge = i.o.o.o.o.Packingcharge,
+                    ShopDeliveryDiscount = i.o.o.o.o.ShopDeliveryDiscount,
+                    TotalPrice = i.o.o.o.o.TotalPrice,
+                    TotalProduct = i.o.o.o.o.TotalProduct,
+                    TotalQuantity = i.o.o.o.o.TotalQuantity,
                     OrderItemList = i.oi.ToList()
                 }).ToList();
 
@@ -1273,7 +1281,7 @@ namespace ShopNow.Controllers
                .GroupJoin(db.OrderItems, o => o.o.o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
                .Select(i => new TodayDeliveryListViewModel.OrderList
                {
-                   Amount = i.o.o.p.Amount,
+                   //Amount = i.o.o.p.Amount,
                    CustomerLatitude = 0,
                    CustomerLongitude = 0,
                    CustomerName = i.o.o.o.o.CustomerName,
@@ -1291,6 +1299,14 @@ namespace ShopNow.Controllers
                    ShopName = i.o.o.o.s.Name,
                    ShopPhoneNumber = i.o.o.o.o.ShopPhoneNumber,
                    Status = i.o.o.o.o.Status,
+                   Convinenientcharge = i.o.o.o.o.Convinenientcharge,
+                   DeliveryCharge = i.o.o.o.o.DeliveryCharge,
+                   NetDeliveryCharge = i.o.o.o.o.NetDeliveryCharge,
+                   Packingcharge = i.o.o.o.o.Packingcharge,
+                   ShopDeliveryDiscount = i.o.o.o.o.ShopDeliveryDiscount,
+                   TotalPrice = i.o.o.o.o.TotalPrice,
+                   TotalProduct = i.o.o.o.o.TotalProduct,
+                   TotalQuantity = i.o.o.o.o.TotalQuantity,
                    OrderItemList = i.oi.ToList()
                }).ToList();
 
