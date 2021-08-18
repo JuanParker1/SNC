@@ -58,7 +58,7 @@
                 },
                     function (isConfirm) {
                         if (isConfirm) {
-                            $.getJSON("/MasterProduct/MedicalDelete", { Id: id }, function (data) {
+                            $.getJSON("/MasterProduct/Delete", { Id: id }, function (data) {
                                 if (data == true) {
                                     window.location.reload();
                                 }
