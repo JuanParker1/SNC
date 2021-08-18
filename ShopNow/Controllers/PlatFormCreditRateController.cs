@@ -62,11 +62,11 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNPFCE003")]
-        public JsonResult Edit(int code, double ratePerOrder, int dailyViewer)
+        public JsonResult Edit(int id, double ratePerOrder, int dailyViewer)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             string message = "";
-            PlatFormCreditRate platFormCR = db.PlatFormCreditRates.FirstOrDefault(i => i.Id == code);
+            PlatFormCreditRate platFormCR = db.PlatFormCreditRates.FirstOrDefault(i => i.Id == id);
             if (platFormCR != null)
             {
                 platFormCR.Status = 2;
@@ -89,10 +89,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNPFCD004")]
-        public JsonResult Delete(int code)
+        public JsonResult Delete(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var platFormCreaditRate = db.PlatFormCreditRates.FirstOrDefault(i => i.Id == code);// PlatFormCreditRate.Get(code);
+            var platFormCreaditRate = db.PlatFormCreditRates.FirstOrDefault(i => i.Id == id);
             if (platFormCreaditRate != null)
             {
                 platFormCreaditRate.Status = 2;
@@ -101,8 +101,9 @@ namespace ShopNow.Controllers
                 db.Entry(platFormCreaditRate).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
-            return Json("Success", JsonRequestBehavior.AllowGet);
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

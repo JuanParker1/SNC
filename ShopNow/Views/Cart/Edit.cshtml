@@ -96,7 +96,7 @@
                                     <td></td>
                                     @if (item.ProductName != null)
                                     {
-                                        <td><a href="~/Product/Details?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(item.ProductId)">@item.ProductName</a></td>}
+                                        <td><a href="~/Product/Details?id=@ShopNow.Helpers.AdminHelpers.ECodeLong(item.ProductId)">@item.ProductName</a></td>}
                                     else
                                     {
                                         <td>N/A</td>}

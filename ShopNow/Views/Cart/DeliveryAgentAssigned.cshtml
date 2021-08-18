@@ -31,7 +31,7 @@
    {
        columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
        columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
-       columns.Add(c => c.PaymentMode).Titled("Payment Mode").Filterable(true).SetWidth(15);
+       columns.Add(c => c.PaymentMode).Titled("PaymentMode").Filterable(true).SetWidth(15);
        columns.Add(c => c.DeliveryBoyName).Titled("DeliveryBoy").Filterable(true).SetWidth(10);
        columns.Add(c => c.DeliveryPhoneNumber).Titled("D.Boy Phone").Filterable(true).SetWidth(15);
        columns.Add().RenderValueAs(c => c.CartStatus == 4 ? "Assigned for Delivery" : "Waiting for Pickup").Titled("Order Status").Filterable(true).SetWidth(10);

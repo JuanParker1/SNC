@@ -22,7 +22,7 @@
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
                {
-               columns.Add().RenderValueAs(o => Html.ActionLink(o.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }).ToHtmlString()).Titled("Name").Encoded(false).Sanitized(false).Filterable(true).SetWidth(10);
+               columns.Add().Titled("Name").Encoded(false).Sanitized(false).Filterable(true).SetWidth(10).RenderValueAs(o => Html.ActionLink(o.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }).ToHtmlString());
                columns.Add(b => b.PhoneNumber).Titled("Phone No").Filterable(true).SetWidth(15);
                columns.Add(b => b.Address).Titled("Address").Filterable(true).SetWidth(40);
                columns.Add(b => b.DistrictName).Titled("District Name").Filterable(true).SetWidth(20);
