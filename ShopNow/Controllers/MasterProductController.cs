@@ -332,34 +332,6 @@ namespace ShopNow.Controllers
             return View(List);
         }
 
-        // Dish Delete
-        [AccessPolicy(PageCode = "")]
-        public JsonResult FoodDelete(string Id)
-        {
-            var dId = AdminHelpers.DCodeLong(Id);
-            var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dId);
-            if (master != null)
-            {
-                master.Status = 2;
-                _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
-                _db.SaveChanges();
-
-                //product delete
-                var productList = _db.Products.Where(i => i.MasterProductId == dId).ToList();
-                if (productList != null)
-                {
-                    foreach (var item in productList)
-                    {
-                        var product = _db.Products.FirstOrDefault(i => i.Id == item.Id);
-                        product.Status = 2;
-                        _db.Entry(product).State = System.Data.Entity.EntityState.Modified;
-                        _db.SaveChanges();
-                    }
-                }
-            }
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
-
         // Upload FMCG MasterItems
         [AccessPolicy(PageCode = "SHNMPRI005")]
         public ActionResult FMCGUpload()
@@ -725,34 +697,6 @@ namespace ShopNow.Controllers
             return RedirectToAction("FMCGEdit", new { id = AdminHelpers.ECodeLong(model.Id) });
         }
 
-        // FMCG Delete
-        [AccessPolicy(PageCode = "SHNMPRFD025")]
-        public JsonResult FMCGDelete(string Id)
-        {
-            var dId = AdminHelpers.DCodeLong(Id);
-            var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dId);
-            if (master != null)
-            {
-                master.Status = 2;
-                _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
-                _db.SaveChanges();
-
-                //product delete
-                var productList = _db.Products.Where(i => i.MasterProductId == dId).ToList();
-                if (productList != null)
-                {
-                    foreach (var item in productList)
-                    {
-                        var product = _db.Products.FirstOrDefault(i => i.Id == item.Id);
-                        product.Status = 2;
-                        _db.Entry(product).State = System.Data.Entity.EntityState.Modified;
-                        _db.SaveChanges();
-                    }
-                }
-            }
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
-
         // Medical List
         [AccessPolicy(PageCode = "SHNMPRML006")]
         public ActionResult MedicalList()
@@ -1008,34 +952,6 @@ namespace ShopNow.Controllers
             }
             // return RedirectToAction("MedicalList");
             return RedirectToAction("MedicalEdit", new { id = AdminHelpers.ECodeLong(model.Id) });
-        }
-
-        // Medical Update
-        [AccessPolicy(PageCode = "SHNMPRMD009")]
-        public JsonResult MedicalDelete(string Id)
-        {
-            var dId = AdminHelpers.DCodeLong(Id);
-            var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dId);
-            if (master != null)
-            {
-                master.Status = 2;
-                _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
-                _db.SaveChanges();
-
-                //product delete
-                var productList = _db.Products.Where(i => i.MasterProductId == dId).ToList();
-                if (productList != null)
-                {
-                    foreach (var item in productList)
-                    {
-                        var product = _db.Products.FirstOrDefault(i => i.Id == item.Id);
-                        product.Status = 2;
-                        _db.Entry(product).State = System.Data.Entity.EntityState.Modified;
-                        _db.SaveChanges();
-                    }
-                }
-            }
-            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         // Upload Medical MasterItems
@@ -1508,34 +1424,6 @@ namespace ShopNow.Controllers
                 }
             }
             return RedirectToAction("List");
-        }
-
-        // Electronic Delete
-        [AccessPolicy(PageCode = "SHNMPRED021")]
-        public JsonResult ElectronicDelete(string Id)
-        {
-            var dId = AdminHelpers.DCodeLong(Id);
-            var master = _db.MasterProducts.FirstOrDefault(i => i.Id == dId);
-            if (master != null)
-            {
-                master.Status = 2;
-                _db.Entry(master).State = System.Data.Entity.EntityState.Modified;
-                _db.SaveChanges();
-
-                //product delete
-                var productList = _db.Products.Where(i => i.MasterProductId == dId).ToList();
-                if (productList != null)
-                {
-                    foreach (var item in productList)
-                    {
-                        var product = _db.Products.FirstOrDefault(i => i.Id == item.Id);
-                        product.Status = 2;
-                        _db.Entry(product).State = System.Data.Entity.EntityState.Modified;
-                        _db.SaveChanges();
-                    }
-                }
-            }
-            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         // Item Mapping
