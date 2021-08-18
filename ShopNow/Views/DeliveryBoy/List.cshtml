@@ -11,38 +11,40 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6">
-            <h5 class="text-success" style="letter-spacing:1px">DELIVERYBOY LIST</h5>
+            <h4 class="text-success" style="letter-spacing:1px">DELIVERYBOY LIST</h4>
         </div>
         <div class="col-md-6 ml-auto text-right text-nowrap" style="margin:0">
-            <a href="~/DeliveryBoy/InactiveList" class="text-danger mr-2" target="_self"><span class="fa fa-bars"></span> Approval Pending</a>
+            <a href="~/DeliveryBoy/InactiveList" class="text-danger mr-2" target="_self"><span class="fa fa-list-ul"></span> Approval Pending</a>
             <a href="~/DeliveryBoy/Create" class="mr-2" target="_self"><span class="fa fa-plus"></span> New Delivery Boy</a>
-            <a href="~/DeliveryBoy/AssignFranchise" target="_self"><span class="fa fa-tasks"></span> Assign Marketing Agent</a>
+            @*<a href="~/DeliveryBoy/AssignFranchise" target="_self"><span class="fa fa-tasks"></span> Assign Marketing Agent</a>*@
         </div>
 
         <div class="col-md-12">
             <div class="card shadow mt-3">
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
-            {
-            columns.Add(c => c.Name).Titled("Name").Encoded(false).Sanitized(false).Filterable(true).SetWidth(20).RenderValueAs(model => Html.ActionLink(model.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(model.Id) }).ToHtmlString());
-            columns.Add(c => c.PhoneNumber).Titled("Phone No.").Filterable(true).SetWidth(15);
-            columns.Add().Encoded(false).Sanitized(false).Titled("Image").Filterable(false).SetWidth(10)
-             .RenderValueAs(c => @<div>
-                    <img alt="Image" data-toggle="modal" data-target="#myModal" class="img-thumbnail DeliveryBoyImage" src="@c.ImagePath" style="width:60px; height:45px" onerror="this.src='/Images/No Photo.png'" /></div>);
-             columns.Add().Encoded(false).Sanitized(false)
-             .RenderValueAs(s => new HtmlString("<label class='switch'> <input type='checkbox' value='" + s.Active + "' Id='Id_" + s.Id + "' class='CheckOnline' data-code='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(10);
+               {
+               columns.Add(c => c.Name).Titled("Name").Encoded(false).Sanitized(false).Filterable(true).SetWidth(20).RenderValueAs(model => Html.ActionLink(model.Name, "Details", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(model.Id) }).ToHtmlString());
+               columns.Add(c => c.PhoneNumber).Titled("Phone No.").Filterable(true).SetWidth(15);
+               columns.Add(c => c.Email).Titled("Email").Filterable(true).SetWidth(10);
+               columns.Add().Encoded(false).Sanitized(false).Titled("Image").Filterable(false).SetWidth(10).RenderValueAs(c => @<div><img alt="Image" data-toggle="modal" data-target="#myModal" class="img-thumbnail DeliveryBoyImage" src="@c.ImagePath" style="width:60px; height:45px" onerror="this.src='/Images/No Photo.png'" /></div>);
+             columns.Add()
+      .Encoded(false)
+      .Sanitized(false)
+      .RenderValueAs(s => new HtmlString
+              ("<label class='switch'> <input type='checkbox' value='" + s.Active + "' Id='Id_" + s.Id + "' class='CheckOnline' data-code='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(10);
              columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
                .RenderValueAs(o => @<div>
-                <a href="/DeliveryBoy/Edit?Id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
-                <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
-            </div>);
+    <a href="/DeliveryBoy/Edit?Id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
+    <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg mr-5"></i></a>
+    <a href="/DeliveryBoy/Clear?Id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info"><i class="fa fa-refresh fa-lg"></i></a>
+</div>);
 }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 <div id="myModal" class="modal fade">
     <div class="modal-dialog">
         <span class="close" data-dismiss="modal">&times;</span>
@@ -68,12 +70,12 @@
             });
 
             $('.CheckOnline').on('click', function () {
-                var id = $(this).data('id');
+                var code = $(this).data('code');
                 if ($(this).is(':checked') == 1) {
-                    $.post('/DeliveryBoy/UpdateDeliveryBoyOnline', { Id: id, Active: 1 }, function () { });
+                    $.post('/DeliveryBoy/UpdateDeliveryBoyOnline', { code: code, Active: 1 }, function () { });
                 }
                 else {
-                    $.post('/DeliveryBoy/UpdateDeliveryBoyOnline', { Id: id, Active: 0 }, function () { });
+                    $.post('/DeliveryBoy/UpdateDeliveryBoyOnline', { code: code, Active: 0 }, function () { });
                 }
             });
 

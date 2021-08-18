@@ -12,22 +12,22 @@ namespace ShopNow.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class CustomerReview
+    public partial class AchievementSetting
     {
-        public long Id { get; set; }
-        public int ShopId { get; set; }
-        public string ShopName { get; set; }
-        public int CustomerId { get; set; }
-        public string CustomerName { get; set; }
-        public string CustomerRemark { get; set; }
-        public int Rating { get; set; }
-        public string CreatedBy { get; set; }
-        public string UpdatedBy { get; set; }
+        public int Id { get; set; }
+        public string ShopDistrict { get; set; }
+        public string Name { get; set; }
+        public int CountType { get; set; }
+        public int CountValue { get; set; }
+        public double Amount { get; set; }
+        public bool HasAccept { get; set; }
+        public int DayLimit { get; set; }
+        public int ActivateType { get; set; }
+        public int ActivateAfterId { get; set; }
+        public int RepeatCount { get; set; }
+        public bool IsForBlackListAbusers { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }
-    
-        public virtual Shop Shop { get; set; }
-        public virtual Customer Customer { get; set; }
     }
 }

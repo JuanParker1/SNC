@@ -1,22 +1,22 @@
 ﻿@model ShopNow.ViewModels.DeliveryBoyListViewModel
 @{
-    ViewBag.Title = "Delivery Boy InactiveList";
+    ViewBag.Title = "Delivery Boy Approval Pending List";
 }
-<title>ShopNow | DeliveryBoy Pending List</title>
+<title>ShopNow | @ViewBag.Title</title>
 
 @using (Html.BeginForm("InactiveList", "DeliveryBoy", FormMethod.Post, new { id = "DeliveryBoyForm", role = "form", enctype = "multipart/form-data" }))
 {
     <div class="container-fluid">
         <div class="row mb-1">
             <div class="col-md-4">
-                <h5 class="text-success" style="letter-spacing:1px">DELIVERYBOY INACTIVE LIST</h5>
+                <h4 class="text-success">@ViewBag.Title</h4>
             </div>
             <div class="col-md-2">
                 <div class="mb-1 data-search">
                 </div>
             </div>
-            <div class="col-md-5 ml-auto text-right text-nowrap" style="margin:0">
-                <a href="~/DeliveryBoy/List"><span class="fa fa-bars"></span> DeliveryBoy List</a>
+            <div class="col-md-6 text-right">
+                <a href="~/DeliveryBoy/List"><span class="fa fa-list-ul"></span> DeliveryBoy List</a>
             </div>
         </div>
         <div class="row">

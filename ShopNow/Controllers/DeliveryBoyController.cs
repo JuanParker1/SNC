@@ -58,7 +58,8 @@ namespace ShopNow.Controllers
                             Name = m.Name,
                             PhoneNumber = m.PhoneNumber,
                             Active = m.Active,
-                            ImagePath = m.ImagePath
+                            ImagePath = m.ImagePath,
+                            Email = m.Email
                         }).ToList();
             return View(list);
         }
@@ -302,6 +303,25 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        [AccessPolicy(PageCode = "")]
+        public ActionResult Clear(string Id)
+        {
+            var dCode = AdminHelpers.DCodeInt(Id);
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == dCode);
+            if (deliveryBoy != null)
+            {
+                deliveryBoy.OnWork = 0;
+                deliveryBoy.isAssign = 0;
+                deliveryBoy.UpdatedBy = user.Name;
+                deliveryBoy.DateUpdated = DateTime.Now;
+                db.Entry(deliveryBoy).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("List");
         }
 
         [AccessPolicy(PageCode = "SHNDBYAP007")]

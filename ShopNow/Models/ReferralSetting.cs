@@ -12,22 +12,14 @@ namespace ShopNow.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class CustomerReview
+    public partial class ReferralSetting
     {
-        public long Id { get; set; }
-        public int ShopId { get; set; }
-        public string ShopName { get; set; }
-        public int CustomerId { get; set; }
-        public string CustomerName { get; set; }
-        public string CustomerRemark { get; set; }
-        public int Rating { get; set; }
-        public string CreatedBy { get; set; }
-        public string UpdatedBy { get; set; }
+        public int Id { get; set; }
+        public string ShopDistrict { get; set; }
+        public int PaymentMode { get; set; }
+        public double Amount { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }
-    
-        public virtual Shop Shop { get; set; }
-        public virtual Customer Customer { get; set; }
     }
 }
