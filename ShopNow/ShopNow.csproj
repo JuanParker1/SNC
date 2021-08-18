@@ -324,6 +324,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Base\BaseClass.cs" />
     <Compile Include="Controllers\AccessPolicyController.cs" />
+    <Compile Include="Controllers\AchievementSettingController.cs" />
     <Compile Include="Controllers\AddOnCategoryController.cs" />
     <Compile Include="Controllers\ApiSettingController.cs" />
     <Compile Include="Controllers\BannerController.cs" />
@@ -583,6 +584,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\AccessPolicyViewModel.cs" />
+    <Compile Include="ViewModels\AchievementSettingViewModels.cs" />
     <Compile Include="ViewModels\AddOnCategoryViewModel.cs" />
     <Compile Include="ViewModels\ApiSettingViewModels.cs" />
     <Compile Include="ViewModels\ApiViewModels.cs" />
@@ -3041,6 +3043,7 @@
     <Content Include="Views\ApiSetting\List.cshtml" />
     <Content Include="Views\ApiSetting\Edit.cshtml" />
     <Content Include="Views\ReferralSetting\Index.cshtml" />
+    <Content Include="Views\AchievementSetting\List.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
