@@ -3880,7 +3880,10 @@ namespace ShopNow.Controllers
         public JsonResult GetAddonList(int productId)
         {
             var list = db.ShopDishAddOns.Where(i => i.ProductId == productId && i.IsActive == true).ToList();
-            return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+            if (list.Count() > 0)
+                return Json(new { list = list, type = list.FirstOrDefault().AddOnType }, JsonRequestBehavior.AllowGet);
+            else
+                return Json(new { list = list }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetLocationDetails(double sourceLatitude, double sourceLongitude, double destinationLatitude, double destinationLongitude)
