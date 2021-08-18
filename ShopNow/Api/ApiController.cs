@@ -2314,7 +2314,7 @@ namespace ShopNow.Controllers
         }
         public JsonResult GetCustomerRefered(int CustomerId)
         {
-            var referealCount = db.Customers.Where(c => c.ReferralNumber != null).count();
+            var referealCount = db.Customers.Where(c => c.ReferralNumber != null && c.Id== CustomerId).Count();
             if(referealCount<=0)
             return Json(new { Status = true}, JsonRequestBehavior.AllowGet);
             else
