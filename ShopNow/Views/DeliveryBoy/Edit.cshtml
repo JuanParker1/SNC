@@ -4,10 +4,10 @@
 }
 <title>ShopNow | @ViewBag.Title</title>
 
-<div class="container-fluid my-0">
-    <div class="row">
+<div class="container-fluid">
+    <div class="row mb-2">
         <div class="col-md-3">
-            <h5 class="mt-1">@ViewBag.Title</h5>
+            <h5 class="text-success">@ViewBag.Title</h5>
         </div>
         <div class="col-md-9 text-right">
             <div class="button-group ml-auto">
@@ -16,7 +16,7 @@
                     <a href="~/DeliveryBoy/Approve?Id=@Model.Id" class="btn btn-success btn-sm mr-2">Approve</a>
                     <a href="~/DeliveryBoy/Reject?Id=@Model.Id" class="btn btn-danger text-center text-nowrap btn-sm mr-2">Reject</a>
                 }
-                <a href="~/DeliveryBoy/List" target="_self"><span class="fa fa-bars"></span> DeliveryBoy List</a>
+                <a href="~/DeliveryBoy/List" target="_self"><span class="fa fa-list-ul"></span> DeliveryBoy List</a>
             </div>
         </div>
     </div>
@@ -38,7 +38,7 @@
                                 <div class="col-md-4">
                                     <label class="col-form-label"><strong class="text-secondary">Delivery Boy Name</strong></label>
                                     <div class="DeliverBoyName">
-                                        <input id="Name" type="text" class="form-control" name="Name" value="@Model.Name" maxlength="100" oninput="this.value=this.value.replace(/[^a-zA-Z]/g, '');" />
+                                        <input id="Name" type="text" class="form-control" name="Name" value="@Model.Name" maxlength="100" oninput="this.value=this.value.replace(/[^a-zA-Z ]/g, '');" />
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -183,7 +183,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12 mt-3 row">
+                        <div class="row col-md-12 mt-3">
                             <div class="col-md-8">
                                 <h5 class="text-success mb-2">Bank Details</h5>
                                 <div class="form-group row">
