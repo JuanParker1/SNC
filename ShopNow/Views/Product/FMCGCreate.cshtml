@@ -144,7 +144,7 @@
                                         <label class="control-label text-secondary font-weight-bold ml-2">FMCG Image1</label>
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <img class="img-container" id="img-FMCGLargeImage1" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
+                                                <img class="img-container" id="img-FMCGImage1" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
                                                 <input type="hidden" name="ImagePath1" />
                                             </div>
                                         </div>
@@ -153,7 +153,7 @@
                                         <label class="control-label text-secondary font-weight-bold ml-2">FMCG Image2</label>
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <img class="img-container" id="img-FMCGLargeImage2" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
+                                                <img class="img-container" id="img-FMCGImage2" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
                                                 <input type="hidden" name="ImagePath2" />
                                             </div>
                                         </div>
@@ -162,7 +162,7 @@
                                         <label class="control-label text-secondary font-weight-bold ml-2">FMCG Image3</label>
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <img class="img-container" id="img-FMCGLargeImage3" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
+                                                <img class="img-container" id="img-FMCGImage3" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
                                                 <input type="hidden" name="ImagePath3" />
                                             </div>
                                         </div>
@@ -171,7 +171,7 @@
                                         <label class="control-label text-secondary font-weight-bold ml-2">FMCG Image4</label>
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <img class="img-container" id="img-FMCGLargeImage4" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
+                                                <img class="img-container" id="img-FMCGImage4" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
                                                 <input type="hidden" name="ImagePath4" />
                                             </div>
                                         </div>
@@ -180,7 +180,7 @@
                                         <label class="control-label text-secondary font-weight-bold ml-2">FMCG Image5</label>
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <img class="img-container" id="img-FMCGLargeImage5" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
+                                                <img class="img-container" id="img-FMCGImage5" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
                                                 <input type="hidden" name="ImagePath5" />
                                             </div>
                                         </div>
@@ -269,11 +269,11 @@
                 $('#SubCategoryId').val(e.params.data.SubCategoryId);
                 $('#NextSubCategoryId').val(e.params.data.NextSubCategoryId);
                 $('#GoogleTaxonomyCode').val(e.params.data.GoogleTaxonomyCode);
-                $('#img-FMCGLargeImage1').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath1);
-                $('#img-FMCGLargeImage2').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath2);
-                $('#img-FMCGLargeImage3').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath3);
-                $('#img-FMCGLargeImage4').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath4);
-                $('#img-FMCGLargeImage5').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath5);
+                $('#img-FMCGImage1').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath1);
+                $('#img-FMCGImage2').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath2);
+                $('#img-FMCGImage3').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath3);
+                $('#img-FMCGImage4').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath4);
+                $('#img-FMCGImage5').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath5);
                 $('input[name="ImagePath1"]').val(e.params.data.ImagePath1);
                 $('input[name="ImagePath2"]').val(e.params.data.ImagePath2);
                 $('input[name="ImagePath3"]').val(e.params.data.ImagePath3);
