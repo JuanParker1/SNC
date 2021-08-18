@@ -1017,6 +1017,21 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
+        [AccessPolicy(PageCode = "")]
+        public async Task<JsonResult> GetDistrictSelect2(string q = "")
+        {
+            var model = await db.Shops
+                .Where(a => a.DistrictName.Contains(q) && a.Status == 0)
+                .GroupBy(i => i.DistrictName)
+                .Select(i => new
+                {
+                    id = i.Key,
+                    text = i.Key
+                }).OrderBy(i => i.text).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
