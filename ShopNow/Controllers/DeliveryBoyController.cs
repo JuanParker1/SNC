@@ -268,12 +268,12 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNDBYD004")]
-        public ActionResult Details(string code)
+        public ActionResult Details(string id)
         {
-            var dCode = AdminHelpers.DCodeInt(code);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            DeliveryBoy deliverBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == dCode);
+            var dId = AdminHelpers.DCodeInt(id);
+            DeliveryBoy deliverBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == dId);
             var model = new DeliveryBoyEditViewModel();
             _mapper.Map(deliverBoy, model);
             return View(model);
@@ -369,9 +369,7 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             DeliveryBoy deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == Id);
             var model = new DeliveryBoyPlacesListViewModel();
-
             _mapper.Map(deliveryBoy, model);
-
             model.List = db.Shops.AsEnumerable().Select(i => new DeliveryBoyPlacesListViewModel.Places
             {
                 Id = i.Id,
@@ -395,8 +393,7 @@ namespace ShopNow.Controllers
         public ActionResult Assign(DeliveryBoyPlacesListViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            DeliveryBoy deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == model.Id);// DeliveryBoy.Get(model.Code);
-
+            DeliveryBoy deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == model.Id);
             model.List = db.Shops.AsEnumerable().Select(i => new DeliveryBoyPlacesListViewModel.Places
             {
                 Id = i.Id,
@@ -437,8 +434,7 @@ namespace ShopNow.Controllers
         public ActionResult AssignFranchise()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            
+            ViewBag.Name = user.Name;            
             return View();
         }
 
@@ -478,12 +474,12 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNDBYFU012")]
-        public ActionResult FranchiseUpdate(int code)
+        public ActionResult FranchiseUpdate(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new FranchiseViewModel();
-            var deliveryboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == code);
+            var deliveryboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == id);
             _mapper.Map(deliveryboy, model);
             if (deliveryboy != null)
             {
@@ -708,10 +704,10 @@ namespace ShopNow.Controllers
             return Json(isCheck, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult UpdateDeliveryBoyOnline(int code, int Active)
+        public ActionResult UpdateDeliveryBoyOnline(int Id, int Active)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var dboy = db.DeliveryBoys.Where(i => i.Id == code && i.Status == 0).FirstOrDefault();
+            var dboy = db.DeliveryBoys.Where(i => i.Id == Id && i.Status == 0).FirstOrDefault();
             dboy.Active = Active;
             db.Entry(dboy).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();

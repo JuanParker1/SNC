@@ -118,7 +118,7 @@
                                     </td>
                                     <td>@item.Price</td>
                                     <td>
-                                        <img src="@item.ImagePath" class="img-thumbnail" width="40" height="40" onerror="this.src='/Images/No Photo.png'" />
+                                        <img src="@item.ImagePath" alt="Image" class="img-thumbnail productImages" data-toggle="modal" data-target="#myModal" width="45" height="60" onerror="this.src='/Images/No Photo.png'" />
                                     </td>
                                 </tr>
                             }
@@ -127,6 +127,15 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <span class="close" data-dismiss="modal">&times;</span>
+        <a href="~/Home/ImageDenied">
+            <img class="modal-content" id="myImage" />
+        </a>
     </div>
 </div>
 
@@ -179,6 +188,20 @@
                         });
                     }
                 });
+            });
+
+            var modal = document.getElementById('myModal');
+            var img = document.getElementsByClassName('productImages');
+            var modalImg = document.getElementById("myImage");
+            $(img).click(function () {
+                modal.style.display = "block";
+                modalImg.src = this.src;
+                if (this.src == "") {
+                    $('#myModal').hide();
+                }
+                else {
+                    $('#myModal').modal('show');
+                }
             });
 
             $("#Cancel").click(function () {

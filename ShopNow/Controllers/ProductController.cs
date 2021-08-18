@@ -140,12 +140,14 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNPROD002")]
         public ActionResult Details(string id)
         {
-            var dCode = AdminHelpers.DCodeLong(id);
+            var dId = AdminHelpers.DCodeLong(id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            Product pd = db.Products.FirstOrDefault(i => i.Id == dCode);
+            Product pd = db.Products.FirstOrDefault(i => i.Id == dId);
+            var master = db.MasterProducts.FirstOrDefault(i => i.Id == pd.MasterProductId);
             var model = new ProductDetailsViewModel();
             _mapper.Map(pd, model);
+            model.ImagePath = master.ImagePath1;
             return View(model);
         }
 
