@@ -91,6 +91,7 @@ namespace ShopNow.ViewModels
         public int[] ShopIds { get; set; }
         public long[] ProductIds { get; set; }
         public int BrandId { get; set; }
+        public double MinimumPurchaseAmount { get; set; }
     }
 
     public class OfferEditViewModel : OfferCreateViewModel

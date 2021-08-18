@@ -349,6 +349,7 @@
     <Compile Include="Controllers\ProductSpecificationController.cs" />
     <Compile Include="Controllers\ProductTypeController.cs" />
     <Compile Include="Controllers\PushNotificationController.cs" />
+    <Compile Include="Controllers\ReferralSettingController.cs" />
     <Compile Include="Controllers\RefundController.cs" />
     <Compile Include="Controllers\SalesController.cs" />
     <Compile Include="Controllers\ShopDiscountCategoryController.cs" />
@@ -607,6 +608,7 @@
     <Compile Include="ViewModels\PortionViewModel.cs" />
     <Compile Include="ViewModels\ProductMedicalStockViewModel.cs" />
     <Compile Include="ViewModels\ProductSpecificationViewModel.cs" />
+    <Compile Include="ViewModels\ReferralSettingViewModels.cs" />
     <Compile Include="ViewModels\RefundViewModels.cs" />
     <Compile Include="ViewModels\SalesViewModel.cs" />
     <Compile Include="ViewModels\ShopDiscountCategoryViewModel.cs" />
@@ -3038,6 +3040,7 @@
     <Content Include="Views\ApiSetting\Create.cshtml" />
     <Content Include="Views\ApiSetting\List.cshtml" />
     <Content Include="Views\ApiSetting\Edit.cshtml" />
+    <Content Include="Views\ReferralSetting\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
