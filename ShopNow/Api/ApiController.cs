@@ -580,7 +580,8 @@ namespace ShopNow.Controllers
                                 Price = i.p.Price,
                                 MenuPrice = i.p.MenuPrice,
                                 Qty = i.p.Qty,
-                                Status = i.p.Status
+                                Status = i.p.Status,
+                                ImagePath = i.m.ImagePath1
                             }).ToList();
             int count = model.Count();
             int CurrentPage = page;
@@ -1967,7 +1968,7 @@ namespace ShopNow.Controllers
 
 
             var model = new GetAllOrderListViewModel();
-            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && (i.Status == 3 || i.Status == 4))
+            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && i.Status == 3 || i.Status == 4 || i.Status==5)
                  .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
                  .Join(db.DeliveryBoys, o => o.o.DeliveryBoyId, d => d.Id, (o, d) => new { o, d })
                  .GroupJoin(db.OrderItems, o => o.o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
