@@ -580,7 +580,8 @@ namespace ShopNow.Controllers
                                 Price = i.p.Price,
                                 MenuPrice = i.p.MenuPrice,
                                 Qty = i.p.Qty,
-                                Status = i.p.Status
+                                Status = i.p.Status,
+                                ImagePath = i.m.ImagePath1
                             }).ToList();
             int count = model.Count();
             int CurrentPage = page;
@@ -1967,9 +1968,9 @@ namespace ShopNow.Controllers
 
 
             var model = new GetAllOrderListViewModel();
-            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && (i.Status == 3 || i.Status == 4))
+            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && (i.Status == 3 || i.Status == 4 || i.Status == 5))
                  .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
-                 .Join(db.DeliveryBoys, o => o.o.DeliveryBoyId, d => d.Id, (o, d) => new { o, d })
+                 .GroupJoin(db.DeliveryBoys, o => o.o.DeliveryBoyId, d => d.Id, (o, d) => new { o, d })
                  .GroupJoin(db.OrderItems, o => o.o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
                  .Select(i => new GetAllOrderListViewModel.OrderList
                  {
@@ -2005,7 +2006,7 @@ namespace ShopNow.Controllers
                      RefundRemark = i.o.o.p.RefundRemark,
                      OrderItemList = i.oi.ToList(),
                      PaymentMode = i.o.o.p.PaymentMode,
-                     Onwork = i.o.d.OnWork
+                     Onwork = i.o.d.Any() ? i.o.d.FirstOrDefault().OnWork : 0
                  }).ToList();
 
             int count = model.OrderLists.Count();
@@ -2311,8 +2312,15 @@ namespace ShopNow.Controllers
             };
             // return Json(model, JsonRequestBehavior.AllowGet);
         }
-
-        public JsonResult GetProductList(double latitude, double longitude, string str = "", int page = 1, int pageSize = 10)
+        public JsonResult GetCustomerRefered(int CustomerId)
+        {
+            var referealCount = db.Customers.Where(c => c.ReferralNumber != null).count();
+            if(referealCount<=0)
+            return Json(new { Status = true}, JsonRequestBehavior.AllowGet);
+            else
+                return Json(new { Status = false }, JsonRequestBehavior.AllowGet);
+        }
+            public JsonResult GetProductList(double latitude, double longitude, string str = "", int page = 1, int pageSize = 10)
         {
             var model = new ProductSearchViewModel();
             double? varlongitude = longitude;
@@ -3880,7 +3888,10 @@ namespace ShopNow.Controllers
         public JsonResult GetAddonList(int productId)
         {
             var list = db.ShopDishAddOns.Where(i => i.ProductId == productId && i.IsActive == true).ToList();
-            return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+            if (list.Count() > 0)
+                return Json(new { list = list, type = list.FirstOrDefault().AddOnType }, JsonRequestBehavior.AllowGet);
+            else
+                return Json(new { list = list }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetLocationDetails(double sourceLatitude, double sourceLongitude, double destinationLatitude, double destinationLongitude)

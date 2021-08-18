@@ -622,6 +622,7 @@ namespace ShopNow.ViewModels
             public double MenuPrice { get; set; }
             public int Qty { get; set; }
             public int Status { get; set; }
+            public string ImagePath { get; set; }
         }       
     }
 

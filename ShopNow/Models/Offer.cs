@@ -17,12 +17,14 @@ namespace ShopNow.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public int OwnerType { get; set; }
+        public string OfferCode { get; set; }
         public int DiscountType { get; set; }
         public int Type { get; set; }
         public double Percentage { get; set; }
         public int QuantityLimit { get; set; }
         public int AmountLimit { get; set; }
         public int CustomerCountLimit { get; set; }
+        public double MinimumPurchaseAmount { get; set; }
         public bool IsForFirstOrder { get; set; }
         public bool IsForOnlinePayment { get; set; }
         public bool IsForBlackListAbusers { get; set; }
