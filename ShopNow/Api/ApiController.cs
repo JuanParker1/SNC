@@ -2312,8 +2312,15 @@ namespace ShopNow.Controllers
             };
             // return Json(model, JsonRequestBehavior.AllowGet);
         }
-
-        public JsonResult GetProductList(double latitude, double longitude, string str = "", int page = 1, int pageSize = 10)
+        public JsonResult GetCustomerRefered(int CustomerId)
+        {
+            var referealCount = db.Customers.Where(c => c.ReferralNumber != null).count();
+            if(referealCount<=0)
+            return Json(new { Status = true}, JsonRequestBehavior.AllowGet);
+            else
+                return Json(new { Status = false }, JsonRequestBehavior.AllowGet);
+        }
+            public JsonResult GetProductList(double latitude, double longitude, string str = "", int page = 1, int pageSize = 10)
         {
             var model = new ProductSearchViewModel();
             double? varlongitude = longitude;
