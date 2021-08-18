@@ -51,6 +51,8 @@ namespace ShopNow.Models
         public double WalletAmount { get; set; }
         public double PenaltyAmount { get; set; }
         public double DeliveryWaitingCharge { get; set; }
+        public Nullable<bool> IsReferred { get; set; }
+        public string ReferralNumber { get; set; }
         public int Status { get; set; }
         public string UpdatedBy { get; set; }
         public string CreatedBy { get; set; }
