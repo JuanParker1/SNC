@@ -28,10 +28,8 @@
                columns.Add(s => s.FromDate).Format("{0:dd/MMM/yyyy}").Titled("From Date").Filterable(true).SetWidth(10);
                columns.Add(s => s.ToDate).Format("{0:dd/MMM/yyyy}").Titled("To Date").Filterable(true).SetWidth(10);
                columns.Add().Encoded(false).Sanitized(false).Titled("Image").Filterable(false).SetWidth(10).RenderValueAs(s => @<div><a href="~/Home/ImageDenied" data-toggle="modal" data-target="#myModal" title="Click Here To Preview!"><img id='img-upload' src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@s.Bannerpath" class="img-thumbnail BannerImage" width="60" height="60" onerror="this.src='/Images/No Photo.png'" /></a></div>);
-                 columns.Add()
-                       .Encoded(false)
-                       .Sanitized(false)
-                       .RenderValueAs(s => Html.ActionLink("Edit", "Edit", new { id = ShopNow.Helpers.AdminHelpers.ECodeInt(s.Id) }, new { @class = "btn btn-warning btn-vsm mr-1", @Style = "padding:3px 26px" }).ToHtmlString()
+               columns.Add().Encoded(false).Sanitized(false)
+                .RenderValueAs(s => Html.ActionLink("Edit", "Edit", new { id = ShopNow.Helpers.AdminHelpers.ECodeInt(s.Id) }, new { @class = "btn btn-warning btn-vsm mr-1", @Style = "padding:3px 26px" }).ToHtmlString()
                        + Html.ActionLink("Delete", "Delete", new { id = ShopNow.Helpers.AdminHelpers.ECodeInt(s.Id) }, new { @class = "btn btn-danger btn-vsm", @style = "padding:3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(20);
              }).WithPaging(10).Sortable(true)
                 </div>
@@ -39,12 +37,14 @@
         </div>
     </div>
 </div>
+
 <div id="myModal" class="modal fade">
     <div class="modal-dialog">
         <span class="close" data-dismiss="modal">&times;</span>
         <img class="modal-content" id="myImage">
     </div>
 </div>
+
 @section Scripts
 {
     <script>
@@ -64,7 +64,7 @@
                 }
             });
         });
-        //hi
+       
     </script>
 }
 

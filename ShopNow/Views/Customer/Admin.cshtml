@@ -6,10 +6,11 @@
 <title>ShopNow | Admin List</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
+
 <div class="container-fluid">
     <div class="row my-2">
         <div class="col-md-6">
-            <h4 class="text-success" style="letter-spacing:1px">Admin List</h4>
+            <h5 class="text-success" style="letter-spacing:1px">ADMIN LIST</h5>
         </div>
         <div class="col-md-6 text-right">
             <a data-toggle="modal" data-target="#createModal" href="createModal"><span class="fa fa-plus"></span> New Admin</a>
@@ -18,22 +19,25 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card shadow">
-                <div class="card-body">
+                <div class="card-body">                  
                     @Html.Grid(Model).Columns(columns =>
-{
-columns.Add().RenderValueAs(o => Html.ActionLink(o.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }).ToHtmlString()).Titled("Name").Encoded(false).Sanitized(false).Filterable(true).SetWidth(10);
-columns.Add(c => c.PhoneNumber).Titled("Phone Number").Filterable(true).SetWidth(10);
-columns.Add(c => c.Address).Titled("Address").Filterable(true).SetWidth(10);
-columns.Add(c => c.DistrictName).Titled("District").Filterable(true).SetWidth(10);
-columns.Add(c => c.StateName).Titled("State").Filterable(true).SetWidth(10);
-columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(c => @<div><button type="button" class="btn btn-sm btn-danger Remove" data-id="@c.Id">Remove</button></div>);
-}).WithPaging(20).Sortable(true)
-
+               {
+               columns.Add().RenderValueAs(o => Html.ActionLink(o.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }).ToHtmlString()).Titled("Name").Encoded(false).Sanitized(false).Filterable(true).SetWidth(10);
+               columns.Add(c => c.PhoneNumber).Titled("Phone Number").Filterable(true).SetWidth(10);
+               columns.Add(c => c.Address).Titled("Address").Filterable(true).SetWidth(10);
+               columns.Add(c => c.DistrictName).Titled("District").Filterable(true).SetWidth(10);
+               columns.Add(c => c.StateName).Titled("State").Filterable(true).SetWidth(10);
+               columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20)
+               .RenderValueAs(c => @<div>
+                    <a href="javascript:void(0)" data-id=@c.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+                    </div>);
+                  }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -46,10 +50,10 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
             <div class="modal-body">
                 <div class="form-group row">
                     <div class="col-md-4">
-                        <label class="control-label text-secondary font-weight-bold" for="Code">Admin Name</label>
+                        <label class="control-label text-secondary font-weight-bold" for="Id">Admin Name</label>
                     </div>
                     <div class="col-md-8">
-                        <select class="form-control" name="Code" id="Code" style="width:100%;"></select>
+                        <select class="form-control" name="Id" id="Id" style="width:100%;"></select>
                         <input type="hidden" name="Name" id="Name" />
                     </div>
                 </div>
@@ -60,6 +64,7 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
         </div>
     </div>
 </div>
+
 @section Scripts
 {
     <!--Select2-->
@@ -73,7 +78,7 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
     <script>
         $(document).ready(function () {
 
-            $('#Code').select2({
+            $('#Id').select2({
                 placeholder: "Search Admin",
                 ajax: {
                     url: "/Customer/GetCustomerSelect2",
@@ -86,14 +91,14 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
             });
 
             $('#Create').on('click', function () {
-                var code = $('#Code').val();
+                var Id = $('#Id').val();
                 var isValidate = false;
                 var requiredArr = [
-                    'Code'
+                    'Id'
                 ];
                 isValidate = ValidateEmptyRequiredFiels(requiredArr);
                 if (isValidate) {
-                    $.getJSON("/Customer/Save?code=" + code, function (data) {
+                    $.getJSON("/Customer/Save?Id=" + Id, function (data) {
                         if (data.IsAdded == true) {
                             swal({
                                 title: data.message,
@@ -109,23 +114,48 @@ columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false)
                 }
             });
 
-            $('.Remove').on('click', function () {
-                //var code = $('#Code').val();
-                var code = $(this).attr('data-id');
-                $.getJSON("/Customer/Remove?code=" + code, function (data) {
-                    if (data.IsAdded == true) {
-                        swal({
-                            title: "Removed Successfully",
-                            text: "",
-                            type: "success"
-                        }, function () {
-                            window.location.href = "/Customer/Admin";
-                        });
+            //$('.Remove').on('click', function () {
+            //    //var Id = $('#Id').val();
+            //    var Id = $(this).attr('data-id');
+            //    $.getJSON("/Customer/Remove?Id=" + Id, function (data) {
+            //        if (data.IsAdded == true) {
+            //            swal({
+            //                title: "Removed Successfully",
+            //                text: "",
+            //                type: "success"
+            //            }, function () {
+            //                window.location.href = "/Customer/Admin";
+            //            });
+            //        }
+            //    });
+            //});
+
+            $(".btnDelete").click(function () {
+                var Id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/Customer/Remove", { Id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
                     }
-                });
+                );
             });
 
-        });
+         });
     </script>
 }
 
