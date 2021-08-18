@@ -138,9 +138,9 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNPROD002")]
-        public ActionResult Details(int id)
+        public ActionResult Details(string id)
         {
-            var dCode = AdminHelpers.DCodeInt(id.ToString());
+            var dCode = AdminHelpers.DCodeLong(id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             Product pd = db.Products.FirstOrDefault(i => i.Id == dCode);
@@ -305,15 +305,16 @@ namespace ShopNow.Controllers
             return RedirectToAction("MedicalEdit", new { id = AdminHelpers.ECodeLong(prod.Id) });
         }
 
-        public ActionResult FMCGList(FMCGListViewModel model)
+        public ActionResult FMCGList()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
+            var model = new FMCGListViewModel();
             model.ListItems = db.Products.Where(i => i.Status == 0 && i.ProductTypeId == 2 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
                 .Join(db.MasterProducts,p=>p.MasterProductId,m=>m.Id,(p,m)=>new { p,m})
             .Select(i => new FMCGListViewModel.ListItem
             {
-               // CategoryName = i.m.CategoryName,
+                CategoryName = db.Categories.FirstOrDefault(j => j.Id == i.m.CategoryId).Name,
                 Id = i.p.Id,
                 Name = i.m.Name,
                 Percentage = i.p.Percentage,
@@ -323,17 +324,16 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        public ActionResult MedicalList(MedicalListViewModel model)
+        public ActionResult MedicalList()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            model.ListItems = db.Products.Where(i => i.Status == 0 &&
-            i.ProductTypeId == 3 &&
-            (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
+            var model = new MedicalListViewModel();
+            model.ListItems = db.Products.Where(i => i.Status == 0 && i.ProductTypeId == 3 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
               .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
             .Select(i => new MedicalListViewModel.ListItem
             {
-               // CategoryName = i.m.CategoryName,
+                CategoryName = db.Categories.FirstOrDefault(j => j.Id == i.m.CategoryId).Name,
                 Id = i.p.Id,
                 Name = i.m.Name,
                 Percentage = i.p.Percentage,
@@ -343,17 +343,18 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        public ActionResult FoodList(FoodListViewModel model)
+        public ActionResult FoodList()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
+            var model = new FoodListViewModel();
             model.ListItems = db.Products.Where(i => i.Status == 0 &&
             i.ProductTypeId == 1 &&
             (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
              .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
             .Select(i => new FoodListViewModel.ListItem
             {
-              //  CategoryName = i.m.CategoryName,
+                CategoryName = db.Categories.FirstOrDefault(j => j.Id == i.m.CategoryId).Name,
                 Id = i.p.Id,
                 Name = i.m.Name,
                 Percentage = i.p.Percentage,
@@ -971,7 +972,7 @@ namespace ShopNow.Controllers
            .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
             .Select(i => new ElectronicListViewModel.ListItem
             {
-               // CategoryName = i.m.CategoryName,
+                CategoryName = db.Categories.FirstOrDefault(j=> j.Id == i.m.CategoryId).Name,
                 Id = i.p.Id,
                 Name = i.m.Name,
                 Percentage = i.p.Percentage,
@@ -1003,22 +1004,9 @@ namespace ShopNow.Controllers
                 prod.ShopName = user.Name;
                 ViewBag.user = user.Id;
             }
-            //prod.CategoryCode = pd.CategoryCode;
-            //var cat = db.Categories.FirstOrDefault(i => i.Id == pd.CategoryCode);//  Category.Get(pd.CategoryCode);
-            //if (cat != null)
-            //{
-            //    prod.CategoryName = cat.Name;
-            //}
-            //prod.ImagePath = _ProductImage != null ? _ProductImage.FileName : prod.ImagePath;
-
-            prod.ProductTypeName = "Service";
-
             if (prod.Id == 0)
             {
                 prod.Status = 0;
-                // prod.Code = Product.Add(prod);
-                //prod.MainSNCode = ShopNow.Helpers.DRC.Generate("PRO");
-               // prod.Code = prod.MainSNCode;
                 prod.DateEncoded = DateTime.Now;
                 prod.DateUpdated = DateTime.Now;
                 prod.Status = 0;
@@ -1037,7 +1025,7 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNPROR010")]
-        public ActionResult Delete(string id, int redirectPage=0) //redirectPage : 1-Food List, 2- FMCG List, 3-Medical List , 4-Electronic List
+        public JsonResult Delete(string id)
         {
             var dId = AdminHelpers.DCodeInt(id);
             var product = db.Products.FirstOrDefault(i => i.Id == dId);
@@ -1048,19 +1036,7 @@ namespace ShopNow.Controllers
                 db.Entry(product).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
-                switch (redirectPage)
-                {
-                    case 1:
-                        return RedirectToAction("FoodList", "Product");
-                    case 2:
-                        return RedirectToAction("FMCGList", "Product");
-                    case 3:
-                        return RedirectToAction("MedicalList", "Product");
-                    case 4:
-                        return RedirectToAction("ElectronicList", "Product");
-                    default:
-                        return RedirectToAction("List", "Product");
-                }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

@@ -320,15 +320,14 @@ namespace ShopNow.Controllers
             }
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name; 
-            var List = _db.MasterProducts.Join(_db.Categories, mp => mp.CategoryId, c => c.Id, (mp, c) => new { mp, c })
-                .Where(i => i.mp.Status == 0 && i.mp.ProductTypeId == 1)
+            var List = _db.MasterProducts.Where(i => i.Status == 0 && i.ProductTypeId == 1)
                 .Select(i => new MasterProductFoodListViewModel.MasterProductFoodList
                 {
-                    Id = i.mp.Id,
-                    Name = i.mp.Name,
-                    CategoryName = i.c.Name,
-                    Price = i.mp.Price,
-                    ProductTypeName = i.mp.ProductTypeName
+                    Id = i.Id,
+                    Name = i.Name,
+                    CategoryName = _db.Categories.FirstOrDefault(j=> j.Id == i.CategoryId).Name,
+                    Price = i.Price,
+                    ProductTypeName = i.ProductTypeName
                 }).OrderBy(i => i.Name).ToList();
             return View(List);
         }
@@ -511,16 +510,16 @@ namespace ShopNow.Controllers
                 return RedirectToAction("LogOut", "Home");
             }
             var List = _db.MasterProducts
-                       .OrderBy(mp => mp.Name)
-                       .Where(mp => mp.Status == 0 && mp.ProductTypeId == 2)
+                       .OrderBy(m => m.Name)
+                       .Where(i => i.Status == 0 && i.ProductTypeId == 2)
                        .Select(i => new MasterProductFMCGListViewModel.MasterProductFMCGList
                        {
                            Id = i.Id,
                            BrandName = i.BrandName,
+                           CategoryName = _db.MasterProducts.FirstOrDefault(j=> j.CategoryId == i.CategoryId).Name,
                            Name = i.Name,
-                           ProductTypeName= i.ProductTypeName
-                       })
-                      .ToList();
+                           ProductTypeName = i.ProductTypeName
+                       }).ToList();
             return View(List);
         }
 
@@ -764,16 +763,15 @@ namespace ShopNow.Controllers
             {
                 return RedirectToAction("LogOut", "Home");
             }
-            var List = _db.MasterProducts.Join(_db.Categories, mp => mp.CategoryId, c => c.Id, (mp, c) => new { mp, c })
-                        .Where(i => i.mp.Status == 0 && i.mp.ProductTypeId == 3)
+            var List = _db.MasterProducts.Where(i => i.Status == 0 && i.ProductTypeId == 3)
                         .Select(i => new MasterProductMedicalListViewModel.MasterProductMedicalList
                         {
-                            Id = i.mp.Id,
-                            Name = i.mp.Name,
-                            BrandName = i.mp.BrandName,
-                            CategoryName = i.c.Name,
-                            DrugCompoundDetailName = i.mp.DrugCompoundDetailName,
-                            ProductTypeName = i.mp.ProductTypeName
+                            Id = i.Id,
+                            Name = i.Name,
+                            BrandName = i.BrandName,
+                            CategoryName = _db.Categories.FirstOrDefault(j=> j.Id == i.CategoryId).Name,
+                            DrugCompoundDetailName = i.DrugCompoundDetailName,
+                            ProductTypeName = i.ProductTypeName
                         }).OrderBy(i=> i.Name).ToList();
             return View(List);
         }
@@ -1299,15 +1297,14 @@ namespace ShopNow.Controllers
             }
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var List = _db.MasterProducts.Join(_db.Categories, mp => mp.CategoryId, c => c.Id, (mp, c) => new { mp, c })
-                .Where(i => i.mp.Status == 0 && i.mp.ProductTypeId == 4)
+            var List = _db.MasterProducts.Where(i => i.Status == 0 && i.ProductTypeId == 4)
                 .Select(i => new MasterElectronicListViewModel.MasterElectronicList
                 {
-                    Id = i.mp.Id,
-                    Name = i.mp.Name,
-                    BrandName = i.mp.BrandName,
-                    CategoryName = i.c.Name,
-                    ProductTypeName = i.mp.ProductTypeName
+                    Id = i.Id,
+                    Name = i.Name,
+                    BrandName = i.BrandName,
+                    CategoryName = _db.Categories.FirstOrDefault(j=>j.Id == i.CategoryId).Name,
+                    ProductTypeName = i.ProductTypeName
 
                 }).OrderBy(i =>i.Name).ToList();
             return View(List);
