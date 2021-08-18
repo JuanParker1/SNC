@@ -25,14 +25,12 @@
         <EntityTypeShape EntityType="sncModel.MeasurementUnit" Width="1.5" PointX="19.75" PointY="18.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.NextSubCategory" Width="1.5" PointX="3" PointY="6.25" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.OfferProduct" Width="1.5" PointX="20.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.Offer" Width="1.5" PointX="20.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.OfferShop" Width="1.5" PointX="0.75" PointY="21.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.OrderItem" Width="1.5" PointX="16" PointY="13.125" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="13.75" PointY="10.25" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.OtpVerification" Width="1.5" PointX="2.75" PointY="21.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.Package" Width="1.5" PointX="4.75" PointY="21.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.Page" Width="1.5" PointX="21.75" PointY="8.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.Payment" Width="1.5" PointX="13.75" PointY="1.25" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.PaymentsData" Width="1.5" PointX="21.75" PointY="12.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.PincodeRate" Width="1.5" PointX="21.75" PointY="17.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.PlatFormCreditRate" Width="1.5" PointX="21.75" PointY="21.75" IsExpanded="true" />
@@ -52,7 +50,6 @@
         <EntityTypeShape EntityType="sncModel.Staff" Width="1.5" PointX="25.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.SubCategory" Width="1.5" PointX="6" PointY="9.125" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.UserEnquiry" Width="1.5" PointX="4.75" PointY="25.75" IsExpanded="true" />
-        <AssociationConnector Association="sncModel.FK_Banners_Payments" ManuallyRouted="false" />
         <AssociationConnector Association="sncModel.FK_SubCategories_Categories" ManuallyRouted="false" />
         <AssociationConnector Association="sncModel.FK_CustomerAddresses_Customers" ManuallyRouted="false" />
         <AssociationConnector Association="sncModel.FK_CustomerReview_Customers" ManuallyRouted="false" />
@@ -65,6 +62,9 @@
         <AssociationConnector Association="sncModel.FK_Products_ProductType" ManuallyRouted="false" />
         <AssociationConnector Association="sncModel.FK_SubCategories_ProductType" ManuallyRouted="false" />
         <EntityTypeShape EntityType="sncModel.ApiSetting" Width="1.5" PointX="20.375" PointY="25.75" />
+        <EntityTypeShape EntityType="sncModel.Offer" Width="1.5" PointX="22.375" PointY="27.5" />
+        <EntityTypeShape EntityType="sncModel.Payment" Width="1.5" PointX="13.75" PointY="0.75" />
+        <AssociationConnector Association="sncModel.FK_Banners_Payments" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

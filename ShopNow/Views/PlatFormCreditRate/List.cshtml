@@ -24,34 +24,14 @@
             <div class="card shadow mt-3">
                 <div class="card-body">
                     @Html.Grid(Model.List).Columns(columns =>
-{
-columns.Add(b => b.RatePerOrder).Titled("Rate Per Order").Filterable(true).SetWidth(10);
-columns.Add(b => b.DailyViewer).Titled("Daily Viewer").Filterable(true).SetWidth(10);
-      columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(b => @<div><a href="javascript:void(0)" data-id="@b.Id" data-id1="@b.RatePerOrder" data-id2="@b.DailyViewer" class="btn-sm btn-warning edit-prompt" data-toggle="modal" data-target="#editModal" style="padding: 3px 26px">Edit</a> <a href="javascript:void(0)" data-id="@b.Id" data-id1="@b.RatePerOrder" class="btn-sm btn-danger delete-prompt" data-toggle="modal" data-target="#deleteModal" style="padding: 3px 18px">Delete</a></div>);
-}).WithPaging(20).Sortable(true)
+                    {
+                         columns.Add(b => b.RatePerOrder).Titled("Rate Per Order").Filterable(true).SetWidth(10);
+                         columns.Add(b => b.DailyViewer).Titled("Daily Viewer").Filterable(true).SetWidth(10);
+                         columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20)
+                       .RenderValueAs(b => @<div><a href="editModal" data-id="@b.Id" data-id1="@b.RatePerOrder" data-id2="@b.DailyViewer" class="text-info edit-prompt mr-5" data-toggle="modal" data-target="#editModal"><i class="fa fa-edit fa-lg"></i></a>
+                                                 <a href="javascript:void(0)" data-id="@b.Id" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a></div>);
+                        }).WithPaging(20).Sortable(true)
                 </div>
-            </div>
-        </div>
-    </div>
-
-</div>
-
-<div class="modal fade" id="deleteModal" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header alert alert-danger">
-                <h4 class="modal-title" id="myModalLabel">Warning</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p class="success-message">Are you sure want to delete this record? </p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-success delete-confirm">Yes</button>
-                <button class="btn btn-danger" data-dismiss="modal">No</button>
-                <input type="hidden" name="Code" id="Code" data-dismiss="modal" />
             </div>
         </div>
     </div>
@@ -108,7 +88,7 @@ columns.Add(b => b.DailyViewer).Titled("Daily Viewer").Filterable(true).SetWidth
             </div>
             <div class="modal-footer">
                 <input type="button" id="Edit" name="Edit" value="Update" class="btn btn-success float-right Edit" />
-                <input type="hidden" name="PlatFormCreaditRateCode" id="PlatFormCreaditRateCode" data-dismiss="modal" />
+                <input type="hidden" name="PlatFormCreaditRateId" id="PlatFormCreaditRateId" data-dismiss="modal" />
             </div>
         </div>
     </div>
@@ -163,13 +143,13 @@ columns.Add(b => b.DailyViewer).Titled("Daily Viewer").Filterable(true).SetWidth
                 var id = $(this).attr('data-id');
                 var rateperorder = $(this).attr('data-id1');
                 var dailyviewer = $(this).attr('data-id2');
-                $("#PlatFormCreaditRateCode").val(id);
+                $("#PlatFormCreaditRateId").val(id);
                 $("#CreditRate").append("<input type=text name=PRatePerOrder id=PRatePerOrder class=form-control value='" + rateperorder + "' />");
                 $("#DailyView").append("<input type=text name=PDailyViewer id=PDailyViewer class=form-control value='" + dailyviewer + "' />");
             });
 
             $(".Edit").click(function () {
-                var Id = $("#PlatFormCreaditRateCode").val();
+                var Id = $("#PlatFormCreaditRateId").val();
                 var ratePerOrder = $("#PRatePerOrder").val();
                 var dailyview = $("#PDailyViewer").val();
                 if (ratePerOrder == "" || ratePerOrder == null) {
@@ -200,16 +180,29 @@ columns.Add(b => b.DailyViewer).Titled("Daily Viewer").Filterable(true).SetWidth
                 window.location.reload();
             });
 
-            $(".delete-prompt").click(function () {
-                var id = $(this).attr('data-id');
-                $("#Id").val(id);
-            });
-
-            $(".delete-confirm").click(function () {
-                var id = $("#Id").val();
-                $.getJSON("/PlatFormCreditRate/Delete", { id: id }, function (data) {
-                    window.location.reload();
-                });
+            $(".btnDelete").click(function () {
+                var Id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/PlatFormCreditRate/Delete", { id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
             });
         });
     </script>

@@ -803,6 +803,7 @@ namespace ShopNow.Controllers
                     order.ShopDeliveryDiscount = model.ShopDeliveryDiscount;
                     order.Packingcharge = model.PackagingCharge;
                     order.Convinenientcharge = model.ConvenientCharge;
+                    order.NetTotal = model.NetTotal;
                     db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
 
@@ -908,27 +909,26 @@ namespace ShopNow.Controllers
         [HttpPost]
         public JsonResult UpdatedPayment(PaymentUpdatedApiViewModel model)
         {
-            //int errorCode = 0;
-            var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == model.OrderNumber); // Payment.GetOrderNo(model.OrderNo);
-            payment.UpdatedOriginalAmount = model.UpdatedOriginalAmount;
-            payment.UpdatedAmount = model.UpdatedAmount;
-            if (model.RefundAmount > 0)
+            try
             {
-                payment.RefundAmount = model.RefundAmount;
-                payment.RefundRemark = model.RefundRemark;
-            }
-            if (model.CustomerId != 0)
-            {
-                var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);// Customer.Get(model.CustomerCode);
-                payment.UpdatedBy = customer.Name;
+                var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == model.OrderNumber);
+                payment.UpdatedOriginalAmount = model.UpdatedOriginalAmount;
+                payment.UpdatedAmount = model.UpdatedAmount;
+                if (model.RefundAmount > 0)
+                {
+                    payment.RefundAmount = model.RefundAmount;
+                    payment.RefundRemark = model.RefundRemark;
+                }
+                payment.UpdatedBy = model.CustomerName;
                 payment.DateUpdated = DateTime.Now;
                 db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                //Payment.Edit(payment, out errorCode);
                 return Json(new { message = "Successfully Updated Cart Payment!", Details = model });
             }
-            else
+            catch
+            {
                 return Json(new { message = "Failed to Update Cart Payment !" });
+            }
         }
 
         [HttpPost]
@@ -1141,12 +1141,13 @@ namespace ShopNow.Controllers
                      TotalPrice = i.o.o.TotalPrice,
                      TotalProduct = i.o.o.TotalProduct,
                      TotalQuantity = i.o.o.TotalQuantity,
+                     NetTotal = i.o.o.NetTotal,
                      WaitingCharge = i.o.o.WaitingCharge,
                      WaitingRemark = i.o.o.WaitingRemark,
                      RefundAmount = i.o.p.RefundAmount,
                      RefundRemark = i.o.p.RefundRemark,
+                     PaymentMode = i.o.p.PaymentMode,
                      OrderItemList = i.oi.ToList(),
-                     PaymentMode = i.o.p.PaymentMode
                  }).OrderByDescending(i => i.DateEncoded).ToList();
 
 
@@ -1245,7 +1246,7 @@ namespace ShopNow.Controllers
                 .GroupJoin(db.OrderItems, o => o.o.o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
                 .Select(i => new TodayDeliveryListViewModel.OrderList
                 {
-                    Amount = i.o.o.p.Amount,
+                    //Amount = i.o.o.p.Amount,
                     CustomerLatitude = 0,
                     CustomerLongitude = 0,
                     CustomerName = i.o.o.o.o.CustomerName,
@@ -1263,6 +1264,15 @@ namespace ShopNow.Controllers
                     ShopName = i.o.o.o.s.Name,
                     ShopPhoneNumber = i.o.o.o.o.ShopPhoneNumber,
                     Status = i.o.o.o.o.Status,
+                    Convinenientcharge = i.o.o.o.o.Convinenientcharge,
+                    DeliveryCharge = i.o.o.o.o.DeliveryCharge,
+                    NetDeliveryCharge = i.o.o.o.o.NetDeliveryCharge,
+                    Packingcharge = i.o.o.o.o.Packingcharge,
+                    ShopDeliveryDiscount = i.o.o.o.o.ShopDeliveryDiscount,
+                    TotalPrice = i.o.o.o.o.TotalPrice,
+                    TotalProduct = i.o.o.o.o.TotalProduct,
+                    TotalQuantity = i.o.o.o.o.TotalQuantity,
+                    NetTotal = i.o.o.o.o.NetTotal,
                     OrderItemList = i.oi.ToList()
                 }).ToList();
 
@@ -1274,7 +1284,7 @@ namespace ShopNow.Controllers
                .GroupJoin(db.OrderItems, o => o.o.o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
                .Select(i => new TodayDeliveryListViewModel.OrderList
                {
-                   Amount = i.o.o.p.Amount,
+                   //Amount = i.o.o.p.Amount,
                    CustomerLatitude = 0,
                    CustomerLongitude = 0,
                    CustomerName = i.o.o.o.o.CustomerName,
@@ -1292,6 +1302,15 @@ namespace ShopNow.Controllers
                    ShopName = i.o.o.o.s.Name,
                    ShopPhoneNumber = i.o.o.o.o.ShopPhoneNumber,
                    Status = i.o.o.o.o.Status,
+                   Convinenientcharge = i.o.o.o.o.Convinenientcharge,
+                   DeliveryCharge = i.o.o.o.o.DeliveryCharge,
+                   NetDeliveryCharge = i.o.o.o.o.NetDeliveryCharge,
+                   Packingcharge = i.o.o.o.o.Packingcharge,
+                   ShopDeliveryDiscount = i.o.o.o.o.ShopDeliveryDiscount,
+                   TotalPrice = i.o.o.o.o.TotalPrice,
+                   TotalProduct = i.o.o.o.o.TotalProduct,
+                   TotalQuantity = i.o.o.o.o.TotalQuantity,
+                   NetTotal = i.o.o.o.o.NetTotal,
                    OrderItemList = i.oi.ToList()
                }).ToList();
 
@@ -1870,6 +1889,7 @@ namespace ShopNow.Controllers
                      TotalPrice = i.o.o.TotalPrice,
                      TotalProduct = i.o.o.TotalProduct,
                      TotalQuantity = i.o.o.TotalQuantity,
+                     NetTotal = i.o.o.NetTotal,
                      WaitingCharge = i.o.o.WaitingCharge,
                      WaitingRemark = i.o.o.WaitingRemark,
                      RefundAmount = i.o.p.RefundAmount,
@@ -1978,6 +1998,7 @@ namespace ShopNow.Controllers
                      TotalPrice = i.o.o.o.TotalPrice,
                      TotalProduct = i.o.o.o.TotalProduct,
                      TotalQuantity = i.o.o.o.TotalQuantity,
+                     NetTotal = i.o.o.o.NetTotal,
                      WaitingCharge = i.o.o.o.WaitingCharge,
                      WaitingRemark = i.o.o.o.WaitingRemark,
                      RefundAmount = i.o.o.p.RefundAmount,
@@ -2366,62 +2387,63 @@ namespace ShopNow.Controllers
         }
         public JsonResult GetP(string str = "")
         {
-            DataTable dtShops = new DataTable();
-            dtShops.Columns.Add("ShopId");
-            dtShops.Columns.Add("OutletId");
-            dtShops.Columns.Add("CategoryName");
-            dtShops.Rows.Add(123,2,"cat1");
-            dtShops.Rows.Add(203,4,"cat2");
-       
+            var apiSettings = db.ApiSettings.Where(m => m.Status == 0).ToList();
 
-            string s = "";
-            string Url = "http://joyrahq.gofrugal.com/RayMedi_HQ/api/v1/items?q=status==R,outletId==2&limit=100000";
-            using (WebClient client = new WebClient())
-            {
-                client.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
-               
-               s=client.DownloadString(Url);
-            }
-            
-            var lst = db.Products.Where(m => m.ShopId == 123).Select(si => si.ItemId).ToList();
-            List<Product> updateList = new List<Product>();
-            List<Product> createList = new List<Product>();
-            Product varProduct = new Product();
-            // var lstDiscount;
-            // GetDiscoutCatecories:
-            // lstDiscount=db.DiscountCategories.Where(m => m.ShopId == 123).Select(si => si.Percentage).ToList();
+            if (apiSettings.Count > 0) {
+                foreach (var api in apiSettings)
+                {
+                    string s = "";
+                    string Url =api.Url+ "items?q=status==R,outletId=="+api.OutletId+"&limit=100000";
+                    using (WebClient client = new WebClient())
+                    {
+                        client.Headers["X-Auth-Token"] = api.AuthKey; //"62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
 
-            dynamic config = JsonConvert.DeserializeObject<ExpandoObject>(s, new ExpandoObjectConverter());
+                        s = client.DownloadString(Url);
+                    }
 
-            foreach (var pro in ((IEnumerable<dynamic>)config.items).Where(t => t.status == "R"))
-            {
-                varProduct.Id = Convert.ToString(pro.itemId);
-                varProduct.Name = pro.itemName;
-                varProduct.IBarU = Convert.ToInt32(pro.iBarU);
-                varProduct.DateUpdated = DateTime.Now;
-                varProduct.ShopCategoryId = 4;
-                varProduct.ShopId = 123;
-               
-                foreach (var med in pro.stock)
-                {
-                   varProduct.Qty= Convert.ToInt32(Math.Floor(Convert.ToDecimal(med.stock)));
-                   varProduct.MenuPrice = Convert.ToDouble(med.mrp);
-                   varProduct.Price= Convert.ToDouble(med.salePrice);
-                   varProduct.TaxPercentage = Convert.ToDouble(med.taxPercentage);
-                   varProduct.ItemTimeStamp = Convert.ToString(med.itemTimeStamp);
-                   varProduct.AppliesOnline = Convert.ToInt32(pro.appliesOnline);
-                   varProduct.OutletId = Convert.ToInt32(pro.outletId);
+                    var lst = db.Products.Where(m => m.ShopId == api.ShopId).Select(si => si.ItemId).ToList();
+                    List<Product> updateList = new List<Product>();
+                    List<Product> createList = new List<Product>();
+                    Product varProduct = new Product();
+                    var lstDiscount = (dynamic)null;
+                    goto GetDiscoutCatecories;
+                GetDiscoutCatecories:
+                    lstDiscount = db.DiscountCategories.Where(m => m.ShopId == api.ShopId).Select(si => si.Percentage).ToList();
+
+                    dynamic config = JsonConvert.DeserializeObject<ExpandoObject>(s, new ExpandoObjectConverter());
+
+                    foreach (var pro in ((IEnumerable<dynamic>)config.items).Where(t => t.status == "R"))
+                    {
+                        varProduct.Id = Convert.ToString(pro.itemId);
+                        varProduct.Name = pro.itemName;
+                        varProduct.IBarU = Convert.ToInt32(pro.iBarU);
+                        varProduct.DateUpdated = DateTime.Now;
+                        varProduct.ShopCategoryId = 4;
+                        varProduct.ShopId = api.ShopId;
+
+                        foreach (var med in pro.stock)
+                        {
+                            varProduct.Qty = Convert.ToInt32(Math.Floor(Convert.ToDecimal(med.stock)));
+                            varProduct.MenuPrice = Convert.ToDouble(med.mrp);
+                            varProduct.Price = Convert.ToDouble(med.salePrice);
+                            varProduct.TaxPercentage = Convert.ToDouble(med.taxPercentage);
+                            varProduct.ItemTimeStamp = Convert.ToString(med.itemTimeStamp);
+                            varProduct.AppliesOnline = Convert.ToInt32(pro.appliesOnline);
+                            varProduct.OutletId = Convert.ToInt32(pro.outletId);
+                            varProduct.DiscountCategoryName = Convert.ToString(med.cat + api.Category);
+                        }
+                        int idx = lst.IndexOf(pro.itemId);
+                        if (idx >= 0)
+                        {
+                            //update
+                        }
+                        else
+                        {
+                            //Add
+                        }
+
+                    }
                 }
-                int idx = lst.IndexOf(pro.itemId);
-                if (idx >= 0)
-                {
-                    //update
-                }
-                else
-                {
-                //Add
-                }
-              
             }
 
             //// DownloadString (encoding specified)
@@ -2846,7 +2868,7 @@ namespace ShopNow.Controllers
             var model = new NearShopImages();
             string query = "SELECT * " +
                                " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and Status = 0 and Latitude != 0 and Longitude != 0" +
-                               " order by Rating";
+                               " order by IsOnline desc,Adscore desc,Rating desc";
             model.NearShops = db.Shops.SqlQuery(query,
              new SqlParameter("Latitude", Latitude),
              new SqlParameter("Longitude", Longitude)).Select(i => new NearShopImages.shops
@@ -2862,27 +2884,27 @@ namespace ShopNow.Controllers
             var model = new PlacesListView();
             string query = "SELECT * " +
                                " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 1 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
-                               " order by Rating";
+                               " order by IsOnline desc,Adscore desc,Rating desc";
             string querySuperMarketList = "SELECT * " +
             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 3 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
-            " order by Rating";
+            " order by IsOnline desc,Adscore desc,Rating desc";
             string queryGroceriesList = "SELECT * " +
             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 2 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
-            " order by Rating";
+            " order by IsOnline desc,Adscore desc,Rating desc";
             string queryHealthList = "SELECT * " +
             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 4 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
-            " order by Rating";
+            " order by IsOnline desc,Adscore desc,Rating desc";
             string queryElectronicsList = "SELECT * " +
             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 5 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
-            " order by Rating";
+            " order by IsOnline desc,Adscore desc,Rating desc";
             string qServicesList = "SELECT * " +
             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 6 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
-            " order by Rating";
+            " order by IsOnline desc,Adscore desc,Rating desc";
             if (a == "-1")
             {
                 string queryOtherList = "SELECT * " +
                 " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 7 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
-                " order by Rating";
+                " order by IsOnline desc,Adscore desc,Rating desc";
                 model.ResturantList = db.Shops.SqlQuery(query,
                  new SqlParameter("Latitude", Latitude),
                  new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
@@ -3916,10 +3938,12 @@ namespace ShopNow.Controllers
                      TotalPrice = i.o.o.TotalPrice,
                      TotalProduct = i.o.o.TotalProduct,
                      TotalQuantity = i.o.o.TotalQuantity,
+                     NetTotal = i.o.o.NetTotal,
                      WaitingCharge = i.o.o.WaitingCharge,
                      WaitingRemark = i.o.o.WaitingRemark,
                      RefundAmount=i.o.p.RefundAmount,
                      RefundRemark = i.o.p.RefundRemark,
+                     PaymentMode = i.o.p.PaymentMode,
                      OrderItemList = i.oi.ToList()
                  }).ToList();
 

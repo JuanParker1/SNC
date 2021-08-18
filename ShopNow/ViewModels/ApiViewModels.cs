@@ -23,6 +23,7 @@ namespace ShopNow.ViewModels
             public int TotalProduct { get; set; }
             public int TotalQuantity { get; set; }
             public double TotalPrice { get; set; }
+            public double NetTotal { get; set; }
             public int OrderNumber { get; set; }
             public int DeliveryBoyId { get; set; }
             public string DeliveryBoyName { get; set; }
@@ -60,7 +61,7 @@ namespace ShopNow.ViewModels
             public double CustomerLatitude { get; set; }
             public double CustomerLongitude { get; set; }
             public int OrderNumber { get; set; }
-            public double Amount { get; set; }
+           // public double Amount { get; set; }
             public string CustomerPhoneNumber { get; set; }
             public string CustomerName { get; set; }
             public string DeliveryAddress { get; set; }
@@ -68,9 +69,19 @@ namespace ShopNow.ViewModels
             public DateTime DateEncoded { get; set; }
             public string PaymentMode { get; set; }
             public int OnWork { get; set; }
+            public int TotalProduct { get; set; }
+            public int TotalQuantity { get; set; }
+            public double TotalPrice { get; set; }
+            public double NetTotal { get; set; }
+            public double DeliveryCharge { get; set; }
+            public double ShopDeliveryDiscount { get; set; }
+            public double NetDeliveryCharge { get; set; }
+            public double Convinenientcharge { get; set; }
+            public double Packingcharge { get; set; }
             public Double? RefundAmount { get; set; }
             public string RefundRemark { get; set; }
             public List<OrderItem> OrderItemList { get; set; }
+           
         }
     }
 }

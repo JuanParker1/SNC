@@ -261,7 +261,7 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNBILDD008")]
-        public ActionResult DeliveryDelete(int id)
+        public JsonResult DeliveryDelete(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var bill = db.Bills.Where(b => b.Id == id && b.Status == 0).FirstOrDefault();
@@ -273,15 +273,14 @@ namespace ShopNow.Controllers
                 db.Entry(bill).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
-            return RedirectToAction("DeliveryChargeList");
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [AccessPolicy(PageCode = "SHNBILDD008")]
-        public ActionResult DeliveryChargeDelete(string id)
+        public JsonResult DeliveryChargeDelete(int id)
         {
-            var dCode = AdminHelpers.DCodeInt(id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var bill = db.Bills.Where(b => b.Id == dCode && b.Status == 0).FirstOrDefault();
+            var bill = db.Bills.Where(b => b.Id == id && b.Status == 0).FirstOrDefault();
             if (bill != null)
             {
                 bill.Status = 2;
@@ -290,7 +289,7 @@ namespace ShopNow.Controllers
                 db.Entry(bill).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
-            return RedirectToAction("DeliveryChargeAssignList");
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [AccessPolicy(PageCode = "SHNBILDCAL09")]

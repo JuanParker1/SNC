@@ -224,6 +224,7 @@ namespace ShopNow.Controllers
                     payment.DateEncoded = DateTime.Now;
                     payment.DateUpdated = DateTime.Now;
                     payment.Status = 0;
+                    payment.PlatformCreditType = 2;
                     db.Payments.Add(payment);
                     db.SaveChanges();
 
@@ -459,6 +460,7 @@ namespace ShopNow.Controllers
                     payment.DateEncoded = DateTime.Now;
                     payment.DateUpdated = DateTime.Now;
                     payment.Status = 0;
+                    payment.PlatformCreditType = 2;
                     db.Payments.Add(payment);
                     db.SaveChanges();
 
@@ -741,6 +743,7 @@ namespace ShopNow.Controllers
                     payment.DateUpdated = DateTime.Now;
                     payment.Status = 0;
                     db.Payments.Add(payment);
+                    payment.PlatformCreditType = 2;
                     db.SaveChanges();
 
                     ShopCredit shopCredit = new ShopCredit
@@ -891,6 +894,7 @@ namespace ShopNow.Controllers
                     payment.DateEncoded = DateTime.Now;
                     payment.DateUpdated = DateTime.Now;
                     payment.Status = 0;
+                    payment.PlatformCreditType = 2;
                     db.Payments.Add(payment);
                     db.SaveChanges();
 

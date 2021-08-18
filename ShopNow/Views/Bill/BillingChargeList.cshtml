@@ -25,13 +25,8 @@
                columns.Add(c => c.ConvenientCharge).Titled("Convenient Charge").Filterable(true).SetWidth(15);
                columns.Add(c => c.ItemTypeText).Titled("Packing Type").Filterable(true).SetWidth(10);
                columns.Add(c => c.PackingCharge).Titled("Packing Charge").Filterable(true).SetWidth(10);
-               columns.Add()
-               .Encoded(false)
-               .Sanitized(false).Titled("Action").SetWidth(15)
-               .RenderValueAs(o =>
-                            //.RenderValueAs(o => Html.ActionLink("Edit", "BillingUpdate", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn btn-sm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()
-                            //               + Html.ActionLink("Delete", "BillingDelete", new { code = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }, new { @class = "btn  btn-sm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
-                            @<div>
+               columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(15)
+               .RenderValueAs(o =>  @<div>
                                 <a href="~/Bill/BillingUpdate?Id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
                                 <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
                             </div>);
@@ -41,6 +36,7 @@
         </div>
     </div>
 </div>
+
 @section Scripts
 {
     <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>

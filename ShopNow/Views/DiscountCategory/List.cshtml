@@ -20,7 +20,7 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <div class="card">
+                <div class="card shadow">
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-striped table-hover table-borderless table-hover" id="DiscountCategory-list">
@@ -29,6 +29,7 @@
                                         <th>No.</th>
                                         <th>Discount Category</th>
                                         <th>Percentage</th>
+                                        <th>Shop Name</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -39,9 +40,10 @@
                                             <td></td>
                                             <td>@item.Name</td>
                                             <td>@item.Percentage</td>
+                                            <td>@item.ShopName</td>
                                             <td>
-                                                <a href="editModal" data-id="@item.Id" data-name="@item.Name" data-percentage="@item.Percentage" class="text-info mr-5 edit-prompt" data-toggle="modal" data-target="#editModal"><i class="fa fa-edit fa-lg"></i></a>
-                                                <a href="javascript:void(0)" data-id="@item.Id" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a> 
+                                                <a href="editModal" data-id="@item.Id" data-name="@item.Name" data-percentage="@item.Percentage" data-shopid="@item.ShopId" data-shopname="@item.ShopName" class="text-info mr-5 edit-prompt" data-toggle="modal" data-target="#editModal"><i class="fa fa-edit fa-lg"></i></a>
+                                                <a href="javascript:void(0)" data-id="@item.Id" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
                                             </td>
                                         </tr>
                                     }
@@ -65,6 +67,14 @@
                 </button>
             </div>
             <div class="modal-body">
+                <div class="form-group row">
+                    <div class="col-md-12">
+                        <label class="col-form-label"><strong class="text-secondary">Shop Name</strong></label>
+                        <select name="ShopId" class="form-control" id="ShopId">
+                        </select>
+                        <input type="hidden" id="ShopName" name="ShopName" />
+                    </div>
+                </div>
                 <div class="form-group row">
                     <div class="col-md-6">
                         <label class="col-form-label font-weight-bold text-secondary">Discount Category Name</label>
@@ -94,6 +104,12 @@
             </div>
             <div class="modal-body">
                 <div class="form-group row">
+                    <div class="col-md-12">
+                        <label class="col-form-label"><strong class="text-secondary">Shop Name</strong></label>
+                        <div id="ShName"></div>
+                    </div>
+                </div>
+                <div class="form-group row">
                     <div class="col-md-6">
                         <label class="col-form-label font-weight-bold text-secondary">Discount Category Name</label>
                         <div id="DiscountCategoryName"></div>
@@ -117,6 +133,9 @@
     <script src="~/Scripts/ValidateRequiredFields.js"></script>
     <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
             var t = $('#DiscountCategory-list').DataTable({
@@ -148,6 +167,8 @@
             $('#Create').on('click', function () {
                 var name = $('#Name').val();
                 var percentage = $('#Percentage').val();
+                var shopid = $('#ShopId').val();
+                var shopname = $('#ShopName').val();
                 var isValidate = false;
                 var requiredArr = [
                     'Name',
@@ -155,7 +176,7 @@
                 ];
                 isValidate = ValidateEmptyRequiredFiels(requiredArr);
                 if (isValidate) {
-                    $.getJSON("/DiscountCategory/Save?Name=" + name + "&Percentage=" + percentage , function (data) {
+                    $.getJSON("/DiscountCategory/Save?Name=" + name + "&Percentage=" + percentage + "&ShopId=" + shopid + "&ShopName=" + shopname, function (data) {
                         if (data.IsAdded == true) {
                             swal({
                                 title: data.message,
@@ -175,27 +196,48 @@
                 }
             });
 
+            $('#ShopId').select2({
+                placeholder: "Search Shop",
+                width: '100%',
+                ajax: {
+                    url: "/DiscountCategory/GetListSelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ShopName"]').val(e.params.data.text);
+            });
+
             $(".edit-prompt").click(function () {
                 var id = $(this).attr('data-id');
                 var name = $(this).attr('data-name');
                 var percentage = $(this).attr('data-percentage');
+                var shopid = $(this).attr('data-shopid');
+                var shopname = $(this).attr('data-shopname');
                 $("#DiscountCategoryId").val(id);
-                $("#DiscountCategoryName").append("<input type=text name=DCName id=DCName class=form-control value='" + name + "' />");
-                $("#DiscountPercentage").append("<input type=number name=DPercentage id=DPercentage class=form-control value='" + percentage + "' />");
+                $("#DiscountCategoryName").append("<input type='text' name='DCName' id='DCName' class='form-control' value='" + name + "' />");
+                $("#DiscountPercentage").append("<input type='number' name='DPercentage' id='DPercentage' class='form-control' value='" + percentage + "' />");
+                $("#ShName").append("<select name='SId' class='form-control SId' id='SId'><option value='" + shopid + "'>" + shopname + "</option></select><input type='hidden' id='SName' name='SName' value='" + shopname + "' />");
             });
 
             $("#Edit").click(function () {
                 var id = $("#DiscountCategoryId").val();
                 var name = $("#DCName").val();
                 var percentage = $("#DPercentage").val();
+                var shopid = $("#SId").val();
+                var shopname = $("#SName").val();
                 if (name == "" || name == null) {
                     swal("Discount Category Name is Empty.", "Please Enter Discount Category Name", "warning");
                 }
                 else {
                     if (percentage == "" || percentage == null) {
                         swal("Discount Percentage is Empty.", "Please Enter Discount Percentage", "warning");
-                    } else {
-                        $.getJSON("/DiscountCategory/Edit", { Id: id, name: name, percentage: percentage }, function (data) {
+                    }
+                    else if (shopname == "" || shopname == null) {
+                        swal("Shop Name is Empty.", "Please Enter Shop Name", "warning");
+                    }
+                    else {
+                        $.getJSON("/DiscountCategory/Edit", { Id: id, name: name, percentage: percentage, shopid: shopid, shopname: shopname }, function (data) {
                             if (data.message != null || data.message != "") {
                                 swal({
                                     title: data.message,
@@ -212,6 +254,18 @@
 
             $("#editModal").on("hidden.bs.modal", function () {
                 window.location.reload();
+            });
+
+            $('.SId').select2({
+                placeholder: "Search Shop",
+                width: '100%',
+                ajax: {
+                    url: "/DiscountCategory/GetListSelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="SName"]').val(e.params.data.text);
             });
 
             $(".btnDelete").click(function () {
