@@ -40,7 +40,7 @@
                                 {
                                     <select id="ShopId" name="ShopId" class="form-control"></select>
                                     <input type="hidden" name="ShopName" id="ShopName" />
-                                    <input type="hidden" name="ShopId" id="ShopId" />
+                                    @*<input type="hidden" name="ShopId" id="ShopId" />*@
                                 }
                             </div>
                         </div>
@@ -297,7 +297,7 @@
             $('#MasterProductId').select2({
                 placeholder: "Search Product",
                 ajax: {
-                    url: "/Product/GetDishMasterProductSelect2",
+                    url: "/Product/GetDishSelect2",
                     width: '100%',
                     delay: 250,
                     dataType: 'json'
@@ -306,20 +306,22 @@
                 $('input[name="MasterProductName"]').val(e.params.data.text);
               //  $('input[name="MasterProductId"]').val(e.params.data.MasterId);
                 $('input[name="Name"]').val(e.params.data.text);
-                $('input[name="CategoryId"]').val(e.params.data.CategoryIds);
-                $('input[name="CategoryName"]').val(e.params.data.CategoryName);
+                $('input[name="CategoryId"]').val(e.params.data.CategoryId);
                 $('select[name="Customisation"] option[value=' + e.params.data.Customisation + ']').attr("selected", "selected");
                 $('select[name="ColorCode"] option[value="' + e.params.data.ColorCode + '"]').attr("selected", "selected");
                 $('#img-ProductImage1').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath1);
                 $('input[name="ImagePath1"]').val(e.params.data.ImagePath1);
                 $('input[name="MenuPrice"]').val(e.params.data.Price);
                 $('input[name="GoogleTaxonomyCode"]').val(e.params.data.GoogleTaxonomyCode);
+                $.getJSON("/Product/GetCategoryName", { categoryId: e.params.data.CategoryId}, function (data) {
+                    $('#CategoryName').val(data.categoryName);
+                });
                 $('#divAddOns').addClass('d-none');
                 $('#tbl-addOns tbody').empty();
                 $.getJSON('/Product/GetProductDishAddOns', { masterProductId: e.params.data.MasterId }, function (data) {
                     if (data != "") {
                         $.each(data, function (index, item) {
-                            var tableData = '<tr class="d-none type_' + item.AddOnType + '" data-code=' + item.Id + '> \
+                            var tableData = '<tr class="d-none type_' + item.AddOnType + '" data-id=' + item.Id + '> \
                                     <td>' + item.PortionName + '</td> \
                                     <td><input class="textbox-sm portion-price" type="number" value=' + item.PortionPrice + '></td> \
                                     <td>' + item.AddOnCategoryName + '</td> \
@@ -329,7 +331,7 @@
                                     <td><input class="textbox-sm crust-price" type="number" value=' + item.CrustPrice + '></td>\
                                     <td>' + item.MinSelectionLimit + '</td>\
                                     <td>' + item.MaxSelectionLimit + '</td>\
-                                    <td><input type="checkbox" class="chk-select chk_'+ item.AddOnType + '" value="true" name="IsActive" data-code=' + item.Id + '></td>\
+                                    <td><input type="checkbox" class="chk-select chk_'+ item.AddOnType + '" value="true" name="IsActive" data-id=' + item.Id + '></td>\
                                 </tr>';
                             $('#tbl-addOns tbody').append(tableData);
                         });
@@ -424,7 +426,7 @@
                     $.post('/Product/AddShopAddOns', { model: data }, function () { });
                 } else {
                     addonDisableCheckbox();
-                    $.post('/Product/RemoveFromShopAddOns', { id: code }, function () { });
+                    $.post('/Product/RemoveFromShopAddOns', { id: id }, function () { });
                 }
             });
 

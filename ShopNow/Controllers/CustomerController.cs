@@ -274,11 +274,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNCUSSA012")]
-        public JsonResult Remove(int code)
+        public JsonResult Remove(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            bool IsAdded = false;
-            var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();
+            var customer = db.Customers.Where(m => m.Id == Id).FirstOrDefault();
             if (customer != null)
             {
                 customer.Position = 0;
@@ -286,9 +285,8 @@ namespace ShopNow.Controllers
                 customer.UpdatedBy = user.Name;
                 db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                IsAdded = true;
             }
-            return Json(new { IsAdded = IsAdded }, JsonRequestBehavior.AllowGet);
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [AccessPolicy(PageCode = "SHNCUSSA012")]

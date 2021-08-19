@@ -8,64 +8,80 @@
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 
-    <div class="container-fluid">
-        <div class="row mb-3">
-            <div class="col-md-3">
-                <h5 class="mt-1" style="letter-spacing:1px">SHOPWISE ITEM LIST</h5>
-            </div>
-            <div class="col-md-5">
-                <form method="get" action="/Product/List">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <select id="select-shop" class="form-control" name="ShopId">
-                                @if (Model.ShopId != 0)
-                                {
-                                    <option value="@Model.ShopId">@Model.ShopName</option>
-                                }
-                            </select>
-                            <input type="hidden" name="ShopName" />
-                        </div>
-                        <div class="col-md-4">
-                            <input type="submit" class="btn btn-info mr-3" value="Go" />
-                            <a href="/Product/List" class="btn btn-info">Clear</a>
-                        </div>
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <h5 class="mt-1" style="letter-spacing:1px">SHOPWISE ITEM LIST</h5>
+        </div>
+        <div class="col-md-5">
+            <form method="get" action="/Product/List">
+                <div class="row">
+                    <div class="col-md-8">
+                        <select id="select-shop" class="form-control" name="ShopId">
+                            @if (Model.ShopId != 0)
+                            {
+                                <option value="@Model.ShopId">@Model.ShopName</option>
+                            }
+                        </select>
+                        <input type="hidden" name="ShopName" />
                     </div>
-                </form>
-            </div>
-            <div class="col-md-4 text-right">
-                <a href="~/Product/FoodCreate" target="_self" class="ml-2"><span class="fa fa-plus"></span> Dish</a>
-                <a href="~/Product/FMCGCreate" target="_self" class="ml-2"><span class="fa fa-plus"></span> FMCG</a>
-                <a href="~/Product/MedicalCreate" target="_self" class="ml-2"><span class="fa fa-plus"></span> Medicine</a>
-                <a href="~/Product/ElectronicCreate" target="_self" class="ml-2"><span class="fa fa-plus"></span> Electronics</a>
-            </div>
+                    <div class="col-md-4">
+                        <input type="submit" class="btn btn-info mr-3" value="Go" />
+                        <a href="/Product/List" class="btn btn-info">Clear</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-4 text-right">
+            <a href="~/Product/FoodCreate" target="_self" class="ml-2"><span class="fa fa-plus"></span> Dish</a>
+            <a href="~/Product/FMCGCreate" target="_self" class="ml-2"><span class="fa fa-plus"></span> FMCG</a>
+            <a href="~/Product/MedicalCreate" target="_self" class="ml-2"><span class="fa fa-plus"></span> Medicine</a>
+            <a href="~/Product/ElectronicCreate" target="_self" class="ml-2"><span class="fa fa-plus"></span> Electronics</a>
+        </div>
 
-            <div class="col-md-12">
-                <div class="card shadow mt-3">
-                    <div class="card-body">
-                        @Html.Grid(Model.ListItems).Columns(columns =>
-  {
-      columns.Add(c => c.ProductTypeName).Titled("Item Type").Filterable(true).SetWidth(10);
-      columns.Add(c => c.Name).Titled("Name").Encoded(false).Sanitized(false).RenderValueAs(model => Html.ActionLink(model.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(model.Id) }).ToHtmlString()).Filterable(true).SetWidth(20);
-      columns.Add(c => c.CategoryName).Titled("Category Name").Filterable(true).SetWidth(12);/*.RenderValueAs(c=> c.CategoryName == null ? "N/A" : c.CategoryName);*/
-      columns.Add(c => c.BrandName).Titled("Brand Name").Filterable(true).SetWidth(18);/*.RenderValueAs(c => c.BrandName == null ? "N/A" : c.BrandName);*/
-      columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
-      columns.Add(c => c.DiscountCategoryPercentage).Titled("Discount %").Filterable(true).SetWidth(10);
-      columns.Add()
-      .Encoded(false)
-      .Sanitized(false)
-      .RenderValueAs(o => o.ProductTypeName == "Product" ? Html.ActionLink("Edit", "Edit", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString() :
-      (o.ProductTypeName == "Dish" ? Html.ActionLink("Edit", "FoodEdit", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString() :
-      (o.ProductTypeName == "FMCG" ? Html.ActionLink("Edit", "FMCGEdit", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString() :
-      (o.ProductTypeName == "Medical" ? Html.ActionLink("Edit", "MedicalEdit", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString() :
-      Html.ActionLink("Edit", "ServiceEdit", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString())))
-      + Html.ActionLink("Delete", "Delete", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id), redirectPage=0 }, new { @class = "btn  btn-sm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
-  }).WithPaging(20).Sortable(true)
-                    </div>
+        <div class="col-md-12">
+            <div class="card shadow mt-3">
+                <div class="card-body">
+                    @Html.Grid(Model.ListItems).Columns(columns =>
+{
+  columns.Add(c => c.ProductTypeName).Titled("Item Type").Filterable(true).SetWidth(10);
+  columns.Add(c => c.Name).Titled("Name").Encoded(false).Sanitized(false).RenderValueAs(model => Html.ActionLink(model.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(model.Id) }).ToHtmlString()).Filterable(true).SetWidth(20);
+  columns.Add(c => c.CategoryName).Titled("Category Name").Filterable(true).SetWidth(12);/*.RenderValueAs(c=> c.CategoryName == null ? "N/A" : c.CategoryName);*/
+  columns.Add(c => c.BrandName).Titled("Brand Name").Filterable(true).SetWidth(18);/*.RenderValueAs(c => c.BrandName == null ? "N/A" : c.BrandName);*/
+  columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
+  columns.Add(c => c.DiscountCategoryPercentage).Titled("Discount %").Filterable(true).SetWidth(10);
+   columns.Add()
+   .Encoded(false)
+   .Sanitized(false).Titled("Action").SetWidth(10)
+   .RenderValueAs(o => @<div>
+            @if (o.ProductTypeId == 1)
+            {
+            <a href="~/Product/FoodEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-4"><i class="fa fa-edit fa-lg"></i></a>
+            }
+            else if (@o.ProductTypeId == 2)
+            {
+            <a href="~/Product/FMCGEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-4"><i class="fa fa-edit fa-lg"></i></a>
+            }
+            else if (@o.ProductTypeId == 3)
+            {
+            <a href="~/Product/MedicalEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-4"><i class="fa fa-edit fa-lg"></i></a>
+            }
+            else if (@o.ProductTypeId == 4)
+            {
+            <a href="~/Product/ElectronicEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-4"><i class="fa fa-edit fa-lg"></i></a>
+            }
+            else
+            {
+            <a href="~/Product/ServiceEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-4"><i class="fa fa-edit fa-lg"></i></a>
+            }
+            <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+        </div>);
+}).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
-       
     </div>
+</div>
 
 @*Image Modal*@
 
@@ -98,6 +114,31 @@
                 }
             }).on('select2:select', function (e) {
                 $('input[name="ShopName"]').val(e.params.data.text);
+                });
+
+            $(".btnDelete").click(function () {
+                var Id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "Delete all ShopItems mapping to this MasterItems. You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/Product/Delete", { Id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
             });
 
             //$("#btnFilter").click(function () {
