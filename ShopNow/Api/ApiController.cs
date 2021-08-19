@@ -950,15 +950,28 @@ namespace ShopNow.Controllers
                 else
                 {
                     var order = _mapper.Map<OrderCreateViewModel, Models.Order>(model);
+                    var customer = (dynamic)null;
                     if (model.CustomerId != 0)
                     {
-                        var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
+                         customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
                         order.CustomerId = customer.Id;
                         order.CreatedBy = customer.Name;
                         order.UpdatedBy = customer.Name;
                         order.CustomerName = customer.Name;
                         order.CustomerPhoneNumber = customer.PhoneNumber;
                     }
+                    if(model.ReferralNumber==string.Empty)
+                    {
+                        customer.IsReferred = true;
+
+                    }
+                    else
+                    {
+                        customer.IsReferred = false;
+                        customer.ReferralNumber = model.ReferralNumber;
+                    }
+                    db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
                     order.OrderNumber = Convert.ToInt32(model.OrderNumber);
                     order.ShopId = shop.Id;
                     order.ShopName = shop.Name;
@@ -2314,9 +2327,9 @@ namespace ShopNow.Controllers
         }
         public JsonResult GetCustomerRefered(int CustomerId)
         {
-            var referealCount = db.Customers.Where(c => c.ReferralNumber != null).Count();
-            if (referealCount <= 0)
-                return Json(new { Status = true }, JsonRequestBehavior.AllowGet);
+            var referealCount = db.Customers.Where(c => c.ReferralNumber != null && c.Id== CustomerId).Count();
+            if(referealCount<=0)
+            return Json(new { Status = true}, JsonRequestBehavior.AllowGet);
             else
                 return Json(new { Status = false }, JsonRequestBehavior.AllowGet);
         }
