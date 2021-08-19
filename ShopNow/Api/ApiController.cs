@@ -23,6 +23,7 @@ using System.Threading.Tasks;
 using System.Web.Http.Cors;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using System.Data.Entity.Migrations;
 
 namespace ShopNow.Controllers
 {
@@ -1593,10 +1594,30 @@ namespace ShopNow.Controllers
             shopCredits.DeliveryCredit -= payment.DeliveryCharge;
             db.Entry(shopCredits).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
-            var fcmToken = (from c in db.Customers
+            var customerDetails = (from c in db.Customers
                             where c.Id == order.CustomerId
-                            select c.FcmTocken ?? "").FirstOrDefault().ToString();
-            Helpers.PushNotification.SendbydeviceId("Your order has been delivered.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+                            //select c.FcmTocken ?? "").FirstOrDefault().ToString();
+                            select c).FirstOrDefault();
+
+            if(customerDetails.IsReferred == false)
+            {
+                customerDetails.Id = customerDetails.Id;
+                customerDetails.IsReferred = true;
+                db.Entry(customerDetails).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                var ReferralCustomer = db.Customers.Where(c => c.PhoneNumber == customerDetails.ReferralNumber).FirstOrDefault();
+                
+                if(ReferralCustomer !=null)
+                {
+                    var referalAmount = db.ReferralSettings.Where(r => r.Status == 0).Select(r => r.Amount).FirstOrDefault();
+                    ReferralCustomer.WalletAmount = ReferralCustomer.WalletAmount + referalAmount;
+                    db.Entry(ReferralCustomer).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+            string fcmtocken = customerDetails.FcmTocken ?? "";
+
+            Helpers.PushNotification.SendbydeviceId("Your order has been delivered.", "ShopNowChat", "a.mp3", fcmtocken.ToString());
             return Json(new { message = "Successfully DelivaryBoy Delivered!" }, JsonRequestBehavior.AllowGet);
         }
 
@@ -2328,10 +2349,11 @@ namespace ShopNow.Controllers
         public JsonResult GetCustomerRefered(int CustomerId)
         {
             var referealCount = db.Customers.Where(c => c.ReferralNumber != null && c.Id== CustomerId).Count();
+            var referSettings = db.ReferralSettings.Where(r => r.Status == 0).Select(r => r.PaymentMode).FirstOrDefault();
             if(referealCount<=0)
-            return Json(new { Status = true}, JsonRequestBehavior.AllowGet);
+            return Json(new { Status = true,paymentMode= referSettings }, JsonRequestBehavior.AllowGet);
             else
-                return Json(new { Status = false }, JsonRequestBehavior.AllowGet);
+                return Json(new { Status = false, paymentMode = referSettings }, JsonRequestBehavior.AllowGet);
         }
             public JsonResult GetProductList(double latitude, double longitude, string str = "", int page = 1, int pageSize = 10)
         {
