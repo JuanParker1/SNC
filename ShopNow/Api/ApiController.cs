@@ -709,11 +709,11 @@ namespace ShopNow.Controllers
         {
             try
             {
-                var deliveryBoyExist = db.DeliveryBoys.FirstOrDefault(i => i.Name == model.Name && i.PhoneNumber == model.PhoneNumber && (i.Status == 0 || i.Status == 1));
-                if (deliveryBoyExist == null)
+                var isExist = db.DeliveryBoys.Any(i => i.PhoneNumber == model.PhoneNumber);
+                var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
+                if (!isExist)
                 {
                     var deliveryBoy = _mapper.Map<DeliveryBoyCreateViewModel, DeliveryBoy>(model);
-                    var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
                     if (customer != null)
                     {
                         deliveryBoy.Name = customer.Name;
@@ -731,7 +731,7 @@ namespace ShopNow.Controllers
                     deliveryBoy.DateUpdated = DateTime.Now;
                     db.DeliveryBoys.Add(deliveryBoy);
                     db.SaveChanges();
-                    if (deliveryBoy.Id != 0)
+                    if (deliveryBoy != null)
                     {
                         return Json(new { message = "Successfully Created a Delivery Boy!", Position = customer.Position });
                     }
@@ -739,7 +739,35 @@ namespace ShopNow.Controllers
                         return Json(new { message = "Failed to Create a Delivery Boy!" });
                 }
                 else
-                    return Json(new { message = "This Delivery Boy Already Exist!" });
+                {
+                    var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.PhoneNumber == model.PhoneNumber);
+                    _mapper.Map(model, deliveryBoy);
+                    if (customer != null)
+                    {
+                        deliveryBoy.Name = customer.Name;
+                        deliveryBoy.Email = customer.Email;
+                        deliveryBoy.CreatedBy = customer.Name;
+                        deliveryBoy.UpdatedBy = customer.Name;
+                        customer.Position = 3;
+                        customer.UpdatedBy = customer.Name;
+                        customer.DateUpdated = DateTime.Now;
+                        db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                    deliveryBoy.Status = 1;
+                    deliveryBoy.DateEncoded = DateTime.Now;
+                    deliveryBoy.DateUpdated = DateTime.Now;
+                    db.Entry(deliveryBoy).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                    if (deliveryBoy != null)
+                    {
+                        return Json(new { message = "Successfully Created a Delivery Boy!", Position = customer.Position });
+                    }
+                    else
+                        return Json(new { message = "Failed to Create a Delivery Boy!" });
+
+                }
+                //return Json(new { message = "This Delivery Boy Already Exist!" });
             }
             catch
             {
@@ -953,14 +981,14 @@ namespace ShopNow.Controllers
                     var customer = (dynamic)null;
                     if (model.CustomerId != 0)
                     {
-                         customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
+                        customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
                         order.CustomerId = customer.Id;
                         order.CreatedBy = customer.Name;
                         order.UpdatedBy = customer.Name;
                         order.CustomerName = customer.Name;
                         order.CustomerPhoneNumber = customer.PhoneNumber;
                     }
-                    if(model.ReferralNumber==string.Empty)
+                    if (model.ReferralNumber == string.Empty)
                     {
                         customer.IsReferred = true;
 
@@ -1124,7 +1152,7 @@ namespace ShopNow.Controllers
 
             db.Configuration.ProxyCreationEnabled = false;
             var model = new GetAllOrderListViewModel();
-            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && i.Status==status)
+            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && i.Status == status)
                  .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
                  .GroupJoin(db.OrderItems, o => o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
                  .Select(i => new GetAllOrderListViewModel.OrderList
@@ -1478,7 +1506,7 @@ namespace ShopNow.Controllers
                 foreach (var item in orderList)
                 {
                     //Product Stock Update
-                    var product = db.Products.FirstOrDefault(i => i.Id == item.ProductId && i.ProductTypeId==3);
+                    var product = db.Products.FirstOrDefault(i => i.Id == item.ProductId && i.ProductTypeId == 3);
                     if (product != null)
                     {
                         product.HoldOnStok -= Convert.ToInt32(item.Quantity);
@@ -2327,9 +2355,9 @@ namespace ShopNow.Controllers
         }
         public JsonResult GetCustomerRefered(int CustomerId)
         {
-            var referealCount = db.Customers.Where(c => c.ReferralNumber != null && c.Id== CustomerId).Count();
-            if(referealCount<=0)
-            return Json(new { Status = true}, JsonRequestBehavior.AllowGet);
+            var referealCount = db.Customers.Where(c => c.ReferralNumber != null && c.Id == CustomerId).Count();
+            if (referealCount <= 0)
+                return Json(new { Status = true }, JsonRequestBehavior.AllowGet);
             else
                 return Json(new { Status = false }, JsonRequestBehavior.AllowGet);
         }
@@ -2414,7 +2442,7 @@ namespace ShopNow.Controllers
                 foreach (var api in apiSettings)
                 {
                     string s = "";
-                    string Url =api.Url+ "items?q=status==R,outletId=="+api.OutletId+"&limit=100000";
+                    string Url = api.Url + "items?q=status==R,outletId==" + api.OutletId + "&limit=100000";
                     using (WebClient client = new WebClient())
                     {
                         client.Headers["X-Auth-Token"] = api.AuthKey; //"62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
@@ -2484,12 +2512,12 @@ namespace ShopNow.Controllers
             //    client.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
             //    Console.WriteLine(System.Text.UTF8Encoding.UTF8.GetString(client.DownloadData(Url)));
             //}
-            return Json(new { Page =""}, JsonRequestBehavior.AllowGet);
+            return Json(new { Page = "" }, JsonRequestBehavior.AllowGet);
         }
 
         public static double GetStockQty(string code)
         {
-         
+
             using (WebClient myData = new WebClient())
             {
                 myData.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
@@ -2511,23 +2539,23 @@ namespace ShopNow.Controllers
         public JsonResult GetShopCategoryList(int shopId = 0, int CategoryId = 0, string str = "", int page = 1, int pageSize = 20)
         {
             //  var shid = db.Shops.Where(s => s.Id == shopId).FirstOrDefault();
-            int ? count = 0;
+            int? count = 0;
             var total = db.GetShopCategoryProductCount(shopId, CategoryId, str).ToList();
             if (total.Count > 0)
-             count = total[0]; 
+                count = total[0];
             var skip = page - 1;
             var model = db.GetShopCategoryProducts(shopId, CategoryId, str, skip, pageSize).ToList();
             int CurrentPage = page;
             int PageSize = pageSize;
-            int ? TotalCount = count;
-            int  TotalPages = (int)Math.Ceiling(count.Value / (double)PageSize);
+            int? TotalCount = count;
+            int TotalPages = (int)Math.Ceiling(count.Value / (double)PageSize);
             var items = model;
             var previous = CurrentPage - 1;
             var previousurl = apipath + "/Api/GetShopCategoryList?shopId=" + shopId + "&categoryId=" + CategoryId + "&str=" + str + "&page=" + previous;
-             var previousPage = CurrentPage > 1 ? previousurl : "No";
+            var previousPage = CurrentPage > 1 ? previousurl : "No";
             var current = CurrentPage + 1;
             var nexturl = apipath + "/Api/GetShopCategoryList?shopId=" + shopId + "&categoryId=" + CategoryId + "&str=" + str + "&page=" + current;
-             var nextPage = CurrentPage < TotalPages ? nexturl : "No";
+            var nextPage = CurrentPage < TotalPages ? nexturl : "No";
             var paginationMetadata = new
             {
                 totalCount = TotalCount,
@@ -2829,12 +2857,17 @@ namespace ShopNow.Controllers
         public JsonResult GetDelivaryBoyStatus(int customerId)
         {
             var delivaryBoy = db.DeliveryBoys.FirstOrDefault(i => i.CustomerId == customerId && i.Status == 0);
-            if (delivaryBoy.Active == 1)
+            if (delivaryBoy != null)
             {
-                return Json("You are Active", JsonRequestBehavior.AllowGet);
+                if (delivaryBoy.Active == 1)
+                {
+                    return Json("You are Active", JsonRequestBehavior.AllowGet);
+                }
+                else
+                    return Json("You are InActive", JsonRequestBehavior.AllowGet);
             }
             else
-                return Json("You are InActive", JsonRequestBehavior.AllowGet);
+                return Json("Delivery Boy not available", JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetDelivaryBoyActive(int customerId, int state)
@@ -2842,24 +2875,46 @@ namespace ShopNow.Controllers
             if (state == 1 && (customerId != 0))
             {
                 var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
-                var delivaryBoy = db.DeliveryBoys.FirstOrDefault(i => i.CustomerId == customerId && i.Status == 0);
-                delivaryBoy.Active = 1;
-                delivaryBoy.UpdatedBy = customer.Name;
-                db.Entry(delivaryBoy).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-                return Json("You are Active", JsonRequestBehavior.AllowGet);
+                if (customer != null)
+                {
+                    var delivaryBoy = db.DeliveryBoys.FirstOrDefault(i => i.CustomerId == customerId && i.Status == 0);
+                    if (delivaryBoy != null)
+                    {
+                        delivaryBoy.Active = 1;
+                        delivaryBoy.UpdatedBy = customer.Name;
+                        db.Entry(delivaryBoy).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                        return Json("You are Active", JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                        return Json("Delivery boy not available", JsonRequestBehavior.AllowGet);
+                }
+                else
+                    return Json("Customer not available", JsonRequestBehavior.AllowGet);
             }
             else
             {
                 var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
-                var delivaryBoy = db.DeliveryBoys.FirstOrDefault(i => i.CustomerId == customerId && i.Status == 0);
-                delivaryBoy.Active = 0;
-                delivaryBoy.UpdatedBy = customer.Name;
-                db.Entry(delivaryBoy).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-                return Json("You are InActive", JsonRequestBehavior.AllowGet);
+                if (customer != null)
+                {
+                    var delivaryBoy = db.DeliveryBoys.FirstOrDefault(i => i.CustomerId == customerId && i.Status == 0);
+                    if (delivaryBoy != null)
+                    {
+                        delivaryBoy.Active = 0;
+                        delivaryBoy.UpdatedBy = customer.Name;
+                        db.Entry(delivaryBoy).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                        return Json("You are InActive", JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                        return Json("Delivery boy not available", JsonRequestBehavior.AllowGet);
+                }
+                else
+                    return Json("Customer not available", JsonRequestBehavior.AllowGet);
             }
+
         }
+    
 
         public JsonResult GetNearDelivaryBoy(double Latitude, double Longitude)
         {
@@ -3199,7 +3254,7 @@ namespace ShopNow.Controllers
             {
                 string queryOtherList = "SELECT top(6) * " +
               " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 7 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0 " +
-              " order by Rating";
+              " order by IsOnline desc,Adscore desc,Rating desc";
                 model.OtherList = db.Shops.SqlQuery(queryOtherList,
                 new SqlParameter("Latitude", Latitude),
                 new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
