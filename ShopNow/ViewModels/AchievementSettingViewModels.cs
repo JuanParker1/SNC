@@ -24,7 +24,7 @@ namespace ShopNow.ViewModels
                     switch (this.CountType)
                     {
                         case 1:
-                            return "Category Count";
+                            return "Shop Category Count";
                         case 2:
                             return "All Shops Count";
                         case 3:
@@ -33,6 +33,8 @@ namespace ShopNow.ViewModels
                             return "All Products Count";
                         case 5:
                             return "Selected Products Count";
+                        case 6:
+                            return "All Order Count";
                         default:
                             return "N/A";
                     }
