@@ -1983,43 +1983,43 @@ namespace ShopNow.Controllers
             var model = new GetAllOrderListViewModel();
             model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && (i.Status == 3 || i.Status == 4 || i.Status == 5))
                  .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
-                 .GroupJoin(db.DeliveryBoys, o => o.o.DeliveryBoyId, d => d.Id, (o, d) => new { o, d })
-                 .GroupJoin(db.OrderItems, o => o.o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
+                 //.Join(db.DeliveryBoys, o => o.o.DeliveryBoyId, d => d.Id, (o, d) => new { o, d })
+                 .GroupJoin(db.OrderItems, o => o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
                  .Select(i => new GetAllOrderListViewModel.OrderList
                  {
-                     Convinenientcharge = i.o.o.o.Convinenientcharge,
-                     CustomerId = i.o.o.o.CustomerId,
-                     CustomerName = i.o.o.o.CustomerName,
-                     CustomerPhoneNumber = i.o.o.o.CustomerPhoneNumber,
-                     DateEncoded = i.o.o.o.DateEncoded,
-                     DeliveryAddress = i.o.o.o.DeliveryAddress,
-                     DeliveryBoyId = i.o.o.o.DeliveryBoyId,
-                     DeliveryBoyName = i.o.o.o.DeliveryBoyName,
-                     DeliveryBoyPhoneNumber = i.o.o.o.DeliveryBoyPhoneNumber,
-                     DeliveryCharge = i.o.o.o.DeliveryCharge,
-                     Id = i.o.o.o.Id,
-                     NetDeliveryCharge = i.o.o.o.NetDeliveryCharge,
-                     OrderNumber = i.o.o.o.OrderNumber,
-                     Packingcharge = i.o.o.o.Packingcharge,
-                     PenaltyAmount = i.o.o.o.PenaltyAmount,
-                     PenaltyRemark = i.o.o.o.PenaltyRemark,
-                     ShopDeliveryDiscount = i.o.o.o.ShopDeliveryDiscount,
-                     ShopId = i.o.o.o.ShopId,
-                     ShopName = i.o.o.o.ShopName,
-                     ShopOwnerPhoneNumber = i.o.o.o.ShopOwnerPhoneNumber,
-                     ShopPhoneNumber = i.o.o.o.ShopPhoneNumber,
-                     Status = i.o.o.o.Status,
-                     TotalPrice = i.o.o.o.TotalPrice,
-                     TotalProduct = i.o.o.o.TotalProduct,
-                     TotalQuantity = i.o.o.o.TotalQuantity,
-                     NetTotal = i.o.o.o.NetTotal,
-                     WaitingCharge = i.o.o.o.WaitingCharge,
-                     WaitingRemark = i.o.o.o.WaitingRemark,
-                     RefundAmount = i.o.o.p.RefundAmount,
-                     RefundRemark = i.o.o.p.RefundRemark,
+                     Convinenientcharge = i.o.o.Convinenientcharge,
+                     CustomerId = i.o.o.CustomerId,
+                     CustomerName = i.o.o.CustomerName,
+                     CustomerPhoneNumber = i.o.o.CustomerPhoneNumber,
+                     DateEncoded = i.o.o.DateEncoded,
+                     DeliveryAddress = i.o.o.DeliveryAddress,
+                     DeliveryBoyId = i.o.o.DeliveryBoyId,
+                     DeliveryBoyName = i.o.o.DeliveryBoyName,
+                     DeliveryBoyPhoneNumber = i.o.o.DeliveryBoyPhoneNumber,
+                     DeliveryCharge = i.o.o.DeliveryCharge,
+                     Id = i.o.o.Id,
+                     NetDeliveryCharge = i.o.o.NetDeliveryCharge,
+                     OrderNumber = i.o.o.OrderNumber,
+                     Packingcharge = i.o.o.Packingcharge,
+                     PenaltyAmount = i.o.o.PenaltyAmount,
+                     PenaltyRemark = i.o.o.PenaltyRemark,
+                     ShopDeliveryDiscount = i.o.o.ShopDeliveryDiscount,
+                     ShopId = i.o.o.ShopId,
+                     ShopName = i.o.o.ShopName,
+                     ShopOwnerPhoneNumber = i.o.o.ShopOwnerPhoneNumber,
+                     ShopPhoneNumber = i.o.o.ShopPhoneNumber,
+                     Status = i.o.o.Status,
+                     TotalPrice = i.o.o.TotalPrice,
+                     TotalProduct = i.o.o.TotalProduct,
+                     TotalQuantity = i.o.o.TotalQuantity,
+                     NetTotal = i.o.o.NetTotal,
+                     WaitingCharge = i.o.o.WaitingCharge,
+                     WaitingRemark = i.o.o.WaitingRemark,
+                     RefundAmount = i.o.p.RefundAmount,
+                     RefundRemark = i.o.p.RefundRemark,
                      OrderItemList = i.oi.ToList(),
-                     PaymentMode = i.o.o.p.PaymentMode,
-                     Onwork = i.o.d.Any() ? i.o.d.FirstOrDefault().OnWork : 0
+                     PaymentMode = i.o.p.PaymentMode,
+                     Onwork = db.DeliveryBoys.Any(a => a.Id == i.o.o.DeliveryBoyId) ? db.DeliveryBoys.FirstOrDefault(a => a.Id == i.o.o.DeliveryBoyId).OnWork : 0
                  }).ToList();
 
             int count = model.OrderLists.Count();

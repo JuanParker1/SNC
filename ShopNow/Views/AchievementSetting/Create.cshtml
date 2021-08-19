@@ -1,0 +1,218 @@
+﻿@model ShopNow.ViewModels.AchievementSettingCreateViewModel
+@{
+    ViewBag.Title = "Achievement Setting Entry";
+}
+
+<title>ShopNow | @ViewBag.Title</title>
+
+<div class="container-fluid mb-5">
+    <div class="row">
+        <div class="col-md-10 mx-auto mt-3">
+            <div class="d-flex justify-content-between">
+                <h4 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h4>
+                <a href="/AchievementSetting/List"><u>Go To List</u></a>
+            </div>
+            <div class="card shadow">
+                <div class="card-body">
+                    <form action="/AchievementSetting/Create" method="post">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="col-form-label d-block font-weight-bold text-muted">Choose Count Type</label>
+                                <div class="form-check-inline mr-5 w-25">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="CountType" value="1" />Category Count
+                                    </label>
+                                </div>
+                                <div class="form-check-inline mr-5 w-25">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="CountType" value="2" />All Shops Count
+                                    </label>
+                                </div>
+                                <div class="form-check-inline w-25">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="CountType" value="3" />Selected Shops Count
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mt-3">
+                                <div class="form-check-inline mr-5 w-25">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="CountType" value="4" />All Products Count
+                                    </label>
+                                </div>
+                                <div class="form-check-inline mr-5 w-25">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="CountType" value="5" />Selected Products Count
+                                    </label>
+                                </div>
+                                <div class="form-check-inline w-25">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="CountType" value="6" />All Order Count
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold text-muted">Name</label>
+                                    <input type="text" name="Name" class="form-control" required />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div id="div-shop" class="d-none">
+                                    <div class="form-group">
+                                        <label class="col-form-label font-weight-bold text-muted">Select Shop</label>
+                                        <select id="select-shop" name="ShopIds" class="form-control" multiple></select>
+                                    </div>
+                                </div>
+                                <div id="div-product" class="d-none">
+                                    <div class="form-group">
+                                        <label class="col-form-label font-weight-bold text-muted">Select Product</label>
+                                        <select id="select-product" name="ProductIds" class="form-control" multiple></select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold text-muted">Count</label>
+                                    <input class="form-control" type="number" name="CountValue" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold text-muted">Amount</label>
+                                    <input class="form-control" type="number" name="Amount" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold text-muted">Day Limit</label>
+                                    <input class="form-control" type="number" name="DayLimit" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="col-form-label font-weight-bold text-muted">Repeat Count</label>
+                                    <input class="form-control" type="number" name="RepeatCount" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 pl-5">
+                                <label class="form-check-label my-3">
+                                    <input type="checkbox" class="form-check-input" name="HasAccept" value="true">Start game after customer accept the challenge?
+                                </label>
+                                <label class="form-check-label">
+                                    <input type="checkbox" class="form-check-input" name="IsForBlackListAbusers" value="true">Also For Black List Abusers?
+                                </label>
+                            </div>
+                            <div class="col">
+                                <label class="col-form-label d-block font-weight-bold text-muted">Activate Game After</label>
+                                <div class="form-check-inline mr-5">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="ActivateType" value="1" />Open All Time
+                                    </label>
+                                </div>
+                                <div class="form-check-inline mr-5">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="ActivateType" value="2" />Open After
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div id="div-game" class="d-none">
+                                    <div class="form-group">
+                                        <label class="col-form-label font-weight-bold text-muted">Select Game</label>
+                                        <select id="select-achievement" name="ActivateAfterId" class="form-control"></select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="row">
+                            <div class="col-md-4 pl-5 my-3">
+                                <label class="form-check-label">
+                                    <input type="checkbox" class="form-check-input" name="IsForBlackListAbusers" value="true">Also For Black List Abusers?
+                                </label>
+                            </div>
+                        </div>*@
+                        <div class="mx-auto col-6 mt-3"> <input type="submit" value="Create" class="btn btn-success btn-block" /></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
+{
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+
+    <script>
+        $(document).ready(function () {
+
+            $('#select-shop').select2({
+                placeholder: "Search Shop",
+                width: '100%',
+                ajax: {
+                    url: "/Cart/GetShopSelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            });
+
+            
+            $('[name="CountType"]').on('change', function () {
+                var $value = $(this).val();
+                $('#div-shop').addClass('d-none');
+                $('#div-product').addClass('d-none');
+
+                if ($value == '3') {
+                    $('#div-shop').removeClass('d-none');
+                    $('#div-product').addClass('d-none');
+                } else if ($value == '5') {
+                    $('#div-shop').addClass('d-none');
+                    $('#div-product').removeClass('d-none');
+                }
+            });
+
+            $('[name="ActivateType"]').on('change', function () {
+                var $value = $(this).val();
+                $('#div-game').addClass('d-none');
+
+                if ($value == '2') {
+                    $('#div-game').removeClass('d-none');
+                } else  {
+                    $('#div-game').addClass('d-none');
+                }
+            });
+
+            $('#select-achievement').select2({
+                placeholder: "Search Game",
+                width: '100%',
+                ajax: {
+                    url: "/AchievementSetting/GetListSelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            });
+            
+                $('#select-product').select2({
+                    placeholder: "Search Products",
+                    width: '100%',
+                    ajax: {
+                        url: "/Product/GetAllProductSelect2",
+                        delay: 250,
+                        dataType: 'json'
+                    }
+                });
+
+        });
+
+
+    </script>
+}

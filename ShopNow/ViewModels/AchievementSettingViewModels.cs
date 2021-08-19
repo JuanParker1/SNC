@@ -33,6 +33,8 @@ namespace ShopNow.ViewModels
                             return "All Products Count";
                         case 5:
                             return "Selected Products Count";
+                        case 6:
+                            return "All Order Count";
                         default:
                             return "N/A";
                     }

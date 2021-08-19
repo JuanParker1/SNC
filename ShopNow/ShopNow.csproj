@@ -3044,6 +3044,7 @@
     <Content Include="Views\ApiSetting\Edit.cshtml" />
     <Content Include="Views\ReferralSetting\Index.cshtml" />
     <Content Include="Views\AchievementSetting\List.cshtml" />
+    <Content Include="Views\AchievementSetting\Create.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
