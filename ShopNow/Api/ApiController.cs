@@ -2333,7 +2333,7 @@ namespace ShopNow.Controllers
             else
                 return Json(new { Status = false }, JsonRequestBehavior.AllowGet);
         }
-            public JsonResult GetProductList(double latitude, double longitude, string str = "", int page = 1, int pageSize = 10)
+        public JsonResult GetProductList(double latitude, double longitude, string str = "", int page = 1, int pageSize = 10)
         {
             var model = new ProductSearchViewModel();
             double? varlongitude = longitude;

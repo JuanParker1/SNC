@@ -268,7 +268,7 @@ namespace ShopNow.Controllers
                 model.BrandId = masterProduct.BrandId;
                 model.BrandName = masterProduct.BrandName;
                 model.CategoryId = masterProduct.CategoryId;
-               // model.CategoryName = masterProduct.CategoryName;
+                model.CategoryName = db.Categories.FirstOrDefault(i => i.Id == masterProduct.CategoryId).Name;
                 model.GoogleTaxonomyCode = masterProduct.GoogleTaxonomyCode;
                 model.ImagePath1 = masterProduct.ImagePath1;
                 model.ImagePath2 = masterProduct.ImagePath2;
@@ -506,7 +506,8 @@ namespace ShopNow.Controllers
             {
                 model.MasterProductName = masterProduct.Name;
                 model.CategoryId = masterProduct.CategoryId;
-              //  model.CategoryName = masterProduct.CategoryName;
+                model.CategoryName = db.Categories.FirstOrDefault(i => i.Id == masterProduct.CategoryId).Name;
+                model.ImagePath1 = masterProduct.ImagePath1;
             }
             Session["ShopAddOnsEdit"] = new List<ShopAddOnSessionEditViewModel>();
             return View(model);
@@ -929,6 +930,7 @@ namespace ShopNow.Controllers
             if (string.IsNullOrEmpty(dId.ToString()))
                 return HttpNotFound();
             var product = db.Products.FirstOrDefault(i => i.Id == dId);
+            var master = db.MasterProducts.FirstOrDefault(i => i.Id == product.MasterProductId);
             //if (product != null)
             //{
             //    if (product.ImagePath1 != null)
@@ -944,6 +946,7 @@ namespace ShopNow.Controllers
             //}
             var model = _mapper.Map<Product, ElectronicCreateEditViewModel>(product);
             model.MasterProductName = GetMasterProductName(model.MasterProductId);
+            model.CategoryName = db.Categories.FirstOrDefault(i => i.Id == master.CategoryId).Name;
             return View(model);
         }
 
@@ -1155,21 +1158,19 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNPROFC004")]
-        public async Task<JsonResult> GetDishMasterProductSelect2(string q = "")
+        public async Task<JsonResult> GetDishSelect2(string q = "")
         {
             var model = await db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 1).Select(i => new
             {
                 id = i.Id,
                 text = i.Name,
-                CategoryIds = i.CategoryId,
-             //   CategoryName = i.CategoryName,
+                CategoryId = i.CategoryId,
                 BrandId = i.BrandId,
                 BrandName = i.BrandName,
                 ShortDescription = i.ShortDescription,
                 LongDescription = i.LongDescription,
                 Customisation = i.Customisation,
                 ColorCode = i.ColorCode,
-                //ImagePath = i.ImagePath,
                 Price = i.Price,
                 ProductTypeId = i.ProductTypeId,
                 ProductTypeName = i.ProductTypeName,
@@ -1262,8 +1263,7 @@ namespace ShopNow.Controllers
             {
                 id = i.Id,
                 text = i.Name,
-                CategoryIds = i.CategoryId,
-             //   CategoryName = i.CategoryName,
+                CategoryId = i.CategoryId,
                 BrandId = i.BrandId,
                 BrandName = i.BrandName,
                 ShortDescription = i.ShortDescription,
@@ -1278,14 +1278,13 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNPROC001")]
-        public async Task<JsonResult> GetMedicalMasterProductSelect2(string q = "")
+        public async Task<JsonResult> GetMedicalSelect2(string q = "")
         {
             var model = await db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 3).Select(i => new
             {
                 id = i.Id,
                 text = i.Name,
-                CategoryIds = i.CategoryId,
-             //  CategoryName = i.CategoryName,
+                CategoryId = i.CategoryId,
                 BrandId = i.BrandId,
                 BrandName = i.BrandName,
                 MeasurementUnitId = i.MeasurementUnitId,
@@ -1466,7 +1465,14 @@ namespace ShopNow.Controllers
             var nextsubcategoryname = db.NextSubCategories.FirstOrDefault(i => i.Id == nextsubcategoryId).Name;
             return Json(new { categoryName = categoryName, subcategoryname = subcategoryname, nextsubcategoryname=nextsubcategoryname }, JsonRequestBehavior.AllowGet);
         }
-        
+
+        public JsonResult GetCategoryName(int categoryId)
+        {
+            var categoryName = db.Categories.FirstOrDefault(i => i.Id == categoryId).Name;
+            return Json(new { categoryName = categoryName }, JsonRequestBehavior.AllowGet);
+        }
+
+
         public async Task<JsonResult> GetFMCGPackageSelect2(string q = "")
         {
             var model = await db.Packages.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
