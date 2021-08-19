@@ -115,7 +115,10 @@ namespace ShopNow.Controllers
             int dId = AdminHelpers.DCodeInt(id);
             var achievementSetting = db.AchievementSettings.FirstOrDefault(i => i.Id == dId);
             var model = _mapper.Map<AchievementSetting, AchievementSettingEditViewModel>(achievementSetting);
-            
+
+            if (model.ActivateAfterId != 0)
+                model.ActivateAfterName = db.AchievementSettings.FirstOrDefault(i => i.Id == model.ActivateAfterId)?.Name;
+
             var achievementShops = db.AchievementShops.Where(i => i.AchievementId == dId).ToList();
             if (achievementShops.Count > 0)
             {

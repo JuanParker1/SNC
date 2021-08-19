@@ -67,5 +67,6 @@ namespace ShopNow.ViewModels
         public string ProductIdstring { get; set; }
         public string ShopNames { get; set; }
         public string ProductNames { get; set; }
+        public string ActivateAfterName { get; set; }
     }
 }
