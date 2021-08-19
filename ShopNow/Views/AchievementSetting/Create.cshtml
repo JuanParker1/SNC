@@ -20,7 +20,7 @@
                                 <label class="col-form-label d-block font-weight-bold text-muted">Choose Count Type</label>
                                 <div class="form-check-inline mr-5 w-25">
                                     <label class="form-check-label">
-                                        <input type="radio" class="form-check-input" name="CountType" value="1" />Category Count
+                                        <input type="radio" class="form-check-input" name="CountType" value="1" />Shop Category Count
                                     </label>
                                 </div>
                                 <div class="form-check-inline mr-5 w-25">
@@ -60,17 +60,25 @@
                                     <input type="text" name="Name" class="form-control" required />
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div id="div-shop" class="d-none">
-                                    <div class="form-group">
-                                        <label class="col-form-label font-weight-bold text-muted">Select Shop</label>
-                                        <select id="select-shop" name="ShopIds" class="form-control" multiple></select>
-                                    </div>
-                                </div>
+                            <div class="col">
                                 <div id="div-product" class="d-none">
                                     <div class="form-group">
                                         <label class="col-form-label font-weight-bold text-muted">Select Product</label>
                                         <select id="select-product" name="ProductIds" class="form-control" multiple></select>
+                                    </div>
+                                </div>
+                                <div id="div-district" class="d-none">
+                                    <div class="form-group">
+                                        <label class="col-form-label font-weight-bold text-muted">Select District</label>
+                                        <select id="select-district" class="form-control" name="ShopDistrict"></select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div id="div-shop" class="d-none">
+                                    <div class="form-group">
+                                        <label class="col-form-label font-weight-bold text-muted">Select Shop</label>
+                                        <select id="select-shop" name="ShopIds" class="form-control" multiple></select>
                                     </div>
                                 </div>
                             </div>
@@ -114,7 +122,7 @@
                                 <label class="col-form-label d-block font-weight-bold text-muted">Activate Game After</label>
                                 <div class="form-check-inline mr-5">
                                     <label class="form-check-label">
-                                        <input type="radio" class="form-check-input" name="ActivateType" value="1" />Open All Time
+                                        <input type="radio" class="form-check-input" name="ActivateType" value="1" />Open Any Time
                                     </label>
                                 </div>
                                 <div class="form-check-inline mr-5">
@@ -155,27 +163,49 @@
     <script>
         $(document).ready(function () {
 
-            $('#select-shop').select2({
-                placeholder: "Search Shop",
+            $('#select-district').select2({
+                placeholder: "Search District",
                 width: '100%',
                 ajax: {
-                    url: "/Cart/GetShopSelect2",
+                    url: "/Shop/GetDistrictSelect2",
+                    width: '100%',
                     delay: 250,
                     dataType: 'json'
                 }
+            }).on('select2:select', function (e) {
+                getShops();
+            }).on('select2:unselect', function (e) {
+                getShops();
+            });
+
+            $('#select-shop').select2({
+                placeholder: "Search Shops",
+                width: '100%',
+                //ajax: {
+                //    url: "/Cart/GetShopSelect2",
+                //    delay: 250,
+                //    dataType: 'json'
+                //}
             });
 
             
             $('[name="CountType"]').on('change', function () {
                 var $value = $(this).val();
                 $('#div-shop').addClass('d-none');
+                $('#div-district').addClass('d-none');
                 $('#div-product').addClass('d-none');
 
                 if ($value == '3') {
                     $('#div-shop').removeClass('d-none');
+                    $('#div-district').removeClass('d-none');
+                    $('#div-product').addClass('d-none');
+                } else if ($value == '2') {
+                    $('#div-shop').addClass('d-none');
+                    $('#div-district').removeClass('d-none');
                     $('#div-product').addClass('d-none');
                 } else if ($value == '5') {
                     $('#div-shop').addClass('d-none');
+                    $('#div-district').addClass('d-none');
                     $('#div-product').removeClass('d-none');
                 }
             });
@@ -204,12 +234,26 @@
                 $('#select-product').select2({
                     placeholder: "Search Products",
                     width: '100%',
+                    minimumInputLength: 5,
                     ajax: {
                         url: "/Product/GetAllProductSelect2",
                         delay: 250,
                         dataType: 'json'
                     }
+            });
+
+            function getShops() {
+                var $selectedValue = $('#select-district').val();
+                $('#select-shop').select2({
+                    placeholder: "Search Shops",
+                    width: '100%',
+                    ajax: {
+                        url: "/Shop/GetShopByDistrictSelect2?district=" + $selectedValue,
+                        delay: 250,
+                        dataType: 'json'
+                    }
                 });
+            }
 
         });
 
