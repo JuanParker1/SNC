@@ -2488,7 +2488,6 @@ namespace ShopNow.Controllers
                     lstDiscount = db.DiscountCategories.Where(m => m.ShopId == api.ShopId).Select(si => si.Percentage).ToList();
 
                     dynamic config = JsonConvert.DeserializeObject<ExpandoObject>(s, new ExpandoObjectConverter());
-
                     foreach (var pro in ((IEnumerable<dynamic>)config.items).Where(t => t.status == "R"))
                     {
                         varProduct.Id = Convert.ToString(pro.itemId);
