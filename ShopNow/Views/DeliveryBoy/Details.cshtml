@@ -3,10 +3,11 @@
     ViewBag.Title = "DeliveryBoy Detail";
 }
 <title>ShopNow | @ViewBag.Title</title>
+
 <div class="container-fluid my-0">
     <div class="row">
         <div class="col-md-3">
-            <h5 class="mt-1">@ViewBag.Title</h5>
+            <h5 class="text-success mt-1" style="letter-spacing:1px">DELIVERYBOY DETAIL</h5>
         </div>
         <div class="col-md-9 text-right">
             <a href="~/DeliveryBoy/List" target="_self"><span class="fa fa-bars"></span>&nbsp;DeliveryBoy List</a>
@@ -17,58 +18,75 @@
         <div class="col-md-12 mx-auto">
             <div class="row">
                 <div class="col-md-3">
-                    <div class="row">
-                        <div class="col-md-12 text-center mb-2">                            
-                                <a href="~/Home/ImageDenied" data-toggle="modal" data-target="#myModalDeliveryBoy" title="Click Here To Preview!">
-                                    <img src="@Model.ImagePath" class="img-thumbnail ProfileImg mb-2" width="100" height="100" onerror="this.src='/Images/No Photo.png'" />
-                                </a>
-                                <input type="hidden" name="DrivingLicenseImagePath" id="DrivingLicenseImagePath" value="@Model.DrivingLicenseImagePath" />
-                                <input type="hidden" name="BankPassbookPath" id="BankPassbookPath" value="@Model.BankPassbookPath" />
-                                <input type="hidden" name="CVPath" id="CVPath" value="@Model.CVPath" />
-                                <br />
+                    <div class="form-group row">
+                        <div class="col-md-12 text-center mb-2">
+                            <a href="~/Home/ImageDenied" data-toggle="modal" data-target="#myModalDeliveryBoy" title="Click Here To Preview!">
+                                <img src="@Model.ImagePath" class="img-thumbnail ProfileImg mb-2" width="100" height="100" onerror="this.src='/Images/No Photo.png'" />
+                            </a>
+                            <input type="hidden" name="DrivingLicenseImagePath" id="DrivingLicenseImagePath" value="@Model.DrivingLicenseImagePath" />
+                            <input type="hidden" name="BankPassbookPath" id="BankPassbookPath" value="@Model.BankPassbookPath" />
+                            <input type="hidden" name="CVPath" id="CVPath" value="@Model.CVPath" />
+                            <br />
                         </div>
                         <div class="col-md-12 text-center">
                             <h5 class="font-weight-bold">@Model.Name</h5>
                         </div>
                         <div class="col-md-12">
-                            <p><span><i class="fa fa-phone text-success mr-2"></i></span>@Model.PhoneNumber</p>
-                            <p><span><i class="fa fa-envelope text-success mr-2"></i></span>@Model.Email</p>
-                            <p><span><i class="fa fa-map-marker text-success mr-2"></i></span>@Model.StreetName , @Model.DistrictName</p>
+                            <div class="form-group row">
+                                <div class="col-md-4 text-right">
+                                    <span><i class="fa fa-phone text-success mr-2"></i></span>
+                                </div>
+                                <div class="col-md-8 text-left">@Model.PhoneNumber</div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4 text-right">
+                                    <span><i class="fa fa-envelope text-success mr-2"></i></span>
+                                </div>
+                                <div class="col-md-8 text-left">
+                                    @Model.Email
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4 text-right">
+                                    <span><i class="fa fa-map-marker text-success mr-2"></i></span>
+                                </div>
+                                <div class="col-md-8 text-left">
+                                    @Model.StreetName , @Model.DistrictName
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-9 row">
                     <div class="col-md-6">
                         <div class="form-group row">
-                            <div class="col-md-5">
-                                <label>Driving License Number</label>
+                            <div class="col-md-6">
+                                <label class="col-form-label"><strong class="text-secondary">Driving License Number</strong></label>
                             </div>
-                            <div class="col-md-7">
-                                <p>@Model.LicenseNumber</p>
+                            <div class="col-md-6">
+                                <span class="font-weight-bold text-dark">@Model.LicenseNumber</span>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <div class="col-md-5">
-                                <label>Address</label>
+                            <div class="col-md-6">
+                                <label class="col-form-label"><strong class="text-secondary">Address</strong></label>
                             </div>
-                            <div class="col-md-7">
-                                <p>@Model.Address</p>
+                            <div class="col-md-6">
+                                <span class="font-weight-bold text-dark">@Model.Address</span>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 mx-auto">
                         <div class="img-upload-container text-center mx-auto">
-                            <a href="~/Home/ImageDenied" data-toggle="modal" data-target="#myModalDrivingLicense" title="Click Here To Preview!">
-                                <img id="LicenseImg" src="@Model.DrivingLicenseImagePath" class="img-thumbnail DrivingLicenseImg mb-2" width="100" height="100" onerror="this.src='/Images/No Photo.png'" />
-                            </a>
-                            <br />
-                            <a id="LicensePdf" class="d-none" href="@Model.DrivingLicenseImagePath" target="_blank">View PDF</a>
+                            <img src="@Model.DrivingLicenseImagePath" class="img-thumbnail DrivingLicenseImg mb-2" width="100" height="100" onerror="this.src='/Images/No Photo.png'" />
+                            @*<br />
+        <a id="LicensePdf" class="" href="@Model.DrivingLicenseImagePath" target="_blank">View PDF</a>*@
                         </div>
                     </div>
-                    <div class="col-md-12">
+                    @*<div class="col-md-12">
                         <hr class="border-success" />
-                    </div>
-                    <div class="col-md-6" id="CVPdf">
+                    </div>*@
+                    @*<div class="col-md-6" id="CVPdf">
                         <div class="form-group row">
                             <div class="col-md-5">
                                 <label>Resume</label>
@@ -77,11 +95,11 @@
                                 <a href="@Model.CVPath" target="_blank">View PDF</a>
                             </div>
                         </div>
-                    </div>
+                    </div>*@
                     <div class="col-md-12">
                         <hr class="border-success" />
                     </div>
-                    <h5 class="col-md-12">Bank Account Detail</h5>
+                    <h5 class="col-md-12"><strong>Bank Account Detail</strong></h5>
                     <div class="col-md-6">
                         <label class="font-weight-normal"> @Model.BankName</label><br />
                         <label class="font-weight-normal"> @Model.AccountName</label><br />
@@ -103,35 +121,35 @@
     </div>
 </div>
 
-<div id="myModalDrivingLicense" class="modal fade">
-    <div class="modal-dialog">
-        <span class="close" data-dismiss="modal">&times;</span>
-        <a href="~/Home/ImageDenied">
-            <img class="modal-content" id="myDrivingLicenseImage">
-        </a>
+@*<div id="myModalDrivingLicense" class="modal fade">
+        <div class="modal-dialog">
+            <span class="close" data-dismiss="modal">&times;</span>
+            <a href="~/Home/ImageDenied">
+                <img class="modal-content" id="myDrivingLicenseImage">
+            </a>
+        </div>
     </div>
-</div>
-<div id="myModalBankPassbook" class="modal fade">
-    <div class="modal-dialog">
-        <span class="close" data-dismiss="modal">&times;</span>
-        <a href="~/Home/ImageDenied">
-            <img class="modal-content" id="BankPassbook">
-        </a>
+    <div id="myModalBankPassbook" class="modal fade">
+        <div class="modal-dialog">
+            <span class="close" data-dismiss="modal">&times;</span>
+            <a href="~/Home/ImageDenied">
+                <img class="modal-content" id="BankPassbook">
+            </a>
+        </div>
     </div>
-</div>
 
-<div id="myModalDeliveryBoy" class="modal fade">
-    <div class="modal-dialog">
-        <span class="close" data-dismiss="modal">&times;</span>
-        <a href="~/Home/ImageDenied">
-            <img class="modal-content" id="DeliveryBoyImage">
-        </a>
-    </div>
-</div>
+    <div id="myModalDeliveryBoy" class="modal fade">
+        <div class="modal-dialog">
+            <span class="close" data-dismiss="modal">&times;</span>
+            <a href="~/Home/ImageDenied">
+                <img class="modal-content" id="DeliveryBoyImage">
+            </a>
+        </div>
+    </div>*@
 
 @section Scripts
 {
-    <script>
+    @*<script>
         $(document).ready(function () {
             var cvpdf = $("#CVPath").val();
             if (cvpdf == null || cvpdf == "") {
@@ -154,7 +172,7 @@
             }
 
             if (resAccount == ".pdf") {
-                $('#AccountPdf').removeClass('d-none'); 
+                $('#AccountPdf').removeClass('d-none');
                 $("#AccountImg").addClass("d-none");
             } else {
                 $('#AccountPdf').addClass('d-none');
@@ -205,8 +223,5 @@
             });
 
         });
-
-
-    </script>
-
+    </script>*@
 }
