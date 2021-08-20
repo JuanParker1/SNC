@@ -2374,20 +2374,25 @@ namespace ShopNow.Controllers
             };
             // return Json(model, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetCustomerRefered(int CustomerId)
+        public JsonResult GetCustomerRefered(int CustomerId,int shopid)
         {
             var customer = db.Customers.FirstOrDefault(i => i.Id == CustomerId);
             if (customer != null)
             {
                 var referralCount = db.Customers.Where(c => c.ReferralNumber != null && c.Id == CustomerId).Count();
-                var referralPaymentMode = db.ReferralSettings.Where(r => r.Status == 0).Select(r => r.PaymentMode).FirstOrDefault();
-                if (referralCount <= 0)
-                    return Json(new { Status = true, paymentMode = referralPaymentMode, walletAmount = customer.WalletAmount }, JsonRequestBehavior.AllowGet);
-                else
-                    return Json(new { Status = false, paymentMode = referralPaymentMode, walletAmount = customer.WalletAmount }, JsonRequestBehavior.AllowGet);
+                var shopDistrict = db.Shops.FirstOrDefault(i => i.Id == shopid).DistrictName;
+                if (!string.IsNullOrEmpty(shopDistrict))
+                {
+                    var referralPaymentMode = db.ReferralSettings.Where(r => r.Status == 0 && r.ShopDistrict == shopDistrict).Select(r => r.PaymentMode).FirstOrDefault();
+                    if (referralCount <= 0)
+                        return Json(new { Status = true, paymentMode = referralPaymentMode, walletAmount = customer.WalletAmount }, JsonRequestBehavior.AllowGet);
+                    else
+                        return Json(new { Status = false, paymentMode = referralPaymentMode, walletAmount = customer.WalletAmount }, JsonRequestBehavior.AllowGet);
+                }else
+                    return Json(new { Status = false, paymentMode = -1, walletAmount = customer.WalletAmount }, JsonRequestBehavior.AllowGet);
             }
             else
-                return Json("Customer not found", JsonRequestBehavior.AllowGet);
+                return Json(new { Status = false, paymentMode = -1, walletAmount = 0 }, JsonRequestBehavior.AllowGet);
         }
         public JsonResult GetProductList(double latitude, double longitude, string str = "", int page = 1, int pageSize = 10)
         {
