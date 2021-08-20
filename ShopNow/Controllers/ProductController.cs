@@ -55,14 +55,12 @@ namespace ShopNow.Controllers
                 config.CreateMap<Product, MedicalEditViewModel>();
                 config.CreateMap<MedicalEditViewModel, Product>();
                 config.CreateMap<ProductDishAddOn, ShopDishAddOn>();
-                //config.CreateMap<MedicalEditViewModel.MedicalStockList, DefaultMedicalStockViewModel>();
                 config.CreateMap<Product, ElectronicCreateEditViewModel>();
                 config.CreateMap<ElectronicCreateEditViewModel, Product>();
             });
 
             _mapper = _mapperConfiguration.CreateMapper();
         }
-
 
         [AccessPolicy(PageCode = "SHNPROL006")]
         public ActionResult List(ProductItemListViewModel model)
@@ -72,9 +70,9 @@ namespace ShopNow.Controllers
             var shid = db.Shops.Where(s => s.Id == model.ShopId).FirstOrDefault();
             if (shid !=null)
             {
-                model.ListItems =     (from i in db.Products
-                                       join m in db.MasterProducts on i.MasterProductId equals m.Id
-                                       where i.Status == 0 && i.ShopId == shid.Id
+                model.ListItems = (from i in db.Products
+                                    join m in db.MasterProducts on i.MasterProductId equals m.Id
+                                    where i.Status == 0 && i.ShopId == shid.Id
                  select new ProductItemListViewModel.ListItem
                  {
                      Id = i.Id,
