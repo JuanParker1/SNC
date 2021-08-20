@@ -4150,7 +4150,7 @@ namespace ShopNow.Controllers
             using (WebClient myData = new WebClient())
             {
                 myData.Headers.Add("X-ApiKey", "Tx9ANC5RqngpTOM9VJ0JP2+1LbZvo1LI");
-                string getDetails = myData.DownloadString("https://admin.shopnowchat.in/Api/GetAllOrders?customercode=CUSPOB15174");
+                string getDetails = myData.DownloadString("https://admin.shopnowchat.in/Api/GetAllCartItems");
                 
                 var result = JsonConvert.DeserializeObject<Results>(getDetails);
                 return Json(result, JsonRequestBehavior.AllowGet);
