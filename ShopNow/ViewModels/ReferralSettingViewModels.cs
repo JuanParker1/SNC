@@ -26,7 +26,7 @@ namespace ShopNow.ViewModels
                         case 2:
                             return "Cash on Hand";
                         default:
-                            return "N/A";
+                            return "Both";
                     }
                 }
             }
