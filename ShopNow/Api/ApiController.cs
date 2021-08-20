@@ -4079,6 +4079,79 @@ namespace ShopNow.Controllers
 
         }
 
+        public JsonResult GetAllOffers()
+        {
+            var model = new OfferApiListViewModel();
+            model.OfferListItems = db.Offers.Where(i => i.Status == 0)
+                .GroupJoin(db.OfferShops, o => o.Id, oShp => oShp.OfferId, (o, oShp) => new { o, oShp })
+                .GroupJoin(db.OfferProducts, o => o.o.Id, oPro => oPro.OfferId, (o, oPro) => new { o, oPro })
+                .Select(i => new OfferApiListViewModel.OfferListItem
+                {
+                    AmountLimit = i.o.o.AmountLimit,
+                    BrandId = i.o.o.BrandId,
+                    CustomerCountLimit = i.o.o.CustomerCountLimit,
+                    DiscountType = i.o.o.DiscountType,
+                    Id = i.o.o.Id,
+                    IsForBlackListAbusers = i.o.o.IsForBlackListAbusers,
+                    IsForFirstOrder = i.o.o.IsForFirstOrder,
+                    IsForOnlinePayment = i.o.o.IsForOnlinePayment,
+                    MinimumPurchaseAmount = i.o.o.MinimumPurchaseAmount,
+                    Name = i.o.o.Name,
+                    OfferCode = i.o.o.OfferCode,
+                    OwnerType = i.o.o.OwnerType,
+                    Percentage = i.o.o.Percentage,
+                    QuantityLimit = i.o.o.QuantityLimit,
+                    Type = i.o.o.Type,
+                    ProductListItems = i.oPro.Select(a => new OfferApiListViewModel.OfferListItem.ProductListItem { Id = a.ProductId }).ToList(),
+                    ShopListItems = i.o.oShp.Select(a => new OfferApiListViewModel.OfferListItem.ShopListItem { Id = a.ShopId }).ToList()
+                }).ToList();
+            return Json(new { list = model }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetAllAchievements()
+        {
+            var model = new AchievementApiListViewModel();
+            model.AchievementListItems = db.AchievementSettings.Where(i => i.Status == 0)
+                .GroupJoin(db.AchievementShops, a => a.Id, ashop => ashop.AchievementId, (a, ashop) => new { a, ashop })
+                .GroupJoin(db.AchievementProducts, a => a.a.Id, apro => apro.AchievementId, (a, apro) => new { a, apro })
+                .Select(i => new AchievementApiListViewModel.AchievementListItem
+                {
+                    ActivateAfterId = i.a.a.ActivateAfterId,
+                    ActivateType = i.a.a.ActivateType,
+                    Amount = i.a.a.Amount,
+                    CountType = i.a.a.CountType,
+                    CountValue = i.a.a.CountValue,
+                    DayLimit = i.a.a.DayLimit,
+                    HasAccept = i.a.a.HasAccept,
+                    Id = i.a.a.Id,
+                    IsForBlackListAbusers = i.a.a.IsForBlackListAbusers,
+                    Name = i.a.a.Name,
+                    RepeatCount = i.a.a.RepeatCount,
+                    ShopDistrict = i.a.a.ShopDistrict,
+                    ProductListItems = i.apro.Select(b => new AchievementApiListViewModel.AchievementListItem.ProductListItem { Id = b.ProductId }).ToList(),
+                    ShopListItems = i.a.ashop.Select(b => new AchievementApiListViewModel.AchievementListItem.ShopListItem { Id = b.ShopId }).ToList()
+                }).ToList();
+            return Json(new { list = model }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetAllAchievement()
+        {
+            var achievements = db.AchievementSettings.Where(i => i.Status == 0).ToList();
+            return Json(new { list = achievements }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult SaveOrders()
+        {
+            using (WebClient myData = new WebClient())
+            {
+                myData.Headers.Add("X-ApiKey", "Tx9ANC5RqngpTOM9VJ0JP2+1LbZvo1LI");
+                string getDetails = myData.DownloadString("https://admin.shopnowchat.in/Api/GetAllOrders?customercode=CUSPOB15174");
+                
+                var result = JsonConvert.DeserializeObject<Results>(getDetails);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public void UpdateAchievements(int customerId)
         {
             var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
