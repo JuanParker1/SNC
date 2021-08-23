@@ -834,6 +834,7 @@ namespace ShopNow.Controllers
                     order.Packingcharge = model.PackagingCharge;
                     order.Convinenientcharge = model.ConvenientCharge;
                     order.NetTotal = model.NetTotal;
+                    order.WalletAmount = model.WalletAmount;
                     db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
 
@@ -911,7 +912,19 @@ namespace ShopNow.Controllers
                     db.Payments.Add(payment);
                     db.SaveChanges();
                 }
-                return Json(new { message = "Successfully Added to Payment!", Details = model });
+                if (payment != null)
+                {
+                    if (model.WalletAmount != 0)
+                    {
+                        var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
+                        customer.WalletAmount -= model.WalletAmount;
+                    }
+                    return Json(new { message = "Successfully Added to Payment!", Details = model });
+                }
+                else
+                {
+                    return Json(new { message = "Failed to Add Payment !" });
+                }
             }
             else
                 return Json(new { message = "Failed to Add Payment !" });
@@ -1098,6 +1111,10 @@ namespace ShopNow.Controllers
                         db.SaveChanges();
                         Helpers.PushNotification.SendbydeviceId($"Your refund of amount {payment.Amount} for order no {payment.OrderNumber} is for {payment.RefundRemark} initiated and you will get credited with in 7 working days.", "ShopNowChat", "a.mp3", fcmToken.ToString());
                     }
+
+                    //Add Wallet Amount to customer
+                    if(order.WalletAmount != 0)
+                    customer.WalletAmount += order.WalletAmount;
                 }
                 return Json(new { message = "Successfully Updated the Order!" }, JsonRequestBehavior.AllowGet);
             }
@@ -1185,6 +1202,7 @@ namespace ShopNow.Controllers
                      TotalProduct = i.o.o.TotalProduct,
                      TotalQuantity = i.o.o.TotalQuantity,
                      NetTotal = i.o.o.NetTotal,
+                     WalletAmount= i.o.o.WalletAmount,
                      WaitingCharge = i.o.o.WaitingCharge,
                      WaitingRemark = i.o.o.WaitingRemark,
                      RefundAmount = i.o.p.RefundAmount,
@@ -1316,6 +1334,7 @@ namespace ShopNow.Controllers
                     TotalProduct = i.o.o.o.o.TotalProduct,
                     TotalQuantity = i.o.o.o.o.TotalQuantity,
                     NetTotal = i.o.o.o.o.NetTotal,
+                    WalletAmount = i.o.o.o.o.WalletAmount,
                     OrderItemList = i.oi.ToList()
                 }).ToList();
 
@@ -1354,6 +1373,7 @@ namespace ShopNow.Controllers
                    TotalProduct = i.o.o.o.o.TotalProduct,
                    TotalQuantity = i.o.o.o.o.TotalQuantity,
                    NetTotal = i.o.o.o.o.NetTotal,
+                   WalletAmount = i.o.o.o.o.WalletAmount,
                    OrderItemList = i.oi.ToList()
                }).ToList();
 
@@ -1818,7 +1838,8 @@ namespace ShopNow.Controllers
                    Date = i.py.rz.c.o.DateEncoded.ToString("dd-MMM-yyyy HH:mm"),
                    DateEncoded = i.py.rz.c.o.DateEncoded,
                    OrderList = GetOrderPendingList(i.py.rz.c.o.OrderNumber),
-                   CartStatus = i.py.rz.c.o.Status
+                   CartStatus = i.py.rz.c.o.Status,
+                   WalletAmount = i.py.rz.c.o.WalletAmount
                }).OrderByDescending(i => i.DateEncoded).ToList();
             int count = model.List.Count();
             int CurrentPage = page;
@@ -1957,8 +1978,9 @@ namespace ShopNow.Controllers
                      WaitingRemark = i.o.o.WaitingRemark,
                      RefundAmount = i.o.p.RefundAmount,
                      RefundRemark = i.o.p.RefundRemark,
+                     PaymentMode = i.o.p.PaymentMode,
+                     WalletAmount = i.o.o.WalletAmount,
                      OrderItemList = i.oi.ToList(),
-                     PaymentMode = i.o.p.PaymentMode
                  }).ToList();
 
             int count = model.OrderLists.Count();
@@ -2066,9 +2088,11 @@ namespace ShopNow.Controllers
                      WaitingRemark = i.o.o.WaitingRemark,
                      RefundAmount = i.o.p.RefundAmount,
                      RefundRemark = i.o.p.RefundRemark,
-                     OrderItemList = i.oi.ToList(),
                      PaymentMode = i.o.p.PaymentMode,
-                     Onwork = db.DeliveryBoys.Any(a => a.Id == i.o.o.DeliveryBoyId) ? db.DeliveryBoys.FirstOrDefault(a => a.Id == i.o.o.DeliveryBoyId).OnWork : 0
+                     Onwork = db.DeliveryBoys.Any(a => a.Id == i.o.o.DeliveryBoyId) ? db.DeliveryBoys.FirstOrDefault(a => a.Id == i.o.o.DeliveryBoyId).OnWork : 0,
+                     WalletAmount = i.o.o.WalletAmount,
+                     OrderItemList = i.oi.ToList(),
+                     
                  }).ToList();
 
             int count = model.OrderLists.Count();
@@ -2619,6 +2643,7 @@ namespace ShopNow.Controllers
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
+        //Have to check
         public JsonResult GetShopBalanceNotification(int customerId)
         {
             var varShopOwner = db.Customers.Where(s => s.Id == customerId && s.Position == 1).FirstOrDefault();
@@ -4055,6 +4080,7 @@ namespace ShopNow.Controllers
                      RefundAmount=i.o.p.RefundAmount,
                      RefundRemark = i.o.p.RefundRemark,
                      PaymentMode = i.o.p.PaymentMode,
+                     WalletAmount = i.o.o.WalletAmount,
                      OrderItemList = i.oi.ToList()
                  }).ToList();
 

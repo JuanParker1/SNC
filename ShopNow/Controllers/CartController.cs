@@ -879,7 +879,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("DeliveryAgentAssigned");
         }
 
-        public ActionResult AddRefundFromShopOrderProcessing(int id, double amount, string remark, int redirection = 0)
+        public ActionResult AddRefundFromShopOrderProcessing(long id, double amount, string remark, int redirection = 0)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
 

@@ -167,6 +167,7 @@ namespace ShopNow.ViewModels
         public double ShopDeliveryDiscount { get; set; }
         public double NetDeliveryCharge { get; set; }
         public double NetTotal { get; set; }
+        public double WalletAmount { get; set; }
         public int PaymentCategoryType { get; set; }
         //public string Currency { get; set; }
         //public string CountryName { get; set; }
