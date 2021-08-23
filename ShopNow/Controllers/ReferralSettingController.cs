@@ -49,7 +49,7 @@ namespace ShopNow.Controllers
         [HttpPost]
         public ActionResult Create(ReferralSettingCreateViewModel model)
         {
-            var isExist = db.ReferralSettings.Any(i => i.ShopDistrict == model.ShopDistrict && i.PaymentMode == model.PaymentMode);
+            var isExist = db.ReferralSettings.Any(i => i.ShopDistrict == model.ShopDistrict);
             if (!isExist)
             {
                 var referralSetting = _mapper.Map<ReferralSettingCreateViewModel, ReferralSetting>(model);
@@ -80,15 +80,12 @@ namespace ShopNow.Controllers
         [HttpPost]
         public ActionResult Edit(ReferralSettingEditViewModel model)
         {
-            var isExist = db.ReferralSettings.Any(i => i.ShopDistrict == model.ShopDistrict && i.PaymentMode == model.PaymentMode);
-            if (!isExist)
-            {
-                var referralSetting = db.ReferralSettings.FirstOrDefault(i => i.Id == model.Id);
-                _mapper.Map(model, referralSetting);
-                referralSetting.DateUpdated = DateTime.Now;
-                db.Entry(referralSetting).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-            }
+
+            var referralSetting = db.ReferralSettings.FirstOrDefault(i => i.Id == model.Id);
+            _mapper.Map(model, referralSetting);
+            referralSetting.DateUpdated = DateTime.Now;
+            db.Entry(referralSetting).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
             return RedirectToAction("Index");
         }
     }

@@ -84,4 +84,73 @@ namespace ShopNow.ViewModels
            
         }
     }
+
+    public class OfferApiListViewModel
+    {
+        public List<OfferListItem> OfferListItems { get; set; }
+        public class OfferListItem
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public int OwnerType { get; set; }
+            public string OfferCode { get; set; }
+            public int DiscountType { get; set; }
+            public int Type { get; set; }
+            public double Percentage { get; set; }
+            public int QuantityLimit { get; set; }
+            public int AmountLimit { get; set; }
+            public int CustomerCountLimit { get; set; }
+            public double MinimumPurchaseAmount { get; set; }
+            public bool IsForFirstOrder { get; set; }
+            public bool IsForOnlinePayment { get; set; }
+            public bool IsForBlackListAbusers { get; set; }
+            public Nullable<int> BrandId { get; set; }
+
+            public List<ShopListItem> ShopListItems { get; set; }
+            public List<ProductListItem> ProductListItems { get; set; }
+
+            public class ProductListItem
+            {
+                public long Id { get; set; }
+            }
+            public class ShopListItem
+            {
+                public int Id { get; set; }
+            }
+
+        }
+    }
+
+    public class AchievementApiListViewModel
+    {
+        public List<AchievementListItem> AchievementListItems { get; set; }
+        public class AchievementListItem
+        {
+            public int Id { get; set; }
+            public string ShopDistrict { get; set; }
+            public string Name { get; set; }
+            public int CountType { get; set; }
+            public int CountValue { get; set; }
+            public double Amount { get; set; }
+            public bool HasAccept { get; set; }
+            public int DayLimit { get; set; }
+            public int ActivateType { get; set; }
+            public int ActivateAfterId { get; set; }
+            public int RepeatCount { get; set; }
+            public bool IsForBlackListAbusers { get; set; }
+
+            public List<ShopListItem> ShopListItems { get; set; }
+            public List<ProductListItem> ProductListItems { get; set; }
+
+            public class ProductListItem
+            {
+                public long Id { get; set; }
+            }
+            public class ShopListItem
+            {
+                public int Id { get; set; }
+            }
+
+        }
+    }
 }
