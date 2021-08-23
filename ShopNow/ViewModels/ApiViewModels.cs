@@ -24,6 +24,7 @@ namespace ShopNow.ViewModels
             public int TotalQuantity { get; set; }
             public double TotalPrice { get; set; }
             public double NetTotal { get; set; }
+            public double WalletAmount { get; set; }
             public int OrderNumber { get; set; }
             public int DeliveryBoyId { get; set; }
             public string DeliveryBoyName { get; set; }
@@ -73,6 +74,7 @@ namespace ShopNow.ViewModels
             public int TotalQuantity { get; set; }
             public double TotalPrice { get; set; }
             public double NetTotal { get; set; }
+            public double WalletAmount { get; set; }
             public double DeliveryCharge { get; set; }
             public double ShopDeliveryDiscount { get; set; }
             public double NetDeliveryCharge { get; set; }

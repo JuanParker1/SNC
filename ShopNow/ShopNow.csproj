@@ -401,6 +401,9 @@
     <Compile Include="Models\ApiSetting.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\AppDetail.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ApplicationDbContext.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
