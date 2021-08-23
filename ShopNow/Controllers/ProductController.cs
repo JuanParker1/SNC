@@ -343,14 +343,11 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        public ActionResult FoodList()
+        public ActionResult FoodList(FoodListViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var model = new FoodListViewModel();
-            model.ListItems = db.Products.Where(i => i.Status == 0 &&
-            i.ProductTypeId == 1 &&
-            (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
+            model.ListItems = db.Products.Where(i => i.Status == 0 && i.ProductTypeId == 1 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
              .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
             .Select(i => new FoodListViewModel.ListItem
             {
