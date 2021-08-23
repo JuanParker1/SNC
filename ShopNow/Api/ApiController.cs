@@ -97,9 +97,10 @@ namespace ShopNow.Controllers
                 config.CreateMap<LocationDetailsCreateViewModel, LocationDetail>();
                 config.CreateMap<OrderCreateViewModel, Models.Order>();
                 config.CreateMap<OrderCreateViewModel.ListItem, OrderItem>();
-            });
+                config.CreateMap<Models.Order, OrderDetailsApiViewModel>();
+            }); 
 
-            _mapper = _mapperConfiguration.CreateMapper();
+             _mapper = _mapperConfiguration.CreateMapper();
         }
 
         public JsonResult GetShop(string placeid)
@@ -4313,6 +4314,46 @@ namespace ShopNow.Controllers
                 var result = JsonConvert.DeserializeObject<Results>(getDetails);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        public JsonResult GetOrderDetails(long id)
+        {
+            var order = db.Orders.FirstOrDefault(i => i.Id == id);
+            var model = new OrderDetailsApiViewModel();
+            if (order != null)
+            {
+                _mapper.Map(order, model);
+                var shop = db.Shops.FirstOrDefault(i => i.Id == order.ShopId);
+                model.ShopId = shop.Id;
+                model.ShopName = shop.Name;
+                model.ShopAddress = shop.Address;
+                model.ShopCategoryId = shop.ShopCategoryId;
+                model.ShopCategoryName = shop.ShopCategoryName;
+                model.ShopLatitude = shop.Latitude;
+                model.ShopLongitude = shop.Longitude;
+                model.ShopImagePath = shop.ImagePath;
+                var shopReview = db.CustomerReviews.Where(i => i.ShopId == shop.Id).ToList();
+                model.ShopReviewCount = shopReview.Count();
+                if (model.ShopReviewCount > 0)
+                    model.ShopRating = shopReview.Sum(l => l.Rating) / model.ShopReviewCount;
+                else
+                    model.ShopReviewCount = 0;
+                model.OrderItemLists = db.OrderItems.Where(i => i.OrderId == order.Id)
+                    .Select(i => new OrderDetailsApiViewModel.OrderItemList
+                    {
+                        BrandId = i.BrandId,
+                        BrandName = i.BrandName,
+                        CategoryId = i.CategoryId,
+                        CategoryName = i.CategoryName,
+                        ImagePath = i.ImagePath,
+                        Price = i.Price,
+                        ProductId = i.ProductId,
+                        ProductName = i.ProductName,
+                        Quantity = i.Quantity,
+                        UnitPrice = i.UnitPrice
+                    }).ToList();
+            }
+            return Json(model, JsonRequestBehavior.AllowGet);
         }
 
         public void UpdateAchievements(int customerId)
