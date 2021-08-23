@@ -2,15 +2,15 @@
 @{
     ViewBag.Title = "Product Specification Entry";
 }
-<title>ShopNow | Product Specification Entry</title>
+<title>ShopNow | @ViewBag.Title</title>
 
 <div class="container-fluid my-4">
     <div class="row">
         <div class="col-md-4">
-            <h5 class="mt-1 text-success" style="letter-spacing:1px">PRODUCT SPECIFICATION ENTRY</h5>
+            <h5 class="mt-1 text-success">@ViewBag.Title</h5>
         </div>
         <div class="col-md-8 text-right">
-            <a href="~/ProductSpecification/List" target="_blank"><span class="fa fa-bars"></span>&nbsp;Product Specification List</a>
+            <a href="~/ProductSpecification/List" target="_self"><span class="fa fa-list-ul"></span> Product Specification List</a>
         </div>
     </div>
 

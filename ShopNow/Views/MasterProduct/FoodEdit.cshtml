@@ -11,8 +11,12 @@
 </style>
 <div class="container-fluid mb-3">
     <div class="row">
-        <div class="col-md-2">
-            <h5 class="mt-1" style="letter-spacing:1px">@ViewBag.Title</h5>
+        <div class="col-md-6">
+            <h5 class="mt-1 text-success">@ViewBag.Title</h5>
+        </div>
+        <div class="col-md-6 text-right">
+            <a href="~/MasterProduct/FoodList" target="_self" class="mr-3"><span class="fa fa-list-ul"></span> Dish List</a>
+            <a href="~/MasterProduct/List" target="_self"><span class="fa fa-list-ul"></span> Full List</a>
         </div>
     </div>
     <div class="row">
@@ -30,8 +34,6 @@
                                 <div class="form-group">
                                     <input type="text" class="form-control" name="Name" id="Name" value="@Model.Name" />
                                     <input type="hidden" name="Id" value="@Model.Id" />
-                                    <input type="hidden" name="ProductTypeId" id="ProductTypeId" value="@Model.ProductTypeId" />
-                                    <input type="hidden" name="ProductTypeName" id="ProductTypeName" value="@Model.ProductTypeName" />
                                 </div>
                             </div>
                             <div class="col-md-3">

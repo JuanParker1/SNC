@@ -63,7 +63,6 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            //int errorCode = 0;
             try
             {
                 var ps = _mapper.Map<ProductSpecificationCreateViewModel, ProductSpecification>(model);
@@ -126,10 +125,14 @@ namespace ShopNow.Controllers
         {
             var dCode = AdminHelpers.DCodeInt(id);
             var ps = _db.ProductSpecifications.FirstOrDefault(i => i.Id == dCode && i.Status == 0);
-            ps.Status = 2;
-            _db.Entry(ps).State = System.Data.Entity.EntityState.Modified;
-            _db.SaveChanges();
-            return RedirectToAction("List");
+            if (ps != null)
+            {
+                ps.Status = 2;
+                ps.DateUpdated = DateTime.Now;
+                _db.Entry(ps).State = System.Data.Entity.EntityState.Modified;
+                _db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [AccessPolicy(PageCode = "SHNPSFI005")]

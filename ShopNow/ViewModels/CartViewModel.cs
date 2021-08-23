@@ -522,6 +522,7 @@ namespace ShopNow.ViewModels
             public double PackingCharge { get; set; }
             public double ConvinenientCharge { get; set; }
             public double Amount { get; set; }
+            public double WalletAmount { get; set; }
             public double GrossDeliveryCharge { get; set; }
             public double ShopDeliveryDiscount { get; set; }
             public double NetDeliveryCharge { get; set; }

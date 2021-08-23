@@ -49,7 +49,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label class="control-label" for="Price"><strong class="text-secondary">Menu Price</strong></label>
-                                            <input id="Price" type="number" class="form-control" name="Price" min="0" value="@Model.Price" />
+                                            <input id="Price" type="number" class="form-control" name="Price" min="0" value="@Model.Price" step="any" />
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -67,15 +67,11 @@
                                         <div class="img-upload-container ml-2">
                                             @if (Model.ImagePath1 != null)
                                             {
-                                                <a href="~/Home/ImageDenied">
                                                     <img id='img-ProductImage1' class="img-container w-100 h-100" width="100" height="100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath1" onerror="this.src='/Images/No Photo.png'" />
-                                                </a>
                                             }
                                             else
                                             {
-                                                <a href="~/Home/ImageDenied">
                                                     <img id='img-ProductImage1' class="img-container w-100 h-100" width="100" height="100" />
-                                                </a>
                                             }
                                             <input type="file" id="ProductImage1" name="ProductImage1" class="d-none" />
                                             <label for="ProductImage1" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
@@ -87,15 +83,11 @@
                                         <div class="img-upload-container ml-2">
                                             @if (Model.ImagePath2 != null)
                                             {
-                                                <a href="~/Home/ImageDenied">
                                                     <img id='img-ProductImage2' class="img-container w-100 h-100" width="100" height="100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath2" onerror="this.src='/Images/No Photo.png'" />
-                                                </a>
                                             }
                                             else
                                             {
-                                                <a href="~/Home/ImageDenied">
                                                     <img id='img-ProductImage2' class="img-container w-100 h-100" width="100" height="100" />
-                                                </a>
                                             }
                                             <input type="file" id="ProductImage2" name="ProductImage2" class="d-none" />
                                             <label for="ProductImage2" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
@@ -107,15 +99,11 @@
                                         <div class="img-upload-container ml-2">
                                             @if (Model.ImagePath3 != null)
                                             {
-                                                <a href="~/Home/ImageDenied">
                                                     <img id='img-ProductImage3' class="img-container w-100 h-100" width="100" height="100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath3" onerror="this.src='/Images/No Photo.png'" />
-                                                </a>
                                             }
                                             else
                                             {
-                                                <a href="~/Home/ImageDenied">
                                                     <img id='img-ProductImage3' class="img-container w-100 h-100" width="100" height="100" />
-                                                </a>
                                             }
                                             <input type="file" id="ProductImage3" name="ProductImage3" class="d-none" />
                                             <label for="ProductImage3" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
@@ -127,15 +115,11 @@
                                         <div class="img-upload-container ml-2">
                                             @if (Model.ImagePath4 != null)
                                             {
-                                                <a href="~/Home/ImageDenied">
                                                     <img id='img-ProductImage4' class="img-container w-100 h-100" width="100" height="100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath4" onerror="this.src='/Images/No Photo.png'" />
-                                                </a>
                                             }
                                             else
                                             {
-                                                <a href="~/Home/ImageDenied">
                                                     <img id='img-ProductImage4' class="img-container w-100 h-100" width="100" height="100" />
-                                                </a>
                                             }
                                             <input type="file" id="ProductImage4" name="ProductImage4" class="d-none" />
                                             <label for="ProductImage4" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
@@ -147,15 +131,11 @@
                                         <div class="img-upload-container ml-2">
                                             @if (Model.ImagePath5 != null)
                                             {
-                                                <a href="~/Home/ImageDenied">
                                                     <img id='img-ProductImage5' class="img-container w-100 h-100" width="100" height="100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath5" onerror="this.src='/Images/No Photo.png'" />
-                                                </a>
                                             }
                                             else
                                             {
-                                                <a href="~/Home/ImageDenied">
                                                     <img id='img-ProductImage5' class="img-container w-100 h-100" width="100" height="100" />
-                                                </a>
                                             }
                                             <input type="file" id="ProductImage5" name="ProductImage5" class="d-none" />
                                             <label for="ProductImage5" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>

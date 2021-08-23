@@ -513,15 +513,14 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNMPRFC023")]
         public ActionResult FMCGCreate(MasterFMCGCreateViewModel model)
         {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var master = _mapper.Map<MasterFMCGCreateViewModel, MasterProduct>(model);
             var isExist = _db.MasterProducts.Any(i => i.Name == model.Name && i.Status == 0 && i.ProductTypeId == 2);
             if (isExist)
             {
                 ViewBag.ErrorMessage = model.Name + " Already Exist";
                 return View();
             }
-
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            var master = _mapper.Map<MasterFMCGCreateViewModel, MasterProduct>(model);
             master.CreatedBy = user.Name;
             master.UpdatedBy = user.Name;
             master.ProductTypeId = 2;
@@ -1247,7 +1246,7 @@ namespace ShopNow.Controllers
             prod.UpdatedBy = user.Name;
             prod.ProductTypeName = "Electronic";
             prod.ProductTypeId = 4;
-            var name = _db.MasterProducts.FirstOrDefault(i => i.Name == model.Name && i.Status == 0 && i.ProductTypeId == 1 && i.CategoryId == model.CategoryId);
+            var name = _db.MasterProducts.FirstOrDefault(i => i.Name == model.Name && i.Status == 0 && i.ProductTypeId == 4 && i.CategoryId == model.CategoryId);
             prod.Name = model.Name;
             if (model.NickName == null)
             {
@@ -1255,27 +1254,6 @@ namespace ShopNow.Controllers
             }
             try
             {
-                //if (model.CategoryCode != null)
-                //{
-                //    prod.CategoryCode = String.Join(",", model.CategoryCode);
-                //    StringBuilder sb = new StringBuilder();
-                //    foreach (var s in model.CategoryCode)
-                //    {
-                //        var cat = _db.Categories.FirstOrDefault(i => i.Code == s);// Category.Get(s);
-                //        sb.Append(cat.Name);
-                //        sb.Append(",");
-                //    }
-                //    if (sb.Length >= 1)
-                //    {
-                //        model.CategoryName = sb.ToString().Remove(sb.Length - 1);
-                //        prod.CategoryName = model.CategoryName;
-                //    }
-                //    else
-                //    {
-                //        model.CategoryName = sb.ToString();
-                //        prod.CategoryName = model.CategoryName;
-                //    }
-                //}
                 //ElectronicImage1
                 if (model.ElectronicImage1 != null)
                 {
