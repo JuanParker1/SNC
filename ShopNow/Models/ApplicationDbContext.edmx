@@ -367,6 +367,21 @@
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="DiscountCategories1">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" />
+          <Property Name="Percentage" Type="float" Nullable="false" />
+          <Property Name="ShopId" Type="int" Nullable="false" />
+          <Property Name="ShopName" Type="nvarchar" MaxLength="250" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar(max)" />
+          <Property Name="UpdatedBy" Type="nvarchar(max)" />
+          <Property Name="DateEncoded" Type="datetime" Nullable="false" />
+          <Property Name="DateUpdated" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="DrugCompoundDetails">
           <Key>
             <PropertyRef Name="Id" />
@@ -835,6 +850,54 @@
           <Property Name="CreatedBy" Type="nvarchar(max)" />
           <Property Name="UpdatedBy" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="Products1">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" />
+          <Property Name="MasterProductId" Type="bigint" Nullable="false" />
+          <Property Name="ShopId" Type="int" Nullable="false" />
+          <Property Name="ShopName" Type="nvarchar(max)" />
+          <Property Name="ShopCategoryId" Type="int" Nullable="false" />
+          <Property Name="ShopCategoryName" Type="nvarchar(max)" />
+          <Property Name="GTIN" Type="nvarchar(max)" />
+          <Property Name="UPC" Type="nvarchar(max)" />
+          <Property Name="GTIN14" Type="nvarchar(max)" />
+          <Property Name="EAN" Type="nvarchar(max)" />
+          <Property Name="ISBN" Type="nvarchar(max)" />
+          <Property Name="Price" Type="float" Nullable="false" />
+          <Property Name="Qty" Type="int" Nullable="false" />
+          <Property Name="ProductTypeName" Type="nvarchar(max)" />
+          <Property Name="ProductTypeId" Type="int" Nullable="false" />
+          <Property Name="MinSelectionLimit" Type="int" Nullable="false" />
+          <Property Name="MaxSelectionLimit" Type="int" Nullable="false" />
+          <Property Name="Customisation" Type="bit" Nullable="false" />
+          <Property Name="MenuPrice" Type="float" Nullable="false" />
+          <Property Name="IBarU" Type="int" Nullable="false" />
+          <Property Name="ItemId" Type="int" Nullable="false" />
+          <Property Name="Percentage" Type="float" Nullable="false" />
+          <Property Name="DiscountCategoryId" Type="int" Nullable="false" />
+          <Property Name="DiscountCategoryName" Type="nvarchar(max)" />
+          <Property Name="DataEntry" Type="int" Nullable="false" />
+          <Property Name="AppliesOnline" Type="int" Nullable="false" />
+          <Property Name="IsOnline" Type="bit" Nullable="false" />
+          <Property Name="HoldOnStok" Type="int" Nullable="false" />
+          <Property Name="PackingType" Type="int" Nullable="false" />
+          <Property Name="TaxPercentage" Type="float" Nullable="false" />
+          <Property Name="SpecialCostOfDelivery" Type="float" Nullable="false" />
+          <Property Name="OutletId" Type="int" Nullable="false" />
+          <Property Name="ItemTimeStamp" Type="nvarchar" MaxLength="100" />
+          <Property Name="LoyaltyPoints" Type="float" Nullable="false" />
+          <Property Name="PackingCharge" Type="float" Nullable="false" />
+          <Property Name="BrandOwnerMiddlePercentage" Type="int" />
+          <Property Name="ShopownnerPrice" Type="float" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DateEncoded" Type="datetime" Nullable="false" />
+          <Property Name="DateUpdated" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar(max)" />
+          <Property Name="UpdatedBy" Type="nvarchar(max)" />
+        </EntityType>
         <EntityType Name="ProductSpecificationItems">
           <Key>
             <PropertyRef Name="Id" />
@@ -1242,6 +1305,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Products1_ProductType">
+          <End Role="ProductType" Type="Self.ProductType" Multiplicity="1" />
+          <End Role="Products1" Type="Self.Products1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Products1">
+              <PropertyRef Name="ProductTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SubCategories_Categories">
           <End Role="Categories" Type="Self.Categories" Multiplicity="1" />
           <End Role="SubCategories" Type="Self.SubCategories" Multiplicity="*" />
@@ -1334,6 +1409,7 @@
           <EntitySet Name="DeliveryBoys" EntityType="Self.DeliveryBoys" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DeliveryBoyShops" EntityType="Self.DeliveryBoyShops" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DiscountCategories" EntityType="Self.DiscountCategories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DiscountCategories1" EntityType="Self.DiscountCategories1" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DrugCompoundDetails" EntityType="Self.DrugCompoundDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LocationDetails" EntityType="Self.LocationDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MarketingAgents" EntityType="Self.MarketingAgents" Schema="dbo" store:Type="Tables" />
@@ -1355,6 +1431,7 @@
           <EntitySet Name="Portions" EntityType="Self.Portions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductDishAddOns" EntityType="Self.ProductDishAddOns" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Products1" EntityType="Self.Products1" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductSpecificationItems" EntityType="Self.ProductSpecificationItems" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductSpecifications" EntityType="Self.ProductSpecifications" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProductType" EntityType="Self.ProductType" Schema="dbo" store:Type="Tables" />
@@ -1408,6 +1485,10 @@
           <AssociationSet Name="FK_Products_ProductType" Association="Self.FK_Products_ProductType">
             <End Role="ProductType" EntitySet="ProductType" />
             <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Products1_ProductType" Association="Self.FK_Products1_ProductType">
+            <End Role="ProductType" EntitySet="ProductType" />
+            <End Role="Products1" EntitySet="Products1" />
           </AssociationSet>
           <AssociationSet Name="FK_SubCategories_Categories" Association="Self.FK_SubCategories_Categories">
             <End Role="Categories" EntitySet="Categories" />
@@ -2149,6 +2230,7 @@
           <NavigationProperty Name="NextSubCategories" Relationship="Self.FK_NextSubCategories_ProductType" FromRole="ProductType" ToRole="NextSubCategories" />
           <NavigationProperty Name="Products" Relationship="Self.FK_Products_ProductType" FromRole="ProductType" ToRole="Products" />
           <NavigationProperty Name="SubCategories" Relationship="Self.FK_SubCategories_ProductType" FromRole="ProductType" ToRole="SubCategories" />
+          <NavigationProperty Name="Products1" Relationship="sncModel.FK_Products1_ProductType" FromRole="ProductType" ToRole="Products1" />
         </EntityType>
         <EntityType Name="RefundsData">
           <Key>
@@ -2657,6 +2739,12 @@
             <End Role="Customer" EntitySet="Customers" />
             <End Role="DeliveryBoy" EntitySet="DeliveryBoys" />
           </AssociationSet>
+          <EntitySet Name="DiscountCategories1" EntityType="sncModel.DiscountCategories1" />
+          <EntitySet Name="Products1" EntityType="sncModel.Products1" />
+          <AssociationSet Name="FK_Products1_ProductType" Association="sncModel.FK_Products1_ProductType">
+            <End Role="ProductType" EntitySet="ProductTypes" />
+            <End Role="Products1" EntitySet="Products1" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3009,6 +3097,82 @@
             </Principal>
             <Dependent Role="DeliveryBoy">
               <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="DiscountCategories1">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Percentage" Type="Double" Nullable="false" />
+          <Property Name="ShopId" Type="Int32" Nullable="false" />
+          <Property Name="ShopName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="Products1">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MasterProductId" Type="Int64" Nullable="false" />
+          <Property Name="ShopId" Type="Int32" Nullable="false" />
+          <Property Name="ShopName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ShopCategoryId" Type="Int32" Nullable="false" />
+          <Property Name="ShopCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="GTIN" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UPC" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="GTIN14" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="EAN" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ISBN" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="Qty" Type="Int32" Nullable="false" />
+          <Property Name="ProductTypeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ProductTypeId" Type="Int32" Nullable="false" />
+          <Property Name="MinSelectionLimit" Type="Int32" Nullable="false" />
+          <Property Name="MaxSelectionLimit" Type="Int32" Nullable="false" />
+          <Property Name="Customisation" Type="Boolean" Nullable="false" />
+          <Property Name="MenuPrice" Type="Double" Nullable="false" />
+          <Property Name="IBarU" Type="Int32" Nullable="false" />
+          <Property Name="ItemId" Type="Int32" Nullable="false" />
+          <Property Name="Percentage" Type="Double" Nullable="false" />
+          <Property Name="DiscountCategoryId" Type="Int32" Nullable="false" />
+          <Property Name="DiscountCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DataEntry" Type="Int32" Nullable="false" />
+          <Property Name="AppliesOnline" Type="Int32" Nullable="false" />
+          <Property Name="IsOnline" Type="Boolean" Nullable="false" />
+          <Property Name="HoldOnStok" Type="Int32" Nullable="false" />
+          <Property Name="PackingType" Type="Int32" Nullable="false" />
+          <Property Name="TaxPercentage" Type="Double" Nullable="false" />
+          <Property Name="SpecialCostOfDelivery" Type="Double" Nullable="false" />
+          <Property Name="OutletId" Type="Int32" Nullable="false" />
+          <Property Name="ItemTimeStamp" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LoyaltyPoints" Type="Double" Nullable="false" />
+          <Property Name="PackingCharge" Type="Double" Nullable="false" />
+          <Property Name="BrandOwnerMiddlePercentage" Type="Int32" />
+          <Property Name="ShopownnerPrice" Type="Double" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ProductType" Relationship="sncModel.FK_Products1_ProductType" FromRole="Products1" ToRole="ProductType" />
+        </EntityType>
+        <Association Name="FK_Products1_ProductType">
+          <End Type="sncModel.ProductType" Role="ProductType" Multiplicity="1" />
+          <End Type="sncModel.Products1" Role="Products1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Products1">
+              <PropertyRef Name="ProductTypeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4270,6 +4434,71 @@
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
                 <ScalarProperty Name="PaymentMode" ColumnName="PaymentMode" />
                 <ScalarProperty Name="ShopDistrict" ColumnName="ShopDistrict" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DiscountCategories1">
+            <EntityTypeMapping TypeName="sncModel.DiscountCategories1">
+              <MappingFragment StoreEntitySet="DiscountCategories1">
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="Percentage" ColumnName="Percentage" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products1">
+            <EntityTypeMapping TypeName="sncModel.Products1">
+              <MappingFragment StoreEntitySet="Products1">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ShopownnerPrice" ColumnName="ShopownnerPrice" />
+                <ScalarProperty Name="BrandOwnerMiddlePercentage" ColumnName="BrandOwnerMiddlePercentage" />
+                <ScalarProperty Name="PackingCharge" ColumnName="PackingCharge" />
+                <ScalarProperty Name="LoyaltyPoints" ColumnName="LoyaltyPoints" />
+                <ScalarProperty Name="ItemTimeStamp" ColumnName="ItemTimeStamp" />
+                <ScalarProperty Name="OutletId" ColumnName="OutletId" />
+                <ScalarProperty Name="SpecialCostOfDelivery" ColumnName="SpecialCostOfDelivery" />
+                <ScalarProperty Name="TaxPercentage" ColumnName="TaxPercentage" />
+                <ScalarProperty Name="PackingType" ColumnName="PackingType" />
+                <ScalarProperty Name="HoldOnStok" ColumnName="HoldOnStok" />
+                <ScalarProperty Name="IsOnline" ColumnName="IsOnline" />
+                <ScalarProperty Name="AppliesOnline" ColumnName="AppliesOnline" />
+                <ScalarProperty Name="DataEntry" ColumnName="DataEntry" />
+                <ScalarProperty Name="DiscountCategoryName" ColumnName="DiscountCategoryName" />
+                <ScalarProperty Name="DiscountCategoryId" ColumnName="DiscountCategoryId" />
+                <ScalarProperty Name="Percentage" ColumnName="Percentage" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="IBarU" ColumnName="IBarU" />
+                <ScalarProperty Name="MenuPrice" ColumnName="MenuPrice" />
+                <ScalarProperty Name="Customisation" ColumnName="Customisation" />
+                <ScalarProperty Name="MaxSelectionLimit" ColumnName="MaxSelectionLimit" />
+                <ScalarProperty Name="MinSelectionLimit" ColumnName="MinSelectionLimit" />
+                <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
+                <ScalarProperty Name="ProductTypeName" ColumnName="ProductTypeName" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="ISBN" ColumnName="ISBN" />
+                <ScalarProperty Name="EAN" ColumnName="EAN" />
+                <ScalarProperty Name="GTIN14" ColumnName="GTIN14" />
+                <ScalarProperty Name="UPC" ColumnName="UPC" />
+                <ScalarProperty Name="GTIN" ColumnName="GTIN" />
+                <ScalarProperty Name="ShopCategoryName" ColumnName="ShopCategoryName" />
+                <ScalarProperty Name="ShopCategoryId" ColumnName="ShopCategoryId" />
+                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="MasterProductId" ColumnName="MasterProductId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

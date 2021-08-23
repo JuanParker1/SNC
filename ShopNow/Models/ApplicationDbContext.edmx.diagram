@@ -69,6 +69,9 @@
         <AssociationConnector Association="sncModel.FK_CustomerAddresses_Customers" />
         <AssociationConnector Association="sncModel.FK_CustomerReview_Customers" />
         <AssociationConnector Association="sncModel.FK_DeliveryBoys_Customers" />
+        <EntityTypeShape EntityType="sncModel.DiscountCategories1" Width="1.5" PointX="26.375" PointY="19.75" />
+        <EntityTypeShape EntityType="sncModel.Products1" Width="1.5" PointX="3" PointY="30.375" />
+        <AssociationConnector Association="sncModel.FK_Products1_ProductType" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
