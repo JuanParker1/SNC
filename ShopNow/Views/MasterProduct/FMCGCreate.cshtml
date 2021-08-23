@@ -1,8 +1,8 @@
 ﻿@model ShopNow.ViewModels.MasterFMCGCreateViewModel
 @{
-    ViewBag.Title = "FMCG Create";
+    ViewBag.Title = "FMCG Entry";
 }
-<title>ShopNow | FMCG Create</title>
+<title>ShopNow | @ViewBag.Title</title>
 <style>
 
     img {
@@ -19,7 +19,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-9">
-            <h5 class="mt-1 text-success" style="letter-spacing:1px">FMCG ENTRY</h5>
+            <h5 class="mt-1 text-success"> @ViewBag.Title</h5>
         </div>
         <div class="col-md-2 text-right">
             <a href="~/MasterProduct/FMCGList" target="_self"><span class="fa fa-list-ul"></span> FMCG List</a>
@@ -82,11 +82,11 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="Price"><strong class="text-secondary">Price</strong></label>
-                                        <input id="Price" type="number" class="form-control" name="Price" min="0" />
+                                        <input id="Price" type="number" class="form-control" name="Price" min="0" step="any" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="Weight"><strong class="text-secondary">Weight</strong></label>
-                                        <input id="Weight" type="number" class="form-control" name="Weight" min="0" />
+                                        <input id="Weight" type="number" class="form-control" name="Weight" min="0" step="any" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="Weight"><strong class="text-secondary">Size LB</strong></label>

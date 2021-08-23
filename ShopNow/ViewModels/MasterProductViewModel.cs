@@ -277,8 +277,6 @@ namespace ShopNow.ViewModels
         public string ImagePath1 { get; set; }
         public int Adscore { get; set; }
         public string NickName { get; set; }
-        public int ProductTypeId { get; set; }
-        public string ProductTypeName { get; set; }
 
         public List<AddonList> AddonLists { get; set; }
         public class AddonList

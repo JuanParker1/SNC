@@ -2,11 +2,11 @@
 @{
     ViewBag.Title = "Medical Update";
 }
-<title>ShopNow | Medical Edit</title>
+<title>ShopNow | @ViewBag.Title</title>
 <div class="container-fluid my-4">
     <div class="row">
         <div class="col-md-4">
-            <h5 class="mt-1 text-success" style="letter-spacing:1px">MEDICAL UPDATE</h5>
+            <h5 class="mt-1 text-success">@ViewBag.Title</h5>
         </div>
         <div class="col-md-8 text-right">
             <a href="~/MasterProduct/MedicalList" target="_blank"><span class="fa fa-bars"></span> Medical List</a>
@@ -94,13 +94,13 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="control-label"><strong class="text-secondary">iBarU</strong></label>
-                                            <input type="text" class="form-control" name="IBarU" id="IBarU" value="@Model.IBarU" />
+                                            <input type="number" class="form-control" name="IBarU" id="IBarU" value="@Model.IBarU" />
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="control-label"><strong class="text-secondary">Weight</strong></label>
-                                            <input type="number" class="form-control" name="Weight" id="Weight" value="@Model.Weight" />
+                                            <input type="number" class="form-control" name="Weight" id="Weight" value="@Model.Weight"  step="any"/>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -118,7 +118,7 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="control-label" for="Adscore"><strong class="text-secondary">Adscore</strong></label>
-                                            <input id="Adscore" type="number" value="@Model.Adscore" class="form-control" name="Adscore" min="1" />
+                                            <input id="Adscore" type="number" value="@Model.Adscore" class="form-control" name="Adscore" />
                                         </div>
                                     </div>
                                     <div class="col-md-3">

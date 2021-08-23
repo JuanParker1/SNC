@@ -3,16 +3,16 @@
 @{
     ViewBag.Title = "Product Specification List";
 }
-<title>ShopNow | Product Specification List</title>
+<title>ShopNow | @ViewBag.Title</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 <div class="container-fluid">
     <div class="row my-2">
         <div class="col-md-6">
-            <h5 class="text-success" style="letter-spacing:1px">Product Specification List</h5>
+            <h5 class="text-success">@ViewBag.Title</h5>
         </div>
         <div class="col-md-6 text-right">
-            <a href="~/ProductSpecification/Create" target="_blank"><span class="fa fa-plus"></span>&nbsp;Product Specification</a>
+            <a href="~/ProductSpecification/Create" target="_self"><span class="fa fa-plus"></span> Product Specification</a>
         </div>
     </div>
     <div class="row">
@@ -85,7 +85,7 @@
                 },
                     function (isConfirm) {
                         if (isConfirm) {
-                            $.getJSON("/MeasurementUnit/Delete", { id: Id }, function (data) {
+                            $.getJSON("/ProductSpecification/Delete", { id: Id }, function (data) {
                                 if (data == true) {
                                     window.location.reload();
                                 }

@@ -1,18 +1,16 @@
 ﻿@model ShopNow.ViewModels.ProductSpecificationEditViewModel
 @{
-    /**/
-
     ViewBag.Title = "Product Specification Update";
 }
-<title>ShopNow | Product Specification Update</title>
+<title>ShopNow | @ViewBag.Title</title>
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6">
-            <h5 class="text-success" style="letter-spacing:1px">PRODUCT SPECIFICATION UPDATE</h5>
+            <h5 class="text-success">@ViewBag.Title</h5>
         </div>
         <div class="col-md-6 text-right">
-            <a href="~/ProductSpecification/List" target="_blank"><span class="fa fa-bars"></span>&nbsp;Product Specification List</a>
+            <a href="~/ProductSpecification/List" target="_self"><span class="fa fa-list-ul"></span> Product Specification List</a>
         </div>
     </div>
 
