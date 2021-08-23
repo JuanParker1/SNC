@@ -24,6 +24,7 @@ using System.Web.Http.Cors;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using System.Data.Entity.Migrations;
+using N.EntityFramework.Extensions;
 
 namespace ShopNow.Controllers
 {
@@ -32,6 +33,7 @@ namespace ShopNow.Controllers
     public class ApiController : Controller
     {
         private sncEntities db = new sncEntities();
+        
 
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
@@ -2491,85 +2493,215 @@ namespace ShopNow.Controllers
             //};
             return Json(new { Page = paginationMetadata, items }, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetP(string str = "")
+        public  class Productss
         {
-            var apiSettings = db.ApiSettings.Where(m => m.Status == 0).ToList();
+            public long Id { get; set; }
+            public string Name { get; set; }
+            public long MasterProductId { get; set; }
+            public int ShopId { get; set; }
+            public int ShopCategoryId { get; set; }
+   
+            public double Price { get; set; }
+            public int Qty { get; set; }
+            public int ProductTypeId { get; set; }
+            public int MinSelectionLimit { get; set; }
+            public int MaxSelectionLimit { get; set; }
+            public bool Customisation { get; set; }
+            public double MenuPrice { get; set; }
+            public int IBarU { get; set; }
+            public int ItemId { get; set; }
+            public double Percentage { get; set; }
+            public int DiscountCategoryId { get; set; }
+            public string DiscountCategoryName { get; set; }
+            public int DataEntry { get; set; }
+            public int AppliesOnline { get; set; }
+            public bool IsOnline { get; set; }
+            public int HoldOnStok { get; set; }
+            public int PackingType { get; set; }
+            public double TaxPercentage { get; set; }
+            public double SpecialCostOfDelivery { get; set; }
+            public int OutletId { get; set; }
+            public string ItemTimeStamp { get; set; }
+            public double LoyaltyPoints { get; set; }
+            public double PackingCharge { get; set; }
 
-            if (apiSettings.Count > 0) {
-                foreach (var api in apiSettings)
-                {
-                    string s = "";
-                    string Url = api.Url + "items?q=status==R,outletId==" + api.OutletId + "&limit=100000";
-                    using (WebClient client = new WebClient())
-                    {
-                        client.Headers["X-Auth-Token"] = api.AuthKey; //"62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
+            public int Status { get; set; }
+            public System.DateTime DateEncoded { get; set; }
+            public System.DateTime DateUpdated { get; set; }
+            public string CreatedBy { get; set; }
+            public string UpdatedBy { get; set; }
 
-                        s = client.DownloadString(Url);
-                    }
-
-                    var lst = db.Products.Where(m => m.ShopId == api.ShopId).Select(si => si.ItemId).ToList();
-                    List<Product> updateList = new List<Product>();
-                    List<Product> createList = new List<Product>();
-                    Product varProduct = new Product();
-                    var lstDiscount = (dynamic)null;
-                    goto GetDiscoutCatecories;
-                GetDiscoutCatecories:
-                    lstDiscount = db.DiscountCategories.Where(m => m.ShopId == api.ShopId).Select(si => si.Percentage).ToList();
-
-                    dynamic config = JsonConvert.DeserializeObject<ExpandoObject>(s, new ExpandoObjectConverter());
-                    foreach (var pro in ((IEnumerable<dynamic>)config.items).Where(t => t.status == "R"))
-                    {
-                        varProduct.Id = Convert.ToString(pro.itemId);
-                        varProduct.Name = pro.itemName;
-                        varProduct.IBarU = Convert.ToInt32(pro.iBarU);
-                        varProduct.DateUpdated = DateTime.Now;
-                        varProduct.ShopCategoryId = 4;
-                        varProduct.ShopId = api.ShopId;
-
-                        foreach (var med in pro.stock)
-                        {
-                            varProduct.Qty = Convert.ToInt32(Math.Floor(Convert.ToDecimal(med.stock)));
-                            varProduct.MenuPrice = Convert.ToDouble(med.mrp);
-                            varProduct.Price = Convert.ToDouble(med.salePrice);
-                            varProduct.TaxPercentage = Convert.ToDouble(med.taxPercentage);
-                            varProduct.ItemTimeStamp = Convert.ToString(med.itemTimeStamp);
-                            varProduct.AppliesOnline = Convert.ToInt32(pro.appliesOnline);
-                            varProduct.OutletId = Convert.ToInt32(pro.outletId);
-                            varProduct.DiscountCategoryName = Convert.ToString(med.cat + api.Category);
-                        }
-                        int idx = lst.IndexOf(pro.itemId);
-                        if (idx >= 0)
-                        {
-                            //update
-                        }
-                        else
-                        {
-                            //Add
-                        }
-
-                    }
-                }
-            }
-
-            //// DownloadString (encoding specified)
-            //using (WebClient client = new WebClient())
-            //{
-            //    client.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
-            //    // specify encoding
-            //    client.Encoding = System.Text.UTF8Encoding.UTF8;
-
-            //    // output
-            //    Console.WriteLine(client.DownloadString(Url));
-            //}
-
-            //// DownloadData (encoding specified)
-            //using (WebClient client = new WebClient())
-            //{
-            //    client.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
-            //    Console.WriteLine(System.Text.UTF8Encoding.UTF8.GetString(client.DownloadData(Url)));
-            //}
-            return Json(new { Page = "" }, JsonRequestBehavior.AllowGet);
         }
+        //public JsonResult GetP(string str = "")
+        //{
+        //    sncEntities context = new sncEntities();
+           
+        //    var apiSettings = db.ApiSettings.Where(m => m.Status == 0).ToList();
+
+        //    if (apiSettings.Count > 0) {
+        //        foreach (var api in apiSettings)
+        //        {
+        //            string s = "";
+        //            string Url = api.Url + "items?q=status==R,outletId==" + api.OutletId + "&limit=100000";
+        //            using (WebClient client = new WebClient())
+        //            {
+        //                client.Headers["X-Auth-Token"] = api.AuthKey; //"62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
+
+        //                s = client.DownloadString(Url);
+        //            }
+
+        //            var lst = db.Products1.Where(m => m.ShopId == api.ShopId).Select(si => si.ItemId).ToList();
+        //            List<Products1> updateList = new List<Products1>();
+        //            List<Products1> createList = new List<Products1>();
+        //            List<DiscountCategory> createCategoryList = new List<DiscountCategory>();
+        //            DiscountCategory dc = new DiscountCategory();
+        //            Products1 varProduct = new Products1();
+        //            List<DiscountCategory> lstDiscount =new List<DiscountCategory>();
+        //            goto GetDiscoutCatecories;
+        //        GetDiscoutCatecories:
+        //            lstDiscount = db.DiscountCategories.Where(m => m.ShopId == api.ShopId).ToList();
+
+        //            dynamic config = JsonConvert.DeserializeObject<ExpandoObject>(s, new ExpandoObjectConverter());
+        //            foreach (var pro in ((IEnumerable<dynamic>)config.items).Where(t => t.status == "R"))
+        //            {
+        //                varProduct.ItemId =Convert.ToInt32(pro.itemId);
+        //                varProduct.Name = pro.itemName;
+        //                varProduct.IBarU = Convert.ToInt32(pro.iBarU);
+        //                varProduct.DateUpdated = DateTime.Now;
+        //                varProduct.ShopCategoryId = 4;
+        //                varProduct.ShopId = api.ShopId;
+
+        //                varProduct.ProductTypeId = 0;
+        //                varProduct.MinSelectionLimit = 0;
+        //                varProduct.MaxSelectionLimit = 0; 
+        //                varProduct.Customisation = false; 
+        //                varProduct.Percentage = 0;
+        //                varProduct.DiscountCategoryId = 0; 
+        //                varProduct.DataEntry = 0; varProduct.IsOnline = true;
+        //                varProduct.HoldOnStok = 0;
+        //                varProduct.PackingType = 0;
+        //                varProduct.SpecialCostOfDelivery = 0;
+        //                varProduct.LoyaltyPoints = 0;
+        //                varProduct.PackingCharge = 0;
+        //                varProduct.Status = 0;
+        //                varProduct.DateEncoded = DateTime.Now;
+        //                varProduct.CreatedBy = "serveice";
+        //                varProduct.UpdatedBy = "serveice";
+        //                foreach (var med in pro.stock)
+        //                {
+        //                    varProduct.Qty = Convert.ToInt32(Math.Floor(Convert.ToDecimal(med.stock)));
+        //                    varProduct.MenuPrice = Convert.ToDouble(med.mrp);
+        //                    varProduct.Price = Convert.ToDouble(med.salePrice);
+        //                    varProduct.TaxPercentage = Convert.ToDouble(med.taxPercentage);
+        //                    varProduct.ItemTimeStamp = Convert.ToString(med.itemTimeStamp);
+        //                    varProduct.AppliesOnline = Convert.ToInt32(pro.appliesOnline);
+        //                    varProduct.OutletId = Convert.ToInt32(med.outletId);
+        //                    if(api.Category==1)
+        //                    varProduct.DiscountCategoryName = Convert.ToString(med.Cat1); 
+        //                    else if (api.Category == 2)
+        //                     varProduct.DiscountCategoryName = Convert.ToString(med.Cat2);
+        //                    else if (api.Category == 3)
+        //                        varProduct.DiscountCategoryName = Convert.ToString(med.Cat3);
+        //                    else if (api.Category == 4)
+        //                        varProduct.DiscountCategoryName = Convert.ToString(med.Cat4);
+        //                    else if (api.Category == 5)
+        //                        varProduct.DiscountCategoryName = Convert.ToString(med.Cat5);
+        //                    else if (api.Category == 6)
+        //                        varProduct.DiscountCategoryName = Convert.ToString(med.Cat6);
+        //                    else if (api.Category == 7)
+        //                        varProduct.DiscountCategoryName = Convert.ToString(med.Cat7);
+        //                    else if (api.Category ==8)
+        //                        varProduct.DiscountCategoryName = Convert.ToString(med.Cat8);
+        //                    else if (api.Category == 9)
+        //                        varProduct.DiscountCategoryName = Convert.ToString(med.Cat9);
+        //                    else if (api.Category == 10)
+        //                        varProduct.DiscountCategoryName = Convert.ToString(med.Cat10);
+        //                    var catCout = lstDiscount.Where(c => c.ShopId == api.ShopId && c.Name == varProduct.DiscountCategoryName).Count();
+        //                    if(catCout<=0)
+        //                    {
+        //                        if (varProduct.DiscountCategoryName !=null)
+        //                        dc.Name = varProduct.DiscountCategoryName.Trim();
+        //                        else
+        //                            dc.Name = varProduct.DiscountCategoryName;
+        //                        dc.ShopId = api.ShopId;
+        //                        int catExist = createCategoryList.Where(c => c.Name == dc.Name && c.ShopId == dc.ShopId).Count();
+        //                        if(catExist<=0)
+        //                        createCategoryList.Add(dc);
+        //                    }
+
+        //                }
+        //                int idx = lst.FindIndex(a => a == pro.itemId);
+        //                if (idx >= 0)
+        //                {
+        //                  //  updateList.Add(varProduct);
+        //                    //update
+        //                }
+        //                else
+        //                {
+        //                    long masterid = 0;
+        //                    long id = 0;
+        //                    createList.Add(new Products1
+        //                    {
+        //                        ProductTypeId = 0,
+        //                        MinSelectionLimit = 0,
+        //                        MaxSelectionLimit = 0,
+        //                        Customisation = false,
+        //                        Percentage = 0,
+        //                        DiscountCategoryId = 0,
+        //                        DataEntry = 0,
+        //                        IsOnline = true,
+        //                        HoldOnStok = 0,
+        //                        PackingType = 0,
+        //                        SpecialCostOfDelivery = 0,
+        //                        LoyaltyPoints = 0,
+        //                        PackingCharge = 0,
+        //                        Status = 0,
+        //                        DateEncoded = DateTime.Now,
+        //                        MasterProductId = masterid,
+        //                        Id = id,
+        //                        ItemId = varProduct.ItemId,
+        //                        Name = varProduct.Name,
+        //                        IBarU = Convert.ToInt32(pro.iBarU),
+        //                        ShopCategoryId = 4,
+        //                        ShopId = api.ShopId,
+        //                        Qty = varProduct.Qty,
+        //                        MenuPrice = varProduct.MenuPrice,
+        //                        Price = varProduct.Price,
+        //                        TaxPercentage = varProduct.TaxPercentage,
+        //                        ItemTimeStamp = varProduct.ItemTimeStamp,
+        //                        AppliesOnline = varProduct.AppliesOnline,
+        //                        OutletId = varProduct.OutletId,
+        //                        DateUpdated = DateTime.Now
+        //                    });
+        //                    //createList.Add(varProduct);
+        //                }
+
+        //            }
+        //            // db.BulkInsert(createList);
+        //            db.Products1.AddRange(createList);
+        //            //db.BulkSaveChanges();
+        //        }
+        //    }
+
+        //    //// DownloadString (encoding specified)
+        //    //using (WebClient client = new WebClient())
+        //    //{
+        //    //    client.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
+        //    //    // specify encoding
+        //    //    client.Encoding = System.Text.UTF8Encoding.UTF8;
+
+        //    //    // output
+        //    //    Console.WriteLine(client.DownloadString(Url));
+        //    //}
+
+        //    //// DownloadData (encoding specified)
+        //    //using (WebClient client = new WebClient())
+        //    //{
+        //    //    client.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
+        //    //    Console.WriteLine(System.Text.UTF8Encoding.UTF8.GetString(client.DownloadData(Url)));
+        //    //}
+        //    return Json(new { Page = "" }, JsonRequestBehavior.AllowGet);
+        //}
 
         public static double GetStockQty(string code)
         {
