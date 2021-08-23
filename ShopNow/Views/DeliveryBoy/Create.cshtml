@@ -10,7 +10,7 @@
             <h5 class="text-success">@ViewBag.Title</h5>
         </div>
         <div class="col-md-9 text-right">
-            <a href="~/DeliveryBoy/List" target="_self"><span class="fa fa-bars"></span>&nbsp;DeliveryBoy List</a>
+            <a href="~/DeliveryBoy/List" target="_self"><span class="fa fa-list-ul"></span>&nbsp;DeliveryBoy List</a>
         </div>
     </div>
     <div class="row">
@@ -18,7 +18,21 @@
             @using (Html.BeginForm("Create", "DeliveryBoy", FormMethod.Post, new { id = "DeliveryBoyForm", role = "form", enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
-                <div class="card mb-4">
+                <div class="card CustomerCheck">
+                    <div class="card-body">
+                        <div class="row form-group">
+                            <div class="col-md-4">
+                                <label class="col-form-label"><strong class="text-secondary">Mobile Number</strong></label>
+                                <input type="text" class="form-control" name="Phone" id="Phone" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'');" />
+                            </div>
+                            <div class="col-md-1">
+                                <label class="col-form-label"></label>
+                                <input type="button" class="form-control btn btn-sm btn-success mt-3" value="Go" id="btnCheckCustomer" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4 d-none DBoy">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12">
@@ -31,7 +45,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <label class="col-form-label"><strong class="text-secondary">Mobile Number</strong></label>
-                                        <input type="text" class="form-control" name="PhoneNumber" id="PhoneNumber" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'');" />
+                                        <input type="text" class="form-control" name="PhoneNumber" id="PhoneNumber" readonly />
                                     </div>
                                     <div class="col-md-4">
                                         <label class="col-form-label"><strong class="text-secondary">Email</strong></label>
@@ -135,7 +149,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="row col-md-12 mt-3">
                         <div class="col-md-8">
                             <h5 class="text-success mb-2">Bank Details</h5>
@@ -208,6 +222,42 @@
             async defer></script>
     <script>
         $(document).ready(function () {
+            
+            $('#btnCheckCustomer').on('click', function () {
+                var isValidated = false;
+                var requiredArr = [
+                    'Phone'
+                ];
+                isValidated = ValidateEmptyRequiredFiels(requiredArr);
+                if (isValidated) {
+                    var phone = $("#Phone").val();
+                    $.getJSON("/DeliveryBoy/GetPhoneNumberCheck/", { phone: phone }, function (data) {
+                        if (data == 0) {
+                            swal("You are not a Customer!", "", "warning");
+                        }
+                        else if (data == 1) {
+                            swal("PhoneNumber already exist!", "Live DeliveryBoy", "warning");
+                        }
+                        else if (data == 2) {
+                            swal("PhoneNumber already exist!", "Waiting for Approval", "warning");
+                        }
+                        else if (data.msg == 3) {
+                            $('.DBoy').removeClass("d-none");
+                            $('.CustomerCheck').addClass("d-none");
+                            $("#PhoneNumber").val(data.phone);
+                            $("#Name").val(data.name);
+                            $("#Email").val(data.email);
+                        }
+                        else if (data.msg == 4) {
+                            $('.DBoy').removeClass("d-none"); 
+                            $('.CustomerCheck').addClass("d-none");
+                            $("#PhoneNumber").val(data.phone);
+                            $("#Name").val(data.name);
+                            $("#Email").val(data.email);
+                        }
+                    });
+                }
+            });
             $('#Create').on('click', function () {
                     var isValidated = false;
                     var requiredArr = [
@@ -217,19 +267,7 @@
                     ];
                     isValidated = ValidateEmptyRequiredFiels(requiredArr);
                 if (isValidated) {
-                    var phone = $("#PhoneNumber").val();
-
-                    $.getJSON("/DeliveryBoy/GetPhoneNumberCheck/", { phone: phone }, function (data) {
-                            if (data == 1) {
-                                $('#DeliveryBoyForm').submit();
-                            }
-                            else if (data == 2) {
-                                swal("You are not a Customer", "", "warning");
-                            }
-                            else if (data == 3) {
-                                swal("Phone Number Already Exist!", "", "warning");
-                            }
-                    });
+                    $('#DeliveryBoyForm').submit();
                 }
             });
             $('input:radio[name="DrivingLicense"]').change(
