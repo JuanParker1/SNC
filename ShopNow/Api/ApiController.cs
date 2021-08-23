@@ -4215,7 +4215,7 @@ namespace ShopNow.Controllers
                      PaymentMode = i.o.p.PaymentMode,
                      WalletAmount = i.o.o.WalletAmount,
                      OrderItemList = i.oi.ToList()
-                 }).ToList();
+                 }).OrderByDescending(i=>i.DateEncoded).ToList();
 
             int count = model.OrderLists.Count();
             int CurrentPage = page;
