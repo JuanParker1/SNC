@@ -450,6 +450,9 @@
     <Compile Include="Models\DeliveryBoyShop.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DiscountCategories1.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DiscountCategory.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
@@ -533,6 +536,9 @@
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ProductDishAddOn.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Products1.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ProductSpecification.cs">
