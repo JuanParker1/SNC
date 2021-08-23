@@ -96,81 +96,163 @@ namespace ShopNow.Controllers
         public ActionResult Create(DeliveryBoyAddViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var deliveryboy = _mapper.Map<DeliveryBoyAddViewModel, DeliveryBoy>(model);
+            var isExist = db.DeliveryBoys.Any(i => i.PhoneNumber == model.PhoneNumber && i.Status == 3);
             var customer = db.Customers.Where(i => i.PhoneNumber == model.PhoneNumber).FirstOrDefault();
-            if (customer != null)
+            if (!isExist)
             {
-                customer.Position = 3;
-                customer.DateUpdated = DateTime.Now;
-                db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-                deliveryboy.CustomerId = customer.Id;
-                deliveryboy.CustomerName = customer.Name;
+                var deliveryboy = _mapper.Map<DeliveryBoyAddViewModel, DeliveryBoy>(model);
+                if (customer != null)
+                {
+                    customer.Position = 3;
+                    customer.DateUpdated = DateTime.Now;
+                    db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                    deliveryboy.CustomerId = customer.Id;
+                    deliveryboy.CustomerName = customer.Name;
+                }
+                deliveryboy.CreatedBy = user.Name;
+                deliveryboy.UpdatedBy = user.Name;
+                deliveryboy.DateEncoded = DateTime.Now;
+                deliveryboy.DateUpdated = DateTime.Now;
+                deliveryboy.Status = 1;
+                try
+                {
+                    // DeliveryBoy Image
+                    if (model.DeliveryBoyImage != null)
+                    {
+                        uc.UploadFiles(model.DeliveryBoyImage.InputStream, deliveryboy.Id + "_" + model.DeliveryBoyImage.FileName, accesskey, secretkey, "image");
+                        deliveryboy.ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryboy.Id + "_" + model.DeliveryBoyImage.FileName.Replace(" ", "");
+                    }
+
+                    // DrivingLicense Image
+                    if (model.DrivingLicenseImage != null)
+                    {
+                        uc.UploadFiles(model.DrivingLicenseImage.InputStream, deliveryboy.Id + "_" + model.DrivingLicenseImage.FileName, accesskey, secretkey, "image");
+                        deliveryboy.DrivingLicenseImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryboy.Id + "_" + model.DrivingLicenseImage.FileName.Replace(" ", "");
+                    }
+
+                    // DrivingLicense Pdf
+                    if (model.DrivingLicensePdf != null)
+                    {
+                        uc.UploadFiles(model.DrivingLicensePdf.InputStream, deliveryboy.Id + "_" + model.DrivingLicensePdf.FileName, accesskey, secretkey, "pdf");
+                        deliveryboy.DrivingLicenseImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryboy.Id + "_" + model.DrivingLicensePdf.FileName.Replace(" ", "");
+                    }
+
+                    // BankPassbook Image
+                    if (model.BankPassbookImage != null)
+                    {
+                        uc.UploadFiles(model.BankPassbookImage.InputStream, deliveryboy.Id + "_" + model.BankPassbookImage.FileName, accesskey, secretkey, "image");
+                        deliveryboy.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryboy.Id + "_" + model.BankPassbookImage.FileName.Replace(" ", "");
+                    }
+
+                    // BankPassbook Pdf
+                    if (model.BankPassbookPdf != null)
+                    {
+                        uc.UploadFiles(model.BankPassbookPdf.InputStream, deliveryboy.Id + "_" + model.BankPassbookPdf.FileName, accesskey, secretkey, "pdf");
+                        deliveryboy.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryboy.Id + "_" + model.BankPassbookPdf.FileName.Replace(" ", "");
+                    }
+
+                    // CV Pdf
+                    if (model.CVPdf != null)
+                    {
+                        uc.UploadFiles(model.CVPdf.InputStream, deliveryboy.Id + "_" + model.CVPdf.FileName, accesskey, secretkey, "pdf");
+                        deliveryboy.CVPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryboy.Id + "_" + model.CVPdf.FileName.Replace(" ", "");
+                    }
+                    db.DeliveryBoys.Add(deliveryboy);
+                    db.SaveChanges();
+                    return RedirectToAction("List");
+                }
+                catch (AmazonS3Exception amazonS3Exception)
+                {
+                    if (amazonS3Exception.ErrorCode != null &&
+                        (amazonS3Exception.ErrorCode.Equals("InvalidAccessKeyId")
+                        ||
+                        amazonS3Exception.ErrorCode.Equals("InvalidSecurity")))
+                    {
+                        return ViewBag.Message = "Check the provided AWS Credentials.";
+                    }
+                    else
+                    {
+                        return ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
+                    }
+                }
             }
-            deliveryboy.CreatedBy = user.Name;
-            deliveryboy.UpdatedBy = user.Name;
-            deliveryboy.DateEncoded = DateTime.Now;
-            deliveryboy.DateUpdated = DateTime.Now;
-            deliveryboy.Status = 1;
-            try
+            else
             {
-                // DeliveryBoy Image
-                if (model.DeliveryBoyImage != null)
+                var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.PhoneNumber == model.PhoneNumber);
+                _mapper.Map(model, deliveryBoy);
+                if (customer != null)
                 {
-                    uc.UploadFiles(model.DeliveryBoyImage.InputStream, deliveryboy.Id + "_" + model.DeliveryBoyImage.FileName, accesskey, secretkey, "image");
-                    deliveryboy.ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryboy.Id + "_" + model.DeliveryBoyImage.FileName.Replace(" ", "");
+                    customer.Position = 3;
+                    customer.DateUpdated = DateTime.Now;
+                    db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                    deliveryBoy.CustomerId = customer.Id;
+                    deliveryBoy.CustomerName = customer.Name;
                 }
+                deliveryBoy.Status = 1;
+                deliveryBoy.DateEncoded = DateTime.Now;
+                deliveryBoy.DateUpdated = DateTime.Now;
+                try
+                {
+                    // DeliveryBoy Image
+                    if (model.DeliveryBoyImage != null)
+                    {
+                        uc.UploadFiles(model.DeliveryBoyImage.InputStream, deliveryBoy.Id + "_" + model.DeliveryBoyImage.FileName, accesskey, secretkey, "image");
+                        deliveryBoy.ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryBoy.Id + "_" + model.DeliveryBoyImage.FileName.Replace(" ", "");
+                    }
 
-                // DrivingLicense Image
-                if (model.DrivingLicenseImage != null)
-                {
-                    uc.UploadFiles(model.DrivingLicenseImage.InputStream, deliveryboy.Id + "_" + model.DrivingLicenseImage.FileName, accesskey, secretkey, "image");
-                    deliveryboy.DrivingLicenseImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryboy.Id + "_" + model.DrivingLicenseImage.FileName.Replace(" ", "");
-                }
+                    // DrivingLicense Image
+                    if (model.DrivingLicenseImage != null)
+                    {
+                        uc.UploadFiles(model.DrivingLicenseImage.InputStream, deliveryBoy.Id + "_" + model.DrivingLicenseImage.FileName, accesskey, secretkey, "image");
+                        deliveryBoy.DrivingLicenseImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryBoy.Id + "_" + model.DrivingLicenseImage.FileName.Replace(" ", "");
+                    }
 
-                // DrivingLicense Pdf
-                if (model.DrivingLicensePdf != null)
-                {
-                    uc.UploadFiles(model.DrivingLicensePdf.InputStream, deliveryboy.Id + "_" + model.DrivingLicensePdf.FileName, accesskey, secretkey, "pdf");
-                    deliveryboy.DrivingLicenseImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryboy.Id + "_" + model.DrivingLicensePdf.FileName.Replace(" ", "");
-                }
+                    // DrivingLicense Pdf
+                    if (model.DrivingLicensePdf != null)
+                    {
+                        uc.UploadFiles(model.DrivingLicensePdf.InputStream, deliveryBoy.Id + "_" + model.DrivingLicensePdf.FileName, accesskey, secretkey, "pdf");
+                        deliveryBoy.DrivingLicenseImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryBoy.Id + "_" + model.DrivingLicensePdf.FileName.Replace(" ", "");
+                    }
 
-                // BankPassbook Image
-                if (model.BankPassbookImage != null)
-                {
-                    uc.UploadFiles(model.BankPassbookImage.InputStream, deliveryboy.Id + "_" + model.BankPassbookImage.FileName, accesskey, secretkey, "image");
-                    deliveryboy.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryboy.Id + "_" + model.BankPassbookImage.FileName.Replace(" ", "");
-                }
+                    // BankPassbook Image
+                    if (model.BankPassbookImage != null)
+                    {
+                        uc.UploadFiles(model.BankPassbookImage.InputStream, deliveryBoy.Id + "_" + model.BankPassbookImage.FileName, accesskey, secretkey, "image");
+                        deliveryBoy.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryBoy.Id + "_" + model.BankPassbookImage.FileName.Replace(" ", "");
+                    }
 
-                // BankPassbook Pdf
-                if (model.BankPassbookPdf != null)
-                {
-                    uc.UploadFiles(model.BankPassbookPdf.InputStream, deliveryboy.Id + "_" + model.BankPassbookPdf.FileName, accesskey, secretkey, "pdf");
-                    deliveryboy.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryboy.Id + "_" + model.BankPassbookPdf.FileName.Replace(" ", "");
-                }
+                    // BankPassbook Pdf
+                    if (model.BankPassbookPdf != null)
+                    {
+                        uc.UploadFiles(model.BankPassbookPdf.InputStream, deliveryBoy.Id + "_" + model.BankPassbookPdf.FileName, accesskey, secretkey, "pdf");
+                        deliveryBoy.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryBoy.Id + "_" + model.BankPassbookPdf.FileName.Replace(" ", "");
+                    }
 
-                // CV Pdf
-                if (model.CVPdf != null)
-                {
-                    uc.UploadFiles(model.CVPdf.InputStream, deliveryboy.Id + "_" + model.CVPdf.FileName, accesskey, secretkey, "pdf");
-                    deliveryboy.CVPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryboy.Id + "_" + model.CVPdf.FileName.Replace(" ", "");
+                    // CV Pdf
+                    if (model.CVPdf != null)
+                    {
+                        uc.UploadFiles(model.CVPdf.InputStream, deliveryBoy.Id + "_" + model.CVPdf.FileName, accesskey, secretkey, "pdf");
+                        deliveryBoy.CVPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryBoy.Id + "_" + model.CVPdf.FileName.Replace(" ", "");
+                    }
+                    db.Entry(deliveryBoy).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("List");
                 }
-                db.DeliveryBoys.Add(deliveryboy);
-                db.SaveChanges();
-                return RedirectToAction("List");
-            }
-            catch (AmazonS3Exception amazonS3Exception)
-            {
-                if (amazonS3Exception.ErrorCode != null &&
-                    (amazonS3Exception.ErrorCode.Equals("InvalidAccessKeyId")
-                    ||
-                    amazonS3Exception.ErrorCode.Equals("InvalidSecurity")))
+                catch (AmazonS3Exception amazonS3Exception)
                 {
-                    return ViewBag.Message = "Check the provided AWS Credentials.";
-                }
-                else
-                {
-                    return ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
+                    if (amazonS3Exception.ErrorCode != null &&
+                        (amazonS3Exception.ErrorCode.Equals("InvalidAccessKeyId")
+                        ||
+                        amazonS3Exception.ErrorCode.Equals("InvalidSecurity")))
+                    {
+                        return ViewBag.Message = "Check the provided AWS Credentials.";
+                    }
+                    else
+                    {
+                        return ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
+                    }
                 }
             }
         }
@@ -707,21 +789,41 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNDBYC001")]
         public JsonResult GetPhoneNumberCheck(string phone)
         {
-            var dboy = db.DeliveryBoys.FirstOrDefault(i => i.PhoneNumber == phone && (i.Status == 0 || i.Status == 1));
             var customer = db.Customers.FirstOrDefault(i => i.PhoneNumber == phone);
-            int isCheck = 0;
-            if (customer != null && dboy == null)
+            int msg;
+            var customerExist = db.Customers.Any(i => i.PhoneNumber == phone);
+            if (customerExist)
             {
-                return Json(isCheck = 1, JsonRequestBehavior.AllowGet);
+                var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.PhoneNumber == phone);
+                if (deliveryBoy != null)
+                {
+                    if (deliveryBoy.Status == 0)    // DeliveryBoy already Exist
+                    {
+                        msg = 1;
+                        return Json(msg, JsonRequestBehavior.AllowGet);
+                    }
+                    else if (deliveryBoy.Status == 1)   // DeliveryBoy in approval Pending status
+                    {
+                        msg = 2;
+                        return Json(msg, JsonRequestBehavior.AllowGet);
+                    }
+                    else if (deliveryBoy.Status == 3) // DeliveryBoy Update
+                    {
+                        msg = 3;
+                        return Json(new { msg, phone = customer.PhoneNumber, name = customer.Name, email = customer.Email }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {     // DeliveryBoy Create
+                    msg = 4;
+                    return Json(new { msg, phone = customer.PhoneNumber, name = customer.Name, email = customer.Email }, JsonRequestBehavior.AllowGet);
+                }
             }
             else
-            {
-                if (customer == null)
-                    return Json(isCheck = 2, JsonRequestBehavior.AllowGet);
-                else if(dboy != null)
-                    return Json(isCheck = 3, JsonRequestBehavior.AllowGet);
+            {   // Not a Customer
+                return Json(msg = 0, JsonRequestBehavior.AllowGet);
             }
-            return Json(isCheck, JsonRequestBehavior.AllowGet);
+            return Json(msg = 0, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult UpdateDeliveryBoyOnline(int Id, int Active)
