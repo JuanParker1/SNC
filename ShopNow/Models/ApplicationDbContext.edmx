@@ -2649,15 +2649,12 @@
           <EntitySet Name="Orders" EntityType="sncModel.Order" />
           <EntitySet Name="DiscountCategories1" EntityType="sncModel.DiscountCategories1" />
           <EntitySet Name="AppDetails" EntityType="sncModel.AppDetail" />
-<<<<<<< HEAD
-          <EntitySet Name="Products1" EntityType="sncModel.Products1" />
-=======
+        <EntitySet Name="Products1" EntityType="sncModel.Products1" />
           <EntitySet Name="OrderItems" EntityType="sncModel.OrderItem" />
           <AssociationSet Name="FK_OrderItems_Orders" Association="sncModel.FK_OrderItems_Orders">
             <End Role="Order" EntitySet="Orders" />
             <End Role="OrderItem" EntitySet="OrderItems" />
           </AssociationSet>
->>>>>>> d2efca4cc79a1941c789d72619aa209f98cc8363
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -4488,8 +4485,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-<<<<<<< HEAD
-=======
+
           <EntitySetMapping Name="AppDetails">
             <EntityTypeMapping TypeName="sncModel.AppDetail">
               <MappingFragment StoreEntitySet="AppDetails">
@@ -4521,7 +4517,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
->>>>>>> d2efca4cc79a1941c789d72619aa209f98cc8363
+
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

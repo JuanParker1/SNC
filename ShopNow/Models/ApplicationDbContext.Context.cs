@@ -80,11 +80,8 @@ namespace ShopNow.Models
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<DiscountCategories1> DiscountCategories1 { get; set; }
         public virtual DbSet<AppDetail> AppDetails { get; set; }
-<<<<<<< HEAD
         public virtual DbSet<Products1> Products1 { get; set; }
-=======
         public virtual DbSet<OrderItem> OrderItems { get; set; }
->>>>>>> d2efca4cc79a1941c789d72619aa209f98cc8363
     
         [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)
