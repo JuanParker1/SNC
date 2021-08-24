@@ -112,7 +112,7 @@ namespace ShopNow.ViewModels
             public int ShopId { get; set; }
             public string ShopName { get; set; }
             public int OrderNumber { get; set; }
-            public int ProductId { get; set; }
+            public long ProductId { get; set; }
             public string ProductName { get; set; }
             public string PhoneNumber { get; set; }
             public int BrandId { get; set; }
@@ -335,7 +335,7 @@ namespace ShopNow.ViewModels
         public List<ListItem> ListItems { get; set; } 
         public class ListItem
         {
-            public int ProductId { get; set; }
+            public long ProductId { get; set; }
             public string ProductName { get; set; }
             public int BrandId { get; set; }
             public string BrandName { get; set; }
@@ -508,7 +508,7 @@ namespace ShopNow.ViewModels
             public int OrderNumber { get; set; }
             public int ShopId { get; set; }
             public string ShopName { get; set; }
-            public int ProductId { get; set; }
+            public long ProductId { get; set; }
             public string ProductName { get; set; }
             public string PhoneNumber { get; set; }
             public string PaymentMode { get; set; }
