@@ -4414,6 +4414,15 @@ namespace ShopNow.Controllers
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetLatestVersion()
+        {
+            string version = "0";
+            var appDetails = db.AppDetails.FirstOrDefault(i => i.Status == 0);
+            if (appDetails != null)
+                version = appDetails.Version;
+            return Json(new { version = version }, JsonRequestBehavior.AllowGet);
+        }
+
         public void UpdateAchievements(int customerId)
         {
             var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);

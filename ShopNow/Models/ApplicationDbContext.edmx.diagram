@@ -25,7 +25,6 @@
         <EntityTypeShape EntityType="sncModel.NextSubCategory" Width="1.5" PointX="3" PointY="6.25" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.OfferProduct" Width="1.5" PointX="20.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.OfferShop" Width="1.5" PointX="0.75" PointY="21.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.OrderItem" Width="1.5" PointX="16" PointY="13.125" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.OtpVerification" Width="1.5" PointX="2.75" PointY="21.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.Package" Width="1.5" PointX="4.75" PointY="21.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.Page" Width="1.5" PointX="21.75" PointY="8.75" IsExpanded="true" />
@@ -68,10 +67,11 @@
         <AssociationConnector Association="sncModel.FK_CustomerReview_Customers" />
         <AssociationConnector Association="sncModel.FK_DeliveryBoys_Customers" />
         <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="13.75" PointY="28.125" />
-        <AssociationConnector Association="sncModel.FK_OrderItems_Orders" />
         <EntityTypeShape EntityType="sncModel.DiscountCategories1" Width="1.5" PointX="27.375" PointY="0.75" />
         <EntityTypeShape EntityType="sncModel.AppDetail" Width="1.5" PointX="26.375" PointY="19.75" />
         <EntityTypeShape EntityType="sncModel.Products1" Width="1.5" PointX="27.375" PointY="22.75" />
+        <EntityTypeShape EntityType="sncModel.OrderItem" Width="1.5" PointX="16" PointY="31.125" />
+        <AssociationConnector Association="sncModel.FK_OrderItems_Orders" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

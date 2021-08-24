@@ -17,7 +17,7 @@ namespace ShopNow.Models
         public long Id { get; set; }
         public long OrderId { get; set; }
         public int OrdeNumber { get; set; }
-        public int ProductId { get; set; }
+        public long ProductId { get; set; }
         public string ProductName { get; set; }
         public int BrandId { get; set; }
         public string BrandName { get; set; }
