@@ -7,7 +7,7 @@
     <Schema Namespace="sncModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AccessPolicies">
           <Key>
-            <PropertyRef Name="Id" /> 
+            <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PageCode" Type="nvarchar(max)" />
@@ -103,7 +103,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
-          <Property Name="Version" Type="float" Nullable="false" />
+          <Property Name="Version" Type="nvarchar" MaxLength="20" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
         </EntityType>
@@ -2689,13 +2689,13 @@
             <End Role="Order" EntitySet="Orders" />
             <End Role="OrderItem" EntitySet="OrderItems" />
           </AssociationSet>
-          <EntitySet Name="AppDetails" EntityType="sncModel.AppDetail" />
           <EntitySet Name="DiscountCategories1" EntityType="sncModel.DiscountCategories1" />
           <EntitySet Name="Products1" EntityType="sncModel.Products1" />
           <AssociationSet Name="FK_Products1_ProductType" Association="sncModel.FK_Products1_ProductType">
             <End Role="ProductType" EntitySet="ProductTypes" />
             <End Role="Products1" EntitySet="Products1" />
           </AssociationSet>
+          <EntitySet Name="AppDetails" EntityType="sncModel.AppDetail" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3114,16 +3114,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="AppDetail">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Version" Type="Double" Nullable="false" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
         <EntityType Name="DiscountCategories1">
           <Key>
             <PropertyRef Name="Id" />
@@ -3200,6 +3190,16 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="AppDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Version" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4463,17 +4463,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="AppDetails">
-            <EntityTypeMapping TypeName="sncModel.AppDetail">
-              <MappingFragment StoreEntitySet="AppDetails">
-                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Version" ColumnName="Version" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="DiscountCategories1">
             <EntityTypeMapping TypeName="sncModel.DiscountCategories1">
               <MappingFragment StoreEntitySet="DiscountCategories1">
@@ -4534,6 +4523,17 @@
                 <ScalarProperty Name="ShopName" ColumnName="ShopName" />
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
                 <ScalarProperty Name="MasterProductId" ColumnName="MasterProductId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AppDetails">
+            <EntityTypeMapping TypeName="sncModel.AppDetail">
+              <MappingFragment StoreEntitySet="AppDetails">
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Version" ColumnName="Version" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

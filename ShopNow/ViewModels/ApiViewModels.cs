@@ -159,44 +159,45 @@ namespace ShopNow.ViewModels
 
     public class OrderDetailsApiViewModel
     {
-        public int CustomerId { get; set; }
-        public string CustomerName { get; set; }
-        public string CustomerPhoneNumber { get; set; }
+        //public int CustomerId { get; set; }
+        //public string CustomerName { get; set; }
+        //public string CustomerPhoneNumber { get; set; }
         public int ShopId { get; set; }
         public string ShopName { get; set; }
         public string ShopAddress { get; set; }
         public string ShopImagePath { get; set; }
-        public int ShopCategoryId { get; set; }
-        public string ShopCategoryName { get; set; }
+        //public int ShopCategoryId { get; set; }
+        //public string ShopCategoryName { get; set; }
         public double ShopLatitude { get; set; }
         public double ShopLongitude { get; set; }
         public int ShopReviewCount { get; set; }
         public double ShopRating { get; set; }
         public string DeliveryAddress { get; set; }
-        public int TotalProduct { get; set; }
-        public int TotalQuantity { get; set; }
-        public double TotalPrice { get; set; }
-        public double NetTotal { get; set; }
-        public double WalletAmount { get; set; }
-        public double DeliveryCharge { get; set; }
-        public double ShopDeliveryDiscount { get; set; }
-        public double NetDeliveryCharge { get; set; }
-        public double Convinenientcharge { get; set; }
-        public double Packingcharge { get; set; }
+        //public int TotalProduct { get; set; }
+        //public int TotalQuantity { get; set; }
+        //public double TotalPrice { get; set; }
+        //public double NetTotal { get; set; }
+        //public double WalletAmount { get; set; }
+        //public double DeliveryCharge { get; set; }
+        //public double ShopDeliveryDiscount { get; set; }
+        //public double NetDeliveryCharge { get; set; }
+        //public double Convinenientcharge { get; set; }
+        //public double Packingcharge { get; set; }
         public List<OrderItemList> OrderItemLists { get; set; }
 
         public class OrderItemList
         {
-            public int ProductId { get; set; }
-            public string ProductName { get; set; }
-            public int BrandId { get; set; }
-            public string BrandName { get; set; }
+            public long Id { get; set; }
+            public string Name { get; set; }
             public int CategoryId { get; set; }
             public string CategoryName { get; set; }
             public string ImagePath { get; set; }
             public int Quantity { get; set; }
-            public double UnitPrice { get; set; }
             public double Price { get; set; }
+            public double TotalPrice { get; set; }
+            public string ColorCode { get; set; }
+            public bool Customisation { get; set; }
+            public int Status { get; set; }
         }
     }
 }
