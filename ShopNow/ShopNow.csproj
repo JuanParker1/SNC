@@ -334,6 +334,7 @@
     <Compile Include="Controllers\AchievementSettingController.cs" />
     <Compile Include="Controllers\AddOnCategoryController.cs" />
     <Compile Include="Controllers\ApiSettingController.cs" />
+    <Compile Include="Controllers\AppDetailController.cs" />
     <Compile Include="Controllers\BannerController.cs" />
     <Compile Include="Controllers\BillController.cs" />
     <Compile Include="Controllers\CartController.cs" />
@@ -609,6 +610,7 @@
     <Compile Include="ViewModels\AddOnCategoryViewModel.cs" />
     <Compile Include="ViewModels\ApiSettingViewModels.cs" />
     <Compile Include="ViewModels\ApiViewModels.cs" />
+    <Compile Include="ViewModels\AppDetailViewModels.cs" />
     <Compile Include="ViewModels\BannerViewModel.cs" />
     <Compile Include="ViewModels\BillViewModel.cs" />
     <Compile Include="ViewModels\CartViewModel.cs" />
@@ -3071,6 +3073,7 @@
     <Content Include="Views\AchievementSetting\List.cshtml" />
     <Content Include="Views\AchievementSetting\Create.cshtml" />
     <Content Include="Views\AchievementSetting\Edit.cshtml" />
+    <Content Include="Views\AppDetail\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

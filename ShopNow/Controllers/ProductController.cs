@@ -305,11 +305,10 @@ namespace ShopNow.Controllers
             return RedirectToAction("MedicalEdit", new { id = AdminHelpers.ECodeLong(prod.Id) });
         }
 
-        public ActionResult FMCGList()
+        public ActionResult FMCGList(FMCGListViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var model = new FMCGListViewModel();
             model.ListItems = db.Products.Where(i => i.Status == 0 && i.ProductTypeId == 2 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
                 .Join(db.MasterProducts,p=>p.MasterProductId,m=>m.Id,(p,m)=>new { p,m})
             .Select(i => new FMCGListViewModel.ListItem
@@ -324,11 +323,10 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        public ActionResult MedicalList()
+        public ActionResult MedicalList(MedicalListViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var model = new MedicalListViewModel();
             model.ListItems = db.Products.Where(i => i.Status == 0 && i.ProductTypeId == 3 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
               .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
             .Select(i => new MedicalListViewModel.ListItem
@@ -993,7 +991,7 @@ namespace ShopNow.Controllers
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
         [AccessPolicy(PageCode = "SHNPROSC007")]
-        public ActionResult ServiceCreate(ServiceCreateEditViewModel pd, HttpPostedFileBase _ProductImage)
+        public ActionResult ServiceCreate(ServiceCreateEditViewModel pd)
         {
             var prod = _mapper.Map<ServiceCreateEditViewModel, Product>(pd);
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -1016,7 +1014,6 @@ namespace ShopNow.Controllers
             }
             else
             {
-                //Product.Edit(prod, out error);
                 prod.DateUpdated = DateTime.Now;
                 db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();

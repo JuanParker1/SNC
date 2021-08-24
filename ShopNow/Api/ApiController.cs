@@ -4327,8 +4327,6 @@ namespace ShopNow.Controllers
                 model.ShopId = shop.Id;
                 model.ShopName = shop.Name;
                 model.ShopAddress = shop.Address;
-                model.ShopCategoryId = shop.ShopCategoryId;
-                model.ShopCategoryName = shop.ShopCategoryName;
                 model.ShopLatitude = shop.Latitude;
                 model.ShopLongitude = shop.Longitude;
                 model.ShopImagePath = shop.ImagePath;
@@ -4339,18 +4337,21 @@ namespace ShopNow.Controllers
                 else
                     model.ShopReviewCount = 0;
                 model.OrderItemLists = db.OrderItems.Where(i => i.OrderId == order.Id)
+                    .Join(db.Products,oi=>oi.ProductId,p=>p.Id,(oi,p)=>new { oi,p})
+                    .Join(db.MasterProducts,p=>p.p.MasterProductId,m=>m.Id,(p,m)=>new { p,m})
                     .Select(i => new OrderDetailsApiViewModel.OrderItemList
                     {
-                        BrandId = i.BrandId,
-                        BrandName = i.BrandName,
-                        CategoryId = i.CategoryId,
-                        CategoryName = i.CategoryName,
-                        ImagePath = i.ImagePath,
-                        Price = i.Price,
-                        ProductId = i.ProductId,
-                        ProductName = i.ProductName,
-                        Quantity = i.Quantity,
-                        UnitPrice = i.UnitPrice
+                        CategoryId = i.m.CategoryId,
+                        CategoryName = i.p.oi.CategoryName,
+                        ImagePath = i.m.ImagePath1,
+                        TotalPrice = i.p.oi.Quantity * i.p.p.Price,
+                        Id = i.p.p.Id,
+                        Name = i.m.Name,
+                        Quantity = i.p.oi.Quantity,
+                        Price = i.p.p.Price,
+                        ColorCode = i.m.ColorCode,
+                        Customisation = i.p.p.Customisation,
+                        Status = i.p.p.Status
                     }).ToList();
             }
             return Json(model, JsonRequestBehavior.AllowGet);

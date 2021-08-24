@@ -79,9 +79,9 @@ namespace ShopNow.Models
         public virtual DbSet<Offer> Offers { get; set; }
         public virtual DbSet<ReferralSetting> ReferralSettings { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
-        public virtual DbSet<AppDetail> AppDetails { get; set; }
         public virtual DbSet<DiscountCategories1> DiscountCategories1 { get; set; }
         public virtual DbSet<Products1> Products1 { get; set; }
+        public virtual DbSet<AppDetail> AppDetails { get; set; }
     
         [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)
