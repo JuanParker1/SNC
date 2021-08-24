@@ -20,7 +20,6 @@ namespace ShopNow.Models
             this.NextSubCategories = new HashSet<NextSubCategory>();
             this.Products = new HashSet<Product>();
             this.SubCategories = new HashSet<SubCategory>();
-            this.Products1 = new HashSet<Products1>();
         }
     
         public int Id { get; set; }
@@ -32,7 +31,5 @@ namespace ShopNow.Models
         public virtual ICollection<Product> Products { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SubCategory> SubCategories { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Products1> Products1 { get; set; }
     }
 }

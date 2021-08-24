@@ -24,7 +24,9 @@ using System.Web.Http.Cors;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using System.Data.Entity.Migrations;
-using N.EntityFramework.Extensions;
+//using N.EntityFramework.Extensions;
+using Z.EntityFramework.Extensions;
+
 
 namespace ShopNow.Controllers
 {
@@ -2533,7 +2535,62 @@ namespace ShopNow.Controllers
             public string UpdatedBy { get; set; }
 
         }
-        public JsonResult GetP(string str = "")
+        public JsonResult GetPp(string str = "")
+        {
+            sncEntities context = new sncEntities();
+            List<Products1> updateList = new List<Products1>();
+            List<Products1> Products1 = new List<Products1>();
+            Products1 varProduct = new Products1();
+            varProduct.Id = 0;
+            varProduct.Name = "sdfsdfd";
+            varProduct.MasterProductId = 0;
+            varProduct.ShopId = 212;
+            varProduct.ShopName = "anna";
+            varProduct.ShopCategoryId = 4;
+            varProduct.ShopCategoryName = "veg";
+            varProduct.GTIN = "";
+            varProduct.UPC = "";
+            varProduct.GTIN14 = "";
+            varProduct.EAN = "";
+            varProduct.ISBN = "";
+            varProduct.Price = 10;
+            varProduct.Qty = 2;
+            varProduct.ProductTypeName= "ytesg";
+            varProduct.ProductTypeId = 0;
+            varProduct.MinSelectionLimit = 0;
+            varProduct.MaxSelectionLimit = 0;
+            varProduct.Customisation = false;
+            varProduct.MenuPrice = 12;
+            varProduct.IBarU = 5;
+            varProduct.ItemId = 1;
+            varProduct.Percentage = 0;
+            varProduct.DiscountCategoryId = 0;
+            varProduct.DiscountCategoryName = "jhuhu";
+            varProduct.DataEntry = 0;
+            varProduct.AppliesOnline = 1;
+            varProduct.IsOnline = true;
+            varProduct.HoldOnStok = 0;
+            varProduct.PackingType = 0;
+            varProduct.TaxPercentage = 10.2;
+            varProduct.SpecialCostOfDelivery = 0;
+            varProduct.OutletId = Convert.ToInt32(2);
+            varProduct.ItemTimeStamp = "12486365858";
+            varProduct.LoyaltyPoints = 0;
+            varProduct.PackingCharge = 0;
+            varProduct.BrandOwnerMiddlePercentage = 1;
+            varProduct.ShopownnerPrice = 10.2;
+            varProduct.Status = 0;
+            varProduct.DateEncoded = DateTime.Now;
+            varProduct.DateUpdated = DateTime.Now;
+            varProduct.CreatedBy = "serveice";
+            varProduct.UpdatedBy = "serveice";
+            Products1.Add(varProduct);
+            db.BulkInsert(Products1);
+            //db.BulkSaveChanges
+
+            return Json(new { Page = "" }, JsonRequestBehavior.AllowGet);
+        }
+            public JsonResult GetP(string str = "")
         {
             sncEntities context = new sncEntities();
 
