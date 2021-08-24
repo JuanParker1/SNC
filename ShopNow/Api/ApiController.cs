@@ -2679,8 +2679,8 @@ namespace ShopNow.Controllers
                         }
 
                     }
-                    // db.BulkInsert(createList);
-                    db.Products1.AddRange(createList);
+                     db.BulkInsert(createList);
+                    //db.Products1.AddRange(createList);
                     //db.BulkSaveChanges();
                 }
             }
