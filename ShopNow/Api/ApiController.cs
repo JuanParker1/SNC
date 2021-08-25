@@ -4571,7 +4571,7 @@ namespace ShopNow.Controllers
                 string getDetails = myData.DownloadString("https://admin.shopnowchat.in/Api/GetAllCartItems");
                 var result = JsonConvert.DeserializeObject<List<OldOrder>>(getDetails);
 
-                foreach (var item in result.GroupBy(i => i.OrderNumber).Take(1))
+                foreach (var item in result.GroupBy(i => i.OrderNumber))
                 {
                     var order = new Models.Order
                     {
@@ -4589,14 +4589,14 @@ namespace ShopNow.Controllers
                         DeliveryBoyPaymentStatus = item.FirstOrDefault().DeliveryBoyPaymentStatus,
                         DeliveryBoyPhoneNumber = item.FirstOrDefault().DeliveryBoyPhoneNumber,
                         DeliveryBoyShopReachTime = null,
-                        DeliveryCharge = item.FirstOrDefault().DeliveryCharge,
+                        DeliveryCharge = item.FirstOrDefault().NetDeliveryCharge,
                         DeliveryLocationReachTime = null,
                         DeliveryOrderPaymentStatus = item.FirstOrDefault().DeliveryOrderPaymentStatus,
                         Distance = 0,
                         Latitude = item.FirstOrDefault().Latitude,
                         Longitude = item.FirstOrDefault().Longitude,
-                        NetDeliveryCharge = item.FirstOrDefault().NetDeliveryCharge,
-                        NetTotal = 0,
+                        NetDeliveryCharge = item.FirstOrDefault().DeliveryCharge,
+                        NetTotal = item.Sum(i => i.TotalPrice) + item.FirstOrDefault().Packingcharge + item.FirstOrDefault().Convinenientcharge + item.FirstOrDefault().DeliveryCharge,
                         OrderNumber = Convert.ToInt32(item.FirstOrDefault().OrderNumber),
                         OrderPickupTime = null,
                         OrderReadyTime = null,
@@ -4611,14 +4611,14 @@ namespace ShopNow.Controllers
                         ShopPaymentStatus = item.FirstOrDefault().ShopPaymentStatus,
                         ShopPhoneNumber = item.FirstOrDefault().ShopPhoneNumber,
                         Status = item.FirstOrDefault().Status,
-                        TotalPrice = item.Sum(i => i.Price),
+                        TotalPrice = item.Sum(i => i.TotalPrice),
                         TotalProduct = item.Count(),
                         TotalQuantity = item.Sum(i => Convert.ToInt32(i.Qty)),
                         UpdatedBy = item.FirstOrDefault().UpdatedBy,
                         WaitingCharge = 0,
                         WaitingRemark = "",
                         WaitingTime = 0,
-                        WalletAmount = 0
+                        WalletAmount = 0,
                     };
 
                     db.Orders.Add(order);
@@ -4626,7 +4626,7 @@ namespace ShopNow.Controllers
 
                     if (order != null)
                     {
-                        foreach (var itemlist in result.Where(i => i.OrderNumber == order.OrderNumber).ToList())
+                        foreach (var itemlist in result.ToList())
                         {
                             var orderItem = new OrderItem
                             {
@@ -4644,6 +4644,9 @@ namespace ShopNow.Controllers
                                 UnitPrice = itemlist.Price,
                                 Status = 0
                             };
+
+                            db.OrderItems.Add(orderItem);
+                            db.SaveChanges();
                         }
                     }
                 }
