@@ -4437,7 +4437,7 @@ namespace ShopNow.Controllers
                 model.ShopAddress = shop.Address;
                 model.ShopLatitude = shop.Latitude;
                 model.ShopLongitude = shop.Longitude;
-                model.ShopImagePath = shop.ImagePath;
+                model.ShopImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + shop.ImagePath;
                 model.ShopCategoryId = shop.ShopCategoryId;
                 model.ShopCategoryName = shop.ShopCategoryName;
                 model.IsShopOnline = shop.IsOnline;
@@ -4454,7 +4454,7 @@ namespace ShopNow.Controllers
                     {
                         CategoryId = i.m.CategoryId,
                         CategoryName = i.p.oi.CategoryName,
-                        ImagePath = i.m.ImagePath1,
+                        ImagePath = i.p.oi.ImagePath,
                         TotalPrice = i.p.oi.Quantity * i.p.p.Price,
                         Id = i.p.p.Id,
                         Name = i.m.Name,
