@@ -4422,18 +4422,6 @@ namespace ShopNow.Controllers
             return Json(new { list = achievements }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult SaveOrders()
-        {
-            using (WebClient myData = new WebClient())
-            {
-                myData.Headers.Add("X-ApiKey", "Tx9ANC5RqngpTOM9VJ0JP2+1LbZvo1LI");
-                string getDetails = myData.DownloadString("https://admin.shopnowchat.in/Api/GetAllCartItems");
-                
-                var result = JsonConvert.DeserializeObject<Results>(getDetails);
-                return Json(result, JsonRequestBehavior.AllowGet);
-            }
-        }
-
         public JsonResult GetOrderDetails(long id)
         {
             var order = db.Orders.FirstOrDefault(i => i.Id == id);
@@ -4527,6 +4515,170 @@ namespace ShopNow.Controllers
                     customer.WalletAmount += 50;
             }
         }
-           
+
+        ////////////////////////////////////////////
+
+        //Store old olders from cart
+        public class OldOrder
+        {
+
+            public int CustomerId { get; set; }
+            public string CustomerName { get; set; }
+            public string CustomerPhoneNumber { get; set; }
+            public int ShopId { get; set; }
+            public string ShopName { get; set; }
+            public string DeliveryAddress { get; set; }
+            public string ShopPhoneNumber { get; set; }
+            public string ShopOwnerPhoneNumber { get; set; }
+            public int OrderNumber { get; set; }
+            public int DeliveryBoyId { get; set; }
+            public string DeliveryBoyName { get; set; }
+            public string DeliveryBoyPhoneNumber { get; set; }
+            public double DeliveryCharge { get; set; }
+            public double ShopDeliveryDiscount { get; set; }
+            public double NetDeliveryCharge { get; set; }
+            public double Convinenientcharge { get; set; }
+            public double Packingcharge { get; set; }
+            public double Latitude { get; set; }
+            public double Longitude { get; set; }
+            public double Distance { get; set; }
+            public int ShopPaymentStatus { get; set; }
+            public int DeliveryBoyPaymentStatus { get; set; }
+            public int DeliveryOrderPaymentStatus { get; set; }
+            public double RatePerOrder { get; set; }
+            public int Status { get; set; }
+            public System.DateTime DateEncoded { get; set; }
+            public System.DateTime DateUpdated { get; set; }
+            public string CreatedBy { get; set; }
+            public string UpdatedBy { get; set; }
+            public double Price { get; set; }
+            public int Qty { get; set; }
+            public double TotalPrice { get; set; }
+
+            public string ProductName { get; set; }
+            public string BrandName { get; set; }
+            public string CategoryName { get; set; }
+            public string ImagePath { get; set; }
+        }
+
+        public JsonResult SaveOrders()
+        {
+            using (WebClient myData = new WebClient())
+            {
+                myData.Headers.Add("X-ApiKey", "Tx9ANC5RqngpTOM9VJ0JP2+1LbZvo1LI");
+                string getDetails = myData.DownloadString("https://admin.shopnowchat.in/Api/GetAllCartItems");
+                var result = JsonConvert.DeserializeObject<List<OldOrder>>(getDetails);
+
+                foreach (var item in result.GroupBy(i => i.OrderNumber).Take(1))
+                {
+                    var order = new Models.Order
+                    {
+                        Convinenientcharge = item.FirstOrDefault().Convinenientcharge,
+                        CreatedBy = item.FirstOrDefault().CreatedBy,
+                        CustomerId = item.FirstOrDefault().CustomerId,
+                        CustomerName = item.FirstOrDefault().CustomerName,
+                        CustomerPhoneNumber = item.FirstOrDefault().CustomerPhoneNumber,
+                        DateEncoded = item.FirstOrDefault().DateEncoded,
+                        DateUpdated = item.FirstOrDefault().DateUpdated,
+                        DeliveredTime = null,
+                        DeliveryAddress = item.FirstOrDefault().DeliveryAddress,
+                        DeliveryBoyId = item.FirstOrDefault().DeliveryBoyId,
+                        DeliveryBoyName = item.FirstOrDefault().DeliveryBoyName,
+                        DeliveryBoyPaymentStatus = item.FirstOrDefault().DeliveryBoyPaymentStatus,
+                        DeliveryBoyPhoneNumber = item.FirstOrDefault().DeliveryBoyPhoneNumber,
+                        DeliveryBoyShopReachTime = null,
+                        DeliveryCharge = item.FirstOrDefault().DeliveryCharge,
+                        DeliveryLocationReachTime = null,
+                        DeliveryOrderPaymentStatus = item.FirstOrDefault().DeliveryOrderPaymentStatus,
+                        Distance = 0,
+                        Latitude = item.FirstOrDefault().Latitude,
+                        Longitude = item.FirstOrDefault().Longitude,
+                        NetDeliveryCharge = item.FirstOrDefault().NetDeliveryCharge,
+                        NetTotal = 0,
+                        OrderNumber = Convert.ToInt32(item.FirstOrDefault().OrderNumber),
+                        OrderPickupTime = null,
+                        OrderReadyTime = null,
+                        Packingcharge = item.FirstOrDefault().Packingcharge,
+                        PenaltyAmount = 0,
+                        PenaltyRemark = null,
+                        RatePerOrder = item.FirstOrDefault().RatePerOrder,
+                        ShopDeliveryDiscount = item.FirstOrDefault().ShopDeliveryDiscount,
+                        ShopId = item.FirstOrDefault().ShopId,
+                        ShopName = item.FirstOrDefault().ShopName,
+                        ShopOwnerPhoneNumber = item.FirstOrDefault().ShopOwnerPhoneNumber,
+                        ShopPaymentStatus = item.FirstOrDefault().ShopPaymentStatus,
+                        ShopPhoneNumber = item.FirstOrDefault().ShopPhoneNumber,
+                        Status = item.FirstOrDefault().Status,
+                        TotalPrice = item.Sum(i => i.Price),
+                        TotalProduct = item.Count(),
+                        TotalQuantity = item.Sum(i => Convert.ToInt32(i.Qty)),
+                        UpdatedBy = item.FirstOrDefault().UpdatedBy,
+                        WaitingCharge = 0,
+                        WaitingRemark = "",
+                        WaitingTime = 0,
+                        WalletAmount = 0
+                    };
+
+                    db.Orders.Add(order);
+                    db.SaveChanges();
+
+                    if (order != null)
+                    {
+                        foreach (var itemlist in result.Where(i => i.OrderNumber == order.OrderNumber).ToList())
+                        {
+                            var orderItem = new OrderItem
+                            {
+                                BrandId = GetBrandId(itemlist.BrandName),
+                                BrandName = itemlist.BrandName,
+                                CategoryId = GetCategoryId(itemlist.CategoryName),
+                                CategoryName = itemlist.CategoryName,
+                                ImagePath = itemlist.ImagePath,
+                                OrdeNumber = order.OrderNumber,
+                                OrderId = order.Id,
+                                Price = itemlist.TotalPrice,
+                                ProductId = GetProductId(itemlist.ProductName),
+                                ProductName = itemlist.ProductName,
+                                Quantity = itemlist.Qty,
+                                UnitPrice = itemlist.Price,
+                                Status = 0
+                            };
+                        }
+                    }
+                }
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        public int GetBrandId(string name)
+        {
+            var model = db.Brands.FirstOrDefault(i => i.Name.Trim().ToLower() == name.Trim().ToLower());
+            if (model != null)
+                return model.Id;
+            else
+                return 0;
+        }
+
+        public int GetCategoryId(string name)
+        {
+            var model = db.Categories.FirstOrDefault(i => i.Name.Trim().ToLower() == name.Trim().ToLower());
+            if (model != null)
+                return model.Id;
+            else
+                return 0;
+        }
+
+        public long GetProductId(string name)
+        {
+            var model = db.MasterProducts.FirstOrDefault(i => i.Name.Trim().ToLower() == name.Trim().ToLower());
+            if (model != null)
+            {
+                var product = db.Products.FirstOrDefault(i => i.MasterProductId == model.Id);
+                return product.Id;
+            }
+            else
+                return 0;
+        }
+
     }
 }
