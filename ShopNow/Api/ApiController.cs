@@ -574,8 +574,10 @@ namespace ShopNow.Controllers
         public JsonResult GetShopItemList(int shopId, string str = "", int page = 1, int pageSize = 20)
         {
             var shid = db.Shops.Where(s => s.Id == shopId).FirstOrDefault();
-            var model = db.Products.Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })//, (c, p) => new { c, p })
-                                                                                                                      //.AsEnumerable()
+            string defaultImagePath = "../../assets/images/noimageres.svg";
+            if (shid.ShopCategoryId == 4)
+                defaultImagePath = "../../assets/images/1.5-cm-X-1.5-cm.png";
+                var model = db.Products.Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
                             .Where(i => i.p.ShopId == shid.Id && (i.p.Status == 0 || i.p.Status == 1) && (str != "" ? i.m.Name.ToLower().StartsWith(str.ToLower()) : true))
                             .Select(i => new ActiveProductListViewModel.ProductList
                             {
@@ -587,7 +589,7 @@ namespace ShopNow.Controllers
                                 MenuPrice = i.p.MenuPrice,
                                 Qty = i.p.Qty,
                                 Status = i.p.Status,
-                                ImagePath = i.m.ImagePath1
+                                ImagePath = ((!string.IsNullOrEmpty(i.m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : defaultImagePath)
                             }).ToList();
             int count = model.Count();
             int CurrentPage = page;
