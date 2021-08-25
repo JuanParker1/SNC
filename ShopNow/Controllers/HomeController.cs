@@ -76,7 +76,7 @@ namespace ShopNow.Controllers
                         Response.Cookies["Password"].Expires = DateTime.Now.AddDays(-1);
                     }
 
-                    return RedirectToAction(returnUrl != null ? returnUrl : "LivePending", "Support");
+                    return RedirectToAction(returnUrl != null ? returnUrl : "Index", "Dashboard");
                     //}
                 }
                 else if (user != null && !string.IsNullOrEmpty(user.IpAddress))
@@ -99,7 +99,7 @@ namespace ShopNow.Controllers
                             Response.Cookies["Password"].Expires = DateTime.Now.AddDays(-1);
                         }
 
-                        return RedirectToAction(returnUrl != null ? returnUrl : "LivePending", "Support");
+                        return RedirectToAction(returnUrl != null ? returnUrl : "Index", "Dashboard");
                     }
                     else
                     {
