@@ -2539,15 +2539,15 @@ namespace ShopNow.Controllers
         {
             sncEntities context = new sncEntities();
             List<Products1> updateList = new List<Products1>();
-            List<Products1> Products1 = new List<Products1>();
+            List<Products1> creatlisdt = new List<Products1>();
             Products1 varProduct = new Products1();
-            varProduct.Id = 0;
-            varProduct.Name = "sdfsdfd";
+            //varProduct.Id = 0;
+            
             varProduct.MasterProductId = 0;
             varProduct.ShopId = 212;
-            varProduct.ShopName = "anna";
+           // varProduct.ShopName = "anna";
             varProduct.ShopCategoryId = 4;
-            varProduct.ShopCategoryName = "veg";
+           // varProduct.ShopCategoryName = "veg";
             varProduct.GTIN = "";
             varProduct.UPC = "";
             varProduct.GTIN14 = "";
@@ -2584,8 +2584,9 @@ namespace ShopNow.Controllers
             varProduct.DateUpdated = DateTime.Now;
             varProduct.CreatedBy = "serveice";
             varProduct.UpdatedBy = "serveice";
-            Products1.Add(varProduct);
-            db.BulkInsert(Products1);
+            varProduct.Name = "sdfsdfd";
+            creatlisdt.Add(varProduct);
+            db.BulkInsert(creatlisdt);
             //db.BulkSaveChanges
 
             return Json(new { Page = "" }, JsonRequestBehavior.AllowGet);
@@ -2609,20 +2610,27 @@ namespace ShopNow.Controllers
                         s = client.DownloadString(Url);
                     }
 
-                    var lst = db.Products1.Where(m => m.ShopId == api.ShopId).Select(si => si.ItemId).ToList();
+                    var lst = db.Products1.Where(m => m.ShopId == api.ShopId).Select(i => new 
+                    {
+                        ItemId = i.ItemId,
+                        Id=i.Id
+                    }).ToList();
                     List<Products1> updateList = new List<Products1>();
                     List<Products1> createList = new List<Products1>();
-                    List<DiscountCategory> createCategoryList = new List<DiscountCategory>();
-                    DiscountCategory dc = new DiscountCategory();
+                    List<DiscountCategories1> createCategoryList = new List<DiscountCategories1>();
+                    DiscountCategories1 dc = new DiscountCategories1();
                     Products1 varProduct = new Products1();
-                    List<DiscountCategory> lstDiscount = new List<DiscountCategory>();
+                    List<DiscountCategories1> lstDiscount = new List<DiscountCategories1>();
                     goto GetDiscoutCatecories;
                 GetDiscoutCatecories:
-                    lstDiscount = db.DiscountCategories.Where(m => m.ShopId == api.ShopId).ToList();
+                    lstDiscount = db.DiscountCategories1.Where(m => m.ShopId == api.ShopId).ToList();
 
-                    dynamic config = JsonConvert.DeserializeObject<ExpandoObject>(s, new ExpandoObjectConverter());
+                    
+
+                        dynamic config = JsonConvert.DeserializeObject<ExpandoObject>(s, new ExpandoObjectConverter());
                     foreach (var pro in ((IEnumerable<dynamic>)config.items).Where(t => t.status == "R"))
                     {
+                       
                         varProduct.ItemId = Convert.ToInt32(pro.itemId);
                         varProduct.Name = pro.itemName;
                         varProduct.IBarU = Convert.ToInt32(pro.iBarU);
@@ -2675,6 +2683,12 @@ namespace ShopNow.Controllers
                                 varProduct.DiscountCategoryName = Convert.ToString(med.Cat9);
                             else if (api.Category == 10)
                                 varProduct.DiscountCategoryName = Convert.ToString(med.Cat10);
+
+                            if (varProduct.DiscountCategoryName != null)
+                                varProduct.DiscountCategoryName = varProduct.DiscountCategoryName.Trim();
+                            else
+                                varProduct.DiscountCategoryName = varProduct.DiscountCategoryName;
+
                             var catCout = lstDiscount.Where(c => c.ShopId == api.ShopId && c.Name == varProduct.DiscountCategoryName).Count();
                             if (catCout <= 0)
                             {
@@ -2683,16 +2697,60 @@ namespace ShopNow.Controllers
                                 else
                                     dc.Name = varProduct.DiscountCategoryName;
                                 dc.ShopId = api.ShopId;
-                                int catExist = createCategoryList.Where(c => c.Name == dc.Name && c.ShopId == dc.ShopId).Count();
-                                if (catExist <= 0)
-                                    createCategoryList.Add(dc);
+                                dc.DateEncoded = DateTime.Now;
+                                dc.DateUpdated = DateTime.Now;
+                                //int catExist = createCategoryList.Where(c => c.Name == dc.Name && c.ShopId == dc.ShopId).Count();
+                                //if (catExist <= 0)
+                                //    createCategoryList.Add(dc);
+                                db.DiscountCategories1.Add(dc);
+                                db.SaveChanges();
+                                varProduct.DiscountCategoryId = dc.Id;
+                                lstDiscount = db.DiscountCategories1.Where(m => m.ShopId == api.ShopId).ToList();
+                            }
+                            else
+                            {
+                                var catId = lstDiscount.Where(c => c.ShopId == api.ShopId && c.Name == varProduct.DiscountCategoryName).Select(c=>c.Id).ToList();
+                                varProduct.DiscountCategoryId = Convert.ToInt32(catId[0]);
                             }
 
                         }
-                        int idx = lst.FindIndex(a => a == pro.itemId);
+                        int idx = lst.FindIndex(a => a.ItemId == pro.itemId);
                         if (idx >= 0)
                         {
-                            //  updateList.Add(varProduct);
+
+                            updateList.Add(new Products1
+                            {
+                                Id = lst[idx].Id,
+                                ProductTypeId = 0,
+                                MinSelectionLimit = 0,
+                                MaxSelectionLimit = 0,
+                                Customisation = false,
+                                Percentage = 0,
+                                DiscountCategoryId = varProduct.DiscountCategoryId,
+                                DataEntry = 0,
+                                IsOnline = true,
+                                HoldOnStok = 0,
+                                PackingType = 0,
+                                SpecialCostOfDelivery = 0,
+                                LoyaltyPoints = 0,
+                                PackingCharge = 0,
+                                Status = 0,
+                                DateEncoded = DateTime.Now,
+                                ItemId = varProduct.ItemId,
+                                Name = varProduct.Name,
+                                IBarU = Convert.ToInt32(pro.iBarU),
+                                ShopCategoryId = 4,
+                                ShopId = api.ShopId,
+                                Qty = varProduct.Qty,
+                                MenuPrice = varProduct.MenuPrice,
+                                Price = varProduct.Price,
+                                TaxPercentage = varProduct.TaxPercentage,
+                                ItemTimeStamp = varProduct.ItemTimeStamp,
+                                AppliesOnline = varProduct.AppliesOnline,
+                                OutletId = varProduct.OutletId,
+                                DateUpdated = DateTime.Now,
+                                DiscountCategoryName = varProduct.DiscountCategoryName
+                            }) ;
                             //update
                         }
                         else
@@ -2701,9 +2759,9 @@ namespace ShopNow.Controllers
                             long id = 0;
                             createList.Add(new Products1
                             {
-                                ProductTypeId = 0,
+                               ProductTypeId = 0,
                                 MinSelectionLimit = 0,
-                                MaxSelectionLimit = 0,
+                               MaxSelectionLimit = 0,
                                 Customisation = false,
                                 Percentage = 0,
                                 DiscountCategoryId = 0,
@@ -2730,13 +2788,16 @@ namespace ShopNow.Controllers
                                 ItemTimeStamp = varProduct.ItemTimeStamp,
                                 AppliesOnline = varProduct.AppliesOnline,
                                 OutletId = varProduct.OutletId,
-                                DateUpdated = DateTime.Now
+                                DateUpdated = DateTime.Now,
+                                DiscountCategoryName= varProduct.DiscountCategoryName
                             });
                             //createList.Add(varProduct);
                         }
 
                     }
-                     db.BulkInsert(createList);
+                      db.BulkInsert(createList);
+                    if(updateList.Count>0)
+                      db.BulkUpdate(updateList);
                     //db.Products1.AddRange(createList);
                     //db.BulkSaveChanges();
                 }

@@ -6,14 +6,14 @@ using System.Net;
 using System.Text;
 using System.Web;
 using System.Web.Script.Serialization;
-using FirebaseAdmin;
+
 
 
 namespace ShopNow.Helpers
 {
     public  class PushNotification
     {
-        FirebaseAdmin.AppOptions s = new FirebaseAdmin.AppOptions();
+
 
         public static string SendbydeviceId(string body, string title,string sound, string deviceId = "")
         {
