@@ -166,11 +166,13 @@ namespace ShopNow.ViewModels
         public string ShopName { get; set; }
         public string ShopAddress { get; set; }
         public string ShopImagePath { get; set; }
-        //public int ShopCategoryId { get; set; }
-        //public string ShopCategoryName { get; set; }
+        public int ShopCategoryId { get; set; }
+        public string ShopCategoryName { get; set; }
+        public string ShopPhoneNumber { get; set; }
         public double ShopLatitude { get; set; }
         public double ShopLongitude { get; set; }
-        public int ShopReviewCount { get; set; }
+        public int ShopReview { get; set; }
+        public bool? IsShopOnline { get; set; }
         public double ShopRating { get; set; }
         public string DeliveryAddress { get; set; }
         //public int TotalProduct { get; set; }
@@ -198,6 +200,7 @@ namespace ShopNow.ViewModels
             public string ColorCode { get; set; }
             public bool Customisation { get; set; }
             public int Status { get; set; }
+            public bool? IsProductOnline { get; set; }
         }
     }
 }

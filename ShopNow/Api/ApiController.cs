@@ -4448,12 +4448,15 @@ namespace ShopNow.Controllers
                 model.ShopLatitude = shop.Latitude;
                 model.ShopLongitude = shop.Longitude;
                 model.ShopImagePath = shop.ImagePath;
+                model.ShopCategoryId = shop.ShopCategoryId;
+                model.ShopCategoryName = shop.ShopCategoryName;
+                model.IsShopOnline = shop.IsOnline;
                 var shopReview = db.CustomerReviews.Where(i => i.ShopId == shop.Id).ToList();
-                model.ShopReviewCount = shopReview.Count();
-                if (model.ShopReviewCount > 0)
-                    model.ShopRating = shopReview.Sum(l => l.Rating) / model.ShopReviewCount;
+                model.ShopReview = shopReview.Count();
+                if (model.ShopReview > 0)
+                    model.ShopRating = shopReview.Sum(l => l.Rating) / model.ShopReview;
                 else
-                    model.ShopReviewCount = 0;
+                    model.ShopRating = 0;
                 model.OrderItemLists = db.OrderItems.Where(i => i.OrderId == order.Id)
                     .Join(db.Products,oi=>oi.ProductId,p=>p.Id,(oi,p)=>new { oi,p})
                     .Join(db.MasterProducts,p=>p.p.MasterProductId,m=>m.Id,(p,m)=>new { p,m})
@@ -4469,7 +4472,8 @@ namespace ShopNow.Controllers
                         Price = i.p.p.Price,
                         ColorCode = i.m.ColorCode,
                         Customisation = i.p.p.Customisation,
-                        Status = i.p.p.Status
+                        Status = i.p.p.Status,
+                        IsProductOnline = i.p.p.IsOnline
                     }).ToList();
             }
             return Json(model, JsonRequestBehavior.AllowGet);
