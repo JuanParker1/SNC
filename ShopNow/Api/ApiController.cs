@@ -2604,7 +2604,7 @@ namespace ShopNow.Controllers
                 foreach (var api in apiSettings)
                 {
                     string s = "";
-                    string Url = api.Url + "items?q=status==R,outletId==" + api.OutletId + "&limit=100000";
+                    string Url = api.Url + "items?q=itemTimeStamp>=20210825121004,status==R,outletId==" + api.OutletId + "&limit=200000";
                     using (WebClient client = new WebClient())
                     {
                         client.Headers["X-Auth-Token"] = api.AuthKey; //"62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
