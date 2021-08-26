@@ -999,28 +999,32 @@ namespace ShopNow.Controllers
                 else
                 {
                     var order = _mapper.Map<OrderCreateViewModel, Models.Order>(model);
-                    var customer = (dynamic)null;
+                    //var customer = (dynamic)null;
                     if (model.CustomerId != 0)
                     {
-                        customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
+                        var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
                         order.CustomerId = customer.Id;
                         order.CreatedBy = customer.Name;
                         order.UpdatedBy = customer.Name;
                         order.CustomerName = customer.Name;
                         order.CustomerPhoneNumber = customer.PhoneNumber;
-                    }
-                    if (model.ReferralNumber == string.Empty)
-                    {
-                        customer.IsReferred = true;
 
-                    }
-                    else
-                    {
-                        customer.IsReferred = false;
+                        //Store Referral Number
                         customer.ReferralNumber = model.ReferralNumber;
+                        db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
                     }
-                    db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
+                    //if (model.ReferralNumber == string.Empty)
+                   // {
+                    //    customer.IsReferred = true;
+
+                    //}
+                  //  else
+                   // {
+                       // customer.IsReferred = false;
+                        
+                   // }
+                    
                     order.OrderNumber = Convert.ToInt32(model.OrderNumber);
                     order.ShopId = shop.Id;
                     order.ShopName = shop.Name;
@@ -1642,6 +1646,7 @@ namespace ShopNow.Controllers
             order.DateUpdated = DateTime.Now;
             db.Entry(order).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
+
             //Reducing Platformcredits
             var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == orderNo);
             var shop = db.Shops.FirstOrDefault(i => i.Id == order.ShopId);
@@ -1649,24 +1654,25 @@ namespace ShopNow.Controllers
             shopCredits.DeliveryCredit -= payment.DeliveryCharge;
             db.Entry(shopCredits).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
+
             var customerDetails = (from c in db.Customers
                             where c.Id == order.CustomerId
                             //select c.FcmTocken ?? "").FirstOrDefault().ToString();
                             select c).FirstOrDefault();
 
-            if(customerDetails.IsReferred == false)
+            if(customerDetails.IsReferred == false && !string.IsNullOrEmpty(customerDetails.ReferralNumber))
             {
-                customerDetails.Id = customerDetails.Id;
+                //customerDetails.Id = customerDetails.Id;
                 customerDetails.IsReferred = true;
                 db.Entry(customerDetails).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                var ReferralCustomer = db.Customers.Where(c => c.PhoneNumber == customerDetails.ReferralNumber).FirstOrDefault();
-                
-                if(ReferralCustomer !=null)
+
+                var referralCustomer = db.Customers.FirstOrDefault(c => c.PhoneNumber == customerDetails.ReferralNumber);
+                if(referralCustomer !=null)
                 {
-                    var referalAmount = db.ReferralSettings.Where(r => r.Status == 0).Select(r => r.Amount).FirstOrDefault();
-                    ReferralCustomer.WalletAmount = ReferralCustomer.WalletAmount + referalAmount;
-                    db.Entry(ReferralCustomer).State = System.Data.Entity.EntityState.Modified;
+                    var referalAmount = db.ReferralSettings.Where(r => r.Status == 0 && r.ShopDistrict == shop.DistrictName).Select(r => r.Amount).FirstOrDefault();
+                    referralCustomer.WalletAmount = referralCustomer.WalletAmount + referalAmount;
+                    db.Entry(referralCustomer).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }
             }
