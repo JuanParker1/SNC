@@ -159,9 +159,6 @@ namespace ShopNow.ViewModels
 
     public class OrderDetailsApiViewModel
     {
-        //public int CustomerId { get; set; }
-        //public string CustomerName { get; set; }
-        //public string CustomerPhoneNumber { get; set; }
         public int ShopId { get; set; }
         public string ShopName { get; set; }
         public string ShopAddress { get; set; }
@@ -175,17 +172,8 @@ namespace ShopNow.ViewModels
         public bool? IsShopOnline { get; set; }
         public double ShopRating { get; set; }
         public string DeliveryAddress { get; set; }
-        //public int TotalProduct { get; set; }
-        //public int TotalQuantity { get; set; }
-        //public double TotalPrice { get; set; }
-        //public double NetTotal { get; set; }
-        //public double WalletAmount { get; set; }
-        //public double DeliveryCharge { get; set; }
-        //public double ShopDeliveryDiscount { get; set; }
-        //public double NetDeliveryCharge { get; set; }
-        //public double Convinenientcharge { get; set; }
-        //public double Packingcharge { get; set; }
         public List<OrderItemList> OrderItemLists { get; set; }
+        public List<MedicalOrderItemList> MedicalOrderItemLists { get; set; }
 
         public class OrderItemList
         {
@@ -200,6 +188,32 @@ namespace ShopNow.ViewModels
             public string ColorCode { get; set; }
             public bool Customisation { get; set; }
             public int Status { get; set; }
+            public bool? IsProductOnline { get; set; }
+        }
+
+        public class MedicalOrderItemList
+        {
+            public long ProductId { get; set; }
+            public string ProductName { get; set; }
+            public int CategoryId { get; set; }
+            public string CategoryName { get; set; }
+            public double DiscountCategoryPercentage { get; set; }
+            public int ShopId { get; set; }
+            public string ShopName { get; set; }
+            public string ImagePath { get; set; }
+            public string ImagePathLarge1 { get; set; }
+            public string ImagePathLarge2 { get; set; }
+            public string ImagePathLarge3 { get; set; }
+            public string ImagePathLarge4 { get; set; }
+            public string ImagePathLarge5 { get; set; }
+            public int Itemid { get; set; }
+            public int Quantity { get; set; }
+            public int Qty { get; set; }
+            public double Price { get; set; }
+            public double SalePrice { get; set; }
+            public double MRP { get; set; }
+            public int Status { get; set; }
+            public int IBarU { get; set; }
             public bool? IsProductOnline { get; set; }
         }
     }

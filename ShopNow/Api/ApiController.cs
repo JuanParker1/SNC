@@ -4441,15 +4441,51 @@ namespace ShopNow.Controllers
                 model.ShopCategoryId = shop.ShopCategoryId;
                 model.ShopCategoryName = shop.ShopCategoryName;
                 model.IsShopOnline = shop.IsOnline;
+                model.ShopPhoneNumber = shop.PhoneNumber;
                 var shopReview = db.CustomerReviews.Where(i => i.ShopId == shop.Id).ToList();
                 model.ShopReview = shopReview.Count();
                 if (model.ShopReview > 0)
                     model.ShopRating = shopReview.Sum(l => l.Rating) / model.ShopReview;
                 else
                     model.ShopRating = 0;
-                model.OrderItemLists = db.OrderItems.Where(i => i.OrderId == order.Id)
-                    .Join(db.Products,oi=>oi.ProductId,p=>p.Id,(oi,p)=>new { oi,p})
-                    .Join(db.MasterProducts,p=>p.p.MasterProductId,m=>m.Id,(p,m)=>new { p,m})
+
+                if (shop.ShopCategoryId == 4)
+                {
+                    model.MedicalOrderItemLists = db.OrderItems.Where(i => i.OrderId == order.Id)
+                   .Join(db.Products, oi => oi.ProductId, p => p.Id, (oi, p) => new { oi, p })
+                   .Join(db.MasterProducts, p => p.p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+                   .Join(db.DiscountCategories, p => p.p.p.DiscountCategoryId, dc => dc.Id, (p, dc) => new { p, dc })
+                   .Select(i => new OrderDetailsApiViewModel.MedicalOrderItemList
+                   {
+                       CategoryId = i.p.m.CategoryId,
+                       CategoryName = i.p.p.oi.CategoryName,
+                       ImagePath = i.p.p.oi.ImagePath,
+                       ProductId = i.p.p.p.Id,
+                       ProductName = i.p.m.Name,
+                       Quantity = i.p.p.oi.Quantity,
+                       Price = i.p.p.p.Price,
+                       Status = i.p.p.p.Status,
+                       IsProductOnline = i.p.p.p.IsOnline,
+                       IBarU = i.p.p.p.IBarU,
+                       ImagePathLarge1 = ((!string.IsNullOrEmpty(i.p.m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                       ImagePathLarge2 = ((!string.IsNullOrEmpty(i.p.m.ImagePath2)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.m.ImagePath2.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                       ImagePathLarge3 = ((!string.IsNullOrEmpty(i.p.m.ImagePath3)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.m.ImagePath3.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                       ImagePathLarge4 = ((!string.IsNullOrEmpty(i.p.m.ImagePath4)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.m.ImagePath4.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                       ImagePathLarge5 = ((!string.IsNullOrEmpty(i.p.m.ImagePath5)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.m.ImagePath5.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                       Itemid = i.p.p.p.ItemId,
+                       MRP = i.p.p.p.MenuPrice,
+                       SalePrice = i.p.p.p.Price,
+                       Qty = i.p.p.p.Qty,
+                       ShopId = shop.Id,
+                       ShopName = shop.Name,
+                       DiscountCategoryPercentage = i.dc.Percentage
+                   }).ToList();
+                }
+                else
+                {
+                    model.OrderItemLists = db.OrderItems.Where(i => i.OrderId == order.Id)
+                    .Join(db.Products, oi => oi.ProductId, p => p.Id, (oi, p) => new { oi, p })
+                    .Join(db.MasterProducts, p => p.p.MasterProductId, m => m.Id, (p, m) => new { p, m })
                     .Select(i => new OrderDetailsApiViewModel.OrderItemList
                     {
                         CategoryId = i.m.CategoryId,
@@ -4465,6 +4501,7 @@ namespace ShopNow.Controllers
                         Status = i.p.p.Status,
                         IsProductOnline = i.p.p.IsOnline
                     }).ToList();
+                }
             }
             return Json(model, JsonRequestBehavior.AllowGet);
         }
