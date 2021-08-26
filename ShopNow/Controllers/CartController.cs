@@ -1008,10 +1008,41 @@ namespace ShopNow.Controllers
             db.Entry(order).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
-            var fcmToken = (from c in db.Customers
-                            where c.Id == order.CustomerId
-                            select c.FcmTocken ?? "").FirstOrDefault().ToString();
-            Helpers.PushNotification.SendbydeviceId("Your order has been delivered.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+            //var fcmToken = (from c in db.Customers
+            //                where c.Id == order.CustomerId
+            //                select c.FcmTocken ?? "").FirstOrDefault().ToString();
+
+            //Reducing Platformcredits
+            var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == OrderNumber);
+            var shop = db.Shops.FirstOrDefault(i => i.Id == order.ShopId);
+            var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
+            shopCredits.DeliveryCredit -= payment.DeliveryCharge;
+            db.Entry(shopCredits).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+
+            var customerDetails = (from c in db.Customers
+                                   where c.Id == order.CustomerId
+                                   select c).FirstOrDefault();
+
+            if (customerDetails.IsReferred == false && !string.IsNullOrEmpty(customerDetails.ReferralNumber))
+            {
+                //customerDetails.Id = customerDetails.Id;
+                customerDetails.IsReferred = true;
+                db.Entry(customerDetails).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+
+                var referralCustomer = db.Customers.FirstOrDefault(c => c.PhoneNumber == customerDetails.ReferralNumber);
+                if (referralCustomer != null)
+                {
+                    var referalAmount = db.ReferralSettings.Where(r => r.Status == 0 && r.ShopDistrict == shop.DistrictName).Select(r => r.Amount).FirstOrDefault();
+                    referralCustomer.WalletAmount = referralCustomer.WalletAmount + referalAmount;
+                    db.Entry(referralCustomer).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+            string fcmtocken = customerDetails.FcmTocken ?? "";
+
+            Helpers.PushNotification.SendbydeviceId("Your order has been delivered.", "ShopNowChat", "a.mp3", fcmtocken);
             return RedirectToAction("Edit", "Cart", new { OrderNumber = OrderNumber, id = AdminHelpers.ECodeLong(id) });
         }
 
