@@ -9,8 +9,15 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-4">
             <h5 class="text-success" style="letter-spacing:1px">SHOP CREDITS LIST</h5>
+        </div>
+        <div class="col-md-8 text-right">
+            <a href="/Shop/CreditsHistory" class="mr-3"><span class="fa fa-list-ul"></span> Credits History</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
             <div class="card shadow mt-3">
                 <div class="card-body">
                     @Html.Grid(Model.ListItems).Columns(columns =>

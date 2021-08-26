@@ -58,19 +58,19 @@
                                         <td>
                                             <label class="col-md-3">Name</label>
                                             <input id="Name" name="Name" type="text" class="col-md-4" />
-                                            <input id="DBName" name="DBName" type="hidden" class="col-md-3" value="Name" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-3">OrderNo</label>
+                                            <input id="OrderNo" name="OrderNo" type="text" class="col-md-4" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <label class="col-md-3">Item Type</label>
-                                            <select id="ProductType" name="ProductType" class="col-md-4">
-                                                <option value=" ">Select</option>
-                                                <option value="Product">Product</option>
-                                                <option value="Dish">Dish</option>
-                                                <option value="Service">Service</option>
-                                                <option value="Medical">Medical</option>
-                                            </select>
+                                            <select id="ProductTypeId" name="ProductTypeId" class="col-md-4"></select>
+                                            <input type="hidden" name="ProductTypeName" id="ProductTypeName" />
                                         </td>
                                     </tr>
                                 </tbody>
@@ -82,11 +82,14 @@
                     }
                 </div>
             </div>
-        </div>           
+        </div>
     }
 </div>
 @section Scripts
-    {
+{
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
 
@@ -102,8 +105,23 @@
                     $('#Name').on('click', function () {
                         $('#Name').val(cel.innerHTML)
                     });
+                    $('#OrderNo').on('click', function () {
+                        $('#OrderNo').val(cel.innerHTML)
+                    });
                 });
             }
+
+            $('#ProductTypeId').select2({
+                placeholder: "Search Type",
+                width: '100%',
+                ajax: {
+                    url: "/ProductType/GetSelect2List",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ProductTypeName"]').val(e.params.data.text);
+            });
         });
     </script>
 }

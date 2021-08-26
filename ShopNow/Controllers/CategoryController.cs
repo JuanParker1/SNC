@@ -221,13 +221,15 @@ namespace ShopNow.Controllers
                 // MainPageModel entities = new MainPageModel();
                 foreach (DataRow row in dt.Rows)
                 {
-                    var cat = db.Categories.FirstOrDefault(i => i.Name == row[model.Name].ToString() && i.Status == 0); //Category.GetName(row[model.Name].ToString());
+                    var cat = db.Categories.AsEnumerable().FirstOrDefault(i => i.Name == row[model.Name].ToString() && i.Status == 0);
                     if (cat == null)
                     {
                         db.Categories.Add(new Category
                         {
                             Name = row[model.Name].ToString(),
-                            ProductTypeId = model.ProductType,
+                            OrderNo = Convert.ToInt32(row[model.OrderNo]),
+                            ProductTypeId = model.ProductTypeId,
+                            ProductTypeName = model.ProductTypeName,
                             Status = 0,
                             DateEncoded = DateTime.Now,
                             DateUpdated = DateTime.Now,

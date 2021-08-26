@@ -204,7 +204,7 @@ namespace ShopNow.Controllers
                 // MainPageModel entities = new MainPageModel();
                 foreach (DataRow row in dt.Rows)
                 {
-                    var brand = db.Brands.Where(b => b.Name == row[model.Name].ToString() && b.Status == 0).Select(b => b.Name).ToString(); //Brand.GetName(row[model.Name].ToString());
+                    var brand = db.Brands.AsEnumerable().FirstOrDefault(i => i.Name == row[model.Name].ToString() && i.Status == 0);
                     if (brand == null)
                     {
                         db.Brands.Add(new Brand
