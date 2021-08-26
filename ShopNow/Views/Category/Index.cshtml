@@ -62,15 +62,11 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <label class="col-md-3">OrderNo</label>
-                                            <input id="OrderNo" name="OrderNo" type="text" class="col-md-4" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
                                             <label class="col-md-3">Item Type</label>
-                                            <select id="ProductTypeId" name="ProductTypeId" class="col-md-4"></select>
-                                            <input type="hidden" name="ProductTypeName" id="ProductTypeName" />
+                                            <div class="col-md-4">
+                                                <select id="ProductTypeId" name="ProductTypeId"></select>
+                                                <input type="hidden" name="ProductTypeName" id="ProductTypeName" />
+                                            </div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -104,9 +100,6 @@
                 $(function () {
                     $('#Name').on('click', function () {
                         $('#Name').val(cel.innerHTML)
-                    });
-                    $('#OrderNo').on('click', function () {
-                        $('#OrderNo').val(cel.innerHTML)
                     });
                 });
             }
