@@ -4274,7 +4274,10 @@ namespace ShopNow.Controllers
         {
             var list = db.ShopDishAddOns.Where(i => i.ProductId == productId && i.IsActive == true).ToList();
             if (list.Count() > 0)
-                return Json(new { list = list, type = list.FirstOrDefault().AddOnType }, JsonRequestBehavior.AllowGet);
+            {
+                var product = db.Products.FirstOrDefault(i => i.Id == productId);
+                return Json(new { list = list, type = list.FirstOrDefault().AddOnType, minLimit = product.MinSelectionLimit, maxLimit = product.MaxSelectionLimit }, JsonRequestBehavior.AllowGet);
+            }
             else
                 return Json(new { list = list }, JsonRequestBehavior.AllowGet);
         }
@@ -4468,7 +4471,7 @@ namespace ShopNow.Controllers
                        ImagePath = i.p.p.oi.ImagePath,
                        ProductId = i.p.p.p.Id,
                        ProductName = i.p.m.Name,
-                       Quantity = i.p.p.oi.Quantity,
+                       Qty = i.p.p.oi.Quantity,
                        Price = i.p.p.p.Price,
                        Status = i.p.p.p.Status,
                        IsProductOnline = i.p.p.p.IsOnline,
@@ -4481,7 +4484,7 @@ namespace ShopNow.Controllers
                        Itemid = i.p.p.p.ItemId,
                        MRP = i.p.p.p.MenuPrice,
                        SalePrice = i.p.p.p.Price,
-                       Qty = i.p.p.p.Qty,
+                       Quantity = i.p.p.p.Qty,
                        ShopId = shop.Id,
                        ShopName = shop.Name,
                        DiscountCategoryPercentage = i.dc.Percentage

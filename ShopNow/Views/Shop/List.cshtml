@@ -47,6 +47,28 @@
     </div>
 </div>
 
+@*<div class="modal fade" id="modal-opentime" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form method="get" action="/Shop/UpdateNextOpeningDateTime">
+                    <input type="hidden" name="Id" />
+                    <input type="hidden" name="IsOnline" value="false"/>
+                    <h5>Next Opening DateTime</h5>
+                    <div class="form-group">
+                        <label>Choose Date & Time</label>
+                        <input class="form-control" type="datetime-local" name="NextOpeningDateTime" required />
+                    </div>
+                    <div class="text-right">
+                        <button class="btn btn-sm btn-success mr-3">Submit</button>
+                        <button class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>*@
+
 @section Scripts
 {
     <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
@@ -69,6 +91,8 @@
                     $.post('/Shop/UpdateShopOnline', { Id: id, isOnline: true }, function () { });
                 }
                 else {
+                    //$('[name="Id"]').val(id);
+                    //$('#modal-opentime').modal('show');
                     $.post('/Shop/UpdateShopOnline', { Id: id, isOnline: false }, function () { });
                 }
             });
