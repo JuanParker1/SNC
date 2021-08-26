@@ -51,7 +51,8 @@ namespace ShopNow.Models
         public double LoyaltyPoints { get; set; }
         public double PackingCharge { get; set; }
         public Nullable<int> BrandOwnerMiddlePercentage { get; set; }
-        public Nullable<double> ShopownnerPrice { get; set; }
+        public Nullable<double> ShopOwnerPrice { get; set; }
+        public Nullable<System.DateTime> NextOpeningDateTime { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }
