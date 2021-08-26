@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using ShopNow.Models;
@@ -124,8 +125,6 @@ namespace ShopNow.ViewModels
             public int DeliveryBoyId { get; set; }
             public string DeliveryBoyName { get; set; }
             public string DeliveryPhoneNumber { get; set; }
-            public string UserEnquiryCode { get; set; }
-            public string UserEnquiryName { get; set; }
             public int Qty { get; set; }
             public double Price { get; set; }
             public int CartStatus { get; set; }
@@ -133,6 +132,13 @@ namespace ShopNow.ViewModels
             public string UpdatedBy { get; set; }
             public int Status { get; set; }
             public string Date { get; set; }
+            public string DateTimeText
+            {
+                get
+                {
+                    return DateEncoded.ToString("dd-MMM-yyyy hh:mm tt", CultureInfo.InvariantCulture);
+                }
+            }
             public DateTime DateEncoded { get; set; }
             public DateTime DateUpdated { get; set; }
             public int isAssign { get; set; }

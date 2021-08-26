@@ -52,8 +52,7 @@ namespace ShopNow.Controllers
                 PhoneNumber = i.ShopPhoneNumber,
                 CartStatus = i.Status,
                 DeliveryBoyName = i.DeliveryBoyName ?? "N/A",
-                DateEncoded = i.DateEncoded,
-               // Date = i.DateEncoded.ToString("dd/MMM/yyyy hh:mm tt")
+                DateEncoded = i.DateEncoded
             }).OrderBy(i => i.CartStatus).OrderByDescending(i => i.DateEncoded).ToList();
             return View(model.List);
         }

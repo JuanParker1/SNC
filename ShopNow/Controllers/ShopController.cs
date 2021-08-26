@@ -1000,6 +1000,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "")]
         public ActionResult CreditList()
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             var model = new ShopCreditViewModel();
             model.ListItems = db.ShopCredits.Where(i => i.PlatformCredit <= 200 || i.DeliveryCredit <= 250) //Low credits
                 .Join(db.Shops, sc => sc.CustomerId, s => s.CustomerId, (sc, s) => new { sc, s })
@@ -1013,6 +1014,25 @@ namespace ShopNow.Controllers
                     ShopOwnerPhoneNumber = i.s.OwnerPhoneNumber,
                     DeliveryCreditCssColor = i.sc.DeliveryCredit <= 150 ? "text-danger" : (i.sc.DeliveryCredit <= 250 && i.sc.DeliveryCredit > 150) ? "text-warning" : "text-success",
                     PlatformCreditCssColor = i.sc.PlatformCredit <= 100 ? "text-danger" : (i.sc.PlatformCredit <= 200 && i.sc.PlatformCredit > 100) ? "text-warning" : "text-success"
+                }).ToList();
+            return View(model);
+        }
+
+        [AccessPolicy(PageCode = "")]
+        public ActionResult CreditsHistory()
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            var model = new ShopCreditViewModel();
+            model.Lists = db.Payments.Where(i => i.CreditType == 0 || i.CreditType == 1 && i.Amount != -20)
+                 .Join(db.Shops, p => p.ShopId, s => s.Id, (p, s) => new { p, s })
+                .Select(i => new ShopCreditViewModel.List
+                {
+                    Id = i.p.Id,
+                    ShopName = i.s.Name,
+                    ShopOwnerName = i.s.CustomerName != null ? i.s.CustomerName : "N/A",
+                    ShopOwnerPhoneNumber = i.s.OwnerPhoneNumber,
+                    Amount = i.p.Amount,
+                    CreditType = i.p.CreditType
                 }).ToList();
             return View(model);
         }

@@ -227,7 +227,7 @@ namespace ShopNow.Controllers
 
                 foreach (DataRow row in dt.Rows)
                 {
-                    var page = db.Pages.FirstOrDefault(i => i.Name == row[model.Name].ToString() && i.Status == model.Status);
+                    var page = db.Pages.AsEnumerable().FirstOrDefault(i => i.Name == row[model.Name].ToString() && i.Status == model.Status);
                     if (page == null)
                     {
                         db.Pages.Add(new Page
