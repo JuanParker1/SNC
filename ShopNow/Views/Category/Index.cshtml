@@ -62,12 +62,6 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <label class="col-md-3">OrderNo</label>
-                                            <input id="OrderNo" name="OrderNo" type="text" class="col-md-4" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
                                             <label class="col-md-3">Item Type</label>
                                             <div class="col-md-4">
                                                 <select id="ProductTypeId" name="ProductTypeId"></select>
@@ -106,9 +100,6 @@
                 $(function () {
                     $('#Name').on('click', function () {
                         $('#Name').val(cel.innerHTML)
-                    });
-                    $('#OrderNo').on('click', function () {
-                        $('#OrderNo').val(cel.innerHTML)
                     });
                 });
             }
