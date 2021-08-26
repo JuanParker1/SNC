@@ -227,9 +227,9 @@ namespace ShopNow.Controllers
                         db.Categories.Add(new Category
                         {
                             Name = row[model.Name].ToString(),
-                            OrderNo = Convert.ToInt32(row[model.OrderNo]),
                             ProductTypeId = model.ProductTypeId,
                             ProductTypeName = model.ProductTypeName,
+                            OrderNo = 0,
                             Status = 0,
                             DateEncoded = DateTime.Now,
                             DateUpdated = DateTime.Now,
