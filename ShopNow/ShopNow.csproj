@@ -379,6 +379,7 @@
     <Compile Include="Controllers\RefundController.cs" />
     <Compile Include="Controllers\SalesController.cs" />
     <Compile Include="Controllers\ShopDiscountCategoryController.cs" />
+    <Compile Include="Controllers\ShopScheduleController.cs" />
     <Compile Include="Controllers\StaffController.cs" />
     <Compile Include="Controllers\BrandController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
@@ -654,6 +655,7 @@
     <Compile Include="ViewModels\RefundViewModels.cs" />
     <Compile Include="ViewModels\SalesViewModel.cs" />
     <Compile Include="ViewModels\ShopDiscountCategoryViewModel.cs" />
+    <Compile Include="ViewModels\ShopScheduleViewModels.cs" />
     <Compile Include="ViewModels\ShopViewModel.cs" />
     <Compile Include="ViewModels\SubCategoryViewModel.cs" />
     <Compile Include="ViewModels\SupportViewModel.cs" />
@@ -3159,6 +3161,7 @@
     <Content Include="Scripts\jquery-3.6.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.6.0.min.map" />
     <Content Include="Views\Shop\CreditsHistory.cshtml" />
+    <Content Include="Views\ShopSchedule\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
