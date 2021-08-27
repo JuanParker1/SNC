@@ -4524,6 +4524,12 @@ namespace ShopNow.Controllers
             return Json(new { version = version }, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetLiveOrderCount(int customerid)
+        {
+            var liveOrdercount = db.Orders.Where(i => i.CustomerId == customerid && i.Status != 0 && i.Status != 6 && i.Status != 7).Count();
+            return Json(new { count = liveOrdercount }, JsonRequestBehavior.AllowGet);
+        }
+
         public void UpdateAchievements(int customerId)
         {
             var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);

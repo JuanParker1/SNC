@@ -1,0 +1,226 @@
+﻿@model ShopNow.ViewModels.ShopScheduleIndexViewModel
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Shop Schedule";
+}
+
+<title>ShopNow | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+<link href="~/Content/switch.css" rel="stylesheet" />
+
+<div class="container-fluid">
+            <div class="row">
+                <div class="col-md-8 mx-auto">
+                    <div class="d-flex justify-content-between my-3">
+                        <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+                        <a href="#modal-add-schedule" data-target="#modal-add-schedule" data-toggle="modal">Add New Schedule</a>
+                    </div>
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <table class="table table-borderless border-none" id="tbl-shop-schedules">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <td>Shop Name</td>
+                                        <td>Schedule Time(s)</td>
+                                        <td>On/Off</td>
+                                        <td>Action</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.ListItems)
+                                    {
+                                        <tr>
+                                            <td>@item.ShopName</td>
+                                            <td>
+                                                @foreach (var time in item.TimeListItems)
+                                                {
+                                                    <span>@time.OnTime - @time.OffTime</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <label class="switch"><input type="checkbox" value="@item.HasSchedule" Id="Id_@item.Id" class='check-schedule' data-shopid="@item.ShopId"><span class='slider round'></span></label>
+                                            </td>
+                                            <td>
+                                                <a href="~/ShopSchedule/Edit?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(item.Id)" class="text-info mr-4"><i class="fa fa-edit fa-lg"></i></a>
+                                                <a href="javascript:void(0)" data-shopid="@ShopNow.Helpers.AdminHelpers.ECodeInt(item.ShopId)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-add-schedule" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert alert-info">
+                <h5 class="modal-title" id="editModalLabel">Add New Schedule</h5>
+                <button type="button" class="btnClose close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="col-form-label font-weight-bold text-muted">Select Shop</label>
+                    <select id="select-shop" class="form-control" name="ShopId" required></select>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label class="col-form-label font-weight-bold text-muted">On Time</label>
+                            <input type="time" name="OnTime" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label class="col-form-label font-weight-bold text-muted">Off Time</label>
+                            <input type="time" name="OffTime" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="col-form-label">&nbsp;</label>
+                            <input type="button" class="btn btn-primary btn-block h-50" value="Add" id="btn-addTime" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row d-none" id="div-times">
+                    <div class="col-md-12">
+                        <table class="table table-bordered table-sm table-striped" id="tbl-times">
+                            <thead class="bg-light font-weight-bold">
+                                <tr>
+                                    <td>On Time</td>
+                                    <td>Off Time</td>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="mx-auto col-8 mt-3"> <input id="btn-add-schedule" type="button" value="Add Schedule" class="btn btn-success btn-block" /></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            var timeArray = [];
+
+            $('table tbody tr').each(function () {
+                var $this = $(this).find(".check-schedule");
+                if ($this.val() == 'True')
+                    $this.prop('checked', true);
+                else
+                    $this.prop('checked', false);
+            });
+
+            $('.check-schedule').on('click', function () {
+                var id = $(this).data('shopid');
+                if ($(this).is(':checked') == true) {
+                    $.post('/ShopSchedule/UpdateShopSchedule', { shopId: id, hasSchedule: true }, function () { });
+                }
+                else {
+                    $.post('/ShopSchedule/UpdateShopSchedule', { shopId: id, hasSchedule: false }, function () { });
+                }
+            });
+
+            //var t = $('#tbl-shop-schedules').DataTable({
+            //    "bPaginate": false,
+            //    "info": false,
+            //    initComplete: function (settings, json) {
+            //        //$('.index input').remove();
+            //        //$('.action-btn input').remove();
+            //        $('.dataTables_filter label').remove();
+            //        $('.dataTables_filter input').appendTo('#data-search');
+            //    },
+            //});
+
+            //t.on('order.dt search.dt', function () {
+            //    t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+            //        cell.innerHTML = i + 1;
+            //    });
+            //}).draw();
+
+            $('#select-shop').select2({
+                placeholder: "Search Shop",
+                width: '100%',
+                ajax: {
+                    url: "/Cart/GetShopSelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            });
+
+            $(".btnDelete").click(function () {
+                var Id = $(this).attr('data-shopid');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/ShopSchedule/Delete", { shopId: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
+            });
+
+
+            $('#btn-addTime').on('click', function () {
+                var onTime = $('[name="OnTime"]').val();
+                var offTime = $('[name="OffTime"]').val();
+                var times = {
+                    onTime: onTime,
+                    offTime: offTime
+                };
+                timeArray.push(times);
+                var $tr = '<tr><td>' + onTime + '</td><td>' + offTime + '</td></tr>';
+                $('#tbl-times tbody').append($tr);
+                $('#div-times').removeClass('d-none');
+                $('[name="OnTime"]').val('');
+                $('[name="OffTime"]').val('');
+            });
+
+            $('#btn-add-schedule').on('click', function () {
+                var model = {
+                    shopId: $('#select-shop').val(),
+                    timeListItems: timeArray
+                }
+                $.post('/ShopSchedule/Add', model, function (data) {
+                    if (data) {
+                        swal('Success', 'Schedules saved successfully', 'success');
+                        window.location.reload();
+                    } else {
+                        swal('Failed', 'Something went wrong!', 'error');
+                    }
+                });
+            });
+
+        });
+    </script>
+}
