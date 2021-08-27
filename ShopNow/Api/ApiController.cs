@@ -826,6 +826,8 @@ namespace ShopNow.Controllers
                 //payment.CustomerName = model.CustomerName;
                 payment.CreatedBy = model.CustomerName;
                 payment.UpdatedBy = model.CustomerName;
+                payment.DeliveryCharge = model.GrossDeliveryCharge;
+                payment.PackingCharge = model.PackagingCharge;
                 payment.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
                 if (model.OrderId != 0)
                 {
