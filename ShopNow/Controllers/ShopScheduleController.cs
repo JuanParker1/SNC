@@ -19,7 +19,7 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            model.ListItems = db.ShopSchedules.Where(i => i.Status == 0 && model.FilterShopId !=0 ? i.ShopId == model.FilterShopId : true)
+            model.ListItems = db.ShopSchedules.Where(i => i.Status == 0 && (model.FilterShopId !=0 ? i.ShopId == model.FilterShopId : true))
                 .Join(db.Shops, sc => sc.ShopId, s => s.Id, (sc, s) => new { sc, s })
                 .GroupBy(i => i.sc.ShopId)
             .Select(i => new ShopScheduleIndexViewModel.ListItem
@@ -39,7 +39,7 @@ namespace ShopNow.Controllers
 
         public JsonResult Add(ShopScheduleAddViewModel model)
         {
-            var isExist = db.ShopSchedules.Any(i => i.ShopId == model.ShopId);
+            var isExist = db.ShopSchedules.Any(i => i.ShopId == model.ShopId && i.Status==0);
             if (!isExist)
             {
                 var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);

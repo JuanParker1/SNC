@@ -915,7 +915,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="ProductId" Type="bigint" Nullable="false" />
           <Property Name="OnTime" Type="time" Precision="7" />
           <Property Name="OffTime" Type="time" Precision="7" />
           <Property Name="UpdatedBy" Type="nvarchar" MaxLength="50" />
@@ -2871,7 +2871,6 @@
             <Parameter Name="shopcode" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="Products" EntityType="sncModel.Product" />
-          <EntitySet Name="ProductSchedules" EntityType="sncModel.ProductSchedule" />
           <EntitySet Name="Shops" EntityType="sncModel.Shop" />
           <EntitySet Name="ShopSchedules" EntityType="sncModel.ShopSchedule" />
           <AssociationSet Name="FK_CustomerReview_Shops" Association="sncModel.FK_CustomerReview_Shops">
@@ -2882,6 +2881,7 @@
             <End Role="ProductType" EntitySet="ProductTypes" />
             <End Role="Product" EntitySet="Products" />
           </AssociationSet>
+          <EntitySet Name="ProductSchedules" EntityType="sncModel.ProductSchedule" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -2992,18 +2992,6 @@
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="ProductType" Relationship="sncModel.FK_Products_ProductType" FromRole="Product" ToRole="ProductType" />
-        </EntityType>
-        <EntityType Name="ProductSchedule">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ProductId" Type="Int32" Nullable="false" />
-          <Property Name="OnTime" Type="Time" Precision="7" />
-          <Property Name="OffTime" Type="Time" Precision="7" />
-          <Property Name="UpdatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DateTimeUpdated" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Shop">
           <Key>
@@ -3119,6 +3107,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ProductSchedule">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductId" Type="Int64" Nullable="false" />
+          <Property Name="OnTime" Type="Time" Precision="7" />
+          <Property Name="OffTime" Type="Time" Precision="7" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DateTimeUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4382,19 +4382,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ProductSchedules">
-            <EntityTypeMapping TypeName="sncModel.ProductSchedule">
-              <MappingFragment StoreEntitySet="ProductSchedules">
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="DateTimeUpdated" ColumnName="DateTimeUpdated" />
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-                <ScalarProperty Name="OffTime" ColumnName="OffTime" />
-                <ScalarProperty Name="OnTime" ColumnName="OnTime" />
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Shops">
             <EntityTypeMapping TypeName="sncModel.Shop">
               <MappingFragment StoreEntitySet="Shops">
@@ -4482,6 +4469,19 @@
                 <ScalarProperty Name="OffTime" ColumnName="OffTime" />
                 <ScalarProperty Name="OnTime" ColumnName="OnTime" />
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductSchedules">
+            <EntityTypeMapping TypeName="sncModel.ProductSchedule">
+              <MappingFragment StoreEntitySet="ProductSchedules">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DateTimeUpdated" ColumnName="DateTimeUpdated" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="OffTime" ColumnName="OffTime" />
+                <ScalarProperty Name="OnTime" ColumnName="OnTime" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

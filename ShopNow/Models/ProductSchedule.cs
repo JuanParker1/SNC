@@ -15,7 +15,7 @@ namespace ShopNow.Models
     public partial class ProductSchedule
     {
         public int Id { get; set; }
-        public int ProductId { get; set; }
+        public long ProductId { get; set; }
         public Nullable<System.TimeSpan> OnTime { get; set; }
         public Nullable<System.TimeSpan> OffTime { get; set; }
         public string UpdatedBy { get; set; }
