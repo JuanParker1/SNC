@@ -1,6 +1,6 @@
-﻿@model ShopNow.ViewModels.ShopScheduleIndexViewModel
+﻿@model ShopNow.ViewModels.ProductScheduleIndexViewModel
 @{
-    ViewBag.Title = "Shop Schedule";
+    ViewBag.Title = "Product Schedule";
 }
 
 <title>ShopNow | @ViewBag.Title</title>
@@ -15,27 +15,27 @@
             </div>
             <div class="card shadow">
                 <div class="card-body">
-                    <form method="get" action="/ShopSchedule/Index">
+                    <form method="get" action="/ProductSchedule/Index">
                         <div class="row mb-3">
                             <div class="col-md-4">
-                                <select id="select-shop-filter" class="form-control" name="FilterShopId">
-                                    @if (Model.FilterShopId != 0)
+                                <select id="select-product-filter" class="form-control" name="FilterProductId">
+                                    @if (Model.FilterProductId != 0)
                                     {
-                                        <option value="@Model.FilterShopId">@Model.FilterShopName</option>
+                                        <option value="@Model.FilterProductId">@Model.FilterProductName</option>
                                     }
                                 </select>
-                                <input type="hidden" name="FilterShopName" />
+                                <input type="hidden" name="FilterProductName" />
                             </div>
                             <div class="col-md-4">
                                 <input type="submit" class="btn btn-info mr-3" value="Filter" />
-                                <a href="/ShopSchedule/Index" class="btn btn-warning">Clear</a>
+                                <a href="/ProductSchedule/Index" class="btn btn-warning">Clear</a>
                             </div>
                         </div>
                     </form>
-                    <table class="table table-borderless" id="tbl-shop-schedules">
+                    <table class="table table-borderless" id="tbl-product-schedules">
                         <thead class="bg-light">
                             <tr>
-                                <th>Shop Name</th>
+                                <th>Product Name</th>
                                 <th>Schedule Time(s)</th>
                                 <th>On/Off</th>
                                 <th>Action</th>
@@ -45,24 +45,24 @@
                             @foreach (var item in Model.ListItems)
                             {
                                 <tr>
-                                    <td>@item.ShopName</td>
+                                    <td>@item.ProductName</td>
                                     <td>
                                         @foreach (var time in item.TimeListItems)
                                         {
-                                        <div class="d-flex">
-                                            <span class="text-nowrap">@DateTime.Today.Add(time.OnTime.Value).ToString("hh:mm tt") - @DateTime.Today.Add(time.OffTime.Value).ToString("hh:mm tt")</span>
-                                            <a href="#modal-update-timimgs" data-target="#modal-update-timimgs" data-toggle="modal" data-id="@item.Id" data-ontime="@time.OnTime" data-offtime="@time.OffTime" class="text-info mx-4 btn-edit-timing"><i class="fa fa-edit fa-lg"></i></a>
-                                            <a href="/ShopSchedule/DeleteTiming?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(item.Id)" class="text-danger"><i class="fa fa-close fa-lg"></i></a>
-                                        </div>
-                                            
+                                            <div class="d-flex">
+                                                <span class="text-nowrap">@DateTime.Today.Add(time.OnTime.Value).ToString("hh:mm tt") - @DateTime.Today.Add(time.OffTime.Value).ToString("hh:mm tt")</span>
+                                                <a href="#modal-update-timimgs" data-target="#modal-update-timimgs" data-toggle="modal" data-id="@item.Id" data-ontime="@time.OnTime" data-offtime="@time.OffTime" class="text-info mx-4 btn-edit-timing"><i class="fa fa-edit fa-lg"></i></a>
+                                                <a href="/ProductSchedule/DeleteTiming?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(item.Id)" class="text-danger"><i class="fa fa-close fa-lg"></i></a>
+                                            </div>
+
                                         }
                                     </td>
                                     <td>
-                                        <label class="switch"><input type="checkbox" Id="Id_@item.Id" class='check-schedule' data-value="@item.HasSchedule" data-shopid="@item.ShopId"><span class='slider round'></span></label>
+                                        <label class="switch"><input type="checkbox" Id="Id_@item.Id" class='check-schedule' data-value="@item.HasSchedule" data-productid="@item.ProductId"><span class='slider round'></span></label>
                                     </td>
                                     <td>
-                                        <a href="#modal-add-timimgs" data-target="#modal-add-timimgs" data-toggle="modal" data-shopid="@item.ShopId" class="text-info mr-4 btn-add-timing"><i class="fa fa-plus fa-lg"></i></a>
-                                        <a href="javascript:void(0)" data-shopid="@ShopNow.Helpers.AdminHelpers.ECodeInt(item.ShopId)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+                                        <a href="#modal-add-timimgs" data-target="#modal-add-timimgs" data-toggle="modal" data-productid="@item.ProductId" class="text-info mr-4 btn-add-timing"><i class="fa fa-plus fa-lg"></i></a>
+                                        <a href="javascript:void(0)" data-productid="@ShopNow.Helpers.AdminHelpers.ECodeLong(item.ProductId)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
                                     </td>
                                 </tr>
                             }
@@ -87,6 +87,10 @@
                 <div class="form-group">
                     <label class="col-form-label font-weight-bold text-muted">Select Shop</label>
                     <select id="select-shop" class="form-control" name="ShopId"></select>
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label font-weight-bold text-muted">Select Product</label>
+                    <select id="select-product" class="form-control" name="ProductId" multiple></select>
                 </div>
                 <hr />
                 <div class="row">
@@ -140,19 +144,19 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="/ShopSchedule/AddTiming" method="post">
-                    <input type="hidden" name="ShopId" />
+                <form action="/ProductSchedule/AddTiming" method="post">
+                    <input type="hidden" name="ProductId" />
                     <div class="row">
                         <div class="col-md-5">
                             <div class="form-group">
                                 <label class="col-form-label font-weight-bold text-muted">On Time</label>
-                                <input type="time" name="OnTime" class="form-control" required/>
+                                <input type="time" name="OnTime" class="form-control" required />
                             </div>
                         </div>
                         <div class="col-md-5">
                             <div class="form-group">
                                 <label class="col-form-label font-weight-bold text-muted">Off Time</label>
-                                <input type="time" name="OffTime" class="form-control" required/>
+                                <input type="time" name="OffTime" class="form-control" required />
                             </div>
                         </div>
                     </div>
@@ -173,7 +177,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="/ShopSchedule/UpdateTiming" method="post">
+                <form action="/ProductSchedule/UpdateTiming" method="post">
                     <input type="hidden" name="Id" />
                     <div class="row">
                         <div class="col-md-5">
@@ -216,25 +220,25 @@
             });
 
             $('.check-schedule').on('click', function () {
-                var id = $(this).data('shopid');
+                var id = $(this).data('productid');
                 if ($(this).is(':checked') == true) {
-                    $.post('/ShopSchedule/UpdateSchedule', { shopId: id, hasSchedule: true }, function () { });
+                    $.post('/ProductSchedule/UpdateSchedule', { productid: id, hasSchedule: true }, function () { });
                 }
                 else {
-                    $.post('/ShopSchedule/UpdateSchedule', { shopId: id, hasSchedule: false }, function () { });
+                    $.post('/ProductSchedule/UpdateSchedule', { productid: id, hasSchedule: false }, function () { });
                 }
             });
 
-            $('#select-shop-filter').select2({
-                placeholder: "Search Shop",
+            $('#select-product-filter').select2({
+                placeholder: "Search Product",
                 width: '100%',
                 ajax: {
-                    url: "/Product/GetActiveShopSelect2",
+                    url: "/ProductSchedule/GetScheduleProductSelect2",
                     delay: 250,
                     dataType: 'json'
                 }
             }).on('select2:select', function (e) {
-                $('input[name="FilterShopName"]').val(e.params.data.text);
+                $('input[name="FilterProductName"]').val(e.params.data.text);
             });
 
             $('#select-shop').select2({
@@ -245,10 +249,21 @@
                     delay: 250,
                     dataType: 'json'
                 }
+            }).on('select2:select', function (e) {
+                $('#select-product').val('').trigger('change');
+                $('#select-product').select2({
+                    placeholder: "Select Product",
+                    width: '100%',
+                    ajax: {
+                        url: "/Banner/GetShopProductSelect2?shopid=" + e.params.data.id,
+                        delay: 250,
+                        dataType: 'json'
+                    }
+                });
             });
 
             $(".btnDelete").click(function () {
-                var Id = $(this).attr('data-shopid');
+                var Id = $(this).attr('data-productid');
                 swal({
                     title: "Are you sure want to delete?",
                     text: "You will not be able to recover this file!",
@@ -262,7 +277,7 @@
                 },
                     function (isConfirm) {
                         if (isConfirm) {
-                            $.getJSON("/ShopSchedule/Delete", { shopId: Id }, function (data) {
+                            $.getJSON("/ProductSchedule/Delete", { productid: Id }, function (data) {
                                 if (data == true) {
                                     window.location.reload();
                                 }
@@ -292,39 +307,39 @@
             });
 
             $('#btn-add-schedule').on('click', function () {
-                if ($('#select-shop').val()) {
+                if ($('#select-product').val() != "") {
                     if (timeArray.length > 0) {
                         var model = {
-                            shopId: $('#select-shop').val(),
+                            productid: $('#select-product').val(),
                             timeListItems: timeArray
                         }
-                        $.post('/ShopSchedule/Add', model, function (data) {
+                        $.post('/ProductSchedule/Add', model, function (data) {
                             if (data) {
                                 swal('Success', 'Schedules saved successfully', 'success');
                                 window.location.reload();
                             } else {
-                                swal('Warning', 'Shop already has Schedules, Kindly update there.', 'warning');
+                                swal('Warning', 'Product already has Schedules, Kindly update there.', 'warning');
                                 timeArray.length = 0;
                                 $('#tbl-times tbody').empty();
                                 $('#div-times').addClass('d-none');
-                                $('#select-shop').val('').trigger('change');
+                                $('#select-product').val('').trigger('change');
                                 $('#modal-add-schedule').modal('hide');
                             }
                         });
                     } else
                         swal('Warning', 'Timing List should not be empty!', 'warning');
                 } else
-                    swal('Warning', 'Shop is required!', 'warning');
+                    swal('Warning', 'Product is required!', 'warning');
             });
 
-            $("#tbl-shop-schedules").on('click', '.btn-edit-timing', function () {
+            $("#tbl-product-schedules").on('click', '.btn-edit-timing', function () {
                 $('[name="Id"]').val($(this).attr('data-id'));
                 $("#edit-onTime").val($(this).attr('data-ontime'));
                 $("#edit-offTime").val($(this).attr('data-offtime'));
             });
 
-            $("#tbl-shop-schedules").on('click', '.btn-add-timing', function () {
-                $('[name="ShopId"]').val($(this).attr('data-shopid'));
+            $("#tbl-product-schedules").on('click', '.btn-add-timing', function () {
+                $('[name="ProductId"]').val($(this).attr('data-productid'));
             });
             
         });

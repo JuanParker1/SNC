@@ -372,6 +372,7 @@
     <Compile Include="Controllers\PincodeRateController.cs" />
     <Compile Include="Controllers\PlatFormCreditRateController.cs" />
     <Compile Include="Controllers\PortionController.cs" />
+    <Compile Include="Controllers\ProductScheduleController.cs" />
     <Compile Include="Controllers\ProductSpecificationController.cs" />
     <Compile Include="Controllers\ProductTypeController.cs" />
     <Compile Include="Controllers\PushNotificationController.cs" />
@@ -650,6 +651,7 @@
     <Compile Include="ViewModels\PlatFormCreditRateViewModel.cs" />
     <Compile Include="ViewModels\PortionViewModel.cs" />
     <Compile Include="ViewModels\ProductMedicalStockViewModel.cs" />
+    <Compile Include="ViewModels\ProductScheduleViewModels.cs" />
     <Compile Include="ViewModels\ProductSpecificationViewModel.cs" />
     <Compile Include="ViewModels\ReferralSettingViewModels.cs" />
     <Compile Include="ViewModels\RefundViewModels.cs" />
@@ -3162,6 +3164,7 @@
     <Content Include="Scripts\jquery-3.6.0.min.map" />
     <Content Include="Views\Shop\CreditsHistory.cshtml" />
     <Content Include="Views\ShopSchedule\Index.cshtml" />
+    <Content Include="Views\ProductSchedule\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

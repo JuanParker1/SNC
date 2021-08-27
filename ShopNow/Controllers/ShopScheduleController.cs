@@ -15,21 +15,20 @@ namespace ShopNow.Controllers
         private sncEntities db = new sncEntities();
 
         [AccessPolicy(PageCode = "")]
-        public ActionResult Index()
+        public ActionResult Index(ShopScheduleIndexViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var model = new ShopScheduleIndexViewModel();
-            model.ListItems = db.ShopSchedules.Where(i => i.Status == 0)
+            model.ListItems = db.ShopSchedules.Where(i => i.Status == 0 && (model.FilterShopId !=0 ? i.ShopId == model.FilterShopId : true))
                 .Join(db.Shops, sc => sc.ShopId, s => s.Id, (sc, s) => new { sc, s })
                 .GroupBy(i => i.sc.ShopId)
             .Select(i => new ShopScheduleIndexViewModel.ListItem
             {
                 Id = i.FirstOrDefault().sc.Id,
-                HasSchedule = i.FirstOrDefault().s.HasSchedule,
+                HasSchedule = i.FirstOrDefault().s.HasSchedule ?? false,
                 ShopId = i.Key,
                 ShopName = i.FirstOrDefault().s.Name,
-                TimeListItems = i.Select(a => new ShopScheduleIndexViewModel.ListItem.TimeListItem
+                TimeListItems = i.Where(a => a.sc.Status == 0).Select(a => new ShopScheduleIndexViewModel.ListItem.TimeListItem
                 {
                     OffTime = a.sc.OffTime,
                     OnTime = a.sc.OnTime
@@ -40,7 +39,8 @@ namespace ShopNow.Controllers
 
         public JsonResult Add(ShopScheduleAddViewModel model)
         {
-            try
+            var isExist = db.ShopSchedules.Any(i => i.ShopId == model.ShopId && i.Status==0);
+            if (!isExist)
             {
                 var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
                 foreach (var item in model.TimeListItems)
@@ -59,9 +59,7 @@ namespace ShopNow.Controllers
                 }
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
-            catch {
-                return Json(false, JsonRequestBehavior.AllowGet);
-            }
+            return Json(false, JsonRequestBehavior.AllowGet);
             
         }
 
@@ -73,10 +71,64 @@ namespace ShopNow.Controllers
             if (shopSchedule.Count() > 0)
             {
                 shopSchedule.ForEach(i => i.Status = 2);
-                db.Entry(shopSchedule).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        [AccessPolicy(PageCode = "")]
+        public JsonResult UpdateSchedule(int shopid, bool hasSchedule)
+        {
+            var shop = db.Shops.FirstOrDefault(i => i.Id == shopid && i.Status == 0);
+            shop.HasSchedule = hasSchedule;
+            db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        [AccessPolicy(PageCode = "")]
+        public ActionResult AddTiming(int shopid, TimeSpan onTime, TimeSpan offTime)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var shopSchedule = new ShopSchedule
+            {
+                DateTimeUpdated = DateTime.Now,
+                OffTime = offTime,
+                OnTime = onTime,
+                ShopId = shopid,
+                Status = 0,
+                UpdatedBy = user.Name
+            };
+            db.ShopSchedules.Add(shopSchedule);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        [AccessPolicy(PageCode = "")]
+        public ActionResult UpdateTiming(int id,TimeSpan onTime,TimeSpan offTime)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var shopSchedule = db.ShopSchedules.FirstOrDefault(i => i.Id == id);
+            shopSchedule.OnTime = onTime;
+            shopSchedule.OffTime = offTime;
+            shopSchedule.UpdatedBy = user.Name;
+            db.Entry(shopSchedule).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        [AccessPolicy(PageCode = "")]
+        public ActionResult DeleteTiming(string id)
+        {
+            int dId = AdminHelpers.DCodeInt(id);
+            var shopSchedule = db.ShopSchedules.FirstOrDefault(i => i.Id == dId);
+            if (shopSchedule != null)
+            {
+                shopSchedule.Status = 2;
+                db.Entry(shopSchedule).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index");
         }
     }
 }
