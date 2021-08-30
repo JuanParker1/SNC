@@ -826,6 +826,8 @@ namespace ShopNow.Controllers
                 //payment.CustomerName = model.CustomerName;
                 payment.CreatedBy = model.CustomerName;
                 payment.UpdatedBy = model.CustomerName;
+                payment.DeliveryCharge = model.GrossDeliveryCharge;
+                payment.PackingCharge = model.PackagingCharge;
                 payment.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
                 if (model.OrderId != 0)
                 {
@@ -2304,7 +2306,7 @@ namespace ShopNow.Controllers
                                           Price = pl.Price,
                                           ImagePath = ((!string.IsNullOrEmpty(m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                                           Status = pl.Status,
-                                          Customisation = pl.Customisation
+                                          Customisation = pl.Customisation,DiscountCategoryPercentage=pl.Percentage
                                       }).Where(i => str != "" ? i.Name.ToLower().Contains(str) : true).ToList();
             }
             else if (shop.ShopCategoryId == 2)
@@ -2326,7 +2328,7 @@ namespace ShopNow.Controllers
                                           Price = pl.Price,
                                           ImagePath = ((!string.IsNullOrEmpty(m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                                           Status = pl.Status,
-                                          Customisation = pl.Customisation
+                                          Customisation = pl.Customisation,DiscountCategoryPercentage=pl.Percentage
                                       }).ToList();
             }
             return new JsonResult()
@@ -4522,6 +4524,12 @@ namespace ShopNow.Controllers
             if (appDetails != null)
                 version = appDetails.Version;
             return Json(new { version = version }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetLiveOrderCount(int customerid)
+        {
+            var liveOrdercount = db.Orders.Where(i => i.CustomerId == customerid && i.Status != 0 && i.Status != 6 && i.Status != 7).Count();
+            return Json(new { count = liveOrdercount }, JsonRequestBehavior.AllowGet);
         }
 
         public void UpdateAchievements(int customerId)

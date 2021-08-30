@@ -86,7 +86,8 @@ namespace ShopNow.Models
         public int Adscore { get; set; }
         public Nullable<bool> IsOnline { get; set; }
         public string GooglePlaceId { get; set; }
-        public Nullable<System.DateTime> NextOpeningDateTime { get; set; }
+        public Nullable<bool> HasSchedule { get; set; }
+        public Nullable<System.TimeSpan> NextOnTime { get; set; }
         public int Status { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }

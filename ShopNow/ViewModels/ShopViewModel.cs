@@ -654,6 +654,7 @@ namespace ShopNow.ViewModels
             public string ImagePath { get; set; }
             public int Status { get; set; }
             public bool Customisation { get; set; }
+            public double DiscountCategoryPercentage { get; set; }
         }
         public class DrugCompundDetailList
         {

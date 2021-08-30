@@ -44,7 +44,6 @@
         <EntityTypeShape EntityType="sncModel.PlatFormCreditRate" Width="1.5" PointX="23.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.Portion" Width="1.5" PointX="23.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.ProductDishAddOn" Width="1.5" PointX="23.75" PointY="18.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.Product" Width="1.5" PointX="3" PointY="10.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.Products1" Width="1.5" PointX="2.75" PointY="24.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.ProductSpecificationItem" Width="1.5" PointX="24.75" PointY="8.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.ProductSpecification" Width="1.5" PointX="24.75" PointY="13.75" IsExpanded="true" />
@@ -55,7 +54,6 @@
         <EntityTypeShape EntityType="sncModel.ShopCredit" Width="1.5" PointX="25.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.ShopDishAddOn" Width="1.5" PointX="14.75" PointY="25.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.ShopMember" Width="1.5" PointX="16.75" PointY="25.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.Shop" Width="1.5" PointX="8.75" PointY="17.125" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.Specification" Width="1.5" PointX="25.75" PointY="17.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.Staff" Width="1.5" PointX="25.75" PointY="21.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.SubCategory" Width="1.5" PointX="6" PointY="9.25" IsExpanded="true" />
@@ -64,14 +62,18 @@
         <AssociationConnector Association="sncModel.FK_SubCategories_Categories" ManuallyRouted="false" />
         <AssociationConnector Association="sncModel.FK_CustomerAddresses_Customers" ManuallyRouted="false" />
         <AssociationConnector Association="sncModel.FK_CustomerReview_Customers" ManuallyRouted="false" />
-        <AssociationConnector Association="sncModel.FK_CustomerReview_Shops" ManuallyRouted="false" />
         <AssociationConnector Association="sncModel.FK_DeliveryBoys_Customers" ManuallyRouted="false" />
         <AssociationConnector Association="sncModel.FK_DeliveryBoyShops_DeliveryBoyShops" ManuallyRouted="false" />
         <AssociationConnector Association="sncModel.FK_NextSubCategories_ProductType" ManuallyRouted="false" />
         <AssociationConnector Association="sncModel.FK_NextSubCategories_SubCategories" ManuallyRouted="false" />
         <AssociationConnector Association="sncModel.FK_OrderItems_Orders" ManuallyRouted="false" />
-        <AssociationConnector Association="sncModel.FK_Products_ProductType" ManuallyRouted="false" />
         <AssociationConnector Association="sncModel.FK_SubCategories_ProductType" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="sncModel.ShopSchedule" Width="1.5" PointX="5.375" PointY="27.75" />
+        <EntityTypeShape EntityType="sncModel.ProductSchedule" Width="1.5" PointX="26.375" PointY="26.75" />
+        <EntityTypeShape EntityType="sncModel.Product" Width="1.5" PointX="3" PointY="35.125" />
+        <EntityTypeShape EntityType="sncModel.Shop" Width="1.5" PointX="8.375" PointY="27.625" />
+        <AssociationConnector Association="sncModel.FK_CustomerReview_Shops" />
+        <AssociationConnector Association="sncModel.FK_Products_ProductType" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
