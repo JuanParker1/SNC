@@ -2306,7 +2306,7 @@ namespace ShopNow.Controllers
                                           Price = pl.Price,
                                           ImagePath = ((!string.IsNullOrEmpty(m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                                           Status = pl.Status,
-                                          Customisation = pl.Customisation
+                                          Customisation = pl.Customisation,DiscountCategoryPercentage=pl.Percentage
                                       }).Where(i => str != "" ? i.Name.ToLower().Contains(str) : true).ToList();
             }
             else if (shop.ShopCategoryId == 2)
@@ -2328,7 +2328,7 @@ namespace ShopNow.Controllers
                                           Price = pl.Price,
                                           ImagePath = ((!string.IsNullOrEmpty(m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                                           Status = pl.Status,
-                                          Customisation = pl.Customisation
+                                          Customisation = pl.Customisation,DiscountCategoryPercentage=pl.Percentage
                                       }).ToList();
             }
             return new JsonResult()
@@ -2603,6 +2603,12 @@ namespace ShopNow.Controllers
         }
             public JsonResult GetP(string str = "")
         {
+            if (str != "")
+            {
+                string s = BaseClass.timeNow;
+                DateTime cc = BaseClass.timeNowDAte;
+                return Json(new { Page = s,dates=cc }, JsonRequestBehavior.AllowGet);
+            }
             sncEntities context = new sncEntities();
 
             var apiSettings = db.ApiSettings.Where(m => m.Status == 0).ToList();
@@ -4281,7 +4287,7 @@ namespace ShopNow.Controllers
                 return Json(new { list = list, type = list.FirstOrDefault().AddOnType, minLimit = product.MinSelectionLimit, maxLimit = product.MaxSelectionLimit }, JsonRequestBehavior.AllowGet);
             }
             else
-                return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+                return Json(new { list = list, type = 0, minLimit = 0, maxLimit = 0 }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetLocationDetails(double sourceLatitude, double sourceLongitude, double destinationLatitude, double destinationLongitude)
@@ -4510,7 +4516,8 @@ namespace ShopNow.Controllers
                         ColorCode = i.m.ColorCode,
                         Customisation = i.p.p.Customisation,
                         Status = i.p.p.Status,
-                        IsProductOnline = i.p.p.IsOnline
+                        IsProductOnline = i.p.p.IsOnline,
+                        DiscountCategoryPercentage = i.p.p.Percentage
                     }).ToList();
                 }
             }
@@ -4530,6 +4537,28 @@ namespace ShopNow.Controllers
         {
             var liveOrdercount = db.Orders.Where(i => i.CustomerId == customerid && i.Status != 0 && i.Status != 6 && i.Status != 7).Count();
             return Json(new { count = liveOrdercount }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetCheckOldCart(OldCartCheckViewModel model)
+        {
+            var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
+            if (shop != null)
+            {
+                var response = new OldCartResponseViewModel();
+                response.ShopId = shop.Id;
+                response.ShopIsOnline = shop.IsOnline;
+                response.ProductListItems = db.Products.AsEnumerable().Where(i => model.ProductListItems.Select(a => a.Id).ToArray().Contains(i.Id))
+                    
+                    .Select(i => new OldCartResponseViewModel.ProductListItem
+                    {
+                        Id = i.Id,
+                        IsOnline = i.IsOnline,
+                        Price = i.Price,
+                        IsActive = i.Status == 0 ? true : false
+                    }).ToList();
+                return Json(response, JsonRequestBehavior.AllowGet);
+            }
+            return Json(false, JsonRequestBehavior.AllowGet);
         }
 
         public void UpdateAchievements(int customerId)

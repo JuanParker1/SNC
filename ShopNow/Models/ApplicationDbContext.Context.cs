@@ -80,12 +80,12 @@ namespace ShopNow.Models
         public virtual DbSet<Staff> Staffs { get; set; }
         public virtual DbSet<SubCategory> SubCategories { get; set; }
         public virtual DbSet<UserEnquiry> UserEnquiries { get; set; }
-        public virtual DbSet<Product> Products { get; set; }
-        public virtual DbSet<Shop> Shops { get; set; }
         public virtual DbSet<ShopSchedule> ShopSchedules { get; set; }
         public virtual DbSet<ProductSchedule> ProductSchedules { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<Shop> Shops { get; set; }
     
-        [DbFunction("sncEntities1", "GetTableVAlueString")]
+        [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)
         {
             var keyParameter = key != null ?

@@ -189,6 +189,7 @@ namespace ShopNow.ViewModels
             public bool Customisation { get; set; }
             public int Status { get; set; }
             public bool? IsProductOnline { get; set; }
+            public double DiscountCategoryPercentage { get; set; }
         }
 
         public class MedicalOrderItemList
@@ -215,6 +216,30 @@ namespace ShopNow.ViewModels
             public int Status { get; set; }
             public int IBarU { get; set; }
             public bool? IsProductOnline { get; set; }
+        }
+    }
+
+    public class OldCartCheckViewModel
+    {
+        public int ShopId { get; set; }
+        public List<ProductListItem> ProductListItems { get; set; }
+        public class ProductListItem
+        {
+            public long Id { get; set; }
+        }
+    }
+
+    public class OldCartResponseViewModel
+    {
+        public int ShopId { get; set; }
+        public bool? ShopIsOnline { get; set; }
+        public List<ProductListItem> ProductListItems { get; set; }
+        public class ProductListItem
+        {
+            public long Id { get; set; }
+            public bool? IsOnline { get; set; }
+            public bool IsActive { get; set; }
+            public double Price { get; set; }
         }
     }
 }

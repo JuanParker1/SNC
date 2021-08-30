@@ -1,5 +1,6 @@
 ﻿using ShopNow.Filters;
 using ShopNow.Models;
+using System;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -15,7 +16,6 @@ namespace ShopNow.Controllers
         {
             //ShopnowchatEntities db = new ShopnowchatEntities();
             //var phoneNumber = Session["PhoneNumber"];
-            
             ViewBag.Name = ((ShopNow.Helpers.Sessions.User)System.Web.HttpContext.Current.Session["USER"]).Name;
             ViewBag.customer = _db.Customers.Where(i => i.Status == 0).Count();
             ViewBag.Shops = _db.Shops.Where(i => i.Status == 0).Count();
