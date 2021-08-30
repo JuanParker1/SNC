@@ -2303,7 +2303,7 @@ namespace ShopNow.Controllers
                                           CategoryId = c.Id,
                                           CategoryName = c.Name,
                                           ColorCode = m.ColorCode,
-                                          Price = pl.Price,
+                                          Price = pl.MenuPrice,
                                           ImagePath = ((!string.IsNullOrEmpty(m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                                           Status = pl.Status,
                                           Customisation = pl.Customisation,DiscountCategoryPercentage=pl.Percentage
@@ -2325,7 +2325,7 @@ namespace ShopNow.Controllers
                                           CategoryId = nsc.Id,
                                           CategoryName = nsc.Name,
                                           ColorCode = m.ColorCode,
-                                          Price = pl.Price,
+                                          Price = pl.MenuPrice,
                                           ImagePath = ((!string.IsNullOrEmpty(m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                                           Status = pl.Status,
                                           Customisation = pl.Customisation,DiscountCategoryPercentage=pl.Percentage
