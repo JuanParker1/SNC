@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Web.Mvc;
 using System.Net;
+using ShopNow.Base;
 
 namespace ShopNow.Controllers
 {
@@ -18,6 +19,7 @@ namespace ShopNow.Controllers
         [AllowAnonymous]
         public ActionResult Index(string returnUrl)
         {
+           
             if (CheckAlreadyLoggedIn())
                 return Redirect(returnUrl != null ? returnUrl : "/dashboard/index");
             else
