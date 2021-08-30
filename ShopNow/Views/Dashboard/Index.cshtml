@@ -6,7 +6,7 @@
 <html>
 <head>
     <title>ShopNow | Dashboard</title>
-    @*<link href="~/Scripts/fontawesome-free-5.12.0-web/css/all.css" rel="stylesheet" />*@
+    <link href="~/Scripts/fontawesome-free-5.12.0-web/css/all.css" rel="stylesheet" />
     <link href="~/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
     <link href="~/Scripts/CustomScript/CustomDashboard.css" rel="stylesheet" />
     <link href="~/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
@@ -25,7 +25,7 @@
                                             <div class="flex flex-wrap">
                                                 <div class="relative w-full pr-4 max-w-full flex-grow flex-1">
                                                     <h5 class="text-gray-500 uppercase font-bold text-xs">
-                                                        Customer
+                                                        Customer @DateTime.Now
                                                     </h5>
                                                     <span class="font-semibold text-xl text-gray-800">
                                                         @ViewBag.customer
@@ -62,7 +62,7 @@
                                                 </div>
                                                 <div class="relative w-auto pl-4 flex-initial">
                                                     <div class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-orange-500">
-                                                        <i class="fa fa-store-alt"></i>
+                                                        <i class="fas fa-store-alt"></i>
                                                     </div>
                                                 </div>
                                             </div>
@@ -91,7 +91,7 @@
                                                 </div>
                                                 <div class="relative w-auto pl-4 flex-initial">
                                                     <div class="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-pink-500">
-                                                        <i class="fa fa-shipping-fast"></i>
+                                                        <i class="fas fa-shipping-fast"></i>
                                                     </div>
                                                 </div>
                                             </div>
