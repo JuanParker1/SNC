@@ -34,7 +34,7 @@
                         <div class="col-md-12 my-2"> <hr class="border-success" style="border-top: 1px dashed" /></div>
                         <div class="col-md-5">
                             <p class="text-success">Excel Headers</p>
-                            <table id="Brand-list">
+                            <table id="Product-list">
                                 <thead>
                                 </thead>
                                 <tbody>
@@ -67,24 +67,6 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <label class="col-md-5">Brand Name</label>
-                                            <input id="BrandName" name="BrandName" type="text" class="col-md-4" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <label class="col-md-5">Short Description</label>
-                                            <input id="ShortDescription" name="ShortDescription" type="text" class="col-md-4" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <label class="col-md-5">Long Description</label>
-                                            <input id="LongDescription" name="LongDescription" type="text" class="col-md-4" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
                                             <label class="col-md-5">Customisation</label>
                                             <input id="Customisation" name="Customisation" type="text" class="col-md-4" />
                                         </td>
@@ -103,39 +85,14 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <label class="col-md-5">Product Image1</label>
+                                            <label class="col-md-5">GoogleTaxonomyCode</label>
+                                            <input id="GoogleTaxonomyCode" name="GoogleTaxonomyCode" type="text" class="col-md-4" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <label class="col-md-5">Dish Image1</label>
                                             <input id="ImagePath1" name="ImagePath1" type="text" class="col-md-4" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <label class="col-md-5">Product Image2</label>
-                                            <input id="ImagePath2" name="ImagePath2" type="text" class="col-md-4" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <label class="col-md-5">Product Image3</label>
-                                            <input id="ImagePath3" name="ImagePath3" type="text" class="col-md-4" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <label class="col-md-5">Product Image4</label>
-                                            <input id="ImagePath4" name="ImagePath4" type="text" class="col-md-4" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <label class="col-md-5">Product Image5</label>
-                                            <input id="ImagePath5" name="ImagePath5" type="text" class="col-md-4" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <label class="col-md-5">Item Type</label>
-                                            <select id="ProductTypeId" name="ProductTypeId" class="col-md-4"></select>
-                                            <input type="hidden" name="ProductTypeName" id="ProductTypeName" />
                                         </td>
                                     </tr>
                                 </tbody>
@@ -160,17 +117,7 @@
 
     <script>
         $(document).ready(function () {
-            $('#ProductTypeId').select2({
-                placeholder: "Search Product Type",
-                ajax: {
-                    url: "/MasterProduct/GetProductTypeSelect2",
-                    width: '100%',
-                    delay: 250,
-                    dataType: 'json'
-                }
-            }).on('select2:select', function (e) {
-                $('input[name="ProductTypeName"]').val(e.params.data.text);
-            });
+           
             var tbl = document.getElementById("Product-list");
             if (tbl != null) {
                 for (var i = 0; i < tbl.rows.length; i++) {
@@ -186,15 +133,6 @@
                     $('#CategoryName').on('click', function () {
                         $('#CategoryName').val(cel.innerHTML)
                     });
-                    $('#BrandName').on('click', function () {
-                        $('#BrandName').val(cel.innerHTML)
-                    });
-                    $('#ShortDescription').on('click', function () {
-                        $('#ShortDescription').val(cel.innerHTML)
-                    });
-                    $('#LongDescription').on('click', function () {
-                        $('#LongDescription').val(cel.innerHTML)
-                    });
                     $('#Customisation').on('click', function () {
                         $('#Customisation').val(cel.innerHTML)
                     });
@@ -204,20 +142,11 @@
                     $('#Price').on('click', function () {
                         $('#Price').val(cel.innerHTML)
                     });
+                    $('#GoogleTaxonomyCode').on('click', function () {
+                        $('#GoogleTaxonomyCode').val(cel.innerHTML)
+                    });
                     $('#ImagePath1').on('click', function () {
                         $('#ImagePath1').val(cel.innerHTML)
-                    });
-                    $('#ImagePath2').on('click', function () {
-                        $('#ImagePath2').val(cel.innerHTML)
-                    });
-                    $('#ImagePath3').on('click', function () {
-                        $('#ImagePath3').val(cel.innerHTML)
-                    });
-                    $('#ImagePath4').on('click', function () {
-                        $('#ImagePath4').val(cel.innerHTML)
-                    });
-                    $('#ImagePath5').on('click', function () {
-                        $('#ImagePath5').val(cel.innerHTML)
                     });
                 });
             }
