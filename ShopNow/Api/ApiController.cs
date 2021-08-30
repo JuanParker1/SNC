@@ -4281,7 +4281,7 @@ namespace ShopNow.Controllers
                 return Json(new { list = list, type = list.FirstOrDefault().AddOnType, minLimit = product.MinSelectionLimit, maxLimit = product.MaxSelectionLimit }, JsonRequestBehavior.AllowGet);
             }
             else
-                return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+                return Json(new { list = list, type = 0, minLimit = 0, maxLimit = 0 }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetLocationDetails(double sourceLatitude, double sourceLongitude, double destinationLatitude, double destinationLongitude)
@@ -4510,7 +4510,8 @@ namespace ShopNow.Controllers
                         ColorCode = i.m.ColorCode,
                         Customisation = i.p.p.Customisation,
                         Status = i.p.p.Status,
-                        IsProductOnline = i.p.p.IsOnline
+                        IsProductOnline = i.p.p.IsOnline,
+                        DiscountCategoryPercentage = i.p.p.Percentage
                     }).ToList();
                 }
             }
@@ -4530,6 +4531,11 @@ namespace ShopNow.Controllers
         {
             var liveOrdercount = db.Orders.Where(i => i.CustomerId == customerid && i.Status != 0 && i.Status != 6 && i.Status != 7).Count();
             return Json(new { count = liveOrdercount }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetCheckOldCart()
+        {
+            return Json("", JsonRequestBehavior.AllowGet);
         }
 
         public void UpdateAchievements(int customerId)

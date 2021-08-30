@@ -189,6 +189,7 @@ namespace ShopNow.ViewModels
             public bool Customisation { get; set; }
             public int Status { get; set; }
             public bool? IsProductOnline { get; set; }
+            public double DiscountCategoryPercentage { get; set; }
         }
 
         public class MedicalOrderItemList
