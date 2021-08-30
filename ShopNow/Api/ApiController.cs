@@ -2306,7 +2306,7 @@ namespace ShopNow.Controllers
                                           Price = pl.Price,
                                           ImagePath = ((!string.IsNullOrEmpty(m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                                           Status = pl.Status,
-                                          Customisation = pl.Customisation
+                                          Customisation = pl.Customisation,DiscountCategoryPercentage=pl.Percentage
                                       }).Where(i => str != "" ? i.Name.ToLower().Contains(str) : true).ToList();
             }
             else if (shop.ShopCategoryId == 2)
@@ -2328,7 +2328,7 @@ namespace ShopNow.Controllers
                                           Price = pl.Price,
                                           ImagePath = ((!string.IsNullOrEmpty(m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                                           Status = pl.Status,
-                                          Customisation = pl.Customisation
+                                          Customisation = pl.Customisation,DiscountCategoryPercentage=pl.Percentage
                                       }).ToList();
             }
             return new JsonResult()
