@@ -7,26 +7,23 @@ namespace ShopNow.ViewModels
 {
     public class MasterDishUploadViewModel
     {
-        public long Id { get; set; }
         public string Name { get; set; }
-        public string NickName { get; set; }
-        public string Customisation { get; set; }
-        public string ColorCode { get; set; }
+        public int CategoryId { get; set; }
         public string CategoryName { get; set; }
-        public string BrandName { get; set; }
-        public string ShortDescription { get; set; }
-        public string LongDescription { get; set; }
-        public string Specification { get; set; }
-        public string ImagePath { get; set; }
-        public string ImagePath1 { get; set; }
-        public string ImagePath2 { get; set; }
-        public string ImagePath3 { get; set; }
-        public string ImagePath4 { get; set; }
-        public string ImagePath5 { get; set; }
         public int ProductTypeId { get; set; }
         public string ProductTypeName { get; set; }
-        public string GoogleTaxonomyCode { get; set; }
         public string Price { get; set; }
+        public string Customisation { get; set; }
+        public string ColorCode { get; set; }
+        public string GoogleTaxonomyCode { get; set; }
+        public string ImagePath1 { get; set; }
+        public int Adscore { get; set; }
+        public string NickName { get; set; }
+        public int Status { get; set; }
+        public System.DateTime DateEncoded { get; set; }
+        public System.DateTime DateUpdated { get; set; }
+        public string CreatedBy { get; set; }
+        public string UpdatedBy { get; set; }
         public System.Data.DataTable DataTable { get; set; }
         public string button { get; set; }
         public string Filename { get; set; }

@@ -435,7 +435,7 @@ namespace ShopNow.Controllers
                         _db.MasterProducts.Add(new MasterProduct
                         {
                             Name = row[model.Name].ToString(),
-                            BrandId = CheckBrand(row[model.BrandName].ToString(), model.ProductTypeId, model.ProductTypeName),
+                            BrandId = CheckBrand(row[model.BrandName].ToString()),
                             BrandName = row[model.BrandName].ToString(),
                             SizeLB = row[model.SizeLB].ToString(),
                             Weight = Convert.ToDouble(row[Convert.ToInt32(model.Weight)]),
@@ -1492,7 +1492,6 @@ namespace ShopNow.Controllers
                 if (product != null)
                 {
                     product.MasterProductId = masterproductId;
-                    product.MasterProductId = masterproduct.Id;
                     product.Customisation = masterproduct.Customisation;
                     product.Price = masterproduct.Price;
                     product.IBarU = Convert.ToInt32(masterproduct.IBarU);
@@ -1544,39 +1543,15 @@ namespace ShopNow.Controllers
             }
             else
             {
-                if (product != null && masterproduct != null)
+                if (product != null)
                 {
                     product.MasterProductId = masterproductId;
-                    product.MasterProductId = masterproduct.Id;
+                    product.Customisation = masterproduct.Customisation;
+                    product.Price = masterproduct.Price;
+                    product.IBarU = Convert.ToInt32(masterproduct.IBarU);
+                    product.ProductTypeId = masterproduct.ProductTypeId;
+                    product.Price = masterproduct.Price;
 
-                    if (product.Customisation == false && masterproduct.Customisation != false)
-                    {
-                        product.Customisation = masterproduct.Customisation;
-                    }
-                    if (product.Price == 0 && masterproduct.Price != 0)
-                    {
-                        product.Price = masterproduct.Price;
-                    }
-                    if (product.IBarU == 0 && masterproduct.IBarU != null)
-                    {
-                        product.IBarU = Convert.ToInt32(masterproduct.IBarU);
-                    }
-                    if (product.ProductTypeId == 0 && masterproduct.ProductTypeId != 0)
-                    {
-                        product.ProductTypeId = masterproduct.ProductTypeId;
-                    }
-                    if (masterproduct.Price != 0)
-                    {
-                        product.Price = masterproduct.Price;
-                    }
-                    if (masterproduct.IBarU != null)
-                    {
-                        product.IBarU = Convert.ToInt32(masterproduct.IBarU);
-                    }
-                    if (masterproduct.ProductTypeId != 0)
-                    {
-                        product.ProductTypeId = masterproduct.ProductTypeId;
-                    }
                     if (shopId != 0)
                     {
                         var shop = _db.Shops.FirstOrDefault(i => i.Id == shopId);
@@ -2108,43 +2083,45 @@ namespace ShopNow.Controllers
 
                 // Insert records to database table.
                 // MainPageModel entities = new MainPageModel();
+                List<MasterProduct> masterList = new List<MasterProduct>();
+                MasterProduct varMasterProduct = new MasterProduct();
+                var master = _db.MasterProducts.Where(i => i.Status == 0).Select(i => new { Id = i.Id, Name = i.Name }).ToList();
+
                 foreach (DataRow row in dt.Rows)
                 {
-                    var masterProduct = _db.MasterProducts.FirstOrDefault(i => i.Name == row[model.Name].ToString() && i.Status == 0);
-                    if (masterProduct == null)
+                    if (row[model.Name].ToString().Trim() != string.Empty)
                     {
-                        _db.MasterProducts.Add(new MasterProduct
+                        int idx = master.FindIndex(a => a.Name == row[model.Name].ToString().Trim());
+                        if (idx <= 0)
                         {
-                            Name = row[model.Name].ToString(),
-                            BrandId = CheckBrand(row[model.BrandName].ToString(), model.ProductTypeId, model.ProductTypeName),
-                            BrandName = row[model.BrandName].ToString(),
-                            CategoryId = CheckCategory(row[model.CategoryName].ToString(), model.ProductTypeId, model.ProductTypeName),
-                            ShortDescription = row[model.ShortDescription].ToString(),
-                            LongDescription = row[model.LongDescription].ToString(),
-                            ProductTypeId = model.ProductTypeId,
-                            ProductTypeName = model.ProductTypeName,
-                            Customisation = Convert.ToBoolean(row[model.Customisation]),
-                            ColorCode = row[model.ColorCode].ToString(),
-                            Price = Convert.ToDouble(row[model.Price]),
-                            ImagePath1 = row[model.ImagePath1].ToString(),
-                            ImagePath2 = row[model.ImagePath2].ToString(),
-                            ImagePath3 = row[model.ImagePath3].ToString(),
-                            ImagePath4 = row[model.ImagePath4].ToString(),
-                            ImagePath5 = row[model.ImagePath5].ToString(),
-                            Status = 0,
-                            CreatedBy = user.Name,
-                            UpdatedBy = user.Name,
-                            DateEncoded = DateTime.Now,
-                            DateUpdated = DateTime.Now,
-                        });
-                        _db.SaveChanges();
+                            masterList.Add(new MasterProduct
+                            {
+                                Name = row[model.Name].ToString().Trim(),
+                                NickName = row[model.Name].ToString().Trim(),
+                                ProductTypeId = 1,
+                                ProductTypeName = "Dish",
+                                CategoryId = CheckCategory(row[model.CategoryName].ToString().Trim(), 1, "Dish"),
+                                Customisation = Convert.ToBoolean(row[model.Customisation]),
+                                ColorCode = row[model.ColorCode].ToString().Trim(),
+                                Price = Convert.ToDouble(row[model.Price]),
+                                GoogleTaxonomyCode = row[model.GoogleTaxonomyCode].ToString().Trim(),
+                                Adscore = 1,
+                                ImagePath1 = row[model.ImagePath1].ToString().Trim(),
+                                Status = 0,
+                                CreatedBy = user.Name,
+                                UpdatedBy = user.Name,
+                                DateEncoded = DateTime.Now,
+                                DateUpdated = DateTime.Now,
+                            });
+                        }
                     }
                 }
+                _db.BulkInsert(masterList);
             }
             return View();
         }
 
-        public int CheckBrand(string BrandName, int ProductTypeId, string ProductTypeName)
+        public int CheckBrand(string BrandName)
         {
             var brand = _db.Brands.FirstOrDefault(i => i.Name == BrandName && i.Status == 0);
             if (brand != null)
@@ -2175,6 +2152,7 @@ namespace ShopNow.Controllers
             {
                 Category cat = new Category();
                 cat.Name = CategoryName;
+                cat.OrderNo = 0;
                 cat.ProductTypeId = ProductTypeId;
                 cat.ProductTypeName = ProductTypeName;
                 cat.Status = 0;
