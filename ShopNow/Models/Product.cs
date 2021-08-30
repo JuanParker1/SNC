@@ -53,6 +53,7 @@ namespace ShopNow.Models
         public Nullable<int> BrandOwnerMiddlePercentage { get; set; }
         public Nullable<double> ShopOwnerPrice { get; set; }
         public Nullable<bool> HasSchedule { get; set; }
+        public Nullable<System.TimeSpan> NextOnTime { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }
