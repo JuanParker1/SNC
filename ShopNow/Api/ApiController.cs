@@ -4533,9 +4533,26 @@ namespace ShopNow.Controllers
             return Json(new { count = liveOrdercount }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetCheckOldCart()
+        public JsonResult GetCheckOldCart(OldCartCheckViewModel model)
         {
-            return Json("", JsonRequestBehavior.AllowGet);
+            var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
+            if (shop != null)
+            {
+                var response = new OldCartResponseViewModel();
+                response.ShopId = shop.Id;
+                response.ShopIsOnline = shop.IsOnline;
+                response.ProductListItems = db.Products.AsEnumerable().Where(i => model.ProductListItems.Select(a => a.Id).ToArray().Contains(i.Id))
+                    
+                    .Select(i => new OldCartResponseViewModel.ProductListItem
+                    {
+                        Id = i.Id,
+                        IsOnline = i.IsOnline,
+                        Price = i.Price,
+                        IsActive = i.Status == 0 ? true : false
+                    }).ToList();
+                return Json(response, JsonRequestBehavior.AllowGet);
+            }
+            return Json(false, JsonRequestBehavior.AllowGet);
         }
 
         public void UpdateAchievements(int customerId)
