@@ -85,14 +85,14 @@ namespace ShopNow.Models
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Shop> Shops { get; set; }
     
-        [DbFunction("sncEntities1", "GetTableVAlueString")]
+        [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)
         {
             var keyParameter = key != null ?
                 new ObjectParameter("key", key) :
                 new ObjectParameter("key", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<GetTableVAlueString_Result>("[sncEntities1].[GetTableVAlueString](@key)", keyParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<GetTableVAlueString_Result>("[sncEntities].[GetTableVAlueString](@key)", keyParameter);
         }
     
         public virtual ObjectResult<Nullable<int>> GetCustomerCount()
