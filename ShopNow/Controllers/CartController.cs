@@ -229,6 +229,8 @@ namespace ShopNow.Controllers
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
+                    OrderPeriod = Math.Round((i.c.DateUpdated - i.c.DateEncoded).TotalMinutes),
+                    ShopAcceptedTime = i.c.ShopAcceptedTime != null ? Math.Round((i.c.ShopAcceptedTime.Value - i.c.DateEncoded).TotalMinutes) : 0,
                 }).OrderByDescending(i => i.DateEncoded).ToList();
 
             return View(model.List);
@@ -274,6 +276,8 @@ namespace ShopNow.Controllers
                 DeliveryBoyName = i.c.DeliveryBoyName,
                 DateEncoded = i.c.DateEncoded,
                 Date = i.c.DateEncoded.ToString("dd/MMM/yyyy hh:mm tt"),
+                ShopCancelledTime = i.c.ShopAcceptedTime,
+                ShopAcceptedTime = i.c.ShopAcceptedTime != null ? Math.Round((i.c.ShopAcceptedTime.Value - i.c.DateEncoded).TotalMinutes) : 0,
             }).OrderByDescending(i => i.DateEncoded).ToList();
 
             return View(model.List);
