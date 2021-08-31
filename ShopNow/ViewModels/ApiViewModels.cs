@@ -233,6 +233,7 @@ namespace ShopNow.ViewModels
     {
         public int ShopId { get; set; }
         public bool? ShopIsOnline { get; set; }
+        public TimeSpan? ShopNextOnTime { get; set; }
         public List<ProductListItem> ProductListItems { get; set; }
         public class ProductListItem
         {
@@ -240,6 +241,7 @@ namespace ShopNow.ViewModels
             public bool? IsOnline { get; set; }
             public bool IsActive { get; set; }
             public double Price { get; set; }
+            public TimeSpan? NextOnTime { get; set; }
         }
     }
 }
