@@ -3143,7 +3143,8 @@ namespace ShopNow.Controllers
                                 Verify = i.ss.s.Verify,
                                 OtpVerify = i.o.Any() ? i.o.LastOrDefault().Verify : false,
                                 CustomerId = i.ss.s.CustomerId,
-                                DateEncoded = i.o.Any() ? i.o.LastOrDefault().DateEncoded.ToString("dd/MMM/yyyy") : "N/A"
+                                DateEncoded = i.o.Any() ? i.o.LastOrDefault().DateEncoded.ToString("dd/MMM/yyyy") : "N/A",
+                                NextOnTime = i.ss.s.NextOnTime
                             }).ToList();
             return Json(model, JsonRequestBehavior.AllowGet);
         }
@@ -3284,7 +3285,8 @@ namespace ShopNow.Controllers
              {
                  id = i.Id,
                  image = i.ImagePath != null ? i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "",
-
+                 IsOnline = i.IsOnline,
+                 NextOnTime = i.NextOnTime
              }).ToList();
             return Json(model, JsonRequestBehavior.AllowGet);
         }
@@ -3331,7 +3333,8 @@ namespace ShopNow.Controllers
                      Status = i.Status,
                      isOnline = i.IsOnline,
                      ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-                     Address = i.Address
+                     Address = i.Address,
+                     NextOnTime = i.NextOnTime
                  }).ToList();
                 model.SuperMarketList = db.Shops.SqlQuery(querySuperMarketList,
                 new SqlParameter("Latitude", Latitude),
@@ -3349,7 +3352,8 @@ namespace ShopNow.Controllers
                     Status = i.Status,
                     isOnline = i.IsOnline,
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-                    Address = i.Address
+                    Address = i.Address,
+                    NextOnTime = i.NextOnTime
                 }).ToList();
                 model.GroceriesList = db.Shops.SqlQuery(queryGroceriesList,
                 new SqlParameter("Latitude", Latitude),
@@ -3368,7 +3372,8 @@ namespace ShopNow.Controllers
                     Status = i.Status,
                     isOnline = i.IsOnline,
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-                    Address = i.Address
+                    Address = i.Address,
+                    NextOnTime = i.NextOnTime
                 }).ToList();
                 model.HealthList = db.Shops.SqlQuery(queryHealthList,
                 new SqlParameter("Latitude", Latitude),
@@ -3386,7 +3391,8 @@ namespace ShopNow.Controllers
                     Status = i.Status,
                     isOnline = i.IsOnline,
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-                    Address = i.Address
+                    Address = i.Address,
+                    NextOnTime = i.NextOnTime
                 }).ToList();
 
                 model.ElectronicsList = db.Shops.SqlQuery(queryElectronicsList,
@@ -3406,7 +3412,8 @@ namespace ShopNow.Controllers
                     Status = i.Status,
                     isOnline = i.IsOnline,
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-                    Address = i.Address
+                    Address = i.Address,
+                    NextOnTime = i.NextOnTime
                 }).ToList();
                 model.ServicesList = db.Shops.SqlQuery(qServicesList,
                 new SqlParameter("Latitude", Latitude),
@@ -3425,7 +3432,8 @@ namespace ShopNow.Controllers
                     Status = i.Status,
                     isOnline = i.IsOnline,
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-                    Address = i.Address
+                    Address = i.Address,
+                    NextOnTime = i.NextOnTime
                 }).ToList();
                 model.OtherList = db.Shops.SqlQuery(queryOtherList,
                 new SqlParameter("Latitude", Latitude),
@@ -3443,7 +3451,8 @@ namespace ShopNow.Controllers
                     Status = i.Status,
                     isOnline = i.IsOnline,
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-                    Address = i.Address
+                    Address = i.Address,
+                    NextOnTime = i.NextOnTime
                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3466,7 +3475,8 @@ namespace ShopNow.Controllers
                     Status = i.Status,
                     isOnline = i.IsOnline,
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-                    Address = i.Address
+                    Address = i.Address,
+                    NextOnTime = i.NextOnTime
                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3489,7 +3499,8 @@ namespace ShopNow.Controllers
                     Status = i.Status,
                     isOnline = i.IsOnline,
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-                    Address = i.Address
+                    Address = i.Address,
+                    NextOnTime = i.NextOnTime
                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3512,7 +3523,8 @@ namespace ShopNow.Controllers
                     Status = i.Status,
                     isOnline = i.IsOnline,
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-                    Address = i.Address
+                    Address = i.Address,
+                    NextOnTime = i.NextOnTime
                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3535,7 +3547,8 @@ namespace ShopNow.Controllers
                     Status = i.Status,
                     isOnline = i.IsOnline,
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-                    Address = i.Address
+                    Address = i.Address,
+                    NextOnTime = i.NextOnTime
                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3558,7 +3571,8 @@ namespace ShopNow.Controllers
                     Status = i.Status,
                     isOnline = i.IsOnline,
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-                    Address = i.Address
+                    Address = i.Address,
+                    NextOnTime = i.NextOnTime
                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3579,7 +3593,8 @@ namespace ShopNow.Controllers
                     Latitude = i.Latitude,
                     Longitude = i.Longitude,
                     Status = i.Status,
-                    isOnline = i.IsOnline
+                    isOnline = i.IsOnline,
+                    NextOnTime = i.NextOnTime
                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3605,7 +3620,8 @@ namespace ShopNow.Controllers
                     Status = i.Status,
                     isOnline = i.IsOnline,
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
-                    Address = i.Address
+                    Address = i.Address,
+                    NextOnTime = i.NextOnTime
                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }

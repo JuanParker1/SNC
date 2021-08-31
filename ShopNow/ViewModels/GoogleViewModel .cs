@@ -54,10 +54,13 @@ namespace ShopNow.ViewModels
     public class NearShopImages
     {
         public List<shops> NearShops { get; set; }
-        public class shops{
-        public int id { get; set; }
-        public string image { get; set; }
-    }
+        public class shops
+        {
+            public int id { get; set; }
+            public string image { get; set; }
+            public bool? IsOnline { get; set; }
+            public TimeSpan? NextOnTime { get; set; }
+        }
 
 
     }
@@ -89,6 +92,7 @@ namespace ShopNow.ViewModels
             public List<BannerImages> List { get; set; }
             public int ReviewCount { get; set; }
             public string Address { get; set; }
+            public TimeSpan? NextOnTime { get; set; }
             // public List<Models.Banner> List { get; set; }
         }
     }
