@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="8c1ea3248a084182bb3a5bf766ce58e3" Name="Diagram1">
+      <Diagram DiagramId="8c1ea3248a084182bb3a5bf766ce58e3" Name="Diagram1" ZoomLevel="86">
         <EntityTypeShape EntityType="sncModel.AccessPolicy" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.AchievementProduct" Width="1.5" PointX="5.75" PointY="5.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.AchievementSetting" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
@@ -31,7 +31,6 @@
         <EntityTypeShape EntityType="sncModel.MeasurementUnit" Width="1.5" PointX="20.75" PointY="11.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.NextSubCategory" Width="1.5" PointX="3" PointY="6.25" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.OfferProduct" Width="1.5" PointX="20.75" PointY="15.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.Offer" Width="1.5" PointX="0.75" PointY="21.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.OfferShop" Width="1.5" PointX="2.75" PointY="21.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.OrderItem" Width="1.5" PointX="16" PointY="14.25" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.OtpVerification" Width="1.5" PointX="21.75" PointY="18.75" IsExpanded="true" />
@@ -74,6 +73,7 @@
         <AssociationConnector Association="sncModel.FK_Products_ProductType" />
         <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="13.75" PointY="33.125" />
         <AssociationConnector Association="sncModel.FK_OrderItems_Orders" />
+        <EntityTypeShape EntityType="sncModel.Offer" Width="1.5" PointX="0.75" PointY="13.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

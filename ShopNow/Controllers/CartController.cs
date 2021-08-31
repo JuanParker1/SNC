@@ -385,6 +385,8 @@ namespace ShopNow.Controllers
                 model.PhoneNumber = cart.CustomerPhoneNumber;
                 model.DeliveryBoyName = cart.DeliveryBoyName;
                 model.DateEncoded = cart.DateEncoded;
+                model.PenaltyAmount = cart.PenaltyAmount;
+                model.WaitingCharge = cart.WaitingCharge;
                 var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == cart.DeliveryBoyId);
                 if (deliveryBoy != null)
                 {
@@ -983,7 +985,6 @@ namespace ShopNow.Controllers
         public ActionResult MarkAsDelivered(int OrderNumber, int id)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-            
             var order = db.Orders.FirstOrDefault(i => i.Id == id);
 
             var delivaryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId && i.Status == 0);
@@ -1050,6 +1051,50 @@ namespace ShopNow.Controllers
 
             Helpers.PushNotification.SendbydeviceId("Your order has been delivered.", "ShopNowChat", "a.mp3", fcmtocken);
             return RedirectToAction("Edit", "Cart", new { OrderNumber = OrderNumber, id = AdminHelpers.ECodeLong(id) });
+        }
+
+        public ActionResult AddWaitingCharge(int orderId, string remark, double amount)
+        {
+            var order = db.Orders.FirstOrDefault(i => i.Id == orderId);
+            if (order != null)
+            {
+                order.WaitingCharge = amount;
+                order.WaitingRemark = remark;
+                if (order.DeliveryLocationReachTime != null && order.DeliveredTime != null)
+                    order.WaitingTime = (order.DeliveryLocationReachTime.Value - order.DeliveredTime.Value).Minutes;
+                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+
+                var customer = db.Customers.FirstOrDefault(i => i.Id == order.CustomerId);
+                if (customer != null)
+                {
+                    customer.DeliveryWaitingCharge += amount;
+                    db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+            return RedirectToAction("Edit", "Cart", new { OrderNumber = order.OrderNumber, id = AdminHelpers.ECodeLong(orderId) });
+        }
+
+        public ActionResult AddPenaltyCharge(int orderId, string remark, double amount)
+        {
+            var order = db.Orders.FirstOrDefault(i => i.Id == orderId);
+            if (order != null)
+            {
+                order.PenaltyAmount = amount;
+                order.PenaltyRemark = remark;
+                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+
+                var customer = db.Customers.FirstOrDefault(i => i.Id == order.CustomerId);
+                if (customer != null)
+                {
+                    customer.PenaltyAmount += amount;
+                    db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+            return RedirectToAction("Edit", "Cart", new { OrderNumber = order.OrderNumber, id = AdminHelpers.ECodeLong(orderId) });
         }
 
         protected override void Dispose(bool disposing)

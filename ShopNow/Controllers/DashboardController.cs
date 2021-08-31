@@ -35,6 +35,11 @@ namespace ShopNow.Controllers
             model.OrderDecCount = _db.Orders.Where(i => i.DateEncoded.Month == 12).Count();
             return View(model);
         }
+
+        public JsonResult GetLiveCount()
+        {
+            return Json(_db.Orders.Where(i => i.Status == 2).Count(), JsonRequestBehavior.AllowGet);
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)
