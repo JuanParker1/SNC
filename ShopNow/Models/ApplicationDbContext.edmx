@@ -991,12 +991,6 @@
           <Property Name="OrderNumber" Type="int" />
           <Property Name="DateEncoded" Type="datetime" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="SearchData">
-          <Property Name="source" Type="nvarchar" MaxLength="500" />
-          <Property Name="keyValue" Type="nvarchar" MaxLength="500" />
-        </EntityType>-->
         <EntityType Name="ShopCategories">
           <Key>
             <PropertyRef Name="Id" />
@@ -2747,7 +2741,7 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="sncEntities1" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="sncEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AccessPolicies" EntityType="Self.AccessPolicy" />
           <EntitySet Name="AchievementProducts" EntityType="Self.AchievementProduct" />
           <EntitySet Name="AchievementSettings" EntityType="Self.AchievementSetting" />
@@ -2846,13 +2840,6 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
           </FunctionImport>
           <FunctionImport Name="GetCustomerCount" ReturnType="Collection(Int32)" />
           <FunctionImport Name="GetDEliveryBoyList" ReturnType="Collection(sncModel.GetDEliveryBoyList_Result)" />
-          <FunctionImport Name="GetProductList" ReturnType="Collection(sncModel.GetProductList_Result)">
-            <Parameter Name="Longitude" Mode="In" Type="Double" />
-            <Parameter Name="Latitude" Mode="In" Type="Double" />
-            <Parameter Name="str" Mode="In" Type="String" />
-            <Parameter Name="page" Mode="In" Type="Int32" />
-            <Parameter Name="pagesize" Mode="In" Type="Int32" />
-          </FunctionImport>
           <FunctionImport Name="GetProductListCount" ReturnType="Collection(Int32)">
             <Parameter Name="Longitude" Mode="In" Type="Double" />
             <Parameter Name="Latitude" Mode="In" Type="Double" />
@@ -2862,13 +2849,6 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
             <Parameter Name="shopCode" Mode="In" Type="Int32" />
             <Parameter Name="categoryCode" Mode="In" Type="Int32" />
             <Parameter Name="str" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="GetShopCategoryProducts" ReturnType="Collection(sncModel.GetShopCategoryProducts_Result)">
-            <Parameter Name="shopCode" Mode="In" Type="Int32" />
-            <Parameter Name="categoryCode" Mode="In" Type="Int32" />
-            <Parameter Name="str" Mode="In" Type="String" />
-            <Parameter Name="page" Mode="In" Type="Int32" />
-            <Parameter Name="pageSize" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetShopname" ReturnType="Collection(sncModel.GetShopname_Result)">
           <Parameter Name="shopId" Mode="In" Type="Int32" />
@@ -2890,6 +2870,20 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
             <End Role="ProductType" EntitySet="ProductTypes" />
             <End Role="Product" EntitySet="Products" />
           </AssociationSet>
+          <FunctionImport Name="GetProductList" ReturnType="Collection(sncModel.GetProductList_Result)">
+            <Parameter Name="Longitude" Mode="In" Type="Double" />
+            <Parameter Name="Latitude" Mode="In" Type="Double" />
+            <Parameter Name="str" Mode="In" Type="String" />
+            <Parameter Name="page" Mode="In" Type="Int32" />
+            <Parameter Name="pagesize" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetShopCategoryProducts" ReturnType="Collection(sncModel.GetShopCategoryProducts_Result)">
+            <Parameter Name="shopCode" Mode="In" Type="Int32" />
+            <Parameter Name="categoryCode" Mode="In" Type="Int32" />
+            <Parameter Name="str" Mode="In" Type="String" />
+            <Parameter Name="page" Mode="In" Type="Int32" />
+            <Parameter Name="pageSize" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -2897,51 +2891,6 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
           <Property Type="Int32" Name="Active" Nullable="false" />
           <Property Type="String" Name="PhoneNumber" Nullable="true" />
           <Property Type="String" Name="ImagePath" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="GetProductList_Result">
-          <Property Type="Int64" Name="ProductId" Nullable="false" />
-          <Property Type="String" Name="ProductName" Nullable="true" />
-          <Property Type="Int32" Name="ShopId" Nullable="false" />
-          <Property Type="String" Name="ShopName" Nullable="true" />
-          <Property Type="Int32" Name="iBarU" Nullable="false" />
-          <Property Type="Int32" Name="CategoryId" Nullable="false" />
-          <Property Type="String" Name="CategoryName" Nullable="true" />
-          <Property Type="Double" Name="DiscountCategoryPercentage" Nullable="false" />
-          <Property Type="Double" Name="MRP" Nullable="false" />
-          <Property Type="Double" Name="Price" Nullable="false" />
-          <Property Type="Int32" Name="Status" Nullable="false" />
-          <Property Type="Decimal" Name="Quantity" Nullable="true" Precision="18" Scale="0" />
-          <Property Type="Boolean" Name="isOnline" Nullable="false" />
-          <Property Type="Int32" Name="ItemId" Nullable="false" />
-          <Property Type="Double" Name="Latitude" Nullable="false" />
-          <Property Type="Double" Name="Longitude" Nullable="false" />
-          <Property Type="Int32" Name="ShopCategoryId" Nullable="false" />
-          <Property Type="String" Name="ImagePath" Nullable="true" />
-          <Property Type="String" Name="ShopImagePath" Nullable="true" />
-          <Property Type="Int32" Name="Meters" Nullable="false" />
-          <Property Type="Boolean" Name="ShopOnline" Nullable="true" />
-          <Property Type="Int32" Name="ShopStatus" Nullable="false" />
-        </ComplexType>
-        <ComplexType Name="GetShopCategoryProducts_Result">
-          <Property Type="Int64" Name="ProductId" Nullable="false" />
-          <Property Type="String" Name="ProductName" Nullable="true" />
-          <Property Type="Int32" Name="ShopId" Nullable="false" />
-          <Property Type="String" Name="ShopName" Nullable="true" />
-          <Property Type="String" Name="ImagePath" Nullable="true" />
-          <Property Type="String" Name="ImagePathLarge1" Nullable="true" />
-          <Property Type="String" Name="ImagePathLarge2" Nullable="true" />
-          <Property Type="String" Name="ImagePathLarge3" Nullable="true" />
-          <Property Type="String" Name="ImagePathLarge4" Nullable="true" />
-          <Property Type="String" Name="ImagePathLarge5" Nullable="true" />
-          <Property Type="Int32" Name="iBarU" Nullable="false" />
-          <Property Type="Int32" Name="CategoryId" Nullable="false" />
-          <Property Type="String" Name="CategoryName" Nullable="true" />
-          <Property Type="Double" Name="DiscountCategoryPercentage" Nullable="false" />
-          <Property Type="Double" Name="MRP" Nullable="false" />
-          <Property Type="Double" Name="SalePrice" Nullable="false" />
-          <Property Type="Int32" Name="Status" Nullable="false" />
-          <Property Type="Decimal" Name="Quantity" Nullable="true" Precision="18" Scale="0" />
-          <Property Type="Int32" Name="Itemid" Nullable="false" />
         </ComplexType>
         <ComplexType Name="GetShopname_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3129,12 +3078,61 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="GetProductList_Result">
+          <Property Type="Int64" Name="ProductId" Nullable="false" />
+          <Property Type="String" Name="ProductName" Nullable="true" />
+          <Property Type="Int32" Name="ShopId" Nullable="false" />
+          <Property Type="String" Name="ShopName" Nullable="true" />
+          <Property Type="Int32" Name="iBarU" Nullable="false" />
+          <Property Type="Int32" Name="CategoryId" Nullable="false" />
+          <Property Type="String" Name="CategoryName" Nullable="true" />
+          <Property Type="Double" Name="DiscountCategoryPercentage" Nullable="false" />
+          <Property Type="Double" Name="MRP" Nullable="false" />
+          <Property Type="Double" Name="Price" Nullable="false" />
+          <Property Type="Int32" Name="Status" Nullable="false" />
+          <Property Type="Decimal" Name="Quantity" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Boolean" Name="isOnline" Nullable="false" />
+          <Property Type="Int32" Name="ItemId" Nullable="false" />
+          <Property Type="Double" Name="Latitude" Nullable="false" />
+          <Property Type="Double" Name="Longitude" Nullable="false" />
+          <Property Type="Int32" Name="ShopCategoryId" Nullable="false" />
+          <Property Type="String" Name="ImagePath" Nullable="true" />
+          <Property Type="String" Name="ShopImagePath" Nullable="true" />
+          <Property Type="Int32" Name="Meters" Nullable="false" />
+          <Property Type="Boolean" Name="ShopOnline" Nullable="true" />
+          <Property Type="Boolean" Name="IsOnline1" Nullable="false" />
+          <Property Type="Time" Name="NextOnTime" Nullable="true" />
+          <Property Type="Int32" Name="ShopStatus" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GetShopCategoryProducts_Result">
+          <Property Type="Int64" Name="ProductId" Nullable="false" />
+          <Property Type="String" Name="ProductName" Nullable="true" />
+          <Property Type="Int32" Name="ShopId" Nullable="false" />
+          <Property Type="String" Name="ShopName" Nullable="true" />
+          <Property Type="String" Name="ImagePath" Nullable="true" />
+          <Property Type="String" Name="ImagePathLarge1" Nullable="true" />
+          <Property Type="String" Name="ImagePathLarge2" Nullable="true" />
+          <Property Type="String" Name="ImagePathLarge3" Nullable="true" />
+          <Property Type="String" Name="ImagePathLarge4" Nullable="true" />
+          <Property Type="String" Name="ImagePathLarge5" Nullable="true" />
+          <Property Type="Int32" Name="iBarU" Nullable="false" />
+          <Property Type="Int32" Name="CategoryId" Nullable="false" />
+          <Property Type="String" Name="CategoryName" Nullable="true" />
+          <Property Type="Double" Name="DiscountCategoryPercentage" Nullable="false" />
+          <Property Type="Double" Name="MRP" Nullable="false" />
+          <Property Type="Double" Name="SalePrice" Nullable="false" />
+          <Property Type="Int32" Name="Status" Nullable="false" />
+          <Property Type="Decimal" Name="Quantity" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Int32" Name="Itemid" Nullable="false" />
+          <Property Type="Boolean" Name="IsOnline" Nullable="false" />
+          <Property Type="Time" Name="NextOnTime" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="sncModelStoreContainer" CdmEntityContainer="sncEntities1">
+        <EntityContainerMapping StorageEntityContainer="sncModelStoreContainer" CdmEntityContainer="sncEntities">
           <EntitySetMapping Name="AccessPolicies">
             <EntityTypeMapping TypeName="sncModel.AccessPolicy">
               <MappingFragment StoreEntitySet="AccessPolicies">
@@ -4274,61 +4272,8 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GetProductList" FunctionName="sncModel.Store.GetProductList">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="sncModel.GetProductList_Result">
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
-                <ScalarProperty Name="iBarU" ColumnName="iBarU" />
-                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
-                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
-                <ScalarProperty Name="DiscountCategoryPercentage" ColumnName="DiscountCategoryPercentage" />
-                <ScalarProperty Name="MRP" ColumnName="MRP" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="isOnline" ColumnName="isOnline" />
-                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
-                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-                <ScalarProperty Name="ShopCategoryId" ColumnName="ShopCategoryId" />
-                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
-                <ScalarProperty Name="ShopImagePath" ColumnName="ShopImagePath" />
-                <ScalarProperty Name="Meters" ColumnName="Meters" />
-                <ScalarProperty Name="ShopOnline" ColumnName="ShopOnline" />
-                <ScalarProperty Name="ShopStatus" ColumnName="ShopStatus" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GetProductListCount" FunctionName="sncModel.Store.GetProductListCount" />
           <FunctionImportMapping FunctionImportName="GetShopCategoryProductCount" FunctionName="sncModel.Store.GetShopCategoryProductCount" />
-          <FunctionImportMapping FunctionImportName="GetShopCategoryProducts" FunctionName="sncModel.Store.GetShopCategoryProducts">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="sncModel.GetShopCategoryProducts_Result">
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
-                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
-                <ScalarProperty Name="ImagePathLarge1" ColumnName="ImagePathLarge1" />
-                <ScalarProperty Name="ImagePathLarge2" ColumnName="ImagePathLarge2" />
-                <ScalarProperty Name="ImagePathLarge3" ColumnName="ImagePathLarge3" />
-                <ScalarProperty Name="ImagePathLarge4" ColumnName="ImagePathLarge4" />
-                <ScalarProperty Name="ImagePathLarge5" ColumnName="ImagePathLarge5" />
-                <ScalarProperty Name="iBarU" ColumnName="iBarU" />
-                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
-                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
-                <ScalarProperty Name="DiscountCategoryPercentage" ColumnName="DiscountCategoryPercentage" />
-                <ScalarProperty Name="MRP" ColumnName="MRP" />
-                <ScalarProperty Name="SalePrice" ColumnName="SalePrice" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="Itemid" ColumnName="Itemid" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GetShopname" FunctionName="sncModel.Store.GetShopname">
             <ResultMapping>
               <ComplexTypeMapping TypeName="sncModel.GetShopname_Result">
@@ -4498,6 +4443,63 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetProductList" FunctionName="sncModel.Store.GetProductList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="sncModel.GetProductList_Result">
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
+                <ScalarProperty Name="iBarU" ColumnName="iBarU" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="DiscountCategoryPercentage" ColumnName="DiscountCategoryPercentage" />
+                <ScalarProperty Name="MRP" ColumnName="MRP" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="isOnline" ColumnName="isOnline" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="ShopCategoryId" ColumnName="ShopCategoryId" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="ShopImagePath" ColumnName="ShopImagePath" />
+                <ScalarProperty Name="Meters" ColumnName="Meters" />
+                <ScalarProperty Name="ShopOnline" ColumnName="ShopOnline" />
+                <ScalarProperty Name="IsOnline1" ColumnName="IsOnline1" />
+                <ScalarProperty Name="NextOnTime" ColumnName="NextOnTime" />
+                <ScalarProperty Name="ShopStatus" ColumnName="ShopStatus" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetShopCategoryProducts" FunctionName="sncModel.Store.GetShopCategoryProducts">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="sncModel.GetShopCategoryProducts_Result">
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="ImagePathLarge1" ColumnName="ImagePathLarge1" />
+                <ScalarProperty Name="ImagePathLarge2" ColumnName="ImagePathLarge2" />
+                <ScalarProperty Name="ImagePathLarge3" ColumnName="ImagePathLarge3" />
+                <ScalarProperty Name="ImagePathLarge4" ColumnName="ImagePathLarge4" />
+                <ScalarProperty Name="ImagePathLarge5" ColumnName="ImagePathLarge5" />
+                <ScalarProperty Name="iBarU" ColumnName="iBarU" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="DiscountCategoryPercentage" ColumnName="DiscountCategoryPercentage" />
+                <ScalarProperty Name="MRP" ColumnName="MRP" />
+                <ScalarProperty Name="SalePrice" ColumnName="SalePrice" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Itemid" ColumnName="Itemid" />
+                <ScalarProperty Name="IsOnline" ColumnName="IsOnline" />
+                <ScalarProperty Name="NextOnTime" ColumnName="NextOnTime" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
