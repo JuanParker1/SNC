@@ -173,6 +173,10 @@
                     delay: 250,
                     dataType: 'json'
                 }
+            }).on('select2:select', function (e) {
+                getProductsByBrand();
+            }).on('select2:unselect', function (e) {
+                getProductsByBrand();
             });
 
             $('[name="OwnerType"]').on('change', function () {
@@ -197,6 +201,8 @@
 
                 if ($value == '2') {
                     $('#div-product').removeClass('d-none');
+                    $('#select-product').val('').trigger('change');
+                    $('#select-brand').val('').trigger('change');
                     getProducts();
                 } else  {
                     $('#div-product').addClass('d-none');
@@ -211,6 +217,20 @@
                     width: '100%',
                     ajax: {
                         url: "/Product/GetProductByShopSelect2?shopIds=" + $selectedValues,
+                        delay: 250,
+                        dataType: 'json'
+                    }
+                });
+            }
+
+            function getProductsByBrand() {
+                $('#select-product').val('').trigger('change');
+                var $selectedValues = $('#select-brand').val();
+                $('#select-product').select2({
+                    placeholder: "Search Products",
+                    width: '100%',
+                    ajax: {
+                        url: "/Product/GetProductByBrandSelect2?brandId=" + $selectedValues,
                         delay: 250,
                         dataType: 'json'
                     }

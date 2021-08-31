@@ -209,7 +209,9 @@
                     dataType: 'json'
                 }
             }).on('select2:select', function (e) {
-                $('input[name="ShopName"]').val(e.params.data.text);
+                getProductsByBrand();
+            }).on('select2:unselect', function (e) {
+                getProductsByBrand();
             });
 
             $('[name="OwnerType"]').on('change', function () {
@@ -259,6 +261,20 @@
                 $('#div-product').addClass('d-none');
                 $('#select-product').val('').trigger('change');
             }
+        }
+
+        function getProductsByBrand() {
+            $('#select-product').val('').trigger('change');
+            var $selectedValues = $('#select-brand').val();
+            $('#select-product').select2({
+                placeholder: "Search Products",
+                width: '100%',
+                ajax: {
+                    url: "/Product/GetProductByBrandSelect2?brandId=" + $selectedValues,
+                    delay: 250,
+                    dataType: 'json'
+                }
+            });
         }
     </script>
 }
