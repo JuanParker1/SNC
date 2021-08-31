@@ -2297,7 +2297,7 @@ namespace ShopNow.Controllers
                                       join c in db.Categories on m.CategoryId equals c.Id
                                       //into cat
                                       //from c in cat.DefaultIfEmpty()
-                                      where pl.ShopId == shopId && pl.Status == 0 && (categoryId != 0 ? m.CategoryId == categoryId : true)
+                                      where pl.ShopId == shopId && pl.Status == 0 && (categoryId != 0 ? m.CategoryId == categoryId : true) && (pl.Price != 0 || pl.MenuPrice !=0)
                                       select new ShopDetails.ProductList
                                       {
                                           Id = pl.Id,
@@ -2313,7 +2313,7 @@ namespace ShopNow.Controllers
                                           Customisation = pl.Customisation,DiscountCategoryPercentage=pl.Percentage,
                                           IsOnline = pl.IsOnline,
                                           NextOnTime = pl.NextOnTime
-                                      }).Where(i => str != "" ? i.Name.ToLower().Contains(str) : true).ToList();
+                                      }).Where(i => (str != "" ? i.Name.ToLower().Contains(str) : true)).ToList();
             }
             else if (shop.ShopCategoryId == 2)
             {
@@ -2321,7 +2321,7 @@ namespace ShopNow.Controllers
                                       join m in db.MasterProducts on pl.MasterProductId equals m.Id
                                       join nsc in db.NextSubCategories on m.NextSubCategoryId equals nsc.Id into cat
                                       from nsc in cat.DefaultIfEmpty()
-                                      where pl.ShopId == shopId && pl.Status == 0 && m.Name.ToLower().Contains(str) && (categoryId != 0 ? m.CategoryId == categoryId : true)
+                                      where pl.ShopId == shopId && pl.Status == 0 && m.Name.ToLower().Contains(str) && (categoryId != 0 ? m.CategoryId == categoryId : true) && (pl.Price != 0 || pl.MenuPrice != 0) 
                                       select new ShopDetails.ProductList
                                       {
                                           Id = pl.Id,
