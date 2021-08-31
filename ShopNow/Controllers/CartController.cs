@@ -723,6 +723,7 @@ namespace ShopNow.Controllers
                 order.Status = 3;
                 order.UpdatedBy = user.Name;
                 order.DateUpdated = DateTime.Now;
+                order.ShopAcceptedTime = DateTime.Now;
                 db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
@@ -752,6 +753,7 @@ namespace ShopNow.Controllers
                 order.Status = 7;
                 order.UpdatedBy = user.Name;
                 order.DateUpdated = DateTime.Now;
+                order.ShopAcceptedTime = DateTime.Now;
                 db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
@@ -935,6 +937,7 @@ namespace ShopNow.Controllers
             var order = db.Orders.FirstOrDefault(i => i.Id == id);
             order.Status = 5;
             order.UpdatedBy = user.Name;
+            order.OrderPickupTime = DateTime.Now;
             order.DateUpdated = DateTime.Now;
             db.Entry(order).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
@@ -980,18 +983,20 @@ namespace ShopNow.Controllers
         public ActionResult MarkAsDelivered(int OrderNumber, int id)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-
-            var otpVerify = db.OtpVerifications.FirstOrDefault(i => i.OrderNo == OrderNumber);
-
+            
             var order = db.Orders.FirstOrDefault(i => i.Id == id);
 
             var delivaryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId && i.Status == 0);
-            delivaryBoy.OnWork = 0;
-            delivaryBoy.isAssign = 0;
-            delivaryBoy.DateUpdated = DateTime.Now;
-            db.Entry(delivaryBoy).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
+            if (delivaryBoy != null)
+            {
+                delivaryBoy.OnWork = 0;
+                delivaryBoy.isAssign = 0;
+                delivaryBoy.DateUpdated = DateTime.Now;
+                db.Entry(delivaryBoy).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
 
+            var otpVerify = db.OtpVerifications.FirstOrDefault(i => i.OrderNo == OrderNumber);
             if (otpVerify != null)
             {
                 otpVerify.Verify = true;
@@ -1005,6 +1010,7 @@ namespace ShopNow.Controllers
             order.Status = 6;
             order.UpdatedBy = delivaryBoy.CustomerName;
             order.DateUpdated = DateTime.Now;
+            order.DeliveredTime = DateTime.Now;
             db.Entry(order).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
