@@ -634,6 +634,7 @@
     <Compile Include="ViewModels\BillViewModel.cs" />
     <Compile Include="ViewModels\CartViewModel.cs" />
     <Compile Include="ViewModels\CustomerReviewViewModel .cs" />
+    <Compile Include="ViewModels\DashboardViewModels.cs" />
     <Compile Include="ViewModels\DeliveryBoysList.cs" />
     <Compile Include="ViewModels\DeliveryBoyViewModel.cs" />
     <Compile Include="ViewModels\DiscountCategoryViewModel.cs" />
@@ -687,6 +688,7 @@
     <Content Include="Content\bootstrap-responsive.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\chart\material-charts.css" />
     <Content Include="Content\clndr.css" />
     <Content Include="Content\coca-print-style.css" />
     <Content Include="Content\custom.css" />
@@ -745,6 +747,7 @@
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\chart\material-charts.js" />
     <Content Include="Scripts\ckeditor\adapters\jquery.js" />
     <Content Include="Scripts\ckeditor\build-config.js" />
     <Content Include="Scripts\ckeditor\ckeditor.js" />

@@ -12,7 +12,6 @@ namespace ShopNow.ViewModels
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {
-            public int Id { get; set; }
             public long ProductId { get; set; }
             public string ProductName { get; set; }
             public bool HasSchedule { get; set; }
@@ -20,6 +19,7 @@ namespace ShopNow.ViewModels
             public List<TimeListItem> TimeListItems { get; set; }
             public class TimeListItem
             {
+                public int Id { get; set; }
                 public TimeSpan? OnTime { get; set; }
                 public TimeSpan? OffTime { get; set; }
             }

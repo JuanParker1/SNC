@@ -51,14 +51,14 @@
                                         {
                                         <div class="d-flex">
                                             <span class="text-nowrap">@DateTime.Today.Add(time.OnTime.Value).ToString("hh:mm tt") - @DateTime.Today.Add(time.OffTime.Value).ToString("hh:mm tt")</span>
-                                            <a href="#modal-update-timimgs" data-target="#modal-update-timimgs" data-toggle="modal" data-id="@item.Id" data-ontime="@time.OnTime" data-offtime="@time.OffTime" class="text-info mx-4 btn-edit-timing"><i class="fa fa-edit fa-lg"></i></a>
-                                            <a href="/ShopSchedule/DeleteTiming?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(item.Id)" class="text-danger"><i class="fa fa-close fa-lg"></i></a>
+                                            <a href="#modal-update-timimgs" data-target="#modal-update-timimgs" data-toggle="modal" data-id="@time.Id" data-ontime="@time.OnTime" data-offtime="@time.OffTime" class="text-info mx-4 btn-edit-timing"><i class="fa fa-edit fa-lg"></i></a>
+                                            <a href="/ShopSchedule/DeleteTiming?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(time.Id)" class="text-danger"><i class="fa fa-close fa-lg"></i></a>
                                         </div>
                                             
                                         }
                                     </td>
                                     <td>
-                                        <label class="switch"><input type="checkbox" Id="Id_@item.Id" class='check-schedule' data-value="@item.HasSchedule" data-shopid="@item.ShopId"><span class='slider round'></span></label>
+                                        <label class="switch"><input type="checkbox" class='check-schedule' data-value="@item.HasSchedule" data-shopid="@item.ShopId"><span class='slider round'></span></label>
                                     </td>
                                     <td>
                                         <a href="#modal-add-timimgs" data-target="#modal-add-timimgs" data-toggle="modal" data-shopid="@item.ShopId" class="text-info mr-4 btn-add-timing"><i class="fa fa-plus fa-lg"></i></a>
