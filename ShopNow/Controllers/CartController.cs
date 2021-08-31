@@ -229,6 +229,8 @@ namespace ShopNow.Controllers
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
+                    OrderPeriod = Math.Round((i.c.DateUpdated - i.c.DateEncoded).TotalMinutes),
+                    ShopAcceptedTime = i.c.ShopAcceptedTime != null ? Math.Round((i.c.ShopAcceptedTime.Value - i.c.DateEncoded).TotalMinutes) : 0,
                 }).OrderByDescending(i => i.DateEncoded).ToList();
 
             return View(model.List);
@@ -274,6 +276,8 @@ namespace ShopNow.Controllers
                 DeliveryBoyName = i.c.DeliveryBoyName,
                 DateEncoded = i.c.DateEncoded,
                 Date = i.c.DateEncoded.ToString("dd/MMM/yyyy hh:mm tt"),
+                ShopCancelledTime = i.c.ShopAcceptedTime,
+                ShopAcceptedTime = i.c.ShopAcceptedTime != null ? Math.Round((i.c.ShopAcceptedTime.Value - i.c.DateEncoded).TotalMinutes) : 0,
             }).OrderByDescending(i => i.DateEncoded).ToList();
 
             return View(model.List);
@@ -385,6 +389,8 @@ namespace ShopNow.Controllers
                 model.PhoneNumber = cart.CustomerPhoneNumber;
                 model.DeliveryBoyName = cart.DeliveryBoyName;
                 model.DateEncoded = cart.DateEncoded;
+                model.PenaltyAmount = cart.PenaltyAmount;
+                model.WaitingCharge = cart.WaitingCharge;
                 var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == cart.DeliveryBoyId);
                 if (deliveryBoy != null)
                 {
@@ -723,6 +729,7 @@ namespace ShopNow.Controllers
                 order.Status = 3;
                 order.UpdatedBy = user.Name;
                 order.DateUpdated = DateTime.Now;
+                order.ShopAcceptedTime = DateTime.Now;
                 db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
@@ -752,6 +759,7 @@ namespace ShopNow.Controllers
                 order.Status = 7;
                 order.UpdatedBy = user.Name;
                 order.DateUpdated = DateTime.Now;
+                order.ShopAcceptedTime = DateTime.Now;
                 db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
@@ -935,6 +943,7 @@ namespace ShopNow.Controllers
             var order = db.Orders.FirstOrDefault(i => i.Id == id);
             order.Status = 5;
             order.UpdatedBy = user.Name;
+            order.OrderPickupTime = DateTime.Now;
             order.DateUpdated = DateTime.Now;
             db.Entry(order).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
@@ -980,18 +989,19 @@ namespace ShopNow.Controllers
         public ActionResult MarkAsDelivered(int OrderNumber, int id)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-
-            var otpVerify = db.OtpVerifications.FirstOrDefault(i => i.OrderNo == OrderNumber);
-
             var order = db.Orders.FirstOrDefault(i => i.Id == id);
 
             var delivaryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId && i.Status == 0);
-            delivaryBoy.OnWork = 0;
-            delivaryBoy.isAssign = 0;
-            delivaryBoy.DateUpdated = DateTime.Now;
-            db.Entry(delivaryBoy).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
+            if (delivaryBoy != null)
+            {
+                delivaryBoy.OnWork = 0;
+                delivaryBoy.isAssign = 0;
+                delivaryBoy.DateUpdated = DateTime.Now;
+                db.Entry(delivaryBoy).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
 
+            var otpVerify = db.OtpVerifications.FirstOrDefault(i => i.OrderNo == OrderNumber);
             if (otpVerify != null)
             {
                 otpVerify.Verify = true;
@@ -1005,6 +1015,7 @@ namespace ShopNow.Controllers
             order.Status = 6;
             order.UpdatedBy = delivaryBoy.CustomerName;
             order.DateUpdated = DateTime.Now;
+            order.DeliveredTime = DateTime.Now;
             db.Entry(order).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
@@ -1044,6 +1055,50 @@ namespace ShopNow.Controllers
 
             Helpers.PushNotification.SendbydeviceId("Your order has been delivered.", "ShopNowChat", "a.mp3", fcmtocken);
             return RedirectToAction("Edit", "Cart", new { OrderNumber = OrderNumber, id = AdminHelpers.ECodeLong(id) });
+        }
+
+        public ActionResult AddWaitingCharge(int orderId, string remark, double amount)
+        {
+            var order = db.Orders.FirstOrDefault(i => i.Id == orderId);
+            if (order != null)
+            {
+                order.WaitingCharge = amount;
+                order.WaitingRemark = remark;
+                if (order.DeliveryLocationReachTime != null && order.DeliveredTime != null)
+                    order.WaitingTime = (order.DeliveryLocationReachTime.Value - order.DeliveredTime.Value).Minutes;
+                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+
+                var customer = db.Customers.FirstOrDefault(i => i.Id == order.CustomerId);
+                if (customer != null)
+                {
+                    customer.DeliveryWaitingCharge += amount;
+                    db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+            return RedirectToAction("Edit", "Cart", new { OrderNumber = order.OrderNumber, id = AdminHelpers.ECodeLong(orderId) });
+        }
+
+        public ActionResult AddPenaltyCharge(int orderId, string remark, double amount)
+        {
+            var order = db.Orders.FirstOrDefault(i => i.Id == orderId);
+            if (order != null)
+            {
+                order.PenaltyAmount = amount;
+                order.PenaltyRemark = remark;
+                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+
+                var customer = db.Customers.FirstOrDefault(i => i.Id == order.CustomerId);
+                if (customer != null)
+                {
+                    customer.PenaltyAmount += amount;
+                    db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+            return RedirectToAction("Edit", "Cart", new { OrderNumber = order.OrderNumber, id = AdminHelpers.ECodeLong(orderId) });
         }
 
         protected override void Dispose(bool disposing)

@@ -37,27 +37,33 @@
                         </div>
                         <hr />
                         <div class="row">
-                                <div class="col-md-6">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="col-form-label">Name</label>
+                                    <input type="text" name="Name" class="form-control" required />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="col-form-label">Offer Code</label>
+                                    <input type="text" name="OfferCode" class="form-control" required />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div id="div-shop" class="d-none">
                                     <div class="form-group">
-                                        <label class="col-form-label">Name</label>
-                                        <input type="text" name="Name" class="form-control" required />
+                                        <label class="col-form-label">Select Shop</label>
+                                        <select id="select-shop" name="ShopIds" class="form-control" multiple></select>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div id="div-shop" class="d-none">
-                                        <div class="form-group">
-                                            <label class="col-form-label">Select Shop</label>
-                                            <select id="select-shop" name="ShopIds" class="form-control" multiple></select>
-                                        </div>
-                                    </div>
-                                    <div id="div-brand" class="d-none">
-                                        <div class="form-group">
-                                            <label class="col-form-label">Select Brand</label>
-                                            <select id="select-brand" name="BrandId" class="form-control"></select>
-                                        </div>
+                                <div id="div-brand" class="d-none">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Select Brand</label>
+                                        <select id="select-brand" name="BrandId" class="form-control"></select>
                                     </div>
                                 </div>
                             </div>
+                        </div>
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
@@ -134,6 +140,10 @@
                                         <input type="checkbox" class="form-check-input" name="IsForBlackListAbusers" value="true">Also For Black List Abusers?
                                     </label>
                                 </div>
+                                <div class="col-md-12">
+                                    <label class="col-form-label">Description</label>
+                                    <textarea name="Description" class="form-control"></textarea>
+                                </div>
                         </div>
                         <div class="mx-auto col-6 mt-3"> <input type="submit" value="Create" class="btn btn-success btn-block" /></div>
                     </form>
@@ -173,6 +183,10 @@
                     delay: 250,
                     dataType: 'json'
                 }
+            }).on('select2:select', function (e) {
+                getProductsByBrand();
+            }).on('select2:unselect', function (e) {
+                getProductsByBrand();
             });
 
             $('[name="OwnerType"]').on('change', function () {
@@ -197,6 +211,8 @@
 
                 if ($value == '2') {
                     $('#div-product').removeClass('d-none');
+                    $('#select-product').val('').trigger('change');
+                    $('#select-brand').val('').trigger('change');
                     getProducts();
                 } else  {
                     $('#div-product').addClass('d-none');
@@ -211,6 +227,20 @@
                     width: '100%',
                     ajax: {
                         url: "/Product/GetProductByShopSelect2?shopIds=" + $selectedValues,
+                        delay: 250,
+                        dataType: 'json'
+                    }
+                });
+            }
+
+            function getProductsByBrand() {
+                $('#select-product').val('').trigger('change');
+                var $selectedValues = $('#select-brand').val();
+                $('#select-product').select2({
+                    placeholder: "Search Products",
+                    width: '100%',
+                    ajax: {
+                        url: "/Product/GetProductByBrandSelect2?brandId=" + $selectedValues,
                         delay: 250,
                         dataType: 'json'
                     }

@@ -1580,5 +1580,19 @@ namespace ShopNow.Controllers
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
+
+        [AccessPolicy(PageCode = "")]
+        public async Task<JsonResult> GetProductByBrandSelect2(int brandId, string q = "")
+        {
+            var model = await db.Products.Where(a => a.Name.Contains(q) && a.Status == 0).OrderBy(i => i.Name)
+                .Join(db.MasterProducts.Where(a => a.BrandId == brandId), p => p.MasterProductId, m => m.Id, (p, m) => new { m, p })
+                .Select(i => new
+                {
+                    id = i.p.Id,
+                    text = i.m.Name
+                }).OrderBy(i => i.text).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

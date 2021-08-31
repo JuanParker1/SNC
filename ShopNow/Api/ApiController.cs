@@ -1091,6 +1091,7 @@ namespace ShopNow.Controllers
                 order.Status = status;
                 order.UpdatedBy = customer.Name;
                 order.DateUpdated = DateTime.Now;
+                order.ShopAcceptedTime = DateTime.Now;
                 db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 var orderList = db.OrderItems.Where(i => i.OrderId == order.Id).ToList();
@@ -1538,6 +1539,7 @@ namespace ShopNow.Controllers
                 order.Status = 5;
                 order.UpdatedBy = customer.Name;
                 order.DateUpdated = DateTime.Now;
+                order.OrderPickupTime = DateTime.Now;
                 db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 var orderList = db.OrderItems.Where(i => i.OrderId == order.Id).ToList();
@@ -1650,6 +1652,7 @@ namespace ShopNow.Controllers
             order.Status = 6;
             order.UpdatedBy = delivaryBoy.CustomerName;
             order.DateUpdated = DateTime.Now;
+            order.DeliveredTime = DateTime.Now;
             db.Entry(order).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
@@ -2922,47 +2925,48 @@ namespace ShopNow.Controllers
         //Have to check
         public JsonResult GetShopBalanceNotification(int customerId)
         {
-            var varShopOwner = db.Customers.Where(s => s.Id == customerId && s.Position == 1).FirstOrDefault();
-            if (varShopOwner != null)
+            var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == customerId);
+           // var varShopOwner = db.Customers.Where(s => s.Id == customerId && s.Position == 1).FirstOrDefault();
+            if (shopCredits != null)
             {
-                var varCustomer = db.Customers.Where(s => s.Id == customerId && s.Position == 1).FirstOrDefault();
-                var customerName = (from c in db.Customers
-                                    where c.Id == varCustomer.Id && c.Position == 1
-                                    select c.Name).FirstOrDefault();
+                //var varCustomer = db.Customers.Where(s => s.Id == customerId && s.Position == 1).FirstOrDefault();
+                //var customerName = (from c in db.Customers
+                //                    where c.Id == varCustomer.Id && c.Position == 1
+                //                    select c.Name).FirstOrDefault();
 
-                var orderCount = (from s in db.Orders
-                                  join sh in db.Shops on s.ShopId equals sh.Id
-                                  join c in db.Customers on sh.CustomerId equals c.Id
-                                  where sh.CustomerId == customerId && (s.Status >= 2)
-                                  select s).Count();
+                //var orderCount = (from s in db.Orders
+                //                  join sh in db.Shops on s.ShopId equals sh.Id
+                //                  join c in db.Customers on sh.CustomerId equals c.Id
+                //                  where sh.CustomerId == customerId && (s.Status >= 2)
+                //                  select s).Count();
 
-                var platformcredits = (from ss in db.Payments
-                                       where ss.CustomerId == customerId && ss.Status == 0 && ss.CreditType == 0
-                                       select (Double?)ss.OriginalAmount).Sum() ?? 0;
+                //var platformcredits = (from ss in db.Payments
+                //                       where ss.CustomerId == customerId && ss.Status == 0 && ss.CreditType == 0
+                //                       select (Double?)ss.OriginalAmount).Sum() ?? 0;
 
-                var platformorder = (Convert.ToInt32(orderCount) * (db.PlatFormCreditRates.FirstOrDefault().RatePerOrder));
-                var varDelivery = (from ss in db.Payments
-                                   where ss.CustomerId == customerId && ss.Status == 0 && ss.CreditType == 1
-                                   select (Double?)ss.OriginalAmount).Sum() ?? 0;
+                //var platformorder = (Convert.ToInt32(orderCount) * (db.PlatFormCreditRates.FirstOrDefault().RatePerOrder));
+                //var varDelivery = (from ss in db.Payments
+                //                   where ss.CustomerId == customerId && ss.Status == 0 && ss.CreditType == 1
+                //                   select (Double?)ss.OriginalAmount).Sum() ?? 0;
 
-                var varDeliveryCharges = (from ss in db.Orders
-                                          join sh in db.Shops on ss.ShopId equals sh.Id
-                                          where sh.CustomerId == customerId && ss.Status >= 2
-                                          select (Double?)ss.DeliveryCharge).Sum() ?? 0;
+                //var varDeliveryCharges = (from ss in db.Orders
+                //                          join sh in db.Shops on ss.ShopId equals sh.Id
+                //                          where sh.CustomerId == customerId && ss.Status >= 2
+                //                          select (Double?)ss.DeliveryCharge).Sum() ?? 0;
 
-                if (platformcredits - platformorder <= 100)
+                if (shopCredits.PlatformCredit <= 100)
                 {
                     return Json(new { message = "Recharge Immediately" }, JsonRequestBehavior.AllowGet);
                 }
-                else if (varDelivery - varDeliveryCharges <= 150)
+                else if (shopCredits.DeliveryCredit <= 150)
                 {
                     return Json(new { message = "Recharge Immediately" }, JsonRequestBehavior.AllowGet);
                 }
-                else if (platformcredits - platformorder <= 200 && platformcredits - platformorder > 100)
+                else if (shopCredits.PlatformCredit <= 200 && shopCredits.PlatformCredit > 100)
                 {
                     return Json(new { message = "Your Credit are Low !" }, JsonRequestBehavior.AllowGet);
                 }
-                else if (varDelivery - varDeliveryCharges >= 150 && varDelivery - varDeliveryCharges <= 250)
+                else if (shopCredits.DeliveryCredit >= 150 && shopCredits.DeliveryCredit <= 250)
                 {
                     return Json(new { message = "Your Credits are Low !" }, JsonRequestBehavior.AllowGet);
                 }
@@ -4583,6 +4587,71 @@ namespace ShopNow.Controllers
                         NextOnTime = i.NextOnTime
                     }).ToList();
                 return Json(response, JsonRequestBehavior.AllowGet);
+            }
+            return Json(false, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult UpdateOrderTiming(int orderId, int type) //type 1-Order Ready, 2-DBoy Reach Shop, 3-DBoy Location Reach
+        {
+            var order = db.Orders.FirstOrDefault(i => i.Id == orderId);
+            if (order != null)
+            {
+                if (type == 1)
+                    order.OrderReadyTime = DateTime.Now;
+                else if (type == 2)
+                    order.DeliveryBoyShopReachTime = DateTime.Now;
+                else if (type == 3)
+                    order.DeliveryLocationReachTime = DateTime.Now;
+
+                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            return Json(false, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddWaitingCharge(int orderId, string remark, double amount)
+        {
+            var order = db.Orders.FirstOrDefault(i => i.Id == orderId);
+            if (order != null)
+            {
+                order.WaitingCharge = amount;
+                order.WaitingRemark = remark;
+                if (order.DeliveryLocationReachTime != null && order.DeliveredTime != null)
+                    order.WaitingTime = (order.DeliveryLocationReachTime.Value - order.DeliveredTime.Value).Minutes;
+                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+
+                var customer = db.Customers.FirstOrDefault(i => i.Id == order.CustomerId);
+                if (customer != null)
+                {
+                    customer.DeliveryWaitingCharge += amount;
+                    db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            return Json(false, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddPenaltyCharge(int orderId, string remark, double amount)
+        {
+            var order = db.Orders.FirstOrDefault(i => i.Id == orderId);
+            if (order != null)
+            {
+                order.PenaltyAmount = amount;
+                order.PenaltyRemark = remark;
+                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+
+                var customer = db.Customers.FirstOrDefault(i => i.Id == order.CustomerId);
+                if (customer != null)
+                {
+                    customer.PenaltyAmount += amount;
+                    db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+                return Json(true, JsonRequestBehavior.AllowGet);
             }
             return Json(false, JsonRequestBehavior.AllowGet);
         }
