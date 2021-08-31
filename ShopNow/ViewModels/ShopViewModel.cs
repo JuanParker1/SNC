@@ -609,6 +609,7 @@ namespace ShopNow.ViewModels
             public bool Verify { get; set; }
             public bool OtpVerify { get; set; }
             public string DateEncoded { get; set; }
+            public TimeSpan? NextOnTime { get; set; }
         }
         public class VerifyList
         {
