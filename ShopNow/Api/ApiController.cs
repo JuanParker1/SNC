@@ -4466,7 +4466,7 @@ namespace ShopNow.Controllers
             {
                 var orderCount = db.Orders.Where(i => i.CustomerId == customerId && i.Status != 0 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(DateTime.Now))).Count();
 
-                var offercount = db.Offers.Where(i => i.Type == 1 && (i.MinimumPurchaseAmount != 0 ? i.MinimumPurchaseAmount <= amount : true) && (i.IsForOnlinePayment != false ? i.IsForOnlinePayment == isOnlinePayment : true) && (i.IsForFirstOrder != false ? orderCount == 0 : true))
+                var offercount = db.Offers.Where(i => i.Type == 1 && (offer.MinimumPurchaseAmount != 0 ? offer.MinimumPurchaseAmount <= amount : true) && (offer.IsForOnlinePayment != false ? offer.IsForOnlinePayment == isOnlinePayment : true) && (offer.IsForFirstOrder != false ? orderCount == 0 : true))
                     .Join(db.OfferShops.Where(i => i.ShopId == shopId), o => o.Id, oShp => oShp.OfferId, (o, oShp) => new { o, oShp })
                     .Count();
                 if (offercount > 0)
