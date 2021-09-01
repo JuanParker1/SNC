@@ -4431,6 +4431,7 @@ namespace ShopNow.Controllers
                     Percentage = i.o.o.Percentage,
                     QuantityLimit = i.o.o.QuantityLimit,
                     Type = i.o.o.Type,
+                    Description = i.o.o.Description,
                     ProductListItems = i.oPro.Select(a => new OfferApiListViewModel.OfferListItem.ProductListItem { Id = a.ProductId }).ToList(),
                     ShopListItems = i.o.oShp.Select(a => new OfferApiListViewModel.OfferListItem.ShopListItem { Id = a.ShopId }).ToList()
                 }).ToList();
