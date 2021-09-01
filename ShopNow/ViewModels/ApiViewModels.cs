@@ -124,6 +124,22 @@ namespace ShopNow.ViewModels
         }
     }
 
+    public class CartOfferApiListViewModel
+    {
+        public List<OfferListItem> OfferListItems { get; set; }
+        public class OfferListItem
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public string OfferCode { get; set; }
+            public int DiscountType { get; set; }
+            public double Percentage { get; set; }
+            public int AmountLimit { get; set; }
+            public double MinimumPurchaseAmount { get; set; }
+            public string Description { get; set; }
+        }
+    }
+
     public class AchievementApiListViewModel
     {
         public List<AchievementListItem> AchievementListItems { get; set; }

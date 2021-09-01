@@ -4438,6 +4438,46 @@ namespace ShopNow.Controllers
             return Json(new { list = model }, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetCartOffer(int shopid, int customerid, double amount, int paymentMode) //1-Online, 2-COH
+        {
+            //Have to check IsFor1stOrder and Paymentmode and 1st order
+            var model = new CartOfferApiListViewModel();
+            model.OfferListItems = db.Offers.Where(i => i.Status == 0 && (i.MinimumPurchaseAmount != 0 ? i.MinimumPurchaseAmount >= amount : true))
+                .Join(db.OfferShops.Where(i => i.ShopId == shopid), o => o.Id, oShp => oShp.OfferId, (o, oShp) => new { o, oShp })
+                .Select(i => new CartOfferApiListViewModel.OfferListItem
+                {
+                    AmountLimit = i.o.AmountLimit,
+                    Description = i.o.Description,
+                    DiscountType = i.o.DiscountType,
+                    Id = i.o.Id,
+                    MinimumPurchaseAmount = i.o.MinimumPurchaseAmount,
+                    Name = i.o.Name,
+                    OfferCode = i.o.OfferCode,
+                    Percentage = i.o.Percentage
+                }).ToList();
+            return Json(new { list = model }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetCheckOffer(int shopId, int customerId, double amount, bool isOnlinePayment, string offerCode)
+        {
+           
+            var offer = db.Offers.FirstOrDefault(i => i.OfferCode == offerCode && i.Status == 0);
+            if (offer != null)
+            {
+                var orderCount = db.Orders.Where(i => i.CustomerId == customerId && i.Status != 0 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(DateTime.Now))).Count();
+
+                var offercount = db.Offers.Where(i => i.Type == 1 && (i.MinimumPurchaseAmount != 0 ? i.MinimumPurchaseAmount <= amount : true) && (i.IsForOnlinePayment != false ? i.IsForOnlinePayment == isOnlinePayment : true) && (i.IsForFirstOrder != false ? orderCount == 0 : true))
+                    .Join(db.OfferShops.Where(i => i.ShopId == shopId), o => o.Id, oShp => oShp.OfferId, (o, oShp) => new { o, oShp })
+                    .Count();
+                if (offercount > 0)
+                    return Json(new { status = true, offerPercentage = offer.Percentage, offerAmountLimit = offer.AmountLimit, discountType = offer.DiscountType }, JsonRequestBehavior.AllowGet);
+                else
+                    return Json(new { status = false }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { status = false }, JsonRequestBehavior.AllowGet);
+
+        }
+
         public JsonResult GetAllAchievements()
         {
             var model = new AchievementApiListViewModel();

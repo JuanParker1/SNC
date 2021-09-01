@@ -67,32 +67,36 @@ namespace ShopNow.Controllers
         public ActionResult Create(OfferCreateViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var offer = _mapper.Map<OfferCreateViewModel, Offer>(model);
-            offer.DateEncoded = DateTime.Now;
-            offer.DateUpdated = DateTime.Now;
-            offer.Status = 0;
-            db.Offers.Add(offer);
-            db.SaveChanges();
-            if (offer != null && model.ShopIds != null)
+            bool isExist = db.Offers.Any(i => i.OfferCode.Trim() == model.OfferCode.Trim());
+            if (!isExist)
             {
-                foreach (var item in model.ShopIds)
+                var offer = _mapper.Map<OfferCreateViewModel, Offer>(model);
+                offer.DateEncoded = DateTime.Now;
+                offer.DateUpdated = DateTime.Now;
+                offer.Status = 0;
+                db.Offers.Add(offer);
+                db.SaveChanges();
+                if (offer != null && model.ShopIds != null)
                 {
-                    var offershop = new OfferShop();
-                    offershop.ShopId = item;
-                    offershop.OfferId = offer.Id;
-                    db.OfferShops.Add(offershop);
-                    db.SaveChanges();
+                    foreach (var item in model.ShopIds)
+                    {
+                        var offershop = new OfferShop();
+                        offershop.ShopId = item;
+                        offershop.OfferId = offer.Id;
+                        db.OfferShops.Add(offershop);
+                        db.SaveChanges();
+                    }
                 }
-            }
-            if (offer != null && model.ProductIds != null)
-            {
-                foreach (var item in model.ProductIds)
+                if (offer != null && model.ProductIds != null)
                 {
-                    var offerproduct = new OfferProduct();
-                    offerproduct.ProductId = item;
-                    offerproduct.OfferId = offer.Id;
-                    db.OfferProducts.Add(offerproduct);
-                    db.SaveChanges();
+                    foreach (var item in model.ProductIds)
+                    {
+                        var offerproduct = new OfferProduct();
+                        offerproduct.ProductId = item;
+                        offerproduct.OfferId = offer.Id;
+                        db.OfferProducts.Add(offerproduct);
+                        db.SaveChanges();
+                    }
                 }
             }
             return RedirectToAction("List");
