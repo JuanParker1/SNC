@@ -55,7 +55,7 @@ columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
                     </div>
                     <div class="col-md-6">
                         <label class="col-form-label"><strong class="text-secondary">Item Type</strong></label>
-                        <select name="ProductType" class="form-control" id="ProductTypeId">                           
+                        <select name="ProductTypeId" class="form-control" id="ProductTypeId">                           
                         </select>
                         <input type="hidden" id="ProductTypeName" name="ProductTypeName" />
                     </div>
@@ -90,15 +90,10 @@ columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
                     </div>
                     <div class="col-md-6">
                         <label class="col-form-label font-weight-bold text-secondary">Item Type</label>
-                        <select name="ProductType" class="form-control" id="edit-ProductTypeId">
-                            @*<option value="0">Select</option>
-                                <option value="4">Product</option>
-                                <option value="1">Dish</option>
-                                <option value="3">Medical</option>
-                                <option value="2">FMCG</option>
-                                <option value="5">Service</option>*@
+                        <select name="edit-ProductTypeId" class="form-control" id="edit-ProductTypeId">
                         </select>
-                        <input type="hidden" id="edit-ProductTypeName" name="ProductTypeName" />
+                        <input type="hidden" id="edit-ProductTypeName" name="edit-ProductTypeName" />
+                        <div id="ProductTypeEdit"></div>
                     </div>
                     <div class="col-md-6">
                         <label class="col-form-label font-weight-bold text-secondary">Adscore</label>
@@ -126,10 +121,10 @@ columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
             //    let selectedType = $(this).find("option:selected").text();
             //    $('[name="ProductTypeName"]').val(selectedType);
             //});
-            $('#edit-ProductTypeId').on('change', function () {
-                let selectedType = $(this).find("option:selected").text();
-                $('#edit-ProductTypeName').val(selectedType);
-            });
+            //$('#edit-ProductTypeId').on('change', function () {
+            //    var selectedType = $(this).find("option:selected").text();
+            //    $('#edit-ProductTypeName').val(selectedType);
+            //});
             $('#ProductTypeId').select2({
                 placeholder: "Search Type",
                 width: '100%',
@@ -189,10 +184,12 @@ columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
                 }
             });
 
-            $(".edit-prompt").click( function () {
+            $(".edit-prompt").click(function () {
+                var typeid = $(this).attr('data-producttypeid');
+                var typename = $(this).attr('data-producttypename');
                 $('#CategoryId').val($(this).attr('data-id'));
                 $('#edit-Name').val($(this).attr('data-name'));
-                $('#edit-ProductTypeId').val($(this).attr('data-producttypeid')).trigger('change');
+                $('#edit-ProductTypeId').append($("<option></option>").attr("value", typeid).text(typename));
                 $('#edit-ProductTypeName').val($(this).attr('data-producttypename'));
                 $('#edit-OrderNo').val($(this).attr('data-orderno'));
             });
