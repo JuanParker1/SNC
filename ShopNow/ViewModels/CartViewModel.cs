@@ -341,7 +341,6 @@ namespace ShopNow.ViewModels
         public double Distance { get; set; }
         public string ReferralNumber { get; set; }
 
-
         public List<ListItem> ListItems { get; set; } 
         public class ListItem
         {

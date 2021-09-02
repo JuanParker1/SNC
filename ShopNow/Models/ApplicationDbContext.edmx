@@ -606,6 +606,9 @@
           <Property Name="Quantity" Type="int" Nullable="false" />
           <Property Name="UnitPrice" Type="float" Nullable="false" />
           <Property Name="Price" Type="float" Nullable="false" />
+          <Property Name="OfferId" Type="int" />
+          <Property Name="OfferAmount" Type="float" Nullable="false" />
+          <Property Name="MiddlePrice" Type="float" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Orders">
@@ -653,6 +656,8 @@
           <Property Name="OrderPickupTime" Type="datetime" />
           <Property Name="DeliveryLocationReachTime" Type="datetime" />
           <Property Name="DeliveredTime" Type="datetime" />
+          <Property Name="OfferId" Type="int" />
+          <Property Name="OfferAmount" Type="float" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
@@ -2088,26 +2093,6 @@
           <Property Name="OfferId" Type="Int32" Nullable="false" />
           <Property Name="ShopId" Type="Int32" Nullable="false" />
         </EntityType>
-        <EntityType Name="OrderItem">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OrderId" Type="Int64" Nullable="false" />
-          <Property Name="OrdeNumber" Type="Int32" Nullable="false" />
-          <Property Name="ProductId" Type="Int64" Nullable="false" />
-          <Property Name="ProductName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="BrandId" Type="Int32" Nullable="false" />
-          <Property Name="BrandName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="CategoryId" Type="Int32" Nullable="false" />
-          <Property Name="CategoryName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="ImagePath" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Quantity" Type="Int32" Nullable="false" />
-          <Property Name="UnitPrice" Type="Double" Nullable="false" />
-          <Property Name="Price" Type="Double" Nullable="false" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Order" Relationship="sncModel.FK_OrderItems_Orders" FromRole="OrderItem" ToRole="Order" />
-        </EntityType>
         <EntityType Name="OtpVerification">
           <Key>
             <PropertyRef Name="Id" />
@@ -2676,7 +2661,6 @@
           <EntitySet Name="NextSubCategories" EntityType="Self.NextSubCategory" />
           <EntitySet Name="OfferProducts" EntityType="Self.OfferProduct" />
           <EntitySet Name="OfferShops" EntityType="Self.OfferShop" />
-          <EntitySet Name="OrderItems" EntityType="Self.OrderItem" />
           <EntitySet Name="OtpVerifications" EntityType="Self.OtpVerification" />
           <EntitySet Name="Packages" EntityType="Self.Package" />
           <EntitySet Name="Pages" EntityType="Self.Page" />
@@ -2785,14 +2769,15 @@
             <Parameter Name="page" Mode="In" Type="Int32" />
             <Parameter Name="pageSize" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="Offers" EntityType="sncModel.Offer" />
+          <EntitySet Name="AchievementSettings" EntityType="sncModel.AchievementSetting" />
+          <EntitySet Name="CustomerAchievements" EntityType="sncModel.CustomerAchievement" />
+          <EntitySet Name="OrderItems" EntityType="sncModel.OrderItem" />
           <EntitySet Name="Orders" EntityType="sncModel.Order" />
           <AssociationSet Name="FK_OrderItems_Orders" Association="sncModel.FK_OrderItems_Orders">
             <End Role="Order" EntitySet="Orders" />
             <End Role="OrderItem" EntitySet="OrderItems" />
           </AssociationSet>
-          <EntitySet Name="Offers" EntityType="sncModel.Offer" />
-          <EntitySet Name="AchievementSettings" EntityType="sncModel.AchievementSetting" />
-          <EntitySet Name="CustomerAchievements" EntityType="sncModel.CustomerAchievement" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3036,70 +3021,6 @@
           <Property Type="Boolean" Name="IsOnline" Nullable="false" />
           <Property Type="Time" Name="NextOnTime" Nullable="true" />
         </ComplexType>
-        <EntityType Name="Order">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CustomerId" Type="Int32" Nullable="false" />
-          <Property Name="CustomerName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="CustomerPhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ShopId" Type="Int32" Nullable="false" />
-          <Property Name="ShopName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="DeliveryAddress" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="ShopPhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="ShopOwnerPhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="TotalProduct" Type="Int32" Nullable="false" />
-          <Property Name="TotalQuantity" Type="Int32" Nullable="false" />
-          <Property Name="TotalPrice" Type="Double" Nullable="false" />
-          <Property Name="WalletAmount" Type="Double" Nullable="false" />
-          <Property Name="NetTotal" Type="Double" Nullable="false" />
-          <Property Name="OrderNumber" Type="Int32" Nullable="false" />
-          <Property Name="DeliveryBoyId" Type="Int32" Nullable="false" />
-          <Property Name="DeliveryBoyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DeliveryBoyPhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="DeliveryCharge" Type="Double" Nullable="false" />
-          <Property Name="ShopDeliveryDiscount" Type="Double" Nullable="false" />
-          <Property Name="NetDeliveryCharge" Type="Double" Nullable="false" />
-          <Property Name="Convinenientcharge" Type="Double" Nullable="false" />
-          <Property Name="Packingcharge" Type="Double" Nullable="false" />
-          <Property Name="Latitude" Type="Double" Nullable="false" />
-          <Property Name="Longitude" Type="Double" Nullable="false" />
-          <Property Name="Distance" Type="Double" Nullable="false" />
-          <Property Name="ShopPaymentStatus" Type="Int32" Nullable="false" />
-          <Property Name="DeliveryBoyPaymentStatus" Type="Int32" Nullable="false" />
-          <Property Name="DeliveryOrderPaymentStatus" Type="Int32" Nullable="false" />
-          <Property Name="RatePerOrder" Type="Double" Nullable="false" />
-          <Property Name="PenaltyAmount" Type="Double" Nullable="false" />
-          <Property Name="PenaltyRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="WaitingCharge" Type="Double" Nullable="false" />
-          <Property Name="WaitingTime" Type="Int32" Nullable="false" />
-          <Property Name="WaitingRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ShopAcceptedTime" Type="DateTime" Precision="3" />
-          <Property Name="OrderReadyTime" Type="DateTime" Precision="3" />
-          <Property Name="DeliveryBoyShopReachTime" Type="DateTime" Precision="3" />
-          <Property Name="OrderPickupTime" Type="DateTime" Precision="3" />
-          <Property Name="DeliveryLocationReachTime" Type="DateTime" Precision="3" />
-          <Property Name="DeliveredTime" Type="DateTime" Precision="3" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="UpdatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="OrderItems" Relationship="sncModel.FK_OrderItems_Orders" FromRole="Order" ToRole="OrderItem" />
-        </EntityType>
-        <Association Name="FK_OrderItems_Orders">
-          <End Type="sncModel.Order" Role="Order" Multiplicity="1" />
-          <End Type="sncModel.OrderItem" Role="OrderItem" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Order">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="OrderItem">
-              <PropertyRef Name="OrderId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="Offer">
           <Key>
             <PropertyRef Name="Id" />
@@ -3155,6 +3076,95 @@
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
+        <EntityType Name="OrderItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderId" Type="Int64" Nullable="false" />
+          <Property Name="OrdeNumber" Type="Int32" Nullable="false" />
+          <Property Name="ProductId" Type="Int64" Nullable="false" />
+          <Property Name="ProductName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="BrandId" Type="Int32" Nullable="false" />
+          <Property Name="BrandName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <Property Name="CategoryName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="UnitPrice" Type="Double" Nullable="false" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="OfferId" Type="Int32" />
+          <Property Name="OfferAmount" Type="Double" Nullable="false" />
+          <Property Name="MiddlePrice" Type="Double" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Order" Relationship="sncModel.FK_OrderItems_Orders" FromRole="OrderItem" ToRole="Order" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="CustomerName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CustomerPhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ShopId" Type="Int32" Nullable="false" />
+          <Property Name="ShopName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DeliveryAddress" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ShopPhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ShopOwnerPhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="TotalProduct" Type="Int32" Nullable="false" />
+          <Property Name="TotalQuantity" Type="Int32" Nullable="false" />
+          <Property Name="TotalPrice" Type="Double" Nullable="false" />
+          <Property Name="WalletAmount" Type="Double" Nullable="false" />
+          <Property Name="NetTotal" Type="Double" Nullable="false" />
+          <Property Name="OrderNumber" Type="Int32" Nullable="false" />
+          <Property Name="DeliveryBoyId" Type="Int32" Nullable="false" />
+          <Property Name="DeliveryBoyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DeliveryBoyPhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DeliveryCharge" Type="Double" Nullable="false" />
+          <Property Name="ShopDeliveryDiscount" Type="Double" Nullable="false" />
+          <Property Name="NetDeliveryCharge" Type="Double" Nullable="false" />
+          <Property Name="Convinenientcharge" Type="Double" Nullable="false" />
+          <Property Name="Packingcharge" Type="Double" Nullable="false" />
+          <Property Name="Latitude" Type="Double" Nullable="false" />
+          <Property Name="Longitude" Type="Double" Nullable="false" />
+          <Property Name="Distance" Type="Double" Nullable="false" />
+          <Property Name="ShopPaymentStatus" Type="Int32" Nullable="false" />
+          <Property Name="DeliveryBoyPaymentStatus" Type="Int32" Nullable="false" />
+          <Property Name="DeliveryOrderPaymentStatus" Type="Int32" Nullable="false" />
+          <Property Name="RatePerOrder" Type="Double" Nullable="false" />
+          <Property Name="PenaltyAmount" Type="Double" Nullable="false" />
+          <Property Name="PenaltyRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="WaitingCharge" Type="Double" Nullable="false" />
+          <Property Name="WaitingTime" Type="Int32" Nullable="false" />
+          <Property Name="WaitingRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ShopAcceptedTime" Type="DateTime" Precision="3" />
+          <Property Name="OrderReadyTime" Type="DateTime" Precision="3" />
+          <Property Name="DeliveryBoyShopReachTime" Type="DateTime" Precision="3" />
+          <Property Name="OrderPickupTime" Type="DateTime" Precision="3" />
+          <Property Name="DeliveryLocationReachTime" Type="DateTime" Precision="3" />
+          <Property Name="DeliveredTime" Type="DateTime" Precision="3" />
+          <Property Name="OfferId" Type="Int32" />
+          <Property Name="OfferAmount" Type="Double" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="OrderItems" Relationship="sncModel.FK_OrderItems_Orders" FromRole="Order" ToRole="OrderItem" />
+        </EntityType>
+        <Association Name="FK_OrderItems_Orders">
+          <End Type="sncModel.Order" Role="Order" Multiplicity="1" />
+          <End Type="sncModel.OrderItem" Role="OrderItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderItem">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3713,26 +3723,6 @@
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="OfferId" ColumnName="OfferId" />
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="OrderItems">
-            <EntityTypeMapping TypeName="sncModel.OrderItem">
-              <MappingFragment StoreEntitySet="OrderItems">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
-                <ScalarProperty Name="OrdeNumber" ColumnName="OrdeNumber" />
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
-                <ScalarProperty Name="BrandName" ColumnName="BrandName" />
-                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
-                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
-                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4432,58 +4422,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="Orders">
-            <EntityTypeMapping TypeName="sncModel.Order">
-              <MappingFragment StoreEntitySet="Orders">
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="DeliveredTime" ColumnName="DeliveredTime" />
-                <ScalarProperty Name="DeliveryLocationReachTime" ColumnName="DeliveryLocationReachTime" />
-                <ScalarProperty Name="OrderPickupTime" ColumnName="OrderPickupTime" />
-                <ScalarProperty Name="DeliveryBoyShopReachTime" ColumnName="DeliveryBoyShopReachTime" />
-                <ScalarProperty Name="OrderReadyTime" ColumnName="OrderReadyTime" />
-                <ScalarProperty Name="ShopAcceptedTime" ColumnName="ShopAcceptedTime" />
-                <ScalarProperty Name="WaitingRemark" ColumnName="WaitingRemark" />
-                <ScalarProperty Name="WaitingTime" ColumnName="WaitingTime" />
-                <ScalarProperty Name="WaitingCharge" ColumnName="WaitingCharge" />
-                <ScalarProperty Name="PenaltyRemark" ColumnName="PenaltyRemark" />
-                <ScalarProperty Name="PenaltyAmount" ColumnName="PenaltyAmount" />
-                <ScalarProperty Name="RatePerOrder" ColumnName="RatePerOrder" />
-                <ScalarProperty Name="DeliveryOrderPaymentStatus" ColumnName="DeliveryOrderPaymentStatus" />
-                <ScalarProperty Name="DeliveryBoyPaymentStatus" ColumnName="DeliveryBoyPaymentStatus" />
-                <ScalarProperty Name="ShopPaymentStatus" ColumnName="ShopPaymentStatus" />
-                <ScalarProperty Name="Distance" ColumnName="Distance" />
-                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-                <ScalarProperty Name="Packingcharge" ColumnName="Packingcharge" />
-                <ScalarProperty Name="Convinenientcharge" ColumnName="Convinenientcharge" />
-                <ScalarProperty Name="NetDeliveryCharge" ColumnName="NetDeliveryCharge" />
-                <ScalarProperty Name="ShopDeliveryDiscount" ColumnName="ShopDeliveryDiscount" />
-                <ScalarProperty Name="DeliveryCharge" ColumnName="DeliveryCharge" />
-                <ScalarProperty Name="DeliveryBoyPhoneNumber" ColumnName="DeliveryBoyPhoneNumber" />
-                <ScalarProperty Name="DeliveryBoyName" ColumnName="DeliveryBoyName" />
-                <ScalarProperty Name="DeliveryBoyId" ColumnName="DeliveryBoyId" />
-                <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
-                <ScalarProperty Name="NetTotal" ColumnName="NetTotal" />
-                <ScalarProperty Name="WalletAmount" ColumnName="WalletAmount" />
-                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
-                <ScalarProperty Name="TotalQuantity" ColumnName="TotalQuantity" />
-                <ScalarProperty Name="TotalProduct" ColumnName="TotalProduct" />
-                <ScalarProperty Name="ShopOwnerPhoneNumber" ColumnName="ShopOwnerPhoneNumber" />
-                <ScalarProperty Name="ShopPhoneNumber" ColumnName="ShopPhoneNumber" />
-                <ScalarProperty Name="DeliveryAddress" ColumnName="DeliveryAddress" />
-                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
-                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-                <ScalarProperty Name="CustomerPhoneNumber" ColumnName="CustomerPhoneNumber" />
-                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
-                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Offers">
             <EntityTypeMapping TypeName="sncModel.Offer">
               <MappingFragment StoreEntitySet="Offers">
@@ -4538,6 +4476,83 @@
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="AchievementId" ColumnName="AchievementId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderItems">
+            <EntityTypeMapping TypeName="sncModel.OrderItem">
+              <MappingFragment StoreEntitySet="OrderItems">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="MiddlePrice" ColumnName="MiddlePrice" />
+                <ScalarProperty Name="OfferAmount" ColumnName="OfferAmount" />
+                <ScalarProperty Name="OfferId" ColumnName="OfferId" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="BrandName" ColumnName="BrandName" />
+                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="OrdeNumber" ColumnName="OrdeNumber" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="sncModel.Order">
+              <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="OfferAmount" ColumnName="OfferAmount" />
+                <ScalarProperty Name="OfferId" ColumnName="OfferId" />
+                <ScalarProperty Name="DeliveredTime" ColumnName="DeliveredTime" />
+                <ScalarProperty Name="DeliveryLocationReachTime" ColumnName="DeliveryLocationReachTime" />
+                <ScalarProperty Name="OrderPickupTime" ColumnName="OrderPickupTime" />
+                <ScalarProperty Name="DeliveryBoyShopReachTime" ColumnName="DeliveryBoyShopReachTime" />
+                <ScalarProperty Name="OrderReadyTime" ColumnName="OrderReadyTime" />
+                <ScalarProperty Name="ShopAcceptedTime" ColumnName="ShopAcceptedTime" />
+                <ScalarProperty Name="WaitingRemark" ColumnName="WaitingRemark" />
+                <ScalarProperty Name="WaitingTime" ColumnName="WaitingTime" />
+                <ScalarProperty Name="WaitingCharge" ColumnName="WaitingCharge" />
+                <ScalarProperty Name="PenaltyRemark" ColumnName="PenaltyRemark" />
+                <ScalarProperty Name="PenaltyAmount" ColumnName="PenaltyAmount" />
+                <ScalarProperty Name="RatePerOrder" ColumnName="RatePerOrder" />
+                <ScalarProperty Name="DeliveryOrderPaymentStatus" ColumnName="DeliveryOrderPaymentStatus" />
+                <ScalarProperty Name="DeliveryBoyPaymentStatus" ColumnName="DeliveryBoyPaymentStatus" />
+                <ScalarProperty Name="ShopPaymentStatus" ColumnName="ShopPaymentStatus" />
+                <ScalarProperty Name="Distance" ColumnName="Distance" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Packingcharge" ColumnName="Packingcharge" />
+                <ScalarProperty Name="Convinenientcharge" ColumnName="Convinenientcharge" />
+                <ScalarProperty Name="NetDeliveryCharge" ColumnName="NetDeliveryCharge" />
+                <ScalarProperty Name="ShopDeliveryDiscount" ColumnName="ShopDeliveryDiscount" />
+                <ScalarProperty Name="DeliveryCharge" ColumnName="DeliveryCharge" />
+                <ScalarProperty Name="DeliveryBoyPhoneNumber" ColumnName="DeliveryBoyPhoneNumber" />
+                <ScalarProperty Name="DeliveryBoyName" ColumnName="DeliveryBoyName" />
+                <ScalarProperty Name="DeliveryBoyId" ColumnName="DeliveryBoyId" />
+                <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
+                <ScalarProperty Name="NetTotal" ColumnName="NetTotal" />
+                <ScalarProperty Name="WalletAmount" ColumnName="WalletAmount" />
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+                <ScalarProperty Name="TotalQuantity" ColumnName="TotalQuantity" />
+                <ScalarProperty Name="TotalProduct" ColumnName="TotalProduct" />
+                <ScalarProperty Name="ShopOwnerPhoneNumber" ColumnName="ShopOwnerPhoneNumber" />
+                <ScalarProperty Name="ShopPhoneNumber" ColumnName="ShopPhoneNumber" />
+                <ScalarProperty Name="DeliveryAddress" ColumnName="DeliveryAddress" />
+                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="CustomerPhoneNumber" ColumnName="CustomerPhoneNumber" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
