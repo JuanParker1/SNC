@@ -91,7 +91,9 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             var model = new BrandListViewModel();
 
-            model.List = _db.Brands.Where(i => i.Status == 0).ToList().AsQueryable().ProjectTo<BrandListViewModel.BrandList>(_mapperConfiguration).OrderBy(i => i.Name).ToList();
+            model.List = _db.Brands.Where(i => i.Status == 0).ToList()
+                .AsQueryable().ProjectTo<BrandListViewModel.BrandList>(_mapperConfiguration)
+                .OrderBy(i => i.Name).ToList();
 
             return View(model);
         }

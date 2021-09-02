@@ -549,20 +549,10 @@ namespace ShopNow.ViewModels
         public string CategoryName { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
-        public int ProductTypeId { get; set; }
-        public string ProductTypeName { get; set; }
         public double Price { get; set; }
-        public int MeasurementUnitId { get; set; }
-        public string MeasurementUnitName { get; set; }
-        public bool PriscriptionCategory { get; set; }
-        public double Weight { get; set; }
-        public string SizeLB { get; set; }
-        public Nullable<int> PackageId { get; set; }
-        public string PackageName { get; set; }
         public string GoogleTaxonomyCode { get; set; }
-        public string ASIN { get; set; }
-        public int Adscore { get; set; }
         public string NickName { get; set; }
+        public int Adscore { get; set; }
     }
 
     public class MasterElectronicEditViewModel
@@ -580,18 +570,8 @@ namespace ShopNow.ViewModels
         public string CategoryName { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
-        public int ProductTypeId { get; set; }
-        public string ProductTypeName { get; set; }
         public double Price { get; set; }
-        public int MeasurementUnitId { get; set; }
-        public string MeasurementUnitName { get; set; }
-        public bool PriscriptionCategory { get; set; }
-        public double Weight { get; set; }
-        public string SizeLB { get; set; }
-        public Nullable<int> PackageId { get; set; }
-        public string PackageName { get; set; }
         public string GoogleTaxonomyCode { get; set; }
-        public string ASIN { get; set; }
         public string ImagePath1 { get; set; }
         public string ImagePath2 { get; set; }
         public string ImagePath3 { get; set; }

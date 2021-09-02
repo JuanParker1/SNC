@@ -225,7 +225,7 @@ namespace ShopNow.Controllers
                 db.Entry(shopCategory).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
-            return Json("Success", JsonRequestBehavior.AllowGet);
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
         protected override void Dispose(bool disposing)
         {

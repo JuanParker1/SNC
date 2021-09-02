@@ -845,8 +845,8 @@ namespace ShopNow.Controllers
                 return HttpNotFound();
             var masterProduct = _db.MasterProducts.FirstOrDefault(i => i.Id == dId);
             var model = _mapper.Map<MasterProduct, MasterMedicalEditViewModel>(masterProduct);
-            if(model.ImagePath1 !=null)
-            model.ImagePath1 = model.ImagePath1.Replace("%", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
+            if (model.ImagePath1 !=null)
+                model.ImagePath1 = model.ImagePath1.Replace("%", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
             if (model.ImagePath2 != null)
                 model.ImagePath2 = model.ImagePath2.Replace("%", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
             if (model.ImagePath3 != null)
@@ -856,6 +856,7 @@ namespace ShopNow.Controllers
             if (model.ImagePath5 != null)
                 model.ImagePath5 = model.ImagePath5.Replace("%", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
             model.DrugCompoundDetailIds1 = masterProduct.DrugCompoundDetailIds;
+            if(masterProduct.CategoryId !=0)
             model.CategoryName = _db.Categories.FirstOrDefault(i => i.Id == masterProduct.CategoryId).Name;
             return View(model);
         }
@@ -1246,7 +1247,16 @@ namespace ShopNow.Controllers
             prod.UpdatedBy = user.Name;
             prod.ProductTypeName = "Electronic";
             prod.ProductTypeId = 4;
-            var name = _db.MasterProducts.FirstOrDefault(i => i.Name == model.Name && i.Status == 0 && i.ProductTypeId == 4 && i.CategoryId == model.CategoryId);
+            var name = _db.MasterProducts.FirstOrDefault(i => i.Name == model.Name && i.Status == 0 && i.ProductTypeId == 4 && i.CategoryId == model.CategoryId);      
+            if (name == null)
+            {
+                prod.DateEncoded = DateTime.Now;
+                prod.DateUpdated = DateTime.Now;
+                prod.Status = 0;
+                _db.MasterProducts.Add(prod);
+                _db.SaveChanges();
+                ViewBag.Message = model.Name + " Saved Successfully!";
+            }
             prod.Name = model.Name;
             if (model.NickName == null)
             {
@@ -1287,16 +1297,7 @@ namespace ShopNow.Controllers
                 {
                     uc.UploadFiles(model.ElectronicImage5.InputStream, prod.Id + "_" + model.ElectronicImage5.FileName, accesskey, secretkey, "image");
                     prod.ImagePath5 = prod.Id + "_" + model.ElectronicImage5.FileName.Replace(" ", "");
-                }
-                if (name == null)
-                {
-                    prod.DateEncoded = DateTime.Now;
-                    prod.DateUpdated = DateTime.Now;
-                    prod.Status = 0;
-                    _db.MasterProducts.Add(prod);
-                    _db.SaveChanges();
-                    ViewBag.Message = model.Name + " Saved Successfully!";
-                }
+                }               
                 else
                 {
                     ViewBag.ErrorMessage = model.Name + " Already Exist";
@@ -1329,8 +1330,19 @@ namespace ShopNow.Controllers
             if (string.IsNullOrEmpty(dId.ToString()))
                 return HttpNotFound();
             var masterProduct = _db.MasterProducts.FirstOrDefault(i => i.Id == dId);
+            if (masterProduct.ImagePath1 != null)
+                masterProduct.ImagePath1 = masterProduct.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
+            if (masterProduct.ImagePath2 != null)
+                masterProduct.ImagePath2 = masterProduct.ImagePath2.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
+            if (masterProduct.ImagePath3 != null)
+                masterProduct.ImagePath3 = masterProduct.ImagePath3.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
+            if (masterProduct.ImagePath4 != null)
+                masterProduct.ImagePath4 = masterProduct.ImagePath4.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
+            if (masterProduct.ImagePath5 != null)
+                masterProduct.ImagePath5 = masterProduct.ImagePath5.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
             var model = _mapper.Map<MasterProduct, MasterElectronicEditViewModel>(masterProduct);
-
+            if(masterProduct.CategoryId != 0)
+            model.CategoryName = _db.Categories.FirstOrDefault(i => i.Id == masterProduct.CategoryId).Name;
             return View(model);
         }
 
@@ -1343,8 +1355,6 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var prod = _db.MasterProducts.FirstOrDefault(i => i.Id == model.Id);
             _mapper.Map(model, prod);
-            prod.Name = model.Name;
-            prod.ProductTypeId = model.ProductTypeId;
             prod.UpdatedBy = user.Name;
             prod.DateUpdated = DateTime.Now;
             try
@@ -1383,7 +1393,6 @@ namespace ShopNow.Controllers
                     uc.UploadFiles(model.ElectronicImage5.InputStream, prod.Id + "_" + model.ElectronicImage5.FileName, accesskey, secretkey, "image");
                     prod.ImagePath5 = prod.Id + "_" + model.ElectronicImage5.FileName.Replace(" ", "");
                 }
-                prod.DateUpdated = DateTime.Now;
                 _db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
                 _db.SaveChanges();
             }
@@ -1401,7 +1410,7 @@ namespace ShopNow.Controllers
                     ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
                 }
             }
-            return RedirectToAction("List");
+            return RedirectToAction("ElectronicEdit", new { id = AdminHelpers.ECodeLong(model.Id) });
         }
 
         // Item Mapping

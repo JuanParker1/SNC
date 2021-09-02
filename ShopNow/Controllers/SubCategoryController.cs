@@ -49,7 +49,7 @@ namespace ShopNow.Controllers
             bool IsAdded = false;
             string message = "";
             string message1 = "";
-            var subcategoryname = db.SubCategories.Where(i => i.Name == subCategory.Name && i.ProductTypeId == subCategory.ProductTypeId).FirstOrDefault();
+            var subcategoryname = db.SubCategories.Where(i => i.Name == subCategory.Name && i.ProductTypeId == subCategory.ProductTypeId && i.Status == 0).FirstOrDefault();
             if (subcategoryname == null)
             {
                 subCategory.CreatedBy = user.Name;
