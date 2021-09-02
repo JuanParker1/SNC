@@ -126,10 +126,10 @@ columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
             //    let selectedType = $(this).find("option:selected").text();
             //    $('[name="ProductTypeName"]').val(selectedType);
             //});
-            //$('#edit-ProductTypeId').on('change', function () {
-            //    let selectedType = $(this).find("option:selected").text();
-            //    $('#edit-ProductTypeName').val(selectedType);
-            //});
+            $('#edit-ProductTypeId').on('change', function () {
+                let selectedType = $(this).find("option:selected").text();
+                $('#edit-ProductTypeName').val(selectedType);
+            });
             $('#ProductTypeId').select2({
                 placeholder: "Search Type",
                 width: '100%',
