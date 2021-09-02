@@ -1,11 +1,11 @@
-﻿@model ShopNow.ViewModels.MasterFMCGUploadViewModel
+﻿@model ShopNow.ViewModels.MasterElectronicUploadViewModel
 @using System.Data;
 @{
-    ViewBag.Title = "FMCG Upload";
+    ViewBag.Title = "Electronic Upload";
 }
-<title>Shop Now | Master FMCG Upload</title>
+<title>Shop Now | Master Electronic Upload</title>
 <div class="container">
-    @using (Html.BeginForm("FMCGUpload", "MasterProduct", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("ElectronicUpload", "MasterProduct", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
@@ -188,13 +188,13 @@
 </div>
 @section Scripts
 {
-<!--Select2-->
-<script src="~/Scripts/select2/js/select2.js"></script>
-<link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
-<link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
-<!--Select2 End-->
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
 
-<script>
+    <script>
     $(document).ready(function () {
         $('#ProductTypeId').select2({
             placeholder: "Search Product Type",
@@ -278,5 +278,5 @@
         }
 
     });
-</script>
+    </script>
 }

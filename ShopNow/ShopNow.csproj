@@ -3168,6 +3168,7 @@
     <Content Include="Views\Shop\CreditsHistory.cshtml" />
     <Content Include="Views\ShopSchedule\Index.cshtml" />
     <Content Include="Views\ProductSchedule\Index.cshtml" />
+    <Content Include="Views\MasterProduct\ElectronicUpload.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

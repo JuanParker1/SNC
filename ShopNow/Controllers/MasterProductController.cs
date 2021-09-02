@@ -424,49 +424,56 @@ namespace ShopNow.Controllers
 
                 // Insert records to database table.
                 // MainPageModel entities = new MainPageModel();
+                List<MasterProduct> masterList = new List<MasterProduct>();
+                var master = _db.MasterProducts.Where(i => i.Status == 0).Select(i => new { Name = i.Name }).ToList();
                 foreach (DataRow row in dt.Rows)
                 {
-                    var masterProduct = _db.MasterProducts.FirstOrDefault(i => i.Name == row[model.Name].ToString() && i.Status == 0);
-                    if (masterProduct == null)
+                    if (row[model.Name].ToString().Trim() != string.Empty)
                     {
-                         model.CategoryId = CheckCategory(row[model.CategoryName].ToString(), model.ProductTypeId, model.ProductTypeName);
-                         model.SubCategoryId = CheckSubCategory(model.CategoryId, row[model.CategoryName].ToString(), row[model.SubCategoryName].ToString(), model.ProductTypeId, model.ProductTypeName);
-                        model.NextSubCategoryId = CheckNextSubCategory(model.SubCategoryId, row[model.SubCategoryName].ToString(), row[model.NextSubCategoryName].ToString(), model.ProductTypeId, model.ProductTypeName);
-                        _db.MasterProducts.Add(new MasterProduct
+                        int idx = master.FindIndex(a => a.Name == row[model.Name].ToString().Trim());
+                        if (idx <= 0)
                         {
-                            Name = row[model.Name].ToString(),
-                            BrandId = CheckBrand(row[model.BrandName].ToString()),
-                            BrandName = row[model.BrandName].ToString(),
-                            SizeLB = row[model.SizeLB].ToString(),
-                            Weight = Convert.ToDouble(row[Convert.ToInt32(model.Weight)]),
-                            GoogleTaxonomyCode = row[model.GoogleTaxonomyCode].ToString(),
-                            ASIN = row[model.ASIN].ToString(),
-                            CategoryId = model.CategoryId,
-                            ShortDescription = row[model.ShortDescription].ToString(),
-                            LongDescription = row[model.LongDescription].ToString(),
-                            Price = Convert.ToDouble(row[Convert.ToInt32(model.Price)]),
-                            ImagePath1 = row[model.ImagePath1].ToString(),
-                            ImagePath2 = row[model.ImagePath2].ToString(),
-                            ImagePath3 = row[model.ImagePath3].ToString(),
-                            ImagePath4 = row[model.ImagePath4].ToString(),
-                            ImagePath5 = row[model.ImagePath5].ToString(),
-                            SubCategoryId = model.SubCategoryId,
-                            NextSubCategoryId = model.NextSubCategoryId,
-                            ProductTypeId = model.ProductTypeId,
-                            ProductTypeName = model.ProductTypeName,
-                            PackageId = CheckPackage(row[model.PackageName].ToString()),
-                            PackageName = row[model.PackageName].ToString(),
-                            MeasurementUnitId = CheckMeasurementUnit(row[model.MeasurementUnitName].ToString()),
-                            MeasurementUnitName = row[model.MeasurementUnitName].ToString(),
-                            Status = 0,
-                            CreatedBy = user.Name,
-                            UpdatedBy = user.Name,
-                            DateEncoded = DateTime.Now,
-                            DateUpdated = DateTime.Now,
-                        });
-                        _db.SaveChanges();
+                            var varCategoryId = CheckCategory(row[model.CategoryName].ToString().Trim(), 2, "FMCG");
+                            var varSubCategoryId = CheckSubCategory(varCategoryId, row[model.CategoryName].ToString().Trim(), row[model.SubCategoryName].ToString().Trim(), 2, "FMCG");
+                            var varNextSubCategoryId = CheckNextSubCategory(varSubCategoryId, row[model.SubCategoryName].ToString().Trim(), row[model.NextSubCategoryName].ToString().Trim(), 2, "FMCG");
+                            masterList.Add(new MasterProduct
+                            {
+                                Name = row[model.Name].ToString().Trim(),
+                                NickName = row[model.Name].ToString().Trim(),
+                                CategoryId = varCategoryId,
+                                SubCategoryId = varSubCategoryId,
+                                NextSubCategoryId = varNextSubCategoryId,
+                                BrandId = CheckBrand(row[model.BrandName].ToString()),
+                                BrandName = row[model.BrandName].ToString(),
+                                ProductTypeId = 2,
+                                ProductTypeName = "FMCG",
+                                Weight = Convert.ToDouble(row[Convert.ToInt32(model.Weight)]),
+                                SizeLB = row[model.SizeLB].ToString().Trim(),
+                                PackageId = CheckPackage(row[model.PackageName].ToString()),
+                                PackageName = row[model.PackageName].ToString(),
+                                MeasurementUnitId = CheckMeasurementUnit(row[model.MeasurementUnitName].ToString()),
+                                MeasurementUnitName = row[model.MeasurementUnitName].ToString(),
+                                ShortDescription = row[model.ShortDescription].ToString(),
+                                LongDescription = row[model.LongDescription].ToString(),
+                                Price = Convert.ToDouble(row[Convert.ToInt32(model.Price)]),
+                                GoogleTaxonomyCode = row[model.GoogleTaxonomyCode].ToString().Trim(),
+                                ASIN = row[model.ASIN].ToString(),
+                                ImagePath1 = row[model.ImagePath1].ToString().Trim(),
+                                ImagePath2 = row[model.ImagePath2].ToString().Trim(),
+                                ImagePath3 = row[model.ImagePath3].ToString().Trim(),
+                                ImagePath4 = row[model.ImagePath4].ToString().Trim(),
+                                ImagePath5 = row[model.ImagePath5].ToString().Trim(),
+                                Adscore = 1,
+                                Status = 0,
+                                CreatedBy = user.Name,
+                                UpdatedBy = user.Name,
+                                DateEncoded = DateTime.Now,
+                                DateUpdated = DateTime.Now,
+                            });
+                        }
                     }
                 }
+                _db.BulkInsert(masterList);
             }
             return View();
         }
@@ -1049,49 +1056,56 @@ namespace ShopNow.Controllers
 
                 // Insert records to database table.
                 // MainPageModel entities = new MainPageModel();
+                List<MasterProduct> masterList = new List<MasterProduct>();
+                var master = _db.MasterProducts.Where(i => i.Status == 0).Select(i => new { Name = i.Name }).ToList();
                 foreach (DataRow row in dt.Rows)
                 {
-                    var masterProduct = _db.MasterProducts.FirstOrDefault(i => i.Name == row[model.Name].ToString() && i.Status == 0);
-                    if (masterProduct == null)
+                    if (row[model.Name].ToString().Trim() != string.Empty)
                     {
-                        _db.MasterProducts.Add(new MasterProduct
+                        int idx = master.FindIndex(a => a.Name == row[model.Name].ToString().Trim());
+                        if (idx <= 0)
                         {
-                            Name = row[model.Name].ToString(),
-                            BrandId = MedicalCheckBrand(row[model.BrandName].ToString()),
-                            BrandName = row[model.BrandName].ToString(),
-                            CategoryId = MedicalCheckCategory(row[model.CategoryName].ToString(), model.ProductTypeId, model.ProductTypeName),
-                            MeasurementUnitId = CheckMeasurementUnit(row[model.MeasurementUnitName].ToString()),
-                            MeasurementUnitName = row[model.MeasurementUnitName].ToString(),
-                            PriscriptionCategory = Convert.ToBoolean(row[Convert.ToInt32(model.PriscriptionCategory)]),
-                            DrugCompoundDetailIds = row[model.DrugCompoundDetailIds].ToString(),
-                            DrugCompoundDetailName = row[model.DrugCompoundDetailName].ToString(),
-                            Price = Convert.ToDouble(row[Convert.ToInt32(model.Price)]),
-                            ImagePath1 = row[model.ImagePath1].ToString(),
-                            ImagePath2 = row[model.ImagePath2].ToString(),
-                            ImagePath3 = row[model.ImagePath3].ToString(),
-                            ImagePath4 = row[model.ImagePath4].ToString(),
-                            ImagePath5 = row[model.ImagePath5].ToString(),
-                            OriginCountry = row[model.OriginCountry].ToString(),
-                            Manufacturer = row[model.Manufacturer].ToString(),
-                            IBarU = Convert.ToInt32(row[model.IBarU ?? 0]),
-                            SizeLB = row[model.SizeLB].ToString(),
-                            Weight = Convert.ToDouble(row[Convert.ToInt32(model.Weight)]),
-                            PackageId = CheckMedicalPackage(row[model.PackageName].ToString()),
-                            PackageName = row[model.PackageName].ToString(),
-                            ProductTypeId = model.ProductTypeId,
-                            ProductTypeName = model.ProductTypeName,
-                            ColorCode = "N/A",
-                            LongDescription = "N/A",
-                            ShortDescription = "N/A",
-                            Status = 0,
-                            CreatedBy = user.Name,
-                            UpdatedBy = user.Name,
-                            DateEncoded = DateTime.Now,
-                            DateUpdated = DateTime.Now
-                        });
-                        _db.SaveChanges();
+                            masterList.Add(new MasterProduct
+                            {
+                                Name = row[model.Name].ToString().Trim(),
+                                NickName = row[model.Name].ToString().Trim(),
+                                BrandId = MedicalCheckBrand(row[model.BrandName].ToString()),
+                                BrandName = row[model.BrandName].ToString(),
+                                CategoryId = MedicalCheckCategory(row[model.CategoryName].ToString().Trim(), 3, "Medical"),
+                                MeasurementUnitId = CheckMeasurementUnit(row[model.MeasurementUnitName].ToString()),
+                                MeasurementUnitName = row[model.MeasurementUnitName].ToString(),
+                                DrugCompoundDetailIds = row[model.DrugCompoundDetailIds].ToString(),
+                                DrugCompoundDetailName = row[model.DrugCompoundDetailName].ToString(),
+                                PriscriptionCategory = Convert.ToBoolean(row[Convert.ToInt32(model.PriscriptionCategory)]),
+                                OriginCountry = row[model.OriginCountry].ToString(),
+                                Manufacturer = row[model.Manufacturer].ToString(),
+                                IBarU = Convert.ToInt32(row[model.IBarU ?? 0]),
+                                Weight = Convert.ToDouble(row[Convert.ToInt32(model.Weight)]),
+                                SizeLB = row[model.SizeLB].ToString(),
+                                Price = Convert.ToDouble(row[Convert.ToInt32(model.Price)]),
+                                PackageId = CheckMedicalPackage(row[model.PackageName].ToString()),
+                                PackageName = row[model.PackageName].ToString(),
+                                ImagePath1 = row[model.ImagePath1].ToString().Trim(),
+                                ImagePath2 = row[model.ImagePath2].ToString().Trim(),
+                                ImagePath3 = row[model.ImagePath3].ToString().Trim(),
+                                ImagePath4 = row[model.ImagePath4].ToString().Trim(),
+                                ImagePath5 = row[model.ImagePath5].ToString().Trim(),
+                                Adscore = 1,
+                                ProductTypeId = 1,
+                                ProductTypeName = "Medical",
+                                Status = 0,
+                                CreatedBy = user.Name,
+                                UpdatedBy = user.Name,
+                                DateEncoded = DateTime.Now,
+                                DateUpdated = DateTime.Now,
+                                ColorCode = "N/A",
+                                LongDescription = "N/A",
+                                ShortDescription = "N/A",
+                            });
+                        }
                     }
                 }
+                _db.BulkInsert(masterList);
             }
             return View();
         }
@@ -1404,6 +1418,151 @@ namespace ShopNow.Controllers
             return RedirectToAction("List");
         }
 
+        // Upload Electronic MasterItems
+        [AccessPolicy(PageCode = "")]
+        public ActionResult ElectronicUpload()
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AccessPolicy(PageCode = "")]
+        public ActionResult ElectronicUpload(HttpPostedFileBase upload, MasterElectronicUploadViewModel model)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            DataTable dt = new DataTable();
+            if (model.button == "upload")
+            {
+                string path = Server.MapPath("~/Content/ExcelUpload/" + upload.FileName);
+                upload.SaveAs(path);
+                if (ModelState.IsValid)
+                {
+                    if (upload != null && upload.ContentLength > 0)
+                    {
+                        Stream stream = upload.InputStream;
+                        IExcelDataReader reader = null;
+
+                        if (upload.FileName.EndsWith(".xls"))
+                        {
+                            reader = ExcelReaderFactory.CreateBinaryReader(stream);
+                        }
+                        else if (upload.FileName.EndsWith(".xlsx"))
+                        {
+                            reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("File", "This file format is not supported");
+                            return View();
+                        }
+                        DataSet result = reader.AsDataSet(new ExcelDataSetConfiguration()
+                        {
+                            ConfigureDataTable = (_) => new ExcelDataTableConfiguration()
+                            {
+                                UseHeaderRow = true
+                            }
+                        });
+                        reader.Close();
+                        model.DataTable = result.Tables[0];
+                        model.Filename = upload.FileName;
+                        return View(model);
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("File", "Please Upload Your file");
+                    }
+                }
+            }
+            else
+            {
+                string path = Server.MapPath("~/Content/ExcelUpload/" + model.Filename);
+                string excelConnectionString = @"Provider='Microsoft.ACE.OLEDB.12.0';Data Source='" + path + "';Extended Properties='Excel 12.0 Xml;IMEX=1'";
+
+                OleDbConnection excelConnection = new OleDbConnection(excelConnectionString);
+                using (OleDbConnection connExcel = new OleDbConnection(excelConnectionString))
+                {
+                    using (OleDbCommand cmdExcel = new OleDbCommand())
+                    {
+                        using (OleDbDataAdapter odaExcel = new OleDbDataAdapter())
+                        {
+                            cmdExcel.Connection = connExcel;
+
+                            //Get the name of First Sheet.
+                            connExcel.Open();
+                            DataTable dtExcelSchema;
+                            dtExcelSchema = connExcel.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                            string sheetName = dtExcelSchema.Rows[0]["TABLE_NAME"].ToString();
+                            connExcel.Close();
+
+                            //Read Data from First Sheet.
+                            connExcel.Open();
+                            cmdExcel.CommandText = "SELECT * From [" + sheetName + "]";
+                            odaExcel.SelectCommand = cmdExcel;
+                            odaExcel.Fill(dt);
+                            connExcel.Close();
+                        }
+                    }
+                }
+
+                // Insert records to database table.
+                // MainPageModel entities = new MainPageModel();
+                List<MasterProduct> masterList = new List<MasterProduct>();
+                var master = _db.MasterProducts.Where(i => i.Status == 0).Select(i => new { Name = i.Name }).ToList();
+                foreach (DataRow row in dt.Rows)
+                {
+                    if (row[model.Name].ToString().Trim() != string.Empty)
+                    {
+                        int idx = master.FindIndex(a => a.Name == row[model.Name].ToString().Trim());
+                        if (idx <= 0)
+                        {
+                            var varCategoryId = CheckCategory(row[model.CategoryName].ToString().Trim(), 2, "FMCG");
+                            var varSubCategoryId = CheckSubCategory(varCategoryId, row[model.CategoryName].ToString().Trim(), row[model.SubCategoryName].ToString().Trim(), 2, "FMCG");
+                            var varNextSubCategoryId = CheckNextSubCategory(varSubCategoryId, row[model.SubCategoryName].ToString().Trim(), row[model.NextSubCategoryName].ToString().Trim(), 2, "FMCG");
+                            masterList.Add(new MasterProduct
+                            {
+                                Name = row[model.Name].ToString().Trim(),
+                                NickName = row[model.Name].ToString().Trim(),
+                                CategoryId = varCategoryId,
+                                SubCategoryId = varSubCategoryId,
+                                NextSubCategoryId = varNextSubCategoryId,
+                                BrandId = CheckBrand(row[model.BrandName].ToString()),
+                                BrandName = row[model.BrandName].ToString(),
+                                ProductTypeId = 2,
+                                ProductTypeName = "FMCG",
+                                Weight = Convert.ToDouble(row[Convert.ToInt32(model.Weight)]),
+                                SizeLB = row[model.SizeLB].ToString().Trim(),
+                                PackageId = CheckPackage(row[model.PackageName].ToString()),
+                                PackageName = row[model.PackageName].ToString(),
+                                MeasurementUnitId = CheckMeasurementUnit(row[model.MeasurementUnitName].ToString()),
+                                MeasurementUnitName = row[model.MeasurementUnitName].ToString(),
+                                ShortDescription = row[model.ShortDescription].ToString(),
+                                LongDescription = row[model.LongDescription].ToString(),
+                                Price = Convert.ToDouble(row[Convert.ToInt32(model.Price)]),
+                                GoogleTaxonomyCode = row[model.GoogleTaxonomyCode].ToString().Trim(),
+                                ASIN = row[model.ASIN].ToString(),
+                                ImagePath1 = row[model.ImagePath1].ToString().Trim(),
+                                ImagePath2 = row[model.ImagePath2].ToString().Trim(),
+                                ImagePath3 = row[model.ImagePath3].ToString().Trim(),
+                                ImagePath4 = row[model.ImagePath4].ToString().Trim(),
+                                ImagePath5 = row[model.ImagePath5].ToString().Trim(),
+                                Adscore = 1,
+                                Status = 0,
+                                CreatedBy = user.Name,
+                                UpdatedBy = user.Name,
+                                DateEncoded = DateTime.Now,
+                                DateUpdated = DateTime.Now,
+                            });
+                        }
+                    }
+                }
+                _db.BulkInsert(masterList);
+            }
+            return View();
+        }
         // Item Mapping
         [AccessPolicy(PageCode = "SHNMPRIM011")]
         public ActionResult ItemMapping()
@@ -2084,8 +2243,7 @@ namespace ShopNow.Controllers
                 // Insert records to database table.
                 // MainPageModel entities = new MainPageModel();
                 List<MasterProduct> masterList = new List<MasterProduct>();
-                MasterProduct varMasterProduct = new MasterProduct();
-                var master = _db.MasterProducts.Where(i => i.Status == 0).Select(i => new { Id = i.Id, Name = i.Name }).ToList();
+                var master = _db.MasterProducts.Where(i => i.Status == 0).Select(i => new { Name = i.Name }).ToList();
 
                 foreach (DataRow row in dt.Rows)
                 {
