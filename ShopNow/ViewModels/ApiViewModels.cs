@@ -106,6 +106,7 @@ namespace ShopNow.ViewModels
             public bool IsForFirstOrder { get; set; }
             public bool IsForOnlinePayment { get; set; }
             public bool IsForBlackListAbusers { get; set; }
+            public string Description { get; set; }
             public Nullable<int> BrandId { get; set; }
 
             public List<ShopListItem> ShopListItems { get; set; }
@@ -120,6 +121,22 @@ namespace ShopNow.ViewModels
                 public int Id { get; set; }
             }
 
+        }
+    }
+
+    public class CartOfferApiListViewModel
+    {
+        public List<OfferListItem> OfferListItems { get; set; }
+        public class OfferListItem
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public string OfferCode { get; set; }
+            public int DiscountType { get; set; }
+            public double Percentage { get; set; }
+            public int AmountLimit { get; set; }
+            public double MinimumPurchaseAmount { get; set; }
+            public string Description { get; set; }
         }
     }
 

@@ -47,6 +47,14 @@
                             }
                             else if (Model.CartStatus == 7)
                             {
+                                if (Model.PenaltyAmount <= 0)
+                                {
+                                    <a href="#modal-add-penalty-charge" data-target="#modal-add-penalty-charge" data-toggle="modal" class="btn btn-sm btn-warning text-white">Add Penalty</a>
+                                }
+                                if (Model.WaitingCharge <= 0)
+                                {
+                                    <a href="#modal-add-waiting-charge" data-target="#modal-add-waiting-charge" data-toggle="modal" class="btn btn-sm btn-warning text-white">Add Waiting Charge</a>
+                                }
                                 <span class="text-danger">Cancelled</span>
                             }
                             else if (Model.CartStatus == 3)
@@ -71,6 +79,14 @@
                             }
                             else if (Model.CartStatus == 6)
                             {
+                                if (Model.PenaltyAmount <= 0)
+                                {
+                                    <a href="#modal-add-penalty-charge" data-target="#modal-add-penalty-charge" data-toggle="modal" class="btn btn-sm btn-warning text-white">Add Penalty</a>
+                                }
+                                if (Model.WaitingCharge <= 0)
+                                {
+                                    <a href="#modal-add-waiting-charge" data-target="#modal-add-waiting-charge" data-toggle="modal" class="btn btn-sm btn-warning text-white">Add Waiting Charge</a>
+                                }
                                 <span class="text-success">Delivered</span>
                             }
                         </div>
@@ -136,6 +152,56 @@
         <a href="~/Home/ImageDenied">
             <img class="modal-content" id="myImage" />
         </a>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-add-penalty-charge" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form method="get" action="/Cart/AddPenaltyCharge">
+                    <input type="hidden" name="OrderId" value="@Model.Id"/>
+                    <h5>Add Penalty Charge</h5>
+                    <div class="form-group">
+                        <label>Amount</label>
+                        <input class="form-control" type="number" name="Amount" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Remarks</label>
+                        <input class="form-control" type="text" name="Remark" required />
+                    </div>
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-sm btn-success mr-3">Submit</button>
+                        <button class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-add-waiting-charge" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form method="get" action="/Cart/AddWaitingCharge">
+                    <input type="hidden" name="OrderId" value="@Model.Id" />
+                    <h5>Add Waiting Charge</h5>
+                    <div class="form-group">
+                        <label>Amount</label>
+                        <input class="form-control" type="number" name="Amount" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Remarks</label>
+                        <input class="form-control" type="text" name="Remark" required />
+                    </div>
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-sm btn-success mr-3">Submit</button>
+                        <button class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -225,6 +291,7 @@
                 var ordernumber = $("#OrderNumber").val();
                 window.location.href = "/Cart/AssignDeliveryBoy?OrderNumber=" + ordernumber;
             });
+
         });
     </script>
 }

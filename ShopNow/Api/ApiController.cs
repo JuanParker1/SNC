@@ -2300,7 +2300,7 @@ namespace ShopNow.Controllers
                                       join c in db.Categories on m.CategoryId equals c.Id
                                       //into cat
                                       //from c in cat.DefaultIfEmpty()
-                                      where pl.ShopId == shopId && pl.Status == 0 && (categoryId != 0 ? m.CategoryId == categoryId : true)
+                                      where pl.ShopId == shopId && pl.Status == 0 && (categoryId != 0 ? m.CategoryId == categoryId : true) && (pl.Price != 0 || pl.MenuPrice !=0)
                                       select new ShopDetails.ProductList
                                       {
                                           Id = pl.Id,
@@ -2316,7 +2316,7 @@ namespace ShopNow.Controllers
                                           Customisation = pl.Customisation,DiscountCategoryPercentage=pl.Percentage,
                                           IsOnline = pl.IsOnline,
                                           NextOnTime = pl.NextOnTime
-                                      }).Where(i => str != "" ? i.Name.ToLower().Contains(str) : true).ToList();
+                                      }).Where(i => (str != "" ? i.Name.ToLower().Contains(str) : true)).ToList();
             }
             else if (shop.ShopCategoryId == 2)
             {
@@ -2324,7 +2324,7 @@ namespace ShopNow.Controllers
                                       join m in db.MasterProducts on pl.MasterProductId equals m.Id
                                       join nsc in db.NextSubCategories on m.NextSubCategoryId equals nsc.Id into cat
                                       from nsc in cat.DefaultIfEmpty()
-                                      where pl.ShopId == shopId && pl.Status == 0 && m.Name.ToLower().Contains(str) && (categoryId != 0 ? m.CategoryId == categoryId : true)
+                                      where pl.ShopId == shopId && pl.Status == 0 && m.Name.ToLower().Contains(str) && (categoryId != 0 ? m.CategoryId == categoryId : true) && (pl.Price != 0 || pl.MenuPrice != 0) 
                                       select new ShopDetails.ProductList
                                       {
                                           Id = pl.Id,
@@ -4431,10 +4431,51 @@ namespace ShopNow.Controllers
                     Percentage = i.o.o.Percentage,
                     QuantityLimit = i.o.o.QuantityLimit,
                     Type = i.o.o.Type,
+                    Description = i.o.o.Description,
                     ProductListItems = i.oPro.Select(a => new OfferApiListViewModel.OfferListItem.ProductListItem { Id = a.ProductId }).ToList(),
                     ShopListItems = i.o.oShp.Select(a => new OfferApiListViewModel.OfferListItem.ShopListItem { Id = a.ShopId }).ToList()
                 }).ToList();
             return Json(new { list = model }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetCartOffer(int shopid, int customerid, double amount, int paymentMode) //1-Online, 2-COH
+        {
+            //Have to check IsFor1stOrder and Paymentmode and 1st order
+            var model = new CartOfferApiListViewModel();
+            model.OfferListItems = db.Offers.Where(i => i.Status == 0 && (i.MinimumPurchaseAmount != 0 ? i.MinimumPurchaseAmount >= amount : true))
+                .Join(db.OfferShops.Where(i => i.ShopId == shopid), o => o.Id, oShp => oShp.OfferId, (o, oShp) => new { o, oShp })
+                .Select(i => new CartOfferApiListViewModel.OfferListItem
+                {
+                    AmountLimit = i.o.AmountLimit,
+                    Description = i.o.Description,
+                    DiscountType = i.o.DiscountType,
+                    Id = i.o.Id,
+                    MinimumPurchaseAmount = i.o.MinimumPurchaseAmount,
+                    Name = i.o.Name,
+                    OfferCode = i.o.OfferCode,
+                    Percentage = i.o.Percentage
+                }).ToList();
+            return Json(new { list = model }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetCheckOffer(int shopId, int customerId, double amount, bool isOnlinePayment, string offerCode)
+        {
+           
+            var offer = db.Offers.FirstOrDefault(i => i.OfferCode == offerCode && i.Status == 0);
+            if (offer != null)
+            {
+                var orderCount = db.Orders.Where(i => i.CustomerId == customerId && i.Status != 0 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(DateTime.Now))).Count();
+
+                var offercount = db.Offers.Where(i => i.Type == 1 && (offer.MinimumPurchaseAmount != 0 ? offer.MinimumPurchaseAmount <= amount : true) && (offer.IsForOnlinePayment != false ? offer.IsForOnlinePayment == isOnlinePayment : true) && (offer.IsForFirstOrder != false ? orderCount == 0 : true))
+                    .Join(db.OfferShops.Where(i => i.ShopId == shopId), o => o.Id, oShp => oShp.OfferId, (o, oShp) => new { o, oShp })
+                    .Count();
+                if (offercount > 0)
+                    return Json(new { status = true, offerPercentage = offer.Percentage, offerAmountLimit = offer.AmountLimit, discountType = offer.DiscountType }, JsonRequestBehavior.AllowGet);
+                else
+                    return Json(new { status = false }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { status = false }, JsonRequestBehavior.AllowGet);
+
         }
 
         public JsonResult GetAllAchievements()

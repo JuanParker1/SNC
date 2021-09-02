@@ -139,14 +139,18 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-12">
+                                <label class="col-form-label">Description</label>
+                                <textarea name="Description" class="form-control ckeditor"></textarea>
+                            </div>
                         </div>
                         @*<div class="row">
-                            <div class="col-md-4 pl-5 my-3">
-                                <label class="form-check-label">
-                                    <input type="checkbox" class="form-check-input" name="IsForBlackListAbusers" value="true">Also For Black List Abusers?
-                                </label>
-                            </div>
-                        </div>*@
+                                <div class="col-md-4 pl-5 my-3">
+                                    <label class="form-check-label">
+                                        <input type="checkbox" class="form-check-input" name="IsForBlackListAbusers" value="true">Also For Black List Abusers?
+                                    </label>
+                                </div>
+                            </div>*@
                         <div class="mx-auto col-6 mt-3"> <input type="submit" value="Create" class="btn btn-success btn-block" /></div>
                     </form>
                 </div>
@@ -159,7 +163,7 @@
     <script src="~/Scripts/select2/js/select2.js"></script>
     <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
     <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
-
+    <script src="~/Scripts/ckeditor/ckeditor.js"></script>
     <script>
         $(document).ready(function () {
 
@@ -188,7 +192,7 @@
                 //}
             });
 
-            
+
             $('[name="CountType"]').on('change', function () {
                 var $value = $(this).val();
                 $('#div-shop').addClass('d-none');
@@ -216,7 +220,7 @@
 
                 if ($value == '2') {
                     $('#div-game').removeClass('d-none');
-                } else  {
+                } else {
                     $('#div-game').addClass('d-none');
                 }
             });
@@ -230,16 +234,16 @@
                     dataType: 'json'
                 }
             });
-            
-                $('#select-product').select2({
-                    placeholder: "Search Products",
-                    width: '100%',
-                    minimumInputLength: 5,
-                    ajax: {
-                        url: "/Product/GetAllProductSelect2",
-                        delay: 250,
-                        dataType: 'json'
-                    }
+
+            $('#select-product').select2({
+                placeholder: "Search Products",
+                width: '100%',
+                minimumInputLength: 5,
+                ajax: {
+                    url: "/Product/GetAllProductSelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
             });
 
             function getShops() {

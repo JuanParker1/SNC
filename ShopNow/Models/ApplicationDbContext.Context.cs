@@ -29,7 +29,6 @@ namespace ShopNow.Models
     
         public virtual DbSet<AccessPolicy> AccessPolicies { get; set; }
         public virtual DbSet<AchievementProduct> AchievementProducts { get; set; }
-        public virtual DbSet<AchievementSetting> AchievementSettings { get; set; }
         public virtual DbSet<AchievementShop> AchievementShops { get; set; }
         public virtual DbSet<AddOnCategory> AddOnCategories { get; set; }
         public virtual DbSet<ApiSetting> ApiSettings { get; set; }
@@ -53,7 +52,6 @@ namespace ShopNow.Models
         public virtual DbSet<MeasurementUnit> MeasurementUnits { get; set; }
         public virtual DbSet<NextSubCategory> NextSubCategories { get; set; }
         public virtual DbSet<OfferProduct> OfferProducts { get; set; }
-        public virtual DbSet<Offer> Offers { get; set; }
         public virtual DbSet<OfferShop> OfferShops { get; set; }
         public virtual DbSet<OrderItem> OrderItems { get; set; }
         public virtual DbSet<OtpVerification> OtpVerifications { get; set; }
@@ -84,6 +82,9 @@ namespace ShopNow.Models
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Shop> Shops { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<Offer> Offers { get; set; }
+        public virtual DbSet<AchievementSetting> AchievementSettings { get; set; }
+        public virtual DbSet<CustomerAchievement> CustomerAchievements { get; set; }
     
         [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)

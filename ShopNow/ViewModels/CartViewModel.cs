@@ -103,6 +103,8 @@ namespace ShopNow.ViewModels
         public double DelivaryCharge { get; set; }
         public double Latitude { get; set; }
         public double Longtitude { get; set; }
+        public double PenaltyAmount { get; set; }
+        public double WaitingCharge { get; set; }
 
         public List<CartList> List { get; set; }
         public class CartList
