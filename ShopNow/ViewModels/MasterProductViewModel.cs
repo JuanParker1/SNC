@@ -568,6 +568,7 @@ namespace ShopNow.ViewModels
         public int BrandId { get; set; }
         public string BrandName { get; set; }
         public int CategoryId { get; set; }
+        public string CategoryName { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
         public int ProductTypeId { get; set; }
@@ -590,6 +591,8 @@ namespace ShopNow.ViewModels
         public string GoogleTaxonomyCode { get; set; }
         public int SubCategoryId { get; set; }
         public int NextSubCategoryId { get; set; }
+        public string SubCategoryName { get; set; }
+        public string NextSubCategoryName { get; set; }
         public string ASIN { get; set; }
         public string ImagePath1 { get; set; }
         public string ImagePath2 { get; set; }
