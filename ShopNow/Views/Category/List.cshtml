@@ -28,7 +28,7 @@ columns.Add(c => c.ProductTypeName).Titled("Product Type").Filterable(true).SetW
 columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
    columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
              .RenderValueAs(o => @<div>
-                    <a href="editModal" class="text-info edit-prompt mr-5" data-id=@o.Id data-name="@o.Name"  data-producttypeid=@o.ProductTypeId  data-producttypename="@o.ProductTypeName" data-orderno=@o.OrderNo data-target="#editModal" data-toggle="modal" ><i class="fa fa-edit fa-lg"></i></a>
+                    <a href="editModal" class="text-info edit-prompt mr-5" data-id=@o.Id data-name="@o.Name"  data-producttypeid="@o.ProductTypeId"  data-producttypename="@o.ProductTypeName" data-orderno=@o.OrderNo data-target="#editModal" data-toggle="modal" ><i class="fa fa-edit fa-lg"></i></a>
                     <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
                 </div>);
 }).WithPaging(20).Sortable(true)
@@ -189,9 +189,9 @@ columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
                 }
             });
 
-            $("table").on('click', '.edit-prompt', function () {
-                $("#CategoryId").val($(this).attr('data-id'));
-                $("#edit-Name").val($(this).attr('data-name'));
+            $(".edit-prompt").click( function () {
+                $('#CategoryId').val($(this).attr('data-id'));
+                $('#edit-Name').val($(this).attr('data-name'));
                 $('#edit-ProductTypeId').val($(this).attr('data-producttypeid')).trigger('change');
                 $('#edit-ProductTypeName').val($(this).attr('data-producttypename'));
                 $('#edit-OrderNo').val($(this).attr('data-orderno'));

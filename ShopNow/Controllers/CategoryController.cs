@@ -52,7 +52,7 @@ namespace ShopNow.Controllers
             bool IsAdded = false;
             string message = "";
             string message1 = "";
-            var categoryname = db.Categories.FirstOrDefault(i => i.Name == category.Name && i.ProductTypeId == category.ProductTypeId && i.Status == 0);//Category.GetNameType(name, type);
+            var categoryname = db.Categories.FirstOrDefault(i => i.Name == category.Name && i.ProductTypeId == category.ProductTypeId && i.Status == 0);
             if (categoryname == null)
             {
                 category.CreatedBy = user.Name;

@@ -43,7 +43,7 @@
                             {
                                 <button type="button" class="btn btn-sm btn-success mr-3" id="Accept">Accept</button>
                                 <button type="button" class="btn btn-sm btn-danger" id="Cancel">Cancel</button>
-                                <a href="~/Cart/PickupSlip?ordernumber=@Model.OrderNumber&id=@ShopNow.Helpers.AdminHelpers.ECodeLong(Model.Id)" class="btn btn-secondary btn-sm" style="padding: 3px 16px"><span><i class="fa fa-print mr-1" aria-hidden="true"></i></span> Pickup Slip</a>
+                                <a href="~/Cart/PickupSlip?OrderNumber=@Model.OrderNumber&id=@ShopNow.Helpers.AdminHelpers.ECodeLong(Model.Id)" class="btn btn-secondary btn-sm" style="padding: 3px 16px"><span><i class="fa fa-print mr-1" aria-hidden="true"></i></span> Pickup Slip</a>
                             }
                             else if (Model.CartStatus == 7)
                             {
@@ -65,17 +65,17 @@
                             else if (Model.CartStatus == 4 && Model.isAssign == 1 && Model.OnWork == 0)
                             {
                                 <span class="text-success">Assigned for Delivery</span>
-                                <a href="/Cart/DeliveryBoyAccept?ordernumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-info mt-2">Delivery Boy Accept</a>
+                                <a href="/Cart/DeliveryBoyAccept?OrderNumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-info mt-2">Delivery Boy Accept</a>
                             }
                             else if (Model.CartStatus == 4 && Model.isAssign == 1 && Model.OnWork == 1)
                             {
                                 <span class="text-success">Waiting for Pickup</span>
-                                <a href="/Cart/DeliveryBoyPickup?ordernumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-info mt-2">Delivery Boy Pickup</a>
+                                <a href="/Cart/DeliveryBoyPickup?OrderNumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-info mt-2">Delivery Boy Pickup</a>
                             }
                             else if (Model.CartStatus == 5)
                             {
                                 <span class="text-success">On the Way to Delivery</span>
-                                <a href="/Cart/MarkAsDelivered?ordernumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-info mt-2">Mark as Delivered</a>
+                                <a href="/Cart/MarkAsDelivered?OrderNumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-info mt-2">Mark as Delivered</a>
                             }
                             else if (Model.CartStatus == 6)
                             {
@@ -243,7 +243,7 @@
             var ordernumber = $("#OrderNumber").val();
             var customerId = $('#CustomerId').val();
             $("#Accept").click(function () {
-                $.getJSON("/Cart/Accept?ordernumber=" + ordernumber + "&customerId=" + customerId, function (data) {
+                $.getJSON("/Cart/Accept?OrderNumber=" + ordernumber + "&customerId=" + customerId, function (data) {
                     if (data.message != null) {
                         swal({
                             title: data.message,
@@ -274,7 +274,7 @@
                 var ordernumber = $("#OrderNumber").val();
                 var customerId = $('#CustomerId').val();
                 var status = $('#Status').val();
-                $.getJSON("/Cart/Cancel?ordernumber=" + ordernumber + "&customerId=" + customerId + "&status=" + status, function (data) {
+                $.getJSON("/Cart/Cancel?OrderNumber=" + ordernumber + "&customerId=" + customerId + "&status=" + status, function (data) {
                     if (data.message != null) {
                         swal({
                             title: data.message,

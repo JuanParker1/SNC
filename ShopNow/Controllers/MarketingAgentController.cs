@@ -275,7 +275,8 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["MARKETINGUSER"]);
             ViewBag.Name = user.Name;
             var model = new ShopListViewModel();
-            model.List = _db.Shops.Where(i => i.Status == 0 && Convert.ToInt32(i.MarketingAgentId) == user.Id).Select(i => new ShopListViewModel.ShopList
+             //model.List = _db.Shops.Where(i => i.Status == 0 && Convert.ToInt32(i.MarketingAgentId) == user.Id).Select(i => new ShopListViewModel.ShopList
+             model.List = _db.Shops.Where(i => i.Status == 0).Select(i => new ShopListViewModel.ShopList
             {
                 Id = i.Id,
                 Name = i.Name,
