@@ -824,9 +824,10 @@ namespace ShopNow.Controllers
         {
             var payment = _mapper.Map<PaymentCreateApiViewModel, Models.Payment>(model);
             var perOrderAmount = db.PlatFormCreditRates.Where(s => s.Status == 0).FirstOrDefault();
-            if (model.CustomerId != 0)
+            var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
+
+            if (customer != null)
             {
-                //var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
                 //payment.CustomerName = model.CustomerName;
                 payment.CreatedBy = model.CustomerName;
                 payment.UpdatedBy = model.CustomerName;
@@ -931,9 +932,9 @@ namespace ShopNow.Controllers
                 {
                     if (model.WalletAmount != 0)
                     {
-                        var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
                         customer.WalletAmount -= model.WalletAmount;
                     }
+                    
                     return Json(new { message = "Successfully Added to Payment!", Details = model });
                 }
                 else
@@ -1133,8 +1134,27 @@ namespace ShopNow.Controllers
                     }
 
                     //Add Wallet Amount to customer
-                    if(order.WalletAmount != 0)
-                    customer.WalletAmount += order.WalletAmount;
+                    if (order.WalletAmount != 0)
+                    {
+                        customer.WalletAmount += order.WalletAmount;
+                        db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
+                    //decrease offer wallet amount
+                    //if (order.OfferId != null)
+                    //{
+                    //    var offer = db.Offers.FirstOrDefault(i => i.Id == order.OfferId);
+                    //    if (offer != null)
+                    //    {
+                    //        if (offer.DiscountType == 2)
+                    //        {
+                    //            customer.WalletAmount -= order.OfferAmount;
+                    //            db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                    //            db.SaveChanges();
+                    //        }
+                    //    }
+                    //}
                 }
                 return Json(new { message = "Successfully Updated the Order!" }, JsonRequestBehavior.AllowGet);
             }
@@ -1657,7 +1677,7 @@ namespace ShopNow.Controllers
             order.DeliveredTime = DateTime.Now;
             db.Entry(order).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
-
+            
             //Reducing Platformcredits
             var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == orderNo);
             var shop = db.Shops.FirstOrDefault(i => i.Id == order.ShopId);
@@ -1687,6 +1707,19 @@ namespace ShopNow.Controllers
                     db.SaveChanges();
                 }
             }
+
+            //Update Wallet Amount with offers
+            var offer = db.Offers.FirstOrDefault(i => i.Id == order.OfferId);
+            if (offer != null)
+            {
+                if (offer.DiscountType == 2)
+                {
+                    customerDetails.WalletAmount += order.OfferAmount;
+                    db.Entry(customerDetails).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+
             string fcmtocken = customerDetails.FcmTocken ?? "";
 
             Helpers.PushNotification.SendbydeviceId("Your order has been delivered.", "ShopNowChat", "a.mp3", fcmtocken.ToString());
@@ -4500,6 +4533,7 @@ namespace ShopNow.Controllers
                     Name = i.a.a.Name,
                     RepeatCount = i.a.a.RepeatCount,
                     ShopDistrict = i.a.a.ShopDistrict,
+                    Description = i.a.a.Description,
                     ProductListItems = i.apro.Select(b => new AchievementApiListViewModel.AchievementListItem.ProductListItem { Id = b.ProductId }).ToList(),
                     ShopListItems = i.a.ashop.Select(b => new AchievementApiListViewModel.AchievementListItem.ShopListItem { Id = b.ShopId }).ToList()
                 }).ToList();
