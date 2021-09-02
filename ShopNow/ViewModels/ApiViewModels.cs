@@ -157,6 +157,7 @@ namespace ShopNow.ViewModels
             public int ActivateAfterId { get; set; }
             public int RepeatCount { get; set; }
             public bool IsForBlackListAbusers { get; set; }
+            public string Description { get; set; }
 
             public List<ShopListItem> ShopListItems { get; set; }
             public List<ProductListItem> ProductListItems { get; set; }
