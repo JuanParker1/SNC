@@ -848,6 +848,8 @@ namespace ShopNow.Controllers
                     order.Convinenientcharge = model.ConvenientCharge;
                     order.NetTotal = model.NetTotal;
                     order.WalletAmount = model.WalletAmount;
+                    order.OfferId = model.OfferId;
+                    order.OfferAmount = model.OfferAmount;
                     db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
 
@@ -4411,7 +4413,7 @@ namespace ShopNow.Controllers
         public JsonResult GetAllOffers()
         {
             var model = new OfferApiListViewModel();
-            model.OfferListItems = db.Offers.Where(i => i.Status == 0)
+            model.OfferListItems = db.Offers.Where(i => i.Status == 0 && i.Type == 1)
                 .GroupJoin(db.OfferShops, o => o.Id, oShp => oShp.OfferId, (o, oShp) => new { o, oShp })
                 .GroupJoin(db.OfferProducts, o => o.o.Id, oPro => oPro.OfferId, (o, oPro) => new { o, oPro })
                 .Select(i => new OfferApiListViewModel.OfferListItem
@@ -4438,25 +4440,25 @@ namespace ShopNow.Controllers
             return Json(new { list = model }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetCartOffer(int shopid, int customerid, double amount, int paymentMode) //1-Online, 2-COH
-        {
-            //Have to check IsFor1stOrder and Paymentmode and 1st order
-            var model = new CartOfferApiListViewModel();
-            model.OfferListItems = db.Offers.Where(i => i.Status == 0 && (i.MinimumPurchaseAmount != 0 ? i.MinimumPurchaseAmount >= amount : true))
-                .Join(db.OfferShops.Where(i => i.ShopId == shopid), o => o.Id, oShp => oShp.OfferId, (o, oShp) => new { o, oShp })
-                .Select(i => new CartOfferApiListViewModel.OfferListItem
-                {
-                    AmountLimit = i.o.AmountLimit,
-                    Description = i.o.Description,
-                    DiscountType = i.o.DiscountType,
-                    Id = i.o.Id,
-                    MinimumPurchaseAmount = i.o.MinimumPurchaseAmount,
-                    Name = i.o.Name,
-                    OfferCode = i.o.OfferCode,
-                    Percentage = i.o.Percentage
-                }).ToList();
-            return Json(new { list = model }, JsonRequestBehavior.AllowGet);
-        }
+        //public JsonResult GetCartOffer(int shopid, int customerid, double amount, int paymentMode) //1-Online, 2-COH
+        //{
+        //    //Have to check IsFor1stOrder and Paymentmode and 1st order
+        //    var model = new CartOfferApiListViewModel();
+        //    model.OfferListItems = db.Offers.Where(i => i.Status == 0 && (i.MinimumPurchaseAmount != 0 ? i.MinimumPurchaseAmount >= amount : true))
+        //        .Join(db.OfferShops.Where(i => i.ShopId == shopid), o => o.Id, oShp => oShp.OfferId, (o, oShp) => new { o, oShp })
+        //        .Select(i => new CartOfferApiListViewModel.OfferListItem
+        //        {
+        //            AmountLimit = i.o.AmountLimit,
+        //            Description = i.o.Description,
+        //            DiscountType = i.o.DiscountType,
+        //            Id = i.o.Id,
+        //            MinimumPurchaseAmount = i.o.MinimumPurchaseAmount,
+        //            Name = i.o.Name,
+        //            OfferCode = i.o.OfferCode,
+        //            Percentage = i.o.Percentage
+        //        }).ToList();
+        //    return Json(new { list = model }, JsonRequestBehavior.AllowGet);
+        //}
 
         public JsonResult GetCheckOffer(int shopId, int customerId, double amount, bool isOnlinePayment, string offerCode)
         {
@@ -4470,7 +4472,7 @@ namespace ShopNow.Controllers
                     .Join(db.OfferShops.Where(i => i.ShopId == shopId), o => o.Id, oShp => oShp.OfferId, (o, oShp) => new { o, oShp })
                     .Count();
                 if (offercount > 0)
-                    return Json(new { status = true, offerPercentage = offer.Percentage, offerAmountLimit = offer.AmountLimit, discountType = offer.DiscountType }, JsonRequestBehavior.AllowGet);
+                    return Json(new { status = true, offerPercentage = offer.Percentage, offerAmountLimit = offer.AmountLimit, discountType = offer.DiscountType,id=offer.Id }, JsonRequestBehavior.AllowGet);
                 else
                     return Json(new { status = false }, JsonRequestBehavior.AllowGet);
             }
