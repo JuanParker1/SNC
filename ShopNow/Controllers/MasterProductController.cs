@@ -208,6 +208,7 @@ namespace ShopNow.Controllers
             Session["EditAddOns"] = new List<MasterAddOnsCreateViewModel>();
             var addOns = new List<MasterAddOnsCreateViewModel>();
             var model = _mapper.Map<MasterProduct, MasterFoodEditViewModel>(master);
+            if(model.CategoryId !=0)
             model.CategoryName = _db.Categories.FirstOrDefault(i => i.Id == master.CategoryId).Name;
             model.AddonLists = _db.ProductDishAddOns.Where(i => i.MasterProductId == master.Id && i.Status == 0).Select(i => new MasterFoodEditViewModel.AddonList
             {
@@ -488,16 +489,16 @@ namespace ShopNow.Controllers
             {
                 return RedirectToAction("LogOut", "Home");
             }
-            var List = _db.MasterProducts
-                       .OrderBy(m => m.Name)
-                       .Where(i => i.Status == 0 && i.ProductTypeId == 2)
+            var List = _db.MasterProducts.Join(_db.Categories, mp=> mp.CategoryId, c=> c.Id, (mp,c)=> new { mp,c})
+                       .OrderBy(i => i.mp.Name)
+                       .Where(i => i.mp.Status == 0 && i.mp.ProductTypeId == 2)
                        .Select(i => new MasterProductFMCGListViewModel.MasterProductFMCGList
                        {
-                           Id = i.Id,
-                           BrandName = i.BrandName,
-                           CategoryName = _db.MasterProducts.FirstOrDefault(j=> j.CategoryId == i.CategoryId).Name,
-                           Name = i.Name,
-                           ProductTypeName = i.ProductTypeName
+                           Id = i.mp.Id,
+                           BrandName = i.mp.BrandName,
+                           CategoryName = i.c.Name,
+                           Name = i.mp.Name,
+                           ProductTypeName = i.mp.ProductTypeName
                        }).ToList();
             return View(List);
         }
@@ -621,9 +622,12 @@ namespace ShopNow.Controllers
             if (masterProduct.ImagePath5 != null)
                 masterProduct.ImagePath5 = masterProduct.ImagePath5.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
             var model = _mapper.Map<MasterProduct, MasterFMCGEditViewModel>(masterProduct);
-            model.CategoryName = _db.Categories.FirstOrDefault(i => i.Id == masterProduct.CategoryId).Name;
-            model.SubCategoryName = _db.SubCategories.FirstOrDefault(i => i.Id == masterProduct.SubCategoryId).Name;
-            model.NextSubCategoryName = _db.NextSubCategories.FirstOrDefault(i => i.Id == masterProduct.NextSubCategoryId).Name;
+            if (model.CategoryId != 0)
+                model.CategoryName = _db.Categories.FirstOrDefault(i => i.Id == masterProduct.CategoryId).Name;
+            if (model.SubCategoryId != 0)
+                model.SubCategoryName = _db.SubCategories.FirstOrDefault(i => i.Id == masterProduct.SubCategoryId).Name;
+            if (model.NextSubCategoryId != 0)
+                model.NextSubCategoryName = _db.NextSubCategories.FirstOrDefault(i => i.Id == masterProduct.NextSubCategoryId).Name;
             return View(model);
         }
 
@@ -713,15 +717,16 @@ namespace ShopNow.Controllers
             {
                 return RedirectToAction("LogOut", "Home");
             }
-            var List = _db.MasterProducts.Where(i => i.Status == 0 && i.ProductTypeId == 3)
+            var List = _db.MasterProducts.Join(_db.Categories, mp=> mp.CategoryId, c=> c.Id, (mp,c)=> new { mp,c})
+                        .Where(i => i.mp.Status == 0 && i.mp.ProductTypeId == 3)
                         .Select(i => new MasterProductMedicalListViewModel.MasterProductMedicalList
                         {
-                            Id = i.Id,
-                            Name = i.Name,
-                            BrandName = i.BrandName,
-                            CategoryName = _db.Categories.FirstOrDefault(j=> j.Id == i.CategoryId).Name,
-                            DrugCompoundDetailName = i.DrugCompoundDetailName,
-                            ProductTypeName = i.ProductTypeName
+                            Id = i.mp.Id,
+                            Name = i.mp.Name,
+                            BrandName = i.mp.BrandName,
+                            CategoryName = i.c.Name,
+                            DrugCompoundDetailName = i.mp.DrugCompoundDetailName,
+                            ProductTypeName = i.mp.ProductTypeName
                         }).OrderBy(i=> i.Name).ToList();
             return View(List);
         }
@@ -903,6 +908,11 @@ namespace ShopNow.Controllers
                         model.DrugCompoundDetailName = sb.ToString();
                         master.DrugCompoundDetailName = model.DrugCompoundDetailName;
                     }
+                }
+                else
+                {
+                    master.DrugCompoundDetailIds = string.Empty;
+                    master.DrugCompoundDetailName = string.Empty;
                 }
 
                 //MedicalImage1

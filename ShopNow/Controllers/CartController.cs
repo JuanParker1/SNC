@@ -1051,6 +1051,19 @@ namespace ShopNow.Controllers
                     db.SaveChanges();
                 }
             }
+
+            //Update Wallet Amount with offers
+            var offer = db.Offers.FirstOrDefault(i => i.Id == order.OfferId);
+            if (offer != null)
+            {
+                if (offer.DiscountType == 2)
+                {
+                    customerDetails.WalletAmount += order.OfferAmount;
+                    db.Entry(customerDetails).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+
             string fcmtocken = customerDetails.FcmTocken ?? "";
 
             Helpers.PushNotification.SendbydeviceId("Your order has been delivered.", "ShopNowChat", "a.mp3", fcmtocken);
