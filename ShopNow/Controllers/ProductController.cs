@@ -116,6 +116,50 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
+        public async Task<JsonResult> GetDishShopSelect2(string q = "")
+        {
+            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && (a.Status == 0 || a.Status == 1) && (a.ShopCategoryId == 1|| a.ShopCategoryId == 3)).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<JsonResult> GetFMCGShopSelect2(string q = "")
+        {
+            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && (a.Status == 0 || a.Status == 1) && (a.ShopCategoryId == 1 || a.ShopCategoryId == 2 || a.ShopCategoryId == 3 || a.ShopCategoryId == 4)).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<JsonResult> GetMedicalShopSelect2(string q = "")
+        {
+            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && (a.Status == 0 || a.Status == 1) && (a.ShopCategoryId == 3 || a.ShopCategoryId == 4)).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name + " (" + i.PhoneNumber + ")"
+            }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<JsonResult> GetElectronicShopSelect2(string q = "")
+        {
+            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && (a.Status == 0 || a.Status == 1) && (a.ShopCategoryId == 3 || a.ShopCategoryId == 4 || a.ShopCategoryId == 5)).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
         public async Task<JsonResult> GetActiveShopSelect2(string q = "")
         {
             var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
@@ -1132,18 +1176,6 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNPROFC004")]
-        public async Task<JsonResult> GetDishShopSelect2(string q = "")
-        {
-            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && (a.ShopCategoryId == 1 || a.ShopCategoryId == 2) && (a.Status == 0 || a.Status == 1)).Select(i => new
-            {
-                id = i.Id,
-                text = i.Name
-            }).ToListAsync();
-
-            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "SHNPROFC004")]
         public async Task<JsonResult> GetAddonCategorySelect2(string q = "")
         {
             var model = await db.AddOnCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
@@ -1205,18 +1237,7 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNPROC001")]
-        public async Task<JsonResult> GetProductShopSelect2(string q = "")
-        {
-            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && (a.ShopCategoryId == 2 || a.ShopCategoryId == 3 || a.ShopCategoryId == 4 || a.ShopCategoryId == 1) && (a.Status == 0 || a.Status == 1)).Select(i => new
-            {
-                id = i.Id,
-                text = i.Name + " (" + i.PhoneNumber + ")"
-            }).ToListAsync();
-
-            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
-        }
-
+        
         [AccessPolicy(PageCode = "SHNPROC001")]
         public async Task<JsonResult> GetCategorySelect2(string q = "")
         {

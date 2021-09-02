@@ -16,7 +16,7 @@
             <form method="get" action="/Product/FoodList">
                 <div class="row">
                     <div class="col-md-6">
-                        <select id="select-shop" class="form-control" name="ShopId">
+                        <select id="ShopId" class="form-control" name="ShopId">
                             @if (Model.ShopId != 0)
                             {
                                 <option value="@Model.ShopId">@Model.ShopName</option>
@@ -69,10 +69,10 @@
     <script>
         $(document).ready(function () {
 
-            $('#select-shop').select2({
+            $('#ShopId').select2({
                 placeholder: "Search Shop",
                 ajax: {
-                    url: "/Product/GetShopSelect2",
+                    url: "/Product/GetDishShopSelect2",
                     width: '100%',
                     delay: 250,
                     dataType: 'json'

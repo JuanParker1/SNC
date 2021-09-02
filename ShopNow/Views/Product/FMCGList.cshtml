@@ -10,7 +10,7 @@
 <div class="container-fluid">
     <div class="row mb-3">
         <div class="col-md-3">
-            <h5 class="mt-1 text-uppercase" style="letter-spacing:1px">@ViewBag.Title</h5>
+            <h5 class="mt-1 text-uppercase text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
         </div>
         <div class="col-md-6">
             <form method="get" action="/Product/FMCGList">
@@ -73,7 +73,7 @@
             $('#select-shop').select2({
                 placeholder: "Search Shop",
                 ajax: {
-                    url: "/Product/GetShopSelect2",
+                    url: "/Product/GetFMCGShopSelect2",
                     width: '100%',
                     delay: 250,
                     dataType: 'json'
