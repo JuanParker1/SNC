@@ -55,6 +55,7 @@ namespace ShopNow.Models
         public double WaitingCharge { get; set; }
         public int WaitingTime { get; set; }
         public string WaitingRemark { get; set; }
+        public Nullable<System.DateTime> ShopAcceptedTime { get; set; }
         public Nullable<System.DateTime> OrderReadyTime { get; set; }
         public Nullable<System.DateTime> DeliveryBoyShopReachTime { get; set; }
         public Nullable<System.DateTime> OrderPickupTime { get; set; }

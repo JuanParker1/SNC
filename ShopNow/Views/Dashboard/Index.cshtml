@@ -1,4 +1,5 @@
-﻿@{
+﻿@model ShopNow.ViewModels.DashboardIndexViewModel
+@{
     ViewBag.Title = "Dashboard";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -10,6 +11,8 @@
     <link href="~/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
     <link href="~/Scripts/CustomScript/CustomDashboard.css" rel="stylesheet" />
     <link href="~/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/chart/material-charts.css" rel="stylesheet" />
+    <script src="~/Scripts/chart/material-charts.js"></script>
 </head>
 <body class="antialiased bg-green-200">
     <div class="container-fluid">
@@ -139,7 +142,14 @@
                         </div>
                     @*</div>*@
                 </section>
-
+                <div class="col-xl-12 mt-5 px-1">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h3 class="text-center">@DateTime.Now.ToString("yyyy") Order Summary</h3>
+                            <div id="bar-chart-example" class="w-100"></div>
+                        </div>
+                    </div>
+                </div>
                 <footer class="block py-4">
                     <div class="col-md-12 mx-auto">
                         <p class="text-center font-weight-light small">&copy; Copyright 2020. All Rights Reserved.<br /> Designed by ShopNow</p>
@@ -147,8 +157,44 @@
                 </footer>
             </div>
         </div>
+        <div class="row mt-5">
+            
+        </div>
     </div>
+    <script>
+        $(document).ready(function () {
+            var exampleBarChartData = {
+                "datasets": {
+                    "values":[@Model.OrderJanCount,@Model.OrderFebCount,@Model.OrderMarCount,@Model.OrderAprCount,@Model.OrderMayCount,@Model.OrderJunCount,@Model.OrderJulCount,@Model.OrderAugCount,@Model.OrderSepCount,@Model.OrderOctCount,@Model.OrderNovCount,@Model.OrderDecCount], /*[100, 200, 150, 300, 450, 500, 350, 600, 400, 250, 300, 650],*/
+                    "labels": [
+                        "January",
+                        "February",
+                        "March",
+                        "April",
+                        "May",
+                        "June",
+                        "July",
+                        "August",
+                        "September",
+                        "October",
+                        "November",
+                        "December"
+                    ],
+                        "color": "green"
+        },
+            "height": "300px",
+            "width": "1300px",
+            //"background": "#FFFFFF",
+            "shadowDepth": "0",
+
+            };
+        MaterialCharts.bar("#bar-chart-example", exampleBarChartData);
+        $('.material-charts-box-chart-vertical-tick-label').each(function () {
+            var value = Math.ceil($(this).html());
+            $(this).html(value);
+        });
+    });
+    </script>
 </body>
 
 </html>
-

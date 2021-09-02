@@ -103,6 +103,8 @@ namespace ShopNow.ViewModels
         public double DelivaryCharge { get; set; }
         public double Latitude { get; set; }
         public double Longtitude { get; set; }
+        public double PenaltyAmount { get; set; }
+        public double WaitingCharge { get; set; }
 
         public List<CartList> List { get; set; }
         public class CartList
@@ -148,7 +150,9 @@ namespace ShopNow.ViewModels
             public string RefundRemark { get; set; }
             public string PaymentMode { get; set; }
             public double Amount { get; set; }
-
+            public Nullable<System.DateTime> ShopCancelledTime { get; set; }
+            public double ShopAcceptedTime { get; set; }
+            public double OrderPeriod { get; set; }
             public string CartStatusText
             {
                 get

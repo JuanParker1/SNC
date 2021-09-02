@@ -24,12 +24,12 @@ namespace ShopNow.Controllers
                 .GroupBy(i => i.sc.ShopId)
             .Select(i => new ShopScheduleIndexViewModel.ListItem
             {
-                Id = i.FirstOrDefault().sc.Id,
                 HasSchedule = i.FirstOrDefault().s.HasSchedule ?? false,
                 ShopId = i.Key,
                 ShopName = i.FirstOrDefault().s.Name,
                 TimeListItems = i.Where(a => a.sc.Status == 0).Select(a => new ShopScheduleIndexViewModel.ListItem.TimeListItem
                 {
+                    Id = a.sc.Id,
                     OffTime = a.sc.OffTime,
                     OnTime = a.sc.OnTime
                 }).ToList()

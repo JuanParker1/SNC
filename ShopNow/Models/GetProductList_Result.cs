@@ -34,6 +34,8 @@ namespace ShopNow.Models
         public string ShopImagePath { get; set; }
         public int Meters { get; set; }
         public Nullable<bool> ShopOnline { get; set; }
+        public bool IsOnline1 { get; set; }
+        public Nullable<System.TimeSpan> NextOnTime { get; set; }
         public int ShopStatus { get; set; }
     }
 }

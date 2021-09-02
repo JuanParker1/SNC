@@ -50,6 +50,7 @@
           <Property Name="ActivateAfterId" Type="int" Nullable="false" />
           <Property Name="RepeatCount" Type="int" Nullable="false" />
           <Property Name="IsForBlackListAbusers" Type="bit" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
@@ -221,6 +222,16 @@
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
           <Property Name="CreatedBy" Type="nvarchar(max)" />
           <Property Name="UpdatedBy" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="CustomerAchievements">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AchievementId" Type="int" Nullable="false" />
+          <Property Name="CustomerId" Type="int" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DateEncoded" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="CustomerAddresses">
           <Key>
@@ -565,6 +576,7 @@
           <Property Name="IsForOnlinePayment" Type="bit" Nullable="false" />
           <Property Name="IsForBlackListAbusers" Type="bit" Nullable="false" />
           <Property Name="BrandId" Type="int" />
+          <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="DateEncoded" Type="date" />
           <Property Name="DateUpdated" Type="date" />
@@ -635,6 +647,7 @@
           <Property Name="WaitingCharge" Type="float" Nullable="false" />
           <Property Name="WaitingTime" Type="int" Nullable="false" />
           <Property Name="WaitingRemark" Type="nvarchar(max)" />
+          <Property Name="ShopAcceptedTime" Type="datetime" />
           <Property Name="OrderReadyTime" Type="datetime" />
           <Property Name="DeliveryBoyShopReachTime" Type="datetime" />
           <Property Name="OrderPickupTime" Type="datetime" />
@@ -991,12 +1004,6 @@
           <Property Name="OrderNumber" Type="int" />
           <Property Name="DateEncoded" Type="datetime" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="SearchData">
-          <Property Name="source" Type="nvarchar" MaxLength="500" />
-          <Property Name="keyValue" Type="nvarchar" MaxLength="500" />
-        </EntityType>-->
         <EntityType Name="ShopCategories">
           <Key>
             <PropertyRef Name="Id" />
@@ -1437,6 +1444,7 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
           <EntitySet Name="BrandOwners" EntityType="Self.BrandOwners" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Brands" EntityType="Self.Brands" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustomerAchievements" EntityType="Self.CustomerAchievements" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerAddresses" EntityType="Self.CustomerAddresses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerReview" EntityType="Self.CustomerReview" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
@@ -1566,26 +1574,6 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="AchievementId" Type="Int32" Nullable="false" />
           <Property Name="ProductId" Type="Int64" Nullable="false" />
-        </EntityType>
-        <EntityType Name="AchievementSetting">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ShopDistrict" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CountType" Type="Int32" Nullable="false" />
-          <Property Name="CountValue" Type="Int32" Nullable="false" />
-          <Property Name="Amount" Type="Double" Nullable="false" />
-          <Property Name="HasAccept" Type="Boolean" Nullable="false" />
-          <Property Name="DayLimit" Type="Int32" Nullable="false" />
-          <Property Name="ActivateType" Type="Int32" Nullable="false" />
-          <Property Name="ActivateAfterId" Type="Int32" Nullable="false" />
-          <Property Name="RepeatCount" Type="Int32" Nullable="false" />
-          <Property Name="IsForBlackListAbusers" Type="Boolean" Nullable="false" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <EntityType Name="AchievementShop">
           <Key>
@@ -2092,29 +2080,6 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
           <Property Name="OfferId" Type="Int32" Nullable="false" />
           <Property Name="ProductId" Type="Int64" Nullable="false" />
         </EntityType>
-        <EntityType Name="Offer">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="OwnerType" Type="Int32" Nullable="false" />
-          <Property Name="OfferCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DiscountType" Type="Int32" Nullable="false" />
-          <Property Name="Type" Type="Int32" Nullable="false" />
-          <Property Name="Percentage" Type="Double" Nullable="false" />
-          <Property Name="QuantityLimit" Type="Int32" Nullable="false" />
-          <Property Name="AmountLimit" Type="Int32" Nullable="false" />
-          <Property Name="CustomerCountLimit" Type="Int32" Nullable="false" />
-          <Property Name="MinimumPurchaseAmount" Type="Double" Nullable="false" />
-          <Property Name="IsForFirstOrder" Type="Boolean" Nullable="false" />
-          <Property Name="IsForOnlinePayment" Type="Boolean" Nullable="false" />
-          <Property Name="IsForBlackListAbusers" Type="Boolean" Nullable="false" />
-          <Property Name="BrandId" Type="Int32" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="DateEncoded" Type="DateTime" Precision="0" />
-          <Property Name="DateUpdated" Type="DateTime" Precision="0" />
-        </EntityType>
         <EntityType Name="OfferShop">
           <Key>
             <PropertyRef Name="Id" />
@@ -2141,58 +2106,7 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
           <Property Name="UnitPrice" Type="Double" Nullable="false" />
           <Property Name="Price" Type="Double" Nullable="false" />
           <Property Name="Status" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Order" Relationship="Self.FK_OrderItems_Orders" FromRole="OrderItems" ToRole="Orders" />
-        </EntityType>
-        <EntityType Name="Order">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CustomerId" Type="Int32" Nullable="false" />
-          <Property Name="CustomerName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="CustomerPhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ShopId" Type="Int32" Nullable="false" />
-          <Property Name="ShopName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="DeliveryAddress" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="ShopPhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="ShopOwnerPhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="TotalProduct" Type="Int32" Nullable="false" />
-          <Property Name="TotalQuantity" Type="Int32" Nullable="false" />
-          <Property Name="TotalPrice" Type="Double" Nullable="false" />
-          <Property Name="WalletAmount" Type="Double" Nullable="false" />
-          <Property Name="NetTotal" Type="Double" Nullable="false" />
-          <Property Name="OrderNumber" Type="Int32" Nullable="false" />
-          <Property Name="DeliveryBoyId" Type="Int32" Nullable="false" />
-          <Property Name="DeliveryBoyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DeliveryBoyPhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="DeliveryCharge" Type="Double" Nullable="false" />
-          <Property Name="ShopDeliveryDiscount" Type="Double" Nullable="false" />
-          <Property Name="NetDeliveryCharge" Type="Double" Nullable="false" />
-          <Property Name="Convinenientcharge" Type="Double" Nullable="false" />
-          <Property Name="Packingcharge" Type="Double" Nullable="false" />
-          <Property Name="Latitude" Type="Double" Nullable="false" />
-          <Property Name="Longitude" Type="Double" Nullable="false" />
-          <Property Name="Distance" Type="Double" Nullable="false" />
-          <Property Name="ShopPaymentStatus" Type="Int32" Nullable="false" />
-          <Property Name="DeliveryBoyPaymentStatus" Type="Int32" Nullable="false" />
-          <Property Name="DeliveryOrderPaymentStatus" Type="Int32" Nullable="false" />
-          <Property Name="RatePerOrder" Type="Double" Nullable="false" />
-          <Property Name="PenaltyAmount" Type="Double" Nullable="false" />
-          <Property Name="PenaltyRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="WaitingCharge" Type="Double" Nullable="false" />
-          <Property Name="WaitingTime" Type="Int32" Nullable="false" />
-          <Property Name="WaitingRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="OrderReadyTime" Type="DateTime" Precision="3" />
-          <Property Name="DeliveryBoyShopReachTime" Type="DateTime" Precision="3" />
-          <Property Name="OrderPickupTime" Type="DateTime" Precision="3" />
-          <Property Name="DeliveryLocationReachTime" Type="DateTime" Precision="3" />
-          <Property Name="DeliveredTime" Type="DateTime" Precision="3" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="UpdatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="OrderItems" Relationship="Self.FK_OrderItems_Orders" FromRole="Orders" ToRole="OrderItems" />
+          <NavigationProperty Name="Order" Relationship="sncModel.FK_OrderItems_Orders" FromRole="OrderItem" ToRole="Order" />
         </EntityType>
         <EntityType Name="OtpVerification">
           <Key>
@@ -2723,18 +2637,6 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_OrderItems_Orders">
-          <End Role="Orders" Type="Self.Order" Multiplicity="1" />
-          <End Role="OrderItems" Type="Self.OrderItem" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Orders">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="OrderItems">
-              <PropertyRef Name="OrderId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_SubCategories_ProductType">
           <End Role="ProductType" Type="Self.ProductType" Multiplicity="1" />
           <End Role="SubCategories" Type="Self.SubCategory" Multiplicity="*" />
@@ -2747,10 +2649,9 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="sncEntities1" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="sncEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AccessPolicies" EntityType="Self.AccessPolicy" />
           <EntitySet Name="AchievementProducts" EntityType="Self.AchievementProduct" />
-          <EntitySet Name="AchievementSettings" EntityType="Self.AchievementSetting" />
           <EntitySet Name="AchievementShops" EntityType="Self.AchievementShop" />
           <EntitySet Name="AddOnCategories" EntityType="Self.AddOnCategory" />
           <EntitySet Name="ApiSettings" EntityType="Self.ApiSetting" />
@@ -2774,10 +2675,8 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
           <EntitySet Name="MeasurementUnits" EntityType="Self.MeasurementUnit" />
           <EntitySet Name="NextSubCategories" EntityType="Self.NextSubCategory" />
           <EntitySet Name="OfferProducts" EntityType="Self.OfferProduct" />
-          <EntitySet Name="Offers" EntityType="Self.Offer" />
           <EntitySet Name="OfferShops" EntityType="Self.OfferShop" />
           <EntitySet Name="OrderItems" EntityType="Self.OrderItem" />
-          <EntitySet Name="Orders" EntityType="Self.Order" />
           <EntitySet Name="OtpVerifications" EntityType="Self.OtpVerification" />
           <EntitySet Name="Packages" EntityType="Self.Package" />
           <EntitySet Name="Pages" EntityType="Self.Page" />
@@ -2833,10 +2732,6 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
             <End Role="SubCategories" EntitySet="SubCategories" />
             <End Role="NextSubCategories" EntitySet="NextSubCategories" />
           </AssociationSet>
-          <AssociationSet Name="FK_OrderItems_Orders" Association="Self.FK_OrderItems_Orders">
-            <End Role="Orders" EntitySet="Orders" />
-            <End Role="OrderItems" EntitySet="OrderItems" />
-          </AssociationSet>
           <AssociationSet Name="FK_SubCategories_ProductType" Association="Self.FK_SubCategories_ProductType">
             <End Role="ProductType" EntitySet="ProductTypes" />
             <End Role="SubCategories" EntitySet="SubCategories" />
@@ -2846,13 +2741,6 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
           </FunctionImport>
           <FunctionImport Name="GetCustomerCount" ReturnType="Collection(Int32)" />
           <FunctionImport Name="GetDEliveryBoyList" ReturnType="Collection(sncModel.GetDEliveryBoyList_Result)" />
-          <FunctionImport Name="GetProductList" ReturnType="Collection(sncModel.GetProductList_Result)">
-            <Parameter Name="Longitude" Mode="In" Type="Double" />
-            <Parameter Name="Latitude" Mode="In" Type="Double" />
-            <Parameter Name="str" Mode="In" Type="String" />
-            <Parameter Name="page" Mode="In" Type="Int32" />
-            <Parameter Name="pagesize" Mode="In" Type="Int32" />
-          </FunctionImport>
           <FunctionImport Name="GetProductListCount" ReturnType="Collection(Int32)">
             <Parameter Name="Longitude" Mode="In" Type="Double" />
             <Parameter Name="Latitude" Mode="In" Type="Double" />
@@ -2862,13 +2750,6 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
             <Parameter Name="shopCode" Mode="In" Type="Int32" />
             <Parameter Name="categoryCode" Mode="In" Type="Int32" />
             <Parameter Name="str" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="GetShopCategoryProducts" ReturnType="Collection(sncModel.GetShopCategoryProducts_Result)">
-            <Parameter Name="shopCode" Mode="In" Type="Int32" />
-            <Parameter Name="categoryCode" Mode="In" Type="Int32" />
-            <Parameter Name="str" Mode="In" Type="String" />
-            <Parameter Name="page" Mode="In" Type="Int32" />
-            <Parameter Name="pageSize" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetShopname" ReturnType="Collection(sncModel.GetShopname_Result)">
           <Parameter Name="shopId" Mode="In" Type="Int32" />
@@ -2890,6 +2771,28 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
             <End Role="ProductType" EntitySet="ProductTypes" />
             <End Role="Product" EntitySet="Products" />
           </AssociationSet>
+          <FunctionImport Name="GetProductList" ReturnType="Collection(sncModel.GetProductList_Result)">
+            <Parameter Name="Longitude" Mode="In" Type="Double" />
+            <Parameter Name="Latitude" Mode="In" Type="Double" />
+            <Parameter Name="str" Mode="In" Type="String" />
+            <Parameter Name="page" Mode="In" Type="Int32" />
+            <Parameter Name="pagesize" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetShopCategoryProducts" ReturnType="Collection(sncModel.GetShopCategoryProducts_Result)">
+            <Parameter Name="shopCode" Mode="In" Type="Int32" />
+            <Parameter Name="categoryCode" Mode="In" Type="Int32" />
+            <Parameter Name="str" Mode="In" Type="String" />
+            <Parameter Name="page" Mode="In" Type="Int32" />
+            <Parameter Name="pageSize" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="Orders" EntityType="sncModel.Order" />
+          <AssociationSet Name="FK_OrderItems_Orders" Association="sncModel.FK_OrderItems_Orders">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="OrderItem" EntitySet="OrderItems" />
+          </AssociationSet>
+          <EntitySet Name="Offers" EntityType="sncModel.Offer" />
+          <EntitySet Name="AchievementSettings" EntityType="sncModel.AchievementSetting" />
+          <EntitySet Name="CustomerAchievements" EntityType="sncModel.CustomerAchievement" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -2897,51 +2800,6 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
           <Property Type="Int32" Name="Active" Nullable="false" />
           <Property Type="String" Name="PhoneNumber" Nullable="true" />
           <Property Type="String" Name="ImagePath" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="GetProductList_Result">
-          <Property Type="Int64" Name="ProductId" Nullable="false" />
-          <Property Type="String" Name="ProductName" Nullable="true" />
-          <Property Type="Int32" Name="ShopId" Nullable="false" />
-          <Property Type="String" Name="ShopName" Nullable="true" />
-          <Property Type="Int32" Name="iBarU" Nullable="false" />
-          <Property Type="Int32" Name="CategoryId" Nullable="false" />
-          <Property Type="String" Name="CategoryName" Nullable="true" />
-          <Property Type="Double" Name="DiscountCategoryPercentage" Nullable="false" />
-          <Property Type="Double" Name="MRP" Nullable="false" />
-          <Property Type="Double" Name="Price" Nullable="false" />
-          <Property Type="Int32" Name="Status" Nullable="false" />
-          <Property Type="Decimal" Name="Quantity" Nullable="true" Precision="18" Scale="0" />
-          <Property Type="Boolean" Name="isOnline" Nullable="false" />
-          <Property Type="Int32" Name="ItemId" Nullable="false" />
-          <Property Type="Double" Name="Latitude" Nullable="false" />
-          <Property Type="Double" Name="Longitude" Nullable="false" />
-          <Property Type="Int32" Name="ShopCategoryId" Nullable="false" />
-          <Property Type="String" Name="ImagePath" Nullable="true" />
-          <Property Type="String" Name="ShopImagePath" Nullable="true" />
-          <Property Type="Int32" Name="Meters" Nullable="false" />
-          <Property Type="Boolean" Name="ShopOnline" Nullable="true" />
-          <Property Type="Int32" Name="ShopStatus" Nullable="false" />
-        </ComplexType>
-        <ComplexType Name="GetShopCategoryProducts_Result">
-          <Property Type="Int64" Name="ProductId" Nullable="false" />
-          <Property Type="String" Name="ProductName" Nullable="true" />
-          <Property Type="Int32" Name="ShopId" Nullable="false" />
-          <Property Type="String" Name="ShopName" Nullable="true" />
-          <Property Type="String" Name="ImagePath" Nullable="true" />
-          <Property Type="String" Name="ImagePathLarge1" Nullable="true" />
-          <Property Type="String" Name="ImagePathLarge2" Nullable="true" />
-          <Property Type="String" Name="ImagePathLarge3" Nullable="true" />
-          <Property Type="String" Name="ImagePathLarge4" Nullable="true" />
-          <Property Type="String" Name="ImagePathLarge5" Nullable="true" />
-          <Property Type="Int32" Name="iBarU" Nullable="false" />
-          <Property Type="Int32" Name="CategoryId" Nullable="false" />
-          <Property Type="String" Name="CategoryName" Nullable="true" />
-          <Property Type="Double" Name="DiscountCategoryPercentage" Nullable="false" />
-          <Property Type="Double" Name="MRP" Nullable="false" />
-          <Property Type="Double" Name="SalePrice" Nullable="false" />
-          <Property Type="Int32" Name="Status" Nullable="false" />
-          <Property Type="Decimal" Name="Quantity" Nullable="true" Precision="18" Scale="0" />
-          <Property Type="Int32" Name="Itemid" Nullable="false" />
         </ComplexType>
         <ComplexType Name="GetShopname_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3129,12 +2987,180 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="GetProductList_Result">
+          <Property Type="Int64" Name="ProductId" Nullable="false" />
+          <Property Type="String" Name="ProductName" Nullable="true" />
+          <Property Type="Int32" Name="ShopId" Nullable="false" />
+          <Property Type="String" Name="ShopName" Nullable="true" />
+          <Property Type="Int32" Name="iBarU" Nullable="false" />
+          <Property Type="Int32" Name="CategoryId" Nullable="false" />
+          <Property Type="String" Name="CategoryName" Nullable="true" />
+          <Property Type="Double" Name="DiscountCategoryPercentage" Nullable="false" />
+          <Property Type="Double" Name="MRP" Nullable="false" />
+          <Property Type="Double" Name="Price" Nullable="false" />
+          <Property Type="Int32" Name="Status" Nullable="false" />
+          <Property Type="Decimal" Name="Quantity" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Boolean" Name="isOnline" Nullable="false" />
+          <Property Type="Int32" Name="ItemId" Nullable="false" />
+          <Property Type="Double" Name="Latitude" Nullable="false" />
+          <Property Type="Double" Name="Longitude" Nullable="false" />
+          <Property Type="Int32" Name="ShopCategoryId" Nullable="false" />
+          <Property Type="String" Name="ImagePath" Nullable="true" />
+          <Property Type="String" Name="ShopImagePath" Nullable="true" />
+          <Property Type="Int32" Name="Meters" Nullable="false" />
+          <Property Type="Boolean" Name="ShopOnline" Nullable="true" />
+          <Property Type="Boolean" Name="IsOnline1" Nullable="false" />
+          <Property Type="Time" Name="NextOnTime" Nullable="true" />
+          <Property Type="Int32" Name="ShopStatus" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GetShopCategoryProducts_Result">
+          <Property Type="Int64" Name="ProductId" Nullable="false" />
+          <Property Type="String" Name="ProductName" Nullable="true" />
+          <Property Type="Int32" Name="ShopId" Nullable="false" />
+          <Property Type="String" Name="ShopName" Nullable="true" />
+          <Property Type="String" Name="ImagePath" Nullable="true" />
+          <Property Type="String" Name="ImagePathLarge1" Nullable="true" />
+          <Property Type="String" Name="ImagePathLarge2" Nullable="true" />
+          <Property Type="String" Name="ImagePathLarge3" Nullable="true" />
+          <Property Type="String" Name="ImagePathLarge4" Nullable="true" />
+          <Property Type="String" Name="ImagePathLarge5" Nullable="true" />
+          <Property Type="Int32" Name="iBarU" Nullable="false" />
+          <Property Type="Int32" Name="CategoryId" Nullable="false" />
+          <Property Type="String" Name="CategoryName" Nullable="true" />
+          <Property Type="Double" Name="DiscountCategoryPercentage" Nullable="false" />
+          <Property Type="Double" Name="MRP" Nullable="false" />
+          <Property Type="Double" Name="SalePrice" Nullable="false" />
+          <Property Type="Int32" Name="Status" Nullable="false" />
+          <Property Type="Decimal" Name="Quantity" Nullable="true" Precision="18" Scale="0" />
+          <Property Type="Int32" Name="Itemid" Nullable="false" />
+          <Property Type="Boolean" Name="IsOnline" Nullable="false" />
+          <Property Type="Time" Name="NextOnTime" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="CustomerName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CustomerPhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ShopId" Type="Int32" Nullable="false" />
+          <Property Name="ShopName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DeliveryAddress" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ShopPhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ShopOwnerPhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="TotalProduct" Type="Int32" Nullable="false" />
+          <Property Name="TotalQuantity" Type="Int32" Nullable="false" />
+          <Property Name="TotalPrice" Type="Double" Nullable="false" />
+          <Property Name="WalletAmount" Type="Double" Nullable="false" />
+          <Property Name="NetTotal" Type="Double" Nullable="false" />
+          <Property Name="OrderNumber" Type="Int32" Nullable="false" />
+          <Property Name="DeliveryBoyId" Type="Int32" Nullable="false" />
+          <Property Name="DeliveryBoyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DeliveryBoyPhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DeliveryCharge" Type="Double" Nullable="false" />
+          <Property Name="ShopDeliveryDiscount" Type="Double" Nullable="false" />
+          <Property Name="NetDeliveryCharge" Type="Double" Nullable="false" />
+          <Property Name="Convinenientcharge" Type="Double" Nullable="false" />
+          <Property Name="Packingcharge" Type="Double" Nullable="false" />
+          <Property Name="Latitude" Type="Double" Nullable="false" />
+          <Property Name="Longitude" Type="Double" Nullable="false" />
+          <Property Name="Distance" Type="Double" Nullable="false" />
+          <Property Name="ShopPaymentStatus" Type="Int32" Nullable="false" />
+          <Property Name="DeliveryBoyPaymentStatus" Type="Int32" Nullable="false" />
+          <Property Name="DeliveryOrderPaymentStatus" Type="Int32" Nullable="false" />
+          <Property Name="RatePerOrder" Type="Double" Nullable="false" />
+          <Property Name="PenaltyAmount" Type="Double" Nullable="false" />
+          <Property Name="PenaltyRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="WaitingCharge" Type="Double" Nullable="false" />
+          <Property Name="WaitingTime" Type="Int32" Nullable="false" />
+          <Property Name="WaitingRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ShopAcceptedTime" Type="DateTime" Precision="3" />
+          <Property Name="OrderReadyTime" Type="DateTime" Precision="3" />
+          <Property Name="DeliveryBoyShopReachTime" Type="DateTime" Precision="3" />
+          <Property Name="OrderPickupTime" Type="DateTime" Precision="3" />
+          <Property Name="DeliveryLocationReachTime" Type="DateTime" Precision="3" />
+          <Property Name="DeliveredTime" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="OrderItems" Relationship="sncModel.FK_OrderItems_Orders" FromRole="Order" ToRole="OrderItem" />
+        </EntityType>
+        <Association Name="FK_OrderItems_Orders">
+          <End Type="sncModel.Order" Role="Order" Multiplicity="1" />
+          <End Type="sncModel.OrderItem" Role="OrderItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderItem">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Offer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="OwnerType" Type="Int32" Nullable="false" />
+          <Property Name="OfferCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DiscountType" Type="Int32" Nullable="false" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="Percentage" Type="Double" Nullable="false" />
+          <Property Name="QuantityLimit" Type="Int32" Nullable="false" />
+          <Property Name="AmountLimit" Type="Int32" Nullable="false" />
+          <Property Name="CustomerCountLimit" Type="Int32" Nullable="false" />
+          <Property Name="MinimumPurchaseAmount" Type="Double" Nullable="false" />
+          <Property Name="IsForFirstOrder" Type="Boolean" Nullable="false" />
+          <Property Name="IsForOnlinePayment" Type="Boolean" Nullable="false" />
+          <Property Name="IsForBlackListAbusers" Type="Boolean" Nullable="false" />
+          <Property Name="BrandId" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Precision="0" />
+          <Property Name="DateUpdated" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityType Name="AchievementSetting">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShopDistrict" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CountType" Type="Int32" Nullable="false" />
+          <Property Name="CountValue" Type="Int32" Nullable="false" />
+          <Property Name="Amount" Type="Double" Nullable="false" />
+          <Property Name="HasAccept" Type="Boolean" Nullable="false" />
+          <Property Name="DayLimit" Type="Int32" Nullable="false" />
+          <Property Name="ActivateType" Type="Int32" Nullable="false" />
+          <Property Name="ActivateAfterId" Type="Int32" Nullable="false" />
+          <Property Name="RepeatCount" Type="Int32" Nullable="false" />
+          <Property Name="IsForBlackListAbusers" Type="Boolean" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="CustomerAchievement">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AchievementId" Type="Int32" Nullable="false" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="sncModelStoreContainer" CdmEntityContainer="sncEntities1">
+        <EntityContainerMapping StorageEntityContainer="sncModelStoreContainer" CdmEntityContainer="sncEntities">
           <EntitySetMapping Name="AccessPolicies">
             <EntityTypeMapping TypeName="sncModel.AccessPolicy">
               <MappingFragment StoreEntitySet="AccessPolicies">
@@ -3163,27 +3189,6 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="AchievementId" ColumnName="AchievementId" />
                 <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="AchievementSettings">
-            <EntityTypeMapping TypeName="sncModel.AchievementSetting">
-              <MappingFragment StoreEntitySet="AchievementSettings">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="ShopDistrict" ColumnName="ShopDistrict" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="CountType" ColumnName="CountType" />
-                <ScalarProperty Name="CountValue" ColumnName="CountValue" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="HasAccept" ColumnName="HasAccept" />
-                <ScalarProperty Name="DayLimit" ColumnName="DayLimit" />
-                <ScalarProperty Name="ActivateType" ColumnName="ActivateType" />
-                <ScalarProperty Name="ActivateAfterId" ColumnName="ActivateAfterId" />
-                <ScalarProperty Name="RepeatCount" ColumnName="RepeatCount" />
-                <ScalarProperty Name="IsForBlackListAbusers" ColumnName="IsForBlackListAbusers" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -3702,30 +3707,6 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Offers">
-            <EntityTypeMapping TypeName="sncModel.Offer">
-              <MappingFragment StoreEntitySet="Offers">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="OwnerType" ColumnName="OwnerType" />
-                <ScalarProperty Name="OfferCode" ColumnName="OfferCode" />
-                <ScalarProperty Name="DiscountType" ColumnName="DiscountType" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="Percentage" ColumnName="Percentage" />
-                <ScalarProperty Name="QuantityLimit" ColumnName="QuantityLimit" />
-                <ScalarProperty Name="AmountLimit" ColumnName="AmountLimit" />
-                <ScalarProperty Name="CustomerCountLimit" ColumnName="CustomerCountLimit" />
-                <ScalarProperty Name="MinimumPurchaseAmount" ColumnName="MinimumPurchaseAmount" />
-                <ScalarProperty Name="IsForFirstOrder" ColumnName="IsForFirstOrder" />
-                <ScalarProperty Name="IsForOnlinePayment" ColumnName="IsForOnlinePayment" />
-                <ScalarProperty Name="IsForBlackListAbusers" ColumnName="IsForBlackListAbusers" />
-                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="OfferShops">
             <EntityTypeMapping TypeName="sncModel.OfferShop">
               <MappingFragment StoreEntitySet="OfferShops">
@@ -3752,57 +3733,6 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
                 <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
                 <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Orders">
-            <EntityTypeMapping TypeName="sncModel.Order">
-              <MappingFragment StoreEntitySet="Orders">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
-                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
-                <ScalarProperty Name="CustomerPhoneNumber" ColumnName="CustomerPhoneNumber" />
-                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
-                <ScalarProperty Name="DeliveryAddress" ColumnName="DeliveryAddress" />
-                <ScalarProperty Name="ShopPhoneNumber" ColumnName="ShopPhoneNumber" />
-                <ScalarProperty Name="ShopOwnerPhoneNumber" ColumnName="ShopOwnerPhoneNumber" />
-                <ScalarProperty Name="TotalProduct" ColumnName="TotalProduct" />
-                <ScalarProperty Name="TotalQuantity" ColumnName="TotalQuantity" />
-                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
-                <ScalarProperty Name="WalletAmount" ColumnName="WalletAmount" />
-                <ScalarProperty Name="NetTotal" ColumnName="NetTotal" />
-                <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
-                <ScalarProperty Name="DeliveryBoyId" ColumnName="DeliveryBoyId" />
-                <ScalarProperty Name="DeliveryBoyName" ColumnName="DeliveryBoyName" />
-                <ScalarProperty Name="DeliveryBoyPhoneNumber" ColumnName="DeliveryBoyPhoneNumber" />
-                <ScalarProperty Name="DeliveryCharge" ColumnName="DeliveryCharge" />
-                <ScalarProperty Name="ShopDeliveryDiscount" ColumnName="ShopDeliveryDiscount" />
-                <ScalarProperty Name="NetDeliveryCharge" ColumnName="NetDeliveryCharge" />
-                <ScalarProperty Name="Convinenientcharge" ColumnName="Convinenientcharge" />
-                <ScalarProperty Name="Packingcharge" ColumnName="Packingcharge" />
-                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-                <ScalarProperty Name="Distance" ColumnName="Distance" />
-                <ScalarProperty Name="ShopPaymentStatus" ColumnName="ShopPaymentStatus" />
-                <ScalarProperty Name="DeliveryBoyPaymentStatus" ColumnName="DeliveryBoyPaymentStatus" />
-                <ScalarProperty Name="DeliveryOrderPaymentStatus" ColumnName="DeliveryOrderPaymentStatus" />
-                <ScalarProperty Name="RatePerOrder" ColumnName="RatePerOrder" />
-                <ScalarProperty Name="PenaltyAmount" ColumnName="PenaltyAmount" />
-                <ScalarProperty Name="PenaltyRemark" ColumnName="PenaltyRemark" />
-                <ScalarProperty Name="WaitingCharge" ColumnName="WaitingCharge" />
-                <ScalarProperty Name="WaitingTime" ColumnName="WaitingTime" />
-                <ScalarProperty Name="WaitingRemark" ColumnName="WaitingRemark" />
-                <ScalarProperty Name="OrderReadyTime" ColumnName="OrderReadyTime" />
-                <ScalarProperty Name="DeliveryBoyShopReachTime" ColumnName="DeliveryBoyShopReachTime" />
-                <ScalarProperty Name="OrderPickupTime" ColumnName="OrderPickupTime" />
-                <ScalarProperty Name="DeliveryLocationReachTime" ColumnName="DeliveryLocationReachTime" />
-                <ScalarProperty Name="DeliveredTime" ColumnName="DeliveredTime" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4274,61 +4204,8 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GetProductList" FunctionName="sncModel.Store.GetProductList">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="sncModel.GetProductList_Result">
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
-                <ScalarProperty Name="iBarU" ColumnName="iBarU" />
-                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
-                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
-                <ScalarProperty Name="DiscountCategoryPercentage" ColumnName="DiscountCategoryPercentage" />
-                <ScalarProperty Name="MRP" ColumnName="MRP" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="isOnline" ColumnName="isOnline" />
-                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
-                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-                <ScalarProperty Name="ShopCategoryId" ColumnName="ShopCategoryId" />
-                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
-                <ScalarProperty Name="ShopImagePath" ColumnName="ShopImagePath" />
-                <ScalarProperty Name="Meters" ColumnName="Meters" />
-                <ScalarProperty Name="ShopOnline" ColumnName="ShopOnline" />
-                <ScalarProperty Name="ShopStatus" ColumnName="ShopStatus" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GetProductListCount" FunctionName="sncModel.Store.GetProductListCount" />
           <FunctionImportMapping FunctionImportName="GetShopCategoryProductCount" FunctionName="sncModel.Store.GetShopCategoryProductCount" />
-          <FunctionImportMapping FunctionImportName="GetShopCategoryProducts" FunctionName="sncModel.Store.GetShopCategoryProducts">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="sncModel.GetShopCategoryProducts_Result">
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
-                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
-                <ScalarProperty Name="ImagePathLarge1" ColumnName="ImagePathLarge1" />
-                <ScalarProperty Name="ImagePathLarge2" ColumnName="ImagePathLarge2" />
-                <ScalarProperty Name="ImagePathLarge3" ColumnName="ImagePathLarge3" />
-                <ScalarProperty Name="ImagePathLarge4" ColumnName="ImagePathLarge4" />
-                <ScalarProperty Name="ImagePathLarge5" ColumnName="ImagePathLarge5" />
-                <ScalarProperty Name="iBarU" ColumnName="iBarU" />
-                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
-                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
-                <ScalarProperty Name="DiscountCategoryPercentage" ColumnName="DiscountCategoryPercentage" />
-                <ScalarProperty Name="MRP" ColumnName="MRP" />
-                <ScalarProperty Name="SalePrice" ColumnName="SalePrice" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="Itemid" ColumnName="Itemid" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GetShopname" FunctionName="sncModel.Store.GetShopname">
             <ResultMapping>
               <ComplexTypeMapping TypeName="sncModel.GetShopname_Result">
@@ -4494,6 +4371,173 @@ warning 6013: The table/view 'snc.dbo.SearchData' does not have a primary key de
                 <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
                 <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetProductList" FunctionName="sncModel.Store.GetProductList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="sncModel.GetProductList_Result">
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
+                <ScalarProperty Name="iBarU" ColumnName="iBarU" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="DiscountCategoryPercentage" ColumnName="DiscountCategoryPercentage" />
+                <ScalarProperty Name="MRP" ColumnName="MRP" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="isOnline" ColumnName="isOnline" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="ShopCategoryId" ColumnName="ShopCategoryId" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="ShopImagePath" ColumnName="ShopImagePath" />
+                <ScalarProperty Name="Meters" ColumnName="Meters" />
+                <ScalarProperty Name="ShopOnline" ColumnName="ShopOnline" />
+                <ScalarProperty Name="IsOnline1" ColumnName="IsOnline1" />
+                <ScalarProperty Name="NextOnTime" ColumnName="NextOnTime" />
+                <ScalarProperty Name="ShopStatus" ColumnName="ShopStatus" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetShopCategoryProducts" FunctionName="sncModel.Store.GetShopCategoryProducts">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="sncModel.GetShopCategoryProducts_Result">
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="ImagePathLarge1" ColumnName="ImagePathLarge1" />
+                <ScalarProperty Name="ImagePathLarge2" ColumnName="ImagePathLarge2" />
+                <ScalarProperty Name="ImagePathLarge3" ColumnName="ImagePathLarge3" />
+                <ScalarProperty Name="ImagePathLarge4" ColumnName="ImagePathLarge4" />
+                <ScalarProperty Name="ImagePathLarge5" ColumnName="ImagePathLarge5" />
+                <ScalarProperty Name="iBarU" ColumnName="iBarU" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="DiscountCategoryPercentage" ColumnName="DiscountCategoryPercentage" />
+                <ScalarProperty Name="MRP" ColumnName="MRP" />
+                <ScalarProperty Name="SalePrice" ColumnName="SalePrice" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Itemid" ColumnName="Itemid" />
+                <ScalarProperty Name="IsOnline" ColumnName="IsOnline" />
+                <ScalarProperty Name="NextOnTime" ColumnName="NextOnTime" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="sncModel.Order">
+              <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DeliveredTime" ColumnName="DeliveredTime" />
+                <ScalarProperty Name="DeliveryLocationReachTime" ColumnName="DeliveryLocationReachTime" />
+                <ScalarProperty Name="OrderPickupTime" ColumnName="OrderPickupTime" />
+                <ScalarProperty Name="DeliveryBoyShopReachTime" ColumnName="DeliveryBoyShopReachTime" />
+                <ScalarProperty Name="OrderReadyTime" ColumnName="OrderReadyTime" />
+                <ScalarProperty Name="ShopAcceptedTime" ColumnName="ShopAcceptedTime" />
+                <ScalarProperty Name="WaitingRemark" ColumnName="WaitingRemark" />
+                <ScalarProperty Name="WaitingTime" ColumnName="WaitingTime" />
+                <ScalarProperty Name="WaitingCharge" ColumnName="WaitingCharge" />
+                <ScalarProperty Name="PenaltyRemark" ColumnName="PenaltyRemark" />
+                <ScalarProperty Name="PenaltyAmount" ColumnName="PenaltyAmount" />
+                <ScalarProperty Name="RatePerOrder" ColumnName="RatePerOrder" />
+                <ScalarProperty Name="DeliveryOrderPaymentStatus" ColumnName="DeliveryOrderPaymentStatus" />
+                <ScalarProperty Name="DeliveryBoyPaymentStatus" ColumnName="DeliveryBoyPaymentStatus" />
+                <ScalarProperty Name="ShopPaymentStatus" ColumnName="ShopPaymentStatus" />
+                <ScalarProperty Name="Distance" ColumnName="Distance" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Packingcharge" ColumnName="Packingcharge" />
+                <ScalarProperty Name="Convinenientcharge" ColumnName="Convinenientcharge" />
+                <ScalarProperty Name="NetDeliveryCharge" ColumnName="NetDeliveryCharge" />
+                <ScalarProperty Name="ShopDeliveryDiscount" ColumnName="ShopDeliveryDiscount" />
+                <ScalarProperty Name="DeliveryCharge" ColumnName="DeliveryCharge" />
+                <ScalarProperty Name="DeliveryBoyPhoneNumber" ColumnName="DeliveryBoyPhoneNumber" />
+                <ScalarProperty Name="DeliveryBoyName" ColumnName="DeliveryBoyName" />
+                <ScalarProperty Name="DeliveryBoyId" ColumnName="DeliveryBoyId" />
+                <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
+                <ScalarProperty Name="NetTotal" ColumnName="NetTotal" />
+                <ScalarProperty Name="WalletAmount" ColumnName="WalletAmount" />
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+                <ScalarProperty Name="TotalQuantity" ColumnName="TotalQuantity" />
+                <ScalarProperty Name="TotalProduct" ColumnName="TotalProduct" />
+                <ScalarProperty Name="ShopOwnerPhoneNumber" ColumnName="ShopOwnerPhoneNumber" />
+                <ScalarProperty Name="ShopPhoneNumber" ColumnName="ShopPhoneNumber" />
+                <ScalarProperty Name="DeliveryAddress" ColumnName="DeliveryAddress" />
+                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="CustomerPhoneNumber" ColumnName="CustomerPhoneNumber" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Offers">
+            <EntityTypeMapping TypeName="sncModel.Offer">
+              <MappingFragment StoreEntitySet="Offers">
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
+                <ScalarProperty Name="IsForBlackListAbusers" ColumnName="IsForBlackListAbusers" />
+                <ScalarProperty Name="IsForOnlinePayment" ColumnName="IsForOnlinePayment" />
+                <ScalarProperty Name="IsForFirstOrder" ColumnName="IsForFirstOrder" />
+                <ScalarProperty Name="MinimumPurchaseAmount" ColumnName="MinimumPurchaseAmount" />
+                <ScalarProperty Name="CustomerCountLimit" ColumnName="CustomerCountLimit" />
+                <ScalarProperty Name="AmountLimit" ColumnName="AmountLimit" />
+                <ScalarProperty Name="QuantityLimit" ColumnName="QuantityLimit" />
+                <ScalarProperty Name="Percentage" ColumnName="Percentage" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="DiscountType" ColumnName="DiscountType" />
+                <ScalarProperty Name="OfferCode" ColumnName="OfferCode" />
+                <ScalarProperty Name="OwnerType" ColumnName="OwnerType" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AchievementSettings">
+            <EntityTypeMapping TypeName="sncModel.AchievementSetting">
+              <MappingFragment StoreEntitySet="AchievementSettings">
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IsForBlackListAbusers" ColumnName="IsForBlackListAbusers" />
+                <ScalarProperty Name="RepeatCount" ColumnName="RepeatCount" />
+                <ScalarProperty Name="ActivateAfterId" ColumnName="ActivateAfterId" />
+                <ScalarProperty Name="ActivateType" ColumnName="ActivateType" />
+                <ScalarProperty Name="DayLimit" ColumnName="DayLimit" />
+                <ScalarProperty Name="HasAccept" ColumnName="HasAccept" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="CountValue" ColumnName="CountValue" />
+                <ScalarProperty Name="CountType" ColumnName="CountType" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ShopDistrict" ColumnName="ShopDistrict" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerAchievements">
+            <EntityTypeMapping TypeName="sncModel.CustomerAchievement">
+              <MappingFragment StoreEntitySet="CustomerAchievements">
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="AchievementId" ColumnName="AchievementId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

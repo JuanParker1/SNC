@@ -99,7 +99,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="col-form-label font-weight-bold text-muted">Amount</label>
-                                    <input class="form-control" type="number" name="Amount" value="@Model.Amount"/>
+                                    <input class="form-control" type="number" name="Amount" value="@Model.Amount" />
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -118,10 +118,10 @@
                         <div class="row">
                             <div class="col-md-6 pl-5">
                                 <label class="form-check-label my-3">
-                                    <input type="checkbox" class="form-check-input" name="HasAccept" value="true" @if (Model.HasAccept == true) { <text>checked</text> } />Start game after customer accept the challenge?
+                                    <input type="checkbox" class="form-check-input" name="HasAccept" value="true" @if (Model.HasAccept == true) { <text> checked</text> } />Start game after customer accept the challenge?
                                 </label>
                                 <label class="form-check-label">
-                                    <input type="checkbox" class="form-check-input" name="IsForBlackListAbusers" value="true" @if (Model.IsForBlackListAbusers == true) { <text>checked</text> } />Also For Black List Abusers?
+                                    <input type="checkbox" class="form-check-input" name="IsForBlackListAbusers" value="true" @if (Model.IsForBlackListAbusers == true) { <text> checked</text> } />Also For Black List Abusers?
                                 </label>
                             </div>
                             <div class="col">
@@ -150,6 +150,10 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-12">
+                                <label class="col-form-label">Description</label>
+                                <textarea name="Description" class="form-control ckeditor">@Model.Description</textarea>
+                            </div>
                         </div>
                         <div class="mx-auto col-6 mt-3"> <input type="submit" value="Update" class="btn btn-success btn-block" /></div>
                     </form>
@@ -163,7 +167,7 @@
     <script src="~/Scripts/select2/js/select2.js"></script>
     <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
     <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
-
+    <script src="~/Scripts/ckeditor/ckeditor.js"></script>
     <script>
         $(document).ready(function () {
             $("input[name=CountType][value='@Model.CountType']").prop('checked', true);

@@ -609,6 +609,7 @@ namespace ShopNow.ViewModels
             public bool Verify { get; set; }
             public bool OtpVerify { get; set; }
             public string DateEncoded { get; set; }
+            public TimeSpan? NextOnTime { get; set; }
         }
         public class VerifyList
         {
@@ -654,6 +655,8 @@ namespace ShopNow.ViewModels
             public string ImagePath { get; set; }
             public int Status { get; set; }
             public bool Customisation { get; set; }
+            public bool IsOnline { get; set; }
+            public TimeSpan? NextOnTime { get; set; }
             public double DiscountCategoryPercentage { get; set; }
         }
         public class DrugCompundDetailList

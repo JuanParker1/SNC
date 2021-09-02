@@ -465,6 +465,9 @@
     <Compile Include="Models\Customer.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CustomerAchievement.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CustomerAddress.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
@@ -634,6 +637,7 @@
     <Compile Include="ViewModels\BillViewModel.cs" />
     <Compile Include="ViewModels\CartViewModel.cs" />
     <Compile Include="ViewModels\CustomerReviewViewModel .cs" />
+    <Compile Include="ViewModels\DashboardViewModels.cs" />
     <Compile Include="ViewModels\DeliveryBoysList.cs" />
     <Compile Include="ViewModels\DeliveryBoyViewModel.cs" />
     <Compile Include="ViewModels\DiscountCategoryViewModel.cs" />
@@ -687,6 +691,7 @@
     <Content Include="Content\bootstrap-responsive.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\chart\material-charts.css" />
     <Content Include="Content\clndr.css" />
     <Content Include="Content\coca-print-style.css" />
     <Content Include="Content\custom.css" />
@@ -745,6 +750,7 @@
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\chart\material-charts.js" />
     <Content Include="Scripts\ckeditor\adapters\jquery.js" />
     <Content Include="Scripts\ckeditor\build-config.js" />
     <Content Include="Scripts\ckeditor\ckeditor.js" />
@@ -2942,6 +2948,7 @@
     <Content Include="Scripts\popper.min.js.map" />
     <Content Include="Scripts\README.md" />
     <Content Include="Scripts\ValidateRequiredFields.js" />
+    <Content Include="Sounds\chil.wav" />
     <Content Include="Views\503.html" />
     <Content Include="Views\Shared\_AdminMenu.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -3165,6 +3172,7 @@
     <Content Include="Views\Shop\CreditsHistory.cshtml" />
     <Content Include="Views\ShopSchedule\Index.cshtml" />
     <Content Include="Views\ProductSchedule\Index.cshtml" />
+    <Content Include="Views\MasterProduct\ElectronicUpload.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

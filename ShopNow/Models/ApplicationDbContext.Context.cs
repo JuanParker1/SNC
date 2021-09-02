@@ -29,7 +29,6 @@ namespace ShopNow.Models
     
         public virtual DbSet<AccessPolicy> AccessPolicies { get; set; }
         public virtual DbSet<AchievementProduct> AchievementProducts { get; set; }
-        public virtual DbSet<AchievementSetting> AchievementSettings { get; set; }
         public virtual DbSet<AchievementShop> AchievementShops { get; set; }
         public virtual DbSet<AddOnCategory> AddOnCategories { get; set; }
         public virtual DbSet<ApiSetting> ApiSettings { get; set; }
@@ -53,10 +52,8 @@ namespace ShopNow.Models
         public virtual DbSet<MeasurementUnit> MeasurementUnits { get; set; }
         public virtual DbSet<NextSubCategory> NextSubCategories { get; set; }
         public virtual DbSet<OfferProduct> OfferProducts { get; set; }
-        public virtual DbSet<Offer> Offers { get; set; }
         public virtual DbSet<OfferShop> OfferShops { get; set; }
         public virtual DbSet<OrderItem> OrderItems { get; set; }
-        public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OtpVerification> OtpVerifications { get; set; }
         public virtual DbSet<Package> Packages { get; set; }
         public virtual DbSet<Page> Pages { get; set; }
@@ -84,6 +81,10 @@ namespace ShopNow.Models
         public virtual DbSet<ProductSchedule> ProductSchedules { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Shop> Shops { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<Offer> Offers { get; set; }
+        public virtual DbSet<AchievementSetting> AchievementSettings { get; set; }
+        public virtual DbSet<CustomerAchievement> CustomerAchievements { get; set; }
     
         [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)
@@ -103,31 +104,6 @@ namespace ShopNow.Models
         public virtual ObjectResult<GetDEliveryBoyList_Result> GetDEliveryBoyList()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetDEliveryBoyList_Result>("GetDEliveryBoyList");
-        }
-    
-        public virtual ObjectResult<GetProductList_Result> GetProductList(Nullable<double> longitude, Nullable<double> latitude, string str, Nullable<int> page, Nullable<int> pagesize)
-        {
-            var longitudeParameter = longitude.HasValue ?
-                new ObjectParameter("Longitude", longitude) :
-                new ObjectParameter("Longitude", typeof(double));
-    
-            var latitudeParameter = latitude.HasValue ?
-                new ObjectParameter("Latitude", latitude) :
-                new ObjectParameter("Latitude", typeof(double));
-    
-            var strParameter = str != null ?
-                new ObjectParameter("str", str) :
-                new ObjectParameter("str", typeof(string));
-    
-            var pageParameter = page.HasValue ?
-                new ObjectParameter("page", page) :
-                new ObjectParameter("page", typeof(int));
-    
-            var pagesizeParameter = pagesize.HasValue ?
-                new ObjectParameter("pagesize", pagesize) :
-                new ObjectParameter("pagesize", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetProductList_Result>("GetProductList", longitudeParameter, latitudeParameter, strParameter, pageParameter, pagesizeParameter);
         }
     
         public virtual ObjectResult<Nullable<int>> GetProductListCount(Nullable<double> longitude, Nullable<double> latitude, string str)
@@ -164,31 +140,6 @@ namespace ShopNow.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("GetShopCategoryProductCount", shopCodeParameter, categoryCodeParameter, strParameter);
         }
     
-        public virtual ObjectResult<GetShopCategoryProducts_Result> GetShopCategoryProducts(Nullable<int> shopCode, Nullable<int> categoryCode, string str, Nullable<int> page, Nullable<int> pageSize)
-        {
-            var shopCodeParameter = shopCode.HasValue ?
-                new ObjectParameter("shopCode", shopCode) :
-                new ObjectParameter("shopCode", typeof(int));
-    
-            var categoryCodeParameter = categoryCode.HasValue ?
-                new ObjectParameter("categoryCode", categoryCode) :
-                new ObjectParameter("categoryCode", typeof(int));
-    
-            var strParameter = str != null ?
-                new ObjectParameter("str", str) :
-                new ObjectParameter("str", typeof(string));
-    
-            var pageParameter = page.HasValue ?
-                new ObjectParameter("page", page) :
-                new ObjectParameter("page", typeof(int));
-    
-            var pageSizeParameter = pageSize.HasValue ?
-                new ObjectParameter("pageSize", pageSize) :
-                new ObjectParameter("pageSize", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetShopCategoryProducts_Result>("GetShopCategoryProducts", shopCodeParameter, categoryCodeParameter, strParameter, pageParameter, pageSizeParameter);
-        }
-    
         public virtual ObjectResult<GetShopname_Result> GetShopname(Nullable<int> shopId)
         {
             var shopIdParameter = shopId.HasValue ?
@@ -213,6 +164,56 @@ namespace ShopNow.Models
                 new ObjectParameter("shopcode", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ReatillerPaymentReportAdmin", fromParameter, toParameter, shopcodeParameter);
+        }
+    
+        public virtual ObjectResult<GetProductList_Result> GetProductList(Nullable<double> longitude, Nullable<double> latitude, string str, Nullable<int> page, Nullable<int> pagesize)
+        {
+            var longitudeParameter = longitude.HasValue ?
+                new ObjectParameter("Longitude", longitude) :
+                new ObjectParameter("Longitude", typeof(double));
+    
+            var latitudeParameter = latitude.HasValue ?
+                new ObjectParameter("Latitude", latitude) :
+                new ObjectParameter("Latitude", typeof(double));
+    
+            var strParameter = str != null ?
+                new ObjectParameter("str", str) :
+                new ObjectParameter("str", typeof(string));
+    
+            var pageParameter = page.HasValue ?
+                new ObjectParameter("page", page) :
+                new ObjectParameter("page", typeof(int));
+    
+            var pagesizeParameter = pagesize.HasValue ?
+                new ObjectParameter("pagesize", pagesize) :
+                new ObjectParameter("pagesize", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetProductList_Result>("GetProductList", longitudeParameter, latitudeParameter, strParameter, pageParameter, pagesizeParameter);
+        }
+    
+        public virtual ObjectResult<GetShopCategoryProducts_Result> GetShopCategoryProducts(Nullable<int> shopCode, Nullable<int> categoryCode, string str, Nullable<int> page, Nullable<int> pageSize)
+        {
+            var shopCodeParameter = shopCode.HasValue ?
+                new ObjectParameter("shopCode", shopCode) :
+                new ObjectParameter("shopCode", typeof(int));
+    
+            var categoryCodeParameter = categoryCode.HasValue ?
+                new ObjectParameter("categoryCode", categoryCode) :
+                new ObjectParameter("categoryCode", typeof(int));
+    
+            var strParameter = str != null ?
+                new ObjectParameter("str", str) :
+                new ObjectParameter("str", typeof(string));
+    
+            var pageParameter = page.HasValue ?
+                new ObjectParameter("page", page) :
+                new ObjectParameter("page", typeof(int));
+    
+            var pageSizeParameter = pageSize.HasValue ?
+                new ObjectParameter("pageSize", pageSize) :
+                new ObjectParameter("pageSize", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetShopCategoryProducts_Result>("GetShopCategoryProducts", shopCodeParameter, categoryCodeParameter, strParameter, pageParameter, pageSizeParameter);
         }
     }
 }
