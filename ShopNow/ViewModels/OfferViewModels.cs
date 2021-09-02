@@ -12,6 +12,7 @@ namespace ShopNow.ViewModels
         {
             public int Id { get; set; }
             public string Name { get; set; }
+            public string OfferCode { get; set; }
             public int OwnerType { get; set; }
             public int DiscountType { get; set; }
             public int Type { get; set; }

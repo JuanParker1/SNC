@@ -58,6 +58,7 @@ namespace ShopNow.ViewModels
         public bool IsForBlackListAbusers { get; set; }
         public int[] ShopIds { get; set; }
         public long[] ProductIds { get; set; }
+        public string Description { get; set; }
     }
 
     public class AchievementSettingEditViewModel : AchievementSettingCreateViewModel

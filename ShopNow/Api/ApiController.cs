@@ -4460,6 +4460,7 @@ namespace ShopNow.Controllers
 
         public JsonResult GetCheckOffer(int shopId, int customerId, double amount, bool isOnlinePayment, string offerCode)
         {
+           
             var offer = db.Offers.FirstOrDefault(i => i.OfferCode == offerCode && i.Status == 0);
             if (offer != null)
             {

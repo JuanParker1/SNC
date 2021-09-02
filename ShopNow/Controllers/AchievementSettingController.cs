@@ -59,6 +59,7 @@ namespace ShopNow.Controllers
 
         [AccessPolicy(PageCode = "")]
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult Create(AchievementSettingCreateViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -139,6 +140,7 @@ namespace ShopNow.Controllers
 
         [AccessPolicy(PageCode = "")]
         [HttpPost]
+        [ValidateInput(false)]
         public ActionResult Edit(AchievementSettingEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);

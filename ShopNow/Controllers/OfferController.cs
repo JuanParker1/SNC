@@ -48,7 +48,8 @@ namespace ShopNow.Controllers
                     Percentage = i.Percentage,
                     QuantityLimit = i.QuantityLimit,
                     Type = i.Type,
-                    Id = i.Id
+                    Id = i.Id,
+                    OfferCode = i.OfferCode
                 }).ToList();
             return View(model);
         }

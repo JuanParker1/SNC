@@ -7,7 +7,6 @@
       <Diagram DiagramId="8c1ea3248a084182bb3a5bf766ce58e3" Name="Diagram1" ZoomLevel="86">
         <EntityTypeShape EntityType="sncModel.AccessPolicy" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.AchievementProduct" Width="1.5" PointX="5.75" PointY="5.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.AchievementSetting" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.AchievementShop" Width="1.5" PointX="9.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.AddOnCategory" Width="1.5" PointX="5.75" PointY="14.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.ApiSetting" Width="1.5" PointX="15.75" PointY="8.75" IsExpanded="true" />
@@ -74,6 +73,8 @@
         <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="13.75" PointY="33.125" />
         <AssociationConnector Association="sncModel.FK_OrderItems_Orders" />
         <EntityTypeShape EntityType="sncModel.Offer" Width="1.5" PointX="0.75" PointY="13.75" />
+        <EntityTypeShape EntityType="sncModel.AchievementSetting" Width="1.5" PointX="10.375" PointY="27.75" />
+        <EntityTypeShape EntityType="sncModel.CustomerAchievement" Width="1.5" PointX="27.375" PointY="12.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
