@@ -1519,9 +1519,9 @@ namespace ShopNow.Controllers
                         int idx = master.FindIndex(a => a.Name == row[model.Name].ToString().Trim());
                         if (idx <= 0)
                         {
-                            var varCategoryId = CheckCategory(row[model.CategoryName].ToString().Trim(), 2, "FMCG");
-                            var varSubCategoryId = CheckSubCategory(varCategoryId, row[model.CategoryName].ToString().Trim(), row[model.SubCategoryName].ToString().Trim(), 2, "FMCG");
-                            var varNextSubCategoryId = CheckNextSubCategory(varSubCategoryId, row[model.SubCategoryName].ToString().Trim(), row[model.NextSubCategoryName].ToString().Trim(), 2, "FMCG");
+                            var varCategoryId = CheckCategory(row[model.CategoryName].ToString().Trim(), 4, "Electronic");
+                            var varSubCategoryId = CheckSubCategory(varCategoryId, row[model.CategoryName].ToString().Trim(), row[model.SubCategoryName].ToString().Trim(), 4, "Electronic");
+                            var varNextSubCategoryId = CheckNextSubCategory(varSubCategoryId, row[model.SubCategoryName].ToString().Trim(), row[model.NextSubCategoryName].ToString().Trim(), 4, "Electronic");
                             masterList.Add(new MasterProduct
                             {
                                 Name = row[model.Name].ToString().Trim(),
@@ -1531,8 +1531,8 @@ namespace ShopNow.Controllers
                                 NextSubCategoryId = varNextSubCategoryId,
                                 BrandId = CheckBrand(row[model.BrandName].ToString()),
                                 BrandName = row[model.BrandName].ToString(),
-                                ProductTypeId = 2,
-                                ProductTypeName = "FMCG",
+                                ProductTypeId = 4,
+                                ProductTypeName = "Electronic",
                                 Weight = Convert.ToDouble(row[Convert.ToInt32(model.Weight)]),
                                 SizeLB = row[model.SizeLB].ToString().Trim(),
                                 PackageId = CheckPackage(row[model.PackageName].ToString()),
