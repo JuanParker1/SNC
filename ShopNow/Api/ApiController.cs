@@ -933,6 +933,8 @@ namespace ShopNow.Controllers
                     if (model.WalletAmount != 0)
                     {
                         customer.WalletAmount -= model.WalletAmount;
+                        db.Entry(customer).State = EntityState.Modified;
+                        db.SaveChanges();
                     }
                     
                     return Json(new { message = "Successfully Added to Payment!", Details = model });
@@ -4731,6 +4733,23 @@ namespace ShopNow.Controllers
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
             return Json(false, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AcceptAchievement(int customerId, int id)
+        {
+            var customerAchievement = new CustomerAchievement()
+            {
+                AchievementId = id,
+                CustomerId = customerId,
+                DateEncoded = DateTime.Now,
+                Status = 1
+            };
+            db.CustomerAchievements.Add(customerAchievement);
+            db.SaveChanges();
+            if (customerAchievement != null)
+                return Json(true, JsonRequestBehavior.AllowGet);
+            else
+                return Json(false, JsonRequestBehavior.AllowGet);
         }
 
         public void UpdateAchievements(int customerId)
