@@ -208,6 +208,7 @@ namespace ShopNow.Controllers
             Session["EditAddOns"] = new List<MasterAddOnsCreateViewModel>();
             var addOns = new List<MasterAddOnsCreateViewModel>();
             var model = _mapper.Map<MasterProduct, MasterFoodEditViewModel>(master);
+            if(model.CategoryId !=0)
             model.CategoryName = _db.Categories.FirstOrDefault(i => i.Id == master.CategoryId).Name;
             model.AddonLists = _db.ProductDishAddOns.Where(i => i.MasterProductId == master.Id && i.Status == 0).Select(i => new MasterFoodEditViewModel.AddonList
             {
