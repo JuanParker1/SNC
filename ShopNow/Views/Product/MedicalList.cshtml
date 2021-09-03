@@ -9,13 +9,13 @@
 
 <div class="container-fluid">
     <div class="row mb-3">
-        <div class="col-md-3">
-            <h5 class="mt-1 text-uppercase" style="letter-spacing:1px">@ViewBag.Title</h5>
+        <div class="col-md-2">
+            <h5 class="mt-1 text-uppercase text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-8">
             <form method="get" action="/Product/MedicalList">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <select id="select-shop" class="form-control" name="ShopId">
                             @if (Model.ShopId != 0)
                             {
@@ -31,7 +31,7 @@
                 </div>
             </form>
         </div>
-        <div class="col-md-3 text-right">
+        <div class="col-md-2 text-right">
             <a href="/Product/MedicalCreate"><span class="fa fa-plus"></span> Medical</a>
         </div>
     </div>
