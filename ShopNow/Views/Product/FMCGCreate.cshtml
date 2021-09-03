@@ -134,7 +134,8 @@
                                     </div>
                                     <div class="col-md-12 form-group">
                                         <label class="control-label"><strong class="text-secondary">Long Description</strong></label>
-                                        <textarea class="form-control" id="LongDescription" name="LongDescription" rows="8" cols="50" readonly></textarea>
+                                        <div id="LongDescription"></div>
+                                        @*<textarea class="form-control" id="LongDescription" name="LongDescription" rows="8" cols="50" readonly></textarea>*@
                                     </div>
                                 </div>
                             </div>
@@ -283,7 +284,7 @@
                 $('#Weight').val(e.params.data.Weight);
                 $('#SizeLB').val(e.params.data.SizeLB);
                 $('#ShortDescription').val(e.params.data.ShortDescription);
-                $('#LongDescription').val(e.params.data.LongDescription);
+                $('#LongDescription').append(e.params.data.LongDescription);
                 $('input[name="MeasurementUnitId"]').val(e.params.data.MeasurementUnitId);
                 $('input[name="MeasurementUnitName"]').val(e.params.data.MeasurementUnitName);
                 $('input[name="PackageId"]').val(e.params.data.PackageId);

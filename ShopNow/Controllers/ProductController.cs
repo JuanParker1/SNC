@@ -539,6 +539,7 @@ namespace ShopNow.Controllers
             {
                 model.MasterProductName = masterProduct.Name;
                 model.CategoryId = masterProduct.CategoryId;
+                model.GoogleTaxonomyCode = masterProduct.GoogleTaxonomyCode;
                 model.CategoryName = db.Categories.FirstOrDefault(i => i.Id == masterProduct.CategoryId).Name;
                 model.ImagePath1 = masterProduct.ImagePath1;
             }

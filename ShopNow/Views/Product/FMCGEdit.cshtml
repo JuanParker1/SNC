@@ -18,11 +18,8 @@
             @using (Html.BeginForm("FMCGEdit", "Product", FormMethod.Post, new { id = "FMCGUpdateForm", enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
-            <div class="row">
-                <div class="col-md-2">
-                    <label><strong class="text-secondary">Shop Name</strong></label>
-                </div>
-                <div class="col-md-8">
+                <div class="d-flex justify-content-evenly">               
+                     <label><strong class="text-secondary">Shop Name</strong></label>    
                     <div class="form-group">
                         @if (Model.ShopId != 0)
                         {
@@ -30,9 +27,8 @@
                             <input type="hidden" name="ShopName" value="@Model.ShopName" />
                             <input type="hidden" name="ShopId" value="@Model.ShopId" />
                         }
-                    </div>
+                   </div>
                 </div>
-            </div>
                 <div class="card">
                     <div class="card-body">
                         <div class="form-group row">
@@ -132,7 +128,8 @@
                                     </div>
                                     <div class="col-md-12 form-group">
                                         <label class="control-label"><strong class="text-secondary">Long Description</strong></label>
-                                        <textarea class="form-control" id="LongDescription" name="LongDescription" rows="8" cols="50" readonly>@Html.Raw(Model.LongDescription)</textarea>
+                                        @*<textarea class="form-control" id="LongDescription" name="LongDescription" rows="8" cols="50" readonly>@Html.Raw(Model.LongDescription)</textarea>*@
+                                        <div>@Html.Raw(Model.LongDescription)</div>
                                     </div>
                                 </div>
                             </div>
