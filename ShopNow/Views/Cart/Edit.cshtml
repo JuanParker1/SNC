@@ -62,6 +62,10 @@
                                 <span class="text-success mr-3">Order is being Prepared</span>
                                 <button type="button" class="btn btn-sm btn-success mr-3" id="Assign">Assign Delivery Boy</button>
                             }
+                            else if (Model.CartStatus == 8)
+                            {
+                                <span class="text-success font-weight-bold mr-3">Order Prepared</span>
+                            }
                             else if (Model.CartStatus == 4 && Model.isAssign == 1 && Model.OnWork == 0)
                             {
                                 <span class="text-success">Assigned for Delivery</span>

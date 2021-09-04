@@ -4344,7 +4344,7 @@ namespace ShopNow.Controllers
                 return 0;
         }
 
-        public JsonResult GetAddonList(int productId)
+        public JsonResult GetAddonList(long productId)
         {
             var list = db.ShopDishAddOns.Where(i => i.ProductId == productId && i.IsActive == true).ToList();
             if (list.Count() > 0)
@@ -4677,7 +4677,10 @@ namespace ShopNow.Controllers
             if (order != null)
             {
                 if (type == 1)
+                {
                     order.OrderReadyTime = DateTime.Now;
+                    order.Status = 8;
+                }
                 else if (type == 2)
                     order.DeliveryBoyShopReachTime = DateTime.Now;
                 else if (type == 3)
@@ -4751,6 +4754,47 @@ namespace ShopNow.Controllers
                 return Json(true, JsonRequestBehavior.AllowGet);
             else
                 return Json(false, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetProductOfferList(long productId)
+        {
+            var offerList = db.OfferProducts.Where(i => i.ProductId == productId)
+                .Join(db.Offers.Where(i => i.Type == 2 && i.Status == 0), op => op.OfferId, o => o.Id, (op, o) => new { op, o })
+                .Select(i => new
+                {
+                    id = i.o.Id,
+                    offerCode = i.o.OfferCode,
+                    name = i.o.Name,
+                    offerPercentage = i.o.Percentage,
+                    amountLimit = i.o.AmountLimit,
+                    discountType = i.o.DiscountType
+                }).ToList();
+            return Json(offerList, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetWalletHistory(int customerId)
+        {
+            var model = new WalletHistoryViewModel();
+            var debitList = db.Orders.Where(i => i.CustomerId == customerId && i.Status == 2 && i.WalletAmount > 0)
+                .Select(i => new WalletHistoryViewModel.ListItem
+                {
+                    Text = "Payment to " + i.ShopName,
+                    Amount = i.WalletAmount,
+                    Type = 2,
+                    Date = i.DeliveredTime ?? DateTime.Now
+                }).ToList();
+
+            var creditList = db.CustomerAchievements.Where(i => i.CustomerId == customerId && i.Status == 0)
+                .Join(db.AchievementSettings, ca => ca.AchievementId, a => a.Id, (ca, a) => new { ca, a })
+               .Select(i => new WalletHistoryViewModel.ListItem
+               {
+                   Text = "Received from " + i.a.Name,
+                   Amount = i.a.Amount,
+                   Type = 1,
+                   Date = i.ca.DateEncoded
+               }).ToList();
+            model.ListItems = debitList.Concat(creditList).OrderByDescending(i => i.Date).ToList();
+            return Json(new { list = model.ListItems }, JsonRequestBehavior.AllowGet);
         }
 
         public void UpdateAchievements(int customerId)
