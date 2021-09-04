@@ -2332,12 +2332,12 @@ namespace ShopNow.Controllers
             model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryId as Id, c.Name as Name from MasterProducts m join Categories c on c.Id = m.CategoryId join Products p on p.MasterProductId = m.id where p.ShopId = {shopId}  and c.Status = 0 and CategoryId !=0 and c.Name is not null group by CategoryId,c.Name order by Name").ToList<ShopDetails.CategoryList>();
             if (shop.ShopCategoryId == 1)
             {
-                model.ProductLists = (from pl in db.Products
+                model.ProductLists = (from pl in db.Products.ToList()
                                       join m in db.MasterProducts on pl.MasterProductId equals m.Id
                                       join c in db.Categories on m.CategoryId equals c.Id
                                       //into cat
                                       //from c in cat.DefaultIfEmpty()
-                                      where pl.ShopId == shopId && pl.Status == 0 && (categoryId != 0 ? m.CategoryId == categoryId : true) && (pl.Price != 0 || pl.MenuPrice !=0)
+                                      where pl.ShopId == shopId && pl.Status == 0 && pl.Price != 0 && (categoryId != 0 ? m.CategoryId == categoryId : true)
                                       select new ShopDetails.ProductList
                                       {
                                           Id = pl.Id,
@@ -2352,16 +2352,17 @@ namespace ShopNow.Controllers
                                           Status = pl.Status,
                                           Customisation = pl.Customisation,DiscountCategoryPercentage=pl.Percentage,
                                           IsOnline = pl.IsOnline,
-                                          NextOnTime = pl.NextOnTime
-                                      }).Where(i => (str != "" ? i.Name.ToLower().Contains(str) : true)).ToList();
+                                          NextOnTime = pl.NextOnTime,
+                                          IsOffer=GetOfferCheck(pl.Id) //false
+                                      }).Where(i => i.Price !=0 && (str != "" ? i.Name.ToLower().Contains(str) : true)).ToList();
             }
             else if (shop.ShopCategoryId == 2)
             {
-                model.ProductLists = (from pl in db.Products
+                model.ProductLists = (from pl in db.Products.ToList()
                                       join m in db.MasterProducts on pl.MasterProductId equals m.Id
                                       join nsc in db.NextSubCategories on m.NextSubCategoryId equals nsc.Id into cat
                                       from nsc in cat.DefaultIfEmpty()
-                                      where pl.ShopId == shopId && pl.Status == 0 && m.Name.ToLower().Contains(str) && (categoryId != 0 ? m.CategoryId == categoryId : true) && (pl.Price != 0 || pl.MenuPrice != 0) 
+                                      where pl.ShopId == shopId && pl.Status == 0 && pl.Price !=0   && m.Name.ToLower().Contains(str) && (categoryId != 0 ? m.CategoryId == categoryId : true)
                                       select new ShopDetails.ProductList
                                       {
                                           Id = pl.Id,
@@ -2376,8 +2377,9 @@ namespace ShopNow.Controllers
                                           Status = pl.Status,
                                           Customisation = pl.Customisation,DiscountCategoryPercentage=pl.Percentage,
                                           IsOnline = pl.IsOnline,
-                                          NextOnTime = pl.NextOnTime
-                                      }).ToList();
+                                          NextOnTime = pl.NextOnTime,
+                                          IsOffer = GetOfferCheck(pl.Id)
+                                      }).Where(i=>i.Price !=0).ToList();
             }
             return new JsonResult()
             {
@@ -4945,6 +4947,20 @@ namespace ShopNow.Controllers
                 return model.Id;
             else
                 return 0;
+        }
+        public bool GetOfferCheck(long id)
+        {
+         //var offCount= (from varOffer in db.Offers
+         //    join op in db.OfferProducts on id equals op.ProductId
+         //    where varOffer.Type == 2 && varOffer.Status ==0
+         //    select varOffer).Count();
+
+            var offCounts = db.Offers.Where(i => i.Type == 2 && i.Status == 0)
+           .Join(db.OfferProducts, o => o.Id, p => p.OfferId, (o, p) => new { o, p }).Where(i=>i.p.ProductId ==id).Count();
+            if (offCounts > 0)
+                return true;
+            else
+                return false;
         }
 
         public long GetProductId(string name)

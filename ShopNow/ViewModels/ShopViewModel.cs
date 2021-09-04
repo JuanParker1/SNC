@@ -658,6 +658,7 @@ namespace ShopNow.ViewModels
             public bool IsOnline { get; set; }
             public TimeSpan? NextOnTime { get; set; }
             public double DiscountCategoryPercentage { get; set; }
+            public bool IsOffer { get; set; }
         }
         public class DrugCompundDetailList
         {
