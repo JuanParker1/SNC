@@ -2389,81 +2389,80 @@ namespace ShopNow.Controllers
                 MaxJsonLength = int.MaxValue
             };
         }
+            //public JsonResult GetShopDetails(int id, int categoryId, string str = "")
+            //{
+            //    Shop shop = new Shop();
+            //    var ss = (from p in db.Shops
+            //              where p.Id == id
+            //              select new
+            //              {
+            //                  Address = p.Address,
+            //                  id = p.Id,
+            //                  Rating = p.Rating,
+            //                  CustomerReview = p.CustomerReview,
+            //                  Name = p.Name,
+            //                  PhoneNumber = p.PhoneNumber,
+            //                  ShopCategoryId = p.ShopCategoryId
+            //              }).ToList();
+            //    shop.Id = ss[0].id;
+            //    shop.Address = ss[0].Address;
+            //    shop.CustomerReview = ss[0].CustomerReview;
+            //    shop.Rating = ss[0].Rating;
+            //    shop.PhoneNumber = ss[0].PhoneNumber;
+            //    shop.Name = ss[0].Name;
+            //    shop.ShopCategoryId = ss[0].ShopCategoryId;
+            //    ShopDetails model = _mapper.Map<Shop, ShopDetails>(shop);
+            //    model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryCode as Code, CategoryName as Name from Products p join Categories c on c.Code = p.CategoryCode where shopid ={id}  and c.Status = 0 and CategoryCode is not null and CategoryName is not null group by CategoryCode,CategoryName order by Name").ToList<ShopDetails.CategoryList>();
+            //    if (shop.ShopCategoryId == 0)
+            //    {
+            //        //model.ProductLists = db.Products.Where(i => i.ShopCode == code && i.Status == 0).ToList().Where(i => str != "" ? i.Name.ToLower().StartsWith(str.ToLower()) : true && categoryCode != "" ? i.CategoryCode == categoryCode : true).AsQueryable().ProjectTo<ShopDetails.ProductList>(_mapperConfiguration).OrderBy(i => i.Name).ToList();
+            //        model.ProductLists = (from pl in db.Products
+            //                              join m in db.MasterProducts on pl.MasterProductId equals m.Id
+            //                              where pl.ShopId == id && pl.Status == 0 && (categoryId != 0 ? pl.ShopCategoryId == categoryId : true)
+            //                              select new ShopDetails.ProductList
+            //                              {
+            //                                  Id = pl.Id,
+            //                                  Name = m.Name,
+            //                                  ShopId = pl.ShopId,
+            //                                  ShopName = pl.ShopName,
+            //                                  CategoryId = m.CategoryId,
+            //                                  //CategoryName = m.CategoryName,
+            //                                  ColorCode = m.ColorCode,
+            //                                  Price = pl.Price,
+            //                                  ImagePath = m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23"),
+            //                                  Status = pl.Status
 
-        //public JsonResult GetShopDetails(int id, int categoryId, string str = "")
-        //{
-        //    Shop shop = new Shop();
-        //    var ss = (from p in db.Shops
-        //              where p.Id == id
-        //              select new
-        //              {
-        //                  Address = p.Address,
-        //                  id = p.Id,
-        //                  Rating = p.Rating,
-        //                  CustomerReview = p.CustomerReview,
-        //                  Name = p.Name,
-        //                  PhoneNumber = p.PhoneNumber,
-        //                  ShopCategoryId = p.ShopCategoryId
-        //              }).ToList();
-        //    shop.Id = ss[0].id;
-        //    shop.Address = ss[0].Address;
-        //    shop.CustomerReview = ss[0].CustomerReview;
-        //    shop.Rating = ss[0].Rating;
-        //    shop.PhoneNumber = ss[0].PhoneNumber;
-        //    shop.Name = ss[0].Name;
-        //    shop.ShopCategoryId = ss[0].ShopCategoryId;
-        //    ShopDetails model = _mapper.Map<Shop, ShopDetails>(shop);
-        //    model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryCode as Code, CategoryName as Name from Products p join Categories c on c.Code = p.CategoryCode where shopid ={id}  and c.Status = 0 and CategoryCode is not null and CategoryName is not null group by CategoryCode,CategoryName order by Name").ToList<ShopDetails.CategoryList>();
-        //    if (shop.ShopCategoryId == 0)
-        //    {
-        //        //model.ProductLists = db.Products.Where(i => i.ShopCode == code && i.Status == 0).ToList().Where(i => str != "" ? i.Name.ToLower().StartsWith(str.ToLower()) : true && categoryCode != "" ? i.CategoryCode == categoryCode : true).AsQueryable().ProjectTo<ShopDetails.ProductList>(_mapperConfiguration).OrderBy(i => i.Name).ToList();
-        //        model.ProductLists = (from pl in db.Products
-        //                              join m in db.MasterProducts on pl.MasterProductId equals m.Id
-        //                              where pl.ShopId == id && pl.Status == 0 && (categoryId != 0 ? pl.ShopCategoryId == categoryId : true)
-        //                              select new ShopDetails.ProductList
-        //                              {
-        //                                  Id = pl.Id,
-        //                                  Name = m.Name,
-        //                                  ShopId = pl.ShopId,
-        //                                  ShopName = pl.ShopName,
-        //                                  CategoryId = m.CategoryId,
-        //                                  //CategoryName = m.CategoryName,
-        //                                  ColorCode = m.ColorCode,
-        //                                  Price = pl.Price,
-        //                                  ImagePath = m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23"),
-        //                                  Status = pl.Status
-
-        //                              }).Where(i => str != "" ? i.Name.ToLower().Contains(str) : true).ToList();
-        //    }
-        //    else if (shop.ShopCategoryId == 1)
-        //    {
-        //        model.ProductLists = (from pl in db.Products
-        //                              join m in db.MasterProducts on pl.MasterProductId equals m.Id
-        //                              where pl.ShopId == id && pl.Status == 0 && m.Name.ToLower().Contains(str) && (categoryId != 0 ? pl.ShopCategoryId == categoryId : true)
-        //                              select new ShopDetails.ProductList
-        //                              {
-        //                                  Id = pl.Id,
-        //                                  Name = m.Name,
-        //                                  ShopId = pl.ShopId,
-        //                                  ShopName = pl.ShopName,
-        //                                  CategoryId = m.CategoryId,
-        //                                  // CategoryName = m.CategoryName,
-        //                                  //ColorCode = pl.ColorCode,
-        //                                  Price = pl.Price,
-        //                                  ImagePath = m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23"),
-        //                                  Status = pl.Status
-        //                              }).ToList();
-        //    }
-        //    return new JsonResult()
-        //    {
-        //        ContentType = "application/json",
-        //        Data = model,
-        //        JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-        //        MaxJsonLength = int.MaxValue
-        //    };
-        //    // return Json(model, JsonRequestBehavior.AllowGet);
-        //}
-        public JsonResult GetCustomerRefered(int CustomerId,int shopid)
+            //                              }).Where(i => str != "" ? i.Name.ToLower().Contains(str) : true).ToList();
+            //    }
+            //    else if (shop.ShopCategoryId == 1)
+            //    {
+            //        model.ProductLists = (from pl in db.Products
+            //                              join m in db.MasterProducts on pl.MasterProductId equals m.Id
+            //                              where pl.ShopId == id && pl.Status == 0 && m.Name.ToLower().Contains(str) && (categoryId != 0 ? pl.ShopCategoryId == categoryId : true)
+            //                              select new ShopDetails.ProductList
+            //                              {
+            //                                  Id = pl.Id,
+            //                                  Name = m.Name,
+            //                                  ShopId = pl.ShopId,
+            //                                  ShopName = pl.ShopName,
+            //                                  CategoryId = m.CategoryId,
+            //                                  // CategoryName = m.CategoryName,
+            //                                  //ColorCode = pl.ColorCode,
+            //                                  Price = pl.Price,
+            //                                  ImagePath = m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23"),
+            //                                  Status = pl.Status
+            //                              }).ToList();
+            //    }
+            //    return new JsonResult()
+            //    {
+            //        ContentType = "application/json",
+            //        Data = model,
+            //        JsonRequestBehavior = JsonRequestBehavior.AllowGet,
+            //        MaxJsonLength = int.MaxValue
+            //    };
+            //    // return Json(model, JsonRequestBehavior.AllowGet);
+            //}
+            public JsonResult GetCustomerRefered(int CustomerId,int shopid)
         {
             var customer = db.Customers.FirstOrDefault(i => i.Id == CustomerId);
             if (customer != null)
