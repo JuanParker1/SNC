@@ -121,6 +121,8 @@ namespace ShopNow.Controllers
                 return View();
             }
             var master = _mapper.Map<MasterFoodCreateViewModel, MasterProduct>(model);
+            if(master != null)
+
             master.CreatedBy = user.Name;
             master.UpdatedBy = user.Name;
             master.ProductTypeName = "Dish";
@@ -622,12 +624,21 @@ namespace ShopNow.Controllers
             if (masterProduct.ImagePath5 != null)
                 masterProduct.ImagePath5 = masterProduct.ImagePath5.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
             var model = _mapper.Map<MasterProduct, MasterFMCGEditViewModel>(masterProduct);
-            if (model.CategoryId != 0)
-                model.CategoryName = _db.Categories.FirstOrDefault(i => i.Id == masterProduct.CategoryId).Name;
-            if (model.SubCategoryId != 0)
-                model.SubCategoryName = _db.SubCategories.FirstOrDefault(i => i.Id == masterProduct.SubCategoryId).Name;
-            if (model.NextSubCategoryId != 0)
-                model.NextSubCategoryName = _db.NextSubCategories.FirstOrDefault(i => i.Id == masterProduct.NextSubCategoryId).Name;
+            var categoryName = _db.Categories.FirstOrDefault(i => i.Id == masterProduct.CategoryId);
+            if (categoryName != null)
+                model.CategoryName = categoryName.Name;
+            else
+                model.CategoryName = "N/A";
+            var subcategoryName = _db.SubCategories.FirstOrDefault(i => i.Id == masterProduct.SubCategoryId);
+            if (subcategoryName != null)
+                model.SubCategoryName = subcategoryName.Name;
+            else
+                model.SubCategoryName = "N/A";
+            var nextsubcategoryName = _db.NextSubCategories.FirstOrDefault(i => i.Id == masterProduct.NextSubCategoryId);
+            if (nextsubcategoryName != null)
+                model.NextSubCategoryName = nextsubcategoryName.Name;
+            else
+                model.NextSubCategoryName = "N/A";
             return View(model);
         }
 
