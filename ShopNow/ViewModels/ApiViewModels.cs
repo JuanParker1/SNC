@@ -109,18 +109,69 @@ namespace ShopNow.ViewModels
             public string Description { get; set; }
             public Nullable<int> BrandId { get; set; }
 
-            public List<ShopListItem> ShopListItems { get; set; }
-            public List<ProductListItem> ProductListItems { get; set; }
+            //public List<ShopListItem> ShopListItems { get; set; }
+            //public List<ProductListItem> ProductListItems { get; set; }
 
-            public class ProductListItem
-            {
-                public long Id { get; set; }
-            }
-            public class ShopListItem
-            {
-                public int Id { get; set; }
-            }
+            //public class ProductListItem
+            //{
+            //    public long Id { get; set; }
+            //}
+            //public class ShopListItem
+            //{
+            //    public int Id { get; set; }
+            //}
 
+        }
+    }
+
+    public class OfferRelatedApiListViewModel
+    {
+        public List<ShopOfferListItem> ShopOfferListItems { get; set; }
+        public class ShopOfferListItem
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public int OwnerType { get; set; }
+            public string OfferCode { get; set; }
+            public int DiscountType { get; set; }
+            public int Type { get; set; }
+            public double Percentage { get; set; }
+            public int QuantityLimit { get; set; }
+            public int AmountLimit { get; set; }
+            public int CustomerCountLimit { get; set; }
+            public double MinimumPurchaseAmount { get; set; }
+            public bool IsForFirstOrder { get; set; }
+            public bool IsForOnlinePayment { get; set; }
+            public bool IsForBlackListAbusers { get; set; }
+            public string Description { get; set; }
+            public Nullable<int> BrandId { get; set; }
+            public int ShopId { get; set; }
+            public string ShopName { get; set; }
+            public string ShopImage { get; set; }
+        }
+
+        public List<ProductOfferListItem> ProductOfferListItems { get; set; }
+        public class ProductOfferListItem
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public int OwnerType { get; set; }
+            public string OfferCode { get; set; }
+            public int DiscountType { get; set; }
+            public int Type { get; set; }
+            public double Percentage { get; set; }
+            public int QuantityLimit { get; set; }
+            public int AmountLimit { get; set; }
+            public int CustomerCountLimit { get; set; }
+            public double MinimumPurchaseAmount { get; set; }
+            public bool IsForFirstOrder { get; set; }
+            public bool IsForOnlinePayment { get; set; }
+            public bool IsForBlackListAbusers { get; set; }
+            public string Description { get; set; }
+            public Nullable<int> BrandId { get; set; }
+            public long ProductId { get; set; }
+            public string ProductName { get; set; }
+            public string ProductImage { get; set; }
         }
     }
 

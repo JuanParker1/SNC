@@ -122,23 +122,19 @@ namespace ShopNow.ViewModels
         public string BrandName { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
-        public int ProductTypeId { get; set; }
-        public string ProductTypeName { get; set; }
-        public double Price { get; set; }
+        public string Price { get; set; }
         public int MeasurementUnitId { get; set; }
         public string MeasurementUnitName { get; set; }
         public bool PriscriptionCategory { get; set; }
-        public double Weight { get; set; }
+        public string Weight { get; set; }
         public string SizeLB { get; set; }
         public string DrugCompoundDetailIds { get; set; }
         public string DrugCompoundDetailName { get; set; }
-        public Nullable<int> IBarU { get; set; }
+        public string IBarU { get; set; }
         public string OriginCountry { get; set; }
         public string Manufacturer { get; set; }
         public Nullable<int> PackageId { get; set; }
         public string PackageName { get; set; }
-        public string GoogleTaxonomyCode { get; set; }
-        public string ASIN { get; set; }
         public string ImagePath1 { get; set; }
         public string ImagePath2 { get; set; }
         public string ImagePath3 { get; set; }
@@ -408,10 +404,10 @@ namespace ShopNow.ViewModels
         public string LongDescription { get; set; }
         public int ProductTypeId { get; set; }
         public string ProductTypeName { get; set; }
-        public double Price { get; set; }
+        public string Price { get; set; }
         public int MeasurementUnitId { get; set; }
         public string MeasurementUnitName { get; set; }
-        public double Weight { get; set; }
+        public string Weight { get; set; }
         public string SizeLB { get; set; }
         public Nullable<int> PackageId { get; set; }
         public string PackageName { get; set; }

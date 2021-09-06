@@ -26,7 +26,7 @@ using System.Web.Script.Serialization;
 using System.Data.Entity.Migrations;
 //using N.EntityFramework.Extensions;
 using Z.EntityFramework.Extensions;
-
+using System.Data.Entity.SqlServer;
 
 namespace ShopNow.Controllers
 {
@@ -2332,7 +2332,7 @@ namespace ShopNow.Controllers
             model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryId as Id, c.Name as Name from MasterProducts m join Categories c on c.Id = m.CategoryId join Products p on p.MasterProductId = m.id where p.ShopId = {shopId}  and c.Status = 0 and CategoryId !=0 and c.Name is not null group by CategoryId,c.Name order by Name").ToList<ShopDetails.CategoryList>();
             if (shop.ShopCategoryId == 1)
             {
-                model.ProductLists = (from pl in db.Products.ToList()
+                model.ProductLists = (from pl in db.Products
                                       join m in db.MasterProducts on pl.MasterProductId equals m.Id
                                       join c in db.Categories on m.CategoryId equals c.Id
                                       //into cat
@@ -2350,19 +2350,20 @@ namespace ShopNow.Controllers
                                           Price = pl.MenuPrice,
                                           ImagePath = ((!string.IsNullOrEmpty(m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                                           Status = pl.Status,
-                                          Customisation = pl.Customisation,DiscountCategoryPercentage=pl.Percentage,
+                                          Customisation = pl.Customisation,
+                                          DiscountCategoryPercentage = pl.Percentage,
                                           IsOnline = pl.IsOnline,
                                           NextOnTime = pl.NextOnTime,
-                                          IsOffer=GetOfferCheck(pl.Id) //false
-                                      }).Where(i => i.Price !=0 && (str != "" ? i.Name.ToLower().Contains(str) : true)).ToList();
+                                          //IsOffer = pl.Id != 0 ? GetOfferCheck(pl.Id) : false //false
+                                      }).Where(i => i.Price != 0 && (str != "" ? i.Name.ToLower().Contains(str) : true)).ToList();
             }
             else if (shop.ShopCategoryId == 2)
             {
-                model.ProductLists = (from pl in db.Products.ToList()
+                model.ProductLists = (from pl in db.Products
                                       join m in db.MasterProducts on pl.MasterProductId equals m.Id
                                       join nsc in db.NextSubCategories on m.NextSubCategoryId equals nsc.Id into cat
                                       from nsc in cat.DefaultIfEmpty()
-                                      where pl.ShopId == shopId && pl.Status == 0 && pl.Price !=0   && m.Name.ToLower().Contains(str) && (categoryId != 0 ? m.CategoryId == categoryId : true)
+                                      where pl.ShopId == shopId && pl.Status == 0 && pl.Price != 0 && m.Name.ToLower().Contains(str) && (categoryId != 0 ? m.CategoryId == categoryId : true)
                                       select new ShopDetails.ProductList
                                       {
                                           Id = pl.Id,
@@ -2375,11 +2376,12 @@ namespace ShopNow.Controllers
                                           Price = pl.MenuPrice,
                                           ImagePath = ((!string.IsNullOrEmpty(m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                                           Status = pl.Status,
-                                          Customisation = pl.Customisation,DiscountCategoryPercentage=pl.Percentage,
+                                          Customisation = pl.Customisation,
+                                          DiscountCategoryPercentage = pl.Percentage,
                                           IsOnline = pl.IsOnline,
                                           NextOnTime = pl.NextOnTime,
-                                          IsOffer = GetOfferCheck(pl.Id)
-                                      }).Where(i=>i.Price !=0).ToList();
+                                          //IsOffer = pl.Id != 0 ? GetOfferCheck(pl.Id) : false
+                                      }).Where(i => i.Price != 0).ToList();
             }
             return new JsonResult()
             {
@@ -4446,12 +4448,16 @@ namespace ShopNow.Controllers
 
         }
 
-        public JsonResult GetAllOffers()
+        public JsonResult GetAllOffers(double latitude, double longitude)
         {
+            string query = "SELECT * " +
+                               " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 1 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0";
             var model = new OfferApiListViewModel();
-            model.OfferListItems = db.Offers.Where(i => i.Status == 0 && i.Type == 1)
-                .GroupJoin(db.OfferShops, o => o.Id, oShp => oShp.OfferId, (o, oShp) => new { o, oShp })
-                .GroupJoin(db.OfferProducts, o => o.o.Id, oPro => oPro.OfferId, (o, oPro) => new { o, oPro })
+            model.OfferListItems = db.Offers.ToList().Where(i => i.Status == 0)
+                .Join(db.OfferShops, o => o.Id, oShp => oShp.OfferId, (o, oShp) => new { o, oShp })
+             .Join(db.Shops.SqlQuery(query,
+                 new SqlParameter("Latitude", latitude),
+                 new SqlParameter("Longitude", longitude)), o => o.oShp.ShopId, s => s.Id, (o, s) => new { o, s })
                 .Select(i => new OfferApiListViewModel.OfferListItem
                 {
                     AmountLimit = i.o.o.AmountLimit,
@@ -4469,11 +4475,79 @@ namespace ShopNow.Controllers
                     Percentage = i.o.o.Percentage,
                     QuantityLimit = i.o.o.QuantityLimit,
                     Type = i.o.o.Type,
-                    Description = i.o.o.Description,
-                    ProductListItems = i.oPro.Select(a => new OfferApiListViewModel.OfferListItem.ProductListItem { Id = a.ProductId }).ToList(),
-                    ShopListItems = i.o.oShp.Select(a => new OfferApiListViewModel.OfferListItem.ShopListItem { Id = a.ShopId }).ToList()
+                    Description = i.o.o.Description
                 }).ToList();
             return Json(new { list = model }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetRelatedOffers(int id)
+        {
+            var model = new OfferRelatedApiListViewModel();
+            var offer = db.Offers.FirstOrDefault(i => i.Id == id);
+            if (offer != null)
+            {
+                if (offer.Type == 1)
+                {
+                    model.ShopOfferListItems = db.Offers.Where(i => i.Status == 0 && i.Id == id && i.Type == 1)
+                        .Join(db.OfferShops, o => o.Id, oShp => oShp.OfferId, (o, oShp) => new { o, oShp })
+                     .Join(db.Shops, o => o.oShp.ShopId, s => s.Id, (o, s) => new { o, s })
+                        .Select(i => new OfferRelatedApiListViewModel.ShopOfferListItem
+                        {
+                            AmountLimit = i.o.o.AmountLimit,
+                            BrandId = i.o.o.BrandId,
+                            CustomerCountLimit = i.o.o.CustomerCountLimit,
+                            DiscountType = i.o.o.DiscountType,
+                            Id = i.o.o.Id,
+                            IsForBlackListAbusers = i.o.o.IsForBlackListAbusers,
+                            IsForFirstOrder = i.o.o.IsForFirstOrder,
+                            IsForOnlinePayment = i.o.o.IsForOnlinePayment,
+                            MinimumPurchaseAmount = i.o.o.MinimumPurchaseAmount,
+                            Name = i.o.o.Name,
+                            OfferCode = i.o.o.OfferCode,
+                            OwnerType = i.o.o.OwnerType,
+                            Percentage = i.o.o.Percentage,
+                            QuantityLimit = i.o.o.QuantityLimit,
+                            Type = i.o.o.Type,
+                            Description = i.o.o.Description,
+                            ShopId = i.o.oShp.ShopId,
+                            ShopImage = i.s.ImagePath,
+                            ShopName = i.s.Name
+                        }).ToList();
+                    return Json(new { list = model.ShopOfferListItems }, JsonRequestBehavior.AllowGet);
+                }
+
+                if (offer.Type == 2)
+                {
+                    model.ProductOfferListItems = db.Offers.Where(i => i.Status == 0 && i.Id == id && i.Type == 2)
+                        .Join(db.OfferProducts, o => o.Id, oPro => oPro.OfferId, (o, oPro) => new { o, oPro })
+                     .Join(db.Products, o => o.oPro.ProductId, p => p.Id, (o, p) => new { o, p })
+                     .Join(db.MasterProducts, o => o.p.MasterProductId, m => m.Id, (o, m) => new { o, m })
+                        .Select(i => new OfferRelatedApiListViewModel.ProductOfferListItem
+                        {
+                            AmountLimit = i.o.o.o.AmountLimit,
+                            BrandId = i.o.o.o.BrandId,
+                            CustomerCountLimit = i.o.o.o.CustomerCountLimit,
+                            DiscountType = i.o.o.o.DiscountType,
+                            Id = i.o.o.o.Id,
+                            IsForBlackListAbusers = i.o.o.o.IsForBlackListAbusers,
+                            IsForFirstOrder = i.o.o.o.IsForFirstOrder,
+                            IsForOnlinePayment = i.o.o.o.IsForOnlinePayment,
+                            MinimumPurchaseAmount = i.o.o.o.MinimumPurchaseAmount,
+                            Name = i.o.o.o.Name,
+                            OfferCode = i.o.o.o.OfferCode,
+                            OwnerType = i.o.o.o.OwnerType,
+                            Percentage = i.o.o.o.Percentage,
+                            QuantityLimit = i.o.o.o.QuantityLimit,
+                            Type = i.o.o.o.Type,
+                            Description = i.o.o.o.Description,
+                            ProductId = i.o.p.Id,
+                            ProductImage = i.m.ImagePath1,
+                            ProductName = i.m.Name
+                        }).ToList();
+                    return Json(new { list = model.ProductOfferListItems }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            return Json(false, JsonRequestBehavior.AllowGet);
         }
 
         //public JsonResult GetCartOffer(int shopid, int customerid, double amount, int paymentMode) //1-Online, 2-COH
