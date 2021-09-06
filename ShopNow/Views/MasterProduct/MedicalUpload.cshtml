@@ -74,7 +74,7 @@
                                     <tr>
                                         <td>
                                             <label class="col-md-6">Drug Measurement Unit Name</label>
-                                            <input id="DrugMeasurementUnitName" name="DrugMeasurementUnitName" type="text" class="col-md-4" />
+                                            <input id="MeasurementUnitName" name="MeasurementUnitName" type="text" class="col-md-4" />
                                         </td>
                                     </tr>
                                     <tr>
@@ -133,6 +133,12 @@
                                     </tr>
                                     <tr>
                                         <td>
+                                            <label class="col-md-6">Package Name</label>
+                                            <input id="PackageName" name="PackageName" type="text" class="col-md-4" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
                                             <label class="col-md-6">Product Image1</label>
                                             <input id="ImagePath1" name="ImagePath1" type="text" class="col-md-4" />
                                         </td>
@@ -161,21 +167,7 @@
                                             <input id="ImagePath5" name="ImagePath5" type="text" class="col-md-4" />
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            <label class="col-md-6">Package Name</label>
-                                            <input id="PackageName" name="PackageName" type="text" class="col-md-4" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <label class="col-md-6">Item Type</label>
-                                            <select id="ProductTypeId" name="ProductTypeId" class="col-md-4"></select>
-                                            <input type="hidden" name="ProductTypeName" id="ProductTypeName" />
-                                        </td>
-                                    </tr>
                                 </tbody>
-
                             </table>
                             <div class="col-md-10 text-center my-3">
                                 <input type="submit" value="submit" class="btn btn-success" />
@@ -198,18 +190,6 @@
 
     <script>
         $(document).ready(function () {
-            $('#ProductTypeId').select2({
-                placeholder: "Search Product Type",
-                ajax: {
-                    url: "/MasterProduct/GetProductTypeSelect2",
-                    width: '100%',
-                    delay: 250,
-                    dataType: 'json'
-                }
-            }).on('select2:select', function (e) {
-                $('input[name="ProductTypeName"]').val(e.params.data.text);
-            });
-
             var tbl = document.getElementById("Product-list");
             if (tbl != null) {
                 for (var i = 0; i < tbl.rows.length; i++) {
@@ -228,8 +208,8 @@
                     $('#BrandName').on('click', function () {
                         $('#BrandName').val(cel.innerHTML)
                     });
-                    $('#DrugMeasurementUnitName').on('click', function () {
-                        $('#DrugMeasurementUnitName').val(cel.innerHTML)
+                    $('#MeasurementUnitName').on('click', function () {
+                        $('#MeasurementUnitName').val(cel.innerHTML)
                     });
                     $('#DrugCompoundDetailIds').on('click', function () {
                         $('#DrugCompoundDetailIds').val(cel.innerHTML)

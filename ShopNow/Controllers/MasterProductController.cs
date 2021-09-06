@@ -1074,27 +1074,49 @@ namespace ShopNow.Controllers
                     if (row[model.Name].ToString().Trim() != string.Empty)
                     {
                         int idx = master.FindIndex(a => a.Name == row[model.Name].ToString().Trim());
+                        var Name = row[model.Name].ToString().Trim();
+                        var BrandId = CheckBrand(row[model.BrandName].ToString());
+                        var BrandName = row[model.BrandName].ToString();
+                        var CategoryId = CheckCategory(row[model.CategoryName].ToString().Trim(), 3, "Medical");
+                        var MeasurementUnitId = CheckMeasurementUnit(row[model.MeasurementUnitName].ToString());
+                        var MeasurementUnitName = row[model.MeasurementUnitName].ToString();
+                        var DrugCompoundDetailIds = row[model.DrugCompoundDetailIds].ToString();
+                        var DrugCompoundDetailName = row[model.DrugCompoundDetailName].ToString();
+                        var PriscriptionCategory = Convert.ToBoolean(row[model.PriscriptionCategory]);
+                        var OriginCountry = row[model.OriginCountry].ToString();
+                        var Manufacturer = row[model.Manufacturer].ToString();
+                        var IBarU = Convert.ToInt32(row[model.IBarU]);
+                        var Weight = Convert.ToDouble(row[model.Weight]);
+                        var SizeLB = row[model.SizeLB].ToString();
+                        var Price = Convert.ToDouble(row[model.Price]);
+                        var PackageId = CheckPackage(row[model.PackageName].ToString());
+                        var PackageName = row[model.PackageName].ToString();
+                        var ImagePath1 = row[model.ImagePath1].ToString().Trim();
+                        var ImagePath2 = row[model.ImagePath2].ToString().Trim();
+                        var ImagePath3 = row[model.ImagePath3].ToString().Trim();
+                        var ImagePath4 = row[model.ImagePath4].ToString().Trim();
+                        var ImagePath5 = row[model.ImagePath5].ToString().Trim();
                         if (idx <= 0)
                         {
                             masterList.Add(new MasterProduct
                             {
-                                Name = row[model.Name].ToString().Trim(),
-                                NickName = row[model.Name].ToString().Trim(),
-                                BrandId = MedicalCheckBrand(row[model.BrandName].ToString()),
+                                Name = Name,
+                                NickName = Name,
+                                BrandId = CheckBrand(row[model.BrandName].ToString()),
                                 BrandName = row[model.BrandName].ToString(),
-                                CategoryId = MedicalCheckCategory(row[model.CategoryName].ToString().Trim(), 3, "Medical"),
+                                CategoryId = CheckCategory(row[model.CategoryName].ToString().Trim(), 3, "Medical"),
                                 MeasurementUnitId = CheckMeasurementUnit(row[model.MeasurementUnitName].ToString()),
                                 MeasurementUnitName = row[model.MeasurementUnitName].ToString(),
                                 DrugCompoundDetailIds = row[model.DrugCompoundDetailIds].ToString(),
                                 DrugCompoundDetailName = row[model.DrugCompoundDetailName].ToString(),
-                                PriscriptionCategory = Convert.ToBoolean(row[Convert.ToInt32(model.PriscriptionCategory)]),
+                                PriscriptionCategory = Convert.ToBoolean(row[model.PriscriptionCategory].ToString()),
                                 OriginCountry = row[model.OriginCountry].ToString(),
                                 Manufacturer = row[model.Manufacturer].ToString(),
                                 IBarU = Convert.ToInt32(row[model.IBarU]),
                                 Weight = Convert.ToDouble(row[model.Weight]),
                                 SizeLB = row[model.SizeLB].ToString(),
                                 Price = Convert.ToDouble(row[model.Price]),
-                                PackageId = CheckMedicalPackage(row[model.PackageName].ToString()),
+                                PackageId = CheckPackage(row[model.PackageName].ToString()),
                                 PackageName = row[model.PackageName].ToString(),
                                 ImagePath1 = row[model.ImagePath1].ToString().Trim(),
                                 ImagePath2 = row[model.ImagePath2].ToString().Trim(),
@@ -1120,73 +1142,7 @@ namespace ShopNow.Controllers
             }
             return View();
         }
-
-        public int MedicalCheckBrand(string BrandName)
-        {
-            var brand = _db.Brands.FirstOrDefault(i => i.Name == BrandName && i.Status == 0);
-            if (brand != null)
-            {
-                return brand.Id;
-            }
-            else
-            {
-                Brand br = new Brand();
-                br.Name = BrandName;
-                br.Status = 0;
-                br.DateEncoded = DateTime.Now;
-                br.DateUpdated = DateTime.Now;
-                _db.Brands.Add(br);
-                _db.SaveChanges();
-                return br.Id;
-            }
-
-        }
-
-        public int MedicalCheckCategory(string CategoryName, int ProductTypeId, string ProductTypeName)
-        {
-            var category = _db.Categories.FirstOrDefault(i => i.Name == CategoryName && i.Status == 0 && i.ProductTypeId == ProductTypeId);
-            if (category != null)
-            {
-                return category.Id;
-            }
-            else
-            {
-                Category cat = new Category();
-                cat.Name = CategoryName;
-                cat.ProductTypeId = ProductTypeId;
-                cat.ProductTypeName = ProductTypeName;
-                cat.OrderNo = 0;
-                cat.Status = 0;
-                cat.DateEncoded = DateTime.Now;
-                cat.DateUpdated = DateTime.Now;
-                _db.Categories.Add(cat);
-                _db.SaveChanges();
-                return cat.Id;
-            }
-
-        }
-
-        public int CheckMedicalPackage(string PackageName)
-        {
-            var package = _db.Packages.FirstOrDefault(i => i.Name == PackageName && i.Status == 0);// Package.GetName(PackageName);
-            if (package != null)
-            {
-                return package.Id;
-            }
-            else
-            {
-                Package mp = new Package();
-                mp.Name = PackageName;
-                mp.Status = 0;
-                mp.DateEncoded = DateTime.Now;
-                mp.DateUpdated = DateTime.Now;
-                _db.Packages.Add(mp);
-                _db.SaveChanges();
-                return mp.Id;
-            }
-
-        }
-
+     
         public int CheckPackage(string PackageName)
         {
             var package = _db.Packages.FirstOrDefault(i => i.Name == PackageName && i.Status == 0);
