@@ -28,7 +28,7 @@
                  //  .RenderValueAs(o => @<div><a href="/DeliveryBoy/Details?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)"></a></div>);
 .RenderValueAs(model => Html.ActionLink(model.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(model.Id) }).ToHtmlString());
 columns.Add(c => c.PhoneNumber).Titled("Phone No.").Filterable(true).SetWidth(15);
-columns.Add(c => c.Email).Titled("Email").Filterable(true).SetWidth(10);
+columns.Add(c => c.Email).Titled("Email").Filterable(true).SetWidth(20);
 columns.Add().Encoded(false).Sanitized(false).Titled("Image").Filterable(false).SetWidth(10).RenderValueAs(c => @<div><img alt="Image" data-toggle="modal" data-target="#myModal" class="img-thumbnail DeliveryBoyImage" src="@c.ImagePath" style="width:60px; height:45px" onerror="this.src='/Images/No Photo.png'" /></div>);
 columns.Add().Encoded(false).Sanitized(false).RenderValueAs(s => new HtmlString
 ("<label class='switch'> <input type='checkbox' value='" + s.Active + "' Id='Id_" + s.Id + "' class='CheckOnline' data-id='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(10);

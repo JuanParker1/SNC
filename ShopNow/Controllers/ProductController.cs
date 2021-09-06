@@ -67,28 +67,20 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var shid = db.Shops.Where(s => s.Id == model.ShopId).FirstOrDefault();
-            if (shid != null)
-            {
-                model.ListItems = (from i in db.Products
-                                   join m in db.MasterProducts on i.MasterProductId equals m.Id
-                                   where i.Status == 0 && i.ShopId == shid.Id
-                                   select new ProductItemListViewModel.ListItem
-                                   {
-                                       Id = i.Id,
-                                       ProductTypeId = m.ProductTypeId,
-                                       ProductTypeName = m.ProductTypeName,
-                                       CategoryName = db.Categories.FirstOrDefault(i => i.Id == m.CategoryId).Name,
-                                       BrandName = m.BrandName ?? "N/A",
-                                       Name = m.Name,
-                                       ShopId = i.ShopId,
-                                       ShopName = i.ShopName
-                                   }).ToList();
-            }
-            else
-            {
-                model.ListItems = new List<ProductItemListViewModel.ListItem>();
-            }
+            model.ListItems = db.Products.Where(i => i.Status == 0 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
+                .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+                .Join(db.Categories, p => p.m.CategoryId, c => c.Id, (p, c) => new { p, c })
+                .Select(i => new ProductItemListViewModel.ListItem
+                {
+                    Id = i.p.p.Id,
+                    BrandName = i.p.m.BrandName ?? "N/A",
+                    CategoryName = i.c.Name,
+                    ProductTypeId = i.p.m.ProductTypeId,
+                    ProductTypeName = i.p.m.ProductTypeName,
+                    Name = i.p.m.Name,
+                    ShopId = i.p.p.ShopId,
+                    ShopName = i.p.p.ShopName
+                }).ToList();
 
             return View(model);
         }

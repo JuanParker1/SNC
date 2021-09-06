@@ -34,5 +34,6 @@ namespace ShopNow.Models
         public int Itemid { get; set; }
         public bool IsOnline { get; set; }
         public Nullable<System.TimeSpan> NextOnTime { get; set; }
+        public Nullable<bool> IsOffer { get; set; }
     }
 }

@@ -44,8 +44,8 @@
                 <div class="card-body">
                     @Html.Grid(Model.ListItems).Columns(columns =>
 {
-  columns.Add(c => c.ProductTypeName).Titled("Item Type").Filterable(true).SetWidth(10);
-  columns.Add(c => c.Name).Titled("Name").Encoded(false).Sanitized(false).RenderValueAs(model => Html.ActionLink(model.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(model.Id) }).ToHtmlString()).Filterable(true).SetWidth(20);
+  columns.Add(c => c.ProductTypeName).Titled("Item Type").Filterable(true).SetWidth(5);
+  columns.Add(c => c.Name).Titled("Name").Encoded(false).Sanitized(false).RenderValueAs(model => Html.ActionLink(model.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(model.Id) }).ToHtmlString()).Filterable(true).SetWidth(40);
   columns.Add(c => c.CategoryName).Titled("Category Name").Filterable(true).SetWidth(12);/*.RenderValueAs(c=> c.CategoryName == null ? "N/A" : c.CategoryName);*/
   columns.Add(c => c.BrandName).Titled("Brand Name").Filterable(true).SetWidth(18);/*.RenderValueAs(c => c.BrandName == null ? "N/A" : c.BrandName);*/
   columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);

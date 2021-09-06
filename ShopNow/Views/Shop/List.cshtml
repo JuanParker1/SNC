@@ -29,9 +29,9 @@
                {
                columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(25);
                columns.Add(c => c.OwnerPhoneNumber).Titled("OwnerPhoneNo").Filterable(true).SetWidth(15);
-               columns.Add().RenderValueAs(c => c.PhoneNumber != null ? c.PhoneNumber : c.ManualPhoneNumber).Titled("PhoneNo.").Filterable(true).SetWidth(20);
+               columns.Add(c => c.PhoneNumber).Titled("PhoneNo.").Filterable(true).SetWidth(20);
                columns.Add(c => c.ShopCategoryName).Titled("Shop Type").Filterable(true).SetWidth(20);
-               columns.Add(c => c.Address).Titled("Address").Filterable(true).SetWidth(20);
+               columns.Add(c => c.Address).Titled("Address").Filterable(true).SetWidth(50);
                //columns.Add(c => c.PinCode).Titled("PinCode").Filterable(true).SetWidth(8);
                columns.Add().Encoded(false).Sanitized(false)
                .RenderValueAs(s => new HtmlString("<label class='switch'> <input type='checkbox' value='" + s.IsOnline + "' Id='Id_" + s.Id + "' class='CheckOnline' data-id='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(8);
