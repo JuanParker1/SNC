@@ -24,10 +24,10 @@
                {
                columns.Add().RenderValueAs(o => Html.ActionLink(o.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }).ToHtmlString()).Titled("Name").Encoded(false).Sanitized(false).Filterable(true).SetWidth(10);
                columns.Add(c => c.PhoneNumber).Titled("Phone Number").Filterable(true).SetWidth(10);
-               columns.Add(c => c.Address).Titled("Address").Filterable(true).SetWidth(10);
+               columns.Add(c => c.Address).Titled("Address").Filterable(true).SetWidth(30);
                columns.Add(c => c.DistrictName).Titled("District").Filterable(true).SetWidth(10);
                columns.Add(c => c.StateName).Titled("State").Filterable(true).SetWidth(10);
-               columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20)
+               columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(10)
                .RenderValueAs(c => @<div>
                     <a href="javascript:void(0)" data-id=@c.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
                     </div>);
