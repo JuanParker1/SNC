@@ -86,7 +86,7 @@
                                     <tr>
                                         <td>
                                             <label class="col-md-5">Weight</label>
-                                            <input id="Weight" name="Weight" type="number" step="any" class="col-md-4" />
+                                            <input id="Weight" name="Weight" type="text" step="any" class="col-md-4" />
                                         </td>
                                     </tr>
                                     <tr>
@@ -167,13 +167,6 @@
                                             <input id="ImagePath5" name="ImagePath5" type="text" class="col-md-4" />
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            <label class="col-md-5">Product Type</label>
-                                            <select id="ProductTypeId" name="ProductTypeId" class="col-md-4"></select>
-                                            <input type="hidden" name="ProductTypeName" id="ProductTypeName" />
-                                        </td>
-                                    </tr>
                                 </tbody>
                             </table>
                             <div class="col-md-9 text-center my-3">
@@ -223,11 +216,11 @@
                 $('#CategoryName').on('click', function () {
                     $('#CategoryName').val(cel.innerHTML)
                 });
-                $('#SubCategoryName1').on('click', function () {
-                    $('#SubCategoryName1').val(cel.innerHTML)
+                $('#SubCategoryName').on('click', function () {
+                    $('#SubCategoryName').val(cel.innerHTML)
                 });
-                $('#SubCategoryName2').on('click', function () {
-                    $('#SubCategoryName2').val(cel.innerHTML)
+                $('#NextSubCategoryName').on('click', function () {
+                    $('#NextSubCategoryName').val(cel.innerHTML)
                 });
                 $('#BrandName').on('click', function () {
                     $('#BrandName').val(cel.innerHTML)
