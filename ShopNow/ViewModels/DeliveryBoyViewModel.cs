@@ -59,12 +59,11 @@ namespace ShopNow.ViewModels
         public string AccountName { get; set; }
         public string AccountNumber { get; set; }
         public string IFSCCode { get; set; }
-        public int Status { get; set; }
-
         public int DeliveryBoyShopCount { get; set; }
         public int Count { get; set; }
         public bool LicenseApprove { get; set; }
         public bool AccountApprove { get; set; }
+        public int Status { get; set; }
 
     }
     public class DeliveryBoyListViewModel

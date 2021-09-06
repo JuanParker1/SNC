@@ -807,7 +807,7 @@ namespace ShopNow.Controllers
                         msg = 2;
                         return Json(msg, JsonRequestBehavior.AllowGet);
                     }
-                    else if (deliveryBoy.Status == 3) // DeliveryBoy Update
+                    else if (deliveryBoy.Status == 3 || deliveryBoy.Status == 2) // DeliveryBoy Update
                     {
                         msg = 3;
                         return Json(new { msg, phone = customer.PhoneNumber, name = customer.Name, email = customer.Email }, JsonRequestBehavior.AllowGet);

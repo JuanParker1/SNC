@@ -7,17 +7,9 @@
 @using (Html.BeginForm("InactiveList", "DeliveryBoy", FormMethod.Post, new { id = "DeliveryBoyForm", role = "form", enctype = "multipart/form-data" }))
 {
     <div class="container-fluid">
-        <div class="row mb-1">
-            <div class="col-md-4">
-                <h4 class="text-success">@ViewBag.Title</h4>
-            </div>
-            <div class="col-md-2">
-                <div class="mb-1 data-search">
-                </div>
-            </div>
-            <div class="col-md-6 text-right">
-                <a href="~/DeliveryBoy/List"><span class="fa fa-list-ul"></span> DeliveryBoy List</a>
-            </div>
+        <div class="mb-1 d-flex justify-content-between">
+            <h4 class="text-success">@ViewBag.Title</h4>
+            <a href="~/DeliveryBoy/List"><span class="fa fa-list-ul"></span> DeliveryBoy List</a>
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -40,7 +32,7 @@
                                     <tr>
                                         <td></td>
                                         <td class="text-nowrap">
-                                            <a href="~/DeliveryBoy/Details?code=@item.Id"> @item.Name</a>
+                                            <a href="~/DeliveryBoy/Details?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(item.Id)"> @item.Name</a>
                                         </td>
                                         <td class="text-nowrap">@item.PhoneNumber</td>
                                         <td class="text-nowrap">@item.Email</td>
@@ -122,7 +114,7 @@
                 });
             }).draw();
 
-            $('#ShopCode').select2({
+            $('#ShopId').select2({
                 placeholder: "Search Shop",
                 ajax: {
                     url: "/DeliveryBoy/GetShopSelect2",
@@ -135,8 +127,8 @@
             });
 
             $("#Filter").click(function () {
-                var shopcode = $("#ShopCode").val();
-                window.location.href = "/DeliveryBoy/List/?shopcode=" + shopcode;
+                var shopid = $("#ShopId").val();
+                window.location.href = "/DeliveryBoy/List/?shopid=" + shopid;
             });
 
             var modal = document.getElementById('myModal');

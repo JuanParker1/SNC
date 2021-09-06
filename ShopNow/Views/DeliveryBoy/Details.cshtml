@@ -5,24 +5,19 @@
 <title>ShopNow | @ViewBag.Title</title>
 
 <div class="container-fluid my-0">
-    <div class="row">
-        <div class="col-md-3">
-            <h5 class="text-success mt-1" style="letter-spacing:1px">DELIVERYBOY DETAIL</h5>
-        </div>
-        <div class="col-md-9 text-right">
-            <a href="~/DeliveryBoy/List" target="_self"><span class="fa fa-bars"></span>&nbsp;DeliveryBoy List</a>
-        </div>
+    <div class="mb-1 d-flex justify-content-between">
+        <h5 class="text-success mt-1" style="letter-spacing:1px">DELIVERYBOY DETAIL</h5>
+        <a href="~/DeliveryBoy/List" target="_self"><span class="fa fa-bars"></span>&nbsp;DeliveryBoy List</a>
     </div>
-    <hr />
-    <div class="row">
-        <div class="col-md-12 mx-auto">
+    <div class="card shadow mx-auto">
+        <div class="card-body">
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group row">
                         <div class="col-md-12 text-center mb-2">
-                            <a href="~/Home/ImageDenied" data-toggle="modal" data-target="#myModalDeliveryBoy" title="Click Here To Preview!">
-                                <img src="@Model.ImagePath" class="img-thumbnail ProfileImg mb-2" width="100" height="100" onerror="this.src='/Images/No Photo.png'" />
-                            </a>
+                          @*  <a href="~/Home/ImageDenied" data-toggle="modal" data-target="#myModalDeliveryBoy" title="Click Here To Preview!">*@
+                                <img src="@Model.ImagePath" class="img-thumbnail mb-2" width="100" height="100" onerror="this.src='/Images/No Photo.png'" />
+                           @* </a>*@
                             <input type="hidden" name="DrivingLicenseImagePath" id="DrivingLicenseImagePath" value="@Model.DrivingLicenseImagePath" />
                             <input type="hidden" name="BankPassbookPath" id="BankPassbookPath" value="@Model.BankPassbookPath" />
                             <input type="hidden" name="CVPath" id="CVPath" value="@Model.CVPath" />
@@ -78,24 +73,24 @@
                     </div>
                     <div class="col-md-6 mx-auto">
                         <div class="img-upload-container text-center mx-auto">
-                            <img src="@Model.DrivingLicenseImagePath" class="img-thumbnail DrivingLicenseImg mb-2" width="100" height="100" onerror="this.src='/Images/No Photo.png'" />
+                            <img src="@Model.DrivingLicenseImagePath" class="img-thumbnail mb-2" width="100" height="100" onerror="this.src='/Images/No Photo.png'" />
                             @*<br />
-        <a id="LicensePdf" class="" href="@Model.DrivingLicenseImagePath" target="_blank">View PDF</a>*@
+                                <a id="LicensePdf" class="" href="@Model.DrivingLicenseImagePath" target="_blank">View PDF</a>*@
                         </div>
                     </div>
                     @*<div class="col-md-12">
-                        <hr class="border-success" />
-                    </div>*@
+                            <hr class="border-success" />
+                        </div>*@
                     @*<div class="col-md-6" id="CVPdf">
-                        <div class="form-group row">
-                            <div class="col-md-5">
-                                <label>Resume</label>
+                            <div class="form-group row">
+                                <div class="col-md-5">
+                                    <label>Resume</label>
+                                </div>
+                                <div class="col-md-7 text-center">
+                                    <a href="@Model.CVPath" target="_blank">View PDF</a>
+                                </div>
                             </div>
-                            <div class="col-md-7 text-center">
-                                <a href="@Model.CVPath" target="_blank">View PDF</a>
-                            </div>
-                        </div>
-                    </div>*@
+                        </div>*@
                     <div class="col-md-12">
                         <hr class="border-success" />
                     </div>
@@ -108,11 +103,11 @@
                     </div>
                     <div class="col-md-6 mb-3 mx-auto">
                         <div class="img-upload-container text-center">
-                            <a href="~/Home/ImageDenied" data-toggle="modal" data-target="#myModalBankPassbook" title="Click Here To Preview!">
-                                <img id="AccountImg" src="@Model.BankPassbookPath" class="img-thumbnail BankPassbookImage mb-2" width="100" height="100" onerror="this.src='/Images/No Photo.png'" />
-                            </a>
+                           @* <a href="~/Home/ImageDenied" data-toggle="modal" data-target="#myModalBankPassbook" title="Click Here To Preview!">*@
+                                <img src="@Model.BankPassbookPath" class="img-thumbnail mb-2" width="100" height="100" onerror="this.src='/Images/No Photo.png'" />
+                           @* </a>*@
                             <br />
-                            <a id="AccountPdf" class="d-none" href="@Model.BankPassbookPath" target="_blank">View PassBook PDF</a>
+                            <a class="d-none" href="@Model.BankPassbookPath" target="_blank">View PassBook PDF</a>
                         </div>
                     </div>
                 </div>
@@ -121,107 +116,3 @@
     </div>
 </div>
 
-@*<div id="myModalDrivingLicense" class="modal fade">
-        <div class="modal-dialog">
-            <span class="close" data-dismiss="modal">&times;</span>
-            <a href="~/Home/ImageDenied">
-                <img class="modal-content" id="myDrivingLicenseImage">
-            </a>
-        </div>
-    </div>
-    <div id="myModalBankPassbook" class="modal fade">
-        <div class="modal-dialog">
-            <span class="close" data-dismiss="modal">&times;</span>
-            <a href="~/Home/ImageDenied">
-                <img class="modal-content" id="BankPassbook">
-            </a>
-        </div>
-    </div>
-
-    <div id="myModalDeliveryBoy" class="modal fade">
-        <div class="modal-dialog">
-            <span class="close" data-dismiss="modal">&times;</span>
-            <a href="~/Home/ImageDenied">
-                <img class="modal-content" id="DeliveryBoyImage">
-            </a>
-        </div>
-    </div>*@
-
-@section Scripts
-{
-    @*<script>
-        $(document).ready(function () {
-            var cvpdf = $("#CVPath").val();
-            if (cvpdf == null || cvpdf == "") {
-                $("#CVPdf").addClass("d-none");
-            } else {
-                $("#CVPdf").removeClass("d-none");
-            }
-            var strLicense = $("#DrivingLicenseImagePath").val();
-            var strAccount = $("#BankPassbookPath").val();
-            var regExp = /.pdf/g;
-            var resLicense = strLicense.match(regExp);
-            var resAccount = strAccount.match(regExp);
-
-            if (resLicense == ".pdf") {
-                $('#LicensePdf').removeClass('d-none');
-                $("#LicenseImg").addClass("d-none");
-            } else {
-                $('#LicensePdf').addClass('d-none');
-                $("#LicenseImg").removeClass("d-none");
-            }
-
-            if (resAccount == ".pdf") {
-                $('#AccountPdf').removeClass('d-none');
-                $("#AccountImg").addClass("d-none");
-            } else {
-                $('#AccountPdf').addClass('d-none');
-                $("#AccountImg").removeClass("d-none");
-            }
-
-            var modal1 = document.getElementById('myModalDrivingLicense');
-            var img1 = document.getElementsByClassName('DrivingLicenseImg');
-            var modalImg1 = document.getElementById("myDrivingLicenseImage");
-            $(img1).click(function () {
-                modal1.style.display = "block";
-                modalImg1.src = this.src;
-                if (this.src == "") {
-                    $('#myModalDrivingLicense').hide();
-                }
-                else {
-                    $('#myModalDrivingLicense').modal('show');
-                }
-            });
-
-
-            var modal2 = document.getElementById('myModalBankPassbook');
-            var img2 = document.getElementsByClassName('BankPassbookImage');
-            var modalImg2 = document.getElementById("BankPassbook");
-            $(img2).click(function () {
-                modal2.style.display = "block";
-                modalImg2.src = this.src;
-                if (this.src == "") {
-                    $('#myModalBankPassbook').hide();
-                }
-                else {
-                    $('#myModalBankPassbook').modal('show');
-                }
-            });
-
-            var modal3 = document.getElementById('myModalDeliveryBoy');
-            var img3 = document.getElementsByClassName('ProfileImg');
-            var modalImg3 = document.getElementById("DeliveryBoyImage");
-            $(img3).click(function () {
-                modal3.style.display = "block";
-                modalImg3.src = this.src;
-                if (this.src == "") {
-                    $('#myModalDeliveryBoy').hide();
-                }
-                else {
-                    $('#myModalDeliveryBoy').modal('show');
-                }
-            });
-
-        });
-    </script>*@
-}

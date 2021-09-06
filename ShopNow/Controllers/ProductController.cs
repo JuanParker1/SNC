@@ -143,7 +143,8 @@ namespace ShopNow.Controllers
             var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && (a.Status == 0 || a.Status == 1) && (a.ShopCategoryId == 3 || a.ShopCategoryId == 4)).Select(i => new
             {
                 id = i.Id,
-                text = i.Name + " (" + i.PhoneNumber + ")"
+                text = i.Name + " (" + i.PhoneNumber + ")",
+                shopname = i.Name
             }).ToListAsync();
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
@@ -310,6 +311,7 @@ namespace ShopNow.Controllers
                 model.CategoryId = masterProduct.CategoryId;
                 model.CategoryName = db.Categories.FirstOrDefault(i => i.Id == masterProduct.CategoryId).Name;
                 model.GoogleTaxonomyCode = masterProduct.GoogleTaxonomyCode;
+                model.PriscriptionCategory = masterProduct.PriscriptionCategory;
                 model.ImagePath1 = masterProduct.ImagePath1;
                 model.ImagePath2 = masterProduct.ImagePath2;
                 model.ImagePath3 = masterProduct.ImagePath3;
