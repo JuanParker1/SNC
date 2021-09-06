@@ -2332,7 +2332,7 @@ namespace ShopNow.Controllers
             model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryId as Id, c.Name as Name from MasterProducts m join Categories c on c.Id = m.CategoryId join Products p on p.MasterProductId = m.id where p.ShopId = {shopId}  and c.Status = 0 and CategoryId !=0 and c.Name is not null group by CategoryId,c.Name order by Name").ToList<ShopDetails.CategoryList>();
             if (shop.ShopCategoryId == 1)
             {
-                model.ProductLists = (from pl in db.Products.ToList()
+                model.ProductLists = (from pl in db.Products
                                       join m in db.MasterProducts on pl.MasterProductId equals m.Id
                                       join c in db.Categories on m.CategoryId equals c.Id
                                       //into cat
@@ -2350,19 +2350,20 @@ namespace ShopNow.Controllers
                                           Price = pl.MenuPrice,
                                           ImagePath = ((!string.IsNullOrEmpty(m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                                           Status = pl.Status,
-                                          Customisation = pl.Customisation,DiscountCategoryPercentage=pl.Percentage,
+                                          Customisation = pl.Customisation,
+                                          DiscountCategoryPercentage = pl.Percentage,
                                           IsOnline = pl.IsOnline,
                                           NextOnTime = pl.NextOnTime,
-                                          IsOffer=GetOfferCheck(pl.Id) //false
-                                      }).Where(i => i.Price !=0 && (str != "" ? i.Name.ToLower().Contains(str) : true)).ToList();
+                                          //IsOffer = pl.Id != 0 ? GetOfferCheck(pl.Id) : false //false
+                                      }).Where(i => i.Price != 0 && (str != "" ? i.Name.ToLower().Contains(str) : true)).ToList();
             }
             else if (shop.ShopCategoryId == 2)
             {
-                model.ProductLists = (from pl in db.Products.ToList()
+                model.ProductLists = (from pl in db.Products
                                       join m in db.MasterProducts on pl.MasterProductId equals m.Id
                                       join nsc in db.NextSubCategories on m.NextSubCategoryId equals nsc.Id into cat
                                       from nsc in cat.DefaultIfEmpty()
-                                      where pl.ShopId == shopId && pl.Status == 0 && pl.Price !=0   && m.Name.ToLower().Contains(str) && (categoryId != 0 ? m.CategoryId == categoryId : true)
+                                      where pl.ShopId == shopId && pl.Status == 0 && pl.Price != 0 && m.Name.ToLower().Contains(str) && (categoryId != 0 ? m.CategoryId == categoryId : true)
                                       select new ShopDetails.ProductList
                                       {
                                           Id = pl.Id,
@@ -2375,11 +2376,12 @@ namespace ShopNow.Controllers
                                           Price = pl.MenuPrice,
                                           ImagePath = ((!string.IsNullOrEmpty(m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                                           Status = pl.Status,
-                                          Customisation = pl.Customisation,DiscountCategoryPercentage=pl.Percentage,
+                                          Customisation = pl.Customisation,
+                                          DiscountCategoryPercentage = pl.Percentage,
                                           IsOnline = pl.IsOnline,
                                           NextOnTime = pl.NextOnTime,
-                                          IsOffer = GetOfferCheck(pl.Id)
-                                      }).Where(i=>i.Price !=0).ToList();
+                                          //IsOffer = pl.Id != 0 ? GetOfferCheck(pl.Id) : false
+                                      }).Where(i => i.Price != 0).ToList();
             }
             return new JsonResult()
             {
