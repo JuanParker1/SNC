@@ -67,22 +67,6 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            //model.ListItems = (from i in db.Products
-            //                   join m in db.MasterProducts on i.MasterProductId equals m.Id
-            //                   join c in db.Categories on m.CategoryId equals c.Id
-            //                   where i.Status == 0 && i.ShopId == shid.Id
-            //                   select new ProductItemListViewModel.ListItem
-            //                   {
-            //                       Id = i.Id,
-            //                       ProductTypeId = m.ProductTypeId,
-            //                       ProductTypeName = m.ProductTypeName,
-            //                       CategoryName = c.Name,
-            //                       BrandName = m.BrandName ?? "N/A",
-            //                       Name = m.Name,
-            //                       ShopId = i.ShopId,
-            //                       ShopName = i.ShopName
-            //                   }).ToList();
-
             model.ListItems = db.Products.Where(i => i.Status == 0 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
                 .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
                 .Join(db.Categories, p => p.m.CategoryId, c => c.Id, (p, c) => new { p, c })
@@ -94,7 +78,7 @@ namespace ShopNow.Controllers
                     ProductTypeId = i.p.m.ProductTypeId,
                     ProductTypeName = i.p.m.ProductTypeName,
                     Name = i.p.m.Name,
-                    ShopId = i.p.m.CategoryId,
+                    ShopId = i.p.p.ShopId,
                     ShopName = i.p.p.ShopName
                 }).ToList();
 
