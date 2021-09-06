@@ -17,8 +17,7 @@
                 <h5 class="mt-1 text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
             </div>
             <div class="col-md-4">
-                @*<select id="ShopCode" name="ShopCode" class="form-control"></select>*@
-                <input type="text" name="ShopName" id="ShopName" class="form-control" value="@Model.ShopName" />
+                <input type="text" name="ShopName" id="ShopName" class="form-control" value="@Model.ShopName" readonly />
                 <input type="hidden" name="ShopId" id="ShopId" value="@Model.ShopId" />
                 <input type="hidden" name="Id" id="Id" value="@Model.Id" />
             </div>
@@ -292,12 +291,10 @@
             });
 
             $(".Save").click(function () {
-                var shopcode = $("#ShopId").val();
-                if (shopcode != null) {
+                var shopid = $("#ShopId").val();
+                if (shopid != null) {
                     $('#ProductForm').submit();
-                } else {
-                    swal("Notice!", "Please Select Shop Name!", "warning");
-                }
+                };
             });
         });
 
