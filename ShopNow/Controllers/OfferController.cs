@@ -68,37 +68,53 @@ namespace ShopNow.Controllers
         public ActionResult Create(OfferCreateViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            bool isExist = db.Offers.Any(i => i.OfferCode.Trim() == model.OfferCode.Trim());
-            if (!isExist)
+            bool isOfferExist = db.Offers.Any(i => i.OfferCode.Trim() == model.OfferCode.Trim() && i.Status == 0);
+            int isShopOfferCount = db.Offers.Where(i => i.Status == 0 && (i.Type == 1 || i.Type == 3))
+                .Join(db.OfferShops.Where(i => model.ShopIds.Contains(i.ShopId)), o => o.Id, os => os.OfferId, (o, os) => new { o, os })
+                .Count();
+            if (!isOfferExist)
             {
-                var offer = _mapper.Map<OfferCreateViewModel, Offer>(model);
-                offer.DateEncoded = DateTime.Now;
-                offer.DateUpdated = DateTime.Now;
-                offer.Status = 0;
-                db.Offers.Add(offer);
-                db.SaveChanges();
-                if (offer != null && model.ShopIds != null)
+                if (isShopOfferCount == 0)
                 {
-                    foreach (var item in model.ShopIds)
+                    var offer = _mapper.Map<OfferCreateViewModel, Offer>(model);
+                    offer.DateEncoded = DateTime.Now;
+                    offer.DateUpdated = DateTime.Now;
+                    offer.Status = 0;
+                    db.Offers.Add(offer);
+                    db.SaveChanges();
+                    if (offer != null && model.ShopIds != null)
                     {
-                        var offershop = new OfferShop();
-                        offershop.ShopId = item;
-                        offershop.OfferId = offer.Id;
-                        db.OfferShops.Add(offershop);
-                        db.SaveChanges();
+                        foreach (var item in model.ShopIds)
+                        {
+                            var offershop = new OfferShop();
+                            offershop.ShopId = item;
+                            offershop.OfferId = offer.Id;
+                            db.OfferShops.Add(offershop);
+                            db.SaveChanges();
+                        }
+                    }
+                    if (offer != null && model.ProductIds != null)
+                    {
+                        foreach (var item in model.ProductIds)
+                        {
+                            var offerproduct = new OfferProduct();
+                            offerproduct.ProductId = item;
+                            offerproduct.OfferId = offer.Id;
+                            db.OfferProducts.Add(offerproduct);
+                            db.SaveChanges();
+                        }
                     }
                 }
-                if (offer != null && model.ProductIds != null)
+                else
                 {
-                    foreach (var item in model.ProductIds)
-                    {
-                        var offerproduct = new OfferProduct();
-                        offerproduct.ProductId = item;
-                        offerproduct.OfferId = offer.Id;
-                        db.OfferProducts.Add(offerproduct);
-                        db.SaveChanges();
-                    }
+                    ViewBag.ErrorMessage = "Offer already Exist for the Shop selected!";
+                    return View();
                 }
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "Offer Code already Exist!";
+                return View();
             }
             return RedirectToAction("List");
         }

@@ -167,8 +167,14 @@
     <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
     <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
     <script src="~/Scripts/ckeditor/ckeditor.js"></script>
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
+            var errormsg = "@ViewBag.ErrorMessage";
+            if (errormsg != "") {
+                swal("Notice!", errormsg, "warning")
+            }
 
             $('#select-shop').select2({
                 placeholder: "Search Shop",
