@@ -57,16 +57,14 @@
                                     <tr>
                                         <td>
                                             <label class="col-md-3">Name</label>
-                                            <input id="Name" name="Name" type="text" class="col-md-4" />
+                                            <input id="Name" name="Name" type="text" class="col-md-6" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <label class="col-md-3">Item Type</label>
-                                            <div class="col-md-4">
-                                                <select id="ProductTypeId" name="ProductTypeId"></select>
-                                                <input type="hidden" name="ProductTypeName" id="ProductTypeName" />
-                                            </div>
+                                            <select id="ProductTypeId" name="ProductTypeId"></select>
+                                            <input type="hidden" name="ProductTypeName" id="ProductTypeName" />
                                         </td>
                                     </tr>
                                 </tbody>
@@ -106,7 +104,7 @@
 
             $('#ProductTypeId').select2({
                 placeholder: "Search Type",
-                width: '100%',
+                width: '50%',
                 ajax: {
                     url: "/ProductType/GetSelect2List",
                     delay: 250,

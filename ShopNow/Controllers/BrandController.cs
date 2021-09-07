@@ -5,6 +5,7 @@ using ShopNow.Helpers;
 using ShopNow.Models;
 using ShopNow.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 using System.IO;
@@ -202,24 +203,28 @@ namespace ShopNow.Controllers
 
                 // Insert records to database table.
                 // MainPageModel entities = new MainPageModel();
+                List<Brand> BrandList = new List<Brand>();
+                var master = db.Brands.Where(i => i.Status == 0).Select(i => new { Name = i.Name }).ToList();
                 foreach (DataRow row in dt.Rows)
                 {
-                    var brand = db.Brands.AsEnumerable().FirstOrDefault(i => i.Name == row[model.Name].ToString() && i.Status == 0);
-                    if (brand == null)
+                    if (row[model.Name].ToString().Trim() != string.Empty)
                     {
-                        db.Brands.Add(new Brand
+                        int idx = master.FindIndex(a => a.Name == row[model.Name].ToString().Trim());
+                        if (idx <= 0)
                         {
-                            Name = row[model.Name].ToString(),
-                            Status = 0,
-                            DateEncoded = DateTime.Now,
-                            DateUpdated = DateTime.Now,
-                            CreatedBy = user.Name,
-                            UpdatedBy = user.Name
-                        });
-                        db.SaveChanges();
+                            BrandList.Add(new Brand
+                            {
+                                Name = row[model.Name].ToString(),
+                                Status = 0,
+                                DateEncoded = DateTime.Now,
+                                DateUpdated = DateTime.Now,
+                                CreatedBy = user.Name,
+                                UpdatedBy = user.Name
+                            });
+                        }
                     }
                 }
-                
+                db.BulkInsert(BrandList);
             }
             return View();
         }
