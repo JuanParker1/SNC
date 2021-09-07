@@ -23,7 +23,7 @@
                     {
                          columns.Add(s => s.Name).Titled("Shop Name").Filterable(true).SetWidth(10);
                          columns.Add(s => s.OwnerPhoneNumber).Titled("Prop. No.").Filterable(true).SetWidth(15);
-                         columns.Add(s => s.PhoneNumber).RenderValueAs(s => s.PhoneNumber != null ? s.PhoneNumber : s.ManualPhoneNumber).Titled("Shop No").Filterable(true).SetWidth(10);
+                         columns.Add(s => s.PhoneNumber).RenderValueAs(s => s.PhoneNumber != null ? s.PhoneNumber : s.ManualPhoneNumber).Titled("Shop PhoneNumber").Filterable(true).SetWidth(10);
                          columns.Add(s => s.ShopCategoryName).RenderValueAs(s => s.ShopCategoryName != null ? s.ShopCategoryName : "N/A").Titled("Shop Type").Filterable(true).SetWidth(10);
                          columns.Add(b => b.Address).Titled("Address").Filterable(true).SetWidth(40);
                          //columns.Add(s => s.StateName).Titled("State").Filterable(true).SetWidth(10);

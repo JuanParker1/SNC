@@ -21,7 +21,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            @using (Html.BeginForm("FoodEdit", "MasterProduct", FormMethod.Post, new { id = "DishForm", role = "form", enctype = "multipart/form-data" }))
+            @using (Html.BeginForm("FoodEdit", "MasterProduct", FormMethod.Post, new { id = "DishUpdateForm", role = "form", enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
                 <div class="card">
@@ -90,7 +90,7 @@
                                 </div>
                             </div>
                         </div>
-                      
+
                     </div>
                     <div class="card d-none" id="radioAddons">
                         <div class="card-body">
@@ -419,6 +419,7 @@
     <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
     <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
     <!--Select2 End-->
+    <script src="~/Scripts/ValidateRequiredFields.js"></script>
     <script src="~/Scripts/ckeditor/ckeditor.js"></script>
     <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
@@ -458,12 +459,24 @@
                 $('input[name="CategoryName"]').val(e.params.data.text);
             });
 
+            //$(".Save").click(function () {
+            //    if ($('#MasterProductName').val() != "") {
+            //        $('#DishForm').submit();
+            //    } else {
+            //        swal("Notice!", "Please Enter Dish Name!", "warning");
+            //    }
+            //});
+
             $(".Save").click(function () {
-                if ($('#MasterProductName').val() != "") {
-                    $('#DishForm').submit();
-                } else {
-                    swal("Notice!", "Please Enter Dish Name!", "warning");
-                }
+                var isValidated = false;
+                var requiredArr = [
+                    'Name'
+                ];
+                isValidated = ValidateEmptyRequiredFiels(requiredArr);
+
+                if (isValidated) {
+                    $('#DishUpdateForm').submit();
+                };
             });
 
             $('input[type=radio][name=AddOnsType]').change(function () {
@@ -528,7 +541,7 @@
                 $("#MinSelectionLimit4").val("");
                 $("#MaxSelectionLimit4").val("");
             }
-            
+
             $('#AddOnCategoryId').select2({
                 placeholder: "Search Addon Category",
                 ajax: {

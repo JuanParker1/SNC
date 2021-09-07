@@ -292,16 +292,25 @@ namespace ShopNow.Controllers
             var dCode = AdminHelpers.DCodeInt(id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
+            if (string.IsNullOrEmpty(dCode.ToString()))
+                return HttpNotFound();
             var product = db.Products.FirstOrDefault(i => i.Id == dCode);
             var model = _mapper.Map<Product, MedicalEditViewModel>(product);
             var masterProduct = db.MasterProducts.FirstOrDefault(i => i.Id == product.MasterProductId);
+            var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
+            if (shop != null)
+                model.ShopName = shop.Name;
             if (masterProduct != null)
             {
                 model.MasterProductName = masterProduct.Name;
                 model.BrandId = masterProduct.BrandId;
                 model.BrandName = masterProduct.BrandName;
                 model.CategoryId = masterProduct.CategoryId;
-                model.CategoryName = db.Categories.FirstOrDefault(i => i.Id == masterProduct.CategoryId).Name;
+                var categoryName = db.Categories.FirstOrDefault(i => i.Id == masterProduct.CategoryId);
+                if (categoryName != null)
+                    model.CategoryName = categoryName.Name;
+                else
+                    model.CategoryName = "N/A";
                 model.GoogleTaxonomyCode = masterProduct.GoogleTaxonomyCode;
                 model.PriscriptionCategory = masterProduct.PriscriptionCategory;
                 model.ImagePath1 = masterProduct.ImagePath1;
@@ -813,7 +822,11 @@ namespace ShopNow.Controllers
                 model.BrandId = masterProduct.BrandId;
                 model.BrandName = masterProduct.BrandName;
                 model.CategoryId = masterProduct.CategoryId;
-                model.CategoryName = db.Categories.FirstOrDefault(i => i.Id == masterProduct.CategoryId).Name;
+                var categoryName = db.Categories.FirstOrDefault(i => i.Id == masterProduct.CategoryId);
+                if (categoryName != null)
+                    model.CategoryName = categoryName.Name;
+                else
+                    model.CategoryName = "N/A";
                 model.GoogleTaxonomyCode = masterProduct.GoogleTaxonomyCode;
                 model.ImagePath1 = masterProduct.ImagePath1;
                 model.ImagePath2 = masterProduct.ImagePath2;
@@ -823,9 +836,17 @@ namespace ShopNow.Controllers
                 model.LongDescription = masterProduct.LongDescription;
                 model.ShortDescription = masterProduct.ShortDescription;
                 model.SubCategoryId = masterProduct.SubCategoryId;
-                model.SubCategoryName = db.SubCategories.FirstOrDefault(i => i.Id == masterProduct.SubCategoryId).Name;
+                var subcategoryName = db.SubCategories.FirstOrDefault(i => i.Id == masterProduct.SubCategoryId);
+                if (subcategoryName != null)
+                    model.SubCategoryName = subcategoryName.Name;
+                else
+                    model.SubCategoryName = "N/A";
                 model.NextSubCategoryId = masterProduct.NextSubCategoryId;
-                model.NextSubCategoryName = db.NextSubCategories.FirstOrDefault(i => i.Id == masterProduct.NextSubCategoryId).Name;
+                var nextsubcategoryName = db.NextSubCategories.FirstOrDefault(i => i.Id == masterProduct.NextSubCategoryId);
+                if (nextsubcategoryName != null)
+                    model.NextSubCategoryName = nextsubcategoryName.Name;
+                else
+                    model.NextSubCategoryName = "N/A";
                 model.MeasurementUnitId = masterProduct.MeasurementUnitId;
                 model.MeasurementUnitName = masterProduct.MeasurementUnitName;
                 model.PackageId = masterProduct.PackageId;

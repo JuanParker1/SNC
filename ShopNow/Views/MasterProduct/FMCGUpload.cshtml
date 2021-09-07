@@ -189,18 +189,7 @@
 
 <script>
     $(document).ready(function () {
-        $('#ProductTypeId').select2({
-            placeholder: "Search Product Type",
-            ajax: {
-                url: "/MasterProduct/GetProductTypeSelect2",
-                width: '100%',
-                delay: 250,
-                dataType: 'json'
-            }
-        }).on('select2:select', function (e) {
-            $('input[name="ProductTypeName"]').val(e.params.data.text);
-        });
-
+       
         var tbl = document.getElementById("Product-list");
         if (tbl != null) {
             for (var i = 0; i < tbl.rows.length; i++) {
