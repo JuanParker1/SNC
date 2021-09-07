@@ -143,6 +143,12 @@ namespace ShopNow.Controllers
                 model.ProductIds = offerProducts.Select(i => i.ProductId).ToArray();
                 model.ProductIdstring = string.Join(",", offerProducts.Select(i => i.ProductId));
                 model.ProductNames = string.Join(",", db.Products.Where(i => model.ProductIds.Contains(i.Id)).Select(i => i.Name).ToList());
+
+                if (offer.Type == 3)
+                {
+                    model.SingleProductId = offerProducts.FirstOrDefault().ProductId;
+                    model.SingleProductName = db.Products.FirstOrDefault(i => i.Id == model.SingleProductId).Name;
+                }
             }
             return View(model);
         }

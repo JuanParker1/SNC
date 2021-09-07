@@ -72,6 +72,7 @@
                                         <option selected disabled>Select Discount Type</option>
                                         <option value="1">Direct Discount</option>
                                         <option value="2">Wallet Cashback</option>
+                                        <option value="3">Free Product</option>
                                     </select>
                                 </div>
                             </div>
@@ -81,14 +82,22 @@
                                     <select name="Type" class="form-control" required>
                                         <option selected disabled>Select Offer Type</option>
                                         <option value="1">Cart Offer</option>
-                                        <option value="2">Item Offer</option>
+                                        <option value="2" disabled>Item Offer</option>
+                                        <option value="3">Product Offer</option>
                                     </select>
                                 </div>
                             </div>
-                            <div id="div-product" class="col-md-4 d-none">
+                            <div id="div-products" class="col-md-4 d-none">
                                 <div class="form-group">
                                     <label class="col-form-label">Select Product</label>
                                     <select id="select-product" name="ProductIds" class="form-control" multiple></select>
+                                </div>
+                            </div>
+                            @*for single product choose*@
+                            <div id="div-product" class="col-md-4 d-none">
+                                <div class="form-group">
+                                    <label class="col-form-label">Select Product</label>
+                                    <select id="select-product-single" name="ProductIds" class="form-control"></select>
                                 </div>
                             </div>
                         </div>
@@ -207,22 +216,36 @@
 
             $('[name="Type"]').on('change', function () {
                 var $value = $(this).val();
+                $('#div-products').addClass('d-none');
                 $('#div-product').addClass('d-none');
-
+                $('[name="Percentage"]').val('');
+                $('[name="Percentage"]').attr('readonly', false);
+                $('[name="QuantityLimit"]').attr('readonly', false);
+                $('[name="AmountLimit"]').attr('readonly', false);
                 if ($value == '2') {
-                    $('#div-product').removeClass('d-none');
+                    $('#div-products').removeClass('d-none');
                     $('#select-product').val('').trigger('change');
                     $('#select-brand').val('').trigger('change');
                     getProducts();
-                } else {
-                    $('#div-product').addClass('d-none');
+                } else if ($value == '3') {
+                    $('#div-product').removeClass('d-none');
+                    $('#select-product-single').val('').trigger('change');
+                    $('#select-brand').val('').trigger('change');
+                    getProducts();
+                    $('[name="Percentage"]').val(100);
+                    $('[name="Percentage"]').attr('readonly', true);
+                    $('[name="QuantityLimit"]').attr('readonly', true);
+                    $('[name="AmountLimit"]').attr('readonly',true);
+                }
+                else {
+                    $('#div-products').addClass('d-none');
                     $('#select-product').val('').trigger('change');
                 }
             });
 
             function getProducts() {
                 var $selectedValues = $('#select-shop').val();
-                $('#select-product').select2({
+                $('#select-product,#select-product-single').select2({
                     placeholder: "Search Products",
                     width: '100%',
                     ajax: {

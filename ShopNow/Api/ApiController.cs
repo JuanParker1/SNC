@@ -4453,7 +4453,7 @@ namespace ShopNow.Controllers
             string query = "SELECT * " +
                                " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and Status = 0  and Latitude != 0 and Longitude != 0";
             var model = new OfferApiListViewModel();
-            model.OfferListItems = db.Offers.ToList().Where(i => i.Status == 0)
+            model.OfferListItems = db.Offers.ToList().Where(i => i.Status == 0 && i.Type==1) //now only for cart offer
                 .Join(db.OfferShops, o => o.Id, oShp => oShp.OfferId, (o, oShp) => new { o, oShp })
              .Join(db.Shops.SqlQuery(query,
                  new SqlParameter("Latitude", Latitude),
