@@ -4478,7 +4478,7 @@ namespace ShopNow.Controllers
                     Type = i.FirstOrDefault().o.o.Type,
                     Description = i.FirstOrDefault().o.o.Description
                 }).ToList();
-            return Json(new { list = model }, JsonRequestBehavior.AllowGet);
+            return Json(new { list = model.OfferListItems }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetOfferList(int id)
