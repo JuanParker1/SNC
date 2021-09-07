@@ -1128,14 +1128,24 @@ namespace ShopNow.Controllers
             year = year != 0 ? year : DateTime.Now.Year;
             var list = db.Orders.Where(a => a.DateEncoded.Month == month && a.DateEncoded.Year == year).GroupBy(i => DbFunctions.TruncateTime(i.DateEncoded))
                 .AsEnumerable()
-                .Select(i => new {
-                    date = i.Key,
-                    totalOrder = i.Count(),
-                    newOrder = 0
-                })
-                .ToList();
+                .Select(i => new
+                {
+                    date = i.Key.Value.ToString("dd-MMM-yyyy"),
+                    totalOrder = i.Count(), //status 6,7
+                    newOrder = GetNewOrderCount(i.Key.Value), //status 6
+                    resTotal = i.Join(db.Shops.Where(a => a.ShopCategoryId == 1), o => o.ShopId, s => s.Id, (o, s) => new { o, s }).Count(),
+                   vegTotal = i.Join(db.Shops.Where(a => a.ShopCategoryId == 2), o => o.ShopId, s => s.Id, (o, s) => new { o, s }).Count(),
+
+                }).ToList();
             return Json(list,JsonRequestBehavior.AllowGet);
             
+        }
+
+        public int GetNewOrderCount(DateTime date)
+        {
+            var orders = db.Orders.Where(i => DbFunctions.TruncateTime(i.DateEncoded) < DbFunctions.TruncateTime(date)).Select(i => i.CustomerId);
+            var count = db.Orders.Where(a => !orders.Contains(a.CustomerId) && DbFunctions.TruncateTime(a.DateEncoded) == DbFunctions.TruncateTime(date)).Count();
+            return count;
         }
        
 
