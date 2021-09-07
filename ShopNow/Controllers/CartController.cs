@@ -1122,6 +1122,23 @@ namespace ShopNow.Controllers
             return RedirectToAction("Edit", "Cart", new { OrderNumber = order.OrderNumber, id = AdminHelpers.ECodeLong(orderId) });
         }
 
+        public ActionResult OrderRatios(int month=0,int year=0)
+        {
+            month = month != 0 ? month : DateTime.Now.Month;
+            year = year != 0 ? year : DateTime.Now.Year;
+            var list = db.Orders.Where(a => a.DateEncoded.Month == month && a.DateEncoded.Year == year).GroupBy(i => DbFunctions.TruncateTime(i.DateEncoded))
+                .AsEnumerable()
+                .Select(i => new {
+                    date = i.Key,
+                    totalOrder = i.Count(),
+                    newOrder = 0
+                })
+                .ToList();
+            return Json(list,JsonRequestBehavior.AllowGet);
+            
+        }
+       
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
