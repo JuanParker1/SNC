@@ -4551,6 +4551,26 @@ namespace ShopNow.Controllers
             return Json(false, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetCartOfferList(int shopId)
+        {
+            var model = new CartOfferApiListViewModel();
+
+            model.OfferListItems = db.Offers.Where(i => i.Status == 0 && i.Type == 1)
+                .Join(db.OfferShops.Where(i=>i.ShopId == shopId), o => o.Id, oShp => oShp.OfferId, (o, oShp) => new { o, oShp })
+                .Select(i => new CartOfferApiListViewModel.OfferListItem
+                {
+                    AmountLimit = i.o.AmountLimit,
+                    DiscountType = i.o.DiscountType,
+                    Id = i.o.Id,
+                    MinimumPurchaseAmount = i.o.MinimumPurchaseAmount,
+                    Name = i.o.Name,
+                    OfferCode = i.o.OfferCode,
+                    Percentage = i.o.Percentage,
+                    Description = i.o.Description,
+                }).ToList();
+            return Json(new { list = model.OfferListItems }, JsonRequestBehavior.AllowGet);
+        }
+
         //public JsonResult GetCartOffer(int shopid, int customerid, double amount, int paymentMode) //1-Online, 2-COH
         //{
         //    //Have to check IsFor1stOrder and Paymentmode and 1st order
