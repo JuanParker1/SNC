@@ -4571,6 +4571,28 @@ namespace ShopNow.Controllers
             return Json(new { list = model.OfferListItems }, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetProductFreeOffer(int shopId)
+        {
+            var model = new ProductFreeOfferApiViewModel();
+            model = db.Offers.Where(i => i.Status == 0 && i.Type == 3)
+                .Join(db.OfferShops.Where(i => i.ShopId == shopId), o => o.Id, oShp => oShp.OfferId, (o, oShp) => new { o, oShp })
+                .Join(db.OfferProducts, o => o.o.Id, oPro => oPro.OfferId, (o, oPro) => new { o, oPro })
+                .Join(db.Products, o => o.oPro.ProductId, p => p.Id, (o, p) => new { o, p })
+                .Join(db.MasterProducts, o => o.p.MasterProductId, m => m.Id, (o, m) => new { o, m })
+                .Select(i => new ProductFreeOfferApiViewModel
+                {
+                    Id = i.o.o.o.o.Id,
+                    MinimumPurchaseAmount = i.o.o.o.o.MinimumPurchaseAmount,
+                    Name = i.o.o.o.o.Name,
+                    OfferCode = i.o.o.o.o.OfferCode,
+                    Description = i.o.o.o.o.Description,
+                    ProductId = i.o.p.Id,
+                    ProductName = i.m.Name,
+                    ProductImage = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + i.m.ImagePath1
+                }).FirstOrDefault();
+            return Json(new { offer = model }, JsonRequestBehavior.AllowGet);
+        }
+
         //public JsonResult GetCartOffer(int shopid, int customerid, double amount, int paymentMode) //1-Online, 2-COH
         //{
         //    //Have to check IsFor1stOrder and Paymentmode and 1st order
