@@ -4448,39 +4448,40 @@ namespace ShopNow.Controllers
 
         }
 
-        public JsonResult GetAllOffers(double latitude, double longitude)
+        public JsonResult GetAllOffers(double Latitude, double Longitude)
         {
             string query = "SELECT * " +
-                               " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 1 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0";
+                               " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and Status = 0  and Latitude != 0 and Longitude != 0";
             var model = new OfferApiListViewModel();
             model.OfferListItems = db.Offers.ToList().Where(i => i.Status == 0)
                 .Join(db.OfferShops, o => o.Id, oShp => oShp.OfferId, (o, oShp) => new { o, oShp })
              .Join(db.Shops.SqlQuery(query,
-                 new SqlParameter("Latitude", latitude),
-                 new SqlParameter("Longitude", longitude)), o => o.oShp.ShopId, s => s.Id, (o, s) => new { o, s })
+                 new SqlParameter("Latitude", Latitude),
+                 new SqlParameter("Longitude", Longitude)), o => o.oShp.ShopId, s => s.Id, (o, s) => new { o, s })
+                 .GroupBy(i=>i.o.o.Id)
                 .Select(i => new OfferApiListViewModel.OfferListItem
                 {
-                    AmountLimit = i.o.o.AmountLimit,
-                    BrandId = i.o.o.BrandId,
-                    CustomerCountLimit = i.o.o.CustomerCountLimit,
-                    DiscountType = i.o.o.DiscountType,
-                    Id = i.o.o.Id,
-                    IsForBlackListAbusers = i.o.o.IsForBlackListAbusers,
-                    IsForFirstOrder = i.o.o.IsForFirstOrder,
-                    IsForOnlinePayment = i.o.o.IsForOnlinePayment,
-                    MinimumPurchaseAmount = i.o.o.MinimumPurchaseAmount,
-                    Name = i.o.o.Name,
-                    OfferCode = i.o.o.OfferCode,
-                    OwnerType = i.o.o.OwnerType,
-                    Percentage = i.o.o.Percentage,
-                    QuantityLimit = i.o.o.QuantityLimit,
-                    Type = i.o.o.Type,
-                    Description = i.o.o.Description
+                    AmountLimit = i.FirstOrDefault().o.o.AmountLimit,
+                    BrandId = i.FirstOrDefault().o.o.BrandId,
+                    CustomerCountLimit = i.FirstOrDefault().o.o.CustomerCountLimit,
+                    DiscountType = i.FirstOrDefault().o.o.DiscountType,
+                    Id = i.FirstOrDefault().o.o.Id,
+                    IsForBlackListAbusers = i.FirstOrDefault().o.o.IsForBlackListAbusers,
+                    IsForFirstOrder = i.FirstOrDefault().o.o.IsForFirstOrder,
+                    IsForOnlinePayment = i.FirstOrDefault().o.o.IsForOnlinePayment,
+                    MinimumPurchaseAmount = i.FirstOrDefault().o.o.MinimumPurchaseAmount,
+                    Name = i.FirstOrDefault().o.o.Name,
+                    OfferCode = i.FirstOrDefault().o.o.OfferCode,
+                    //OwnerType = i.FirstOrDefault().o.o.OwnerType,
+                    Percentage = i.FirstOrDefault().o.o.Percentage,
+                    QuantityLimit = i.FirstOrDefault().o.o.QuantityLimit,
+                    Type = i.FirstOrDefault().o.o.Type,
+                    Description = i.FirstOrDefault().o.o.Description
                 }).ToList();
             return Json(new { list = model }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetRelatedOffers(int id)
+        public JsonResult GetOfferList(int id)
         {
             var model = new OfferRelatedApiListViewModel();
             var offer = db.Offers.FirstOrDefault(i => i.Id == id);
