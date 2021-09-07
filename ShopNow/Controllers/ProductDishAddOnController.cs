@@ -15,24 +15,14 @@ using System.Web.Mvc;
 
 namespace ShopNow.Controllers
 {
-    public class ShopCategoryController : Controller
+    public class ProductDishAddOnController : Controller
     {
         private sncEntities db = new sncEntities();
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
+        // GET: ProductDishAddOn
 
-        public ShopCategoryController()
-        {
-            _mapperConfiguration = new MapperConfiguration(config =>
-            {
-                config.CreateMap<ShopCategory, ShopCategoryListViewModel.ShopCategoryList>();
-
-            });
-            _mapper = _mapperConfiguration.CreateMapper();
-
-        }
-
-        [AccessPolicy(PageCode = "SHNSCTI001")]
+        [AccessPolicy(PageCode = "")]
         public ActionResult Index()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -42,8 +32,8 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNSCTI001")]
-        public ActionResult Index(HttpPostedFileBase upload, ShopCategoryMasterViewModel model)
+        [AccessPolicy(PageCode = "")]
+        public ActionResult Index(HttpPostedFileBase upload, ProductDishAddOnViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             DataTable dt = new DataTable();
@@ -128,118 +118,112 @@ namespace ShopNow.Controllers
                 // Insert records to database table.
                 // MainPageModel entities = new MainPageModel();
 
-                List<ShopCategory> ShopCategoryList = new List<ShopCategory>();
-                var master = db.ShopCategories.Where(i => i.Status == 0).Select(i => new { Name = i.Name }).ToList();
+                List<ProductDishAddOn> ProductDishAddOnList = new List<ProductDishAddOn>();
+                List<MasterProduct> MasterProductList = new List<MasterProduct>();
+                var master = db.ProductDishAddOns.Where(i => i.Status == 0).Select(i => new { Name = i.AddOnItemName }).ToList();
                 foreach (DataRow row in dt.Rows)
                 {
-                    if (row[model.Name].ToString().Trim() != string.Empty)
+                    var mpname = row[model.MasterProductName].ToString().Trim();
+                    var masterproduct = db.MasterProducts.Where(i => i.Status == 0).Select(i => new { Name = mpname }).ToList();
+                    if (masterproduct == null)
                     {
-                        int idx = master.FindIndex(a => a.Name == row[model.Name].ToString().Trim());
-                        if (idx <= 0)
+                        if (row[model.AddOnItemName].ToString().Trim() != string.Empty)
                         {
-                            ShopCategoryList.Add(new ShopCategory
+                            int idx = master.FindIndex(a => a.Name == row[model.AddOnItemName].ToString().Trim());
+                            if (idx <= 0)
                             {
-                                Name = row[model.Name].ToString(),
-                                Status = 0,
-                                DateEncoded = DateTime.Now,
-                                DateUpdated = DateTime.Now,
-                                CreatedBy = user.Name,
-                                UpdatedBy = user.Name
-                            });
+                                ProductDishAddOnList.Add(new ProductDishAddOn
+                                {
+                                    AddOnItemName = row[model.AddOnItemName].ToString(),
+                                    MasterProductId = CheckMasterProduct(row[model.MasterProductName].ToString().Trim()),
+                                    MasterProductName = row[model.MasterProductName].ToString().Trim(),
+                                    AddOnCategoryId = CheckAddOnCategory(row[model.AddOnCategoryName].ToString()),
+                                    AddOnCategoryName = row[model.AddOnCategoryName].ToString(),
+                                    PortionId = CheckPortion(row[model.PortionName].ToString()),
+                                    PortionName = row[model.PortionName].ToString(),
+                                    PortionPrice = Convert.ToDouble(row[model.PortionPrice]),
+                                    AddOnsPrice = Convert.ToDouble(row[model.AddOnsPrice]),
+                                    CrustPrice = Convert.ToDouble(row[model.CrustPrice]),
+                                    AddOnType = Convert.ToInt32(row[model.AddOnType]),
+                                    CrustName = row[model.CrustName].ToString(),
+                                    MaxSelectionLimit = Convert.ToInt32(row[model.MaxSelectionLimit]),
+                                    MinSelectionLimit = Convert.ToInt32(row[model.MinSelectionLimit]),
+                                    Status = 0,
+                                    DateEncoded = DateTime.Now,
+                                    DateUpdated = DateTime.Now,
+                                    CreatedBy = user.Name,
+                                    UpdatedBy = user.Name
+                                });
+                            }
                         }
                     }
                 }
-                db.BulkInsert(ShopCategoryList);
+                db.BulkInsert(ProductDishAddOnList);
             }
             return View();
         }
 
-        [AccessPolicy(PageCode = "SHNSCTL004")]
-        public ActionResult List()
+        public long CheckMasterProduct(string MasterProductName)
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            var model = new ShopCategoryListViewModel();
-            model.List = db.ShopCategories.Where(i => i.Status == 0).ToList().AsQueryable().ProjectTo<ShopCategoryListViewModel.ShopCategoryList>(_mapperConfiguration).OrderBy(i => i.Name).ToList();
-
-            return View(model.List);
-        }
-
-        [AccessPolicy(PageCode = "SHNSCTS002")]
-        public JsonResult Save(string name = "")
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            bool IsAdded = false;
-            string message = "";
-            string message1 = "";
-            int count = 0;
-            var shopCategoryName = db.ShopCategories.FirstOrDefault(i => i.Name == name && i.Status == 0);// ShopCategory.GetName(name);
-            count = db.ShopCategories.Count();
-            if (shopCategoryName == null)
+            var master = db.MasterProducts.FirstOrDefault(i => i.Name == MasterProductName && i.Status == 0 && i.ProductTypeId == 1);
+            if (master != null)
             {
-                var shopCategory = new ShopCategory();
-                shopCategory.Name = name;
-                shopCategory.Id = count;
-                shopCategory.CreatedBy = user.Name;
-                shopCategory.UpdatedBy = user.Name;
-                //string code = ShopCategory.Add(shopCategory, out int error);
-                shopCategory.DateEncoded = DateTime.Now;
-                shopCategory.DateUpdated = DateTime.Now;
-                db.ShopCategories.Add(shopCategory);
-                db.SaveChanges();
-                IsAdded = shopCategory.Id != 0 ? true : false;
-                message = name + " Successfully Added";
+                return master.Id;
             }
             else
             {
-                message1 = name + " Already Exist!";
-            }
-            return Json(new { IsAdded = IsAdded, message = message, message1 = message1 }, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "SHNSCTE003")]
-        public JsonResult Edit(int Id, string name)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            string message = "";
-            ShopCategory shopCategory = db.ShopCategories.FirstOrDefault(i => i.Id == Id);
-            if (shopCategory != null)
-            {
-                shopCategory.Name = name;
-                shopCategory.DateUpdated = DateTime.Now;
-                shopCategory.UpdatedBy = user.Name;
-                // bool result = ShopCategory.Edit(shopCategory, out int error);
-                shopCategory.DateUpdated = DateTime.Now;
-                db.Entry(shopCategory).State = System.Data.Entity.EntityState.Modified;
+                MasterProduct mp = new MasterProduct();
+                mp.Name = MasterProductName;
+                mp.NickName = MasterProductName;
+                mp.ProductTypeId = 1;
+                mp.ProductTypeName = "Dish";
+                mp.Status = 0;
+                mp.DateEncoded = DateTime.Now;
+                mp.DateUpdated = DateTime.Now;
+                db.MasterProducts.Add(mp);
                 db.SaveChanges();
-
-                message = name + " Updated Successfully";
+                return mp.Id;
             }
-            return Json(new { message = message }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNSCTD005")]
-        public JsonResult Delete(int id)
+        public int CheckAddOnCategory(string AddOnCategoryName)
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            var shopCategory = db.ShopCategories.FirstOrDefault(i => i.Id == id);
-            if (shopCategory != null)
+            var master = db.AddOnCategories.FirstOrDefault(i => i.Name == AddOnCategoryName && i.Status == 0);
+            if (master != null)
             {
-                shopCategory.Status = 2;
-                shopCategory.DateUpdated = DateTime.Now;
-                shopCategory.UpdatedBy = user.Name;
-                db.Entry(shopCategory).State = System.Data.Entity.EntityState.Modified;
+                return master.Id;
+            }
+            else
+            {
+                AddOnCategory mp = new AddOnCategory();
+                mp.Name = AddOnCategoryName;
+                mp.Status = 0;
+                mp.DateEncoded = DateTime.Now;
+                mp.DateUpdated = DateTime.Now;
+                db.AddOnCategories.Add(mp);
                 db.SaveChanges();
+                return mp.Id;
             }
-            return Json(true, JsonRequestBehavior.AllowGet);
         }
-        protected override void Dispose(bool disposing)
+
+        public int CheckPortion(string PortionName)
         {
-            if (disposing)
+            var master = db.Portions.FirstOrDefault(i => i.Name == PortionName && i.Status == 0);
+            if (master != null)
             {
-                db.Dispose();
+                return master.Id;
             }
-            base.Dispose(disposing);
+            else
+            {
+                Portion mp = new Portion();
+                mp.Name = PortionName;
+                mp.Status = 0;
+                mp.DateEncoded = DateTime.Now;
+                mp.DateUpdated = DateTime.Now;
+                db.Portions.Add(mp);
+                db.SaveChanges();
+                return mp.Id;
+            }
         }
     }
 }

@@ -1,17 +1,17 @@
-﻿@model ShopNow.ViewModels.DrugCompoundDetailMasterViewModel
+﻿@model ShopNow.ViewModels.ProductDishAddOnViewModel
 @using System.Data;
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<title>Shop Now | Drug Compound Detail Ecxel Upload</title>
+<title>Shop Now | Master DishAddOn Upload</title>
 <div class="container">
-    @using (Html.BeginForm("Index", "DrugCompoundDetail", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("Index", "ProductDishAddOn", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
         <div class="row">
             <div class="col-md-12">
-                <h5>Drug Compound Detail Master Excel Upload</h5>
+                <h5>Master DishAddOn Upload</h5>
                 <div class="row mt-3">
                     <div class="col-md-6 mb-2">
                         <input type="file" id="dataFile" name="upload" />
@@ -34,7 +34,7 @@
                         <div class="col-md-12 my-2"> <hr class="border-success" style="border-top: 1px dashed" /></div>
                         <div class="col-md-5">
                             <p class="text-success">Excel Headers</p>
-                            <table id="Brand-list">
+                            <table id="Product-list">
                                 <thead>
                                 </thead>
                                 <tbody>
@@ -55,75 +55,74 @@
                                 <tbody>
                                     <tr>
                                         <td>
-                                            <label class="col-md-6">Alias Name</label>
-                                            <input id="AliasName" name="AliasName" type="text" class="col-md-4" />
+                                            <label class="col-md-6">AddOnItemName</label>
+                                            <input id="AddOnItemName" name="AddOnItemName" type="text" class="col-md-4" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <label class="col-md-6">Interacting Compounds</label>
-                                            <input id="InteractingCompounds" name="InteractingCompounds" type="text" class="col-md-4" />
+                                            <label class="col-md-6">MasterProductName</label>
+                                            <input id="MasterProductName" name="MasterProductName" type="text" class="col-md-4" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <label class="col-md-6">Intake Indications</label>
-                                            <input id="IntakeIndications" name="IntakeIndications" type="text" class="col-md-4" />
+                                            <label class="col-md-6">AddOnCategoryName</label>
+                                            <input id="AddOnCategoryName" name="AddOnCategoryName" type="text" class="col-md-4" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <label class="col-md-6">Intake Contraindication</label>
-                                            <input id="IntakeContraindication" name="IntakeContraindication" type="text" class="col-md-4" />
+                                            <label class="col-md-6">PortionName</label>
+                                            <input id="PortionName" name="PortionName" type="text" class="col-md-4" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <label class="col-md-6">Mechanism Of Action</label>
-                                            <input id="MechanismOfAction" name="MechanismOfAction" type="text" class="col-md-4" />
+                                            <label class="col-md-6">PortionPrice</label>
+                                            <input id="PortionPrice" name="PortionPrice" type="text" class="col-md-4" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <label class="col-md-6">Indication Treatment Age Group</label>
-                                            <input id="IndicationTreatmentAgeGroup" name="IndicationTreatmentAgeGroup" type="text" class="col-md-4" />
+                                            <label class="col-md-6">AddOnsPrice</label>
+                                            <input id="AddOnsPrice" name="AddOnsPrice" type="text" class="col-md-4" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <label class="col-md-6">Compound Usage Reasons</label>
-                                            <input id="CompoundUsageReasons" name="CompoundUsageReasons" type="text" class="col-md-4" />
+                                            <label class="col-md-6">CrustPrice</label>
+                                            <input id="CrustPrice" name="CrustPrice" type="text" class="col-md-4" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <label class="col-md-6">Alcohol</label>
-                                            <input id="Alcohol" name="Alcohol" type="text" class="col-md-4" />
+                                            <label class="col-md-6">AddOnType</label>
+                                            <input id="AddOnType" name="AddOnType" type="text" class="col-md-4" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <label class="col-md-6">Pregnancy</label>
-                                            <input id="Pregnancy" name="Pregnancy" type="text" class="col-md-4" />
+                                            <label class="col-md-6">CrustName</label>
+                                            <input id="CrustName" name="CrustName" type="text" class="col-md-4" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <label class="col-md-6">Breastfeeding</label>
-                                            <input id="Breastfeeding" name="Breastfeeding" type="text" class="col-md-4" />
+                                            <label class="col-md-6">MinSelectionLimit</label>
+                                            <input id="MinSelectionLimit" name="MinSelectionLimit" type="text" class="col-md-4" />
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>
-                                            <label class="col-md-6">Driving</label>
-                                            <input id="Driving" name="Driving" type="text" class="col-md-4" />
+                                            <label class="col-md-6">MaxSelectionLimit</label>
+                                            <input id="MaxSelectionLimit" name="MaxSelectionLimit" type="text" class="col-md-4" />
                                         </td>
                                     </tr>
                                 </tbody>
-
                             </table>
                             <div class="col-md-10 text-center my-3">
-                                <input type="submit" value="Submit" class="btn btn-success" />
+                                <input type="submit" value="submit" class="btn btn-success" />
                             </div>
                         </div>
                     }
@@ -132,12 +131,18 @@
         </div>
     }
 </div>
+
 @section Scripts
-    {
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+
     <script>
         $(document).ready(function () {
-
-            var tbl = document.getElementById("Brand-list");
+            var tbl = document.getElementById("Product-list");
             if (tbl != null) {
                 for (var i = 0; i < tbl.rows.length; i++) {
                     for (var j = 0; j < tbl.rows[i].cells.length; j++)
@@ -146,41 +151,42 @@
             }
             function getval(cel) {
                 $(function () {
-                    $('#AliasName').on('click', function () {
-                        $('#AliasName').val(cel.innerHTML)
+                    $('#AddOnItemName').on('click', function () {
+                        $('#AddOnItemName').val(cel.innerHTML)
                     });
-                    $('#InteractingCompounds').on('click', function () {
-                        $('#InteractingCompounds').val(cel.innerHTML)
+                    $('#MasterProductName').on('click', function () {
+                        $('#MasterProductName').val(cel.innerHTML)
                     });
-                    $('#IntakeIndications').on('click', function () {
-                        $('#IntakeIndications').val(cel.innerHTML)
+                    $('#AddOnCategoryName').on('click', function () {
+                        $('#AddOnCategoryName').val(cel.innerHTML)
                     });
-                    $('#IntakeContraindication').on('click', function () {
-                        $('#IntakeContraindication').val(cel.innerHTML)
+                    $('#PortionName').on('click', function () {
+                        $('#PortionName').val(cel.innerHTML)
                     });
-                    $('#MechanismOfAction').on('click', function () {
-                        $('#MechanismOfAction').val(cel.innerHTML)
+                    $('#PortionPrice').on('click', function () {
+                        $('#PortionPrice').val(cel.innerHTML)
                     });
-                    $('#IndicationTreatmentAgeGroup').on('click', function () {
-                        $('#IndicationTreatmentAgeGroup').val(cel.innerHTML)
+                    $('#AddOnsPrice').on('click', function () {
+                        $('#AddOnsPrice').val(cel.innerHTML)
                     });
-                    $('#CompoundUsageReasons').on('click', function () {
-                        $('#CompoundUsageReasons').val(cel.innerHTML)
+                    $('#CrustPrice').on('click', function () {
+                        $('#CrustPrice').val(cel.innerHTML)
                     });
-                    $('#Alcohol').on('click', function () {
-                        $('#Alcohol').val(cel.innerHTML)
+                    $('#AddOnType').on('click', function () {
+                        $('#AddOnType').val(cel.innerHTML)
                     });
-                    $('#Pregnancy').on('click', function () {
-                        $('#Pregnancy').val(cel.innerHTML)
+                    $('#CrustName').on('click', function () {
+                        $('#CrustName').val(cel.innerHTML)
                     });
-                    $('#Breastfeeding').on('click', function () {
-                        $('#Breastfeeding').val(cel.innerHTML)
+                    $('#MaxSelectionLimit').on('click', function () {
+                        $('#MaxSelectionLimit').val(cel.innerHTML)
                     });
-                    $('#Driving').on('click', function () {
-                        $('#Driving').val(cel.innerHTML)
+                    $('#MinSelectionLimit').on('click', function () {
+                        $('#MinSelectionLimit').val(cel.innerHTML)
                     });
                 });
             }
+
         });
     </script>
 }

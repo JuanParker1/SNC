@@ -6,6 +6,7 @@ using ShopNow.Helpers;
 using ShopNow.Models;
 using ShopNow.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 using System.IO;
@@ -219,34 +220,39 @@ namespace ShopNow.Controllers
 
                 // Insert records to database table.
                 // MainPageModel entities = new MainPageModel();
+
+                List<DrugCompoundDetail> DrugCompoundDetailList = new List<DrugCompoundDetail>();
+                var master = db.DrugCompoundDetails.Where(i => i.Status == 0).Select(i => new { AliasName = i.AliasName }).ToList();
                 foreach (DataRow row in dt.Rows)
                 {
-                    var drug = db.DrugCompoundDetails.FirstOrDefault(i => i.AliasName == row[model.AliasName].ToString() && i.Status == 0);// DrugCompoundDetail.GetName(row[model.AliasName].ToString());
-                    if (drug == null)
+                    if (row[model.AliasName].ToString().Trim() != string.Empty)
                     {
-                        db.DrugCompoundDetails.Add(new DrugCompoundDetail
+                        int idx = master.FindIndex(a => a.AliasName == row[model.AliasName].ToString().Trim());
+                        if (idx <= 0)
                         {
-                            AliasName = row[model.AliasName].ToString(),                     
-                            IndicationTreatmentAgeGroup = row[model.IndicationTreatmentAgeGroup].ToString(),
-                            IntakeContraindication = row[model.IntakeContraindication].ToString(),
-                            IntakeIndications = row[model.IntakeIndications].ToString(),
-                            InteractingCompounds = row[model.InteractingCompounds].ToString(),
-                            Alcohol = Convert.ToBoolean(row[model.Alcohol]),
-                            Breastfeeding = Convert.ToBoolean(row[model.Breastfeeding]),
-                            Driving = Convert.ToBoolean(row[model.Driving]),
-                            Pregnancy = Convert.ToBoolean(row[model.Pregnancy]),
-                            CompoundUsageReasons = row[model.CompoundUsageReasons].ToString(),
-                            MechanismOfAction = row[model.MechanismOfAction].ToString(),
-                            Status = 0,
-                            DateEncoded = DateTime.Now,
-                            DateUpdated = DateTime.Now,
-                            CreatedBy = user.Name,
-                            UpdatedBy = user.Name
-                        });
-                        db.SaveChanges();
+                            DrugCompoundDetailList.Add(new DrugCompoundDetail
+                            {
+                                AliasName = row[model.AliasName].ToString(),
+                                IndicationTreatmentAgeGroup = row[model.IndicationTreatmentAgeGroup].ToString(),
+                                IntakeContraindication = row[model.IntakeContraindication].ToString(),
+                                IntakeIndications = row[model.IntakeIndications].ToString(),
+                                InteractingCompounds = row[model.InteractingCompounds].ToString(),
+                                Alcohol = Convert.ToBoolean(row[model.Alcohol]),
+                                Breastfeeding = Convert.ToBoolean(row[model.Breastfeeding]),
+                                Driving = Convert.ToBoolean(row[model.Driving]),
+                                Pregnancy = Convert.ToBoolean(row[model.Pregnancy]),
+                                CompoundUsageReasons = row[model.CompoundUsageReasons].ToString(),
+                                MechanismOfAction = row[model.MechanismOfAction].ToString(),
+                                Status = 0,
+                                DateEncoded = DateTime.Now,
+                                DateUpdated = DateTime.Now,
+                                CreatedBy = user.Name,
+                                UpdatedBy = user.Name
+                            });
+                        }
                     }
                 }
-
+                db.BulkInsert(DrugCompoundDetailList);
             }
             return View();
         }

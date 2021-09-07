@@ -4,6 +4,7 @@ using ShopNow.Filters;
 using ShopNow.Models;
 using ShopNow.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Data.OleDb;
@@ -219,26 +220,32 @@ namespace ShopNow.Controllers
 
                 // Insert records to database table.
                 // MainPageModel entities = new MainPageModel();
+
+                List<Category> CategoryList = new List<Category>();
+                var master = db.Categories.Where(i => i.Status == 0).Select(i => new { Name = i.Name }).ToList();
                 foreach (DataRow row in dt.Rows)
                 {
-                    var cat = db.Categories.AsEnumerable().FirstOrDefault(i => i.Name == row[model.Name].ToString() && i.Status == 0);
-                    if (cat == null)
+                    if (row[model.Name].ToString().Trim() != string.Empty)
                     {
-                        db.Categories.Add(new Category
+                        int idx = master.FindIndex(a => a.Name == row[model.Name].ToString().Trim());
+                        if (idx <= 0)
                         {
-                            Name = row[model.Name].ToString(),
-                            ProductTypeId = model.ProductTypeId,
-                            ProductTypeName = model.ProductTypeName,
-                            OrderNo = 0,
-                            Status = 0,
-                            DateEncoded = DateTime.Now,
-                            DateUpdated = DateTime.Now,
-                            CreatedBy = user.Name,
-                            UpdatedBy = user.Name
-                        });
-                        db.SaveChanges();
+                            CategoryList.Add(new Category
+                            {
+                                Name = row[model.Name].ToString(),
+                                ProductTypeId = model.ProductTypeId,
+                                ProductTypeName = model.ProductTypeName,
+                                OrderNo = 0,
+                                Status = 0,
+                                DateEncoded = DateTime.Now,
+                                DateUpdated = DateTime.Now,
+                                CreatedBy = user.Name,
+                                UpdatedBy = user.Name
+                            });
+                        }
                     }
                 }
+                db.BulkInsert(CategoryList);
             }
             return View();
         }

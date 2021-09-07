@@ -52,6 +52,8 @@ namespace ShopNow.ViewModels
                             return "Direct Discount";
                         case 2:
                             return "Wallet Cashback";
+                        case 3:
+                            return "Product Free";
                         default:
                             return "N/A";
                     }
@@ -68,6 +70,8 @@ namespace ShopNow.ViewModels
                             return "Cart Offer";
                         case 2:
                             return "Item Offer";
+                        case 3:
+                            return "Product Offer";
                         default:
                             return "N/A";
                     }
@@ -105,5 +109,7 @@ namespace ShopNow.ViewModels
         public string ProductIdstring { get; set; }
         public string ShopNames { get; set; }
         public string ProductNames { get; set; }
+        public long SingleProductId { get; set; }
+        public string SingleProductName { get; set; }
     }
 }

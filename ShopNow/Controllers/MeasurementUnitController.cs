@@ -6,6 +6,7 @@ using ShopNow.Helpers;
 using ShopNow.Models;
 using ShopNow.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 using System.IO;
@@ -231,27 +232,33 @@ namespace ShopNow.Controllers
 
                 // Insert records to database table.
                 // MainPageModel entities = new MainPageModel();
+
+                List<MeasurementUnit> MeasurementUnitList = new List<MeasurementUnit>();
+                var master = db.MeasurementUnits.Where(i => i.Status == 0).Select(i => new { Name = i.UnitName }).ToList();
                 foreach (DataRow row in dt.Rows)
                 {
-                    var drug = db.MeasurementUnits.FirstOrDefault(i => i.UnitName == row[model.UnitName].ToString() && i.Status == 0);// MeasurementUnit.GetName(row[model.UnitName].ToString());
-                    if (drug == null)
+                    if (row[model.UnitName].ToString().Trim() != string.Empty)
                     {
-                        db.MeasurementUnits.Add(new MeasurementUnit
+                        int idx = master.FindIndex(a => a.Name == row[model.UnitName].ToString().Trim());
+                        if (idx <= 0)
                         {
-                            UnitName = row[model.UnitName].ToString(),
-                            ConversionFormula = row[model.ConversionFormula].ToString(),
-                            ConversionUnit = row[model.ConversionUnit].ToString(),
-                            UnitSymbol = row[model.UnitSymbol].ToString(),
-                            UnitType = row[model.UnitType].ToString(),
-                            Status = 0,
-                            DateEncoded = DateTime.Now,
-                            DateUpdated = DateTime.Now,
-                            CreatedBy = user.Name,
-                            UpdatedBy = user.Name
-                        });
-                        db.SaveChanges();
+                            MeasurementUnitList.Add(new MeasurementUnit
+                            {
+                                UnitName = row[model.UnitName].ToString(),
+                                ConversionFormula = row[model.ConversionFormula].ToString(),
+                                ConversionUnit = row[model.ConversionUnit].ToString(),
+                                UnitSymbol = row[model.UnitSymbol].ToString(),
+                                UnitType = row[model.UnitType].ToString(),
+                                Status = 0,
+                                DateEncoded = DateTime.Now,
+                                DateUpdated = DateTime.Now,
+                                CreatedBy = user.Name,
+                                UpdatedBy = user.Name
+                            });
+                        }
                     }
                 }
+                db.BulkInsert(MeasurementUnitList);
             }
             return View();
         }

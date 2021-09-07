@@ -191,6 +191,18 @@ namespace ShopNow.ViewModels
         }
     }
 
+    public class ProductFreeOfferApiViewModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string OfferCode { get; set; }
+        public double MinimumPurchaseAmount { get; set; }
+        public string Description { get; set; }
+        public long ProductId { get; set; }
+        public string ProductName { get; set; }
+        public string ProductImage { get; set; }
+    }
+
     public class AchievementApiListViewModel
     {
         public List<AchievementListItem> AchievementListItems { get; set; }
