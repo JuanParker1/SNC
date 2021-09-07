@@ -372,6 +372,7 @@
     <Compile Include="Controllers\PincodeRateController.cs" />
     <Compile Include="Controllers\PlatFormCreditRateController.cs" />
     <Compile Include="Controllers\PortionController.cs" />
+    <Compile Include="Controllers\ProductDishAddOnController.cs" />
     <Compile Include="Controllers\ProductScheduleController.cs" />
     <Compile Include="Controllers\ProductSpecificationController.cs" />
     <Compile Include="Controllers\ProductTypeController.cs" />
@@ -654,6 +655,7 @@
     <Compile Include="ViewModels\PincodeRateViewModel.cs" />
     <Compile Include="ViewModels\PlatFormCreditRateViewModel.cs" />
     <Compile Include="ViewModels\PortionViewModel.cs" />
+    <Compile Include="ViewModels\ProductDishAddOnViewModel.cs" />
     <Compile Include="ViewModels\ProductMedicalStockViewModel.cs" />
     <Compile Include="ViewModels\ProductScheduleViewModels.cs" />
     <Compile Include="ViewModels\ProductSpecificationViewModel.cs" />
@@ -3173,6 +3175,7 @@
     <Content Include="Views\ShopSchedule\Index.cshtml" />
     <Content Include="Views\ProductSchedule\Index.cshtml" />
     <Content Include="Views\MasterProduct\ElectronicUpload.cshtml" />
+    <Content Include="Views\ProductDishAddOn\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
