@@ -304,6 +304,29 @@ namespace ShopNow.ViewModels
         }
     }
 
+    public class OrderRatioViewModel
+    {
+        public int MonthFilter { get; set; }
+        public int YearFilter { get; set; }
+        public List<ListItem> ListItems { get; set; }
+        public class ListItem
+        {
+            public string Date { get; set; }
+            public int TotalOrder { get; set; }
+            public int NewOrder { get; set; }
+            public int CancelOrder { get; set; }
+            public int ResTotal { get; set; }
+            public int VegTotal { get; set; }
+            public int MedicalTotal { get; set; }
+            public int ResNewOrder { get; set; }
+            public int VegNewOrder { get; set; }
+            public int MedicalNewOrder { get; set; }
+            public int ResCancelOrder { get; set; }
+            public int VegCancelOrder { get; set; }
+            public int MedicalCancelOrder { get; set; }
+        }
+    }
+
     //Api
     public class CartCreateViewModel
     {
