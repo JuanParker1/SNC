@@ -8,7 +8,7 @@
         width: 100% !important;
     }
 </style>
-@using (Html.BeginForm("MedicalCreate", "Product", FormMethod.Post, new { id = "ProductForm", role = "form", enctype = "multipart/form-data" }))
+@using (Html.BeginForm("MedicalCreate", "Product", FormMethod.Post, new { id = "ProductForm", role = "form", enctype = "multipart/form-data", autocomplete = "off" }))
 {
     @Html.AntiForgeryToken()
     <div class="container-fluid my-0">

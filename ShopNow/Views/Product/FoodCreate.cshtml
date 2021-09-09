@@ -22,7 +22,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            @using (Html.BeginForm("FoodCreate", "Product", FormMethod.Post, new { id = "ProductForm", role = "form", enctype = "multipart/form-data" }))
+            @using (Html.BeginForm("FoodCreate", "Product", FormMethod.Post, new { id = "ProductForm", role = "form", enctype = "multipart/form-data",autocomplete="off" }))
             {
                 @Html.AntiForgeryToken()
                 <div class="card">

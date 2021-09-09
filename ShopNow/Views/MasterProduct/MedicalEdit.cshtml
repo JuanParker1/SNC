@@ -14,7 +14,7 @@
     </div>
     <div class="row">
         <div class="col-md-12 mx-auto">
-            @using (Html.BeginForm("MedicalEdit", "MasterProduct", FormMethod.Post, new { id = "MedicalProductForm", enctype = "multipart/form-data" }))
+            @using (Html.BeginForm("MedicalEdit", "MasterProduct", FormMethod.Post, new { id = "MedicalProductForm", enctype = "multipart/form-data", autocomplete = "off" }))
             {
                 <div class="card shadow">
                     <div class="card-body">
