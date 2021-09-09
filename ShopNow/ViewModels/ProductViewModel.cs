@@ -55,7 +55,7 @@ namespace ShopNow.ViewModels
         public string Manufacturer { get; set; }
         public string OriginCountry { get; set; }
         public double Weight { get; set; }
-        public string SizeLB { get; set; }
+        public string SizeLBH { get; set; }
         public int PackageId { get; set; }
         public string PackageName { get; set; }
         public int DiscountCategoryId { get; set; }
@@ -99,7 +99,7 @@ namespace ShopNow.ViewModels
         public string Manufacturer { get; set; }
         public string OriginCountry { get; set; }
         public double Weight { get; set; }
-        public string SizeLB { get; set; }
+        public double SizeLBH { get; set; }
         public int? PackageId { get; set; }
         public string PackageName { get; set; }
         public int DiscountCategoryId { get; set; }
@@ -372,7 +372,7 @@ namespace ShopNow.ViewModels
             public string Manufacturer { get; set; }
             public string OriginCountry { get; set; }
             public double weight { get; set; }
-            public string SizeLB { get; set; }
+            public string SizeLBH { get; set; }
         }
     }
 
@@ -406,7 +406,7 @@ namespace ShopNow.ViewModels
         public double Price { get; set; }
         public double MenuPrice { get; set; }
         public double Weight { get; set; }
-        public string SizeLB { get; set; }
+        public double SizeLBH { get; set; }
         public int IBarU { get; set; }
         public int Qty { get; set; }
         public int Percentage { get; set; }
@@ -449,7 +449,7 @@ namespace ShopNow.ViewModels
         public double MenuPrice { get; set; }
         public string ASIN { get; set; }
         public double Weight { get; set; }
-        public string SizeLB { get; set; }
+        public string SizeLBH { get; set; }
         public string ProductType { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }

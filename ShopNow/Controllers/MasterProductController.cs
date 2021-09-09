@@ -449,7 +449,7 @@ namespace ShopNow.Controllers
                                 BrandId = CheckBrand(row[model.BrandName].ToString()),
                                 BrandName = row[model.BrandName].ToString(),
                                 Weight = Convert.ToDouble(row[model.Weight]),
-                                SizeLB = row[model.SizeLB].ToString().Trim(),
+                                SizeLBH = Convert.ToDouble(row[model.SizeLBH]),
                                 PackageId = CheckPackage(row[model.PackageName].ToString()),
                                 PackageName = row[model.PackageName].ToString(),
                                 MeasurementUnitId = CheckMeasurementUnit(row[model.MeasurementUnitName].ToString()),
@@ -1086,27 +1086,6 @@ namespace ShopNow.Controllers
                     {
                         int idx = master.FindIndex(a => a.Name == row[model.Name].ToString().Trim());
                         var Name = row[model.Name].ToString().Trim();
-                        var BrandId = CheckBrand(row[model.BrandName].ToString());
-                        var BrandName = row[model.BrandName].ToString();
-                        var CategoryId = CheckCategory(row[model.CategoryName].ToString().Trim(), 3, "Medical");
-                        var MeasurementUnitId = CheckMeasurementUnit(row[model.MeasurementUnitName].ToString());
-                        var MeasurementUnitName = row[model.MeasurementUnitName].ToString();
-                        var DrugCompoundDetailIds = row[model.DrugCompoundDetailIds].ToString();
-                        var DrugCompoundDetailName = row[model.DrugCompoundDetailName].ToString();
-                        var PriscriptionCategory = Convert.ToBoolean(row[model.PriscriptionCategory]);
-                        var OriginCountry = row[model.OriginCountry].ToString();
-                        var Manufacturer = row[model.Manufacturer].ToString();
-                        var IBarU = Convert.ToInt32(row[model.IBarU]);
-                        var Weight = Convert.ToDouble(row[model.Weight]);
-                        var SizeLB = row[model.SizeLB].ToString();
-                        var Price = Convert.ToDouble(row[model.Price]);
-                        var PackageId = CheckPackage(row[model.PackageName].ToString());
-                        var PackageName = row[model.PackageName].ToString();
-                        var ImagePath1 = row[model.ImagePath1].ToString().Trim();
-                        var ImagePath2 = row[model.ImagePath2].ToString().Trim();
-                        var ImagePath3 = row[model.ImagePath3].ToString().Trim();
-                        var ImagePath4 = row[model.ImagePath4].ToString().Trim();
-                        var ImagePath5 = row[model.ImagePath5].ToString().Trim();
                         if (idx <= 0)
                         {
                             masterList.Add(new MasterProduct
@@ -1125,7 +1104,7 @@ namespace ShopNow.Controllers
                                 Manufacturer = row[model.Manufacturer].ToString(),
                                 IBarU = Convert.ToInt32(row[model.IBarU]),
                                 Weight = Convert.ToDouble(row[model.Weight]),
-                                SizeLBH = row[model.SizeLB].ToString(),
+                                SizeLBH = Convert.ToDouble(row[model.SizeLBH]),
                                 Price = Convert.ToDouble(row[model.Price]),
                                 PackageId = CheckPackage(row[model.PackageName].ToString()),
                                 PackageName = row[model.PackageName].ToString(),
@@ -1520,7 +1499,7 @@ namespace ShopNow.Controllers
                                 ProductTypeId = 4,
                                 ProductTypeName = "Electronic",
                                 Weight = Convert.ToDouble(row[Convert.ToInt32(model.Weight)]),
-                                SizeLB = row[model.SizeLB].ToString().Trim(),
+                                SizeLBH = Convert.ToDouble(row[Convert.ToInt32(model.SizeLBH)]),
                                 PackageId = CheckPackage(row[model.PackageName].ToString()),
                                 PackageName = row[model.PackageName].ToString(),
                                 MeasurementUnitId = CheckMeasurementUnit(row[model.MeasurementUnitName].ToString()),
