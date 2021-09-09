@@ -450,7 +450,7 @@ namespace ShopNow.ViewModels
         public string OriginCountry { get; set; }
         public Nullable<int> IBarU { get; set; }
         public double Weight { get; set; }
-        public string SizeLBH { get; set; }
+        public double SizeLBH { get; set; }
         public double Price { get; set; }
         public int Adscore { get; set; }
         public Nullable<int> PackageId { get; set; }
