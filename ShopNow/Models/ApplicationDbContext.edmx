@@ -490,8 +490,8 @@
           <Property Name="MeasurementUnitId" Type="int" Nullable="false" />
           <Property Name="MeasurementUnitName" Type="nvarchar(max)" />
           <Property Name="PriscriptionCategory" Type="bit" Nullable="false" />
+          <Property Name="SizeLBH" Type="float" Nullable="false" />
           <Property Name="Weight" Type="float" Nullable="false" />
-          <Property Name="SizeLB" Type="nvarchar(max)" />
           <Property Name="DrugCompoundDetailIds" Type="nvarchar(max)" />
           <Property Name="DrugCompoundDetailName" Type="nvarchar(max)" />
           <Property Name="IBarU" Type="int" />
@@ -1997,51 +1997,6 @@
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
-        <EntityType Name="MasterProduct">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="BrandId" Type="Int32" Nullable="false" />
-          <Property Name="BrandName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CategoryId" Type="Int32" Nullable="false" />
-          <Property Name="ShortDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="LongDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ProductTypeId" Type="Int32" Nullable="false" />
-          <Property Name="ProductTypeName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="Price" Type="Double" Nullable="false" />
-          <Property Name="Customisation" Type="Boolean" Nullable="false" />
-          <Property Name="ColorCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="MeasurementUnitId" Type="Int32" Nullable="false" />
-          <Property Name="MeasurementUnitName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PriscriptionCategory" Type="Boolean" Nullable="false" />
-          <Property Name="Weight" Type="Double" Nullable="false" />
-          <Property Name="SizeLB" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DrugCompoundDetailIds" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DrugCompoundDetailName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="IBarU" Type="Int32" />
-          <Property Name="OriginCountry" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Manufacturer" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PackageId" Type="Int32" />
-          <Property Name="PackageName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="GoogleTaxonomyCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="SubCategoryId" Type="Int32" Nullable="false" />
-          <Property Name="NextSubCategoryId" Type="Int32" Nullable="false" />
-          <Property Name="ASIN" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ImagePath1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ImagePath2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ImagePath3" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ImagePath4" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ImagePath5" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Adscore" Type="Int32" Nullable="false" />
-          <Property Name="NickName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="MeasurementUnit">
           <Key>
             <PropertyRef Name="Id" />
@@ -2656,7 +2611,6 @@
           <EntitySet Name="DrugCompoundDetails" EntityType="Self.DrugCompoundDetail" />
           <EntitySet Name="LocationDetails" EntityType="Self.LocationDetail" />
           <EntitySet Name="MarketingAgents" EntityType="Self.MarketingAgent" />
-          <EntitySet Name="MasterProducts" EntityType="Self.MasterProduct" />
           <EntitySet Name="MeasurementUnits" EntityType="Self.MeasurementUnit" />
           <EntitySet Name="NextSubCategories" EntityType="Self.NextSubCategory" />
           <EntitySet Name="OfferProducts" EntityType="Self.OfferProduct" />
@@ -2778,6 +2732,7 @@
             <Parameter Name="page" Mode="In" Type="Int32" />
             <Parameter Name="pageSize" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="MasterProducts" EntityType="sncModel.MasterProduct" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3166,6 +3121,51 @@
           <Property Type="Time" Name="NextOnTime" Nullable="true" />
           <Property Type="Boolean" Name="IsOffer" Nullable="true" />
         </ComplexType>
+        <EntityType Name="MasterProduct">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BrandId" Type="Int32" Nullable="false" />
+          <Property Name="BrandName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <Property Name="ShortDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LongDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ProductTypeId" Type="Int32" Nullable="false" />
+          <Property Name="ProductTypeName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="Customisation" Type="Boolean" Nullable="false" />
+          <Property Name="ColorCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MeasurementUnitId" Type="Int32" Nullable="false" />
+          <Property Name="MeasurementUnitName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PriscriptionCategory" Type="Boolean" Nullable="false" />
+          <Property Name="SizeLBH" Type="Double" Nullable="false" />
+          <Property Name="Weight" Type="Double" Nullable="false" />
+          <Property Name="DrugCompoundDetailIds" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DrugCompoundDetailName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IBarU" Type="Int32" />
+          <Property Name="OriginCountry" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Manufacturer" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PackageId" Type="Int32" />
+          <Property Name="PackageName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="GoogleTaxonomyCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SubCategoryId" Type="Int32" Nullable="false" />
+          <Property Name="NextSubCategoryId" Type="Int32" Nullable="false" />
+          <Property Name="ASIN" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath1" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath3" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath4" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath5" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Adscore" Type="Int32" Nullable="false" />
+          <Property Name="NickName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3625,52 +3625,6 @@
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
                 <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="MasterProducts">
-            <EntityTypeMapping TypeName="sncModel.MasterProduct">
-              <MappingFragment StoreEntitySet="MasterProducts">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
-                <ScalarProperty Name="BrandName" ColumnName="BrandName" />
-                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
-                <ScalarProperty Name="ShortDescription" ColumnName="ShortDescription" />
-                <ScalarProperty Name="LongDescription" ColumnName="LongDescription" />
-                <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
-                <ScalarProperty Name="ProductTypeName" ColumnName="ProductTypeName" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Customisation" ColumnName="Customisation" />
-                <ScalarProperty Name="ColorCode" ColumnName="ColorCode" />
-                <ScalarProperty Name="MeasurementUnitId" ColumnName="MeasurementUnitId" />
-                <ScalarProperty Name="MeasurementUnitName" ColumnName="MeasurementUnitName" />
-                <ScalarProperty Name="PriscriptionCategory" ColumnName="PriscriptionCategory" />
-                <ScalarProperty Name="Weight" ColumnName="Weight" />
-                <ScalarProperty Name="SizeLB" ColumnName="SizeLB" />
-                <ScalarProperty Name="DrugCompoundDetailIds" ColumnName="DrugCompoundDetailIds" />
-                <ScalarProperty Name="DrugCompoundDetailName" ColumnName="DrugCompoundDetailName" />
-                <ScalarProperty Name="IBarU" ColumnName="IBarU" />
-                <ScalarProperty Name="OriginCountry" ColumnName="OriginCountry" />
-                <ScalarProperty Name="Manufacturer" ColumnName="Manufacturer" />
-                <ScalarProperty Name="PackageId" ColumnName="PackageId" />
-                <ScalarProperty Name="PackageName" ColumnName="PackageName" />
-                <ScalarProperty Name="GoogleTaxonomyCode" ColumnName="GoogleTaxonomyCode" />
-                <ScalarProperty Name="SubCategoryId" ColumnName="SubCategoryId" />
-                <ScalarProperty Name="NextSubCategoryId" ColumnName="NextSubCategoryId" />
-                <ScalarProperty Name="ASIN" ColumnName="ASIN" />
-                <ScalarProperty Name="ImagePath1" ColumnName="ImagePath1" />
-                <ScalarProperty Name="ImagePath2" ColumnName="ImagePath2" />
-                <ScalarProperty Name="ImagePath3" ColumnName="ImagePath3" />
-                <ScalarProperty Name="ImagePath4" ColumnName="ImagePath4" />
-                <ScalarProperty Name="ImagePath5" ColumnName="ImagePath5" />
-                <ScalarProperty Name="Adscore" ColumnName="Adscore" />
-                <ScalarProperty Name="NickName" ColumnName="NickName" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4559,6 +4513,52 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="MasterProducts">
+            <EntityTypeMapping TypeName="sncModel.MasterProduct">
+              <MappingFragment StoreEntitySet="MasterProducts">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="NickName" ColumnName="NickName" />
+                <ScalarProperty Name="Adscore" ColumnName="Adscore" />
+                <ScalarProperty Name="ImagePath5" ColumnName="ImagePath5" />
+                <ScalarProperty Name="ImagePath4" ColumnName="ImagePath4" />
+                <ScalarProperty Name="ImagePath3" ColumnName="ImagePath3" />
+                <ScalarProperty Name="ImagePath2" ColumnName="ImagePath2" />
+                <ScalarProperty Name="ImagePath1" ColumnName="ImagePath1" />
+                <ScalarProperty Name="ASIN" ColumnName="ASIN" />
+                <ScalarProperty Name="NextSubCategoryId" ColumnName="NextSubCategoryId" />
+                <ScalarProperty Name="SubCategoryId" ColumnName="SubCategoryId" />
+                <ScalarProperty Name="GoogleTaxonomyCode" ColumnName="GoogleTaxonomyCode" />
+                <ScalarProperty Name="PackageName" ColumnName="PackageName" />
+                <ScalarProperty Name="PackageId" ColumnName="PackageId" />
+                <ScalarProperty Name="Manufacturer" ColumnName="Manufacturer" />
+                <ScalarProperty Name="OriginCountry" ColumnName="OriginCountry" />
+                <ScalarProperty Name="IBarU" ColumnName="IBarU" />
+                <ScalarProperty Name="DrugCompoundDetailName" ColumnName="DrugCompoundDetailName" />
+                <ScalarProperty Name="DrugCompoundDetailIds" ColumnName="DrugCompoundDetailIds" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="SizeLBH" ColumnName="SizeLBH" />
+                <ScalarProperty Name="PriscriptionCategory" ColumnName="PriscriptionCategory" />
+                <ScalarProperty Name="MeasurementUnitName" ColumnName="MeasurementUnitName" />
+                <ScalarProperty Name="MeasurementUnitId" ColumnName="MeasurementUnitId" />
+                <ScalarProperty Name="ColorCode" ColumnName="ColorCode" />
+                <ScalarProperty Name="Customisation" ColumnName="Customisation" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="ProductTypeName" ColumnName="ProductTypeName" />
+                <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
+                <ScalarProperty Name="LongDescription" ColumnName="LongDescription" />
+                <ScalarProperty Name="ShortDescription" ColumnName="ShortDescription" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="BrandName" ColumnName="BrandName" />
+                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

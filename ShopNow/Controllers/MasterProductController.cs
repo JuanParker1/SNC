@@ -1125,7 +1125,7 @@ namespace ShopNow.Controllers
                                 Manufacturer = row[model.Manufacturer].ToString(),
                                 IBarU = Convert.ToInt32(row[model.IBarU]),
                                 Weight = Convert.ToDouble(row[model.Weight]),
-                                SizeLB = row[model.SizeLB].ToString(),
+                                SizeLBH = row[model.SizeLB].ToString(),
                                 Price = Convert.ToDouble(row[model.Price]),
                                 PackageId = CheckPackage(row[model.PackageName].ToString()),
                                 PackageName = row[model.PackageName].ToString(),

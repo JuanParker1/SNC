@@ -127,7 +127,7 @@ namespace ShopNow.ViewModels
         public string MeasurementUnitName { get; set; }
         public string PriscriptionCategory { get; set; }
         public string Weight { get; set; }
-        public string SizeLB { get; set; }
+        public string SizeLBH { get; set; }
         public string DrugCompoundDetailIds { get; set; }
         public string DrugCompoundDetailName { get; set; }
         public string IBarU { get; set; }
