@@ -4914,6 +4914,21 @@ namespace ShopNow.Controllers
             return Json(new { list = model.ListItems }, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetDeliveryMode(double totalSize, double totalWeight)
+        {
+            int mode = 0; //0-NA,1-bike,2-carrier bike,3-Auto
+            double liters = totalSize / 1000;
+
+            if (totalWeight <= 20 || liters <= 60)
+                mode = 1;
+            if ((totalWeight > 20 && totalWeight <= 40) || (liters > 60 && liters <= 120))
+                mode = 2;
+            if (totalWeight > 40 || liters > 120)
+                mode = 3;
+
+            return Json(mode, JsonRequestBehavior.AllowGet);
+        }
+
         public void UpdateAchievements(int customerId)
         {
             var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
