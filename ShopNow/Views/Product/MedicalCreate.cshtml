@@ -204,7 +204,7 @@
                             </div>
                             <div class="col-md-2">
                                 <label class="control-label"><strong class="text-secondary">Product Image2</strong></label>
-                                 <img class="img-container" id="img-ProductImage2" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
+                                <img class="img-container" id="img-ProductImage2" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
                             </div>
                             <div class="col-md-2">
                                 <label class="control-label"><strong class="text-secondary">Product Image3</strong></label>
@@ -226,33 +226,32 @@
                         </div>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>
 }
-    @*Image Modal*@
-    <div id="myModal" class="modal fade">
-        <div class="modal-dialog">
-            <span class="close" data-dismiss="modal">&times;</span>
-            <img class="modal-content" id="myImage">
-        </div>
+@*Image Modal*@
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <span class="close" data-dismiss="modal">&times;</span>
+        <img class="modal-content" id="myImage">
     </div>
+</div>
 
-    @section Scripts
+@section Scripts
 {
-        <!--Select2-->
-        <script src="~/Scripts/select2/js/select2.js"></script>
-        <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
-        <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
-        <!--Select2 End-->
-        <script src="~/Scripts/ckeditor/ckeditor.js"></script>
-        <script src="~/Scripts/multiple-image-upload.js"></script>
-        <link href="~/Content/multiple-image-upload.css" rel="stylesheet" />
-        <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
-        <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
-        <script>
-
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script src="~/Scripts/ckeditor/ckeditor.js"></script>
+    <script src="~/Scripts/multiple-image-upload.js"></script>
+    <link href="~/Content/multiple-image-upload.css" rel="stylesheet" />
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script>
             $(document).ready(function () {
 
                 $("#AddStock").on('click', function () {
@@ -348,14 +347,12 @@
                     $('#img-ProductImage2').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath2);
                     $('#img-ProductImage3').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath3);
                     $('#img-ProductImage4').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath4);
-                    $('#img-ProductImage5').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath5);  
+                    $('#img-ProductImage5').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath5);
                     $.getJSON("/Product/GetCategoryName", { categoryId: e.params.data.CategoryId }, function (data) {
                         $('#CategoryName').val(data.categoryName);
                     });
                 });
-
             });
-
-        </script>
+    </script>
 }
 
