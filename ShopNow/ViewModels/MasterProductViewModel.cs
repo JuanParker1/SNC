@@ -127,7 +127,7 @@ namespace ShopNow.ViewModels
         public string MeasurementUnitName { get; set; }
         public string PriscriptionCategory { get; set; }
         public string Weight { get; set; }
-        public string SizeLB { get; set; }
+        public string SizeLBH { get; set; }
         public string DrugCompoundDetailIds { get; set; }
         public string DrugCompoundDetailName { get; set; }
         public string IBarU { get; set; }
@@ -210,7 +210,7 @@ namespace ShopNow.ViewModels
         public string Manufacturer { get; set; }
         public string OriginCountry { get; set; }
         public double weight { get; set; }
-        public string SizeLB { get; set; }
+        public string SizeLBH { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
         public int Status { get; set; }
@@ -345,7 +345,7 @@ namespace ShopNow.ViewModels
         public int Adscore { get; set; }
         public double Price { get; set; }
         public double Weight { get; set; }
-        public string SizeLB { get; set; }
+        public string SizeLBH { get; set; }
         public int MeasurementUnitId { get; set; }
         public string MeasurementUnitName { get; set; }
         public Nullable<int> PackageId { get; set; }
@@ -377,7 +377,7 @@ namespace ShopNow.ViewModels
         public int Adscore { get; set; }
         public double Price { get; set; }
         public double Weight { get; set; }
-        public string SizeLB { get; set; }
+        public string SizeLBH { get; set; }
         public int MeasurementUnitId { get; set; }
         public string MeasurementUnitName { get; set; }
         public Nullable<int> PackageId { get; set; }
@@ -408,7 +408,7 @@ namespace ShopNow.ViewModels
         public int MeasurementUnitId { get; set; }
         public string MeasurementUnitName { get; set; }
         public string Weight { get; set; }
-        public string SizeLB { get; set; }
+        public string SizeLBH { get; set; }
         public Nullable<int> PackageId { get; set; }
         public string PackageName { get; set; }
         public string GoogleTaxonomyCode { get; set; }
@@ -450,7 +450,7 @@ namespace ShopNow.ViewModels
         public string OriginCountry { get; set; }
         public Nullable<int> IBarU { get; set; }
         public double Weight { get; set; }
-        public string SizeLB { get; set; }
+        public double SizeLBH { get; set; }
         public double Price { get; set; }
         public int Adscore { get; set; }
         public Nullable<int> PackageId { get; set; }
@@ -482,7 +482,7 @@ namespace ShopNow.ViewModels
         public string OriginCountry { get; set; }
         public Nullable<int> IBarU { get; set; }
         public double Weight { get; set; }
-        public string SizeLB { get; set; }
+        public string SizeLBH { get; set; }
         public double Price { get; set; }
         public int Adscore { get; set; }
         public Nullable<int> PackageId { get; set; }
@@ -576,7 +576,7 @@ namespace ShopNow.ViewModels
         public string MeasurementUnitName { get; set; }
         public bool PriscriptionCategory { get; set; }
         public double Weight { get; set; }
-        public string SizeLB { get; set; }
+        public string SizeLBH { get; set; }
         public string DrugCompoundDetailIds { get; set; }
         public string DrugCompoundDetailName { get; set; }
         public Nullable<int> IBarU { get; set; }

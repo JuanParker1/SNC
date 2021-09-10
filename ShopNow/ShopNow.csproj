@@ -3176,6 +3176,7 @@
     <Content Include="Views\ProductSchedule\Index.cshtml" />
     <Content Include="Views\MasterProduct\ElectronicUpload.cshtml" />
     <Content Include="Views\ProductDishAddOn\Index.cshtml" />
+    <Content Include="Views\Cart\OrderRatios.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

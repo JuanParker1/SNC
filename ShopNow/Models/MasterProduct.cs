@@ -29,8 +29,8 @@ namespace ShopNow.Models
         public int MeasurementUnitId { get; set; }
         public string MeasurementUnitName { get; set; }
         public bool PriscriptionCategory { get; set; }
+        public double SizeLBH { get; set; }
         public double Weight { get; set; }
-        public string SizeLB { get; set; }
         public string DrugCompoundDetailIds { get; set; }
         public string DrugCompoundDetailName { get; set; }
         public Nullable<int> IBarU { get; set; }

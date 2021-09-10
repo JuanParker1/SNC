@@ -21,7 +21,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            @using (Html.BeginForm("FoodEdit", "MasterProduct", FormMethod.Post, new { id = "DishUpdateForm", role = "form", enctype = "multipart/form-data" }))
+            @using (Html.BeginForm("FoodEdit", "MasterProduct", FormMethod.Post, new { id = "DishUpdateForm", role = "form", enctype = "multipart/form-data", autocomplete = "off" }))
             {
                 @Html.AntiForgeryToken()
                 <div class="card">

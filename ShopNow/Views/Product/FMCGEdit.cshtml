@@ -15,7 +15,7 @@
     </div>
     <div class="row">
         <div class="col-md-12 mx-auto">
-            @using (Html.BeginForm("FMCGEdit", "Product", FormMethod.Post, new { id = "FMCGUpdateForm", enctype = "multipart/form-data" }))
+            @using (Html.BeginForm("FMCGEdit", "Product", FormMethod.Post, new { id = "FMCGUpdateForm", enctype = "multipart/form-data", autocomplete = "off" }))
              {
                  @Html.AntiForgeryToken()
             <div class="row">
