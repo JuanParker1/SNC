@@ -355,6 +355,7 @@
     <Compile Include="Controllers\BannerController.cs" />
     <Compile Include="Controllers\BillController.cs" />
     <Compile Include="Controllers\CartController.cs" />
+    <Compile Include="Controllers\CrustController.cs" />
     <Compile Include="Controllers\DeliveryBoyController.cs" />
     <Compile Include="Controllers\DiscountCategoryController.cs" />
     <Compile Include="Controllers\DrugCompoundDetailController.cs" />
@@ -463,6 +464,9 @@
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ClassCustomerReview.cs" />
+    <Compile Include="Models\Crust.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Customer.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
@@ -637,6 +641,7 @@
     <Compile Include="ViewModels\BannerViewModel.cs" />
     <Compile Include="ViewModels\BillViewModel.cs" />
     <Compile Include="ViewModels\CartViewModel.cs" />
+    <Compile Include="ViewModels\CrustViewModels.cs" />
     <Compile Include="ViewModels\CustomerReviewViewModel .cs" />
     <Compile Include="ViewModels\DashboardViewModels.cs" />
     <Compile Include="ViewModels\DeliveryBoysList.cs" />
@@ -3177,6 +3182,7 @@
     <Content Include="Views\MasterProduct\ElectronicUpload.cshtml" />
     <Content Include="Views\ProductDishAddOn\Index.cshtml" />
     <Content Include="Views\Cart\OrderRatios.cshtml" />
+    <Content Include="Views\Crust\List.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

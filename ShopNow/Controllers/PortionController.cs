@@ -20,14 +20,7 @@ namespace ShopNow.Controllers
         private sncEntities db = new sncEntities();
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
-        private const string _prefix = "CST";
-        private static string _generatedCode
-        {
-            get
-            {
-                return ShopNow.Helpers.DRC.Generate(_prefix);
-            }
-        }
+
         public PortionController()
         {
             _mapperConfiguration = new MapperConfiguration(config =>
@@ -93,7 +86,6 @@ namespace ShopNow.Controllers
                 portion.Name = name;
                 portion.DateUpdated = DateTime.Now;
                 portion.UpdatedBy = user.Name;
-                portion.DateUpdated = DateTime.Now;
                 db.Entry(portion).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 message = name + " Updated Successfully";
