@@ -85,14 +85,6 @@
                                         <input id="Price" type="number" class="form-control" name="Price" min="0" step="any" />
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="col-form-label" for="Weight"><strong class="text-secondary">Weight</strong></label>
-                                        <input id="Weight" type="number" class="form-control" name="Weight" min="0" step="any" />
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="col-form-label" for="Weight"><strong class="text-secondary">Size LB</strong></label>
-                                        <input id="SizeLBH" type="text" class="form-control" name="SizeLBH" min="0" />
-                                    </div>
-                                    <div class="col-md-3">
                                         <label class="col-form-label" for="MeasurementUnitId"><strong class="text-secondary">Measurement Unit Name</strong></label>
                                         <select name="MeasurementUnitId" class="form-control" id="MeasurementUnitId"></select>
                                         <input type="hidden" name="MeasurementUnitName" id="MeasurementUnitName" />
@@ -101,6 +93,34 @@
                                         <label class="col-form-label" for="PackageId"><strong class="text-secondary">Package Name</strong></label>
                                         <select name="PackageId" class="form-control" id="PackageId"></select>
                                         <input type="hidden" name="PackageName" id="PackageName" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="col-form-label" for="Weight"><strong class="text-secondary">Weight</strong></label>
+                                        <input id="Weight" type="number" class="form-control" name="Weight" min="0" step="any" />
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label class="col-form-label"><strong class="text-secondary">Length(cms)</strong></label>
+                                            <input type="number" class="form-control" name="Length" id="Length" />
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label class="col-form-label"><strong class="text-secondary">Width(cms)</strong></label>
+                                            <input type="number" class="form-control" name="Width" id="Width" />
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label class="col-form-label"><strong class="text-secondary">Height(cms)</strong></label>
+                                            <input type="number" class="form-control" name="Height" id="Height" />
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label class="col-form-label"><strong class="text-secondary">Size</strong></label>
+                                            <input type="text" class="form-control" name="SizeLBH" id="SizeLBH" readonly />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -386,6 +406,17 @@
             $("#FMCGImage5").change(function () {
                 readURLFMCGImage5(this);
             });
+
+            $('#Length,#Width,#Height').on('change', function () {
+                calculateSizeLBH();
+            });
+            function calculateSizeLBH() {
+                var length = $('#Length').val();
+                var width = $('#Width').val();
+                var height = $('#Height').val();
+                var size = parseFloat(length * width * height).toFixed(2);
+                $('#SizeLBH').val(size);
+            }
 
         });
         function setSubCategories() {
