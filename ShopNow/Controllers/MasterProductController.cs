@@ -1983,6 +1983,18 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
+        // CrustSelect2
+        public async Task<JsonResult> GetCrustSelect2(string q = "")
+        {
+            var model = await _db.Crusts.Where(a => a.Name.Contains(q) && a.Status == 0).OrderBy(i => i.Name).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).OrderBy(i => i.text).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
         // ProductType Select2
         public async Task<JsonResult> GetProductTypeSelect2(string q = "")
         {
