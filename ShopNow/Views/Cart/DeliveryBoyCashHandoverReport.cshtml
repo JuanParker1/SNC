@@ -50,19 +50,21 @@
                         <table class="table table-striped table-hover table-borderless" id="DeliveryBoy-list">
                             <thead>
                                 <tr>
+                                    <th>#</th>
                                     <th>Date</th>
-                                    <th class="font-weight-bold">Order No.</th>
-                                    <th class="font-weight-bold">DeliveryBoy Phone No.</th>
-                                    <th class="font-weight-bold">DeliveryBoy Name</th>
-                                    <th class="font-weight-bold">Cash Amount</th>
-                                    <th class="font-weight-bold">Handover Status</th>
+                                    <th>Order No.</th>
+                                    <th>DeliveryBoy Phone No.</th>
+                                    <th>DeliveryBoy Name</th>
+                                    <th>Cash Amount</th>
+                                    <th>Handover Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var item in Model.List)
                                 {
                                     <tr>
-                                        <td>@item.DateUpdated.ToString("dd-MM-yyyy hh:mm tt")</td>
+                                        <td></td>
+                                        <td>@item.DateEncoded.ToString("dd-MM-yyyy")</td>
                                         <td>
                                             <a href="~/Cart/Edit?ordernumber=@item.OrderNumber&id=@item.Id">@item.OrderNumber</a>
                                         </td>

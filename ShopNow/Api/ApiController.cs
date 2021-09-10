@@ -4346,16 +4346,99 @@ namespace ShopNow.Controllers
                 return 0;
         }
 
+        //public JsonResult GetAddonList(long productId)
+        //{
+        //    var list = db.ShopDishAddOns.Where(i => i.ProductId == productId && i.IsActive == true).ToList();
+        //    if (list.Count() > 0)
+        //    {
+        //        var product = db.Products.FirstOrDefault(i => i.Id == productId);
+        //        return Json(new { list = list, type = list.FirstOrDefault().AddOnType, minLimit = product.MinSelectionLimit, maxLimit = product.MaxSelectionLimit }, JsonRequestBehavior.AllowGet);
+        //    }
+        //    else
+        //        return Json(new { list = list, type = 0, minLimit = 0, maxLimit = 0 }, JsonRequestBehavior.AllowGet);
+        //}
+
         public JsonResult GetAddonList(long productId)
         {
-            var list = db.ShopDishAddOns.Where(i => i.ProductId == productId && i.IsActive == true).ToList();
-            if (list.Count() > 0)
+            var product = db.Products.FirstOrDefault(i => i.Id == productId);
+            if (product != null)
             {
-                var product = db.Products.FirstOrDefault(i => i.Id == productId);
-                return Json(new { list = list, type = list.FirstOrDefault().AddOnType, minLimit = product.MinSelectionLimit, maxLimit = product.MaxSelectionLimit }, JsonRequestBehavior.AllowGet);
+                var masterProduct = db.MasterProducts.FirstOrDefault(i => i.Id == product.MasterProductId);
+                var list = db.ShopDishAddOns.Where(i => i.ProductId == productId && i.IsActive == true).ToList();
+                if (list.Count > 0)
+                {
+                    var model = new ApiProductAddonViewModel();
+                    model.Type = list.FirstOrDefault().AddOnType;
+                    model.MinLimit = product.MinSelectionLimit;
+                    model.MaxLimit = product.MaxSelectionLimit;
+                    if (list.FirstOrDefault().AddOnType == 1)
+                    {
+                        model.PortionListItems = list.Where(i => i.AddOnType == 1).Select(i => new ApiProductAddonViewModel.PortionListItem
+                        {
+                            PortionId = i.PortionId,
+                            PortionName = i.PortionName,
+                            PortionPrice = i.PortionPrice
+                        }).ToList();
+                    }
+                    if (list.FirstOrDefault().AddOnType == 2)
+                    {
+                        model.AddonListItems = list.Where(i => i.AddOnType == 2).Select(i => new ApiProductAddonViewModel.AddonListItem
+                        {
+                            AddonName = i.AddOnItemName,
+                            AddonPrice = i.AddOnsPrice,
+                            AddonCategoryName = i.AddOnCategoryName,
+                            ColorCode = masterProduct.ColorCode,
+                            PortionId = i.PortionId
+                        }).ToList();
+                    }
+
+                    if (list.FirstOrDefault().AddOnType == 3)
+                    {
+                        model.PortionListItems = list.Where(i => i.AddOnType == 3).Select(i => new ApiProductAddonViewModel.PortionListItem
+                        {
+                            PortionId = i.PortionId,
+                            PortionName = i.PortionName,
+                            PortionPrice = i.PortionPrice
+                        }).ToList();
+
+                        model.AddonListItems = list.Where(i => i.AddOnType == 3).Select(i => new ApiProductAddonViewModel.AddonListItem
+                        {
+                            PortionId = i.PortionId,
+                            AddonName = i.AddOnItemName,
+                            AddonPrice = i.AddOnsPrice,
+                            AddonCategoryName = i.AddOnCategoryName,
+                            ColorCode = masterProduct.ColorCode
+                        }).ToList();
+                    }
+
+                    if (list.FirstOrDefault().AddOnType == 4)
+                    {
+                        model.PortionListItems = list.Where(i => i.AddOnType == 4).Select(i => new ApiProductAddonViewModel.PortionListItem
+                        {
+                            PortionId = i.PortionId,
+                            PortionName = i.PortionName,
+                            PortionPrice = i.PortionPrice
+                        }).ToList();
+
+                        model.AddonListItems = list.Where(i => i.AddOnType == 4).Select(i => new ApiProductAddonViewModel.AddonListItem
+                        {
+                            PortionId = i.PortionId,
+                            AddonName = i.AddOnItemName,
+                            AddonPrice = i.AddOnsPrice,
+                            AddonCategoryName = i.AddOnCategoryName,
+                            ColorCode = masterProduct.ColorCode
+                        }).ToList();
+
+                        model.CrustListItems = list.Where(i => i.AddOnType == 4).Select(i => new ApiProductAddonViewModel.CrustListItem
+                        {
+                            CrustName = i.CrustName,
+                            PortionId = i.PortionId
+                        }).ToList();
+                    }
+                    return Json(new { result = model }, JsonRequestBehavior.AllowGet);
+                }
             }
-            else
-                return Json(new { list = list, type = 0, minLimit = 0, maxLimit = 0 }, JsonRequestBehavior.AllowGet);
+            return Json(new { result = false }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetLocationDetails(double sourceLatitude, double sourceLongitude, double destinationLatitude, double destinationLongitude)

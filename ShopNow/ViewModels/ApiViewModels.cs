@@ -337,4 +337,35 @@ namespace ShopNow.ViewModels
             public DateTime Date { get; set; }
         }
     }
+
+    public class ApiProductAddonViewModel
+    {
+        public int Type { get; set; }
+        public int MinLimit { get; set; }
+        public int MaxLimit { get; set; }
+
+        public List<PortionListItem> PortionListItems { get; set; }
+        public class PortionListItem {
+            public int PortionId { get; set; }
+            public string PortionName { get; set; }
+            public double PortionPrice { get; set; }
+        }
+
+        public List<AddonListItem> AddonListItems { get; set; }
+        public class AddonListItem
+        {
+            public int PortionId { get; set; }
+            public string AddonName { get; set; }
+            public double AddonPrice { get; set; }
+            public string AddonCategoryName { get; set; }
+            public string ColorCode { get; set; }
+        }
+
+        public List<CrustListItem> CrustListItems { get; set; }
+        public class CrustListItem
+        {
+            public string CrustName { get; set; }
+            public int PortionId { get; set; }
+        }
+    }
 }
