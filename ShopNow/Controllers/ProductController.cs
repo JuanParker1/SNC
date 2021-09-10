@@ -1483,7 +1483,7 @@ namespace ShopNow.Controllers
                     ASIN = i.ASIN,
                     GoogleTaxonomyCode = i.GoogleTaxonomyCode,
                     Weight = i.Weight,
-                    SizeLB = i.SizeLBH,
+                    SizeLBH = i.SizeLBH,
                     MeasurementUnitId = i.MeasurementUnitId,
                     MeasurementUnitName = i.MeasurementUnitName,
                     PackageId = i.PackageId,
