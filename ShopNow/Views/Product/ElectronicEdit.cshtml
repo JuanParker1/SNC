@@ -17,7 +17,7 @@
     </div>
     <div class="row">
         <div class="col-md-12 mx-auto">
-            @using (Html.BeginForm("ElectronicEdit", "Product", FormMethod.Post, new { id = "ElectronicUpdateForm", enctype = "multipart/form-data" }))
+            @using (Html.BeginForm("ElectronicEdit", "Product", FormMethod.Post, new { id = "ElectronicUpdateForm", enctype = "multipart/form-data", autocomplete = "off" }))
             {
                 @Html.AntiForgeryToken()
                 <div class="row">
@@ -93,7 +93,7 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="SizeLB"><strong class="text-secondary">Size LB</strong></label>
-                                        <input id="SizeLB" type="text" class="form-control" name="SizeLB" min="0" value="@Model.SizeLB" />
+                                        <input id="SizeLB" type="text" class="form-control" name="SizeLBH" min="0" value="@Model.SizeLBH" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="MeasurementUnitCode"><strong class="text-secondary">Measurement Unit Name</strong></label>

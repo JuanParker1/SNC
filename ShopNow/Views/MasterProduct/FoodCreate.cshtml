@@ -21,7 +21,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            @using (Html.BeginForm("FoodCreate", "MasterProduct", FormMethod.Post, new { id = "DishForm", role = "form", enctype = "multipart/form-data" }))
+            @using (Html.BeginForm("FoodCreate", "MasterProduct", FormMethod.Post, new { id = "DishForm", role = "form", enctype = "multipart/form-data", autocomplete = "off" }))
             {
                 @Html.AntiForgeryToken()
                 <div class="card">
@@ -285,14 +285,15 @@
                                         <div class="row">
                                             <div class="col-md-7">
                                                 <div class="form-group">
-                                                    <label class="control-label" for="CrustName"><strong class="text-secondary">Selection Name</strong></label>
-                                                    <input type="text" class="form-control" name="CrustName" id="CrustName" />
+                                                    <label class="control-label" for="CrustName"><strong class="text-secondary">Selection Name(Crust)</strong></label>
+                                                    <select class="form-control" id="CrustId" name="CrustId"></select>
+                                                    <input type="hidden" class="form-control" name="CrustName" id="CrustName" />
                                                 </div>
                                             </div>
                                             <div class="col-md-5">
                                                 <div class="form-group">
                                                     <label class="control-label" for="CrustPrice"><strong class="text-secondary">Selection Price</strong></label>
-                                                    <input type="number" class="form-control" name="CrustPrice" step="any" id="CrustPrice" min="0" />
+                                                    <input type="number" class="form-control" name="CrustPrice" step="any" id="CrustPrice" min="0" readonly/>
                                                 </div>
                                             </div>
                                         </div>
@@ -496,6 +497,7 @@
             $('#AddOnItemName2').val("");
             $('#AddOnsPrice2').val("");
             $('#CrustName').val("");
+            $("#CrustId").val('').trigger('change');
             $('#CrustPrice').val("");
             $("#MinSelectionLimit2").val("");
             $("#MaxSelectionLimit2").val("");
@@ -584,6 +586,18 @@
             }
         }).on('select2:select', function (e) {
             $('input[name="PortionName2"]').val(e.params.data.text);
+            });
+
+        $('#CrustId').select2({
+            placeholder: "Search Portion",
+            ajax: {
+                url: "/MasterProduct/GetCrustSelect2",
+                width: '100%',
+                delay: 250,
+                dataType: 'json'
+            }
+        }).on('select2:select', function (e) {
+            $('input[name="CrustName"]').val(e.params.data.text);
         });
 
         $('.addToAddOns').on('click', function () {
