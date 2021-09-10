@@ -502,90 +502,104 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             var model = new CartReportViewModel();
 
-            if (deliveryboyId != 0)
-            {
-                if (StartDate != null && EndDate != null)
-                {
-                    DateTime startDatetFilter = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day);
-                    DateTime endDateFilter = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day).AddDays(1);
+            model.List = db.Payments.Where(i => i.Status == 0 && i.PaymentMode == "Cash On Hand" && ((StartDate != null && EndDate != null) ? DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(EndDate) : true))
+                .Join(db.Orders.Where(i => i.Status == 6 && (deliveryboyId != 0 ? i.DeliveryBoyId == deliveryboyId : true)), p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
+                   .Select(i => new CartReportViewModel.CartReportList
+                   {
+                       Id = i.c.Id,
+                       OrderNumber = i.p.OrderNumber,
+                       DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
+                       DeliveryBoyId = i.c.DeliveryBoyId,
+                       DeliveryBoyName = i.c.DeliveryBoyName,
+                       Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
+                       DateEncoded = i.p.DateEncoded,
+                       DeliveryOrderPaymentStatus = i.c.DeliveryOrderPaymentStatus
+                   }).OrderByDescending(i => i.DateEncoded).ToList();
 
-                    model.List = db.Payments.Join(db.Orders, p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
-                    .Where(i => i.p.DateEncoded >= startDatetFilter && i.p.DateEncoded <= endDateFilter && i.p.Status == 0
-                    && i.c.DeliveryBoyId == deliveryboyId && i.c.Status == 6 && i.p.PaymentMode == "Cash On Hand")
-                     .Select(i => new CartReportViewModel.CartReportList
-                     {
-                         Id = i.c.Id,
-                         OrderNumber = i.p.OrderNumber,
-                         DeliveryBoyPhoneNumber =i.c.DeliveryBoyPhoneNumber,
-                         DeliveryBoyId = i.c.DeliveryBoyId,
-                         DeliveryBoyName = i.c.DeliveryBoyName,
-                         Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
-                         DateUpdated = i.c.DateUpdated,
-                         DeliveryOrderPaymentStatus = i.c.DeliveryOrderPaymentStatus
-                     }).OrderByDescending(i => i.DateUpdated).ToList();
-                    model.StartingDate = StartDate.Value.ToString("yyyy/MM/dd");
-                    model.EndingDate = EndDate.Value.ToString("yyyy/MM/dd");
-                }
-                else
-                {
-                    model.List = db.Payments
-                        .Join(db.Orders, p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
-                      .Where(i => i.p.Status == 0 && i.c.DeliveryBoyId == deliveryboyId && i.c.Status == 6 && i.p.PaymentMode == "Cash On Hand")
-                     .Select(i => new CartReportViewModel.CartReportList
-                     {
-                         Id = i.c.Id,
-                         OrderNumber = i.p.OrderNumber,
-                         DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
-                         DeliveryBoyId = i.c.DeliveryBoyId,
-                         DeliveryBoyName = i.c.DeliveryBoyName,
-                         Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
-                         DateUpdated = i.c.DateUpdated,
-                         DeliveryOrderPaymentStatus = i.c.DeliveryOrderPaymentStatus
-                     }).OrderByDescending(i => i.DateUpdated).ToList();
-                }
-            }
-            else
-            {
-                if (StartDate != null && EndDate != null)
-                {
-                    DateTime startDatetFilter = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day);
-                    DateTime endDateFilter = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day).AddDays(1);
+            //if (deliveryboyId != 0)
+            //{
+            //    if (StartDate != null && EndDate != null)
+            //    {
+            //        DateTime startDatetFilter = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day);
+            //        DateTime endDateFilter = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day).AddDays(1);
 
-                    model.List = db.Payments
-                        .Join(db.Orders, p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
-                    .Where(i => i.p.DateEncoded >= startDatetFilter && i.p.DateEncoded <= endDateFilter && i.p.Status == 0
-                    && i.c.Status == 6 && i.p.PaymentMode == "Cash On Hand")
-                     .Select(i => new CartReportViewModel.CartReportList
-                     {
-                         Id = i.c.Id,
-                         OrderNumber = i.p.OrderNumber,
-                         DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
-                         DeliveryBoyId = i.c.DeliveryBoyId,
-                         DeliveryBoyName = i.c.DeliveryBoyName,
-                         Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
-                         DateUpdated = i.c.DateUpdated,
-                         DeliveryOrderPaymentStatus = i.c.DeliveryOrderPaymentStatus
-                     }).OrderByDescending(i => i.DateUpdated).ToList();
-                    model.StartingDate = StartDate.Value.ToString("yyyy/MM/dd");
-                    model.EndingDate = EndDate.Value.ToString("yyyy/MM/dd");
-                }
-                else
-                {
-                    model.List = db.Payments.Join(db.Orders, p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
-                       .Where(i => i.p.Status == 0 && i.c.Status == 6 && i.p.PaymentMode == "Cash On Hand")
-                     .Select(i => new CartReportViewModel.CartReportList
-                     {
-                         Id = i.c.Id,
-                         OrderNumber = i.p.OrderNumber,
-                         DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
-                         DeliveryBoyId = i.c.DeliveryBoyId,
-                         DeliveryBoyName = i.c.DeliveryBoyName,
-                         Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
-                         DateUpdated = i.c.DateUpdated,
-                         DeliveryOrderPaymentStatus = i.c.DeliveryOrderPaymentStatus
-                     }).OrderByDescending(i => i.DateUpdated).ToList();
-                }
-            }
+            //        model.List = db.Payments.Join(db.Orders, p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
+            //        .Where(i => i.p.DateEncoded >= startDatetFilter && i.p.DateEncoded <= endDateFilter && i.p.Status == 0
+            //        && i.c.DeliveryBoyId == deliveryboyId && i.c.Status == 6 && i.p.PaymentMode == "Cash On Hand")
+            //         .Select(i => new CartReportViewModel.CartReportList
+            //         {
+            //             Id = i.c.Id,
+            //             OrderNumber = i.p.OrderNumber,
+            //             DeliveryBoyPhoneNumber =i.c.DeliveryBoyPhoneNumber,
+            //             DeliveryBoyId = i.c.DeliveryBoyId,
+            //             DeliveryBoyName = i.c.DeliveryBoyName,
+            //             Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
+            //             DateUpdated = i.c.DateUpdated,
+            //             DeliveryOrderPaymentStatus = i.c.DeliveryOrderPaymentStatus
+            //         }).OrderByDescending(i => i.DateUpdated).ToList();
+            //        model.StartingDate = StartDate.Value.ToString("yyyy/MM/dd");
+            //        model.EndingDate = EndDate.Value.ToString("yyyy/MM/dd");
+            //    }
+            //    else
+            //    {
+            //        model.List = db.Payments
+            //            .Join(db.Orders, p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
+            //          .Where(i => i.p.Status == 0 && i.c.DeliveryBoyId == deliveryboyId && i.c.Status == 6 && i.p.PaymentMode == "Cash On Hand")
+            //         .Select(i => new CartReportViewModel.CartReportList
+            //         {
+            //             Id = i.c.Id,
+            //             OrderNumber = i.p.OrderNumber,
+            //             DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
+            //             DeliveryBoyId = i.c.DeliveryBoyId,
+            //             DeliveryBoyName = i.c.DeliveryBoyName,
+            //             Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
+            //             DateUpdated = i.c.DateUpdated,
+            //             DeliveryOrderPaymentStatus = i.c.DeliveryOrderPaymentStatus
+            //         }).OrderByDescending(i => i.DateUpdated).ToList();
+            //    }
+            //}
+            //else
+            //{
+            //    if (StartDate != null && EndDate != null)
+            //    {
+            //        DateTime startDatetFilter = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day);
+            //        DateTime endDateFilter = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day).AddDays(1);
+
+            //        model.List = db.Payments
+            //            .Join(db.Orders, p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
+            //        .Where(i => i.p.DateEncoded >= startDatetFilter && i.p.DateEncoded <= endDateFilter && i.p.Status == 0
+            //        && i.c.Status == 6 && i.p.PaymentMode == "Cash On Hand")
+            //         .Select(i => new CartReportViewModel.CartReportList
+            //         {
+            //             Id = i.c.Id,
+            //             OrderNumber = i.p.OrderNumber,
+            //             DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
+            //             DeliveryBoyId = i.c.DeliveryBoyId,
+            //             DeliveryBoyName = i.c.DeliveryBoyName,
+            //             Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
+            //             DateUpdated = i.c.DateUpdated,
+            //             DeliveryOrderPaymentStatus = i.c.DeliveryOrderPaymentStatus
+            //         }).OrderByDescending(i => i.DateUpdated).ToList();
+            //        model.StartingDate = StartDate.Value.ToString("yyyy/MM/dd");
+            //        model.EndingDate = EndDate.Value.ToString("yyyy/MM/dd");
+            //    }
+            //    else
+            //    {
+            //        model.List = db.Payments.Join(db.Orders, p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
+            //           .Where(i => i.p.Status == 0 && i.c.Status == 6 && i.p.PaymentMode == "Cash On Hand")
+            //         .Select(i => new CartReportViewModel.CartReportList
+            //         {
+            //             Id = i.c.Id,
+            //             OrderNumber = i.p.OrderNumber,
+            //             DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
+            //             DeliveryBoyId = i.c.DeliveryBoyId,
+            //             DeliveryBoyName = i.c.DeliveryBoyName,
+            //             Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
+            //             DateUpdated = i.c.DateUpdated,
+            //             DeliveryOrderPaymentStatus = i.c.DeliveryOrderPaymentStatus
+            //         }).OrderByDescending(i => i.DateUpdated).ToList();
+            //    }
+            //}
             return View(model);
         }
 
@@ -595,86 +609,102 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new CartReportViewModel();
-            if (DeliveryBoyId != 0)
-            {
-                if (StartDate != null && EndDate != null)
-                {
-                    DateTime startDatetFilter = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day);
-                    DateTime endDateFilter = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day).AddDays(1);
 
-                    model.DeliveryBoyPaymentStatusLists = db.Orders
-                    .Where(i => i.DateEncoded >= startDatetFilter && i.DateEncoded <= endDateFilter && i.Status == 6 && i.DeliveryBoyId == DeliveryBoyId)
-                        .Select(i => new CartReportViewModel.DeliveryBoyPaymentStatusList
-                        {
-                            Id = i.Id,
-                            DateEncoded = i.DateEncoded,
-                            OrderNumber = i.OrderNumber,
-                            DeliveryBoyId = i.DeliveryBoyId,
-                            DeliveryBoyName = i.DeliveryBoyName,
-                            DeliveryBoyPhoneNumber = i.DeliveryBoyPhoneNumber,
-                            DeliveryCharge = i.DeliveryCharge,
-                            DeliveryBoyPaymentStatus = i.DeliveryBoyPaymentStatus,
-                            Distance = i.Distance
-                        }).OrderBy(i => i.DeliveryBoyName).ToList();
-                }
-                else
-                {
-                    model.DeliveryBoyPaymentStatusLists = db.Orders
-                      .Where(i => i.Status == 6 && i.DeliveryBoyId == DeliveryBoyId)
-                          .Select(i => new CartReportViewModel.DeliveryBoyPaymentStatusList
-                          {
-                              Id = i.Id,
-                              DateEncoded = i.DateEncoded,
-                              OrderNumber = i.OrderNumber,
-                              DeliveryBoyId = i.DeliveryBoyId,
-                              DeliveryBoyName = i.DeliveryBoyName,
-                              DeliveryBoyPhoneNumber = i.DeliveryBoyPhoneNumber,
-                              DeliveryCharge = i.DeliveryCharge,
-                              DeliveryBoyPaymentStatus = i.DeliveryBoyPaymentStatus,
-                              Distance = i.Distance
-                          }).OrderBy(i => i.DeliveryBoyName).ToList();
-                }
-            }
-            else
-            {
-                if (StartDate != null && EndDate != null)
-                {
-                    DateTime startDatetFilter = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day);
-                    DateTime endDateFilter = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day).AddDays(1);
+            model.DeliveryBoyPaymentStatusLists = db.Orders
+                   .Where(i => i.Status == 6 && ((StartDate != null && EndDate != null) ? DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(EndDate) : true) && (DeliveryBoyId != 0 ? i.DeliveryBoyId == DeliveryBoyId : true))
+                       .Select(i => new CartReportViewModel.DeliveryBoyPaymentStatusList
+                       {
+                           Id = i.Id,
+                           DateEncoded = i.DateEncoded,
+                           OrderNumber = i.OrderNumber,
+                           DeliveryBoyId = i.DeliveryBoyId,
+                           DeliveryBoyName = i.DeliveryBoyName,
+                           DeliveryBoyPhoneNumber = i.DeliveryBoyPhoneNumber,
+                           DeliveryCharge = i.DeliveryCharge,
+                           DeliveryBoyPaymentStatus = i.DeliveryBoyPaymentStatus,
+                           Distance = i.Distance
+                       }).OrderByDescending(i => i.DateEncoded).ToList();
 
-                    model.DeliveryBoyPaymentStatusLists = db.Orders
-                    .Where(i => i.DateEncoded >= startDatetFilter && i.DateEncoded <= endDateFilter && i.Status == 6)
-                        .Select(i => new CartReportViewModel.DeliveryBoyPaymentStatusList
-                        {
-                            Id = i.Id,
-                            DateEncoded = i.DateEncoded,
-                            OrderNumber = i.OrderNumber,
-                            DeliveryBoyId = i.DeliveryBoyId,
-                            DeliveryBoyName = i.DeliveryBoyName,
-                            DeliveryBoyPhoneNumber = i.DeliveryBoyPhoneNumber,
-                            DeliveryCharge = i.DeliveryCharge,
-                            DeliveryBoyPaymentStatus = i.DeliveryBoyPaymentStatus,
-                            Distance = i.Distance
-                        }).OrderBy(i => i.DeliveryBoyName).ToList();
-                }
-                else
-                {
-                    model.DeliveryBoyPaymentStatusLists = db.Orders
-                      .Where(i => i.Status == 6)
-                          .Select(i => new CartReportViewModel.DeliveryBoyPaymentStatusList
-                          {
-                              Id = i.Id,
-                              DateEncoded = i.DateEncoded,
-                              OrderNumber = i.OrderNumber,
-                              DeliveryBoyId = i.DeliveryBoyId,
-                              DeliveryBoyName = i.DeliveryBoyName,
-                              DeliveryBoyPhoneNumber = i.DeliveryBoyPhoneNumber,
-                              DeliveryCharge = i.DeliveryCharge,
-                              DeliveryBoyPaymentStatus = i.DeliveryBoyPaymentStatus,
-                              Distance = i.Distance
-                          }).OrderBy(i => i.DeliveryBoyName).ToList();
-                }
-            }
+            //if (DeliveryBoyId != 0)
+            //{
+            //    if (StartDate != null && EndDate != null)
+            //    {
+            //        DateTime startDatetFilter = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day);
+            //        DateTime endDateFilter = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day).AddDays(1);
+
+            //        model.DeliveryBoyPaymentStatusLists = db.Orders
+            //        .Where(i => i.DateEncoded >= startDatetFilter && i.DateEncoded <= endDateFilter && i.Status == 6 && i.DeliveryBoyId == DeliveryBoyId)
+            //            .Select(i => new CartReportViewModel.DeliveryBoyPaymentStatusList
+            //            {
+            //                Id = i.Id,
+            //                DateEncoded = i.DateEncoded,
+            //                OrderNumber = i.OrderNumber,
+            //                DeliveryBoyId = i.DeliveryBoyId,
+            //                DeliveryBoyName = i.DeliveryBoyName,
+            //                DeliveryBoyPhoneNumber = i.DeliveryBoyPhoneNumber,
+            //                DeliveryCharge = i.DeliveryCharge,
+            //                DeliveryBoyPaymentStatus = i.DeliveryBoyPaymentStatus,
+            //                Distance = i.Distance
+            //            }).OrderBy(i => i.DeliveryBoyName).ToList();
+            //    }
+            //    else
+            //    {
+            //        model.DeliveryBoyPaymentStatusLists = db.Orders
+            //          .Where(i => i.Status == 6 && i.DeliveryBoyId == DeliveryBoyId)
+            //              .Select(i => new CartReportViewModel.DeliveryBoyPaymentStatusList
+            //              {
+            //                  Id = i.Id,
+            //                  DateEncoded = i.DateEncoded,
+            //                  OrderNumber = i.OrderNumber,
+            //                  DeliveryBoyId = i.DeliveryBoyId,
+            //                  DeliveryBoyName = i.DeliveryBoyName,
+            //                  DeliveryBoyPhoneNumber = i.DeliveryBoyPhoneNumber,
+            //                  DeliveryCharge = i.DeliveryCharge,
+            //                  DeliveryBoyPaymentStatus = i.DeliveryBoyPaymentStatus,
+            //                  Distance = i.Distance
+            //              }).OrderBy(i => i.DeliveryBoyName).ToList();
+            //    }
+            //}
+            //else
+            //{
+            //    if (StartDate != null && EndDate != null)
+            //    {
+            //        DateTime startDatetFilter = new DateTime(StartDate.Value.Year, StartDate.Value.Month, StartDate.Value.Day);
+            //        DateTime endDateFilter = new DateTime(EndDate.Value.Year, EndDate.Value.Month, EndDate.Value.Day).AddDays(1);
+
+            //        model.DeliveryBoyPaymentStatusLists = db.Orders
+            //        .Where(i => i.DateEncoded >= startDatetFilter && i.DateEncoded <= endDateFilter && i.Status == 6)
+            //            .Select(i => new CartReportViewModel.DeliveryBoyPaymentStatusList
+            //            {
+            //                Id = i.Id,
+            //                DateEncoded = i.DateEncoded,
+            //                OrderNumber = i.OrderNumber,
+            //                DeliveryBoyId = i.DeliveryBoyId,
+            //                DeliveryBoyName = i.DeliveryBoyName,
+            //                DeliveryBoyPhoneNumber = i.DeliveryBoyPhoneNumber,
+            //                DeliveryCharge = i.DeliveryCharge,
+            //                DeliveryBoyPaymentStatus = i.DeliveryBoyPaymentStatus,
+            //                Distance = i.Distance
+            //            }).OrderBy(i => i.DeliveryBoyName).ToList();
+            //    }
+            //    else
+            //    {
+            //        model.DeliveryBoyPaymentStatusLists = db.Orders
+            //          .Where(i => i.Status == 6)
+            //              .Select(i => new CartReportViewModel.DeliveryBoyPaymentStatusList
+            //              {
+            //                  Id = i.Id,
+            //                  DateEncoded = i.DateEncoded,
+            //                  OrderNumber = i.OrderNumber,
+            //                  DeliveryBoyId = i.DeliveryBoyId,
+            //                  DeliveryBoyName = i.DeliveryBoyName,
+            //                  DeliveryBoyPhoneNumber = i.DeliveryBoyPhoneNumber,
+            //                  DeliveryCharge = i.DeliveryCharge,
+            //                  DeliveryBoyPaymentStatus = i.DeliveryBoyPaymentStatus,
+            //                  Distance = i.Distance
+            //              }).OrderBy(i => i.DeliveryBoyName).ToList();
+            //    }
+            //}
             return View(model);
         }
 
