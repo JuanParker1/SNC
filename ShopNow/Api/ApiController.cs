@@ -4363,6 +4363,7 @@ namespace ShopNow.Controllers
             var product = db.Products.FirstOrDefault(i => i.Id == productId);
             if (product != null)
             {
+                var masterProduct = db.MasterProducts.FirstOrDefault(i => i.Id == product.MasterProductId);
                 var list = db.ShopDishAddOns.Where(i => i.ProductId == productId && i.IsActive == true).ToList();
                 if (list.Count > 0)
                 {
@@ -4384,7 +4385,10 @@ namespace ShopNow.Controllers
                         model.AddonListItems = list.Where(i => i.AddOnType == 2).Select(i => new ApiProductAddonViewModel.AddonListItem
                         {
                             AddonName = i.AddOnItemName,
-                            AddonPrice = i.AddOnsPrice
+                            AddonPrice = i.AddOnsPrice,
+                            AddonCategoryName = i.AddOnCategoryName,
+                            ColorCode = masterProduct.ColorCode,
+                            PortionId = i.PortionId
                         }).ToList();
                     }
 
@@ -4401,7 +4405,9 @@ namespace ShopNow.Controllers
                         {
                             PortionId = i.PortionId,
                             AddonName = i.AddOnItemName,
-                            AddonPrice = i.AddOnsPrice
+                            AddonPrice = i.AddOnsPrice,
+                            AddonCategoryName = i.AddOnCategoryName,
+                            ColorCode = masterProduct.ColorCode
                         }).ToList();
                     }
 
@@ -4418,7 +4424,9 @@ namespace ShopNow.Controllers
                         {
                             PortionId = i.PortionId,
                             AddonName = i.AddOnItemName,
-                            AddonPrice = i.AddOnsPrice
+                            AddonPrice = i.AddOnsPrice,
+                            AddonCategoryName = i.AddOnCategoryName,
+                            ColorCode = masterProduct.ColorCode
                         }).ToList();
 
                         model.CrustListItems = list.Where(i => i.AddOnType == 4).Select(i => new ApiProductAddonViewModel.CrustListItem

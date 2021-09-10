@@ -413,27 +413,27 @@ namespace ShopNow.Controllers
 
           model.ListItems =  db.Payments.Where(i => ((DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate)) &&
                  (DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate))) && (model.ShopId !=0?i.ShopId == model.ShopId:true))
-               .Join(db.Shops, p => p.ShopId, s => s.Id, (p, s) => new { p, s })
-               .Join(db.Orders.Where(i => i.Status == 6), p => p.p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
-               .GroupJoin(db.PaymentsDatas, p => p.p.p.ReferenceCode, pd => pd.PaymentId, (p, pd) => new { p, pd })
+              // .Join(db.Shops, p => p.ShopId, s => s.Id, (p, s) => new { p, s })
+               .Join(db.Orders.Where(i => i.Status == 6), p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
+               .GroupJoin(db.PaymentsDatas, p => p.p.ReferenceCode, pd => pd.PaymentId, (p, pd) => new { p, pd })
                .AsEnumerable()
                .Select((i, index) => new RetailerPaymentListViewModel.ListItem
                {
                    No = index + 1,
-                   OrderDate = i.p.p.p.DateEncoded,
-                   OrderFirstAmount = i.p.p.p.Amount,
-                   OrderNumber = i.p.p.p.OrderNumber,
+                   OrderDate = i.p.p.DateEncoded,
+                   OrderFirstAmount = i.p.p.Amount,
+                   OrderNumber = i.p.p.OrderNumber,
                    //PaidAmount = i.PaidAmount ?? 0,
-                   PaidAmount = i.p.p.p.Amount - (i.p.p.p.RefundAmount ?? 0),
+                   PaidAmount = i.p.p.Amount - (i.p.p.RefundAmount ?? 0),
                    //PaymentAmount = i.PaymentAmount ?? 0,
-                   PaymentAmount = i.p.p.p.Amount - (i.p.p.p.RefundAmount ?? 0) - Convert.ToDouble((i.pd.Any()? i.pd.FirstOrDefault().Fee : 0)) - Convert.ToDouble((i.pd.Any() ? i.pd.FirstOrDefault().Tax : 0)),
-                   PaymentDate = i.p.p.p.DateEncoded,
-                   PaymentId = i.p.p.p.ReferenceCode ?? "N/A",
-                   PaymentType = i.p.p.p.PaymentMode,
-                   RefundAmount = i.p.p.p.RefundAmount ?? 0,
-                   RefundeRemark = i.p.p.p.RefundRemark ?? "N/A",
-                   RefundStatus = i.p.p.p.RefundStatus,
-                   ShopName = i.p.p.p.ShopName,
+                   PaymentAmount = i.p.p.Amount - (i.p.p.RefundAmount ?? 0) - Convert.ToDouble((i.pd.Any()? i.pd.FirstOrDefault().Fee : 0)) - Convert.ToDouble((i.pd.Any() ? i.pd.FirstOrDefault().Tax : 0)),
+                   PaymentDate = i.p.p.DateEncoded,
+                   PaymentId = i.p.p.ReferenceCode ?? "N/A",
+                   PaymentType = i.p.p.PaymentMode,
+                   RefundAmount = i.p.p.RefundAmount ?? 0,
+                   RefundeRemark = i.p.p.RefundRemark ?? "N/A",
+                   RefundStatus = i.p.p.RefundStatus,
+                   ShopName = i.p.p.ShopName,
                    ShopPaymentStatus = i.p.c.ShopPaymentStatus,
                    TransactionFee = i.pd.Any()? i.pd.FirstOrDefault().Fee : 0,
                    TransactionTax = i.pd.Any() ? i.pd.FirstOrDefault().Fee : 0

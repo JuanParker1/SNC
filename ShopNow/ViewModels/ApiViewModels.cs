@@ -357,6 +357,8 @@ namespace ShopNow.ViewModels
             public int PortionId { get; set; }
             public string AddonName { get; set; }
             public double AddonPrice { get; set; }
+            public string AddonCategoryName { get; set; }
+            public string ColorCode { get; set; }
         }
 
         public List<CrustListItem> CrustListItems { get; set; }
