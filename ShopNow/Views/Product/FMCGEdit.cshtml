@@ -18,21 +18,26 @@
             @using (Html.BeginForm("FMCGEdit", "Product", FormMethod.Post, new { id = "FMCGUpdateForm", enctype = "multipart/form-data", autocomplete = "off" }))
              {
                  @Html.AntiForgeryToken()
-            <div class="row">
-                <div class="col-md-6 text-right">
-                    <label><strong class="text-secondary">Shop Name</strong></label>
-                </div>
-                <div class="col-md-6 text-left">
-                    <div class="form-group">
-                        @if (Model.ShopId != 0)
-                        {
-                            <h5 class="text-secondary">@Model.ShopName</h5>
-                            <input type="hidden" name="ShopName" value="@Model.ShopName" />
-                            <input type="hidden" name="ShopId" value="@Model.ShopId" />
-                        }
+                <div class="card shadow mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-2">
+                                <label><strong class="text-secondary">Shop Name</strong></label>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    @if (Model.ShopId != 0)
+                                    {
+                                        <input type="text" name="ShopName" class="form-control" id="ShopName" value="@Model.ShopName" readonly />
+                                        <input type="hidden" name="ShopName" value="@Model.ShopName" />
+                                        <input type="hidden" name="ShopId" value="@Model.ShopId" />
+                                    }
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
                 <div class="card">
                     <div class="card-body">
                         <div class="form-group row">

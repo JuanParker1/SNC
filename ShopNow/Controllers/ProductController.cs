@@ -1106,10 +1106,10 @@ namespace ShopNow.Controllers
 
             return Json(new
             {
-                PortionCode = model.PortionCode,
+                PortionId = model.PortionId,
                 PortionName = model.PortionName,
                 PortionPrice = model.PortionPrice,
-                AddOnCategoryCode = model.AddOnCategoryCode,
+                AddOnCategoryId = model.AddOnCategoryId,
                 AddOnCategoryName = model.AddOnCategoryName,
                 AddOnsPrice = model.AddOnsPrice,
                 MinSelectionLimit = model.MinSelectionLimit,
