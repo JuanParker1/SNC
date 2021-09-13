@@ -3120,6 +3120,7 @@ namespace ShopNow.Controllers
         [HttpPost]
         public JsonResult SingleShopImgeUpdate(SingleShopImgeUpdateViewModel model)
         {
+            db.Configuration.ProxyCreationEnabled = false;
             var shop = db.Shops.FirstOrDefault(i => i.Id == model.Id);
             shop.ImagePath = model.ImagePath;
             shop.UpdatedBy = shop.CustomerName;
