@@ -27,20 +27,22 @@
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
                {
-               columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(25);
-               columns.Add(c => c.OwnerPhoneNumber).Titled("OwnerPhoneNo").Filterable(true).SetWidth(15);
-               columns.Add(c => c.PhoneNumber).Titled("PhoneNo.").Filterable(true).SetWidth(20);
-               columns.Add(c => c.ShopCategoryName).Titled("Shop Type").Filterable(true).SetWidth(20);
-               columns.Add(c => c.Address).Titled("Address").Filterable(true).SetWidth(50);
-               //columns.Add(c => c.PinCode).Titled("PinCode").Filterable(true).SetWidth(8);
+               columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(15);
+               columns.Add(c => c.OwnerPhoneNumber).Titled("OwnerPhoneNo").Filterable(true).SetWidth(10);
+               columns.Add(c => c.PhoneNumber).Titled("PhoneNo.").Filterable(true).SetWidth(10);
+               columns.Add(c => c.ShopCategoryName).Titled("Shop Type").Filterable(true).SetWidth(10);
+               columns.Add(c => c.Address).Titled("Address").Filterable(true).SetWidth(30);
+               columns.Add().Encoded(false).Sanitized(false).RenderValueAs(cs => cs.Status == 6 ?
+                    Html.ActionLink("Activate", "Active", new { Id = cs.Id }, new { @class = "btn btn-success btn-vsm mb-1", @style = "padding: 3px 14px" }).ToHtmlString():
+                    Html.ActionLink("InActive", "InActive", new { Id =cs.Id }, new { @class = "btn btn-secondary btn-vsm mb-1", @style = "padding: 3px 14px" }).ToHtmlString()).Titled("Status").SetWidth(8);
                columns.Add().Encoded(false).Sanitized(false)
-               .RenderValueAs(s => new HtmlString("<label class='switch'> <input type='checkbox' value='" + s.IsOnline + "' Id='Id_" + s.Id + "' class='CheckOnline' data-id='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(8);
+                    .RenderValueAs(s => new HtmlString("<label class='switch'> <input type='checkbox' value='" + s.IsOnline + "' Id='Id_" + s.Id + "' class='CheckOnline' data-id='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(8);
                columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
-            .RenderValueAs(o => @<div>
+                    .RenderValueAs(o => @<div>
                     <a href="~/Shop/Edit?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-4"><i class="fa fa-edit fa-lg"></i></a>
                     <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
                 </div>);
-}).WithPaging(20).Sortable(true)
+                }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>

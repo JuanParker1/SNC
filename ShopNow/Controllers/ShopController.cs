@@ -79,7 +79,7 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var List = (from s in db.Shops
-                        select s).OrderBy(s => s.Name).Where(i => i.Status == 0).ToList();
+                        select s).OrderBy(s => s.Name).Where(i => i.Status == 0 || i.Status == 6).ToList();
 
             return View(List);
         }

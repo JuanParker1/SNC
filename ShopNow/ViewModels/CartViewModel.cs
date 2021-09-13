@@ -71,52 +71,202 @@ namespace ShopNow.ViewModels
         public long Id { get; set; }
         public int CustomerId { get; set; }
         public string CustomerName { get; set; }
-        public int ShopId { get; set; }
+        public string CustomerPhoneNumber { get; set; }
         public string ShopName { get; set; }
-        public int ProductId { get; set; }
-        public string ProductName { get; set; }
-        public string PhoneNumber { get; set; }
-        public int BrandId { get; set; }
-        public string BrandName { get; set; }
-        public int CategoryId { get; set; }
-        public string CategoryName { get; set; }
         public string DeliveryAddress { get; set; }
-        public string ImagePath { get; set; }
-        public int DeliveryBoyId { get; set; }
-        public string DeliveryBoyName { get; set; }
-        public string UserEnquiryCode { get; set; }
-        public string UserEnquiryName { get; set; }
+        public string ShopPhoneNumber { get; set; }
+        public string ShopOwnerPhoneNumber { get; set; }
+        public int TotalProduct { get; set; }
+        public int TotalQuantity { get; set; }
+        public double TotalPrice { get; set; }
         public int OrderNumber { get; set; }
-        public string Qty { get; set; }
-        public double Price { get; set; }
-        public int CartStatus { get; set; }
-        public string CreatedBy { get; set; }
-        public string UpdatedBy { get; set; }
+        public string DeliveryBoyName { get; set; }
+        public string DeliveryBoyPhoneNumber { get; set; }
+        public double DeliveryCharge { get; set; }
+        public double ShopDeliveryDiscount { get; set; }
+        public double NetDeliveryCharge { get; set; }
+        public double Convinenientcharge { get; set; }
+        public double Packingcharge { get; set; }
         public int Status { get; set; }
-        public DateTime DateEncoded { get; set; }
-        public DateTime DateUpdated { get; set; }
+        public System.DateTime DateEncoded { get; set; }
+        public System.DateTime DateUpdated { get; set; }
         public int isAssign { get; set; }
         public int OnWork { get; set; }
-        public double Amount { get; set; }
-        public double ConvenientCharge { get; set; }
-        public double PackagingCharge { get; set; }
-        public double DelivaryCharge { get; set; }
-        public double Latitude { get; set; }
-        public double Longtitude { get; set; }
         public double PenaltyAmount { get; set; }
         public double WaitingCharge { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
 
+        public List<TodayList> TodayLists { get; set; }
+        public class TodayList
+        {
+            public long Id { get; set; }
+            public int OrderNumber { get; set; }
+            public string ShopName { get; set; }
+            public string DeliveryAddress { get; set; }
+            public string ShopPhoneNumber { get; set; }
+            public string DeliveryBoyName { get; set; }
+            public int Status { get; set; }
+            public DateTime DateEncoded { get; set; }
+            public string OrderStatusText
+            {
+                get
+                {
+                    switch (this.Status)
+                    {
+                        case 2:
+                            return "Pending";
+                        case 3:
+                            return "Order is being Prepared";
+                        case 4:
+                            return "Assigned for Delivery. Waiting for Pickup";
+                        case 5:
+                            return "On the Way to Delivery";
+                        case 6:
+                            return "Delivered";
+                        case 7:
+                            return "Cancelled";
+                        default:
+                            return "N/A";
+                    }
+                }
+            }
+        }
+
+        public List<CartPendingList> CartPendingLists { get; set; }
+        public class CartPendingList
+        {
+            public long Id { get; set; }
+            public int OrderNumber { get; set; }
+            public string ShopName { get; set; }
+            public string DeliveryAddress { get; set; }
+            public string ShopOwnerPhoneNumber { get; set; }
+            public string DeliveryBoyName { get; set; }
+            public int Status { get; set; }
+            public DateTime DateEncoded { get; set; }
+            public double Price { get; set; }
+            public double? RefundAmount { get; set; }
+            public string RefundRemark { get; set; }
+            public string PaymentMode { get; set; }
+        }
+
+        public List<CartPreparedList> CartPreparedLists { get; set; }
+        public class CartPreparedList
+        {
+            public long Id { get; set; }
+            public int OrderNumber { get; set; }
+            public string ShopName { get; set; }
+            public string DeliveryAddress { get; set; }
+            public string ShopPhoneNumber { get; set; }
+            public string DeliveryBoyPhoneNumber { get; set; }
+            public string DeliveryBoyName { get; set; }
+            public int Status { get; set; }
+            public DateTime DateEncoded { get; set; }
+            public double Price { get; set; }
+            public double? RefundAmount { get; set; }
+            public string RefundRemark { get; set; }
+            public string PaymentMode { get; set; }
+        }
+
+        public List<DeliveryAgentAssignedList> DeliveryAgentAssignedLists { get; set; }
+        public class DeliveryAgentAssignedList
+        {
+            public long Id { get; set; }
+            public int OrderNumber { get; set; }
+            public string ShopName { get; set; }
+            public string DeliveryBoyPhoneNumber { get; set; }
+            public string DeliveryBoyName { get; set; }
+            public int Status { get; set; }
+            public DateTime DateEncoded { get; set; }
+            public string PaymentMode { get; set; }
+            public double Price { get; set; }
+            public double? RefundAmount { get; set; }
+            public string RefundRemark { get; set; }
+        }
+
+        public List<PickupList> PickupLists { get; set; }
+        public class PickupList
+        {
+            public long Id { get; set; }
+            public int OrderNumber { get; set; }
+            public string ShopName { get; set; }
+            public string DeliveryBoyPhoneNumber { get; set; }
+            public string DeliveryBoyName { get; set; }
+            public int Status { get; set; }
+            public DateTime DateEncoded { get; set; }
+            public string PaymentMode { get; set; }
+            public double Price { get; set; }
+            public double Amount { get; set; }
+            public double? RefundAmount { get; set; }
+            public string RefundRemark { get; set; }
+        }
+
+        public List<OntheWayList> OntheWayLists { get; set; }
+        public class OntheWayList
+        {
+            public long Id { get; set; }
+            public int OrderNumber { get; set; }
+            public string ShopName { get; set; }
+            public string DeliveryBoyPhoneNumber { get; set; }
+            public int Status { get; set; }
+            public DateTime DateEncoded { get; set; }
+            public string PaymentMode { get; set; }
+            public double Price { get; set; }
+            public double Amount { get; set; }
+            public double? RefundAmount { get; set; }
+            public string RefundRemark { get; set; }
+        }
+
+        public List<DeliveredList> DeliveredLists { get; set; }
+        public class DeliveredList
+        {
+            public long Id { get; set; }
+            public int OrderNumber { get; set; }
+            public string ShopName { get; set; }
+            public string CustomerPhoneNumber { get; set; }
+            public int Status { get; set; }
+            public DateTime DateEncoded { get; set; }
+            public string PaymentMode { get; set; }
+            public double Price { get; set; }
+            public double Amount { get; set; }
+            public double? RefundAmount { get; set; }
+            public string RefundRemark { get; set; }
+            public double ShopAcceptedTime { get; set; }
+            public double OrderPeriod { get; set; }
+        }
+
+        public List<CancelledList> CancelledLists { get; set; }
+        public class CancelledList
+        {
+            public long Id { get; set; }
+            public int OrderNumber { get; set; }
+            public string ShopName { get; set; }
+            public string CustomerPhoneNumber { get; set; }
+            public int Status { get; set; }
+            public DateTime DateEncoded { get; set; }
+            public string PaymentMode { get; set; }
+            public double Price { get; set; }
+            public double Amount { get; set; }
+            public double? RefundAmount { get; set; }
+            public string RefundRemark { get; set; }
+            public double ShopCancelPeriod { get; set; }
+            public Nullable<System.DateTime> ShopCancelledTime { get; set; }
+            public double OrderPeriod { get; set; }
+        }
         public List<CartList> List { get; set; }
         public class CartList
         {
             public long Id { get; set; }
             public int CustomerId { get; set; }
             public string CustomerName { get; set; }
+            public string CustomerPhoneNumber { get; set; }
             public int ShopId { get; set; }
             public string ShopName { get; set; }
             public int OrderNumber { get; set; }
             public long ProductId { get; set; }
             public string ProductName { get; set; }
+            public string ShopPhoneNumber { get; set; }
+            public string ShopOwnerPhoneNumber { get; set; }
             public string PhoneNumber { get; set; }
             public int BrandId { get; set; }
             public string BrandName { get; set; }
@@ -126,21 +276,12 @@ namespace ShopNow.ViewModels
             public string ImagePath { get; set; }
             public int DeliveryBoyId { get; set; }
             public string DeliveryBoyName { get; set; }
-            public string DeliveryPhoneNumber { get; set; }
+            public string DeliveryBoyPhoneNumber { get; set; }
             public int Qty { get; set; }
             public double Price { get; set; }
-            public int CartStatus { get; set; }
             public string CreatedBy { get; set; }
             public string UpdatedBy { get; set; }
             public int Status { get; set; }
-            public string Date { get; set; }
-            public string DateTimeText
-            {
-                get
-                {
-                    return DateEncoded.ToString("dd-MMM-yyyy hh:mm tt", CultureInfo.InvariantCulture);
-                }
-            }
             public DateTime DateEncoded { get; set; }
             public DateTime DateUpdated { get; set; }
             public int isAssign { get; set; }
@@ -153,11 +294,11 @@ namespace ShopNow.ViewModels
             public Nullable<System.DateTime> ShopCancelledTime { get; set; }
             public double ShopAcceptedTime { get; set; }
             public double OrderPeriod { get; set; }
-            public string CartStatusText
+            public string OrderStatusText
             {
                 get
                 {
-                    switch (this.CartStatus)
+                    switch (this.Status)
                     {
                         case 2:
                             return "Pending";
