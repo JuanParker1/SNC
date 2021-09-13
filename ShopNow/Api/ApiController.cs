@@ -2654,12 +2654,7 @@ namespace ShopNow.Controllers
         }
             public JsonResult GetP(string str = "")
         {
-            if (str != "")
-            {
-                string s = BaseClass.timeNow;
-                DateTime cc = BaseClass.timeNowDAte;
-                return Json(new { Page = s,dates=cc }, JsonRequestBehavior.AllowGet);
-            }
+            
             sncEntities context = new sncEntities();
 
             var apiSettings = db.ApiSettings.Where(m => m.Status == 0).ToList();
