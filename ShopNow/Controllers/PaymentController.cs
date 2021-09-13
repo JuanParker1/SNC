@@ -343,7 +343,7 @@ namespace ShopNow.Controllers
             model.EarningDate = model.EarningDate == null ? DateTime.Now : model.EarningDate.Value;
 
             model.ListItems = db.Orders.Where(i => i.Status == 6)
-               .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+               .Join(db.Payments.Where(i => (DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(model.EarningDate.Value))), c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                .Join(db.DeliveryBoys, c => c.c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
                .Select(i => new DeliveryBoyPaymentListViewModel.ListItem
                {
@@ -362,7 +362,7 @@ namespace ShopNow.Controllers
                    EmailBody = "",
                    EmailID = i.d.Email,
                    DeliveryBoyPaymentStatus = i.c.c.DeliveryBoyPaymentStatus
-               }).Where(i =>(DbFunctions.TruncateTime(i.PaymentDate) == DbFunctions.TruncateTime(model.EarningDate.Value)) /*&& i.OrderNo != null*/).ToList();
+               }).ToList();
             return View(model);
         }
 

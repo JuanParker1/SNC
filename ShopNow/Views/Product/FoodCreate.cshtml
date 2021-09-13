@@ -3,13 +3,11 @@
     ViewBag.Title = "Dish Entry";
 }
 <title>ShopNow | Dish Create</title>
-
 <style>
     .textbox-sm {
         width: 80px;
     }
 </style>
-
 <div class="container-fluid mb-3">
     <div class="row">
         <div class="col-md-2">
@@ -22,12 +20,13 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            @using (Html.BeginForm("FoodCreate", "Product", FormMethod.Post, new { id = "ProductForm", role = "form", enctype = "multipart/form-data",autocomplete="off" }))
+            @using (Html.BeginForm("FoodCreate", "Product", FormMethod.Post, new { id = "ProductForm", role = "form", enctype = "multipart/form-data", autocomplete = "off" }))
             {
                 @Html.AntiForgeryToken()
-                <div class="card">
-                    <div class="card-title">
+                <div class="card shadow mb-3">
+                    <div class="card-body">
                         <div class="form-group row mt-3 mx-3">
+                            <div class="col-md-2"></div>
                             <div class="col-md-2">
                                 <label class="col-form-label text-secondary font-weight-bold">Shop Name</label>
                             </div>
@@ -45,7 +44,8 @@
                             </div>
                         </div>
                     </div>
-
+                </div>
+                <div class="card shadow">
                     <div class="card-body" id="DefaultEntry">
                         <div class="row">
                             <div class="col-md-3">

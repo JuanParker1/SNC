@@ -2,9 +2,7 @@
 @{
     ViewBag.Title = "Electronic Update";
 }
-
 <title>ShopNow | @ViewBag.Title</title>
-
 <div class="container-fluid">
     <div class="row my-2">
         <div class="col-md-6">
@@ -20,22 +18,25 @@
             @using (Html.BeginForm("ElectronicEdit", "Product", FormMethod.Post, new { id = "ElectronicUpdateForm", enctype = "multipart/form-data", autocomplete = "off" }))
             {
                 @Html.AntiForgeryToken()
-                <div class="row">
-                    <div class="col-md-2">
-                        <label class="col-form-label"><strong class="text-secondary">Shop Name</strong></label>
-                    </div>
-                    <div class="col-md-4 text-center">
-
-                        <div class="form-group">
-                            @if (Model.ShopId != 0)
-                            {
-                                <input type="text" class="form-control" name="ShopName" value="@Model.ShopName" readonly />
-                                <input type="hidden" name="ShopId" value="@Model.ShopId" />
-                            }
+                <div class="card shadow">
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label class="col-form-label"><strong class="text-secondary">Shop Name</strong></label>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="form-group">
+                                    @if (Model.ShopId != 0)
+                                    {
+                                        <input type="text" class="form-control" name="ShopName" value="@Model.ShopName" readonly />
+                                        <input type="hidden" name="ShopId" value="@Model.ShopId" />
+                                    }
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="card">
+                <div class="card shadow">
                     <div class="card-body">
                         <div class="form-group row">
                             <div class="col-md-12">
@@ -57,17 +58,17 @@
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Category Name</strong></label>
                                         <input type="text" class="form-control" name="CategoryName" id="CategoryName" value="@Model.CategoryName" readonly />
-                                        <input type="hidden" name="CategoryCode" id="CategoryId" value="@Model.CategoryId" />
+                                        <input type="hidden" name="CategoryId" id="CategoryId" value="@Model.CategoryId" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Sub Category I Name</strong></label>
                                         <input type="text" class="form-control" name="SubCategoryName" id="SubCategoryName" value="@Model.SubCategoryName" readonly />
-                                        <input type="hidden" name="SubCategoryCode" id="SubCategoryCode" value="@Model.SubCategoryCode" />
+                                        <input type="hidden" name="SubCategoryId" id="SubCategoryId" value="@Model.SubCategoryId" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Sub Category II Name</strong></label>
                                         <input type="text" class="form-control" name="NextSubCategoryName" id="NextSubCategoryName" value="@Model.NextSubCategoryName" readonly />
-                                        <input type="hidden" name="NextSubCategoryCode" id="NextSubCategoryCode" value="@Model.NextSubCategoryCode" />
+                                        <input type="hidden" name="NextSubCategoryId" id="NextSubCategoryId" value="@Model.NextSubCategoryId" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="Price"><strong class="text-secondary">Menu Price</strong></label>
@@ -96,13 +97,13 @@
                                         <input id="SizeLB" type="text" class="form-control" name="SizeLBH" min="0" value="@Model.SizeLBH" />
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="col-form-label" for="MeasurementUnitCode"><strong class="text-secondary">Measurement Unit Name</strong></label>
-                                        <input type="hidden" name="MeasurementUnitCode" id="MeasurementUnitCode" value="@Model.MeasurementUnitCode" />
+                                        <label class="col-form-label" for="MeasurementUnitId"><strong class="text-secondary">Measurement Unit Name</strong></label>
+                                        <input type="hidden" name="MeasurementUnitId" id="MeasurementUnitId" value="@Model.MeasurementUnitId" />
                                         <input type="text" class="form-control" name="MeasurementUnitName" id="MeasurementUnitName" value="@Model.MeasurementUnitName" readonly />
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="col-form-label" for="PackageCode"><strong class="text-secondary">Package Name</strong></label>
-                                        <input type="hidden" name="PackageCode" id="PackageCode" value="@Model.PackageCode" />
+                                        <label class="col-form-label" for="PackageId"><strong class="text-secondary">Package Name</strong></label>
+                                        <input type="hidden" name="PackageId" id="PackageId" value="@Model.PackageId" />
                                         <input type="text" class="form-control" name="PackageName" id="PackageName" value="@Model.PackageName" readonly />
                                     </div>
                                     <div class="col-md-3">
@@ -114,18 +115,18 @@
                                         <input id="GoogleTaxonomyCode" type="text" class="form-control" name="GoogleTaxonomyCode" value="@Model.GoogleTaxonomyCode" readonly />
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="control-label" for="PackagingType"><strong class="text-secondary">Packing Type</strong></label>
+                                        <label class="control-label" for="PackingType"><strong class="text-secondary">Packing Type</strong></label>
                                         <div class="form-check-inline ml-3">
                                             <label class="form-check-label">
-                                                <input type="radio" class="form-check-input" name="PackagingType" value="0" @if (Model.PackingType == 0) { <text> checked </text> }>Item Qty
+                                                <input type="radio" class="form-check-input" name="PackingType" value="0" @if (Model.PackingType == 0) { <text> checked </text> }>Item Qty
                                             </label>
                                         </div>
                                         <div class="form-check-inline">
                                             <label class="form-check-label">
-                                                <input type="radio" class="form-check-input" name="PackagingType" value="1" @if (Model.PackingType == 1) { <text> checked </text> }>SKU
+                                                <input type="radio" class="form-check-input" name="PackingType" value="1" @if (Model.PackingType == 1) { <text> checked </text> }>SKU
                                             </label>
                                         </div>
-                                        <input type="number" class="form-control" name="PackagingCharge" id="PackagingCharge" value="@Model.PackingCharge" />
+                                        <input type="number" class="form-control" name="PackingCharge" id="PackingCharge" value="@Model.PackingCharge" />
                                     </div>
                                 </div>
                             </div>
@@ -143,7 +144,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @*<div class="col-md-6">
+                            <div class="col-md-6">
                                 <div class="row">
                                     <div class="col-md-4 form-group">
                                         <label class="control-label text-secondary font-weight-bold ml-2">Electronic Image-1</label>
@@ -171,7 +172,7 @@
                                         <input type="hidden" name="ImagePath5" value="@Model.ImagePath5" />
                                     </div>
                                 </div>
-                            </div>*@
+                            </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-md-2 mx-auto">

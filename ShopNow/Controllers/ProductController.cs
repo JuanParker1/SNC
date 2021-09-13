@@ -1106,10 +1106,10 @@ namespace ShopNow.Controllers
 
             return Json(new
             {
-                PortionCode = model.PortionCode,
+                PortionId = model.PortionId,
                 PortionName = model.PortionName,
                 PortionPrice = model.PortionPrice,
-                AddOnCategoryCode = model.AddOnCategoryCode,
+                AddOnCategoryId = model.AddOnCategoryId,
                 AddOnCategoryName = model.AddOnCategoryName,
                 AddOnsPrice = model.AddOnsPrice,
                 MinSelectionLimit = model.MinSelectionLimit,
@@ -1483,7 +1483,7 @@ namespace ShopNow.Controllers
                     ASIN = i.ASIN,
                     GoogleTaxonomyCode = i.GoogleTaxonomyCode,
                     Weight = i.Weight,
-                    SizeLB = i.SizeLBH,
+                    SizeLBH = i.SizeLBH,
                     MeasurementUnitId = i.MeasurementUnitId,
                     MeasurementUnitName = i.MeasurementUnitName,
                     PackageId = i.PackageId,

@@ -18,7 +18,7 @@
             @using (Html.BeginForm("FMCGCreate", "Product", FormMethod.Post, new { id = "FMCGCreateForm", enctype = "multipart/form-data", autocomplete = "off" }))
             {
                 @Html.AntiForgeryToken()
-                <div class="card mb-3">
+                <div class="card shadow mb-3">
                     <div class="card-body">
                         <div class="col-md-12">
                             <div class="form-group row">
@@ -33,7 +33,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card">
+                <div class="card shadow">
                     <div class="card-body">
                         <div class="form-group row">
                             <div class="col-md-12">
@@ -87,8 +87,8 @@
                                         <input id="Weight" type="number" class="form-control" name="Weight" step="any" min="0"  readonly/>
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="col-form-label" for="SizeLB"><strong class="text-secondary">Size LB</strong></label>
-                                        <input id="SizeLB" type="text" class="form-control" name="SizeLB" min="0" readonly/>
+                                        <label class="col-form-label" for="SizeLBH"><strong class="text-secondary">Size LB</strong></label>
+                                        <input id="SizeLBH" type="text" class="form-control" name="SizeLBH" min="0" readonly/>
                                     </div>
                                     <div class="col-md-3">
                                         <label><strong class="text-secondary">Measurement Unit Name</strong></label>
@@ -282,7 +282,7 @@
                 $('input[name="ImagePath5"]').val(e.params.data.ImagePath5);
                 $('#MenuPrice').val(e.params.data.Price);
                 $('#Weight').val(e.params.data.Weight);
-                $('#SizeLB').val(e.params.data.SizeLB);
+                $('#SizeLBH').val(e.params.data.SizeLBH);
                 $('#ShortDescription').val(e.params.data.ShortDescription);
                 $('#LongDescription').append(e.params.data.LongDescription);
                 $('input[name="MeasurementUnitId"]').val(e.params.data.MeasurementUnitId);
