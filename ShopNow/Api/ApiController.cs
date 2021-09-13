@@ -3183,7 +3183,7 @@ namespace ShopNow.Controllers
                                 Status = i.ss.s.Status,
                                 isOnline = i.ss.s.IsOnline,
                                 Rating = i.ss.s.Rating,
-                                ImagePath = i.ss.s.ImagePath,
+                                ImagePath = ((!string.IsNullOrEmpty(i.ss.s.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ss.s.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                                 DistrictName = i.ss.s.DistrictName,
                                 Verify = i.ss.s.Verify,
                                 OtpVerify = i.o.Any() ? i.o.LastOrDefault().Verify : false,
