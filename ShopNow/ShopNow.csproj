@@ -3183,6 +3183,10 @@
     <Content Include="Views\ProductDishAddOn\Index.cshtml" />
     <Content Include="Views\Cart\OrderRatios.cshtml" />
     <Content Include="Views\Crust\List.cshtml" />
+    <Content Include="Views\Cart\PendingList.cshtml" />
+    <Content Include="Views\Cart\DeliveryAgentAssignedList.cshtml" />
+    <Content Include="Views\Cart\WaitingForPickupList.cshtml" />
+    <Content Include="Views\Cart\OnTheWayList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

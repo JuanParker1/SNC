@@ -25,27 +25,27 @@
                             <input type="hidden" name="Id" id="Id" value="@Model.Id" />
                             <input type="hidden" name="CustomerId" id="CustomerId" value="@Model.CustomerId" />
                             <input type="hidden" name="OrderNumber" id="OrderNumber" value="@Model.OrderNumber" />
-                            <input type="hidden" name="Status" id="Status" value="@Model.CartStatus" />
+                            <input type="hidden" name="Status" id="Status" value="@Model.Status" />
                             <div class="row">
                                 <div class="col-md-4">
                                     <label><span class="text-secondary font-weight-bold">Shop Name:</span><span class="font-weight-bold"> @Model.ShopName</span></label>
                                 </div>
                                 <div class="col-md-6">
-                                    <label><span class="text-secondary font-weight-bold">Address:</span> <a onclick="gotomap(@Model.Latitude,@Model.Longtitude)" href="" target="_blank"> <span class="font-weight-bold"> @Model.DeliveryAddress</span></a></label>
+                                    <label><span class="text-secondary font-weight-bold">Address:</span> <a onclick="gotomap(@Model.Latitude,@Model.Longitude)" href="" target="_blank"> <span class="font-weight-bold"> @Model.DeliveryAddress</span></a></label>
                                 </div>
                                 <div class="col-md-2">
-                                    <label><span class="text-secondary font-weight-bold">Phone Number:</span><span class="font-weight-bold"> @Model.PhoneNumber</span></label>
+                                    <label><span class="text-secondary font-weight-bold">Phone Number:</span><span class="font-weight-bold"> @Model.CustomerPhoneNumber</span></label>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-3 text-right">
-                            @if (Model.CartStatus == 2)
+                            @if (Model.Status == 2)
                             {
                                 <button type="button" class="btn btn-sm btn-success mr-3" id="Accept">Accept</button>
                                 <button type="button" class="btn btn-sm btn-danger mr-3" id="Cancel">Cancel</button>
                                 <a href="~/Cart/PickupSlip?OrderNumber=@Model.OrderNumber&id=@ShopNow.Helpers.AdminHelpers.ECodeLong(Model.Id)" class="btn btn-secondary btn-sm" style="padding: 3px 16px"><span><i class="fa fa-print mr-1" aria-hidden="true"></i></span> Pickup Slip</a>
                             }
-                            else if (Model.CartStatus == 7)
+                            else if (Model.Status == 7)
                             {
                                 if (Model.PenaltyAmount <= 0)
                                 {
@@ -57,31 +57,31 @@
                                 }
                                 <span class="text-danger">Cancelled</span>
                             }
-                            else if (Model.CartStatus == 3)
+                            else if (Model.Status == 3)
                             {
                                 <span class="text-success mr-3">Order is being Prepared</span>
                                 <button type="button" class="btn btn-sm btn-success mr-3" id="Assign">Assign Delivery Boy</button>
                             }
-                            else if (Model.CartStatus == 8)
+                            else if (Model.Status == 8)
                             {
                                 <span class="text-success font-weight-bold mr-3">Order Prepared</span>
                             }
-                            else if (Model.CartStatus == 4 && Model.isAssign == 1 && Model.OnWork == 0)
+                            else if (Model.Status == 4 && Model.isAssign == 1 && Model.OnWork == 0)
                             {
                                 <span class="text-success">Assigned for Delivery</span>
                                 <a href="/Cart/DeliveryBoyAccept?OrderNumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-info mt-2">Delivery Boy Accept</a>
                             }
-                            else if (Model.CartStatus == 4 && Model.isAssign == 1 && Model.OnWork == 1)
+                            else if (Model.Status == 4 && Model.isAssign == 1 && Model.OnWork == 1)
                             {
                                 <span class="text-success">Waiting for Pickup</span>
                                 <a href="/Cart/DeliveryBoyPickup?OrderNumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-info mt-2">Delivery Boy Pickup</a>
                             }
-                            else if (Model.CartStatus == 5)
+                            else if (Model.Status == 5)
                             {
                                 <span class="text-success">On the Way to Delivery</span>
                                 <a href="/Cart/MarkAsDelivered?OrderNumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-info mt-2">Mark as Delivered</a>
                             }
-                            else if (Model.CartStatus == 6)
+                            else if (Model.Status == 6)
                             {
                                 if (Model.PenaltyAmount <= 0)
                                 {
