@@ -2654,12 +2654,7 @@ namespace ShopNow.Controllers
         }
             public JsonResult GetP(string str = "")
         {
-            if (str != "")
-            {
-                string s = BaseClass.timeNow;
-                DateTime cc = BaseClass.timeNowDAte;
-                return Json(new { Page = s,dates=cc }, JsonRequestBehavior.AllowGet);
-            }
+            
             sncEntities context = new sncEntities();
 
             var apiSettings = db.ApiSettings.Where(m => m.Status == 0).ToList();
@@ -3120,6 +3115,7 @@ namespace ShopNow.Controllers
         [HttpPost]
         public JsonResult SingleShopImgeUpdate(SingleShopImgeUpdateViewModel model)
         {
+            db.Configuration.ProxyCreationEnabled = false;
             var shop = db.Shops.FirstOrDefault(i => i.Id == model.Id);
             shop.ImagePath = model.ImagePath;
             shop.UpdatedBy = shop.CustomerName;
@@ -3182,7 +3178,7 @@ namespace ShopNow.Controllers
                                 Status = i.ss.s.Status,
                                 isOnline = i.ss.s.IsOnline,
                                 Rating = i.ss.s.Rating,
-                                ImagePath = i.ss.s.ImagePath,
+                                ImagePath = ((!string.IsNullOrEmpty(i.ss.s.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ss.s.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                                 DistrictName = i.ss.s.DistrictName,
                                 Verify = i.ss.s.Verify,
                                 OtpVerify = i.o.Any() ? i.o.LastOrDefault().Verify : false,
