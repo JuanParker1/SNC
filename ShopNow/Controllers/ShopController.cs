@@ -594,6 +594,19 @@ namespace ShopNow.Controllers
             return RedirectToAction("List", "Shop");
         }
 
+        [AccessPolicy(PageCode = "SHNSHPIA007")]
+        public ActionResult InActiveLowBalance(int Id)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var shop = db.Shops.FirstOrDefault(i => i.Id == Id);
+            shop.Status = 6;
+            shop.DateUpdated = DateTime.Now;
+            shop.UpdatedBy = user.Name;
+            db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("List", "Shop");
+        }
+
         [AccessPolicy(PageCode = "SHNSHPA008")]
         public ActionResult Active(int id)
         {

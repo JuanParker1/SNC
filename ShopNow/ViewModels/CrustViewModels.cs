@@ -16,4 +16,13 @@ namespace ShopNow.ViewModels
             public string Name { get; set; }
         }
     }
+
+    public class CrustMasterViewModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public System.Data.DataTable DataTable { get; set; }
+        public string button { get; set; }
+        public string Filename { get; set; }
+    }
 }

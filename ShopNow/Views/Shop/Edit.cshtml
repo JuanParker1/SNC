@@ -4,7 +4,7 @@
 }
 <title>ShopNow | Shop Update</title>
 <style>
-
+    
     #map {
         height: 100%;
         position: inherit;
@@ -529,76 +529,84 @@
                     </div>
                 </div>
                 <div class="card mb-4 shadow">
-                    <div class="col-md-12">
-                        <div class="form-group row">
-                            @if (Model.ImageAuthoriseBrandPath != null || Model.ImageAuthoriseBrandPath != "")
-                            {
-                                <div class="col-md-6">
-                                    Authorised Distributer of any Brand :
-                                    <input type="radio" name="distributorCheck" value="yes" checked>Yes
-                                    <input type="radio" name="distributorCheck" value="no"> No
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="col-md-6">
-                                    Authorised Distributer of any Brand :
-                                    <input type="radio" name="distributorCheck" value="yes">Yes
-                                    <input type="radio" name="distributorCheck" value="no" checked> No
-                                </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group row m-3">
+                                @if (Model.ImageAuthoriseBrandPath != null || Model.ImageAuthoriseBrandPath != "")
+                                {
+                                    <div class="col-md-6">
+                                        Authorised Distributer of any Brand :
+                                        <input type="radio" class="ml-3" name="distributorCheck" value="yes" checked> Yes
+                                        <input type="radio" class="ml-3" name="distributorCheck" value="no"> No
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-md-6">
+                                        Authorised Distributer of any Brand :
+                                        <input type="radio" class="ml-3" name="distributorCheck" value="yes"> Yes
+                                        <input type="radio" class="ml-3" name="distributorCheck" value="no" checked> No
+                                    </div>
 
-                            }
-                        </div>
-                        <div class="card-columns d-none form-group row col-md-4 distributor ">
-                            <div class="card bg-muted">
-                                <div class="card-body text-center">
-                                    <div class="alert alert-warning alert-dismissible fade show d-none brand">
-                                        <strong>Warning!</strong> It is Required Field.Please upload license
-                                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                    </div>
-                                    <label class="col-md-12"><small class="text-secondary"><i>Authorised Brand Name</i></small></label>
-                                    <select id="AuthorisedBrandId" name="AuthorisedBrandId" class="form-control">
-                                        <option value="@Model.AuthorisedBrandId">@Model.AuthorisedBrandName</option>
-                                    </select>
-                                    <input type="hidden" name="AuthorisedBrandName" id="AuthorisedBrandName" value="@Model.AuthorisedBrandName" />
-                                    <label class="col-md-12"><small class="text-secondary"><i>Authorised Certificate Upload</i></small></label>
-                                    <input type="radio" class="ml-3" name="AuthLicense" id="AuthLicenseImage" value="Image" checked> <label for="AuthLicenseImage"> Image</label>
-                                    <input type="radio" class="ml-3" name="AuthLicense" id="AuthLicensePDF" value="PDF"> <label for="AuthLicensePDF"> PDF</label>
-                                    <div class="row ml-3 AuthLicensePdf d-none mt-2 mb-3">
-                                        <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" target="_blank" class="mb-2"> Click here for Pdf view</a>
-                                        <input type="file" id="AuthorisedDistributorPdf" name="AuthorisedDistributorPdf" />
-                                    </div>
-                                    <div class="row AuthLicenseImg">
-                                        <div class="img-upload-container mx-auto">
-                                            <a href="~/Home/ImageDenied">
-                                                <img class="img-container w-100 h-100 mb-3" id="img-authorise" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" onerror="this.src='/Images/No Photo.png'" />
-                                                <input type="file" id="AuthorisedDistributorImage" name="AuthorisedDistributorImage" class="d-none" />
-                                                <label for="AuthorisedDistributorImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            </a>
+                                }
+                            </div>
+                            <div class="card-columns form-group row col-md-4 distributor m-3">
+                                <div class="card bg-muted">
+                                    <div class="card-body">
+                                        <div class="row form-group">
+                                            <div class="col-md-12">
+                                                <label class="text-secondary"><i>Authorised Brand Name</i></label>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <select id="AuthorisedBrandId" name="AuthorisedBrandId" class="form-control">
+                                                    <option value="@Model.AuthorisedBrandId">@Model.AuthorisedBrandName</option>
+                                                </select>
+                                                <input type="hidden" name="AuthorisedBrandName" id="AuthorisedBrandName" value="@Model.AuthorisedBrandName" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    @if (Model.ImageAuthoriseBrandPath != null && Model.Verify == false)
-                                    {
-                                        <div class="alert alert-success AuthApprovedlbl font-weight-bold d-none p-2">Approved</div>
-                                        <div class="alert alert-danger AuthRejectedlbl font-weight-bold d-none p-2">Rejected</div>
-                                        if (Model.ImageAuthoriseBrandPath == "Rejected" || Model.AuthorisedBrandName == "Rejected")
-                                        {
-                                            <div class="alert alert-danger font-weight-bold Auth p-2">Rejected</div>
-                                        }
-                                        else
-                                        {
-                                            <div class="alert alert-danger font-weight-bold Auth p-2">Verification Pending</div>
-                                        }
-                                    }
-                                    @if (Model.ImageAuthoriseBrandPath != null)
-                                    {
-                                        <div class="col-md-12">
-                                            <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#ModalBrand">
-                                                + Expand
-                                            </button>
-                                            <input type="hidden" id="AuthApprove" name="AuthApprove" />
+                                        <div class="row form-group text-center">
+                                            <div class="col-md-12">
+                                                <label class="col-md-12 text-secondary"><i>Authorised Certificate Upload</i></label>
+                                                <input type="radio" class="ml-3" name="AuthLicense" id="AuthLicenseImage" value="Image" checked> <label for="AuthLicenseImage"> Image</label>
+                                                <input type="radio" class="ml-3" name="AuthLicense" id="AuthLicensePDF" value="PDF"> <label for="AuthLicensePDF"> PDF</label>
+                                            </div>
                                         </div>
-                                    }
+                                            <div class="row ml-3 AuthLicensePdf d-none mt-2 mb-3">
+                                                <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" target="_blank" class="mb-2"> Click here for Pdf view</a>
+                                                <input type="file" id="AuthorisedDistributorPdf" name="AuthorisedDistributorPdf" />
+                                            </div>
+                                            <div class="row AuthLicenseImg">
+                                                <div class="img-upload-container mx-auto">
+                                                    <a href="~/Home/ImageDenied">
+                                                        <img class="img-container w-100 h-100 mb-3" id="img-authorise" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" onerror="this.src='/Images/No Photo.png'" />
+                                                        <input type="file" id="AuthorisedDistributorImage" name="AuthorisedDistributorImage" class="d-none" />
+                                                        <label for="AuthorisedDistributorImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        @if (Model.ImageAuthoriseBrandPath != null && Model.Verify == false)
+                                        {
+                                            <div class="alert alert-success AuthApprovedlbl font-weight-bold d-none p-2">Approved</div>
+                                            <div class="alert alert-danger AuthRejectedlbl font-weight-bold d-none p-2">Rejected</div>
+                                            if (Model.ImageAuthoriseBrandPath == "Rejected" || Model.AuthorisedBrandName == "Rejected")
+                                            {
+                                                <div class="alert alert-danger font-weight-bold Auth p-2">Rejected</div>
+                                            }
+                                            else
+                                            {
+                                                <div class="alert alert-danger font-weight-bold Auth p-2">Verification Pending</div>
+                                            }
+                                        }
+                                        @if (Model.ImageAuthoriseBrandPath != null)
+                                        {
+                                            <div class="col-md-12">
+                                                <button type="button" class="btn btn-sm btn-warning mb-2" data-toggle="modal" data-target="#ModalBrand">
+                                                    + Expand
+                                                </button>
+                                                <input type="hidden" id="AuthApprove" name="AuthApprove" />
+                                            </div>
+                                        }
+                                    </div>
                                 </div>
                             </div>
                         </div>

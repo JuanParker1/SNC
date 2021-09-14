@@ -3187,6 +3187,7 @@
     <Content Include="Views\Cart\DeliveryAgentAssignedList.cshtml" />
     <Content Include="Views\Cart\WaitingForPickupList.cshtml" />
     <Content Include="Views\Cart\OnTheWayList.cshtml" />
+    <Content Include="Views\Crust\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

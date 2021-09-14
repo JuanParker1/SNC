@@ -145,7 +145,7 @@ namespace ShopNow.Controllers
                                     AddOnsPrice = Convert.ToDouble(row[model.AddOnsPrice]),
                                     CrustPrice = Convert.ToDouble(row[model.CrustPrice]),
                                     AddOnType = Convert.ToInt32(row[model.AddOnType]),
-                                    CrustName = row[model.CrustName].ToString(),
+                                    CrustName = CheckCrust(row[model.CrustName].ToString()),
                                     MaxSelectionLimit = Convert.ToInt32(row[model.MaxSelectionLimit]),
                                     MinSelectionLimit = Convert.ToInt32(row[model.MinSelectionLimit]),
                                     Status = 0,
@@ -223,6 +223,26 @@ namespace ShopNow.Controllers
                 db.Portions.Add(mp);
                 db.SaveChanges();
                 return mp.Id;
+            }
+        }
+
+        public string CheckCrust(string CrustName)
+        {
+            var master = db.Crusts.FirstOrDefault(i => i.Name == CrustName && i.Status == 0);
+            if (master != null)
+            {
+                return master.Name;
+            }
+            else
+            {
+                Crust mp = new Crust();
+                mp.Name = CrustName;
+                mp.Status = 0;
+                mp.DateEncoded = DateTime.Now;
+                mp.DateUpdated = DateTime.Now;
+                db.Crusts.Add(mp);
+                db.SaveChanges();
+                return mp.Name;
             }
         }
     }
