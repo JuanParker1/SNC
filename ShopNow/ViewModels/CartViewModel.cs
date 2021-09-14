@@ -557,7 +557,7 @@ namespace ShopNow.ViewModels
             public double ShopLongitude { get; set; }
             public double CustomerLatitude { get; set; }
             public double CustomerLongitude { get; set; }
-            public string Date { get; set; }
+            //public string Date { get; set; }
         }
     }
 
@@ -566,10 +566,10 @@ namespace ShopNow.ViewModels
         public List<PayoutOut> List { get; set; }
         public class PayoutOut
         {
-            public string Date { get; set; }
-            public DateTime date { get; set; }
-            public double totalamount { get; set; }
-            public double paidamount { get; set; }
+            //public string Date { get; set; }
+            public DateTime Date { get; set; }
+            public double TotalAmount { get; set; }
+            public double PaidAmount { get; set; }
         }
     }
 
@@ -584,11 +584,11 @@ namespace ShopNow.ViewModels
         {
             public int OrderNumber { get; set; }
             public double GrossDeliveryCharge { get; set; }
-            public string Amount { get; set; }
+            public double Amount { get; set; }
             public int DeliveryBoyPaymentStatus { get; set; }
             public int CartStatus { get; set; }
             public DateTime DateEncoded { get; set; }
-            public string Date { get; set; }
+            //public string Date { get; set; }
         }
     }
 
@@ -600,11 +600,11 @@ namespace ShopNow.ViewModels
         public class CartList
         {
             public int OrderNumber { get; set; }
-            public string Amount { get; set; }
+            public double Amount { get; set; }
             public int ShopPaymentStatus { get; set; }
             public int CartStatus { get; set; }
             public DateTime DateEncoded { get; set; }
-            public string Date { get; set; }
+            //public string Date { get; set; }
         }
     }
 

@@ -723,7 +723,7 @@ namespace ShopNow.ViewModels
         public List<EarningListItem> ListItems { get; set; }
         public class EarningListItem
         {
-            public string Date { get; set; }
+            //public string Date { get; set; }
             public DateTime DateEncoded { get; set; }
             public double Earning { get; set; }
             public double Pending { get; set; }
@@ -733,7 +733,7 @@ namespace ShopNow.ViewModels
         public List<RefundListItem> RefundLists { get; set; }
         public class RefundListItem
         {
-            public string Date { get; set; }
+           // public string Date { get; set; }
             public DateTime DateEncoded { get; set; }
             public double Refund { get; set; }
             public double Earning { get; set; }

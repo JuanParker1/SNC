@@ -3272,19 +3272,15 @@ namespace ShopNow.Controllers
             var model = new ShopOrderAmountApiViewModel();
             if (dt == "1")
             {
-                dt = DateTime.Now.ToString("dd-MMM-yyyy");
-                model.List = db.Orders.Where(i => i.Status == 6)
+                model.List = db.Orders.Where(i => i.Status == 6 && i.ShopId == shopId && DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(DateTime.Now))
                     .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
-                     //.Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
-                     .AsEnumerable()
-                   .Where(i => i.c.ShopId == shopId && i.c.DateEncoded.ToString("dd-MMM-yyyy") == dt)
                    .Select(i => new ShopOrderAmountApiViewModel.CartList
                    {
                        OrderNumber = i.c.OrderNumber,
                        CartStatus = i.c.Status,
                        ShopPaymentStatus = i.c.ShopPaymentStatus,
-                       Amount = i.p.OriginalAmount.ToString(),
-                       Date = i.c.DateEncoded.ToString("dd-MMM-yyyy HH:ss")
+                       Amount = i.p.OriginalAmount,
+                       DateEncoded = i.c.DateEncoded
                    }).ToList();
                 if (model.List.Count() != 0)
                 {
@@ -3296,18 +3292,15 @@ namespace ShopNow.Controllers
             {
                 DateTime from1 = DateTime.Parse(from);
                 DateTime to1 = DateTime.Parse(to);
-                model.List = db.Orders.Where(i => i.Status == 6)
+                model.List = db.Orders.Where(i => i.Status == 6 && i.ShopId == shopId && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(from1) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(to1)))
                     .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
-                     //.Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
-                     .AsEnumerable()
-                   .Where(i => i.c.ShopId == shopId && i.c.DateEncoded >= from1 && i.c.DateEncoded <= to1)
                    .Select(i => new ShopOrderAmountApiViewModel.CartList
                    {
                        OrderNumber = i.c.OrderNumber,
                        CartStatus = i.c.Status,
                        ShopPaymentStatus = i.c.ShopPaymentStatus,
-                       Amount = i.p.OriginalAmount.ToString(),
-                       Date = i.c.DateEncoded.ToString("dd-MMM-yyyy HH:ss")
+                       Amount = i.p.OriginalAmount,
+                       DateEncoded = i.c.DateEncoded
                    }).ToList();
                 if (model.List.Count() != 0)
                 {
@@ -3317,18 +3310,15 @@ namespace ShopNow.Controllers
             }
             else
             {
-                model.List = db.Orders.Where(i => i.Status == 6)
+                model.List = db.Orders.Where(i => i.Status == 6 && i.ShopId == shopId && DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(DateTime.Now))
                     .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
-                     // .Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
-                     .AsEnumerable()
-                   .Where(i => i.c.ShopId == shopId && i.c.DateEncoded.ToString("dd-MMM-yyyy") == dt)
                    .Select(i => new ShopOrderAmountApiViewModel.CartList
                    {
                        OrderNumber = i.c.OrderNumber,
                        CartStatus = i.c.Status,
                        ShopPaymentStatus = i.c.ShopPaymentStatus,
-                       Amount = i.p.OriginalAmount.ToString(),
-                       Date = i.c.DateEncoded.ToString("dd-MMM-yyyy HH:ss")
+                       Amount = i.p.OriginalAmount,
+                       DateEncoded = i.c.DateEncoded
                    }).ToList();
                 if (model.List.Count() != 0)
                 {
@@ -3363,13 +3353,11 @@ namespace ShopNow.Controllers
         public JsonResult GetDelivaryBoyFullReport(string phoneNumber)
         {
             var model = new DelivaryCreditAmountApiViewModel();
-            model.List = db.Orders.Where(i => i.Status == 6)
-                 .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
-                  .AsEnumerable()
-                .Where(i => i.c.DeliveryBoyPhoneNumber == phoneNumber && i.p.PaymentMode != "Online Payment" && i.c.DeliveryOrderPaymentStatus == 0)
+            model.List = db.Orders.Where(i => i.Status == 6 && i.DeliveryBoyPhoneNumber == phoneNumber && i.DeliveryBoyPaymentStatus==0)
+                 .Join(db.Payments.Where(i=>i.PaymentMode != "Online Payment"), c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Select(i => new DelivaryCreditAmountApiViewModel.CartList
                 {
-                    Amount = (i.p.Amount - (i.p.RefundAmount ?? 0)).ToString()
+                    Amount = (i.p.Amount - (i.p.RefundAmount ?? 0))
 
                 }).ToList();
             if (model.List.Count() != 0)
@@ -3385,11 +3373,8 @@ namespace ShopNow.Controllers
             var model = new DelivaryBoyReportViewModel();
             if (dt == "1")
             {
-                dt = DateTime.Now.ToString("dd-MMM-yyyy");
-                model.List = db.Orders.Where(i => i.Status == 6)
+                model.List = db.Orders.Where(i => i.Status == 6 && i.DeliveryBoyPhoneNumber == phoneNumber && DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(DateTime.Now))
                             .Join(db.Shops, scc => scc.ShopId, s => s.Id, (scc, s) => new { scc, s })
-                     .AsEnumerable()
-                   .Where(i => i.scc.DeliveryBoyPhoneNumber == phoneNumber && i.scc.DateEncoded.ToString("dd-MMM-yyyy") == dt)
                    .Select(i => new DelivaryBoyReportViewModel.CartList
                    {
                        OrderNumber = i.scc.OrderNumber,
@@ -3400,7 +3385,6 @@ namespace ShopNow.Controllers
                        ShopLatitude = i.s.Latitude,
                        ShopLongitude = i.s.Longitude,
                        DateEncoded = i.scc.DateEncoded,
-                       Date = i.scc.DateEncoded.ToString("dd-MMM-yyyy HH:ss")
                    }).OrderByDescending(j => j.DateEncoded).ToList();
                 if (model.List.Count() != 0)
                 {
@@ -3411,12 +3395,9 @@ namespace ShopNow.Controllers
             {
                 DateTime from1 = DateTime.Parse(from);
                 DateTime to1 = DateTime.Parse(to);
-                model.List = db.Orders.Where(i => i.Status == 6)
-                            // .Join(db.ShopCharges, c => c.OrderNumber, sc => sc.OrderNo, (c, sc) => new { c, sc })
+                model.List = db.Orders.Where(i => i.Status == 6 && ((DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(from1)) &&
+            (DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(to1))))
                             .Join(db.Shops, scc => scc.ShopId, s => s.Id, (scc, s) => new { scc, s })
-                          .Where(i => ((DbFunctions.TruncateTime(i.scc.DateEncoded) >= DbFunctions.TruncateTime(from1)) &&
-            (DbFunctions.TruncateTime(i.scc.DateEncoded) <= DbFunctions.TruncateTime(to1))))
-                          .AsEnumerable()
                    .Select(i => new DelivaryBoyReportViewModel.CartList
                    {
                        OrderNumber = i.scc.OrderNumber,
@@ -3427,7 +3408,6 @@ namespace ShopNow.Controllers
                        ShopLatitude = i.s.Latitude,
                        ShopLongitude = i.s.Longitude,
                        DateEncoded = i.scc.DateEncoded,
-                       Date = i.scc.DateEncoded.ToString("dd-MMM-yyyy HH:ss")
                    }).OrderByDescending(j => j.DateEncoded).ToList();
                 if (model.List.Count() != 0)
                 {
@@ -3436,11 +3416,8 @@ namespace ShopNow.Controllers
             }
             else
             {
-                model.List = db.Orders.Where(i => i.Status == 6)
-                            // .Join(db.ShopCharges, c => c.OrderNumber, sc => sc.OrderNo, (c, sc) => new { c, sc })
+                model.List = db.Orders.Where(i => i.Status == 6 && i.DeliveryBoyPhoneNumber == phoneNumber && DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(DateTime.Now))
                             .Join(db.Shops, scc => scc.ShopId, s => s.Id, (scc, s) => new { scc, s })
-                     .AsEnumerable()
-                   .Where(i => i.scc.DeliveryBoyPhoneNumber == phoneNumber && i.scc.DateEncoded.ToString("dd-MMM-yyyy") == dt)
                    .Select(i => new DelivaryBoyReportViewModel.CartList
                    {
                        OrderNumber = i.scc.OrderNumber,
@@ -3451,7 +3428,6 @@ namespace ShopNow.Controllers
                        ShopLatitude = i.s.Latitude,
                        ShopLongitude = i.s.Longitude,
                        DateEncoded = i.scc.DateEncoded,
-                       Date = i.scc.DateEncoded.ToString("dd-MMM-yyyy HH:ss")
                    }).OrderByDescending(j => j.DateEncoded).ToList();
                 if (model.List.Count() != 0)
                 {
@@ -3487,20 +3463,16 @@ namespace ShopNow.Controllers
             var model = new DelivaryCreditAmountApiViewModel();
             if (dt == "1")
             {
-                dt = DateTime.Now.ToString("dd-MMM-yyyy");
-                model.List = db.Orders.Where(i => i.Status == 6)
-                    .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
-                     //.Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
-                     .AsEnumerable()
-                   .Where(i => i.c.DeliveryBoyPhoneNumber == phoneNumber && i.c.DateEncoded.ToString("dd-MMM-yyyy") == dt && i.p.PaymentMode != "Online Payment" && i.c.DeliveryOrderPaymentStatus == 0)
+                model.List = db.Orders.Where(i => i.Status == 6 && i.DeliveryBoyPhoneNumber == phoneNumber && DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(DateTime.Now) && i.DeliveryOrderPaymentStatus == 0)
+                    .Join(db.Payments.Where(i=>i.PaymentMode != "Online Payment"), c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })                 
                    .Select(i => new DelivaryCreditAmountApiViewModel.CartList
                    {
                        OrderNumber = i.c.OrderNumber,
                        CartStatus = i.c.Status,
                        GrossDeliveryCharge = i.c.DeliveryCharge,
                        DeliveryBoyPaymentStatus = i.c.DeliveryBoyPaymentStatus,
-                       Amount = i.p.Amount.ToString(),
-                       Date = i.c.DateEncoded.ToString("dd-MMM-yyyy HH:ss")
+                       Amount = i.p.Amount,
+                       DateEncoded = i.c.DateEncoded
                    }).ToList();
                 if (model.List.Count() != 0)
                 {
@@ -3521,19 +3493,16 @@ namespace ShopNow.Controllers
             {
                 DateTime from1 = DateTime.Parse(from);
                 DateTime to1 = DateTime.Parse(to);
-                model.List = db.Orders.Where(i => i.Status == 6)
-                    .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
-                     //.Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
-                     .AsEnumerable()
-                   .Where(i => i.c.DeliveryBoyPhoneNumber == phoneNumber && i.p.PaymentMode != "Online Payment" && i.c.DateEncoded >= from1 && i.c.DateEncoded <= to1 && i.c.DeliveryOrderPaymentStatus == 0)
+                model.List = db.Orders.Where(i => i.Status == 6 && i.DeliveryBoyPhoneNumber == phoneNumber && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(from1) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(to1)) && i.DeliveryOrderPaymentStatus == 0)
+                    .Join(db.Payments.Where(i=> i.PaymentMode != "Online Payment"), c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                    .Select(i => new DelivaryCreditAmountApiViewModel.CartList
                    {
                        OrderNumber = i.c.OrderNumber,
                        CartStatus = i.c.Status,
                        GrossDeliveryCharge = i.c.DeliveryCharge,
                        DeliveryBoyPaymentStatus = i.c.DeliveryBoyPaymentStatus,
-                       Amount = i.p.Amount.ToString(),
-                       Date = i.c.DateEncoded.ToString("dd-MMM-yyyy HH:ss")
+                       Amount = i.p.Amount,
+                       DateEncoded = i.c.DateEncoded
                    }).ToList();
                 if (model.List.Count() != 0)
                 {
@@ -3552,19 +3521,16 @@ namespace ShopNow.Controllers
             }
             else
             {
-                model.List = db.Orders.Where(i => i.Status == 6)
-                    .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
-                    //.Join(db.ShopCharges, pay => pay.p.OrderNo, sc => sc.OrderNo, (pay, sc) => new { pay, sc })
-                    .AsEnumerable()
-                   .Where(i => i.c.DeliveryBoyPhoneNumber == phoneNumber && i.c.DateEncoded.ToString("dd-MMM-yyyy") == dt && i.p.PaymentMode != "Online Payment" && i.c.DeliveryOrderPaymentStatus == 0)
+                model.List = db.Orders.Where(i => i.Status == 6 && i.DeliveryBoyPhoneNumber == phoneNumber && DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(DateTime.Now) && i.DeliveryOrderPaymentStatus == 0)
+                    .Join(db.Payments.Where(i => i.PaymentMode != "Online Payment"), c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                    .Select(i => new DelivaryCreditAmountApiViewModel.CartList
                    {
                        OrderNumber = i.c.OrderNumber,
                        CartStatus = i.c.Status,
                        GrossDeliveryCharge = i.c.DeliveryCharge,
                        DeliveryBoyPaymentStatus = i.c.DeliveryBoyPaymentStatus,
-                       Amount = i.p.Amount.ToString(),
-                       Date = i.c.DateEncoded.ToString("dd-MMM-yyyy HH:ss")
+                       Amount = i.p.Amount,
+                       DateEncoded = i.c.DateEncoded
                    }).ToList();
                 if (model.List.Count() != 0)
                 {
@@ -3829,17 +3795,17 @@ namespace ShopNow.Controllers
         {
             //DelivaryBoyPayoutReportViewModel
             var model = new DelivaryBoyPayoutReportViewModel();
-            model.List = db.Orders.Where(i => i.Status == 6 && ((DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(startDate)) && (DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(endDate))))
-            .Join(db.DeliveryBoys.Where(i => i.PhoneNumber == phoneNo), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
-            .GroupBy(i => DbFunctions.TruncateTime(i.c.DateEncoded))
+            model.List = db.Orders.Where(i => i.Status == 6 && i.DeliveryBoyPhoneNumber == phoneNo && ((DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(startDate)) && (DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(endDate))))
+            //.Join(db.DeliveryBoys.Where(i => i.PhoneNumber == phoneNo), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
+            .GroupBy(i => DbFunctions.TruncateTime(i.DateEncoded))
             .AsEnumerable()
             .Select(i => new DelivaryBoyPayoutReportViewModel.PayoutOut
             {
-                Date = i.Any() ? i.FirstOrDefault().c.DateEncoded.ToString("dd-MMM-yyyy HH:ss") : "",
-                date = i.FirstOrDefault().c.DateEncoded,
-                totalamount = i.Sum(a => a.c.DeliveryCharge),
-                paidamount = GetPaidAmount(i.Key.Value, phoneNo),
-            }).OrderByDescending(j => j.date).ToList();
+                //Date = i.Any() ? i.FirstOrDefault().DateEncoded.ToString("dd-MMM-yyyy HH:ss") : "",
+                Date = i.FirstOrDefault().DateEncoded,
+                TotalAmount = i.Sum(a => a.DeliveryCharge),
+                PaidAmount = GetPaidAmount(i.Key.Value, phoneNo),
+            }).OrderByDescending(j => j.Date).ToList();
             int count = model.List.Count();
             int CurrentPage = page;
             int PageSize = pageSize;
@@ -3889,15 +3855,15 @@ namespace ShopNow.Controllers
                 model.ListItems = db.Payments
                      .Where(i => ((DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(startDate)) &&
                  (DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(endDate))))
-                 .Join(db.Shops.Where(i => i.Id == shopId), p => p.ShopId, s => s.Id, (p, s) => new { p, s })
-                 .Join(db.Orders.Where(i => i.Status == 6), p => p.p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
-                 .GroupBy(i => DbFunctions.TruncateTime(i.p.p.DateEncoded))
+                 //.Join(db.Shops.Where(i => i.Id == shopId), p => p.ShopId, s => s.Id, (p, s) => new { p, s })
+                 .Join(db.Orders.Where(i => i.Status == 6 && i.ShopId == shopId), p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
+                 .GroupBy(i => DbFunctions.TruncateTime(i.p.DateEncoded))
                  .AsEnumerable()
                  .Select(i => new ShopApiReportsViewModel.EarningListItem
                  {
-                     Date = i.Any() ? i.FirstOrDefault().p.p.DateEncoded.ToString("dd-MMM-yyyy HH:ss") : "",
-                     DateEncoded = i.FirstOrDefault().p.p.DateEncoded,
-                     Earning = i.Sum(a => a.p.p.Amount),
+                    // Date = i.Any() ? i.FirstOrDefault().p.DateEncoded.ToString("dd-MMM-yyyy HH:ss") : "",
+                     DateEncoded = i.FirstOrDefault().p.DateEncoded,
+                     Earning = i.Sum(a => a.p.Amount),
                      Paid = GetShopPaidAmount(i.Key.Value, shopId),
                  }).OrderByDescending(j => j.DateEncoded).ToList();
                 return Json(model.ListItems, JsonRequestBehavior.AllowGet);
@@ -3907,18 +3873,18 @@ namespace ShopNow.Controllers
                 model.RefundLists = db.Payments
                     .Where(i => ((DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(startDate)) &&
                 (DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(endDate))))
-                .Join(db.Shops.Where(i => i.Id == shopId), p => p.ShopId, s => s.Id, (p, s) => new { p, s })
-                .Join(db.Orders.Where(i => i.Status == 6), p => p.p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
+                //.Join(db.Shops.Where(i => i.Id == shopId), p => p.ShopId, s => s.Id, (p, s) => new { p, s })
+                .Join(db.Orders.Where(i => i.Status == 6 && i.ShopId == shopId), p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
                 // .Join(db.ShopCharges.Where(i => i.Status == 0), p => p.p.p.OrderNo, sc => sc.OrderNo, (p, sc) => new { p, sc })
-                .AsEnumerable()
+               // .AsEnumerable()
                 .Select(i => new ShopApiReportsViewModel.RefundListItem
                 {
-                    Date = i.p.p.DateEncoded.ToString("dd-MMM-yyyy HH:ss"),
-                    DateEncoded = i.p.p.DateEncoded,
-                    Earning = i.p.p.Amount,
-                    Refund = i.p.p.RefundAmount ?? 0,
+                   // Date = i.p.DateEncoded.ToString("dd-MMM-yyyy HH:ss"),
+                    DateEncoded = i.p.DateEncoded,
+                    Earning = i.p.Amount,
+                    Refund = i.p.RefundAmount ?? 0,
                     DeliveryCredits = i.c.DeliveryCharge,
-                    OrderNo = i.p.p.OrderNumber
+                    OrderNo = i.p.OrderNumber
                 }).OrderByDescending(i => i.DateEncoded).ToList();
                 return Json(model.RefundLists, JsonRequestBehavior.AllowGet);
             }
@@ -3940,19 +3906,7 @@ namespace ShopNow.Controllers
             else
                 return 0;
         }
-
-        //public JsonResult GetAddonList(long productId)
-        //{
-        //    var list = db.ShopDishAddOns.Where(i => i.ProductId == productId && i.IsActive == true).ToList();
-        //    if (list.Count() > 0)
-        //    {
-        //        var product = db.Products.FirstOrDefault(i => i.Id == productId);
-        //        return Json(new { list = list, type = list.FirstOrDefault().AddOnType, minLimit = product.MinSelectionLimit, maxLimit = product.MaxSelectionLimit }, JsonRequestBehavior.AllowGet);
-        //    }
-        //    else
-        //        return Json(new { list = list, type = 0, minLimit = 0, maxLimit = 0 }, JsonRequestBehavior.AllowGet);
-        //}
-
+        
         public JsonResult GetAddonList(long productId)
         {
             var product = db.Products.FirstOrDefault(i => i.Id == productId);
