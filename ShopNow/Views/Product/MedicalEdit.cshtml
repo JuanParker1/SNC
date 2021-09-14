@@ -13,227 +13,238 @@
     @Html.AntiForgeryToken()
     <div class="container-fluid my-0">
         <div class="row">
-            <div class="col-md-2">
+            <div class="col-md-6">
                 <h5 class="mt-1 text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
-            </div>
-            <div class="col-md-4">
-                <input type="text" name="ShopName" id="ShopName" class="form-control" value="@Model.ShopName" readonly />
-                <input type="hidden" name="ShopId" id="ShopId" value="@Model.ShopId" />
-                <input type="hidden" name="Id" id="Id" value="@Model.Id" />
             </div>
             <div class="col-md-6 text-right">
                 <a href="~/Product/MedicalList" target="_self"><span class="fa fa-list-ul"></span> Medical List</a>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card mt-3">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <label class="control-label">
-                                    <span class="text-secondary font-weight-bold">Drug Name</span>
-                                </label>
-                                <div class="form-group">
-                                    <div class="Select2Name">
-                                        @*<select id="MasterProductCode" name="MasterProductCode" class="form-control"></select>*@
-                                        <input type="text" name="MasterProductName" id="MasterProductName" class="form-control" value="@Model.MasterProductName" readonly />
-                                        <input type="hidden" name="MasterProductId" id="MasterProductId" value="@Model.MasterProductId" />
-                                        <input type="hidden" name="Name" value="@Model.Name" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="control-label text-secondary font-weight-bold" for="BrandCode">Brand Name</label>
-                                <div class="form-group">
-                                    <input type="hidden" name="BrandId" id="BrandId" value="@Model.BrandId" />
-                                    <input type="text" class="form-control" name="BrandName" id="BrandName" value="@Model.BrandName" readonly />
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="control-label text-secondary font-weight-bold" for="CategoryId">Category Name</label>
-                                <div class="form-group">
-                                    <input type="hidden" name="CategoryId" id="CategoryId" value="@Model.CategoryId" />
-                                    <input type="text" class="form-control" name="CategoryName" id="CategoryName" value="@Model.CategoryName" readonly />
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="control-label text-secondary font-weight-bold" for="DrugMeasurementUnitCode">Drug Measurement Unit Name</label>
-                                <div class="form-group">
-                                    <input type="hidden" name="DrugMeasurementUnitId" id="DrugMeasurementUnitId" value="@Model.DrugMeasurementUnitId" />
-                                    <input type="text" class="form-control" name="DrugMeasurementUnitName" id="DrugMeasurementUnitName" value="@Model.DrugMeasurementUnitName" readonly />
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="control-label text-secondary font-weight-bold" for="DrugCompoundDetailCode">Combination DrugCompound</label>
-                                <div class="form-group">
-                                    @*<select class="form-control" name="DrugCompoundDetailCode" id="DrugCompoundDetailCode" multiple></select>*@
-                                    <input type="text" class="form-control" name="DrugCompoundDetailName" id="DrugCompoundDetailName" value="@Model.DrugCompoundDetailName" readonly />
-                                    <input type="hidden" name="DrugCompoundDetailIds" id="DrugCompoundDetailIds" value="@Model.DrugCompoundDetailIds" />
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="control-label"><strong class="text-secondary">Prescription</strong></label>
-                                    <select class="form-control" name="PriscriptionCategory" id="PriscriptionCategory" disabled>
-                                        <option value="Select">Select Prescription</option>
-                                        <option value="True">Rx Required</option>
-                                        <option value="False">Rx Not Required</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="control-label"><strong class="text-secondary">iBarU</strong></label>
-                                    <input type="text" class="form-control" name="IBarU" id="iBarU" value="@Model.IBarU" readonly />
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="control-label" for="MenuPrice"><strong class="text-secondary">Menu Price</strong></label>
-                                    <input id="MenuPrice" type="number" class="form-control" step="any" name="MenuPrice" min="1" value="@Model.MenuPrice" />
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="control-label" for="Price"><strong class="text-secondary">Selling Price</strong></label>
-                                    <input id="Price" type="number" class="form-control" step="any" name="Price" min="1" value="@Model.Price" />
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="control-label" for="Price"><strong class="text-secondary">Percentage</strong></label>
-                                    <input id="Percentage" type="number" class="form-control" name="Percentage" min="1" value="@Model.Percentage" readonly />
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="control-label" for="Qty"><strong class="text-secondary">Quantity</strong></label>
-                                    <input id="Qty" type="number" class="form-control" name="Qty" min="1" value="@Model.Qty" />
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="control-label text-secondary font-weight-bold" for="DiscountCategoryId">Discount Category Name</label>
-                                <div class="form-group">
-                                    <select class="form-control" name="DiscountCategoryId" id="DiscountCategoryId">
-                                        <option value="@Model.DiscountCategoryId">@Model.DiscountCategoryName</option>
-                                    </select>
-                                    <input type="hidden" name="DiscountCategoryName" id="DiscountCategoryName" value="@Model.DiscountCategoryName" />
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="control-label" for="DiscountCategoryPercentage"><strong class="text-secondary">Discount Percentage</strong></label>
-                                    <input type="number" class="form-control" name="DiscountCategoryPercentage" id="DiscountCategoryPercentage" value="@Model.DiscountCategoryPercentage" readonly />
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="control-label"><strong class="text-secondary">Weight</strong></label>
-                                    <input type="number" class="form-control" name="Weight" id="weight" step="any" value="@Model.Weight" readonly />
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="control-label"><strong class="text-secondary">Size</strong></label>
-                                    <input type="text" class="form-control" name="SizeLB" id="SizeLBH" value="@Model.SizeLBH" readonly />
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="control-label"><strong class="text-secondary">Package Name</strong></label>
-                                    <input type="text" class="form-control" name="PackageName" id="PackageName" value="@Model.PackageName" readonly />
-                                    <input type="hidden" name="PackageId" id="PackageId" value="@Model.PackageId" />
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="control-label" for="GoogleTaxonomyCode"><strong class="text-secondary">Google Taxonomy Code</strong></label>
-                                <input id="GoogleTaxonomyCode" type="text" class="form-control" name="GoogleTaxonomyCode" value="@Model.GoogleTaxonomyCode" readonly />
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="control-label"><strong class="text-secondary">Manufacturer</strong></label>
-                                    <input type="text" class="form-control" name="Manufacturer" id="Manufacturer" value="@Model.Manufacturer" readonly />
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="control-label"><strong class="text-secondary">Origin Country</strong></label>
-                                    <input type="text" class="form-control" name="OriginCountry" id="OriginCountry" value="@Model.OriginCountry" readonly />
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="control-label" for="PackagingType"><strong class="text-secondary">Packing Type</strong></label>
-                                <div class="form-check-inline ml-3">
-                                    <label class="form-check-label">
-                                        <input type="radio" class="form-check-input" name="PackingType" value="0" @if (Model.PackingType == 0) { <text> checked </text> }>Item Qty
-                                    </label>
-                                </div>
-                                <div class="form-check-inline">
-                                    <label class="form-check-label">
-                                        <input type="radio" class="form-check-input" name="PackingType" value="1" @if (Model.PackingType == 1) { <text> checked </text> }>SKU
-                                    </label>
-                                </div>
-                                <input type="number" class="form-control" name="PackingCharge" id="PackingCharge" value="@Model.PackingCharge" />
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="control-label"><strong class="text-secondary">Loyalty Points per 100 Value</strong></label>
-                                    <input type="number" class="form-control" name="LoyaltyPoints" id="LoyaltyPoints" value="@Model.LoyaltyPoints"/>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="control-label"><strong class="text-secondary">Tax %</strong></label>
-                                <div class="form-group">
-                                    <input type="number" class="form-control" name="TaxPercentage" id="TaxPercentage" value="@Model.TaxPercentage"/>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="control-label"><strong class="text-secondary">Special Cost Of Delivery</strong></label>
-                                <div class="form-group">
-                                    <input type="number" class="form-control" name="SpecialCostOfDelivery" id="SpecialCostOfDelivery" value="@Model.SpecialCostOfDelivery"/>
-                                </div>
-                            </div>
+        <div class="card shadow mb-3">
+            <div class="card-body">
+                <div class="form-group row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-2">
+                        <label><strong class="text-secondary">Shop Name</strong></label>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @if (Model.ShopId != 0)
+                            {
+                                <input type="text" name="ShopName" class="form-control" id="ShopName" value="@Model.ShopName" readonly />
+                                <input type="hidden" name="ShopName" value="@Model.ShopName" />
+                                <input type="hidden" name="ShopId" value="@Model.ShopId" />
+                            }
                         </div>
                     </div>
                 </div>
-                <div class="card my-3">
-                    <div class="card-body">
-                        <div class="row mt-2">
-                            <h5 class="text-success">Drug Image(s)</h5>
-                        </div>
-                        <div class="row mt-2">
-                            <div class="col-md-2">
-                                <label class="control-label"><strong class="text-secondary">Drug Image 1</strong></label>
-                                <img id="img-ProductImage1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath1" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                            </div>
-                            <div class="col-md-2">
-                                <label class="control-label"><strong class="text-secondary">Drug Image 2</strong></label>
-                                <img id="img-ProductImage2" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath2" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                            </div>
-                            <div class="col-md-2">
-                                <label class="control-label"><strong class="text-secondary">Drug Image 3</strong></label>
-                                <img id="img-ProductImage3" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath3" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                            </div>
-                            <div class="col-md-2">
-                                <label class="control-label"><strong class="text-secondary">Drug Image 4</strong></label>
-                                <img id="img-ProductImage4" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath4" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                            </div>
-                            <div class="col-md-2">
-                                <label class="control-label"><strong class="text-secondary">Drug Image 5</strong></label>
-                                <img id="img-ProductImage5" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath5" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-3 mx-auto">
-                                <button type="button" class="btn btn-block btn-success Save"><span class="glyphicon glyphicon-file"></span> Save</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <label class="control-label">
+                            <span class="text-secondary font-weight-bold">Drug Name</span>
+                        </label>
+                        <div class="form-group">
+                            <div class="Select2Name">
+                                @*<select id="MasterProductCode" name="MasterProductCode" class="form-control"></select>*@
+                                <input type="text" name="MasterProductName" id="MasterProductName" class="form-control" value="@Model.MasterProductName" readonly />
+                                <input type="hidden" name="MasterProductId" id="MasterProductId" value="@Model.MasterProductId" />
+                                <input type="hidden" name="Name" value="@Model.Name" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label text-secondary font-weight-bold" for="BrandCode">Brand Name</label>
+                        <div class="form-group">
+                            <input type="hidden" name="BrandId" id="BrandId" value="@Model.BrandId" />
+                            <input type="text" class="form-control" name="BrandName" id="BrandName" value="@Model.BrandName" readonly />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label text-secondary font-weight-bold" for="CategoryId">Category Name</label>
+                        <div class="form-group">
+                            <input type="hidden" name="CategoryId" id="CategoryId" value="@Model.CategoryId" />
+                            <input type="text" class="form-control" name="CategoryName" id="CategoryName" value="@Model.CategoryName" readonly />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label text-secondary font-weight-bold" for="DrugMeasurementUnitCode">Drug Measurement Unit Name</label>
+                        <div class="form-group">
+                            <input type="hidden" name="DrugMeasurementUnitId" id="DrugMeasurementUnitId" value="@Model.DrugMeasurementUnitId" />
+                            <input type="text" class="form-control" name="DrugMeasurementUnitName" id="DrugMeasurementUnitName" value="@Model.DrugMeasurementUnitName" readonly />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="control-label text-secondary font-weight-bold" for="DrugCompoundDetailCode">Combination DrugCompound</label>
+                        <div class="form-group">
+                            @*<select class="form-control" name="DrugCompoundDetailCode" id="DrugCompoundDetailCode" multiple></select>*@
+                            <input type="text" class="form-control" name="DrugCompoundDetailName" id="DrugCompoundDetailName" value="@Model.DrugCompoundDetailName" readonly />
+                            <input type="hidden" name="DrugCompoundDetailIds" id="DrugCompoundDetailIds" value="@Model.DrugCompoundDetailIds" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label"><strong class="text-secondary">Prescription</strong></label>
+                            <select class="form-control" name="PriscriptionCategory" id="PriscriptionCategory" disabled>
+                                <option value="Select">Select Prescription</option>
+                                <option value="True">Rx Required</option>
+                                <option value="False">Rx Not Required</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label"><strong class="text-secondary">iBarU</strong></label>
+                            <input type="text" class="form-control" name="IBarU" id="iBarU" value="@Model.IBarU" readonly />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label" for="MenuPrice"><strong class="text-secondary">Menu Price</strong></label>
+                            <input id="MenuPrice" type="number" class="form-control" step="any" name="MenuPrice" min="1" value="@Model.MenuPrice" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label" for="Price"><strong class="text-secondary">Selling Price</strong></label>
+                            <input id="Price" type="number" class="form-control" step="any" name="Price" min="1" value="@Model.Price" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label" for="Price"><strong class="text-secondary">Percentage</strong></label>
+                            <input id="Percentage" type="number" class="form-control" name="Percentage" min="1" value="@Model.Percentage" readonly />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label" for="Qty"><strong class="text-secondary">Quantity</strong></label>
+                            <input id="Qty" type="number" class="form-control" name="Qty" min="1" value="@Model.Qty" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label text-secondary font-weight-bold" for="DiscountCategoryId">Discount Category Name</label>
+                        <div class="form-group">
+                            <select class="form-control" name="DiscountCategoryId" id="DiscountCategoryId">
+                                <option value="@Model.DiscountCategoryId">@Model.DiscountCategoryName</option>
+                            </select>
+                            <input type="hidden" name="DiscountCategoryName" id="DiscountCategoryName" value="@Model.DiscountCategoryName" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label" for="DiscountCategoryPercentage"><strong class="text-secondary">Discount Percentage</strong></label>
+                            <input type="number" class="form-control" name="DiscountCategoryPercentage" id="DiscountCategoryPercentage" value="@Model.DiscountCategoryPercentage" readonly />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label"><strong class="text-secondary">Weight</strong></label>
+                            <input type="number" class="form-control" name="Weight" id="weight" step="any" value="@Model.Weight" readonly />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label"><strong class="text-secondary">Size</strong></label>
+                            <input type="text" class="form-control" name="SizeLB" id="SizeLBH" value="@Model.SizeLBH" readonly />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label"><strong class="text-secondary">Package Name</strong></label>
+                            <input type="text" class="form-control" name="PackageName" id="PackageName" value="@Model.PackageName" readonly />
+                            <input type="hidden" name="PackageId" id="PackageId" value="@Model.PackageId" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label" for="GoogleTaxonomyCode"><strong class="text-secondary">Google Taxonomy Code</strong></label>
+                        <input id="GoogleTaxonomyCode" type="text" class="form-control" name="GoogleTaxonomyCode" value="@Model.GoogleTaxonomyCode" readonly />
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label"><strong class="text-secondary">Manufacturer</strong></label>
+                            <input type="text" class="form-control" name="Manufacturer" id="Manufacturer" value="@Model.Manufacturer" readonly />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label"><strong class="text-secondary">Origin Country</strong></label>
+                            <input type="text" class="form-control" name="OriginCountry" id="OriginCountry" value="@Model.OriginCountry" readonly />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label" for="PackingType"><strong class="text-secondary">Packing Type</strong></label>
+                        <div class="form-check-inline ml-3">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="PackingType" value="0" @if (Model.PackingType == 0) { <text> checked </text> }>Item Qty
+                            </label>
+                        </div>
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="PackingType" value="1" @if (Model.PackingType == 1) { <text> checked </text> }>SKU
+                            </label>
+                        </div>
+                        <input type="number" class="form-control" name="PackingCharge" id="PackingCharge" value="@Model.PackingCharge" />
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label"><strong class="text-secondary">Loyalty Points per 100 Value</strong></label>
+                            <input type="number" class="form-control" name="LoyaltyPoints" id="LoyaltyPoints" value="@Model.LoyaltyPoints" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label"><strong class="text-secondary">Tax %</strong></label>
+                        <div class="form-group">
+                            <input type="number" class="form-control" name="TaxPercentage" id="TaxPercentage" value="@Model.TaxPercentage" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label"><strong class="text-secondary">Special Cost Of Delivery</strong></label>
+                        <div class="form-group">
+                            <input type="number" class="form-control" name="SpecialCostOfDelivery" id="SpecialCostOfDelivery" value="@Model.SpecialCostOfDelivery" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card my-3">
+            <div class="card-body">
+                <div class="row mt-2">
+                    <h5 class="text-success">Drug Image(s)</h5>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-2">
+                        <label class="control-label"><strong class="text-secondary">Drug Image 1</strong></label>
+                        <img id="img-ProductImage1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath1" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="control-label"><strong class="text-secondary">Drug Image 2</strong></label>
+                        <img id="img-ProductImage2" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath2" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="control-label"><strong class="text-secondary">Drug Image 3</strong></label>
+                        <img id="img-ProductImage3" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath3" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="control-label"><strong class="text-secondary">Drug Image 4</strong></label>
+                        <img id="img-ProductImage4" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath4" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="control-label"><strong class="text-secondary">Drug Image 5</strong></label>
+                        <img id="img-ProductImage5" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath5" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-3 mx-auto">
+                        <button type="button" class="btn btn-block btn-success Save"><span class="glyphicon glyphicon-file"></span> Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 }
 @*Image Modal*@
@@ -297,7 +308,6 @@
                 };
             });
         });
-
     </script>
 }
 
