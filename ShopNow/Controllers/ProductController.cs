@@ -323,7 +323,7 @@ namespace ShopNow.Controllers
                 model.PackageId = masterProduct.PackageId;
                 model.PackageName = masterProduct.PackageName;
                 model.Weight = masterProduct.Weight;
-                model.SizeLBH = masterProduct.SizeLBH;
+                model.SizeLBH = masterProduct.SizeLWH;
                 model.DrugCompoundDetailIds = masterProduct.DrugCompoundDetailIds;
                 model.DrugCompoundDetailName = masterProduct.DrugCompoundDetailName;
                 model.OriginCountry = masterProduct.OriginCountry;
@@ -852,7 +852,7 @@ namespace ShopNow.Controllers
                 model.PackageId = masterProduct.PackageId;
                 model.PackageName = masterProduct.PackageName;
                 model.Weight = masterProduct.Weight;
-                model.SizeLBH = masterProduct.SizeLBH;
+                model.SizeLBH = masterProduct.SizeLWH;
             }
             return View(model);
         }
@@ -1332,7 +1332,7 @@ namespace ShopNow.Controllers
                 OriginCountry = i.OriginCountry,
                 iBarU = i.IBarU,
                 weight = i.Weight,
-                SizeLB = i.SizeLBH,
+                SizeLB = i.SizeLWH,
                 Price = i.Price,
                 ImagePath1 = i.ImagePath1,
                 ImagePath2 = i.ImagePath2,
@@ -1483,7 +1483,7 @@ namespace ShopNow.Controllers
                     ASIN = i.ASIN,
                     GoogleTaxonomyCode = i.GoogleTaxonomyCode,
                     Weight = i.Weight,
-                    SizeLBH = i.SizeLBH,
+                    SizeLBH = i.SizeLWH,
                     MeasurementUnitId = i.MeasurementUnitId,
                     MeasurementUnitName = i.MeasurementUnitName,
                     PackageId = i.PackageId,
@@ -1552,7 +1552,7 @@ namespace ShopNow.Controllers
                 ASIN = i.ASIN,
                 GoogleTaxonomyCode = i.GoogleTaxonomyCode,
                 weight = i.Weight,
-                SizeLB = i.SizeLBH,
+                SizeLB = i.SizeLWH,
                 MeasurementUnitId = i.MeasurementUnitId,
                 MeasurementUnitName = i.MeasurementUnitName,
                 PackageId = i.PackageId,

@@ -502,7 +502,10 @@
           <Property Name="MeasurementUnitId" Type="int" Nullable="false" />
           <Property Name="MeasurementUnitName" Type="nvarchar(max)" />
           <Property Name="PriscriptionCategory" Type="bit" Nullable="false" />
-          <Property Name="SizeLBH" Type="float" Nullable="false" />
+          <Property Name="Length" Type="float" Nullable="false" />
+          <Property Name="Width" Type="float" Nullable="false" />
+          <Property Name="Height" Type="float" Nullable="false" />
+          <Property Name="SizeLWH" Type="float" Nullable="false" />
           <Property Name="Weight" Type="float" Nullable="false" />
           <Property Name="DrugCompoundDetailIds" Type="nvarchar(max)" />
           <Property Name="DrugCompoundDetailName" Type="nvarchar(max)" />
@@ -2745,8 +2748,8 @@
             <Parameter Name="page" Mode="In" Type="Int32" />
             <Parameter Name="pageSize" Mode="In" Type="Int32" />
           </FunctionImport>
-          <EntitySet Name="MasterProducts" EntityType="sncModel.MasterProduct" />
           <EntitySet Name="Crusts" EntityType="sncModel.Crust" />
+          <EntitySet Name="MasterProducts" EntityType="sncModel.MasterProduct" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3135,6 +3138,18 @@
           <Property Type="Time" Name="NextOnTime" Nullable="true" />
           <Property Type="Boolean" Name="IsOffer" Nullable="true" />
         </ComplexType>
+        <EntityType Name="Crust">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="CreatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
         <EntityType Name="MasterProduct">
           <Key>
             <PropertyRef Name="Id" />
@@ -3154,7 +3169,10 @@
           <Property Name="MeasurementUnitId" Type="Int32" Nullable="false" />
           <Property Name="MeasurementUnitName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="PriscriptionCategory" Type="Boolean" Nullable="false" />
-          <Property Name="SizeLBH" Type="Double" Nullable="false" />
+          <Property Name="Length" Type="Double" Nullable="false" />
+          <Property Name="Width" Type="Double" Nullable="false" />
+          <Property Name="Height" Type="Double" Nullable="false" />
+          <Property Name="SizeLWH" Type="Double" Nullable="false" />
           <Property Name="Weight" Type="Double" Nullable="false" />
           <Property Name="DrugCompoundDetailIds" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="DrugCompoundDetailName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -3179,18 +3197,6 @@
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="Crust">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="CreatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UpdatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -4539,6 +4545,19 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="Crusts">
+            <EntityTypeMapping TypeName="sncModel.Crust">
+              <MappingFragment StoreEntitySet="Crusts">
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="MasterProducts">
             <EntityTypeMapping TypeName="sncModel.MasterProduct">
               <MappingFragment StoreEntitySet="MasterProducts">
@@ -4566,7 +4585,10 @@
                 <ScalarProperty Name="DrugCompoundDetailName" ColumnName="DrugCompoundDetailName" />
                 <ScalarProperty Name="DrugCompoundDetailIds" ColumnName="DrugCompoundDetailIds" />
                 <ScalarProperty Name="Weight" ColumnName="Weight" />
-                <ScalarProperty Name="SizeLBH" ColumnName="SizeLBH" />
+                <ScalarProperty Name="SizeLWH" ColumnName="SizeLWH" />
+                <ScalarProperty Name="Height" ColumnName="Height" />
+                <ScalarProperty Name="Width" ColumnName="Width" />
+                <ScalarProperty Name="Length" ColumnName="Length" />
                 <ScalarProperty Name="PriscriptionCategory" ColumnName="PriscriptionCategory" />
                 <ScalarProperty Name="MeasurementUnitName" ColumnName="MeasurementUnitName" />
                 <ScalarProperty Name="MeasurementUnitId" ColumnName="MeasurementUnitId" />
@@ -4580,19 +4602,6 @@
                 <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
                 <ScalarProperty Name="BrandName" ColumnName="BrandName" />
                 <ScalarProperty Name="BrandId" ColumnName="BrandId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Crusts">
-            <EntityTypeMapping TypeName="sncModel.Crust">
-              <MappingFragment StoreEntitySet="Crusts">
-                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
