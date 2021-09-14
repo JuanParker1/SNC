@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ShopNow.ViewModels.CartListViewModel.CartList>
+﻿@model IEnumerable<ShopNow.ViewModels.CartListViewModel.CartPreparedList>
 @using GridMvc.Html
 @{
     ViewBag.Title = "Order Prepared List";
@@ -33,8 +33,8 @@
        columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
        columns.Add(c => c.PaymentMode).Titled("Payment Mode").Filterable(true).SetWidth(15);
        columns.Add(c => c.Price).Titled("Amount").Filterable(true).SetWidth(10);
-       columns.Add().RenderValueAs(c => c.CartStatus == 3 ? "Order is being Prepared" : "Delivery Boy Assigned").Titled("Order Status").Filterable(true).SetWidth(10);
-       columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10);
+       columns.Add().RenderValueAs(c => c.Status == 3 ? "Order is being Prepared" : "Delivery Boy Assigned").Titled("Order Status").Filterable(true).SetWidth(10);
+       columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
        columns.Add()
        .Encoded(false)
        .Sanitized(false)

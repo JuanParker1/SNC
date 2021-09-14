@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ShopNow.ViewModels.CartListViewModel.CartList>
+﻿@model IEnumerable<ShopNow.ViewModels.CartListViewModel.PickupList>
 @using GridMvc.Html
 @{
     ViewBag.Title = "Waiting For Pickup List";
@@ -33,9 +33,9 @@
         columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
         columns.Add(c => c.PaymentMode).Titled("Payment Mode").Filterable(true).SetWidth(12);
         columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(8);
-        columns.Add(c => c.PhoneNumber).Titled("D.Boy Phone").Filterable(true).SetWidth(10);
-        columns.Add().RenderValueAs(c => c.CartStatus == 5 ? "Waiting for Pickup" : "Waiting for Pickup").Titled("Order Status").Filterable(true).SetWidth(15);
-        columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(15);
+        columns.Add(c => c.DeliveryBoyPhoneNumber).Titled("D.Boy Phone").Filterable(true).SetWidth(10);
+        columns.Add().RenderValueAs(c => c.Status == 5 ? "Waiting for Pickup" : "Waiting for Pickup").Titled("Order Status").Filterable(true).SetWidth(15);
+        columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(15).Format("{0:dd-MMM-yyyy}");
         columns.Add()
        .Encoded(false)
        .Sanitized(false)

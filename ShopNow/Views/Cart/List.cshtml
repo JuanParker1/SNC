@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ShopNow.ViewModels.CartListViewModel.CartList>
+﻿@model IEnumerable<ShopNow.ViewModels.CartListViewModel.TodayList>
 @using GridMvc.Html
 @{
     ViewBag.Title = "Cart List";
@@ -8,7 +8,6 @@
 
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-
 <div class="container-fluid">
     <div class="row my-2">
         <div class="col-md-4">
@@ -33,9 +32,9 @@
                    columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
                    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
                    columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(20);
-                   columns.Add(c => c.PhoneNumber).Titled("Phone").Filterable(true).SetWidth(10);
-                   columns.Add(c => c.DateTimeText).Titled("Date").Filterable(true).SetWidth(10);
-                   columns.Add(c => c.CartStatusText).Titled("Order Status").Filterable(true).SetWidth(15);
+                   columns.Add(c => c.ShopPhoneNumber).Titled("Phone").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
+                   columns.Add(c => c.OrderStatusText).Titled("Order Status").Filterable(true).SetWidth(15);
                    columns.Add()
                    .Encoded(false)
                    .Sanitized(false)

@@ -1,10 +1,10 @@
-﻿@model IEnumerable<ShopNow.ViewModels.CartListViewModel.CartPendingList>
+﻿@model IEnumerable<ShopNow.ViewModels.CartListViewModel.DeliveryAgentAssignedList>
 @using GridMvc.Html
 @{
-    ViewBag.Title = "Pending List";
+    ViewBag.Title = "Delivery Agent Assigned List";
 }
 
-<title>ShopNow | @ViewBag.Title</title>
+<title>ShopNow | Delivery Agent Assigned List</title>
 
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
@@ -12,7 +12,7 @@
 <div class="container-fluid">
     <div class="row my-2">
         <div class="col-md-4">
-            <h5 class="text-success">@ViewBag.Title</h5>
+            <h5 class="mt-1 text-success" style="letter-spacing:1px">DELIVERY AGENT ASSIGNED LIST</h5>
         </div>
         <div class="col-md-3">
             <select name="ShopId" id="ShopId" class="form-control"></select>
@@ -28,29 +28,30 @@
             <div class="card shadow mt-3">
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
-    {
+   {
        columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
        columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
-       columns.Add(c => c.PaymentMode).Titled("PaymentMode").Filterable(true).SetWidth(12);
-       columns.Add(c => c.ShopOwnerPhoneNumber).Titled("PhoneNo").Filterable(true).SetWidth(10);
-       columns.Add(c => c.Price).Titled("Amount").Filterable(true).SetWidth(10);
-       columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(13).Format("{0:dd-MMM-yyyy}");
-       columns.Add().RenderValueAs(c => c.Status == 2 ? "Pending" :"N/A").Titled("Order Status").Filterable(true).SetWidth(12);
+       columns.Add(c => c.PaymentMode).Titled("PaymentMode").Filterable(true).SetWidth(15);
+       columns.Add(c => c.DeliveryBoyName).Titled("DeliveryBoy").Filterable(true).SetWidth(10);
+       columns.Add(c => c.DeliveryBoyPhoneNumber).Titled("D.Boy Phone").Filterable(true).SetWidth(15);
+       columns.Add().RenderValueAs(c => c.Status == 4 ? "Assigned for Delivery" : "Waiting for Pickup").Titled("Order Status").Filterable(true).SetWidth(10);
+       columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
        columns.Add()
-       .Encoded(false)
-       .Sanitized(false)
-       .RenderValueAs(o => Html.ActionLink("View", "Edit", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-info btn-block",  }).ToHtmlString()
-       + Html.ActionLink("Pickup Slip", "PickupSlip", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-secondary btn-block", }).ToHtmlString()).Titled("Action").SetWidth(15);
-       columns.Add()
-       .Encoded(false)
-       .Sanitized(false)
-       .RenderValueAs(o => (o.RefundAmount == 0 || o.RefundAmount == null) ? "<a href='#modal-refund' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-refund' class='btn btn-sm btn-primary btn-modal-refund mt-3 btn-block'>Refund</a>" : o.RefundAmount.Value > 0 ? "<span>" + o.RefundAmount + "(" + o.RefundRemark + ")" + "</span>" : "N/A").Titled("Refund").SetWidth(10);
-     }).WithPaging(20).Sortable(true)
+      .Encoded(false)
+      .Sanitized(false)
+      .RenderValueAs(o => Html.ActionLink("View", "Edit", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-vsm btn-info mr-1" }).ToHtmlString()
+      + Html.ActionLink("Pickup Slip", "PickupSlip", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-vsm btn-secondary mr-1" }).ToHtmlString()
+      + Html.ActionLink("UnAssigned", "UnAssignDeliveryBoy", new { ordernumber = o.OrderNumber }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
+      columns.Add()
+      .Encoded(false)
+      .Sanitized(false)
+      .RenderValueAs(o => (o.RefundAmount == 0 || o.RefundAmount == null) ? "<a href='#modal-refund' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-refund' class='btn btn-vsm btn-primary btn-modal-refund'>Refund</a>" : o.RefundAmount.Value > 0 ? "<span>" + o.RefundAmount + "(" + o.RefundRemark + ")" + "</span>" : "N/A").Titled("Refund").SetWidth(10);
+   }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
-    </div>  
-    
+    </div>
+
 </div>
 
 <div class="modal fade" id="modal-refund" tabindex="-1" role="dialog">
@@ -59,7 +60,7 @@
             <div class="modal-body">
                 <form method="get" action="/Cart/AddRefundFromShopOrderProcessing">
                     <input type="hidden" name="Id" />
-                    <input type="hidden" name="Redirection" value="0" />
+                    <input type="hidden" name="Redirection" value="2" />
                     <h5>Initiate Refund</h5>
                     <div class="form-group">
                         <label>Amount</label>
@@ -88,7 +89,6 @@
     <!--Select2 End-->
     <script>
         $(document).ready(function () {
-            
             $('#ShopId').select2({
                 placeholder: "Search Shop",
                 ajax: {
@@ -103,7 +103,18 @@
 
             $("#Filter").click(function () {
                 var shopId = $("#ShopId").val();
-                window.location.href = "/Cart/Pending/?shopId=" + shopId;
+                window.location.href = "/Cart/DeliveryAgentAssigned/?shopId=" + shopId;
+            });
+
+            $("#btnReject").click(function () {
+                var ordernumber = $(this).data("ordernumber");
+                $.getJSON("/Cart/DeliveryBoyReject", { ordernumber: ordernumber }, function (data) {
+                    if (data == true) {
+                        window.location.href = "/Cart/OrderPrepared";
+                    } else {
+                        window.location.reload();
+                    }
+                });
             });
 
             $(".btn-modal-refund").click(function () {

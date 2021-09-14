@@ -35,11 +35,11 @@
        columns.Add(c => c.ShopOwnerPhoneNumber).Titled("PhoneNo").Filterable(true).SetWidth(10);
        columns.Add(c => c.Price).Titled("Amount").Filterable(true).SetWidth(10);
        columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(13).Format("{0:dd-MMM-yyyy}");
-       columns.Add().RenderValueAs(c => c.Status == 2 ? "Pending" :"N/A").Titled("Order Status").Filterable(true).SetWidth(12);
+       columns.Add().RenderValueAs(c => c.Status == 2 ? "Pending" : "N/A").Titled("Order Status").Filterable(true).SetWidth(12);
        columns.Add()
        .Encoded(false)
        .Sanitized(false)
-       .RenderValueAs(o => Html.ActionLink("View", "Edit", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-info btn-block",  }).ToHtmlString()
+       .RenderValueAs(o => Html.ActionLink("View", "Edit", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-info btn-block", }).ToHtmlString()
        + Html.ActionLink("Pickup Slip", "PickupSlip", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-secondary btn-block", }).ToHtmlString()).Titled("Action").SetWidth(15);
        columns.Add()
        .Encoded(false)
@@ -49,8 +49,8 @@
                 </div>
             </div>
         </div>
-    </div>  
-    
+    </div>
+
 </div>
 
 <div class="modal fade" id="modal-refund" tabindex="-1" role="dialog">
@@ -88,7 +88,7 @@
     <!--Select2 End-->
     <script>
         $(document).ready(function () {
-            
+
             $('#ShopId').select2({
                 placeholder: "Search Shop",
                 ajax: {
