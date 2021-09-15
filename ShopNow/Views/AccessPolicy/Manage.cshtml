@@ -125,7 +125,7 @@
             }).draw();
 
             $('#ShopId').select2({
-                placeholder: "Search Shop",
+                placeholder: "Select Shop",
                 ajax: {
                     url: "/AccessPolicy/GetShopSelect2",
                     width: '100%',
@@ -135,7 +135,7 @@
             }).on('select2:select', function (e) {
                 $('input[name="ShopName"]').val(e.params.data.text);
                 $("#StaffId").select2({
-                    placeholder: "Search Staff",
+                    placeholder: "Select Staff",
                     ajax: {
                         url: "/AccessPolicy/GetStaffSelect2?ShopId=" + e.params.data.id,
                         width: "100%",

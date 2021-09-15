@@ -18,7 +18,7 @@
             @using (Html.BeginForm("Create", "DeliveryBoy", FormMethod.Post, new { id = "DeliveryBoyForm", role = "form", enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
-                <div class="card CustomerCheck">
+                <div class="card shadow CustomerCheck">
                     <div class="card-body">
                         <div class="row form-group">
                             <div class="col-md-4">
@@ -32,7 +32,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card mb-4 d-none DBoy">
+                <div class="card shadow mb-4 d-none DBoy">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12">
