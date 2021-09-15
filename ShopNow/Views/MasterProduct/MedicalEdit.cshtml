@@ -85,28 +85,50 @@
                                             <input type="text" class="form-control" name="Manufacturer" id="Manufacturer" value="@Model.Manufacturer" />
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <div class="form-group">
                                             <label class="control-label"><strong class="text-secondary">Origin Country</strong></label>
                                             <input type="text" class="form-control" name="OriginCountry" id="OriginCountry" value="@Model.OriginCountry" />
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <div class="form-group">
                                             <label class="control-label"><strong class="text-secondary">iBarU</strong></label>
                                             <input type="number" class="form-control" name="IBarU" id="IBarU" value="@Model.IBarU" />
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <div class="form-group">
                                             <label class="control-label"><strong class="text-secondary">Weight</strong></label>
-                                            <input type="number" class="form-control" name="Weight" id="Weight" value="@Model.Weight"  step="any"/>
+                                            <input type="number" class="form-control" name="Weight" id="Weight" value="@Model.Weight" step="any" />
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label class="control-label"><strong class="text-secondary">Size</strong></label>
-                                            <input type="text" class="form-control" name="SizeLWH" id="SizeLWH" value="@Model.SizeLWH" />
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label class="control-label"><strong class="text-secondary">Length(cms)</strong></label>
+                                                    <input type="number" class="form-control" name="Length" id="Length" min="0" value="@Model.Length" />
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label class="control-label"><strong class="text-secondary">Width(cms)</strong></label>
+                                                    <input type="number" class="form-control" name="Width" id="Width" min="0" value="@Model.Width" />
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label class="control-label"><strong class="text-secondary">Height(cms)</strong></label>
+                                                    <input type="number" class="form-control" name="Height" id="Height" min="0" value="@Model.Height" />
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label class="control-label"><strong class="text-secondary">Size</strong></label>
+                                                    <input type="text" class="form-control" name="SizeLWH" id="SizeLWH" readonly value="@Model.SizeLWH" />
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -393,6 +415,17 @@
             $("#MedicalImage5").change(function () {
                 readURLDrug5(this);
             });
+
+            $('#Length,#Width,#Height').on('change', function () {
+                calculateSizeLWH();
+            });
+            function calculateSizeLWH() {
+                var length = $('#Length').val();
+                var width = $('#Width').val();
+                var height = $('#Height').val();
+                var size = parseFloat(length * width * height).toFixed(2);
+                $('#SizeLWH').val(size);
+            }
 
         });
     </script>

@@ -4561,6 +4561,18 @@ namespace ShopNow.Controllers
             return Json(mode, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetCustomerPaymentMode(int customerId)//If Customer Cancel the order(not pick up the phone on delivery) next 5 orders should be Online Mode
+        {
+            var lastCancelledOrder = db.Orders.AsEnumerable().LastOrDefault(i => i.CustomerId == customerId && i.Status == 9); //Replace with customer cancel status
+            if (lastCancelledOrder != null)
+            {
+                int orderCountAfterLC = db.Orders.Where(i => i.CustomerId == customerId && i.Status == 6 && (i.DateEncoded > lastCancelledOrder.DateEncoded)).Count();
+                if (orderCountAfterLC < 5)
+                    return Json(new { isOnline = true }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { isOnline = false }, JsonRequestBehavior.AllowGet);
+        }
+
         public void UpdateAchievements(int customerId)
         {
             var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
