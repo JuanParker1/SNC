@@ -290,17 +290,18 @@
                 $('input[name="MeasurementUnitName"]').val(e.params.data.MeasurementUnitName);
                 $('input[name="PackageId"]').val(e.params.data.PackageId);
                 $('input[name="PackageName"]').val(e.params.data.PackageName);
+                if (e.params.data.CategoryId != 0 && e.params.data.SubCategoryId != 0 && e.params.data.NextSubCategoryId != 0) {
                 $.getJSON("/Product/GetSelectCategoryNames", { categoryId: e.params.data.CategoryId, subcategoryId: e.params.data.SubCategoryId, nextsubcategoryId: e.params.data.NextSubCategoryId }, function (data) {
                     $('#CategoryName').val(data.categoryName);
                     $('#SubCategoryName').val(data.subcategoryname);
                     $('#NextSubCategoryName').val(data.nextsubcategoryname);
                 });
+                }
             });
 
-
             $(".Save").click(function () {
-                var shopcode = $("#ShopId").val();
-                if (shopcode != null) {
+                var shopid = $("#ShopId").val();
+                if (shopid != null) {
                     if ($('#MasterProductId').val()) {
                         $('#FMCGCreateForm').submit();
                     } else {
@@ -310,7 +311,6 @@
                     swal("Notice!", "Please Select Shop!", "warning");
                 }
             });
-
         });
     </script>
 }

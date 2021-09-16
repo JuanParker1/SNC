@@ -353,9 +353,11 @@
                     $('#img-ProductImage3').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath3);
                     $('#img-ProductImage4').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath4);
                     $('#img-ProductImage5').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath5);
-                    $.getJSON("/Product/GetCategoryName", { categoryId: e.params.data.CategoryId }, function (data) {
-                        $('#CategoryName').val(data.categoryName);
-                    });
+                    if (e.params.data.CategoryId != 0) {
+                        $.getJSON("/Product/GetCategoryName", { categoryId: e.params.data.CategoryId }, function (data) {
+                            $('#CategoryName').val(data.categoryName);
+                        });
+                    }
                 });
             });
     </script>
