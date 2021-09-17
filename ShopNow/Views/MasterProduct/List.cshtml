@@ -33,23 +33,23 @@
                .RenderValueAs(o => @<div>
                         @if (o.ProductTypeId == 1)
                                  {
-                            <a href="~/MasterProduct/FoodEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
+                            <a href="~/MasterProduct/FoodEdit?Id=@HttpUtility.UrlEncode(ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id))" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
                                  }
                                  else if (@o.ProductTypeId == 2)
                                  {
-                            <a href="~/MasterProduct/FMCGEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
+                            <a href="~/MasterProduct/FMCGEdit?Id=@HttpUtility.UrlEncode(ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id))" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
                                  }
                                  else if (@o.ProductTypeId == 3)
                                  {
-                            <a href="~/MasterProduct/MedicalEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
+                            <a href="~/MasterProduct/MedicalEdit?Id=@HttpUtility.UrlEncode(ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id))" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
                                  }
                                  else if (@o.ProductTypeId == 4)
                                  {
-                            <a href="~/MasterProduct/ElectronicEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
+                            <a href="~/MasterProduct/ElectronicEdit?Id=@HttpUtility.UrlEncode(ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id))" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
                                  }
                                  else
                                  {
-                            <a href="~/MasterProduct/ServiceEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
+                            <a href="~/MasterProduct/ServiceEdit?Id=@HttpUtility.UrlEncode(ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id))" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
                                  }
                         <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
                     </div>);

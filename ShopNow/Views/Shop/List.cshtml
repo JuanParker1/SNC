@@ -55,7 +55,7 @@
                     .RenderValueAs(s => new HtmlString("<label class='switch'> <input type='checkbox' value='" + s.IsOnline + "' Id='Id_" + s.Id + "' class='CheckOnline' data-id='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(8);
                columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
                     .RenderValueAs(o => @<div>
-                            <a href="~/Shop/Edit?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-4"><i class="fa fa-edit fa-lg"></i></a>
+                            <a href="~/Shop/Edit?id=@HttpUtility.UrlEncode(ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id))" class="text-info mr-4"><i class="fa fa-edit fa-lg"></i></a>
                             <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
                         </div>);
             }).WithPaging(20).Sortable(true)
