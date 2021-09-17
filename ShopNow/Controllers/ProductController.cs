@@ -1006,14 +1006,12 @@ namespace ShopNow.Controllers
             var prod = db.Products.FirstOrDefault(i => i.Id == model.Id);
             _mapper.Map(model, prod);
             prod.Name = model.Name;
-            prod.ProductTypeName = model.ProductType;
             prod.UpdatedBy = user.Name;
-            prod.DateUpdated = DateTime.Now;
             prod.DateUpdated = DateTime.Now;
             db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
-            return RedirectToAction("ElectronicList", new { ShopId = prod.ShopId, shopName = prod.ShopName });
+            return RedirectToAction("ElectronicEdit", new { id = AdminHelpers.ECodeLong(model.Id) });
         }
 
         public ActionResult ElectronicList(ElectronicListViewModel model)

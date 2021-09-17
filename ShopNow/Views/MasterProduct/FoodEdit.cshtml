@@ -24,7 +24,7 @@
             @using (Html.BeginForm("FoodEdit", "MasterProduct", FormMethod.Post, new { id = "DishUpdateForm", role = "form", enctype = "multipart/form-data", autocomplete = "off" }))
             {
                 @Html.AntiForgeryToken()
-                <div class="card">
+                <div class="card shadow">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-3">
@@ -343,7 +343,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (var s in Model.AddonLists)
+                                       @foreach (var s in Model.AddonLists)
                                         {
                                             var totalcount = Model.AddonLists.Count();
                                             var count = Model.AddonLists.IndexOf(s);
