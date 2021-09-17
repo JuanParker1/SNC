@@ -1036,6 +1036,7 @@ namespace ShopNow.Controllers
         public ActionResult CreditsHistory()
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var model = new ShopCreditViewModel();
             model.Lists = db.Payments.Where(i => i.CreditType == 0 || i.CreditType == 1 && i.Amount != -20)
                  .Join(db.Shops, p => p.ShopId, s => s.Id, (p, s) => new { p, s })
