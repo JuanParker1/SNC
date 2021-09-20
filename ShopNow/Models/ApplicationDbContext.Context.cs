@@ -34,7 +34,6 @@ namespace ShopNow.Models
         public virtual DbSet<ApiSetting> ApiSettings { get; set; }
         public virtual DbSet<AppDetail> AppDetails { get; set; }
         public virtual DbSet<Banner> Banners { get; set; }
-        public virtual DbSet<Bill> Bills { get; set; }
         public virtual DbSet<BrandOwner> BrandOwners { get; set; }
         public virtual DbSet<Brand> Brands { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
@@ -86,6 +85,7 @@ namespace ShopNow.Models
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Crust> Crusts { get; set; }
         public virtual DbSet<MasterProduct> MasterProducts { get; set; }
+        public virtual DbSet<Bill> Bills { get; set; }
     
         [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)

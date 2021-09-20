@@ -157,6 +157,7 @@
           <Property Name="UpdatedBy" Type="nvarchar(max)" />
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
+          <Property Name="VehicleType" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="BrandOwners">
           <Key>
@@ -1672,34 +1673,6 @@
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Payment" Relationship="Self.FK_Banners_Payments" FromRole="Banners" ToRole="Payments" />
         </EntityType>
-        <EntityType Name="Bill">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CustomerId" Type="Int32" Nullable="false" />
-          <Property Name="CustomerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ShopId" Type="Int32" Nullable="false" />
-          <Property Name="ShopName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="NameOfBill" Type="Int32" Nullable="false" />
-          <Property Name="ConvenientCharge" Type="Double" Nullable="false" />
-          <Property Name="PackingCharge" Type="Double" Nullable="false" />
-          <Property Name="TotalAmount" Type="Double" Nullable="false" />
-          <Property Name="Distance" Type="Int32" Nullable="false" />
-          <Property Name="ItemType" Type="Int32" Nullable="false" />
-          <Property Name="DeliveryChargeKM" Type="Double" Nullable="false" />
-          <Property Name="DeliveryChargeOneKM" Type="Double" Nullable="false" />
-          <Property Name="DeliveryChargeCustomer" Type="Double" Nullable="false" />
-          <Property Name="DeliveryRateSet" Type="Int32" Nullable="false" />
-          <Property Name="PlatformCreditRate" Type="Double" Nullable="false" />
-          <Property Name="PlatformCreditRateId" Type="Int32" Nullable="false" />
-          <Property Name="Type" Type="Int32" Nullable="false" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
         <EntityType Name="BrandOwner">
           <Key>
             <PropertyRef Name="Id" />
@@ -2613,7 +2586,6 @@
           <EntitySet Name="ApiSettings" EntityType="Self.ApiSetting" />
           <EntitySet Name="AppDetails" EntityType="Self.AppDetail" />
           <EntitySet Name="Banners" EntityType="Self.Banner" />
-          <EntitySet Name="Bills" EntityType="Self.Bill" />
           <EntitySet Name="BrandOwners" EntityType="Self.BrandOwner" />
           <EntitySet Name="Brands" EntityType="Self.Brand" />
           <EntitySet Name="Categories" EntityType="Self.Category" />
@@ -2750,6 +2722,7 @@
           </FunctionImport>
           <EntitySet Name="Crusts" EntityType="sncModel.Crust" />
           <EntitySet Name="MasterProducts" EntityType="sncModel.MasterProduct" />
+          <EntitySet Name="Bills" EntityType="sncModel.Bill" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3198,6 +3171,35 @@
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="Bill">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="CustomerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ShopId" Type="Int32" Nullable="false" />
+          <Property Name="ShopName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="NameOfBill" Type="Int32" Nullable="false" />
+          <Property Name="ConvenientCharge" Type="Double" Nullable="false" />
+          <Property Name="PackingCharge" Type="Double" Nullable="false" />
+          <Property Name="TotalAmount" Type="Double" Nullable="false" />
+          <Property Name="Distance" Type="Int32" Nullable="false" />
+          <Property Name="ItemType" Type="Int32" Nullable="false" />
+          <Property Name="DeliveryChargeKM" Type="Double" Nullable="false" />
+          <Property Name="DeliveryChargeOneKM" Type="Double" Nullable="false" />
+          <Property Name="DeliveryChargeCustomer" Type="Double" Nullable="false" />
+          <Property Name="DeliveryRateSet" Type="Int32" Nullable="false" />
+          <Property Name="PlatformCreditRate" Type="Double" Nullable="false" />
+          <Property Name="PlatformCreditRateId" Type="Int32" Nullable="false" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="VehicleType" Type="Int32" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3307,35 +3309,6 @@
                 <ScalarProperty Name="BannerName" ColumnName="BannerName" />
                 <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
                 <ScalarProperty Name="CreditType" ColumnName="CreditType" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Bills">
-            <EntityTypeMapping TypeName="sncModel.Bill">
-              <MappingFragment StoreEntitySet="Bills">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
-                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
-                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
-                <ScalarProperty Name="NameOfBill" ColumnName="NameOfBill" />
-                <ScalarProperty Name="ConvenientCharge" ColumnName="ConvenientCharge" />
-                <ScalarProperty Name="PackingCharge" ColumnName="PackingCharge" />
-                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
-                <ScalarProperty Name="Distance" ColumnName="Distance" />
-                <ScalarProperty Name="ItemType" ColumnName="ItemType" />
-                <ScalarProperty Name="DeliveryChargeKM" ColumnName="DeliveryChargeKM" />
-                <ScalarProperty Name="DeliveryChargeOneKM" ColumnName="DeliveryChargeOneKM" />
-                <ScalarProperty Name="DeliveryChargeCustomer" ColumnName="DeliveryChargeCustomer" />
-                <ScalarProperty Name="DeliveryRateSet" ColumnName="DeliveryRateSet" />
-                <ScalarProperty Name="PlatformCreditRate" ColumnName="PlatformCreditRate" />
-                <ScalarProperty Name="PlatformCreditRateId" ColumnName="PlatformCreditRateId" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
@@ -4603,6 +4576,36 @@
                 <ScalarProperty Name="BrandName" ColumnName="BrandName" />
                 <ScalarProperty Name="BrandId" ColumnName="BrandId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Bills">
+            <EntityTypeMapping TypeName="sncModel.Bill">
+              <MappingFragment StoreEntitySet="Bills">
+                <ScalarProperty Name="VehicleType" ColumnName="VehicleType" />
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="PlatformCreditRateId" ColumnName="PlatformCreditRateId" />
+                <ScalarProperty Name="PlatformCreditRate" ColumnName="PlatformCreditRate" />
+                <ScalarProperty Name="DeliveryRateSet" ColumnName="DeliveryRateSet" />
+                <ScalarProperty Name="DeliveryChargeCustomer" ColumnName="DeliveryChargeCustomer" />
+                <ScalarProperty Name="DeliveryChargeOneKM" ColumnName="DeliveryChargeOneKM" />
+                <ScalarProperty Name="DeliveryChargeKM" ColumnName="DeliveryChargeKM" />
+                <ScalarProperty Name="ItemType" ColumnName="ItemType" />
+                <ScalarProperty Name="Distance" ColumnName="Distance" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="PackingCharge" ColumnName="PackingCharge" />
+                <ScalarProperty Name="ConvenientCharge" ColumnName="ConvenientCharge" />
+                <ScalarProperty Name="NameOfBill" ColumnName="NameOfBill" />
+                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
