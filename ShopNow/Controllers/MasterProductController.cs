@@ -2354,6 +2354,15 @@ namespace ShopNow.Controllers
             }
         }
 
-        
+        public async Task<JsonResult> GetAllSelect2(string q = "")
+        {
+            var model = await _db.MasterProducts.Where(a => a.Name.StartsWith(q) && a.Status == 0).Take(50).OrderBy(i => i.Name).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).OrderBy(i => i.text).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

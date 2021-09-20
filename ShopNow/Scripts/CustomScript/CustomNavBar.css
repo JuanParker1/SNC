@@ -8,9 +8,9 @@
     background-color: #195c1c !important;
 }
 
-.nav-item a:hover {
+/*.nav-item a:hover {
     color: #ffffff !important; 
-}
+}*/
 
 /* breakpoint and up - mega dropdown styles */
 @media screen and (min-width: 992px) {

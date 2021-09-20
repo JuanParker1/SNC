@@ -1,0 +1,80 @@
+﻿@model ShopNow.ViewModels.SearchDataEntryViewModel
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Search Data Entry";
+}
+<title>ShopNow | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+
+<div class="container-fluid">
+    <div class="row my-2">
+        <div class="col-md-6">
+            <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+        </div>
+        <div class="col-md-6 text-right">
+
+        </div>
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="mb-5">
+                        <h6>Filter By Letters</h6>
+                        @for (char c = 'A'; c <= 'Z'; c++)
+                        {
+                            <a href="/SearchData/Entry?str=@c" class="mr-4 @if (c.ToString() == ViewBag.Str) { <text>font-weight-bold h5</text> } "><u>@c</u></a>
+                        }
+                        <a href="/SearchData/Entry" class="float-right"><u>Clear Filter</u></a>
+                    </div>
+                    @Html.Grid(Model.KeywordLists).Columns(columns =>
+{
+   columns.Add(b => b.Keyword).Titled("Keyword").Filterable(true).SetWidth(10);
+   columns.Add(b => b.AvailableKeyword).Titled("Available Keyword").Filterable(true).SetWidth(40);
+   columns.Add()
+    .Encoded(false)
+    .Sanitized(false)
+     .RenderValueAs(b => new HtmlString
+              ("<input class='form-control input-keys' />")).Titled("Enter Keys(comma seperated)").SetWidth(60);
+   columns.Add().Css("text-center")
+.Encoded(false)
+.Sanitized(false)
+.RenderValueAs(b => "<a data-keyword='" + b.Keyword + "' class='btn btn-sm btn-primary btn-add-keyword'>Add</a>").Titled("Action").SetWidth(5);
+}).WithPaging(50).Sortable(true)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts
+{
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            $('.btn-add-keyword').on('click', function () {
+                var tr = $(this).closest('tr');
+                var keyword = $(this).data('keyword');
+                var keys = tr.find('.input-keys').val();
+                if (keys) {
+                    $.post('/SearchData/Add', { keyword: keyword, keys: keys }, function (data) {
+                        if (data) {
+                            swal('Success!', 'Save Successfully', 'success');
+                            tr.find('.input-keys').val('');
+                        }
+                        else
+                            swal('Warning!', 'Something went wrong, try again later!', 'warning');
+                    });
+                } else
+                swal('Warning!', 'Enter Key Values', 'warning');
+            });
+        });
+    </script>
+
+}
+
+
+
+
