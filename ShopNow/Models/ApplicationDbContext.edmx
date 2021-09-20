@@ -130,6 +130,22 @@
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="BillingCharge">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="ShopId" Type="int" Nullable="false" />
+          <Property Name="ConvenientCharge" Type="float" Nullable="false" />
+          <Property Name="PackingCharge" Type="float" Nullable="false" />
+          <Property Name="ItemType" Type="int" Nullable="false" />
+          <Property Name="DeliveryDiscountPercentage" Type="float" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DateEncoded" Type="datetime" Nullable="false" />
+          <Property Name="DateUpdated" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="100" />
+          <Property Name="UpdatedBy" Type="nvarchar" MaxLength="100" />
+        </EntityType>
         <EntityType Name="Bills">
           <Key>
             <PropertyRef Name="Id" />
@@ -329,6 +345,15 @@
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="CustomerSearchData">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DateEncoded" Type="datetime" Nullable="false" />
+          <Property Name="SearchKeyword" Type="nvarchar(max)" />
+          <Property Name="ResultCount" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="DeliveryBoys">
           <Key>
             <PropertyRef Name="Id" />
@@ -386,6 +411,22 @@
           <Property Name="CreatedBy" Type="nvarchar(max)" />
           <Property Name="UpdatedBy" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="DeliveryCharge">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ChargeUpto5Km" Type="float" Nullable="false" />
+          <Property Name="ChargePerKm" Type="float" Nullable="false" />
+          <Property Name="Type" Type="int" Nullable="false" />
+          <Property Name="TireType" Type="int" Nullable="false" />
+          <Property Name="VehicleType" Type="int" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DateEncoded" Type="datetime" Nullable="false" />
+          <Property Name="DateUpdated" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="100" />
+          <Property Name="UpdatedBy" Type="nvarchar" MaxLength="100" />
+        </EntityType>
         <EntityType Name="DiscountCategories">
           <Key>
             <PropertyRef Name="Id" />
@@ -437,6 +478,13 @@
           <Property Name="UpdatedBy" Type="nvarchar(max)" />
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="KeywordData">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <EntityType Name="LocationDetails">
           <Key>
@@ -1025,6 +1073,14 @@
           <Property Name="OrderNumber" Type="int" />
           <Property Name="DateEncoded" Type="datetime" />
         </EntityType>
+        <EntityType Name="SearchData">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Source" Type="nvarchar" MaxLength="500" />
+          <Property Name="KeyValue" Type="nvarchar" MaxLength="500" />
+        </EntityType>
         <EntityType Name="ShopCategories">
           <Key>
             <PropertyRef Name="Id" />
@@ -1172,6 +1228,7 @@
           <Property Name="GooglePlaceId" Type="nvarchar" MaxLength="100" />
           <Property Name="HasSchedule" Type="bit" />
           <Property Name="NextOnTime" Type="time" Precision="7" />
+          <Property Name="DeliveryChargeId" Type="int" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="CreatedBy" Type="nvarchar(max)" />
           <Property Name="UpdatedBy" Type="nvarchar(max)" />
@@ -1461,6 +1518,7 @@
           <EntitySet Name="ApiSettings" EntityType="Self.ApiSettings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AppDetails" EntityType="Self.AppDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Banners" EntityType="Self.Banners" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BillingCharge" EntityType="Self.BillingCharge" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Bills" EntityType="Self.Bills" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BrandOwners" EntityType="Self.BrandOwners" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Brands" EntityType="Self.Brands" Schema="dbo" store:Type="Tables" />
@@ -1470,11 +1528,14 @@
           <EntitySet Name="CustomerAddresses" EntityType="Self.CustomerAddresses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerReview" EntityType="Self.CustomerReview" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustomerSearchData" EntityType="Self.CustomerSearchData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DeliveryBoys" EntityType="Self.DeliveryBoys" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DeliveryBoyShops" EntityType="Self.DeliveryBoyShops" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DeliveryCharge" EntityType="Self.DeliveryCharge" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DiscountCategories" EntityType="Self.DiscountCategories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DiscountCategories1" EntityType="Self.DiscountCategories1" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DrugCompoundDetails" EntityType="Self.DrugCompoundDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="KeywordData" EntityType="Self.KeywordData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LocationDetails" EntityType="Self.LocationDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MarketingAgents" EntityType="Self.MarketingAgents" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MasterProducts" EntityType="Self.MasterProducts" Schema="dbo" store:Type="Tables" />
@@ -1502,6 +1563,7 @@
           <EntitySet Name="ProductType" EntityType="Self.ProductType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ReferralSettings" EntityType="Self.ReferralSettings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RefundsData" EntityType="Self.RefundsData" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SearchData" EntityType="Self.SearchData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ShopCategories" EntityType="Self.ShopCategories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ShopCredit" EntityType="Self.ShopCredit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ShopDishAddOns" EntityType="Self.ShopDishAddOns" Schema="dbo" store:Type="Tables" />
@@ -2688,11 +2750,6 @@
           <EntitySet Name="ShopSchedules" EntityType="sncModel.ShopSchedule" />
           <EntitySet Name="ProductSchedules" EntityType="sncModel.ProductSchedule" />
           <EntitySet Name="Products" EntityType="sncModel.Product" />
-          <EntitySet Name="Shops" EntityType="sncModel.Shop" />
-          <AssociationSet Name="FK_CustomerReview_Shops" Association="sncModel.FK_CustomerReview_Shops">
-            <End Role="Shop" EntitySet="Shops" />
-            <End Role="CustomerReview" EntitySet="CustomerReviews" />
-          </AssociationSet>
           <AssociationSet Name="FK_Products_ProductType" Association="sncModel.FK_Products_ProductType">
             <End Role="ProductType" EntitySet="ProductTypes" />
             <End Role="Product" EntitySet="Products" />
@@ -2723,6 +2780,16 @@
           <EntitySet Name="Crusts" EntityType="sncModel.Crust" />
           <EntitySet Name="MasterProducts" EntityType="sncModel.MasterProduct" />
           <EntitySet Name="Bills" EntityType="sncModel.Bill" />
+          <EntitySet Name="CustomerSearchDatas" EntityType="sncModel.CustomerSearchData" />
+          <EntitySet Name="KeywordDatas" EntityType="sncModel.KeywordData" />
+          <EntitySet Name="SearchDatas" EntityType="sncModel.SearchData" />
+          <EntitySet Name="BillingCharges" EntityType="sncModel.BillingCharge" />
+          <EntitySet Name="DeliveryCharges" EntityType="sncModel.DeliveryCharge" />
+          <EntitySet Name="Shops" EntityType="sncModel.Shop" />
+          <AssociationSet Name="FK_CustomerReview_Shops" Association="sncModel.FK_CustomerReview_Shops">
+            <End Role="Shop" EntitySet="Shops" />
+            <End Role="CustomerReview" EntitySet="CustomerReviews" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -2814,97 +2881,6 @@
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="ProductType" Relationship="sncModel.FK_Products_ProductType" FromRole="Product" ToRole="ProductType" />
         </EntityType>
-        <EntityType Name="Shop">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CustomerId" Type="Int32" Nullable="false" />
-          <Property Name="CustomerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CountryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="StateName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DistrictName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="StreetName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PinCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Latitude" Type="Double" Nullable="false" />
-          <Property Name="Longitude" Type="Double" Nullable="false" />
-          <Property Name="AccessStaff" Type="Boolean" Nullable="false" />
-          <Property Name="StaffMembers" Type="Int32" Nullable="false" />
-          <Property Name="MemberCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CustomerReview" Type="Int32" Nullable="false" />
-          <Property Name="Rating" Type="Double" Nullable="false" />
-          <Property Name="ImageLogoPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="OwnerPhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ManualPhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="OfficialEmail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Website" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Verify" Type="Boolean" Nullable="false" />
-          <Property Name="BankName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="AccountName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="IFSCCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ImageAccountPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ImageGSTINPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ImagePanPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ImageFSSAIPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ImageDrugPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ImageEstablishPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ImageOtherLicensePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="FSSAINumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DrugNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="EstablishNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="OtherLicenseNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ImageAadharPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="AadharNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ImageAuthoriseBrandPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="AadharName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="GSTINNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PanNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="OtherLicenseName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="AuthorisedDistributorNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="AuthorisedBrandId" Type="Int32" />
-          <Property Name="AuthorisedBrandName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="AcountType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="SwiftCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="UPIID" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="FSSAIStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DrugStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="AuthorisedDistributorStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="AccountNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ShopCategoryId" Type="Int32" Nullable="false" />
-          <Property Name="ShopCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PincodeRateId" Type="Int32" Nullable="false" />
-          <Property Name="PincodeRateDeliveryRateSet" Type="Int32" Nullable="false" />
-          <Property Name="MarketingAgentId" Type="Int32" Nullable="false" />
-          <Property Name="MarketingAgentName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Adscore" Type="Int32" Nullable="false" />
-          <Property Name="IsOnline" Type="Boolean" />
-          <Property Name="GooglePlaceId" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="HasSchedule" Type="Boolean" />
-          <Property Name="NextOnTime" Type="Time" Precision="7" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="CustomerReviews" Relationship="sncModel.FK_CustomerReview_Shops" FromRole="Shop" ToRole="CustomerReview" />
-        </EntityType>
-        <Association Name="FK_CustomerReview_Shops">
-          <End Type="sncModel.Shop" Role="Shop" Multiplicity="1" />
-          <End Type="sncModel.CustomerReview" Role="CustomerReview" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Shop">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="CustomerReview">
-              <PropertyRef Name="ShopId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Products_ProductType">
           <End Type="sncModel.ProductType" Role="ProductType" Multiplicity="1" />
           <End Type="sncModel.Product" Role="Product" Multiplicity="*" />
@@ -3200,6 +3176,154 @@
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="VehicleType" Type="Int32" Nullable="false" />
         </EntityType>
+        <EntityType Name="CustomerSearchData">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SearchKeyword" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ResultCount" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="KeywordData">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SearchData">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Source" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="KeyValue" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="BillingCharge">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="ShopId" Type="Int32" Nullable="false" />
+          <Property Name="ConvenientCharge" Type="Double" Nullable="false" />
+          <Property Name="PackingCharge" Type="Double" Nullable="false" />
+          <Property Name="ItemType" Type="Int32" Nullable="false" />
+          <Property Name="DeliveryDiscountPercentage" Type="Double" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="DeliveryCharge">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ChargeUpto5Km" Type="Double" Nullable="false" />
+          <Property Name="ChargePerKm" Type="Double" Nullable="false" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="TireType" Type="Int32" Nullable="false" />
+          <Property Name="VehicleType" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Shop">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="CustomerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CountryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="StateName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DistrictName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="StreetName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PinCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Latitude" Type="Double" Nullable="false" />
+          <Property Name="Longitude" Type="Double" Nullable="false" />
+          <Property Name="AccessStaff" Type="Boolean" Nullable="false" />
+          <Property Name="StaffMembers" Type="Int32" Nullable="false" />
+          <Property Name="MemberCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerReview" Type="Int32" Nullable="false" />
+          <Property Name="Rating" Type="Double" Nullable="false" />
+          <Property Name="ImageLogoPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OwnerPhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ManualPhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OfficialEmail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Website" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Verify" Type="Boolean" Nullable="false" />
+          <Property Name="BankName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AccountName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IFSCCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImageAccountPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImageGSTINPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePanPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImageFSSAIPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImageDrugPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImageEstablishPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImageOtherLicensePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FSSAINumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DrugNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="EstablishNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OtherLicenseNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImageAadharPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AadharNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImageAuthoriseBrandPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AadharName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="GSTINNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PanNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OtherLicenseName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AuthorisedDistributorNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AuthorisedBrandId" Type="Int32" />
+          <Property Name="AuthorisedBrandName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AcountType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SwiftCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UPIID" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FSSAIStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DrugStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AuthorisedDistributorStatus" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AccountNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ShopCategoryId" Type="Int32" Nullable="false" />
+          <Property Name="ShopCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PincodeRateId" Type="Int32" Nullable="false" />
+          <Property Name="PincodeRateDeliveryRateSet" Type="Int32" Nullable="false" />
+          <Property Name="MarketingAgentId" Type="Int32" Nullable="false" />
+          <Property Name="MarketingAgentName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Adscore" Type="Int32" Nullable="false" />
+          <Property Name="IsOnline" Type="Boolean" />
+          <Property Name="GooglePlaceId" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="HasSchedule" Type="Boolean" />
+          <Property Name="NextOnTime" Type="Time" Precision="7" />
+          <Property Name="DeliveryChargeId" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="CustomerReviews" Relationship="sncModel.FK_CustomerReview_Shops" FromRole="Shop" ToRole="CustomerReview" />
+        </EntityType>
+        <Association Name="FK_CustomerReview_Shops">
+          <End Type="sncModel.Shop" Role="Shop" Multiplicity="1" />
+          <End Type="sncModel.CustomerReview" Role="CustomerReview" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shop">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CustomerReview">
+              <PropertyRef Name="ShopId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4246,85 +4370,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Shops">
-            <EntityTypeMapping TypeName="sncModel.Shop">
-              <MappingFragment StoreEntitySet="Shops">
-                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="NextOnTime" ColumnName="NextOnTime" />
-                <ScalarProperty Name="HasSchedule" ColumnName="HasSchedule" />
-                <ScalarProperty Name="GooglePlaceId" ColumnName="GooglePlaceId" />
-                <ScalarProperty Name="IsOnline" ColumnName="IsOnline" />
-                <ScalarProperty Name="Adscore" ColumnName="Adscore" />
-                <ScalarProperty Name="MarketingAgentName" ColumnName="MarketingAgentName" />
-                <ScalarProperty Name="MarketingAgentId" ColumnName="MarketingAgentId" />
-                <ScalarProperty Name="PincodeRateDeliveryRateSet" ColumnName="PincodeRateDeliveryRateSet" />
-                <ScalarProperty Name="PincodeRateId" ColumnName="PincodeRateId" />
-                <ScalarProperty Name="ShopCategoryName" ColumnName="ShopCategoryName" />
-                <ScalarProperty Name="ShopCategoryId" ColumnName="ShopCategoryId" />
-                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
-                <ScalarProperty Name="AuthorisedDistributorStatus" ColumnName="AuthorisedDistributorStatus" />
-                <ScalarProperty Name="DrugStatus" ColumnName="DrugStatus" />
-                <ScalarProperty Name="FSSAIStatus" ColumnName="FSSAIStatus" />
-                <ScalarProperty Name="UPIID" ColumnName="UPIID" />
-                <ScalarProperty Name="SwiftCode" ColumnName="SwiftCode" />
-                <ScalarProperty Name="AcountType" ColumnName="AcountType" />
-                <ScalarProperty Name="AuthorisedBrandName" ColumnName="AuthorisedBrandName" />
-                <ScalarProperty Name="AuthorisedBrandId" ColumnName="AuthorisedBrandId" />
-                <ScalarProperty Name="AuthorisedDistributorNumber" ColumnName="AuthorisedDistributorNumber" />
-                <ScalarProperty Name="OtherLicenseName" ColumnName="OtherLicenseName" />
-                <ScalarProperty Name="PanNumber" ColumnName="PanNumber" />
-                <ScalarProperty Name="GSTINNumber" ColumnName="GSTINNumber" />
-                <ScalarProperty Name="AadharName" ColumnName="AadharName" />
-                <ScalarProperty Name="ImageAuthoriseBrandPath" ColumnName="ImageAuthoriseBrandPath" />
-                <ScalarProperty Name="AadharNumber" ColumnName="AadharNumber" />
-                <ScalarProperty Name="ImageAadharPath" ColumnName="ImageAadharPath" />
-                <ScalarProperty Name="OtherLicenseNumber" ColumnName="OtherLicenseNumber" />
-                <ScalarProperty Name="EstablishNumber" ColumnName="EstablishNumber" />
-                <ScalarProperty Name="DrugNumber" ColumnName="DrugNumber" />
-                <ScalarProperty Name="FSSAINumber" ColumnName="FSSAINumber" />
-                <ScalarProperty Name="ImageOtherLicensePath" ColumnName="ImageOtherLicensePath" />
-                <ScalarProperty Name="ImageEstablishPath" ColumnName="ImageEstablishPath" />
-                <ScalarProperty Name="ImageDrugPath" ColumnName="ImageDrugPath" />
-                <ScalarProperty Name="ImageFSSAIPath" ColumnName="ImageFSSAIPath" />
-                <ScalarProperty Name="ImagePanPath" ColumnName="ImagePanPath" />
-                <ScalarProperty Name="ImageGSTINPath" ColumnName="ImageGSTINPath" />
-                <ScalarProperty Name="ImageAccountPath" ColumnName="ImageAccountPath" />
-                <ScalarProperty Name="IFSCCode" ColumnName="IFSCCode" />
-                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
-                <ScalarProperty Name="BankName" ColumnName="BankName" />
-                <ScalarProperty Name="Verify" ColumnName="Verify" />
-                <ScalarProperty Name="Website" ColumnName="Website" />
-                <ScalarProperty Name="OfficialEmail" ColumnName="OfficialEmail" />
-                <ScalarProperty Name="ManualPhoneNumber" ColumnName="ManualPhoneNumber" />
-                <ScalarProperty Name="OwnerPhoneNumber" ColumnName="OwnerPhoneNumber" />
-                <ScalarProperty Name="ImageLogoPath" ColumnName="ImageLogoPath" />
-                <ScalarProperty Name="Rating" ColumnName="Rating" />
-                <ScalarProperty Name="CustomerReview" ColumnName="CustomerReview" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="MemberCode" ColumnName="MemberCode" />
-                <ScalarProperty Name="StaffMembers" ColumnName="StaffMembers" />
-                <ScalarProperty Name="AccessStaff" ColumnName="AccessStaff" />
-                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-                <ScalarProperty Name="PinCode" ColumnName="PinCode" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="StreetName" ColumnName="StreetName" />
-                <ScalarProperty Name="DistrictName" ColumnName="DistrictName" />
-                <ScalarProperty Name="StateName" ColumnName="StateName" />
-                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
-                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
-                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
-                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Offers">
             <EntityTypeMapping TypeName="sncModel.Offer">
               <MappingFragment StoreEntitySet="Offers">
@@ -4606,6 +4651,147 @@
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
                 <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerSearchDatas">
+            <EntityTypeMapping TypeName="sncModel.CustomerSearchData">
+              <MappingFragment StoreEntitySet="CustomerSearchData">
+                <ScalarProperty Name="ResultCount" ColumnName="ResultCount" />
+                <ScalarProperty Name="SearchKeyword" ColumnName="SearchKeyword" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="KeywordDatas">
+            <EntityTypeMapping TypeName="sncModel.KeywordData">
+              <MappingFragment StoreEntitySet="KeywordData">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SearchDatas">
+            <EntityTypeMapping TypeName="sncModel.SearchData">
+              <MappingFragment StoreEntitySet="SearchData">
+                <ScalarProperty Name="KeyValue" ColumnName="KeyValue" />
+                <ScalarProperty Name="Source" ColumnName="Source" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BillingCharges">
+            <EntityTypeMapping TypeName="sncModel.BillingCharge">
+              <MappingFragment StoreEntitySet="BillingCharge">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DeliveryDiscountPercentage" ColumnName="DeliveryDiscountPercentage" />
+                <ScalarProperty Name="ItemType" ColumnName="ItemType" />
+                <ScalarProperty Name="PackingCharge" ColumnName="PackingCharge" />
+                <ScalarProperty Name="ConvenientCharge" ColumnName="ConvenientCharge" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DeliveryCharges">
+            <EntityTypeMapping TypeName="sncModel.DeliveryCharge">
+              <MappingFragment StoreEntitySet="DeliveryCharge">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="VehicleType" ColumnName="VehicleType" />
+                <ScalarProperty Name="TireType" ColumnName="TireType" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="ChargePerKm" ColumnName="ChargePerKm" />
+                <ScalarProperty Name="ChargeUpto5Km" ColumnName="ChargeUpto5Km" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Shops">
+            <EntityTypeMapping TypeName="sncModel.Shop">
+              <MappingFragment StoreEntitySet="Shops">
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DeliveryChargeId" ColumnName="DeliveryChargeId" />
+                <ScalarProperty Name="NextOnTime" ColumnName="NextOnTime" />
+                <ScalarProperty Name="HasSchedule" ColumnName="HasSchedule" />
+                <ScalarProperty Name="GooglePlaceId" ColumnName="GooglePlaceId" />
+                <ScalarProperty Name="IsOnline" ColumnName="IsOnline" />
+                <ScalarProperty Name="Adscore" ColumnName="Adscore" />
+                <ScalarProperty Name="MarketingAgentName" ColumnName="MarketingAgentName" />
+                <ScalarProperty Name="MarketingAgentId" ColumnName="MarketingAgentId" />
+                <ScalarProperty Name="PincodeRateDeliveryRateSet" ColumnName="PincodeRateDeliveryRateSet" />
+                <ScalarProperty Name="PincodeRateId" ColumnName="PincodeRateId" />
+                <ScalarProperty Name="ShopCategoryName" ColumnName="ShopCategoryName" />
+                <ScalarProperty Name="ShopCategoryId" ColumnName="ShopCategoryId" />
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+                <ScalarProperty Name="AuthorisedDistributorStatus" ColumnName="AuthorisedDistributorStatus" />
+                <ScalarProperty Name="DrugStatus" ColumnName="DrugStatus" />
+                <ScalarProperty Name="FSSAIStatus" ColumnName="FSSAIStatus" />
+                <ScalarProperty Name="UPIID" ColumnName="UPIID" />
+                <ScalarProperty Name="SwiftCode" ColumnName="SwiftCode" />
+                <ScalarProperty Name="AcountType" ColumnName="AcountType" />
+                <ScalarProperty Name="AuthorisedBrandName" ColumnName="AuthorisedBrandName" />
+                <ScalarProperty Name="AuthorisedBrandId" ColumnName="AuthorisedBrandId" />
+                <ScalarProperty Name="AuthorisedDistributorNumber" ColumnName="AuthorisedDistributorNumber" />
+                <ScalarProperty Name="OtherLicenseName" ColumnName="OtherLicenseName" />
+                <ScalarProperty Name="PanNumber" ColumnName="PanNumber" />
+                <ScalarProperty Name="GSTINNumber" ColumnName="GSTINNumber" />
+                <ScalarProperty Name="AadharName" ColumnName="AadharName" />
+                <ScalarProperty Name="ImageAuthoriseBrandPath" ColumnName="ImageAuthoriseBrandPath" />
+                <ScalarProperty Name="AadharNumber" ColumnName="AadharNumber" />
+                <ScalarProperty Name="ImageAadharPath" ColumnName="ImageAadharPath" />
+                <ScalarProperty Name="OtherLicenseNumber" ColumnName="OtherLicenseNumber" />
+                <ScalarProperty Name="EstablishNumber" ColumnName="EstablishNumber" />
+                <ScalarProperty Name="DrugNumber" ColumnName="DrugNumber" />
+                <ScalarProperty Name="FSSAINumber" ColumnName="FSSAINumber" />
+                <ScalarProperty Name="ImageOtherLicensePath" ColumnName="ImageOtherLicensePath" />
+                <ScalarProperty Name="ImageEstablishPath" ColumnName="ImageEstablishPath" />
+                <ScalarProperty Name="ImageDrugPath" ColumnName="ImageDrugPath" />
+                <ScalarProperty Name="ImageFSSAIPath" ColumnName="ImageFSSAIPath" />
+                <ScalarProperty Name="ImagePanPath" ColumnName="ImagePanPath" />
+                <ScalarProperty Name="ImageGSTINPath" ColumnName="ImageGSTINPath" />
+                <ScalarProperty Name="ImageAccountPath" ColumnName="ImageAccountPath" />
+                <ScalarProperty Name="IFSCCode" ColumnName="IFSCCode" />
+                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+                <ScalarProperty Name="BankName" ColumnName="BankName" />
+                <ScalarProperty Name="Verify" ColumnName="Verify" />
+                <ScalarProperty Name="Website" ColumnName="Website" />
+                <ScalarProperty Name="OfficialEmail" ColumnName="OfficialEmail" />
+                <ScalarProperty Name="ManualPhoneNumber" ColumnName="ManualPhoneNumber" />
+                <ScalarProperty Name="OwnerPhoneNumber" ColumnName="OwnerPhoneNumber" />
+                <ScalarProperty Name="ImageLogoPath" ColumnName="ImageLogoPath" />
+                <ScalarProperty Name="Rating" ColumnName="Rating" />
+                <ScalarProperty Name="CustomerReview" ColumnName="CustomerReview" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="MemberCode" ColumnName="MemberCode" />
+                <ScalarProperty Name="StaffMembers" ColumnName="StaffMembers" />
+                <ScalarProperty Name="AccessStaff" ColumnName="AccessStaff" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="PinCode" ColumnName="PinCode" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="StreetName" ColumnName="StreetName" />
+                <ScalarProperty Name="DistrictName" ColumnName="DistrictName" />
+                <ScalarProperty Name="StateName" ColumnName="StateName" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

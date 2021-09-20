@@ -1,0 +1,131 @@
+﻿@model ShopNow.ViewModels.SearchDataListViewModel
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Customer Search Data List";
+}
+<title>ShopNow | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+
+<div class="container-fluid">
+    <div class="row my-2">
+        <div class="col-md-6">
+            <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+        </div>
+        <div class="col-md-6 text-right">
+        </div>
+    </div>
+
+ <div class="card shadow">
+     <div class="card-body">
+         <ul class="nav nav-tabs mb-3">
+             <li class="nav-item">
+                 <a class="nav-link active" data-toggle="tab" href="#all">All</a>
+             </li>
+             <li class="nav-item">
+                 <a class="nav-link" data-toggle="tab" href="#zero">Zero Count</a>
+             </li>
+         </ul>
+
+
+         <div class="tab-content">
+             <div class="tab-pane active" id="all">
+                 @Html.Grid(Model.AllListItems).Columns(columns =>
+            {
+                columns.Add(b => b.Date).Titled("Date/Time").Filterable(true).SetWidth(20).Format("{0:dd-MMM-yyyy}");
+                columns.Add(b => b.Key).Titled("Cust Search Word").Filterable(true).SetWidth(20);
+                columns.Add(b => b.Count).Titled("Result Count").Filterable(true).SetWidth(20);
+            }).WithPaging(20).Sortable(true)
+             </div>
+             <div class="tab-pane fade" id="zero">
+                 @Html.Grid(Model.ZeroCountListItems).Columns(columns =>
+            {
+                columns.Add(b => b.Date).Titled("Date").Filterable(true).SetWidth(20).Format("{0:dd-MMM-yyyy}");
+                columns.Add(b => b.Key).Titled("Cust Search Word-0").Filterable(true).SetWidth(10);
+                columns.Add()
+          .Encoded(false)
+          .Sanitized(false)
+           .RenderValueAs(b => new HtmlString
+                    ("<input class='form-control input-keyword' />")).Titled("Keyword").SetWidth(30);
+                columns.Add()
+          .Encoded(false)
+          .Sanitized(false)
+           .RenderValueAs(b => new HtmlString
+                    ("<select class='form-control select-source' multiple></select>")).Titled("Correct Word").SetWidth(30);
+                columns.Add()
+          .Encoded(false)
+          .Sanitized(false)
+           .RenderValueAs(b => new HtmlString
+                    ("<select class='form-control select-masterproduct' multiple></select>")).Titled("Nickname").SetWidth(30);
+                columns.Add()
+          .Encoded(false)
+          .Sanitized(false)
+           .RenderValueAs(b => new HtmlString
+                    ("<input type='button' class='btn btn-sm btn-success btn-save-keyword' value='Save' />")).Titled("Action").Css("text-center").SetWidth(5);
+            }).WithPaging(20).Sortable(true)
+             </div>
+         </div>
+     </div>
+ </div>
+    
+
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            $('.select-source').select2({
+                placeholder: "Search Keyword",
+                minimumInputLength: 3,
+                width: "100%",
+                ajax: {
+                    url: "/SearchData/GetKeywordSelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            });
+
+            $('.select-masterproduct').select2({
+                placeholder: "Search Product",
+                minimumInputLength: 3,
+                width: "100%",
+                ajax: {
+                    url: "/MasterProduct/GetAllSelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            });
+
+            $('.btn-save-keyword').on('click', function () {
+                var tr = $(this).closest('tr');
+                var searchWord = tr.find('.input-keyword').val();
+                var searchSource = tr.find('.select-source').val();
+                var masterIds = tr.find('.select-masterproduct').val();
+                if (searchWord) {
+                    $.post('/SearchData/AddToSourceAndNickname', { searchWord: searchWord, searchSource: searchSource, masterIds: masterIds }, function (data) {
+                        if (data) {
+                            swal('Success!', 'Save Successfully', 'success');
+                            tr.find('.select-source').val('').trigger('change');
+                            tr.find('.select-masterproduct').val('').trigger('change');
+                            tr.find('.input-keyword').val('');
+                        }
+                        else
+                            swal('Warning!', 'Select Correct word or Nickname!', 'warning');
+                    });
+                } else
+                    swal('Warning!', 'Enter Keyword', 'warning');
+            });
+        });
+    </script>
+
+}
+
+
+
+

@@ -381,6 +381,7 @@
     <Compile Include="Controllers\ReferralSettingController.cs" />
     <Compile Include="Controllers\RefundController.cs" />
     <Compile Include="Controllers\SalesController.cs" />
+    <Compile Include="Controllers\SearchDataController.cs" />
     <Compile Include="Controllers\ShopDiscountCategoryController.cs" />
     <Compile Include="Controllers\ShopScheduleController.cs" />
     <Compile Include="Controllers\StaffController.cs" />
@@ -479,6 +480,9 @@
     <Compile Include="Models\CustomerReview.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CustomerSearchData.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DeliveryBoy.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
@@ -508,6 +512,9 @@
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\GetTableVAlueString_Result.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\KeywordData.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\LocationDetail.cs">
@@ -591,6 +598,9 @@
     <Compile Include="Models\RefundsData.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SearchData.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Shop.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
@@ -667,6 +677,7 @@
     <Compile Include="ViewModels\ReferralSettingViewModels.cs" />
     <Compile Include="ViewModels\RefundViewModels.cs" />
     <Compile Include="ViewModels\SalesViewModel.cs" />
+    <Compile Include="ViewModels\SearchDataViewModels.cs" />
     <Compile Include="ViewModels\ShopDiscountCategoryViewModel.cs" />
     <Compile Include="ViewModels\ShopScheduleViewModels.cs" />
     <Compile Include="ViewModels\ShopViewModel.cs" />
@@ -3188,6 +3199,8 @@
     <Content Include="Views\Cart\WaitingForPickupList.cshtml" />
     <Content Include="Views\Cart\OnTheWayList.cshtml" />
     <Content Include="Views\Crust\Index.cshtml" />
+    <Content Include="Views\SearchData\List.cshtml" />
+    <Content Include="Views\SearchData\Entry.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

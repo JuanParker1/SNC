@@ -642,9 +642,21 @@ namespace ShopNow.Controllers
             }
         }
 
-        public JsonResult GetBillOrDelivary(int bill, int shopId)
+        public JsonResult GetBillOrDelivary(int bill, int shopId, double totalSize=0, double totalWeight=0)
         {
             var model = new BillApiListViewModel();
+
+            int mode = 0; //0-NA,1-bike,2-carrier bike,3-Auto
+            double liters = totalSize / 1000;
+
+            if (totalWeight <= 20 || liters <= 60)
+                mode = 1;
+            if ((totalWeight > 20 && totalWeight <= 40) || (liters > 60 && liters <= 120))
+                mode = 2;
+            if (totalWeight > 40 || liters > 120)
+                mode = 3;
+
+
             model.List = db.Bills.Where(i => i.NameOfBill == bill && i.ShopId == shopId && i.Status == 0).Select(i => new BillApiListViewModel.BillList
             {
                 Id = i.Id,
@@ -3354,8 +3366,8 @@ namespace ShopNow.Controllers
         public JsonResult GetDelivaryBoyFullReport(string phoneNumber)
         {
             var model = new DelivaryCreditAmountApiViewModel();
-            model.List = db.Orders.Where(i => i.Status == 6 && i.DeliveryBoyPhoneNumber == phoneNumber && i.DeliveryBoyPaymentStatus==0)
-                 .Join(db.Payments.Where(i=>i.PaymentMode != "Online Payment"), c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+            model.List = db.Orders.Where(i => i.Status == 6 && i.DeliveryBoyPhoneNumber == phoneNumber && i.DeliveryOrderPaymentStatus == 0)
+                 .Join(db.Payments.Where(i => i.PaymentMode != "Online Payment"), c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Select(i => new DelivaryCreditAmountApiViewModel.CartList
                 {
                     Amount = (i.p.Amount - (i.p.RefundAmount ?? 0))

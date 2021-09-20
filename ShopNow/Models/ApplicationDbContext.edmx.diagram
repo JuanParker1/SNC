@@ -64,8 +64,6 @@
         <EntityTypeShape EntityType="sncModel.ShopSchedule" Width="1.5" PointX="5.375" PointY="27.75" />
         <EntityTypeShape EntityType="sncModel.ProductSchedule" Width="1.5" PointX="26.375" PointY="26.75" />
         <EntityTypeShape EntityType="sncModel.Product" Width="1.5" PointX="3" PointY="35.125" />
-        <EntityTypeShape EntityType="sncModel.Shop" Width="1.5" PointX="8.375" PointY="27.625" />
-        <AssociationConnector Association="sncModel.FK_CustomerReview_Shops" />
         <AssociationConnector Association="sncModel.FK_Products_ProductType" />
         <EntityTypeShape EntityType="sncModel.Offer" Width="1.5" PointX="0.75" PointY="13.75" />
         <EntityTypeShape EntityType="sncModel.AchievementSetting" Width="1.5" PointX="10.375" PointY="27.75" />
@@ -76,6 +74,13 @@
         <EntityTypeShape EntityType="sncModel.Crust" Width="1.5" PointX="13.375" PointY="14.75" />
         <EntityTypeShape EntityType="sncModel.MasterProduct" Width="1.5" PointX="19.375" PointY="28.75" />
         <EntityTypeShape EntityType="sncModel.Bill" Width="1.5" PointX="18.375" PointY="0.75" />
+        <EntityTypeShape EntityType="sncModel.CustomerSearchData" Width="1.5" PointX="15.375" PointY="14.75" />
+        <EntityTypeShape EntityType="sncModel.KeywordData" Width="1.5" PointX="20.375" PointY="0.75" />
+        <EntityTypeShape EntityType="sncModel.SearchData" Width="1.5" PointX="20.375" PointY="3.75" />
+        <EntityTypeShape EntityType="sncModel.BillingCharge" Width="1.5" PointX="28.375" PointY="0.75" />
+        <EntityTypeShape EntityType="sncModel.DeliveryCharge" Width="1.5" PointX="21.375" PointY="28.75" />
+        <EntityTypeShape EntityType="sncModel.Shop" Width="1.5" PointX="7.375" PointY="28.625" />
+        <AssociationConnector Association="sncModel.FK_CustomerReview_Shops" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
