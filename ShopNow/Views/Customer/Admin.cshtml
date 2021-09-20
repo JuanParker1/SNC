@@ -22,7 +22,8 @@
                 <div class="card-body">                  
                     @Html.Grid(Model).Columns(columns =>
                {
-               columns.Add().RenderValueAs(o => Html.ActionLink(o.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }).ToHtmlString()).Titled("Name").Encoded(false).Sanitized(false).Filterable(true).SetWidth(10);
+               // columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => Html.ActionLink(o.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }).ToHtmlString()).Titled("Name").Filterable(true).SetWidth(10);
+               columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(10);
                columns.Add(c => c.PhoneNumber).Titled("Phone Number").Filterable(true).SetWidth(10);
                columns.Add(c => c.Address).Titled("Address").Filterable(true).SetWidth(30);
                columns.Add(c => c.DistrictName).Titled("District").Filterable(true).SetWidth(10);
@@ -108,7 +109,7 @@
                                 window.location.href = "/Customer/Admin";
                             });
                         } else if (data.message1 != null || data.message1 != "") {
-                            swal(data.message1, "", "warning");
+                            swal(data.message1, "Already Exist", "warning");
                         }
                     });
                 }

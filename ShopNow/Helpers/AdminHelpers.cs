@@ -114,7 +114,8 @@ namespace ShopNow.Helpers
 
             // Return the decoded int.
             int i = BitConverter.ToInt32(b, 0);
-            return i-2;
+            int j = i - 2;
+            return j;
         }
 
         public static string ECodeLong(long input)

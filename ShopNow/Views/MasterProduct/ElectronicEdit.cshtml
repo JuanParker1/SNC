@@ -18,7 +18,7 @@
         <div class="col-md-12 mx-auto">
             @using (Html.BeginForm("ElectronicEdit", "MasterProduct", FormMethod.Post, new { id = "MasterProductForm", enctype = "multipart/form-data", autocomplete = "off" }))
             {
-                <div class="card">
+                <div class="card shadow">
                     <div class="card-body">
                         @Html.AntiForgeryToken()
                         <div class="form-group row">

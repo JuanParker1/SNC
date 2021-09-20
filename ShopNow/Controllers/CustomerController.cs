@@ -27,7 +27,7 @@ namespace ShopNow.Controllers
                 config.CreateMap<Customer, CustomerDetailsViewModel>();
                 config.CreateMap<CustomerEditViewModel, Customer>();
                 config.CreateMap<Customer, CustomerEditViewModel>();
-                config.CreateMap<CustomerAddress, CustomerDetailsViewModel.AddressList>();
+                config.CreateMap<Customer, CustomerDetailsViewModel>();
             });
             _mapper = _mapperConfiguration.CreateMapper();
         }
@@ -73,11 +73,8 @@ namespace ShopNow.Controllers
             var dId = AdminHelpers.DCodeInt(id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            if (dId == 0)
-                return HttpNotFound();
             var customer = db.Customers.Where(m => m.Id == dId).FirstOrDefault();
             var model = _mapper.Map<Customer, CustomerDetailsViewModel>(customer);
-            model.List = db.CustomerAddresses.Where(i => i.Status == 0 && i.CustomerId == dId).ToList().AsQueryable().ProjectTo<CustomerDetailsViewModel.AddressList>(_mapperConfiguration).ToList();
             return View(model);
         }
 
@@ -246,14 +243,14 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNCUSSA012")]
-        public JsonResult Save(int code = 0)
+        public JsonResult Save(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             bool IsAdded = false;
             string message = "";
             string message1 = "";
 
-            var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();
+            var customer = db.Customers.Where(m => m.Id == Id).FirstOrDefault();
             if (customer != null && customer.Position != 4)
             {
                 customer.Position = 4;

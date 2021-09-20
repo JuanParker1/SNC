@@ -584,7 +584,6 @@ namespace ShopNow.Controllers
                 _db.MasterProducts.Add(master);
                 _db.SaveChanges();
                 ViewBag.Message = model.Name + " Saved Successfully!";
-
             }
             catch (AmazonS3Exception amazonS3Exception)
             {
@@ -1213,65 +1212,64 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var prod = _mapper.Map<MasterElectronicCreateViewModel, MasterProduct>(model);
+            var isExist = _db.MasterProducts.Any(i => i.Name == model.Name && i.Status == 0 && i.ProductTypeId == 4);
+            if (isExist)
+            {
+                ViewBag.ErrorMessage = model.Name + " Already Exist";
+                return View();
+            }
             prod.CreatedBy = user.Name;
             prod.UpdatedBy = user.Name;
-            prod.ProductTypeName = "Electronic";
             prod.ProductTypeId = 4;
-            var name = _db.MasterProducts.FirstOrDefault(i => i.Name == model.Name && i.Status == 0 && i.ProductTypeId == 4 && i.CategoryId == model.CategoryId);      
-            if (name == null)
-            {
-                prod.DateEncoded = DateTime.Now;
-                prod.DateUpdated = DateTime.Now;
-                prod.Status = 0;
-                _db.MasterProducts.Add(prod);
-                _db.SaveChanges();
-                ViewBag.Message = model.Name + " Saved Successfully!";
-            }
-            prod.Name = model.Name;
+            prod.ProductTypeName = "Electronic";
             if (model.NickName == null)
             {
                 prod.NickName = model.Name;
             }
             try
             {
+                long ticks = DateTime.Now.Ticks;
+
                 //ElectronicImage1
                 if (model.ElectronicImage1 != null)
                 {
-                    uc.UploadFiles(model.ElectronicImage1.InputStream, prod.Id + "_" + model.ElectronicImage1.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath1 = prod.Id + "_" + model.ElectronicImage1.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.ElectronicImage1.InputStream, ticks + "_" + model.ElectronicImage1.FileName, accesskey, secretkey, "image");
+                    prod.ImagePath1 = ticks + "_" + model.ElectronicImage1.FileName.Replace(" ", "");
                 }
 
                 //ElectronicImage2
                 if (model.ElectronicImage2 != null)
                 {
-                    uc.UploadFiles(model.ElectronicImage2.InputStream, prod.Id + "_" + model.ElectronicImage2.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath2 = prod.Id + "_" + model.ElectronicImage2.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.ElectronicImage2.InputStream, ticks + "_" + model.ElectronicImage2.FileName, accesskey, secretkey, "image");
+                    prod.ImagePath2 = ticks + "_" + model.ElectronicImage2.FileName.Replace(" ", "");
                 }
 
                 //ElectronicImage3
                 if (model.ElectronicImage3 != null)
                 {
-                    uc.UploadFiles(model.ElectronicImage3.InputStream, prod.Id + "_" + model.ElectronicImage3.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath3 = prod.Id + "_" + model.ElectronicImage3.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.ElectronicImage3.InputStream, ticks + "_" + model.ElectronicImage3.FileName, accesskey, secretkey, "image");
+                    prod.ImagePath3 = ticks + "_" + model.ElectronicImage3.FileName.Replace(" ", "");
                 }
 
                 //ElectronicImage4
                 if (model.ElectronicImage4 != null)
                 {
-                    uc.UploadFiles(model.ElectronicImage4.InputStream, prod.Id + "_" + model.ElectronicImage4.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath4 = prod.Id + "_" + model.ElectronicImage4.FileName.Replace(" ", "");
+                    uc.UploadFiles(model.ElectronicImage4.InputStream, ticks + "_" + model.ElectronicImage4.FileName, accesskey, secretkey, "image");
+                    prod.ImagePath4 = ticks + "_" + model.ElectronicImage4.FileName.Replace(" ", "");
                 }
 
                 //ElectronicImage5
                 if (model.ElectronicImage5 != null)
                 {
-                    uc.UploadFiles(model.ElectronicImage5.InputStream, prod.Id + "_" + model.ElectronicImage5.FileName, accesskey, secretkey, "image");
-                    prod.ImagePath5 = prod.Id + "_" + model.ElectronicImage5.FileName.Replace(" ", "");
-                }               
-                else
-                {
-                    ViewBag.ErrorMessage = model.Name + " Already Exist";
+                    uc.UploadFiles(model.ElectronicImage5.InputStream, ticks + "_" + model.ElectronicImage5.FileName, accesskey, secretkey, "image");
+                    prod.ImagePath5 = ticks + "_" + model.ElectronicImage5.FileName.Replace(" ", "");
                 }
+                prod.DateEncoded = DateTime.Now;
+                prod.DateUpdated = DateTime.Now;
+                prod.Status = 0;
+                _db.MasterProducts.Add(prod);
+                _db.SaveChanges();
+                ViewBag.Message = model.Name + " Saved Successfully!";
             }
             catch (AmazonS3Exception amazonS3Exception)
             {
@@ -1311,8 +1309,11 @@ namespace ShopNow.Controllers
             if (masterProduct.ImagePath5 != null)
                 masterProduct.ImagePath5 = masterProduct.ImagePath5.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
             var model = _mapper.Map<MasterProduct, MasterElectronicEditViewModel>(masterProduct);
-            if(masterProduct.CategoryId != 0)
-            model.CategoryName = _db.Categories.FirstOrDefault(i => i.Id == masterProduct.CategoryId).Name;
+            var categoryName = _db.Categories.FirstOrDefault(i => i.Id == masterProduct.CategoryId);
+            if (categoryName != null)
+                model.CategoryName = categoryName.Name;
+            else
+                model.CategoryName = "N/A";
             return View(model);
         }
 
