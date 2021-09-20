@@ -326,12 +326,6 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNBILDCA010")]
         public ActionResult DeliveryChargeAssign(BillCreateEditViewModel model)
         {
-            bool isCheck = db.Bills.Any(i => i.ShopId == model.ShopId && i.NameOfBill == 0 && i.Status == 0);
-            if (isCheck)
-            {
-                ViewBag.Message = "Delivery Charge Already Exist";
-                return View();
-            }
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var bill = _mapper.Map<BillCreateEditViewModel, Bill>(model);
             bill.CustomerId = user.Id;
@@ -339,8 +333,17 @@ namespace ShopNow.Controllers
             bill.CreatedBy = user.Name;
             bill.UpdatedBy = user.Name;
             bill.NameOfBill = 0;
-            if (model.DeliveryRateSet == 0)
+
+            bool isGeneralCheck = db.Bills.Any(i => i.ShopId == model.ShopId && i.NameOfBill == 0 && i.DeliveryRateSet == 0 && i.Type == model.Type && i.VehicleType == model.VehicleType && i.Status == 0);
+            bool isSpecialCheck = db.Bills.Any(i => i.ShopId == model.ShopId && i.NameOfBill == 0 && i.DeliveryRateSet == 1 && i.Type == model.Type && i.VehicleType == model.VehicleType && i.Status == 0);
+            if (isGeneralCheck && isSpecialCheck)
             {
+                ViewBag.Message = "Delivery Charge Already Exist";
+                return View();
+            }
+             if(!isGeneralCheck)
+            {
+                bill.DeliveryChargeKM = model.DeliveryChargeKM;
                 bill.DeliveryRateSet = model.DeliveryRateSet;
                 bill.DeliveryChargeOneKM = model.DeliveryChargeOneKM;
                 bill.Status = 0;
@@ -349,7 +352,7 @@ namespace ShopNow.Controllers
                 db.Bills.Add(bill);
                 db.SaveChanges();
             }
-            if (model.DeliveryRateSet1 == 1)
+             if (!isSpecialCheck)
             {
                 bill.DeliveryChargeKM = model.DeliveryChargeKM1;
                 bill.DeliveryChargeOneKM = model.DeliveryChargeOneKM1;
@@ -360,6 +363,29 @@ namespace ShopNow.Controllers
                 db.Bills.Add(bill);
                 db.SaveChanges();
             }
+          
+            
+            //if (model.DeliveryRateSet == 0)
+            //{
+            //    bill.DeliveryRateSet = model.DeliveryRateSet;
+            //    bill.DeliveryChargeOneKM = model.DeliveryChargeOneKM;
+            //    bill.Status = 0;
+            //    bill.DateEncoded = DateTime.Now;
+            //    bill.DateUpdated = DateTime.Now;
+            //    db.Bills.Add(bill);
+            //    db.SaveChanges();
+            //}
+            //if (model.DeliveryRateSet1 == 1)
+            //{
+            //    bill.DeliveryChargeKM = model.DeliveryChargeKM1;
+            //    bill.DeliveryChargeOneKM = model.DeliveryChargeOneKM1;
+            //    bill.DeliveryRateSet = model.DeliveryRateSet1;
+            //    bill.Status = 0;
+            //    bill.DateEncoded = DateTime.Now;
+            //    bill.DateUpdated = DateTime.Now;
+            //    db.Bills.Add(bill);
+            //    db.SaveChanges();
+            //}
             
             return RedirectToAction("DeliveryChargeAssignList");
         }
