@@ -642,9 +642,21 @@ namespace ShopNow.Controllers
             }
         }
 
-        public JsonResult GetBillOrDelivary(int bill, int shopId)
+        public JsonResult GetBillOrDelivary(int bill, int shopId, double totalSize=0, double totalWeight=0)
         {
             var model = new BillApiListViewModel();
+
+            int mode = 0; //0-NA,1-bike,2-carrier bike,3-Auto
+            double liters = totalSize / 1000;
+
+            if (totalWeight <= 20 || liters <= 60)
+                mode = 1;
+            if ((totalWeight > 20 && totalWeight <= 40) || (liters > 60 && liters <= 120))
+                mode = 2;
+            if (totalWeight > 40 || liters > 120)
+                mode = 3;
+
+
             model.List = db.Bills.Where(i => i.NameOfBill == bill && i.ShopId == shopId && i.Status == 0).Select(i => new BillApiListViewModel.BillList
             {
                 Id = i.Id,
