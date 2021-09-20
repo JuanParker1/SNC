@@ -33,6 +33,7 @@ namespace ShopNow.ViewModels
         public int Status { get; set; }
         public DateTime DateEncoded { get; set; }
         public DateTime DateUpdated { get; set; }
+        public int VehicleType { get; set; }
 
         public int GeneralCount { get; set; }
         public int SpecialCount { get; set; }
@@ -102,6 +103,56 @@ namespace ShopNow.ViewModels
             public double TotalAmount { get; set; }
             public int Distance { get; set; }
             public int Type { get; set; }
+            public int VehicleType { get; set; }
+            public string DeliveryChargeTypeText
+            {
+                get
+                {
+                    switch (this.Type)
+                    {
+                        case 1:
+                            return "I Tier";
+                        case 2:
+                            return "II Tier";
+                        case 3:
+                            return "III Tier";
+                        default:
+                            return "N/A";
+                    }
+                }
+            }
+            public string VehicleTypeText
+            {
+                get
+                {
+                    switch (this.VehicleType)
+                    {
+                        case 1:
+                            return "Bike";
+                        case 2:
+                            return "Carrier Bike";
+                        case 3:
+                            return "Auto";
+                        default:
+                            return "N/A";
+                    }
+                }
+            }
+            public string DeliveryRateSetText
+            {
+                get
+                {
+                    switch (this.DeliveryRateSet)
+                    {
+                        case 0:
+                            return "General";
+                        case 1:
+                            return "Special";
+                        default:
+                            return "N/A";
+                    }
+                }
+            }
         }
     }
 

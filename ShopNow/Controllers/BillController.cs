@@ -58,7 +58,8 @@ namespace ShopNow.Controllers
                 DeliveryChargeKM = i.DeliveryChargeKM,
                 DeliveryChargeOneKM = i.DeliveryChargeOneKM,
                 DeliveryRateSet = i.DeliveryRateSet,
-                Type = i.Type
+                Type = i.Type,
+                VehicleType = i.VehicleType
             }).OrderBy(i=> i.DeliveryRateSet).ToList();
             model.GeneralCount1 = db.Bills.Where(i => i.NameOfBill == 0 && i.DeliveryRateSet == 0 && i.Status == 0 && i.Type == 1).Count();
             model.GeneralCount2 = db.Bills.Where(i => i.NameOfBill == 0 && i.DeliveryRateSet == 0 && i.Status == 0 && i.Type == 2).Count();
@@ -130,7 +131,7 @@ namespace ShopNow.Controllers
         public ActionResult DeliveryCharge(BillCreateEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var isExist = db.Bills.Any(i => i.NameOfBill == 0 && i.DeliveryRateSet == model.DeliveryRateSet && i.Type == model.Type && i.Status == 0);
+            var isExist = db.Bills.Any(i => i.NameOfBill == 0 && i.DeliveryRateSet == model.DeliveryRateSet && i.Type == model.Type && i.VehicleType == model.VehicleType && i.Status == 0);
             if (isExist)
             {
                 ViewBag.Message = "Already Exist";
@@ -306,7 +307,8 @@ namespace ShopNow.Controllers
                 DeliveryChargeKM = i.DeliveryChargeKM,
                 DeliveryChargeOneKM = i.DeliveryChargeOneKM,
                 DeliveryRateSet = i.DeliveryRateSet,
-                Type = i.Type
+                Type = i.Type,
+                VehicleType = i.VehicleType
             }).ToList();
             return View(model.List);
         }
@@ -340,7 +342,7 @@ namespace ShopNow.Controllers
             if (model.DeliveryRateSet == 0)
             {
                 bill.DeliveryRateSet = model.DeliveryRateSet;
-
+                bill.DeliveryChargeOneKM = model.DeliveryChargeOneKM;
                 bill.Status = 0;
                 bill.DateEncoded = DateTime.Now;
                 bill.DateUpdated = DateTime.Now;
@@ -352,7 +354,6 @@ namespace ShopNow.Controllers
                 bill.DeliveryChargeKM = model.DeliveryChargeKM1;
                 bill.DeliveryChargeOneKM = model.DeliveryChargeOneKM1;
                 bill.DeliveryRateSet = model.DeliveryRateSet1;
-
                 bill.Status = 0;
                 bill.DateEncoded = DateTime.Now;
                 bill.DateUpdated = DateTime.Now;
@@ -376,10 +377,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNBILDC004")]
-        public JsonResult DeliveryChargeExist(int DeliveryRateSet, int type)
+        public JsonResult DeliveryChargeExist(int DeliveryRateSet, int type, int vehicletype)
         {
-            var GeneralCount = db.Bills.Where(i => i.NameOfBill == 0 && i.DeliveryRateSet == 0 && i.Status == 0 && i.Type == type).Count();
-            var SpecialCount = db.Bills.Where(i => i.NameOfBill == 0 && i.DeliveryRateSet == 1 && i.Status == 0 && i.Type == type).Count();
+            var GeneralCount = db.Bills.Where(i => i.NameOfBill == 0 && i.DeliveryRateSet == 0 && i.Status == 0 && i.Type == type && i.VehicleType == vehicletype).Count();
+            var SpecialCount = db.Bills.Where(i => i.NameOfBill == 0 && i.DeliveryRateSet == 1 && i.Status == 0 && i.Type == type && i.VehicleType == vehicletype).Count();
             bool IsAdded = false;
             string message = "";
             if(DeliveryRateSet == 0)
@@ -407,10 +408,10 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNBILDCA010")]
-        public async Task<JsonResult> GetDeliveryChargeType(int type)
+        public async Task<JsonResult> GetDeliveryChargeType(int type, int vehicletype)
         {
             var model = new DeliveryListViewModel();
-            model.List = await db.Bills.Where(a => a.Type == type && a.Status == 0).Select(i => new DeliveryListViewModel.DeliveryList
+            model.List = await db.Bills.Where(a => a.Type == type && a.VehicleType == vehicletype && a.Status == 0).Select(i => new DeliveryListViewModel.DeliveryList
             {
                Id = i.Id,
                DeliveryChargeKM = i.DeliveryChargeKM,

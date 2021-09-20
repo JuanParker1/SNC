@@ -36,6 +36,7 @@
                 <input type="hidden" name="ShopName" value="@Model.ShopName" />
                 <input type="hidden" name="DeliveryRateSet" id="DeliveryRateSet" value="@Model.DeliveryRateSet" />
                 <input type="hidden" name="Type" id="Type" value="@Model.Type" />
+                <input type="hidden" name="VehicleType" id="VehicleType" value="@Model.VehicleType" />
                 <div class="card mb-3">
                     <div class="card-body">
                         <div class="row">
@@ -71,6 +72,22 @@
                                         @if (Model.Type == 3)
                                         {
                                             <label> 3<sup>rd</sup> Tier</label>}
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-2 text-center text-theme_dark">
+                                        <h6>Vehicle Type</h6>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @if (Model.VehicleType == 1)
+                                        {
+                                            <label>Bike</label>}
+                                        @if (Model.VehicleType == 2)
+                                        {
+                                            <label> Carrier Bike</label>}
+                                        @if (Model.VehicleType == 3)
+                                        {
+                                            <label> Auto</label>}
                                     </div>
                                 </div>
                                 <hr class="sn_theme-gradient" />
