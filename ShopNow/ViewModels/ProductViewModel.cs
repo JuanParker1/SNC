@@ -431,27 +431,12 @@ namespace ShopNow.ViewModels
         public int ProductTypeId { get; set; }
         public string ProductTypeName { get; set; }
         public double Price { get; set; }
-        public bool Customisation { get; set; }
-        public string ColorCode { get; set; }
-        public int MeasurementUnitId { get; set; }
-        public string MeasurementUnitName { get; set; }
-        public bool PriscriptionCategory { get; set; }
         public double Length { get; set; }
         public double Width { get; set; }
         public double Height { get; set; }
         public double SizeLWH { get; set; }
         public double Weight { get; set; }
-        public string DrugCompoundDetailIds { get; set; }
-        public string DrugCompoundDetailName { get; set; }
-        public Nullable<int> IBarU { get; set; }
-        public string OriginCountry { get; set; }
-        public string Manufacturer { get; set; }
-        public Nullable<int> PackageId { get; set; }
-        public string PackageName { get; set; }
         public string GoogleTaxonomyCode { get; set; }
-        public int SubCategoryId { get; set; }
-        public int NextSubCategoryId { get; set; }
-        public string ASIN { get; set; }
         public string ImagePath1 { get; set; }
         public string ImagePath2 { get; set; }
         public string ImagePath3 { get; set; }

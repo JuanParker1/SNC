@@ -48,7 +48,7 @@
                                         <input type="hidden" name="MasterProductId" id="MasterProductId" value="@Model.MasterProductId" />
                                         <input type="hidden" name="Id" value="@Model.Id" />
                                         <input type="hidden" name="Name" value="@Model.Name" />
-                                        <input type="hidden" name="ProductType" value="@Model.ProductType" />
+                                        <input type="hidden" name="ProductTypeId" value="@Model.ProductTypeId" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Brand Name</strong></label>
@@ -61,7 +61,7 @@
                                         <input type="text" class="form-control" name="CategoryName" id="CategoryName" value="@Model.CategoryName" readonly />
                                         <input type="hidden" name="CategoryId" id="CategoryId" value="@Model.CategoryId" />
                                     </div>
-                                    <div class="col-md-3">
+                                    @*<div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Sub Category I Name</strong></label>
                                         <input type="text" class="form-control" name="SubCategoryName" id="SubCategoryName" value="@Model.SubCategoryName" readonly />
                                         <input type="hidden" name="SubCategoryId" id="SubCategoryId" value="@Model.SubCategoryId" />
@@ -70,7 +70,7 @@
                                         <label class="col-form-label"><strong class="text-secondary">Sub Category II Name</strong></label>
                                         <input type="text" class="form-control" name="NextSubCategoryName" id="NextSubCategoryName" value="@Model.NextSubCategoryName" readonly />
                                         <input type="hidden" name="NextSubCategoryId" id="NextSubCategoryId" value="@Model.NextSubCategoryId" />
-                                    </div>
+                                    </div>*@
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="Price"><strong class="text-secondary">Menu Price</strong></label>
                                         <input id="MenuPrice" type="number" class="form-control" name="MenuPrice" min="0" step="any" value="@Model.MenuPrice" />
@@ -95,9 +95,9 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="SizeLB"><strong class="text-secondary">Size LB</strong></label>
-                                        <input id="SizeLB" type="text" class="form-control" name="SizeLBH" min="0" value="@Model.SizeLBH" />
+                                        <input id="SizeLB" type="text" class="form-control" name="SizeLWH" min="0" value="@Model.SizeLWH" />
                                     </div>
-                                    <div class="col-md-3">
+                                    @*<div class="col-md-3">
                                         <label class="col-form-label" for="MeasurementUnitId"><strong class="text-secondary">Measurement Unit Name</strong></label>
                                         <input type="hidden" name="MeasurementUnitId" id="MeasurementUnitId" value="@Model.MeasurementUnitId" />
                                         <input type="text" class="form-control" name="MeasurementUnitName" id="MeasurementUnitName" value="@Model.MeasurementUnitName" readonly />
@@ -110,7 +110,7 @@
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">ASIN / EAN</strong></label>
                                         <input id="ASIN" type="text" class="form-control" name="ASIN" value="@Model.ASIN" readonly />
-                                    </div>
+                                    </div>*@
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="GoogleTaxonomyCode"><strong class="text-secondary">Google Taxonomy Code</strong></label>
                                         <input id="GoogleTaxonomyCode" type="text" class="form-control" name="GoogleTaxonomyCode" value="@Model.GoogleTaxonomyCode" readonly />
