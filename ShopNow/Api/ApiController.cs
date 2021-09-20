@@ -2575,9 +2575,10 @@ namespace ShopNow.Controllers
 
         public JsonResult GetSingleShopDetails(int id)
         {
-            var shid = db.Shops.Where(s => s.Id == id).FirstOrDefault();
-            var shop = db.Shops.FirstOrDefault(i => i.Id == shid.Id);
+            //var shid = db.Shops.Where(s => s.Id == id).FirstOrDefault();
+            var shop = db.Shops.FirstOrDefault(i => i.Id == id);
             ShopSingleUpdateViewModel model = _mapper.Map<Shop, ShopSingleUpdateViewModel>(shop);
+            model.ImagePath = ((!string.IsNullOrEmpty(model.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + model.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg");
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
