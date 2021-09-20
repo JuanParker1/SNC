@@ -3354,8 +3354,8 @@ namespace ShopNow.Controllers
         public JsonResult GetDelivaryBoyFullReport(string phoneNumber)
         {
             var model = new DelivaryCreditAmountApiViewModel();
-            model.List = db.Orders.Where(i => i.Status == 6 && i.DeliveryBoyPhoneNumber == phoneNumber && i.DeliveryBoyPaymentStatus==0)
-                 .Join(db.Payments.Where(i=>i.PaymentMode != "Online Payment"), c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+            model.List = db.Orders.Where(i => i.Status == 6 && i.DeliveryBoyPhoneNumber == phoneNumber && i.DeliveryOrderPaymentStatus == 0)
+                 .Join(db.Payments.Where(i => i.PaymentMode != "Online Payment"), c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Select(i => new DelivaryCreditAmountApiViewModel.CartList
                 {
                     Amount = (i.p.Amount - (i.p.RefundAmount ?? 0))
