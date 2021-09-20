@@ -107,7 +107,7 @@
                 var searchWord = tr.find('.input-keyword').val();
                 var searchSource = tr.find('.select-source').val();
                 var masterIds = tr.find('.select-masterproduct').val();
-                if (searchSource || masterCodes) {
+                if (searchWord) {
                     $.post('/SearchData/AddToSourceAndNickname', { searchWord: searchWord, searchSource: searchSource, masterIds: masterIds }, function (data) {
                         if (data) {
                             swal('Success!', 'Save Successfully', 'success');
@@ -116,10 +116,10 @@
                             tr.find('.input-keyword').val('');
                         }
                         else
-                            swal('Warning!', 'Something went wrong, try again later!', 'warning');
+                            swal('Warning!', 'Select Correct word or Nickname!', 'warning');
                     });
                 } else
-                    swal('Warning!', 'Select Value', 'warning');
+                    swal('Warning!', 'Enter Keyword', 'warning');
             });
         });
     </script>

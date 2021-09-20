@@ -77,7 +77,12 @@ namespace ShopNow.Controllers
 
         public JsonResult AddToSourceAndNickname(string searchWord, string[] searchSource, long[] masterIds)
         {
-            if (masterIds.Length > 0)
+            if (masterIds == null && searchSource == null)
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+
+            if (masterIds != null)
             {
                 foreach (var id in masterIds)
                 {
@@ -91,7 +96,7 @@ namespace ShopNow.Controllers
                 }
             }
 
-            if (searchSource.Length > 0)
+            if (searchSource != null)
             {
                 foreach (var source in searchSource)
                 {
