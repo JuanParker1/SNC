@@ -3,12 +3,9 @@
 @{
     ViewBag.Title = "FMCG List";
 }
-
 <title>ShopNow | FMCG List</title>
-
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6">
@@ -18,10 +15,10 @@
             <a href="~/MasterProduct/FMCGCreate" target="_self"><span class="fa fa-plus"></span> New FMCG</a>
         </div>
     </div>
-    <div class="card">
+    <div class="card shadow">
         <div class="card-body">
             @Html.Grid(Model).Columns(columns =>
-        {
+            {
             columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(20);
             columns.Add(c => c.CategoryName).Titled("Category Name").Filterable(true).SetWidth(10);
             columns.Add(c => c.BrandName).Titled("Brand Name").Filterable(true).SetWidth(10);
@@ -31,41 +28,41 @@
                     <a href="~/MasterProduct/FMCGEdit?Id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
                     <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
                 </div>);
-}).WithPaging(20).Sortable(true)
+            }).WithPaging(20).Sortable(true)
         </div>
     </div>
 </div>
 
-        @section Scripts
+@section Scripts
 {
-            <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
-            <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
-            <script>
-                $(document).ready(function () {
-                    $(".btnDelete").click(function () {
-                        var id = $(this).attr('data-id');
-                        swal({
-                            title: "Are you sure want to delete?",
-                            text: "You will not be able to recover this file!",
-                            type: "warning",
-                            showCancelButton: true,
-                            confirmButtonColor: "#DD6B55",
-                            confirmButtonText: "Yes, Delete it!",
-                            cancelButtonText: "No, cancel",
-                            closeOnConfirm: false,
-                            closeOnCancel: true
-                        },
-                            function (isConfirm) {
-                                if (isConfirm) {
-                                    $.getJSON("/MasterProduct/Delete", { Id: id }, function (data) {
-                                        if (data == true) {
-                                            window.location.reload();
-                                        }
-                                    });
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            $(".btnDelete").click(function () {
+                var id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/MasterProduct/Delete", { Id: id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
                                 }
-                            }
-                        );
-                    });
-                });
-            </script>
-        }
+                            });
+                        }
+                    }
+                );
+            });
+        });
+    </script>
+}

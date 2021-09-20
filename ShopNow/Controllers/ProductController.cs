@@ -969,31 +969,37 @@ namespace ShopNow.Controllers
             return View();
         }
 
-        public ActionResult ElectronicEdit(int id)
+        public ActionResult ElectronicEdit(string id)
         {
-            var dId = AdminHelpers.DCodeLong(id.ToString());
+            var dId = AdminHelpers.DCodeLong(id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             if (string.IsNullOrEmpty(dId.ToString()))
                 return HttpNotFound();
             var product = db.Products.FirstOrDefault(i => i.Id == dId);
+            var model = _mapper.Map<Product,ElectronicCreateEditViewModel>(product);
             var master = db.MasterProducts.FirstOrDefault(i => i.Id == product.MasterProductId);
-            //if (product != null)
-            //{
-            //    if (product.ImagePath1 != null)
-            //        product.ImagePath1 = product.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-            //    if (product.ImagePath2 != null)
-            //        product.ImagePath2 = product.ImagePath2.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-            //    if (product.ImagePath3 != null)
-            //        product.ImagePath3 = product.ImagePath3.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-            //    if (product.ImagePath4 != null)
-            //        product.ImagePath4 = product.ImagePath4.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-            //    if (product.ImagePath5 != null)
-            //        product.ImagePath5 = product.ImagePath5.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-            //}
-            var model = _mapper.Map<Product, ElectronicCreateEditViewModel>(product);
-            model.MasterProductName = GetMasterProductName(model.MasterProductId);
-            model.CategoryName = db.Categories.FirstOrDefault(i => i.Id == master.CategoryId).Name;
+            if (master != null)
+            {
+                model.MasterProductName = master.Name;
+                model.BrandId = master.BrandId;
+                model.BrandName = master.BrandName;
+                model.GoogleTaxonomyCode = master.GoogleTaxonomyCode;
+                model.ImagePath1 = master.ImagePath1;
+                model.ImagePath2 = master.ImagePath2;
+                model.ImagePath3 = master.ImagePath3;
+                model.ImagePath4 = master.ImagePath4;
+                model.ImagePath5 = master.ImagePath5;
+                model.CategoryId = master.CategoryId;
+                var categoryName = db.Categories.FirstOrDefault(i => i.Id == master.CategoryId);
+                if (categoryName != null)
+                    model.CategoryName = categoryName.Name;
+                else
+                    model.CategoryName = "N/A";
+                model.ShortDescription = master.ShortDescription;
+                model.LongDescription = master.LongDescription;
+                model.SizeLWH = master.SizeLWH;
+            }
             return View(model);
         }
 
@@ -1006,14 +1012,12 @@ namespace ShopNow.Controllers
             var prod = db.Products.FirstOrDefault(i => i.Id == model.Id);
             _mapper.Map(model, prod);
             prod.Name = model.Name;
-            prod.ProductTypeName = model.ProductType;
             prod.UpdatedBy = user.Name;
-            prod.DateUpdated = DateTime.Now;
             prod.DateUpdated = DateTime.Now;
             db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
-            return RedirectToAction("ElectronicList", new { ShopId = prod.ShopId, shopName = prod.ShopName });
+            return RedirectToAction("ElectronicEdit", new { id = AdminHelpers.ECodeLong(model.Id) });
         }
 
         public ActionResult ElectronicList(ElectronicListViewModel model)

@@ -423,50 +423,49 @@ namespace ShopNow.ViewModels
     {
         public long Id { get; set; }
         public string Name { get; set; }
-        public int MasterProductId { get; set; }
-        public string MasterProductName { get; set; }
-        public int ShopId { get; set; }
-        public string ShopName { get; set; }
-        public string ShopCategoryId { get; set; }
-        public string ShopCategoryName { get; set; }
-        public int CategoryId { get; set; }
-        public string CategoryName { get; set; }
-        public string SubCategoryId { get; set; }
-        public string SubCategoryName { get; set; }
-        public string NextSubCategoryId { get; set; }
-        public string NextSubCategoryName { get; set; }
-        public string PackageId { get; set; }
-        public string PackageName { get; set; }
-        public string MeasurementUnitId { get; set; }
-        public string MeasurementUnitName { get; set; }
-        public string GoogleTaxonomyCode { get; set; }
         public int BrandId { get; set; }
         public string BrandName { get; set; }
+        public int CategoryId { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
-        public string ImagePath { get; set; }
+        public int ProductTypeId { get; set; }
+        public string ProductTypeName { get; set; }
         public double Price { get; set; }
-        public double MenuPrice { get; set; }
-        public string ASIN { get; set; }
+        public double Length { get; set; }
+        public double Width { get; set; }
+        public double Height { get; set; }
+        public double SizeLWH { get; set; }
         public double Weight { get; set; }
-        public string SizeLBH { get; set; }
-        public string ProductType { get; set; }
-        public string CreatedBy { get; set; }
-        public string UpdatedBy { get; set; }
-        public int Status { get; set; }
-        public string IBarU { get; set; }
-        public string OriginCountry { get; set; }
-        public string Manufacturer { get; set; }
-        public Nullable<int> shopid { get; set; }
-        public int Qty { get; set; }
-        public int Percentage { get; set; }
-        public int PackingType { get; set; }
-        public double PackingCharge { get; set; }
+        public string GoogleTaxonomyCode { get; set; }
         public string ImagePath1 { get; set; }
         public string ImagePath2 { get; set; }
         public string ImagePath3 { get; set; }
         public string ImagePath4 { get; set; }
         public string ImagePath5 { get; set; }
+        public int Adscore { get; set; }
+        public string NickName { get; set; }
+        public int Status { get; set; }
+        public System.DateTime DateEncoded { get; set; }
+        public System.DateTime DateUpdated { get; set; }
+        public string CreatedBy { get; set; }
+        public string UpdatedBy { get; set; }
+
+        public int MasterProductId { get; set; }
+        public string MasterProductName { get; set; }
+        public int ShopId { get; set; }
+        public string ShopName { get; set; }
+        public int ShopCategoryId { get; set; }
+        public string ShopCategoryName { get; set; }
+        public string CategoryName { get; set; }
+        public string SubCategoryName { get; set; }
+        public string NextSubCategoryName { get; set; }
+        public string ImagePath { get; set; }
+        public double MenuPrice { get; set; }
+        public Nullable<int> shopid { get; set; }
+        public int Qty { get; set; }
+        public int Percentage { get; set; }
+        public int PackingType { get; set; }
+        public double PackingCharge { get; set; }
     }
 
     public class FoodCreateViewModel
@@ -596,10 +595,6 @@ namespace ShopNow.ViewModels
         public string CategoryName { get; set; }
         public int BrandId { get; set; }
         public string BrandName { get; set; }
-        public string ProductType { get; set; }
-        public string ShopCategoryId { get; set; }
-        public string ShopCategoryName { get; set; }
-        public string MainSNCode { get; set; }     
         public string ImagePath { get; set; }
         public double Price { get; set; }
         public int Qty { get; set; }  

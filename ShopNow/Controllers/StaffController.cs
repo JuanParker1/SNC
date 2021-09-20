@@ -168,9 +168,9 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNSTFD004")]
-        public ActionResult Details(string code)
+        public ActionResult Details(string Id)
         {
-            var dCode = AdminHelpers.DCodeInt(code);
+            var dCode = AdminHelpers.DCodeInt(Id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             Staff staff = db.Staffs.FirstOrDefault(i => i.Id == dCode);
