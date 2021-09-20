@@ -8,7 +8,7 @@
 <script src="~/Scripts/gridmvc.js"></script>
 <link href="~/Content/switch.css" rel="stylesheet" />
 
-<div class="container-fluid">
+<div class="container-fluid mb-3">
     <div class="row">
         <div class="col-md-3">
             <h5 class="mt-1 text-success" style="letter-spacing:1px">SHOP LIST</h5>
@@ -25,6 +25,22 @@
         <div class="col-md-12">
             <div class="card shadow mt-3">
                 <div class="card-body">
+                    <form method="get" action="/Shop/List">
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <select id="select-district" class="form-control" name="District">
+                                    @if (ViewBag.District != "")
+                                    {
+                                        <option value="@ViewBag.District">@ViewBag.District</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="submit" class="btn btn-info mr-3" value="Filter" />
+                                <a href="/Shop/List" class="btn btn-warning">Clear</a>
+                            </div>
+                        </div>
+                    </form>
                     @Html.Grid(Model).Columns(columns =>
                {
                columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(15);
@@ -39,10 +55,10 @@
                     .RenderValueAs(s => new HtmlString("<label class='switch'> <input type='checkbox' value='" + s.IsOnline + "' Id='Id_" + s.Id + "' class='CheckOnline' data-id='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(8);
                columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
                     .RenderValueAs(o => @<div>
-                    <a href="~/Shop/Edit?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-4"><i class="fa fa-edit fa-lg"></i></a>
-                    <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
-                </div>);
-                }).WithPaging(20).Sortable(true)
+                            <a href="~/Shop/Edit?id=@HttpUtility.UrlEncode(ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id))" class="text-info mr-4"><i class="fa fa-edit fa-lg"></i></a>
+                            <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+                        </div>);
+            }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
@@ -50,32 +66,34 @@
 </div>
 
 @*<div class="modal fade" id="modal-opentime" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-body">
-                <form method="get" action="/Shop/UpdateNextOpeningDateTime">
-                    <input type="hidden" name="Id" />
-                    <input type="hidden" name="IsOnline" value="false"/>
-                    <h5>Next Opening DateTime</h5>
-                    <div class="form-group">
-                        <label>Choose Date & Time</label>
-                        <input class="form-control" type="datetime-local" name="NextOpeningDateTime" required />
-                    </div>
-                    <div class="text-right">
-                        <button class="btn btn-sm btn-success mr-3">Submit</button>
-                        <button class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
-                    </div>
-                </form>
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form method="get" action="/Shop/UpdateNextOpeningDateTime">
+                        <input type="hidden" name="Id" />
+                        <input type="hidden" name="IsOnline" value="false"/>
+                        <h5>Next Opening DateTime</h5>
+                        <div class="form-group">
+                            <label>Choose Date & Time</label>
+                            <input class="form-control" type="datetime-local" name="NextOpeningDateTime" required />
+                        </div>
+                        <div class="text-right">
+                            <button class="btn btn-sm btn-success mr-3">Submit</button>
+                            <button class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-</div>*@
+    </div>*@
 
 @section Scripts
 {
     <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
-
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
 
@@ -122,6 +140,16 @@
                         }
                     }
                 );
+            });
+
+            $('#select-district').select2({
+                placeholder: "Search District",
+                ajax: {
+                    url: "/Shop/GetDistrictSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
             });
 
         });

@@ -2575,9 +2575,10 @@ namespace ShopNow.Controllers
 
         public JsonResult GetSingleShopDetails(int id)
         {
-            var shid = db.Shops.Where(s => s.Id == id).FirstOrDefault();
-            var shop = db.Shops.FirstOrDefault(i => i.Id == shid.Id);
+            //var shid = db.Shops.Where(s => s.Id == id).FirstOrDefault();
+            var shop = db.Shops.FirstOrDefault(i => i.Id == id);
             ShopSingleUpdateViewModel model = _mapper.Map<Shop, ShopSingleUpdateViewModel>(shop);
+            model.ImagePath = ((!string.IsNullOrEmpty(model.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + model.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg");
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
@@ -4559,6 +4560,18 @@ namespace ShopNow.Controllers
                 mode = 3;
 
             return Json(mode, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetCustomerPaymentMode(int customerId)//If Customer Cancel the order(not pick up the phone on delivery) next 5 orders should be Online Mode
+        {
+            var lastCancelledOrder = db.Orders.AsEnumerable().LastOrDefault(i => i.CustomerId == customerId && i.Status == 9); //Replace with customer cancel status
+            if (lastCancelledOrder != null)
+            {
+                int orderCountAfterLC = db.Orders.Where(i => i.CustomerId == customerId && i.Status == 6 && (i.DateEncoded > lastCancelledOrder.DateEncoded)).Count();
+                if (orderCountAfterLC < 5)
+                    return Json(new { isOnline = true }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { isOnline = false }, JsonRequestBehavior.AllowGet);
         }
 
         public void UpdateAchievements(int customerId)

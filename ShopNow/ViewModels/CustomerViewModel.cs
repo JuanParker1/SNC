@@ -56,15 +56,12 @@ namespace ShopNow.ViewModels
 
     public class CustomerDetailsViewModel
     {
-        public int Id{ get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
+        public string Password { get; set; }
         public string Email { get; set; }
-        public string DOB { get; set; }
         public string ImagePath { get; set; }
-        public string ImageAadharPath { get; set; }
-        public string AadharName { get; set; }
-        public string AadharNumber { get; set; }
         public string CountryName { get; set; }
         public string StateName { get; set; }
         public string DistrictName { get; set; }
@@ -73,18 +70,28 @@ namespace ShopNow.ViewModels
         public string PinCode { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public List<AddressList> List { get; set; }
-        public class AddressList
-        {
-            public int Id{ get; set; }
-            public string Name { get; set; }
-            public string CountryName { get; set; }
-            public string StateName { get; set; }
-            public string DistrictName { get; set; }
-            public string StreetName { get; set; }
-            public string Address { get; set; }
-            public string PinCode { get; set; }
-        }
+        public string LandMark { get; set; }
+        public int AddressType { get; set; }
+        public string FlatNo { get; set; }
+        public int Position { get; set; }
+        public string ImageAadharPath { get; set; }
+        public string AadharName { get; set; }
+        public string AadharNumber { get; set; }
+        public bool AgeVerify { get; set; }
+        public bool AadharVerify { get; set; }
+        public Nullable<System.DateTime> DOB { get; set; }
+        public string FcmTocken { get; set; }
+        public string IpAddress { get; set; }
+        public double WalletAmount { get; set; }
+        public double PenaltyAmount { get; set; }
+        public double DeliveryWaitingCharge { get; set; }
+        public Nullable<bool> IsReferred { get; set; }
+        public string ReferralNumber { get; set; }
+        public int Status { get; set; }
+        public string UpdatedBy { get; set; }
+        public string CreatedBy { get; set; }
+        public System.DateTime DateEncoded { get; set; }
+        public System.DateTime DateUpdated { get; set; }
     }
 
     //Api

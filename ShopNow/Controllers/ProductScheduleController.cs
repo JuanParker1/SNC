@@ -145,7 +145,7 @@ namespace ShopNow.Controllers
                 {
                     id = i.psc.p.Id,
                     text = i.m.Name
-                }).OrderBy(i => i.text).ToListAsync();
+                }).Distinct().OrderBy(i => i.text).ToListAsync();
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }

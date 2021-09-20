@@ -74,13 +74,14 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNSHPL005")]
-        public ActionResult List()
+        public ActionResult List(string district = "")
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var List = (from s in db.Shops
-                        select s).OrderBy(s => s.Name).Where(i => i.Status == 0 || i.Status == 6).ToList();
-
+                        where (district != "" ? s.DistrictName == district : true) && (s.Status == 0 || s.Status == 6)
+                        select s).OrderBy(s => s.Name).ToList();
+            ViewBag.District = district;
             return View(List);
         }
 
@@ -1035,6 +1036,7 @@ namespace ShopNow.Controllers
         public ActionResult CreditsHistory()
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var model = new ShopCreditViewModel();
             model.Lists = db.Payments.Where(i => i.CreditType == 0 || i.CreditType == 1 && i.Amount != -20)
                  .Join(db.Shops, p => p.ShopId, s => s.Id, (p, s) => new { p, s })

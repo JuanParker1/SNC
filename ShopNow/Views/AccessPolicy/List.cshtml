@@ -1,8 +1,8 @@
 ﻿@model ShopNow.ViewModels.AccessPolicyListViewModel
 @{
-    ViewBag.Title = "Access Policy Create";
+    ViewBag.Title = "Access Policy List";
 }
-<title>ShopNow | Access Policy Create</title>
+<title>ShopNow | Access Policy List</title>
 
 @using (Html.BeginForm("List", "AccessPolicy", FormMethod.Post, new { id = "AccessPolicyForm" }))
 {
@@ -123,7 +123,7 @@
             }).draw();
 
             $('#CustomerId').select2({
-                placeholder: "Search Customer",
+                placeholder: "Select Customer",
                 ajax: {
                     url: "/AccessPolicy/GetCustomerSelect2",
                     width: '100%',

@@ -145,7 +145,7 @@ namespace ShopNow.Controllers
             return View();
         }
 
-        [AccessPolicy(PageCode = "SHNHOML001")]
+        //[AccessPolicy(PageCode = "SHNHOML001")]
         public ActionResult LogOut()
         {
             Session.Abandon();

@@ -313,9 +313,11 @@
                 $('input[name="ImagePath1"]').val(e.params.data.ImagePath1);
                 $('input[name="MenuPrice"]').val(e.params.data.Price);
                 $('input[name="GoogleTaxonomyCode"]').val(e.params.data.GoogleTaxonomyCode);
-                $.getJSON("/Product/GetCategoryName", { categoryId: e.params.data.CategoryId}, function (data) {
-                    $('#CategoryName').val(data.categoryName);
-                });
+                if (e.params.data.CategoryId != 0) {
+                    $.getJSON("/Product/GetCategoryName", { categoryId: e.params.data.CategoryId }, function (data) {
+                        $('#CategoryName').val(data.categoryName);
+                    });
+                }
                 $('#divAddOns').addClass('d-none');
                 $('#tbl-addOns tbody').empty();
                 $.getJSON('/Product/GetProductDishAddOns', { masterProductId: e.params.data.MasterId }, function (data) {

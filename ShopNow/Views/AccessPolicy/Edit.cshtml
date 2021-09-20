@@ -31,14 +31,14 @@
                         <input type="hidden" name="CustomerId" value="@Model.CustomerId" />
                         <input type="hidden" name="CustomerName" value="@Model.CustomerName" />
                         <div class="form-group row">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label class="col-form-label"><strong class="text-secondary">Page Name</strong></label>
                                 <select name="PageCode" id="PageCode" class="form-control">
                                     <option value="@Model.PageCode">@Model.PageName</option>
                                 </select>
                                 <input type="hidden" name="PageName" id="PageName" value="@Model.PageName" />
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label class="col-form-label"><strong class="text-secondary">Shop Name</strong></label>
                                 <select name="ShopId" id="ShopId" class="form-control">
                                     @if (Model.ShopName != null)
@@ -48,7 +48,7 @@
                                 </select>
                                 <input type="hidden" name="ShopName" id="ShopName" value="@Model.ShopName" />
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label class="col-form-label"><strong class="text-secondary">Staff Name</strong></label>
                                 <select name="StaffId" id="StaffId" class="form-control">
                                     @if (Model.StaffName != null)
@@ -58,7 +58,7 @@
                                 </select>
                                 <input type="hidden" name="StaffName" id="StaffName" value="@Model.StaffName" />
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label class="col-form-label"><strong class="text-secondary">Role</strong></label>
                                 <select id="Position" name="Position" class="form-control">
                                     <option value=" ">Select</option>
@@ -69,7 +69,7 @@
                                     <option value="4">Admin</option>
                                 </select>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label class="col-form-label"><strong class="text-secondary">Website</strong></label>
                                 <select id="Status" name="Status" class="form-control">
                                     <option value=" ">Select</option>

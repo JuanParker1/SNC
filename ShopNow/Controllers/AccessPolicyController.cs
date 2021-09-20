@@ -137,13 +137,6 @@ namespace ShopNow.Controllers
                     db.AccessPolicies.Add(access);
                     db.SaveChanges();
                 }
-                else
-                {
-                    var ap = db.AccessPolicies.FirstOrDefault(i=> i.Id == s.Id);
-                    ap.isAccess = true;
-                    db.Entry(ap).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-                }
             }
             model.List = db.Pages.Where(i => i.Status == 0)
                .GroupJoin(db.AccessPolicies.Where(i => i.CustomerId == model.CustomerId && i.isAccess == true), p => p.Code, a => a.PageCode, (p, a) => new { p, a })
