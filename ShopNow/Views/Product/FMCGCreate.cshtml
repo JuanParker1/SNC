@@ -67,11 +67,11 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="MenuPrice"><strong class="text-secondary">Menu Price</strong></label>
-                                        <input id="MenuPrice" type="number" class="form-control" name="MenuPrice" step="any" min="0" />
+                                        <input id="MenuPrice" type="number" class="form-control" name="MenuPrice" min="1" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="Price"><strong class="text-secondary">Selling Price</strong></label>
-                                        <input id="Price" type="number" class="form-control" name="Price" step="any" min="0" />
+                                        <input id="Price" type="number" class="form-control" name="Price" min="1" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="Qty"><strong class="text-secondary">Quantity</strong></label>
@@ -192,7 +192,7 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-md-2 mx-auto">
-                                <button type="button" class="btn btn-block btn-success Save" id="Create"><span class="glyphicon glyphicon-file"></span> Save</button>
+                                <button type="button" class="btn btn-block btn-success Save"><span class="glyphicon glyphicon-file"></span> Save</button>
                             </div>
                         </div>
                     </div>
@@ -300,16 +300,27 @@
             });
 
             $(".Save").click(function () {
-                var shopid = $("#ShopId").val();
-                if (shopid != null) {
-                    if ($('#MasterProductId').val()) {
-                        $('#FMCGCreateForm').submit();
-                    } else {
-                        swal("Notice!", "Please Select FMCG!", "warning");
-                    }
-                } else {
-                    swal("Notice!", "Please Select Shop!", "warning");
-                }
+                var isValidated = false;
+                var requiredArr = [
+                    'MenuPrice',
+                    'Price',
+                    'ShopId',
+                    'MasterProductId'
+                ];
+                isValidated = ValidateEmptyRequiredFiels(requiredArr);
+                if (isValidated) {
+                    $('#FMCGCreateForm').submit();
+                };
+                //var shopid = $("#ShopId").val();
+                //if (shopid != null) {
+                //    if ($('#MasterProductId').val()) {
+                //        $('#FMCGCreateForm').submit();
+                //    } else {
+                //        swal("Notice!", "Please Select FMCG!", "warning");
+                //    }
+                //} else {
+                //    swal("Notice!", "Please Select Shop!", "warning");
+                //}
             });
         });
     </script>

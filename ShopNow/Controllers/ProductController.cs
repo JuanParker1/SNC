@@ -289,7 +289,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNPROME008")]
         public ActionResult MedicalEdit(string id)
         {
-            var dCode = AdminHelpers.DCodeInt(id);
+            var dCode = AdminHelpers.DCodeLong(id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             if (string.IsNullOrEmpty(dCode.ToString()))
@@ -340,11 +340,11 @@ namespace ShopNow.Controllers
         public ActionResult MedicalEdit(MedicalEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            Product prod = db.Products.FirstOrDefault(i => i.Id == model.Id);
+            var prod = db.Products.FirstOrDefault(i => i.Id == model.Id);
             _mapper.Map(model, prod);
-
-            prod.DateUpdated = DateTime.Now;
+            prod.Name = model.Name;
             prod.UpdatedBy = user.Name;
+            prod.DateUpdated = DateTime.Now;
             db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
             return RedirectToAction("MedicalEdit", new { id = AdminHelpers.ECodeLong(prod.Id) });
