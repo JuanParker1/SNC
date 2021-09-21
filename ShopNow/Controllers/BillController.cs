@@ -273,17 +273,18 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new DeliveryChargeAssignListViewModel();
-            model.List = db.Shops.Where(i => i.Status == 0).Join(db.DeliveryCharges,s=> s.DeliveryChargeId, d=> d.Id, (s,d)=> new { s,d}).Select(i => new DeliveryChargeAssignListViewModel.DeliveryAssignList
-            {
-                ShopId = i.s.Id,
-                DeliveryChargeId = i.d.Id,
-                ShopName = i.s.Name,
-                ChargeUpto5Km = i.d.ChargeUpto5Km,
-                ChargePerKm = i.d.ChargePerKm,
-                Type = i.d.Type,
-                TireType = i.d.TireType,
-                VehicleType = i.d.VehicleType
-            }).ToList();
+            //model.List = db.Shops.Where(i => i.Status == 0)
+            //    .Join(db.DeliveryCharges,s=> s.DeliveryChargeId, d=> d.Id, (s,d)=> new { s,d}).Select(i => new DeliveryChargeAssignListViewModel.DeliveryAssignList
+            //{
+            //    ShopId = i.s.Id,
+            //    DeliveryChargeId = i.d.Id,
+            //    ShopName = i.s.Name,
+            //    ChargeUpto5Km = i.d.ChargeUpto5Km,
+            //    ChargePerKm = i.d.ChargePerKm,
+            //    Type = i.d.Type,
+            //    TireType = i.d.TireType,
+            //    VehicleType = i.d.VehicleType
+            //}).ToList();
             return View(model.List);
         }
 
