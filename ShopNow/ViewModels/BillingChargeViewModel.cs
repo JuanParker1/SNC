@@ -17,6 +17,7 @@ namespace ShopNow.ViewModels
     {
         public int Id { get; set; }
         public int ShopId { get; set; }
+        public string ShopName { get; set; }
         public double ConvenientCharge { get; set; }
         public double PackingCharge { get; set; }
         public int ItemType { get; set; }

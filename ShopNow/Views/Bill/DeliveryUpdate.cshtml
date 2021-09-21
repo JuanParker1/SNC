@@ -21,7 +21,7 @@
             {
                 @Html.AntiForgeryToken()
                 <input type="hidden" name="Id" value="@Model.Id" />
-                <input type="hidden" id="Type" value="@Model.Type" />
+                <input type="hidden" name="Type" id="Type" value="@Model.Type" />
                 <input type="hidden" name="TireType" id="TireType" value="@Model.TireType" />
                 <input type="hidden" name="VehicleType" id="VehicleType" value="@Model.VehicleType" />
                 <div class="card mb-3">
@@ -35,12 +35,12 @@
                                     <div class="col-md-6">
                                         <div class="form-check-inline mr-3">
                                             <label class="form-check-label">
-                                                <input type="radio" class="form-check-input" name="Type" value="0" disabled> General
+                                                <input type="radio" class="form-check-input" name="TypeRadio" value="0" disabled> General
                                             </label>
                                         </div>
                                         <div class="form-check-inline">
                                             <label class="form-check-label">
-                                                <input type="radio" class="form-check-input" name="Type" value="1" disabled> Special
+                                                <input type="radio" class="form-check-input" name="TypeRadio" value="1" disabled> Special
                                             </label>
                                         </div>
                                     </div>
@@ -152,7 +152,7 @@
         $(document).ready(function () {
             jQuery(document).ready(function ($) {
                 var drs = $("#Type").val();
-                $("input[name=Type][value=" + drs + "]").attr('checked', 'checked');
+                $("input[name=TypeRadio][value=" + drs + "]").attr('checked', 'checked');
                 if (drs == 0) {
                     $("#GeneralEntry").removeClass("d-none");
                     $("#SpecialEntry").addClass("d-none");
