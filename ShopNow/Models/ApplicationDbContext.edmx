@@ -134,7 +134,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ShopId" Type="int" Nullable="false" />
           <Property Name="ConvenientCharge" Type="float" Nullable="false" />
           <Property Name="PackingCharge" Type="float" Nullable="false" />
@@ -1228,12 +1228,13 @@
           <Property Name="GooglePlaceId" Type="nvarchar" MaxLength="100" />
           <Property Name="HasSchedule" Type="bit" />
           <Property Name="NextOnTime" Type="time" Precision="7" />
-          <Property Name="DeliveryChargeId" Type="int" Nullable="false" />
+          <Property Name="DeliveryType" Type="int" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="CreatedBy" Type="nvarchar(max)" />
           <Property Name="UpdatedBy" Type="nvarchar(max)" />
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
+          <Property Name="DeliveryTierType" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="ShopSchedules">
           <Key>
@@ -2783,8 +2784,8 @@
           <EntitySet Name="CustomerSearchDatas" EntityType="sncModel.CustomerSearchData" />
           <EntitySet Name="KeywordDatas" EntityType="sncModel.KeywordData" />
           <EntitySet Name="SearchDatas" EntityType="sncModel.SearchData" />
-          <EntitySet Name="BillingCharges" EntityType="sncModel.BillingCharge" />
           <EntitySet Name="DeliveryCharges" EntityType="sncModel.DeliveryCharge" />
+          <EntitySet Name="BillingCharges" EntityType="sncModel.BillingCharge" />
           <EntitySet Name="Shops" EntityType="sncModel.Shop" />
           <AssociationSet Name="FK_CustomerReview_Shops" Association="sncModel.FK_CustomerReview_Shops">
             <End Role="Shop" EntitySet="Shops" />
@@ -3200,22 +3201,6 @@
           <Property Name="Source" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="KeyValue" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="BillingCharge">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="ShopId" Type="Int32" Nullable="false" />
-          <Property Name="ConvenientCharge" Type="Double" Nullable="false" />
-          <Property Name="PackingCharge" Type="Double" Nullable="false" />
-          <Property Name="ItemType" Type="Int32" Nullable="false" />
-          <Property Name="DeliveryDiscountPercentage" Type="Double" Nullable="false" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="UpdatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="DeliveryCharge">
           <Key>
             <PropertyRef Name="Id" />
@@ -3226,6 +3211,22 @@
           <Property Name="Type" Type="Int32" Nullable="false" />
           <Property Name="TireType" Type="Int32" Nullable="false" />
           <Property Name="VehicleType" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="BillingCharge">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShopId" Type="Int32" Nullable="false" />
+          <Property Name="ConvenientCharge" Type="Double" Nullable="false" />
+          <Property Name="PackingCharge" Type="Double" Nullable="false" />
+          <Property Name="ItemType" Type="Int32" Nullable="false" />
+          <Property Name="DeliveryDiscountPercentage" Type="Double" Nullable="false" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
@@ -3304,12 +3305,13 @@
           <Property Name="GooglePlaceId" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="HasSchedule" Type="Boolean" />
           <Property Name="NextOnTime" Type="Time" Precision="7" />
-          <Property Name="DeliveryChargeId" Type="Int32" Nullable="false" />
+          <Property Name="DeliveryType" Type="Int32" Nullable="false" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DeliveryTierType" Type="Int32" Nullable="false" />
           <NavigationProperty Name="CustomerReviews" Relationship="sncModel.FK_CustomerReview_Shops" FromRole="Shop" ToRole="CustomerReview" />
         </EntityType>
         <Association Name="FK_CustomerReview_Shops">
@@ -4682,23 +4684,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="BillingCharges">
-            <EntityTypeMapping TypeName="sncModel.BillingCharge">
-              <MappingFragment StoreEntitySet="BillingCharge">
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="DeliveryDiscountPercentage" ColumnName="DeliveryDiscountPercentage" />
-                <ScalarProperty Name="ItemType" ColumnName="ItemType" />
-                <ScalarProperty Name="PackingCharge" ColumnName="PackingCharge" />
-                <ScalarProperty Name="ConvenientCharge" ColumnName="ConvenientCharge" />
-                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="DeliveryCharges">
             <EntityTypeMapping TypeName="sncModel.DeliveryCharge">
               <MappingFragment StoreEntitySet="DeliveryCharge">
@@ -4716,15 +4701,33 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="BillingCharges">
+            <EntityTypeMapping TypeName="sncModel.BillingCharge">
+              <MappingFragment StoreEntitySet="BillingCharge">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DeliveryDiscountPercentage" ColumnName="DeliveryDiscountPercentage" />
+                <ScalarProperty Name="ItemType" ColumnName="ItemType" />
+                <ScalarProperty Name="PackingCharge" ColumnName="PackingCharge" />
+                <ScalarProperty Name="ConvenientCharge" ColumnName="ConvenientCharge" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Shops">
             <EntityTypeMapping TypeName="sncModel.Shop">
               <MappingFragment StoreEntitySet="Shops">
+                <ScalarProperty Name="DeliveryTierType" ColumnName="DeliveryTierType" />
                 <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
                 <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
                 <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="DeliveryChargeId" ColumnName="DeliveryChargeId" />
+                <ScalarProperty Name="DeliveryType" ColumnName="DeliveryType" />
                 <ScalarProperty Name="NextOnTime" ColumnName="NextOnTime" />
                 <ScalarProperty Name="HasSchedule" ColumnName="HasSchedule" />
                 <ScalarProperty Name="GooglePlaceId" ColumnName="GooglePlaceId" />

@@ -655,6 +655,7 @@
     <Compile Include="ViewModels\ApiViewModels.cs" />
     <Compile Include="ViewModels\AppDetailViewModels.cs" />
     <Compile Include="ViewModels\BannerViewModel.cs" />
+    <Compile Include="ViewModels\BillingChargeViewModel.cs" />
     <Compile Include="ViewModels\BillViewModel.cs" />
     <Compile Include="ViewModels\CartViewModel.cs" />
     <Compile Include="ViewModels\CrustViewModels.cs" />
@@ -662,6 +663,7 @@
     <Compile Include="ViewModels\DashboardViewModels.cs" />
     <Compile Include="ViewModels\DeliveryBoysList.cs" />
     <Compile Include="ViewModels\DeliveryBoyViewModel.cs" />
+    <Compile Include="ViewModels\DeliveryChargeViewModel.cs" />
     <Compile Include="ViewModels\DiscountCategoryViewModel.cs" />
     <Compile Include="ViewModels\DrugCompoundDetailViewModel.cs" />
     <Compile Include="ViewModels\LocationDetailsViewModels.cs" />
