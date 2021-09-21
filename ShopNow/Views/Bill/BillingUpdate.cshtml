@@ -1,4 +1,4 @@
-﻿@model ShopNow.ViewModels.BillCreateEditViewModel
+﻿@model ShopNow.ViewModels.BillingChargeEditViewModel
 @{
     ViewBag.Title = "Billing Charge Update";
 }
@@ -38,7 +38,6 @@
                                                             <option value="@Model.ShopId">@Model.ShopName</option>
                                                         }
                                                     </select>
-                                                    <input type="hidden" name="ShopName" id="ShopName" value="@Model.ShopName" />
                                                 </div>
                                             </div>
                                         </div>
@@ -252,7 +251,7 @@
                     dataType: 'json'
                 }
             }).on('select2:select', function (e) {
-                $('input[name="ShopName"]').val(e.params.data.text);
+               // $('input[name="ShopName"]').val(e.params.data.text);
             });
 
             jQuery(document).ready(function ($) {

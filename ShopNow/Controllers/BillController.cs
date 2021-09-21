@@ -20,18 +20,18 @@ namespace ShopNow.Controllers
         {
             _mapperConfiguration = new MapperConfiguration(config =>
             {
-                //config.CreateMap<Bill, BillListViewModel.BillList>();
-                //config.CreateMap<Bill, DeliveryListViewModel.DeliveryList>();
-                //config.CreateMap<BillCreateEditViewModel, Bill>();
-                //config.CreateMap<Bill, BillCreateEditViewModel>();
-
-                // DeliveryCharge
+                // Delivery Charge
                 config.CreateMap<DeliveryChargeCreateViewModel, DeliveryCharge>();
                 config.CreateMap<DeliveryChargeEditViewModel, DeliveryCharge>();
                 config.CreateMap<DeliveryCharge, DeliveryChargeEditViewModel>();
                 config.CreateMap<DeliveryCharge, DeliveryChargeListViewModel.DeliveryList>();
 
-                // BillingCharge
+                // Delivery Charge Assign
+                //config.CreateMap<DeliveryChargeAssignCreateViewModel, DeliveryCharge>();
+                config.CreateMap<DeliveryChargeEditViewModel, DeliveryCharge>();
+                config.CreateMap<DeliveryCharge, DeliveryChargeEditViewModel>();
+
+                // Billing Charge
                 config.CreateMap<BillingChargeCreateViewModel, BillingCharge>();
                 config.CreateMap<BillingChargeEditViewModel, BillingCharge>();
                 config.CreateMap<BillingCharge, BillingChargeEditViewModel>();
@@ -116,6 +116,7 @@ namespace ShopNow.Controllers
             {
                 ViewBag.PlatformCreditRate = platFormCreaditRate.RatePerOrder;
             }
+            model.ShopName = db.Shops.FirstOrDefault(i => i.Id == model.ShopId).Name;
             return View(model);
         }
 
@@ -264,27 +265,24 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        // Delivery Charge Assign
 
-
-
-
-       
         [AccessPolicy(PageCode = "SHNBILDCAL09")]
         public ActionResult DeliveryChargeAssignList()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var model = new DeliveryListViewModel();
-            model.List = db.Bills.Where(i => i.NameOfBill == 0 && i.Status == 0 && i.ShopId != 0 ).Select(i => new DeliveryListViewModel.DeliveryList
+            var model = new DeliveryChargeAssignListViewModel();
+            model.List = db.Shops.Where(i => i.Status == 0).Join(db.DeliveryCharges,s=> s.DeliveryChargeId, d=> d.Id, (s,d)=> new { s,d}).Select(i => new DeliveryChargeAssignListViewModel.DeliveryAssignList
             {
-                Id = i.Id,
-                ShopId = i.ShopId,
-                ShopName = i.ShopName,
-                DeliveryChargeKM = i.DeliveryChargeKM,
-                DeliveryChargeOneKM = i.DeliveryChargeOneKM,
-                DeliveryRateSet = i.DeliveryRateSet,
-                Type = i.Type,
-                VehicleType = i.VehicleType
+                ShopId = i.s.Id,
+                DeliveryChargeId = i.d.Id,
+                ShopName = i.s.Name,
+                ChargeUpto5Km = i.d.ChargeUpto5Km,
+                ChargePerKm = i.d.ChargePerKm,
+                Type = i.d.Type,
+                TireType = i.d.TireType,
+                VehicleType = i.d.VehicleType
             }).ToList();
             return View(model.List);
         }
@@ -423,15 +421,17 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SHNBILDCA010")]
-        public async Task<JsonResult> GetDeliveryChargeType(int type, int vehicletype)
+        public async Task<JsonResult> GetDeliveryChargeType(int type, int tiretype)
         {
-            var model = new DeliveryListViewModel();
-            model.List = await db.Bills.Where(a => a.Type == type && a.VehicleType == vehicletype && a.Status == 0).Select(i => new DeliveryListViewModel.DeliveryList
+            var model = new DeliveryChargeListViewModel();
+            model.List = await db.DeliveryCharges.Where(a => a.Type == type && a.TireType == tiretype && a.Status == 0).Select(i => new DeliveryChargeListViewModel.DeliveryList
             {
-               Id = i.Id,
-               DeliveryChargeKM = i.DeliveryChargeKM,
-               DeliveryChargeOneKM = i.DeliveryChargeOneKM,
-               DeliveryRateSet = i.DeliveryRateSet
+                Id = i.Id,
+                ChargeUpto5Km = i.ChargeUpto5Km,
+                ChargePerKm = i.ChargePerKm,
+                TireType = i.TireType,
+                Type = i.Type,
+                VehicleType = i.VehicleType
             }).ToListAsync();
 
             return Json(new { model.List, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
