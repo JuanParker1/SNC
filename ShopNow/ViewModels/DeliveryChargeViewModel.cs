@@ -95,13 +95,10 @@ namespace ShopNow.ViewModels
 
     public class DeliveryChargeAssignCreateViewModel
     {
-        public double ChargeUpto5Km { get; set; }
-        public double ChargePerKm { get; set; }
-        public double ChargeUpto5Km1 { get; set; }
-        public double ChargePerKm1 { get; set; }
+        public int ShopId { get; set; }
+        public string ShopName { get; set; }
         public int Type { get; set; }
         public int TireType { get; set; }
-        public int VehicleType { get; set; }
     }
     public class DeliveryChargeAssignEditViewModel
     {
@@ -120,7 +117,6 @@ namespace ShopNow.ViewModels
         public List<DeliveryAssignList> List { get; set; }
         public class DeliveryAssignList
         {
-            public int DeliveryChargeId { get; set; }
             public int ShopId { get; set; }
             public string ShopName { get; set; }
             public double ChargeUpto5Km { get; set; }

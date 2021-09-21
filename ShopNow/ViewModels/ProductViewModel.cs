@@ -95,7 +95,7 @@ namespace ShopNow.ViewModels
         public bool PriscriptionCategory { get; set; }
         public string DrugCompoundDetailIds { get; set; }
         public string DrugCompoundDetailName { get; set; }
-        public int IBarU { get; set; }
+        public Nullable<int> IBarU { get; set; }
         public string Manufacturer { get; set; }
         public string OriginCountry { get; set; }
         public double Weight { get; set; }
@@ -412,6 +412,7 @@ namespace ShopNow.ViewModels
         public int Percentage { get; set; }
         public int PackingType { get; set; }
         public double PackingCharge { get; set; }
+        public string ASIN { get; set; }
     }
 
     public class FMCGEditViewModel : FMCGCreateViewModel
