@@ -273,16 +273,12 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new DeliveryChargeAssignListViewModel();
-            model.List = db.Shops.Where(i => i.Status == 0).Join(db.DeliveryCharges,s=> s.DeliveryChargeId, d=> d.Id, (s,d)=> new { s,d}).Select(i => new DeliveryChargeAssignListViewModel.DeliveryAssignList
+            model.List = db.Shops.Where(i => i.Status == 0).Select(i => new DeliveryChargeAssignListViewModel.DeliveryAssignList
             {
-                ShopId = i.s.Id,
-                DeliveryChargeId = i.d.Id,
-                ShopName = i.s.Name,
-                ChargeUpto5Km = i.d.ChargeUpto5Km,
-                ChargePerKm = i.d.ChargePerKm,
-                Type = i.d.Type,
-                TireType = i.d.TireType,
-                VehicleType = i.d.VehicleType
+                ShopId = i.Id,
+                ShopName = i.Name,
+                Type = i.DeliveryType,
+                TireType = i.DeliveryTierType
             }).ToList();
             return View(model.List);
         }
@@ -298,87 +294,35 @@ namespace ShopNow.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AccessPolicy(PageCode = "SHNBILDCA010")]
-        public ActionResult DeliveryChargeAssign(BillCreateEditViewModel model)
+        public ActionResult DeliveryChargeAssign(DeliveryChargeAssignCreateViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var bill = _mapper.Map<BillCreateEditViewModel, Bill>(model);
-            bill.CustomerId = user.Id;
-            bill.CustomerName = user.Name;
-            bill.CreatedBy = user.Name;
-            bill.UpdatedBy = user.Name;
-            bill.NameOfBill = 0;
+            var shop = db.Shops.Where(i => i.Id == model.ShopId).FirstOrDefault();
 
-            bool isGeneralCheck = db.Bills.Any(i => i.ShopId == model.ShopId && i.NameOfBill == 0 && i.DeliveryRateSet == 0 && i.Type == model.Type && i.VehicleType == model.VehicleType && i.Status == 0);
-            bool isSpecialCheck = db.Bills.Any(i => i.ShopId == model.ShopId && i.NameOfBill == 0 && i.DeliveryRateSet == 1 && i.Type == model.Type && i.VehicleType == model.VehicleType && i.Status == 0);
-            if (isGeneralCheck && isSpecialCheck)
-            {
-                ViewBag.Message = "Delivery Charge Already Exist";
-                return View();
-            }
-             if(!isGeneralCheck)
-            {
-                bill.DeliveryChargeKM = model.DeliveryChargeKM;
-                bill.DeliveryRateSet = model.DeliveryRateSet;
-                bill.DeliveryChargeOneKM = model.DeliveryChargeOneKM;
-                bill.Status = 0;
-                bill.DateEncoded = DateTime.Now;
-                bill.DateUpdated = DateTime.Now;
-                db.Bills.Add(bill);
-                db.SaveChanges();
-            }
-             if (!isSpecialCheck)
-            {
-                bill.DeliveryChargeKM = model.DeliveryChargeKM1;
-                bill.DeliveryChargeOneKM = model.DeliveryChargeOneKM1;
-                bill.DeliveryRateSet = model.DeliveryRateSet1;
-                bill.Status = 0;
-                bill.DateEncoded = DateTime.Now;
-                bill.DateUpdated = DateTime.Now;
-                db.Bills.Add(bill);
-                db.SaveChanges();
-            }
-          
-            
-            //if (model.DeliveryRateSet == 0)
-            //{
-            //    bill.DeliveryRateSet = model.DeliveryRateSet;
-            //    bill.DeliveryChargeOneKM = model.DeliveryChargeOneKM;
-            //    bill.Status = 0;
-            //    bill.DateEncoded = DateTime.Now;
-            //    bill.DateUpdated = DateTime.Now;
-            //    db.Bills.Add(bill);
-            //    db.SaveChanges();
-            //}
-            //if (model.DeliveryRateSet1 == 1)
-            //{
-            //    bill.DeliveryChargeKM = model.DeliveryChargeKM1;
-            //    bill.DeliveryChargeOneKM = model.DeliveryChargeOneKM1;
-            //    bill.DeliveryRateSet = model.DeliveryRateSet1;
-            //    bill.Status = 0;
-            //    bill.DateEncoded = DateTime.Now;
-            //    bill.DateUpdated = DateTime.Now;
-            //    db.Bills.Add(bill);
-            //    db.SaveChanges();
-            //}
-            
+            shop.DeliveryType = model.Type;
+            shop.DeliveryTierType = model.TireType;
+            shop.UpdatedBy = user.Name;
+            shop.DateUpdated = DateTime.Now;
+            db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
             return RedirectToAction("DeliveryChargeAssignList");
         }
 
-        [AccessPolicy(PageCode = "SHNBILDD008")]
-        public JsonResult DeliveryChargeDelete(int id)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            var deliverycharge = db.DeliveryCharges.Where(b => b.Id == id && b.Status == 0).FirstOrDefault();
-            if (deliverycharge != null)
-            {
-                deliverycharge.Status = 2;
-                deliverycharge.DateUpdated = DateTime.Now;
-                deliverycharge.UpdatedBy = user.Name;
-                db.Entry(deliverycharge).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-            }
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
+        //[AccessPolicy(PageCode = "SHNBILDD008")]
+        //public JsonResult DeliveryChargeDelete(int id)
+        //{
+        //    var user = ((Helpers.Sessions.User)Session["USER"]);
+        //    var deliverycharge = db.DeliveryCharges.Where(b => b.Id == id && b.Status == 0).FirstOrDefault();
+        //    if (deliverycharge != null)
+        //    {
+        //        deliverycharge.Status = 2;
+        //        deliverycharge.DateUpdated = DateTime.Now;
+        //        deliverycharge.UpdatedBy = user.Name;
+        //        db.Entry(deliverycharge).State = System.Data.Entity.EntityState.Modified;
+        //        db.SaveChanges();
+        //    }
+        //    return Json(true, JsonRequestBehavior.AllowGet);
+        //}
 
 
         [AccessPolicy(PageCode = "SHNBILBC003")]

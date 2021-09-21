@@ -337,10 +337,7 @@ namespace ShopNow.Controllers
             {
                 model.PhoneVerify = false;
             }
-            var bill = db.Bills.Where(i => i.ShopId == shop.Id && i.NameOfBill == 0 && i.Status == 0).FirstOrDefault();
-            if (bill != null)
-                model.Type = bill.Type;
-
+            
             return View(model);
         }
 
@@ -490,49 +487,14 @@ namespace ShopNow.Controllers
                 {
                     shop.Verify = false;
                 }
+
+                //Delivery charge Assign
+                shop.DeliveryType = model.DeliveryType;
+                shop.DeliveryTierType = model.DeliveryTierType;
+
                 db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
-                //Delivery charge Assign
-                var deliveryChargeList = db.Bills.Where(i => i.Type == model.Type && i.Status == 0 && i.ShopName == "Admin").ToList();
-                var deliveryChargeShopList = db.Bills.Where(i => i.Id == shop.Id && i.NameOfBill == 0 && i.Status == 0).ToList();
-                var general = db.Bills.FirstOrDefault(i => i.Type == model.Type && i.DeliveryRateSet == 0 && i.Status == 0 && i.ShopName == "Admin");
-                var special = db.Bills.FirstOrDefault(i => i.Type == model.Type && i.DeliveryRateSet == 1 && i.Status == 0 && i.ShopName == "Admin");
-                if (deliveryChargeShopList.Count() > 0)
-                {
-                    foreach (var dc in deliveryChargeShopList)
-                    {
-                        var dcbill = db.Bills.FirstOrDefault(i => i.Id == dc.Id);
-                        if (dcbill.DeliveryRateSet == 0)
-                        {
-                            dcbill.DeliveryChargeKM = general.DeliveryChargeKM;
-                            dcbill.DeliveryChargeOneKM = general.DeliveryChargeOneKM;
-                        }
-                        else
-                        {
-                            dcbill.DeliveryChargeKM = special.DeliveryChargeKM;
-                            dcbill.DeliveryChargeOneKM = special.DeliveryChargeOneKM;
-                        }
-                        dcbill.Type = model.Type;
-                        dcbill.DateUpdated = DateTime.Now;
-                        db.Entry(dcbill).State = System.Data.Entity.EntityState.Modified;
-                        db.SaveChanges();
-                    }
-                }
-                else
-                {
-                    foreach (var item in deliveryChargeList)
-                    {
-                        var bill = _mapper.Map<Bill, Bill>(item);
-                        bill.Status = 0;
-                        bill.DateEncoded = DateTime.Now;
-                        bill.DateUpdated = DateTime.Now;
-                        bill.ShopId = shop.Id;
-                        bill.ShopName = shop.Name;
-                        db.Bills.Add(bill);
-                        db.SaveChanges();
-                    }
-                }
                 return RedirectToAction("List", "Shop");
             }
             catch (AmazonS3Exception amazonS3Exception)
