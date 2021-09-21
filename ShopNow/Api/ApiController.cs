@@ -667,7 +667,7 @@ namespace ShopNow.Controllers
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetBillAndDeliveryCharge(int bill, int shopId, double totalSize = 0, double totalWeight = 0)
+        public JsonResult GetBillAndDeliveryCharge(int shopId, double totalSize = 0, double totalWeight = 0)
         {
             var model = new BillingDeliveryChargeViewModel();
             var shop = db.Shops.FirstOrDefault(i => i.Id == shopId);
@@ -680,12 +680,12 @@ namespace ShopNow.Controllers
                 mode = 2;
             if (totalWeight > 40 || liters > 120)
                 mode = 3;
-            var deliveryCharge = db.DeliveryCharges.FirstOrDefault(i => i.Type == shop.DeliveryType && i.TireType == shop.DeliveryTierType && i.VehicleType == mode);
+            var deliveryCharge = db.DeliveryCharges.FirstOrDefault(i => i.Type == shop.DeliveryType && i.TireType == shop.DeliveryTierType && i.VehicleType == mode && i.Status==0);
             model.DeliveryChargeKM = deliveryCharge.ChargeUpto5Km;
             model.DeliveryChargeOneKM = deliveryCharge.ChargePerKm;
             model.DeliveryMode = deliveryCharge.VehicleType;
 
-            var billingCharge = db.BillingCharges.FirstOrDefault(i => i.ShopId == shopId);
+            var billingCharge = db.BillingCharges.FirstOrDefault(i => i.ShopId == shopId && i.Status==0);
             model.ConvenientCharge = billingCharge.ConvenientCharge;
             model.PackingCharge = billingCharge.PackingCharge;
             model.DeliveryDiscountPercentage = billingCharge.DeliveryDiscountPercentage;
