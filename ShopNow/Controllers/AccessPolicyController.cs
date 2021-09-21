@@ -49,7 +49,7 @@ namespace ShopNow.Controllers
             if (customerid != 0)
             {
                 model.List = db.Pages.Where(i => i.Status == 0)
-                .GroupJoin(db.AccessPolicies.Where(i => i.CustomerId == customerid && i.isAccess == true), p => p.Code, a => a.PageCode, (p, a) => new { p, a })
+                .GroupJoin(db.AccessPolicies.Where(i => i.CustomerId == customerid && i.isAccess == true && i.Status == 0), p => p.Code, a => a.PageCode, (p, a) => new { p, a })
                             .Select(i => new AccessPolicyListViewModel.AccessPolicy
                             {
                                 PageCode = i.p.Code,
@@ -674,7 +674,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("ItemList");
         }
 
-        [AccessPolicy(PageCode = "SHNAPGD007")]
+        [AccessPolicy(PageCode = "")]
         public JsonResult Delete(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
