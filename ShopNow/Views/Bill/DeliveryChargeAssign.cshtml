@@ -1,4 +1,4 @@
-﻿@model ShopNow.ViewModels.BillCreateEditViewModel
+﻿@model ShopNow.ViewModels.DeliveryChargeAssignCreateViewModel
 @{
     ViewBag.Title = "Delivery Charge Assign";
 }
@@ -13,7 +13,7 @@
             <a href="~/Bill/DeliveryChargeAssignList" target="_self"><span class="fa fa-list-ul ml-3"></span> Delivery Charge Assign List</a>
         </div>
     </div>
-    <div class="row">
+    <div class="row mt-2">
         <div class="col-md-12">
             @using (Html.BeginForm("DeliveryChargeAssign", "Bill", FormMethod.Post, new { id = "DeliveryForm" }))
             {
@@ -33,86 +33,97 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row mt-3">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label class="col-form-label text-secondary font-weight-bold">Delivery Mode</label>
+                            </div>
+                            <div class="col-md-6 mt-2">
+                                <div class="form-check-inline mr-3">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="Type" value="0" checked> General
+                                    </label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <label class="form-check-label">
+                                        <input type="radio" class="form-check-input" name="Type" value="1"> Special
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row my-3">
                             <div class="col-md-2">
                                 <label class="col-form-label text-secondary font-weight-bold">Delivery Charge Type</label>
                             </div>
                             <div class="col-md-8 mt-2">
                                 <div class="form-check-inline mr-3">
                                     <label class="form-check-label">
-                                        <input type="radio" class="form-check-input" name="Type" value="1"> 1<sup>st</sup> Tier
+                                        <input type="radio" class="form-check-input" name="TireType" value="1"> 1<sup>st</sup> Tier
                                     </label>
                                 </div>
                                 <div class="form-check-inline">
                                     <label class="form-check-label">
-                                        <input type="radio" class="form-check-input" name="Type" value="2"> 2<sup>nd</sup> Tier
+                                        <input type="radio" class="form-check-input" name="TireType" value="2"> 2<sup>nd</sup> Tier
                                     </label>
                                 </div>
                                 <div class="form-check-inline">
                                     <label class="form-check-label">
-                                        <input type="radio" class="form-check-input" name="Type" value="3"> 3<sup>rd</sup> Tier
+                                        <input type="radio" class="form-check-input" name="TireType" value="3"> 3<sup>rd</sup> Tier
                                     </label>
                                 </div>
                             </div>
                         </div>
-                        <div class="row mt-3">
-                            <div class="col-md-2">
-                                <label class="col-form-label text-secondary font-weight-bold">Vehicle Type</label>
-                            </div>
-                            <div class="col-md-8 mt-2">
-                                <div class="form-check-inline mr-3">
-                                    <label class="form-check-label">
-                                        <input type="radio" class="form-check-input" name="VehicleType" value="1"> Bike
-                                    </label>
+                        <div class="row">
+                            <div class="col-md-4 border-right">
+                                <div class="row mt-3">
+                                    <div class="col-md-4">
+                                        <label class="col-form-label text-secondary font-weight-bold">Bike</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label class="text-secondary">Rate upto 5 Km. : <span class="font-weight-bold" id="BikeChargeUpto5Km"></span></label>
+                                    </div>
                                 </div>
-                                <div class="form-check-inline">
-                                    <label class="form-check-label">
-                                        <input type="radio" class="form-check-input" name="VehicleType" value="2"> Carrier Bike
-                                    </label>
-                                </div>
-                                <div class="form-check-inline">
-                                    <label class="form-check-label">
-                                        <input type="radio" class="form-check-input" name="VehicleType" value="3"> Auto
-                                    </label>
+                                <div class="row mt-3">
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-8">
+                                        <label class="text-secondary">After 5 Km. (Rate per Km.) : <span class="font-weight-bold" id="BikeChargePerKm"></span></label>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-2">
-                                <label class="col-form-label text-secondary font-weight-bold">General</label>
+                            <div class="col-md-4 border-right">
+                                <div class="row mt-3">
+                                    <div class="col-md-4">
+                                        <label class="col-form-label text-secondary font-weight-bold">Carrier Bike</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label class="text-secondary">Rate upto 5 Km. : <span class="font-weight-bold" id="CarrierBikeChargeUpto5Km"></span></label>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-8">
+                                        <label class="text-secondary">After 5 Km. (Rate per Km.) : <span class="font-weight-bold" id="CarrierBikeChargePerKm"></span></label>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-3">
-                                <label class="text-secondary">Rate upto 5 Km. : </label>
-                                <input type="text" class="font-weight-bold col-md-3" id="DeliveryChargeKM" name="DeliveryChargeKM" readonly style="border:0" />
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-2"></div>
-                            <div class="col-md-3">
-                                <label class="text-secondary">After 5 Km. (Rate per Km.) : </label>
-                                <input type="text" class="font-weight-bold col-md-3" id="DeliveryChargeOneKM" name="DeliveryChargeOneKM" readonly style="border:0" />
-                                <input type="hidden" name="DeliveryRateSet" id="DeliveryRateSet" />
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-2">
-                                <label class="col-form-label text-secondary font-weight-bold">Special</label>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="text-secondary">Rate upto 5 Km. : </label>
-                                <input type="text" class="font-weight-bold col-md-3" id="DeliveryChargeKM1" name="DeliveryChargeKM1" readonly style="border:0" />
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-md-2"></div>
-                            <div class="col-md-3">
-                                <label class="text-secondary">After 5 Km. (Rate per Km.) : </label>
-                                <input type="text" class="font-weight-bold col-md-3" id="DeliveryChargeOneKM1" name="DeliveryChargeOneKM1" readonly style="border:0" />
-                                <input type="hidden" name="DeliveryRateSet1" id="DeliveryRateSet1" />
+                            <div class="col-md-4">
+                                <div class="row mt-3">
+                                    <div class="col-md-4">
+                                        <label class="col-form-label text-secondary font-weight-bold">Auto</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <label class="text-secondary">Rate upto 5 Km. : <span class="font-weight-bold" id="AutoChargeUpto5Km"></span></label>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-8">
+                                        <label class="text-secondary">After 5 Km. (Rate per Km.) : <span class="font-weight-bold" id="AutoChargePerKm"></span></label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <div class="col-md-2 my-2 mx-auto">
+                            <div class="col-md-2 my-5 mx-auto">
                                 <button type="button" class="btn btn-block btn-success" id="Create"><span class="glyphicon glyphicon-file"></span> Update</button>
                             </div>
                         </div>
@@ -138,22 +149,100 @@
         if (msg != "") {
             swal("Notice!", msg, "warning")
         }
-            $('input[type=radio][name=VehicleType]').change(function () {
+            $('input[type=radio][name=TireType]').change(function () {
                 var type = $('input[name="Type"]:checked').val();
-                var vehicletype = $('input[name="VehicleType"]:checked').val();
-                $.getJSON("/Bill/GetDeliveryChargeType?type=" + type + "&vehicletype=" + vehicletype, function (data) {
-                    debugger;
-                    $.each(data, function (key, val) {
-                        $.each(val, function (index, list) {
-                            if (list.DeliveryRateSet == 0) {
-                                $("#DeliveryChargeKM").val(list.DeliveryChargeKM);
-                                $("#DeliveryChargeOneKM").val(list.DeliveryChargeOneKM);
-                                $("#DeliveryRateSet").val(list.DeliveryRateSet);
+                var tiretype = $('input[name="TireType"]:checked').val();
+                $.getJSON("/Bill/GetDeliveryChargeType?type=" + type + "&tiretype=" + tiretype, function (data) {
+                    //debugger;
+                    $.each(data, function (key, v) {
+                        $.each(v, function (index, list) {
+                            if (list.Type == 0) {
+                                if (list.TireType == 1) {
+                                    if (list.VehicleType == 1) {
+                                        $("#BikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#BikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 2) {
+                                        $("#CarrierBikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#CarrierBikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 3) {
+                                        $("#AutoChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#AutoChargePerKm").text(list.ChargePerKm);
+                                    }
+                                }
+                                if (list.TireType == 2) {
+                                    if (list.VehicleType == 1) {
+                                        $("#BikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#BikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 2) {
+                                        $("#CarrierBikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#CarrierBikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 3) {
+                                        $("#AutoChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#AutoChargePerKm").text(list.ChargePerKm);
+                                    }
+                                }
+                                if (list.TireType == 3) {
+                                    if (list.VehicleType == 1) {
+                                        $("#BikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#BikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 2) {
+                                        $("#CarrierBikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#CarrierBikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 3) {
+                                        $("#AutoChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#AutoChargePerKm").text(list.ChargePerKm);
+                                    }
+                                }
                             }
-                            if (list.DeliveryRateSet == 1) {
-                                $("#DeliveryChargeKM1").val(list.DeliveryChargeKM);
-                                $("#DeliveryChargeOneKM1").val(list.DeliveryChargeOneKM);
-                                $("#DeliveryRateSet1").val(list.DeliveryRateSet);
+                            if (list.Type == 1) {
+                                if (list.TireType == 1) {
+                                    if (list.VehicleType == 1) {
+                                        $("#BikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#BikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 2) {
+                                        $("#CarrierBikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#CarrierBikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 3) {
+                                        $("#AutoChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#AutoChargePerKm").text(list.ChargePerKm);
+                                    }
+                                }
+                                if (list.TireType == 2) {
+                                    if (list.VehicleType == 1) {
+                                        $("#BikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#BikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 2) {
+                                        $("#CarrierBikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#CarrierBikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 3) {
+                                        $("#AutoChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#AutoChargePerKm").text(list.ChargePerKm);
+                                    }
+                                }
+                                if (list.TireType == 3) {
+                                    if (list.VehicleType == 1) {
+                                        $("#BikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#BikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 2) {
+                                        $("#CarrierBikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#CarrierBikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 3) {
+                                        $("#AutoChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#AutoChargePerKm").text(list.ChargePerKm);
+                                    }
+                                }
                             }
                         });
                     });
@@ -162,26 +251,102 @@
 
             $('input[type=radio][name=Type]').change(function () {
                 var type = $('input[name="Type"]:checked').val();
-                var vehicletype = $('input[name="VehicleType"]:checked').val();
-                $.getJSON("/Bill/GetDeliveryChargeType?type=" + type + "&vehicletype=" + vehicletype, function (data) {
-                    debugger;
-                    $.each(data, function (key, val) {
-                        $.each(val, function (index, list) {
-                            if (list.DeliveryRateSet == 0) {
-                                $("#DeliveryChargeKM").val(list.DeliveryChargeKM);
-                                $("#DeliveryChargeOneKM").val(list.DeliveryChargeOneKM);
-                                $("#DeliveryRateSet").val(list.DeliveryRateSet);
+                var tiretype = $('input[name="TireType"]:checked').val();
+                $.getJSON("/Bill/GetDeliveryChargeType?type=" + type + "&tiretype=" + tiretype, function (data) {
+                    $.each(data, function (key, v) {
+                        $.each(v, function (index, list) {
+                            if (list.Type == 0) {
+                                if (list.TireType == 1) {
+                                    if (list.VehicleType == 1) {
+                                        $("#BikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#BikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 2) {
+                                        $("#CarrierBikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#CarrierBikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 3) {
+                                        $("#AutoChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#AutoChargePerKm").text(list.ChargePerKm);
+                                    }
+                                }
+                                if (list.TireType == 2) {
+                                    if (list.VehicleType == 1) {
+                                        $("#BikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#BikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 2) {
+                                        $("#CarrierBikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#CarrierBikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 3) {
+                                        $("#AutoChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#AutoChargePerKm").text(list.ChargePerKm);
+                                    }
+                                }
+                                if (list.TireType == 3) {
+                                    if (list.VehicleType == 1) {
+                                        $("#BikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#BikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 2) {
+                                        $("#CarrierBikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#CarrierBikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 3) {
+                                        $("#AutoChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#AutoChargePerKm").text(list.ChargePerKm);
+                                    }
+                                }
                             }
-                            if (list.DeliveryRateSet == 1) {
-                                $("#DeliveryChargeKM1").val(list.DeliveryChargeKM);
-                                $("#DeliveryChargeOneKM1").val(list.DeliveryChargeOneKM);
-                                $("#DeliveryRateSet1").val(list.DeliveryRateSet);
+                            if (list.Type == 1) {
+                                if (list.TireType == 1) {
+                                    if (list.VehicleType == 1) {
+                                        $("#BikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#BikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 2) {
+                                        $("#CarrierBikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#CarrierBikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 3) {
+                                        $("#AutoChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#AutoChargePerKm").text(list.ChargePerKm);
+                                    }
+                                }
+                                if (list.TireType == 2) {
+                                    if (list.VehicleType == 1) {
+                                        $("#BikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#BikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 2) {
+                                        $("#CarrierBikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#CarrierBikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 3) {
+                                        $("#AutoChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#AutoChargePerKm").text(list.ChargePerKm);
+                                    }
+                                }
+                                if (list.TireType == 3) {
+                                    if (list.VehicleType == 1) {
+                                        $("#BikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#BikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 2) {
+                                        $("#CarrierBikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#CarrierBikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 3) {
+                                        $("#AutoChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#AutoChargePerKm").text(list.ChargePerKm);
+                                    }
+                                }
                             }
                         });
                     });
                 });
             });
-
             $('#ShopId').select2({
                 placeholder: "Search Shop",
                 ajax: {
@@ -197,17 +362,17 @@
             $('#Create').on('click', function () {
                 var shop = $("#ShopId").val();
                 var type = $('input[name="Type"]:checked').val();
-                var vehicletype = $('input[name="VehicleType"]:checked').val();
+                var tiretype = $('input[name="TireType"]:checked').val();
                 if (shop != null) {
-                    if (type == '1' || type == '2' || type == '3') {
-                        if (vehicletype == '1' || vehicletype == '2' || vehicletype == '3') {
+                    if (type == '0' || type == '1') {
+                        if (tiretype == '1' || tiretype == '2' || tiretype == '3') {
                             $('#DeliveryForm').submit();
                         }
                         else {
-                            swal("Notice!", "Please Select Vehicle Type!", "warning");
+                            swal("Notice!", "Please Select Delivery Charge Type!", "warning");
                         }
                     } else {
-                        swal("Notice!", "Please Select Delivery Charge Type!", "warning");
+                        swal("Notice!", "Please Select Delivery Mode!", "warning");
                     }
                 } else {
                     swal("Notice!", "Please Select Shop Name!", "warning");

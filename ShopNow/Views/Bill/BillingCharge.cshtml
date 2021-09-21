@@ -1,6 +1,6 @@
 ﻿@model ShopNow.ViewModels.BillCreateEditViewModel
 @{
-    ViewBag.Title = "Bill Charge Setting";
+    ViewBag.Title = "Billing Charge Setting";
 }
 
 <title>ShopNow | @ViewBag.Title</title>
@@ -56,7 +56,7 @@
                                                 </div>
                                                 <div class="col-md-7">
                                                     <div class="col-md-5">
-                                                        <input type="number" class="form-control" name="DeliveryChargeCustomer" id="DeliveryChargeCustomer" min="1" />
+                                                        <input type="number" class="form-control" name="DeliveryDiscountPercentage" id="DeliveryDiscountPercentage" min="1" />
                                                     </div>
                                                     <div class="col-md-12">
                                                         <span id="dcc" class="text-danger font-italic"></span>
@@ -174,12 +174,12 @@
         if (msg != "") {
             swal("Notice!", msg, "warning")
         }
-            $("#DeliveryChargeCustomer").focusout(function () {
+            $("#DeliveryDiscountPercentage").focusout(function () {
                 var dcc = $(this).val();
                 if (dcc == "" || dcc == null) {
                     $("#dcc").text("Please Enter a Percentage!");
                 } else if (dcc == 0) {
-                    $("#DeliveryChargeCustomer").val("1");
+                    $("#DeliveryDiscountPercentage").val("1");
                     $("#dcc").text("");
                 } else {
                     $("#dcc").text("");
@@ -220,18 +220,18 @@
                 }
             });
             $('#Create').on('click', function () {
-                var packingcharge = $("#PackingCharge").val();
+                var PackingCharge = $("#PackingCharge").val();
                 var itemtype = $('input[type=radio][name=ItemType]:checked').val();
                 var isValidate = false;
                 var requiredArr = [
                     'ShopId',
-                    'DeliveryChargeCustomer',
+                    'DeliveryDiscountPercentage',
                     'ConvenientCharge'
                 ];
                 isValidate = ValidateEmptyRequiredFiels(requiredArr);
                 if (isValidate) {
                     if (itemtype == 1) {
-                        if (packingcharge == "" || packingcharge == null) {
+                        if (PackingCharge == "" || PackingCharge == null) {
                             $("#pc").text("Please Enter Packing Charge!");
                         } else {
                             $("#pc").text("");

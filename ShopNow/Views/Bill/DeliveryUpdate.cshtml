@@ -1,4 +1,4 @@
-﻿@model ShopNow.ViewModels.BillCreateEditViewModel
+﻿@model ShopNow.ViewModels.DeliveryChargeEditViewModel
 @{
     ViewBag.Title = "Delivery Charge Setting";
 }
@@ -8,7 +8,7 @@
 <div class="container-fluid my-4">
     <div class="row">
         <div class="col-md-4">
-            <h5 class="mt-1 text-success" style="letter-spacing:1px">DELIVERY CHARGE SETTING</h5>
+            <h5 class="mt-1 text-success">@ViewBag.Title</h5>
         </div>
         <div class="col-md-8 text-right">
             <a href="~/Bill/DeliveryChargeList" target="_self"><span class="fa fa-bars ml-3"></span> Delivery Charge List</a>
@@ -21,21 +21,8 @@
             {
                 @Html.AntiForgeryToken()
                 <input type="hidden" name="Id" value="@Model.Id" />
-                <input type="hidden" name="DateEncoded" value="@Model.DateEncoded" />
-                <input type="hidden" name="DateUpdated" value="@Model.DateUpdated" />
-                <input type="hidden" name="CreatedBy" value="@Model.CreatedBy" />
-                <input type="hidden" name="UpdatedBy" value="@Model.UpdatedBy" />
-                <input type="hidden" name="Status" value="@Model.Status" />
-                <input type="hidden" name="CustomerId" value="@Model.CustomerId" />
-                <input type="hidden" name="CustomerName" value="@Model.CustomerName" />
-                <input type="hidden" name="NameOfBill" value="@Model.NameOfBill" />
-                <input type="hidden" name="ItemType" value="@Model.ItemType" />
-                <input type="hidden" name="Distance" value="@Model.Distance" />
-                <input type="hidden" name="TotalAmount" value="@Model.TotalAmount" />
-                <input type="hidden" name="ShopId" value="@Model.ShopId" />
-                <input type="hidden" name="ShopName" value="@Model.ShopName" />
-                <input type="hidden" name="DeliveryRateSet" id="DeliveryRateSet" value="@Model.DeliveryRateSet" />
                 <input type="hidden" name="Type" id="Type" value="@Model.Type" />
+                <input type="hidden" name="TireType" id="TireType" value="@Model.TireType" />
                 <input type="hidden" name="VehicleType" id="VehicleType" value="@Model.VehicleType" />
                 <div class="card mb-3">
                     <div class="card-body">
@@ -48,12 +35,12 @@
                                     <div class="col-md-6">
                                         <div class="form-check-inline mr-3">
                                             <label class="form-check-label">
-                                                <input type="radio" class="form-check-input" name="DRS" value="0" disabled> General
+                                                <input type="radio" class="form-check-input" name="TypeRadio" value="0" disabled> General
                                             </label>
                                         </div>
                                         <div class="form-check-inline">
                                             <label class="form-check-label">
-                                                <input type="radio" class="form-check-input" name="DRS" value="1" disabled> Special
+                                                <input type="radio" class="form-check-input" name="TypeRadio" value="1" disabled> Special
                                             </label>
                                         </div>
                                     </div>
@@ -63,13 +50,13 @@
                                         <h6>Delivery Charge Type</h6>
                                     </div>
                                     <div class="col-md-8">
-                                        @if (Model.Type == 1)
+                                        @if (Model.TireType == 1)
                                         {
                                             <label> 1<sup>st</sup> Tier</label>}
-                                        @if (Model.Type == 2)
+                                        @if (Model.TireType == 2)
                                         {
                                             <label> 2<sup>nd</sup> Tier</label>}
-                                        @if (Model.Type == 3)
+                                        @if (Model.TireType == 3)
                                         {
                                             <label> 3<sup>rd</sup> Tier</label>}
                                     </div>
@@ -102,7 +89,7 @@
                                             <strong class="text-secondary">Rate upto 5 Km. <span class="text-danger">*</span></strong>
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="number" name="DeliveryChargeKM" id="DeliveryChargeKM" class="form-control" value="@Model.DeliveryChargeKM" min="25" />
+                                            <input type="number" name="ChargeUpto5Km" id="ChargeUpto5Km" class="form-control" value="@Model.ChargeUpto5Km" min="25" />
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -110,7 +97,7 @@
                                             <strong class="text-secondary">After 5 Km. (Rate per Km.) <span class="text-danger">*</span></strong>
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="number" name="DeliveryChargeOneKM" id="DeliveryChargeOneKM" class="form-control" value="@Model.DeliveryChargeOneKM" min="5" />
+                                            <input type="number" name="ChargePerKm" id="ChargePerKm" class="form-control" value="@Model.ChargePerKm" min="5" />
                                         </div>
                                     </div>
                                 </div>
@@ -125,7 +112,7 @@
                                             <strong class="text-secondary">Rate upto 5 Km. <span class="text-danger">*</span></strong>
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="number" name="DeliveryChargeKM1" id="DeliveryChargeKM1" class="form-control" value="@Model.DeliveryChargeKM1" min="30" />
+                                            <input type="number" name="ChargeUpto5Km1" id="ChargeUpto5Km1" class="form-control" value="@Model.ChargeUpto5Km1" min="30" />
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -133,7 +120,7 @@
                                             <strong class="text-secondary">After 5 Km. (Rate per Km.) <span class="text-danger">*</span></strong>
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="number" name="DeliveryChargeOneKM1" id="DeliveryChargeOneKM1" class="form-control" value="@Model.DeliveryChargeOneKM1" min="10" />
+                                            <input type="number" name="ChargePerKm1" id="ChargePerKm1" class="form-control" value="@Model.ChargePerKm1" min="10" />
                                         </div>
                                     </div>
                                 </div>
@@ -164,8 +151,8 @@
     <script>
         $(document).ready(function () {
             jQuery(document).ready(function ($) {
-                var drs = $("#DeliveryRateSet").val();
-                $("input[name=DRS][value=" + drs + "]").attr('checked', 'checked');
+                var drs = $("#Type").val();
+                $("input[name=TypeRadio][value=" + drs + "]").attr('checked', 'checked');
                 if (drs == 0) {
                     $("#GeneralEntry").removeClass("d-none");
                     $("#SpecialEntry").addClass("d-none");
@@ -176,33 +163,23 @@
             });
 
             $('#Edit').on('click', function () {
-                var generalDeliveryChargekm = $('#DeliveryChargeKM').val();
-                var generalDeliveryChargeOnekm = $('#DeliveryChargeOneKM').val();
-                var specialDeliveryChargekm = $('#DeliveryChargeKM1').val();
-                var specialDeliveryChargeOnekm = $('#DeliveryChargeOneKM1').val();
-                var entry = $("#DeliveryRateSet").val();
+                var generalChargeUpto5Km = $('#ChargeUpto5Km').val();
+                var generalChargePerKm = $('#ChargePerKm').val();
+                var specialChargeUpto5Km = $('#ChargeUpto5Km1').val();
+                var specialChargePerKm = $('#ChargePerKm1').val();
+                var type = $("#Type").val();
 
-                if (entry == 0) {
-                    if (generalDeliveryChargekm == null || generalDeliveryChargeOnekm == null || generalDeliveryChargekm == "" || generalDeliveryChargeOnekm == "") {
+                if (type == 0) {
+                    if (generalChargeUpto5Km == null || generalChargePerKm == null || generalChargeUpto5Km == "" || generalChargePerKm == "") {
                         swal("Notice!", "Please Enter General Delivery Charge Amount!", "warning");
                     }
-                    //else if (generalDeliveryChargekm < 25) {
-                    //    swal("Notice!", "General Delivery Charge within 5KM is Minimum Rs.25", "warning");
-                    //} else if (generalDeliveryChargeOnekm < 5) {
-                    //    swal("Notice!", "General Delivery Charge After 5KM per KM is Minimum Rs.5", "warning");
-                    //}
                     else {
                         $('#DeliveryForm').submit();
                     }
-                } else if (entry == 1) {
-                    if (specialDeliveryChargekm == null || specialDeliveryChargeOnekm == null || specialDeliveryChargekm == "" || specialDeliveryChargeOnekm == "") {
+                } else if (type == 1) {
+                    if (specialChargeUpto5Km == null || specialChargePerKm == null || specialChargeUpto5Km == "" || specialChargePerKm == "") {
                         swal("Notice!", "Please Enter Special Delivery Charge Amount!", "warning");
                     }
-                    //else if (specialDeliveryChargekm < 30) {
-                    //    swal("Notice!", "Special Delivery Charge within 5KM is Minimum Rs.30", "warning");
-                    //} else if (specialDeliveryChargeOnekm < 10) {
-                    //    swal("Notice!", "Special Delivery Charge After 5KM per KM is Minimum Rs.10", "warning");
-                    //}
                     else {
                         $('#DeliveryForm').submit();
                     }

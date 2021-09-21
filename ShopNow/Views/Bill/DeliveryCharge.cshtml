@@ -1,13 +1,13 @@
-﻿@model ShopNow.ViewModels.BillCreateEditViewModel
+﻿@model ShopNow.ViewModels.DeliveryChargeCreateViewModel
 @{
-    ViewBag.Title = "Delivary Charge Limit";
+    ViewBag.Title = "Delivary Charge Setting";
 }
-<title>ShopNow | Delivary Charge Limit</title>
+<title>ShopNow | Delivary Charge Setting</title>
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-4">
-            <h5 class="mt-1 text-success" style="letter-spacing:1px">DELIVERY CHARGE</h5>
+            <h5 class="mt-1 text-success">@ViewBag.Title</h5>
         </div>
         <div class="col-md-8 text-right">
             <a href="~/Bill/DeliveryChargeList" target="_self"><span class="fa fa-bars ml-3"></span> Delivery Charge List</a>
@@ -29,12 +29,12 @@
                                     <div class="col-md-6">
                                         <div class="form-check-inline mr-3">
                                             <label class="form-check-label">
-                                                <input type="radio" class="form-check-input" name="DeliveryRateSet" value="0" checked> General
+                                                <input type="radio" class="form-check-input" name="Type" value="0" checked> General
                                             </label>
                                         </div>
                                         <div class="form-check-inline">
                                             <label class="form-check-label">
-                                                <input type="radio" class="form-check-input" name="DeliveryRateSet" value="1"> Special
+                                                <input type="radio" class="form-check-input" name="Type" value="1"> Special
                                             </label>
                                         </div>
                                     </div>
@@ -46,17 +46,17 @@
                                     <div class="col-md-8">
                                         <div class="form-check-inline mr-3">
                                             <label class="form-check-label">
-                                                <input type="radio" class="form-check-input" name="Type" value="1" checked> 1<sup>st</sup> Tier
+                                                <input type="radio" class="form-check-input" name="TireType" value="1" checked> 1<sup>st</sup> Tier
                                             </label>
                                         </div>
                                         <div class="form-check-inline">
                                             <label class="form-check-label">
-                                                <input type="radio" class="form-check-input" name="Type" value="2"> 2<sup>nd</sup> Tier
+                                                <input type="radio" class="form-check-input" name="TireType" value="2"> 2<sup>nd</sup> Tier
                                             </label>
                                         </div>
                                         <div class="form-check-inline">
                                             <label class="form-check-label">
-                                                <input type="radio" class="form-check-input" name="Type" value="3"> 3<sup>rd</sup> Tier
+                                                <input type="radio" class="form-check-input" name="TireType" value="3"> 3<sup>rd</sup> Tier
                                             </label>
                                         </div>
                                     </div>
@@ -95,7 +95,7 @@
                                             <strong class="text-secondary">Rate upto 5 Km. <span class="text-danger">*</span></strong>
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="number" name="DeliveryChargeKM" id="DeliveryChargeKM" class="form-control" min="25" value="25" />
+                                            <input type="number" name="ChargeUpto5Km" id="ChargeUpto5Km" class="form-control" min="25" />
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -103,7 +103,7 @@
                                             <strong class="text-secondary">After 5 Km. (Rate per Km.) <span class="text-danger">*</span></strong>
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="number" name="DeliveryChargeOneKM" id="DeliveryChargeOneKM" class="form-control" min="5" value="5" />
+                                            <input type="number" name="ChargePerKm" id="ChargePerKm" class="form-control" min="5" />
                                         </div>
                                     </div>
                                 </div>
@@ -118,7 +118,7 @@
                                             <strong class="text-secondary">Rate upto 5 Km. <span class="text-danger">*</span></strong>
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="number" name="DeliveryChargeKM1" id="DeliveryChargeKM1" class="form-control" min="30" value="30" />
+                                            <input type="number" name="ChargeUpto5Km1" id="ChargeUpto5Km1" class="form-control" min="30" />
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -126,7 +126,7 @@
                                             <strong class="text-secondary">After 5 Km. (Rate per Km.) <span class="text-danger">*</span></strong>
                                         </div>
                                         <div class="col-md-2">
-                                            <input type="number" name="DeliveryChargeOneKM1" id="DeliveryChargeOneKM1" class="form-control" min="10" value="10" />
+                                            <input type="number" name="ChargePerKm1" id="ChargePerKm1" class="form-control" min="10" />
                                         </div>
                                     </div>
                                 </div>
@@ -160,7 +160,7 @@
             swal("Notice!", msg, "error")
             }
            
-        $('input[type=radio][name=DeliveryRateSet]').change(function () {
+        $('input[type=radio][name=Type]').change(function () {
             if (this.value == '0') {
                 $("#GeneralEntry").removeClass("d-none");
                 $("#SpecialEntry").addClass("d-none");
@@ -172,23 +172,23 @@
         });
 
         $('#Create').on('click', function () {
-            var generalDeliveryChargekm = $('#DeliveryChargeKM').val();
-            var generalDeliveryChargeOnekm = $('#DeliveryChargeOneKM').val();
-            var specialDeliveryChargekm = $('#DeliveryChargeKM1').val();
-            var specialDeliveryChargeOnekm = $('#DeliveryChargeOneKM1').val();
-            var entry = $('input[name="DeliveryRateSet"]:checked').val();
+            var generalChargeUpto5Km = $('#ChargeUpto5Km').val();
+            var generalChargePerKm = $('#ChargePerKm').val();
+            var specialChargeUpto5Km = $('#ChargeUpto5Km1').val();
+            var specialChargePerKm = $('#ChargePerKm1').val();
             var type = $('input[name="Type"]:checked').val();
+            var tiretype = $('input[name="TireType"]:checked').val();
             var vehicletype = $('input[name="VehicleType"]:checked').val();
-            if (entry == '0') {
-                if (generalDeliveryChargekm == null || generalDeliveryChargeOnekm == null || generalDeliveryChargekm == "" || generalDeliveryChargeOnekm == "") {
+            if (type == '0') {
+                if (generalChargeUpto5Km == null || generalChargePerKm == null || generalChargeUpto5Km == "" || generalChargePerKm == "") {
                     swal("Notice!", "Please Enter General Delivery Charge Amount!", "warning");
-                } else if (generalDeliveryChargekm < 25) {
+                } else if (generalChargeUpto5Km < 25) {
                     swal("Notice!", "General Delivery Charge within 5KM is Minimum Rs.25", "warning");
-                } else if (generalDeliveryChargeOnekm < 4) {
-                    swal("Notice!", "General Delivery Charge After 5KM per KM is Minimum Rs.4", "warning");
+                } else if (generalChargePerKm < 5) {
+                    swal("Notice!", "General Delivery Charge After 5KM per KM is Minimum Rs.5", "warning");
                 }
                 else {
-                    $.getJSON("/Bill/DeliveryChargeExist?DeliveryRateSet=" + entry + "&type=" + type + "&vehicletype=" + vehicletype, function (data) {
+                    $.getJSON("/Bill/DeliveryChargeExist?tiretype=" + tiretype + "&vehicletype=" + vehicletype, function (data) {
                         if (data.IsAdded == true) {
                             $('#DeliveryForm').submit();
                         } else {
@@ -196,16 +196,16 @@
                         }
                     });
                 }
-            } else if (entry == '1') {
-                if (specialDeliveryChargekm == null || specialDeliveryChargeOnekm == null || specialDeliveryChargekm == "" || specialDeliveryChargeOnekm == "") {
+            } else if (type == '1') {
+                if (specialChargeUpto5Km == null || specialChargePerKm == null || specialChargeUpto5Km == "" || specialChargePerKm == "") {
                     swal("Notice!", "Please Enter Special Delivery Charge Amount!", "warning");
-                } else if (specialDeliveryChargekm < 30) {
+                } else if (specialChargeUpto5Km < 30) {
                     swal("Notice!", "Special Delivery Charge within 5KM is Minimum Rs.30", "warning");
-                } else if (specialDeliveryChargeOnekm < 10) {
+                } else if (specialChargePerKm < 10) {
                     swal("Notice!", "Special Delivery Charge After 5KM per KM is Minimum Rs.10", "warning");
                 }
                 else {
-                    $.getJSON("/Bill/DeliveryChargeExist?DeliveryRateSet=" + entry + "&type=" + type + "&vehicletype=" + vehicletype, function (data) {
+                    $.getJSON("/Bill/DeliveryChargeExist?tiretype=" + tiretype + "&vehicletype=" + vehicletype, function (data) {
                         if (data.IsAdded == true) {
                             $('#DeliveryForm').submit();
                         } else {

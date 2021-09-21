@@ -1,4 +1,4 @@
-﻿@model ShopNow.ViewModels.BillCreateEditViewModel
+﻿@model ShopNow.ViewModels.BillingChargeEditViewModel
 @{
     ViewBag.Title = "Billing Charge Update";
 }
@@ -21,18 +21,7 @@
                 <div class="card mb-3 shadow">
                     <div class="card-body">
                         @Html.AntiForgeryToken()
-                        <input type="hidden" name="Id" value="@Model.Id" />
-                        <input type="hidden" name="DateEncoded" value="@Model.DateEncoded" />
-                        <input type="hidden" name="DateUpdated" value="@Model.DateUpdated" />
-                        <input type="hidden" name="CreatedBy" value="@Model.CreatedBy" />
-                        <input type="hidden" name="UpdatedBy" value="@Model.UpdatedBy" />
-                        <input type="hidden" name="Status" value="@Model.Status" />
-                        <input type="hidden" name="CustomerId" value="@Model.CustomerId" />
-                        <input type="hidden" name="CustomerName" value="@Model.CustomerName" />
-                        <input type="hidden" name="NameOfBill" value="@Model.NameOfBill" />
-                        <input type="hidden" name="DeliveryRateSet" value="@Model.DeliveryRateSet" />
-                        <input type="hidden" name="TotalAmount" value="@Model.TotalAmount" />
-                        <input type="hidden" name="Distance" value="@Model.Distance" />
+                        <input type="hidden" name="Id" id="Id" value="@Model.Id" />
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="container">
@@ -49,7 +38,6 @@
                                                             <option value="@Model.ShopId">@Model.ShopName</option>
                                                         }
                                                     </select>
-                                                    <input type="hidden" name="ShopName" id="ShopName" value="@Model.ShopName" />
                                                 </div>
                                             </div>
                                         </div>
@@ -74,7 +62,7 @@
                                                 </div>
                                                 <div class="col-md-7">
                                                     <div class="col-md-5">
-                                                        <input type="number" class="form-control" name="DeliveryChargeCustomer" id="DeliveryChargeCustomer" min="1" value="@Model.DeliveryChargeCustomer" />
+                                                        <input type="number" class="form-control" name="DeliveryDiscountPercentage" id="DeliveryDiscountPercentage" min="1" value="@Model.DeliveryDiscountPercentage" />
                                                     </div>
                                                     <div class="col-md-12">
                                                         <span id="dcc" class="text-danger font-italic"></span>
@@ -144,9 +132,7 @@
                                             <div class="form-group row">
                                                 <div class="col-md-5 text-md-left">
                                                     <label class="col-form-label text-secondary font-weight-bold">Levy Convenience Charge order below Rs.</label>
-                                                    <label class="small text-secondary font-italic">( <span class="font-weight-bold font-italic">Note : </span>Current rate is <span class="text-theme_light font-weight-bold">Rs.@Model.PlatformCreditRate</span> per order )</label>
-                                                    <input type="hidden" name="PlatformCreditRateCode" value="@Model.PlatformCreditRateId" />
-                                                    <input type="hidden" name="PlatformCreditRate" value="@Model.PlatformCreditRate" />
+                                                    <label class="small text-secondary font-italic">( <span class="font-weight-bold font-italic">Note : </span>Current rate is <span class="text-theme_light font-weight-bold">Rs.@ViewBag.PlatformCreditRate</span> per order )</label>
                                                 </div>
                                                 <div class="col-md-7">
                                                     <div class="col-md-5">
@@ -188,12 +174,12 @@
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
-            $("#DeliveryChargeCustomer").focusout(function () {
+            $("#DeliveryDiscountPercentage").focusout(function () {
                 var dcc = $(this).val();
                 if (dcc == "" || dcc == null) {
                     $("#dcc").text("Please Enter a Percentage!");
                 } else if (dcc == 0) {
-                    $("#DeliveryChargeCustomer").val("1");
+                    $("#DeliveryDiscountPercentage").val("1");
                     $("#dcc").text("");
                 } else {
                     $("#dcc").text("");
@@ -239,7 +225,7 @@
                 var isValidate = false;
                 var requiredArr = [
                     'ShopId',
-                    'DeliveryChargeCustomer',
+                    'DeliveryDiscountPercentage',
                     'ConvenientCharge'
                 ];
                 isValidate = ValidateEmptyRequiredFiels(requiredArr);
@@ -265,7 +251,7 @@
                     dataType: 'json'
                 }
             }).on('select2:select', function (e) {
-                $('input[name="ShopName"]').val(e.params.data.text);
+               // $('input[name="ShopName"]').val(e.params.data.text);
             });
 
             jQuery(document).ready(function ($) {

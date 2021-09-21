@@ -368,4 +368,15 @@ namespace ShopNow.ViewModels
             public int PortionId { get; set; }
         }
     }
+
+    public class BillingDeliveryChargeViewModel
+    {
+        public double ConvenientCharge { get; set; }
+        public double DeliveryChargeKM { get; set; }
+        public double DeliveryChargeOneKM { get; set; }
+        public double PackingCharge { get; set; }
+        public int ItemType { get; set; }
+        public int DeliveryMode { get; set; }
+        public double DeliveryDiscountPercentage { get; set; }
+    }
 }
