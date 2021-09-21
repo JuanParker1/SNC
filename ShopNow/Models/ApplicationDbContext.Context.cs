@@ -88,9 +88,9 @@ namespace ShopNow.Models
         public virtual DbSet<CustomerSearchData> CustomerSearchDatas { get; set; }
         public virtual DbSet<KeywordData> KeywordDatas { get; set; }
         public virtual DbSet<SearchData> SearchDatas { get; set; }
-        public virtual DbSet<BillingCharge> BillingCharges { get; set; }
         public virtual DbSet<DeliveryCharge> DeliveryCharges { get; set; }
         public virtual DbSet<Shop> Shops { get; set; }
+        public virtual DbSet<BillingCharge> BillingCharges { get; set; }
     
         [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)
