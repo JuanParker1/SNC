@@ -455,7 +455,9 @@
     <Compile Include="Models\Bill.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\BillingCharge.cs" />
+    <Compile Include="Models\BillingCharge.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Brand.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
