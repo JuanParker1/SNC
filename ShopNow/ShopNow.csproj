@@ -492,9 +492,7 @@
     <Compile Include="Models\DeliveryBoyShop.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\DeliveryCharge.cs">
-      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Models\DeliveryCharge.cs" />
     <Compile Include="Models\DiscountCategories1.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
