@@ -671,7 +671,7 @@ namespace ShopNow.Controllers
         {
             var model = new BillingDeliveryChargeViewModel();
             var shop = db.Shops.FirstOrDefault(i => i.Id == shopId);
-            int mode = 0; //0-NA,1-bike,2-carrier bike,3-Auto
+            int mode = 1; //1-bike,2-carrier bike,3-Auto
             double liters = totalSize / 1000;
 
             if (totalWeight <= 20 || liters <= 60)
@@ -680,7 +680,7 @@ namespace ShopNow.Controllers
                 mode = 2;
             if (totalWeight > 40 || liters > 120)
                 mode = 3;
-            var deliveryCharge = db.DeliveryCharges.FirstOrDefault(i => i.Id == shop.DeliveryChargeId);
+            var deliveryCharge = db.DeliveryCharges.FirstOrDefault(i => i.Type == shop.DeliveryType && i.TireType == shop.DeliveryTierType && i.VehicleType == mode);
             model.DeliveryChargeKM = deliveryCharge.ChargeUpto5Km;
             model.DeliveryChargeOneKM = deliveryCharge.ChargePerKm;
             model.DeliveryMode = deliveryCharge.VehicleType;
