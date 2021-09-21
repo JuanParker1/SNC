@@ -96,13 +96,13 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label" for="MenuPrice"><strong class="text-secondary">Menu Price</strong></label>
-                            <input id="MenuPrice" type="number" class="form-control" step="any" name="MenuPrice" min="1" />
+                            <input id="MenuPrice" type="number" class="form-control" name="MenuPrice" min="1" required />
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label" for="Price"><strong class="text-secondary">Selling Price</strong></label>
-                            <input id="Price" type="number" class="form-control" step="any" name="Price" min="1" />
+                            <input id="Price" type="number" class="form-control" name="Price" min="1" />
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -251,6 +251,7 @@
     <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
     <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
     <!--Select2 End-->
+    <script src="~/Scripts/ValidateRequiredFields.js"></script>
     <script src="~/Scripts/ckeditor/ckeditor.js"></script>
     <script src="~/Scripts/multiple-image-upload.js"></script>
     <link href="~/Content/multiple-image-upload.css" rel="stylesheet" />
@@ -312,12 +313,23 @@
                 });
 
                 $(".Save").click(function () {
-                    var shopcode = $("#ShopId").val();
-                    if (shopcode != null) {
+                    var isValidated = false;
+                    var requiredArr = [
+                        'ShopId',
+                        'MasterProductId',
+                        'MenuPrice',
+                        'Price'
+                    ];
+                    var isValidated = ValidateEmptyRequiredFiels(requiredArr);
+                    if (isValidated) {
                         $('#ProductForm').submit();
-                    } else {
-                        swal("Notice!", "Please Select Shop Name!", "warning");
                     }
+                    //var shopcode = $("#ShopId").val();
+                    //if (shopcode != null) {
+                    //    $('#ProductForm').submit();
+                    //} else {
+                    //    swal("Notice!", "Please Select Shop Name!", "warning");
+                    //}
                 });
 
                 $('#MasterProductId').select2({
