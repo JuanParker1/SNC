@@ -4302,7 +4302,7 @@ namespace ShopNow.Controllers
                     ProductListItems = i.apro.Select(b => new AchievementApiListViewModel.AchievementListItem.ProductListItem { Id = b.ProductId }).ToList(),
                     ShopListItems = i.a.ashop.Select(b => new AchievementApiListViewModel.AchievementListItem.ShopListItem { Id = b.ShopId }).ToList()
                 }).ToList();
-            return Json(new { list = model }, JsonRequestBehavior.AllowGet);
+            return Json(new { list = model.AchievementListItems }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetAllAchievement()
