@@ -153,7 +153,7 @@
                 var type = $('input[name="Type"]:checked').val();
                 var tiretype = $('input[name="TireType"]:checked').val();
                 $.getJSON("/Bill/GetDeliveryChargeType?type=" + type + "&tiretype=" + tiretype, function (data) {
-                    debugger;
+                    //debugger;
                     $.each(data, function (key, v) {
                         $.each(v, function (index, list) {
                             if (list.Type == 0) {
@@ -249,7 +249,104 @@
                 });
             });
 
-           
+            $('input[type=radio][name=Type]').change(function () {
+                var type = $('input[name="Type"]:checked').val();
+                var tiretype = $('input[name="TireType"]:checked').val();
+                $.getJSON("/Bill/GetDeliveryChargeType?type=" + type + "&tiretype=" + tiretype, function (data) {
+                    $.each(data, function (key, v) {
+                        $.each(v, function (index, list) {
+                            if (list.Type == 0) {
+                                if (list.TireType == 1) {
+                                    if (list.VehicleType == 1) {
+                                        $("#BikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#BikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 2) {
+                                        $("#CarrierBikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#CarrierBikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 3) {
+                                        $("#AutoChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#AutoChargePerKm").text(list.ChargePerKm);
+                                    }
+                                }
+                                if (list.TireType == 2) {
+                                    if (list.VehicleType == 1) {
+                                        $("#BikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#BikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 2) {
+                                        $("#CarrierBikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#CarrierBikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 3) {
+                                        $("#AutoChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#AutoChargePerKm").text(list.ChargePerKm);
+                                    }
+                                }
+                                if (list.TireType == 3) {
+                                    if (list.VehicleType == 1) {
+                                        $("#BikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#BikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 2) {
+                                        $("#CarrierBikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#CarrierBikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 3) {
+                                        $("#AutoChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#AutoChargePerKm").text(list.ChargePerKm);
+                                    }
+                                }
+                            }
+                            if (list.Type == 1) {
+                                if (list.TireType == 1) {
+                                    if (list.VehicleType == 1) {
+                                        $("#BikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#BikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 2) {
+                                        $("#CarrierBikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#CarrierBikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 3) {
+                                        $("#AutoChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#AutoChargePerKm").text(list.ChargePerKm);
+                                    }
+                                }
+                                if (list.TireType == 2) {
+                                    if (list.VehicleType == 1) {
+                                        $("#BikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#BikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 2) {
+                                        $("#CarrierBikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#CarrierBikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 3) {
+                                        $("#AutoChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#AutoChargePerKm").text(list.ChargePerKm);
+                                    }
+                                }
+                                if (list.TireType == 3) {
+                                    if (list.VehicleType == 1) {
+                                        $("#BikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#BikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 2) {
+                                        $("#CarrierBikeChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#CarrierBikeChargePerKm").text(list.ChargePerKm);
+                                    }
+                                    if (list.VehicleType == 3) {
+                                        $("#AutoChargeUpto5Km").text(list.ChargeUpto5Km);
+                                        $("#AutoChargePerKm").text(list.ChargePerKm);
+                                    }
+                                }
+                            }
+                        });
+                    });
+                });
+            });
             $('#ShopId').select2({
                 placeholder: "Search Shop",
                 ajax: {
