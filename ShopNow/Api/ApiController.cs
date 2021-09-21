@@ -642,20 +642,9 @@ namespace ShopNow.Controllers
             }
         }
 
-        public JsonResult GetBillOrDelivary(int bill, int shopId, double totalSize=0, double totalWeight=0)
+        public JsonResult GetBillOrDelivary(int bill, int shopId)
         {
             var model = new BillApiListViewModel();
-
-            int mode = 0; //0-NA,1-bike,2-carrier bike,3-Auto
-            double liters = totalSize / 1000;
-
-            if (totalWeight <= 20 || liters <= 60)
-                mode = 1;
-            if ((totalWeight > 20 && totalWeight <= 40) || (liters > 60 && liters <= 120))
-                mode = 2;
-            if (totalWeight > 40 || liters > 120)
-                mode = 3;
-
 
             model.List = db.Bills.Where(i => i.NameOfBill == bill && i.ShopId == shopId && i.Status == 0).Select(i => new BillApiListViewModel.BillList
             {
@@ -675,6 +664,32 @@ namespace ShopNow.Controllers
                 Distance = i.Distance
             }).ToList();
 
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetBillAndDeliveryCharge(int bill, int shopId, double totalSize = 0, double totalWeight = 0)
+        {
+            var model = new BillingDeliveryChargeViewModel();
+            var shop = db.Shops.FirstOrDefault(i => i.Id == shopId);
+            int mode = 1; //1-bike,2-carrier bike,3-Auto
+            double liters = totalSize / 1000;
+
+            if (totalWeight <= 20 || liters <= 60)
+                mode = 1;
+            if ((totalWeight > 20 && totalWeight <= 40) || (liters > 60 && liters <= 120))
+                mode = 2;
+            if (totalWeight > 40 || liters > 120)
+                mode = 3;
+            var deliveryCharge = db.DeliveryCharges.FirstOrDefault(i => i.Type == shop.DeliveryType && i.TireType == shop.DeliveryTierType && i.VehicleType == mode);
+            model.DeliveryChargeKM = deliveryCharge.ChargeUpto5Km;
+            model.DeliveryChargeOneKM = deliveryCharge.ChargePerKm;
+            model.DeliveryMode = deliveryCharge.VehicleType;
+
+            var billingCharge = db.BillingCharges.FirstOrDefault(i => i.ShopId == shopId);
+            model.ConvenientCharge = billingCharge.ConvenientCharge;
+            model.PackingCharge = billingCharge.PackingCharge;
+            model.DeliveryDiscountPercentage = billingCharge.DeliveryDiscountPercentage;
+            model.ItemType = billingCharge.ItemType;
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
