@@ -4296,7 +4296,7 @@ namespace ShopNow.Controllers
         public JsonResult GetAllAchievements(int customerid=0)
         {
             var model = new AchievementApiListViewModel();
-            model.AchievementListItems = db.AchievementSettings.Where(i => i.Status == 0)
+            model.AchievementListItems = db.AchievementSettings.Where(i => i.Status == 0).ToList()
                 .GroupJoin(db.AchievementShops, a => a.Id, ashop => ashop.AchievementId, (a, ashop) => new { a, ashop })
                 .GroupJoin(db.AchievementProducts, a => a.a.Id, apro => apro.AchievementId, (a, apro) => new { a, apro })
                 .GroupJoin(db.CustomerAchievements, a => a.a.a.Id, ca => ca.AchievementId, (a, ca) => new { a, ca })
@@ -4317,7 +4317,8 @@ namespace ShopNow.Controllers
                     Description = i.a.a.a.Description,
                     ProductListItems = i.a.apro.Select(b => new AchievementApiListViewModel.AchievementListItem.ProductListItem { Id = b.ProductId }).ToList(),
                     ShopListItems = i.a.a.ashop.Select(b => new AchievementApiListViewModel.AchievementListItem.ShopListItem { Id = b.ShopId }).ToList(),
-                    IsCustomerAccepted = i.ca.Any() ? i.ca.Any(a => a.Status == 1) : false
+                    IsCustomerAccepted = i.ca.Any() ? i.ca.Any(a => a.Status == 1) : false,
+                    ExpiryDate = (i.a.a.a.DayLimit != 0 && i.ca.Any(a => a.Status == 1) == true) ? i.ca.FirstOrDefault().DateEncoded.AddDays(Convert.ToDouble(i.a.a.a.DayLimit)).ToString("dd-MMM-yyyy") : ""
                 }).ToList();
             return Json(new { list = model.AchievementListItems }, JsonRequestBehavior.AllowGet);
         }
