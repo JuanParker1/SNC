@@ -52,6 +52,19 @@ namespace ShopNow.ViewModels
                 }
             }
         }
+        
     }
 
+    public class BillingChargeEmptyListViewModel
+    {
+        public List<EmptyBillList> EmptyList { get; set; }
+        public class EmptyBillList
+        {
+            public int ShopId { get; set; }
+            public string ShopName { get; set; }
+            public double PackingCharge { get; set; }
+            public double ConvenientCharge { get; set; }
+            public bool HasBilling { get; set; }
+        }
+    }
 }
