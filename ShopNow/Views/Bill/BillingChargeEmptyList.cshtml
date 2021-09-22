@@ -35,39 +35,3 @@
         </div>
     </div>
 </div>
-
-@section Scripts
-{
-    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
-    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
-    @*<script>
-        $(document).ready(function () {
-            $(".btnDelete").click(function () {
-                var Id = $(this).attr('data-id');
-                swal({
-                    title: "Are you sure want to delete?",
-                    text: "You will not be able to recover this file!",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Yes, Delete it!",
-                    cancelButtonText: "No, cancel",
-                    closeOnConfirm: false,
-                    closeOnCancel: true
-                },
-                    function (isConfirm) {
-                        if (isConfirm) {
-                            $.getJSON("/Bill/BillingDelete", { Id: Id }, function (data) {
-                                if (data == true) {
-                                    window.location.reload();
-                                }
-                            });
-                        }
-                    }
-                );
-            });
-
-        });
-    </script>*@
-}
-
