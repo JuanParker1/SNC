@@ -4293,29 +4293,32 @@ namespace ShopNow.Controllers
 
         }
 
-        public JsonResult GetAllAchievements()
+        public JsonResult GetAllAchievements(int customerid=0)
         {
             var model = new AchievementApiListViewModel();
-            model.AchievementListItems = db.AchievementSettings.Where(i => i.Status == 0)
+            model.AchievementListItems = db.AchievementSettings.Where(i => i.Status == 0).ToList()
                 .GroupJoin(db.AchievementShops, a => a.Id, ashop => ashop.AchievementId, (a, ashop) => new { a, ashop })
                 .GroupJoin(db.AchievementProducts, a => a.a.Id, apro => apro.AchievementId, (a, apro) => new { a, apro })
+                .GroupJoin(db.CustomerAchievements, a => a.a.a.Id, ca => ca.AchievementId, (a, ca) => new { a, ca })
                 .Select(i => new AchievementApiListViewModel.AchievementListItem
                 {
-                    ActivateAfterId = i.a.a.ActivateAfterId,
-                    ActivateType = i.a.a.ActivateType,
-                    Amount = i.a.a.Amount,
-                    CountType = i.a.a.CountType,
-                    CountValue = i.a.a.CountValue,
-                    DayLimit = i.a.a.DayLimit,
-                    HasAccept = i.a.a.HasAccept,
-                    Id = i.a.a.Id,
-                    IsForBlackListAbusers = i.a.a.IsForBlackListAbusers,
-                    Name = i.a.a.Name,
-                    RepeatCount = i.a.a.RepeatCount,
-                    ShopDistrict = i.a.a.ShopDistrict,
-                    Description = i.a.a.Description,
-                    ProductListItems = i.apro.Select(b => new AchievementApiListViewModel.AchievementListItem.ProductListItem { Id = b.ProductId }).ToList(),
-                    ShopListItems = i.a.ashop.Select(b => new AchievementApiListViewModel.AchievementListItem.ShopListItem { Id = b.ShopId }).ToList()
+                    ActivateAfterId = i.a.a.a.ActivateAfterId,
+                    ActivateType = i.a.a.a.ActivateType,
+                    Amount = i.a.a.a.Amount,
+                    CountType = i.a.a.a.CountType,
+                    CountValue = i.a.a.a.CountValue,
+                    DayLimit = i.a.a.a.DayLimit,
+                    HasAccept = i.a.a.a.HasAccept,
+                    Id = i.a.a.a.Id,
+                    IsForBlackListAbusers = i.a.a.a.IsForBlackListAbusers,
+                    Name = i.a.a.a.Name,
+                    RepeatCount = i.a.a.a.RepeatCount,
+                    ShopDistrict = i.a.a.a.ShopDistrict,
+                    Description = i.a.a.a.Description,
+                    ProductListItems = i.a.apro.Select(b => new AchievementApiListViewModel.AchievementListItem.ProductListItem { Id = b.ProductId }).ToList(),
+                    ShopListItems = i.a.a.ashop.Select(b => new AchievementApiListViewModel.AchievementListItem.ShopListItem { Id = b.ShopId }).ToList(),
+                    IsCustomerAccepted = i.ca.Any() ? i.ca.Any(a => a.Status == 1) : false,
+                    ExpiryDate = (i.a.a.a.DayLimit != 0 && i.ca.Any(a => a.Status == 1) == true) ? i.ca.FirstOrDefault().DateEncoded.AddDays(Convert.ToDouble(i.a.a.a.DayLimit)).ToString("dd-MMM-yyyy") : ""
                 }).ToList();
             return Json(new { list = model.AchievementListItems }, JsonRequestBehavior.AllowGet);
         }
@@ -4523,6 +4526,7 @@ namespace ShopNow.Controllers
                 AchievementId = id,
                 CustomerId = customerId,
                 DateEncoded = DateTime.Now,
+                DateUpdated = DateTime.Now,
                 Status = 1
             };
             db.CustomerAchievements.Add(customerAchievement);

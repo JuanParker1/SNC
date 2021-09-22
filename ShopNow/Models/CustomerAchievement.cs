@@ -19,5 +19,6 @@ namespace ShopNow.Models
         public int CustomerId { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
+        public System.DateTime DateUpdated { get; set; }
     }
 }

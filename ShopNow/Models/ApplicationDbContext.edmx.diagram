@@ -67,7 +67,6 @@
         <AssociationConnector Association="sncModel.FK_Products_ProductType" />
         <EntityTypeShape EntityType="sncModel.Offer" Width="1.5" PointX="0.75" PointY="13.75" />
         <EntityTypeShape EntityType="sncModel.AchievementSetting" Width="1.5" PointX="10.375" PointY="27.75" />
-        <EntityTypeShape EntityType="sncModel.CustomerAchievement" Width="1.5" PointX="27.375" PointY="12.75" />
         <EntityTypeShape EntityType="sncModel.OrderItem" Width="1.5" PointX="30.625" PointY="19.375" />
         <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="28.375" PointY="16.375" />
         <AssociationConnector Association="sncModel.FK_OrderItems_Orders" />
@@ -79,6 +78,7 @@
         <EntityTypeShape EntityType="sncModel.SearchData" Width="1.5" PointX="20.375" PointY="3.75" />
         <EntityTypeShape EntityType="sncModel.DeliveryCharge" Width="1.5" PointX="21.375" PointY="28.75" />
         <EntityTypeShape EntityType="sncModel.BillingCharge" Width="1.5" PointX="28.375" PointY="0.75" />
+        <EntityTypeShape EntityType="sncModel.CustomerAchievement" Width="1.5" PointX="27.375" PointY="12.75" />
         <EntityTypeShape EntityType="sncModel.Shop" Width="1.5" PointX="7.375" PointY="28.625" />
         <AssociationConnector Association="sncModel.FK_CustomerReview_Shops" />
       </Diagram>
