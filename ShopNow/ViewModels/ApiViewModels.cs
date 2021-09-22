@@ -221,6 +221,7 @@ namespace ShopNow.ViewModels
             public int RepeatCount { get; set; }
             public bool IsForBlackListAbusers { get; set; }
             public bool IsCustomerAccepted { get; set; }
+            public string ExpiryDate { get; set; }
             public string Description { get; set; }
 
             public List<ShopListItem> ShopListItems { get; set; }
