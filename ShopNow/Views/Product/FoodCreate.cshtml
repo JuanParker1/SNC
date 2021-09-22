@@ -237,6 +237,7 @@
     <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
     <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
     <!--Select2 End-->
+    <script src="~/Scripts/ValidateRequiredFields.js"></script>
     <script src="~/Scripts/ckeditor/ckeditor.js"></script>
     <script src="~/Scripts/multiple-image-upload.js"></script>
     <link href="~/Content/multiple-image-upload.css" rel="stylesheet" />
@@ -282,16 +283,27 @@
             });
 
             $(".Save").click(function () {
-                var shopid = $("#ShopId").val();
-                if (shopid != null) {
-                    if ($('#MasterProductId').val()) {
-                        $('#ProductForm').submit();
-                    } else {
-                        swal("Notice!", "Please Select Product!", "warning");
-                    }
-                } else {
-                    swal("Notice!", "Please Select Shop!", "warning");
+                var isValidated = false;
+                var requiredArr = [
+                    'ShopId',
+                    'MasterProductId',
+                    'MenuPrice',
+                    'Price'
+                ];
+                var isValidated = ValidateEmptyRequiredFiels(requiredArr);
+                if (isValidated) {
+                    $(ProductForm).submit();
                 }
+                //var shopid = $("#ShopId").val();
+                //if (shopid != null) {
+                //    if ($('#MasterProductId').val()) {
+                //        $('#ProductForm').submit();
+                //    } else {
+                //        swal("Notice!", "Please Select Product!", "warning");
+                //    }
+                //} else {
+                //    swal("Notice!", "Please Select Shop!", "warning");
+                //}
             });
 
             $('#MasterProductId').select2({

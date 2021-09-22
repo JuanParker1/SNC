@@ -827,6 +827,25 @@
                     <h5 class="text-success ml-2 mt-2">Delivery Charge Assign</h5>
                     <div class="row mb-3 ml-3">
                         <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label class="col-form-label text-secondary font-weight-bold">Delivery Mode</label>
+                                    <input type="hidden" id="DeliveryType" value="@Model.DeliveryType" />
+                                    <input type="hidden" id="DeliveryTierType" value="@Model.DeliveryTierType" />
+                                </div>
+                                <div class="col-md-6 mt-2">
+                                    <div class="form-check-inline mr-3">
+                                        <label class="form-check-label">
+                                            <input type="radio" class="form-check-input" name="DeliveryType" value="0"> General
+                                        </label>
+                                    </div>
+                                    <div class="form-check-inline">
+                                        <label class="form-check-label">
+                                            <input type="radio" class="form-check-input" name="DeliveryType" value="1"> Special
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row mt-3">
                                 <div class="col-md-2">
                                     <label class="col-form-label text-secondary font-weight-bold">Delivery Charge Type</label>
@@ -834,17 +853,17 @@
                                 <div class="col-md-8 mt-2">
                                     <div class="form-check-inline mr-3">
                                         <label class="form-check-label">
-                                            <input type="radio" class="form-check-input" name="Type" value="1"> 1<sup>st</sup> Tier
+                                            <input type="radio" class="form-check-input" name="DeliveryTierType" value="1"> 1<sup>st</sup> Tier
                                         </label>
                                     </div>
                                     <div class="form-check-inline">
                                         <label class="form-check-label">
-                                            <input type="radio" class="form-check-input" name="Type" value="2"> 2<sup>nd</sup> Tier
+                                            <input type="radio" class="form-check-input" name="DeliveryTierType" value="2"> 2<sup>nd</sup> Tier
                                         </label>
                                     </div>
                                     <div class="form-check-inline">
                                         <label class="form-check-label">
-                                            <input type="radio" class="form-check-input" name="Type" value="3"> 3<sup>rd</sup> Tier
+                                            <input type="radio" class="form-check-input" name="DeliveryTierType" value="3"> 3<sup>rd</sup> Tier
                                         </label>
                                     </div>
                                 </div>
@@ -1210,6 +1229,10 @@
         });
 
         $(document).ready(function () {
+            var type = $("#DeliveryType").val();
+            var tiertype = $("#DeliveryTierType").val();
+            $("input[name=DeliveryType][value=" + type + "]").attr('checked', 'checked');
+            $("input[name=DeliveryTierType][value=" + tiertype + "]").attr('checked', 'checked');
 
             var Id = $('#Id').val();
             var password = $('#Password').val();

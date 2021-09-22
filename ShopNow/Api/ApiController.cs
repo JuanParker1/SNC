@@ -667,7 +667,7 @@ namespace ShopNow.Controllers
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetBillAndDeliveryCharge(int bill, int shopId, double totalSize = 0, double totalWeight = 0)
+        public JsonResult GetBillAndDeliveryCharge(int shopId, double totalSize = 0, double totalWeight = 0)
         {
             var model = new BillingDeliveryChargeViewModel();
             var shop = db.Shops.FirstOrDefault(i => i.Id == shopId);
@@ -680,12 +680,12 @@ namespace ShopNow.Controllers
                 mode = 2;
             if (totalWeight > 40 || liters > 120)
                 mode = 3;
-            var deliveryCharge = db.DeliveryCharges.FirstOrDefault(i => i.Type == shop.DeliveryType && i.TireType == shop.DeliveryTierType && i.VehicleType == mode);
+            var deliveryCharge = db.DeliveryCharges.FirstOrDefault(i => i.Type == shop.DeliveryType && i.TireType == shop.DeliveryTierType && i.VehicleType == mode && i.Status==0);
             model.DeliveryChargeKM = deliveryCharge.ChargeUpto5Km;
             model.DeliveryChargeOneKM = deliveryCharge.ChargePerKm;
             model.DeliveryMode = deliveryCharge.VehicleType;
 
-            var billingCharge = db.BillingCharges.FirstOrDefault(i => i.ShopId == shopId);
+            var billingCharge = db.BillingCharges.FirstOrDefault(i => i.ShopId == shopId && i.Status==0);
             model.ConvenientCharge = billingCharge.ConvenientCharge;
             model.PackingCharge = billingCharge.PackingCharge;
             model.DeliveryDiscountPercentage = billingCharge.DeliveryDiscountPercentage;
@@ -4293,29 +4293,31 @@ namespace ShopNow.Controllers
 
         }
 
-        public JsonResult GetAllAchievements()
+        public JsonResult GetAllAchievements(int customerid=0)
         {
             var model = new AchievementApiListViewModel();
             model.AchievementListItems = db.AchievementSettings.Where(i => i.Status == 0)
                 .GroupJoin(db.AchievementShops, a => a.Id, ashop => ashop.AchievementId, (a, ashop) => new { a, ashop })
                 .GroupJoin(db.AchievementProducts, a => a.a.Id, apro => apro.AchievementId, (a, apro) => new { a, apro })
+                .GroupJoin(db.CustomerAchievements, a => a.a.a.Id, ca => ca.AchievementId, (a, ca) => new { a, ca })
                 .Select(i => new AchievementApiListViewModel.AchievementListItem
                 {
-                    ActivateAfterId = i.a.a.ActivateAfterId,
-                    ActivateType = i.a.a.ActivateType,
-                    Amount = i.a.a.Amount,
-                    CountType = i.a.a.CountType,
-                    CountValue = i.a.a.CountValue,
-                    DayLimit = i.a.a.DayLimit,
-                    HasAccept = i.a.a.HasAccept,
-                    Id = i.a.a.Id,
-                    IsForBlackListAbusers = i.a.a.IsForBlackListAbusers,
-                    Name = i.a.a.Name,
-                    RepeatCount = i.a.a.RepeatCount,
-                    ShopDistrict = i.a.a.ShopDistrict,
-                    Description = i.a.a.Description,
-                    ProductListItems = i.apro.Select(b => new AchievementApiListViewModel.AchievementListItem.ProductListItem { Id = b.ProductId }).ToList(),
-                    ShopListItems = i.a.ashop.Select(b => new AchievementApiListViewModel.AchievementListItem.ShopListItem { Id = b.ShopId }).ToList()
+                    ActivateAfterId = i.a.a.a.ActivateAfterId,
+                    ActivateType = i.a.a.a.ActivateType,
+                    Amount = i.a.a.a.Amount,
+                    CountType = i.a.a.a.CountType,
+                    CountValue = i.a.a.a.CountValue,
+                    DayLimit = i.a.a.a.DayLimit,
+                    HasAccept = i.a.a.a.HasAccept,
+                    Id = i.a.a.a.Id,
+                    IsForBlackListAbusers = i.a.a.a.IsForBlackListAbusers,
+                    Name = i.a.a.a.Name,
+                    RepeatCount = i.a.a.a.RepeatCount,
+                    ShopDistrict = i.a.a.a.ShopDistrict,
+                    Description = i.a.a.a.Description,
+                    ProductListItems = i.a.apro.Select(b => new AchievementApiListViewModel.AchievementListItem.ProductListItem { Id = b.ProductId }).ToList(),
+                    ShopListItems = i.a.a.ashop.Select(b => new AchievementApiListViewModel.AchievementListItem.ShopListItem { Id = b.ShopId }).ToList(),
+                    IsCustomerAccepted = i.ca.Any() ? i.ca.Any(a => a.Status == 1) : false
                 }).ToList();
             return Json(new { list = model.AchievementListItems }, JsonRequestBehavior.AllowGet);
         }
@@ -4523,6 +4525,7 @@ namespace ShopNow.Controllers
                 AchievementId = id,
                 CustomerId = customerId,
                 DateEncoded = DateTime.Now,
+                DateUpdated = DateTime.Now,
                 Status = 1
             };
             db.CustomerAchievements.Add(customerAchievement);

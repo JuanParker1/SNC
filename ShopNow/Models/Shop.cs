@@ -89,12 +89,12 @@ namespace ShopNow.Models
         public Nullable<bool> HasSchedule { get; set; }
         public Nullable<System.TimeSpan> NextOnTime { get; set; }
         public int DeliveryType { get; set; }
+        public int DeliveryTierType { get; set; }
         public int Status { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }
-        public int DeliveryTierType { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CustomerReview> CustomerReviews { get; set; }

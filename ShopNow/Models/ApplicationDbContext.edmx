@@ -261,6 +261,7 @@
           <Property Name="CustomerId" Type="int" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
+          <Property Name="DateUpdated" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="CustomerAddresses">
           <Key>
@@ -1229,12 +1230,12 @@
           <Property Name="HasSchedule" Type="bit" />
           <Property Name="NextOnTime" Type="time" Precision="7" />
           <Property Name="DeliveryType" Type="int" Nullable="false" />
+          <Property Name="DeliveryTierType" Type="int" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="CreatedBy" Type="nvarchar(max)" />
           <Property Name="UpdatedBy" Type="nvarchar(max)" />
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
-          <Property Name="DeliveryTierType" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="ShopSchedules">
           <Key>
@@ -2757,7 +2758,6 @@
           </AssociationSet>
           <EntitySet Name="Offers" EntityType="sncModel.Offer" />
           <EntitySet Name="AchievementSettings" EntityType="sncModel.AchievementSetting" />
-          <EntitySet Name="CustomerAchievements" EntityType="sncModel.CustomerAchievement" />
           <EntitySet Name="OrderItems" EntityType="sncModel.OrderItem" />
           <EntitySet Name="Orders" EntityType="sncModel.Order" />
           <AssociationSet Name="FK_OrderItems_Orders" Association="sncModel.FK_OrderItems_Orders">
@@ -2786,6 +2786,7 @@
           <EntitySet Name="SearchDatas" EntityType="sncModel.SearchData" />
           <EntitySet Name="DeliveryCharges" EntityType="sncModel.DeliveryCharge" />
           <EntitySet Name="BillingCharges" EntityType="sncModel.BillingCharge" />
+          <EntitySet Name="CustomerAchievements" EntityType="sncModel.CustomerAchievement" />
           <EntitySet Name="Shops" EntityType="sncModel.Shop" />
           <AssociationSet Name="FK_CustomerReview_Shops" Association="sncModel.FK_CustomerReview_Shops">
             <End Role="Shop" EntitySet="Shops" />
@@ -2938,16 +2939,6 @@
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
-        <EntityType Name="CustomerAchievement">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="AchievementId" Type="Int32" Nullable="false" />
-          <Property Name="CustomerId" Type="Int32" Nullable="false" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <EntityType Name="OrderItem">
           <Key>
@@ -3233,6 +3224,17 @@
           <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="CustomerAchievement">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AchievementId" Type="Int32" Nullable="false" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
         <EntityType Name="Shop">
           <Key>
             <PropertyRef Name="Id" />
@@ -3306,12 +3308,12 @@
           <Property Name="HasSchedule" Type="Boolean" />
           <Property Name="NextOnTime" Type="Time" Precision="7" />
           <Property Name="DeliveryType" Type="Int32" Nullable="false" />
+          <Property Name="DeliveryTierType" Type="Int32" Nullable="false" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DeliveryTierType" Type="Int32" Nullable="false" />
           <NavigationProperty Name="CustomerReviews" Relationship="sncModel.FK_CustomerReview_Shops" FromRole="Shop" ToRole="CustomerReview" />
         </EntityType>
         <Association Name="FK_CustomerReview_Shops">
@@ -4419,17 +4421,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="CustomerAchievements">
-            <EntityTypeMapping TypeName="sncModel.CustomerAchievement">
-              <MappingFragment StoreEntitySet="CustomerAchievements">
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
-                <ScalarProperty Name="AchievementId" ColumnName="AchievementId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="OrderItems">
             <EntityTypeMapping TypeName="sncModel.OrderItem">
               <MappingFragment StoreEntitySet="OrderItems">
@@ -4718,15 +4709,27 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="CustomerAchievements">
+            <EntityTypeMapping TypeName="sncModel.CustomerAchievement">
+              <MappingFragment StoreEntitySet="CustomerAchievements">
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="AchievementId" ColumnName="AchievementId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Shops">
             <EntityTypeMapping TypeName="sncModel.Shop">
               <MappingFragment StoreEntitySet="Shops">
-                <ScalarProperty Name="DeliveryTierType" ColumnName="DeliveryTierType" />
                 <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
                 <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
                 <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DeliveryTierType" ColumnName="DeliveryTierType" />
                 <ScalarProperty Name="DeliveryType" ColumnName="DeliveryType" />
                 <ScalarProperty Name="NextOnTime" ColumnName="NextOnTime" />
                 <ScalarProperty Name="HasSchedule" ColumnName="HasSchedule" />

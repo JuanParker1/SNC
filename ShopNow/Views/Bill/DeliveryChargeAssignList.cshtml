@@ -20,54 +20,12 @@
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
                {
-               columns.Add(b => b.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
-               columns.Add(b => b.TypeText).Filterable(true).Titled("Delivery Mode").SetWidth(10);
-               columns.Add(b => b.TireTypeText).Filterable(true).Titled("Charge Type").SetWidth(10);
-               columns.Add(b => b.VehicleTypeText).Filterable(true).Titled("Vehicle Type").SetWidth(10);
-               //columns.Add(b => b.DeliveryChargeKM).Titled("Upto 5Km").Filterable(true).SetWidth(10);
-               //columns.Add(b => b.DeliveryChargeOneKM).Titled("After 5 (Rate/Km)").Filterable(true).SetWidth(10);
-               columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(15)
-       .RenderValueAs(o => @<div>
-                    <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
-                    </div>);
+               columns.Add(b => b.ShopName).Titled("Shop Name").Filterable(true).SetWidth(20);
+               columns.Add(b => b.TypeText).Filterable(true).Titled("Delivery Mode").SetWidth(20);
+               columns.Add(b => b.TireTypeText).Filterable(true).Titled("Delivery Charge Type").SetWidth(20);
 }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-@section Scripts
-{
-    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
-    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
-    <script>
-        $(document).ready(function () {
-            $(".btnDelete").click(function () {
-                var Id = $(this).attr('data-id');
-                swal({
-                    title: "Are you sure want to delete?",
-                    text: "You will not be able to recover this file!",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Yes, Delete it!",
-                    cancelButtonText: "No, cancel",
-                    closeOnConfirm: false,
-                    closeOnCancel: true
-                },
-                    function (isConfirm) {
-                        if (isConfirm) {
-                            $.getJSON("/Bill/DeliveryChargeDelete", { id: Id }, function (data) {
-                                if (data == true) {
-                                    window.location.reload();
-                                }
-                            });
-                        }
-                    }
-                );
-            });
-
-        });
-    </script>
-}

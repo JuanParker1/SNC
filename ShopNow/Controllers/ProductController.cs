@@ -324,6 +324,7 @@ namespace ShopNow.Controllers
                 model.PackageName = masterProduct.PackageName;
                 model.Weight = masterProduct.Weight;
                 model.SizeLBH = masterProduct.SizeLWH;
+                model.IBarU = masterProduct.IBarU;
                 model.DrugCompoundDetailIds = masterProduct.DrugCompoundDetailIds;
                 model.DrugCompoundDetailName = masterProduct.DrugCompoundDetailName;
                 model.OriginCountry = masterProduct.OriginCountry;
@@ -530,7 +531,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNPROFE005")]
         public ActionResult FoodEdit(string id)
         {
-            var dCode = AdminHelpers.DCodeInt(id);
+            var dCode = AdminHelpers.DCodeLong(id);
             if (dCode == 0)
                 return HttpNotFound();
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -543,7 +544,11 @@ namespace ShopNow.Controllers
                 model.MasterProductName = masterProduct.Name;
                 model.CategoryId = masterProduct.CategoryId;
                 model.GoogleTaxonomyCode = masterProduct.GoogleTaxonomyCode;
-                model.CategoryName = db.Categories.FirstOrDefault(i => i.Id == masterProduct.CategoryId).Name;
+                var categoryName = db.Categories.FirstOrDefault(i => i.Id == masterProduct.CategoryId);
+                if (categoryName != null)
+                    model.CategoryName = categoryName.Name;
+                else
+                    model.CategoryName = "N/A";
                 model.ImagePath1 = masterProduct.ImagePath1;
             }
             Session["ShopAddOnsEdit"] = new List<ShopAddOnSessionEditViewModel>();
@@ -808,7 +813,7 @@ namespace ShopNow.Controllers
 
         public ActionResult FMCGEdit(string id)
         {
-            var dCode = AdminHelpers.DCodeInt(id);
+            var dCode = AdminHelpers.DCodeLong(id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             if (string.IsNullOrEmpty(dCode.ToString()))
@@ -853,6 +858,7 @@ namespace ShopNow.Controllers
                 model.PackageName = masterProduct.PackageName;
                 model.Weight = masterProduct.Weight;
                 model.SizeLBH = masterProduct.SizeLWH;
+                model.ASIN = masterProduct.ASIN;
             }
             return View(model);
         }
