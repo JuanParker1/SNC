@@ -3207,6 +3207,7 @@
     <Content Include="Views\Crust\Index.cshtml" />
     <Content Include="Views\SearchData\List.cshtml" />
     <Content Include="Views\SearchData\Entry.cshtml" />
+    <Content Include="Views\Bill\BillingChargeEmptyList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

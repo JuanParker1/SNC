@@ -59,6 +59,23 @@ namespace ShopNow.Controllers
             return View(model.List);
         }
 
+        [AccessPolicy(PageCode = "")]
+        public ActionResult BillingChargeEmptyList()
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var model = new BillingChargeEmptyListViewModel();
+            model.EmptyList = db.Shops.Where(i=>i.Status==0)
+                .GroupJoin(db.BillingCharges.Where(i => i.Status == 0), s => s.Id, b => b.ShopId, (s, b) => new { s, b }).Select(i => new BillingChargeEmptyListViewModel.EmptyBillList
+            {
+                ShopId = i.s.Id,
+                ShopName = i.s.Name,
+                ConvenientCharge = i.b.FirstOrDefault().ConvenientCharge,
+                PackingCharge = i.b.FirstOrDefault().PackingCharge,
+                HasBilling = i.b.Any()
+            }).ToList();
+            return View(model.EmptyList);
+        }
         [AccessPolicy(PageCode = "SHNBILBC003")]
         public ActionResult BillingCharge()
         {
