@@ -2071,7 +2071,7 @@ namespace ShopNow.Controllers
             else
                 reviewCount = 0;
             model.CustomerReview = reviewCount;
-            model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryId as Id, c.Name as Name from MasterProducts m join Categories c on c.Id = m.CategoryId join Products p on p.MasterProductId = m.id where p.ShopId = {shopId}  and c.Status = 0 and CategoryId !=0 and c.Name is not null group by CategoryId,c.Name order by Name").ToList<ShopDetails.CategoryList>();
+            model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct m.CategoryId as Id, c.Name as Name from MasterProducts m join Categories c on c.Id = m.CategoryId join Products p on p.MasterProductId = m.id where p.ShopId = {shopId}  and c.Status = 0 and m.CategoryId !=0 and c.Name is not null group by m.CategoryId,c.Name order by Name").ToList<ShopDetails.CategoryList>();
             if (shop.ShopCategoryId == 1)
             {
                 model.ProductLists = (from pl in db.Products
@@ -4625,6 +4625,19 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult CustomerCancelOrder(long orderId)
+        {
+            var order = db.Orders.FirstOrDefault(i => i.Id == orderId);
+            if (order != null)
+            {
+                order.Status = 9;
+                db.Entry(order).State = EntityState.Modified;
+                db.SaveChanges();
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            return Json(false, JsonRequestBehavior.AllowGet);
         }
 
         public void UpdateAchievements(int customerId)
