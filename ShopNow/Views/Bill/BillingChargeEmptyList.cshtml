@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ShopNow.ViewModels.BillingChargeListViewModel.BillList>
+﻿@model IEnumerable<ShopNow.ViewModels.BillingChargeEmptyListViewModel.EmptyBillList>
 @using GridMvc.Html
 @{
     ViewBag.Title = "Billing Charge Empty List";
@@ -21,14 +21,18 @@
                     @Html.Grid(Model).Columns(columns =>
                {
                columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(50);
-               @*columns.Add(c => c.ConvenientCharge).Titled("Convenient Charge").Filterable(true).SetWidth(15);
-               columns.Add(c => c.ItemTypeText).Titled("Packing Type").Filterable(true).SetWidth(10);
-               columns.Add(c => c.PackingCharge).Titled("Packing Charge").Filterable(true).SetWidth(10);
-               columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(15)
+                     columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(15)
                .RenderValueAs(o => @<div>
-                        <a href="~/Bill/BillingUpdate?Id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
-                        <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
-                    </div>);*@
+                        <a href="~/Bill/BillingCharge?shopid=@o.ShopId&shopname=@o.ShopName" class="btn btn-sm btn-success">Add Billing Charge</a>
+                    </div>);
+                @*columns.Add(c => c.ConvenientCharge).Titled("Convenient Charge").Filterable(true).SetWidth(15);
+    columns.Add(c => c.ItemTypeText).Titled("Packing Type").Filterable(true).SetWidth(10);
+    columns.Add(c => c.PackingCharge).Titled("Packing Charge").Filterable(true).SetWidth(10);
+    columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(15)
+    .RenderValueAs(o => @<div>
+             <a href="~/Bill/BillingUpdate?Id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
+             <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+         </div>);*@
 }).WithPaging(20).Sortable(true)
                 </div>
             </div>
