@@ -4605,6 +4605,17 @@ namespace ShopNow.Controllers
             return Json(new { isOnline = false }, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult UpdateCustomerDistrict(int customerId, string district)
+        {
+            var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
+            if (customer != null)
+            {
+                customer.DistrictName = district;
+                db.Entry(customer).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+        }
+
         public void UpdateAchievements(int customerId)
         {
             var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);

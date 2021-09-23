@@ -504,6 +504,7 @@ namespace ShopNow.ViewModels
         public double Longitude { get; set; }
         public double Distance { get; set; }
         public string ReferralNumber { get; set; }
+        public int OfferId { get; set; }
 
         public List<ListItem> ListItems { get; set; } 
         public class ListItem
