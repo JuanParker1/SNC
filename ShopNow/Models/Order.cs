@@ -62,6 +62,7 @@ namespace ShopNow.Models
         public Nullable<System.DateTime> DeliveryLocationReachTime { get; set; }
         public Nullable<System.DateTime> DeliveredTime { get; set; }
         public Nullable<int> OfferId { get; set; }
+        public Nullable<int> ProductFreeOfferId { get; set; }
         public double OfferAmount { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
