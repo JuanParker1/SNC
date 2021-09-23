@@ -4614,6 +4614,7 @@ namespace ShopNow.Controllers
                 db.Entry(customer).State = EntityState.Modified;
                 db.SaveChanges();
             }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         public void UpdateAchievements(int customerId)
