@@ -37,5 +37,7 @@ namespace ShopNow.Models
         public Nullable<System.TimeSpan> NextOnTime { get; set; }
         public int ShopStatus { get; set; }
         public Nullable<bool> IsOffer { get; set; }
+        public double Size { get; set; }
+        public double Weight { get; set; }
     }
 }
