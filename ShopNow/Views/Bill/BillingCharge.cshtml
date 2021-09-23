@@ -30,8 +30,13 @@
                                                     <label class="col-form-label text-secondary font-weight-bold">Shop Name</label>
                                                 </div>
                                                 <div class="col-md-7">
-                                                    <select id="ShopId" name="ShopId" class="form-control"></select>
-                                                    <input type="hidden" name="ShopName" id="ShopName" />
+                                                    <select id="ShopId" name="ShopId" class="form-control">
+                                                        @if(ViewBag.ShopId != 0)
+                {
+                                                            <option value="@ViewBag.ShopId">@ViewBag.ShopName</option>
+                }
+                                                    </select>
+                                                    <input type="hidden" name="ShopName" id="ShopName" value="@ViewBag.ShopName"/>
                                                 </div>
                                             </div>
                                         </div>

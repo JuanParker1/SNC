@@ -70,18 +70,20 @@ namespace ShopNow.Controllers
             {
                 ShopId = i.s.Id,
                 ShopName = i.s.Name,
-                ConvenientCharge = i.b.FirstOrDefault().ConvenientCharge,
-                PackingCharge = i.b.FirstOrDefault().PackingCharge,
+                //ConvenientCharge = i.b.FirstOrDefault().ConvenientCharge,
+                //PackingCharge = i.b.FirstOrDefault().PackingCharge,
                 HasBilling = i.b.Any()
-            }).ToList();
+            }).Where(i=> i.HasBilling == false).ToList();
             return View(model.EmptyList);
         }
         [AccessPolicy(PageCode = "SHNBILBC003")]
-        public ActionResult BillingCharge()
+        public ActionResult BillingCharge(string shopname, int shopid=0)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var model = new BillingChargeCreateViewModel();
             ViewBag.Name = user.Name;
+            ViewBag.ShopId = shopid;
+            ViewBag.ShopName = shopname;
             var ratecode = db.PlatFormCreditRates.Where(i => i.Status == 0).Select(i => i.Id).FirstOrDefault();
             ViewBag.PlatformCreditRateId = ratecode;
             var platFormCreaditRate = db.PlatFormCreditRates.Where(i => i.Id == ratecode).FirstOrDefault();
