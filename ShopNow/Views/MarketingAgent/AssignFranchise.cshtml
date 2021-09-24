@@ -1,0 +1,120 @@
+﻿@model ShopNow.ViewModels.FranchiseAssignViewModel
+@{
+    ViewBag.Title = "Assign DeliveryBoy and Shops for Marketing Agent";
+}
+<title>ShopNow | @ViewBag.Title </title>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <h5 class="text-success">@ViewBag.Title</h5>
+        </div>
+        <div class="col-md-6 text-right">
+            <a href="/MarketingAgent/AssignedFranchiseList"><span class="fa fa-bars"></span> Assigned Marketing Agent List</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 mx-auto">
+            @using (Html.BeginForm("AssignFranchise", "MarketingAgent", FormMethod.Post, new { id = "AssignFranchiseForm", enctype = "multipart/form-data" }))
+            {
+                <div class="card mb-3">
+                    <div class="card-body">
+                        @Html.AntiForgeryToken()
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label class="col-form-label font-weight-bold text-secondary">Marketing Agent Name<span class="text-danger">*</span></label>
+                                <select name="MarketingAgentId" id="MarketingAgentId" class="form-control"></select>
+                                <input type="hidden" name="MarketingAgentName" id="MarketingAgentName" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="col-form-label text-secondary font-weight-bold">DeliveryBoy Name<span class="text-danger">*</span></label>
+                                <select id="DeliveryBoyIds" name="DeliveryBoyIds" class="form-control" multiple></select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="col-form-label text-secondary font-weight-bold">Shop Name<span class="text-danger">*</span></label>
+                                <select id="ShopIds" name="ShopIds" class="form-control" multiple></select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-12 text-center">
+                                <button type="button" class="btn btn-success Save col-md-2" id="Create">Assign</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script src="~/Scripts/ValidateRequiredFields.js"></script>
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+
+    <script>
+        $(document).ready(function () {
+
+            $('#Create').on('click', function () {
+                var isValidated = false;
+                var requiredArr = [
+                    'MarketingAgentId',
+                    'DeliveryBoyIds',
+                    'ShopIds'
+                ];
+                isValidated = ValidateEmptyRequiredFiels(requiredArr);
+                if (isValidated) {
+                    var marketingagentId = $("#MarketingAgentId").val()
+                    $.getJSON("/MarketingAgent/GetAssignMarketingAgent", { marketingagentId: marketingagentId }, function (data) {
+                        if (data == true) {
+                            swal("Notice!", "Already Assigned!", "warning");
+                        } else {
+                            $('#AssignFranchiseForm').submit();
+                        }
+                    });
+                }
+            });
+
+            $('#DeliveryBoyIds').select2({
+                placeholder: "Search Delivery Boy",
+                ajax: {
+                    url: "/MarketingAgent/GetDeliveryBoySelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+            });
+
+            $('#ShopIds').select2({
+                placeholder: "Search Shop",
+                ajax: {
+                    url: "/MarketingAgent/GetShopSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+            });
+
+            $('#MarketingAgentId').select2({
+                placeholder: "Search Marketing Agent",
+                ajax: {
+                    url: "/MarketingAgent/GetMarketingAgentSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="MarketingAgentName"]').val(e.params.data.text);
+            });
+
+        });
+    </script>
+}
