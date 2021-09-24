@@ -327,8 +327,8 @@
                     dataType: 'json'
                 }
             }).on('select2:select', function (e) {
+                $('select[name="CategoryId"]').find('option').remove();
                 $('input[name="MasterProductName"]').val(e.params.data.text);
-              //  $('input[name="MasterProductId"]').val(e.params.data.MasterId);
                 $('input[name="Name"]').val(e.params.data.text);
                 $('select[name="CategoryId"]').append('<option value=' + e.params.data.CategoryId + '>' + e.params.data.CategoryName + '</option>')
                 $('input[name="CategoryName"]').val(e.params.data.CategoryName);
@@ -338,11 +338,6 @@
                 $('input[name="ImagePath1"]').val(e.params.data.ImagePath1);
                 $('input[name="MenuPrice"]').val(e.params.data.Price);
                 $('input[name="GoogleTaxonomyCode"]').val(e.params.data.GoogleTaxonomyCode);
-                //if (e.params.data.CategoryId != 0) {
-                //    $.getJSON("/Product/GetCategoryName", { categoryId: e.params.data.CategoryId }, function (data) {
-                //        $('#CategoryName').val(data.categoryName);
-                //    });
-                //}
                 $('#divAddOns').addClass('d-none');
                 $('#tbl-addOns tbody').empty();
                 $.getJSON('/Product/GetProductDishAddOns', { masterProductId: e.params.data.MasterId }, function (data) {

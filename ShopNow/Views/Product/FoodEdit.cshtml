@@ -61,8 +61,13 @@
                                     <strong class="text-secondary">Category Name</strong>
                                 </label>
                                 <div class="form-group">
-                                    <input type="text" name="CategoryName" id="CategoryName" class="form-control" value="@Model.CategoryName" readonly />
-                                    <input type="hidden" name="CategoryId" id="CategoryId" value="@Model.CategoryId" />
+                                    <select id="CategoryId" name="CategoryId" class="form-control">
+                                        @if (Model.CategoryId != 0)
+                                        {
+                                            <option value="@Model.CategoryId">@Model.CategoryName</option>
+                                        }
+                                    </select>
+                                    <input type="hidden" name="CategoryName" id="CategoryName" value="@Model.CategoryName" />
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -225,6 +230,11 @@
 
 @section Scripts
 {
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
     <script>
         $(document).ready(function () {
             $('#tbl-addOns tbody').empty();
@@ -249,6 +259,18 @@
             } else {
                 $("#divAddOns").addClass("d-none");
             }
+
+            $('#CategoryId').select2({
+                placeholder: "Search Category",
+                ajax: {
+                    url: "/Product/GetDishCategorySelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="CategoryName"]').val(e.params.data.text);
+            });
 
             $.getJSON('/Product/GetProductDishAddOnsFoodEdit', { masterProductId: @Model.MasterProductId  }, function (data) {
                 if (data != "") {

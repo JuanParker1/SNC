@@ -9,8 +9,8 @@
             <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
         </div>
         <div class="col-md-6 text-right">
-            <a href="~/Product/FMCGList" target="_blank" class="mr-3"><span class="fa fa-list-ul"></span> FMCG List</a>
-            <a href="~/Product/List" target="_blank"><span class="fa fa-list-ul"></span> Full List</a>
+            <a href="~/Product/FMCGList" target="_self" class="mr-3"><span class="fa fa-list-ul"></span> FMCG List</a>
+            <a href="~/Product/List" target="_self"><span class="fa fa-list-ul"></span> Full List</a>
         </div>
     </div>
     <div class="row">
@@ -298,6 +298,9 @@
                     dataType: 'json'
                 }
             }).on('select2:select', function (e) {
+                $('select[name="CategoryId"]').find('option').remove();
+                $('select[name="SubCategoryId"]').find('option').remove();
+                $('select[name="NextSubCategoryId"]').find('option').remove();
                 $('input[name="MasterProductName"]').val(e.params.data.text);
                 $('input[name="Name"]').val(e.params.data.text);
                 $('#BrandId').val(e.params.data.BrandId);

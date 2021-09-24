@@ -68,8 +68,13 @@
                     <div class="col-md-3">
                         <label class="control-label text-secondary font-weight-bold" for="CategoryId">Category Name</label>
                         <div class="form-group">
-                            <input type="hidden" name="CategoryId" id="CategoryId" value="@Model.CategoryId" />
-                            <input type="text" class="form-control" name="CategoryName" id="CategoryName" value="@Model.CategoryName" readonly />
+                            <select id="CategoryId" name="CategoryId" class="form-control">
+                                @if (Model.CategoryId != 0)
+                                {
+                                    <option value="@Model.CategoryId">@Model.CategoryName</option>
+                                }
+                            </select>
+                            <input type="hidden" name="CategoryName" id="CategoryName" value="@Model.CategoryName" />
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -301,6 +306,18 @@
             }).on('select2:select', function (e) {
                 $('input[name="DiscountCategoryName"]').val(e.params.data.text);
                 $('input[name="DiscountCategoryPercentage"]').val(e.params.data.percentage);
+            });
+
+            $('#CategoryId').select2({
+                placeholder: "Search Category",
+                ajax: {
+                    url: "/Product/GetMedicalCategorySelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="CategoryName"]').val(e.params.data.text);
             });
 
             $(".Save").click(function () {

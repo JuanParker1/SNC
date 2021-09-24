@@ -18,7 +18,7 @@
             </div>
             <div class="col-md-6 text-right">
                 <a href="~/Product/MedicalList" target="_self"><span class="fa fa-list-ul"></span> Medical List</a>&nbsp;&nbsp;
-                <a href="~/Product/List" target="_blank"><span class="fa fa-list-ul"></span> Full List</a>
+                <a href="~/Product/List" target="_self"><span class="fa fa-list-ul"></span> Full List</a>
             </div>
         </div>
         <div class="card shadow mb-3">
@@ -289,9 +289,9 @@
 
                 $('#ShopId').select2({
                     placeholder: "Search Shop",
+                    width: '100%',
                     ajax: {
                         url: "/Product/GetMedicalShopSelect2",
-                        width: '100%',
                         delay: 250,
                         dataType: 'json'
                     }
@@ -301,9 +301,9 @@
 
                 $('#DiscountCategoryId').select2({
                     placeholder: "Search Discount Category",
+                    width: '100%',
                     ajax: {
                         url: "/Product/GetDiscountCategorySelect2",
-                        width: '100%',
                         delay: 250,
                         dataType: 'json'
                     }
@@ -353,6 +353,7 @@
                         dataType: 'json'
                     }
                 }).on('select2:select', function (e) {
+                    $('select[name="CategoryId"]').find('option').remove();
                     var code = e.params.data.id;
                     $('input[name="MasterProductName"]').val(e.params.data.text);
                     $('select[name="CategoryId"]').append('<option value=' + e.params.data.CategoryId + '>' + e.params.data.CategoryName + '</option>')
@@ -372,7 +373,7 @@
                     $('input[name="SizeLB"]').val(e.params.data.SizeLB);
                     $('input[name="MenuPrice"]').val(e.params.data.Price);
                     $('input[name="GoogleTaxonomyCode"]').val(e.params.data.GoogleTaxonomyCode);
-                    $('select[name^="PriscriptionCategory"] option[value="' + e.params.data.PriscriptionCategory + '"]').attr("selected", "selected");
+                    $('select[name="PriscriptionCategory"] option[value="' + e.params.data.PriscriptionCategory + '"]').attr("selected", "selected");
                     $('#img-ProductImage1').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath1);
                     $('#img-ProductImage2').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath2);
                     $('#img-ProductImage3').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath3);

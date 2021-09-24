@@ -1476,33 +1476,39 @@ namespace ShopNow.Controllers
         public async Task<JsonResult> GetFMCGSelect2(string q = "")
         {
             var model = await db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 2)
+                .Join(db.Categories, m => m.CategoryId, c => c.Id, (m, c) => new { m, c })
+                .Join(db.SubCategories, m => m.m.SubCategoryId, sc => sc.Id, (m, sc) => new { m, sc })
+                .Join(db.NextSubCategories, m => m.m.m.NextSubCategoryId, nsc => nsc.Id, (m, nsc) => new { m, nsc })
                 .Select(i => new
                 {
-                    id = i.Id,
-                    text = i.Name,
-                    CategoryId = i.CategoryId,
-                    SubCategoryId = i.SubCategoryId,
-                    NextSubCategoryId = i.NextSubCategoryId,
-                    BrandId = i.BrandId,
-                    BrandName = i.BrandName,
-                    ShortDescription = i.ShortDescription,
-                    LongDescription = i.LongDescription,
-                    ImagePath1 = i.ImagePath1,
-                    ImagePath2 = i.ImagePath2,
-                    ImagePath3 = i.ImagePath3,
-                    ImagePath4 = i.ImagePath4,
-                    ImagePath5 = i.ImagePath5,
-                    Price = i.Price,
-                    ProductTypeId = i.ProductTypeId,
-                    ASIN = i.ASIN,
-                    GoogleTaxonomyCode = i.GoogleTaxonomyCode,
-                    Weight = i.Weight,
-                    SizeLBH = i.SizeLWH,
-                    MeasurementUnitId = i.MeasurementUnitId,
-                    MeasurementUnitName = i.MeasurementUnitName,
-                    PackageId = i.PackageId,
-                    PackageName = i.PackageName
-                }).ToListAsync();
+                    id = i.m.m.m.Id,
+                    text = i.m.m.m.Name,
+                    CategoryId = i.m.m.m.CategoryId,
+                    CategoryName = i.m.m.c.Name,
+                    SubCategoryId = i.m.m.m.SubCategoryId,
+                    SubCategoryName = i.m.sc.Name,
+                    NextSubCategoryId = i.m.m.m.NextSubCategoryId,
+                    NextSubCategoryName = i.nsc.Name,
+                    BrandId = i.m.m.m.BrandId,
+                    BrandName = i.m.m.m.BrandName,
+                    ShortDescription = i.m.m.m.ShortDescription,
+                    LongDescription = i.m.m.m.LongDescription,
+                    ImagePath1 = i.m.m.m.ImagePath1,
+                    ImagePath2 = i.m.m.m.ImagePath2,
+                    ImagePath3 = i.m.m.m.ImagePath3,
+                    ImagePath4 = i.m.m.m.ImagePath4,
+                    ImagePath5 = i.m.m.m.ImagePath5,
+                    Price = i.m.m.m.Price,
+                    ProductTypeId = i.m.m.m.ProductTypeId,
+                    ASIN = i.m.m.m.ASIN,
+                    GoogleTaxonomyCode = i.m.m.m.GoogleTaxonomyCode,
+                    Weight = i.m.m.m.Weight,
+                    SizeLBH = i.m.m.m.SizeLWH,
+                    MeasurementUnitId = i.m.m.m.MeasurementUnitId,
+                    MeasurementUnitName = i.m.m.m.MeasurementUnitName,
+                    PackageId = i.m.m.m.PackageId,
+                    PackageName = i.m.m.m.PackageName
+                }).Take(500).ToListAsync();
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
