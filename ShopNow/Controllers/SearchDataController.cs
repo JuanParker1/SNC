@@ -14,10 +14,10 @@ namespace ShopNow.Controllers
     {
         private sncEntities db = new sncEntities();
 
-        public ActionResult List()
+        public ActionResult List(SearchDataListViewModel model)
         {
-            var model = new SearchDataListViewModel();
-            model.AllListItems = db.CustomerSearchDatas
+            //var model = new SearchDataListViewModel();
+            model.AllListItems = db.CustomerSearchDatas.Where(i => (model.StartDate != null && model.EndDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate)) : true)
                 .GroupBy(i => i.SearchKeyword)
                 .Select(i => new SearchDataListViewModel.ListItem
                 {
@@ -25,13 +25,16 @@ namespace ShopNow.Controllers
                     Date = i.FirstOrDefault().DateEncoded,
                     Key = i.Key,
                 }).OrderByDescending(i => i.Date).ToList();
-            model.ZeroCountListItems = db.CustomerSearchDatas.Where(i => i.ResultCount == 0)
+            model.ZeroCountListItems = db.CustomerSearchDatas.Where(i => i.ResultCount == 0 && ((model.StartDate != null && model.EndDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate)) : true))
                  .GroupBy(i => i.SearchKeyword)
+                 .GroupJoin(db.SearchDatas, k => k.Key, sd => sd.KeyValue, (k, sd) => new { k, sd })
+                 .AsEnumerable()
                 .Select(i => new SearchDataListViewModel.ListItem
                 {
-                    Count = i.Max(a => a.ResultCount),
-                    Date = i.FirstOrDefault().DateEncoded,
-                    Key = i.Key,
+                    Count = i.k.Max(a => a.ResultCount),
+                    Date = i.k.FirstOrDefault().DateEncoded,
+                    Key = i.k.Key,
+                    OldCommonWord = string.Join(",", i.sd.Select(a => a.Source).ToList()).ToString()
                 }).OrderByDescending(i => i.Date).ToList();
 
             return View(model);
