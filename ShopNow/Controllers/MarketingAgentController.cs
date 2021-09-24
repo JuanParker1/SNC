@@ -507,6 +507,91 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
+        // Franchise Assign
+        [AccessPolicy(PageCode = "")]
+        public ActionResult AssignedFranchiseList()
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var model = new FranchiseListViewModel();
+            model.Lists = _db.MarketingAgents.Where(i => i.Status == 0).Join(_db.Shops.Where(i => i.Status == 0 && i.MarketingAgentId != 0), m=> m.Id, s=> s.Id, (m,s)=> new { m,s})
+                .Join(_db.DeliveryBoys.Where(i => i.Status == 0 && i.MarketingAgentId != 0), p=> p.m.Id, d=> d.MarketingAgentId, (p,d)=>new { p,d})
+                .Select(i => new FranchiseListViewModel.FranchiseList
+                {
+                    MarketingAgentId = i.p.m.Id,
+                    MarketingAgentName = i.p.m.Name,
+                    ShopId = i.p.s.Id,
+                    ShopName = i.p.s.Name,
+                    DeliveryBoyId = i.d.Id,
+                    DeliveryBoyName = i.d.Name
+                }).ToList();
+            return View(model.Lists);
+        }
+
+        [AccessPolicy(PageCode = "")]
+        public ActionResult AssignFranchise()
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            return View();
+        }
+
+        [HttpPost]
+        [AccessPolicy(PageCode = "")]
+        public ActionResult AssignFranchise(FranchiseAssignViewModel model)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+          
+            if (model.ShopIds != null)
+            {
+                foreach (var item in model.ShopIds)
+                {
+                    var shop = _db.Shops.FirstOrDefault(i => i.Id == item);
+                    shop.MarketingAgentId = model.MarketingAgentId;
+                    shop.MarketingAgentName = model.MarketingAgentName;
+                    _db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
+                    _db.SaveChanges();
+                }
+            }
+            if (model.DeliveryBoyIds != null)
+            {
+                foreach (var item in model.DeliveryBoyIds)
+                {
+                    var deliveryboy = _db.DeliveryBoys.FirstOrDefault(i => i.Id == item);
+                    deliveryboy.MarketingAgentId = model.MarketingAgentId;
+                    deliveryboy.MarketingAgentName = model.MarketingAgentName;
+                    _db.Entry(deliveryboy).State = System.Data.Entity.EntityState.Modified;
+                    _db.SaveChanges();
+                }
+            }
+            return RedirectToAction("AssignedFranchiseList");
+        }
+
+        
+
+        [AccessPolicy(PageCode = "")]
+        public ActionResult FranchiseUpdate(int id)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var model = new FranchiseAssignUpdateViewModel();
+            model.ShopIds = string.Join(",",_db.Shops.Where(i => i.MarketingAgentId == id && i.Status == 0).Select(i => i.Id).ToList());
+            model.DeliveryBoyIds = string.Join(",",_db.DeliveryBoys.Where(i => i.MarketingAgentId == id && i.Status == 0).Select(i => i.Id).ToList());
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AccessPolicy(PageCode = "")]
+        public ActionResult FranchiseUpdate(FranchiseAssignUpdateViewModel model)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+          
+
+            return RedirectToAction("AssignedFranchiseList");
+        }
+ 
         #endregion
 
         [AccessPolicy(PageCode = "")]

@@ -300,6 +300,7 @@ namespace ShopNow.Controllers
             var model = new CartListViewModel();
             model.DeliveredLists = db.Orders.Where(i => (shopId != 0 ? i.ShopId == shopId : true) && i.Status == 6)
                 .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+                .AsEnumerable()
                 .Select(i => new CartListViewModel.DeliveredList
                 {
                     Id = i.c.Id,
@@ -308,11 +309,12 @@ namespace ShopNow.Controllers
                     CustomerPhoneNumber = i.c.CustomerPhoneNumber,
                     Status = i.c.Status,
                     DateEncoded = i.c.DateEncoded,
+                    DateUpdated = i.c.DateUpdated,
                     Price = i.c.TotalPrice,
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
-                    OrderPeriod = Math.Round((i.c.DateUpdated - i.c.DateEncoded).TotalMinutes),
+                    OrderPeriod =  Math.Round((i.c.DateUpdated - i.c.DateEncoded).TotalMinutes),
                     ShopAcceptedTime = i.c.ShopAcceptedTime != null ? Math.Round((i.c.ShopAcceptedTime.Value - i.c.DateEncoded).TotalMinutes) : 0,
                 }).OrderByDescending(i => i.DateEncoded).ToList();
 
@@ -345,8 +347,9 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new CartListViewModel();
-            model.CancelledLists = db.Orders.Where(i => (shopId != 0 ? i.ShopId == shopId : true) && i.Status == 6)
+            model.CancelledLists = db.Orders.Where(i => i.Status == 7 && (shopId != 0 ? i.ShopId == shopId : true))
                         .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+                        .AsEnumerable()
                         .Select(i => new CartListViewModel.CancelledList
                         {
                             Id = i.c.Id,
