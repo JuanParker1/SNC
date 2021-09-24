@@ -514,18 +514,25 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new FranchiseListViewModel();
-            model.Lists = _db.MarketingAgents.Where(i => i.Status == 0).Join(_db.Shops.Where(i => i.Status == 0 && i.MarketingAgentId != 0), m=> m.Id, s=> s.Id, (m,s)=> new { m,s})
-                .Join(_db.DeliveryBoys.Where(i => i.Status == 0 && i.MarketingAgentId != 0), p=> p.m.Id, d=> d.MarketingAgentId, (p,d)=>new { p,d})
+            model.Lists = _db.MarketingAgents.Where(i => i.Status == 0).Join(_db.Shops.Where(i => i.Status == 0), m=> m.Id, s=> s.MarketingAgentId, (m,s)=> new { m,s})
+                .Join(_db.DeliveryBoys.Where(i => i.Status == 0), p=> p.m.Id, d=> d.MarketingAgentId, (p,d)=>new { p,d})
+                .GroupBy(i=> i.p.m.Id)
                 .Select(i => new FranchiseListViewModel.FranchiseList
                 {
-                    MarketingAgentId = i.p.m.Id,
-                    MarketingAgentName = i.p.m.Name,
-                    ShopId = i.p.s.Id,
-                    ShopName = i.p.s.Name,
-                    DeliveryBoyId = i.d.Id,
-                    DeliveryBoyName = i.d.Name
+                    MarketingAgentId = i.FirstOrDefault().p.m.Id,
+                    MarketingAgentName = i.FirstOrDefault().p.m.Name,
+                    ShopListItems = i.Where(a => a.p.s.Status == 0).Select(a => new FranchiseListViewModel.FranchiseList.ShopListItem
+                    {
+                        ShopId = a.p.s.Id,
+                        ShopName = a.p.s.Name,
+                    }).ToList(),
+                    DeliveryBoyListItems = i.Where(a => a.d.Status == 0).Select(a => new FranchiseListViewModel.FranchiseList.DeliveryBoyListItem
+                    {
+                        DeliveryBoyId = a.d.Id,
+                        DeliveryBoyName = a.d.Name
+                    }).ToList()
                 }).ToList();
-            return View(model.Lists);
+            return View(model);
         }
 
         [AccessPolicy(PageCode = "")]
@@ -591,8 +598,46 @@ namespace ShopNow.Controllers
 
             return RedirectToAction("AssignedFranchiseList");
         }
- 
+
         #endregion
+
+        public JsonResult GetAssignMarketingAgent(int marketingagentId)
+        {
+            var shop = _db.Shops.Any(i => i.MarketingAgentId == marketingagentId);
+            var deliveryboy = _db.DeliveryBoys.Any(i => i.MarketingAgentId == marketingagentId);
+            if (shop == true || deliveryboy == true) 
+            {
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [AccessPolicy(PageCode = "")]
+        public async Task<JsonResult> GetDeliveryBoySelect2(string q = "")
+        {
+            var model = await _db.DeliveryBoys.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        [AccessPolicy(PageCode = "")]
+        public async Task<JsonResult> GetMarketingAgentSelect2(string q = "")
+        {
+            var model = await _db.MarketingAgents.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
 
         [AccessPolicy(PageCode = "")]
         public async Task<JsonResult> GetShopCategorySelect2(string q = "")
@@ -621,10 +666,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "")]
         public async Task<JsonResult> GetShopSelect2(string q = "")
         {
-            var user = ((Helpers.Sessions.User)Session["MARKETINGUSER"]);
-            var marketingAgent = _db.MarketingAgents.FirstOrDefault(i => i.Id == user.Id);// MarketingAgent.Get(user.Code);
-
-            var model = await _db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && Convert.ToInt32(a.MarketingAgentId) == marketingAgent.Id).Select(i => new
+            var model = await _db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
             {
                 id = i.Id,
                 text = i.Name

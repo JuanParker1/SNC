@@ -385,6 +385,58 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
+        public ActionResult CustomerCancelled(int shopId = 0)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["User"]);
+            ViewBag.Name = user.Name;
+            var model = new CartListViewModel();
+            model.CustomerCancelledLists = db.Orders.Where(i => i.Status == 9 && ((shopId != 0) ? i.ShopId == shopId : true))
+                .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+                .AsEnumerable()
+                .Select(i => new CartListViewModel.CustomerCancelledList
+                {
+                    Id = i.c.Id,
+                    OrderNumber = i.c.OrderNumber,
+                    ShopName = i.c.ShopName,
+                    CustomerPhoneNumber = i.c.CustomerPhoneNumber,
+                    Status = i.c.Status,
+                    DateEncoded = i.c.DateEncoded,
+                    CustomerCancelledTime = i.c.ShopAcceptedTime,
+                    ShopCancelPeriod = i.c.ShopAcceptedTime != null ? Math.Round((i.c.ShopAcceptedTime.Value - i.c.DateEncoded).TotalMinutes) : 0
+
+                }).OrderByDescending(i => i.DateEncoded).ToList();
+            return View(model.CustomerCancelledLists);
+        }
+
+        public ActionResult CustomerNotPickup(int shopId = 0)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.user = user.Name;
+            var model = new CartListViewModel();
+            model.CustomerNotPickupLists = db.Orders.Where(i => i.Status == 10 && ((shopId != 0) ? i.ShopId == shopId : true))
+                .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+                .AsEnumerable()
+                .Select(i => new CartListViewModel.CustomerNotPickupList
+                {
+                    Id = i.c.Id,
+                    ShopName = i.c.ShopName,
+                    OrderNumber = i.c.OrderNumber,
+                    CustomerPhoneNumber = i.c.CustomerPhoneNumber,
+                    Status = i.c.Status,
+                    DateEncoded = i.c.DateEncoded,
+                    DateUpdated = i.c.DateUpdated,
+                    Price = i.c.TotalPrice,
+                    RefundAmount = i.p.RefundAmount ?? 0,
+                    RefundRemark = i.p.RefundRemark ?? "",
+                    PaymentMode = i.p.PaymentMode,
+                    OrderPeriod = Math.Round((i.c.DateUpdated - i.c.DateEncoded).TotalMinutes),
+                    ShopAcceptedTime = i.c.ShopAcceptedTime != null ? Math.Round((i.c.ShopAcceptedTime.Value - i.c.DateEncoded).TotalMinutes) : 0,
+
+                }).OrderByDescending(i => i.DateEncoded).ToList();
+            return View(model.CustomerNotPickupLists);
+        }
+
+
         [AccessPolicy(PageCode = "SHNCARD005")]
         public ActionResult Details(int id)
         {
@@ -1132,7 +1184,7 @@ namespace ShopNow.Controllers
 
 
             order.Status = 6;
-            order.UpdatedBy = delivaryBoy.CustomerName;
+            order.UpdatedBy = user.Name;
             order.DateUpdated = DateTime.Now;
             order.DeliveredTime = DateTime.Now;
             db.Entry(order).State = System.Data.Entity.EntityState.Modified;
@@ -1186,6 +1238,30 @@ namespace ShopNow.Controllers
             string fcmtocken = customerDetails.FcmTocken ?? "";
 
             Helpers.PushNotification.SendbydeviceId("Your order has been delivered.", "ShopNowChat", "a.mp3", fcmtocken);
+            return RedirectToAction("Edit", "Cart", new { OrderNumber = OrderNumber, id = AdminHelpers.ECodeLong(id) });
+        }
+
+        public ActionResult CustomerNotPickUp(int OrderNumber, int id)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            var order = db.Orders.FirstOrDefault(i => i.Id == id);
+
+            var delivaryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId && i.Status == 0);
+            if (delivaryBoy != null)
+            {
+                delivaryBoy.OnWork = 0;
+                delivaryBoy.isAssign = 0;
+                delivaryBoy.DateUpdated = DateTime.Now;
+                db.Entry(delivaryBoy).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            order.Status = 10;
+            order.UpdatedBy = user.Name;
+            order.DateUpdated = DateTime.Now;
+            db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+
             return RedirectToAction("Edit", "Cart", new { OrderNumber = OrderNumber, id = AdminHelpers.ECodeLong(id) });
         }
 

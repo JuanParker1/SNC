@@ -8,13 +8,29 @@
 <script src="~/Scripts/gridmvc.js"></script>
 
 <div class="container-fluid">
-    <div class="row my-2">
-        <div class="col-md-6">
-            <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+    <form method="get" action="/SearchData/List" class="my-3">
+        <div class="row my-2">
+            <div class="col-md-6">
+                <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="font-weight-bold">Start Date</label>
+                        <input type="date" id="StartDate" name="StartDate" class="form-control" @if (Model.StartDate != null) { <text> value="@Model.StartDate.Value.ToString("yyyy-MM-dd")" </text> } />
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="font-weight-bold">End Date</label>
+                        <input type="date" id="EndDate" name="EndDate" class="form-control" @if (Model.EndDate != null) { <text> value="@Model.EndDate.Value.ToString("yyyy-MM-dd")" </text> } />
+                    </div>
+                    <div class="col-md-2 mt-2">
+                        <input type="submit" class="btn btn-info mt-4" value="Apply Filter" />
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-md-6 text-right">
-        </div>
-    </div>
+    </form>
 
  <div class="card shadow">
      <div class="card-body">
@@ -40,8 +56,9 @@
              <div class="tab-pane fade" id="zero">
                  @Html.Grid(Model.ZeroCountListItems).Columns(columns =>
             {
-                columns.Add(b => b.Date).Titled("Date").Filterable(true).SetWidth(20).Format("{0:dd-MMM-yyyy}");
+                columns.Add(b => b.Date).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
                 columns.Add(b => b.Key).Titled("Cust Search Word-0").Filterable(true).SetWidth(10);
+                columns.Add(b => b.OldCommonWord).Titled("Old Common Word").Filterable(true).SetWidth(10);
                 columns.Add()
           .Encoded(false)
           .Sanitized(false)
@@ -82,7 +99,7 @@
         $(document).ready(function () {
             $('.select-source').select2({
                 placeholder: "Search Keyword",
-                minimumInputLength: 3,
+                //minimumInputLength: 3,
                 width: "100%",
                 ajax: {
                     url: "/SearchData/GetKeywordSelect2",
@@ -93,7 +110,7 @@
 
             $('.select-masterproduct').select2({
                 placeholder: "Search Product",
-                minimumInputLength: 3,
+                //minimumInputLength: 3,
                 width: "100%",
                 ajax: {
                     url: "/MasterProduct/GetAllSelect2",
@@ -114,6 +131,7 @@
                             tr.find('.select-source').val('').trigger('change');
                             tr.find('.select-masterproduct').val('').trigger('change');
                             tr.find('.input-keyword').val('');
+                            window.location.reload();
                         }
                         else
                             swal('Warning!', 'Select Correct word or Nickname!', 'warning');
@@ -121,6 +139,16 @@
                 } else
                     swal('Warning!', 'Enter Keyword', 'warning');
             });
+
+            //Stay in active tab on refresh
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                localStorage.setItem('activeTab', $(e.target).attr('href'));
+            });
+
+            var activeTab = localStorage.getItem('activeTab');
+            if (activeTab) {
+                $('.nav-tabs a[href="' + activeTab + '"]').tab('show');
+            }
         });
     </script>
 

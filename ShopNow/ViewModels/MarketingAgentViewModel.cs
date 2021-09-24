@@ -71,10 +71,20 @@ namespace ShopNow.ViewModels
         {
             public int MarketingAgentId { get; set; }
             public string MarketingAgentName { get; set; }
-            public int ShopId { get; set; }
-            public string ShopName { get; set; }
-            public int DeliveryBoyId { get; set; }
-            public string DeliveryBoyName { get; set; }
+
+            public List<ShopListItem> ShopListItems { get; set; }
+            public class ShopListItem
+            {
+                public int ShopId { get; set; }
+                public string ShopName { get; set; }
+            }
+
+            public List<DeliveryBoyListItem> DeliveryBoyListItems { get; set; }
+            public class DeliveryBoyListItem
+            {
+                public int DeliveryBoyId { get; set; }
+                public string DeliveryBoyName { get; set; }
+            }
         }
 
     }
