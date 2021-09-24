@@ -2,10 +2,8 @@
 @using GridMvc.Html
 @{
     ViewBag.Title = "Cancelled Order List";
-} 
-
+}
 <title>ShopNow | Cancelled Order </title>
-
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 
@@ -37,16 +35,13 @@
                    columns.Add(c => c.DateEncoded).Titled("Order Time").Filterable(true).SetWidth(10);
                    columns.Add(c => c.ShopCancelledTime).Titled("Cancelled Time").Filterable(true).SetWidth(10);
                    columns.Add(c => c.ShopCancelPeriod).Titled("Shop Cancel Period").Filterable(true).SetWidth(15);
-                   columns.Add()
-                  .Encoded(false)
-                  .Sanitized(false)
-                  .RenderValueAs(o => Html.ActionLink("View", "Edit", new { orderno=o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-vsm btn-info mr-1",  }).ToHtmlString()).Titled("Action").SetWidth(10);
+                   columns.Add().Encoded(false).Sanitized(false)
+                  .RenderValueAs(o => Html.ActionLink("View", "Edit", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-info btn-block mt-2", }).ToHtmlString()).Titled("Action").SetWidth(10);
                }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
     </div>
-    
 </div>
 
 @section Scripts

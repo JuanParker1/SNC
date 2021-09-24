@@ -273,6 +273,8 @@ namespace ShopNow.ViewModels
             public int Status { get; set; }
             public bool? IsProductOnline { get; set; }
             public double DiscountCategoryPercentage { get; set; }
+            public double Size { get; set; }
+            public double Weight { get; set; }
         }
 
         public class MedicalOrderItemList
@@ -299,6 +301,8 @@ namespace ShopNow.ViewModels
             public int Status { get; set; }
             public int IBarU { get; set; }
             public bool? IsProductOnline { get; set; }
+            public double Size { get; set; }
+            public double Weight { get; set; }
         }
     }
 

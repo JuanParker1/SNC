@@ -227,6 +227,7 @@ namespace ShopNow.ViewModels
             public string CustomerPhoneNumber { get; set; }
             public int Status { get; set; }
             public DateTime DateEncoded { get; set; }
+            public DateTime DateUpdated { get; set; }
             public string PaymentMode { get; set; }
             public double Price { get; set; }
             public double Amount { get; set; }
@@ -251,7 +252,7 @@ namespace ShopNow.ViewModels
             public double? RefundAmount { get; set; }
             public string RefundRemark { get; set; }
             public double ShopCancelPeriod { get; set; }
-            public Nullable<System.DateTime> ShopCancelledTime { get; set; }
+            public DateTime? ShopCancelledTime { get; set; }
             public double OrderPeriod { get; set; }
         }
         public List<CartList> List { get; set; }
@@ -505,6 +506,8 @@ namespace ShopNow.ViewModels
         public double Longitude { get; set; }
         public double Distance { get; set; }
         public string ReferralNumber { get; set; }
+        public Nullable<int> OfferId { get; set; }
+        public Nullable<int> ProductFreeOfferId { get; set; }
 
         public List<ListItem> ListItems { get; set; } 
         public class ListItem

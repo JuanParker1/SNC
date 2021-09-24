@@ -593,7 +593,9 @@ namespace ShopNow.Controllers
                             Status = i.p.Status,
                             ImagePath = ((!string.IsNullOrEmpty(i.m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : defaultImagePath),
                             IsOnline = i.p.IsOnline,
-                            NextOnTime = i.p.NextOnTime
+                            NextOnTime = i.p.NextOnTime,
+                            Size = i.m.SizeLWH,
+                            Weight = i.m.Weight
                         }).ToList();
             int count = model.Count();
             int CurrentPage = page;
@@ -2069,7 +2071,7 @@ namespace ShopNow.Controllers
             else
                 reviewCount = 0;
             model.CustomerReview = reviewCount;
-            model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryId as Id, c.Name as Name from MasterProducts m join Categories c on c.Id = m.CategoryId join Products p on p.MasterProductId = m.id where p.ShopId = {shopId}  and c.Status = 0 and CategoryId !=0 and c.Name is not null group by CategoryId,c.Name order by Name").ToList<ShopDetails.CategoryList>();
+            model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct m.CategoryId as Id, c.Name as Name from MasterProducts m join Categories c on c.Id = m.CategoryId join Products p on p.MasterProductId = m.id where p.ShopId = {shopId}  and c.Status = 0 and m.CategoryId !=0 and c.Name is not null group by m.CategoryId,c.Name order by Name").ToList<ShopDetails.CategoryList>();
             if (shop.ShopCategoryId == 1)
             {
                 model.ProductLists = (from pl in db.Products
@@ -2094,6 +2096,8 @@ namespace ShopNow.Controllers
                                           DiscountCategoryPercentage = pl.Percentage,
                                           IsOnline = pl.IsOnline,
                                           NextOnTime = pl.NextOnTime,
+                                          Size = m.SizeLWH,
+                                          Weight = m.SizeLWH
                                           //IsOffer = pl.Id != 0 ? GetOfferCheck(pl.Id) : false //false
                                       }).Where(i => i.Price != 0 && (str != "" ? i.Name.ToLower().Contains(str) : true)).ToList();
             }
@@ -2120,6 +2124,8 @@ namespace ShopNow.Controllers
                                           DiscountCategoryPercentage = pl.Percentage,
                                           IsOnline = pl.IsOnline,
                                           NextOnTime = pl.NextOnTime,
+                                          Size = m.SizeLWH,
+                                          Weight = m.SizeLWH
                                           //IsOffer = pl.Id != 0 ? GetOfferCheck(pl.Id) : false
                                       }).Where(i => i.Price != 0).ToList();
             }
@@ -4383,7 +4389,9 @@ namespace ShopNow.Controllers
                        Quantity = i.p.p.p.Qty,
                        ShopId = shop.Id,
                        ShopName = shop.Name,
-                       DiscountCategoryPercentage = i.dc.Percentage
+                       DiscountCategoryPercentage = i.dc.Percentage,
+                       Size = i.p.m.SizeLWH,
+                       Weight = i.p.m.Weight
                    }).ToList();
                 }
                 else
@@ -4405,7 +4413,9 @@ namespace ShopNow.Controllers
                         Customisation = i.p.p.Customisation,
                         Status = i.p.p.Status,
                         IsProductOnline = i.p.p.IsOnline,
-                        DiscountCategoryPercentage = i.p.p.Percentage
+                        DiscountCategoryPercentage = i.p.p.Percentage,
+                        Size = i.m.SizeLWH,
+                        Weight = i.m.Weight
                     }).ToList();
                 }
             }
@@ -4603,6 +4613,31 @@ namespace ShopNow.Controllers
                     return Json(new { isOnline = true }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { isOnline = false }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult UpdateCustomerDistrict(int customerId, string district)
+        {
+            var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
+            if (customer != null)
+            {
+                customer.DistrictName = district;
+                db.Entry(customer).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult CustomerCancelOrder(long orderId)
+        {
+            var order = db.Orders.FirstOrDefault(i => i.Id == orderId);
+            if (order != null)
+            {
+                order.Status = 9;
+                db.Entry(order).State = EntityState.Modified;
+                db.SaveChanges();
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            return Json(false, JsonRequestBehavior.AllowGet);
         }
 
         public void UpdateAchievements(int customerId)

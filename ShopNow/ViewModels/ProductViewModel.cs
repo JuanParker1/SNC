@@ -626,6 +626,8 @@ namespace ShopNow.ViewModels
             public string ImagePath { get; set; }
             public bool IsOnline { get; set; }
             public TimeSpan? NextOnTime { get; set; }
+            public double Size { get; set; }
+            public double Weight { get; set; }
         }       
     }
 
