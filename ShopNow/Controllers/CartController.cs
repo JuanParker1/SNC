@@ -1129,7 +1129,7 @@ namespace ShopNow.Controllers
 
 
             order.Status = 6;
-            order.UpdatedBy = delivaryBoy.CustomerName;
+            order.UpdatedBy = user.Name;
             order.DateUpdated = DateTime.Now;
             order.DeliveredTime = DateTime.Now;
             db.Entry(order).State = System.Data.Entity.EntityState.Modified;
@@ -1183,6 +1183,30 @@ namespace ShopNow.Controllers
             string fcmtocken = customerDetails.FcmTocken ?? "";
 
             Helpers.PushNotification.SendbydeviceId("Your order has been delivered.", "ShopNowChat", "a.mp3", fcmtocken);
+            return RedirectToAction("Edit", "Cart", new { OrderNumber = OrderNumber, id = AdminHelpers.ECodeLong(id) });
+        }
+
+        public ActionResult CustomerNotPickUp(int OrderNumber, int id)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            var order = db.Orders.FirstOrDefault(i => i.Id == id);
+
+            var delivaryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId && i.Status == 0);
+            if (delivaryBoy != null)
+            {
+                delivaryBoy.OnWork = 0;
+                delivaryBoy.isAssign = 0;
+                delivaryBoy.DateUpdated = DateTime.Now;
+                db.Entry(delivaryBoy).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            order.Status = 10;
+            order.UpdatedBy = user.Name;
+            order.DateUpdated = DateTime.Now;
+            db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+
             return RedirectToAction("Edit", "Cart", new { OrderNumber = OrderNumber, id = AdminHelpers.ECodeLong(id) });
         }
 

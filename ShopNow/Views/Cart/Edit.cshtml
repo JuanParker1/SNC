@@ -77,6 +77,7 @@
                             {
                                 <span class="text-success">On the Way to Delivery</span>
                                 <a href="/Cart/MarkAsDelivered?OrderNumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-info mt-2">Mark as Delivered</a>
+                                <a href="/Cart/CustomerNotPickUp?OrderNumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-info mt-2">Customer Not Pickup</a>
                             }
                             else if (Model.Status == 6)
                             {
