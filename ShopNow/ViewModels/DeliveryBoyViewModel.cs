@@ -119,21 +119,7 @@ namespace ShopNow.ViewModels
         }
     }
 
-    public class FranchiseViewModel
-    {
-        public int DeliveryBoyId { get; set; }
-        public string DeliveryBoyName { get; set; }
-        public int MarketingAgentId { get; set; }
-        public string MarketingAgentName { get; set; }
-        public List<FranchiseList> Lists { get; set; }
-        public class FranchiseList
-        {
-            public int Id { get; set; }
-            public string Name { get; set; }
-            public int MarketingAgentId { get; set; }
-            public string MarketingAgentName { get; set; }
-        }
-    }
+    
 
     public class DeliveryBoyCreditAmountViewModel
     {

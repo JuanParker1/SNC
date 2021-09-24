@@ -3210,6 +3210,7 @@
     <Content Include="Views\SearchData\List.cshtml" />
     <Content Include="Views\SearchData\Entry.cshtml" />
     <Content Include="Views\Bill\BillingChargeEmptyList.cshtml" />
+    <Content Include="Views\MarketingAgent\AssignedFranchiseList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

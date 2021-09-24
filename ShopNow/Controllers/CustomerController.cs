@@ -41,9 +41,19 @@ namespace ShopNow.Controllers
             }
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var List = (from s in db.Customers
-                        select s).OrderBy(s => s.Name).Where(i => i.Status == 0).ToList();
-            return View(List);
+            var model = new CustomerListViewModel();
+            model.List = db.Customers.Where(i => i.Status == 0).AsEnumerable().Select((i, index) => new CustomerListViewModel.CustomerList
+            {
+                No = index + 1,
+                Id = i.Id,
+                Name = i.Name,
+                PhoneNumber = i.PhoneNumber,
+                Address = i.Address,
+                DistrictName = i.DistrictName,
+                StateName = i.StateName,
+                DateEncoded = i.DateEncoded
+            }).OrderByDescending(i => i.DateEncoded).ToList();
+            return View(model.List);
         }
 
         [AccessPolicy(PageCode = "SHNCUSL001")]
@@ -57,10 +67,7 @@ namespace ShopNow.Controllers
                 Id = i.Id,
                 Name = i.Name,
                 Address = i.Address,
-                CountryName = i.CountryName,
                 DistrictName = i.DistrictName,
-                Email = i.Email,
-                ImagePath = i.ImagePath,
                 PhoneNumber = i.PhoneNumber,
                 StateName = i.StateName
             }).OrderBy(i => i.Name).ToList();
@@ -235,8 +242,7 @@ namespace ShopNow.Controllers
                 PhoneNumber = i.PhoneNumber,
                 Address = i.Address,
                 DistrictName = i.DistrictName,
-                StateName = i.StateName,
-                ImagePath = i.ImagePath
+                StateName = i.StateName
             }).OrderBy(i => i.Name).ToList();
 
             return View(model.List);
