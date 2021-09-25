@@ -408,7 +408,7 @@ namespace ShopNow.Controllers
             return View(model.CustomerCancelledLists);
         }
 
-        public ActionResult CustomerNotPickup(int shopId = 0)
+        public ActionResult CustomerNotPickupList(int shopId = 0)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.user = user.Name;

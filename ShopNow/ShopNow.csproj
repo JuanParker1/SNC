@@ -3212,9 +3212,9 @@
     <Content Include="Views\Bill\BillingChargeEmptyList.cshtml" />
     <Content Include="Views\MarketingAgent\AssignedFranchiseList.cshtml" />
     <Content Include="Views\Cart\CustomerCancelled.cshtml" />
-    <Content Include="Views\Cart\CustomerNotPickup.cshtml" />
     <Content Include="Views\MarketingAgent\AssignFranchise.cshtml" />
     <Content Include="Views\MarketingAgent\FranchiseUpdate.cshtml" />
+    <Content Include="Views\Cart\CustomerNotPickupList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
