@@ -18,7 +18,7 @@
             </div>
             <div class="col-md-6 text-right">
                 <a href="~/Product/MedicalList" target="_self"><span class="fa fa-list-ul"></span> Medical List</a>&nbsp;&nbsp;
-                <a href="~/Product/List" target="_blank"><span class="fa fa-list-ul"></span> Full List</a>
+                <a href="~/Product/List" target="_self"><span class="fa fa-list-ul"></span> Full List</a>
             </div>
         </div>
         <div class="card shadow mb-3">
@@ -59,8 +59,8 @@
                     <div class="col-md-3">
                         <label class="control-label text-secondary font-weight-bold" for="CategoryId">Category Name</label>
                         <div class="form-group">
-                            <input type="hidden" name="CategoryId" id="CategoryId" />
-                            <input type="text" class="form-control" name="CategoryName" id="CategoryName" readonly />
+                            <select id="CategoryId" name="CategoryId" class="form-control"></select>
+                            <input type="hidden" name="CategoryName" id="CategoryName" />
                         </div>
                     </div>
                     <div class="col-md-3">
@@ -289,9 +289,9 @@
 
                 $('#ShopId').select2({
                     placeholder: "Search Shop",
+                    width: '100%',
                     ajax: {
                         url: "/Product/GetMedicalShopSelect2",
-                        width: '100%',
                         delay: 250,
                         dataType: 'json'
                     }
@@ -301,15 +301,27 @@
 
                 $('#DiscountCategoryId').select2({
                     placeholder: "Search Discount Category",
+                    width: '100%',
                     ajax: {
                         url: "/Product/GetDiscountCategorySelect2",
-                        width: '100%',
                         delay: 250,
                         dataType: 'json'
                     }
                 }).on('select2:select', function (e) {
                     $('input[name="DiscountCategoryName"]').val(e.params.data.text);
                     $('input[name="DiscountCategoryPercentage"]').val(e.params.data.percentage);
+                });
+
+                $('#CategoryId').select2({
+                    placeholder: "Search Category",
+                    ajax: {
+                        url: "/Product/GetMedicalCategorySelect2",
+                        width: '100%',
+                        delay: 250,
+                        dataType: 'json'
+                    }
+                }).on('select2:select', function (e) {
+                    $('input[name="CategoryName"]').val(e.params.data.text);
                 });
 
                 $(".Save").click(function () {
@@ -341,9 +353,11 @@
                         dataType: 'json'
                     }
                 }).on('select2:select', function (e) {
+                    $('select[name="CategoryId"]').find('option').remove();
                     var code = e.params.data.id;
                     $('input[name="MasterProductName"]').val(e.params.data.text);
-                    $('input[name="CategoryId"]').val(e.params.data.CategoryId);
+                    $('select[name="CategoryId"]').append('<option value=' + e.params.data.CategoryId + '>' + e.params.data.CategoryName + '</option>')
+                    $('input[name="CategoryName"]').val(e.params.data.CategoryName);
                     $('input[name="BrandId"]').val(e.params.data.BrandId);
                     $('input[name="BrandName"]').val(e.params.data.BrandName);
                     $('input[name="MeasurementUnitId"]').val(e.params.data.MeasurementUnitId);
@@ -359,17 +373,12 @@
                     $('input[name="SizeLB"]').val(e.params.data.SizeLB);
                     $('input[name="MenuPrice"]').val(e.params.data.Price);
                     $('input[name="GoogleTaxonomyCode"]').val(e.params.data.GoogleTaxonomyCode);
-                    $('select[name^="PriscriptionCategory"] option[value="' + e.params.data.PriscriptionCategory + '"]').attr("selected", "selected");
+                    $('select[name="PriscriptionCategory"] option[value="' + e.params.data.PriscriptionCategory + '"]').attr("selected", "selected");
                     $('#img-ProductImage1').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath1);
                     $('#img-ProductImage2').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath2);
                     $('#img-ProductImage3').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath3);
                     $('#img-ProductImage4').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath4);
                     $('#img-ProductImage5').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath5);
-                    if (e.params.data.CategoryId != 0) {
-                        $.getJSON("/Product/GetCategoryName", { categoryId: e.params.data.CategoryId }, function (data) {
-                            $('#CategoryName').val(data.categoryName);
-                        });
-                    }
                 });
             });
     </script>
