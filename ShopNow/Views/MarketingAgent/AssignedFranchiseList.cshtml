@@ -1,34 +1,55 @@
-﻿@model IEnumerable<ShopNow.ViewModels.FranchiseListViewModel.FranchiseList>
-@using GridMvc.Html
+﻿@model ShopNow.ViewModels.FranchiseListViewModel
 @{
     ViewBag.Title = "Assigned Franchise List";
 }
 <title>ShopNow | Franchise List</title>
-<link href="~/Content/Gridmvc.css" rel="stylesheet" />
-<script src="~/Scripts/gridmvc.js"></script>
 <div class="container-fluid">
     <div class="row my-2">
         <div class="col-md-6">
             <h5 class="text-success">@ViewBag.Title</h5>
         </div>
         <div class="col-md-6 text-right">
-            <a href="/DeliveryBoy/AssignFranchise"><span class="fa fa-tasks"></span> Assign Franchise</a>
+            <a href="/MarketingAgent/AssignFranchise"><span class="fa fa-tasks"></span> Assign Franchise</a>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    @Html.Grid(Model).Columns(columns =>
-               {
-               columns.Add(b => b.MarketingAgentName).Titled("Franchise Name").Filterable(true).SetWidth(20);
-               columns.Add(b => b.ShopName).Titled("Shops").Filterable(true).SetWidth(20);
-               columns.Add(b => b.DeliveryBoyName).Titled("DeliveryBoys").Filterable(true).SetWidth(20);
-               @*columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20).RenderValueAs(b => @<div>
-                                <a href="~/DeliveryBoy/FranchiseUpdate?id=@b.Id" class="btn btn-sm btn-warning" style="padding: 3px 26px">Edit</a>
-                                <button type="button" class="btn btn-sm btn-danger Remove" data-id="@b.Id">Remove</button>
-                            </div>);*@
-                  }).WithPaging(20).Sortable(true)
+                    <table class="table table-borderless" id="Franchise">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="text-nowrap w-25">Marketing Agent Name</th>
+                                <th class="w-25">Shop Name(s)</th>
+                                <th class="w-25">DeliveryBoy Name(s)</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Lists)
+                            {
+                            <tr>
+                                <td class="nowrap font-weight-bold">@item.MarketingAgentName</td>
+                                <td>
+                                    @foreach (var shop in item.ShopListItems)
+                                    {
+                                        <button type="button" class="btn btn-secondary m-1">@shop.ShopName</button>
+                                    }
+                                </td>
+                                <td>
+                                    @foreach (var deliveryBoy in item.DeliveryBoyListItems)
+                                    {
+                                        <button type="button" class="btn btn-secondary m-1">@deliveryBoy.DeliveryBoyName</button>
+                                    }
+                                </td>
+                                <td>
+                                    <a href="/MarketingAgent/FranchiseUpdate?Id=@item.MarketingAgentId" class="text-info"><i class="fa fa-edit fa-2x"></i></a>
+                                    @*<a href="javascript:void(0)" data-id="@item.MarketingAgentId" class="text-danger btnDelete"><i class="fa fa-trash fa-2x"></i></a>*@
+                                </td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -42,46 +63,30 @@
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
-            var t = $('#Franchise-list').DataTable({
-                "dom": "<'row'<'col-sm-6'f>>" +
-                    "<'row'<'col-sm-5'i><'col-sm-3'l><'col-sm-4'p>>" +
-                    "<'row'<'col-sm-12'tr>>",
-                "bPaginate": false,
-                "scrollY": 400,
-                "paging": true,
-                "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "ALL"]],
-                "pageLength": -1,
-                initComplete: function (settings, json) {
-                    $('.index input').remove();
-                    $('.action-btn input').remove();
-                    $('.dataTables_filter input').appendTo('.data-search');
-                    $('.dataTables_filter label').remove();
-                    $('.data-search input').attr('placeholder', 'Quick Search');
-                    $('.data-search input').addClass('form-control');
-                    $('.data-search input').removeClass('form-control-sm');
+            $(".btnDelete").click(function () {
+                var id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
                 },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/MarketingAgent/FranchiseDelete", { id: id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
             });
-
-            t.on('order.dt search.dt', function () {
-                t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
-                    cell.innerHTML = i + 1;
-                });
-            }).draw();
-
-            //$('.Remove').on('click', function () {
-            //    var id = $(this).attr('data-id');
-            //    $.getJSON("/DeliveryBoy/FranchiseRemove?id=" + id, function (data) {
-            //        if (data.IsAdded == true) {
-            //            swal({
-            //                title: "Removed Successfully",
-            //                text: "",
-            //                type: "success"
-            //            }, function () {
-            //                window.location.href = "/DeliveryBoy/AssignedFranchiseList";
-            //            });
-            //        }
-            //    });
-            //});
         });
     </script>
 }

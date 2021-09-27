@@ -1216,24 +1216,26 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNPROFC004")]
         public async Task<JsonResult> GetDishSelect2(string q = "")
         {
-            var model = await db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 1).Select(i => new
-            {
-                id = i.Id,
-                text = i.Name,
-                CategoryId = i.CategoryId,
-                BrandId = i.BrandId,
-                BrandName = i.BrandName,
-                ShortDescription = i.ShortDescription,
-                LongDescription = i.LongDescription,
-                Customisation = i.Customisation,
-                ColorCode = i.ColorCode,
-                Price = i.Price,
-                ProductTypeId = i.ProductTypeId,
-                ProductTypeName = i.ProductTypeName,
-                ImagePath1 = i.ImagePath1,
-                GoogleTaxonomyCode = i.GoogleTaxonomyCode,
-                MasterId = i.Id
-            }).ToListAsync();
+            var model = await db.MasterProducts.Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 1).Join(db.Categories, m => m.CategoryId, c => c.Id, (m, c) => new { m, c })
+                .Select(i => new
+                {
+                    id = i.m.Id,
+                    text = i.m.Name,
+                    CategoryId = i.m.CategoryId,
+                    CategoryName = i.c.Name,
+                    BrandId = i.m.BrandId,
+                    BrandName = i.m.BrandName,
+                    ShortDescription = i.m.ShortDescription,
+                    LongDescription = i.m.LongDescription,
+                    Customisation = i.m.Customisation,
+                    ColorCode = i.m.ColorCode,
+                    Price = i.m.Price,
+                    ProductTypeId = i.m.ProductTypeId,
+                    ProductTypeName = i.m.ProductTypeName,
+                    ImagePath1 = i.m.ImagePath1,
+                    GoogleTaxonomyCode = i.m.GoogleTaxonomyCode,
+                    MasterId = i.m.Id
+                }).Take(500).OrderBy(i => i.text).ToListAsync();
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
@@ -1324,34 +1326,36 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNPROC001")]
         public async Task<JsonResult> GetMedicalSelect2(string q = "")
         {
-            var model = await db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 3).Select(i => new
-            {
-                id = i.Id,
-                text = i.Name,
-                CategoryId = i.CategoryId,
-                BrandId = i.BrandId,
-                BrandName = i.BrandName,
-                MeasurementUnitId = i.MeasurementUnitId,
-                MeasurementUnitName = i.MeasurementUnitName,
-                PriscriptionCategory = i.PriscriptionCategory,
-                DrugCompoundDetailIds = i.DrugCompoundDetailIds,
-                DrugCompoundDetailName = i.DrugCompoundDetailName,
-                PackageId = i.PackageId,
-                PackageName = i.PackageName,
-                Manufacturer = i.Manufacturer,
-                OriginCountry = i.OriginCountry,
-                iBarU = i.IBarU,
-                weight = i.Weight,
-                SizeLB = i.SizeLWH,
-                Price = i.Price,
-                ImagePath1 = i.ImagePath1,
-                ImagePath2 = i.ImagePath2,
-                ImagePath3 = i.ImagePath3,
-                ImagePath4 = i.ImagePath4,
-                ImagePath5 = i.ImagePath5,
-                ProductTypeId = i.ProductTypeId,
-                GoogleTaxonomyCode = i.GoogleTaxonomyCode,
-            }).ToListAsync();
+            var model = await db.MasterProducts.Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 3).Join(db.Categories,m=> m.CategoryId, c=> c.Id, (m,c) =>new { m,c})
+                .Select(i => new
+                {
+                    id = i.m.Id,
+                    text = i.m.Name,
+                    CategoryId = i.m.CategoryId,
+                    CategoryName = i.c.Name,
+                    BrandId = i.m.BrandId,
+                    BrandName = i.m.BrandName,
+                    MeasurementUnitId = i.m.MeasurementUnitId,
+                    MeasurementUnitName = i.m.MeasurementUnitName,
+                    PriscriptionCategory = i.m.PriscriptionCategory,
+                    DrugCompoundDetailIds = i.m.DrugCompoundDetailIds,
+                    DrugCompoundDetailName = i.m.DrugCompoundDetailName,
+                    PackageId = i.m.PackageId,
+                    PackageName = i.m.PackageName,
+                    Manufacturer = i.m.Manufacturer,
+                    OriginCountry = i.m.OriginCountry,
+                    iBarU = i.m.IBarU,
+                    weight = i.m.Weight,
+                    SizeLB = i.m.SizeLWH,
+                    Price = i.m.Price,
+                    ImagePath1 = i.m.ImagePath1,
+                    ImagePath2 = i.m.ImagePath2,
+                    ImagePath3 = i.m.ImagePath3,
+                    ImagePath4 = i.m.ImagePath4,
+                    ImagePath5 = i.m.ImagePath5,
+                    ProductTypeId = i.m.ProductTypeId,
+                    GoogleTaxonomyCode = i.m.GoogleTaxonomyCode
+                }).Take(500).OrderBy(i => i.text).ToListAsync();
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
@@ -1472,33 +1476,39 @@ namespace ShopNow.Controllers
         public async Task<JsonResult> GetFMCGSelect2(string q = "")
         {
             var model = await db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 2)
+                .Join(db.Categories, m => m.CategoryId, c => c.Id, (m, c) => new { m, c })
+                .Join(db.SubCategories, m => m.m.SubCategoryId, sc => sc.Id, (m, sc) => new { m, sc })
+                .Join(db.NextSubCategories, m => m.m.m.NextSubCategoryId, nsc => nsc.Id, (m, nsc) => new { m, nsc })
                 .Select(i => new
                 {
-                    id = i.Id,
-                    text = i.Name,
-                    CategoryId = i.CategoryId,
-                    SubCategoryId = i.SubCategoryId,
-                    NextSubCategoryId = i.NextSubCategoryId,
-                    BrandId = i.BrandId,
-                    BrandName = i.BrandName,
-                    ShortDescription = i.ShortDescription,
-                    LongDescription = i.LongDescription,
-                    ImagePath1 = i.ImagePath1,
-                    ImagePath2 = i.ImagePath2,
-                    ImagePath3 = i.ImagePath3,
-                    ImagePath4 = i.ImagePath4,
-                    ImagePath5 = i.ImagePath5,
-                    Price = i.Price,
-                    ProductTypeId = i.ProductTypeId,
-                    ASIN = i.ASIN,
-                    GoogleTaxonomyCode = i.GoogleTaxonomyCode,
-                    Weight = i.Weight,
-                    SizeLBH = i.SizeLWH,
-                    MeasurementUnitId = i.MeasurementUnitId,
-                    MeasurementUnitName = i.MeasurementUnitName,
-                    PackageId = i.PackageId,
-                    PackageName = i.PackageName
-                }).ToListAsync();
+                    id = i.m.m.m.Id,
+                    text = i.m.m.m.Name,
+                    CategoryId = i.m.m.m.CategoryId,
+                    CategoryName = i.m.m.c.Name,
+                    SubCategoryId = i.m.m.m.SubCategoryId,
+                    SubCategoryName = i.m.sc.Name,
+                    NextSubCategoryId = i.m.m.m.NextSubCategoryId,
+                    NextSubCategoryName = i.nsc.Name,
+                    BrandId = i.m.m.m.BrandId,
+                    BrandName = i.m.m.m.BrandName,
+                    ShortDescription = i.m.m.m.ShortDescription,
+                    LongDescription = i.m.m.m.LongDescription,
+                    ImagePath1 = i.m.m.m.ImagePath1,
+                    ImagePath2 = i.m.m.m.ImagePath2,
+                    ImagePath3 = i.m.m.m.ImagePath3,
+                    ImagePath4 = i.m.m.m.ImagePath4,
+                    ImagePath5 = i.m.m.m.ImagePath5,
+                    Price = i.m.m.m.Price,
+                    ProductTypeId = i.m.m.m.ProductTypeId,
+                    ASIN = i.m.m.m.ASIN,
+                    GoogleTaxonomyCode = i.m.m.m.GoogleTaxonomyCode,
+                    Weight = i.m.m.m.Weight,
+                    SizeLBH = i.m.m.m.SizeLWH,
+                    MeasurementUnitId = i.m.m.m.MeasurementUnitId,
+                    MeasurementUnitName = i.m.m.m.MeasurementUnitName,
+                    PackageId = i.m.m.m.PackageId,
+                    PackageName = i.m.m.m.PackageName
+                }).Take(500).ToListAsync();
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
@@ -1516,6 +1526,42 @@ namespace ShopNow.Controllers
             return Json(new { categoryName = categoryName }, JsonRequestBehavior.AllowGet);
         }
 
+        [AccessPolicy(PageCode = "")]
+        public async Task<JsonResult> GetFMCGCategorySelect2(string q = "")
+        {
+            var model = await db.Categories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 2).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        [AccessPolicy(PageCode = "")]
+        public async Task<JsonResult> GetFMCGSubCategorySelect2(string q = "")
+        {
+            var model = await db.SubCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 2).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        // NextSub Category Select2
+        [AccessPolicy(PageCode = "")]
+        public async Task<JsonResult> GetFMCGNextSubCategorySelect2(string q = "")
+        {
+            var model = await db.NextSubCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 2).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
 
         public async Task<JsonResult> GetFMCGPackageSelect2(string q = "")
         {

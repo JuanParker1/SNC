@@ -9,8 +9,8 @@
             <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
         </div>
         <div class="col-md-6 text-right">
-            <a href="~/Product/FMCGList" target="_blank" class="mr-3"><span class="fa fa-list-ul"></span> FMCG List</a>
-            <a href="~/Product/List" target="_blank"><span class="fa fa-list-ul"></span> Full List</a>
+            <a href="~/Product/FMCGList" target="_self" class="mr-3"><span class="fa fa-list-ul"></span> FMCG List</a>
+            <a href="~/Product/List" target="_self"><span class="fa fa-list-ul"></span> Full List</a>
         </div>
     </div>
     <div class="row">
@@ -52,18 +52,18 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Category Name</strong></label>
-                                        <input type="text" class="form-control" name="CategoryName" id="CategoryName" readonly />
-                                        <input type="hidden" name="CategoryId" id="CategoryId" />
+                                        <select id="CategoryId" name="CategoryId" class="form-control"></select>
+                                        <input type="hidden" name="CategoryName" id="CategoryName" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Sub Category I Name</strong></label>
-                                        <input type="text" class="form-control" name="SubCategoryName" id="SubCategoryName" readonly />
-                                        <input type="hidden" name="SubCategoryId" id="SubCategoryId" />
+                                        <select id="SubCategoryId" name="SubCategoryId" class="form-control"></select>
+                                        <input type="hidden" name="SubCategoryName" id="SubCategoryName" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Sub Category II Name</strong></label>
-                                        <input type="text" class="form-control" name="NextSubCategoryName" id="NextSubCategoryName" readonly />
-                                        <input type="hidden" name="NextSubCategoryId" id="NextSubCategoryId" />
+                                        <select id="NextSubCategoryId" name="NextSubCategoryId" class="form-control"></select>
+                                        <input type="hidden" name="NextSubCategoryName" id="NextSubCategoryName" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="MenuPrice"><strong class="text-secondary">Menu Price</strong></label>
@@ -253,6 +253,42 @@
                 $('input[name="ShopName"]').val(e.params.data.text);
             });
 
+            $('#CategoryId').select2({
+                placeholder: "Search Category",
+                ajax: {
+                    url: "/Product/GetFMCGCategorySelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="CategoryName"]').val(e.params.data.text);
+            });
+
+            $('#SubCategoryId').select2({
+                placeholder: "Search Category",
+                ajax: {
+                    url: "/Product/GetFMCGSubCategorySelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="SubCategoryName"]').val(e.params.data.text);
+            });
+
+            $('#NextSubCategoryId').select2({
+                placeholder: "Search Category",
+                ajax: {
+                    url: "/Product/GetFMCGNextSubCategorySelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="NextSubCategoryName"]').val(e.params.data.text);
+            });
+
             $('#MasterProductId').select2({
                 placeholder: "Search Product",
                 ajax: {
@@ -262,14 +298,20 @@
                     dataType: 'json'
                 }
             }).on('select2:select', function (e) {
+                $('select[name="CategoryId"]').find('option').remove();
+                $('select[name="SubCategoryId"]').find('option').remove();
+                $('select[name="NextSubCategoryId"]').find('option').remove();
                 $('input[name="MasterProductName"]').val(e.params.data.text);
                 $('input[name="Name"]').val(e.params.data.text);
                 $('#BrandId').val(e.params.data.BrandId);
                 $('#BrandName').val(e.params.data.BrandName);
                 $('#ASIN').val(e.params.data.ASIN);
-                $('#CategoryId').val(e.params.data.CategoryId);
-                $('#SubCategoryId').val(e.params.data.SubCategoryId);
-                $('#NextSubCategoryId').val(e.params.data.NextSubCategoryId);
+                $('select[name="CategoryId"]').append('<option value=' + e.params.data.CategoryId + '>' + e.params.data.CategoryName + '</option>')
+                $('input[name="CategoryName"]').val(e.params.data.CategoryName);
+                $('select[name="SubCategoryId"]').append('<option value=' + e.params.data.SubCategoryId + '>' + e.params.data.SubCategoryName + '</option>')
+                $('input[name="SubCategoryName"]').val(e.params.data.SubCategoryName);
+                $('select[name="NextSubCategoryId"]').append('<option value=' + e.params.data.NextSubCategoryId + '>' + e.params.data.NextSubCategoryName + '</option>')
+                $('input[name="NextSubCategoryName"]').val(e.params.data.NextSubCategoryName);
                 $('#GoogleTaxonomyCode').val(e.params.data.GoogleTaxonomyCode);
                 $('#img-FMCGImage1').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath1);
                 $('#img-FMCGImage2').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath2);
@@ -290,13 +332,13 @@
                 $('input[name="MeasurementUnitName"]').val(e.params.data.MeasurementUnitName);
                 $('input[name="PackageId"]').val(e.params.data.PackageId);
                 $('input[name="PackageName"]').val(e.params.data.PackageName);
-                if (e.params.data.CategoryId != 0 && e.params.data.SubCategoryId != 0 && e.params.data.NextSubCategoryId != 0) {
-                $.getJSON("/Product/GetSelectCategoryNames", { categoryId: e.params.data.CategoryId, subcategoryId: e.params.data.SubCategoryId, nextsubcategoryId: e.params.data.NextSubCategoryId }, function (data) {
-                    $('#CategoryName').val(data.categoryName);
-                    $('#SubCategoryName').val(data.subcategoryname);
-                    $('#NextSubCategoryName').val(data.nextsubcategoryname);
-                });
-                }
+                //if (e.params.data.CategoryId != 0 && e.params.data.SubCategoryId != 0 && e.params.data.NextSubCategoryId != 0) {
+                //$.getJSON("/Product/GetSelectCategoryNames", { categoryId: e.params.data.CategoryId, subcategoryId: e.params.data.SubCategoryId, nextsubcategoryId: e.params.data.NextSubCategoryId }, function (data) {
+                //    $('#CategoryName').val(data.categoryName);
+                //    $('#SubCategoryName').val(data.subcategoryname);
+                //    $('#NextSubCategoryName').val(data.nextsubcategoryname);
+                //});
+                //}
             });
 
             $(".Save").click(function () {

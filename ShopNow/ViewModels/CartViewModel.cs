@@ -255,6 +255,45 @@ namespace ShopNow.ViewModels
             public DateTime? ShopCancelledTime { get; set; }
             public double OrderPeriod { get; set; }
         }
+
+        public List<CustomerCancelledList> CustomerCancelledLists { get; set; }
+        public class CustomerCancelledList
+        {
+            public long Id { get; set; }
+            public int OrderNumber { get; set; }
+            public string ShopName { get; set; }
+            public string CustomerPhoneNumber { get; set; }
+            public int Status { get; set; }
+            public DateTime DateEncoded { get; set; }
+            public string PaymentMode { get; set; }
+            public double Price { get; set; }
+            public double Amount { get; set; }
+            public double? RefundAmount { get; set; }
+            public string RefundRemark { get; set; }
+            public double ShopCancelPeriod { get; set; }
+            public DateTime? CustomerCancelledTime { get; set; }
+            public double OrderPeriod { get; set; }
+        }
+
+        public List<CustomerNotPickupList> CustomerNotPickupLists { get; set; }
+        public class CustomerNotPickupList
+        {
+            public long Id { get; set; }
+            public int OrderNumber { get; set; }
+            public string ShopName { get; set; }
+            public string CustomerPhoneNumber { get; set; }
+            public int Status { get; set; }
+            public DateTime DateEncoded { get; set; }
+            public DateTime DateUpdated { get; set; }
+            public string PaymentMode { get; set; }
+            public double Price { get; set; }
+            public double Amount { get; set; }
+            public double? RefundAmount { get; set; }
+            public string RefundRemark { get; set; }
+            public double ShopAcceptedTime { get; set; }
+            public double OrderPeriod { get; set; }
+        }
+
         public List<CartList> List { get; set; }
         public class CartList
         {
