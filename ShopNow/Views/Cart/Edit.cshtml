@@ -25,17 +25,20 @@
                             <input type="hidden" name="Status" id="Status" value="@Model.Status" />
                             <div class="row">
                                 <div class="col-md-4">
-                                    <label><span class="text-secondary font-weight-bold">Shop Name:</span><span class="font-weight-bold"> @Model.ShopName</span></label>
+                                    <label><span class="text-secondary font-weight-bold">Shop: </span><span class="font-weight-bold"> @Model.ShopName</span></label>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-5">
                                     <label><span class="text-secondary font-weight-bold">Address:</span> <a onclick="gotomap(@Model.Latitude,@Model.Longitude)" href="" target="_blank"> <span class="font-weight-bold"> @Model.DeliveryAddress</span></a></label>
                                 </div>
-                                <div class="col-md-2">
-                                    <label><span class="text-secondary font-weight-bold">Phone Number:</span><span class="font-weight-bold"> @Model.CustomerPhoneNumber</span></label>
+                                <div class="col-md-3">
+                                    <label><span class="text-secondary font-weight-bold">Customer Phone Number:</span><span class="font-weight-bold"> @Model.CustomerPhoneNumber</span></label>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-3 text-right">
+                            @if(Model.DeliveryBoyName != null) { 
+                                <label class="control-label font-weight-bold text-secondary">DeliveryBoy: <span class="text-success">@Model.DeliveryBoyName</span></label>
+                            }
                             @if (Model.Status == 2)
                             {
                                 <button type="button" class="btn btn-sm btn-success mr-3" id="Accept">Accept</button>
@@ -90,6 +93,14 @@
                                     <a href="#modal-add-waiting-charge" data-target="#modal-add-waiting-charge" data-toggle="modal" class="btn btn-sm btn-warning text-white">Add Waiting Charge</a>
                                 }
                                 <span class="text-success">Delivered</span>
+                            }
+                            else if (Model.Status == 9)
+                            {
+                                <span class="text-danger font-weight-bold mr-3">Cancelled by Customer</span>
+                            }
+                            else if (Model.Status == 10)
+                            {
+                                <span class="text-danger font-weight-bold mr-3">Customer Not Pickup</span>
                             }
                         </div>
                     </div>

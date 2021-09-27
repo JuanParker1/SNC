@@ -270,7 +270,7 @@ namespace ShopNow.ViewModels
             public double Amount { get; set; }
             public double? RefundAmount { get; set; }
             public string RefundRemark { get; set; }
-            public double ShopCancelPeriod { get; set; }
+            public double CustomerCancelPeriod { get; set; }
             public DateTime? CustomerCancelledTime { get; set; }
             public double OrderPeriod { get; set; }
         }
