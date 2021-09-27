@@ -357,6 +357,8 @@ namespace ShopNow.Controllers
                             OrderNumber = i.c.OrderNumber,
                             CustomerPhoneNumber = i.c.CustomerPhoneNumber,
                             Status = i.c.Status,
+                            PaymentMode = i.p.PaymentMode,
+                            Price = i.c.TotalPrice,
                             DateEncoded = i.c.DateEncoded,
                             ShopCancelledTime = i.c.ShopAcceptedTime,
                             ShopCancelPeriod = i.c.ShopAcceptedTime != null ? Math.Round((i.c.ShopAcceptedTime.Value - i.c.DateEncoded).TotalMinutes) : 0
@@ -400,10 +402,10 @@ namespace ShopNow.Controllers
                     ShopName = i.c.ShopName,
                     CustomerPhoneNumber = i.c.CustomerPhoneNumber,
                     Status = i.c.Status,
+                    Price = i.c.TotalPrice,
+                    PaymentMode = i.p.PaymentMode,
                     DateEncoded = i.c.DateEncoded,
-                    CustomerCancelledTime = i.c.ShopAcceptedTime,
-                    ShopCancelPeriod = i.c.ShopAcceptedTime != null ? Math.Round((i.c.ShopAcceptedTime.Value - i.c.DateEncoded).TotalMinutes) : 0
-
+                    CustomerCancelledTime = i.c.DateUpdated
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             return View(model.CustomerCancelledLists);
         }
