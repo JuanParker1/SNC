@@ -707,16 +707,21 @@ namespace ShopNow.Controllers
                 model.DeliveryChargeKM = deliveryCharge.ChargeUpto5Km;
                 model.DeliveryChargeOneKM = deliveryCharge.ChargePerKm;
                 model.DeliveryMode = deliveryCharge.VehicleType;
+                model.Distance = 5;
             }
 
             var billingCharge = db.BillingCharges.FirstOrDefault(i => i.ShopId == shopId && i.Status==0);
             if (billingCharge != null)
             {
                 model.BillingId = billingCharge.Id;
-                model.ConvenientCharge = billingCharge.ConvenientCharge;
+                model.ConvenientChargeRange = billingCharge.ConvenientCharge;
                 model.PackingCharge = billingCharge.PackingCharge;
                 model.DeliveryDiscountPercentage = billingCharge.DeliveryDiscountPercentage;
                 model.ItemType = billingCharge.ItemType;
+
+                var platformCreditRate = db.PlatFormCreditRates.FirstOrDefault(i => i.Status == 0);
+                if (platformCreditRate != null)
+                    model.ConvenientCharge = platformCreditRate.RatePerOrder;
             }
             return Json(model, JsonRequestBehavior.AllowGet);
         }
