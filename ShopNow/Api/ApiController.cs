@@ -624,11 +624,30 @@ namespace ShopNow.Controllers
         [HttpPost]
         public JsonResult BillUpdate(BillUpdate model)
         {
-            var bill = db.Bills.FirstOrDefault(i => i.Id == model.Id);
+            //var bill = db.Bills.FirstOrDefault(i => i.Id == model.Id);
+            //var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
+            //if (bill != null && customer != null)
+            //{
+            //    bill.DeliveryChargeCustomer = model.DeliveryChargeCustomer;
+            //    bill.ItemType = model.ItemType;
+            //    bill.ConvenientCharge = model.ConvenientChargeRange;
+            //    bill.PackingCharge = model.PackingCharge;
+            //    bill.UpdatedBy = customer.Name;
+            //    bill.DateUpdated = DateTime.Now;
+            //    db.Entry(bill).State = System.Data.Entity.EntityState.Modified;
+            //    db.SaveChanges();
+            //    return Json(new { message = "Successfully Updated Bill!" });
+            //}
+            //else
+            //{
+            //    return Json(new { message = "Fail to Update Bill!" });
+            //}
+
+            var bill = db.BillingCharges.FirstOrDefault(i => i.Id == model.Id);
             var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
             if (bill != null && customer != null)
             {
-                bill.DeliveryChargeCustomer = model.DeliveryChargeCustomer;
+                bill.DeliveryDiscountPercentage = model.DeliveryChargeCustomer;
                 bill.ItemType = model.ItemType;
                 bill.ConvenientCharge = model.ConvenientChargeRange;
                 bill.PackingCharge = model.PackingCharge;
@@ -683,15 +702,22 @@ namespace ShopNow.Controllers
             if (totalWeight > 40 || liters > 120)
                 mode = 3;
             var deliveryCharge = db.DeliveryCharges.FirstOrDefault(i => i.Type == shop.DeliveryType && i.TireType == shop.DeliveryTierType && i.VehicleType == mode && i.Status==0);
-            model.DeliveryChargeKM = deliveryCharge.ChargeUpto5Km;
-            model.DeliveryChargeOneKM = deliveryCharge.ChargePerKm;
-            model.DeliveryMode = deliveryCharge.VehicleType;
+            if (deliveryCharge != null)
+            {
+                model.DeliveryChargeKM = deliveryCharge.ChargeUpto5Km;
+                model.DeliveryChargeOneKM = deliveryCharge.ChargePerKm;
+                model.DeliveryMode = deliveryCharge.VehicleType;
+            }
 
             var billingCharge = db.BillingCharges.FirstOrDefault(i => i.ShopId == shopId && i.Status==0);
-            model.ConvenientCharge = billingCharge.ConvenientCharge;
-            model.PackingCharge = billingCharge.PackingCharge;
-            model.DeliveryDiscountPercentage = billingCharge.DeliveryDiscountPercentage;
-            model.ItemType = billingCharge.ItemType;
+            if (billingCharge != null)
+            {
+                model.BillingId = billingCharge.Id;
+                model.ConvenientCharge = billingCharge.ConvenientCharge;
+                model.PackingCharge = billingCharge.PackingCharge;
+                model.DeliveryDiscountPercentage = billingCharge.DeliveryDiscountPercentage;
+                model.ItemType = billingCharge.ItemType;
+            }
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
