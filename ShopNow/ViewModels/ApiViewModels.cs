@@ -377,6 +377,7 @@ namespace ShopNow.ViewModels
 
     public class BillingDeliveryChargeViewModel
     {
+        public int BillingId { get; set; }
         public double ConvenientCharge { get; set; }
         public double DeliveryChargeKM { get; set; }
         public double DeliveryChargeOneKM { get; set; }
