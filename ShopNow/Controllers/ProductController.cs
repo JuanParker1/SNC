@@ -1216,7 +1216,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNPROFC004")]
         public async Task<JsonResult> GetDishSelect2(string q = "")
         {
-            var model = await db.MasterProducts.Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 1).Join(db.Categories, m => m.CategoryId, c => c.Id, (m, c) => new { m, c })
+            var model = await db.MasterProducts.Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 1)
+                .Join(db.Categories, m => m.CategoryId, c => c.Id, (m, c) => new { m, c })
                 .Select(i => new
                 {
                     id = i.m.Id,
