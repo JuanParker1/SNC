@@ -66,6 +66,8 @@ namespace ShopNow.ViewModels
         public double TaxPercentage { get; set; }
         public double SpecialCostOfDelivery { get; set; }
         public double LoyaltyPoints { get; set; }
+        public bool IsPreorder { get; set; }
+        public int PreorderHour { get; set; }
     }
 
     public class MedicalEditViewModel
@@ -110,6 +112,8 @@ namespace ShopNow.ViewModels
         public double TaxPercentage { get; set; }
         public double SpecialCostOfDelivery { get; set; }
         public double LoyaltyPoints { get; set; }
+        public bool IsPreorder { get; set; }
+        public int PreorderHour { get; set; }
     }
 
     public class ElectronicListViewModel
@@ -492,6 +496,8 @@ namespace ShopNow.ViewModels
         public string ImagePath1 { get; set; }
         public int PackingType { get; set; }
         public double PackingCharge { get; set; }
+        public bool IsPreorder { get; set; }
+        public int PreorderHour { get; set; }
     }
 
     public class FoodEditViewModel
@@ -516,6 +522,8 @@ namespace ShopNow.ViewModels
         public string ImagePath1 { get; set; }
         public int PackingType { get; set; }
         public double PackingCharge { get; set; }
+        public bool IsPreorder { get; set; }
+        public int PreorderHour { get; set; }
     }
 
     public class ShopAddOnSessionAddViewModel

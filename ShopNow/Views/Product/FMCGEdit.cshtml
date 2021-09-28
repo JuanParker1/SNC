@@ -18,7 +18,7 @@
             @using (Html.BeginForm("FMCGEdit", "Product", FormMethod.Post, new { id = "FMCGUpdateForm", enctype = "multipart/form-data", autocomplete = "off" }))
             {
                 @Html.AntiForgeryToken()
-                <div class="card shadow mb-3">
+                <div class="card shadow-sm mb-3">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-2"></div>
@@ -144,16 +144,20 @@
                                         </div>
                                         <input type="number" class="form-control" name="PackingCharge" id="PackingCharge" value="@Model.PackingCharge" />
                                     </div>
-                                    <div class="col-md-3">
-                                        <input type="checkbox" id="IsPreorder" name="IsPreorder" value="true" @if (Model.IsPreorder) { <text> checked </text> }>
-                                        <label class="font-weight-bold text-secondary col-form-label" for="IsPreorder"> Is PreOrder</label><br>
-                                        <select name="PreorderHour" id="PreorderHour" class="form-control d-none">
-                                            <option value="0" selected disabled>Select Hours</option>
-                                            @for (int i = 2; i <= 24; i++)
-                                            {
-                                                <option value="@i" @if(Model.PreorderHour == @i) { <text> selected </text> }>@i hours</option>
-                                            }
-                                        </select>
+                                    <div class="d-flex mt-3">
+                                        <div class="mx-3">
+                                            <input type="checkbox" id="IsPreorder" name="IsPreorder" value="true" @if (Model.IsPreorder) { <text> checked </text> }>
+                                            <label class="font-weight-bold text-secondary col-form-label" for="IsPreorder"> Is PreOrder</label><br>
+                                        </div>
+                                        <div class="ml-3">
+                                            <select name="PreorderHour" id="PreorderHour" class="form-control d-none">
+                                                <option value="0" selected disabled>Select Hours</option>
+                                                @for (int i = 2; i <= 24; i++)
+                                                {
+                                                    <option value="@i" @if (Model.PreorderHour == @i) { <text> selected </text> }>@i hours</option>
+                                                }
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -232,19 +236,10 @@
                 $("#Percentage").val(results);
             });
 
-            var ispreorder = $("#IsPreorder").val();
-            if (ispreorder) {
-                $("#PreorderHour").removeClass('d-none');
-            } else {
-                $("#PreorderHour").addClass('d-none');
-            }
+            showHour();
 
             $('#IsPreorder').change(function () {
-                if (this.checked) {
-                    $("#PreorderHour").removeClass('d-none');
-                } else {
-                    $("#PreorderHour").addClass('d-none');
-                }
+                showHour();
             });
 
             $('#CategoryId').select2({
@@ -283,5 +278,15 @@
                 $('input[name="NextSubCategoryName"]').val(e.params.data.text);
             });
         });
+
+        function showHour() {
+            if ($('#IsPreorder').is(":checked")) {
+                $("#PreorderHour").removeClass('d-none');
+                $("#PreorderHour").val(@Model.PreorderHour);
+            } else {
+                $("#PreorderHour").addClass('d-none');
+                $("#PreorderHour").val(0);
+            }
+        }
     </script>
 }

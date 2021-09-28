@@ -214,6 +214,21 @@
                             <input type="number" class="form-control" name="SpecialCostOfDelivery" id="SpecialCostOfDelivery" value="@Model.SpecialCostOfDelivery" />
                         </div>
                     </div>
+                    <div class="d-flex mt-3">
+                        <div class="mx-3">
+                            <input type="checkbox" id="IsPreorder" name="IsPreorder" value="true" @if (Model.IsPreorder) { <text> checked </text> }>
+                            <label class="font-weight-bold text-secondary col-form-label" for="IsPreorder"> Is PreOrder</label><br>
+                        </div>
+                        <div class="ml-3">
+                            <select name="PreorderHour" id="PreorderHour" class="form-control d-none">
+                                <option value="0" selected disabled>Select Hours</option>
+                                @for (int i = 2; i <= 24; i++)
+                                {
+                                    <option value="@i" @if (Model.PreorderHour == @i) { <text> selected </text> }>@i hours</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -295,6 +310,12 @@
                 $("#Percentage").val(results);
             });
 
+            showHour();
+
+            $('#IsPreorder').change(function () {
+                showHour();
+            });
+
             $('#DiscountCategoryId').select2({
                 placeholder: "Search Discount Category",
                 ajax: {
@@ -327,6 +348,16 @@
                 };
             });
         });
+
+        function showHour() {
+            if ($('#IsPreorder').is(":checked")) {
+                $("#PreorderHour").removeClass('d-none');
+                $("#PreorderHour").val(@Model.PreorderHour);
+            } else {
+                $("#PreorderHour").addClass('d-none');
+                $("#PreorderHour").val(0);
+            }
+        }
     </script>
 }
 

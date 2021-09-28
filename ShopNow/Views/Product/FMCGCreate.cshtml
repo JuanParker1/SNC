@@ -18,7 +18,7 @@
             @using (Html.BeginForm("FMCGCreate", "Product", FormMethod.Post, new { id = "FMCGCreateForm", enctype = "multipart/form-data", autocomplete = "off" }))
             {
                 @Html.AntiForgeryToken()
-                <div class="card shadow mb-3">
+                <div class="card shadow-sm mb-3">
                     <div class="card-body">
                         <div class="col-md-12">
                             <div class="form-group row">
@@ -123,16 +123,20 @@
                                         </div>
                                         <input type="number" class="form-control" name="PackingCharge" id="PackingCharge" />
                                     </div>
-                                    <div class="col-md-3">
-                                        <input type="checkbox" id="IsPreorder" name="IsPreorder" value="true">
-                                        <label class="font-weight-bold text-secondary col-form-label" for="IsPreorder"> Is PreOrder</label><br>
-                                        <select name="PreorderHour" id="PreorderHour" class="form-control d-none">
-                                            <option value="0" selected disabled>Select Hours</option>
-                                            @for (int i = 2; i <= 24; i++)
-                                            {
-                                                <option value="@i">@i hours</option>
-                                            }
-                                        </select>
+                                    <div class="d-flex mt-3">
+                                        <div class="mx-3">
+                                            <input type="checkbox" id="IsPreorder" name="IsPreorder" value="true">
+                                            <label class="font-weight-bold text-secondary col-form-label" for="IsPreorder"> Is PreOrder</label><br>
+                                        </div>
+                                        <div class="ml-3">
+                                            <select name="PreorderHour" id="PreorderHour" class="form-control d-none">
+                                                <option value="0" selected disabled>Select Hours</option>
+                                                @for (int i = 2; i <= 24; i++)
+                                                {
+                                                    <option value="@i">@i hours</option>
+                                                }
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

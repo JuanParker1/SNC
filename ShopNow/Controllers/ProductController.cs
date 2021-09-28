@@ -871,6 +871,10 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var prod = db.Products.FirstOrDefault(i => i.Id == model.Id);
             _mapper.Map(model, prod);
+            if(model.IsPreorder == false)
+            {
+                model.PreorderHour = 0;
+            }
             prod.Name = model.Name;
             prod.UpdatedBy = user.Name;
             prod.DateUpdated = DateTime.Now;
