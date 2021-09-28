@@ -630,6 +630,8 @@ namespace ShopNow.ViewModels
             public TimeSpan? NextOnTime { get; set; }
             public double Size { get; set; }
             public double Weight { get; set; }
+            public bool IsPreorder { get; set; }
+            public int PreorderHour { get; set; }
         }       
     }
 
