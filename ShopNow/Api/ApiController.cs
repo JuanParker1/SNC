@@ -594,7 +594,9 @@ namespace ShopNow.Controllers
                             IsOnline = i.p.IsOnline,
                             NextOnTime = i.p.NextOnTime,
                             Size = i.m.SizeLWH,
-                            Weight = i.m.Weight
+                            Weight = i.m.Weight,
+                            IsPreorder = i.p.IsPreorder,
+                            PreorderHour = i.p.PreorderHour
                         }).ToList();
             int count = model.Count();
             int CurrentPage = page;
@@ -2127,7 +2129,9 @@ namespace ShopNow.Controllers
                                           IsOnline = pl.IsOnline,
                                           NextOnTime = pl.NextOnTime,
                                           Size = m.SizeLWH,
-                                          Weight = m.SizeLWH
+                                          Weight = m.Weight,
+                                          IsPreorder = pl.IsPreorder,
+                                          PreorderHour = pl.PreorderHour
                                           //IsOffer = pl.Id != 0 ? GetOfferCheck(pl.Id) : false //false
                                       }).Where(i => i.Price != 0 && (str != "" ? i.Name.ToLower().Contains(str) : true)).ToList();
             }
@@ -2155,7 +2159,9 @@ namespace ShopNow.Controllers
                                           IsOnline = pl.IsOnline,
                                           NextOnTime = pl.NextOnTime,
                                           Size = m.SizeLWH,
-                                          Weight = m.SizeLWH
+                                          Weight = m.Weight,
+                                          IsPreorder = pl.IsPreorder,
+                                          PreorderHour = pl.PreorderHour
                                           //IsOffer = pl.Id != 0 ? GetOfferCheck(pl.Id) : false
                                       }).Where(i => i.Price != 0).ToList();
             }
