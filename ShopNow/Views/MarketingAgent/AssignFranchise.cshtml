@@ -1,6 +1,6 @@
 ﻿@model ShopNow.ViewModels.FranchiseAssignViewModel
 @{
-    ViewBag.Title = "Assign DeliveryBoy and Shops for Marketing Agent";
+    ViewBag.Title = "Assign DeliveryBoy and Shops for Agency";
 }
 <title>ShopNow | @ViewBag.Title </title>
 
@@ -10,7 +10,8 @@
             <h5 class="text-success">@ViewBag.Title</h5>
         </div>
         <div class="col-md-6 text-right">
-            <a href="/MarketingAgent/AssignedFranchiseList"><span class="fa fa-bars"></span> Assigned Marketing Agent List</a>
+            <a href="~/MarketingAgent/List"><span class="fa fa-list-ul"></span> Agency List</a>
+            <a href="/MarketingAgent/AssignedFranchiseList" class="ml-3"><span class="fa fa-bars"></span> Agency Assigned List</a>
         </div>
     </div>
     <div class="row">
@@ -22,7 +23,7 @@
                         @Html.AntiForgeryToken()
                         <div class="form-group row">
                             <div class="col-md-4">
-                                <label class="col-form-label font-weight-bold text-secondary">Marketing Agent Name<span class="text-danger">*</span></label>
+                                <label class="col-form-label font-weight-bold text-secondary">Agency Name<span class="text-danger">*</span></label>
                                 <select name="MarketingAgentId" id="MarketingAgentId" class="form-control"></select>
                                 <input type="hidden" name="MarketingAgentName" id="MarketingAgentName" />
                             </div>
