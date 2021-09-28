@@ -547,6 +547,8 @@ namespace ShopNow.ViewModels
         public string ReferralNumber { get; set; }
         public Nullable<int> OfferId { get; set; }
         public Nullable<int> ProductFreeOfferId { get; set; }
+        public Nullable<bool> IsPreorder { get; set; }
+        public Nullable<System.DateTime> PreorderDeliveryDateTime { get; set; }
 
         public List<ListItem> ListItems { get; set; } 
         public class ListItem
