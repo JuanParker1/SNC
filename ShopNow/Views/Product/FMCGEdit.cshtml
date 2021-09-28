@@ -100,7 +100,7 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label class="control-label" for="Percentage"><strong class="text-secondary">Percentage</strong></label>
+                                            <label class="col-form-label" for="Percentage"><strong class="text-secondary">Percentage</strong></label>
                                             <input id="Percentage" type="number" class="form-control" name="Percentage" value="@Model.Percentage" readonly />
                                         </div>
                                     </div>
@@ -131,7 +131,7 @@
                                         <input id="GoogleTaxonomyCode" type="text" class="form-control" name="GoogleTaxonomyCode" value="@Model.GoogleTaxonomyCode" readonly />
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="control-label" for="PackingType"><strong class="text-secondary">Packing Type</strong></label>
+                                        <label class="col-form-label" for="PackingType"><strong class="text-secondary">Packing Type</strong></label>
                                         <div class="form-check-inline ml-3">
                                             <label class="form-check-label">
                                                 <input type="radio" class="form-check-input" name="PackingType" value="0" @if (Model.PackingType == 0) { <text> checked </text> }>Item Qty
@@ -143,6 +143,17 @@
                                             </label>
                                         </div>
                                         <input type="number" class="form-control" name="PackingCharge" id="PackingCharge" value="@Model.PackingCharge" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="checkbox" id="IsPreorder" name="IsPreorder" value="true" @if (Model.IsPreorder) { <text> checked </text> }>
+                                        <label class="font-weight-bold text-secondary col-form-label" for="IsPreorder"> Is PreOrder</label><br>
+                                        <select name="PreorderHour" id="PreorderHour" class="form-control d-none">
+                                            <option value="0" selected disabled>Select Hours</option>
+                                            @for (int i = 2; i <= 24; i++)
+                                            {
+                                                <option value="@i" @if(Model.PreorderHour == @i) { <text> selected </text> }>@i hours</option>
+                                            }
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -219,6 +230,21 @@
                 var sellingprice = $('#Price').val();
                 var results = Math.ceil(((menuprice - sellingprice) / menuprice) * 100);
                 $("#Percentage").val(results);
+            });
+
+            var ispreorder = $("#IsPreorder").val();
+            if (ispreorder) {
+                $("#PreorderHour").removeClass('d-none');
+            } else {
+                $("#PreorderHour").addClass('d-none');
+            }
+
+            $('#IsPreorder').change(function () {
+                if (this.checked) {
+                    $("#PreorderHour").removeClass('d-none');
+                } else {
+                    $("#PreorderHour").addClass('d-none');
+                }
             });
 
             $('#CategoryId').select2({

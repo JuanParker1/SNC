@@ -85,11 +85,11 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="Weight"><strong class="text-secondary">Weight</strong></label>
-                                        <input id="Weight" type="number" class="form-control" name="Weight" step="any" min="0"  readonly/>
+                                        <input id="Weight" type="number" class="form-control" name="Weight" step="any" min="0" readonly />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="SizeLBH"><strong class="text-secondary">Size LB</strong></label>
-                                        <input id="SizeLBH" type="text" class="form-control" name="SizeLBH" min="0" readonly/>
+                                        <input id="SizeLBH" type="text" class="form-control" name="SizeLBH" min="0" readonly />
                                     </div>
                                     <div class="col-md-3">
                                         <label><strong class="text-secondary">Measurement Unit Name</strong></label>
@@ -122,6 +122,17 @@
                                             </label>
                                         </div>
                                         <input type="number" class="form-control" name="PackingCharge" id="PackingCharge" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="checkbox" id="IsPreorder" name="IsPreorder" value="true">
+                                        <label class="font-weight-bold text-secondary col-form-label" for="IsPreorder"> Is PreOrder</label><br>
+                                        <select name="PreorderHour" id="PreorderHour" class="form-control d-none">
+                                            <option value="0" selected disabled>Select Hours</option>
+                                            @for (int i = 2; i <= 24; i++)
+                                            {
+                                                <option value="@i">@i hours</option>
+                                            }
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -239,6 +250,15 @@
                 var sellingprice = $('#Price').val();
                 var results = Math.ceil(((menuprice - sellingprice) / menuprice) * 100);
                 $("#Percentage").val(results);
+            });
+
+            $('#IsPreorder').change(function () {
+                if (this.checked) {
+                    $("#PreorderHour").removeClass('d-none');
+                } else {
+                    $("#PreorderHour").addClass('d-none');
+                    $("#PreorderHour").val(0);
+                }
             });
 
             $('#ShopId').select2({

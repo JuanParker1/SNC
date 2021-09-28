@@ -413,6 +413,8 @@ namespace ShopNow.ViewModels
         public int PackingType { get; set; }
         public double PackingCharge { get; set; }
         public string ASIN { get; set; }
+        public bool IsPreorder { get; set; }
+        public int PreorderHour { get; set; }
     }
 
     public class FMCGEditViewModel : FMCGCreateViewModel
