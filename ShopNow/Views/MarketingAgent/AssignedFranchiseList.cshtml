@@ -10,11 +10,12 @@
         </div>
         <div class="col-md-6 text-right">
             <a href="/MarketingAgent/AssignFranchise"><span class="fa fa-tasks"></span> Assign Franchise</a>
+            <a href="~/MarketingAgent/List"><span class="fa fa-list-ul"></span>Marketing Agent</a>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-body">
                     <table class="table table-borderless" id="Franchise">
                         <thead class="bg-light">
@@ -29,22 +30,24 @@
                             @foreach (var item in Model.Lists)
                             {
                             <tr>
-                                <td class="nowrap font-weight-bold">@item.MarketingAgentName</td>
+                                <td class="nowrap font-weight-bold text-secondary mx-5">@item.MarketingAgentName</td>
                                 <td>
                                     @foreach (var shop in item.ShopListItems)
                                     {
-                                        <button type="button" class="btn btn-secondary m-1">@shop.ShopName</button>
+                                        <label class="mr-4">@shop.ShopName</label>
+                                        <a href="/MarketingAgent/ShopDelete?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(shop.ShopId)" class="text-danger"><i class="fa fa-close fa-lg"></i></a>
                                     }
                                 </td>
                                 <td>
                                     @foreach (var deliveryBoy in item.DeliveryBoyListItems)
                                     {
-                                        <button type="button" class="btn btn-secondary m-1">@deliveryBoy.DeliveryBoyName</button>
+                                        <label class="mr-4">@deliveryBoy.DeliveryBoyName</label>
+                                        <a href="/MarketingAgent/DeliveryBoyDelete?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(deliveryBoy.DeliveryBoyId)" class="text-danger"><i class="fa fa-close fa-lg"></i></a>
                                     }
                                 </td>
                                 <td>
-                                    <a href="/MarketingAgent/FranchiseUpdate?Id=@item.MarketingAgentId" class="text-info"><i class="fa fa-edit fa-2x"></i></a>
-                                    @*<a href="javascript:void(0)" data-id="@item.MarketingAgentId" class="text-danger btnDelete"><i class="fa fa-trash fa-2x"></i></a>*@
+                                    <a href="/MarketingAgent/FranchiseUpdate?Id=@item.MarketingAgentId" class="text-info mr-4"><i class="fa fa-plus fa-lg"></i></a>
+                                    <a href="javascript:void(0)" data-id="@item.MarketingAgentId" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
                                 </td>
                             </tr>
                             }
