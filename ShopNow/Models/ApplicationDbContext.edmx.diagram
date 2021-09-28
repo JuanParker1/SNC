@@ -79,7 +79,7 @@
         <AssociationConnector Association="sncModel.FK_CustomerReview_Shops" />
         <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="28.375" PointY="30.25" />
         <AssociationConnector Association="sncModel.FK_OrderItems_Orders" />
-        <EntityTypeShape EntityType="sncModel.Product" Width="1.5" PointX="3" PointY="35.125" />
+        <EntityTypeShape EntityType="sncModel.Product" Width="1.5" PointX="3" PointY="34.875" />
         <AssociationConnector Association="sncModel.FK_Products_ProductType" />
       </Diagram>
     </edmx:Diagrams>
