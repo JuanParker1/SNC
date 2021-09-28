@@ -150,14 +150,13 @@ namespace ShopNow.Controllers
                     otpmodel.CreatedBy = user.Name;
                     otpmodel.UpdatedBy = user.Name;
                     otpmodel.DateEncoded = DateTime.Now;
-                    var dateAndTime = DateTime.Now;
-                    var date = dateAndTime.ToString("d");
-                    var time = dateAndTime.ToString("HH:mm");
+                    //var dateAndTime = DateTime.Now;
+                    //var date = dateAndTime.ToString("d");
+                    //var time = dateAndTime.ToString("HH:mm");
                     string joyra = "04448134440";
-                    string Msg = "Hi, " + otpmodel.Otp + " is the OTP for (Shop Now Chat) Verification at " + time + " with " + otpmodel.ReferenceCode + " reference - Joyra";
+                    string Msg = "Hi, " + otpmodel.Otp + " is the OTP for (Shop Now Chat) Verification at " + DateTime.Now.ToString("HH:mm") + " with " + otpmodel.ReferenceCode + " reference - Joyra";
                     string result = SendSMS.execute(joyra, model.PhoneNumber, Msg);
                     otpmodel.Status = 0;
-                    otpmodel.DateEncoded = DateTime.Now;
                     otpmodel.DateUpdated = DateTime.Now;
                     db.OtpVerifications.Add(otpmodel);
                     db.SaveChanges();
@@ -707,16 +706,21 @@ namespace ShopNow.Controllers
                 model.DeliveryChargeKM = deliveryCharge.ChargeUpto5Km;
                 model.DeliveryChargeOneKM = deliveryCharge.ChargePerKm;
                 model.DeliveryMode = deliveryCharge.VehicleType;
+                model.Distance = 5;
             }
 
             var billingCharge = db.BillingCharges.FirstOrDefault(i => i.ShopId == shopId && i.Status==0);
             if (billingCharge != null)
             {
                 model.BillingId = billingCharge.Id;
-                model.ConvenientCharge = billingCharge.ConvenientCharge;
+                model.ConvenientChargeRange = billingCharge.ConvenientCharge;
                 model.PackingCharge = billingCharge.PackingCharge;
                 model.DeliveryDiscountPercentage = billingCharge.DeliveryDiscountPercentage;
                 model.ItemType = billingCharge.ItemType;
+
+                var platformCreditRate = db.PlatFormCreditRates.FirstOrDefault(i => i.Status == 0);
+                if (platformCreditRate != null)
+                    model.ConvenientCharge = platformCreditRate.RatePerOrder;
             }
             return Json(model, JsonRequestBehavior.AllowGet);
         }

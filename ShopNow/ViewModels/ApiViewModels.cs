@@ -379,11 +379,13 @@ namespace ShopNow.ViewModels
     {
         public int BillingId { get; set; }
         public double ConvenientCharge { get; set; }
+        public double ConvenientChargeRange { get; set; }
         public double DeliveryChargeKM { get; set; }
         public double DeliveryChargeOneKM { get; set; }
         public double PackingCharge { get; set; }
         public int ItemType { get; set; }
         public int DeliveryMode { get; set; }
         public double DeliveryDiscountPercentage { get; set; }
+        public int Distance { get; set; }
     }
 }
