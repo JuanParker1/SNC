@@ -109,7 +109,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="control-label" for="Percentage"><strong class="text-secondary">Percentage</strong></label>
-                                    <input id="Percentage" type="number" class="form-control" name="Percentage" readonly value="@Model.Percentage" />
+                                    <input id="Percentage" type="number" class="form-control" name="Percentage" value="@Model.Percentage" />
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -279,6 +279,13 @@
                 var sellingprice = $('#Price').val();
                 var results = Math.ceil(((menuprice - sellingprice) / menuprice) * 100);
                 $("#Percentage").val(results);
+            });
+
+            $('#Percentage').on('change keyup', function () {
+                var percentage = $(this).val();
+                var menuprice = $("#MenuPrice").val();
+                var results = Math.ceil(menuprice - (menuprice * (percentage / 100)));
+                $("#Price").val(results);
             });
 
             var cust = $('#select-customisation').val();
