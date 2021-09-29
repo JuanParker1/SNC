@@ -32,8 +32,8 @@
                          //columns.Add(s => s.DateEncoded).Titled("Date").Filterable(true).SetWidth(10);
                          columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20)
                         .RenderValueAs(o => @<div>
-                      <a href="~/Shop/Edit?id=@HttpUtility.UrlEncode(ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id))" class="text-info mr-4"><i class="fa fa-edit fa-lg"></i></a>
-                      <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+                      <a href="~/Shop/Edit?id=@HttpUtility.UrlEncode(ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id))" class="text-info mr-4"><i class="fa fa-edit fa-2x"></i></a>
+                      <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-2x"></i></a>
                      </div>);
                    }).WithPaging(20).Sortable(true)
                 </div>
