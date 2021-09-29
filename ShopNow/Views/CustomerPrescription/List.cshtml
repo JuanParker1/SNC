@@ -1,0 +1,31 @@
+﻿@model IEnumerable<ShopNow.Models.CustomerPrescription>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Customer Prescription List";
+}
+
+<title>ShopNow | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+
+
+<div class="container-fluid mb-5">
+    <div class="row">
+        <div class="col-md-10 mx-auto mt-3">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+                    @Html.Grid(Model).Columns(columns =>
+               {
+                   columns.Add(c => c.CustomerName).Titled("Name").Filterable(false).SetWidth(15);
+                   columns.Add(c => c.CustomerPhoneNumber).Titled("Phone No").Filterable(false).SetWidth(12);
+                   columns.Add(c => c.ImagePath).Titled("Image").Filterable(false).SetWidth(10);
+                   columns.Add(c => c.AudioPath).Titled("Audio").Filterable(false).SetWidth(10);
+                   columns.Add(c => c.Remarks).Titled("Remarks").Filterable(false).SetWidth(10);
+                   columns.Add(c => c.DateEncoded).Titled("Date").Format("{0:dd-MMM-yyyy}").Filterable(false).SetWidth(10);
+               }).Sortable(false)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
