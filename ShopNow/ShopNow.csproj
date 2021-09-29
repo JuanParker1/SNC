@@ -3215,6 +3215,7 @@
     <Content Include="Views\MarketingAgent\AssignFranchise.cshtml" />
     <Content Include="Views\MarketingAgent\FranchiseUpdate.cshtml" />
     <Content Include="Views\Cart\CustomerNotPickupList.cshtml" />
+    <Content Include="Views\Product\ApplyDiscount.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
