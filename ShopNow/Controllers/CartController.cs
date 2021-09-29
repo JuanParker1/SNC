@@ -42,7 +42,7 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             var dt = DateTime.Now;
             var model = new CartListViewModel();
-            model.TodayLists = db.Orders.Where(i => (shopId != 0 ? i.ShopId == shopId : true) && i.Status != 6 && i.Status != 7 && i.Status != 0)
+            model.TodayLists = db.Orders.Where(i => (shopId != 0 ? i.ShopId == shopId : true) && i.Status != 6 && i.Status != 7 && i.Status != 9 && i.Status != 10 && i.Status != 0)
             .Select(i => new CartListViewModel.TodayList
             {
                 Id = i.Id,
