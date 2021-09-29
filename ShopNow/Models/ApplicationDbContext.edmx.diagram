@@ -81,6 +81,7 @@
         <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="28.375" PointY="29.875" />
         <AssociationConnector Association="sncModel.FK_OrderItems_Orders" />
         <EntityTypeShape EntityType="sncModel.Offer" Width="1.5" PointX="0.75" PointY="13.75" />
+        <EntityTypeShape EntityType="sncModel.CustomerPrescription" Width="1.5" PointX="28.375" PointY="15.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

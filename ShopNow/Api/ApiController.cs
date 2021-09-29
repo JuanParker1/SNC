@@ -100,6 +100,7 @@ namespace ShopNow.Controllers
                 config.CreateMap<OrderCreateViewModel, Models.Order>();
                 config.CreateMap<OrderCreateViewModel.ListItem, OrderItem>();
                 config.CreateMap<Models.Order, OrderDetailsApiViewModel>();
+                config.CreateMap<SavePrescriptionViewModel, CustomerPrescription>();
             }); 
 
              _mapper = _mapperConfiguration.CreateMapper();
@@ -4689,6 +4690,17 @@ namespace ShopNow.Controllers
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
             return Json(false, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult SavePrescription(SavePrescriptionViewModel model)
+        {
+            var prescription = _mapper.Map<SavePrescriptionViewModel, CustomerPrescription>(model);
+            prescription.DateEncoded = DateTime.Now;
+            prescription.Status = 0;
+            db.CustomerPrescriptions.Add(prescription);
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         public void UpdateAchievements(int customerId)
