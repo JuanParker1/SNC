@@ -343,6 +343,10 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var prod = db.Products.FirstOrDefault(i => i.Id == model.Id);
             _mapper.Map(model, prod);
+            if (model.IsPreorder == false)
+            {
+                model.PreorderHour = 0;
+            }
             prod.Name = model.Name;
             prod.UpdatedBy = user.Name;
             prod.DateUpdated = DateTime.Now;
@@ -565,6 +569,10 @@ namespace ShopNow.Controllers
             // var shop = db.Shops.Any(i => i.Id == user.Id);
             var prod = db.Products.FirstOrDefault(i => i.Id == model.Id);
             _mapper.Map(model, prod);
+            if (model.IsPreorder == false)
+            {
+                model.PreorderHour = 0;
+            }
             prod.DateUpdated = DateTime.Now;
             prod.UpdatedBy = user.Name;
             db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
@@ -1021,6 +1029,10 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var prod = db.Products.FirstOrDefault(i => i.Id == model.Id);
             _mapper.Map(model, prod);
+            if (model.IsPreorder == false)
+            {
+                model.PreorderHour = 0;
+            }
             prod.Name = model.Name;
             prod.UpdatedBy = user.Name;
             prod.DateUpdated = DateTime.Now;

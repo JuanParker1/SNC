@@ -449,13 +449,6 @@ namespace ShopNow.ViewModels
         public string ImagePath3 { get; set; }
         public string ImagePath4 { get; set; }
         public string ImagePath5 { get; set; }
-        public int Adscore { get; set; }
-        public string NickName { get; set; }
-        public int Status { get; set; }
-        public System.DateTime DateEncoded { get; set; }
-        public System.DateTime DateUpdated { get; set; }
-        public string CreatedBy { get; set; }
-        public string UpdatedBy { get; set; }
 
         public int MasterProductId { get; set; }
         public string MasterProductName { get; set; }
@@ -473,6 +466,8 @@ namespace ShopNow.ViewModels
         public int Percentage { get; set; }
         public int PackingType { get; set; }
         public double PackingCharge { get; set; }
+        public bool IsPreorder { get; set; }
+        public int PreorderHour { get; set; }
     }
 
     public class FoodCreateViewModel

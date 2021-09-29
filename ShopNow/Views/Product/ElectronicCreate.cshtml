@@ -15,7 +15,7 @@
     </div>
     <div class="row">
         <div class="col-md-12 mx-auto">
-            @using (Html.BeginForm("ElectronicCreate", "Product", FormMethod.Post, new { id = "ElectronicCreateForm", enctype = "multipart/form-data", autocomplete = "off" }))
+            @using (Html.BeginForm("ElectronicCreate", "Product", FormMethod.Post, new { id = "ElectronicCreateForm", enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
                 <div class="card shadow mb-3">
@@ -56,16 +56,6 @@
                                         <input type="text" class="form-control" name="CategoryName" id="CategoryName" readonly />
                                         <input type="hidden" name="CategoryId" id="CategoryId" />
                                     </div>
-                                    @*<div class="col-md-3">
-                                        <label class="col-form-label"><strong class="text-secondary">Sub Category I Name</strong></label>
-                                        <input type="text" class="form-control" name="SubCategoryName" id="SubCategoryName" readonly />
-                                        <input type="hidden" name="SubCategoryId" id="SubCategoryId" />
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="col-form-label"><strong class="text-secondary">Sub Category II Name</strong></label>
-                                        <input type="text" class="form-control" name="NextSubCategoryName" id="NextSubCategoryName" readonly />
-                                        <input type="hidden" name="NextSubCategoryId" id="NextSubCategoryId" />
-                                    </div>*@
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="Price"><strong class="text-secondary">Menu Price</strong></label>
                                         <input id="MenuPrice" type="number" class="form-control" name="MenuPrice" step="any" min="0" />
@@ -93,19 +83,19 @@
                                         <input id="SizeLWH" type="text" class="form-control" name="SizeLWH" min="0" />
                                     </div>
                                     @*<div class="col-md-3">
-                                        <label><strong class="text-secondary">Measurement Unit Name</strong></label>
-                                        <input type="text" class="form-control" name="MeasurementUnitName" id="MeasurementUnitName" readonly />
-                                        <input type="hidden" name="MeasurementUnitId" id="MeasurementUnitId" />
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="col-form-label" for="PackageId"><strong class="text-secondary">Package Name</strong></label>
-                                        <input type="text" class="form-control" name="PackageName" id="PackageName" readonly />
-                                        <input type="hidden" name="PackageId" id="PackageId" />
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="col-form-label"><strong class="text-secondary">ASIN / EAN</strong></label>
-                                        <input id="ASIN" type="text" class="form-control" name="ASIN" readonly />
-                                    </div>*@
+            <label><strong class="text-secondary">Measurement Unit Name</strong></label>
+            <input type="text" class="form-control" name="MeasurementUnitName" id="MeasurementUnitName" readonly />
+            <input type="hidden" name="MeasurementUnitId" id="MeasurementUnitId" />
+        </div>
+        <div class="col-md-3">
+            <label class="col-form-label" for="PackageId"><strong class="text-secondary">Package Name</strong></label>
+            <input type="text" class="form-control" name="PackageName" id="PackageName" readonly />
+            <input type="hidden" name="PackageId" id="PackageId" />
+        </div>
+        <div class="col-md-3">
+            <label class="col-form-label"><strong class="text-secondary">ASIN / EAN</strong></label>
+            <input id="ASIN" type="text" class="form-control" name="ASIN" readonly />
+        </div>*@
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="GoogleTaxonomyCode"><strong class="text-secondary">Google Taxonomy Code</strong></label>
                                         <input id="GoogleTaxonomyCode" type="text" class="form-control" name="GoogleTaxonomyCode" readonly />
@@ -123,6 +113,21 @@
                                             </label>
                                         </div>
                                         <input type="number" class="form-control" name="PackingCharge" id="PackingCharge" />
+                                    </div>
+                                    <div class="d-flex mt-3">
+                                        <div class="mx-3">
+                                            <input type="checkbox" id="IsPreorder" name="IsPreorder" value="true">
+                                            <label class="font-weight-bold text-secondary col-form-label" for="IsPreorder"> Is PreOrder</label><br>
+                                        </div>
+                                        <div class="ml-3">
+                                            <select name="PreorderHour" id="PreorderHour" class="form-control d-none">
+                                                <option value="0" selected disabled>Select Hours</option>
+                                                @for (int i = 2; i <= 24; i++)
+                                                {
+                                                    <option value="@i">@i hours</option>
+                                                }
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -192,7 +197,7 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-md-2 mx-auto">
-                                <button type="button" class="btn btn-block btn-success Save" id="Create"><span class="glyphicon glyphicon-file"></span> Save</button>
+                                <button type="button"  class="btn btn-block btn-success Save" id="Create"><span class="glyphicon glyphicon-file"></span> Save</button>
                             </div>
                         </div>
                     </div>
@@ -225,6 +230,15 @@
             if (msg != "") {
                 swal("Success!", msg, "success")
             }
+
+            $('#IsPreorder').change(function () {
+                if (this.checked) {
+                    $("#PreorderHour").removeClass('d-none');
+                } else {
+                    $("#PreorderHour").addClass('d-none');
+                    $("#PreorderHour").val(0);
+                }
+            });
 
             $('#Price').on('change keyup', function () {
                 var menuprice = $("#MenuPrice").val();
@@ -297,8 +311,9 @@
 
             $(".Save").click(function () {
                 var ShopId = $("#ShopId").val();
+                var mpId = $('#MasterProductId').val();
                 if (ShopId != null) {
-                    if ($('#MasterProductId').val()) {
+                    if (mpId != 0) {
                         $('#ElectronicCreateForm').submit();
                     } else {
                         swal("Notice!", "Please Select FMCG!", "warning");
