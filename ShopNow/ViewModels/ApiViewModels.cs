@@ -370,6 +370,7 @@ namespace ShopNow.ViewModels
         public List<CrustListItem> CrustListItems { get; set; }
         public class CrustListItem
         {
+            public int CrustId { get; set; }
             public string CrustName { get; set; }
             public int PortionId { get; set; }
         }

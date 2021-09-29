@@ -2103,7 +2103,8 @@ namespace ShopNow.Controllers
             else
                 reviewCount = 0;
             model.CustomerReview = reviewCount;
-            model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct m.CategoryId as Id, c.Name as Name from MasterProducts m join Categories c on c.Id = m.CategoryId join Products p on p.MasterProductId = m.id where p.ShopId = {shopId}  and c.Status = 0 and m.CategoryId !=0 and c.Name is not null group by m.CategoryId,c.Name order by Name").ToList<ShopDetails.CategoryList>();
+            //model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct m.CategoryId as Id, c.Name as Name from MasterProducts m join Categories c on c.Id = m.CategoryId join Products p on p.MasterProductId = m.id where p.ShopId = {shopId}  and c.Status = 0 and m.CategoryId !=0 and c.Name is not null group by m.CategoryId,c.Name order by Name").ToList<ShopDetails.CategoryList>();
+            model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryId as Id, c.Name as Name from Products p join Categories c on c.Id = p.CategoryId where ShopId ={shopId}  and c.Status = 0 and CategoryId !=0 and c.Name is not null group by CategoryId,c.Name order by Name").ToList<ShopDetails.CategoryList>();
             if (shop.ShopCategoryId == 1)
             {
                 model.ProductLists = (from pl in db.Products
@@ -4050,6 +4051,7 @@ namespace ShopNow.Controllers
 
                         model.CrustListItems = list.Where(i => i.AddOnType == 4).Select(i => new ApiProductAddonViewModel.CrustListItem
                         {
+                            CrustId = i.Id,
                             CrustName = i.CrustName,
                             PortionId = i.PortionId
                         }).ToList();
