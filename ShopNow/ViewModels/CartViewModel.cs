@@ -549,6 +549,8 @@ namespace ShopNow.ViewModels
         public Nullable<int> ProductFreeOfferId { get; set; }
         public Nullable<bool> IsPreorder { get; set; }
         public Nullable<System.DateTime> PreorderDeliveryDateTime { get; set; }
+        public string RouteAudioPath { get; set; }
+        public string Remarks { get; set; }
 
         public List<ListItem> ListItems { get; set; } 
         public class ListItem
