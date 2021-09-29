@@ -643,8 +643,10 @@
           <Property Name="BrandId" Type="int" />
           <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="Status" Type="int" Nullable="false" />
-          <Property Name="DateEncoded" Type="date" />
-          <Property Name="DateUpdated" Type="date" />
+          <Property Name="DateEncoded" Type="datetime" Nullable="false" />
+          <Property Name="DateUpdated" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="100" />
+          <Property Name="UpdatedBy" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <EntityType Name="OfferShops">
           <Key>
@@ -2759,7 +2761,6 @@
           </FunctionImport>
           <EntitySet Name="ShopSchedules" EntityType="sncModel.ShopSchedule" />
           <EntitySet Name="ProductSchedules" EntityType="sncModel.ProductSchedule" />
-          <EntitySet Name="Offers" EntityType="sncModel.Offer" />
           <EntitySet Name="AchievementSettings" EntityType="sncModel.AchievementSetting" />
           <EntitySet Name="OrderItems" EntityType="sncModel.OrderItem" />
           <EntitySet Name="Crusts" EntityType="sncModel.Crust" />
@@ -2800,6 +2801,7 @@
             <End Role="Order" EntitySet="Orders" />
             <End Role="OrderItem" EntitySet="OrderItems" />
           </AssociationSet>
+          <EntitySet Name="Offers" EntityType="sncModel.Offer" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -2839,30 +2841,6 @@
           <Property Name="UpdatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DateTimeUpdated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Status" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Offer">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="OwnerType" Type="Int32" Nullable="false" />
-          <Property Name="OfferCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DiscountType" Type="Int32" Nullable="false" />
-          <Property Name="Type" Type="Int32" Nullable="false" />
-          <Property Name="Percentage" Type="Double" Nullable="false" />
-          <Property Name="QuantityLimit" Type="Int32" Nullable="false" />
-          <Property Name="AmountLimit" Type="Int32" Nullable="false" />
-          <Property Name="CustomerCountLimit" Type="Int32" Nullable="false" />
-          <Property Name="MinimumPurchaseAmount" Type="Double" Nullable="false" />
-          <Property Name="IsForFirstOrder" Type="Boolean" Nullable="false" />
-          <Property Name="IsForOnlinePayment" Type="Boolean" Nullable="false" />
-          <Property Name="IsForBlackListAbusers" Type="Boolean" Nullable="false" />
-          <Property Name="BrandId" Type="Int32" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="DateEncoded" Type="DateTime" Precision="0" />
-          <Property Name="DateUpdated" Type="DateTime" Precision="0" />
         </EntityType>
         <EntityType Name="AchievementSetting">
           <Key>
@@ -3352,6 +3330,32 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Offer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="OwnerType" Type="Int32" Nullable="false" />
+          <Property Name="OfferCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DiscountType" Type="Int32" Nullable="false" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="Percentage" Type="Double" Nullable="false" />
+          <Property Name="QuantityLimit" Type="Int32" Nullable="false" />
+          <Property Name="AmountLimit" Type="Int32" Nullable="false" />
+          <Property Name="CustomerCountLimit" Type="Int32" Nullable="false" />
+          <Property Name="MinimumPurchaseAmount" Type="Double" Nullable="false" />
+          <Property Name="IsForFirstOrder" Type="Boolean" Nullable="false" />
+          <Property Name="IsForOnlinePayment" Type="Boolean" Nullable="false" />
+          <Property Name="IsForBlackListAbusers" Type="Boolean" Nullable="false" />
+          <Property Name="BrandId" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4347,31 +4351,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Offers">
-            <EntityTypeMapping TypeName="sncModel.Offer">
-              <MappingFragment StoreEntitySet="Offers">
-                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
-                <ScalarProperty Name="IsForBlackListAbusers" ColumnName="IsForBlackListAbusers" />
-                <ScalarProperty Name="IsForOnlinePayment" ColumnName="IsForOnlinePayment" />
-                <ScalarProperty Name="IsForFirstOrder" ColumnName="IsForFirstOrder" />
-                <ScalarProperty Name="MinimumPurchaseAmount" ColumnName="MinimumPurchaseAmount" />
-                <ScalarProperty Name="CustomerCountLimit" ColumnName="CustomerCountLimit" />
-                <ScalarProperty Name="AmountLimit" ColumnName="AmountLimit" />
-                <ScalarProperty Name="QuantityLimit" ColumnName="QuantityLimit" />
-                <ScalarProperty Name="Percentage" ColumnName="Percentage" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="DiscountType" ColumnName="DiscountType" />
-                <ScalarProperty Name="OfferCode" ColumnName="OfferCode" />
-                <ScalarProperty Name="OwnerType" ColumnName="OwnerType" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="AchievementSettings">
             <EntityTypeMapping TypeName="sncModel.AchievementSetting">
               <MappingFragment StoreEntitySet="AchievementSettings">
@@ -4838,6 +4817,33 @@
                 <ScalarProperty Name="CustomerPhoneNumber" ColumnName="CustomerPhoneNumber" />
                 <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Offers">
+            <EntityTypeMapping TypeName="sncModel.Offer">
+              <MappingFragment StoreEntitySet="Offers">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
+                <ScalarProperty Name="IsForBlackListAbusers" ColumnName="IsForBlackListAbusers" />
+                <ScalarProperty Name="IsForOnlinePayment" ColumnName="IsForOnlinePayment" />
+                <ScalarProperty Name="IsForFirstOrder" ColumnName="IsForFirstOrder" />
+                <ScalarProperty Name="MinimumPurchaseAmount" ColumnName="MinimumPurchaseAmount" />
+                <ScalarProperty Name="CustomerCountLimit" ColumnName="CustomerCountLimit" />
+                <ScalarProperty Name="AmountLimit" ColumnName="AmountLimit" />
+                <ScalarProperty Name="QuantityLimit" ColumnName="QuantityLimit" />
+                <ScalarProperty Name="Percentage" ColumnName="Percentage" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="DiscountType" ColumnName="DiscountType" />
+                <ScalarProperty Name="OfferCode" ColumnName="OfferCode" />
+                <ScalarProperty Name="OwnerType" ColumnName="OwnerType" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
