@@ -1227,7 +1227,7 @@ namespace ShopNow.Controllers
             }
         }
 
-        //Have to check later
+        
         public JsonResult GetShopDeliveredOrders(int shopId, int status, int page = 1, int pageSize = 5)
         {
             db.Configuration.ProxyCreationEnabled = false;
@@ -1816,7 +1816,7 @@ namespace ShopNow.Controllers
         {
             db.Configuration.ProxyCreationEnabled = false;
             var model = new GetAllOrderListViewModel();
-            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && (mode == 0 ? i.Status == 2 : (i.Status == 3 || i.Status == 4)))
+            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && (mode == 0 ? i.Status == 2 : (i.Status == 3 || i.Status == 4 || i.Status==8)))
                  .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
                  .GroupJoin(db.OrderItems, o => o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
                  .Select(i => new GetAllOrderListViewModel.OrderList
@@ -1886,7 +1886,7 @@ namespace ShopNow.Controllers
             db.Configuration.ProxyCreationEnabled = false;
             
             var model = new GetAllOrderListViewModel();
-            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && (i.Status == 3 || i.Status == 4 || i.Status == 5))
+            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && (i.Status == 3 || i.Status == 4 || i.Status == 5 || i.Status==8))
                  .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
                  //.Join(db.DeliveryBoys, o => o.o.DeliveryBoyId, d => d.Id, (o, d) => new { o, d })
                  .GroupJoin(db.OrderItems, o => o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
@@ -2103,7 +2103,8 @@ namespace ShopNow.Controllers
             else
                 reviewCount = 0;
             model.CustomerReview = reviewCount;
-            model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct m.CategoryId as Id, c.Name as Name from MasterProducts m join Categories c on c.Id = m.CategoryId join Products p on p.MasterProductId = m.id where p.ShopId = {shopId}  and c.Status = 0 and m.CategoryId !=0 and c.Name is not null group by m.CategoryId,c.Name order by Name").ToList<ShopDetails.CategoryList>();
+            //model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct m.CategoryId as Id, c.Name as Name from MasterProducts m join Categories c on c.Id = m.CategoryId join Products p on p.MasterProductId = m.id where p.ShopId = {shopId}  and c.Status = 0 and m.CategoryId !=0 and c.Name is not null group by m.CategoryId,c.Name order by Name").ToList<ShopDetails.CategoryList>();
+            model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryId as Id, c.Name as Name from Products p join Categories c on c.Id = p.CategoryId where ShopId ={shopId}  and c.Status = 0 and CategoryId !=0 and c.Name is not null group by CategoryId,c.Name order by Name").ToList<ShopDetails.CategoryList>();
             if (shop.ShopCategoryId == 1)
             {
                 model.ProductLists = (from pl in db.Products
@@ -2648,6 +2649,12 @@ namespace ShopNow.Controllers
             var shop = db.Shops.FirstOrDefault(i => i.Id == id);
             ShopSingleUpdateViewModel model = _mapper.Map<Shop, ShopSingleUpdateViewModel>(shop);
             model.ImagePath = ((!string.IsNullOrEmpty(model.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + model.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg");
+            model.ImageAadharPath = ((!string.IsNullOrEmpty(model.ImageAadharPath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + model.ImageAadharPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/notavailable.png");
+            model.ImageAccountPath = ((!string.IsNullOrEmpty(model.ImageAccountPath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + model.ImageAccountPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/notavailable.png");
+            model.ImageFSSAIPath = ((!string.IsNullOrEmpty(model.ImageFSSAIPath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + model.ImageFSSAIPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/notavailable.png");
+            model.ImagePanPath = ((!string.IsNullOrEmpty(model.ImagePanPath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + model.ImagePanPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/notavailable.png");
+            model.ImageGSTINPath = ((!string.IsNullOrEmpty(model.ImageGSTINPath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + model.ImageGSTINPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/notavailable.png");
+            model.ImageDrugPath = ((!string.IsNullOrEmpty(model.ImageDrugPath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + model.ImageDrugPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/notavailable.png"); 
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
@@ -3992,8 +3999,9 @@ namespace ShopNow.Controllers
                     model.MaxLimit = product.MaxSelectionLimit;
                     if (list.FirstOrDefault().AddOnType == 1)
                     {
-                        model.PortionListItems = list.Where(i => i.AddOnType == 1).Select(i => new ApiProductAddonViewModel.PortionListItem
+                        model.PortionListItems = list.Where(i => i.AddOnType == 1).Select((i, index) => new ApiProductAddonViewModel.PortionListItem
                         {
+                            Index = index + 1,
                             PortionId = i.PortionId,
                             PortionName = i.PortionName,
                             PortionPrice = i.PortionPrice
@@ -4001,8 +4009,9 @@ namespace ShopNow.Controllers
                     }
                     if (list.FirstOrDefault().AddOnType == 2)
                     {
-                        model.AddonListItems = list.Where(i => i.AddOnType == 2).Select(i => new ApiProductAddonViewModel.AddonListItem
+                        model.AddonListItems = list.Where(i => i.AddOnType == 2).Select((i, index) => new ApiProductAddonViewModel.AddonListItem
                         {
+                            Index = index + 1,
                             AddonName = i.AddOnItemName,
                             AddonPrice = i.AddOnsPrice,
                             AddonCategoryName = i.AddOnCategoryName,
@@ -4013,15 +4022,17 @@ namespace ShopNow.Controllers
 
                     if (list.FirstOrDefault().AddOnType == 3)
                     {
-                        model.PortionListItems = list.Where(i => i.AddOnType == 3).Select(i => new ApiProductAddonViewModel.PortionListItem
+                        model.PortionListItems = list.Where(i => i.AddOnType == 3).Select((i, index) => new ApiProductAddonViewModel.PortionListItem
                         {
+                            Index = index + 1,
                             PortionId = i.PortionId,
                             PortionName = i.PortionName,
                             PortionPrice = i.PortionPrice
                         }).ToList();
 
-                        model.AddonListItems = list.Where(i => i.AddOnType == 3).Select(i => new ApiProductAddonViewModel.AddonListItem
+                        model.AddonListItems = list.Where(i => i.AddOnType == 3).Select((i, index) => new ApiProductAddonViewModel.AddonListItem
                         {
+                            Index = index + 1,
                             PortionId = i.PortionId,
                             AddonName = i.AddOnItemName,
                             AddonPrice = i.AddOnsPrice,
@@ -4032,15 +4043,17 @@ namespace ShopNow.Controllers
 
                     if (list.FirstOrDefault().AddOnType == 4)
                     {
-                        model.PortionListItems = list.Where(i => i.AddOnType == 4).Select(i => new ApiProductAddonViewModel.PortionListItem
+                        model.PortionListItems = list.Where(i => i.AddOnType == 4).Select((i, index) => new ApiProductAddonViewModel.PortionListItem
                         {
+                            Index = index + 1,
                             PortionId = i.PortionId,
                             PortionName = i.PortionName,
                             PortionPrice = i.PortionPrice
                         }).ToList();
 
-                        model.AddonListItems = list.Where(i => i.AddOnType == 4).Select(i => new ApiProductAddonViewModel.AddonListItem
+                        model.AddonListItems = list.Where(i => i.AddOnType == 4).Select((i, index) => new ApiProductAddonViewModel.AddonListItem
                         {
+                            Index = index + 1,
                             PortionId = i.PortionId,
                             AddonName = i.AddOnItemName,
                             AddonPrice = i.AddOnsPrice,
@@ -4048,10 +4061,12 @@ namespace ShopNow.Controllers
                             ColorCode = masterProduct.ColorCode
                         }).ToList();
 
-                        model.CrustListItems = list.Where(i => i.AddOnType == 4).Select(i => new ApiProductAddonViewModel.CrustListItem
+                        model.CrustListItems = list.Where(i => i.AddOnType == 4).Select((i, index) => new ApiProductAddonViewModel.CrustListItem
                         {
+                            Index = index + 1,
                             CrustName = i.CrustName,
-                            PortionId = i.PortionId
+                            PortionId = i.PortionId,
+                            CrustId = i.Id
                         }).ToList();
                     }
                     return Json(new { result = model }, JsonRequestBehavior.AllowGet);
@@ -4085,7 +4100,7 @@ namespace ShopNow.Controllers
         {
             db.Configuration.ProxyCreationEnabled = false;
             var model = new GetAllOrderListViewModel();
-            model.OrderLists = db.Orders.Where(i => i.CustomerId == customerId && (type == 1 ? (i.Status >= 2 && i.Status <= 5) : (i.Status == 6 || i.Status == 7)))
+            model.OrderLists = db.Orders.Where(i => i.CustomerId == customerId && (type == 1 ? (i.Status >= 2 && i.Status <= 5) || i.Status == 8 : (i.Status == 6 || i.Status == 7)))
                  .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
                  .GroupJoin(db.OrderItems, o => o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
                  .Select(i => new GetAllOrderListViewModel.OrderList
@@ -4469,7 +4484,7 @@ namespace ShopNow.Controllers
 
         public JsonResult GetLiveOrderCount(int customerid)
         {
-            var liveOrdercount = db.Orders.Where(i => i.CustomerId == customerid && i.Status != 0 && i.Status != 6 && i.Status != 7).Count();
+            var liveOrdercount = db.Orders.Where(i => i.CustomerId == customerid && i.Status != 0 && i.Status != 6 && i.Status != 7 && i.Status != 9 && i.Status != 10).Count();
             return Json(new { count = liveOrdercount }, JsonRequestBehavior.AllowGet);
         }
 

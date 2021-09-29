@@ -664,5 +664,12 @@ namespace ShopNow.ViewModels
         public string ProductName { get; set; }
         public int Qty { get; set; }
     }
+
+    public class ApplyDiscountViewModel
+    {
+        public int ShopId { get; set; }
+        public string ShopName { get; set; }
+       public int Percentage { get; set; }
+    }
 }
 

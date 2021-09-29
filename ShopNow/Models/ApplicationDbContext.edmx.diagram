@@ -63,7 +63,6 @@
         <AssociationConnector Association="sncModel.FK_SubCategories_ProductType" ManuallyRouted="false" />
         <EntityTypeShape EntityType="sncModel.ShopSchedule" Width="1.5" PointX="5.375" PointY="27.75" />
         <EntityTypeShape EntityType="sncModel.ProductSchedule" Width="1.5" PointX="26.375" PointY="26.75" />
-        <EntityTypeShape EntityType="sncModel.Offer" Width="1.5" PointX="0.75" PointY="13.75" />
         <EntityTypeShape EntityType="sncModel.AchievementSetting" Width="1.5" PointX="10.375" PointY="27.75" />
         <EntityTypeShape EntityType="sncModel.OrderItem" Width="1.5" PointX="30.625" PointY="19.375" />
         <EntityTypeShape EntityType="sncModel.Crust" Width="1.5" PointX="13.375" PointY="14.75" />
@@ -79,8 +78,9 @@
         <AssociationConnector Association="sncModel.FK_CustomerReview_Shops" />
         <EntityTypeShape EntityType="sncModel.Product" Width="1.5" PointX="3" PointY="34.875" />
         <AssociationConnector Association="sncModel.FK_Products_ProductType" />
-        <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="28.375" PointY="30.125" />
+        <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="28.375" PointY="29.875" />
         <AssociationConnector Association="sncModel.FK_OrderItems_Orders" />
+        <EntityTypeShape EntityType="sncModel.Offer" Width="1.5" PointX="0.75" PointY="13.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

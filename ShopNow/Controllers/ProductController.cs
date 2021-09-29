@@ -1666,6 +1666,28 @@ namespace ShopNow.Controllers
             return RedirectToAction("UpdateStock");
         }
 
+
+        [AccessPolicy(PageCode = "")]
+        [HttpGet]
+        public ActionResult ApplyDiscount()
+        {
+            return View();
+        }
+
+        [AccessPolicy(PageCode = "")]
+        [HttpPost]
+        public ActionResult ApplyDiscount(ApplyDiscountViewModel model)
+        {
+            var productsList =db.Products.Where(i => i.ShopId == model.ShopId && i.Status == 0).ToList();
+            if (productsList != null)
+            {
+                productsList.ForEach(i => { i.Percentage = model.Percentage; i.Price = Math.Round(i.MenuPrice - (i.MenuPrice * model.Percentage) / 100, 0); });
+                db.SaveChanges();
+            }
+            ViewBag.Message ="Successfully Updated!";
+            return View();
+        }
+
         [AccessPolicy(PageCode = "")]
         public async Task<JsonResult> GetProductByShopSelect2(string shopIds, string q = "")
         {
