@@ -3993,8 +3993,9 @@ namespace ShopNow.Controllers
                     model.MaxLimit = product.MaxSelectionLimit;
                     if (list.FirstOrDefault().AddOnType == 1)
                     {
-                        model.PortionListItems = list.Where(i => i.AddOnType == 1).Select(i => new ApiProductAddonViewModel.PortionListItem
+                        model.PortionListItems = list.Where(i => i.AddOnType == 1).Select((i, index) => new ApiProductAddonViewModel.PortionListItem
                         {
+                            Index = index + 1,
                             PortionId = i.PortionId,
                             PortionName = i.PortionName,
                             PortionPrice = i.PortionPrice
@@ -4002,8 +4003,9 @@ namespace ShopNow.Controllers
                     }
                     if (list.FirstOrDefault().AddOnType == 2)
                     {
-                        model.AddonListItems = list.Where(i => i.AddOnType == 2).Select(i => new ApiProductAddonViewModel.AddonListItem
+                        model.AddonListItems = list.Where(i => i.AddOnType == 2).Select((i, index) => new ApiProductAddonViewModel.AddonListItem
                         {
+                            Index = index + 1,
                             AddonName = i.AddOnItemName,
                             AddonPrice = i.AddOnsPrice,
                             AddonCategoryName = i.AddOnCategoryName,
@@ -4014,15 +4016,17 @@ namespace ShopNow.Controllers
 
                     if (list.FirstOrDefault().AddOnType == 3)
                     {
-                        model.PortionListItems = list.Where(i => i.AddOnType == 3).Select(i => new ApiProductAddonViewModel.PortionListItem
+                        model.PortionListItems = list.Where(i => i.AddOnType == 3).Select((i, index) => new ApiProductAddonViewModel.PortionListItem
                         {
+                            Index = index + 1,
                             PortionId = i.PortionId,
                             PortionName = i.PortionName,
                             PortionPrice = i.PortionPrice
                         }).ToList();
 
-                        model.AddonListItems = list.Where(i => i.AddOnType == 3).Select(i => new ApiProductAddonViewModel.AddonListItem
+                        model.AddonListItems = list.Where(i => i.AddOnType == 3).Select((i, index) => new ApiProductAddonViewModel.AddonListItem
                         {
+                            Index = index + 1,
                             PortionId = i.PortionId,
                             AddonName = i.AddOnItemName,
                             AddonPrice = i.AddOnsPrice,
@@ -4033,15 +4037,17 @@ namespace ShopNow.Controllers
 
                     if (list.FirstOrDefault().AddOnType == 4)
                     {
-                        model.PortionListItems = list.Where(i => i.AddOnType == 4).Select(i => new ApiProductAddonViewModel.PortionListItem
+                        model.PortionListItems = list.Where(i => i.AddOnType == 4).Select((i, index) => new ApiProductAddonViewModel.PortionListItem
                         {
+                            Index = index + 1,
                             PortionId = i.PortionId,
                             PortionName = i.PortionName,
                             PortionPrice = i.PortionPrice
                         }).ToList();
 
-                        model.AddonListItems = list.Where(i => i.AddOnType == 4).Select(i => new ApiProductAddonViewModel.AddonListItem
+                        model.AddonListItems = list.Where(i => i.AddOnType == 4).Select((i, index) => new ApiProductAddonViewModel.AddonListItem
                         {
+                            Index = index + 1,
                             PortionId = i.PortionId,
                             AddonName = i.AddOnItemName,
                             AddonPrice = i.AddOnsPrice,
@@ -4049,11 +4055,12 @@ namespace ShopNow.Controllers
                             ColorCode = masterProduct.ColorCode
                         }).ToList();
 
-                        model.CrustListItems = list.Where(i => i.AddOnType == 4).Select(i => new ApiProductAddonViewModel.CrustListItem
+                        model.CrustListItems = list.Where(i => i.AddOnType == 4).Select((i, index) => new ApiProductAddonViewModel.CrustListItem
                         {
-                            CrustId = i.Id,
+                            Index = index + 1,
                             CrustName = i.CrustName,
-                            PortionId = i.PortionId
+                            PortionId = i.PortionId,
+                            CrustId = i.Id
                         }).ToList();
                     }
                     return Json(new { result = model }, JsonRequestBehavior.AllowGet);
