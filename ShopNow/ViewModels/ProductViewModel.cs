@@ -461,7 +461,7 @@ namespace ShopNow.ViewModels
         public string NextSubCategoryName { get; set; }
         public string ImagePath { get; set; }
         public double MenuPrice { get; set; }
-        public Nullable<int> shopid { get; set; }
+        //public Nullable<int> shopid { get; set; }
         public int Qty { get; set; }
         public int Percentage { get; set; }
         public int PackingType { get; set; }
