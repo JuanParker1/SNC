@@ -127,6 +127,8 @@ namespace ShopNow.ViewModels
                             return "Delivered";
                         case 7:
                             return "Cancelled";
+                        case 8:
+                            return "Order Prepared";
                         default:
                             return "N/A";
                     }
