@@ -175,6 +175,10 @@ namespace ShopNow.ViewModels
         //public string CountryName { get; set; }
         //public string CheckSumString { get; set; }
         //public string QueryString { get; set; }
+
+        //Shop Credits
+        public double PlatformCreditAmount { get; set; }
+        public double DeliveryCreditAmount { get; set; }
     }
 
     public class ShopPaymentListViewModel
