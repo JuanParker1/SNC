@@ -4734,6 +4734,13 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        public JsonResult GetPrescriptionList(int customerid)
+        {
+            var list = db.CustomerPrescriptions.Where(i => i.CustomerId == customerid).ToList();
+            return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+        }
+
         public void UpdateAchievements(int customerId)
         {
             var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
