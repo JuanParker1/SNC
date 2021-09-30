@@ -11,7 +11,7 @@
 
 <div class="container-fluid mb-5">
     <div class="row">
-        <div class="col-md-10 mx-auto mt-3">
+        <div class="col-md-12 mx-auto mt-3">
             <div class="card shadow">
                 <div class="card-body">
                     <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
@@ -23,9 +23,142 @@
                    columns.Add(c => c.AudioPath).Titled("Audio").Filterable(false).SetWidth(10);
                    columns.Add(c => c.Remarks).Titled("Remarks").Filterable(false).SetWidth(10);
                    columns.Add(c => c.DateEncoded).Titled("Date").Format("{0:dd-MMM-yyyy}").Filterable(false).SetWidth(10);
-               }).Sortable(false)
+                   columns.Add()
+  .Encoded(false)
+  .Sanitized(false)
+  .RenderValueAs(o => o.Status == 0  ? "<a href='#modal-add' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-add' class='btn btn-sm btn-primary btn-modal-add btn-block'>Add</a>" : "<span class='text-success'>Already Added</span>").Titled("Action").SetWidth(5);
+               }).Sortable(true)
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="modal-add" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <input type="hidden" name="PrescriptionId" />
+                <input type="hidden" name="ShopId" />
+                <h5>Add Prescription Item</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Select Product</label>
+                            <select class="form-control" name="ProductId" id="select-product"></select>
+                            <input type="hidden" name="ProductName" />
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label>Quantity</label>
+                            <input class="form-control" type="number" name="Quantity" />
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt-2">
+                        <input type="button" value="Add To List" class="btn btn-primary btn-sm h-50 mt-4" id="btn-addtolist" />
+                    </div>
+                </div>
+                <div class="row d-none" id="div-items">
+                    <div class="col-md-12">
+                        <h6>Item List</h6>
+                        <table class="table table-bordered table-sm table-striped" id="tbl-items">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="w-75">Product</th>
+                                    <th class="w-25">Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <hr />
+                <div class="text-right">
+                    <button class="btn btn-success mr-3" id="btn-save-prescription">Submit</button>
+                    <button class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script>
+        $(document).ready(function () {
+            var itemArray = [];
+            $('#select-product').select2({
+                placeholder: "Select Product",
+                width: '100%',
+                ajax: {
+                    url: "/Banner/GetShopProductSelect2?shopid=123",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ProductName"]').val(e.params.data.text);
+            });
+
+
+            $(".btn-modal-add").click(function () {
+                $('[name="PrescriptionId"]').val($(this).data('id'));
+                $('[name="ShopId"]').val($(this).data('shopid'));
+                $('#modal-add').modal('show');
+            });
+
+            $('#btn-addtolist').on('click', function () {
+                var productId = $('[name="ProductId"]').val();
+                var productName = $('[name="ProductName"]').val();
+                var qty = $('[name="Quantity"]').val();
+                if (productId && qty) {
+                    var item = {
+                        productId: productId,
+                        quantity: qty
+                    };
+                    itemArray.push(item);
+                    var $tr = '<tr><td>' + productName + '</td><td>' + qty + '</td></tr>';
+                    $('#tbl-items tbody').append($tr);
+                    $('#div-items').removeClass('d-none');
+                    $('[name="ProductId"]').val('').trigger('change');
+                    $('[name="Quantity"]').val('');
+                } else
+                    swal('Warning', 'All fields are required!', 'warning');
+            });
+
+            $('#btn-save-prescription').on('click', function () {
+                    if (itemArray.length > 0) {
+                        var model = {
+                            prescriptionId: $('[name="PrescriptionId"]').val(),
+                            shopId: $('#select-shop').val(),
+                            customerId: $('#CustomerId').val(),
+                            ListItems: itemArray
+                        }
+                        $.post('/CustomerPrescription/AddPrescriptionItem', model, function (data) {
+                            if (data) {
+                                swal('Success', 'Prescription Items saved successfully', 'success');
+                                window.location.reload();
+                            } else {
+                               // swal('Warning', 'Shop already has Schedules, Kindly update there.', 'warning');
+                                timeArray.length = 0;
+                                $('#tbl-items tbody').empty();
+                                $('#div-items').addClass('d-none');
+                                //$('#select-shop').val('').trigger('change');
+                                $('#modal-add').modal('hide');
+                            }
+                        });
+                    } else
+                        swal('Warning', 'Item List should not be empty!', 'warning');
+            });
+        });
+    </script>
+}
+
