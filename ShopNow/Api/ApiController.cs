@@ -896,6 +896,8 @@ namespace ShopNow.Controllers
                 payment.DeliveryCharge = model.GrossDeliveryCharge;
                 payment.PackingCharge = model.PackagingCharge;
                 payment.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
+
+
                 if (model.OrderId != 0)
                 {
                     var order = db.Orders.FirstOrDefault(i => i.Id == model.OrderId);
@@ -916,12 +918,16 @@ namespace ShopNow.Controllers
                     db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
 
+
                     //Reducing Platformcredits
                     var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
                     var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
                     shopCredits.PlatformCredit -= payment.RatePerOrder.Value;
                     db.Entry(shopCredits).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
+
+                    payment.OrderNumber = order.OrderNumber;
+                }
 
                     if (model.PaymentMode == "Online Payment")
                     {
@@ -969,20 +975,19 @@ namespace ShopNow.Controllers
                         pay.DateEncoded = DateTime.Now;
                         db.PaymentsDatas.Add(pay);
                         db.SaveChanges();
-                    }
-
 
                     if (model.CreditType == 0 || model.CreditType == 1)
                     {
                         payment.PaymentCategoryType = 1;
-                        payment.Credits = model.OriginalAmount.ToString();
+                        payment.Credits = model.CreditType == 0 ? "Platform Credits" : "Delivery Credits";
+                        //payment.CreditType = model.CreditType;
                     }
                     else
                     {
                         payment.PaymentCategoryType = 0;
                         payment.Credits = "N/A";
                     }
-                    payment.OrderNumber = order.OrderNumber;
+                    
                     payment.DateEncoded = DateTime.Now;
                     payment.DateUpdated = DateTime.Now;
                     payment.Status = 0;
@@ -990,7 +995,7 @@ namespace ShopNow.Controllers
                     db.Payments.Add(payment);
                     db.SaveChanges();
                 }
-                if (payment != null)
+                if (payment.Id != 0)
                 {
                     if (model.WalletAmount != 0)
                     {
@@ -998,8 +1003,22 @@ namespace ShopNow.Controllers
                         db.Entry(customer).State = EntityState.Modified;
                         db.SaveChanges();
                     }
-                    
-                    return Json(new { message = "Successfully Added to Payment!", Details = model });
+
+                    //For Credits adding
+                    if (model.CreditType == 0 || model.CreditType == 1)
+                    {
+                        //var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
+                        var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == model.CustomerId);
+                        if (shopCredits != null)
+                        {
+                            shopCredits.PlatformCredit += model.PlatformCreditAmount;
+                            shopCredits.DeliveryCredit += model.DeliveryCreditAmount;
+                            db.Entry(shopCredits).State = System.Data.Entity.EntityState.Modified;
+                            db.SaveChanges();
+                        }
+                    }
+
+                        return Json(new { message = "Successfully Added to Payment!", Details = model });
                 }
                 else
                 {
