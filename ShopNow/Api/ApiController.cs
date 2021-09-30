@@ -1013,7 +1013,19 @@ namespace ShopNow.Controllers
                         {
                             shopCredits.PlatformCredit += model.PlatformCreditAmount;
                             shopCredits.DeliveryCredit += model.DeliveryCreditAmount;
+                            shopCredits.DateUpdated = DateTime.Now;
                             db.Entry(shopCredits).State = System.Data.Entity.EntityState.Modified;
+                            db.SaveChanges();
+                        }
+                        else {
+                            var shopcredit = new ShopCredit
+                            {
+                                CustomerId = model.CustomerId,
+                                DateUpdated = DateTime.Now,
+                                DeliveryCredit = model.DeliveryCreditAmount,
+                                PlatformCredit = model.PlatformCreditAmount
+                            };
+                            db.ShopCredits.Add(shopcredit);
                             db.SaveChanges();
                         }
                     }
