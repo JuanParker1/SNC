@@ -66,6 +66,8 @@ namespace ShopNow.ViewModels
         public double TaxPercentage { get; set; }
         public double SpecialCostOfDelivery { get; set; }
         public double LoyaltyPoints { get; set; }
+        public bool IsPreorder { get; set; }
+        public int PreorderHour { get; set; }
     }
 
     public class MedicalEditViewModel
@@ -110,6 +112,8 @@ namespace ShopNow.ViewModels
         public double TaxPercentage { get; set; }
         public double SpecialCostOfDelivery { get; set; }
         public double LoyaltyPoints { get; set; }
+        public bool IsPreorder { get; set; }
+        public int PreorderHour { get; set; }
     }
 
     public class ElectronicListViewModel
@@ -413,6 +417,8 @@ namespace ShopNow.ViewModels
         public int PackingType { get; set; }
         public double PackingCharge { get; set; }
         public string ASIN { get; set; }
+        public bool IsPreorder { get; set; }
+        public int PreorderHour { get; set; }
     }
 
     public class FMCGEditViewModel : FMCGCreateViewModel
@@ -443,13 +449,6 @@ namespace ShopNow.ViewModels
         public string ImagePath3 { get; set; }
         public string ImagePath4 { get; set; }
         public string ImagePath5 { get; set; }
-        public int Adscore { get; set; }
-        public string NickName { get; set; }
-        public int Status { get; set; }
-        public System.DateTime DateEncoded { get; set; }
-        public System.DateTime DateUpdated { get; set; }
-        public string CreatedBy { get; set; }
-        public string UpdatedBy { get; set; }
 
         public int MasterProductId { get; set; }
         public string MasterProductName { get; set; }
@@ -462,11 +461,13 @@ namespace ShopNow.ViewModels
         public string NextSubCategoryName { get; set; }
         public string ImagePath { get; set; }
         public double MenuPrice { get; set; }
-        public Nullable<int> shopid { get; set; }
+        //public Nullable<int> shopid { get; set; }
         public int Qty { get; set; }
         public int Percentage { get; set; }
         public int PackingType { get; set; }
         public double PackingCharge { get; set; }
+        public bool IsPreorder { get; set; }
+        public int PreorderHour { get; set; }
     }
 
     public class FoodCreateViewModel
@@ -490,6 +491,8 @@ namespace ShopNow.ViewModels
         public string ImagePath1 { get; set; }
         public int PackingType { get; set; }
         public double PackingCharge { get; set; }
+        public bool IsPreorder { get; set; }
+        public int PreorderHour { get; set; }
     }
 
     public class FoodEditViewModel
@@ -514,6 +517,8 @@ namespace ShopNow.ViewModels
         public string ImagePath1 { get; set; }
         public int PackingType { get; set; }
         public double PackingCharge { get; set; }
+        public bool IsPreorder { get; set; }
+        public int PreorderHour { get; set; }
     }
 
     public class ShopAddOnSessionAddViewModel
@@ -628,6 +633,8 @@ namespace ShopNow.ViewModels
             public TimeSpan? NextOnTime { get; set; }
             public double Size { get; set; }
             public double Weight { get; set; }
+            public bool IsPreorder { get; set; }
+            public int PreorderHour { get; set; }
         }       
     }
 
@@ -656,6 +663,13 @@ namespace ShopNow.ViewModels
         public string ShopName { get; set; }
         public string ProductName { get; set; }
         public int Qty { get; set; }
+    }
+
+    public class ApplyDiscountViewModel
+    {
+        public int ShopId { get; set; }
+        public string ShopName { get; set; }
+       public int Percentage { get; set; }
     }
 }
 

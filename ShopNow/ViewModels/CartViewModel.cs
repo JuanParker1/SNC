@@ -127,6 +127,8 @@ namespace ShopNow.ViewModels
                             return "Delivered";
                         case 7:
                             return "Cancelled";
+                        case 8:
+                            return "Order Prepared";
                         default:
                             return "N/A";
                     }
@@ -545,8 +547,12 @@ namespace ShopNow.ViewModels
         public double Longitude { get; set; }
         public double Distance { get; set; }
         public string ReferralNumber { get; set; }
-        public Nullable<int> OfferId { get; set; }
-        public Nullable<int> ProductFreeOfferId { get; set; }
+        public int? OfferId { get; set; }
+        public int? ProductFreeOfferId { get; set; }
+        public bool? IsPreorder { get; set; }
+        public DateTime? PreorderDeliveryDateTime { get; set; }
+        public string RouteAudioPath { get; set; }
+        public string Remarks { get; set; }
 
         public List<ListItem> ListItems { get; set; } 
         public class ListItem

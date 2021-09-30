@@ -343,6 +343,10 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var prod = db.Products.FirstOrDefault(i => i.Id == model.Id);
             _mapper.Map(model, prod);
+            if (model.IsPreorder == false)
+            {
+                model.PreorderHour = 0;
+            }
             prod.Name = model.Name;
             prod.UpdatedBy = user.Name;
             prod.DateUpdated = DateTime.Now;
@@ -565,6 +569,10 @@ namespace ShopNow.Controllers
             // var shop = db.Shops.Any(i => i.Id == user.Id);
             var prod = db.Products.FirstOrDefault(i => i.Id == model.Id);
             _mapper.Map(model, prod);
+            if (model.IsPreorder == false)
+            {
+                model.PreorderHour = 0;
+            }
             prod.DateUpdated = DateTime.Now;
             prod.UpdatedBy = user.Name;
             db.Entry(prod).State = System.Data.Entity.EntityState.Modified;
@@ -871,6 +879,10 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var prod = db.Products.FirstOrDefault(i => i.Id == model.Id);
             _mapper.Map(model, prod);
+            if(model.IsPreorder == false)
+            {
+                model.PreorderHour = 0;
+            }
             prod.Name = model.Name;
             prod.UpdatedBy = user.Name;
             prod.DateUpdated = DateTime.Now;
@@ -1017,6 +1029,10 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var prod = db.Products.FirstOrDefault(i => i.Id == model.Id);
             _mapper.Map(model, prod);
+            if (model.IsPreorder == false)
+            {
+                model.PreorderHour = 0;
+            }
             prod.Name = model.Name;
             prod.UpdatedBy = user.Name;
             prod.DateUpdated = DateTime.Now;
@@ -1216,7 +1232,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNPROFC004")]
         public async Task<JsonResult> GetDishSelect2(string q = "")
         {
-            var model = await db.MasterProducts.Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 1).Join(db.Categories, m => m.CategoryId, c => c.Id, (m, c) => new { m, c })
+            var model = await db.MasterProducts.Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 1)
+                .Join(db.Categories, m => m.CategoryId, c => c.Id, (m, c) => new { m, c })
                 .Select(i => new
                 {
                     id = i.m.Id,
@@ -1647,6 +1664,28 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
             }
             return RedirectToAction("UpdateStock");
+        }
+
+
+        [AccessPolicy(PageCode = "")]
+        [HttpGet]
+        public ActionResult ApplyDiscount()
+        {
+            return View();
+        }
+
+        [AccessPolicy(PageCode = "")]
+        [HttpPost]
+        public ActionResult ApplyDiscount(ApplyDiscountViewModel model)
+        {
+            var productsList =db.Products.Where(i => i.ShopId == model.ShopId && i.Status == 0).ToList();
+            if (productsList != null)
+            {
+                productsList.ForEach(i => { i.Percentage = model.Percentage; i.Price = Math.Round(i.MenuPrice - (i.MenuPrice * model.Percentage) / 100, 0); });
+                db.SaveChanges();
+            }
+            ViewBag.Message ="Successfully Updated!";
+            return View();
         }
 
         [AccessPolicy(PageCode = "")]

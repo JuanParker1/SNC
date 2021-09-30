@@ -64,6 +64,10 @@ namespace ShopNow.Models
         public Nullable<int> OfferId { get; set; }
         public Nullable<int> ProductFreeOfferId { get; set; }
         public double OfferAmount { get; set; }
+        public Nullable<bool> IsPreorder { get; set; }
+        public Nullable<System.DateTime> PreorderDeliveryDateTime { get; set; }
+        public string RouteAudioPath { get; set; }
+        public string Remarks { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }

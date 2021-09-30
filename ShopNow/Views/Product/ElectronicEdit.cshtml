@@ -62,15 +62,15 @@
                                         <input type="hidden" name="CategoryId" id="CategoryId" value="@Model.CategoryId" />
                                     </div>
                                     @*<div class="col-md-3">
-                                        <label class="col-form-label"><strong class="text-secondary">Sub Category I Name</strong></label>
-                                        <input type="text" class="form-control" name="SubCategoryName" id="SubCategoryName" value="@Model.SubCategoryName" readonly />
-                                        <input type="hidden" name="SubCategoryId" id="SubCategoryId" value="@Model.SubCategoryId" />
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="col-form-label"><strong class="text-secondary">Sub Category II Name</strong></label>
-                                        <input type="text" class="form-control" name="NextSubCategoryName" id="NextSubCategoryName" value="@Model.NextSubCategoryName" readonly />
-                                        <input type="hidden" name="NextSubCategoryId" id="NextSubCategoryId" value="@Model.NextSubCategoryId" />
-                                    </div>*@
+            <label class="col-form-label"><strong class="text-secondary">Sub Category I Name</strong></label>
+            <input type="text" class="form-control" name="SubCategoryName" id="SubCategoryName" value="@Model.SubCategoryName" readonly />
+            <input type="hidden" name="SubCategoryId" id="SubCategoryId" value="@Model.SubCategoryId" />
+        </div>
+        <div class="col-md-3">
+            <label class="col-form-label"><strong class="text-secondary">Sub Category II Name</strong></label>
+            <input type="text" class="form-control" name="NextSubCategoryName" id="NextSubCategoryName" value="@Model.NextSubCategoryName" readonly />
+            <input type="hidden" name="NextSubCategoryId" id="NextSubCategoryId" value="@Model.NextSubCategoryId" />
+        </div>*@
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="Price"><strong class="text-secondary">Menu Price</strong></label>
                                         <input id="MenuPrice" type="number" class="form-control" name="MenuPrice" min="0" step="any" value="@Model.MenuPrice" />
@@ -86,7 +86,7 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="control-label" for="Percentage"><strong class="text-secondary">Percentage</strong></label>
-                                            <input id="Percentage" type="number" class="form-control" name="Percentage" value="@Model.Percentage" readonly />
+                                            <input id="Percentage" type="number" class="form-control" name="Percentage" value="@Model.Percentage" />
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -98,19 +98,19 @@
                                         <input id="SizeLB" type="text" class="form-control" name="SizeLWH" min="0" value="@Model.SizeLWH" />
                                     </div>
                                     @*<div class="col-md-3">
-                                        <label class="col-form-label" for="MeasurementUnitId"><strong class="text-secondary">Measurement Unit Name</strong></label>
-                                        <input type="hidden" name="MeasurementUnitId" id="MeasurementUnitId" value="@Model.MeasurementUnitId" />
-                                        <input type="text" class="form-control" name="MeasurementUnitName" id="MeasurementUnitName" value="@Model.MeasurementUnitName" readonly />
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="col-form-label" for="PackageId"><strong class="text-secondary">Package Name</strong></label>
-                                        <input type="hidden" name="PackageId" id="PackageId" value="@Model.PackageId" />
-                                        <input type="text" class="form-control" name="PackageName" id="PackageName" value="@Model.PackageName" readonly />
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="col-form-label"><strong class="text-secondary">ASIN / EAN</strong></label>
-                                        <input id="ASIN" type="text" class="form-control" name="ASIN" value="@Model.ASIN" readonly />
-                                    </div>*@
+            <label class="col-form-label" for="MeasurementUnitId"><strong class="text-secondary">Measurement Unit Name</strong></label>
+            <input type="hidden" name="MeasurementUnitId" id="MeasurementUnitId" value="@Model.MeasurementUnitId" />
+            <input type="text" class="form-control" name="MeasurementUnitName" id="MeasurementUnitName" value="@Model.MeasurementUnitName" readonly />
+        </div>
+        <div class="col-md-3">
+            <label class="col-form-label" for="PackageId"><strong class="text-secondary">Package Name</strong></label>
+            <input type="hidden" name="PackageId" id="PackageId" value="@Model.PackageId" />
+            <input type="text" class="form-control" name="PackageName" id="PackageName" value="@Model.PackageName" readonly />
+        </div>
+        <div class="col-md-3">
+            <label class="col-form-label"><strong class="text-secondary">ASIN / EAN</strong></label>
+            <input id="ASIN" type="text" class="form-control" name="ASIN" value="@Model.ASIN" readonly />
+        </div>*@
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="GoogleTaxonomyCode"><strong class="text-secondary">Google Taxonomy Code</strong></label>
                                         <input id="GoogleTaxonomyCode" type="text" class="form-control" name="GoogleTaxonomyCode" value="@Model.GoogleTaxonomyCode" readonly />
@@ -128,6 +128,21 @@
                                             </label>
                                         </div>
                                         <input type="number" class="form-control" name="PackingCharge" id="PackingCharge" value="@Model.PackingCharge" />
+                                    </div>
+                                    <div class="d-flex mt-3">
+                                        <div class="mx-3">
+                                            <input type="checkbox" id="IsPreorder" name="IsPreorder" value="true" @if (Model.IsPreorder) { <text> checked </text> }>
+                                            <label class="font-weight-bold text-secondary col-form-label" for="IsPreorder"> Is PreOrder</label><br>
+                                        </div>
+                                        <div class="ml-3">
+                                            <select name="PreorderHour" id="PreorderHour" class="form-control d-none">
+                                                <option value="0" selected disabled>Select Hours</option>
+                                                @for (int i = 2; i <= 24; i++)
+                                                {
+                                                    <option value="@i" @if (Model.PreorderHour == @i) { <text> selected </text> }>@i hours</option>
+                                                }
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -211,6 +226,28 @@
                 var results = Math.ceil(((menuprice - sellingprice) / menuprice) * 100);
                 $("#Percentage").val(results);
             });
+
+            $('#Percentage').on('change keyup', function () {
+                var percentage = $(this).val();
+                var menuprice = $("#MenuPrice").val();
+                var results = Math.ceil(menuprice - (menuprice * (percentage / 100)));
+                $("#Price").val(results);
+            });
+
+            showHour();
+
+            $('#IsPreorder').change(function () {
+                showHour();
+            });
         });
+         function showHour() {
+            if ($('#IsPreorder').is(":checked")) {
+                $("#PreorderHour").removeClass('d-none');
+                $("#PreorderHour").val(@Model.PreorderHour);
+            } else {
+                $("#PreorderHour").addClass('d-none');
+                $("#PreorderHour").val(0);
+            }
+        }
     </script>
 }

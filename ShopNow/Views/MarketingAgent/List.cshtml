@@ -1,18 +1,19 @@
 ﻿@model IEnumerable<ShopNow.ViewModels.MarketingAgentListViewModel.MarketingAgentList>
 @using GridMvc.Html
 @{
-    ViewBag.Title = "Marketing Agent List";    
+    ViewBag.Title = "Agency List";    
 }
-<title>ShopNow | Marketing Agent List</title>
+<title>ShopNow | @ViewBag.Title</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 <div class="container-fluid">
     <div class="row my-2">
         <div class="col-md-6">
-            <h5 class="" style="letter-spacing:1px">Marketing Agent List</h5>
-        </div>        
+            <h5 class="text-success">@ViewBag.Title</h5>
+        </div>    
         <div class="col-md-6 text-right">
-            <a class="nav-link" href="~/MarketingAgent/Login"><span class="fa fa-sign-in"></span> Marketing Agent Login</a>
+            <a href="/MarketingAgent/AssignFranchise"><span class="fa fa-list-ul"></span> Assign Agency</a>
+            <a href="~/MarketingAgent/AssignedFranchiseList" class="ml-3"><span class="fa fa-list-ul"></span> Agency Assigned List</a>
         </div>
     </div>
 

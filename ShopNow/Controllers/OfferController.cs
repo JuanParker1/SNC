@@ -79,6 +79,8 @@ namespace ShopNow.Controllers
                     var offer = _mapper.Map<OfferCreateViewModel, Offer>(model);
                     offer.DateEncoded = DateTime.Now;
                     offer.DateUpdated = DateTime.Now;
+                    offer.CreatedBy = user.Name;
+                    offer.UpdatedBy = user.Name;
                     offer.Status = 0;
                     db.Offers.Add(offer);
                     db.SaveChanges();
@@ -178,6 +180,7 @@ namespace ShopNow.Controllers
             var offer = db.Offers.FirstOrDefault(i => i.Id == model.Id);
             _mapper.Map(model, offer);
             offer.DateUpdated = DateTime.Now;
+            offer.UpdatedBy = user.Name;
             db.Entry(offer).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
             return RedirectToAction("Edit", new { id = AdminHelpers.ECodeInt(model.Id) });

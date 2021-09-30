@@ -1,15 +1,16 @@
 ﻿@model ShopNow.ViewModels.FranchiseListViewModel
 @{
-    ViewBag.Title = "Assigned Franchise List";
+    ViewBag.Title = "Assigned Agency List";
 }
-<title>ShopNow | Franchise List</title>
+<title>ShopNow | @ViewBag.Title</title>
 <div class="container-fluid">
     <div class="row my-2">
         <div class="col-md-6">
             <h5 class="text-success">@ViewBag.Title</h5>
         </div>
         <div class="col-md-6 text-right">
-            <a href="/MarketingAgent/AssignFranchise"><span class="fa fa-tasks"></span> Assign Franchise</a>
+            <a href="/MarketingAgent/AssignFranchise"><span class="fa fa-tasks"></span> Assign Agency</a>
+            <a href="~/MarketingAgent/List" class="ml-3"><span class="fa fa-list-ul"></span>Agency List</a>
         </div>
     </div>
     <div class="row">
@@ -19,7 +20,7 @@
                     <table class="table table-borderless" id="Franchise">
                         <thead class="bg-light">
                             <tr>
-                                <th class="text-nowrap w-25">Marketing Agent Name</th>
+                                <th class="text-nowrap w-25">Agency Name</th>
                                 <th class="w-25">Shop Name(s)</th>
                                 <th class="w-25">DeliveryBoy Name(s)</th>
                                 <th>Action</th>

@@ -145,6 +145,21 @@
                                 </div>
                                 <input type="number" class="form-control" name="PackingCharge" id="PackingCharge" />
                             </div>
+                            <div class="d-flex mt-3">
+                                <div class="mx-3">
+                                    <input type="checkbox" id="IsPreorder" name="IsPreorder" value="true">
+                                    <label class="font-weight-bold text-secondary col-form-label" for="IsPreorder"> Is PreOrder</label><br>
+                                </div>
+                                <div class="ml-3">
+                                    <select name="PreorderHour" id="PreorderHour" class="form-control d-none">
+                                        <option value="0" selected disabled>Select Hours</option>
+                                        @for (int i = 2; i <= 24; i++)
+                                        {
+                                            <option value="@i">@i hours</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <div class="d-none" id="divAddOns">
                             <hr />
@@ -202,7 +217,7 @@
                             </div>
                             <hr />
                         </div>
-                        <div class="row">
+                        <div class="row mt-2">
                             <div class="col-md-3">
                                 <h5 class="text-success">Dish Image</h5>
                                 <img class="img-container" id="img-ProductImage1" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
@@ -255,6 +270,15 @@
             if (msg != "") {
                 swal("Success!", msg, "success")
             }
+
+            $('#IsPreorder').change(function () {
+                if (this.checked) {
+                    $("#PreorderHour").removeClass('d-none');
+                } else {
+                    $("#PreorderHour").addClass('d-none');
+                    $("#PreorderHour").val(0);
+                }
+            });
 
             $('#Price').on('change keyup', function () {
                 var menuprice = $("#MenuPrice").val();
