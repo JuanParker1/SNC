@@ -402,4 +402,18 @@ namespace ShopNow.ViewModels
         public string AudioPath { get; set; }
         public string Remarks { get; set; }
     }
+
+    public class CustomerPrescriptionListViewModel
+    {
+        public List<ListItem> ListItems { get; set; }
+        public class ListItem
+        {
+            public int Id { get; set; }
+            public string ImagePath { get; set; }
+            public string AudioPath { get; set; }
+            public string Remarks { get; set; }
+            public int Status { get; set; }
+            public DateTime DateEncoded { get; set; }
+        }
+    }
 }
