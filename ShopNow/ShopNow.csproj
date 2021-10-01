@@ -3219,6 +3219,9 @@
     <Content Include="Views\MarketingAgent\FranchiseUpdate.cshtml" />
     <Content Include="Views\Cart\CustomerNotPickupList.cshtml" />
     <Content Include="Views\Product\ApplyDiscount.cshtml" />
+    <Content Include="Views\Payment\CreditList.cshtml" />
+    <Content Include="Views\Payment\Create.cshtml" />
+    <Content Include="Views\Payment\CheckOut.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

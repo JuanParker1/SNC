@@ -1,111 +1,95 @@
 ﻿@model ShopNow.ViewModels.PaymentCreateViewModel
+
 @{
-    ViewBag.Title = "Payment Entry";
+    ViewBag.Title = "Payment";
 }
-
-
-@using (Html.BeginForm("Create", "Payment"))
-{
-    <div class="clearfix">
-        <div class="container">
-            @Html.AntiForgeryToken()
-            <button id="rzp-button1">Pay with RazorPay</button>
+<title>Credits | ShopNowPay</title>
+<div class="container-fluid my-3">
+    <div class="row mb-2">
+        <div class="col-md-6">
+            <h5 class="text-success">Shop Credits</h5>
+        </div>
+        <div class="col-md-6 text-right">
+            <a href="~/Payment/CreditList" target="_self"><span class="fa fa-bars"></span> Shop Credit List</a>
         </div>
     </div>
-}
-@section Scripts
-{
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <script>
-var options = {
-    "key": "rzp_test_xXqwMy4biuT1eB", // Enter the Key ID generated from the Dashboard
-    "amount": "50000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 means 50000 paise or ₹500.
-    "currency": "INR",
-    "name": "Joyra Traders",
-    "description": "Testing Razor Pay",
-    "image": "https://cdn.razorpay.com/logos/DpMG1Kg761hs6t_medium.png",
-    //"order_id": "22222",// Replace this with the order_id created using Orders API (https://razorpay.com/docs/api/orders).
-    "handler": function (response){
-        alert(response.razorpay_payment_id);
-    },
-    "prefill": {
-        "name": "Joyra",
-        "email": "joyra@example.com",
-        "contact": "9999999999"
-    },
-    "notes": {
-        "address": "Joyra Medicals Building, No 44, Court Rd, Nagercoil, Tamil Nadu 629001"
-    },
-    "theme": {
-        "color": "#21DC74"
-    }
-};
-        var rzp1 = new Razorpay(options);
-        window.onload = function () {
-            document.getElementById("rzp-button1").onclick = function (e) {
-                rzp1.open();
-                e.preventDefault();
-            }
-        }
-//document.getElementById('rzp-button1').onclick = function(e){
-//    rzp1.open();
-//    e.preventDefault();
-//}
-    </script>
-}
-@*
-    <div class="clearfix">
-            <div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            @using (Html.BeginForm("Create", "Payment", FormMethod.Post, new { id = "CreateForm", role = "form", enctype = "multipart/form-data" }))
+            {
                 @Html.AntiForgeryToken()
 
-                <div class="formRow clearfix" style="margin:20px 0;">
-                    <b>Select Payment Type*</b>
-                    <div style="margin-top: 8px;">
-                        <label for="radio-2" class="css-label">
-                            @Html.RadioButton("PaymentType", "Pay Using Debit/Credit Card", new { @class = "css-checkbox" })
-                            Pay Using Debit/Credit Card
-                        </label>
-                        <label for="radio-2" class="css-label">
-                            @Html.RadioButton("PaymentType", "Pay Using Net banking", new { @class = "css-checkbox" })
-                            Pay Using Net banking
-                        </label>
-                        <label for="radio-2" class="css-label">
-                            @Html.RadioButton("PaymentType", "Cash On Delivery", new { @class = "css-checkbox" })
-                            Cash On Delivery
-                        </label>
-                        @Html.ValidationMessageFor(m => m.PaymentType)
+                <div class="card">
+                    <div class="card-header">
+                        <label class="col-form-label text-success font-weight-bold mr-5">Credit Type</label>
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="CreditType" value="0">Platform Credit
+                            </label>
+                        </div>
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input" name="CreditType" value="1">Delivery Credit
+                            </label>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row form-group">
+                            <div class="col-md-3">
+                                <label class="col-form-label">Shop Owner</label>
+                                <select type="number" class="form-control" name="ShopId" id="ShopId"></select>
+                                <input type="hidden" name="ShopName" id="ShopName" />
+                            </div>
+                            <div class="col-md-3">
+                                <label class="col-form-label">Amount</label>
+                                <input type="number" class="form-control" name="Amount" />
+                            </div>
+                            <div class="col-md-3">
+                                <label class="col-form-label">GST Amount</label>
+                                <input type="number" class="form-control" name="GSTAmount" />
+                            </div>
+                            <div class="col-md-3">
+                                <label class="col-form-label">RazorPayId</label>
+                                <input type="text" class="form-control" name="ReferenceCode" id="ReferenceCode" />
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-2 text-center">
+                                <input type="submit" class="btn btn-success" value="Add Credits" />
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <b>Delivery Address</b>
-            <div class="formRow clearfix" style="margin-top: 8px;">
-                <label>Address*  @Html.ValidationMessageFor(m => m.AddressLine)</label>
-                @Html.TextBoxFor(m => m.AddressLine, new { @class = "inputComn", @placeholder = "Address" })
-            </div>
-
-                <div class="formRow clearfix">
-                    <div class="half fl">
-                        <label>City*  @Html.ValidationMessageFor(m => m.City)</label>
-                        @Html.TextBoxFor(m => m.City, new { @class = "inputComn", @placeholder = "City" })
-                    </div>
-                    <div class="half fr">
-                        <label>State*  @Html.ValidationMessageFor(m => m.State)</label>
-                        @Html.TextBoxFor(m => m.State, new { @class = "inputComn", @placeholder = "State" })
-                    </div>
-                </div>
-
-                <div class="formRow clearfix">
-                    <div class="half fl">
-                        <label>Country*  @Html.ValidationMessageFor(m => m.Country)</label>
-                        @Html.TextBoxFor(m => m.Country, new { @class = "inputComn", @placeholder = "Country" })
-                    </div>
-                    <div class="half fr">
-                        <label>Zip Code*  @Html.ValidationMessageFor(m => m.ZipCode)</label>
-                        @Html.TextBoxFor(m => m.ZipCode, new { @class = "inputComn", @placeholder = "Zip Code" })
-                    </div>
-                </div>
-                <button type="submit" class="contactBtn signupBtn" value="Proceed to Pay" />
-            </div>
+            }
         </div>
-*@
+    </div>
+</div>
+
+@section Scripts
+{
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script>
+
+        $(document).ready(function () {
+            $('#ShopId').select2({
+                placeholder: "Search Shop",
+                ajax: {
+                    url: "/Payment/GetShopOwnerSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ShopName"]').val(e.params.data.text);
+            });
+        });
+
+    </script>
+}
 

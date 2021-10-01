@@ -453,6 +453,141 @@ namespace ShopNow.Controllers
             return RedirectToAction("RetailerPayment");
         }
 
+        [AccessPolicy(PageCode = "")]
+        public ActionResult Create()
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AccessPolicy(PageCode = "")]
+        public ActionResult Create(PaymentCreditsViewModel model)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var shop = db.Shops.Where(i => i.Id == model.ShopId && i.Status == 0).FirstOrDefault();
+            if (shop != null)
+            {
+                Payment pay = new Payment();
+                pay.Amount = model.Amount;
+                pay.OriginalAmount = model.Amount - model.GSTAmount;
+                pay.GSTAmount = model.GSTAmount;
+                pay.CreditType = model.CreditType;
+                pay.ReferenceCode = model.ReferenceCode;
+                pay.CustomerId = shop.CustomerId;
+                pay.CustomerName = shop.CustomerName;
+                pay.ShopId = shop.Id;
+                pay.ShopName = shop.Name;
+                pay.GSTINNumber = shop.GSTINNumber;
+                pay.PaymentMode = "Online Payment";
+                pay.Key = "Razor";
+                pay.PaymentResult = "success";
+                pay.Currency = "INR";
+                pay.Credits = model.Amount.ToString();
+                pay.PaymentCategoryType = 1;
+                pay.CreatedBy = user.Name;
+                pay.UpdatedBy = user.Name;
+                pay.DateEncoded = DateTime.Now;
+                pay.DateUpdated = DateTime.Now;
+                db.Payments.Add(pay);
+                db.SaveChanges();
+
+                // ShopCredit
+                var sh = db.Shops.FirstOrDefault(i => i.CustomerId == model.CustomerId);
+                var isExist = db.ShopCredits.Any(i => i.CustomerId == sh.CustomerId);
+                if (isExist)
+                {
+                    var sc = db.ShopCredits.FirstOrDefault(i => i.CustomerId == sh.CustomerId);
+                    sc.DateUpdated = DateTime.Now;
+                    if (model.CreditType == 0)
+                        sc.PlatformCredit += pay.OriginalAmount;
+                    else if (model.CreditType == 1)
+                        sc.DeliveryCredit += pay.OriginalAmount;
+                    db.Entry(sc).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+                else
+                {
+                    ShopCredit shopCredit = new ShopCredit
+                    {
+                        CustomerId = sh.CustomerId,
+                        DateUpdated = DateTime.Now,
+                        DeliveryCredit = model.CreditType == 1 ? pay.OriginalAmount : 0,
+                        PlatformCredit = model.CreditType == 0 ? pay.OriginalAmount : 0,
+                    };
+                    db.ShopCredits.Add(shopCredit);
+                    db.SaveChanges();
+                }
+
+                // Voucher
+                model.Id = pay.Id;
+                model.GSTINNumber = shop.GSTINNumber;
+                model.OriginalAmount = pay.OriginalAmount;
+                model.Address = shop.Address;
+                model.Email = shop.Email;
+                model.PhoneNumber = shop.PhoneNumber;
+                model.Amount = pay.Amount;
+                model.ReferenceCode = pay.ReferenceCode;
+                model.DateEncoded = pay.DateEncoded;
+                model.CustomerName = shop.CustomerName;
+                return RedirectToAction("CheckOut", new { id = pay.Id });
+            }
+            return View();
+        }
+
+        public ActionResult CheckOut(int id)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var pay = db.Payments.FirstOrDefault(i => i.Id == id);
+            var order = db.Orders.FirstOrDefault(i=> i.OrderNumber == pay.OrderNumber);
+            var model = new PaymentCreditsViewModel();
+            if (pay != null)
+            {
+                var shop = db.Shops.FirstOrDefault(i => i.Id == pay.ShopId);
+                model.GSTINNumber = pay.GSTINNumber;
+                model.OriginalAmount = pay.OriginalAmount;
+                model.Address = order.DeliveryAddress;
+                model.Email = shop.Email;
+                model.PhoneNumber = shop.PhoneNumber;
+                model.Amount = pay.Amount;
+                model.ReferenceCode = pay.ReferenceCode;
+                model.ShopName = pay.ShopName;
+                model.DateEncoded = pay.DateEncoded;
+            }
+            return View(model);
+        }
+
+        public ActionResult CreditList()
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var model = new PaymentCreditsViewModel();
+            model.creditLists = db.Payments.Where(i => (i.CreditType == 0 || i.CreditType == 1) && i.Amount != -20).Select(i => new PaymentCreditsViewModel.CreditList
+            {
+                Id = i.Id,
+                ShopName = i.ShopName,
+                CustomerName = i.CustomerName,
+                Amount = i.Amount,
+                CreditType = i.CreditType,
+                ReferenceCode = i.ReferenceCode,
+                DateEncoded = i.DateEncoded
+            }).OrderByDescending(i => i.DateEncoded).ToList();
+            return View(model.creditLists);
+        }
+
+        public async Task<JsonResult> GetShopOwnerSelect2(string q = "")
+        {
+            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)
