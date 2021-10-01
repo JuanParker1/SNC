@@ -42,14 +42,14 @@ namespace ShopNow.Controllers
             _mapper = _mapperConfiguration.CreateMapper();
         }
 
-        public ActionResult Register()
+        public ActionResult Create()
         {
             return View();
         }
 
         [AllowAnonymous]
         [HttpPost]
-        public ActionResult Register(AgencyCreateViewModel model)
+        public ActionResult Create(AgencyCreateViewModel model)
         {
 
             var marketingAgent = _mapper.Map<AgencyCreateViewModel, MarketingAgent>(model);
@@ -62,7 +62,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("Login", "MarketingAgent");
         }
 
-        public ActionResult Updation()
+        public ActionResult Edit()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -72,7 +72,7 @@ namespace ShopNow.Controllers
         }
 
         [HttpPost]
-        public ActionResult Updation(MarketingAgentUpdationViewModel model)
+        public ActionResult Edit(AgencyEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["MARKETINGUSER"]);
             ViewBag.Name = user.Name;
@@ -153,10 +153,10 @@ namespace ShopNow.Controllers
 
         public ActionResult List()
         {
-            var model = new MarketingAgentListViewModel();
+            var model = new AgencyListViewModel();
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            model.List = db.MarketingAgents.Where(i => i.Status == 0).Select(i => new MarketingAgentListViewModel.MarketingAgentList
+            model.List = db.MarketingAgents.Where(i => i.Status == 0).Select(i => new AgencyListViewModel.AgencyList
             {
                 Id = i.Id,
                 Email = i.Email,
@@ -174,21 +174,21 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var model = new FranchiseListViewModel();
+            var model = new AgencyAssignListViewModel();
             model.Lists = db.MarketingAgents.Where(i => i.Status == 0).Join(db.Shops.Where(i => i.Status == 0), m => m.Id, s => s.MarketingAgentId, (m, s) => new { m, s })
                 .Join(db.DeliveryBoys.Where(i => i.Status == 0), p => p.m.Id, d => d.MarketingAgentId, (p, d) => new { p, d })
                 .GroupBy(i => i.p.m.Id)
                 .AsEnumerable()
-                .Select(i => new FranchiseListViewModel.FranchiseList
+                .Select(i => new AgencyAssignListViewModel.AgencyList
                 {
                     MarketingAgentId = i.FirstOrDefault().p.m.Id,
                     MarketingAgentName = i.FirstOrDefault().p.m.Name,
-                    ShopListItems = i.Where(a => a.p.s.Status == 0).Select(a => new FranchiseListViewModel.FranchiseList.ShopListItem
+                    ShopListItems = i.Where(a => a.p.s.Status == 0).Select(a => new AgencyAssignListViewModel.AgencyList.ShopListItem
                     {
                         ShopId = a.p.s.Id,
                         ShopName = a.p.s.Name,
                     }).ToList(),
-                    DeliveryBoyListItems = i.Where(a => a.d.Status == 0).Select(a => new FranchiseListViewModel.FranchiseList.DeliveryBoyListItem
+                    DeliveryBoyListItems = i.Where(a => a.d.Status == 0).Select(a => new AgencyAssignListViewModel.AgencyList.DeliveryBoyListItem
                     {
                         DeliveryBoyId = a.d.Id,
                         DeliveryBoyName = a.d.Name
@@ -207,7 +207,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [AccessPolicy(PageCode = "")]
-        public ActionResult AssignFranchise(FranchiseAssignViewModel model)
+        public ActionResult AssignFranchise(AgencyAssignViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);          
             if (model.ShopIds != null)
@@ -240,7 +240,7 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var model = new FranchiseAssignUpdateViewModel();
+            var model = new AgencyAssignUpdateViewModel();
             model.ShopIds = string.Join(",",db.Shops.Where(i => i.MarketingAgentId == id && i.Status == 0).Select(i => i.Id).ToList());
             model.DeliveryBoyIds = string.Join(",",db.DeliveryBoys.Where(i => i.MarketingAgentId == id && i.Status == 0).Select(i => i.Id).ToList());
 
@@ -250,41 +250,11 @@ namespace ShopNow.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AccessPolicy(PageCode = "")]
-        public ActionResult FranchiseUpdate(FranchiseAssignUpdateViewModel model)
+        public ActionResult FranchiseUpdate(AgencyAssignUpdateViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             return RedirectToAction("AssignedFranchiseList");
         }
-
-        [AccessPolicy(PageCode = "")]
-        public ActionResult ShopDelete(string id)
-        {
-            var dId = AdminHelpers.DCodeInt(id);
-            var marketAgent = db.MarketingAgents.FirstOrDefault(i => i.Id == dId);
-            if (marketAgent != null)
-            {
-                marketAgent.Status = 2;
-                db.Entry(marketAgent).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-            }
-            return RedirectToAction("AssignedFranchiseList");
-        }
-
-        [AccessPolicy(PageCode = "")]
-        public ActionResult DeliveryBoyDelete(string id)
-        {
-            var dId = AdminHelpers.DCodeInt(id);
-            var marketingAgent = db.MarketingAgents.FirstOrDefault(i => i.Id == dId);
-            if (marketingAgent != null)
-            {
-                marketingAgent.Status = 2;
-                db.Entry(marketingAgent).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-            }
-            return RedirectToAction("AssignedFranchiseList");
-        }
-
-        #endregion
 
         public JsonResult GetAssignMarketingAgent(int marketingagentId)
         {
