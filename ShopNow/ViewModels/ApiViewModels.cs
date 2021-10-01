@@ -40,6 +40,7 @@ namespace ShopNow.ViewModels
             public string WaitingRemark { get; set; }
             public int Status { get; set; }
             public DateTime DateEncoded { get; set; }
+            public DateTime? OrderReadyTime { get; set; }
             public double? RefundAmount { get; set; }
             public string RefundRemark { get; set; }
             public string PaymentMode { get; set; }
