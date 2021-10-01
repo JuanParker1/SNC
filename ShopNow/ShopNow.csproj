@@ -484,6 +484,9 @@
     <Compile Include="Models\CustomerPrescription.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CustomerPrescriptionItem.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CustomerReview.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
@@ -663,6 +666,7 @@
     <Compile Include="ViewModels\BillViewModel.cs" />
     <Compile Include="ViewModels\CartViewModel.cs" />
     <Compile Include="ViewModels\CrustViewModels.cs" />
+    <Compile Include="ViewModels\CustomerPrescriptionViewModels.cs" />
     <Compile Include="ViewModels\CustomerReviewViewModel .cs" />
     <Compile Include="ViewModels\DashboardViewModels.cs" />
     <Compile Include="ViewModels\DeliveryBoysList.cs" />
@@ -3026,7 +3030,6 @@
     <Content Include="Views\ProductSpecification\Index.cshtml" />
     <Content Include="Views\AddOnCategory\Index.cshtml" />
     <Content Include="Views\MarketingAgent\Register.cshtml" />
-    <Content Include="Views\MarketingAgent\Login.cshtml" />
     <Content Include="Views\Brand\Index.cshtml" />
     <Content Include="Views\Category\Index.cshtml" />
     <Content Include="Views\Shop\Details.cshtml" />
@@ -3037,11 +3040,8 @@
     <Content Include="Views\ProductSpecification\Create.cshtml" />
     <Content Include="Views\ProductSpecification\Edit.cshtml" />
     <Content Include="Views\ProductSpecification\List.cshtml" />
-    <Content Include="Views\MarketingAgent\Dashboard.cshtml" />
     <Content Include="Views\MarketingAgent\List.cshtml" />
     <Content Include="Views\MarketingAgent\Updation.cshtml" />
-    <Content Include="Views\MarketingAgent\_Layout.cshtml" />
-    <Content Include="Views\MarketingAgent\_Menu.cshtml" />
     <Content Include="Views\BrandOwner\Dashboard.cshtml" />
     <Content Include="Views\BrandOwner\List.cshtml" />
     <Content Include="Views\BrandOwner\Updation.cshtml" />
@@ -3110,13 +3110,8 @@
     <Content Include="Views\DeliveryBoy\FranchiseUpdate.cshtml" />
     <Content Include="Views\Shop\AssignedFranchiseList.cshtml" />
     <Content Include="Views\Shop\FranchiseUpdate.cshtml" />
-    <Content Include="Views\MarketingAgent\ShopList.cshtml" />
     <Content Include="Views\MasterProduct\PendingList.cshtml" />
     <Content Include="Views\MasterProduct\MappedList.cshtml" />
-    <Content Include="Views\MarketingAgent\DeliveryBoyList.cshtml" />
-    <Content Include="Views\MarketingAgent\DeliveryBoyCreate.cshtml" />
-    <Content Include="Views\MarketingAgent\DeliveryBoyEdit.cshtml" />
-    <Content Include="Views\MarketingAgent\DeliveryBoyDetails.cshtml" />
     <Content Include="Views\Cart\Pending.cshtml" />
     <Content Include="Views\Cart\DeliveryAgentAssigned.cshtml" />
     <Content Include="Views\Cart\OrderPrepared.cshtml" />
@@ -3221,6 +3216,9 @@
     <Content Include="Views\Cart\CustomerNotPickupList.cshtml" />
     <Content Include="Views\Product\ApplyDiscount.cshtml" />
     <Content Include="Views\CustomerPrescription\List.cshtml" />
+    <Content Include="Views\Payment\CheckOut.cshtml" />
+    <Content Include="Views\Payment\Create.cshtml" />
+    <Content Include="Views\Payment\CreditList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

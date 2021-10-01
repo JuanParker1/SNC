@@ -293,6 +293,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ShopId" Type="int" Nullable="false" />
           <Property Name="CustomerId" Type="int" Nullable="false" />
           <Property Name="CustomerName" Type="nvarchar" MaxLength="100" />
           <Property Name="CustomerPhoneNumber" Type="nvarchar" MaxLength="50" />
@@ -301,6 +302,18 @@
           <Property Name="Remarks" Type="nvarchar(max)" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CustomerPrescriptionItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerPrescriptionId" Type="int" Nullable="false" />
+          <Property Name="ProductId" Type="bigint" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DateEncoded" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="150" />
         </EntityType>
         <EntityType Name="CustomerReview">
           <Key>
@@ -1389,18 +1402,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_DeliveryBoys_Customers">
-          <End Role="Customers" Type="Self.Customers" Multiplicity="1" />
-          <End Role="DeliveryBoys" Type="Self.DeliveryBoys" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Customers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="DeliveryBoys">
-              <PropertyRef Name="CustomerId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_DeliveryBoyShops_DeliveryBoyShops">
           <End Role="DeliveryBoyShops" Type="Self.DeliveryBoyShops" Multiplicity="1" />
           <End Role="DeliveryBoyShops1" Type="Self.DeliveryBoyShops" Multiplicity="0..1" />
@@ -1446,18 +1447,6 @@
             </Principal>
             <Dependent Role="OrderItems">
               <PropertyRef Name="OrderId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Products_ProductType">
-          <End Role="ProductType" Type="Self.ProductType" Multiplicity="1" />
-          <End Role="Products" Type="Self.Products" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ProductType">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Products">
-              <PropertyRef Name="ProductTypeId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1553,6 +1542,7 @@
           <EntitySet Name="CustomerAchievements" EntityType="Self.CustomerAchievements" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerAddresses" EntityType="Self.CustomerAddresses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerPrescription" EntityType="Self.CustomerPrescription" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustomerPrescriptionItem" EntityType="Self.CustomerPrescriptionItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerReview" EntityType="Self.CustomerReview" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerSearchData" EntityType="Self.CustomerSearchData" Schema="dbo" store:Type="Tables" />
@@ -1617,10 +1607,6 @@
             <End Role="Shops" EntitySet="Shops" />
             <End Role="CustomerReview" EntitySet="CustomerReview" />
           </AssociationSet>
-          <AssociationSet Name="FK_DeliveryBoys_Customers" Association="Self.FK_DeliveryBoys_Customers">
-            <End Role="Customers" EntitySet="Customers" />
-            <End Role="DeliveryBoys" EntitySet="DeliveryBoys" />
-          </AssociationSet>
           <AssociationSet Name="FK_DeliveryBoyShops_DeliveryBoyShops" Association="Self.FK_DeliveryBoyShops_DeliveryBoyShops">
             <End Role="DeliveryBoyShops" EntitySet="DeliveryBoyShops" />
             <End Role="DeliveryBoyShops1" EntitySet="DeliveryBoyShops" />
@@ -1636,10 +1622,6 @@
           <AssociationSet Name="FK_OrderItems_Orders" Association="Self.FK_OrderItems_Orders">
             <End Role="Orders" EntitySet="Orders" />
             <End Role="OrderItems" EntitySet="OrderItems" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Products_ProductType" Association="Self.FK_Products_ProductType">
-            <End Role="ProductType" EntitySet="ProductType" />
-            <End Role="Products" EntitySet="Products" />
           </AssociationSet>
           <AssociationSet Name="FK_SubCategories_Categories" Association="Self.FK_SubCategories_Categories">
             <End Role="Categories" EntitySet="Categories" />
@@ -1915,46 +1897,6 @@
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="CustomerAddresses" Relationship="Self.FK_CustomerAddresses_Customers" FromRole="Customers" ToRole="CustomerAddresses" />
           <NavigationProperty Name="CustomerReviews" Relationship="Self.FK_CustomerReview_Customers" FromRole="Customers" ToRole="CustomerReview" />
-          <NavigationProperty Name="DeliveryBoys" Relationship="Self.FK_DeliveryBoys_Customers" FromRole="Customers" ToRole="DeliveryBoys" />
-        </EntityType>
-        <EntityType Name="DeliveryBoy">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CustomerId" Type="Int32" Nullable="false" />
-          <Property Name="CustomerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CountryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="StateName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DistrictName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="StreetName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PinCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Latitude" Type="Double" Nullable="false" />
-          <Property Name="Longitude" Type="Double" Nullable="false" />
-          <Property Name="CVPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DrivingLicenseImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="BankPassbookPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="LicenseNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="BankName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="AccountName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="AccountNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="IFSCCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="MarketingAgentId" Type="Int32" Nullable="false" />
-          <Property Name="MarketingAgentName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="OnWork" Type="Int32" Nullable="false" />
-          <Property Name="isAssign" Type="Int32" Nullable="false" />
-          <Property Name="Active" Type="Int32" Nullable="false" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Customer" Relationship="Self.FK_DeliveryBoys_Customers" FromRole="DeliveryBoys" ToRole="Customers" />
         </EntityType>
         <EntityType Name="DeliveryBoyShop">
           <Key>
@@ -2386,7 +2328,6 @@
           <Property Name="Name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="NextSubCategories" Relationship="Self.FK_NextSubCategories_ProductType" FromRole="ProductType" ToRole="NextSubCategories" />
           <NavigationProperty Name="SubCategories" Relationship="Self.FK_SubCategories_ProductType" FromRole="ProductType" ToRole="SubCategories" />
-          <NavigationProperty Name="Products" Relationship="sncModel.FK_Products_ProductType" FromRole="ProductType" ToRole="Product" />
         </EntityType>
         <EntityType Name="ReferralSetting">
           <Key>
@@ -2607,18 +2548,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_DeliveryBoys_Customers">
-          <End Role="Customers" Type="Self.Customer" Multiplicity="1" />
-          <End Role="DeliveryBoys" Type="Self.DeliveryBoy" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Customers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="DeliveryBoys">
-              <PropertyRef Name="CustomerId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_DeliveryBoyShops_DeliveryBoyShops">
           <End Role="DeliveryBoyShops" Type="Self.DeliveryBoyShop" Multiplicity="1" />
           <End Role="DeliveryBoyShops1" Type="Self.DeliveryBoyShop" Multiplicity="0..1" />
@@ -2681,7 +2610,6 @@
           <EntitySet Name="CustomerAddresses" EntityType="Self.CustomerAddress" />
           <EntitySet Name="CustomerReviews" EntityType="Self.CustomerReview" />
           <EntitySet Name="Customers" EntityType="Self.Customer" />
-          <EntitySet Name="DeliveryBoys" EntityType="Self.DeliveryBoy" />
           <EntitySet Name="DeliveryBoyShops" EntityType="Self.DeliveryBoyShop" />
           <EntitySet Name="DiscountCategories" EntityType="Self.DiscountCategory" />
           <EntitySet Name="DiscountCategories1" EntityType="Self.DiscountCategories1" />
@@ -2730,10 +2658,6 @@
           <AssociationSet Name="FK_CustomerReview_Customers" Association="Self.FK_CustomerReview_Customers">
             <End Role="Customers" EntitySet="Customers" />
             <End Role="CustomerReview" EntitySet="CustomerReviews" />
-          </AssociationSet>
-          <AssociationSet Name="FK_DeliveryBoys_Customers" Association="Self.FK_DeliveryBoys_Customers">
-            <End Role="Customers" EntitySet="Customers" />
-            <End Role="DeliveryBoys" EntitySet="DeliveryBoys" />
           </AssociationSet>
           <AssociationSet Name="FK_DeliveryBoyShops_DeliveryBoyShops" Association="Self.FK_DeliveryBoyShops_DeliveryBoyShops">
             <End Role="DeliveryBoyShops" EntitySet="DeliveryBoyShops" />
@@ -2792,11 +2716,6 @@
             <End Role="Shop" EntitySet="Shops" />
             <End Role="CustomerReview" EntitySet="CustomerReviews" />
           </AssociationSet>
-          <EntitySet Name="Products" EntityType="sncModel.Product" />
-          <AssociationSet Name="FK_Products_ProductType" Association="sncModel.FK_Products_ProductType">
-            <End Role="ProductType" EntitySet="ProductTypes" />
-            <End Role="Product" EntitySet="Products" />
-          </AssociationSet>
           <FunctionImport Name="GetProductList" ReturnType="Collection(sncModel.GetProductList_Result)">
             <Parameter Name="Longitude" Mode="In" Type="Double" />
             <Parameter Name="Latitude" Mode="In" Type="Double" />
@@ -2817,7 +2736,10 @@
             <End Role="OrderItem" EntitySet="OrderItems" />
           </AssociationSet>
           <EntitySet Name="Offers" EntityType="sncModel.Offer" />
+          <EntitySet Name="CustomerPrescriptionItems" EntityType="sncModel.CustomerPrescriptionItem" />
           <EntitySet Name="CustomerPrescriptions" EntityType="sncModel.CustomerPrescription" />
+          <EntitySet Name="DeliveryBoys" EntityType="sncModel.DeliveryBoy" />
+          <EntitySet Name="Products" EntityType="sncModel.Product" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3151,72 +3073,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Product">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="MasterProductId" Type="Int64" Nullable="false" />
-          <Property Name="CategoryId" Type="Int32" Nullable="false" />
-          <Property Name="ShopId" Type="Int32" Nullable="false" />
-          <Property Name="ShopName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ShopCategoryId" Type="Int32" Nullable="false" />
-          <Property Name="ShopCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="GTIN" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="UPC" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="GTIN14" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="EAN" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ISBN" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Price" Type="Double" Nullable="false" />
-          <Property Name="Qty" Type="Int32" Nullable="false" />
-          <Property Name="ProductTypeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ProductTypeId" Type="Int32" Nullable="false" />
-          <Property Name="MinSelectionLimit" Type="Int32" Nullable="false" />
-          <Property Name="MaxSelectionLimit" Type="Int32" Nullable="false" />
-          <Property Name="Customisation" Type="Boolean" Nullable="false" />
-          <Property Name="MenuPrice" Type="Double" Nullable="false" />
-          <Property Name="IBarU" Type="Int32" Nullable="false" />
-          <Property Name="ItemId" Type="Int32" Nullable="false" />
-          <Property Name="Percentage" Type="Double" Nullable="false" />
-          <Property Name="DiscountCategoryId" Type="Int32" Nullable="false" />
-          <Property Name="DiscountCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DataEntry" Type="Int32" Nullable="false" />
-          <Property Name="AppliesOnline" Type="Int32" Nullable="false" />
-          <Property Name="IsOnline" Type="Boolean" Nullable="false" />
-          <Property Name="HoldOnStok" Type="Int32" Nullable="false" />
-          <Property Name="PackingType" Type="Int32" Nullable="false" />
-          <Property Name="TaxPercentage" Type="Double" Nullable="false" />
-          <Property Name="SpecialCostOfDelivery" Type="Double" Nullable="false" />
-          <Property Name="OutletId" Type="Int32" Nullable="false" />
-          <Property Name="ItemTimeStamp" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="LoyaltyPoints" Type="Double" Nullable="false" />
-          <Property Name="PackingCharge" Type="Double" Nullable="false" />
-          <Property Name="BrandOwnerMiddlePercentage" Type="Int32" />
-          <Property Name="ShopOwnerPrice" Type="Double" />
-          <Property Name="HasSchedule" Type="Boolean" />
-          <Property Name="NextOnTime" Type="Time" Precision="7" />
-          <Property Name="IsPreorder" Type="Boolean" Nullable="false" />
-          <Property Name="PreorderHour" Type="Int32" Nullable="false" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="ProductType" Relationship="sncModel.FK_Products_ProductType" FromRole="Product" ToRole="ProductType" />
-        </EntityType>
-        <Association Name="FK_Products_ProductType">
-          <End Type="sncModel.ProductType" Role="ProductType" Multiplicity="1" />
-          <End Type="sncModel.Product" Role="Product" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ProductType">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Product">
-              <PropertyRef Name="ProductTypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <ComplexType Name="GetProductList_Result">
           <Property Type="Int64" Name="ProductId" Nullable="false" />
           <Property Type="String" Name="ProductName" Nullable="true" />
@@ -3372,11 +3228,24 @@
           <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="CustomerPrescriptionItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerPrescriptionId" Type="Int32" Nullable="false" />
+          <Property Name="ProductId" Type="Int64" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
         <EntityType Name="CustomerPrescription">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShopId" Type="Int32" Nullable="false" />
           <Property Name="CustomerId" Type="Int32" Nullable="false" />
           <Property Name="CustomerName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="CustomerPhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -3385,6 +3254,97 @@
           <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="DeliveryBoy">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="CustomerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CountryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="StateName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DistrictName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="StreetName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PinCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Latitude" Type="Double" Nullable="false" />
+          <Property Name="Longitude" Type="Double" Nullable="false" />
+          <Property Name="CVPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DrivingLicenseImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BankPassbookPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LicenseNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BankName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AccountName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AccountNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IFSCCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MarketingAgentId" Type="Int32" Nullable="false" />
+          <Property Name="MarketingAgentName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OnWork" Type="Int32" Nullable="false" />
+          <Property Name="isAssign" Type="Int32" Nullable="false" />
+          <Property Name="Active" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MasterProductId" Type="Int64" Nullable="false" />
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <Property Name="ShopId" Type="Int32" Nullable="false" />
+          <Property Name="ShopName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ShopCategoryId" Type="Int32" Nullable="false" />
+          <Property Name="ShopCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="GTIN" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UPC" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="GTIN14" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="EAN" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ISBN" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="Qty" Type="Int32" Nullable="false" />
+          <Property Name="ProductTypeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ProductTypeId" Type="Int32" Nullable="false" />
+          <Property Name="MinSelectionLimit" Type="Int32" Nullable="false" />
+          <Property Name="MaxSelectionLimit" Type="Int32" Nullable="false" />
+          <Property Name="Customisation" Type="Boolean" Nullable="false" />
+          <Property Name="MenuPrice" Type="Double" Nullable="false" />
+          <Property Name="IBarU" Type="Int32" Nullable="false" />
+          <Property Name="ItemId" Type="Int32" Nullable="false" />
+          <Property Name="Percentage" Type="Double" Nullable="false" />
+          <Property Name="DiscountCategoryId" Type="Int32" Nullable="false" />
+          <Property Name="DiscountCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DataEntry" Type="Int32" Nullable="false" />
+          <Property Name="AppliesOnline" Type="Int32" Nullable="false" />
+          <Property Name="IsOnline" Type="Boolean" Nullable="false" />
+          <Property Name="HoldOnStok" Type="Int32" Nullable="false" />
+          <Property Name="PackingType" Type="Int32" Nullable="false" />
+          <Property Name="TaxPercentage" Type="Double" Nullable="false" />
+          <Property Name="SpecialCostOfDelivery" Type="Double" Nullable="false" />
+          <Property Name="OutletId" Type="Int32" Nullable="false" />
+          <Property Name="ItemTimeStamp" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LoyaltyPoints" Type="Double" Nullable="false" />
+          <Property Name="PackingCharge" Type="Double" Nullable="false" />
+          <Property Name="BrandOwnerMiddlePercentage" Type="Int32" />
+          <Property Name="ShopOwnerPrice" Type="Double" />
+          <Property Name="HasSchedule" Type="Boolean" />
+          <Property Name="NextOnTime" Type="Time" Precision="7" />
+          <Property Name="IsPreorder" Type="Boolean" Nullable="false" />
+          <Property Name="PreorderHour" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -3652,45 +3612,6 @@
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="DeliveryBoys">
-            <EntityTypeMapping TypeName="sncModel.DeliveryBoy">
-              <MappingFragment StoreEntitySet="DeliveryBoys">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
-                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
-                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
-                <ScalarProperty Name="StateName" ColumnName="StateName" />
-                <ScalarProperty Name="DistrictName" ColumnName="DistrictName" />
-                <ScalarProperty Name="StreetName" ColumnName="StreetName" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="PinCode" ColumnName="PinCode" />
-                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-                <ScalarProperty Name="CVPath" ColumnName="CVPath" />
-                <ScalarProperty Name="DrivingLicenseImagePath" ColumnName="DrivingLicenseImagePath" />
-                <ScalarProperty Name="BankPassbookPath" ColumnName="BankPassbookPath" />
-                <ScalarProperty Name="LicenseNumber" ColumnName="LicenseNumber" />
-                <ScalarProperty Name="BankName" ColumnName="BankName" />
-                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
-                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
-                <ScalarProperty Name="IFSCCode" ColumnName="IFSCCode" />
-                <ScalarProperty Name="MarketingAgentId" ColumnName="MarketingAgentId" />
-                <ScalarProperty Name="MarketingAgentName" ColumnName="MarketingAgentName" />
-                <ScalarProperty Name="OnWork" ColumnName="OnWork" />
-                <ScalarProperty Name="isAssign" ColumnName="isAssign" />
-                <ScalarProperty Name="Active" ColumnName="Active" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
                 <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
                 <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
               </MappingFragment>
@@ -4672,60 +4593,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Products">
-            <EntityTypeMapping TypeName="sncModel.Product">
-              <MappingFragment StoreEntitySet="Products">
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="PreorderHour" ColumnName="PreorderHour" />
-                <ScalarProperty Name="IsPreorder" ColumnName="IsPreorder" />
-                <ScalarProperty Name="NextOnTime" ColumnName="NextOnTime" />
-                <ScalarProperty Name="HasSchedule" ColumnName="HasSchedule" />
-                <ScalarProperty Name="ShopOwnerPrice" ColumnName="ShopOwnerPrice" />
-                <ScalarProperty Name="BrandOwnerMiddlePercentage" ColumnName="BrandOwnerMiddlePercentage" />
-                <ScalarProperty Name="PackingCharge" ColumnName="PackingCharge" />
-                <ScalarProperty Name="LoyaltyPoints" ColumnName="LoyaltyPoints" />
-                <ScalarProperty Name="ItemTimeStamp" ColumnName="ItemTimeStamp" />
-                <ScalarProperty Name="OutletId" ColumnName="OutletId" />
-                <ScalarProperty Name="SpecialCostOfDelivery" ColumnName="SpecialCostOfDelivery" />
-                <ScalarProperty Name="TaxPercentage" ColumnName="TaxPercentage" />
-                <ScalarProperty Name="PackingType" ColumnName="PackingType" />
-                <ScalarProperty Name="HoldOnStok" ColumnName="HoldOnStok" />
-                <ScalarProperty Name="IsOnline" ColumnName="IsOnline" />
-                <ScalarProperty Name="AppliesOnline" ColumnName="AppliesOnline" />
-                <ScalarProperty Name="DataEntry" ColumnName="DataEntry" />
-                <ScalarProperty Name="DiscountCategoryName" ColumnName="DiscountCategoryName" />
-                <ScalarProperty Name="DiscountCategoryId" ColumnName="DiscountCategoryId" />
-                <ScalarProperty Name="Percentage" ColumnName="Percentage" />
-                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
-                <ScalarProperty Name="IBarU" ColumnName="IBarU" />
-                <ScalarProperty Name="MenuPrice" ColumnName="MenuPrice" />
-                <ScalarProperty Name="Customisation" ColumnName="Customisation" />
-                <ScalarProperty Name="MaxSelectionLimit" ColumnName="MaxSelectionLimit" />
-                <ScalarProperty Name="MinSelectionLimit" ColumnName="MinSelectionLimit" />
-                <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
-                <ScalarProperty Name="ProductTypeName" ColumnName="ProductTypeName" />
-                <ScalarProperty Name="Qty" ColumnName="Qty" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="ISBN" ColumnName="ISBN" />
-                <ScalarProperty Name="EAN" ColumnName="EAN" />
-                <ScalarProperty Name="GTIN14" ColumnName="GTIN14" />
-                <ScalarProperty Name="UPC" ColumnName="UPC" />
-                <ScalarProperty Name="GTIN" ColumnName="GTIN" />
-                <ScalarProperty Name="ShopCategoryName" ColumnName="ShopCategoryName" />
-                <ScalarProperty Name="ShopCategoryId" ColumnName="ShopCategoryId" />
-                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
-                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
-                <ScalarProperty Name="MasterProductId" ColumnName="MasterProductId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="GetProductList" FunctionName="sncModel.Store.GetProductList">
             <ResultMapping>
               <ComplexTypeMapping TypeName="sncModel.GetProductList_Result">
@@ -4878,6 +4745,19 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="CustomerPrescriptionItems">
+            <EntityTypeMapping TypeName="sncModel.CustomerPrescriptionItem">
+              <MappingFragment StoreEntitySet="CustomerPrescriptionItem">
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="CustomerPrescriptionId" ColumnName="CustomerPrescriptionId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="CustomerPrescriptions">
             <EntityTypeMapping TypeName="sncModel.CustomerPrescription">
               <MappingFragment StoreEntitySet="CustomerPrescription">
@@ -4889,6 +4769,100 @@
                 <ScalarProperty Name="CustomerPhoneNumber" ColumnName="CustomerPhoneNumber" />
                 <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DeliveryBoys">
+            <EntityTypeMapping TypeName="sncModel.DeliveryBoy">
+              <MappingFragment StoreEntitySet="DeliveryBoys">
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="isAssign" ColumnName="isAssign" />
+                <ScalarProperty Name="OnWork" ColumnName="OnWork" />
+                <ScalarProperty Name="MarketingAgentName" ColumnName="MarketingAgentName" />
+                <ScalarProperty Name="MarketingAgentId" ColumnName="MarketingAgentId" />
+                <ScalarProperty Name="IFSCCode" ColumnName="IFSCCode" />
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+                <ScalarProperty Name="BankName" ColumnName="BankName" />
+                <ScalarProperty Name="LicenseNumber" ColumnName="LicenseNumber" />
+                <ScalarProperty Name="BankPassbookPath" ColumnName="BankPassbookPath" />
+                <ScalarProperty Name="DrivingLicenseImagePath" ColumnName="DrivingLicenseImagePath" />
+                <ScalarProperty Name="CVPath" ColumnName="CVPath" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="PinCode" ColumnName="PinCode" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="StreetName" ColumnName="StreetName" />
+                <ScalarProperty Name="DistrictName" ColumnName="DistrictName" />
+                <ScalarProperty Name="StateName" ColumnName="StateName" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="sncModel.Product">
+              <MappingFragment StoreEntitySet="Products">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="PreorderHour" ColumnName="PreorderHour" />
+                <ScalarProperty Name="IsPreorder" ColumnName="IsPreorder" />
+                <ScalarProperty Name="NextOnTime" ColumnName="NextOnTime" />
+                <ScalarProperty Name="HasSchedule" ColumnName="HasSchedule" />
+                <ScalarProperty Name="ShopOwnerPrice" ColumnName="ShopOwnerPrice" />
+                <ScalarProperty Name="BrandOwnerMiddlePercentage" ColumnName="BrandOwnerMiddlePercentage" />
+                <ScalarProperty Name="PackingCharge" ColumnName="PackingCharge" />
+                <ScalarProperty Name="LoyaltyPoints" ColumnName="LoyaltyPoints" />
+                <ScalarProperty Name="ItemTimeStamp" ColumnName="ItemTimeStamp" />
+                <ScalarProperty Name="OutletId" ColumnName="OutletId" />
+                <ScalarProperty Name="SpecialCostOfDelivery" ColumnName="SpecialCostOfDelivery" />
+                <ScalarProperty Name="TaxPercentage" ColumnName="TaxPercentage" />
+                <ScalarProperty Name="PackingType" ColumnName="PackingType" />
+                <ScalarProperty Name="HoldOnStok" ColumnName="HoldOnStok" />
+                <ScalarProperty Name="IsOnline" ColumnName="IsOnline" />
+                <ScalarProperty Name="AppliesOnline" ColumnName="AppliesOnline" />
+                <ScalarProperty Name="DataEntry" ColumnName="DataEntry" />
+                <ScalarProperty Name="DiscountCategoryName" ColumnName="DiscountCategoryName" />
+                <ScalarProperty Name="DiscountCategoryId" ColumnName="DiscountCategoryId" />
+                <ScalarProperty Name="Percentage" ColumnName="Percentage" />
+                <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+                <ScalarProperty Name="IBarU" ColumnName="IBarU" />
+                <ScalarProperty Name="MenuPrice" ColumnName="MenuPrice" />
+                <ScalarProperty Name="Customisation" ColumnName="Customisation" />
+                <ScalarProperty Name="MaxSelectionLimit" ColumnName="MaxSelectionLimit" />
+                <ScalarProperty Name="MinSelectionLimit" ColumnName="MinSelectionLimit" />
+                <ScalarProperty Name="ProductTypeId" ColumnName="ProductTypeId" />
+                <ScalarProperty Name="ProductTypeName" ColumnName="ProductTypeName" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="ISBN" ColumnName="ISBN" />
+                <ScalarProperty Name="EAN" ColumnName="EAN" />
+                <ScalarProperty Name="GTIN14" ColumnName="GTIN14" />
+                <ScalarProperty Name="UPC" ColumnName="UPC" />
+                <ScalarProperty Name="GTIN" ColumnName="GTIN" />
+                <ScalarProperty Name="ShopCategoryName" ColumnName="ShopCategoryName" />
+                <ScalarProperty Name="ShopCategoryId" ColumnName="ShopCategoryId" />
+                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="MasterProductId" ColumnName="MasterProductId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

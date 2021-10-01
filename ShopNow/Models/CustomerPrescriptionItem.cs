@@ -12,17 +12,14 @@ namespace ShopNow.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class CustomerPrescription
+    public partial class CustomerPrescriptionItem
     {
         public int Id { get; set; }
-        public int ShopId { get; set; }
-        public int CustomerId { get; set; }
-        public string CustomerName { get; set; }
-        public string CustomerPhoneNumber { get; set; }
-        public string ImagePath { get; set; }
-        public string AudioPath { get; set; }
-        public string Remarks { get; set; }
+        public int CustomerPrescriptionId { get; set; }
+        public long ProductId { get; set; }
+        public int Quantity { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
+        public string CreatedBy { get; set; }
     }
 }

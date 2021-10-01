@@ -5,7 +5,7 @@ using System.Web;
 
 namespace ShopNow.ViewModels
 {
-    public class MarketingAgentRegisterViewModel
+    public class AgencyCreateViewModel
     {
         public HttpPostedFileBase PanImage { get; set; }
         public string Name { get; set; }
@@ -16,14 +16,8 @@ namespace ShopNow.ViewModels
         public string ImagePanPath { get; set; }
     }
 
-    public class MarketingAgentLoginViewModel
-    {
-        public string PhoneNumber { get; set; }
-        public string Password { get; set; }
-       
-    }
 
-    public class MarketingAgentUpdationViewModel
+    public class AgencyEditViewModel
     {
         public HttpPostedFileBase PanImage { get; set; }
         public int Id { get; set; }
@@ -35,10 +29,10 @@ namespace ShopNow.ViewModels
         public string ImagePanPath { get; set; }
     }
 
-    public class MarketingAgentListViewModel
+    public class AgencyListViewModel
     {
-        public List<MarketingAgentList> List { get; set; }
-        public class MarketingAgentList
+        public List<AgencyList> List { get; set; }
+        public class AgencyList
         {
             public int Id { get; set; }
             public string Name { get; set; }
@@ -47,7 +41,7 @@ namespace ShopNow.ViewModels
         }
     }
 
-    public class FranchiseAssignViewModel
+    public class AgencyAssignViewModel
     {
         public int[] DeliveryBoyIds { get; set; }
         public int[] ShopIds { get; set; }
@@ -56,7 +50,7 @@ namespace ShopNow.ViewModels
        
     }
 
-    public class FranchiseAssignUpdateViewModel
+    public class AgencyAssignUpdateViewModel
     {
         public string DeliveryBoyIds { get; set; }
         public string ShopIds { get; set; }
@@ -64,10 +58,10 @@ namespace ShopNow.ViewModels
         public string MarketingAgentName { get; set; }
 
     }
-    public class FranchiseListViewModel
+    public class AgencyAssignListViewModel
     {
-        public List<FranchiseList> Lists { get; set; }
-        public class FranchiseList
+        public List<AgencyList> Lists { get; set; }
+        public class AgencyList
         {
             public int MarketingAgentId { get; set; }
             public string MarketingAgentName { get; set; }
