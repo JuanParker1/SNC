@@ -91,6 +91,7 @@ namespace ShopNow.Models
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Offer> Offers { get; set; }
+        public virtual DbSet<CustomerPrescriptionItem> CustomerPrescriptionItems { get; set; }
         public virtual DbSet<CustomerPrescription> CustomerPrescriptions { get; set; }
     
         [DbFunction("sncEntities", "GetTableVAlueString")]

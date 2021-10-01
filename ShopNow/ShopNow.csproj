@@ -356,6 +356,7 @@
     <Compile Include="Controllers\BillController.cs" />
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\CrustController.cs" />
+    <Compile Include="Controllers\CustomerPrescriptionController.cs" />
     <Compile Include="Controllers\DeliveryBoyController.cs" />
     <Compile Include="Controllers\DiscountCategoryController.cs" />
     <Compile Include="Controllers\DrugCompoundDetailController.cs" />
@@ -481,6 +482,9 @@
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CustomerPrescription.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CustomerPrescriptionItem.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CustomerReview.cs">
@@ -662,6 +666,7 @@
     <Compile Include="ViewModels\BillViewModel.cs" />
     <Compile Include="ViewModels\CartViewModel.cs" />
     <Compile Include="ViewModels\CrustViewModels.cs" />
+    <Compile Include="ViewModels\CustomerPrescriptionViewModels.cs" />
     <Compile Include="ViewModels\CustomerReviewViewModel .cs" />
     <Compile Include="ViewModels\DashboardViewModels.cs" />
     <Compile Include="ViewModels\DeliveryBoysList.cs" />
@@ -3219,9 +3224,6 @@
     <Content Include="Views\MarketingAgent\FranchiseUpdate.cshtml" />
     <Content Include="Views\Cart\CustomerNotPickupList.cshtml" />
     <Content Include="Views\Product\ApplyDiscount.cshtml" />
-    <Content Include="Views\Payment\CreditList.cshtml" />
-    <Content Include="Views\Payment\Create.cshtml" />
-    <Content Include="Views\Payment\CheckOut.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
