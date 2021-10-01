@@ -40,7 +40,7 @@ namespace ShopNow.Controllers
                 config.CreateMap<DeliveryBoyEditViewModel, DeliveryBoy>();
                 config.CreateMap<DeliveryBoy, DeliveryBoyEditViewModel>();
                 config.CreateMap<DeliveryBoy, DeliveryBoyPlacesListViewModel>();
-                config.CreateMap<DeliveryBoy, FranchiseAssignViewModel>();
+                 //config.CreateMap<DeliveryBoy, AgencyAssignViewModel>();
             });
             _mapper = _mapperConfiguration.CreateMapper();
         }
