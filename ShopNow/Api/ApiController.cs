@@ -1957,6 +1957,7 @@ namespace ShopNow.Controllers
                      PaymentMode = i.o.p.PaymentMode,
                      Onwork = db.DeliveryBoys.Any(a => a.Id == i.o.o.DeliveryBoyId) ? db.DeliveryBoys.FirstOrDefault(a => a.Id == i.o.o.DeliveryBoyId).OnWork : 0,
                      WalletAmount = i.o.o.WalletAmount,
+                     OrderReadyTime = i.o.o.OrderReadyTime,
                      OrderItemList = i.oi.ToList(),  
                  }).ToList();
 
