@@ -729,9 +729,9 @@ namespace ShopNow.Controllers
         }
 
         [HttpPost]
-        public JsonResult SaveCustomerToken(int customerId, string token)
+        public JsonResult SaveCustomerToken(int CustomerId, string token)
         {
-            var customer = db.Customers.Where(c => c.Id == customerId).FirstOrDefault();
+            var customer = db.Customers.Where(c => c.Id == CustomerId).FirstOrDefault();
             try
             {
                 customer.FcmTocken = token;
