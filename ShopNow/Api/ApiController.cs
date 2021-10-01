@@ -4751,6 +4751,92 @@ namespace ShopNow.Controllers
             return Json(new { list = model.ListItems }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        public JsonResult GetCompletedPrescriptionDetails(int id)
+        {
+            var prescription = db.CustomerPrescriptions.FirstOrDefault(i => i.Id == id);
+            var model = new PrescriptionDetailsApiViewModel();
+            if (prescription != null)
+            {
+                model.CustomerId = prescription.CustomerId;
+                model.CustomerName = prescription.CustomerName;
+                model.CustomerPhoneNumber = prescription.CustomerPhoneNumber;
+                var shop = db.Shops.FirstOrDefault(i => i.Id == prescription.ShopId);
+                model.ShopId = shop.Id;
+                model.ShopName = shop.Name;
+                model.ShopAddress = shop.Address;
+                model.ShopLatitude = shop.Latitude;
+                model.ShopLongitude = shop.Longitude;
+                model.ShopImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + shop.ImagePath;
+                model.ShopCategoryId = shop.ShopCategoryId;
+                model.ShopCategoryName = shop.ShopCategoryName;
+                model.IsShopOnline = shop.IsOnline;
+                model.ShopPhoneNumber = shop.PhoneNumber;
+                var shopReview = db.CustomerReviews.Where(i => i.ShopId == shop.Id).ToList();
+                model.ShopReview = shopReview.Count();
+                if (model.ShopReview > 0)
+                    model.ShopRating = shopReview.Sum(l => l.Rating) / model.ShopReview;
+                else
+                    model.ShopRating = 0;
+                
+                    model.ItemLists = db.CustomerPrescriptionItems.Where(i => i.CustomerPrescriptionId == prescription.Id)
+                   .Join(db.Products, cp => cp.ProductId, p => p.Id, (cp, p) => new { cp, p })
+                   .Join(db.MasterProducts, p => p.p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+                   .Join(db.Categories, p => p.p.p.CategoryId, c => c.Id, (p, c) => new { p, c })
+                   .Join(db.DiscountCategories, p => p.p.p.p.DiscountCategoryId, dc => dc.Id, (p, dc) => new { p, dc })
+                   .Select(i => new PrescriptionDetailsApiViewModel.ItemList
+                   {
+                       CategoryId = i.p.p.m.CategoryId,
+                       CategoryName = i.p.c.Name,
+                       ImagePath = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                       ProductId = i.p.p.p.p.Id,
+                       ProductName = i.p.p.m.Name,
+                       Qty = i.p.p.p.cp.Quantity,
+                       Price = i.p.p.p.p.Price,
+                       Status = i.p.p.p.p.Status,
+                       IsProductOnline = i.p.p.p.p.IsOnline,
+                       IBarU = i.p.p.p.p.IBarU,
+                       ImagePathLarge1 = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                       ImagePathLarge2 = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath2)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath2.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                       ImagePathLarge3 = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath3)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath3.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                       ImagePathLarge4 = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath4)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath4.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                       ImagePathLarge5 = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath5)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath5.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                       Itemid = i.p.p.p.p.ItemId,
+                       MRP = i.p.p.p.p.MenuPrice,
+                       SalePrice = i.p.p.p.p.Price,
+                       Quantity = i.p.p.p.p.Qty,
+                       ShopId = shop.Id,
+                       ShopName = shop.Name,
+                       DiscountCategoryPercentage = i.dc.Percentage,
+                       Size = i.p.p.m.SizeLWH,
+                       Weight = i.p.p.m.Weight
+                   }).ToList();
+               
+            }
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetMedicalShopDropdownValues(double Latitude, double Longitude)
+        {
+            string query = "SELECT * " +
+                               " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and Status = 0  and ShopCategoryId=4  and Latitude != 0 and Longitude != 0";
+            var list = db.Shops.SqlQuery(query,
+                  new SqlParameter("Latitude", Latitude),
+                  new SqlParameter("Longitude", Longitude))
+                 .Select(i => new
+                 {
+                     id = i.Id,
+                     name = i.Name
+                 }).ToList();
+            return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "")
+        {
+            Helpers.PushNotification.SendbydeviceId(body, title, "", deviceId);
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
         public void UpdateAchievements(int customerId)
         {
             var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
