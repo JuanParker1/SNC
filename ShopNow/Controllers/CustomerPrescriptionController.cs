@@ -50,5 +50,19 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
+        public JsonResult GetItemList(int id)
+        {
+            var list = db.CustomerPrescriptionItems.Where(i => i.CustomerPrescriptionId == id)
+                .Join(db.Products, cp => cp.ProductId, p => p.Id, (cp, p) => new { cp, p })
+                .Join(db.MasterProducts, cp => cp.p.MasterProductId, m => m.Id, (cp, m) => new { cp, m })
+                .Select(i => new
+                {
+                    ProductName = i.m.Name,
+                    Quantity = i.cp.cp.Quantity
+                }).ToList();
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }
