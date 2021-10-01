@@ -4737,8 +4737,18 @@ namespace ShopNow.Controllers
         [HttpGet]
         public JsonResult GetPrescriptionList(int customerid)
         {
-            var list = db.CustomerPrescriptions.Where(i => i.CustomerId == customerid).ToList();
-            return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+            var model = new CustomerPrescriptionListViewModel();
+            model.ListItems = db.CustomerPrescriptions.Where(i => i.CustomerId == customerid)
+                .Select(i => new CustomerPrescriptionListViewModel.ListItem
+                {
+                    AudioPath = (!string.IsNullOrEmpty(i.AudioPath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Audio/" + i.AudioPath : "",
+                    DateEncoded = i.DateEncoded,
+                    Id = i.Id,
+                    ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/notavailable.png"),
+                    Remarks = i.Remarks,
+                    Status = i.Status
+                }).ToList();
+            return Json(new { list = model.ListItems }, JsonRequestBehavior.AllowGet);
         }
 
         public void UpdateAchievements(int customerId)
