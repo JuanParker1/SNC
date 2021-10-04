@@ -115,6 +115,8 @@ namespace ShopNow.Controllers
                 deliveryboy.DateEncoded = DateTime.Now;
                 deliveryboy.DateUpdated = DateTime.Now;
                 deliveryboy.Status = 1;
+                db.DeliveryBoys.Add(deliveryboy);
+                db.SaveChanges();
                 try
                 {
                     // DeliveryBoy Image
@@ -158,7 +160,7 @@ namespace ShopNow.Controllers
                         uc.UploadFiles(model.CVPdf.InputStream, deliveryboy.Id + "_" + model.CVPdf.FileName, accesskey, secretkey, "pdf");
                         deliveryboy.CVPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryboy.Id + "_" + model.CVPdf.FileName.Replace(" ", "");
                     }
-                    db.DeliveryBoys.Add(deliveryboy);
+                    db.Entry(deliveryboy).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                     return RedirectToAction("List");
                 }

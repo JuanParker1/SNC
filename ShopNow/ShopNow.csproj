@@ -3029,7 +3029,6 @@
     <Content Include="Views\Page\Index.cshtml" />
     <Content Include="Views\ProductSpecification\Index.cshtml" />
     <Content Include="Views\AddOnCategory\Index.cshtml" />
-    <Content Include="Views\MarketingAgent\Register.cshtml" />
     <Content Include="Views\Brand\Index.cshtml" />
     <Content Include="Views\Category\Index.cshtml" />
     <Content Include="Views\Shop\Details.cshtml" />
@@ -3041,7 +3040,6 @@
     <Content Include="Views\ProductSpecification\Edit.cshtml" />
     <Content Include="Views\ProductSpecification\List.cshtml" />
     <Content Include="Views\MarketingAgent\List.cshtml" />
-    <Content Include="Views\MarketingAgent\Updation.cshtml" />
     <Content Include="Views\BrandOwner\Dashboard.cshtml" />
     <Content Include="Views\BrandOwner\List.cshtml" />
     <Content Include="Views\BrandOwner\Updation.cshtml" />
@@ -3219,6 +3217,8 @@
     <Content Include="Views\Payment\CheckOut.cshtml" />
     <Content Include="Views\Payment\Create.cshtml" />
     <Content Include="Views\Payment\CreditList.cshtml" />
+    <Content Include="Views\MarketingAgent\Create.cshtml" />
+    <Content Include="Views\MarketingAgent\Edit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

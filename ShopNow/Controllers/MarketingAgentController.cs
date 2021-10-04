@@ -270,76 +270,115 @@ namespace ShopNow.Controllers
             }
         }
 
-        [AccessPolicy(PageCode = "")]
-        public async Task<JsonResult> GetDeliveryBoySelect2(string q = "")
+        //[AccessPolicy(PageCode = "")]
+        //public async Task<JsonResult> GetDeliveryBoySelect2(string q = "")
+        //{
+        //    var model = await db.DeliveryBoys.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
+        //    {
+        //        id = i.Id,
+        //        text = i.Name
+        //    }).ToListAsync();
+
+        //    return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        //}
+
+        //[AccessPolicy(PageCode = "")]
+        //public async Task<JsonResult> GetMarketingAgentSelect2(string q = "")
+        //{
+        //    var model = await db.MarketingAgents.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
+        //    {
+        //        id = i.Id,
+        //        text = i.Name
+        //    }).ToListAsync();
+
+        //    return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        //}
+
+        //[AccessPolicy(PageCode = "")]
+        //public async Task<JsonResult> GetShopCategorySelect2(string q = "")
+        //{
+        //    var model = await db.ShopCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q)).Select(i => new
+        //    {
+        //        id = i.Id,
+        //        text = i.Name
+        //    }).ToListAsync();
+
+        //    return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        //}
+
+        //[AccessPolicy(PageCode = "")]
+        //public async Task<JsonResult> GetBrandSelect2(string q = "")
+        //{
+        //    var model = await db.Brands.OrderBy(i => i.Name).Where(a => a.Name.Contains(q)).Select(i => new
+        //    {
+        //        id = i.Id,
+        //        text = i.Name
+        //    }).ToListAsync();
+
+        //    return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        //}
+
+        //[AccessPolicy(PageCode = "")]
+        //public async Task<JsonResult> GetShopSelect2(string q = "")
+        //{
+        //    var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
+        //    {
+        //        id = i.Id,
+        //        text = i.Name
+        //    }).ToListAsync();
+
+        //    return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        //}
+
+        //[AccessPolicy(PageCode = "")]
+        //public async Task<JsonResult> GetStaffSelect2(int shopId)
+        //{
+        //    var model = await db.Staffs.OrderBy(i => i.Name).Where(a => a.ShopId == shopId && a.Status == 0).Select(i => new
+        //    {
+        //        id = i.Id,
+        //        text = i.Name
+        //    }).ToListAsync();
+
+        //    return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        //}
+
+        public JsonResult GetPhoneNumberCheck(string phone)
         {
-            var model = await db.DeliveryBoys.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
+            var customer = db.Customers.FirstOrDefault(i => i.PhoneNumber == phone);
+            int msg;
+            var customerExist = db.Customers.Any(i => i.PhoneNumber == phone);
+            if (customerExist)
             {
-                id = i.Id,
-                text = i.Name
-            }).ToListAsync();
-
-            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "")]
-        public async Task<JsonResult> GetMarketingAgentSelect2(string q = "")
-        {
-            var model = await db.MarketingAgents.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
-            {
-                id = i.Id,
-                text = i.Name
-            }).ToListAsync();
-
-            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "")]
-        public async Task<JsonResult> GetShopCategorySelect2(string q = "")
-        {
-            var model = await db.ShopCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q)).Select(i => new
-            {
-                id = i.Id,
-                text = i.Name
-            }).ToListAsync();
-
-            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "")]
-        public async Task<JsonResult> GetBrandSelect2(string q = "")
-        {
-            var model = await db.Brands.OrderBy(i => i.Name).Where(a => a.Name.Contains(q)).Select(i => new
-            {
-                id = i.Id,
-                text = i.Name
-            }).ToListAsync();
-
-            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "")]
-        public async Task<JsonResult> GetShopSelect2(string q = "")
-        {
-            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
-            {
-                id = i.Id,
-                text = i.Name
-            }).ToListAsync();
-
-            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "")]
-        public async Task<JsonResult> GetStaffSelect2(int shopId)
-        {
-            var model = await db.Staffs.OrderBy(i => i.Name).Where(a => a.ShopId == shopId && a.Status == 0).Select(i => new
-            {
-                id = i.Id,
-                text = i.Name
-            }).ToListAsync();
-
-            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+                var agent = db.MarketingAgents.FirstOrDefault(i => i.PhoneNumber == phone);
+                if (agent != null)
+                {
+                    if (agent.Status == 0)    // Agency already Exist
+                    {
+                        msg = 1;
+                        return Json(msg, JsonRequestBehavior.AllowGet);
+                    }
+                    else if (agent.Status == 1)   // Agency in approval Pending status
+                    {
+                        msg = 2;
+                        return Json(msg, JsonRequestBehavior.AllowGet);
+                    }
+                    else if (agent.Status == 3 || agent.Status == 2) // Agency Update
+                    {
+                        msg = 3;
+                        return Json(new { msg, phone = customer.PhoneNumber, name = customer.Name, email = customer.Email }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {     // DeliveryBoy Create
+                    msg = 4;
+                    return Json(new { msg, phone = customer.PhoneNumber, name = customer.Name, email = customer.Email }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {   // Not a Customer
+                return Json(msg = 0, JsonRequestBehavior.AllowGet);
+            }
+            return Json(msg = 0, JsonRequestBehavior.AllowGet);
         }
         protected override void Dispose(bool disposing)
         {

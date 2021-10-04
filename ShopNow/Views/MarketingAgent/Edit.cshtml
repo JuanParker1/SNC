@@ -1,19 +1,18 @@
-﻿@model ShopNow.ViewModels.MarketingAgentUpdationViewModel
+﻿@model ShopNow.ViewModels.AgencyEditViewModel
 @{
-    ViewBag.Title = "Marketing Agent Updation";
-    Layout = "~/Views/MarketingAgent/_Layout.cshtml";
+    ViewBag.Title = "Agency Update";
 }
 
-<h4 class="text-secondary font-weight-bold ml-3 mb-3">Marketing Agent Updation</h4>
+<h4 class="text-secondary font-weight-bold ml-3 mb-3">@ViewBag.Title</h4>
 <div class="container-fluid my-0">
     <div class="row">
         <div class="col-md-12 mx-auto">
-            @using (Html.BeginForm("Updation", "MarketingAgent", FormMethod.Post, new { id = "MarketingAgentForm", role = "form", enctype = "multipart/form-data" }))
+            @using (Html.BeginForm("Edit", "MarketingAgent", FormMethod.Post, new { id = "MarketingAgentForm", role = "form", enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
-                <input type="hidden" name="Code" value="@Model.Code" />
+                <input type="hidden" name="Id" value="@Model.Id" />
                 <input type="hidden" name="ImagePanPath" value="@Model.ImagePanPath" />
-                <div class="card mb-4">
+                <div class="card mb-4"> 
                     <h5 class="text-success ml-2 mt-2"></h5>
                     <div class="card-body row">
                         <div class="col-md-7">

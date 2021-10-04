@@ -1562,16 +1562,28 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new MasterProductListViewModel();
-           
-            model.Lists = _db.Products
-                 .Where(a => a.ShopId == shopId && a.Status == 0 && a.MasterProductId == 0)
-                 .OrderBy(i => i.Name).Select(i => new MasterProductListViewModel.PendingList
-                 {
-                     Id = i.Id,
-                     Name = i.Name,
-                     ItemId = i.ItemId,
-                     ProductTypeName = i.ProductTypeName
-                 }).ToList();
+            if (shopId == 322)
+            {
+                model.Lists = _db.Products.Where(a => a.ShopId == shopId && a.Status == 0 && a.MasterProductId == 0)
+                     .OrderBy(i => i.Name).Select(i => new MasterProductListViewModel.PendingList
+                     {
+                         Id = i.Id,
+                         Name = i.Name,
+                         ItemId = i.ItemId,
+                         ProductTypeName = i.ProductTypeName
+                     }).ToList();
+            }
+            else
+            {
+                model.Lists = _db.Products.Where(a => a.ShopId == shopId && a.Status == 0 && a.MasterProductId == 0)
+                     .OrderBy(i => i.Name).Select(i => new MasterProductListViewModel.PendingList
+                     {
+                         Id = i.Id,
+                         Name = i.Name,
+                         ItemId = i.ItemId,
+                         ProductTypeName = i.ProductTypeName
+                     }).ToList();
+            }
             return View(model);
         }
 
@@ -1581,7 +1593,9 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new MasterProductListViewModel();
-            model.MappedLists = _db.Products.Join(_db.MasterProducts, p=> p.MasterProductId, mp=> mp.Id, (p,mp)=>new {p,mp})
+            if (shopId == 322)
+            {
+                model.MappedLists = _db.Products.Join(_db.MasterProducts, p => p.MasterProductId, mp => mp.Id, (p, mp) => new { p, mp })
                 .Where(a => a.p.ShopId == shopId && a.p.Status == 0 && a.p.MasterProductId != 0)
                 .OrderBy(i => i.p.Name).Select(i => new MasterProductListViewModel.MappedList
                 {
@@ -1590,6 +1604,19 @@ namespace ShopNow.Controllers
                     MasterProductName = i.mp.Name,
                     ProductTypeName = i.p.ProductTypeName
                 }).ToList();
+            }
+            else
+            {
+                model.MappedLists = _db.Products.Join(_db.MasterProducts, p => p.MasterProductId, mp => mp.Id, (p, mp) => new { p, mp })
+                .Where(a => a.p.ShopId == shopId && a.p.Status == 0 && a.p.MasterProductId != 0)
+                .OrderBy(i => i.p.Name).Select(i => new MasterProductListViewModel.MappedList
+                {
+                    Id = i.p.Id,
+                    Name = i.p.Name,
+                    MasterProductName = i.mp.Name,
+                    ProductTypeName = i.p.ProductTypeName
+                }).ToList();
+            }
             return View(model);
         }
 
