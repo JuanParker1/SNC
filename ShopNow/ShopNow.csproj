@@ -350,6 +350,7 @@
     <Compile Include="Controllers\AccessPolicyController.cs" />
     <Compile Include="Controllers\AchievementSettingController.cs" />
     <Compile Include="Controllers\AddOnCategoryController.cs" />
+    <Compile Include="Controllers\AgencyController.cs" />
     <Compile Include="Controllers\ApiSettingController.cs" />
     <Compile Include="Controllers\AppDetailController.cs" />
     <Compile Include="Controllers\BannerController.cs" />
@@ -427,6 +428,9 @@
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AddOnCategory.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Agency.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ApiSetting.cs">
@@ -658,6 +662,7 @@
     <Compile Include="ViewModels\AccessPolicyViewModel.cs" />
     <Compile Include="ViewModels\AchievementSettingViewModels.cs" />
     <Compile Include="ViewModels\AddOnCategoryViewModel.cs" />
+    <Compile Include="ViewModels\AgencyViewModel.cs" />
     <Compile Include="ViewModels\ApiSettingViewModels.cs" />
     <Compile Include="ViewModels\ApiViewModels.cs" />
     <Compile Include="ViewModels\AppDetailViewModels.cs" />
@@ -676,7 +681,6 @@
     <Compile Include="ViewModels\DrugCompoundDetailViewModel.cs" />
     <Compile Include="ViewModels\LocationDetailsViewModels.cs" />
     <Compile Include="ViewModels\MeasurementUnitViewModel.cs" />
-    <Compile Include="ViewModels\MarketingAgentViewModel.cs" />
     <Compile Include="ViewModels\MasterProductViewModel.cs" />
     <Compile Include="ViewModels\BrandOwnerViewModel.cs" />
     <Compile Include="ViewModels\OfferViewModels.cs" />
@@ -3248,6 +3252,7 @@
     <Folder Include="Scripts\ckeditor\samples\plugins\htmlwriter\assets\outputforflash\" />
     <Folder Include="Scripts\ckeditor\samples\plugins\magicline\" />
     <Folder Include="Uploads\" />
+    <Folder Include="Views\Agency\" />
     <Folder Include="Views\ProductType\" />
   </ItemGroup>
   <ItemGroup>

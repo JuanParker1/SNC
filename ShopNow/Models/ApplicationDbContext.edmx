@@ -75,6 +75,38 @@
           <Property Name="CreatedBy" Type="nvarchar(max)" />
           <Property Name="UpdatedBy" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="Agency">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="CustomerId" Type="int" Nullable="false" />
+          <Property Name="ImagePath" Type="nvarchar(max)" />
+          <Property Name="CountryName" Type="nvarchar" MaxLength="50" />
+          <Property Name="StateName" Type="nvarchar" MaxLength="50" />
+          <Property Name="DistrictName" Type="nvarchar" MaxLength="50" />
+          <Property Name="StreetName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Address" Type="nvarchar(max)" />
+          <Property Name="PinCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="Latitude" Type="float" Nullable="false" />
+          <Property Name="Longitude" Type="float" Nullable="false" />
+          <Property Name="PanNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="ImagePanPath" Type="nvarchar(max)" />
+          <Property Name="BankName" Type="nvarchar" MaxLength="200" />
+          <Property Name="AccountName" Type="nvarchar" MaxLength="100" />
+          <Property Name="AccountNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="IFSCCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="SwiftCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="UPIID" Type="nvarchar" MaxLength="50" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DateEncoded" Type="datetime" Nullable="false" />
+          <Property Name="DateUpdated" Type="datetime" Nullable="false" />
+          <Property Name="UpdatedBy" Type="nvarchar" MaxLength="100" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="100" />
+        </EntityType>
         <EntityType Name="ApiSettings">
           <Key>
             <PropertyRef Name="Id" />
@@ -1530,6 +1562,7 @@
           <EntitySet Name="AchievementSettings" EntityType="Self.AchievementSettings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AchievementShops" EntityType="Self.AchievementShops" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AddOnCategories" EntityType="Self.AddOnCategories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Agency" EntityType="Self.Agency" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ApiSettings" EntityType="Self.ApiSettings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AppDetails" EntityType="Self.AppDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Banners" EntityType="Self.Banners" Schema="dbo" store:Type="Tables" />
@@ -2740,6 +2773,7 @@
           <EntitySet Name="CustomerPrescriptions" EntityType="sncModel.CustomerPrescription" />
           <EntitySet Name="DeliveryBoys" EntityType="sncModel.DeliveryBoy" />
           <EntitySet Name="Products" EntityType="sncModel.Product" />
+          <EntitySet Name="Agencies" EntityType="sncModel.Agency" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3345,6 +3379,38 @@
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Agency">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="ImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CountryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StateName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DistrictName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StreetName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PinCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Latitude" Type="Double" Nullable="false" />
+          <Property Name="Longitude" Type="Double" Nullable="false" />
+          <Property Name="PanNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePanPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BankName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AccountName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="AccountNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IFSCCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SwiftCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UPIID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -4862,6 +4928,39 @@
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
                 <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
                 <ScalarProperty Name="MasterProductId" ColumnName="MasterProductId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Agencies">
+            <EntityTypeMapping TypeName="sncModel.Agency">
+              <MappingFragment StoreEntitySet="Agency">
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="UPIID" ColumnName="UPIID" />
+                <ScalarProperty Name="SwiftCode" ColumnName="SwiftCode" />
+                <ScalarProperty Name="IFSCCode" ColumnName="IFSCCode" />
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+                <ScalarProperty Name="BankName" ColumnName="BankName" />
+                <ScalarProperty Name="ImagePanPath" ColumnName="ImagePanPath" />
+                <ScalarProperty Name="PanNumber" ColumnName="PanNumber" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="PinCode" ColumnName="PinCode" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="StreetName" ColumnName="StreetName" />
+                <ScalarProperty Name="DistrictName" ColumnName="DistrictName" />
+                <ScalarProperty Name="StateName" ColumnName="StateName" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

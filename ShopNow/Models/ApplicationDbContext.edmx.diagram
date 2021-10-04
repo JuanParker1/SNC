@@ -81,6 +81,7 @@
         <EntityTypeShape EntityType="sncModel.CustomerPrescription" Width="1.5" PointX="28.375" PointY="24.75" />
         <EntityTypeShape EntityType="sncModel.DeliveryBoy" Width="1.5" PointX="29.375" PointY="4.75" />
         <EntityTypeShape EntityType="sncModel.Product" Width="1.5" PointX="30.375" PointY="24.75" />
+        <EntityTypeShape EntityType="sncModel.Agency" Width="1.5" PointX="8.375" PointY="15.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

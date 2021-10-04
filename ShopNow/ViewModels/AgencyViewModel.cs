@@ -82,7 +82,7 @@ namespace ShopNow.ViewModels
         public int[] ShopIds { get; set; }
         public int MarketingAgentId { get; set; }
         public string MarketingAgentName { get; set; }
-       
+
     }
 
     public class AgencyAssignUpdateViewModel
