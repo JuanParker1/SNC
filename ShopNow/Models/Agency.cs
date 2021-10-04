@@ -35,6 +35,7 @@ namespace ShopNow.Models
         public string AccountNumber { get; set; }
         public string IFSCCode { get; set; }
         public string SwiftCode { get; set; }
+        public string BankPassbookPath { get; set; }
         public string UPIID { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }

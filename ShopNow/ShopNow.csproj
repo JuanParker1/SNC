@@ -363,7 +363,6 @@
     <Compile Include="Controllers\DrugCompoundDetailController.cs" />
     <Compile Include="Controllers\ErrorPageController.cs" />
     <Compile Include="Controllers\MeasurementUnitController.cs" />
-    <Compile Include="Controllers\MarketingAgentController.cs" />
     <Compile Include="Controllers\MasterProductController.cs" />
     <Compile Include="Controllers\BrandOwnerController.cs" />
     <Compile Include="Controllers\OfferController.cs" />
@@ -3229,6 +3228,7 @@
     <Content Include="Views\Agency\Create.cshtml" />
     <Content Include="Views\Agency\Edit.cshtml" />
     <Content Include="Views\Agency\AgencyAssignList.cshtml" />
+    <Content Include="Views\Agency\AgencyAssign.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
