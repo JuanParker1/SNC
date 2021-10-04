@@ -663,8 +663,8 @@ namespace ShopNow.Controllers
 
             if (deliveryBoy != null)
             {
-                deliveryBoy.MarketingAgentId = 0;
-                deliveryBoy.MarketingAgentName = null;
+                deliveryBoy.AgencyId = 0;
+                deliveryBoy.AgencyName = null;
                 deliveryBoy.DateUpdated = DateTime.Now;
                 db.Entry(deliveryBoy).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
@@ -719,7 +719,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNDBYAF011")]
         public async Task<JsonResult> GetDeliveryBoySelect2(string q = "")
         {
-            var model = await db.DeliveryBoys.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.MarketingAgentName == null).Select(i => new
+            var model = await db.DeliveryBoys.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.AgencyName == null).Select(i => new
             {
                 id = i.Id,
                 text = i.Name

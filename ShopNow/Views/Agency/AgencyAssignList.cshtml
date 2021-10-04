@@ -1,0 +1,99 @@
+﻿@model ShopNow.ViewModels.ListViewModel
+@{
+    ViewBag.Title = "Assigned Agency List";
+}
+<title>ShopNow | @ViewBag.Title</title>
+<div class="container-fluid">
+    <div class="row my-2">
+        <div class="col-md-6">
+            <h5 class="text-success">@ViewBag.Title</h5>
+        </div>
+        <div class="col-md-6 text-right">
+            <a href="/MarketingAgent/AssignFranchise"><span class="fa fa-tasks"></span> Assign Agency</a>
+            <a href="~/MarketingAgent/List" class="ml-3"><span class="fa fa-list-ul"></span>Agency List</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    <table class="table table-borderless" id="Franchise">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="text-nowrap w-25">Agency Name</th>
+                                <th class="w-25">Shop Name(s)</th>
+                                <th class="w-25">DeliveryBoy Name(s)</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Lists)
+                            {
+                                <tr>
+                                    <td class="nowrap font-weight-bold text-secondary mx-5">@item.MarketingAgentName</td>
+                                    <td>
+                                        @foreach (var shop in item.ShopListItems)
+                                        {
+                                            <label class="mr-4">@shop.ShopName</label>
+                                            <a href="/MarketingAgent/ShopDelete?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(shop.ShopId)" class="text-danger"><i class="fa fa-close fa-lg"></i></a>
+                                        }
+                                    </td>
+                                    <td>
+                                        @foreach (var deliveryBoy in item.DeliveryBoyListItems)
+                                        {
+                                            <label class="mr-4">@deliveryBoy.DeliveryBoyName</label>
+                                            <a href="/MarketingAgent/DeliveryBoyDelete?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(deliveryBoy.DeliveryBoyId)" class="text-danger"><i class="fa fa-close fa-lg"></i></a>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a href="/MarketingAgent/FranchiseUpdate?Id=@item.MarketingAgentId" class="text-info mr-4"><i class="fa fa-plus fa-lg"></i></a>
+                                        <a href="javascript:void(0)" data-id="@item.MarketingAgentId" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            $(".btnDelete").click(function () {
+                var id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/MarketingAgent/FranchiseDelete", { id: id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
+            });
+        });
+    </script>
+}
+
+
+
+

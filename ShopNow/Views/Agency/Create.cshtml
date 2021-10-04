@@ -10,12 +10,12 @@
             <h5 class="text-success">@ViewBag.Title</h5>
         </div>
         <div class="col-md-9 text-right">
-            <a href="~/MarketingAgent/List" target="_self"><span class="fa fa-list-ul"></span> Agency List</a>
+            <a href="~/Agency/List" target="_self"><span class="fa fa-list-ul"></span> Agency List</a>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12 mx-auto">
-            @using (Html.BeginForm("Create", "MarketingAgent", FormMethod.Post, new { id = "AgencyForm", role = "form", enctype = "multipart/form-data" }))
+            @using (Html.BeginForm("Create", "Agency", FormMethod.Post, new { id = "AgencyForm", role = "form", enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
                 <div class="card shadow CustomerCheck">
@@ -39,7 +39,7 @@
                                 <div class="form-group row">
                                     <div class="col-md-4">
                                         <label class="col-form-label"><strong class="text-secondary">Agency Name</strong></label>
-                                        <input id="Name" type="text" class="form-control" name="Name" maxlength="100" oninput="this.value=this.value.replace(/[^a-zA-Z ]/g, '');"  />
+                                        <input id="Name" type="text" class="form-control" name="Name" maxlength="100" oninput="this.value=this.value.replace(/[^a-zA-Z ]/g, '');" />
                                     </div>
                                     <div class="col-md-4">
                                         <label class="col-form-label"><strong class="text-secondary">Mobile Number</strong></label>
@@ -189,26 +189,26 @@
                             </div>
                         </div>
                         @*<div class="col-md-4">
-                            <div class="card-columns form-group row col-md-12">
-                                <div class="card border-info">
-                                    <div class="card-body text-center row">
-                                        <label class="col-md-12 text-center"><strong class="text-secondary">Bank Account</strong></label>
-                                        <span class="col-md-12">
-                                            <input type="radio" class="text-center" name="AccountDocument" id="AccountImage" value="Image" checked> <label for="AccountImage"> Image</label>
-                                            <input type="radio" class="text-center" name="AccountDocument" id="AccountPDF" value="PDF"> <label for="AccountPDF"> PDF</label>
-                                        </span>
-                                        <div class="row AccountDocumentPdf mx-auto d-none mt-2 mb-3">
-                                            <input class="mx-auto" type="file" id="BankPassbookPdf" name="BankPassbookPdf" />
-                                        </div>
-                                        <div class="img-upload-container mx-auto mb-3 AccountDocumentImg">
-                                            <img class="img-container w-100 h-100 mb-2" id="img-account" onerror="this.src='/Images/No Photo.png'" />
-                                            <input type="file" id="BankPassbookImage" name="BankPassbookImage" class="d-none" />
-                                            <label for="BankPassbookImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                <div class="card-columns form-group row col-md-12">
+                                    <div class="card border-info">
+                                        <div class="card-body text-center row">
+                                            <label class="col-md-12 text-center"><strong class="text-secondary">Bank Account</strong></label>
+                                            <span class="col-md-12">
+                                                <input type="radio" class="text-center" name="AccountDocument" id="AccountImage" value="Image" checked> <label for="AccountImage"> Image</label>
+                                                <input type="radio" class="text-center" name="AccountDocument" id="AccountPDF" value="PDF"> <label for="AccountPDF"> PDF</label>
+                                            </span>
+                                            <div class="row AccountDocumentPdf mx-auto d-none mt-2 mb-3">
+                                                <input class="mx-auto" type="file" id="BankPassbookPdf" name="BankPassbookPdf" />
+                                            </div>
+                                            <div class="img-upload-container mx-auto mb-3 AccountDocumentImg">
+                                                <img class="img-container w-100 h-100 mb-2" id="img-account" onerror="this.src='/Images/No Photo.png'" />
+                                                <input type="file" id="BankPassbookImage" name="BankPassbookImage" class="d-none" />
+                                                <label for="BankPassbookImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>*@
+                            </div>*@
                     </div>
                     <div class="form-group row mb-3">
                         <div class="col-md-3 mx-auto">
@@ -245,7 +245,7 @@
                 isValidated = ValidateEmptyRequiredFiels(requiredArr);
                 if (isValidated) {
                     var phone = $("#Phone").val();
-                    $.getJSON("/MarketingAgent/GetPhoneNumberCheck/", { phone: phone }, function (data) {
+                    $.getJSON("/Agency/GetPhoneNumberCheck/", { phone: phone }, function (data) {
                         if (data == 0) {
                             swal("You are not a Customer!", "", "warning");
                         }
@@ -284,7 +284,7 @@
                     $('#AgencyForm').submit();
                 }
             });
-           
+
             $('input:radio[name="AccountDocument"]').change(
                 function () {
                     if (this.checked && this.value == 'Image') {

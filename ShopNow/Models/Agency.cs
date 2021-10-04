@@ -12,14 +12,13 @@ namespace ShopNow.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class DeliveryBoy
+    public partial class Agency
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int CustomerId { get; set; }
-        public string CustomerName { get; set; }
-        public string Email { get; set; }
         public string PhoneNumber { get; set; }
+        public string Email { get; set; }
+        public int CustomerId { get; set; }
         public string ImagePath { get; set; }
         public string CountryName { get; set; }
         public string StateName { get; set; }
@@ -29,23 +28,18 @@ namespace ShopNow.Models
         public string PinCode { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public string CVPath { get; set; }
-        public string DrivingLicenseImagePath { get; set; }
-        public string BankPassbookPath { get; set; }
-        public string LicenseNumber { get; set; }
+        public string PanNumber { get; set; }
+        public string ImagePanPath { get; set; }
         public string BankName { get; set; }
         public string AccountName { get; set; }
         public string AccountNumber { get; set; }
         public string IFSCCode { get; set; }
-        public int AgencyId { get; set; }
-        public string AgencyName { get; set; }
-        public int OnWork { get; set; }
-        public int isAssign { get; set; }
-        public int Active { get; set; }
+        public string SwiftCode { get; set; }
+        public string UPIID { get; set; }
         public int Status { get; set; }
-        public string CreatedBy { get; set; }
-        public string UpdatedBy { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }
+        public string UpdatedBy { get; set; }
+        public string CreatedBy { get; set; }
     }
 }

@@ -1,6 +1,6 @@
-﻿@model ShopNow.ViewModels.AgencyCreateViewModel
+﻿@model ShopNow.ViewModels.AgencyEditViewModel
 @{
-    ViewBag.Title = "Agency Create";
+    ViewBag.Title = "Agency Update";
 }
 <title>ShopNow | @ViewBag.Title</title>
 
@@ -10,44 +10,32 @@
             <h5 class="text-success">@ViewBag.Title</h5>
         </div>
         <div class="col-md-9 text-right">
-            <a href="~/MarketingAgent/List" target="_self"><span class="fa fa-list-ul"></span> Agency List</a>
+            <a href="~/Agency/List" target="_self"><span class="fa fa-list-ul"></span> Agency List</a>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12 mx-auto">
-            @using (Html.BeginForm("Create", "MarketingAgent", FormMethod.Post, new { id = "AgencyForm", role = "form", enctype = "multipart/form-data" }))
+            @using (Html.BeginForm("Edit", "Agency", FormMethod.Post, new { id = "AgencyForm", role = "form", enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
-                <div class="card shadow CustomerCheck">
-                    <div class="card-body">
-                        <div class="row form-group">
-                            <div class="col-md-4">
-                                <label class="col-form-label"><strong class="text-secondary">Mobile Number</strong></label>
-                                <input type="text" class="form-control" name="Phone" id="Phone" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'');" />
-                            </div>
-                            <div class="col-md-1">
-                                <label class="col-form-label"></label>
-                                <input type="button" class="form-control btn btn-sm btn-success mt-3" value="Go" id="btnCheckCustomer" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card shadow mb-4 d-none Agency">
+                <div class="card shadow mb-4">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group row">
                                     <div class="col-md-4">
                                         <label class="col-form-label"><strong class="text-secondary">Agency Name</strong></label>
-                                        <input id="Name" type="text" class="form-control" name="Name" maxlength="100" oninput="this.value=this.value.replace(/[^a-zA-Z ]/g, '');"  />
+                                        <div class="DeliverBoyName">
+                                            <input id="Name" type="text" class="form-control" name="Name" maxlength="100" oninput="this.value=this.value.replace(/[^a-zA-Z ]/g, '');" value="@Model.Name" />
+                                        </div>
                                     </div>
                                     <div class="col-md-4">
                                         <label class="col-form-label"><strong class="text-secondary">Mobile Number</strong></label>
-                                        <input type="text" class="form-control" name="PhoneNumber" id="PhoneNumber" readonly />
+                                        <input type="text" class="form-control" name="PhoneNumber" id="PhoneNumber" readonly value="@Model.PhoneNumber" />
                                     </div>
                                     <div class="col-md-4">
                                         <label class="col-form-label"><strong class="text-secondary">Email</strong></label>
-                                        <input type="email" class="form-control" name="Email" id="Email" />
+                                        <input type="email" class="form-control" name="Email" id="Email" value="@Model.Email" />
                                     </div>
                                 </div>
                             </div>
@@ -64,38 +52,38 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <label class="col-form-label"><strong class="text-secondary">Agency Preference Area</strong></label>
-                                                <input id="Address" type="text" class="form-control mb-2" name="Address" />
+                                                <input id="Address" type="text" class="form-control mb-2" name="Address" value="@Model.Address" />
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <small class="control-label" for="StreetName"><i class="text-secondary">Locality</i></small>
-                                                <input id="StreetName" type="text" class="form-control mb-2" name="StreetName" />
+                                                <input id="StreetName" type="text" class="form-control mb-2" name="StreetName" value="@Model.StreetName" />
                                             </div>
                                             <div class="col-md-4">
                                                 <small class="control-label" for="DistrictName"><i class="text-secondary">District</i></small>
-                                                <input id="DistrictName" type="text" class="form-control" name="DistrictName" />
+                                                <input id="DistrictName" type="text" class="form-control" name="DistrictName" value="@Model.DistrictName" />
                                             </div>
                                             <div class="col-md-4">
                                                 <small class="control-label" for="StateName"><i class="text-secondary">State / Province</i></small>
-                                                <input id="StateName" type="text" class="form-control mb-2" name="StateName" />
+                                                <input id="StateName" type="text" class="form-control mb-2" name="StateName" value="@Model.StateName" />
                                             </div>
                                             <div class="col-md-4">
                                                 <small class="control-label" for="CountryName"><i class="text-secondary">Country</i></small>
-                                                <input id="CountryName" type="text" class="form-control" name="CountryName" />
+                                                <input id="CountryName" type="text" class="form-control" name="CountryName" value="@Model.CountryName" />
                                             </div>
                                             <div class="col-md-4">
                                                 <small class="control-label" for="PinCode"><i class="text-secondary">PIN Code</i></small>
-                                                <input id="PinCode" type="text" class="form-control" name="PinCode" />
+                                                <input id="PinCode" type="text" class="form-control" name="PinCode" value="@Model.PinCode" />
                                             </div>
                                             <div class="col-md-4"></div>
                                             <div class="col-md-4">
                                                 <small class="control-label col-sm-12" for="Latitude"><i class="text-secondary">Latitude</i></small>
-                                                <input id="Latitude" type="text" class="form-control mb-2" placeholder="Latitude" name="Latitude" readonly />
+                                                <input id="Latitude" type="text" class="form-control mb-2" placeholder="Latitude" name="Latitude" readonly value="@Model.Latitude" />
                                             </div>
                                             <div class="col-md-4">
                                                 <small class="control-label col-sm-12" for="Longitude"><i class="text-secondary">Longitude</i></small>
-                                                <input id="Longitude" type="text" class="form-control" placeholder="Longitude" name="Longitude" readonly />
+                                                <input id="Longitude" type="text" class="form-control" placeholder="Longitude" name="Longitude" readonly value="@Model.Longitude" />
                                             </div>
                                         </div>
                                     </div>
@@ -125,7 +113,7 @@
                                             <div class="card-body">
                                                 <label class="col-md-12 text-center"><strong class="text-secondary">Pan </strong></label>
                                                 <label class="col-md-12 text-left"><small class="text-secondary"><i>Pan Number</i></small></label>
-                                                <input id="PanNumber" type="text" class="form-control" name="PanNumber" />
+                                                <input id="PanNumber" type="text" class="form-control" name="PanNumber" value="@Model.PanNumber" />
                                                 <label class="col-md-12 mt-2"><small class="text-secondary"><i>Pan Image</i></small></label>
                                                 <div class="row ml-3 PanImg mt-2">
                                                     <div class="img-upload-container mb-3">
@@ -164,51 +152,30 @@
                             <div class="form-group row">
                                 <div class="col-md-4">
                                     <small class="col-form-label" for="BankName"><i class="text-secondary">Bank Name</i></small>
-                                    <input id="BankName" type="text" class="form-control" name="BankName" />
+                                    <input id="BankName" type="text" class="form-control" name="BankName" value="@Model.BankName" />
                                 </div>
                                 <div class="col-md-4">
                                     <small class="col-form-label" for="AccountName"><i class="text-secondary">Account Name</i></small>
-                                    <input id="AccountName" type="text" class="form-control" name="AccountName" />
+                                    <input id="AccountName" type="text" class="form-control" name="AccountName" value="@Model.AccountName" />
                                 </div>
                                 <div class="col-md-4">
                                     <small class="col-form-label" for="AccountNumber"><i class="text-secondary">Account Number</i></small>
-                                    <input id="AccountNumber" type="text" class="form-control" name="AccountNumber" />
+                                    <input id="AccountNumber" type="text" class="form-control" name="AccountNumber" value="@Model.AccountNumber" />
                                 </div>
                                 <div class="col-md-4">
                                     <small class="col-form-label" for="IFSCCode"><i class="text-secondary">IFSC Code</i></small>
-                                    <input id="IFSCCode" type="text" class="form-control" name="IFSCCode" />
+                                    <input id="IFSCCode" type="text" class="form-control" name="IFSCCode" value="@Model.IFSCCode" />
                                 </div>
                                 <div class="col-md-4">
                                     <small class="col-form-label" for="SwiftCode"><i class="text-secondary">SwiftCode</i></small>
-                                    <input id="SwiftCode" type="text" class="form-control" name="SwiftCode" />
+                                    <input id="SwiftCode" type="text" class="form-control" name="SwiftCode" value="@Model.SwiftCode" />
                                 </div>
                                 <div class="col-md-4">
                                     <small class="col-form-label" for="UPIID"><i class="text-secondary">UPI</i></small>
-                                    <input id="UPIID" type="text" class="form-control" name="UPIID" />
+                                    <input id="UPIID" type="text" class="form-control" name="UPIID" value="@Model.UPIID" />
                                 </div>
                             </div>
                         </div>
-                        @*<div class="col-md-4">
-                            <div class="card-columns form-group row col-md-12">
-                                <div class="card border-info">
-                                    <div class="card-body text-center row">
-                                        <label class="col-md-12 text-center"><strong class="text-secondary">Bank Account</strong></label>
-                                        <span class="col-md-12">
-                                            <input type="radio" class="text-center" name="AccountDocument" id="AccountImage" value="Image" checked> <label for="AccountImage"> Image</label>
-                                            <input type="radio" class="text-center" name="AccountDocument" id="AccountPDF" value="PDF"> <label for="AccountPDF"> PDF</label>
-                                        </span>
-                                        <div class="row AccountDocumentPdf mx-auto d-none mt-2 mb-3">
-                                            <input class="mx-auto" type="file" id="BankPassbookPdf" name="BankPassbookPdf" />
-                                        </div>
-                                        <div class="img-upload-container mx-auto mb-3 AccountDocumentImg">
-                                            <img class="img-container w-100 h-100 mb-2" id="img-account" onerror="this.src='/Images/No Photo.png'" />
-                                            <input type="file" id="BankPassbookImage" name="BankPassbookImage" class="d-none" />
-                                            <label for="BankPassbookImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>*@
                     </div>
                     <div class="form-group row mb-3">
                         <div class="col-md-3 mx-auto">
@@ -237,41 +204,6 @@
     <script>
         $(document).ready(function () {
 
-            $('#btnCheckCustomer').on('click', function () {
-                var isValidated = false;
-                var requiredArr = [
-                    'Phone'
-                ];
-                isValidated = ValidateEmptyRequiredFiels(requiredArr);
-                if (isValidated) {
-                    var phone = $("#Phone").val();
-                    $.getJSON("/MarketingAgent/GetPhoneNumberCheck/", { phone: phone }, function (data) {
-                        if (data == 0) {
-                            swal("You are not a Customer!", "", "warning");
-                        }
-                        else if (data == 1) {
-                            swal("PhoneNumber already exist!", "Live Agency", "warning");
-                        }
-                        else if (data == 2) {
-                            swal("PhoneNumber already exist!", "Waiting for Approval", "warning");
-                        }
-                        else if (data.msg == 3) {
-                            $('.Agency').removeClass("d-none");
-                            $('.CustomerCheck').addClass("d-none");
-                            $("#PhoneNumber").val(data.phone);
-                            $("#Name").val(data.name);
-                            $("#Email").val(data.email);
-                        }
-                        else if (data.msg == 4) {
-                            $('.Agency').removeClass("d-none");
-                            $('.CustomerCheck').addClass("d-none");
-                            $("#PhoneNumber").val(data.phone);
-                            $("#Name").val(data.name);
-                            $("#Email").val(data.email);
-                        }
-                    });
-                }
-            });
             $('#Create').on('click', function () {
                 var isValidated = false;
                 var requiredArr = [
@@ -284,7 +216,21 @@
                     $('#AgencyForm').submit();
                 }
             });
-           
+
+            $('input:radio[name="DrivingLicense"]').change(
+                function () {
+                    if (this.checked && this.value == 'Image') {
+                        $('.DrivingImg').removeClass('d-none');
+                        $('.DrivingPdf').addClass('d-none');
+                        $("#DrivingLicensePdf").val("");
+                    } else {
+                        $('.DrivingImg').addClass('d-none');
+                        $('.DrivingPdf').removeClass('d-none');
+                        $("#DrivingLicenseImage").val("");
+                        $("#img-license").attr('src', '');
+                    }
+                });
+
             $('input:radio[name="AccountDocument"]').change(
                 function () {
                     if (this.checked && this.value == 'Image') {
@@ -298,6 +244,7 @@
                         $("#img-account").attr('src', '');
                     }
                 });
+
             function readURL(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
