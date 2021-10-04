@@ -39,9 +39,7 @@
                                 <div class="form-group row">
                                     <div class="col-md-4">
                                         <label class="col-form-label"><strong class="text-secondary">Agency Name</strong></label>
-                                        <div class="DeliverBoyName">
-                                            <input id="Name" type="text" class="form-control" name="Name" maxlength="100" oninput="this.value=this.value.replace(/[^a-zA-Z ]/g, '');" />
-                                        </div>
+                                        <input id="Name" type="text" class="form-control" name="Name" maxlength="100" oninput="this.value=this.value.replace(/[^a-zA-Z ]/g, '');"  />
                                     </div>
                                     <div class="col-md-4">
                                         <label class="col-form-label"><strong class="text-secondary">Mobile Number</strong></label>
@@ -286,19 +284,7 @@
                     $('#AgencyForm').submit();
                 }
             });
-            $('input:radio[name="DrivingLicense"]').change(
-                function () {
-                    if (this.checked && this.value == 'Image') {
-                        $('.DrivingImg').removeClass('d-none');
-                        $('.DrivingPdf').addClass('d-none');
-                        $("#DrivingLicensePdf").val("");
-                    } else {
-                        $('.DrivingImg').addClass('d-none');
-                        $('.DrivingPdf').removeClass('d-none');
-                        $("#DrivingLicenseImage").val("");
-                        $("#img-license").attr('src', '');
-                    }
-                });
+           
             $('input:radio[name="AccountDocument"]').change(
                 function () {
                     if (this.checked && this.value == 'Image') {

@@ -3219,6 +3219,7 @@
     <Content Include="Views\Payment\CreditList.cshtml" />
     <Content Include="Views\MarketingAgent\Create.cshtml" />
     <Content Include="Views\MarketingAgent\Edit.cshtml" />
+    <Content Include="Views\MarketingAgent\InActiveList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
