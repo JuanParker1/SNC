@@ -169,16 +169,6 @@ namespace ShopNow.Controllers
         }
 
         
-        public ActionResult Dashboard()
-        {
-            var user = ((Helpers.Sessions.User)Session["MARKETINGUSER"]);
-            ViewBag.Name = user.Name;
-            return View();
-        }
-
-       
-
-      
         // Franchise Assign
         [AccessPolicy(PageCode = "")]
         public ActionResult AssignedFranchiseList()
@@ -186,8 +176,8 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new AgencyAssignListViewModel();
-            model.Lists = db.MarketingAgents.Where(i => i.Status == 0).Join(db.Shops.Where(i => i.Status == 0), m => m.Id, s => s.MarketingAgentId, (m, s) => new { m, s })
-                .Join(db.DeliveryBoys.Where(i => i.Status == 0), p => p.m.Id, d => d.MarketingAgentId, (p, d) => new { p, d })
+            model.Lists = db.MarketingAgents.Where(i => i.Status == 0).Join(db.Shops.Where(i => i.Status == 0), m => m.Id, s => s.AgencyId, (m, s) => new { m, s })
+                .Join(db.DeliveryBoys.Where(i => i.Status == 0), p => p.m.Id, d => d.AgencyId, (p, d) => new { p, d })
                 .GroupBy(i => i.p.m.Id)
                 .AsEnumerable()
                 .Select(i => new AgencyAssignListViewModel.AgencyList
@@ -226,8 +216,8 @@ namespace ShopNow.Controllers
                 foreach (var item in model.ShopIds)
                 {
                     var shop = db.Shops.FirstOrDefault(i => i.Id == item);
-                    shop.MarketingAgentId = model.MarketingAgentId;
-                    shop.MarketingAgentName = model.MarketingAgentName;
+                    shop.AgencyId = model.MarketingAgentId;
+                    shop.AgencyName = model.MarketingAgentName;
                     db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }
@@ -237,8 +227,8 @@ namespace ShopNow.Controllers
                 foreach (var item in model.DeliveryBoyIds)
                 {
                     var deliveryboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == item);
-                    deliveryboy.MarketingAgentId = model.MarketingAgentId;
-                    deliveryboy.MarketingAgentName = model.MarketingAgentName;
+                    deliveryboy.AgencyId = model.MarketingAgentId;
+                    deliveryboy.AgencyName = model.MarketingAgentName;
                     db.Entry(deliveryboy).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }
@@ -252,8 +242,8 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new AgencyAssignUpdateViewModel();
-            model.ShopIds = string.Join(",",db.Shops.Where(i => i.MarketingAgentId == id && i.Status == 0).Select(i => i.Id).ToList());
-            model.DeliveryBoyIds = string.Join(",",db.DeliveryBoys.Where(i => i.MarketingAgentId == id && i.Status == 0).Select(i => i.Id).ToList());
+            model.ShopIds = string.Join(",",db.Shops.Where(i => i.AgencyId == id && i.Status == 0).Select(i => i.Id).ToList());
+            model.DeliveryBoyIds = string.Join(",",db.DeliveryBoys.Where(i => i.AgencyId == id && i.Status == 0).Select(i => i.Id).ToList());
 
             return View(model);
         }
@@ -269,8 +259,8 @@ namespace ShopNow.Controllers
 
         public JsonResult GetAssignMarketingAgent(int marketingagentId)
         {
-            var shop = db.Shops.Any(i => i.MarketingAgentId == marketingagentId);
-            var deliveryboy = db.DeliveryBoys.Any(i => i.MarketingAgentId == marketingagentId);
+            var shop = db.Shops.Any(i => i.AgencyId == marketingagentId);
+            var deliveryboy = db.DeliveryBoys.Any(i => i.AgencyId == marketingagentId);
             if (shop == true || deliveryboy == true) 
             {
                 return Json(true, JsonRequestBehavior.AllowGet);

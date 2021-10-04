@@ -1,0 +1,35 @@
+﻿@model IEnumerable<ShopNow.ViewModels.AgencyListViewModel.AgencyList>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Approval Pending Agency List";
+}
+<title>ShopNow | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+<div class="container-fluid">
+    <div class="row my-2">
+        <div class="col-md-6">
+            <h5 class="text-success">@ViewBag.Title</h5>
+        </div>
+        <div class="col-md-6 text-right">
+            <a href="~/Agency/List" class="mr-2" target="_self"><span class="fa fa-list-ul"></span> List</a>
+            <a href="/Agency/AssignFranchise"><span class="fa fa-list-ul"></span> Assign Agency</a>
+            <a href="~/Agency/AssignedFranchiseList" class="ml-3"><span class="fa fa-list-ul"></span> Agency Assigned List</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    @Html.Grid(Model).Columns(columns =>
+                    {
+                    columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(10);
+                    columns.Add(c => c.PhoneNumber).Titled("Phone Number").Filterable(true).SetWidth(10);
+                    columns.Add(c => c.Email).Titled("Address").Filterable(true).SetWidth(10);
+                    }).WithPaging(20).Sortable(true)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

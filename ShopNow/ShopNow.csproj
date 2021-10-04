@@ -3224,6 +3224,11 @@
     <Content Include="Views\MarketingAgent\Create.cshtml" />
     <Content Include="Views\MarketingAgent\Edit.cshtml" />
     <Content Include="Views\MarketingAgent\InActiveList.cshtml" />
+    <Content Include="Views\Agency\List.cshtml" />
+    <Content Include="Views\Agency\InActiveList.cshtml" />
+    <Content Include="Views\Agency\Create.cshtml" />
+    <Content Include="Views\Agency\Edit.cshtml" />
+    <Content Include="Views\Agency\AgencyAssignList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -3252,7 +3257,6 @@
     <Folder Include="Scripts\ckeditor\samples\plugins\htmlwriter\assets\outputforflash\" />
     <Folder Include="Scripts\ckeditor\samples\plugins\magicline\" />
     <Folder Include="Uploads\" />
-    <Folder Include="Views\Agency\" />
     <Folder Include="Views\ProductType\" />
   </ItemGroup>
   <ItemGroup>
