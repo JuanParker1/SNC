@@ -10,6 +10,11 @@
             <h5 class="text-success">@ViewBag.Title</h5>
         </div>
         <div class="col-md-9 text-right">
+            @if (Model.Status == 1)
+            {
+                <a href="~/Agency/Approve?Id=@Model.Id" class="btn btn-success btn-sm mr-2">Approve</a>
+                <a href="~/Agency/Reject?Id=@Model.Id" class="btn btn-danger text-center text-nowrap btn-sm mr-2">Reject</a>
+            }
             <a href="~/Agency/List" target="_self"><span class="fa fa-list-ul"></span> Agency List</a>
         </div>
     </div>

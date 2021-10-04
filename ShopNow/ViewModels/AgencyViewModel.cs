@@ -10,6 +10,7 @@ namespace ShopNow.ViewModels
         public HttpPostedFileBase AgencyImage { get; set; }
         public HttpPostedFileBase PanImage { get; set; }
         public HttpPostedFileBase BankPassbookImage { get; set; }
+        public HttpPostedFileBase BankPassbookPdf { get; set; }
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
@@ -39,6 +40,7 @@ namespace ShopNow.ViewModels
         public HttpPostedFileBase AgencyImage { get; set; }
         public HttpPostedFileBase PanImage { get; set; }
         public HttpPostedFileBase BankPassbookImage { get; set; }
+        public HttpPostedFileBase BankPassbookPdf { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
@@ -61,6 +63,7 @@ namespace ShopNow.ViewModels
         public string IFSCCode { get; set; }
         public string SwiftCode { get; set; }
         public string UPIID { get; set; }
+        public int Status { get; set; }
     }
 
     public class AgencyListViewModel
