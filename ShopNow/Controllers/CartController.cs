@@ -445,8 +445,30 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             Order order = db.Orders.FirstOrDefault(i => i.Id == id);
-            var model = new CartDetailsViewModel();
-            _mapper.Map(order, model);
+             var model = new CartDetailsViewModel();
+            if (order != null)
+            {
+                var shop = db.Shops.FirstOrDefault(i => i.Id == order.ShopId);
+                _mapper.Map(order, model);
+                model.ShopAddress = shop.Address;
+                var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId);
+                if (deliveryBoy != null)
+                {
+                    model.DeliveryBoyIsAssign = deliveryBoy.isAssign;
+                    model.DeliveryBoyOnWork = deliveryBoy.OnWork;
+                }
+                model.ListItems = db.OrderItems.Where(i => i.OrderId == order.Id)
+                    .Select(i => new CartDetailsViewModel.ListItem
+                    {
+                        BrandName = i.BrandName,
+                        CategoryName = i.CategoryName,
+                        ImagePath = i.ImagePath,
+                        Price = i.Price,
+                        ProductName = i.ProductName,
+                        Quantity = i.Quantity,
+                        UnitPrice = i.UnitPrice
+                    }).ToList();
+            }
             return View(model);
         }
 
