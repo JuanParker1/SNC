@@ -5059,5 +5059,30 @@ namespace ShopNow.Controllers
                 return 0;
         }
 
+        //Update search data if save as space seperated
+        public JsonResult UpdateSearchData()
+        {
+            var list = db.SearchDatas.Where(i => i.KeyValue.Length > 100).ToList();
+            foreach (var item in list)
+            {
+                string[] keyArr = item.KeyValue.Split(null);
+                foreach (var li in keyArr)
+                {
+                    var searchdata = new SearchData
+                    {
+                        KeyValue = li,
+                        Source = item.Source
+                    };
+                    db.SearchDatas.Add(searchdata);
+                    db.SaveChanges();
+                }
+
+                var oldSD = db.SearchDatas.FirstOrDefault(i => i.Id == item.Id);
+                db.SearchDatas.Remove(oldSD);
+                db.SaveChanges();
+            }
+
+            return Json(true);
+        }
     }
 }

@@ -614,8 +614,8 @@ namespace ShopNow.Controllers
             var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
             if (shop != null)
             {
-                shop.MarketingAgentId = model.MarketingAgentId;
-                shop.MarketingAgentName = model.MarketingAgentName;
+                shop.AgencyId = model.MarketingAgentId;
+                shop.AgencyName = model.MarketingAgentName;
                 db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
@@ -629,13 +629,13 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new ShopFranchiseViewModel();
-            model.List = db.Shops.Where(i => i.Status == 0 && i.MarketingAgentId != 0 && i.MarketingAgentName != null)
+            model.List = db.Shops.Where(i => i.Status == 0 && i.AgencyId != 0 && i.AgencyName != null)
                 .Select(i => new ShopFranchiseViewModel.FranchiseList
                 {
                     Name = i.Name,
                     Id = i.Id,
-                    MarketingAgentId = Convert.ToInt32(i.MarketingAgentId),
-                    MarketingAgentName = i.MarketingAgentName
+                    MarketingAgentId = Convert.ToInt32(i.AgencyId),
+                    MarketingAgentName = i.AgencyName
                 }).OrderBy(i => i.Name).ToList();
             return View(model.List);
         }
@@ -666,8 +666,8 @@ namespace ShopNow.Controllers
             var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
             if (shop != null)
             {
-                shop.MarketingAgentId = model.MarketingAgentId;
-                shop.MarketingAgentName = model.MarketingAgentName;
+                shop.AgencyId = model.MarketingAgentId;
+                shop.AgencyName = model.MarketingAgentName;
                 shop.UpdatedBy = user.Name;
                 shop.DateUpdated = DateTime.Now;
                 db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
@@ -685,8 +685,8 @@ namespace ShopNow.Controllers
             var shop = db.Shops.FirstOrDefault(i => i.Id == id);
             if (shop != null)
             {
-                shop.MarketingAgentId = 0;
-                shop.MarketingAgentName = null;
+                shop.AgencyId = 0;
+                shop.AgencyName = null;
                 db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 IsAdded = true;
@@ -931,7 +931,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNSHPAF015")]
         public async Task<JsonResult> GetShopSelect2(string q = "")
         {
-            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.MarketingAgentName == null).Select(i => new
+            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.AgencyName == null).Select(i => new
             {
                 id = i.Id,
                 text = i.Name

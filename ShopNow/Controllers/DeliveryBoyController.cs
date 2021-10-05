@@ -115,6 +115,8 @@ namespace ShopNow.Controllers
                 deliveryboy.DateEncoded = DateTime.Now;
                 deliveryboy.DateUpdated = DateTime.Now;
                 deliveryboy.Status = 1;
+                db.DeliveryBoys.Add(deliveryboy);
+                db.SaveChanges();
                 try
                 {
                     // DeliveryBoy Image
@@ -158,7 +160,7 @@ namespace ShopNow.Controllers
                         uc.UploadFiles(model.CVPdf.InputStream, deliveryboy.Id + "_" + model.CVPdf.FileName, accesskey, secretkey, "pdf");
                         deliveryboy.CVPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryboy.Id + "_" + model.CVPdf.FileName.Replace(" ", "");
                     }
-                    db.DeliveryBoys.Add(deliveryboy);
+                    db.Entry(deliveryboy).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                     return RedirectToAction("List");
                 }
@@ -661,8 +663,8 @@ namespace ShopNow.Controllers
 
             if (deliveryBoy != null)
             {
-                deliveryBoy.MarketingAgentId = 0;
-                deliveryBoy.MarketingAgentName = null;
+                deliveryBoy.AgencyId = 0;
+                deliveryBoy.AgencyName = null;
                 deliveryBoy.DateUpdated = DateTime.Now;
                 db.Entry(deliveryBoy).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
@@ -717,7 +719,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SHNDBYAF011")]
         public async Task<JsonResult> GetDeliveryBoySelect2(string q = "")
         {
-            var model = await db.DeliveryBoys.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.MarketingAgentName == null).Select(i => new
+            var model = await db.DeliveryBoys.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.AgencyName == null).Select(i => new
             {
                 id = i.Id,
                 text = i.Name

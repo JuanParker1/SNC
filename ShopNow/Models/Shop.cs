@@ -81,8 +81,8 @@ namespace ShopNow.Models
         public string ShopCategoryName { get; set; }
         public int PincodeRateId { get; set; }
         public int PincodeRateDeliveryRateSet { get; set; }
-        public int MarketingAgentId { get; set; }
-        public string MarketingAgentName { get; set; }
+        public int AgencyId { get; set; }
+        public string AgencyName { get; set; }
         public int Adscore { get; set; }
         public Nullable<bool> IsOnline { get; set; }
         public string GooglePlaceId { get; set; }

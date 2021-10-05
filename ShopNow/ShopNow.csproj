@@ -350,6 +350,7 @@
     <Compile Include="Controllers\AccessPolicyController.cs" />
     <Compile Include="Controllers\AchievementSettingController.cs" />
     <Compile Include="Controllers\AddOnCategoryController.cs" />
+    <Compile Include="Controllers\AgencyController.cs" />
     <Compile Include="Controllers\ApiSettingController.cs" />
     <Compile Include="Controllers\AppDetailController.cs" />
     <Compile Include="Controllers\BannerController.cs" />
@@ -427,6 +428,9 @@
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AddOnCategory.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Agency.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ApiSetting.cs">
@@ -658,6 +662,7 @@
     <Compile Include="ViewModels\AccessPolicyViewModel.cs" />
     <Compile Include="ViewModels\AchievementSettingViewModels.cs" />
     <Compile Include="ViewModels\AddOnCategoryViewModel.cs" />
+    <Compile Include="ViewModels\AgencyViewModel.cs" />
     <Compile Include="ViewModels\ApiSettingViewModels.cs" />
     <Compile Include="ViewModels\ApiViewModels.cs" />
     <Compile Include="ViewModels\AppDetailViewModels.cs" />
@@ -676,7 +681,6 @@
     <Compile Include="ViewModels\DrugCompoundDetailViewModel.cs" />
     <Compile Include="ViewModels\LocationDetailsViewModels.cs" />
     <Compile Include="ViewModels\MeasurementUnitViewModel.cs" />
-    <Compile Include="ViewModels\MarketingAgentViewModel.cs" />
     <Compile Include="ViewModels\MasterProductViewModel.cs" />
     <Compile Include="ViewModels\BrandOwnerViewModel.cs" />
     <Compile Include="ViewModels\OfferViewModels.cs" />
@@ -3029,7 +3033,6 @@
     <Content Include="Views\Page\Index.cshtml" />
     <Content Include="Views\ProductSpecification\Index.cshtml" />
     <Content Include="Views\AddOnCategory\Index.cshtml" />
-    <Content Include="Views\MarketingAgent\Register.cshtml" />
     <Content Include="Views\Brand\Index.cshtml" />
     <Content Include="Views\Category\Index.cshtml" />
     <Content Include="Views\Shop\Details.cshtml" />
@@ -3041,7 +3044,6 @@
     <Content Include="Views\ProductSpecification\Edit.cshtml" />
     <Content Include="Views\ProductSpecification\List.cshtml" />
     <Content Include="Views\MarketingAgent\List.cshtml" />
-    <Content Include="Views\MarketingAgent\Updation.cshtml" />
     <Content Include="Views\BrandOwner\Dashboard.cshtml" />
     <Content Include="Views\BrandOwner\List.cshtml" />
     <Content Include="Views\BrandOwner\Updation.cshtml" />
@@ -3219,6 +3221,14 @@
     <Content Include="Views\Payment\CheckOut.cshtml" />
     <Content Include="Views\Payment\Create.cshtml" />
     <Content Include="Views\Payment\CreditList.cshtml" />
+    <Content Include="Views\MarketingAgent\Create.cshtml" />
+    <Content Include="Views\MarketingAgent\Edit.cshtml" />
+    <Content Include="Views\MarketingAgent\InActiveList.cshtml" />
+    <Content Include="Views\Agency\List.cshtml" />
+    <Content Include="Views\Agency\InActiveList.cshtml" />
+    <Content Include="Views\Agency\Create.cshtml" />
+    <Content Include="Views\Agency\Edit.cshtml" />
+    <Content Include="Views\Agency\AgencyAssignList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

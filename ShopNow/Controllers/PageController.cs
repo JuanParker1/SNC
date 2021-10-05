@@ -5,6 +5,7 @@ using ShopNow.Helpers;
 using ShopNow.Models;
 using ShopNow.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 using System.IO;
@@ -225,24 +226,29 @@ namespace ShopNow.Controllers
                     }
                 }
 
+                List<Page> PageList = new List<Page>();
+                var master = db.Pages.Where(i => i.Status == 0).Select(i => new { Name = i.Name }).ToList();
                 foreach (DataRow row in dt.Rows)
                 {
-                    var page = db.Pages.AsEnumerable().FirstOrDefault(i => i.Name == row[model.Name].ToString() && i.Status == model.Status);
-                    if (page == null)
+                    if (row[model.Name].ToString().Trim() != string.Empty)
                     {
-                        db.Pages.Add(new Page
+                        int idx = master.FindIndex(a => a.Name == row[model.Name].ToString().Trim());
+                        if (idx <= 0)
                         {
-                            Name = row[model.Name].ToString().ToUpper(),
-                            Code = row[model.Code].ToString().ToUpper(),
-                            Status = model.Status,
-                            DateEncoded = DateTime.Now,
-                            DateUpdated = DateTime.Now,
-                            CreatedBy = user.Name,
-                            UpdatedBy = user.Name
-                        });
-                        db.SaveChanges();
+                            PageList.Add(new Page
+                            {
+                                Name = row[model.Name].ToString().ToUpper(),
+                                Code = row[model.Code].ToString().ToUpper(),
+                                Status = model.Status,
+                                DateEncoded = DateTime.Now,
+                                DateUpdated = DateTime.Now,
+                                CreatedBy = user.Name,
+                                UpdatedBy = user.Name
+                            });
+                        }
                     }
                 }
+                db.BulkInsert(PageList);
             }
             return View();
         }
