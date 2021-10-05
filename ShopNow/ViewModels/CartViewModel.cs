@@ -9,34 +9,74 @@ namespace ShopNow.ViewModels
 {
     public class CartDetailsViewModel
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public int CustomerId { get; set; }
         public string CustomerName { get; set; }
+        public string CustomerPhoneNumber { get; set; }
         public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public int ProductId { get; set; }
-        public string ProductName { get; set; }
-        public string PhoneNumber { get; set; }
-        public   int BrandId { get; set; }
-        public string BrandName { get; set; }
-        public string CategoryCode { get; set; }
-        public string CategoryName { get; set; }
         public string DeliveryAddress { get; set; }
-        public string ImagePath { get; set; }
-        public string DeliveryBoyCode { get; set; }
+        public string ShopPhoneNumber { get; set; }
+        public string ShopOwnerPhoneNumber { get; set; }
+        public string ShopAddress { get; set; }
+        public int TotalProduct { get; set; }
+        public int TotalQuantity { get; set; }
+        public double TotalPrice { get; set; }
+        public double WalletAmount { get; set; }
+        public double NetTotal { get; set; }
+        public int OrderNumber { get; set; }
+        public int DeliveryBoyId { get; set; }
         public string DeliveryBoyName { get; set; }
         public string DeliveryBoyPhoneNumber { get; set; }
-        public string UserEnquiryCode { get; set; }
-        public string UserEnquiryName { get; set; }
-        public int OrderNumber { get; set; }
-        public string Qty { get; set; }
-        public double Price { get; set; }
-        public int CartStatus { get; set; }
-        public string CreatedBy { get; set; }
-        public string UpdatedBy { get; set; }
+        public int DeliveryBoyIsAssign { get; set; }
+        public int DeliveryBoyOnWork { get; set; }
+        public double DeliveryCharge { get; set; }
+        public double ShopDeliveryDiscount { get; set; }
+        public double NetDeliveryCharge { get; set; }
+        public double Convinenientcharge { get; set; }
+        public double Packingcharge { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public double Distance { get; set; }
+        public int ShopPaymentStatus { get; set; }
+        public int DeliveryBoyPaymentStatus { get; set; }
+        public int DeliveryOrderPaymentStatus { get; set; }
+        public double RatePerOrder { get; set; }
+        public double PenaltyAmount { get; set; }
+        public string PenaltyRemark { get; set; }
+        public double WaitingCharge { get; set; }
+        public int WaitingTime { get; set; }
+        public string WaitingRemark { get; set; }
+        public DateTime? ShopAcceptedTime { get; set; }
+        public DateTime? OrderReadyTime { get; set; }
+        public DateTime? DeliveryBoyShopReachTime { get; set; }
+        public DateTime? OrderPickupTime { get; set; }
+        public DateTime? DeliveryLocationReachTime { get; set; }
+        public DateTime? DeliveredTime { get; set; }
+        public int? OfferId { get; set; }
+        public int? ProductFreeOfferId { get; set; }
+        public double OfferAmount { get; set; }
+        public bool? IsPreorder { get; set; }
+        public DateTime? PreorderDeliveryDateTime { get; set; }
+        public string RouteAudioPath { get; set; }
+        public string Remarks { get; set; }
         public int Status { get; set; }
         public DateTime DateEncoded { get; set; }
         public DateTime DateUpdated { get; set; }
+        public string CreatedBy { get; set; }
+        public string UpdatedBy { get; set; }
+
+        public List<ListItem> ListItems { get; set; }
+        public class ListItem
+        {
+            public string ProductName { get; set; }
+            public string BrandName { get; set; }
+            public string CategoryName { get; set; }
+            public string ImagePath { get; set; }
+            public int Quantity { get; set; }
+            public double UnitPrice { get; set; }
+            public double Price { get; set; }
+        }
     }
 
     public class CartHistoryViewModel

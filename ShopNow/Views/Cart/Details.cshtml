@@ -1,7 +1,7 @@
 ﻿@model ShopNow.ViewModels.CartDetailsViewModel
 @{
 
-    ViewBag.Title = "Cart Details";
+    ViewBag.Title = "Order Details";
 }
 
 <div class="px-3 mb-3">
@@ -11,93 +11,333 @@
         </div>
     </div>
 </div>
-<div class="container-fluid my-0">
-    <div class="row bg-green-200">
-        <div class="col-md-12 mx-auto">
-            @Html.AntiForgeryToken()
-            <div class="card">
-                <div class="card-header">
-                    <span class="text-success h5"><strong>Cart Details</strong></span>
-                </div>
+<div class="container-fluid mb-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card h-100">
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-3 text-center">
-                            <label class="font-weight-bold text-secondary">Image</label>
-                            <div class="col-md-12 mb-2">
-                                <img id='img-upload' src="@Model.ImagePath" class="img-thumbnail" width="100" height="100" onerror="this.src='~/Images/No Photo.png'" />
-                            </div>
-                            @if (Model.ProductName != null)
-                            {
-                                <span class="text-dark font-weight-bold"> @Model.ProductName</span>
-                            }
-                        </div>
-                        <div class="col-md-9">
-                            <p>
-                                <span>Brand:</span>
-                                @if (Model.BrandName != null)
-                                {
-                                    <span class="text-dark font-weight-bold"> @Model.BrandName</span>
-                                }
-                                else
-                                {
-                                    <span class="font-weight-bold text-dark"> N/A</span>
-                                }
-                                <span>Category: </span>
-                                @if (Model.CategoryName != null)
-                                {
-                                    <span class="text-dark font-weight-bold"> @Model.CategoryName</span>
-                                }
-                                else
-                                {
-                                    <span class="font-weight-bold text-dark"> N/A</span>
-                                }
-                            </p>
-                            <p>
-                                M.R.P:
-                                @if (Model.Price != 0)
-                                {
-                                    <span class="font-weight-bold text-dark"> @Model.Price</span>
-                                }
-                                else
-                                {
-                                    <span class="font-weight-bold text-dark"> N/A</span>
-                                }
-                                Quantity:
-                                @if (Model.Price != 0)
-                                {
-                                    <span class="font-weight-bold text-dark"> @Model.Qty</span>
-                                }
-                                else
-                                {
-                                    <span class="font-weight-bold text-dark"> N/A</span>
-                                }
-                            </p>
-                            <p>
-                                Shop Name:
-                                @if (Model.ShopName != null)
-                                {
-                                    <span class="font-weight-bold text-dark"> @Model.ShopName</span>
-                                }
-                                else
-                                {
-                                    <span class="font-weight-bold text-dark"> N/A</span>
-                                }
-                            </p>
-                            <p>
-                                Delivery Address:
-                                @if (Model.DeliveryAddress != null)
-                                {
-                                    <span class="font-weight-bold text-dark"> @Model.DeliveryAddress</span>
-                                }
-                                else
-                                {
-                                    <span class="font-weight-bold text-dark"> N/A</span>
-                                }
-                            </p>
-                        </div>
+                    <label class="font-weight-bold text-muted"><u>Order Details:</u></label>
+                    <div class="d-flex">
+                        <label class="mr-3">Number:</label>
+                        <b>@Model.OrderNumber</b>
+                    </div>
+                    <div class="d-flex">
+                        <label class="mr-3">Date:</label>
+                        <b>@Model.DateEncoded.ToString("dd-MMM-yyyy")</b>
+                    </div>
+                    <div class="d-flex">
+                        <label class="mr-3">Total Amount:</label>
+                        <b>₹@Model.NetTotal</b>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class=" card-body">
+                    <label class="font-weight-bold text-muted"><u>Shop Details:</u></label>
+                    <div class="d-flex">
+                        <label class="mr-3">Name:</label>
+                        <b>@Model.ShopName</b>
+                    </div>
+                    <div class="d-flex">
+                        <label class="mr-3">Ph Number:</label>
+                        <b>@Model.ShopPhoneNumber</b>
+                    </div>
+                    <div class="d-flex">
+                        <label class="mr-3">Owner Number:</label>
+                        <b>@Model.ShopOwnerPhoneNumber</b>
+                    </div>
+                    <div class="d-flex">
+                        <label class="mr-3">Address:</label>
+                        <b>@Model.ShopAddress</b>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class=" card-body">
+                    <label class="font-weight-bold text-muted"><u>Customer Details:</u></label>
+                    <div class="d-flex">
+                        <label class="mr-3">Name:</label>
+                        <b>@Model.CustomerName</b>
+                    </div>
+                    <div class="d-flex">
+                        <label class="mr-3">Ph Number:</label>
+                        <b>@Model.CustomerPhoneNumber</b>
+                    </div>
+                    <div class="d-flex">
+                        <label class="mr-3">Address:</label>
+                        <a onclick="gotomap(@Model.Latitude,@Model.Longitude)" href="" target="_blank"> <span class="font-weight-bold"> @Model.DeliveryAddress</span></a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="row mt-3">
+        <div class="col-md-10">
+            <div class="card h-100">
+                <div class="card-body">
+                    <label class="font-weight-bold text-muted"><u>Order Items:</u></label>
+                    <table class="table table-borderless table-striped" id="tbl-items">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Product Name</th>
+                                <th>Brand Name</th>
+                                <th>Category Name</th>
+                                <th>Qty</th>
+                                <th>Price</th>
+                                <th>Total</th>
+                                <th>Image</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.ListItems)
+                            {
+                                <tr>
+                                    <td></td>
+                                    <td>@item.ProductName</td>
+                                    <td>@item.BrandName</td>
+                                    <td>@item.CategoryName</td>
+                                    <td>@item.Quantity</td>
+                                    <td>@item.UnitPrice</td>
+                                    <td>@item.Price</td>
+                                    <td><img src="@item.ImagePath" alt="Image" class="img-thumbnail productImages" data-toggle="modal" data-target="#myModal" width="45" height="60" onerror="this.src='/Images/No Photo.png'" /></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card h-100">
+                <div class="card-body">
+                    <label class="font-weight-bold text-muted"><u>Order Status:</u></label>
+                    @switch (Model.Status)
+                    {
+                        case 2:
+                            <h5 class="font-weight-bold text-primary text-center mb-3">Order Pending</h5>
+                            <button type="button" class="btn btn-sm btn-block btn-success mb-3" id="Accept">Accept</button>
+                            <button type="button" class="btn btn-sm btn-block btn-danger" id="Cancel">Cancel</button>
+                            break;
+                        case 3:
+                            <h5 class="font-weight-bold text-primary text-center mb-3">Order is being Prepared</h5>
+                            <button type="button" class="btn btn-sm btn-block btn-success" id="Assign">Assign Delivery Boy</button>
+                            break;
+                        case 4:
+                            if (Model.DeliveryBoyIsAssign == 1 && Model.DeliveryBoyOnWork == 0)
+                            {
+                                <h5 class="font-weight-bold text-center text-warning mb-3">Assigned for Delivery</h5>
+                                <a href="/Cart/DeliveryBoyAccept?OrderNumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-sm btn-info btn-block">Delivery Boy Accept</a>
+                            }
+                            else if (Model.DeliveryBoyIsAssign == 1 && Model.DeliveryBoyOnWork == 1)
+                            {
+                                <h5 class="font-weight-bold text-warning text-center mb-3">Waiting For Pickup</h5>
+                                <a href="/Cart/DeliveryBoyPickup?OrderNumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-sm btn-info btn-block">Delivery Boy Pickup</a>
+                            }
+                            else
+                            {
+                                <h5 class="font-weight-bold text-warning text-center mb-3">Assigned for Delivery</h5>
+                            }
+                            break;
+                        case 5:
+                            <h5 class="font-weight-bold text-warning text-center mb-3">On the Way to Delivery</h5>
+                            <a href="/Cart/MarkAsDelivered?OrderNumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-sm btn-info btn-block mb-3">Mark as Delivered</a>
+                            <a href="/Cart/CustomerNotPickUp?OrderNumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-sm btn-warning btn-block text-white">Customer Not Pickup</a>
+                            break;
+                        case 6:
+                            <h5 class="font-weight-bold text-success text-center mb-3">Order Delivered</h5>
+                            if (Model.PenaltyAmount <= 0)
+                            {
+                                <a href="#modal-add-penalty-charge" data-target="#modal-add-penalty-charge" data-toggle="modal" class="btn btn-sm btn-block btn-info text-white mb-3">Add Penalty</a>
+                            }
+                            if (Model.WaitingCharge <= 0)
+                            {
+                                <a href="#modal-add-waiting-charge" data-target="#modal-add-waiting-charge" data-toggle="modal" class="btn btn-sm btn-block btn-warning text-white">Add Waiting Charge</a>
+                            }
+                            break;
+                        case 7:
+                            <h5 class="font-weight-bold text-danger text-center mb-3">Order Cancelled</h5>
+                            break;
+                        case 8:
+                            <h5 class="font-weight-bold text-success text-center mb-3">Order is Ready</h5>
+                            if (Model.DeliveryBoyId == 0)
+                            {
+                                <button type="button" class="btn btn-sm btn-block btn-success" id="Assign">Assign Delivery Boy</button>
+                            }
+                            break;
+                        case 9:
+                            <h5 class="font-weight-bold text-danger text-center mb-3">Order Cancelled By Customer</h5>
+                            break;
+                        case 10:
+                            <h5 class="font-weight-bold text-danger text-center mb-3">Customer Not Responed</h5>
+                            if (Model.PenaltyAmount <= 0)
+                            {
+                                <a href="#modal-add-penalty-charge" data-target="#modal-add-penalty-charge" data-toggle="modal" class="btn btn-sm btn-block btn-info text-white mb-3">Add Penalty</a>
+                            }
+                            break;
+                    }
+                    <a href="~/Cart/PickupSlip?OrderNumber=@Model.OrderNumber&id=@ShopNow.Helpers.AdminHelpers.ECodeLong(Model.Id)" class="btn btn-sm btn-secondary btn-block mt-3"><span><i class="fa fa-print mr-1" aria-hidden="true"></i></span> Pickup Slip</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+<input type="hidden" value="@Model.OrderNumber" id="hidden-ordernumber" />
+<input type="hidden" value="@Model.CustomerId" id="hidden-customerid" />
+<input type="hidden" value="@Model.Status" id="hidden-status" />
+
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <span class="close" data-dismiss="modal">&times;</span>
+        <a href="~/Home/ImageDenied">
+            <img class="modal-content" id="myImage" />
+        </a>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-add-penalty-charge" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form method="get" action="/Cart/AddPenaltyCharge">
+                    <input type="hidden" name="OrderId" value="@Model.Id" />
+                    <h5>Add Penalty Charge</h5>
+                    <div class="form-group">
+                        <label>Amount</label>
+                        <input class="form-control" type="number" name="Amount" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Remarks</label>
+                        <input class="form-control" type="text" name="Remark" required />
+                    </div>
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-sm btn-success mr-3">Submit</button>
+                        <button class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-add-waiting-charge" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form method="get" action="/Cart/AddWaitingCharge">
+                    <input type="hidden" name="OrderId" value="@Model.Id" />
+                    <h5>Add Waiting Charge</h5>
+                    <div class="form-group">
+                        <label>Amount</label>
+                        <input class="form-control" type="number" name="Amount" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Remarks</label>
+                        <input class="form-control" type="text" name="Remark" required />
+                    </div>
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-sm btn-success mr-3">Submit</button>
+                        <button class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script>
+        function gotomap(lat, lng) {
+            window.open('https://www.google.com/maps/place/' + lat + ',' + lng, "_blank");
+        }
+        $(document).ready(function () {
+            var t = $('#tbl-items').DataTable({
+                "dom": "<'row'<'col-sm-6'f>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-3'l><'col-sm-4'p>>" +
+                    "<'row'<'col-sm-12'tr>>",
+                "bPaginate": false,
+                "scrollY": 300,
+                "paging": true,
+                "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "ALL"]],
+                "pageLength": 20,
+                initComplete: function (settings, json) {
+                    $('.index input').remove();
+                    $('.action-btn input').remove();
+                    $('.dataTables_filter input').appendTo('.data-search');
+                    $('.dataTables_filter label').remove();
+                    $('.data-search input').attr('placeholder', 'Quick Search');
+                    $('.data-search input').addClass('form-control');
+                    $('.data-search input').removeClass('form-control-sm');
+                },
+            });
+
+            t.on('order.dt search.dt', function () {
+                t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+
+            var ordernumber = $("#hidden-ordernumber").val();
+            var customerId = $('#hidden-customerid').val();
+            $("#Accept").click(function () {
+                $.getJSON("/Cart/Accept?OrderNumber=" + ordernumber + "&customerId=" + customerId, function (data) {
+                    if (data.message != null) {
+                        swal({
+                            title: data.message,
+                            text: "",
+                            type: "success"
+                        }, function () {
+                            window.location.href = "/Cart/List";
+                        });
+                    }
+                });
+            });
+
+            var modal = document.getElementById('myModal');
+            var img = document.getElementsByClassName('productImages');
+            var modalImg = document.getElementById("myImage");
+            $(img).click(function () {
+                modal.style.display = "block";
+                modalImg.src = this.src;
+                if (this.src == "") {
+                    $('#myModal').hide();
+                }
+                else {
+                    $('#myModal').modal('show');
+                }
+            });
+
+            $("#Cancel").click(function () {
+                var ordernumber = $("#hidden-ordernumber").val();
+                var customerId = $('#hidden-customerid').val();
+                var status = $('#hidden-status').val();
+                $.getJSON("/Cart/Cancel?OrderNumber=" + ordernumber + "&customerId=" + customerId + "&status=" + status, function (data) {
+                    if (data.message != null) {
+                        swal({
+                            title: "Order Cancelled",
+                            text: data.message,
+                            type: "error"
+                        }, function () {
+                            window.location.href = "/Cart/List";
+                        });
+                    }
+                });
+            });
+
+            $("#Assign").click(function () {
+                var ordernumber = $("#hidden-ordernumber").val();
+                window.location.href = "/Cart/AssignDeliveryBoy?OrderNumber=" + ordernumber;
+            });
+
+        });
+    </script>
+}

@@ -1,4 +1,4 @@
-﻿@model ShopNow.ViewModels.FranchiseAssignViewModel
+﻿@model ShopNow.ViewModels.AgencyAssignViewModel
 @{
     ViewBag.Title = "Assign DeliveryBoy and Shops for Agency";
 }
@@ -10,13 +10,13 @@
             <h5 class="text-success">@ViewBag.Title</h5>
         </div>
         <div class="col-md-6 text-right">
-            <a href="~/MarketingAgent/List"><span class="fa fa-list-ul"></span> Agency List</a>
-            <a href="/MarketingAgent/AssignedFranchiseList" class="ml-3"><span class="fa fa-bars"></span> Agency Assigned List</a>
+            <a href="~/Agency/List"><span class="fa fa-list-ul"></span> Agency List</a>
+            <a href="/Agency/AgencyAssignList" class="ml-3"><span class="fa fa-bars"></span> Agency Assigned List</a>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12 mx-auto">
-            @using (Html.BeginForm("AssignFranchise", "MarketingAgent", FormMethod.Post, new { id = "AssignFranchiseForm", enctype = "multipart/form-data" }))
+            @using (Html.BeginForm("AgencyAssign", "Agency", FormMethod.Post, new { id = "AgencyAssignForm", enctype = "multipart/form-data" }))
             {
                 <div class="card shadow mb-3">
                     <div class="card-body">
@@ -24,8 +24,8 @@
                         <div class="form-group row">
                             <div class="col-md-4">
                                 <label class="col-form-label font-weight-bold text-secondary">Agency Name<span class="text-danger">*</span></label>
-                                <select name="MarketingAgentId" id="MarketingAgentId" class="form-control"></select>
-                                <input type="hidden" name="MarketingAgentName" id="MarketingAgentName" />
+                                <select name="AgencyId" id="AgencyId" class="form-control"></select>
+                                <input type="hidden" name="AgencyName" id="AgencyName" />
                             </div>
                             <div class="col-md-4">
                                 <label class="col-form-label text-secondary font-weight-bold">DeliveryBoy Name<span class="text-danger">*</span></label>
@@ -65,18 +65,18 @@
             $('#Create').on('click', function () {
                 var isValidated = false;
                 var requiredArr = [
-                    'MarketingAgentId',
+                    'AgencyId',
                     'DeliveryBoyIds',
                     'ShopIds'
                 ];
                 isValidated = ValidateEmptyRequiredFiels(requiredArr);
                 if (isValidated) {
-                    var marketingagentId = $("#MarketingAgentId").val()
-                    $.getJSON("/MarketingAgent/GetAssignMarketingAgent", { marketingagentId: marketingagentId }, function (data) {
+                    var agencyId = $("#AgencyId").val()
+                    $.getJSON("/Agency/GetAgencyAssign", { agencyId: agencyId }, function (data) {
                         if (data == true) {
                             swal("Notice!", "Already Assigned!", "warning");
                         } else {
-                            $('#AssignFranchiseForm').submit();
+                            $('#AgencyAssignForm').submit();
                         }
                     });
                 }
@@ -85,7 +85,7 @@
             $('#DeliveryBoyIds').select2({
                 placeholder: "Search Delivery Boy",
                 ajax: {
-                    url: "/MarketingAgent/GetDeliveryBoySelect2",
+                    url: "/Agency/GetDeliveryBoySelect2",
                     width: '100%',
                     delay: 250,
                     dataType: 'json'
@@ -96,7 +96,7 @@
             $('#ShopIds').select2({
                 placeholder: "Search Shop",
                 ajax: {
-                    url: "/MarketingAgent/GetShopSelect2",
+                    url: "/Agency/GetShopSelect2",
                     width: '100%',
                     delay: 250,
                     dataType: 'json'
@@ -104,16 +104,16 @@
             }).on('select2:select', function (e) {
             });
 
-            $('#MarketingAgentId').select2({
-                placeholder: "Search Marketing Agent",
+            $('#AgencyId').select2({
+                placeholder: "Search Agency",
                 ajax: {
-                    url: "/MarketingAgent/GetMarketingAgentSelect2",
+                    url: "/Agency/GetAgencySelect2",
                     width: '100%',
                     delay: 250,
                     dataType: 'json'
                 }
             }).on('select2:select', function (e) {
-                $('input[name="MarketingAgentName"]').val(e.params.data.text);
+                $('input[name="AgencyName"]').val(e.params.data.text);
             });
 
         });

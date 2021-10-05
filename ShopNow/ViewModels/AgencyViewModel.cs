@@ -10,9 +10,11 @@ namespace ShopNow.ViewModels
         public HttpPostedFileBase AgencyImage { get; set; }
         public HttpPostedFileBase PanImage { get; set; }
         public HttpPostedFileBase BankPassbookImage { get; set; }
+        public HttpPostedFileBase BankPassbookPdf { get; set; }
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
+        public int CustomerId { get; set; }
         public string ImagePath { get; set; }
         public string CountryName { get; set; }
         public string StateName { get; set; }
@@ -27,9 +29,9 @@ namespace ShopNow.ViewModels
         public string BankName { get; set; }
         public string AccountName { get; set; }
         public string AccountNumber { get; set; }
-        public string AcountType { get; set; }
         public string IFSCCode { get; set; }
         public string SwiftCode { get; set; }
+        public string BankPassbookPath { get; set; }
         public string UPIID { get; set; }
     }
 
@@ -39,10 +41,10 @@ namespace ShopNow.ViewModels
         public HttpPostedFileBase AgencyImage { get; set; }
         public HttpPostedFileBase PanImage { get; set; }
         public HttpPostedFileBase BankPassbookImage { get; set; }
+        public HttpPostedFileBase BankPassbookPdf { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
-        public string Password { get; set; }
         public string Email { get; set; }
         public string ImagePath { get; set; }
         public string CountryName { get; set; }
@@ -58,10 +60,11 @@ namespace ShopNow.ViewModels
         public string BankName { get; set; }
         public string AccountName { get; set; }
         public string AccountNumber { get; set; }
-        public string AcountType { get; set; }
         public string IFSCCode { get; set; }
         public string SwiftCode { get; set; }
+        public string BankPassbookPath { get; set; }
         public string UPIID { get; set; }
+        public int Status { get; set; }
     }
 
     public class AgencyListViewModel
@@ -80,26 +83,18 @@ namespace ShopNow.ViewModels
     {
         public int[] DeliveryBoyIds { get; set; }
         public int[] ShopIds { get; set; }
-        public int MarketingAgentId { get; set; }
-        public string MarketingAgentName { get; set; }
+        public int AgencyId { get; set; }
+        public string AgencyName { get; set; }
 
     }
 
-    public class AgencyAssignUpdateViewModel
-    {
-        public string DeliveryBoyIds { get; set; }
-        public string ShopIds { get; set; }
-        public int MarketingAgentId { get; set; }
-        public string MarketingAgentName { get; set; }
-
-    }
     public class AgencyAssignListViewModel
     {
         public List<AgencyList> Lists { get; set; }
         public class AgencyList
         {
-            public int MarketingAgentId { get; set; }
-            public string MarketingAgentName { get; set; }
+            public int AgencyId { get; set; }
+            public string AgencyName { get; set; }
 
             public List<ShopListItem> ShopListItems { get; set; }
             public class ShopListItem

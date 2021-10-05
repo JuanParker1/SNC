@@ -10,6 +10,11 @@
             <h5 class="text-success">@ViewBag.Title</h5>
         </div>
         <div class="col-md-9 text-right">
+            @if (Model.Status == 1)
+            {
+                <a href="~/Agency/Approve?Id=@Model.Id" class="btn btn-success btn-sm mr-2">Approve</a>
+                <a href="~/Agency/Reject?Id=@Model.Id" class="btn btn-danger text-center text-nowrap btn-sm mr-2">Reject</a>
+            }
             <a href="~/Agency/List" target="_self"><span class="fa fa-list-ul"></span> Agency List</a>
         </div>
     </div>
@@ -18,6 +23,8 @@
             @using (Html.BeginForm("Edit", "Agency", FormMethod.Post, new { id = "AgencyForm", role = "form", enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <input type="hidden" name="Status" value="@Model.Status" />
                 <div class="card shadow mb-4">
                     <div class="card-body">
                         <div class="row">
@@ -101,9 +108,17 @@
                                                 <div class="row ml-5 mt-2">
                                                     <div class="col-md-12">
                                                         <div class="img-upload-container mb-3">
-                                                            <img class="img-container w-100 h-100 mb-2" id="img-upload" onerror="this.src='/Images/No Photo.png'" />
+                                                            @if (Model.ImagePath != null)
+                                                            {
+                                                                <img class="img-container w-100 h-100 mb-2" id="img-upload" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath" onerror="this.src='/Images/No Photo.png'" />
+                                                            }
+                                                            else
+                                                            {
+                                                                <img id='img-upload' class="img-container w-100 h-100" />
+                                                            }
                                                             <input type="file" id="AgencyImage" name="AgencyImage" class="d-none" />
                                                             <label for="AgencyImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                            <input type="hidden" name="ImagePath" value="@Model.ImagePath" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -117,27 +132,39 @@
                                                 <label class="col-md-12 mt-2"><small class="text-secondary"><i>Pan Image</i></small></label>
                                                 <div class="row ml-3 PanImg mt-2">
                                                     <div class="img-upload-container mb-3">
-                                                        <img class="img-container w-100 h-100 mb-2" id="img-pan" onerror="this.src='/Images/No Photo.png'" />
+                                                        @if (Model.ImagePanPath != null)
+                                                        {
+                                                            <img class="img-container w-100 h-100 mb-2" id="img-pan" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePanPath" onerror="this.src='/Images/No Photo.png'" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <img id='img-pan' class="img-container w-100 h-100" />
+                                                        }
                                                         <input type="file" id="PanImage" name="PanImage" class="d-none" />
                                                         <label for="PanImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                        <input type="hidden" name="ImagePanPath" value="@Model.ImagePanPath" />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="card border-info">
-                                            <div class="card-body text-center row">
+                                            <div class="card-body text-center">
                                                 <label class="col-md-12 text-center"><strong class="text-secondary">Bank Account</strong></label>
-                                                <span class="col-md-12">
-                                                    <input type="radio" class="text-center" name="AccountDocument" id="AccountImage" value="Image" checked> <label for="AccountImage"> Image</label>
-                                                    <input type="radio" class="text-center" name="AccountDocument" id="AccountPDF" value="PDF"> <label for="AccountPDF"> PDF</label>
-                                                </span>
-                                                <div class="row AccountDocumentPdf mx-auto d-none mt-2 mb-3">
-                                                    <input class="mx-auto" type="file" id="BankPassbookPdf" name="BankPassbookPdf" />
-                                                </div>
-                                                <div class="img-upload-container mx-auto mb-3 AccountDocumentImg">
-                                                    <img class="img-container w-100 h-100 mb-2" id="img-account" onerror="this.src='/Images/No Photo.png'" />
-                                                    <input type="file" id="BankPassbookImage" name="BankPassbookImage" class="d-none" />
-                                                    <label for="BankPassbookImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                <label class="col-md-12"><small class="text-secondary"><i>Bank Passbook Image</i></small></label>
+                                                <div class="row">
+                                                    <div class="img-upload-container mx-auto mb-3 AccountDocumentImg">
+                                                        @if (Model.BankPassbookPath != null)
+                                                        {
+                                                            <img class="img-container w-100 h-100 mb-2" id="img-account" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.BankPassbookPath" onerror="this.src='/Images/No Photo.png'" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <img id='img-account' class="img-container w-100 h-100" />
+                                                        }
+                                                        <input type="file" id="BankPassbookImage" name="BankPassbookImage" class="d-none" />
+                                                        <label for="BankPassbookImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                        <input type="hidden" name="BankPassbookPath" value="@Model.BankPassbookPath" />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -150,27 +177,27 @@
                         <div class="col-md-12">
                             <h5 class="text-success mb-2">Bank Details</h5>
                             <div class="form-group row">
-                                <div class="col-md-4">
+                                <div class="form-group col-md-4">
                                     <small class="col-form-label" for="BankName"><i class="text-secondary">Bank Name</i></small>
                                     <input id="BankName" type="text" class="form-control" name="BankName" value="@Model.BankName" />
                                 </div>
-                                <div class="col-md-4">
+                                <div class="form-group col-md-4">
                                     <small class="col-form-label" for="AccountName"><i class="text-secondary">Account Name</i></small>
                                     <input id="AccountName" type="text" class="form-control" name="AccountName" value="@Model.AccountName" />
                                 </div>
-                                <div class="col-md-4">
+                                <div class="form-group col-md-4">
                                     <small class="col-form-label" for="AccountNumber"><i class="text-secondary">Account Number</i></small>
                                     <input id="AccountNumber" type="text" class="form-control" name="AccountNumber" value="@Model.AccountNumber" />
                                 </div>
-                                <div class="col-md-4">
+                                <div class="form-group col-md-4">
                                     <small class="col-form-label" for="IFSCCode"><i class="text-secondary">IFSC Code</i></small>
                                     <input id="IFSCCode" type="text" class="form-control" name="IFSCCode" value="@Model.IFSCCode" />
                                 </div>
-                                <div class="col-md-4">
+                                <div class="form-group col-md-4">
                                     <small class="col-form-label" for="SwiftCode"><i class="text-secondary">SwiftCode</i></small>
                                     <input id="SwiftCode" type="text" class="form-control" name="SwiftCode" value="@Model.SwiftCode" />
                                 </div>
-                                <div class="col-md-4">
+                                <div class="form-group col-md-4">
                                     <small class="col-form-label" for="UPIID"><i class="text-secondary">UPI</i></small>
                                     <input id="UPIID" type="text" class="form-control" name="UPIID" value="@Model.UPIID" />
                                 </div>
@@ -297,147 +324,88 @@
         });
 
 
-        var map, infoWindow, markers = [], marker;
+        var map, infoWindow, markers = [];
         function initMap() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    var card = document.getElementById('pac-card');
-                    var input = document.getElementById('pac-input');
-                    var autocomplete = new google.maps.places.Autocomplete(input);
-                    map = new google.maps.Map(document.getElementById('map'), {
-                        center: { lat: position.coords.latitude, lng: position.coords.longitude },
-                        zoom: 6
-                    });
-                    infoWindow = new google.maps.InfoWindow;
 
-                    if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(function (position) {
-                            var pos = {
-                                lat: position.coords.latitude,
-                                lng: position.coords.longitude
-                            };
+            var latitude = parseFloat($('#Latitude').val());
+            var longitude = parseFloat($('#Longitude').val());
+            var center = new google.maps.LatLng(latitude, longitude);
+            var card = document.getElementById('pac-card');
+            var input = document.getElementById('pac-input');
+            var autocomplete = new google.maps.places.Autocomplete(input);
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: latitude, lng: longitude },
+                zoom: 13
+            });
 
-                            marker = new google.maps.Marker({
-                                position: pos,
-                                map: map,
-                                draggable: true,
-                                title: "your place"
-                            });
-                            markers.push(marker);
-                            google.maps.event.addListener(marker, 'dragend', function (evt) {
-                                geocodePosition(marker.position);
-                            });
-                            google.maps.event.addListener(marker, 'drag', function () {
-                                geocodePosition(marker.position);
-                            });
-                            geocodePosition(pos);
+            infoWindow = new google.maps.InfoWindow;
+            var pos = {
+                lat: latitude,
+                lng: longitude
+            };
 
-                            function geocodePosition(pos) {
-                                var google_maps_geocoder = new google.maps.Geocoder();
-                                google_maps_geocoder.geocode(
-                                    { 'latLng': pos },
-                                    function (results, status) {
-                                        console.log(results);
-                                        $('#Address').val(results[0].formatted_address);
-                                        var address = results[0].address_components;
-                                        $.each(address, function () {
-                                            if (this.types[0] == "locality") {
-                                                $('#StreetName').val(this.long_name);
-                                            }
-                                            if (this.types[0] == "administrative_area_level_2") {
-                                                $('#DistrictName').val(this.long_name);
-                                            }
-                                            if (this.types[0] == "administrative_area_level_1") {
-                                                $('#StateName').val(this.long_name);
-                                            }
-                                            if (this.types[0] == "country") {
-                                                $('#CountryName').val(this.long_name);
-                                            }
-                                            if (this.types[0] == "postal_code") {
-                                                $('#PinCode').val(this.long_name);
-                                            }
+            var marker = new google.maps.Marker({
+                position: pos,
+                map: map,
+                title: "your place"
+            });
+            google.maps.event.addListener(marker, 'click', function () {
+                infowindow.open(map, marker);
+            });
+            markers.push(marker);
 
-                                        });
-                                        $('#Latitude').val(results[0].geometry.location.lat);
-                                        $('#Longitude').val(results[0].geometry.location.lng);
-                                    }
-                                );
-                            }
-
-                            autocomplete.addListener('place_changed', function () {
-                                document.getElementById("location-error").style.display = 'none';
-                                markers.forEach(function (marker) {
-                                    marker.setMap(null);
-                                });
-
-                                var place = autocomplete.getPlace();
-                                if (!place.geometry) {
-                                    document.getElementById("location-error").style.display = 'inline-block';
-                                    document.getElementById("location-error").innerHTML = "Cannot Locate '" + input.value + "' on map";
-                                    return;
-                                }
-                                var marker = new google.maps.Marker({
-                                    position: pos,
-                                    map: map,
-                                    title: "your place"
-                                });
-
-                                google.maps.event.addListener(marker, 'click', function () {
-                                    infowindow.open(map, marker);
-                                });
-                                markers.push(marker);
-
-                                map.fitBounds(place.geometry.viewport);
-                                marker.setPosition(place.geometry.location);
-                                marker.setVisible(true);
-                                console.log(place);
-                                $('#Address').val(place.formatted_address);
-                                var address = place.address_components;
-                                $.each(address, function () {
-
-                                    if (this.types[0] == "locality") {
-                                        $('#StreetName').val(this.long_name);
-                                    }
-                                    if (this.types[0] == "administrative_area_level_2") {
-                                        $('#DistrictName').val(this.long_name);
-                                    }
-                                    if (this.types[0] == "administrative_area_level_1") {
-                                        $('#StateName').val(this.long_name);
-                                    }
-                                    if (this.types[0] == "country") {
-                                        $('#CountryName').val(this.long_name);
-                                    }
-                                    if (this.types[0] == "postal_code") {
-                                        $('#PinCode').val(this.long_name);
-                                    }
-
-                                });
-
-                                $('#Latitude').val(place.geometry.location.lat);
-                                $('#Longitude').val(place.geometry.location.lng);
-
-                            });
-                        }, function () {
-                            handleLocationError(true, infoWindow, map.getCenter());
-                        });
-                    } else {
-
-                        handleLocationError(false, infoWindow, map.getCenter());
-                    }
-
+            autocomplete.addListener('place_changed', function () {
+                document.getElementById("location-error").style.display = 'none';
+                markers.forEach(function (marker) {
+                    marker.setMap(null);
                 });
-            } else {
-                x.innerHTML = "Geolocation is not supported by this browser.";
-            }
 
-        }
+                var place = autocomplete.getPlace();
+                if (!place.geometry) {
+                    document.getElementById("location-error").style.display = 'inline-block';
+                    document.getElementById("location-error").innerHTML = "Cannot Locate '" + input.value + "' on map";
+                    return;
+                }
+                var marker = new google.maps.Marker({
+                    position: pos,
+                    map: map,
+                    title: "your place"
+                });
 
-        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-            infoWindow.setPosition(pos);
-            infoWindow.setContent(browserHasGeolocation ?
-                'Error: The Geolocation service failed.' :
-                'Error: Your browser doesn\'t support geolocation.');
-            infoWindow.open(map);
+                google.maps.event.addListener(marker, 'click', function () {
+                    infowindow.open(map, marker);
+                });
+                markers.push(marker);
+
+                map.fitBounds(place.geometry.viewport);
+                marker.setPosition(place.geometry.location);
+                marker.setVisible(true);
+                console.log(place);
+
+                $('#Address').val(place.formatted_address);
+                var address = place.address_components;
+                $.each(address, function () {
+
+                    if (this.types[0] == "locality") {
+                        $('#StreetName').val(this.long_name);
+                    }
+                    if (this.types[0] == "administrative_area_level_2") {
+                        $('#DistrictName').val(this.long_name);
+                    }
+                    if (this.types[0] == "administrative_area_level_1") {
+                        $('#StateName').val(this.long_name);
+                    }
+                    if (this.types[0] == "country") {
+                        $('#CountryName').val(this.long_name);
+                    }
+                    if (this.types[0] == "postal_Id") {
+                        $('#PinCode').val(this.long_name);
+                    }
+                });
+                $('#Latitude').val(place.geometry.location.lat);
+                $('#Longitude').val(place.geometry.location.lng);
+
+            });
         }
 
     </script>

@@ -363,7 +363,6 @@
     <Compile Include="Controllers\DrugCompoundDetailController.cs" />
     <Compile Include="Controllers\ErrorPageController.cs" />
     <Compile Include="Controllers\MeasurementUnitController.cs" />
-    <Compile Include="Controllers\MarketingAgentController.cs" />
     <Compile Include="Controllers\MasterProductController.cs" />
     <Compile Include="Controllers\BrandOwnerController.cs" />
     <Compile Include="Controllers\OfferController.cs" />
@@ -3043,7 +3042,6 @@
     <Content Include="Views\ProductSpecification\Create.cshtml" />
     <Content Include="Views\ProductSpecification\Edit.cshtml" />
     <Content Include="Views\ProductSpecification\List.cshtml" />
-    <Content Include="Views\MarketingAgent\List.cshtml" />
     <Content Include="Views\BrandOwner\Dashboard.cshtml" />
     <Content Include="Views\BrandOwner\List.cshtml" />
     <Content Include="Views\BrandOwner\Updation.cshtml" />
@@ -3211,24 +3209,19 @@
     <Content Include="Views\SearchData\List.cshtml" />
     <Content Include="Views\SearchData\Entry.cshtml" />
     <Content Include="Views\Bill\BillingChargeEmptyList.cshtml" />
-    <Content Include="Views\MarketingAgent\AssignedFranchiseList.cshtml" />
     <Content Include="Views\Cart\CustomerCancelled.cshtml" />
-    <Content Include="Views\MarketingAgent\AssignFranchise.cshtml" />
-    <Content Include="Views\MarketingAgent\FranchiseUpdate.cshtml" />
     <Content Include="Views\Cart\CustomerNotPickupList.cshtml" />
     <Content Include="Views\Product\ApplyDiscount.cshtml" />
     <Content Include="Views\CustomerPrescription\List.cshtml" />
     <Content Include="Views\Payment\CheckOut.cshtml" />
     <Content Include="Views\Payment\Create.cshtml" />
     <Content Include="Views\Payment\CreditList.cshtml" />
-    <Content Include="Views\MarketingAgent\Create.cshtml" />
-    <Content Include="Views\MarketingAgent\Edit.cshtml" />
-    <Content Include="Views\MarketingAgent\InActiveList.cshtml" />
     <Content Include="Views\Agency\List.cshtml" />
     <Content Include="Views\Agency\InActiveList.cshtml" />
     <Content Include="Views\Agency\Create.cshtml" />
     <Content Include="Views\Agency\Edit.cshtml" />
     <Content Include="Views\Agency\AgencyAssignList.cshtml" />
+    <Content Include="Views\Agency\AgencyAssign.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

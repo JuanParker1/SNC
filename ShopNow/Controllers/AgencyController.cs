@@ -77,24 +77,37 @@ namespace ShopNow.Controllers
 
         public ActionResult Create()
         {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             return View();
         }
 
-        [AllowAnonymous]
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(false)]
+        [AccessPolicy(PageCode = "")]
         public ActionResult Create(AgencyCreateViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var agency = _mapper.Map<AgencyCreateViewModel, MarketingAgent>(model);
+            var agency = _mapper.Map<AgencyCreateViewModel, Agency>(model);
             agency.Status = 1;
             agency.DateEncoded = DateTime.Now;
             agency.DateUpdated = DateTime.Now;
-            db.MarketingAgents.Add(agency);
+            agency.CreatedBy = user.Name;
+            agency.UpdatedBy = user.Name;
+            db.Agencies.Add(agency);
             db.SaveChanges();
 
+            var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
+            if(customer != null)
+            {
+                customer.Position = 5;   // Agency
+                db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
             try
             {
-                var agencyImage = db.MarketingAgents.FirstOrDefault(i => i.Id == agency.Id);
+                var agencyImage = db.Agencies.FirstOrDefault(i => i.Id == agency.Id);
                 // Agency Image
                 if (model.AgencyImage != null)
                 {
@@ -102,25 +115,99 @@ namespace ShopNow.Controllers
                     agencyImage.ImagePath = agency.Id + "_" + model.AgencyImage.FileName.Replace(" ", "");
                 }
 
-                //// DrivingLicense Image
-                //if (model.PanImage != null)
-                //{
-                //    uc.UploadFiles(model.DrivingLicenseImage.InputStream, deliveryboy.Id + "_" + model.DrivingLicenseImage.FileName, accesskey, secretkey, "image");
-                //    agencyImage.ImagePanPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryboy.Id + "_" + model.DrivingLicenseImage.FileName.Replace(" ", "");
-                //}
+                // Pan Image
+                if (model.PanImage != null)
+                {
+                    uc.UploadFiles(model.PanImage.InputStream, agencyImage.Id + "_" + model.PanImage.FileName, accesskey, secretkey, "image");
+                    agencyImage.ImagePanPath = agencyImage.Id + "_" + model.PanImage.FileName.Replace(" ", "");
+                }
 
-                //// BankPassbook Image
-                //if (model.BankPassbookImage != null)
-                //{
-                //    uc.UploadFiles(model.BankPassbookImage.InputStream, deliveryboy.Id + "_" + model.BankPassbookImage.FileName, accesskey, secretkey, "image");
-                //    agencyImage.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + deliveryboy.Id + "_" + model.BankPassbookImage.FileName.Replace(" ", "");
-                //}
+                // BankPassbook Image
+                if (model.BankPassbookImage != null)
+                {
+                    uc.UploadFiles(model.BankPassbookImage.InputStream, agencyImage.Id + "_" + model.BankPassbookImage.FileName, accesskey, secretkey, "image");
+                    agencyImage.BankPassbookPath = agencyImage.Id + "_" + model.BankPassbookImage.FileName.Replace(" ", "");
+                }
 
                 //// BankPassbook Pdf
                 //if (model.BankPassbookPdf != null)
                 //{
-                //    uc.UploadFiles(model.BankPassbookPdf.InputStream, deliveryboy.Id + "_" + model.BankPassbookPdf.FileName, accesskey, secretkey, "pdf");
-                //    agencyImage. = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + deliveryboy.Id + "_" + model.BankPassbookPdf.FileName.Replace(" ", "");
+                //    uc.UploadFiles(model.BankPassbookPdf.InputStream, agencyImage.Id + "_" + model.BankPassbookPdf.FileName, accesskey, secretkey, "pdf");
+                //    agencyImage.BankPassbookPath = agencyImage.Id + "_" + model.BankPassbookPdf.FileName.Replace(" ", "");
+                //}
+
+                db.Entry(agencyImage).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("List");
+            }
+            catch (AmazonS3Exception amazonS3Exception)
+            {
+                if (amazonS3Exception.ErrorCode != null &&
+                    (amazonS3Exception.ErrorCode.Equals("InvalidAccessKeyId")
+                    ||
+                    amazonS3Exception.ErrorCode.Equals("InvalidSecurity")))
+                {
+                    return ViewBag.Message = "Check the provided AWS Credentials.";
+                }
+                else
+                {
+                    return ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
+                }
+            }
+        }
+
+        public ActionResult Edit(string id)
+        {
+            var dId = AdminHelpers.DCodeInt(id);
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var agency = db.Agencies.FirstOrDefault(i => i.Id == dId);
+            var model = _mapper.Map<Agency, AgencyEditViewModel>(agency);
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(false)]
+        [AccessPolicy(PageCode = "")]
+        public ActionResult Edit(AgencyEditViewModel model)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var agent = db.Agencies.FirstOrDefault(i => i.Id == model.Id);
+            var agency = _mapper.Map(model, agent);
+            agency.DateUpdated = DateTime.Now;
+            db.Entry(agency).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            try
+            {
+                var agencyImage = db.Agencies.FirstOrDefault(i => i.Id == agency.Id);
+                // Agency Image
+                if (model.AgencyImage != null)
+                {
+                    uc.UploadFiles(model.AgencyImage.InputStream, agency.Id + "_" + model.AgencyImage.FileName, accesskey, secretkey, "image");
+                    agencyImage.ImagePath = agency.Id + "_" + model.AgencyImage.FileName.Replace(" ", "");
+                }
+
+                // Pan Image
+                if (model.PanImage != null)
+                {
+                    uc.UploadFiles(model.PanImage.InputStream, agencyImage.Id + "_" + model.PanImage.FileName, accesskey, secretkey, "image");
+                    agencyImage.ImagePanPath = agencyImage.Id + "_" + model.PanImage.FileName.Replace(" ", "");
+                }
+
+                // BankPassbook Image
+                if (model.BankPassbookImage != null)
+                {
+                    uc.UploadFiles(model.BankPassbookImage.InputStream, agencyImage.Id + "_" + model.BankPassbookImage.FileName, accesskey, secretkey, "image");
+                    agencyImage.BankPassbookPath = agencyImage.Id + "_" + model.BankPassbookImage.FileName.Replace(" ", "");
+                }
+
+                //// BankPassbook Pdf
+                //if (model.BankPassbookPdf != null)
+                //{
+                //    uc.UploadFiles(model.BankPassbookPdf.InputStream, agencyImage.Id + "_" + model.BankPassbookPdf.FileName, accesskey, secretkey, "pdf");
+                //    agencyImage.BankPassbookPath = agencyImage.Id + "_" + model.BankPassbookPdf.FileName.Replace(" ", "");
                 //}
 
 
@@ -142,32 +229,22 @@ namespace ShopNow.Controllers
                     return ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
                 }
             }
-            return RedirectToAction("List", "MarketingAgent");
+
         }
 
-        public ActionResult Edit()
+        public JsonResult Delete(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            var agency = db.MarketingAgents.FirstOrDefault(i => i.Id == user.Id);
-            var model = _mapper.Map<MarketingAgent, AgencyEditViewModel>(agency);
-            return View(model);
-        }
-
-        [HttpPost]
-        public ActionResult Edit(AgencyEditViewModel model)
-        {
-            var user = ((Helpers.Sessions.User)Session["MARKETINGUSER"]);
-            ViewBag.Name = user.Name;
-            var marketingAgent = db.MarketingAgents.FirstOrDefault(i => i.Id == model.Id);
-            var agency = _mapper.Map(model, marketingAgent);
-
-            agency.DateUpdated = DateTime.Now;
-            db.Entry(agency).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
-
-
-            return View(model);
+            var agency = db.Agencies.FirstOrDefault(i => i.Id == id);
+            if (agency != null)
+            {
+                agency.Status = 2;
+                agency.DateUpdated = DateTime.Now;
+                agency.UpdatedBy = user.Name;
+                db.Entry(agency).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         // Agency Assign
@@ -177,14 +254,14 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new AgencyAssignListViewModel();
-            model.Lists = db.MarketingAgents.Where(i => i.Status == 0).Join(db.Shops.Where(i => i.Status == 0), m => m.Id, s => s.AgencyId, (m, s) => new { m, s })
+            model.Lists = db.Agencies.Where(i => i.Status == 0).Join(db.Shops.Where(i => i.Status == 0), m => m.Id, s => s.AgencyId, (m, s) => new { m, s })
                 .Join(db.DeliveryBoys.Where(i => i.Status == 0), p => p.m.Id, d => d.AgencyId, (p, d) => new { p, d })
                 .GroupBy(i => i.p.m.Id)
                 .AsEnumerable()
                 .Select(i => new AgencyAssignListViewModel.AgencyList
                 {
-                    MarketingAgentId = i.FirstOrDefault().p.m.Id,
-                    MarketingAgentName = i.FirstOrDefault().p.m.Name,
+                    AgencyId = i.FirstOrDefault().p.m.Id,
+                    AgencyName = i.FirstOrDefault().p.m.Name,
                     ShopListItems = i.Where(a => a.p.s.Status == 0).Select(a => new AgencyAssignListViewModel.AgencyList.ShopListItem
                     {
                         ShopId = a.p.s.Id,
@@ -217,8 +294,8 @@ namespace ShopNow.Controllers
                 foreach (var item in model.ShopIds)
                 {
                     var shop = db.Shops.FirstOrDefault(i => i.Id == item);
-                    shop.AgencyId = model.MarketingAgentId;
-                    shop.AgencyName = model.MarketingAgentName;
+                    shop.AgencyId = model.AgencyId;
+                    shop.AgencyName = model.AgencyName;
                     db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }
@@ -228,34 +305,13 @@ namespace ShopNow.Controllers
                 foreach (var item in model.DeliveryBoyIds)
                 {
                     var deliveryboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == item);
-                    deliveryboy.AgencyId = model.MarketingAgentId;
-                    deliveryboy.AgencyName = model.MarketingAgentName;
+                    deliveryboy.AgencyId = model.AgencyId;
+                    deliveryboy.AgencyName = model.AgencyName;
                     db.Entry(deliveryboy).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }
             }
-            return RedirectToAction("AssignedFranchiseList");
-        }
-
-        [AccessPolicy(PageCode = "")]
-        public ActionResult AgencyAssignUpdate(int id)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            var model = new AgencyAssignUpdateViewModel();
-            model.ShopIds = string.Join(",", db.Shops.Where(i => i.AgencyId == id && i.Status == 0).Select(i => i.Id).ToList());
-            model.DeliveryBoyIds = string.Join(",", db.DeliveryBoys.Where(i => i.AgencyId == id && i.Status == 0).Select(i => i.Id).ToList());
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "")]
-        public ActionResult AgencyAssignUpdate(AgencyAssignUpdateViewModel model)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            return RedirectToAction("AssignedFranchiseList");
+            return RedirectToAction("AgencyAssignList");
         }
 
         public JsonResult GetAgencyAssign(int agencyId)
@@ -280,7 +336,7 @@ namespace ShopNow.Controllers
             var customerExist = db.Customers.Any(i => i.PhoneNumber == phone);
             if (customerExist)
             {
-                var agent = db.MarketingAgents.FirstOrDefault(i => i.PhoneNumber == phone);
+                var agent = db.Agencies.FirstOrDefault(i => i.PhoneNumber == phone);
                 if (agent != null)
                 {
                     if (agent.Status == 0)    // Agency already Exist
@@ -296,13 +352,13 @@ namespace ShopNow.Controllers
                     else if (agent.Status == 3 || agent.Status == 2) // Agency Update
                     {
                         msg = 3;
-                        return Json(new { msg, phone = customer.PhoneNumber, name = customer.Name, email = customer.Email }, JsonRequestBehavior.AllowGet);
+                        return Json(new { msg, phone = customer.PhoneNumber, name = customer.Name, email = customer.Email, customerid = customer.Id }, JsonRequestBehavior.AllowGet);
                     }
                 }
                 else
                 {     // Agency Create
                     msg = 4;
-                    return Json(new { msg, phone = customer.PhoneNumber, name = customer.Name, email = customer.Email }, JsonRequestBehavior.AllowGet);
+                    return Json(new { msg, phone = customer.PhoneNumber, name = customer.Name, email = customer.Email, customerid = customer.Id }, JsonRequestBehavior.AllowGet);
                 }
             }
             else
@@ -310,6 +366,64 @@ namespace ShopNow.Controllers
                 return Json(msg = 0, JsonRequestBehavior.AllowGet);
             }
             return Json(msg = 0, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Approve(int Id)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var agency = db.Agencies.FirstOrDefault(i => i.Id == Id);
+            agency.Status = 0;
+            agency.UpdatedBy = user.Name;
+            agency.DateUpdated = DateTime.Now;
+            db.Entry(agency).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("List");
+        }
+
+        [AccessPolicy(PageCode = "")]
+        public ActionResult Reject(int Id)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var agency = db.Agencies.FirstOrDefault(i => i.Id == Id);
+            agency.Status = 3;
+            agency.UpdatedBy = user.Name;
+            agency.DateUpdated = DateTime.Now;
+            db.Entry(agency).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("List");
+        }
+
+        public async Task<JsonResult> GetShopSelect2(string q = "")
+        {
+            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<JsonResult> GetDeliveryBoySelect2(string q = "")
+        {
+            var model = await db.DeliveryBoys.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<JsonResult> GetAgencySelect2(string q = "")
+        {
+            var model = await db.Agencies.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
         protected override void Dispose(bool disposing)
         {

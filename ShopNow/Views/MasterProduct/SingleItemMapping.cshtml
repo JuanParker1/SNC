@@ -125,7 +125,7 @@
                 var MasterProductId = $('#MasterProductId').val();
                 var ProductId = $('#ProductId').val();
                 var ShopId = $('#ShopId').val();
-                $.post('/MasterProduct/MappingProduct', { MasterProductId: MasterProductId, ProductId: ProductId, ShopId: ShopId }, function (data) {
+                $.post('/MasterProduct/MappingProduct', { masterproductId: MasterProductId, itemId: ProductId, shopId: ShopId }, function (data) {
                     if (data == true) {
                         window.location.reload();
                       //  swal("Information!", "Succesfully mapped", "warning");
