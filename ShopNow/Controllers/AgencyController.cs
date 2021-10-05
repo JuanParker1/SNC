@@ -217,6 +217,21 @@ namespace ShopNow.Controllers
 
         }
 
+        public JsonResult Delete(int id)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var agency = db.Agencies.FirstOrDefault(i => i.Id == id);
+            if (agency != null)
+            {
+                agency.Status = 2;
+                agency.DateUpdated = DateTime.Now;
+                agency.UpdatedBy = user.Name;
+                db.Entry(agency).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
         // Agency Assign
         [AccessPolicy(PageCode = "")]
         public ActionResult AgencyAssignList()

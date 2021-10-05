@@ -1,6 +1,6 @@
 ﻿@model ShopNow.ViewModels.AgencyCreateViewModel
 @{
-    ViewBag.Title = "Agency Create";
+    ViewBag.Title = "Agency Entry";
 }
 <title>ShopNow | @ViewBag.Title</title>
 
@@ -105,7 +105,7 @@
                                 <div class="col-md-12">
                                     <div class="card-deck">
                                         <div class="card border-info">
-                                            <div class="card-body text-center">
+                                            <div class="card-body">
                                                 <div class="row text-center">
                                                     <div class="col-md-12"><label class="text-secondary font-weight-bold">Image</label></div>
                                                     <div class="col-md-12"><label class="small font-italic">* Upload recent photo</label></div>
@@ -124,14 +124,16 @@
                                         <div class="card border-info bg-muted">
                                             <div class="card-body">
                                                 <label class="col-md-12 text-center"><strong class="text-secondary">Pan </strong></label>
-                                                <label class="col-md-12 text-left"><small class="text-secondary"><i>Pan Number</i></small></label>
+                                                <label class="col-md-12"><small class="text-secondary"><i>Pan Number</i></small></label>
                                                 <input id="PanNumber" type="text" class="form-control" name="PanNumber" />
-                                                <label class="col-md-12 mt-2"><small class="text-secondary"><i>Pan Image</i></small></label>
-                                                <div class="row ml-3 PanImg mt-2">
-                                                    <div class="img-upload-container mb-3">
-                                                        <img class="img-container w-100 h-100 mb-2" id="img-pan" onerror="this.src='/Images/No Photo.png'" />
-                                                        <input type="file" id="PanImage" name="PanImage" class="d-none" />
-                                                        <label for="PanImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                <label class="col-md-12"><small class="text-secondary"><i>Pan Image</i></small></label>
+                                                <div class="row PanImg">
+                                                    <div class="col-md-12 text-center">
+                                                        <div class="img-upload-container">
+                                                            <img class="img-container w-100 h-100 mb-2" id="img-pan" onerror="this.src='/Images/No Photo.png'" />
+                                                            <input type="file" id="PanImage" name="PanImage" class="d-none" />
+                                                            <label for="PanImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
