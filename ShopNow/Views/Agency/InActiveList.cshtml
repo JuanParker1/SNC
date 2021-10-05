@@ -12,9 +12,7 @@
             <h5 class="text-success">@ViewBag.Title</h5>
         </div>
         <div class="col-md-6 text-right">
-            <a href="~/Agency/List" class="mr-2" target="_self"><span class="fa fa-list-ul"></span> List</a>
-            <a href="/Agency/AgencyAssign"><span class="fa fa-list-ul"></span> Assign Agency</a>
-            <a href="~/Agency/AgencyAssignList" class="ml-3"><span class="fa fa-list-ul"></span> Agency Assigned List</a>
+            <a href="~/Agency/List" class="mr-2" target="_self"><span class="fa fa-list-ul"></span> Agency List</a>
         </div>
     </div>
 
@@ -27,9 +25,47 @@
                     columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(10);
                     columns.Add(c => c.PhoneNumber).Titled("Phone Number").Filterable(true).SetWidth(10);
                     columns.Add(c => c.Email).Titled("Address").Filterable(true).SetWidth(10);
-                    }).WithPaging(20).Sortable(true)
+                    columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(10)
+                        .RenderValueAs(o => @<div>
+                                <a href="~/Agency/Edit?id=@HttpUtility.UrlEncode(ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id))" class="text-info mr-4"><i class="fa fa-edit fa-2x"></i></a>
+                                <a href="javascript:void(0)" data-id="@o.Id" class="text-danger btnDelete"><i class="fa fa-trash fa-2x"></i></a>
+                            </div>);
+                      }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
     </div>
 </div>
+@section Scripts
+{
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            $(".btnDelete").click(function () {
+                var Id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/Agency/Delete", { id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
+            });
+        });
+    </script>
+}

@@ -31,6 +31,7 @@ namespace ShopNow.ViewModels
         public string AccountNumber { get; set; }
         public string IFSCCode { get; set; }
         public string SwiftCode { get; set; }
+        public string BankPassbookPath { get; set; }
         public string UPIID { get; set; }
     }
 
@@ -45,7 +46,6 @@ namespace ShopNow.ViewModels
         public string Name { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
-        public int CustomerId { get; set; }
         public string ImagePath { get; set; }
         public string CountryName { get; set; }
         public string StateName { get; set; }
@@ -62,6 +62,7 @@ namespace ShopNow.ViewModels
         public string AccountNumber { get; set; }
         public string IFSCCode { get; set; }
         public string SwiftCode { get; set; }
+        public string BankPassbookPath { get; set; }
         public string UPIID { get; set; }
         public int Status { get; set; }
     }
