@@ -23,6 +23,8 @@
             @using (Html.BeginForm("Edit", "Agency", FormMethod.Post, new { id = "AgencyForm", role = "form", enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
+                <input type="hidden" name="Id" value="@Model.Id" />
+                <input type="hidden" name="Status" value="@Model.Status" />
                 <div class="card shadow mb-4">
                     <div class="card-body">
                         <div class="row">
@@ -106,9 +108,17 @@
                                                 <div class="row ml-5 mt-2">
                                                     <div class="col-md-12">
                                                         <div class="img-upload-container mb-3">
-                                                            <img class="img-container w-100 h-100 mb-2" id="img-upload" onerror="this.src='/Images/No Photo.png'" />
+                                                            @if (Model.ImagePath != null)
+                                                            {
+                                                                <img class="img-container w-100 h-100 mb-2" id="img-upload" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath" onerror="this.src='/Images/No Photo.png'" />
+                                                            }
+                                                            else
+                                                            {
+                                                                <img id='img-upload' class="img-container w-100 h-100" />
+                                                            }
                                                             <input type="file" id="AgencyImage" name="AgencyImage" class="d-none" />
                                                             <label for="AgencyImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                            <input type="hidden" name="ImagePath" value="@Model.ImagePath" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -122,27 +132,39 @@
                                                 <label class="col-md-12 mt-2"><small class="text-secondary"><i>Pan Image</i></small></label>
                                                 <div class="row ml-3 PanImg mt-2">
                                                     <div class="img-upload-container mb-3">
-                                                        <img class="img-container w-100 h-100 mb-2" id="img-pan" onerror="this.src='/Images/No Photo.png'" />
+                                                        @if (Model.ImagePanPath != null)
+                                                        {
+                                                            <img class="img-container w-100 h-100 mb-2" id="img-pan" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePanPath" onerror="this.src='/Images/No Photo.png'" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <img id='img-pan' class="img-container w-100 h-100" />
+                                                        }
                                                         <input type="file" id="PanImage" name="PanImage" class="d-none" />
                                                         <label for="PanImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                        <input type="hidden" name="ImagePanPath" value="@Model.ImagePanPath" />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="card border-info">
-                                            <div class="card-body text-center row">
+                                            <div class="card-body text-center">
                                                 <label class="col-md-12 text-center"><strong class="text-secondary">Bank Account</strong></label>
-                                                <span class="col-md-12">
-                                                    <input type="radio" class="text-center" name="AccountDocument" id="AccountImage" value="Image" checked> <label for="AccountImage"> Image</label>
-                                                    <input type="radio" class="text-center" name="AccountDocument" id="AccountPDF" value="PDF"> <label for="AccountPDF"> PDF</label>
-                                                </span>
-                                                <div class="row AccountDocumentPdf mx-auto d-none mt-2 mb-3">
-                                                    <input class="mx-auto" type="file" id="BankPassbookPdf" name="BankPassbookPdf" />
-                                                </div>
-                                                <div class="img-upload-container mx-auto mb-3 AccountDocumentImg">
-                                                    <img class="img-container w-100 h-100 mb-2" id="img-account" onerror="this.src='/Images/No Photo.png'" />
-                                                    <input type="file" id="BankPassbookImage" name="BankPassbookImage" class="d-none" />
-                                                    <label for="BankPassbookImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                <label class="col-md-12"><small class="text-secondary"><i>Bank Passbook Image</i></small></label>
+                                                <div class="row">
+                                                    <div class="img-upload-container mx-auto mb-3 AccountDocumentImg">
+                                                        @if (Model.BankPassbookPath != null)
+                                                        {
+                                                            <img class="img-container w-100 h-100 mb-2" id="img-account" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.BankPassbookPath" onerror="this.src='/Images/No Photo.png'" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <img id='img-account' class="img-container w-100 h-100" />
+                                                        }
+                                                        <input type="file" id="BankPassbookImage" name="BankPassbookImage" class="d-none" />
+                                                        <label for="BankPassbookImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                        <input type="hidden" name="BankPassbookPath" value="@Model.BankPassbookPath" />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -155,27 +177,27 @@
                         <div class="col-md-12">
                             <h5 class="text-success mb-2">Bank Details</h5>
                             <div class="form-group row">
-                                <div class="col-md-4">
+                                <div class="form-group col-md-4">
                                     <small class="col-form-label" for="BankName"><i class="text-secondary">Bank Name</i></small>
                                     <input id="BankName" type="text" class="form-control" name="BankName" value="@Model.BankName" />
                                 </div>
-                                <div class="col-md-4">
+                                <div class="form-group col-md-4">
                                     <small class="col-form-label" for="AccountName"><i class="text-secondary">Account Name</i></small>
                                     <input id="AccountName" type="text" class="form-control" name="AccountName" value="@Model.AccountName" />
                                 </div>
-                                <div class="col-md-4">
+                                <div class="form-group col-md-4">
                                     <small class="col-form-label" for="AccountNumber"><i class="text-secondary">Account Number</i></small>
                                     <input id="AccountNumber" type="text" class="form-control" name="AccountNumber" value="@Model.AccountNumber" />
                                 </div>
-                                <div class="col-md-4">
+                                <div class="form-group col-md-4">
                                     <small class="col-form-label" for="IFSCCode"><i class="text-secondary">IFSC Code</i></small>
                                     <input id="IFSCCode" type="text" class="form-control" name="IFSCCode" value="@Model.IFSCCode" />
                                 </div>
-                                <div class="col-md-4">
+                                <div class="form-group col-md-4">
                                     <small class="col-form-label" for="SwiftCode"><i class="text-secondary">SwiftCode</i></small>
                                     <input id="SwiftCode" type="text" class="form-control" name="SwiftCode" value="@Model.SwiftCode" />
                                 </div>
-                                <div class="col-md-4">
+                                <div class="form-group col-md-4">
                                     <small class="col-form-label" for="UPIID"><i class="text-secondary">UPI</i></small>
                                     <input id="UPIID" type="text" class="form-control" name="UPIID" value="@Model.UPIID" />
                                 </div>

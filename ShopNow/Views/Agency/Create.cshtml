@@ -40,6 +40,7 @@
                                     <div class="col-md-4">
                                         <label class="col-form-label"><strong class="text-secondary">Agency Name</strong></label>
                                         <input id="Name" type="text" class="form-control" name="Name" maxlength="100" oninput="this.value=this.value.replace(/[^a-zA-Z ]/g, '');" />
+                                        <input type="hidden" name="CustomerId" id="CustomerId" />
                                     </div>
                                     <div class="col-md-4">
                                         <label class="col-form-label"><strong class="text-secondary">Mobile Number</strong></label>
@@ -139,19 +140,22 @@
                                             </div>
                                         </div>
                                         <div class="card border-info">
-                                            <div class="card-body text-center row">
+                                            <div class="card-body text-center">
                                                 <label class="col-md-12 text-center"><strong class="text-secondary">Bank Account</strong></label>
-                                                <span class="col-md-12">
-                                                    <input type="radio" class="text-center" name="AccountDocument" id="AccountImage" value="Image" checked> <label for="AccountImage"> Image</label>
-                                                    <input type="radio" class="text-center" name="AccountDocument" id="AccountPDF" value="PDF"> <label for="AccountPDF"> PDF</label>
+                                                <label class="col-md-12"><small class="text-secondary"><i>Bank Passbook Image</i></small></label>
+                                                @*<span class="col-md-12">
+                                                <input type="radio" class="text-center" name="AccountDocument" id="AccountImage" value="Image" checked> <label for="AccountImage"> Image</label>
+                                                <input type="radio" class="text-center" name="AccountDocument" id="AccountPDF" value="PDF"> <label for="AccountPDF"> PDF</label>
                                                 </span>
                                                 <div class="row AccountDocumentPdf mx-auto d-none mt-2 mb-3">
                                                     <input class="mx-auto" type="file" id="BankPassbookPdf" name="BankPassbookPdf" />
-                                                </div>
-                                                <div class="img-upload-container mx-auto mb-3 AccountDocumentImg">
-                                                    <img class="img-container w-100 h-100 mb-2" id="img-account" onerror="this.src='/Images/No Photo.png'" />
-                                                    <input type="file" id="BankPassbookImage" name="BankPassbookImage" class="d-none" />
-                                                    <label for="BankPassbookImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                </div>*@
+                                                <div class="row">
+                                                    <div class="img-upload-container mx-auto mb-3 AccountDocumentImg">
+                                                        <img class="img-container w-100 h-100 mb-2" id="img-account" onerror="this.src='/Images/No Photo.png'" />
+                                                        <input type="file" id="BankPassbookImage" name="BankPassbookImage" class="d-none" />
+                                                        <label for="BankPassbookImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -262,6 +266,7 @@
                             $('.CustomerCheck').addClass("d-none");
                             $("#PhoneNumber").val(data.phone);
                             $("#Name").val(data.name);
+                            $("#CustomerId").val(data.customerid);
                             $("#Email").val(data.email);
                         }
                         else if (data.msg == 4) {
@@ -269,6 +274,7 @@
                             $('.CustomerCheck').addClass("d-none");
                             $("#PhoneNumber").val(data.phone);
                             $("#Name").val(data.name);
+                            $("#CustomerId").val(data.customerid);
                             $("#Email").val(data.email);
                         }
                     });

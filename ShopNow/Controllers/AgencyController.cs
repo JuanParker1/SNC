@@ -77,11 +77,15 @@ namespace ShopNow.Controllers
 
         public ActionResult Create()
         {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             return View();
         }
 
-        [AllowAnonymous]
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(false)]
+        [AccessPolicy(PageCode = "")]
         public ActionResult Create(AgencyCreateViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -89,6 +93,8 @@ namespace ShopNow.Controllers
             agency.Status = 1;
             agency.DateEncoded = DateTime.Now;
             agency.DateUpdated = DateTime.Now;
+            agency.CreatedBy = user.Name;
+            agency.UpdatedBy = user.Name;
             db.Agencies.Add(agency);
             db.SaveChanges();
 
@@ -106,23 +112,22 @@ namespace ShopNow.Controllers
                 if (model.PanImage != null)
                 {
                     uc.UploadFiles(model.PanImage.InputStream, agencyImage.Id + "_" + model.PanImage.FileName, accesskey, secretkey, "image");
-                    agencyImage.ImagePanPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + agencyImage.Id + "_" + model.PanImage.FileName.Replace(" ", "");
+                    agencyImage.ImagePanPath = agencyImage.Id + "_" + model.PanImage.FileName.Replace(" ", "");
                 }
 
                 // BankPassbook Image
                 if (model.BankPassbookImage != null)
                 {
                     uc.UploadFiles(model.BankPassbookImage.InputStream, agencyImage.Id + "_" + model.BankPassbookImage.FileName, accesskey, secretkey, "image");
-                    agencyImage.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + agencyImage.Id + "_" + model.BankPassbookImage.FileName.Replace(" ", "");
+                    agencyImage.BankPassbookPath = agencyImage.Id + "_" + model.BankPassbookImage.FileName.Replace(" ", "");
                 }
 
-                // BankPassbook Pdf
-                if (model.BankPassbookPdf != null)
-                {
-                    uc.UploadFiles(model.BankPassbookPdf.InputStream, agencyImage.Id + "_" + model.BankPassbookPdf.FileName, accesskey, secretkey, "pdf");
-                    agencyImage.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + agencyImage.Id + "_" + model.BankPassbookPdf.FileName.Replace(" ", "");
-                }
-
+                //// BankPassbook Pdf
+                //if (model.BankPassbookPdf != null)
+                //{
+                //    uc.UploadFiles(model.BankPassbookPdf.InputStream, agencyImage.Id + "_" + model.BankPassbookPdf.FileName, accesskey, secretkey, "pdf");
+                //    agencyImage.BankPassbookPath = agencyImage.Id + "_" + model.BankPassbookPdf.FileName.Replace(" ", "");
+                //}
 
                 db.Entry(agencyImage).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
@@ -144,23 +149,26 @@ namespace ShopNow.Controllers
             }
         }
 
-        public ActionResult Edit()
+        public ActionResult Edit(string id)
         {
+            var dId = AdminHelpers.DCodeInt(id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var agency = db.Agencies.FirstOrDefault(i => i.Id == user.Id);
+            var agency = db.Agencies.FirstOrDefault(i => i.Id == dId);
             var model = _mapper.Map<Agency, AgencyEditViewModel>(agency);
             return View(model);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(false)]
+        [AccessPolicy(PageCode = "")]
         public ActionResult Edit(AgencyEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var agent = db.Agencies.FirstOrDefault(i => i.Id == model.Id);
             var agency = _mapper.Map(model, agent);
-
             agency.DateUpdated = DateTime.Now;
             db.Entry(agency).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
@@ -188,12 +196,12 @@ namespace ShopNow.Controllers
                     agencyImage.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + agencyImage.Id + "_" + model.BankPassbookImage.FileName.Replace(" ", "");
                 }
 
-                // BankPassbook Pdf
-                if (model.BankPassbookPdf != null)
-                {
-                    uc.UploadFiles(model.BankPassbookPdf.InputStream, agencyImage.Id + "_" + model.BankPassbookPdf.FileName, accesskey, secretkey, "pdf");
-                    agencyImage.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + agencyImage.Id + "_" + model.BankPassbookPdf.FileName.Replace(" ", "");
-                }
+                //// BankPassbook Pdf
+                //if (model.BankPassbookPdf != null)
+                //{
+                //    uc.UploadFiles(model.BankPassbookPdf.InputStream, agencyImage.Id + "_" + model.BankPassbookPdf.FileName, accesskey, secretkey, "pdf");
+                //    agencyImage.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + agencyImage.Id + "_" + model.BankPassbookPdf.FileName.Replace(" ", "");
+                //}
 
 
                 db.Entry(agencyImage).State = System.Data.Entity.EntityState.Modified;
@@ -337,13 +345,13 @@ namespace ShopNow.Controllers
                     else if (agent.Status == 3 || agent.Status == 2) // Agency Update
                     {
                         msg = 3;
-                        return Json(new { msg, phone = customer.PhoneNumber, name = customer.Name, email = customer.Email }, JsonRequestBehavior.AllowGet);
+                        return Json(new { msg, phone = customer.PhoneNumber, name = customer.Name, email = customer.Email, customerid = customer.Id }, JsonRequestBehavior.AllowGet);
                     }
                 }
                 else
                 {     // Agency Create
                     msg = 4;
-                    return Json(new { msg, phone = customer.PhoneNumber, name = customer.Name, email = customer.Email }, JsonRequestBehavior.AllowGet);
+                    return Json(new { msg, phone = customer.PhoneNumber, name = customer.Name, email = customer.Email, customerid = customer.Id }, JsonRequestBehavior.AllowGet);
                 }
             }
             else
