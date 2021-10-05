@@ -98,6 +98,13 @@ namespace ShopNow.Controllers
             db.Agencies.Add(agency);
             db.SaveChanges();
 
+            var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
+            if(customer != null)
+            {
+                customer.Position = 5;   // Agency
+                db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
             try
             {
                 var agencyImage = db.Agencies.FirstOrDefault(i => i.Id == agency.Id);
