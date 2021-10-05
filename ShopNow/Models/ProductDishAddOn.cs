@@ -20,6 +20,7 @@ namespace ShopNow.Models
         public string MasterProductName { get; set; }
         public int AddOnCategoryId { get; set; }
         public string AddOnCategoryName { get; set; }
+        public int CrustId { get; set; }
         public string CrustName { get; set; }
         public int Status { get; set; }
         public int PortionId { get; set; }

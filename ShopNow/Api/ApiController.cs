@@ -4076,12 +4076,13 @@ namespace ShopNow.Controllers
 
                     if (list.FirstOrDefault().AddOnType == 4)
                     {
-                        model.PortionListItems = list.Where(i => i.AddOnType == 4).Select((i, index) => new ApiProductAddonViewModel.PortionListItem
+                        model.PortionListItems = list.Where(i => i.AddOnType == 4).GroupBy(i => i.PortionId).Select((i, index) => new ApiProductAddonViewModel.PortionListItem
                         {
                             Index = index + 1,
-                            PortionId = i.PortionId,
-                            PortionName = i.PortionName,
-                            PortionPrice = i.PortionPrice
+                            PortionId = i.FirstOrDefault().PortionId,
+                            PortionName = i.FirstOrDefault().PortionName,
+                            PortionPrice = i.FirstOrDefault().PortionPrice,
+                            CrustId = i.FirstOrDefault().CrustId
                         }).ToList();
 
                         model.AddonListItems = list.Where(i => i.AddOnType == 4).Select((i, index) => new ApiProductAddonViewModel.AddonListItem
@@ -4091,15 +4092,15 @@ namespace ShopNow.Controllers
                             AddonName = i.AddOnItemName,
                             AddonPrice = i.AddOnsPrice,
                             AddonCategoryName = i.AddOnCategoryName,
-                            ColorCode = masterProduct.ColorCode
+                            ColorCode = masterProduct.ColorCode,
+                            CrustId = i.CrustId
                         }).ToList();
 
-                        model.CrustListItems = list.Where(i => i.AddOnType == 4).Select((i, index) => new ApiProductAddonViewModel.CrustListItem
+                        model.CrustListItems = list.Where(i => i.AddOnType == 4).GroupBy(i=>i.CrustId).Select((i, index) => new ApiProductAddonViewModel.CrustListItem
                         {
                             Index = index + 1,
-                            CrustName = i.CrustName,
-                            PortionId = i.PortionId,
-                            CrustId = i.Id
+                            CrustName = i.FirstOrDefault().CrustName,
+                            CrustId = i.FirstOrDefault().CrustId
                         }).ToList();
                     }
                     return Json(new { result = model }, JsonRequestBehavior.AllowGet);

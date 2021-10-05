@@ -189,6 +189,7 @@ namespace ShopNow.Controllers
                     productDishaddOn.Status = 0;
                     productDishaddOn.AddOnType = s.AddOnType;
                     productDishaddOn.MasterProductId = master.Id;
+                    productDishaddOn.CrustId = s.CrustId;
                     _db.ProductDishAddOns.Add(productDishaddOn);
                     _db.SaveChanges();
                 }
@@ -304,6 +305,7 @@ namespace ShopNow.Controllers
                         productDishaddOn.Status = 0;
                         productDishaddOn.AddOnType = s.AddOnType;
                         productDishaddOn.MasterProductId = master.Id;
+                        productDishaddOn.CrustId = s.CrustId;
                         _db.ProductDishAddOns.Add(productDishaddOn);
                         _db.SaveChanges();
                     }

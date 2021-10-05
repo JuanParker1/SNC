@@ -291,6 +291,7 @@ namespace ShopNow.ViewModels
         public string MasterProductName { get; set; }
         public int AddOnCategoryId { get; set; }
         public string AddOnCategoryName { get; set; }
+        public int CrustId { get; set; }
         public string CrustName { get; set; }
         public int PortionId { get; set; }
         public string PortionName { get; set; }
