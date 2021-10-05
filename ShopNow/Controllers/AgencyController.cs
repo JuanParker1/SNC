@@ -193,21 +193,21 @@ namespace ShopNow.Controllers
                 if (model.PanImage != null)
                 {
                     uc.UploadFiles(model.PanImage.InputStream, agencyImage.Id + "_" + model.PanImage.FileName, accesskey, secretkey, "image");
-                    agencyImage.ImagePanPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + agencyImage.Id + "_" + model.PanImage.FileName.Replace(" ", "");
+                    agencyImage.ImagePanPath = agencyImage.Id + "_" + model.PanImage.FileName.Replace(" ", "");
                 }
 
                 // BankPassbook Image
                 if (model.BankPassbookImage != null)
                 {
                     uc.UploadFiles(model.BankPassbookImage.InputStream, agencyImage.Id + "_" + model.BankPassbookImage.FileName, accesskey, secretkey, "image");
-                    agencyImage.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + agencyImage.Id + "_" + model.BankPassbookImage.FileName.Replace(" ", "");
+                    agencyImage.BankPassbookPath = agencyImage.Id + "_" + model.BankPassbookImage.FileName.Replace(" ", "");
                 }
 
                 //// BankPassbook Pdf
                 //if (model.BankPassbookPdf != null)
                 //{
                 //    uc.UploadFiles(model.BankPassbookPdf.InputStream, agencyImage.Id + "_" + model.BankPassbookPdf.FileName, accesskey, secretkey, "pdf");
-                //    agencyImage.BankPassbookPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Uploads/" + agencyImage.Id + "_" + model.BankPassbookPdf.FileName.Replace(" ", "");
+                //    agencyImage.BankPassbookPath = agencyImage.Id + "_" + model.BankPassbookPdf.FileName.Replace(" ", "");
                 //}
 
 
