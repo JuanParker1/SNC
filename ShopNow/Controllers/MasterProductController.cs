@@ -1615,6 +1615,7 @@ namespace ShopNow.Controllers
                 if (product != null)
                 {
                     product.MasterProductId = masterproductId;
+                    product.CategoryId = masterproduct.CategoryId;
                     product.Customisation = masterproduct.Customisation;
                     product.Price = masterproduct.Price;
                     product.IBarU = Convert.ToInt32(masterproduct.IBarU);
@@ -1658,6 +1659,7 @@ namespace ShopNow.Controllers
             if (isCheck == true)
             {
                 product.MasterProductId = 0;
+                product.CategoryId = 0;
                 product.IBarU = 0;
                 product.UpdatedBy = user.Name;
                 product.DateUpdated = DateTime.Now;
@@ -1669,6 +1671,7 @@ namespace ShopNow.Controllers
                 if (product != null)
                 {
                     product.MasterProductId = masterproductId;
+                    product.CategoryId = masterproduct.CategoryId;
                     product.Customisation = masterproduct.Customisation;
                     product.Price = masterproduct.Price;
                     product.IBarU = Convert.ToInt32(masterproduct.IBarU);
@@ -1702,17 +1705,19 @@ namespace ShopNow.Controllers
         {
             if (q != "")
             {
-                var model = _db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId != 1).Select(i => new
-                {
-                    id = i.Id,
-                    text = i.Name,
-                    image = i.ImagePath1,
-                    description = i.LongDescription,
-                    brandname = i.BrandName,
-                    //categoryname = i.CategoryName,
-                    price = i.Price,
-                    type = i.ProductTypeName
-                }).Take(50).ToList();
+                var model = _db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId != 1)
+                    .Join(_db.Categories, m => m.CategoryId, c => c.Id, (m, c) => new { m, c })
+                    .Select(i => new
+                    {
+                        id = i.m.Id,
+                        text = i.m.Name,
+                        image = i.m.ImagePath1,
+                        description = i.m.LongDescription,
+                        brandname = i.m.BrandName,
+                        categoryname = i.c.Name,
+                        price = i.m.Price,
+                        type = i.m.ProductTypeName
+                    }).Take(50).ToList();
                 return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
             }
             else
