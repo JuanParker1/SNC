@@ -90,6 +90,8 @@ namespace ShopNow.ViewModels
 
     public class AgencyAssignListViewModel
     {
+        public int FilterAgencyId { get; set; }
+        public string FilterAgencyName { get; set; }
         public List<AgencyList> Lists { get; set; }
         public class AgencyList
         {
