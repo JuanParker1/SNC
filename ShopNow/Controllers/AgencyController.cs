@@ -235,69 +235,75 @@ namespace ShopNow.Controllers
         public JsonResult Delete(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var agency = db.Agencies.FirstOrDefault(i => i.Id == id);
-            if (agency != null)
+            var shoplist = db.Shops.Where(i => i.AgencyId == id).ToList();
+            var deliveryBoylist = db.DeliveryBoys.Where(i => i.AgencyId == id).ToList();
+            if (shoplist.Count() > 0)
             {
-                agency.Status = 2;
-                agency.DateUpdated = DateTime.Now;
-                agency.UpdatedBy = user.Name;
-                db.Entry(agency).State = System.Data.Entity.EntityState.Modified;
+                shoplist.ForEach(i => i.AgencyId = 0);
+                shoplist.ForEach(i => i.AgencyName = null);
+                db.SaveChanges();
+            }
+            if (deliveryBoylist.Count() > 0)
+            {
+                deliveryBoylist.ForEach(i => i.AgencyId = 0);
+                deliveryBoylist.ForEach(i => i.AgencyName = null);
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult DeleteShop(int id)
+        {
+            var shop = db.Shops.FirstOrDefault(i => i.Id == id);
+            if (shop != null)
+            {
+                shop.AgencyId = 0;
+                shop.AgencyName = null;
+                db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteDeliveryBoy(int id)
+        {
+            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == id);
+
+            if (deliveryBoy != null)
+            {
+                deliveryBoy.AgencyId = 0;
+                deliveryBoy.AgencyName = null;
+                db.Entry(deliveryBoy).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        // Agency Assign List
+
         [AccessPolicy(PageCode = "")]
-        public ActionResult Index(AgencyAssignListViewModel model)
+        public ActionResult AgencyAssignList(AgencyAssignListViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            model.Lists = db.ShopSchedules.Where(i => i.Status == 0 && (model.FilterAgencyId != 0 ? i.ShopId == model.FilterAgencyId : true))
-                .Join(db.Shops, sc => sc.ShopId, s => s.Id, (sc, s) => new { sc, s })
-                .GroupBy(i => i.sc.ShopId)
+            model.Lists = db.Agencies.Where(i => i.Status == 0 && (model.FilterAgencyId != 0 ? i.Id == model.FilterAgencyId : true))
+                .GroupJoin(db.Shops.Where(i => i.Status == 0), a => a.Id, s => s.AgencyId, (a, s) => new { a, s })
+                .GroupJoin(db.DeliveryBoys.Where(i => i.Status == 0), ss => ss.s.FirstOrDefault().AgencyId, d => d.AgencyId, (ss, d) => new { ss, d })
             .Select(i => new AgencyAssignListViewModel.AgencyList
             {
-                AgencyId = i.FirstOrDefault().p.m.Id,
-                AgencyName = i.FirstOrDefault().p.m.Name,
-                ShopListItems = i.Where(a => a.p.s.Status == 0).Select(a => new AgencyAssignListViewModel.AgencyList.ShopListItem
+                AgencyId = i.ss.a.Id,
+                AgencyName = i.ss.a.Name,
+                ShopListItems = i.ss.s.Select(a=> new AgencyAssignListViewModel.AgencyList.ShopListItem
                 {
-                    ShopId = a.p.s.Id,
-                    ShopName = a.p.s.Name,
+                    ShopId = a.Id,
+                    ShopName = a.Name,
                 }).ToList(),
-                DeliveryBoyListItems = i.Where(a => a.d.Status == 0).Select(a => new AgencyAssignListViewModel.AgencyList.DeliveryBoyListItem
+                DeliveryBoyListItems = i.d.Select(a => new AgencyAssignListViewModel.AgencyList.DeliveryBoyListItem
                 {
-                    DeliveryBoyId = a.d.Id,
-                    DeliveryBoyName = a.d.Name
+                    DeliveryBoyId = a.Id,
+                    DeliveryBoyName = a.Name
                 }).ToList()
             }).ToList();
-            return View(model);
-        }
-        // Agency Assign
-        [AccessPolicy(PageCode = "")]
-        public ActionResult AgencyAssignList()
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            var model = new AgencyAssignListViewModel();
-            model.Lists = db.Agencies.Where(i => i.Status == 0).Join(db.Shops.Where(i => i.Status == 0), m => m.Id, s => s.AgencyId, (m, s) => new { m, s })
-                .Join(db.DeliveryBoys.Where(i => i.Status == 0), p => p.m.Id, d => d.AgencyId, (p, d) => new { p, d })
-                .GroupBy(i => i.p.m.Id)
-                .AsEnumerable()
-                .Select(i => new AgencyAssignListViewModel.AgencyList
-                {
-                    AgencyId = i.FirstOrDefault().p.m.Id,
-                    AgencyName = i.FirstOrDefault().p.m.Name,
-                    ShopListItems = i.Where(a => a.p.s.Status == 0).Select(a => new AgencyAssignListViewModel.AgencyList.ShopListItem
-                    {
-                        ShopId = a.p.s.Id,
-                        ShopName = a.p.s.Name,
-                    }).ToList(),
-                    DeliveryBoyListItems = i.Where(a => a.d.Status == 0).Select(a => new AgencyAssignListViewModel.AgencyList.DeliveryBoyListItem
-                    {
-                        DeliveryBoyId = a.d.Id,
-                        DeliveryBoyName = a.d.Name
-                    }).ToList()
-                }).ToList();
             return View(model);
         }
 
@@ -418,9 +424,36 @@ namespace ShopNow.Controllers
             return RedirectToAction("List");
         }
 
+        public JsonResult Add(AgencyAssignViewModel model)
+        {
+            if (model.ShopIds != null)
+            {
+                foreach (var item in model.ShopIds)
+                {
+                    var shop = db.Shops.FirstOrDefault(i => i.Id == item);
+                    shop.AgencyId = model.AgencyId;
+                    shop.AgencyName = model.AgencyName;
+                    db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+            if (model.DeliveryBoyIds != null)
+            {
+                foreach (var item in model.DeliveryBoyIds)
+                {
+                    var deliveryboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == item);
+                    deliveryboy.AgencyId = model.AgencyId;
+                    deliveryboy.AgencyName = model.AgencyName;
+                    db.Entry(deliveryboy).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
         public async Task<JsonResult> GetShopSelect2(string q = "")
         {
-            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
+            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.AgencyId == 0).Select(i => new
             {
                 id = i.Id,
                 text = i.Name
@@ -431,7 +464,7 @@ namespace ShopNow.Controllers
 
         public async Task<JsonResult> GetDeliveryBoySelect2(string q = "")
         {
-            var model = await db.DeliveryBoys.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
+            var model = await db.DeliveryBoys.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.AgencyId == 0).Select(i => new
             {
                 id = i.Id,
                 text = i.Name

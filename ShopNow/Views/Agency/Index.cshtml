@@ -7,7 +7,7 @@
 
 <div class="container-fluid mb-3">
     <div class="row">
-        <div class="col-md-10 mx-auto">
+        <div class="col-md-12 mx-auto">
             <div class="d-flex justify-content-between my-3">
                 <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
                 <a href="#modal-add-agency" data-target="#modal-add-agency" data-toggle="modal">Add New Agency</a>
@@ -17,7 +17,7 @@
                     <form method="get" action="/Agency/Index">
                         <div class="row mb-3">
                             <div class="col-md-4">
-                                <select id="select-shop-filter" class="form-control" name="FilterAgencyId">
+                                <select id="AgencyId-filter" class="form-control" name="FilterAgencyId">
                                     @if (Model.FilterAgencyId != 0)
                                     {
                                         <option value="@Model.FilterAgencyId">@Model.FilterAgencyName</option>
@@ -34,9 +34,9 @@
                     <table class="table table-borderless" id="tbl-shop-schedules">
                         <thead class="bg-light">
                             <tr>
-                                <th>Shop Name</th>
-                                <th>Schedule Time(s)</th>
-                                <th>On/Off</th>
+                                <th>Agency Name</th>
+                                <th>Shop Name(s)</th>
+                                <th>Delivery Boy Name(s)</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -91,7 +91,8 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label class="col-form-label font-weight-bold text-muted">Select Agency</label>
-                    <select id="select-Agency" class="form-control" name="AgencyId"></select>
+                    <select id="AgencyId" class="form-control" name="AgencyId"></select>
+                    <input type="hidden" name="AgencyName" id="AgencyName" />
                 </div>
                 <hr />
                 <div class="row">
@@ -103,12 +104,12 @@
                         <label class="col-form-label text-secondary font-weight-bold">Shop Name<span class="text-danger">*</span></label>
                         <select id="ShopIds" name="ShopIds" class="form-control" multiple></select>
                     </div>
-                    <div class="col-md-2">
+                    @*<div class="col-md-2">
                         <div class="form-group">
                             <label class="col-form-label">&nbsp;</label>
                             <input type="button" class="btn btn-primary btn-block h-50" value="Add" id="btn-addTime" />
                         </div>
-                    </div>
+                    </div>*@
                 </div>
                 @*<div class="row d-none" id="div-times">
                     <div class="col-md-12">
@@ -124,7 +125,7 @@
                         </table>
                     </div>
                 </div>*@
-                <div class="mx-auto col-8 mt-3"> <input id="btn-add-agency" type="button" value="Add Agency" class="btn btn-success btn-block" /></div>
+                <div class="mx-auto col-6 mt-5"> <input id="btn-add-agency" type="button" value="Add Agency" class="btn btn-success btn-block" /></div>
             </div>
         </div>
     </div>
@@ -208,7 +209,7 @@
         $(document).ready(function () {
            
 
-            $('#select-agency-filter').select2({
+            $('#AgencyId-filter').select2({
                 placeholder: "Search Agency",
                 width: '100%',
                 ajax: {
@@ -220,7 +221,7 @@
                 $('input[name="FilterAgencyName"]').val(e.params.data.text);
             });
 
-            $('#select-Agency').select2({
+            $('#AgencyId').select2({
                 placeholder: "Select Agency",
                 width: '100%',
                 ajax: {
@@ -228,9 +229,11 @@
                     delay: 250,
                     dataType: 'json'
                 }
+            }).on('select2:select', function (e) {
+                $('input[name="AgencyName"]').val(e.params.data.text);
             });
 
-            $('#select-ShopIds').select2({
+            $('#ShopIds').select2({
                 placeholder: "Select Shop",
                 width: '100%',
                 ajax: {
@@ -240,7 +243,7 @@
                 }
             });
 
-            $('#select-DeliveryBoyIds').select2({
+            $('#DeliveryBoyIds').select2({
                 placeholder: "Select DeliveryBoy",
                 width: '100%',
                 ajax: {
@@ -295,16 +298,17 @@
             //});
 
             $('#btn-add-agency').on('click', function () {
-                if ($('#select-Agency').val()) {
-                    if ($('#select-ShopIds').val()) {
-                        if ($('#select-DeliveryBoyIds').val()) {
+                if ($('#AgencyId').val()) {
+                    if ($('#ShopIds').val()) {
+                        if ($('#DeliveryBoyIds').val()) {
                             var model = {
-                                agencyId: $('#select-Agency').val(),
-                                shopId: $('#select-ShopIds').val(),
-                                deliveryboyId: $('#select-DeliveryBoyIds').val()
+                                AgencyId: $('#AgencyId').val(),
+                                AgencyName: $('#AgencyName').val(),
+                                ShopIds: $('#ShopIds').val(),
+                                DeliveryBoyIds: $('#DeliveryBoyIds').val()
                             }
                             $.post('/Agency/Add', model, function (data) {
-                                if (data) {
+                                if (data == true) {
                                     swal('Success', 'Agency saved successfully', 'success');
                                     window.location.reload();
                                 }
