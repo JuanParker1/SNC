@@ -589,7 +589,7 @@
             });
 
         $('#CrustId').select2({
-            placeholder: "Search Portion",
+            placeholder: "Search Crust",
             ajax: {
                 url: "/MasterProduct/GetCrustSelect2",
                 width: '100%',
@@ -696,6 +696,7 @@
                 var MaxSelectionLimit = $("#MaxSelectionLimit4").val();
                 var AddOnItemName = ($('#AddOnItemName2').val() == "") ? "N/A" : $('#AddOnItemName2').val();
                 var AddOnsPrice = $('#AddOnsPrice2').val();
+                var CrustId = $('#CrustId').val();
                 var CrustName = ($('#CrustName').val() == "") ? "N/A" : $('#CrustName').val();
                 var CrustPrice = $('#CrustPrice').val();
                 var AddOnType = 4;
@@ -709,6 +710,7 @@
                 fd.append('MaxSelectionLimit', MaxSelectionLimit);
                 fd.append('AddOnItemName', AddOnItemName);
                 fd.append('AddOnsPrice', AddOnsPrice);
+                fd.append('CrustId', CrustId);
                 fd.append('CrustName', CrustName);
                 fd.append('CrustPrice', CrustPrice);
                 fd.append('AddOnType', AddOnType);

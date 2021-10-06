@@ -948,6 +948,7 @@
           <Property Name="MasterProductName" Type="nvarchar" MaxLength="200" />
           <Property Name="AddOnCategoryId" Type="int" Nullable="false" />
           <Property Name="AddOnCategoryName" Type="nvarchar(max)" />
+          <Property Name="CrustId" Type="int" Nullable="false" />
           <Property Name="CrustName" Type="nvarchar(max)" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="PortionId" Type="int" Nullable="false" />
@@ -1184,6 +1185,7 @@
           <Property Name="MasterProductName" Type="nvarchar" MaxLength="200" />
           <Property Name="AddOnCategoryId" Type="int" Nullable="false" />
           <Property Name="AddOnCategoryName" Type="nvarchar(max)" />
+          <Property Name="CrustId" Type="int" Nullable="false" />
           <Property Name="CrustName" Type="nvarchar(max)" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
@@ -2245,31 +2247,6 @@
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="ProductDishAddOn">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="AddOnItemName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="MasterProductId" Type="Int64" />
-          <Property Name="MasterProductName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="AddOnCategoryId" Type="Int32" Nullable="false" />
-          <Property Name="AddOnCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CrustName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="PortionId" Type="Int32" Nullable="false" />
-          <Property Name="PortionName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="MinSelectionLimit" Type="Int32" Nullable="false" />
-          <Property Name="MaxSelectionLimit" Type="Int32" Nullable="false" />
-          <Property Name="PortionPrice" Type="Double" Nullable="false" />
-          <Property Name="AddOnsPrice" Type="Double" Nullable="false" />
-          <Property Name="CrustPrice" Type="Double" Nullable="false" />
-          <Property Name="AddOnType" Type="Int32" Nullable="false" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="Products1">
           <Key>
             <PropertyRef Name="Id" />
@@ -2409,37 +2386,6 @@
           <Property Name="DeliveryCredit" Type="Double" Nullable="false" />
           <Property Name="CustomerId" Type="Int32" Nullable="false" />
           <Property Name="DateUpdated" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="ShopDishAddOn">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="AddOnItemName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="MasterProductId" Type="Int64" Nullable="false" />
-          <Property Name="MasterProductName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="AddOnCategoryId" Type="Int32" Nullable="false" />
-          <Property Name="AddOnCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CrustName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PortionId" Type="Int32" Nullable="false" />
-          <Property Name="PortionName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="MinSelectionLimit" Type="Int32" Nullable="false" />
-          <Property Name="MaxSelectionLimit" Type="Int32" Nullable="false" />
-          <Property Name="PortionPrice" Type="Double" Nullable="false" />
-          <Property Name="AddOnsPrice" Type="Double" Nullable="false" />
-          <Property Name="CrustPrice" Type="Double" Nullable="false" />
-          <Property Name="AddOnType" Type="Int32" Nullable="false" />
-          <Property Name="ProductId" Type="Int64" Nullable="false" />
-          <Property Name="ProductName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="ShopId" Type="Int32" Nullable="false" />
-          <Property Name="ShopName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="ProductDishAddonId" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="ShopMember">
           <Key>
@@ -2662,7 +2608,6 @@
           <EntitySet Name="PincodeRates" EntityType="Self.PincodeRate" />
           <EntitySet Name="PlatFormCreditRates" EntityType="Self.PlatFormCreditRate" />
           <EntitySet Name="Portions" EntityType="Self.Portion" />
-          <EntitySet Name="ProductDishAddOns" EntityType="Self.ProductDishAddOn" />
           <EntitySet Name="Products1" EntityType="Self.Products1" />
           <EntitySet Name="ProductSpecificationItems" EntityType="Self.ProductSpecificationItem" />
           <EntitySet Name="ProductSpecifications" EntityType="Self.ProductSpecification" />
@@ -2671,7 +2616,6 @@
           <EntitySet Name="RefundsDatas" EntityType="Self.RefundsData" />
           <EntitySet Name="ShopCategories" EntityType="Self.ShopCategory" />
           <EntitySet Name="ShopCredits" EntityType="Self.ShopCredit" />
-          <EntitySet Name="ShopDishAddOns" EntityType="Self.ShopDishAddOn" />
           <EntitySet Name="ShopMembers" EntityType="Self.ShopMember" />
           <EntitySet Name="Specifications" EntityType="Self.Specification" />
           <EntitySet Name="Staffs" EntityType="Self.Staff" />
@@ -2775,6 +2719,8 @@
             <End Role="CustomerReview" EntitySet="CustomerReviews" />
           </AssociationSet>
           <EntitySet Name="Agencies" EntityType="sncModel.Agency" />
+          <EntitySet Name="ProductDishAddOns" EntityType="sncModel.ProductDishAddOn" />
+          <EntitySet Name="ShopDishAddOns" EntityType="sncModel.ShopDishAddOn" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3414,6 +3360,64 @@
           <Property Name="UpdatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="ProductDishAddOn">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AddOnItemName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="MasterProductId" Type="Int64" />
+          <Property Name="MasterProductName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AddOnCategoryId" Type="Int32" Nullable="false" />
+          <Property Name="AddOnCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CrustId" Type="Int32" Nullable="false" />
+          <Property Name="CrustName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="PortionId" Type="Int32" Nullable="false" />
+          <Property Name="PortionName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MinSelectionLimit" Type="Int32" Nullable="false" />
+          <Property Name="MaxSelectionLimit" Type="Int32" Nullable="false" />
+          <Property Name="PortionPrice" Type="Double" Nullable="false" />
+          <Property Name="AddOnsPrice" Type="Double" Nullable="false" />
+          <Property Name="CrustPrice" Type="Double" Nullable="false" />
+          <Property Name="AddOnType" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ShopDishAddOn">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AddOnItemName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="MasterProductId" Type="Int64" Nullable="false" />
+          <Property Name="MasterProductName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AddOnCategoryId" Type="Int32" Nullable="false" />
+          <Property Name="AddOnCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CrustId" Type="Int32" Nullable="false" />
+          <Property Name="CrustName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PortionId" Type="Int32" Nullable="false" />
+          <Property Name="PortionName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MinSelectionLimit" Type="Int32" Nullable="false" />
+          <Property Name="MaxSelectionLimit" Type="Int32" Nullable="false" />
+          <Property Name="PortionPrice" Type="Double" Nullable="false" />
+          <Property Name="AddOnsPrice" Type="Double" Nullable="false" />
+          <Property Name="CrustPrice" Type="Double" Nullable="false" />
+          <Property Name="AddOnType" Type="Int32" Nullable="false" />
+          <Property Name="ProductId" Type="Int64" Nullable="false" />
+          <Property Name="ProductName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ShopId" Type="Int32" Nullable="false" />
+          <Property Name="ShopName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="ProductDishAddonId" Type="Int32" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4011,32 +4015,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ProductDishAddOns">
-            <EntityTypeMapping TypeName="sncModel.ProductDishAddOn">
-              <MappingFragment StoreEntitySet="ProductDishAddOns">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="AddOnItemName" ColumnName="AddOnItemName" />
-                <ScalarProperty Name="MasterProductId" ColumnName="MasterProductId" />
-                <ScalarProperty Name="MasterProductName" ColumnName="MasterProductName" />
-                <ScalarProperty Name="AddOnCategoryId" ColumnName="AddOnCategoryId" />
-                <ScalarProperty Name="AddOnCategoryName" ColumnName="AddOnCategoryName" />
-                <ScalarProperty Name="CrustName" ColumnName="CrustName" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="PortionId" ColumnName="PortionId" />
-                <ScalarProperty Name="PortionName" ColumnName="PortionName" />
-                <ScalarProperty Name="MinSelectionLimit" ColumnName="MinSelectionLimit" />
-                <ScalarProperty Name="MaxSelectionLimit" ColumnName="MaxSelectionLimit" />
-                <ScalarProperty Name="PortionPrice" ColumnName="PortionPrice" />
-                <ScalarProperty Name="AddOnsPrice" ColumnName="AddOnsPrice" />
-                <ScalarProperty Name="CrustPrice" ColumnName="CrustPrice" />
-                <ScalarProperty Name="AddOnType" ColumnName="AddOnType" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Products1">
             <EntityTypeMapping TypeName="sncModel.Products1">
               <MappingFragment StoreEntitySet="Products1">
@@ -4180,38 +4158,6 @@
                 <ScalarProperty Name="DeliveryCredit" ColumnName="DeliveryCredit" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ShopDishAddOns">
-            <EntityTypeMapping TypeName="sncModel.ShopDishAddOn">
-              <MappingFragment StoreEntitySet="ShopDishAddOns">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="AddOnItemName" ColumnName="AddOnItemName" />
-                <ScalarProperty Name="MasterProductId" ColumnName="MasterProductId" />
-                <ScalarProperty Name="MasterProductName" ColumnName="MasterProductName" />
-                <ScalarProperty Name="AddOnCategoryId" ColumnName="AddOnCategoryId" />
-                <ScalarProperty Name="AddOnCategoryName" ColumnName="AddOnCategoryName" />
-                <ScalarProperty Name="CrustName" ColumnName="CrustName" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-                <ScalarProperty Name="PortionId" ColumnName="PortionId" />
-                <ScalarProperty Name="PortionName" ColumnName="PortionName" />
-                <ScalarProperty Name="MinSelectionLimit" ColumnName="MinSelectionLimit" />
-                <ScalarProperty Name="MaxSelectionLimit" ColumnName="MaxSelectionLimit" />
-                <ScalarProperty Name="PortionPrice" ColumnName="PortionPrice" />
-                <ScalarProperty Name="AddOnsPrice" ColumnName="AddOnsPrice" />
-                <ScalarProperty Name="CrustPrice" ColumnName="CrustPrice" />
-                <ScalarProperty Name="AddOnType" ColumnName="AddOnType" />
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="ProductDishAddonId" ColumnName="ProductDishAddonId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4965,6 +4911,66 @@
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductDishAddOns">
+            <EntityTypeMapping TypeName="sncModel.ProductDishAddOn">
+              <MappingFragment StoreEntitySet="ProductDishAddOns">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="AddOnType" ColumnName="AddOnType" />
+                <ScalarProperty Name="CrustPrice" ColumnName="CrustPrice" />
+                <ScalarProperty Name="AddOnsPrice" ColumnName="AddOnsPrice" />
+                <ScalarProperty Name="PortionPrice" ColumnName="PortionPrice" />
+                <ScalarProperty Name="MaxSelectionLimit" ColumnName="MaxSelectionLimit" />
+                <ScalarProperty Name="MinSelectionLimit" ColumnName="MinSelectionLimit" />
+                <ScalarProperty Name="PortionName" ColumnName="PortionName" />
+                <ScalarProperty Name="PortionId" ColumnName="PortionId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CrustName" ColumnName="CrustName" />
+                <ScalarProperty Name="CrustId" ColumnName="CrustId" />
+                <ScalarProperty Name="AddOnCategoryName" ColumnName="AddOnCategoryName" />
+                <ScalarProperty Name="AddOnCategoryId" ColumnName="AddOnCategoryId" />
+                <ScalarProperty Name="MasterProductName" ColumnName="MasterProductName" />
+                <ScalarProperty Name="MasterProductId" ColumnName="MasterProductId" />
+                <ScalarProperty Name="AddOnItemName" ColumnName="AddOnItemName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ShopDishAddOns">
+            <EntityTypeMapping TypeName="sncModel.ShopDishAddOn">
+              <MappingFragment StoreEntitySet="ShopDishAddOns">
+                <ScalarProperty Name="ProductDishAddonId" ColumnName="ProductDishAddonId" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="AddOnType" ColumnName="AddOnType" />
+                <ScalarProperty Name="CrustPrice" ColumnName="CrustPrice" />
+                <ScalarProperty Name="AddOnsPrice" ColumnName="AddOnsPrice" />
+                <ScalarProperty Name="PortionPrice" ColumnName="PortionPrice" />
+                <ScalarProperty Name="MaxSelectionLimit" ColumnName="MaxSelectionLimit" />
+                <ScalarProperty Name="MinSelectionLimit" ColumnName="MinSelectionLimit" />
+                <ScalarProperty Name="PortionName" ColumnName="PortionName" />
+                <ScalarProperty Name="PortionId" ColumnName="PortionId" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CrustName" ColumnName="CrustName" />
+                <ScalarProperty Name="CrustId" ColumnName="CrustId" />
+                <ScalarProperty Name="AddOnCategoryName" ColumnName="AddOnCategoryName" />
+                <ScalarProperty Name="AddOnCategoryId" ColumnName="AddOnCategoryId" />
+                <ScalarProperty Name="MasterProductName" ColumnName="MasterProductName" />
+                <ScalarProperty Name="MasterProductId" ColumnName="MasterProductId" />
+                <ScalarProperty Name="AddOnItemName" ColumnName="AddOnItemName" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

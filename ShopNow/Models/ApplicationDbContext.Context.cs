@@ -58,7 +58,6 @@ namespace ShopNow.Models
         public virtual DbSet<PincodeRate> PincodeRates { get; set; }
         public virtual DbSet<PlatFormCreditRate> PlatFormCreditRates { get; set; }
         public virtual DbSet<Portion> Portions { get; set; }
-        public virtual DbSet<ProductDishAddOn> ProductDishAddOns { get; set; }
         public virtual DbSet<Products1> Products1 { get; set; }
         public virtual DbSet<ProductSpecificationItem> ProductSpecificationItems { get; set; }
         public virtual DbSet<ProductSpecification> ProductSpecifications { get; set; }
@@ -67,7 +66,6 @@ namespace ShopNow.Models
         public virtual DbSet<RefundsData> RefundsDatas { get; set; }
         public virtual DbSet<ShopCategory> ShopCategories { get; set; }
         public virtual DbSet<ShopCredit> ShopCredits { get; set; }
-        public virtual DbSet<ShopDishAddOn> ShopDishAddOns { get; set; }
         public virtual DbSet<ShopMember> ShopMembers { get; set; }
         public virtual DbSet<Specification> Specifications { get; set; }
         public virtual DbSet<Staff> Staffs { get; set; }
@@ -94,6 +92,8 @@ namespace ShopNow.Models
         public virtual DbSet<DeliveryBoy> DeliveryBoys { get; set; }
         public virtual DbSet<Shop> Shops { get; set; }
         public virtual DbSet<Agency> Agencies { get; set; }
+        public virtual DbSet<ProductDishAddOn> ProductDishAddOns { get; set; }
+        public virtual DbSet<ShopDishAddOn> ShopDishAddOns { get; set; }
     
         [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)
