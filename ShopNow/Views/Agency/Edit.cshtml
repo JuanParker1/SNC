@@ -6,10 +6,29 @@
 
 <div class="container-fluid">
     <div class="row mb-2">
-        <div class="col-md-3">
+        <div class="col-md-2">
             <h5 class="text-success">@ViewBag.Title</h5>
         </div>
-        <div class="col-md-9 text-right">
+        <div class="col-md-2 text-right">
+            <input type="button" class="btn btn-info" id="btnPassword" value="Generate Password">
+            <input type="button" class="btn btn-info d-none" id="btnPass" value="Password" disabled>
+        </div>
+        <div class="col-md-2">
+            <div class="input-group mb-3">
+                <input type="password" class="form-control" id="txtPassword" readonly value="@Model.Password" />
+                <div class="input-group-append">
+                    <button class="btn btn-secondary btnShow" type="button"><i class="fa fa-eye"></i></button>
+                    <button class="btn btn-secondary d-none btnHide" type="button"><i class="fa fa-eye-slash"></i></button>
+                </div>
+            </div>
+        </div>
+        @if (Model.Password != null)
+        {
+        <div class="col-md-1 mt-2">
+            <a href="#modal-Password" data-target="#modal-Password" data-toggle="modal">Update</a>
+        </div>
+        }
+        <div class="col-md-5 text-right">
             @if (Model.Status == 1)
             {
                 <a href="~/Agency/Approve?Id=@Model.Id" class="btn btn-success btn-sm mr-2">Approve</a>
@@ -24,6 +43,7 @@
             {
                 @Html.AntiForgeryToken()
                 <input type="hidden" name="Id" value="@Model.Id" />
+                <input type="hidden" name="CustomerId" id="CustomerId" value="@Model.CustomerId" />
                 <input type="hidden" name="Status" value="@Model.Status" />
                 <div class="card shadow mb-4">
                     <div class="card-body">
@@ -214,6 +234,26 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modal-Password" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert alert-info">
+                <h5 class="modal-title">Update Password</h5>
+                <button type="button" class="btnClose close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="col-form-label font-weight-bold text-muted">Password</label>
+                    <input type="text" class="form-control" name="Password" id="Password" />
+                </div>
+                <div class="mx-auto col-4 mt-5"> <input id="btnUpdatePassword" type="button" value="Update" class="btn btn-success btn-block" /></div>
+            </div>
+        </div>
+    </div>
+</div>
 @section Scripts
 {
     <script src="~/Scripts/ValidateRequiredFields.js"></script>
@@ -242,6 +282,46 @@
                 if (isValidated) {
                     $('#AgencyForm').submit();
                 }
+            });
+
+            var password = $("#txtPassword").val();
+            if (password == "") {
+                $("#btnPassword").removeClass("d-none");
+                $("#btnPass").addClass("d-none");
+            } else {
+                $("#btnPassword").addClass("d-none");
+                $("#btnPass").removeClass("d-none");
+            }
+
+            $('#btnPassword').on('click', function () {
+                var customerid = $("#CustomerId").val();
+                $.getJSON("/Agency/GeneratePassword", { customerid: customerid}, function (data) {
+                    if (data != "")
+                        $("#txtPassword").val(data);
+                    location.reload();
+                });
+            });
+
+            $('#btnUpdatePassword').on('click', function () {
+                var customerid = $("#CustomerId").val();
+                var password = $("#Password").val();
+                $.getJSON("/Agency/UpdatePassword", { customerid: customerid , password:password}, function (data) {
+                    if (data != "")
+                        $("#txtPassword").val(data);
+                    location.reload();
+                });
+            });
+
+            $('.btnShow').on('click', function () {
+                $("#txtPassword").prop("type", "text");
+                $(".btnShow").addClass("d-none");
+                $(".btnHide").removeClass("d-none");
+            });
+
+            $('.btnHide').on('click', function () {
+                $("#txtPassword").prop("type", "password");
+                $(".btnShow").removeClass("d-none");
+                $(".btnHide").addClass("d-none");
             });
 
             $('input:radio[name="DrivingLicense"]').change(

@@ -58,7 +58,7 @@
                 },
                     function (isConfirm) {
                         if (isConfirm) {
-                            $.getJSON("/Agency/Delete", { id: Id }, function (data) {
+                            $.getJSON("/Agency/DeleteAgency", { id: Id }, function (data) {
                                 if (data == true) {
                                     window.location.reload();
                                 }

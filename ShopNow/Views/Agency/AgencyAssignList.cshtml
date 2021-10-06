@@ -125,18 +125,18 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label class="col-form-label font-weight-bold text-muted">Select Agency</label>
-                    <select id="AgencyId" class="form-control" name="AgencyId"></select>
-                    <input type="hidden" name="AgencyName" id="AgencyName" />
+                    <select class="form-control" name="editAgencyId" id="editAgencyId"></select>
+                    <input type="hidden" name="editAgencyName" id="editAgencyName" />
                 </div>
                 <hr />
                 <div class="row">
                     <div class="col-md-6">
                         <label class="col-form-label text-secondary font-weight-bold">DeliveryBoy Name<span class="text-danger">*</span></label>
-                        <select id="DeliveryBoyIds" name="DeliveryBoyIds" class="form-control" multiple></select>
+                        <select id="editDeliveryBoyIds" name="editDeliveryBoyIds" class="form-control" multiple></select>
                     </div>
                     <div class="col-md-6">
                         <label class="col-form-label text-secondary font-weight-bold">Shop Name<span class="text-danger">*</span></label>
-                        <select id="ShopIds" name="ShopIds" class="form-control" multiple></select>
+                        <select id="editShopIds" name="editShopIds" class="form-control" multiple></select>
                     </div>
                 </div>
                 <div class="mx-auto col-6 mt-5"> <input id="btn-update-agency" type="button" value="Update Agency" class="btn btn-success btn-block" /></div>
@@ -199,6 +199,38 @@
                 }
             });
 
+            $('#editAgencyId').select2({
+                placeholder: "Select Agency",
+                width: '100%',
+                ajax: {
+                    url: "/Agency/GetAgencySelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="editAgencyName"]').val(e.params.data.text);
+            });
+
+            $('#editShopIds').select2({
+                placeholder: "Select Shop",
+                width: '100%',
+                ajax: {
+                    url: "/Agency/GetShopSelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            });
+
+            $('#editDeliveryBoyIds').select2({
+                placeholder: "Select DeliveryBoy",
+                width: '100%',
+                ajax: {
+                    url: "/Agency/GetDeliveryBoySelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            });
+
             $('#btn-add-agency').on('click', function () {
                 if ($('#AgencyId').val()) {
                     if ($('#ShopIds').val()) {
@@ -226,12 +258,14 @@
 
             $(".update-agency").click(function () {
                 var agencyid = $(this).attr('data-agencyid');
-                var agencyname = $(this).attr('data-agencyname');
-                $('#CategoryId').val($(this).attr('data-id'));
-                $('#edit-AgencyName').val($(this).attr('data-name'));
-                $('#edit-ProductTypeId').append($("<option></option>").attr("value", typeid).text(typename));
-                $('#edit-ProductTypeName').val($(this).attr('data-producttypename'));
-                $('#edit-OrderNo').val($(this).attr('data-orderno'));
+                $.post("/Agency/GetAssignAgency", { id: agencyid }, function (data) {
+                    if (data != null) {
+                        $('#editAgencyId').append($("<option></option>").attr("value", data).text(typename));
+                        $('#editShopIds').append($("<option></option>").attr("value", data).text(typename));
+                        $('#editDeliveryBoyIds').append($("<option></option>").attr("value", data).text(typename));
+                    }
+                });
+               
             });
 
             $('#btn-update-agency').on('click', function () {
