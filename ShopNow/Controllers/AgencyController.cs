@@ -247,6 +247,31 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        [AccessPolicy(PageCode = "")]
+        public ActionResult Index(AgencyAssignListViewModel model)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            model.Lists = db.ShopSchedules.Where(i => i.Status == 0 && (model.FilterAgencyId != 0 ? i.ShopId == model.FilterAgencyId : true))
+                .Join(db.Shops, sc => sc.ShopId, s => s.Id, (sc, s) => new { sc, s })
+                .GroupBy(i => i.sc.ShopId)
+            .Select(i => new AgencyAssignListViewModel.AgencyList
+            {
+                AgencyId = i.FirstOrDefault().p.m.Id,
+                AgencyName = i.FirstOrDefault().p.m.Name,
+                ShopListItems = i.Where(a => a.p.s.Status == 0).Select(a => new AgencyAssignListViewModel.AgencyList.ShopListItem
+                {
+                    ShopId = a.p.s.Id,
+                    ShopName = a.p.s.Name,
+                }).ToList(),
+                DeliveryBoyListItems = i.Where(a => a.d.Status == 0).Select(a => new AgencyAssignListViewModel.AgencyList.DeliveryBoyListItem
+                {
+                    DeliveryBoyId = a.d.Id,
+                    DeliveryBoyName = a.d.Name
+                }).ToList()
+            }).ToList();
+            return View(model);
+        }
         // Agency Assign
         [AccessPolicy(PageCode = "")]
         public ActionResult AgencyAssignList()
