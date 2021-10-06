@@ -3222,6 +3222,7 @@
     <Content Include="Views\Agency\Edit.cshtml" />
     <Content Include="Views\Agency\AgencyAssignList.cshtml" />
     <Content Include="Views\Agency\AgencyAssign.cshtml" />
+    <Content Include="Views\Agency\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
