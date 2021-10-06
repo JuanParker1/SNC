@@ -1,28 +1,42 @@
-﻿@model ShopNow.ViewModels.ListViewModel
+﻿@model ShopNow.ViewModels.AgencyAssignListViewModel
 @{
-    ViewBag.Title = "Assigned Agency List";
+    ViewBag.Title = "Agency Assign List";
 }
+
 <title>ShopNow | @ViewBag.Title</title>
-<div class="container-fluid">
-    <div class="row my-2">
-        <div class="col-md-6">
-            <h5 class="text-success">@ViewBag.Title</h5>
-        </div>
-        <div class="col-md-6 text-right">
-            <a href="/Agency/AssignFranchise"><span class="fa fa-tasks"></span> Assign Agency</a>
-            <a href="~/Agency/List" class="ml-3"><span class="fa fa-list-ul"></span>Agency List</a>
-        </div>
-    </div>
+
+<div class="container-fluid mb-3">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 mx-auto">
+            <div class="d-flex justify-content-between my-3">
+                <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+                <a href="#modal-add-agency" data-target="#modal-add-agency" data-toggle="modal">Add New Agency</a>
+            </div>
             <div class="card shadow">
                 <div class="card-body">
-                    <table class="table table-borderless" id="Franchise">
+                    <form method="get" action="/Agency/Index">
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <select id="AgencyId-filter" class="form-control" name="FilterAgencyId">
+                                    @if (Model.FilterAgencyId != 0)
+                                    {
+                                        <option value="@Model.FilterAgencyId">@Model.FilterAgencyName</option>
+                                    }
+                                </select>
+                                <input type="hidden" name="FilterAgencyName" />
+                            </div>
+                            <div class="col-md-4">
+                                <input type="submit" class="btn btn-info mr-3" value="Filter" />
+                                <a href="/Agency/Index" class="btn btn-warning">Clear</a>
+                            </div>
+                        </div>
+                    </form>
+                    <table class="table table-borderless" id="tbl-shop-schedules">
                         <thead class="bg-light">
                             <tr>
-                                <th class="text-nowrap w-25">Agency Name</th>
-                                <th class="w-25">Shop Name(s)</th>
-                                <th class="w-25">DeliveryBoy Name(s)</th>
+                                <th>Agency Name</th>
+                                <th>Shop Name(s)</th>
+                                <th>Delivery Boy Name(s)</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -30,25 +44,31 @@
                             @foreach (var item in Model.Lists)
                             {
                                 <tr>
-                                    <td class="nowrap font-weight-bold text-secondary mx-5">@item.AgencyName</td>
+                                    <td>@item.AgencyName</td>
                                     <td>
                                         @foreach (var shop in item.ShopListItems)
                                         {
+                                        <div class="d-flex">
                                             <label class="mr-4">@shop.ShopName</label>
-                                            <a href="/Agency/ShopDelete?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(shop.ShopId)" class="text-danger"><i class="fa fa-close fa-lg"></i></a>
+                                            <a href="javascript:void(0)" data-shopid="@shop.ShopId" class="text-danger btnShopDelete"><i class="fa fa-close fa-lg"></i></a>
+                                        </div>
+
                                         }
                                     </td>
                                     <td>
                                         @foreach (var deliveryBoy in item.DeliveryBoyListItems)
                                         {
+                                        <div class="d-flex">
                                             <label class="mr-4">@deliveryBoy.DeliveryBoyName</label>
-                                            <a href="/Agency/DeliveryBoyDelete?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(deliveryBoy.DeliveryBoyId)" class="text-danger"><i class="fa fa-close fa-lg"></i></a>
+                                           <a href="javascript:void(0)" data-deliveryboyid="@deliveryBoy.DeliveryBoyId" class="text-danger btnDeliveryBoyDelete"><i class="fa fa-close fa-lg"></i></a>
+                                        </div>
+
                                         }
                                     </td>
-                                    @*<td>
-                                        <a href="/Agency/FranchiseUpdate?Id=@item.AgencyId" class="text-info mr-4"><i class="fa fa-plus fa-lg"></i></a>
-                                        <a href="javascript:void(0)" data-id="@item.AgencyId" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
-                                    </td>*@
+                                    <td>
+                                        <a href="#modal-update-agency" data-target="#modal-update-agency" data-toggle="modal" data-agencyid="@item.AgencyId" data-agencyname="@item.AgencyName" class="text-info mr-4 update-agency"><i class="fa fa-plus fa-lg"></i></a>
+                                        <a href="javascript:void(0)" data-agencyid="@item.AgencyId" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+                                    </td>
                                 </tr>
                             }
                         </tbody>
@@ -59,15 +79,187 @@
     </div>
 </div>
 
+<div class="modal fade" id="modal-add-agency" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert alert-info">
+                <h5 class="modal-title">Add New Agency</h5>
+                <button type="button" class="btnClose close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="col-form-label font-weight-bold text-muted">Select Agency</label>
+                    <select id="AgencyId" class="form-control" name="AgencyId"></select>
+                    <input type="hidden" name="AgencyName" id="AgencyName" />
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="col-form-label text-secondary font-weight-bold">DeliveryBoy Name<span class="text-danger">*</span></label>
+                        <select id="DeliveryBoyIds" name="DeliveryBoyIds" class="form-control" multiple></select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-form-label text-secondary font-weight-bold">Shop Name<span class="text-danger">*</span></label>
+                        <select id="ShopIds" name="ShopIds" class="form-control" multiple></select>
+                    </div>
+                </div>
+                <div class="mx-auto col-6 mt-5"> <input id="btn-add-agency" type="button" value="Add Agency" class="btn btn-success btn-block" /></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="modal-update-agency" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert alert-info">
+                <h5 class="modal-title">Update Agency</h5>
+                <button type="button" class="btnClose close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="col-form-label font-weight-bold text-muted">Select Agency</label>
+                    <select id="AgencyId" class="form-control" name="AgencyId"></select>
+                    <input type="hidden" name="AgencyName" id="AgencyName" />
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="col-form-label text-secondary font-weight-bold">DeliveryBoy Name<span class="text-danger">*</span></label>
+                        <select id="DeliveryBoyIds" name="DeliveryBoyIds" class="form-control" multiple></select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-form-label text-secondary font-weight-bold">Shop Name<span class="text-danger">*</span></label>
+                        <select id="ShopIds" name="ShopIds" class="form-control" multiple></select>
+                    </div>
+                </div>
+                <div class="mx-auto col-6 mt-5"> <input id="btn-update-agency" type="button" value="Update Agency" class="btn btn-success btn-block" /></div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts
 {
     <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
+
+            $('#AgencyId-filter').select2({
+                placeholder: "Search Agency",
+                width: '100%',
+                ajax: {
+                    url: "/Agency/GetAgencySelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="FilterAgencyName"]').val(e.params.data.text);
+            });
+
+            $('#AgencyId').select2({
+                placeholder: "Select Agency",
+                width: '100%',
+                ajax: {
+                    url: "/Agency/GetAgencySelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="AgencyName"]').val(e.params.data.text);
+            });
+
+            $('#ShopIds').select2({
+                placeholder: "Select Shop",
+                width: '100%',
+                ajax: {
+                    url: "/Agency/GetShopSelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            });
+
+            $('#DeliveryBoyIds').select2({
+                placeholder: "Select DeliveryBoy",
+                width: '100%',
+                ajax: {
+                    url: "/Agency/GetDeliveryBoySelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            });
+
+            $('#btn-add-agency').on('click', function () {
+                if ($('#AgencyId').val()) {
+                    if ($('#ShopIds').val()) {
+                        if ($('#DeliveryBoyIds').val()) {
+                            var model = {
+                                AgencyId: $('#AgencyId').val(),
+                                AgencyName: $('#AgencyName').val(),
+                                ShopIds: $('#ShopIds').val(),
+                                DeliveryBoyIds: $('#DeliveryBoyIds').val()
+                            }
+                            $.post('/Agency/Add', model, function (data) {
+                                if (data == true) {
+                                    swal('Success', 'Agency saved successfully', 'success');
+                                    window.location.reload();
+                                }
+                            });
+                        } else
+                            swal('Warning', 'DeliveryBoy is required!', 'warning');
+                    } else
+                        swal('Warning', 'Shop is required!', 'warning');
+                } else
+                    swal('Warning', 'Agency is required!', 'warning');
+            });
+           // update-agency
+
+            $(".update-agency").click(function () {
+                var agencyid = $(this).attr('data-agencyid');
+                var agencyname = $(this).attr('data-agencyname');
+                $('#CategoryId').val($(this).attr('data-id'));
+                $('#edit-AgencyName').val($(this).attr('data-name'));
+                $('#edit-ProductTypeId').append($("<option></option>").attr("value", typeid).text(typename));
+                $('#edit-ProductTypeName').val($(this).attr('data-producttypename'));
+                $('#edit-OrderNo').val($(this).attr('data-orderno'));
+            });
+
+            $('#btn-update-agency').on('click', function () {
+                if ($('#AgencyId').val()) {
+                    if ($('#ShopIds').val()) {
+                        if ($('#DeliveryBoyIds').val()) {
+                            var model = {
+                                AgencyId: $('#AgencyId').val(),
+                                AgencyName: $('#AgencyName').val(),
+                                ShopIds: $('#ShopIds').val(),
+                                DeliveryBoyIds: $('#DeliveryBoyIds').val()
+                            }
+                            $.post('/Agency/Update', model, function (data) {
+                                if (data == true) {
+                                    swal('Success', 'Agency Update successfully', 'success');
+                                    window.location.reload();
+                                }
+                            });
+                        } else
+                            swal('Warning', 'DeliveryBoy is required!', 'warning');
+                    } else
+                        swal('Warning', 'Shop is required!', 'warning');
+                } else
+                    swal('Warning', 'Agency is required!', 'warning');
+            });
+
             $(".btnDelete").click(function () {
-                var id = $(this).attr('data-id');
+                var Id = $(this).attr('data-agencyid');
                 swal({
                     title: "Are you sure want to delete?",
                     text: "You will not be able to recover this file!",
@@ -81,7 +273,7 @@
                 },
                     function (isConfirm) {
                         if (isConfirm) {
-                            $.getJSON("/Agency/FranchiseDelete", { id: id }, function (data) {
+                            $.getJSON("/Agency/Delete", { id: Id }, function (data) {
                                 if (data == true) {
                                     window.location.reload();
                                 }
@@ -90,10 +282,67 @@
                     }
                 );
             });
+
+            $(".btnShopDelete").click(function () {
+                var Id = $(this).attr('data-shopid');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/Agency/DeleteShop", { id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
+            });
+
+            $(".btnDeliveryBoyDelete").click(function () {
+                var Id = $(this).attr('data-deliveryboyid');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/Agency/DeleteDeliveryBoy", { id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
+            });
+
+            $("#tbl-shop-schedules").on('click', '.btn-edit-timing', function () {
+                $('[name="Id"]').val($(this).attr('data-id'));
+                $("#edit-onTime").val($(this).attr('data-ontime'));
+                $("#edit-offTime").val($(this).attr('data-offtime'));
+            });
+
+            $("#tbl-shop-schedules").on('click', '.btn-add-timing', function () {
+                $('[name="ShopId"]').val($(this).attr('data-shopid'));
+            });
+
         });
     </script>
 }
-
-
-
-
