@@ -4055,12 +4055,12 @@ namespace ShopNow.Controllers
 
                     if (list.FirstOrDefault().AddOnType == 3)
                     {
-                        model.PortionListItems = list.Where(i => i.AddOnType == 3).Select((i, index) => new ApiProductAddonViewModel.PortionListItem
+                        model.PortionListItems = list.Where(i => i.AddOnType == 3).GroupBy(i => i.PortionId).Select((i, index) => new ApiProductAddonViewModel.PortionListItem
                         {
                             Index = index + 1,
-                            PortionId = i.PortionId,
-                            PortionName = i.PortionName,
-                            PortionPrice = i.PortionPrice
+                            PortionId = i.Key,
+                            PortionName = i.FirstOrDefault().PortionName,
+                            PortionPrice = i.FirstOrDefault().PortionPrice
                         }).ToList();
 
                         model.AddonListItems = list.Where(i => i.AddOnType == 3).Select((i, index) => new ApiProductAddonViewModel.AddonListItem
