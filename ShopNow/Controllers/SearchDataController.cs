@@ -36,7 +36,8 @@ namespace ShopNow.Controllers
                     Key = i.k.Key,
                     OldCommonWord = string.Join(",", i.sd.Select(a => a.Source).ToList()).ToString()
                 }).OrderByDescending(i => i.Date).ToList();
-
+            model.AllCount = model.AllListItems.Count();
+            model.ZeroCount = model.ZeroCountListItems.Count();
             return View(model);
         }
 
