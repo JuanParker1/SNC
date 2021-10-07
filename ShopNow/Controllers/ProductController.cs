@@ -102,7 +102,8 @@ namespace ShopNow.Controllers
             var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && (a.Status == 0 || a.Status == 1)).Select(i => new
             {
                 id = i.Id,
-                text = i.Name
+                text = i.Name + " -- " + i.DistrictName,
+                textSave = i.Name
             }).ToListAsync();
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
@@ -113,7 +114,8 @@ namespace ShopNow.Controllers
             var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && (a.Status == 0 || a.Status == 1) && (a.ShopCategoryId == 1|| a.ShopCategoryId == 3)).Select(i => new
             {
                 id = i.Id,
-                text = i.Name
+                text = i.Name + " -- " + i.DistrictName,
+                textSave = i.Name
             }).ToListAsync();
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
@@ -135,7 +137,7 @@ namespace ShopNow.Controllers
             var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && (a.Status == 0 || a.Status == 1) && (a.ShopCategoryId == 3 || a.ShopCategoryId == 4)).Select(i => new
             {
                 id = i.Id,
-                text = i.Name + " (" + i.PhoneNumber + ")",
+                text = i.Name + " (" + i.PhoneNumber + ")" + " -- " + i.DistrictName,
                 shopname = i.Name
             }).ToListAsync();
 
@@ -158,7 +160,7 @@ namespace ShopNow.Controllers
             var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
             {
                 id = i.Id,
-                text = i.Name
+                text = i.Name + " -- " + i.DistrictName
             }).ToListAsync();
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
