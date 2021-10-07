@@ -94,6 +94,10 @@ namespace ShopNow.ViewModels
     {
         public int FilterAgencyId { get; set; }
         public string FilterAgencyName { get; set; }
+        public int[] editDeliveryBoyIds { get; set; }
+        public int[] editShopIds { get; set; }
+        public int editAgencyId { get; set; }
+        public string editAgencyName { get; set; }
         public List<AgencyList> Lists { get; set; }
         public class AgencyList
         {
