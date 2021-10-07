@@ -517,61 +517,29 @@ namespace ShopNow.Controllers
 
         public ActionResult Update(AgencyAssignListViewModel model)
         {
-            // Delete
-            var shoplist = db.Shops.Where(i => i.AgencyId == model.editAgencyId).ToList();
-            var deliveryBoylist = db.DeliveryBoys.Where(i => i.AgencyId == model.editAgencyId).ToList();
-            if (shoplist.Count() > 0)
+            if (model.ShopIds != null)
             {
-                shoplist.ForEach(i => i.AgencyId = 0);
-                shoplist.ForEach(i => i.AgencyName = null);
-                db.SaveChanges();
-            }
-            if (deliveryBoylist.Count() > 0)
-            {
-                deliveryBoylist.ForEach(i => i.AgencyId = 0);
-                deliveryBoylist.ForEach(i => i.AgencyName = null);
-                db.SaveChanges();
-            }
-            
-            // Update
-            if (model.editShopIds != null)
-            {
-                foreach (var item in model.editShopIds)
+                foreach (var item in model.ShopIds)
                 {
                     var shop = db.Shops.FirstOrDefault(i => i.Id == item);
-                    shop.AgencyId = model.editAgencyId;
-                    shop.AgencyName = model.editAgencyName;
+                    shop.AgencyId = model.AgencyId;
+                    shop.AgencyName = model.AgencyName;
                     db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }
             }
-            if (model.editDeliveryBoyIds != null)
+            if (model.DeliveryBoyIds != null)
             {
-                foreach (var item in model.editDeliveryBoyIds)
+                foreach (var item in model.DeliveryBoyIds)
                 {
                     var deliveryboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == item);
-                    deliveryboy.AgencyId = model.editAgencyId;
-                    deliveryboy.AgencyName = model.editAgencyName;
+                    deliveryboy.AgencyId = model.AgencyId;
+                    deliveryboy.AgencyName = model.AgencyName;
                     db.Entry(deliveryboy).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }
             }
-            return RedirectToAction("AssignList");
-        }
-
-        public JsonResult GetAssignAgency(int id)
-        {
-            int[] shopids, deliveryboyids;
-            string[] shopnames, deliveryboynames;
-            var agency = db.Agencies.FirstOrDefault(i => i.Id == id);
-            var shop = db.Shops.Where(i => i.AgencyId == id).ToList();
-            var deliveryboy = db.DeliveryBoys.Where(i => i.AgencyId == id).ToList();
-            shopids = shop.Select(x => x.Id).ToArray();
-            shopnames = shop.Select(x => x.Name).ToArray();
-            deliveryboyids = deliveryboy.Select(x => x.Id).ToArray();
-            deliveryboynames = deliveryboy.Select(x => x.Name).ToArray();
-
-            return Json(new { agencyid = agency.Id, agencyname = agency.Name, shopids = shopids, shopnames= shopnames, deliveryboyids = deliveryboyids, deliveryboynames= deliveryboynames }, JsonRequestBehavior.AllowGet);
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         public async Task<JsonResult> GetShopSelect2(string q = "")

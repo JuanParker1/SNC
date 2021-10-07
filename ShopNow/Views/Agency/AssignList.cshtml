@@ -83,7 +83,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header alert alert-info">
-                <h5 class="modal-title">Add New Agency</h5>
+                <h5 class="modal-title">New Assign</h5>
                 <button type="button" class="btnClose close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -97,12 +97,12 @@
                 <hr />
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="col-form-label text-secondary font-weight-bold">DeliveryBoy Name<span class="text-danger">*</span></label>
-                        <select id="DeliveryBoyIds" name="DeliveryBoyIds" class="form-control" multiple></select>
-                    </div>
-                    <div class="col-md-6">
                         <label class="col-form-label text-secondary font-weight-bold">Shop Name<span class="text-danger">*</span></label>
                         <select id="ShopIds" name="ShopIds" class="form-control" multiple></select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-form-label text-secondary font-weight-bold">DeliveryBoy Name<span class="text-danger">*</span></label>
+                        <select id="DeliveryBoyIds" name="DeliveryBoyIds" class="form-control" multiple></select>
                     </div>
                 </div>
                 <div class="mx-auto col-6 mt-5"> <input id="btn-add-agency" type="button" value="Add Agency" class="btn btn-success btn-block" /></div>
@@ -117,32 +117,26 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header alert alert-info">
-                <h5 class="modal-title">Update Agency</h5>
+                <h5 class="modal-title">Update Assign</h5>
                 <button type="button" class="btnClose close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form method="post" action="/Agency/Update">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label class="col-form-label font-weight-bold text-muted">Select Agency</label>
-                        <input type="hidden" name="editAgencyId" id="editAgencyId" />
-                        <input type="hidden" name="editAgencyName" id="editAgencyName" />
+            <div class="modal-body">
+                <input type="hidden" name="editAgencyId" id="editAgencyId" />
+                <input type="hidden" name="editAgencyName" id="editAgencyName" />
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="col-form-label text-secondary font-weight-bold">Shop Name<span class="text-danger">*</span></label>
+                        <select id="editShopIds" name="editShopIds" class="form-control" multiple></select>
                     </div>
-                    <hr />
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="col-form-label text-secondary font-weight-bold">DeliveryBoy Name<span class="text-danger">*</span></label>
-                            <select id="editDeliveryBoyIds" name="editDeliveryBoyIds" class="form-control" multiple></select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="col-form-label text-secondary font-weight-bold">Shop Name<span class="text-danger">*</span></label>
-                            <select id="editShopIds" name="editShopIds" class="form-control" multiple></select>
-                        </div>
+                    <div class="col-md-6">
+                        <label class="col-form-label text-secondary font-weight-bold">DeliveryBoy Name<span class="text-danger">*</span></label>
+                        <select id="editDeliveryBoyIds" name="editDeliveryBoyIds" class="form-control" multiple></select>
                     </div>
-                    <div class="mx-auto col-6 mt-5"> <input type="submit" class="btn btn-success btn-block" id="btn-update-agency" value="Update Agency" /></div>
                 </div>
-            </form>
+                <div class="mx-auto col-6 mt-5"> <input type="button" class="btn btn-success btn-block" id="btn-update-agency" value="Update Agency" /></div>
+            </div>
         </div>
     </div>
 </div>
@@ -201,7 +195,6 @@
                 }
             });
 
-           
             $('#editShopIds').select2({
                 placeholder: "Select Shop",
                 width: '100%',
@@ -234,7 +227,6 @@
                             }
                             $.post('/Agency/Add', model, function (data) {
                                 if (data == true) {
-                                    swal('Success', 'Agency saved successfully', 'success');
                                     window.location.reload();
                                 }
                             });
@@ -246,40 +238,23 @@
                     swal('Warning', 'Agency is required!', 'warning');
             });
 
-           // update-agency
-            $(".update-agency").click(function () {
-                $('#editAgencyId').trigger('change').val("");
-                $('#editShopIds').trigger('change').val("");
-                $('#editDeliveryBoyIds').trigger('change').val("");
-                var agencyid = $(this).attr('data-agencyid');
-                $.post("/Agency/GetAssignAgency", { id: agencyid }, function (data) {
-                    if (data != null) {
-                        $('#editAgencyId').val(data.agencyid);
-                        $('#editAgencyName').val(data.agencyname);
-                        var shopid = data.shopids;
-                        var dbid = data.deliveryboyids;
-                        if (shopid) {
-                            var array_code = data.shopids;
-                            var array_name = data.shopnames;
-                            $.each(array_code, function (i) {
-                                $('select[name="editShopIds"] option[value=' + array_code[i] + ']').attr('selected', 'selected');
-                                var option = new Option(array_name[i], array_code[i], true, true);
-                                $('#editShopIds').append(option).trigger('change');
-                            });
-                        }
-                        if (dbid) {
-                            var array_code = data.deliveryboyids;
-                            var array_name = data.deliveryboynames;
-                            $.each(array_code, function (i) {
-                                $('select[name="editDeliveryBoyIds"] option[value=' + array_code[i] + ']').attr('selected', 'selected');
-                                var option = new Option(array_name[i], array_code[i], true, true);
-                                $('#editDeliveryBoyIds').append(option).trigger('change');
-                            });
-                        }
+            $('.update-agency').on('click', function () {
+                $("#editAgencyId").val($(this).attr('data-agencyid'));
+                $("#editAgencyName").val($(this).attr('data-agencyname'));
+            });
 
+            $('#btn-update-agency').on('click', function () {
+                var model = {
+                    AgencyId: $("#editAgencyId").val(),
+                    AgencyName: $("#editAgencyName").val(),
+                    ShopIds: $('#editShopIds').val(),
+                    DeliveryBoyIds: $('#editDeliveryBoyIds').val()
+                }
+                $.post('/Agency/Update', model, function (data) {
+                    if (data == true) {
+                        window.location.reload();
                     }
                 });
-
             });
 
             $(".btnDelete").click(function () {
