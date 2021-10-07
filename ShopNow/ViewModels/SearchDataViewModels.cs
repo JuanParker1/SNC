@@ -19,6 +19,9 @@ namespace ShopNow.ViewModels
             //public string Color { get; set; }
             public string OldCommonWord { get; set; }
         }
+
+        public int AllCount { get; set; }
+        public int ZeroCount { get; set; }
     }
 
     public class SearchDataEntryViewModel

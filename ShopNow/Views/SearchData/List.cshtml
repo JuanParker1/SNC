@@ -10,22 +10,25 @@
 <div class="container-fluid">
     <form method="get" action="/SearchData/List" class="my-3">
         <div class="row my-2">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="font-weight-bold">Start Date</label>
                         <input type="date" id="StartDate" name="StartDate" class="form-control" @if (Model.StartDate != null) { <text> value="@Model.StartDate.Value.ToString("yyyy-MM-dd")" </text> } />
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label class="font-weight-bold">End Date</label>
                         <input type="date" id="EndDate" name="EndDate" class="form-control" @if (Model.EndDate != null) { <text> value="@Model.EndDate.Value.ToString("yyyy-MM-dd")" </text> } />
                     </div>
                     <div class="col-md-2 mt-2">
                         <input type="submit" class="btn btn-info mt-4" value="Apply Filter" />
+                    </div>
+                    <div class="col-md-3 mt-2">
+                        <a href="/SearchData/List" class="btn btn-warning mt-4">Clear Filter</a>
                     </div>
                 </div>
             </div>
@@ -36,10 +39,10 @@
      <div class="card-body">
          <ul class="nav nav-tabs mb-3">
              <li class="nav-item">
-                 <a class="nav-link active" data-toggle="tab" href="#all">All</a>
+                 <a class="nav-link active" data-toggle="tab" href="#all">All <b>(@Model.AllCount)</b></a>
              </li>
              <li class="nav-item">
-                 <a class="nav-link" data-toggle="tab" href="#zero">Zero Count</a>
+                 <a class="nav-link" data-toggle="tab" href="#zero">Zero Count <b>(@Model.ZeroCount)</b></a>
              </li>
          </ul>
 
