@@ -228,6 +228,10 @@ namespace ShopNow.ViewModels
             public string ImagePath { get; set; }
             public string LongDescription { get; set; }
         }
+
+        //
+        public int PendingCount { get; set; }
+        public int MappedCount { get; set; }
     }
 
     // Master Dish - 1

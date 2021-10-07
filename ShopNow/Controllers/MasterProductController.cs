@@ -1555,6 +1555,9 @@ namespace ShopNow.Controllers
                     model.ShopName = shop.Name;
                 }
             }
+            model.PendingCount = _db.Products.Where(a => a.ShopId == shopId && a.Status == 0 && a.MasterProductId == 0).Count();
+            model.MappedCount = _db.Products.Join(_db.MasterProducts, p => p.MasterProductId, mp => mp.Id, (p, mp) => new { p, mp })
+                .Where(a => a.p.ShopId == shopId && a.p.Status == 0 && a.p.MasterProductId != 0).Count();
             return View(model);
         }
 
