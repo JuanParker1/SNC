@@ -398,20 +398,6 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        public JsonResult GetAgencyAssign(int agencyId)
-        {
-            var shop = db.Shops.Any(i => i.AgencyId == agencyId);
-            var deliveryboy = db.DeliveryBoys.Any(i => i.AgencyId == agencyId);
-            if (shop == true || deliveryboy == true)
-            {
-                return Json(true, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                return Json(false, JsonRequestBehavior.AllowGet);
-            }
-        }
-
         public JsonResult GetPhoneNumberCheck(string phone)
         {
             var customer = db.Customers.FirstOrDefault(i => i.PhoneNumber == phone);
@@ -475,7 +461,6 @@ namespace ShopNow.Controllers
             return RedirectToAction("List");
         }
 
-        [AccessPolicy(PageCode = "")]
         public ActionResult Reject(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
