@@ -317,7 +317,8 @@ namespace ShopNow.Controllers
                     OrderPeriod =  Math.Round((i.c.DateUpdated - i.c.DateEncoded).TotalMinutes),
                     ShopAcceptedTime = i.c.ShopAcceptedTime != null ? Math.Round((i.c.ShopAcceptedTime.Value - i.c.DateEncoded).TotalMinutes) : 0,
                 }).OrderByDescending(i => i.DateEncoded).ToList();
-
+            int counter = 1;
+            model.DeliveredLists.ForEach(x => x.No = counter++);
             return View(model.DeliveredLists);
         }
 
@@ -338,6 +339,8 @@ namespace ShopNow.Controllers
                 PhoneNumber = i.CustomerPhoneNumber,
                 DateEncoded = i.DateEncoded
             }).OrderByDescending(i => i.DateEncoded).ToList();
+            int counter = 1;
+            model.DeliveredReportLists.ForEach(x => x.No = counter++);
             return View(model);
         }
 

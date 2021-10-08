@@ -34,6 +34,7 @@
                         <h4 class="text-center d-none d-print-block">@ViewBag.Title</h4>
                         @Html.Grid(Model.DeliveredReportLists).Columns(columns =>
                    {
+                       columns.Add(c => c.No).Titled("Sl.No").Filterable(true).SetWidth(5);
                        columns.Add(c => c.OrderNumber).Titled("Order Number").Filterable(true).SetWidth(10);
                        columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
                        columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(15);

@@ -263,6 +263,7 @@ namespace ShopNow.ViewModels
         public List<DeliveredList> DeliveredLists { get; set; }
         public class DeliveredList
         {
+            public int No { get; set; }
             public long Id { get; set; }
             public int OrderNumber { get; set; }
             public string ShopName { get; set; }
@@ -475,6 +476,7 @@ namespace ShopNow.ViewModels
         }
         public List<DeliveredReportList> DeliveredReportLists { get; set; }
         public class DeliveredReportList {
+            public int No { get; set; }
             public long Id { get; set; }
             public int OrderNumber { get; set; }
             public string ShopName { get; set; }
