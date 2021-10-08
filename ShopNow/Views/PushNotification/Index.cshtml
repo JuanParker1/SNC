@@ -1,12 +1,18 @@
-﻿@{
+﻿@model ShopNow.ViewModels.PushNotificationIndexViewModel
+@using GridMvc.Html
+@{
     ViewBag.Title = "Push Notification";
 }
 
 <title>ShopNow | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+
+
 
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-md-6 mx-auto mt-3">
+    <div class="row mt-3 mx-auto">
+        <div class="offset-md-1 col-md-6">
             <div class="card shadow">
                 <div class="card-body">
                     <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
@@ -25,6 +31,18 @@
                         </div>
                         <div class="mx-auto col-6"> <input type="submit" value="Send" class="btn btn-success btn-block" /></div>
                     </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="text-success" style="letter-spacing:1px">Count</h5>
+                    @Html.Grid(Model.ListItems).Columns(columns =>
+               {
+              columns.Add(s => s.DistrictName).Titled("District Name").Filterable(true).SetWidth(30);
+              columns.Add(s => s.Count).Titled("Count").Filterable(true).SetWidth(8);
+          }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
@@ -53,7 +71,7 @@
             //    .on('select2:select', function (e) {
             //    $('input[name="ShopName"]').val(e.params.data.text);
             //});
-        
+
         });
     </script>
 }

@@ -693,6 +693,7 @@
     <Compile Include="ViewModels\ProductMedicalStockViewModel.cs" />
     <Compile Include="ViewModels\ProductScheduleViewModels.cs" />
     <Compile Include="ViewModels\ProductSpecificationViewModel.cs" />
+    <Compile Include="ViewModels\PushNotificationViewModels.cs" />
     <Compile Include="ViewModels\ReferralSettingViewModels.cs" />
     <Compile Include="ViewModels\RefundViewModels.cs" />
     <Compile Include="ViewModels\SalesViewModel.cs" />
