@@ -8,7 +8,15 @@
 
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
+<style>
+    .grid-mvc {
+        overflow-x: scroll;
+    }
 
+        .grid-mvc table {
+            width: auto;
+        }
+</style>
 <div class="container-fluid">
     <div class="row my-2">
         <div class="col-md-4">
@@ -28,24 +36,25 @@
             <div class="card shadow mt-3">
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
-{
-   columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
-   columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
-   columns.Add()
- .Encoded(false)
- .Sanitized(false)
- .RenderValueAs(o => Html.ActionLink(o.PaymentMode, "Edit", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-info btn-block", }).ToHtmlString()).Titled("Payment Mode").SetWidth(15);
-   columns.Add(c => c.Price).Titled("Amount").Filterable(true).SetWidth(8);
-   columns.Add(c => c.CustomerPhoneNumber).Titled("Cust.Phone No.").Filterable(true).SetWidth(15);
-   columns.Add(c => c.DateEncoded).Titled("Order Time").Filterable(true).SetWidth(10);
-   columns.Add(c => c.DateUpdated).Titled("Delivered Time").Filterable(true).SetWidth(15);
-   columns.Add(c => c.ShopAcceptedTime).Titled("Shop Accept").Filterable(true).SetWidth(10);
-   columns.Add(c => c.OrderPeriod).Titled("Order Period").Filterable(true).SetWidth(10);
-   columns.Add()
-   .Encoded(false)
-   .Sanitized(false)
-   .RenderValueAs(o => (o.RefundAmount == 0 || o.RefundAmount == null) ? "<a href='#modal-refund' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-refund' class='btn btn-sm btn-primary btn-modal-refund mt-2 btn-block'>Refund</a>" : o.RefundAmount.Value > 0 ? "<span>" + o.RefundAmount + "(" + o.RefundRemark + ")" + "</span>" : "N/A").Titled("Refund").SetWidth(30);
-}).WithPaging(10).Sortable(true)
+               {
+                   columns.Add(c => c.No).Titled("Sl.No").Filterable(true).SetWidth(3);
+                   columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
+                   columns.Add()
+                 .Encoded(false)
+                 .Sanitized(false)
+                 .RenderValueAs(o => Html.ActionLink(o.PaymentMode, "Edit", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-vsm btn-info btn-block", }).ToHtmlString()).Titled("Payment Mode").SetWidth(10);
+                   columns.Add(c => c.Price).Titled("Amount").Filterable(true).SetWidth(8);
+                   columns.Add(c => c.CustomerPhoneNumber).Titled("Cust.Phone No.").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.DateEncoded).Titled("Order Time").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.DateUpdated).Titled("Delivered Time").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.ShopAcceptedTime).Titled("Shop Accept").Filterable(true).SetWidth(88);
+                   columns.Add(c => c.OrderPeriod).Titled("Order Period").Filterable(true).SetWidth(8);
+                   columns.Add()
+                   .Encoded(false)
+                   .Sanitized(false)
+                   .RenderValueAs(o => (o.RefundAmount == 0 || o.RefundAmount == null) ? "<a href='#modal-refund' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-refund' class='btn btn-vsm btn-primary btn-modal-refund mt-2'>Refund</a>" : o.RefundAmount.Value > 0 ? "<span>" + o.RefundAmount + "(" + o.RefundRemark + ")" + "</span>" : "N/A").Titled("Refund").SetWidth(20);
+               }).WithPaging(10).Sortable(true)
                 </div>
             </div>
         </div>
