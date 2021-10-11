@@ -1,5 +1,6 @@
 ﻿using ShopNow.Filters;
 using ShopNow.Models;
+using ShopNow.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,16 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            return View();
+            var model = new PushNotificationIndexViewModel();
+            model.ListItems = db.Customers.Where(i => !string.IsNullOrEmpty(i.FcmTocken) && !string.IsNullOrEmpty(i.DistrictName) && i.FcmTocken != "NULL" && i.DistrictName !="NULL")
+                .GroupBy(i => i.DistrictName).OrderBy(i => i.FirstOrDefault().DistrictName)
+                .Select(i=> new PushNotificationIndexViewModel.ListItem
+                {
+                    Count = i.Count(),
+                    DistrictName = i.FirstOrDefault().DistrictName,
+                    Index = 0
+                }).ToList();
+            return View(model);
         }
 
         [AccessPolicy(PageCode = "")]

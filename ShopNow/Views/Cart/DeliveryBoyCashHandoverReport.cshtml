@@ -66,7 +66,7 @@
                                         <td></td>
                                         <td>@item.DateEncoded.ToString("dd-MM-yyyy")</td>
                                         <td>
-                                            <a href="~/Cart/Edit?ordernumber=@item.OrderNumber&id=@item.Id">@item.OrderNumber</a>
+                                            <a href="~/Cart/Edit?ordernumber=@item.OrderNumber&id=@ShopNow.Helpers.AdminHelpers.ECodeLong(item.Id)">@item.OrderNumber</a>
                                         </td>
                                         <td>@item.DeliveryBoyPhoneNumber</td>
                                         <td>@item.DeliveryBoyName</td>

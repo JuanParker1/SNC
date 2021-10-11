@@ -323,7 +323,7 @@
                     dataType: 'json'
                 }
             }).on('select2:select', function (e) {
-                $('input[name="ShopName"]').val(e.params.data.text);
+                $('input[name="ShopName"]').val(e.params.data.textSave);
                 });
 
             $('#Create').on('click', function () {

@@ -93,10 +93,10 @@
     border-bottom-left-radius: 10px
 }
 
-#progressbar li.active:before,
-#progressbar li.active:after {
-    background: #651FFF
-}
+        #progressbar li.active:before,
+        #progressbar li.active:after {
+            background: #28a745
+        }
 
 #progressbar li.active:before {
     font-family: FontAwesome;
@@ -113,6 +113,18 @@
     padding-bottom: 20px
 }
 
+/*danger*/
+    #progressbar li.active-danger:before,
+    #progressbar li.active-danger:after {
+        background: #dc3545;
+    }
+
+    #progressbar li.active-danger:before {
+        font-family: FontAwesome;
+        content: "\f00c"
+    }
+
+
 @@media screen and (max-width: 992px) {
     .icon-content {
         width: 50%
@@ -127,6 +139,107 @@
     </div>
 </div>
 <div class="container-fluid mb-4">
+    <div class="row mt-3">
+        <div class="col-md-12">
+            @if (Model.Status != 7 && Model.Status != 9 && Model.Status != 10)
+            {
+                <div class="row d-flex justify-content-center">
+                    <div class="col-12">
+                        <ul id="progressbar" class="text-center">
+                            @if (Model.Status == 2 || Model.Status == 3)
+                            {
+                                <li class="step0 active"></li>
+                                <li class="step0"></li>
+                                <li class="step0"></li>
+                                <li class="step0"></li>
+                            }
+                            else if (Model.Status == 4 || Model.Status == 8)
+                            {
+                                <li class="step0 active"></li>
+                                <li class="step0 active"></li>
+                                <li class="step0"></li>
+                                <li class="step0"></li>
+                            }
+                            else if (Model.Status == 5)
+                            {
+                                <li class="step0 active"></li>
+                                <li class="step0 active"></li>
+                                <li class="step0 active"></li>
+                                <li class="step0"></li>
+                            }
+                            else
+                            {
+                                <li class="step0 active"></li>
+                                <li class="step0 active"></li>
+                                <li class="step0 active"></li>
+                                <li class="step0 active"></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <div class="row justify-content-between top">
+                    <div class="row d-flex icon-content">
+                        <img class="icon" src="https://i.imgur.com/9nnc9Et.png">
+                        <div class="d-flex flex-column">
+                            <p class="font-weight-bold">Order<br>Pending</p>
+                        </div>
+                    </div>
+                    <div class="row d-flex icon-content">
+                        <img class="icon" src="https://i.imgur.com/u1AzR7w.png">
+                        <div class="d-flex flex-column">
+                            <p class="font-weight-bold">Order<br>Ready</p>
+                        </div>
+                    </div>
+                    <div class="row d-flex icon-content">
+                        <img class="icon" src="https://i.imgur.com/TkPm63y.png">
+                        <div class="d-flex flex-column">
+                            <p class="font-weight-bold">On the<br>Way</p>
+                        </div>
+                    </div>
+                    <div class="row d-flex icon-content">
+                        <img class="icon" src="https://i.imgur.com/HdsziHP.png">
+                        <div class="d-flex flex-column">
+                            <p class="font-weight-bold">Order<br>Delivered</p>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="row d-flex justify-content-center">
+                    <div class="col-12">
+                        <ul id="progressbar" class="text-center">
+                            @if (Model.Status == 2 || Model.Status == 3)
+                            {
+                                <li class="step0 active-danger"></li>
+                                <li class="step0"></li>
+                            }
+                            else
+                            {
+                                <li class="step0 active-danger"></li>
+                                <li class="step0 active-danger"></li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+                <div class="row top">
+                    <div class="row d-flex icon-content">
+                        <img class="icon" src="https://i.imgur.com/9nnc9Et.png">
+                        <div class="d-flex flex-column">
+                            <p class="font-weight-bold">Order<br>Pending</p>
+                        </div>
+                    </div>
+                    <div class="row d-flex icon-content" style="margin-left:14rem;">
+                        <img class="icon" src="https://i.imgur.com/u1AzR7w.png">
+                        <div class="d-flex flex-column">
+                            <p class="font-weight-bold">Order<br>Cancelled</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-md-4">
             <div class="card h-100">
@@ -302,46 +415,6 @@
         </div>
     </div>
 
-        <div class="row mt-3">
-            <div class="col-md-12">
-                <div class="row d-flex justify-content-center">
-                    <div class="col-12">
-                        <ul id="progressbar" class="text-center">
-                            <li class="active step0"></li>
-                            <li class="active step0"></li>
-                            <li class="active step0"></li>
-                            <li class="step0"></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="row justify-content-between top">
-                    <div class="row d-flex icon-content">
-                        <img class="icon" src="https://i.imgur.com/9nnc9Et.png">
-                        <div class="d-flex flex-column">
-                            <p class="font-weight-bold">Order<br>Processed</p>
-                        </div>
-                    </div>
-                    <div class="row d-flex icon-content">
-                        <img class="icon" src="https://i.imgur.com/u1AzR7w.png">
-                        <div class="d-flex flex-column">
-                            <p class="font-weight-bold">Order<br>Shipped</p>
-                        </div>
-                    </div>
-                    <div class="row d-flex icon-content">
-                        <img class="icon" src="https://i.imgur.com/TkPm63y.png">
-                        <div class="d-flex flex-column">
-                            <p class="font-weight-bold">Order<br>En Route</p>
-                        </div>
-                    </div>
-                    <div class="row d-flex icon-content">
-                        <img class="icon" src="https://i.imgur.com/HdsziHP.png">
-                        <div class="d-flex flex-column">
-                            <p class="font-weight-bold">Order<br>Arrived</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 </div>
 <input type="hidden" value="@Model.OrderNumber" id="hidden-ordernumber" />
 <input type="hidden" value="@Model.CustomerId" id="hidden-customerid" />

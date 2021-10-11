@@ -286,36 +286,68 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             model.EarningDate = model.EarningDate == null ? DateTime.Now : model.EarningDate.Value;
-            
+
+            //model.ListItems = db.Payments.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(model.EarningDate.Value) && i.OrderNumber !=0)
+            //   .Join(db.Shops, p => p.ShopId, s => s.Id, (p, s) => new { p, s })
+            //   .Join(db.Orders.Where(i => i.Status == 6), p => p.p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
+            //   .GroupJoin(db.PaymentsDatas, p => p.p.p.ReferenceCode, pd => pd.PaymentId, (p, pd) => new { p, pd })
+            //   .AsEnumerable()
+            //   .Select(i => new ShopPaymentListViewModel.ListItem
+            //   {
+            //       AccountName = i.p.p.s.AccountName,
+            //       AccountNumber = i.p.p.s.AccountNumber,
+            //       AccountType = i.p.p.s.AcountType,
+            //       FinalAmount = i.p.p.p.Amount - (i.p.p.p.RefundAmount ?? 0) - (Convert.ToDouble(i.pd.Any() ? (i.pd.FirstOrDefault().Fee ?? 0) : 0)) - (Convert.ToDouble(i.pd.Any() ? (i.pd.FirstOrDefault().Tax ?? 0) : 0)),
+            //       IfscCode = i.p.p.s.IFSCCode,
+            //       PaymentDate = i.p.p.p.DateEncoded,
+            //       PaymentId = "JOY" + i.p.p.p.OrderNumber,
+            //       ShopName = i.p.p.p.ShopName,
+            //       ShopId = i.p.c.ShopId,
+            //       ShopOwnerPhoneNumber = i.p.p.s.OwnerPhoneNumber,
+            //       TransactionType = i.p.p.p.PaymentMode,
+            //       Identifier = (i.p.p.s.AcountType == "CA" && i.p.p.s.BankName == "Axis Bank") ? "I" : "N",
+            //       CNR = "JOY" + i.p.p.p.OrderNumber,
+            //       DebitAccountNo = "918020043538740",
+            //       EmailBody = "",
+            //       EmailID = i.p.p.s.Email,
+            //       ReceiverIFSC = i.p.p.s.IFSCCode,
+            //       Remarks = "",
+            //       PhoneNo = i.p.p.s.OwnerPhoneNumber,
+            //       CartStatus = i.p.c.Status,
+            //       ShopPaymentStatus = i.p.c.ShopPaymentStatus
+            //   }).ToList();
+
             model.ListItems = db.Payments.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(model.EarningDate.Value) && i.OrderNumber !=0)
-               .Join(db.Shops, p => p.ShopId, s => s.Id, (p, s) => new { p, s })
-               .Join(db.Orders.Where(i => i.Status == 6), p => p.p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
-               .GroupJoin(db.PaymentsDatas, p => p.p.p.ReferenceCode, pd => pd.PaymentId, (p, pd) => new { p, pd })
-               .AsEnumerable()
-               .Select(i => new ShopPaymentListViewModel.ListItem
-               {
-                   AccountName = i.p.p.s.AccountName,
-                   AccountNumber = i.p.p.s.AccountNumber,
-                   AccountType = i.p.p.s.AcountType,
-                   FinalAmount = i.p.p.p.Amount - (i.p.p.p.RefundAmount ?? 0) - (Convert.ToDouble(i.pd.Any() ? (i.pd.FirstOrDefault().Fee ?? 0) : 0)) - (Convert.ToDouble(i.pd.Any() ? (i.pd.FirstOrDefault().Tax ?? 0) : 0)),
-                   IfscCode = i.p.p.s.IFSCCode,
-                   PaymentDate = i.p.p.p.DateEncoded,
-                   PaymentId = "JOY" + i.p.p.p.OrderNumber,
-                   ShopName = i.p.p.p.ShopName,
-                   ShopId = i.p.c.ShopId,
-                   ShopOwnerPhoneNumber = i.p.p.s.OwnerPhoneNumber,
-                   TransactionType = i.p.p.p.PaymentMode,
-                   Identifier = (i.p.p.s.AcountType == "CA" && i.p.p.s.BankName == "Axis Bank") ? "I" : "N",
-                   CNR = "JOY" + i.p.p.p.OrderNumber,
-                   DebitAccountNo = "918020043538740",
-                   EmailBody = "",
-                   EmailID = i.p.p.s.Email,
-                   ReceiverIFSC = i.p.p.s.IFSCCode,
-                   Remarks = "",
-                   PhoneNo = i.p.p.s.OwnerPhoneNumber,
-                   CartStatus = i.p.c.Status,
-                   ShopPaymentStatus = i.p.c.ShopPaymentStatus
-               }).ToList();
+              .Join(db.Shops, p => p.ShopId, s => s.Id, (p, s) => new { p, s })
+              .Join(db.Orders.Where(i => i.Status == 6), p => p.p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
+              .GroupJoin(db.PaymentsDatas, p => p.p.p.ReferenceCode, pd => pd.PaymentId, (p, pd) => new { p, pd })
+              .GroupBy(i => i.p.c.OrderNumber)
+              .AsEnumerable()
+              .Select(i => new ShopPaymentListViewModel.ListItem
+              {
+                  AccountName = i.FirstOrDefault().p.p.s.AccountName ?? "Nil",
+                  AccountNumber = i.FirstOrDefault().p.p.s.AccountNumber ?? "Nil",
+                  AccountType = i.FirstOrDefault().p.p.s.AcountType,
+                  FinalAmount = i.FirstOrDefault().p.p.p.Amount - (i.FirstOrDefault().p.p.p.RefundAmount ?? 0) - (Convert.ToDouble(i.FirstOrDefault().pd.Any() ? (i.FirstOrDefault().pd.FirstOrDefault().Fee ?? 0) : 0)) - (Convert.ToDouble(i.FirstOrDefault().pd.Any() ? (i.FirstOrDefault().pd.FirstOrDefault().Tax ?? 0) : 0)),
+                  IfscCode = i.FirstOrDefault().p.p.s.IFSCCode,
+                  PaymentDate = i.FirstOrDefault().p.p.p.DateEncoded,
+                  PaymentId = "JOY" + i.FirstOrDefault().p.p.p.OrderNumber,
+                  ShopName = i.FirstOrDefault().p.p.p.ShopName,
+                  ShopId = i.FirstOrDefault().p.p.p.ShopId ?? 0,
+                  ShopOwnerPhoneNumber = i.FirstOrDefault().p.p.s.OwnerPhoneNumber,
+                  TransactionType = i.FirstOrDefault().p.p.p.PaymentMode,
+                  Identifier = (i.FirstOrDefault().p.p.s.AcountType == "CA" && i.FirstOrDefault().p.p.s.BankName == "Axis Bank") ? "I" : "N",
+                  CNR = "JOY" + i.FirstOrDefault().p.p.p.OrderNumber,
+                  DebitAccountNo = "609505027294",
+                  EmailBody = "",
+                  EmailID = i.FirstOrDefault().p.p.s.Email,
+                  ReceiverIFSC = i.FirstOrDefault().p.p.s.IFSCCode,
+                  Remarks = "",
+                  PhoneNo = i.FirstOrDefault().p.p.s.OwnerPhoneNumber,
+                  CartStatus = i.FirstOrDefault().p.c.Status,
+                  ShopPaymentStatus = i.FirstOrDefault().p.c.ShopPaymentStatus,
+                  PaymentMode = i.FirstOrDefault().p.p.s.BankName.ToUpper() == "ICICI BANK" ? "FT" : "NEFT"
+              }).ToList();
             return View(model);
         }
 
@@ -361,7 +393,8 @@ namespace ShopNow.Controllers
                    OrderNo = i.c.p.OrderNumber,
                    EmailBody = "",
                    EmailID = i.d.Email,
-                   DeliveryBoyPaymentStatus = i.c.c.DeliveryBoyPaymentStatus
+                   DeliveryBoyPaymentStatus = i.c.c.DeliveryBoyPaymentStatus,
+                   PaymentMode = i.d.BankName.ToUpper() == "ICICI BANK" ? "FT" : "NEFT"
                }).ToList();
             return View(model);
         }

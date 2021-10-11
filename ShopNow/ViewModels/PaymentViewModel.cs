@@ -244,7 +244,8 @@ namespace ShopNow.ViewModels
             public string AccountType { get; set; }
             public int CartStatus { get; set; }
             public int ShopPaymentStatus { get; set; }
-            
+
+
             //for excel
             public string Identifier { get; set; }
             public string EmailID { get; set; }
@@ -264,9 +265,11 @@ namespace ShopNow.ViewModels
                             return 11;
                     }
                 }
+
             }
             public string Remarks { get; set; }
             public string PhoneNo { get; set; }
+            public string PaymentMode { get; set; }
         }
     }
 
@@ -308,6 +311,7 @@ namespace ShopNow.ViewModels
                     }
                 }
             }
+            public string PaymentMode { get; set; }
         }
     }
 

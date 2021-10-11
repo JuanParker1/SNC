@@ -12,8 +12,9 @@
             <h5 class="text-success">@ViewBag.Title</h5>
         </div>
         <div class="col-md-6 text-right">
-            <a href="~/Agency/InActiveList" class="text-danger mr-2" target="_self"><span class="fa fa-list-ul"></span> Approval Pending</a>
-            <a href="~/Agency/Create" target="_self"><span class="fa fa-plus"></span> New Agency</a>
+            <a href="~/Agency/InActiveList" class="text-danger mr-3" target="_self"><span class="fa fa-list-ul"></span> Approval Pending</a>
+            <a href="~/Agency/Create" target="_self" class="mr-3"><span class="fa fa-plus"></span> New Agency</a>
+            <a href="~/Agency/AssignList" target="_self"><span class="fa fa-list-ul"></span> Assign List</a>
         </div>
     </div>
 
@@ -58,7 +59,7 @@
                 },
                     function (isConfirm) {
                         if (isConfirm) {
-                            $.getJSON("/Agency/Delete", { id: Id }, function (data) {
+                            $.getJSON("/Agency/DeleteAgency", { id: Id }, function (data) {
                                 if (data == true) {
                                     window.location.reload();
                                 }

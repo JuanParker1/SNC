@@ -42,7 +42,7 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             var dt = DateTime.Now;
             var model = new CartListViewModel();
-            model.TodayLists = db.Orders.Where(i => (shopId != 0 ? i.ShopId == shopId : true) && i.Status != 6 && i.Status != 7 && i.Status != 9 && i.Status != 10 && i.Status != 0)
+            model.TodayLists = db.Orders.Where(i => (shopId != 0 ? i.ShopId == shopId : true) && DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(dt) && i.Status != 6 && i.Status != 7 && i.Status != 9 && i.Status != 10 && i.Status != 0)
             .Select(i => new CartListViewModel.TodayList
             {
                 Id = i.Id,
@@ -317,7 +317,8 @@ namespace ShopNow.Controllers
                     OrderPeriod =  Math.Round((i.c.DateUpdated - i.c.DateEncoded).TotalMinutes),
                     ShopAcceptedTime = i.c.ShopAcceptedTime != null ? Math.Round((i.c.ShopAcceptedTime.Value - i.c.DateEncoded).TotalMinutes) : 0,
                 }).OrderByDescending(i => i.DateEncoded).ToList();
-
+            int counter = 1;
+            model.DeliveredLists.ForEach(x => x.No = counter++);
             return View(model.DeliveredLists);
         }
 
@@ -338,6 +339,8 @@ namespace ShopNow.Controllers
                 PhoneNumber = i.CustomerPhoneNumber,
                 DateEncoded = i.DateEncoded
             }).OrderByDescending(i => i.DateEncoded).ToList();
+            int counter = 1;
+            model.DeliveredReportLists.ForEach(x => x.No = counter++);
             return View(model);
         }
 

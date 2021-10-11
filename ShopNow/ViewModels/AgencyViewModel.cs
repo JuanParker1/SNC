@@ -65,6 +65,8 @@ namespace ShopNow.ViewModels
         public string BankPassbookPath { get; set; }
         public string UPIID { get; set; }
         public int Status { get; set; }
+        public string Password { get; set; }
+        public int CustomerId { get; set; }
     }
 
     public class AgencyListViewModel
@@ -88,7 +90,7 @@ namespace ShopNow.ViewModels
 
     }
 
-    public class AgencyAssignListViewModel
+    public class AgencyAssignListViewModel : AgencyAssignViewModel
     {
         public int FilterAgencyId { get; set; }
         public string FilterAgencyName { get; set; }

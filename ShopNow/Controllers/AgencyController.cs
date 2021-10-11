@@ -90,68 +90,127 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var agency = _mapper.Map<AgencyCreateViewModel, Agency>(model);
-            agency.Status = 1;
-            agency.DateEncoded = DateTime.Now;
-            agency.DateUpdated = DateTime.Now;
-            agency.CreatedBy = user.Name;
-            agency.UpdatedBy = user.Name;
-            db.Agencies.Add(agency);
-            db.SaveChanges();
-
-            var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
-            if(customer != null)
+            var agencyExist = db.Agencies.Any(i => i.PhoneNumber == model.PhoneNumber);
+            if (!agencyExist)
             {
-                customer.Position = 5;   // Agency
-                db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                agency.Status = 1;
+                agency.DateEncoded = DateTime.Now;
+                agency.DateUpdated = DateTime.Now;
+                agency.CreatedBy = user.Name;
+                agency.UpdatedBy = user.Name;
+                db.Agencies.Add(agency);
                 db.SaveChanges();
+                try
+                {
+                    var agencyImage = db.Agencies.FirstOrDefault(i => i.Id == agency.Id);
+                    // Agency Image
+                    if (model.AgencyImage != null)
+                    {
+                        uc.UploadFiles(model.AgencyImage.InputStream, agency.Id + "_" + model.AgencyImage.FileName, accesskey, secretkey, "image");
+                        agencyImage.ImagePath = agency.Id + "_" + model.AgencyImage.FileName.Replace(" ", "");
+                    }
+
+                    // Pan Image
+                    if (model.PanImage != null)
+                    {
+                        uc.UploadFiles(model.PanImage.InputStream, agencyImage.Id + "_" + model.PanImage.FileName, accesskey, secretkey, "image");
+                        agencyImage.ImagePanPath = agencyImage.Id + "_" + model.PanImage.FileName.Replace(" ", "");
+                    }
+
+                    // BankPassbook Image
+                    if (model.BankPassbookImage != null)
+                    {
+                        uc.UploadFiles(model.BankPassbookImage.InputStream, agencyImage.Id + "_" + model.BankPassbookImage.FileName, accesskey, secretkey, "image");
+                        agencyImage.BankPassbookPath = agencyImage.Id + "_" + model.BankPassbookImage.FileName.Replace(" ", "");
+                    }
+
+                    //// BankPassbook Pdf
+                    //if (model.BankPassbookPdf != null)
+                    //{
+                    //    uc.UploadFiles(model.BankPassbookPdf.InputStream, agencyImage.Id + "_" + model.BankPassbookPdf.FileName, accesskey, secretkey, "pdf");
+                    //    agencyImage.BankPassbookPath = agencyImage.Id + "_" + model.BankPassbookPdf.FileName.Replace(" ", "");
+                    //}
+
+                    db.Entry(agencyImage).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("List");
+                }
+                catch (AmazonS3Exception amazonS3Exception)
+                {
+                    if (amazonS3Exception.ErrorCode != null &&
+                        (amazonS3Exception.ErrorCode.Equals("InvalidAccessKeyId")
+                        ||
+                        amazonS3Exception.ErrorCode.Equals("InvalidSecurity")))
+                    {
+                        return ViewBag.Message = "Check the provided AWS Credentials.";
+                    }
+                    else
+                    {
+                        return ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
+                    }
+                }
             }
-            try
+            else
             {
-                var agencyImage = db.Agencies.FirstOrDefault(i => i.Id == agency.Id);
-                // Agency Image
-                if (model.AgencyImage != null)
-                {
-                    uc.UploadFiles(model.AgencyImage.InputStream, agency.Id + "_" + model.AgencyImage.FileName, accesskey, secretkey, "image");
-                    agencyImage.ImagePath = agency.Id + "_" + model.AgencyImage.FileName.Replace(" ", "");
-                }
+                var agencyupdate = db.Agencies.FirstOrDefault(i => i.PhoneNumber == model.PhoneNumber);
+                _mapper.Map(model, agencyupdate);
 
-                // Pan Image
-                if (model.PanImage != null)
-                {
-                    uc.UploadFiles(model.PanImage.InputStream, agencyImage.Id + "_" + model.PanImage.FileName, accesskey, secretkey, "image");
-                    agencyImage.ImagePanPath = agencyImage.Id + "_" + model.PanImage.FileName.Replace(" ", "");
-                }
-
-                // BankPassbook Image
-                if (model.BankPassbookImage != null)
-                {
-                    uc.UploadFiles(model.BankPassbookImage.InputStream, agencyImage.Id + "_" + model.BankPassbookImage.FileName, accesskey, secretkey, "image");
-                    agencyImage.BankPassbookPath = agencyImage.Id + "_" + model.BankPassbookImage.FileName.Replace(" ", "");
-                }
-
-                //// BankPassbook Pdf
-                //if (model.BankPassbookPdf != null)
-                //{
-                //    uc.UploadFiles(model.BankPassbookPdf.InputStream, agencyImage.Id + "_" + model.BankPassbookPdf.FileName, accesskey, secretkey, "pdf");
-                //    agencyImage.BankPassbookPath = agencyImage.Id + "_" + model.BankPassbookPdf.FileName.Replace(" ", "");
-                //}
-
-                db.Entry(agencyImage).State = System.Data.Entity.EntityState.Modified;
+                agencyupdate.Status = 1;
+                agencyupdate.DateEncoded = DateTime.Now;
+                agencyupdate.DateUpdated = DateTime.Now;
+                agencyupdate.CreatedBy = user.Name;
+                agencyupdate.UpdatedBy = user.Name;
+                db.Entry(agencyupdate).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("List");
-            }
-            catch (AmazonS3Exception amazonS3Exception)
-            {
-                if (amazonS3Exception.ErrorCode != null &&
-                    (amazonS3Exception.ErrorCode.Equals("InvalidAccessKeyId")
-                    ||
-                    amazonS3Exception.ErrorCode.Equals("InvalidSecurity")))
+
+                try
                 {
-                    return ViewBag.Message = "Check the provided AWS Credentials.";
+                    var agencyUpdateImage = db.Agencies.FirstOrDefault(i => i.Id == agencyupdate.Id);
+                    // Agency Image
+                    if (model.AgencyImage != null)
+                    {
+                        uc.UploadFiles(model.AgencyImage.InputStream, agency.Id + "_" + model.AgencyImage.FileName, accesskey, secretkey, "image");
+                        agencyUpdateImage.ImagePath = agency.Id + "_" + model.AgencyImage.FileName.Replace(" ", "");
+                    }
+
+                    // Pan Image
+                    if (model.PanImage != null)
+                    {
+                        uc.UploadFiles(model.PanImage.InputStream, agencyUpdateImage.Id + "_" + model.PanImage.FileName, accesskey, secretkey, "image");
+                        agencyUpdateImage.ImagePanPath = agencyUpdateImage.Id + "_" + model.PanImage.FileName.Replace(" ", "");
+                    }
+
+                    // BankPassbook Image
+                    if (model.BankPassbookImage != null)
+                    {
+                        uc.UploadFiles(model.BankPassbookImage.InputStream, agencyUpdateImage.Id + "_" + model.BankPassbookImage.FileName, accesskey, secretkey, "image");
+                        agencyUpdateImage.BankPassbookPath = agencyUpdateImage.Id + "_" + model.BankPassbookImage.FileName.Replace(" ", "");
+                    }
+
+                    //// BankPassbook Pdf
+                    //if (model.BankPassbookPdf != null)
+                    //{
+                    //    uc.UploadFiles(model.BankPassbookPdf.InputStream, agencyImage.Id + "_" + model.BankPassbookPdf.FileName, accesskey, secretkey, "pdf");
+                    //    agencyImage.BankPassbookPath = agencyImage.Id + "_" + model.BankPassbookPdf.FileName.Replace(" ", "");
+                    //}
+
+                    db.Entry(agencyUpdateImage).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("List");
                 }
-                else
+                catch (AmazonS3Exception amazonS3Exception)
                 {
-                    return ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
+                    if (amazonS3Exception.ErrorCode != null &&
+                        (amazonS3Exception.ErrorCode.Equals("InvalidAccessKeyId")
+                        ||
+                        amazonS3Exception.ErrorCode.Equals("InvalidSecurity")))
+                    {
+                        return ViewBag.Message = "Check the provided AWS Credentials.";
+                    }
+                    else
+                    {
+                        return ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
+                    }
                 }
             }
         }
@@ -163,6 +222,11 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             var agency = db.Agencies.FirstOrDefault(i => i.Id == dId);
             var model = _mapper.Map<Agency, AgencyEditViewModel>(agency);
+            var customer = db.Customers.FirstOrDefault(i=> i.Id == agency.CustomerId);
+            if(customer != null)
+            {
+                model.Password = customer.Password;
+            }
             return View(model);
         }
 
@@ -232,6 +296,33 @@ namespace ShopNow.Controllers
 
         }
 
+        // Agency Delete 
+        public JsonResult DeleteAgency(int id)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var agency = db.Agencies.FirstOrDefault(i=> i.Id == id);
+            var customer = db.Customers.FirstOrDefault(i => i.Id == agency.CustomerId);
+            if (agency != null)
+            {
+                agency.Status = 2;
+                agency.DateUpdated = DateTime.Now;
+                agency.UpdatedBy = user.Name;
+                db.Entry(agency).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            if (customer != null)
+            {
+                customer.Position = 0;
+                customer.Password = null;
+                customer.DateUpdated = DateTime.Now;
+                customer.UpdatedBy = user.Name;
+                db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        // Assign Agency Remove
         public JsonResult Delete(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -282,7 +373,7 @@ namespace ShopNow.Controllers
         // Agency Assign List
 
         [AccessPolicy(PageCode = "")]
-        public ActionResult AgencyAssignList(AgencyAssignListViewModel model)
+        public ActionResult AssignList(AgencyAssignListViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -306,59 +397,6 @@ namespace ShopNow.Controllers
             }).ToList();
             return View(model);
         }
-
-        [AccessPolicy(PageCode = "")]
-        public ActionResult AgencyAssign()
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            return View();
-        }
-
-        [HttpPost]
-        [AccessPolicy(PageCode = "")]
-        public ActionResult AgencyAssign(AgencyAssignViewModel model)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            if (model.ShopIds != null)
-            {
-                foreach (var item in model.ShopIds)
-                {
-                    var shop = db.Shops.FirstOrDefault(i => i.Id == item);
-                    shop.AgencyId = model.AgencyId;
-                    shop.AgencyName = model.AgencyName;
-                    db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-                }
-            }
-            if (model.DeliveryBoyIds != null)
-            {
-                foreach (var item in model.DeliveryBoyIds)
-                {
-                    var deliveryboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == item);
-                    deliveryboy.AgencyId = model.AgencyId;
-                    deliveryboy.AgencyName = model.AgencyName;
-                    db.Entry(deliveryboy).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-                }
-            }
-            return RedirectToAction("AgencyAssignList");
-        }
-
-        public JsonResult GetAgencyAssign(int agencyId)
-        {
-            var shop = db.Shops.Any(i => i.AgencyId == agencyId);
-            var deliveryboy = db.DeliveryBoys.Any(i => i.AgencyId == agencyId);
-            if (shop == true || deliveryboy == true)
-            {
-                return Json(true, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                return Json(false, JsonRequestBehavior.AllowGet);
-            }
-        }
-
 
         public JsonResult GetPhoneNumberCheck(string phone)
         {
@@ -403,15 +441,26 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var agency = db.Agencies.FirstOrDefault(i => i.Id == Id);
-            agency.Status = 0;
-            agency.UpdatedBy = user.Name;
-            agency.DateUpdated = DateTime.Now;
-            db.Entry(agency).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
+            var customer = db.Customers.FirstOrDefault(i => i.Id == agency.CustomerId);
+            if (agency != null)
+            {
+                agency.Status = 0;
+                agency.UpdatedBy = user.Name;
+                agency.DateUpdated = DateTime.Now;
+                db.Entry(agency).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            if (customer != null)
+            {
+                customer.Position = 5;   // Agency Login
+                customer.DateUpdated = DateTime.Now;
+                customer.UpdatedBy = user.Name;
+                db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
             return RedirectToAction("List");
         }
 
-        [AccessPolicy(PageCode = "")]
         public ActionResult Reject(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -425,6 +474,33 @@ namespace ShopNow.Controllers
         }
 
         public JsonResult Add(AgencyAssignViewModel model)
+        {
+            if (model.ShopIds != null)
+            {
+                foreach (var item in model.ShopIds)
+                {
+                    var shop = db.Shops.FirstOrDefault(i => i.Id == item);
+                    shop.AgencyId = model.AgencyId;
+                    shop.AgencyName = model.AgencyName;
+                    db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+            if (model.DeliveryBoyIds != null)
+            {
+                foreach (var item in model.DeliveryBoyIds)
+                {
+                    var deliveryboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == item);
+                    deliveryboy.AgencyId = model.AgencyId;
+                    deliveryboy.AgencyName = model.AgencyName;
+                    db.Entry(deliveryboy).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Update(AgencyAssignListViewModel model)
         {
             if (model.ShopIds != null)
             {
@@ -490,6 +566,42 @@ namespace ShopNow.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        //public static string RandomString()
+        //{
+        //    const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        //    return new string(Enumerable.Repeat(chars, 6)
+        //      .Select(s => s[random.Next(s.Length)]).ToArray());
+        //}
+
+        private static Random random = new Random();
+        public JsonResult GeneratePassword(int customerid)
+        {
+            string password = "";
+            var customer = db.Customers.FirstOrDefault(i => i.Id == customerid);
+            if(customer!= null)
+            {
+                string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                password = new string(Enumerable.Repeat(chars, 6).Select(s => s[random.Next(s.Length)]).ToArray());
+                customer.Password = password;
+                db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                return Json(password, JsonRequestBehavior.AllowGet);
+            }
+            return Json(password, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult UpdatePassword(int customerid, string password)
+        {
+            var customer = db.Customers.FirstOrDefault(i => i.Id == customerid);
+            if (customer != null)
+            {
+                customer.Password = password;
+                db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(password, JsonRequestBehavior.AllowGet);
         }
 
     }

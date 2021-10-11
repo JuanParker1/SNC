@@ -3,18 +3,14 @@
 @{
     ViewBag.Title = "Shop Payment";
 }
-
 <title>ShopNow | @ViewBag.Title</title>
-
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-
 <style>
     .dis-none {
         display: none;
     }
 </style>
-
 <div class="container-fluid">
     <div class="row mb-3">
         <div class="col-md-3">
@@ -48,7 +44,7 @@
       columns.Add(c => c.AccountName).Titled("Account Name").Filterable(true).SetWidth(12);
       columns.Add(c => c.AccountNumber).Titled("Account No.").Filterable(true).SetWidth(10);
       columns.Add(c => c.PaymentId).Titled("Payment Id").Filterable(true).SetWidth(10);
-      columns.Add(c => c.IfscCode).Titled("Ifsc Code").Filterable(true).SetWidth(8);
+      columns.Add(c => c.IfscCode).Titled("IFSC Code").Filterable(true).SetWidth(8);
       columns.Add(c => c.AccountType).Titled("Account Type").Filterable(true).SetWidth(11);
    }).WithPaging(20).Sortable(true)
                 </div>
@@ -58,24 +54,57 @@
 </div>
 
 <table id="table-excel" class="d-none">
-    @foreach (var item in Model.ListItems.GroupBy(i => i.ShopId))
-    {
+    <thead>
         <tr>
-            <td>@item.FirstOrDefault().Identifier</td>
-            <td>@item.Sum(i => i.FinalAmount)</td>
-            <td>@DateTime.Now.ToString("dd-MM-yyyy")</td>
-            <td>@item.FirstOrDefault().AccountName</td>
-            <td type="string">@item.FirstOrDefault().AccountNumber</td>
-            <td>@item.FirstOrDefault().EmailID</td>
-            <td>@item.FirstOrDefault().EmailBody</td>
-            <td type="string">@item.FirstOrDefault().DebitAccountNo</td>
-            <td>@item.FirstOrDefault().PaymentId</td>
-            <td>@item.FirstOrDefault().IfscCode</td>
-            <td>@item.FirstOrDefault().ReceiverACType</td>
-            <td>@item.FirstOrDefault().Remarks</td>
-            <td>@item.FirstOrDefault().ShopOwnerPhoneNumber&nbsp;</td>
+            <td>PYMT_PROD_TYPE_CODE</td>
+            <td>PYMT_MODE</td>
+            <td>DEBIT_ACC_NO</td>
+            <td>BNF_NAME</td>
+            <td>BENE_ACC_NO</td>
+            <td>BENE_IFSC</td>
+            <td>AMOUNT</td>
+            <td>DEBIT_NARR</td>
+            <td>CREDIT_NARR</td>
+            <td>MOBILE_NUM</td>
+            <td>EMAIL_ID</td>
+            <td>REMARK</td>
+            <td>PYMT_DATE</td>
+            <td>REF_NO</td>
+            <td>ADDL_INFO1</td>
+            <td>ADDL_INFO2</td>
+            <td>ADDL_INFO3</td>
+            <td>ADDL_INFO4</td>
+            <td>ADDL_INFO5</td>
+            <td>LEI_NUMBER</td>
         </tr>
-    }
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ListItems.GroupBy(i => i.ShopId))
+        {
+        <tr>
+            <td>PAB_VENDOR</td>
+            <td>@item.FirstOrDefault().PaymentMode</td>
+            <td type="string">@item.FirstOrDefault().DebitAccountNo</td>
+            <td>@item.FirstOrDefault().AccountName.ToUpper()</td>
+            <td type="string">@item.FirstOrDefault().AccountNumber</td>
+            <td>@item.FirstOrDefault().IfscCode</td>
+            <td>@item.Sum(i => i.FinalAmount)</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>@item.FirstOrDefault().Remarks</td>
+            <td>@DateTime.Now.ToString("dd-MM-yyyy")</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        }
+    </tbody>
 </table>
 
 @if (Model.ListItems.Count != 0 && Model.ListItems.Any(i => i.ShopPaymentStatus != 1))
@@ -100,17 +129,18 @@
             $('#date-earning').on('change', function () {
                 $('#date').val($(this).val());
             });
-        });
 
-        $("#btnExport").on('click', function () {
-            $(function () {
-                Table2Excel.extend((cell, cellText) => {
-                    return $(cell).attr('type') == 'string' ? { t: 's', v: cellText } : { t: 'n', v: cellText };
+
+            $("#btnExport").on('click', function () {
+                $(function () {
+                    Table2Excel.extend((cell, cellText) => {
+                        return $(cell).attr('type') == 'string' ? { t: 's', v: cellText } : { t: 'n', v: cellText };
+                    });
+                    var table2excel = new Table2Excel({
+                        defaultFileName: "ShopPayment",
+                    });
+                    table2excel.export($("#table-excel"));
                 });
-                var table2excel = new Table2Excel({
-                    defaultFileName: "ShopPayment",
-                });
-                table2excel.export($("#table-excel"));
             });
         });
     </script>
