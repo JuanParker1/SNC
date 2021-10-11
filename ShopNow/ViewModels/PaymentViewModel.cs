@@ -311,6 +311,7 @@ namespace ShopNow.ViewModels
                     }
                 }
             }
+            public string PaymentMode { get; set; }
         }
     }
 

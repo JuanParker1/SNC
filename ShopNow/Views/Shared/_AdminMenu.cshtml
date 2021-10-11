@@ -353,17 +353,19 @@
                     <div class="container">
                         <div class="row">
                             <!-- /.col-md-4  -->
-                            <div class="col-md-6">
-                                @*<span class="text-uppercase text-white">Orders</span>
+                            @*<div class="col-md-6">
+                                <span class="text-uppercase text-white">Orders</span>
                                 <ul class="nav flex-column">
                                     <li class="nav-item">
                                         <a class="nav-link" href="~/Cart/PendingReport">New Order</a>
                                         <a class="nav-link" href="~/Cart/DeliveryAgentAssignedReport">Delivery Agent Assigned</a>
                                         <a class="nav-link" href="~/Cart/WaitingForPickupReport">Waiting For Pickup</a>
                                         <a class="nav-link" href="~/Cart/OntheWayReport">On the Way</a>
+                                        <a class="nav-link" href="~/Cart/DeliveredReport">Delivered</a>
+                                        <a class="nav-link" href="~/Cart/CancelledReport">Cancelled</a>
                                     </li>
-                                </ul>*@
-                            </div>
+                                </ul>
+                            </div>*@
                             @*<div class="col-md-4">
                                 <label></label>
                                 <ul class="nav flex-column">
@@ -379,23 +381,34 @@
                                 <label></label>
                                 <ul class="nav flex-column">
                                     <li class="nav-item text-nowrap">
+                                        <a class="nav-link" href="~/Cart/DeliveredReport">Delivered</a>
+                                        <a class="nav-link" href="~/Cart/CancelledReport">Cancelled</a>
+                                        <a class="nav-link" href="~/Refund/Pending">Refund Pending</a>
+                                        <a class="nav-link" href="~/Refund/History">Refund History</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <label></label>
+                                <ul class="nav flex-column">
+                                    <li class="nav-item text-nowrap">
                                         <a class="nav-link" href="~/Payment/Report">Payments</a>
                                         <a class="nav-link" href="~/Payment/ShopPayment">Shop Payment</a>
                                         <a class="nav-link" href="~/Payment/RetailerPayment">Retailer Payment</a>
                                         <a class="nav-link" href="~/Payment/DeliveryBoyPayment">DeliveryBoy Payment</a>
                                         <a class="nav-link" href="~/Cart/DeliveryBoyPaymentStatus">DeliveryBoy Payment Status</a>
                                         <a class="nav-link" href="~/Cart/DeliveryBoyCashHandoverReport">DeliveryBoy Cash Handover</a>
-                                        <a class="nav-link" href="~/Refund/Pending">Refund Pending</a>
+                                        @*<a class="nav-link" href="~/Refund/Pending">Refund Pending</a>
                                         <a class="nav-link" href="~/Refund/History">Refund History</a>
-                                        <a class="nav-link" href="~/Cart/DeliveredReport">Delivered Report</a>
-                                        <a class="nav-link" href="~/Cart/CancelledReport">Cancelled Report</a>
+                                         <a class="nav-link" href="~/Cart/DeliveredReport">Delivered</a>
+                                        <a class="nav-link" href="~/Cart/CancelledReport">Cancelled</a>*@
                                         @*<a class="nav-link" href="~/DeliveryBoy/CreditAmount">DeliveryBoy Credit Amount</a>
-        <a class="nav-link" href="~/DeliveryBoy/TodayCreditAmount">Today DeliveryBoy Credit Amount</a>
-        <a class="nav-link" href="~/Payment/PlatformCreditReport">Platform Credit Report</a>
-        <a class="nav-link" href="~/Payment/TodayPlatformCreditReport">Today Platform Credit Report</a>
-        <a class="nav-link" href="~/Payment/DeliveryCreditReport">Delivery Credit Report</a>
-        <a class="nav-link" href="~/Payment/TodayDeliveryCreditReport">Today Delivery Credit Report</a>
-        <a class="nav-link" href="~/Cart/DeliveredAmountReport">Shop Delivered Amount Report</a>*@
+                                        <a class="nav-link" href="~/DeliveryBoy/TodayCreditAmount">Today DeliveryBoy Credit Amount</a>
+                                        <a class="nav-link" href="~/Payment/PlatformCreditReport">Platform Credit Report</a>
+                                        <a class="nav-link" href="~/Payment/TodayPlatformCreditReport">Today Platform Credit Report</a>
+                                        <a class="nav-link" href="~/Payment/DeliveryCreditReport">Delivery Credit Report</a>
+                                        <a class="nav-link" href="~/Payment/TodayDeliveryCreditReport">Today Delivery Credit Report</a>
+                                        <a class="nav-link" href="~/Cart/DeliveredAmountReport">Shop Delivered Amount Report</a>*@
                                     </li>
                                 </ul>
                             </div>

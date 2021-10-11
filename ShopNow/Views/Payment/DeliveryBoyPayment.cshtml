@@ -42,7 +42,7 @@
     columns.Add(c => c.AccountName).Titled("A/c Name").Filterable(true).SetWidth(10);
     columns.Add(c => c.AccountNumber).Titled("A/c No.").Filterable(true).SetWidth(10);
     columns.Add(c => c.PaymentId).Titled("Payment Id").Filterable(true).SetWidth(10);
-    columns.Add(c => c.IfscCode).Titled("Ifsc Code").Filterable(true).SetWidth(9);
+    columns.Add(c => c.IfscCode).Titled("IFSC Code").Filterable(true).SetWidth(9);
     columns.Add(c => c.AccountType).Titled("Account Type").Filterable(true).SetWidth(12);
 }).WithPaging(20).Sortable(true)
                 </div>
@@ -54,25 +54,78 @@
 
 </div>
 <table id="table-excel" class="d-none">
+    <thead>
+        <tr>
+            <td>PYMT_PROD_TYPE_CODE</td>
+            <td>PYMT_MODE</td>
+            <td>DEBIT_ACC_NO</td>
+            <td>BNF_NAME</td>
+            <td>BENE_ACC_NO</td>
+            <td>BENE_IFSC</td>
+            <td>AMOUNT</td>
+            <td>DEBIT_NARR</td>
+            <td>CREDIT_NARR</td>
+            <td>MOBILE_NUM</td>
+            <td>EMAIL_ID</td>
+            <td>REMARK</td>
+            <td>PYMT_DATE</td>
+            <td>REF_NO</td>
+            <td>ADDL_INFO1</td>
+            <td>ADDL_INFO2</td>
+            <td>ADDL_INFO3</td>
+            <td>ADDL_INFO4</td>
+            <td>ADDL_INFO5</td>
+            <td>LEI_NUMBER</td>
+        </tr>
+    </thead>
     <tbody>
         @foreach (var item in Model.ListItems.GroupBy(i => i.DeliveryBoyId))
         {
             <tr>
-                <td>N</td>
-                <td>@item.Sum(i => i.Amount)</td>
-                <td>@DateTime.Now.ToString("dd-MM-yyyy")</td>
-                <td>@item.FirstOrDefault().AccountName</td>
-                <td type="string">@item.FirstOrDefault().AccountNumber</td>
-                <td>@item.FirstOrDefault().EmailID</td>
-                <td>@item.FirstOrDefault().EmailBody</td>
-                <td type="string">918020043538740</td>
-                <td>@item.FirstOrDefault().PaymentId</td>
-                <td>@item.FirstOrDefault().IfscCode</td>
-                <td>@item.FirstOrDefault().ReceiverACType</td>
-                <td></td>
-                <td>@item.FirstOrDefault().DeliveryBoyPhoneNumber&nbsp;</td>
-            </tr>
-        }
+                <td>PAB_VENDOR</td>
+                <td>@item.FirstOrDefault().PaymentMode</td>
+                <td type="string">609505027294</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.FirstOrDefault().AccountName))
+                    {<span>@item.FirstOrDefault().AccountName.ToUpper()</span>}
+                else
+                { <span></span>}
+            </td>
+
+            <td type="string">@item.FirstOrDefault().AccountNumber</td>
+
+            <td>@item.FirstOrDefault().IfscCode</td>
+
+            <td>@item.Sum(i => i.Amount)</td>
+
+            <td></td>
+
+            <td></td>
+
+            <td></td>
+
+            <td></td>
+
+            <td></td>
+
+            <td>@DateTime.Now.ToString("dd-MM-yyyy")</td>
+
+            <td></td>
+
+            <td></td>
+
+            <td></td>
+
+            <td></td>
+
+            <td></td>
+
+            <td></td>
+
+            <td></td>
+
+        </tr>
+    }
     </tbody>
 </table>
 
