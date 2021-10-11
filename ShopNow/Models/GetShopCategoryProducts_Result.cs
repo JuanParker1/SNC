@@ -39,5 +39,6 @@ namespace ShopNow.Models
         public double Weight { get; set; }
         public bool IsPreorder { get; set; }
         public int PreorderHour { get; set; }
+        public bool PriscriptionCategory { get; set; }
     }
 }
