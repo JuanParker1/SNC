@@ -354,6 +354,7 @@ namespace ShopNow.ViewModels
         public List<PortionListItem> PortionListItems { get; set; }
         public class PortionListItem {
             public int Index { get; set; }
+            public int AddonId { get; set; }
             public int PortionId { get; set; }
             public int CrustId { get; set; }
             public string PortionName { get; set; }
@@ -364,6 +365,7 @@ namespace ShopNow.ViewModels
         public class AddonListItem
         {
             public int Index { get; set; }
+            public int AddonId { get; set; }
             public int PortionId { get; set; }
             public string AddonName { get; set; }
             public double AddonPrice { get; set; }
@@ -376,6 +378,7 @@ namespace ShopNow.ViewModels
         public class CrustListItem
         {
             public int CrustId { get; set; }
+            public int AddonId { get; set; }
             public int Index { get; set; }
             public string CrustName { get; set; }
         }
