@@ -563,6 +563,9 @@
     <Compile Include="Models\OrderItem.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\OrderItemAddon.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\OtpVerification.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
