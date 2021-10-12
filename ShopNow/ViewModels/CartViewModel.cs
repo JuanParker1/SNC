@@ -611,7 +611,7 @@ namespace ShopNow.ViewModels
             public double Price { get; set; }
             public int ItemId { get; set; }
             public bool HasAddon { get; set; }
-            public bool AddOnType { get; set; }
+            public int AddOnType { get; set; }
 
             public List<AddOnListItem> AddOnListItems { get; set; }
             public class AddOnListItem
