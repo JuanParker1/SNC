@@ -1162,11 +1162,14 @@ namespace ShopNow.Controllers
 
                         foreach (var addon in item.AddOnListItems)
                         {
-                            var addonItem = _mapper.Map<OrderCreateViewModel.ListItem.AddOnListItem, OrderItemAddon>(addon);
-                            addonItem.Status = 0;
-                            addonItem.OrderItemId = orderItem.Id;
-                            db.OrderItemAddons.Add(addonItem);
-                            db.SaveChanges();
+                            if (addon.ProductId == orderItem.ProductId)
+                            {
+                                var addonItem = _mapper.Map<OrderCreateViewModel.ListItem.AddOnListItem, OrderItemAddon>(addon);
+                                addonItem.Status = 0;
+                                addonItem.OrderItemId = orderItem.Id;
+                                db.OrderItemAddons.Add(addonItem);
+                                db.SaveChanges();
+                            }
                         }
                     }
 
