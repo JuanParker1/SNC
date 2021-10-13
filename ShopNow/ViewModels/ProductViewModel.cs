@@ -671,5 +671,37 @@ namespace ShopNow.ViewModels
         public string ShopName { get; set; }
        public int Percentage { get; set; }
     }
+
+    public class ProductZeroPriceList
+    {
+        public int ShopId { get; set; }
+        public string ShopName { get; set; }
+        public List<ListItem> ListItems { get; set; }
+        public class ListItem
+        {
+            public long Id { get; set; }
+            public string Name { get; set; }
+            public double MenuPrice { get; set; }
+            public double SellingPrice { get; set; }
+            public int Quantity { get; set; }
+            public int ItemId { get; set; }
+        }
+    }
+
+    public class ProductInactiveList
+    {
+        public int ShopId { get; set; }
+        public string ShopName { get; set; }
+        public List<ListItem> ListItems { get; set; }
+        public class ListItem
+        {
+            public long Id { get; set; }
+            public string Name { get; set; }
+            public double MenuPrice { get; set; }
+            public double SellingPrice { get; set; }
+            public int Quantity { get; set; }
+            public int ItemId { get; set; }
+        }
+    }
 }
 

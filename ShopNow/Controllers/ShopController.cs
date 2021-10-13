@@ -973,6 +973,16 @@ namespace ShopNow.Controllers
             return RedirectToAction("List");
         }
 
+        public ActionResult UpdateShopTrail(int Id, bool isTrail)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var shop = db.Shops.Where(i => i.Id == Id).FirstOrDefault();
+            shop.IsTrail = isTrail;
+            db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("List");
+        }
+
         [AccessPolicy(PageCode = "")]
         public ActionResult CreditList()
         {

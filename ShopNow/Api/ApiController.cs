@@ -1092,7 +1092,7 @@ namespace ShopNow.Controllers
             {
                 var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
                 var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
-                if ((shopCredits.PlatformCredit < 26 || shopCredits.DeliveryCredit < 67))
+                if ((shopCredits.PlatformCredit < 26 && shopCredits.DeliveryCredit < 67) && shop.IsTrail ==false)
                 {
                     //Shop DeActivate
                     shop.Status = 6;
@@ -4115,7 +4115,8 @@ namespace ShopNow.Controllers
                         {
                             Index = index + 1,
                             CrustName = i.FirstOrDefault().CrustName,
-                            CrustId = i.FirstOrDefault().CrustId
+                            CrustId = i.FirstOrDefault().CrustId,
+                            AddonId = i.FirstOrDefault().Id
                         }).ToList();
                     }
                     return Json(new { result = model }, JsonRequestBehavior.AllowGet);

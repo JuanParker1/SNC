@@ -53,8 +53,10 @@
                     Html.ActionLink("InActive", "InActiveLowBalance", new { Id =cs.Id }, new { @class = "btn btn-secondary btn-vsm mb-1", @style = "padding: 3px 14px" }).ToHtmlString()).Titled("Status").SetWidth(8);
                columns.Add().Encoded(false).Sanitized(false)
                     .RenderValueAs(s => new HtmlString("<label class='switch'> <input type='checkbox' value='" + s.IsOnline + "' Id='Id_" + s.Id + "' class='CheckOnline' data-id='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(8);
+               columns.Add().Encoded(false).Sanitized(false)
+ .RenderValueAs(s => new HtmlString("<label class='switch'> <input type='checkbox' value='" + s.IsTrail + "' Id='Id_" + s.Id + "' class='check-trail' data-id='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsTrail").SetWidth(8);
                columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
-                    .RenderValueAs(o => @<div>
+                .RenderValueAs(o => @<div>
                             <a href="~/Shop/Edit?id=@HttpUtility.UrlEncode(ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id))" class="text-info mr-4"><i class="fa fa-edit fa-2x"></i></a>
                             <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-2x"></i></a>
                         </div>);
@@ -103,6 +105,12 @@
                     $this.prop('checked', true);
                 else
                     $this.prop('checked', false);
+
+                var $trail = $(this).find(".check-trail");
+                if ($trail.val() == 'True')
+                    $trail.prop('checked', true);
+                else
+                    $trail.prop('checked', false);
             });
 
             $('.CheckOnline').on('click', function () {
@@ -111,9 +119,17 @@
                     $.post('/Shop/UpdateShopOnline', { Id: id, isOnline: true }, function () { });
                 }
                 else {
-                    //$('[name="Id"]').val(id);
-                    //$('#modal-opentime').modal('show');
                     $.post('/Shop/UpdateShopOnline', { Id: id, isOnline: false }, function () { });
+                }
+            });
+
+            $('.check-trail').on('click', function () {
+                var id = $(this).data('id');
+                if ($(this).is(':checked') == true) {
+                    $.post('/Shop/UpdateShopTrail', { Id: id, isTrail: true }, function () { });
+                }
+                else {
+                    $.post('/Shop/UpdateShopTrail', { Id: id, isTrail: false }, function () { });
                 }
             });
 

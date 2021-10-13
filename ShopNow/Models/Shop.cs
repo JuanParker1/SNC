@@ -90,6 +90,7 @@ namespace ShopNow.Models
         public Nullable<System.TimeSpan> NextOnTime { get; set; }
         public int DeliveryType { get; set; }
         public int DeliveryTierType { get; set; }
+        public bool IsTrail { get; set; }
         public int Status { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }

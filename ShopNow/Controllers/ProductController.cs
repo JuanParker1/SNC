@@ -1716,6 +1716,58 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult ZeroPriceList(ProductZeroPriceList model)
+        {
+            model.ListItems = db.Products.Where(i => i.MasterProductId != 0 && (i.MenuPrice == 0 || i.Price == 0) && i.Status == 0  && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
+                .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+                .Select(i => new ProductZeroPriceList.ListItem
+                {
+                    Id = i.p.Id,
+                    MenuPrice = i.p.MenuPrice,
+                    Name = i.m.Name,
+                    Quantity = i.p.Qty,
+                    SellingPrice = i.p.Price,
+                    ItemId = i.p.ItemId
+                }).ToList();
+            return View(model);
+        }
+
+        public ActionResult InactiveList(ProductInactiveList model)
+        {
+            model.ListItems = db.Products.Where(i => i.MasterProductId != 0 && i.Status == 1 && (i.MenuPrice != 0 || i.Price != 0) && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
+                .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+                .Select(i => new ProductInactiveList.ListItem
+                {
+                    Id = i.p.Id,
+                    MenuPrice = i.p.MenuPrice,
+                    Name = i.m.Name,
+                    Quantity = i.p.Qty,
+                    SellingPrice = i.p.Price,
+                    ItemId = i.p.ItemId
+                }).ToList();
+            return View(model);
+        }
+
+        public JsonResult UpdatePriceAndQuantity(long id, double mrp, double price, int qty)
+        {
+            var product = db.Products.FirstOrDefault(i => i.Id == id);
+            product.MenuPrice = mrp;
+            product.Price = price;
+            product.Qty = qty;
+            db.Entry(product).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult UpdateActive(long id)
+        {
+            var product = db.Products.FirstOrDefault(i => i.Id == id);
+            product.Status = 0;
+            db.Entry(product).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
