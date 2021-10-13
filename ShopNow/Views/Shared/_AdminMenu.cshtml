@@ -28,9 +28,13 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="">
                     <div class="container">
                         <div class="row">
+                            <div class="col-md-2"></div>
                             <div class="col-md-4">
                                 <span class="text-uppercase text-white text-nowrap">Human Resource</span>
                                 <ul class="nav flex-column text-nowrap">
+                                     <li class="nav-item">
+                                        <a class="nav-link" href="~/Customer/List">Customer</a>
+                                    </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="~/Customer/Admin">Support Staff</a>
                                     </li>
@@ -40,17 +44,15 @@
                                     <li class="nav-item">
                                         <a class="nav-link" href="~/Agency/List">Agency</a>
                                     </li>
-                                    <li class="nav-item">
+                                    @*<li class="nav-item">
                                         <a class="nav-link" href="~/WebAPI/Create">API Upload</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="~/WebAPI/TSUpdate">Shop API History</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="~/Payment/Create">Add Shop Credits</a>
-                                    </li>
+                                    </li>*@
                                 </ul>
                             </div>
+                            <div class="col-md-2"></div>
                             <div class="col-md-4">
                                 <span class="text-uppercase text-white text-nowrap">Access Policy</span>
                                 <ul class="nav flex-column text-nowrap">
@@ -68,14 +70,6 @@
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="~/Page/Index">Page Upload</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-md-4">
-                                <span class="text-uppercase text-white text-nowrap">Customer</span>
-                                <ul class="nav flex-column text-nowrap">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="~/Customer/List">Customer</a>
                                     </li>
                                 </ul>
                             </div>
@@ -281,7 +275,7 @@
                     <div class="container">
                         <div class="row">
                             <!-- /.col-md-4  -->
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <label></label>
                                 <ul class="nav flex-column">
                                     <li class="nav-item">
@@ -294,24 +288,23 @@
                                 <label></label>
                                 <ul class="nav flex-column">
                                     <li class="nav-item">
-                                        <a class="nav-link text-nowrap" href="~/Product/List">Shop Items</a>    
+                                        <a class="nav-link text-nowrap" href="~/Product/List">Shop Items</a>
                                         <a class="nav-link text-nowrap" href="~/Bill/BillingChargeList">Shop Bill Charge Setting</a>
                                     </li>
                                 </ul>
                             </div>
+                            <div class="col-md-1"></div>
                             <div class="col-md-4">
                                 <label></label>
                                 <ul class="nav flex-column">
                                     <li class="nav-item text-nowrap">
-                                        <a class="nav-link" href="~/MasterProduct/ItemMapping">ShopItem Mapping</a>                                        
+                                        <a class="nav-link" href="~/MasterProduct/ItemMapping">ShopItem Mapping</a>
+                                        <a class="nav-link" href="~/Payment/Create">Shop Credits</a>
                                     </li>
                                 </ul>
                             </div>
-                            <div class="col-md-4">
-                                <span class="text-uppercase text-white"> </span>
-                            </div>
                         </div>
-                    </div>
+                        </div>
                     <!--  /.container  -->
                 </div>
             </li>
@@ -323,10 +316,11 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <div class="container">
                         <div class="row">
-                            <div class="col-md-12">
-                                <span class="text-uppercase text-white">Orders List</span>
+                            <div class="col-md-8"></div>
+                            <div class="col-md-4">
+                                <span class="text-white text-nowrap">Orders List</span>
                                 <ul class="nav flex-column">
-                                    <li class="nav-item">
+                                    <li class="nav-item text-nowrap">
                                         <a class="nav-link" href="~/Cart/List">Today's Order</a>
                                         <a class="nav-link" href="~/Cart/Pending">New Order</a>
                                         <a class="nav-link" href="~/Cart/OrderPrepared">Order is being Prepared</a>
@@ -341,7 +335,7 @@
                                 </ul>
                             </div>
                         </div>
-                    </div>
+                        </div>
                 </div>
             </li>
             <!--Reports-->
@@ -352,33 +346,10 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <div class="container">
                         <div class="row">
-                            <!-- /.col-md-4  -->
-                            @*<div class="col-md-6">
-                                <span class="text-uppercase text-white">Orders</span>
-                                <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="~/Cart/PendingReport">New Order</a>
-                                        <a class="nav-link" href="~/Cart/DeliveryAgentAssignedReport">Delivery Agent Assigned</a>
-                                        <a class="nav-link" href="~/Cart/WaitingForPickupReport">Waiting For Pickup</a>
-                                        <a class="nav-link" href="~/Cart/OntheWayReport">On the Way</a>
-                                        <a class="nav-link" href="~/Cart/DeliveredReport">Delivered</a>
-                                        <a class="nav-link" href="~/Cart/CancelledReport">Cancelled</a>
-                                    </li>
-                                </ul>
-                            </div>*@
-                            @*<div class="col-md-4">
-                                <label></label>
-                                <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="~/Sales/Report">Sales</a>
-                                        <a class="nav-link" href="~/Cart/ShopNowChat_ShopReport">Retailer Payment</a>
-                                        <a class="nav-link" href="~/Cart/DeliveryBoy_ShopNowChatReport">DeliveryBoy Cash Handover</a>
-                                        <a class="nav-link" href="~/Cart/ShopNowChat_DeliveryBoyReport">DeliveryBoy Payment</a>
-                                    </li>
-                                </ul>
-                            </div>*@
+                            <div class="col-md-4"></div>
                             <div class="col-md-4">
                                 <label></label>
+                                <span class="text-uppercase text-white text-nowrap">Reports</span>
                                 <ul class="nav flex-column">
                                     <li class="nav-item text-nowrap">
                                         <a class="nav-link" href="~/Cart/DeliveredReport">Delivered</a>
@@ -398,26 +369,11 @@
                                         <a class="nav-link" href="~/Payment/DeliveryBoyPayment">DeliveryBoy Payment</a>
                                         <a class="nav-link" href="~/Cart/DeliveryBoyPaymentStatus">DeliveryBoy Payment Status</a>
                                         <a class="nav-link" href="~/Cart/DeliveryBoyCashHandoverReport">DeliveryBoy Cash Handover</a>
-                                        @*<a class="nav-link" href="~/Refund/Pending">Refund Pending</a>
-                                        <a class="nav-link" href="~/Refund/History">Refund History</a>
-                                         <a class="nav-link" href="~/Cart/DeliveredReport">Delivered</a>
-                                        <a class="nav-link" href="~/Cart/CancelledReport">Cancelled</a>*@
-                                        @*<a class="nav-link" href="~/DeliveryBoy/CreditAmount">DeliveryBoy Credit Amount</a>
-                                        <a class="nav-link" href="~/DeliveryBoy/TodayCreditAmount">Today DeliveryBoy Credit Amount</a>
-                                        <a class="nav-link" href="~/Payment/PlatformCreditReport">Platform Credit Report</a>
-                                        <a class="nav-link" href="~/Payment/TodayPlatformCreditReport">Today Platform Credit Report</a>
-                                        <a class="nav-link" href="~/Payment/DeliveryCreditReport">Delivery Credit Report</a>
-                                        <a class="nav-link" href="~/Payment/TodayDeliveryCreditReport">Today Delivery Credit Report</a>
-                                        <a class="nav-link" href="~/Cart/DeliveredAmountReport">Shop Delivered Amount Report</a>*@
                                     </li>
                                 </ul>
                             </div>
-                            <div class="col-md-4">
-                                <span class="text-uppercase text-white"> </span>
-                            </div>
                         </div>
                     </div>
-                    <!--  /.container  -->
                 </div>
             </li>
             <!--Support-->

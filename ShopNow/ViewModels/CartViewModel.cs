@@ -610,6 +610,21 @@ namespace ShopNow.ViewModels
             public double UnitPrice { get; set; }
             public double Price { get; set; }
             public int ItemId { get; set; }
+            public bool HasAddon { get; set; }
+            public int AddOnType { get; set; }
+
+            public List<AddOnListItem> AddOnListItems { get; set; }
+            public class AddOnListItem
+            {
+                public int AddonId { get; set; }
+                public string AddonName { get; set; }
+                public double AddonPrice { get; set; }
+                public int CrustId { get; set; }
+                public string CrustName { get; set; }
+                public int PortionId { get; set; }
+                public double PortionPrice { get; set; }
+                public string PortionName { get; set; }
+            }
         }
     }
 

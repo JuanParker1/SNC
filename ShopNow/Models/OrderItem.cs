@@ -30,6 +30,8 @@ namespace ShopNow.Models
         public Nullable<int> OfferId { get; set; }
         public double OfferAmount { get; set; }
         public double MiddlePrice { get; set; }
+        public bool HasAddon { get; set; }
+        public int AddOnType { get; set; }
         public int Status { get; set; }
     
         public virtual Order Order { get; set; }

@@ -716,6 +716,22 @@
           <Property Name="OfferId" Type="int" Nullable="false" />
           <Property Name="ShopId" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="OrderItemAddons">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderItemId" Type="bigint" Nullable="false" />
+          <Property Name="AddonId" Type="int" Nullable="false" />
+          <Property Name="AddonName" Type="nvarchar" MaxLength="250" />
+          <Property Name="AddonPrice" Type="float" Nullable="false" />
+          <Property Name="CrustId" Type="int" Nullable="false" />
+          <Property Name="CrustName" Type="nvarchar" MaxLength="250" />
+          <Property Name="PortionId" Type="int" Nullable="false" />
+          <Property Name="PortionPrice" Type="float" Nullable="false" />
+          <Property Name="PortionName" Type="nvarchar" MaxLength="250" />
+          <Property Name="Status" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="OrderItems">
           <Key>
             <PropertyRef Name="Id" />
@@ -736,6 +752,8 @@
           <Property Name="OfferId" Type="int" />
           <Property Name="OfferAmount" Type="float" Nullable="false" />
           <Property Name="MiddlePrice" Type="float" Nullable="false" />
+          <Property Name="HasAddon" Type="bit" Nullable="false" />
+          <Property Name="AddOnType" Type="int" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Orders">
@@ -1597,6 +1615,7 @@
           <EntitySet Name="OfferProducts" EntityType="Self.OfferProducts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Offers" EntityType="Self.Offers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OfferShops" EntityType="Self.OfferShops" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderItemAddons" EntityType="Self.OrderItemAddons" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderItems" EntityType="Self.OrderItems" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OtpVerifications" EntityType="Self.OtpVerifications" Schema="dbo" store:Type="Tables" />
@@ -2679,7 +2698,6 @@
           <EntitySet Name="ShopSchedules" EntityType="sncModel.ShopSchedule" />
           <EntitySet Name="ProductSchedules" EntityType="sncModel.ProductSchedule" />
           <EntitySet Name="AchievementSettings" EntityType="sncModel.AchievementSetting" />
-          <EntitySet Name="OrderItems" EntityType="sncModel.OrderItem" />
           <EntitySet Name="Crusts" EntityType="sncModel.Crust" />
           <EntitySet Name="MasterProducts" EntityType="sncModel.MasterProduct" />
           <EntitySet Name="Bills" EntityType="sncModel.Bill" />
@@ -2690,10 +2708,6 @@
           <EntitySet Name="BillingCharges" EntityType="sncModel.BillingCharge" />
           <EntitySet Name="CustomerAchievements" EntityType="sncModel.CustomerAchievement" />
           <EntitySet Name="Orders" EntityType="sncModel.Order" />
-          <AssociationSet Name="FK_OrderItems_Orders" Association="sncModel.FK_OrderItems_Orders">
-            <End Role="Order" EntitySet="Orders" />
-            <End Role="OrderItem" EntitySet="OrderItems" />
-          </AssociationSet>
           <EntitySet Name="Offers" EntityType="sncModel.Offer" />
           <EntitySet Name="CustomerPrescriptionItems" EntityType="sncModel.CustomerPrescriptionItem" />
           <EntitySet Name="CustomerPrescriptions" EntityType="sncModel.CustomerPrescription" />
@@ -2721,6 +2735,12 @@
             <Parameter Name="page" Mode="In" Type="Int32" />
             <Parameter Name="pageSize" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="OrderItems" EntityType="sncModel.OrderItem" />
+          <AssociationSet Name="FK_OrderItems_Orders" Association="sncModel.FK_OrderItems_Orders">
+            <End Role="Order" EntitySet="Orders" />
+            <End Role="OrderItem" EntitySet="OrderItems" />
+          </AssociationSet>
+          <EntitySet Name="OrderItemAddons" EntityType="sncModel.OrderItemAddon" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -2781,29 +2801,6 @@
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
-        <EntityType Name="OrderItem">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OrderId" Type="Int64" Nullable="false" />
-          <Property Name="OrdeNumber" Type="Int32" Nullable="false" />
-          <Property Name="ProductId" Type="Int64" Nullable="false" />
-          <Property Name="ProductName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="BrandId" Type="Int32" Nullable="false" />
-          <Property Name="BrandName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="CategoryId" Type="Int32" Nullable="false" />
-          <Property Name="CategoryName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="ImagePath" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="Quantity" Type="Int32" Nullable="false" />
-          <Property Name="UnitPrice" Type="Double" Nullable="false" />
-          <Property Name="Price" Type="Double" Nullable="false" />
-          <Property Name="OfferId" Type="Int32" />
-          <Property Name="OfferAmount" Type="Double" Nullable="false" />
-          <Property Name="MiddlePrice" Type="Double" Nullable="false" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Order" Relationship="sncModel.FK_OrderItems_Orders" FromRole="OrderItem" ToRole="Order" />
         </EntityType>
         <EntityType Name="Crust">
           <Key>
@@ -3020,18 +3017,6 @@
           <Property Name="UpdatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="OrderItems" Relationship="sncModel.FK_OrderItems_Orders" FromRole="Order" ToRole="OrderItem" />
         </EntityType>
-        <Association Name="FK_OrderItems_Orders">
-          <End Type="sncModel.Order" Role="Order" Multiplicity="1" />
-          <End Type="sncModel.OrderItem" Role="OrderItem" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Order">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="OrderItem">
-              <PropertyRef Name="OrderId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="Offer">
           <Key>
             <PropertyRef Name="Id" />
@@ -3420,6 +3405,59 @@
           <Property Type="Int32" Name="PreorderHour" Nullable="false" />
           <Property Type="Boolean" Name="PriscriptionCategory" Nullable="false" />
         </ComplexType>
+        <EntityType Name="OrderItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderId" Type="Int64" Nullable="false" />
+          <Property Name="OrdeNumber" Type="Int32" Nullable="false" />
+          <Property Name="ProductId" Type="Int64" Nullable="false" />
+          <Property Name="ProductName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="BrandId" Type="Int32" Nullable="false" />
+          <Property Name="BrandName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <Property Name="CategoryName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="UnitPrice" Type="Double" Nullable="false" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="OfferId" Type="Int32" />
+          <Property Name="OfferAmount" Type="Double" Nullable="false" />
+          <Property Name="MiddlePrice" Type="Double" Nullable="false" />
+          <Property Name="HasAddon" Type="Boolean" Nullable="false" />
+          <Property Name="AddOnType" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Order" Relationship="sncModel.FK_OrderItems_Orders" FromRole="OrderItem" ToRole="Order" />
+        </EntityType>
+        <Association Name="FK_OrderItems_Orders">
+          <End Type="sncModel.Order" Role="Order" Multiplicity="1" />
+          <End Type="sncModel.OrderItem" Role="OrderItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderItem">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="OrderItemAddon">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderItemId" Type="Int64" Nullable="false" />
+          <Property Name="AddonId" Type="Int32" Nullable="false" />
+          <Property Name="AddonName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="AddonPrice" Type="Double" Nullable="false" />
+          <Property Name="CrustId" Type="Int32" Nullable="false" />
+          <Property Name="CrustName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="PortionId" Type="Int32" Nullable="false" />
+          <Property Name="PortionPrice" Type="Double" Nullable="false" />
+          <Property Name="PortionName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4340,29 +4378,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="OrderItems">
-            <EntityTypeMapping TypeName="sncModel.OrderItem">
-              <MappingFragment StoreEntitySet="OrderItems">
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="MiddlePrice" ColumnName="MiddlePrice" />
-                <ScalarProperty Name="OfferAmount" ColumnName="OfferAmount" />
-                <ScalarProperty Name="OfferId" ColumnName="OfferId" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
-                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
-                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
-                <ScalarProperty Name="BrandName" ColumnName="BrandName" />
-                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="OrdeNumber" ColumnName="OrdeNumber" />
-                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Crusts">
             <EntityTypeMapping TypeName="sncModel.Crust">
               <MappingFragment StoreEntitySet="Crusts">
@@ -4979,6 +4994,48 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="OrderItems">
+            <EntityTypeMapping TypeName="sncModel.OrderItem">
+              <MappingFragment StoreEntitySet="OrderItems">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="AddOnType" ColumnName="AddOnType" />
+                <ScalarProperty Name="HasAddon" ColumnName="HasAddon" />
+                <ScalarProperty Name="MiddlePrice" ColumnName="MiddlePrice" />
+                <ScalarProperty Name="OfferAmount" ColumnName="OfferAmount" />
+                <ScalarProperty Name="OfferId" ColumnName="OfferId" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="BrandName" ColumnName="BrandName" />
+                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="OrdeNumber" ColumnName="OrdeNumber" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderItemAddons">
+            <EntityTypeMapping TypeName="sncModel.OrderItemAddon">
+              <MappingFragment StoreEntitySet="OrderItemAddons">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="PortionName" ColumnName="PortionName" />
+                <ScalarProperty Name="PortionPrice" ColumnName="PortionPrice" />
+                <ScalarProperty Name="PortionId" ColumnName="PortionId" />
+                <ScalarProperty Name="CrustName" ColumnName="CrustName" />
+                <ScalarProperty Name="CrustId" ColumnName="CrustId" />
+                <ScalarProperty Name="AddonPrice" ColumnName="AddonPrice" />
+                <ScalarProperty Name="AddonName" ColumnName="AddonName" />
+                <ScalarProperty Name="AddonId" ColumnName="AddonId" />
+                <ScalarProperty Name="OrderItemId" ColumnName="OrderItemId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

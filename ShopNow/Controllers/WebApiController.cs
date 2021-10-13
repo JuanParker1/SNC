@@ -39,8 +39,8 @@ namespace ShopNow.Controllers
             int errorCode = 0;
             try
             {
-                model.ShopId = 1;
-                model.ShopName = "Joyra Medicals & Surgicals";
+                model.ShopId = 123;
+                model.ShopName = "JOYRA MEDICALS+SURGICALS";
 
                 
                 using (WebClient myData = new WebClient())
@@ -53,7 +53,7 @@ namespace ShopNow.Controllers
                     Product product = new Product();
                     foreach (var pro  in result.items)
                     {
-                        var produc = db.Products.FirstOrDefault(i => i.ItemId == pro.itemId); // Product.GetItemId(pro.itemId);
+                        var produc = db.Products.FirstOrDefault(i => i.ItemId == pro.itemId); 
                         if (produc == null && pro.status =="R")
                         {
                             product.ItemId = pro.itemId;
@@ -258,7 +258,7 @@ namespace ShopNow.Controllers
                     Product product = new Product();
                     foreach (var pro in result.items)
                     {
-                        var produc = db.Products.FirstOrDefault(i => i.ItemId == Convert.ToInt32(pro.itemId)); // Product.GetItemId(pro.itemId);
+                        var produc = db.Products.FirstOrDefault(i => i.ItemId == Convert.ToInt32(pro.itemId)); 
                         if (produc == null && pro.status == "R")
                         {
                             product.ItemId = Convert.ToInt32(pro.itemId);

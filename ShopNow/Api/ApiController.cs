@@ -1158,6 +1158,15 @@ namespace ShopNow.Controllers
                         orderItem.OrdeNumber = order.OrderNumber;
                         db.OrderItems.Add(orderItem);
                         db.SaveChanges();
+
+                        foreach (var addon in item.AddOnListItems)
+                        {
+                            var addonItem = _mapper.Map<OrderCreateViewModel.ListItem.AddOnListItem, OrderItemAddon>(addon);
+                            addonItem.Status = 0;
+                            addonItem.OrderItemId = orderItem.Id;
+                            db.OrderItemAddons.Add(addonItem);
+                            db.SaveChanges();
+                        }
                     }
 
                     if (order != null)
@@ -4035,6 +4044,7 @@ namespace ShopNow.Controllers
                         model.PortionListItems = list.Where(i => i.AddOnType == 1).Select((i, index) => new ApiProductAddonViewModel.PortionListItem
                         {
                             Index = index + 1,
+                            AddonId = i.Id,
                             PortionId = i.PortionId,
                             PortionName = i.PortionName,
                             PortionPrice = i.PortionPrice
@@ -4045,6 +4055,7 @@ namespace ShopNow.Controllers
                         model.AddonListItems = list.Where(i => i.AddOnType == 2).Select((i, index) => new ApiProductAddonViewModel.AddonListItem
                         {
                             Index = index + 1,
+                            AddonId = i.Id,
                             AddonName = i.AddOnItemName,
                             AddonPrice = i.AddOnsPrice,
                             AddonCategoryName = i.AddOnCategoryName,
@@ -4058,6 +4069,7 @@ namespace ShopNow.Controllers
                         model.PortionListItems = list.Where(i => i.AddOnType == 3).GroupBy(i => i.PortionId).Select((i, index) => new ApiProductAddonViewModel.PortionListItem
                         {
                             Index = index + 1,
+                            AddonId = i.FirstOrDefault().Id,
                             PortionId = i.Key,
                             PortionName = i.FirstOrDefault().PortionName,
                             PortionPrice = i.FirstOrDefault().PortionPrice
@@ -4066,6 +4078,7 @@ namespace ShopNow.Controllers
                         model.AddonListItems = list.Where(i => i.AddOnType == 3).Select((i, index) => new ApiProductAddonViewModel.AddonListItem
                         {
                             Index = index + 1,
+                            AddonId=i.Id,
                             PortionId = i.PortionId,
                             AddonName = i.AddOnItemName,
                             AddonPrice = i.AddOnsPrice,
@@ -4079,6 +4092,7 @@ namespace ShopNow.Controllers
                         model.PortionListItems = list.Where(i => i.AddOnType == 4).GroupBy(i => new { i.PortionId,i.CrustId }).Select((i, index) => new ApiProductAddonViewModel.PortionListItem
                         {
                             Index = index + 1,
+                            AddonId = i.FirstOrDefault().Id,
                             PortionId = i.Key.PortionId,
                             PortionName = i.FirstOrDefault().PortionName,
                             PortionPrice = i.FirstOrDefault().PortionPrice,
@@ -4088,6 +4102,7 @@ namespace ShopNow.Controllers
                         model.AddonListItems = list.Where(i => i.AddOnType == 4).Select((i, index) => new ApiProductAddonViewModel.AddonListItem
                         {
                             Index = index + 1,
+                            AddonId = i.Id,
                             PortionId = i.PortionId,
                             AddonName = i.AddOnItemName,
                             AddonPrice = i.AddOnsPrice,
