@@ -101,9 +101,10 @@ namespace ShopNow.Controllers
                 config.CreateMap<OrderCreateViewModel.ListItem, OrderItem>();
                 config.CreateMap<Models.Order, OrderDetailsApiViewModel>();
                 config.CreateMap<SavePrescriptionViewModel, CustomerPrescription>();
-            }); 
+                config.CreateMap<OrderCreateViewModel.ListItem.AddOnListItem, OrderItemAddon>();
+            });
 
-             _mapper = _mapperConfiguration.CreateMapper();
+            _mapper = _mapperConfiguration.CreateMapper();
         }
 
         public JsonResult GetShop(string placeid)
