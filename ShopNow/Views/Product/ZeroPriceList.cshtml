@@ -1,0 +1,106 @@
+﻿@model ShopNow.ViewModels.ProductZeroPriceList
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Zero Price List";
+}
+<title>ShopNow | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+
+<div class="container-fluid">
+    <form method="get" action="/Product/ZeroPriceList" class="my-3">
+        <div class="row my-2">
+            <div class="col-md-4">
+                <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+            </div>
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-4">
+                        <select id="select-shop" class="form-control" name="ShopCode">
+                            @if (Model.ShopId != 0)
+                            {
+                                <option value="@Model.ShopId">@Model.ShopName</option>
+                            }
+                        </select>
+                        <input type="hidden" name="ShopName" />
+                    </div>
+                    <div class="col-md-4">
+                        <input type="submit" class="btn btn-info" value="Apply Filter" />
+                        <a href="/Product/ZeroPriceList" class="btn btn-warning ml-2">Clear Filter</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    @Html.Grid(Model.ListItems).Columns(columns =>
+{
+    columns.Add(b => b.Name).Titled("Name").Filterable(true).SetWidth(10);
+    columns.Add(b => b.ItemId).Titled("Item id").Filterable(true).SetWidth(10);
+    columns.Add()
+ .Encoded(false)
+ .Sanitized(false)
+ .RenderValueAs(b => new HtmlString
+        ("<input class='form-control input-mrp' value=" + b.MenuPrice + " />")).Titled("MRP").SetWidth(30);
+    columns.Add()
+.Encoded(false)
+.Sanitized(false)
+.RenderValueAs(b => new HtmlString
+      ("<input class='form-control input-sellingprice' value=" + b.SellingPrice + " />")).Titled("Selling price").SetWidth(30);
+    columns.Add()
+.Encoded(false)
+.Sanitized(false)
+.RenderValueAs(b => new HtmlString
+      ("<input class='form-control input-qty' value=" + b.Quantity + " />")).Titled("Qty").SetWidth(30);
+    columns.Add()
+ .Encoded(false)
+ .Sanitized(false)
+ .RenderValueAs(b => new HtmlString
+        ("<input type='button' class='btn btn-sm btn-success btn-update-price' value='Update' data-id="+b.Id+" />")).Titled("Action").Css("text-center").SetWidth(5);
+}).WithPaging(20).Sortable(true)
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            $('#select-shop').select2({
+                placeholder: "Search Shop",
+                ajax: {
+                    url: "/Product/GetActiveShopSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ShopName"]').val(e.params.data.text);
+            });
+
+            $('.btn-update-price').on('click', function () {
+                var tr = $(this).closest('tr');
+                var mrp = tr.find('.input-mrp').val();
+                var price = tr.find('.input-sellingprice').val();
+                var qty = tr.find('.input-qty').val();
+                var id = tr.find('.btn-update-price').data('id');
+                $.post('/Product/UpdatePriceAndQuantity', { id: id, mrp: mrp, price: price, qty: qty }, function (data) {
+                    if (data) {
+                        swal('Success!', 'Updated Successfully', 'success');
+                        tr.find('.input-mrp').val('');
+                        tr.find('.input-sellingprice').val('');
+                        tr.find('.input-qty').val('');
+                        window.location.reload();
+                    }
+                    else
+                        swal('Warning!', 'Something went wrong', 'warning');
+                });
+            });
+
+        });
+    </script>
+
+}

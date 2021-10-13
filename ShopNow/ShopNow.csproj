@@ -3225,6 +3225,8 @@
     <Content Include="Views\Agency\Create.cshtml" />
     <Content Include="Views\Agency\Edit.cshtml" />
     <Content Include="Views\Agency\AssignList.cshtml" />
+    <Content Include="Views\Product\ZeroPriceList.cshtml" />
+    <Content Include="Views\Product\InactiveList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
