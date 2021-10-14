@@ -68,6 +68,7 @@ namespace ShopNow.Models
         public Nullable<System.DateTime> PreorderDeliveryDateTime { get; set; }
         public string RouteAudioPath { get; set; }
         public string Remarks { get; set; }
+        public string PrescriptionImagePath { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }

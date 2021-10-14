@@ -595,6 +595,7 @@ namespace ShopNow.ViewModels
         public DateTime? PreorderDeliveryDateTime { get; set; }
         public string RouteAudioPath { get; set; }
         public string Remarks { get; set; }
+        public string PrescriptionImagePath { get; set; }
 
         public List<ListItem> ListItems { get; set; } 
         public class ListItem
