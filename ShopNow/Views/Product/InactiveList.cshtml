@@ -33,21 +33,24 @@
         </div>
     </form>
 
-    @Html.Grid(Model.ListItems).Columns(columns =>
-{
-    columns.Add(b => b.Name).Titled("Name").Filterable(true).SetWidth(10);
-    columns.Add(b => b.ItemId).Titled("Item id").Filterable(true).SetWidth(10);
-    columns.Add(b => b.MenuPrice).Titled("Mrp").Filterable(true).SetWidth(10);
-    columns.Add(b => b.SellingPrice).Titled("Price").Filterable(true).SetWidth(10);
-    columns.Add(b => b.Quantity).Titled("Qty").Filterable(true).SetWidth(10);
-    columns.Add()
- .Encoded(false)
- .Sanitized(false)
- .RenderValueAs(b => new HtmlString
-        ("<input type='button' class='btn btn-sm btn-success btn-update-active' value='Make Active' data-id="+b.Id+" />")).Titled("Action").Css("text-center").SetWidth(5);
-}).WithPaging(20).Sortable(true)
+    <div class="card shadow">
+        <div class="card-body">
+            @Html.Grid(Model.ListItems).Columns(columns =>
+        {
+            columns.Add(b => b.Name).Titled("Name").Filterable(true).SetWidth(10);
+            columns.Add(b => b.ItemId).Titled("Item id").Filterable(true).SetWidth(10);
+            columns.Add(b => b.MenuPrice).Titled("Mrp").Filterable(true).SetWidth(10);
+            columns.Add(b => b.SellingPrice).Titled("Price").Filterable(true).SetWidth(10);
+            columns.Add(b => b.Quantity).Titled("Qty").Filterable(true).SetWidth(10);
+            columns.Add()
+         .Encoded(false)
+         .Sanitized(false)
+         .RenderValueAs(b => new HtmlString
+                ("<input type='button' class='btn btn-sm btn-success btn-update-active' value='Make Active' data-id="+b.Id+" />")).Titled("Action").Css("text-center").SetWidth(5);
+        }).WithPaging(20).Sortable(true)
+        </div>
+    </div>
 </div>
-
 @section Scripts
 {
     <script src="~/Scripts/select2/js/select2.js"></script>

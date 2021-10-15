@@ -1319,7 +1319,32 @@ namespace ShopNow.Controllers
                      RefundAmount = i.o.p.RefundAmount,
                      RefundRemark = i.o.p.RefundRemark,
                      PaymentMode = i.o.p.PaymentMode,
-                     OrderItemList = i.oi.ToList(),
+                     //OrderItemList = i.oi.ToList(),
+                     OrderItemLists = i.oi.Select(a => new GetAllOrderListViewModel.OrderList.OrderItemList
+                     {
+                         AddOnType = a.AddOnType,
+                         BrandId = a.BrandId,
+                         BrandName = a.BrandName,
+                         CategoryId = a.CategoryId,
+                         CategoryName = a.CategoryName,
+                         HasAddon = a.HasAddon,
+                         ImagePath = a.ImagePath,
+                         OrdeNumber = a.OrdeNumber,
+                         OrderId = a.OrderId,
+                         Price = a.Price,
+                         ProductId = a.ProductId,
+                         ProductName = a.ProductName,
+                         Quantity = a.Quantity,
+                         UnitPrice = a.UnitPrice,
+                         OrderItemAddonLists = db.OrderItemAddons.Where(b => b.OrderItemId == a.Id).Select(b => new GetAllOrderListViewModel.OrderList.OrderItemList.OrderItemAddonList
+                         {
+                             AddonName = b.AddonName,
+                             AddonPrice = b.AddonPrice,
+                             CrustName = b.CrustName,
+                             PortionName = b.PortionName,
+                             PortionPrice = b.PortionPrice
+                         }).ToList()
+                     }).ToList()
                  }).OrderByDescending(i => i.DateEncoded).ToList();
 
 
@@ -1903,7 +1928,32 @@ namespace ShopNow.Controllers
                      RefundRemark = i.o.p.RefundRemark,
                      PaymentMode = i.o.p.PaymentMode,
                      WalletAmount = i.o.o.WalletAmount,
-                     OrderItemList = i.oi.ToList(),
+                     //OrderItemList = i.oi.ToList(),
+                     OrderItemLists = i.oi.Select(a => new GetAllOrderListViewModel.OrderList.OrderItemList
+                     {
+                         AddOnType = a.AddOnType,
+                         BrandId = a.BrandId,
+                         BrandName = a.BrandName,
+                         CategoryId = a.CategoryId,
+                         CategoryName = a.CategoryName,
+                         HasAddon = a.HasAddon,
+                         ImagePath = a.ImagePath,
+                         OrdeNumber = a.OrdeNumber,
+                         OrderId = a.OrderId,
+                         Price = a.Price,
+                         ProductId = a.ProductId,
+                         ProductName = a.ProductName,
+                         Quantity = a.Quantity,
+                         UnitPrice = a.UnitPrice,
+                         OrderItemAddonLists = db.OrderItemAddons.Where(b => b.OrderItemId == a.Id).Select(b => new GetAllOrderListViewModel.OrderList.OrderItemList.OrderItemAddonList
+                         {
+                             AddonName = b.AddonName,
+                             AddonPrice = b.AddonPrice,
+                             CrustName = b.CrustName,
+                             PortionName = b.PortionName,
+                             PortionPrice = b.PortionPrice
+                         }).ToList()
+                     }).ToList()
                  }).ToList();
 
             int count = model.OrderLists.Count();
@@ -1935,7 +1985,7 @@ namespace ShopNow.Controllers
             db.Configuration.ProxyCreationEnabled = false;
             
             var model = new GetAllOrderListViewModel();
-            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && (i.Status == 3 || i.Status == 4 || i.Status == 5 || i.Status==8))
+            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && (i.Status == 3 || i.Status == 4 || i.Status == 5 || i.Status == 8))
                  .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
                  //.Join(db.DeliveryBoys, o => o.o.DeliveryBoyId, d => d.Id, (o, d) => new { o, d })
                  .GroupJoin(db.OrderItems, o => o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
@@ -1975,7 +2025,32 @@ namespace ShopNow.Controllers
                      Onwork = db.DeliveryBoys.Any(a => a.Id == i.o.o.DeliveryBoyId) ? db.DeliveryBoys.FirstOrDefault(a => a.Id == i.o.o.DeliveryBoyId).OnWork : 0,
                      WalletAmount = i.o.o.WalletAmount,
                      OrderReadyTime = i.o.o.OrderReadyTime,
-                     OrderItemList = i.oi.ToList(),  
+                     //OrderItemList = i.oi.ToList(), 
+                     OrderItemLists = i.oi.Select(a => new GetAllOrderListViewModel.OrderList.OrderItemList
+                     {
+                         AddOnType = a.AddOnType,
+                         BrandId = a.BrandId,
+                         BrandName = a.BrandName,
+                         CategoryId = a.CategoryId,
+                         CategoryName = a.CategoryName,
+                         HasAddon = a.HasAddon,
+                         ImagePath = a.ImagePath,
+                         OrdeNumber = a.OrdeNumber,
+                         OrderId = a.OrderId,
+                         Price = a.Price,
+                         ProductId = a.ProductId,
+                         ProductName = a.ProductName,
+                         Quantity = a.Quantity,
+                         UnitPrice = a.UnitPrice,
+                         OrderItemAddonLists = db.OrderItemAddons.Where(b => b.OrderItemId == a.Id).Select(b => new GetAllOrderListViewModel.OrderList.OrderItemList.OrderItemAddonList
+                         {
+                             AddonName = b.AddonName,
+                             AddonPrice = b.AddonPrice,
+                             CrustName = b.CrustName,
+                             PortionName = b.PortionName,
+                             PortionPrice = b.PortionPrice
+                         }).ToList()
+                     }).ToList()
                  }).ToList();
 
             int count = model.OrderLists.Count();
@@ -2458,8 +2533,8 @@ namespace ShopNow.Controllers
                         varProduct.PackingCharge = 0;
                         varProduct.Status = 0;
                         varProduct.DateEncoded = DateTime.Now;
-                        varProduct.CreatedBy = "serveice";
-                        varProduct.UpdatedBy = "serveice";
+                        varProduct.CreatedBy = "service";
+                        varProduct.UpdatedBy = "service";
                         foreach (var med in pro.stock)
                         {
                             varProduct.Qty = Convert.ToInt32(Math.Floor(Convert.ToDecimal(med.stock)));
@@ -3042,10 +3117,10 @@ namespace ShopNow.Controllers
         public JsonResult GetNearShops(double Latitude, double Longitude)
         {
             var model = new NearShopImages();
-            string query = "SELECT * " +
+            string query8KM = "SELECT * " +
                                " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and Status = 0 and Latitude != 0 and Longitude != 0" +
                                " order by IsOnline desc,Adscore desc,Rating desc";
-            model.NearShops = db.Shops.SqlQuery(query,
+            var list8KM = db.Shops.SqlQuery(query8KM,
              new SqlParameter("Latitude", Latitude),
              new SqlParameter("Longitude", Longitude)).Select(i => new NearShopImages.shops
              {
@@ -3054,6 +3129,21 @@ namespace ShopNow.Controllers
                  IsOnline = i.IsOnline,
                  NextOnTime = i.NextOnTime
              }).ToList();
+
+            string query16KM = "SELECT * " +
+                               " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 16 and ShopCategoryId=4 and Status = 0 and Latitude != 0 and Longitude != 0" +
+                               " order by IsOnline desc,Adscore desc,Rating desc";
+            var list16KM = db.Shops.SqlQuery(query16KM,
+             new SqlParameter("Latitude", Latitude),
+             new SqlParameter("Longitude", Longitude)).Select(i => new NearShopImages.shops
+             {
+                 id = i.Id,
+                 image = i.ImagePath != null ? i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "",
+                 IsOnline = i.IsOnline,
+                 NextOnTime = i.NextOnTime
+             }).ToList();
+
+            model.NearShops = list8KM.Concat(list16KM).ToList();
             return Json(model, JsonRequestBehavior.AllowGet);
         }
         public JsonResult GetNearPlaces(double Latitude, double Longitude, string a)
@@ -3069,7 +3159,7 @@ namespace ShopNow.Controllers
             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 2 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
             " order by IsOnline desc,Adscore desc,Rating desc";
             string queryHealthList = "SELECT * " +
-            " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 4 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
+            " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 16 and ShopCategoryId = 4 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
             " order by IsOnline desc,Adscore desc,Rating desc";
             string queryElectronicsList = "SELECT * " +
             " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId = 5 and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
@@ -3084,7 +3174,8 @@ namespace ShopNow.Controllers
                 " order by IsOnline desc,Adscore desc,Rating desc";
                 model.ResturantList = db.Shops.SqlQuery(query,
                  new SqlParameter("Latitude", Latitude),
-                 new SqlParameter("Longitude", Longitude)).Select(i => new PlacesListView.Places
+                 new SqlParameter("Longitude", Longitude))
+                 .Select(i => new PlacesListView.Places
                  {
                      Id = i.Id,
                      Name = i.Name,
@@ -3100,7 +3191,8 @@ namespace ShopNow.Controllers
                      isOnline = i.IsOnline,
                      ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
                      Address = i.Address,
-                     NextOnTime = i.NextOnTime
+                     NextOnTime = i.NextOnTime,
+                     OfferPercentage = db.Products.Where(b => b.ShopId == i.Id).Max(b => b.Percentage)
                  }).ToList();
                 model.SuperMarketList = db.Shops.SqlQuery(querySuperMarketList,
                 new SqlParameter("Latitude", Latitude),
@@ -3119,7 +3211,8 @@ namespace ShopNow.Controllers
                     isOnline = i.IsOnline,
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
                     Address = i.Address,
-                    NextOnTime = i.NextOnTime
+                    NextOnTime = i.NextOnTime,
+                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id).Max(b => b.Percentage)
                 }).ToList();
                 model.GroceriesList = db.Shops.SqlQuery(queryGroceriesList,
                 new SqlParameter("Latitude", Latitude),
@@ -3139,7 +3232,8 @@ namespace ShopNow.Controllers
                     isOnline = i.IsOnline,
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
                     Address = i.Address,
-                    NextOnTime = i.NextOnTime
+                    NextOnTime = i.NextOnTime,
+                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id).Max(b => b.Percentage)
                 }).ToList();
                 model.HealthList = db.Shops.SqlQuery(queryHealthList,
                 new SqlParameter("Latitude", Latitude),
@@ -3158,7 +3252,8 @@ namespace ShopNow.Controllers
                     isOnline = i.IsOnline,
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
                     Address = i.Address,
-                    NextOnTime = i.NextOnTime
+                    NextOnTime = i.NextOnTime,
+                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id).Max(b => b.Percentage)
                 }).ToList();
 
                 model.ElectronicsList = db.Shops.SqlQuery(queryElectronicsList,
@@ -3179,7 +3274,8 @@ namespace ShopNow.Controllers
                     isOnline = i.IsOnline,
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
                     Address = i.Address,
-                    NextOnTime = i.NextOnTime
+                    NextOnTime = i.NextOnTime,
+                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id).Max(b => b.Percentage)
                 }).ToList();
                 model.ServicesList = db.Shops.SqlQuery(qServicesList,
                 new SqlParameter("Latitude", Latitude),
@@ -3199,7 +3295,8 @@ namespace ShopNow.Controllers
                     isOnline = i.IsOnline,
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
                     Address = i.Address,
-                    NextOnTime = i.NextOnTime
+                    NextOnTime = i.NextOnTime,
+                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id).Max(b => b.Percentage)
                 }).ToList();
                 model.OtherList = db.Shops.SqlQuery(queryOtherList,
                 new SqlParameter("Latitude", Latitude),
@@ -3218,7 +3315,8 @@ namespace ShopNow.Controllers
                     isOnline = i.IsOnline,
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
                     Address = i.Address,
-                    NextOnTime = i.NextOnTime
+                    NextOnTime = i.NextOnTime,
+                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id).Max(b => b.Percentage)
                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3242,7 +3340,8 @@ namespace ShopNow.Controllers
                     isOnline = i.IsOnline,
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
                     Address = i.Address,
-                    NextOnTime = i.NextOnTime
+                    NextOnTime = i.NextOnTime,
+                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id).Max(b => b.Percentage)
                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3266,7 +3365,8 @@ namespace ShopNow.Controllers
                     isOnline = i.IsOnline,
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
                     Address = i.Address,
-                    NextOnTime = i.NextOnTime
+                    NextOnTime = i.NextOnTime,
+                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id).Max(b => b.Percentage)
                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3290,7 +3390,8 @@ namespace ShopNow.Controllers
                     isOnline = i.IsOnline,
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
                     Address = i.Address,
-                    NextOnTime = i.NextOnTime
+                    NextOnTime = i.NextOnTime,
+                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id).Max(b => b.Percentage)
                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3314,7 +3415,8 @@ namespace ShopNow.Controllers
                     isOnline = i.IsOnline,
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
                     Address = i.Address,
-                    NextOnTime = i.NextOnTime
+                    NextOnTime = i.NextOnTime,
+                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id).Max(b => b.Percentage)
                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3338,7 +3440,8 @@ namespace ShopNow.Controllers
                     isOnline = i.IsOnline,
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
                     Address = i.Address,
-                    NextOnTime = i.NextOnTime
+                    NextOnTime = i.NextOnTime,
+                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id).Max(b => b.Percentage)
                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3360,7 +3463,8 @@ namespace ShopNow.Controllers
                     Longitude = i.Longitude,
                     Status = i.Status,
                     isOnline = i.IsOnline,
-                    NextOnTime = i.NextOnTime
+                    NextOnTime = i.NextOnTime,
+                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id).Max(b => b.Percentage)
                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3387,7 +3491,8 @@ namespace ShopNow.Controllers
                     isOnline = i.IsOnline,
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
                     Address = i.Address,
-                    NextOnTime = i.NextOnTime
+                    NextOnTime = i.NextOnTime,
+                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id).Max(b => b.Percentage)
                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3845,11 +3950,11 @@ namespace ShopNow.Controllers
             try
             {
                 var d = DateTime.Now.Date.Date;
-                var teenStudentsName = (from s in db.Banners
+                var banners = (from s in db.Banners
                                         where (s.Status == 0 || s.Status == 6) && s.ShopId == id && (DbFunctions.TruncateTime(s.FromDate) <= DbFunctions.TruncateTime(DateTime.Now) && DbFunctions.TruncateTime(s.Todate) >= DbFunctions.TruncateTime(DateTime.Now))
                                         select new BannerImages { Bannerpath = (s.BannerPath != null) ? s.BannerPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "", ShopId = s.ShopId, ProductId = s.MasterProductId }).ToList();
 
-                return teenStudentsName;
+                return banners;
             }
             catch (Exception ex)
             {
@@ -4158,7 +4263,7 @@ namespace ShopNow.Controllers
         {
             db.Configuration.ProxyCreationEnabled = false;
             var model = new GetAllOrderListViewModel();
-            model.OrderLists = db.Orders.Where(i => i.CustomerId == customerId && (type == 1 ? (i.Status >= 2 && i.Status <= 5) || i.Status == 8 : (i.Status == 6 || i.Status == 7)))
+            model.OrderLists = db.Orders.Where(i => i.CustomerId == customerId && (type == 1 ? (i.Status >= 2 && i.Status <= 5) || i.Status == 8 : (i.Status == 6 || i.Status == 7 || i.Status ==9 || i.Status ==10)))
                  .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
                  .GroupJoin(db.OrderItems, o => o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
                  .Select(i => new GetAllOrderListViewModel.OrderList
@@ -4195,7 +4300,29 @@ namespace ShopNow.Controllers
                      RefundRemark = i.o.p.RefundRemark,
                      PaymentMode = i.o.p.PaymentMode,
                      WalletAmount = i.o.o.WalletAmount,
-                     OrderItemList = i.oi.ToList()
+                     OrderItemLists = i.oi.Select(a=>new GetAllOrderListViewModel.OrderList.OrderItemList {
+                         AddOnType= a.AddOnType,
+                         BrandId = a.BrandId,
+                         BrandName = a.BrandName,
+                         CategoryId = a.CategoryId,
+                         CategoryName = a.CategoryName,
+                         HasAddon = a.HasAddon,
+                         ImagePath = a.ImagePath,
+                         OrdeNumber = a.OrdeNumber,
+                         OrderId = a.OrderId,
+                         Price = a.Price,
+                         ProductId = a.ProductId,
+                         ProductName = a.ProductName,
+                         Quantity = a.Quantity,
+                         UnitPrice = a.UnitPrice,
+                         OrderItemAddonLists = db.OrderItemAddons.Where(b=>b.OrderItemId == a.Id).Select(b=>new GetAllOrderListViewModel.OrderList.OrderItemList.OrderItemAddonList {
+                             AddonName = b.AddonName,
+                             AddonPrice = b.AddonPrice,
+                             CrustName = b.CrustName,
+                             PortionName = b.PortionName,
+                             PortionPrice = b.PortionPrice
+                         }).ToList()
+                     }).ToList()
                  }).OrderByDescending(i=>i.DateEncoded).ToList();
 
             int count = model.OrderLists.Count();
@@ -4500,7 +4627,9 @@ namespace ShopNow.Controllers
                        ShopName = shop.Name,
                        DiscountCategoryPercentage = i.dc.Percentage,
                        Size = i.p.m.SizeLWH,
-                       Weight = i.p.m.Weight
+                       Weight = i.p.m.Weight,
+                       IsPreorder = i.p.p.p.IsPreorder,
+                       PreorderHour = i.p.p.p.PreorderHour
                    }).ToList();
                 }
                 else
@@ -4524,7 +4653,20 @@ namespace ShopNow.Controllers
                         IsProductOnline = i.p.p.IsOnline,
                         DiscountCategoryPercentage = i.p.p.Percentage,
                         Size = i.m.SizeLWH,
-                        Weight = i.m.Weight
+                        Weight = i.m.Weight,
+                        IsPreorder = i.p.p.IsPreorder,
+                        PreorderHour = i.p.p.PreorderHour,
+                        OrderItemAddonLists = db.OrderItemAddons.Where(a => a.OrderItemId == i.p.oi.Id).Select(a => new OrderDetailsApiViewModel.OrderItemList.OrderItemAddonList {
+                            AddonId = a.AddonId,
+                            AddonName = a.AddonName,
+                            AddonPrice = a.AddonPrice,
+                            CrustId = a.CrustId,
+                            CrustName = a.CrustName,
+                            OrderItemId = a.OrderItemId,
+                            PortionId = a.PortionId,
+                            PortionName = a.PortionName,
+                            PortionPrice = a.PortionPrice
+                        }).ToList()
                     }).ToList();
                 }
             }

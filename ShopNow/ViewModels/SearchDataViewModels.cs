@@ -11,6 +11,7 @@ namespace ShopNow.ViewModels
         public DateTime? EndDate { get; set; }
         public List<ListItem> AllListItems { get; set; }
         public List<ListItem> ZeroCountListItems { get; set; }
+        public List<ListItem> ListWithLinkedKeywords { get; set; }
         public class ListItem
         {
             public DateTime? Date { get; set; }
@@ -18,10 +19,12 @@ namespace ShopNow.ViewModels
             public int? Count { get; set; }
             //public string Color { get; set; }
             public string OldCommonWord { get; set; }
+            public string LinkedMasterProduct { get; set; }
         }
 
         public int AllCount { get; set; }
         public int ZeroCount { get; set; }
+        public int LinkedKeywordCount { get; set; }
     }
 
     public class SearchDataEntryViewModel
