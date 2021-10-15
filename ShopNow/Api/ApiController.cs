@@ -2533,8 +2533,8 @@ namespace ShopNow.Controllers
                         varProduct.PackingCharge = 0;
                         varProduct.Status = 0;
                         varProduct.DateEncoded = DateTime.Now;
-                        varProduct.CreatedBy = "serveice";
-                        varProduct.UpdatedBy = "serveice";
+                        varProduct.CreatedBy = "service";
+                        varProduct.UpdatedBy = "service";
                         foreach (var med in pro.stock)
                         {
                             varProduct.Qty = Convert.ToInt32(Math.Floor(Convert.ToDecimal(med.stock)));
