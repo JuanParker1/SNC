@@ -395,6 +395,7 @@
     <Compile Include="Controllers\ShopCategoryController.cs" />
     <Compile Include="Controllers\ShopController.cs" />
     <Compile Include="Controllers\SpecificationController.cs" />
+    <Compile Include="Controllers\StockUpdateController.cs" />
     <Compile Include="Controllers\SubCategoryController.cs" />
     <Compile Include="Controllers\SupportController.cs" />
     <Compile Include="Controllers\WebApiController.cs" />
@@ -404,6 +405,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Global\Common.cs" />
+    <Compile Include="Global\Utility.cs" />
     <Compile Include="Helpers\AdminHelpers.cs" />
     <Compile Include="Helpers\CallHelpers.cs" />
     <Compile Include="Helpers\CommonHelpers.cs" />
@@ -644,6 +646,7 @@
     <Compile Include="Models\Staff.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\stockmodel.cs" />
     <Compile Include="Models\SubCategory.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
@@ -3227,6 +3230,8 @@
     <Content Include="Views\Agency\AssignList.cshtml" />
     <Content Include="Views\Product\ZeroPriceList.cshtml" />
     <Content Include="Views\Product\InactiveList.cshtml" />
+    <Content Include="Views\StockUpdate\DiscountMaintenance.cshtml" />
+    <Content Include="Views\StockUpdate\StockMaintenance.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
