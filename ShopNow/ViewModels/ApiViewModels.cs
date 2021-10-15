@@ -311,6 +311,22 @@ namespace ShopNow.ViewModels
             public double DiscountCategoryPercentage { get; set; }
             public double Size { get; set; }
             public double Weight { get; set; }
+            public bool IsPreorder { get; set; }
+            public int PreorderHour { get; set; }
+
+            public List<OrderItemAddonList> OrderItemAddonLists { get; set; }
+            public class OrderItemAddonList
+            {
+                public long OrderItemId { get; set; }
+                public int AddonId { get; set; }
+                public string AddonName { get; set; }
+                public double AddonPrice { get; set; }
+                public int CrustId { get; set; }
+                public string CrustName { get; set; }
+                public int PortionId { get; set; }
+                public double PortionPrice { get; set; }
+                public string PortionName { get; set; }
+            }
         }
 
         public class MedicalOrderItemList
@@ -339,6 +355,8 @@ namespace ShopNow.ViewModels
             public bool? IsProductOnline { get; set; }
             public double Size { get; set; }
             public double Weight { get; set; }
+            public bool IsPreorder { get; set; }
+            public int PreorderHour { get; set; }
         }
     }
 

@@ -4627,7 +4627,9 @@ namespace ShopNow.Controllers
                        ShopName = shop.Name,
                        DiscountCategoryPercentage = i.dc.Percentage,
                        Size = i.p.m.SizeLWH,
-                       Weight = i.p.m.Weight
+                       Weight = i.p.m.Weight,
+                       IsPreorder = i.p.p.p.IsPreorder,
+                       PreorderHour = i.p.p.p.PreorderHour
                    }).ToList();
                 }
                 else
@@ -4651,7 +4653,20 @@ namespace ShopNow.Controllers
                         IsProductOnline = i.p.p.IsOnline,
                         DiscountCategoryPercentage = i.p.p.Percentage,
                         Size = i.m.SizeLWH,
-                        Weight = i.m.Weight
+                        Weight = i.m.Weight,
+                        IsPreorder = i.p.p.IsPreorder,
+                        PreorderHour = i.p.p.PreorderHour,
+                        OrderItemAddonLists = db.OrderItemAddons.Where(a => a.OrderItemId == i.p.oi.Id).Select(a => new OrderDetailsApiViewModel.OrderItemList.OrderItemAddonList {
+                            AddonId = a.AddonId,
+                            AddonName = a.AddonName,
+                            AddonPrice = a.AddonPrice,
+                            CrustId = a.CrustId,
+                            CrustName = a.CrustName,
+                            OrderItemId = a.OrderItemId,
+                            PortionId = a.PortionId,
+                            PortionName = a.PortionName,
+                            PortionPrice = a.PortionPrice
+                        }).ToList()
                     }).ToList();
                 }
             }
