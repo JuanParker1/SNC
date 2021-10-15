@@ -1319,7 +1319,32 @@ namespace ShopNow.Controllers
                      RefundAmount = i.o.p.RefundAmount,
                      RefundRemark = i.o.p.RefundRemark,
                      PaymentMode = i.o.p.PaymentMode,
-                     OrderItemList = i.oi.ToList(),
+                     //OrderItemList = i.oi.ToList(),
+                     OrderItemLists = i.oi.Select(a => new GetAllOrderListViewModel.OrderList.OrderItemList
+                     {
+                         AddOnType = a.AddOnType,
+                         BrandId = a.BrandId,
+                         BrandName = a.BrandName,
+                         CategoryId = a.CategoryId,
+                         CategoryName = a.CategoryName,
+                         HasAddon = a.HasAddon,
+                         ImagePath = a.ImagePath,
+                         OrdeNumber = a.OrdeNumber,
+                         OrderId = a.OrderId,
+                         Price = a.Price,
+                         ProductId = a.ProductId,
+                         ProductName = a.ProductName,
+                         Quantity = a.Quantity,
+                         UnitPrice = a.UnitPrice,
+                         OrderItemAddonLists = db.OrderItemAddons.Where(b => b.OrderItemId == a.Id).Select(b => new GetAllOrderListViewModel.OrderList.OrderItemList.OrderItemAddonList
+                         {
+                             AddonName = b.AddonName,
+                             AddonPrice = b.AddonPrice,
+                             CrustName = b.CrustName,
+                             PortionName = b.PortionName,
+                             PortionPrice = b.PortionPrice
+                         }).ToList()
+                     }).ToList()
                  }).OrderByDescending(i => i.DateEncoded).ToList();
 
 
@@ -1903,7 +1928,32 @@ namespace ShopNow.Controllers
                      RefundRemark = i.o.p.RefundRemark,
                      PaymentMode = i.o.p.PaymentMode,
                      WalletAmount = i.o.o.WalletAmount,
-                     OrderItemList = i.oi.ToList(),
+                     //OrderItemList = i.oi.ToList(),
+                     OrderItemLists = i.oi.Select(a => new GetAllOrderListViewModel.OrderList.OrderItemList
+                     {
+                         AddOnType = a.AddOnType,
+                         BrandId = a.BrandId,
+                         BrandName = a.BrandName,
+                         CategoryId = a.CategoryId,
+                         CategoryName = a.CategoryName,
+                         HasAddon = a.HasAddon,
+                         ImagePath = a.ImagePath,
+                         OrdeNumber = a.OrdeNumber,
+                         OrderId = a.OrderId,
+                         Price = a.Price,
+                         ProductId = a.ProductId,
+                         ProductName = a.ProductName,
+                         Quantity = a.Quantity,
+                         UnitPrice = a.UnitPrice,
+                         OrderItemAddonLists = db.OrderItemAddons.Where(b => b.OrderItemId == a.Id).Select(b => new GetAllOrderListViewModel.OrderList.OrderItemList.OrderItemAddonList
+                         {
+                             AddonName = b.AddonName,
+                             AddonPrice = b.AddonPrice,
+                             CrustName = b.CrustName,
+                             PortionName = b.PortionName,
+                             PortionPrice = b.PortionPrice
+                         }).ToList()
+                     }).ToList()
                  }).ToList();
 
             int count = model.OrderLists.Count();
@@ -1935,7 +1985,7 @@ namespace ShopNow.Controllers
             db.Configuration.ProxyCreationEnabled = false;
             
             var model = new GetAllOrderListViewModel();
-            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && (i.Status == 3 || i.Status == 4 || i.Status == 5 || i.Status==8))
+            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && (i.Status == 3 || i.Status == 4 || i.Status == 5 || i.Status == 8))
                  .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
                  //.Join(db.DeliveryBoys, o => o.o.DeliveryBoyId, d => d.Id, (o, d) => new { o, d })
                  .GroupJoin(db.OrderItems, o => o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
@@ -1975,7 +2025,32 @@ namespace ShopNow.Controllers
                      Onwork = db.DeliveryBoys.Any(a => a.Id == i.o.o.DeliveryBoyId) ? db.DeliveryBoys.FirstOrDefault(a => a.Id == i.o.o.DeliveryBoyId).OnWork : 0,
                      WalletAmount = i.o.o.WalletAmount,
                      OrderReadyTime = i.o.o.OrderReadyTime,
-                     OrderItemList = i.oi.ToList(),  
+                     //OrderItemList = i.oi.ToList(), 
+                     OrderItemLists = i.oi.Select(a => new GetAllOrderListViewModel.OrderList.OrderItemList
+                     {
+                         AddOnType = a.AddOnType,
+                         BrandId = a.BrandId,
+                         BrandName = a.BrandName,
+                         CategoryId = a.CategoryId,
+                         CategoryName = a.CategoryName,
+                         HasAddon = a.HasAddon,
+                         ImagePath = a.ImagePath,
+                         OrdeNumber = a.OrdeNumber,
+                         OrderId = a.OrderId,
+                         Price = a.Price,
+                         ProductId = a.ProductId,
+                         ProductName = a.ProductName,
+                         Quantity = a.Quantity,
+                         UnitPrice = a.UnitPrice,
+                         OrderItemAddonLists = db.OrderItemAddons.Where(b => b.OrderItemId == a.Id).Select(b => new GetAllOrderListViewModel.OrderList.OrderItemList.OrderItemAddonList
+                         {
+                             AddonName = b.AddonName,
+                             AddonPrice = b.AddonPrice,
+                             CrustName = b.CrustName,
+                             PortionName = b.PortionName,
+                             PortionPrice = b.PortionPrice
+                         }).ToList()
+                     }).ToList()
                  }).ToList();
 
             int count = model.OrderLists.Count();
@@ -4188,7 +4263,7 @@ namespace ShopNow.Controllers
         {
             db.Configuration.ProxyCreationEnabled = false;
             var model = new GetAllOrderListViewModel();
-            model.OrderLists = db.Orders.Where(i => i.CustomerId == customerId && (type == 1 ? (i.Status >= 2 && i.Status <= 5) || i.Status == 8 : (i.Status == 6 || i.Status == 7)))
+            model.OrderLists = db.Orders.Where(i => i.CustomerId == customerId && (type == 1 ? (i.Status >= 2 && i.Status <= 5) || i.Status == 8 : (i.Status == 6 || i.Status == 7 || i.Status ==9 || i.Status ==10)))
                  .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
                  .GroupJoin(db.OrderItems, o => o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
                  .Select(i => new GetAllOrderListViewModel.OrderList
@@ -4225,7 +4300,29 @@ namespace ShopNow.Controllers
                      RefundRemark = i.o.p.RefundRemark,
                      PaymentMode = i.o.p.PaymentMode,
                      WalletAmount = i.o.o.WalletAmount,
-                     OrderItemList = i.oi.ToList()
+                     OrderItemLists = i.oi.Select(a=>new GetAllOrderListViewModel.OrderList.OrderItemList {
+                         AddOnType= a.AddOnType,
+                         BrandId = a.BrandId,
+                         BrandName = a.BrandName,
+                         CategoryId = a.CategoryId,
+                         CategoryName = a.CategoryName,
+                         HasAddon = a.HasAddon,
+                         ImagePath = a.ImagePath,
+                         OrdeNumber = a.OrdeNumber,
+                         OrderId = a.OrderId,
+                         Price = a.Price,
+                         ProductId = a.ProductId,
+                         ProductName = a.ProductName,
+                         Quantity = a.Quantity,
+                         UnitPrice = a.UnitPrice,
+                         OrderItemAddonLists = db.OrderItemAddons.Where(b=>b.OrderItemId == a.Id).Select(b=>new GetAllOrderListViewModel.OrderList.OrderItemList.OrderItemAddonList {
+                             AddonName = b.AddonName,
+                             AddonPrice = b.AddonPrice,
+                             CrustName = b.CrustName,
+                             PortionName = b.PortionName,
+                             PortionPrice = b.PortionPrice
+                         }).ToList()
+                     }).ToList()
                  }).OrderByDescending(i=>i.DateEncoded).ToList();
 
             int count = model.OrderLists.Count();

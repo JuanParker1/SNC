@@ -45,7 +45,42 @@ namespace ShopNow.ViewModels
             public string RefundRemark { get; set; }
             public string PaymentMode { get; set; }
             public int Onwork { get; set; }
-            public List<OrderItem> OrderItemList { get; set; }
+            public List<OrderItemList> OrderItemLists { get; set; }
+            public class OrderItemList
+            {
+                public long OrderId { get; set; }
+                public int OrdeNumber { get; set; }
+                public long ProductId { get; set; }
+                public string ProductName { get; set; }
+                public int BrandId { get; set; }
+                public string BrandName { get; set; }
+                public int CategoryId { get; set; }
+                public string CategoryName { get; set; }
+                public string ImagePath { get; set; }
+                public int Quantity { get; set; }
+                public double UnitPrice { get; set; }
+                public double Price { get; set; }
+                public Nullable<int> OfferId { get; set; }
+                public double OfferAmount { get; set; }
+                public double MiddlePrice { get; set; }
+                public bool HasAddon { get; set; }
+                public int AddOnType { get; set; }
+
+                public List<OrderItemAddonList> OrderItemAddonLists { get; set; }
+                public class OrderItemAddonList
+                {
+                    public long OrderItemId { get; set; }
+                    public int AddonId { get; set; }
+                    public string AddonName { get; set; }
+                    public double AddonPrice { get; set; }
+                    public int CrustId { get; set; }
+                    public string CrustName { get; set; }
+                    public int PortionId { get; set; }
+                    public double PortionPrice { get; set; }
+                    public string PortionName { get; set; }
+                }
+            }
+            
         }
     }
 

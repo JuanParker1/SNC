@@ -18,5 +18,7 @@ namespace ShopNow.Models
         public System.DateTime DateEncoded { get; set; }
         public string SearchKeyword { get; set; }
         public int ResultCount { get; set; }
+        public string LinkedMasterProductIds { get; set; }
+        public string LinkedMasterProductName { get; set; }
     }
 }

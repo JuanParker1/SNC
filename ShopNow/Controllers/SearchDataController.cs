@@ -25,8 +25,10 @@ namespace ShopNow.Controllers
                     Date = i.FirstOrDefault().DateEncoded,
                     Key = i.Key,
                 }).OrderByDescending(i => i.Date).ToList();
-            model.ZeroCountListItems = db.CustomerSearchDatas.Where(i => i.ResultCount == 0 && ((model.StartDate != null && model.EndDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate)) : true))
-                 .GroupBy(i => i.SearchKeyword)
+
+            model.ZeroCountListItems = db.CustomerSearchDatas
+                .Where(i => i.ResultCount == 0 && ((model.StartDate != null && model.EndDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate)) : true) && string.IsNullOrEmpty(i.LinkedMasterProductIds))
+                 .GroupBy(i => i.SearchKeyword).Where(i => i.Sum(a => a.ResultCount) == 0)
                  .GroupJoin(db.SearchDatas, k => k.Key, sd => sd.KeyValue, (k, sd) => new { k, sd })
                  .AsEnumerable()
                 .Select(i => new SearchDataListViewModel.ListItem
@@ -35,9 +37,25 @@ namespace ShopNow.Controllers
                     Date = i.k.FirstOrDefault().DateEncoded,
                     Key = i.k.Key,
                     OldCommonWord = string.Join(",", i.sd.Select(a => a.Source).ToList()).ToString()
-                }).OrderByDescending(i => i.Date).ToList();
+                }).Where(i => string.IsNullOrEmpty(i.OldCommonWord)).OrderByDescending(i => i.Date).ToList();
+
+            model.ListWithLinkedKeywords = db.CustomerSearchDatas
+              .Where(i => ((model.StartDate != null && model.EndDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate)) : true))
+               .GroupBy(i => i.SearchKeyword).Where(i => i.Sum(a => a.ResultCount) == 0)
+               .GroupJoin(db.SearchDatas, k => k.Key, sd => sd.KeyValue, (k, sd) => new { k, sd })
+               .AsEnumerable()
+              .Select(i => new SearchDataListViewModel.ListItem
+              {
+                  Count = i.k.Max(a => a.ResultCount),
+                  Date = i.k.FirstOrDefault().DateEncoded,
+                  Key = i.k.Key,
+                  OldCommonWord = string.Join(",", i.sd.Select(a => a.Source).ToList()).ToString(),
+                  LinkedMasterProduct = i.k.FirstOrDefault().LinkedMasterProductName
+              }).Where(i => !string.IsNullOrEmpty(i.OldCommonWord) || !string.IsNullOrEmpty(i.LinkedMasterProduct)).OrderByDescending(i => i.Date).ToList();
+
             model.AllCount = model.AllListItems.Count();
             model.ZeroCount = model.ZeroCountListItems.Count();
+            model.LinkedKeywordCount = model.ListWithLinkedKeywords.Count();
             return View(model);
         }
 
@@ -96,6 +114,19 @@ namespace ShopNow.Controllers
                         masterProduct.NickName = masterProduct.NickName + " " + searchWord;
                         db.Entry(masterProduct).State = EntityState.Modified;
                         db.SaveChanges();
+
+                        var searchDataList = db.CustomerSearchDatas.Where(i => i.SearchKeyword == searchWord).ToList();
+                        foreach (var item in searchDataList)
+                        {
+                            var sd = db.CustomerSearchDatas.FirstOrDefault(i => i.SearchKeyword == item.SearchKeyword);
+                            if (sd != null)
+                            {
+                                sd.LinkedMasterProductIds = sd.LinkedMasterProductIds != null ? sd.LinkedMasterProductIds + "," + masterProduct.Id : masterProduct.Id.ToString();
+                                sd.LinkedMasterProductName = sd.LinkedMasterProductName != null ? sd.LinkedMasterProductName + "," + masterProduct.Name : masterProduct.Name;
+                                db.Entry(sd).State = EntityState.Modified;
+                                db.SaveChanges();
+                            }
+                        }
                     }
                 }
             }

@@ -676,6 +676,7 @@ namespace ShopNow.ViewModels
     {
         public int ShopId { get; set; }
         public string ShopName { get; set; }
+        public int ShopCategoryId { get; set; }
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {

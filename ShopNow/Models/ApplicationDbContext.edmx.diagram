@@ -63,7 +63,6 @@
         <EntityTypeShape EntityType="sncModel.Crust" Width="1.5" PointX="13.375" PointY="14.75" />
         <EntityTypeShape EntityType="sncModel.MasterProduct" Width="1.5" PointX="19.375" PointY="28.75" />
         <EntityTypeShape EntityType="sncModel.Bill" Width="1.5" PointX="18.375" PointY="0.75" />
-        <EntityTypeShape EntityType="sncModel.CustomerSearchData" Width="1.5" PointX="15.375" PointY="14.75" />
         <EntityTypeShape EntityType="sncModel.KeywordData" Width="1.5" PointX="20.375" PointY="0.75" />
         <EntityTypeShape EntityType="sncModel.SearchData" Width="1.5" PointX="20.375" PointY="3.75" />
         <EntityTypeShape EntityType="sncModel.DeliveryCharge" Width="1.5" PointX="21.375" PointY="28.75" />
@@ -83,6 +82,7 @@
         <AssociationConnector Association="sncModel.FK_CustomerReview_Shops" />
         <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="28.375" PointY="35.75" />
         <AssociationConnector Association="sncModel.FK_OrderItems_Orders" />
+        <EntityTypeShape EntityType="sncModel.CustomerSearchData" Width="1.5" PointX="15.375" PointY="14.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

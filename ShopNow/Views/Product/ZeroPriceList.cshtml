@@ -32,75 +32,104 @@
             </div>
         </div>
     </form>
-
-    @Html.Grid(Model.ListItems).Columns(columns =>
+    <div class="card shadow">
+        <div class="card-body">
+            @Html.Grid(Model.ListItems).Columns(columns =>
+        {
+            columns.Add(b => b.Name).Titled("Name").Filterable(true).SetWidth(10);
+            if (Model.ShopCategoryId == 4)
+            {
+                columns.Add(b => b.ItemId).Titled("Item id").Filterable(true).SetWidth(10);
+            }
+            columns.Add()
+         .Encoded(false)
+         .Sanitized(false)
+         .RenderValueAs(b => new HtmlString
+                ("<input class='form-control input-mrp' value=" + b.MenuPrice + " />")).Titled("MRP").SetWidth(30);
+            columns.Add()
+        .Encoded(false)
+        .Sanitized(false)
+        .RenderValueAs(b => new HtmlString
+              ("<input class='form-control input-sellingprice' value=" + b.SellingPrice + " />")).Titled("Selling price").SetWidth(30);
+            columns.Add()
+        .Encoded(false)
+        .Sanitized(false)
+        .RenderValueAs(b => new HtmlString
+              ("<input class='form-control input-qty' value=" + b.Quantity + " />")).Titled("Qty").SetWidth(30);
+            if (Model.ShopCategoryId == 4)
+            {
+                columns.Add()
+                 .Encoded(false)
+                 .Sanitized(false)
+                  .RenderValueAs(b => new HtmlString
+                           ("<select class='form-control select-discountcategory'></select>")).Titled("Discount Category").SetWidth(30);
+            }
+            columns.Add()
+         .Encoded(false)
+         .Sanitized(false)
+         .RenderValueAs(b => new HtmlString
+                ("<input type='button' class='btn btn-sm btn-success btn-update-price' value='Update' data-id="+b.Id+" />")).Titled("Action").Css("text-center").SetWidth(5);
+        }).WithPaging(20).Sortable(true)
+            <input type="hidden" name="DiscountCategoryName" />
+        </div>
+        </div>
+    </div>
+        @section Scripts
 {
-    columns.Add(b => b.Name).Titled("Name").Filterable(true).SetWidth(10);
-    columns.Add(b => b.ItemId).Titled("Item id").Filterable(true).SetWidth(10);
-    columns.Add()
- .Encoded(false)
- .Sanitized(false)
- .RenderValueAs(b => new HtmlString
-        ("<input class='form-control input-mrp' value=" + b.MenuPrice + " />")).Titled("MRP").SetWidth(30);
-    columns.Add()
-.Encoded(false)
-.Sanitized(false)
-.RenderValueAs(b => new HtmlString
-      ("<input class='form-control input-sellingprice' value=" + b.SellingPrice + " />")).Titled("Selling price").SetWidth(30);
-    columns.Add()
-.Encoded(false)
-.Sanitized(false)
-.RenderValueAs(b => new HtmlString
-      ("<input class='form-control input-qty' value=" + b.Quantity + " />")).Titled("Qty").SetWidth(30);
-    columns.Add()
- .Encoded(false)
- .Sanitized(false)
- .RenderValueAs(b => new HtmlString
-        ("<input type='button' class='btn btn-sm btn-success btn-update-price' value='Update' data-id="+b.Id+" />")).Titled("Action").Css("text-center").SetWidth(5);
-}).WithPaging(20).Sortable(true)
-</div>
+            <script src="~/Scripts/select2/js/select2.js"></script>
+            <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+            <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+            <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+            <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+            <script>
+                $(document).ready(function () {
+                    $('#select-shop').select2({
+                        placeholder: "Search Shop",
+                        ajax: {
+                            url: "/Product/GetActiveShopSelect2",
+                            width: '100%',
+                            delay: 250,
+                            dataType: 'json'
+                        }
+                    }).on('select2:select', function (e) {
+                        $('input[name="ShopName"]').val(e.params.data.text);
+                    });
 
-@section Scripts
-{
-    <script src="~/Scripts/select2/js/select2.js"></script>
-    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
-    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
-    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
-    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
-    <script>
-        $(document).ready(function () {
-            $('#select-shop').select2({
-                placeholder: "Search Shop",
-                ajax: {
-                    url: "/Product/GetActiveShopSelect2",
-                    width: '100%',
-                    delay: 250,
-                    dataType: 'json'
-                }
-            }).on('select2:select', function (e) {
-                $('input[name="ShopName"]').val(e.params.data.text);
-            });
+                    $('.select-discountcategory').select2({
+                        placeholder: "Search Discount",
+                        ajax: {
+                            url: "/Product/GetMedicalDiscountCategorySelect2",
+                            width: '100%',
+                            delay: 250,
+                            dataType: 'json'
+                        }
+                    }).on('select2:select', function (e) {
+                        $('input[name="DiscountCategoryName"]').val(e.params.data.text);
+                    });
 
-            $('.btn-update-price').on('click', function () {
-                var tr = $(this).closest('tr');
-                var mrp = tr.find('.input-mrp').val();
-                var price = tr.find('.input-sellingprice').val();
-                var qty = tr.find('.input-qty').val();
-                var id = tr.find('.btn-update-price').data('id');
-                $.post('/Product/UpdatePriceAndQuantity', { id: id, mrp: mrp, price: price, qty: qty }, function (data) {
-                    if (data) {
-                        swal('Success!', 'Updated Successfully', 'success');
-                        tr.find('.input-mrp').val('');
-                        tr.find('.input-sellingprice').val('');
-                        tr.find('.input-qty').val('');
-                        window.location.reload();
-                    }
-                    else
-                        swal('Warning!', 'Something went wrong', 'warning');
+
+                    $('.btn-update-price').on('click', function () {
+                        var tr = $(this).closest('tr');
+                        var mrp = tr.find('.input-mrp').val();
+                        var price = tr.find('.input-sellingprice').val();
+                        var qty = tr.find('.input-qty').val();
+                        var id = tr.find('.btn-update-price').data('id');
+                        var discatid = tr.find('.select-discountcategory').val();
+                        var discatname = $('input[name="DiscountCategoryName"]').val();
+                        $.post('/Product/UpdatePriceAndQuantityAndDiscount', { id: id, mrp: mrp, price: price, qty: qty, discatid: discatid, discatname: discatname }, function (data) {
+                            if (data) {
+                                swal('Success!', 'Updated Successfully', 'success');
+                                //tr.find('.input-mrp').val('');
+                                //tr.find('.input-sellingprice').val('');
+                                //tr.find('.input-qty').val('');
+                                window.location.reload();
+                            }
+                            else
+                                swal('Warning!', 'Something went wrong', 'warning');
+                        });
+                    });
+
                 });
-            });
+            </script>
 
-        });
-    </script>
-
-}
+        }
