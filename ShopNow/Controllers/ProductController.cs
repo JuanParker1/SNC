@@ -1718,6 +1718,9 @@ namespace ShopNow.Controllers
 
         public ActionResult ZeroPriceList(ProductZeroPriceList model)
         {
+            if (model.ShopId != 0)
+                model.ShopCategoryId = db.Shops.FirstOrDefault(i => i.Id == model.ShopId).ShopCategoryId;
+
             model.ListItems = db.Products.Where(i => i.MasterProductId != 0 && (i.MenuPrice == 0 || i.Price == 0) && i.Status == 0  && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
                 .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
                 .Select(i => new ProductZeroPriceList.ListItem
@@ -1734,7 +1737,7 @@ namespace ShopNow.Controllers
 
         public ActionResult InactiveList(ProductInactiveList model)
         {
-            model.ListItems = db.Products.Where(i => i.MasterProductId != 0 && i.Status == 1 && (i.MenuPrice != 0 || i.Price != 0) && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
+            model.ListItems = db.Products.Where(i => i.MasterProductId != 0 && i.Status == 1  && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
                 .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
                 .Select(i => new ProductInactiveList.ListItem
                 {
@@ -1748,12 +1751,17 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        public JsonResult UpdatePriceAndQuantity(long id, double mrp, double price, int qty)
+        public JsonResult UpdatePriceAndQuantityAndDiscount(long id, double mrp, double price, int qty,int discatid=0, string discatname = "")
         {
             var product = db.Products.FirstOrDefault(i => i.Id == id);
             product.MenuPrice = mrp;
             product.Price = price;
             product.Qty = qty;
+            if (discatid!=0 && !(string.IsNullOrEmpty(discatname)))
+            {
+                product.DiscountCategoryId = discatid;
+                product.DiscountCategoryName = discatname;
+            }
             db.Entry(product).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);
@@ -1766,6 +1774,18 @@ namespace ShopNow.Controllers
             db.Entry(product).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<JsonResult> GetMedicalDiscountCategorySelect2(string q = "")
+        {
+            var model = await db.DiscountCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q))
+                .Select(i => new
+                {
+                    id = i.Id,
+                    text = i.Name
+                }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)

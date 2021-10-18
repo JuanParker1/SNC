@@ -76,6 +76,18 @@ namespace ShopNow.ViewModels
             public int Quantity { get; set; }
             public double UnitPrice { get; set; }
             public double Price { get; set; }
+            public int AddonType { get; set; }
+            public bool HasAddon { get; set; }
+
+            public List<AddonListItem> AddonListItems { get; set; }
+            public class AddonListItem
+            {
+                public string PortionName { get; set; }
+                public double PortionPrice { get; set; }
+                public string CrustName { get; set; }
+                public string AddonName { get; set; }
+                public double AddonPrice { get; set; }
+            }
         }
     }
 

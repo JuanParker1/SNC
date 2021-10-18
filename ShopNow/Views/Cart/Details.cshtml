@@ -18,102 +18,103 @@
         padding-left: 13% !important;
         padding-right: 13% !important
     }
+
     #progressbar {
-    margin-bottom: 30px;
-    overflow: hidden;
-    color: #455A64;
-    padding-left: 0px;
-    margin-top: 30px
-}
+        margin-bottom: 30px;
+        overflow: hidden;
+        color: #455A64;
+        padding-left: 0px;
+        margin-top: 30px
+    }
 
-#progressbar li {
-    list-style-type: none;
-    font-size: 13px;
-    width: 25%;
-    float: left;
-    position: relative;
-    font-weight: 400
-}
+        #progressbar li {
+            list-style-type: none;
+            font-size: 13px;
+            width: 25%;
+            float: left;
+            position: relative;
+            font-weight: 400
+        }
 
-#progressbar .step0:before {
-    font-family: FontAwesome;
-    content: "\f10c";
-    color: #fff
-}
+        #progressbar .step0:before {
+            font-family: FontAwesome;
+            content: "\f10c";
+            color: #fff
+        }
 
-#progressbar li:before {
-    width: 40px;
-    height: 40px;
-    line-height: 45px;
-    display: block;
-    font-size: 20px;
-    background: #C5CAE9;
-    border-radius: 50%;
-    margin: auto;
-    padding: 0px
-}
+        #progressbar li:before {
+            width: 40px;
+            height: 40px;
+            line-height: 45px;
+            display: block;
+            font-size: 20px;
+            background: #C5CAE9;
+            border-radius: 50%;
+            margin: auto;
+            padding: 0px
+        }
 
-#progressbar li:after {
-    content: '';
-    width: 100%;
-    height: 12px;
-    background: #C5CAE9;
-    position: absolute;
-    left: 0;
-    top: 16px;
-    z-index: -1
-}
+        #progressbar li:after {
+            content: '';
+            width: 100%;
+            height: 12px;
+            background: #C5CAE9;
+            position: absolute;
+            left: 0;
+            top: 16px;
+            z-index: -1
+        }
 
-#progressbar li:last-child:after {
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-    position: absolute;
-    left: -50%
-}
+        #progressbar li:last-child:after {
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+            position: absolute;
+            left: -50%
+        }
 
-#progressbar li:nth-child(2):after,
-#progressbar li:nth-child(3):after {
-    left: -50%
-}
+        #progressbar li:nth-child(2):after,
+        #progressbar li:nth-child(3):after {
+            left: -50%
+        }
 
-#progressbar li:first-child:after {
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-    position: absolute;
-    left: 50%
-}
+        #progressbar li:first-child:after {
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            position: absolute;
+            left: 50%
+        }
 
-#progressbar li:last-child:after {
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px
-}
+        #progressbar li:last-child:after {
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px
+        }
 
-#progressbar li:first-child:after {
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px
-}
+        #progressbar li:first-child:after {
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px
+        }
 
         #progressbar li.active:before,
         #progressbar li.active:after {
             background: #28a745
         }
 
-#progressbar li.active:before {
-    font-family: FontAwesome;
-    content: "\f00c"
-}
+        #progressbar li.active:before {
+            font-family: FontAwesome;
+            content: "\f00c"
+        }
 
-.icon {
-    width: 60px;
-    height: 60px;
-    margin-right: 15px
-}
+    .icon {
+        width: 60px;
+        height: 60px;
+        margin-right: 15px
+    }
 
-.icon-content {
-    padding-bottom: 20px
-}
+    .icon-content {
+        padding-bottom: 20px
+    }
 
-/*danger*/
+    /*danger*/
     #progressbar li.active-danger:before,
     #progressbar li.active-danger:after {
         background: #dc3545;
@@ -125,11 +126,11 @@
     }
 
 
-@@media screen and (max-width: 992px) {
-    .icon-content {
-        width: 50%
+    @@media screen and (max-width: 992px) {
+        .icon-content {
+            width: 50%
+        }
     }
-}
 </style>
 <div class="px-3 mb-3">
     <div class="d-flex flex-row my-3">
@@ -327,7 +328,52 @@
                             {
                                 <tr>
                                     <td></td>
-                                    <td>@item.ProductName</td>
+                                    <td>
+                                        <b>@item.ProductName </b><br/>
+                                        @if (item.HasAddon == true)
+                                        {
+                                            foreach (var addon in item.AddonListItems)
+                                            {
+                                                if (item.AddonType == 1)
+                                                {
+                                                    if (item.UnitPrice == addon.PortionPrice)
+                                                    {
+                                                    <span>@addon.PortionName - @addon.PortionPrice</span><br />
+                                                    }
+                                                }
+                                                else if (item.AddonType == 2)
+                                                {
+                                                    <span>@addon.AddonName - @addon.AddonPrice</span><br />
+                                                }
+                                                else if (item.AddonType == 3)
+                                                {
+                                                    if (addon.AddonPrice == 0)
+                                                    {
+                                                        <span>@addon.PortionName - @addon.PortionPrice</span><br />
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>@addon.AddonName - @addon.AddonPrice</span><br />
+                                                    }
+                                                }
+                                                else if (item.AddonType == 4)
+                                                {
+                                                    if (addon.AddonPrice == 0 && addon.PortionPrice == 0)
+                                                    {
+                                                        <span>@addon.CrustName</span><br />
+                                                    }
+                                                    else if (addon.PortionPrice != 0)
+                                                    {
+                                                        <span>@addon.PortionName - @addon.PortionPrice</span><br />
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>@addon.AddonName - @addon.AddonPrice</span><br />
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    </td>
                                     <td>@item.BrandName</td>
                                     <td>@item.CategoryName</td>
                                     <td>@item.Quantity</td>
@@ -494,7 +540,7 @@
                     "<'row'<'col-sm-5'i><'col-sm-3'l><'col-sm-4'p>>" +
                     "<'row'<'col-sm-12'tr>>",
                 "bPaginate": false,
-                "scrollY": 300,
+                "scrollY": 400,
                 "paging": true,
                 "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "ALL"]],
                 "pageLength": 20,

@@ -94,6 +94,7 @@ namespace ShopNow.ViewModels
             public string Address { get; set; }
             public TimeSpan? NextOnTime { get; set; }
             // public List<Models.Banner> List { get; set; }
+            public double OfferPercentage { get; set; }
         }
     }
 

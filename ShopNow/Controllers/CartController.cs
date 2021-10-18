@@ -469,7 +469,17 @@ namespace ShopNow.Controllers
                         Price = i.Price,
                         ProductName = i.ProductName,
                         Quantity = i.Quantity,
-                        UnitPrice = i.UnitPrice
+                        UnitPrice = i.UnitPrice,
+                        AddonType = i.AddOnType,
+                        HasAddon = i.HasAddon,
+                        AddonListItems = db.OrderItemAddons.Where(a => a.OrderItemId == i.Id)
+                        .Select(a=>new CartDetailsViewModel.ListItem.AddonListItem {
+                            AddonName = a.AddonName,
+                            AddonPrice = a.AddonPrice,
+                            CrustName = a.CrustName,
+                            PortionName = a.PortionName,
+                            PortionPrice = a.PortionPrice
+                        }).ToList()
                     }).ToList();
             }
             return View(model);

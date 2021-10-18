@@ -988,8 +988,8 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             var model = new ShopCreditViewModel();
-            model.ListItems = db.ShopCredits.Where(i => i.PlatformCredit <= 200 || i.DeliveryCredit <= 250) //Low credits
-                .Join(db.Shops, sc => sc.CustomerId, s => s.CustomerId, (sc, s) => new { sc, s })
+            model.ListItems = db.ShopCredits.Where(i => i.PlatformCredit <= 100 && i.DeliveryCredit <= 100) //Low credits
+                .Join(db.Shops.Where(i=>i.IsTrail == false), sc => sc.CustomerId, s => s.CustomerId, (sc, s) => new { sc, s })
                 .Select(i => new ShopCreditViewModel.ListItem
                 {
                     DeliveryCredit = i.sc.DeliveryCredit,
