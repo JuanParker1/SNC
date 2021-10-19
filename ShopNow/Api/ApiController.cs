@@ -1931,6 +1931,8 @@ namespace ShopNow.Controllers
                      RefundRemark = i.o.p.RefundRemark,
                      PaymentMode = i.o.p.PaymentMode,
                      WalletAmount = i.o.o.WalletAmount,
+                     IsPreorder = i.o.o.IsPreorder,
+                     PreorderDeliveryDateTime = i.o.o.PreorderDeliveryDateTime,
                      //OrderItemList = i.oi.ToList(),
                      OrderItemLists = i.oi.Select(a => new GetAllOrderListViewModel.OrderList.OrderItemList
                      {
@@ -1999,8 +2001,10 @@ namespace ShopNow.Controllers
                          RefundRemark = i.o.p.RefundRemark,
                          PaymentMode = i.o.p.PaymentMode,
                          WalletAmount = i.o.o.WalletAmount,
-                     //OrderItemList = i.oi.ToList(),
-                     OrderItemLists = i.oi.Select(a => new GetAllOrderListViewModel.OrderList.OrderItemList
+                         IsPreorder = i.o.o.IsPreorder,
+                         PreorderDeliveryDateTime = i.o.o.PreorderDeliveryDateTime,
+                         //OrderItemList = i.oi.ToList(),
+                         OrderItemLists = i.oi.Select(a => new GetAllOrderListViewModel.OrderList.OrderItemList
                          {
                              AddOnType = a.AddOnType,
                              BrandId = a.BrandId,
@@ -2097,6 +2101,8 @@ namespace ShopNow.Controllers
                      Onwork = db.DeliveryBoys.Any(a => a.Id == i.o.o.DeliveryBoyId) ? db.DeliveryBoys.FirstOrDefault(a => a.Id == i.o.o.DeliveryBoyId).OnWork : 0,
                      WalletAmount = i.o.o.WalletAmount,
                      OrderReadyTime = i.o.o.OrderReadyTime,
+                     IsPreorder = i.o.o.IsPreorder,
+                     PreorderDeliveryDateTime = i.o.o.PreorderDeliveryDateTime,
                      //OrderItemList = i.oi.ToList(), 
                      OrderItemLists = i.oi.Select(a => new GetAllOrderListViewModel.OrderList.OrderItemList
                      {
