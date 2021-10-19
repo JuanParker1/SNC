@@ -50,6 +50,8 @@ namespace ShopNow.ViewModels
             public List<OrderItemList> OrderItemLists { get; set; }
             public class OrderItemList
             {
+                public int ShopId { get; set; }
+                public string ShopName { get; set; }
                 public long OrderId { get; set; }
                 public int OrdeNumber { get; set; }
                 public long ProductId { get; set; }

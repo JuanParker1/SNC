@@ -4393,6 +4393,8 @@ namespace ShopNow.Controllers
                          ProductName = a.ProductName,
                          Quantity = a.Quantity,
                          UnitPrice = a.UnitPrice,
+                         ShopId = i.o.o.ShopId,
+                         ShopName = i.o.o.ShopName,
                          OrderItemAddonLists = db.OrderItemAddons.Where(b=>b.OrderItemId == a.Id).Select(b=>new GetAllOrderListViewModel.OrderList.OrderItemList.OrderItemAddonList {
                              AddonName = b.AddonName,
                              AddonPrice = b.AddonPrice,
