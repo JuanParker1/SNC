@@ -45,6 +45,8 @@ namespace ShopNow.ViewModels
             public string RefundRemark { get; set; }
             public string PaymentMode { get; set; }
             public int Onwork { get; set; }
+            public bool? IsPreorder { get; set; }
+            public DateTime? PreorderDeliveryDateTime { get; set; }
             public List<OrderItemList> OrderItemLists { get; set; }
             public class OrderItemList
             {
