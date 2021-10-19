@@ -180,7 +180,11 @@ namespace ShopNow.ViewModels
                         case 7:
                             return "Cancelled";
                         case 8:
-                            return "Order Prepared";
+                            return "Order Ready";
+                        case 9:
+                            return "Customer Cancelled";
+                        case 10:
+                            return "Customer Not Pickup";
                         default:
                             return "N/A";
                     }
@@ -408,6 +412,12 @@ namespace ShopNow.ViewModels
                             return "Delivered";
                         case 7:
                             return "Cancelled";
+                        case 8:
+                            return "Order Ready";
+                        case 9:
+                            return "Customer Cancelled";
+                        case 10:
+                            return "Customer Not Pickup";
                         default:
                             return "N/A";
                     }
