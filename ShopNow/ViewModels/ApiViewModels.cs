@@ -300,6 +300,8 @@ namespace ShopNow.ViewModels
         {
             public long Id { get; set; }
             public string Name { get; set; }
+            public int ShopId { get; set; }
+            public string ShopName { get; set; }
             public int CategoryId { get; set; }
             public string CategoryName { get; set; }
             public string ImagePath { get; set; }

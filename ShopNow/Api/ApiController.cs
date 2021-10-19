@@ -1891,9 +1891,9 @@ namespace ShopNow.Controllers
             db.Configuration.ProxyCreationEnabled = false;
             var model = new GetAllOrderListViewModel();
 
-            if (mode == 0)
-            {
-                model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && i.Status == 2)
+            //if (mode == 0)
+            //{
+                model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && (mode==0? i.Status == 2 :(i.Status==3 || i.Status==4 || i.Status==8)))
                  .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
                  .GroupJoin(db.OrderItems, o => o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
                  .Select(i => new GetAllOrderListViewModel.OrderList
@@ -1959,78 +1959,78 @@ namespace ShopNow.Controllers
                              PortionPrice = b.PortionPrice
                          }).ToList()
                      }).ToList()
-                 }).ToList();
-            }
-            else
-            {
-                model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && (i.Status == 3 || i.Status == 4 || i.Status == 8))
-                     .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
-                     .GroupJoin(db.OrderItems, o => o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
-                     .Select(i => new GetAllOrderListViewModel.OrderList
-                     {
-                         Convinenientcharge = i.o.o.Convinenientcharge,
-                         CustomerId = i.o.o.CustomerId,
-                         CustomerName = i.o.o.CustomerName,
-                         CustomerPhoneNumber = i.o.o.CustomerPhoneNumber,
-                     //DateStr = i.o.o.DateEncoded.ToString("dd-MMM-yyyy HH:mm"),
-                     DateEncoded = i.o.o.DateEncoded,
-                         DeliveryAddress = i.o.o.DeliveryAddress,
-                         DeliveryBoyId = i.o.o.DeliveryBoyId,
-                         DeliveryBoyName = i.o.o.DeliveryBoyName,
-                         DeliveryBoyPhoneNumber = i.o.o.DeliveryBoyPhoneNumber,
-                         DeliveryCharge = i.o.o.DeliveryCharge,
-                         Id = i.o.o.Id,
-                         NetDeliveryCharge = i.o.o.NetDeliveryCharge,
-                         OrderNumber = i.o.o.OrderNumber,
-                         Packingcharge = i.o.o.Packingcharge,
-                         PenaltyAmount = i.o.o.PenaltyAmount,
-                         PenaltyRemark = i.o.o.PenaltyRemark,
-                         ShopDeliveryDiscount = i.o.o.ShopDeliveryDiscount,
-                         ShopId = i.o.o.ShopId,
-                         ShopName = i.o.o.ShopName,
-                         ShopOwnerPhoneNumber = i.o.o.ShopOwnerPhoneNumber,
-                         ShopPhoneNumber = i.o.o.ShopPhoneNumber,
-                         Status = i.o.o.Status,
-                         TotalPrice = i.o.o.TotalPrice,
-                         TotalProduct = i.o.o.TotalProduct,
-                         TotalQuantity = i.o.o.TotalQuantity,
-                         NetTotal = i.o.o.NetTotal,
-                         WaitingCharge = i.o.o.WaitingCharge,
-                         WaitingRemark = i.o.o.WaitingRemark,
-                         RefundAmount = i.o.p.RefundAmount,
-                         RefundRemark = i.o.p.RefundRemark,
-                         PaymentMode = i.o.p.PaymentMode,
-                         WalletAmount = i.o.o.WalletAmount,
-                         IsPreorder = i.o.o.IsPreorder,
-                         PreorderDeliveryDateTime = i.o.o.PreorderDeliveryDateTime,
-                         //OrderItemList = i.oi.ToList(),
-                         OrderItemLists = i.oi.Select(a => new GetAllOrderListViewModel.OrderList.OrderItemList
-                         {
-                             AddOnType = a.AddOnType,
-                             BrandId = a.BrandId,
-                             BrandName = a.BrandName,
-                             CategoryId = a.CategoryId,
-                             CategoryName = a.CategoryName,
-                             HasAddon = a.HasAddon,
-                             ImagePath = a.ImagePath,
-                             OrdeNumber = a.OrdeNumber,
-                             OrderId = a.OrderId,
-                             Price = a.Price,
-                             ProductId = a.ProductId,
-                             ProductName = a.ProductName,
-                             Quantity = a.Quantity,
-                             UnitPrice = a.UnitPrice,
-                             OrderItemAddonLists = db.OrderItemAddons.Where(b => b.OrderItemId == a.Id).Select(b => new GetAllOrderListViewModel.OrderList.OrderItemList.OrderItemAddonList
-                             {
-                                 AddonName = b.AddonName,
-                                 AddonPrice = b.AddonPrice,
-                                 CrustName = b.CrustName,
-                                 PortionName = b.PortionName,
-                                 PortionPrice = b.PortionPrice
-                             }).ToList()
-                         }).ToList()
-                     }).ToList();
-            }
+                 }).OrderByDescending(i=>i.Id).ToList();
+            //}
+            //else
+            //{
+            //    model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && (i.Status == 3 || i.Status == 4 || i.Status == 8))
+            //         .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
+            //         .GroupJoin(db.OrderItems, o => o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
+            //         .Select(i => new GetAllOrderListViewModel.OrderList
+            //         {
+            //             Convinenientcharge = i.o.o.Convinenientcharge,
+            //             CustomerId = i.o.o.CustomerId,
+            //             CustomerName = i.o.o.CustomerName,
+            //             CustomerPhoneNumber = i.o.o.CustomerPhoneNumber,
+            //         //DateStr = i.o.o.DateEncoded.ToString("dd-MMM-yyyy HH:mm"),
+            //         DateEncoded = i.o.o.DateEncoded,
+            //             DeliveryAddress = i.o.o.DeliveryAddress,
+            //             DeliveryBoyId = i.o.o.DeliveryBoyId,
+            //             DeliveryBoyName = i.o.o.DeliveryBoyName,
+            //             DeliveryBoyPhoneNumber = i.o.o.DeliveryBoyPhoneNumber,
+            //             DeliveryCharge = i.o.o.DeliveryCharge,
+            //             Id = i.o.o.Id,
+            //             NetDeliveryCharge = i.o.o.NetDeliveryCharge,
+            //             OrderNumber = i.o.o.OrderNumber,
+            //             Packingcharge = i.o.o.Packingcharge,
+            //             PenaltyAmount = i.o.o.PenaltyAmount,
+            //             PenaltyRemark = i.o.o.PenaltyRemark,
+            //             ShopDeliveryDiscount = i.o.o.ShopDeliveryDiscount,
+            //             ShopId = i.o.o.ShopId,
+            //             ShopName = i.o.o.ShopName,
+            //             ShopOwnerPhoneNumber = i.o.o.ShopOwnerPhoneNumber,
+            //             ShopPhoneNumber = i.o.o.ShopPhoneNumber,
+            //             Status = i.o.o.Status,
+            //             TotalPrice = i.o.o.TotalPrice,
+            //             TotalProduct = i.o.o.TotalProduct,
+            //             TotalQuantity = i.o.o.TotalQuantity,
+            //             NetTotal = i.o.o.NetTotal,
+            //             WaitingCharge = i.o.o.WaitingCharge,
+            //             WaitingRemark = i.o.o.WaitingRemark,
+            //             RefundAmount = i.o.p.RefundAmount,
+            //             RefundRemark = i.o.p.RefundRemark,
+            //             PaymentMode = i.o.p.PaymentMode,
+            //             WalletAmount = i.o.o.WalletAmount,
+            //             IsPreorder = i.o.o.IsPreorder,
+            //             PreorderDeliveryDateTime = i.o.o.PreorderDeliveryDateTime,
+            //             //OrderItemList = i.oi.ToList(),
+            //             OrderItemLists = i.oi.Select(a => new GetAllOrderListViewModel.OrderList.OrderItemList
+            //             {
+            //                 AddOnType = a.AddOnType,
+            //                 BrandId = a.BrandId,
+            //                 BrandName = a.BrandName,
+            //                 CategoryId = a.CategoryId,
+            //                 CategoryName = a.CategoryName,
+            //                 HasAddon = a.HasAddon,
+            //                 ImagePath = a.ImagePath,
+            //                 OrdeNumber = a.OrdeNumber,
+            //                 OrderId = a.OrderId,
+            //                 Price = a.Price,
+            //                 ProductId = a.ProductId,
+            //                 ProductName = a.ProductName,
+            //                 Quantity = a.Quantity,
+            //                 UnitPrice = a.UnitPrice,
+            //                 OrderItemAddonLists = db.OrderItemAddons.Where(b => b.OrderItemId == a.Id).Select(b => new GetAllOrderListViewModel.OrderList.OrderItemList.OrderItemAddonList
+            //                 {
+            //                     AddonName = b.AddonName,
+            //                     AddonPrice = b.AddonPrice,
+            //                     CrustName = b.CrustName,
+            //                     PortionName = b.PortionName,
+            //                     PortionPrice = b.PortionPrice
+            //                 }).ToList()
+            //             }).ToList()
+            //         }).OrderByDescending(i => i.Id).ToList();
+            //}
 
             int count = model.OrderLists.Count();
             int CurrentPage = page;
@@ -2129,7 +2129,7 @@ namespace ShopNow.Controllers
                              PortionPrice = b.PortionPrice
                          }).ToList()
                      }).ToList()
-                 }).ToList();
+                 }).OrderByDescending(i => i.DateEncoded).ToList();
 
             int count = model.OrderLists.Count();
             int CurrentPage = page;
@@ -4723,6 +4723,8 @@ namespace ShopNow.Controllers
                         TotalPrice = i.p.oi.Quantity * i.p.p.Price,
                         Id = i.p.p.Id,
                         Name = i.m.Name,
+                        ShopId = i.p.p.ShopId,
+                        ShopName = i.p.p.ShopName,
                         Quantity = i.p.oi.Quantity,
                         Price = i.p.p.Price,
                         ColorCode = i.m.ColorCode,
