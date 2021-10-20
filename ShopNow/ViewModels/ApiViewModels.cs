@@ -465,6 +465,7 @@ namespace ShopNow.ViewModels
         public string ImagePath { get; set; }
         public string AudioPath { get; set; }
         public string Remarks { get; set; }
+        public int ShopId { get; set; }
     }
 
     public class CustomerPrescriptionListViewModel
