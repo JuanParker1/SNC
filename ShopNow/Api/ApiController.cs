@@ -2345,7 +2345,7 @@ namespace ShopNow.Controllers
                                       join m in db.MasterProducts on pl.MasterProductId equals m.Id
                                       join nsc in db.NextSubCategories on m.NextSubCategoryId equals nsc.Id into cat
                                       from nsc in cat.DefaultIfEmpty()
-                                      where pl.ShopId == shopId && pl.Status == 0 && pl.Price != 0 && m.Name.ToLower().Contains(str) && (categoryId != 0 ? m.CategoryId == categoryId : true)
+                                      where pl.ShopId == shopId && pl.Status == 0 && pl.Price != 0 && m.Name.ToLower().Contains(str) && (categoryId != 0 ? nsc.Id == categoryId : true)
                                       select new ShopDetails.ProductList
                                       {
                                           Id = pl.Id,
@@ -2366,7 +2366,6 @@ namespace ShopNow.Controllers
                                           Weight = m.Weight,
                                           IsPreorder = pl.IsPreorder,
                                           PreorderHour = pl.PreorderHour
-                                          //IsOffer = pl.Id != 0 ? GetOfferCheck(pl.Id) : false
                                       }).Where(i => i.Price != 0).ToList();
             }
             return new JsonResult()
