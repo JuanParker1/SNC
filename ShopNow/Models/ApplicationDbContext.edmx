@@ -417,6 +417,17 @@
           <Property Name="LinkedMasterProductIds" Type="nvarchar(max)" />
           <Property Name="LinkedMasterProductName" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="CustomerWalletHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerId" Type="int" Nullable="false" />
+          <Property Name="Amount" Type="float" Nullable="false" />
+          <Property Name="Type" Type="int" Nullable="false" />
+          <Property Name="DateEncoded" Type="datetime" />
+          <Property Name="Description" Type="nvarchar(max)" />
+        </EntityType>
         <EntityType Name="DeliveryBoys">
           <Key>
             <PropertyRef Name="Id" />
@@ -1604,6 +1615,7 @@
           <EntitySet Name="CustomerReview" EntityType="Self.CustomerReview" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerSearchData" EntityType="Self.CustomerSearchData" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustomerWalletHistory" EntityType="Self.CustomerWalletHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DeliveryBoys" EntityType="Self.DeliveryBoys" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DeliveryBoyShops" EntityType="Self.DeliveryBoyShops" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DeliveryCharge" EntityType="Self.DeliveryCharge" Schema="dbo" store:Type="Tables" />
@@ -2745,6 +2757,7 @@
             <End Role="OrderItem" EntitySet="OrderItems" />
           </AssociationSet>
           <EntitySet Name="CustomerSearchDatas" EntityType="sncModel.CustomerSearchData" />
+          <EntitySet Name="CustomerWalletHistories" EntityType="sncModel.CustomerWalletHistory" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3465,6 +3478,17 @@
           <Property Name="ResultCount" Type="Int32" Nullable="false" />
           <Property Name="LinkedMasterProductIds" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="LinkedMasterProductName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="CustomerWalletHistory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="Amount" Type="Double" Nullable="false" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Precision="3" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -5044,6 +5068,18 @@
                 <ScalarProperty Name="ResultCount" ColumnName="ResultCount" />
                 <ScalarProperty Name="SearchKeyword" ColumnName="SearchKeyword" />
                 <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerWalletHistories">
+            <EntityTypeMapping TypeName="sncModel.CustomerWalletHistory">
+              <MappingFragment StoreEntitySet="CustomerWalletHistory">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
