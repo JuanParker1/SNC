@@ -635,10 +635,12 @@ namespace ShopNow.ViewModels
             public int ItemId { get; set; }
             public bool HasAddon { get; set; }
             public int AddOnType { get; set; }
+            public int AddOnIndex { get; set; }
 
             public List<AddOnListItem> AddOnListItems { get; set; }
             public class AddOnListItem
             {
+                public int Index { get; set; }
                 public long ProductId { get; set; }
                 public int AddonId { get; set; }
                 public string AddonName { get; set; }
