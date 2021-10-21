@@ -498,6 +498,9 @@
     <Compile Include="Models\CustomerSearchData.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CustomerWalletHistory.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DeliveryBoy.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
