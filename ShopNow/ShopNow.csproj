@@ -406,6 +406,7 @@
     </Compile>
     <Compile Include="Global\Common.cs" />
     <Compile Include="Global\Utility.cs" />
+    <Compile Include="Helpers\AchievementHelpers.cs" />
     <Compile Include="Helpers\AdminHelpers.cs" />
     <Compile Include="Helpers\CallHelpers.cs" />
     <Compile Include="Helpers\CommonHelpers.cs" />

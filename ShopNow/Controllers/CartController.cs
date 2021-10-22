@@ -1311,6 +1311,9 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
             }
 
+            //Update Achievement Wallet
+            Helpers.AchievementHelpers.UpdateAchievements(order.CustomerId);
+
             string fcmtocken = customerDetails.FcmTocken ?? "";
 
             Helpers.PushNotification.SendbydeviceId("Your order has been delivered.", "ShopNowChat", "a.mp3", fcmtocken);
