@@ -4776,6 +4776,8 @@ namespace ShopNow.Controllers
                         Weight = i.m.Weight,
                         IsPreorder = i.p.p.IsPreorder,
                         PreorderHour = i.p.p.PreorderHour,
+                        AddOnType = i.p.oi.AddOnType,
+                        HasAddon = i.p.oi.HasAddon,
                         OrderItemAddonLists = db.OrderItemAddons.Where(a => a.OrderItemId == i.p.oi.Id).Select(a => new OrderDetailsApiViewModel.OrderItemList.OrderItemAddonList {
                             AddonId = a.AddonId,
                             AddonName = a.AddonName,
@@ -5144,7 +5146,7 @@ namespace ShopNow.Controllers
                                 {
                                     if (item.DayLimit > 0)
                                     {
-                                        var orderListSelectShop = db.Orders.Where(i => i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded.AddDays(item.DayLimit)))).Select(i => i.ShopId); 
+                                        var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded.AddDays(item.DayLimit)))).Select(i => i.ShopId); 
                                         var shopCategoryCount = db.Shops.Where(i => orderListSelectShop.Contains(i.Id)).GroupBy(i => i.ShopCategoryId).Count();
                                         if (shopCategoryCount == item.CountValue)
                                         {
@@ -5157,7 +5159,7 @@ namespace ShopNow.Controllers
                                         }
                                     } else
                                     {
-                                        var orderListSelectShop = db.Orders.Where(i => i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Select(i => i.ShopId);
+                                        var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Select(i => i.ShopId);
                                         var shopCategoryCount = db.Shops.Where(i => orderListSelectShop.Contains(i.Id)).GroupBy(i => i.ShopCategoryId).Count();
                                         if (shopCategoryCount == item.CountValue)
                                         {
@@ -5175,7 +5177,7 @@ namespace ShopNow.Controllers
                             else {
                                 if (item.DayLimit > 0)
                                 {
-                                    var orderListSelectShop = db.Orders.Where(i => i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementStartDateTime.AddDays(item.DayLimit)))).Select(i => i.ShopId);
+                                    var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementStartDateTime.AddDays(item.DayLimit)))).Select(i => i.ShopId);
                                     var shopCategoryCount = db.Shops.Where(i => orderListSelectShop.Contains(i.Id)).GroupBy(i => i.ShopCategoryId).Count();
                                     if (shopCategoryCount == item.CountValue)
                                     {
@@ -5188,7 +5190,7 @@ namespace ShopNow.Controllers
                                 }
                                 else
                                 {
-                                    var orderListSelectShop = db.Orders.Where(i => i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Select(i => i.ShopId);
+                                    var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Select(i => i.ShopId);
                                     var shopCategoryCount = db.Shops.Where(i => orderListSelectShop.Contains(i.Id)).GroupBy(i => i.ShopCategoryId).Count();
                                     if (shopCategoryCount == item.CountValue)
                                     {
@@ -5202,6 +5204,67 @@ namespace ShopNow.Controllers
                             }
                             break;
                         case 2:
+                            if (item.HasAccept == true)
+                            {
+                                var customerAcceptedAchievements = db.CustomerAchievements.FirstOrDefault(i => i.Status == 1 && i.CustomerId == customer.Id && i.AchievementId == item.Id);
+                                if (customerAcceptedAchievements != null)
+                                {
+                                    if (item.DayLimit > 0)
+                                    {
+                                        var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded.AddDays(item.DayLimit)))).GroupBy(i => i.ShopId).Count();
+                                        if (orderListShopCount == item.CountValue)
+                                        {
+                                            customer.WalletAmount += item.Amount;
+                                            db.Entry(customer).State = EntityState.Modified;
+                                            db.SaveChanges();
+
+                                            //Wallet History
+                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).GroupBy(i => i.ShopId).Count();
+                                        if (orderListShopCount == item.CountValue)
+                                        {
+                                            customer.WalletAmount += item.Amount;
+                                            db.Entry(customer).State = EntityState.Modified;
+                                            db.SaveChanges();
+
+                                            //Wallet History
+                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+                                        }
+                                    }
+
+                                }
+                            }
+                            else
+                            {
+                                if (item.DayLimit > 0)
+                                {
+                                    var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementStartDateTime.AddDays(item.DayLimit)))).GroupBy(i => i.ShopId).Count();
+                                    if (orderListShopCount == item.CountValue)
+                                    {
+                                        customer.WalletAmount += item.Amount;
+                                        db.Entry(customer).State = EntityState.Modified;
+                                        db.SaveChanges();
+                                        //Wallet History
+                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+                                    }
+                                }
+                                else
+                                {
+                                    var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).GroupBy(i => i.ShopId).Count();
+                                    if (orderListShopCount == item.CountValue)
+                                    {
+                                        customer.WalletAmount += item.Amount;
+                                        db.Entry(customer).State = EntityState.Modified;
+                                        db.SaveChanges();
+                                        //Wallet History
+                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+                                    }
+                                }
+                            }
                             break;
                         case 3:
                             break;
@@ -5210,6 +5273,67 @@ namespace ShopNow.Controllers
                         case 5:
                             break;
                         case 6:
+                            if (item.HasAccept == true)
+                            {
+                                var customerAcceptedAchievements = db.CustomerAchievements.FirstOrDefault(i => i.Status == 1 && i.CustomerId == customer.Id && i.AchievementId == item.Id);
+                                if (customerAcceptedAchievements != null)
+                                {
+                                    if (item.DayLimit > 0)
+                                    {
+                                        var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded.AddDays(item.DayLimit)))).Count();
+                                        if (orderListCount == item.CountValue)
+                                        {
+                                            customer.WalletAmount += item.Amount;
+                                            db.Entry(customer).State = EntityState.Modified;
+                                            db.SaveChanges();
+
+                                            //Wallet History
+                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Count();
+                                        if (orderListCount == item.CountValue)
+                                        {
+                                            customer.WalletAmount += item.Amount;
+                                            db.Entry(customer).State = EntityState.Modified;
+                                            db.SaveChanges();
+
+                                            //Wallet History
+                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+                                        }
+                                    }
+
+                                }
+                            }
+                            else
+                            {
+                                if (item.DayLimit > 0)
+                                {
+                                    var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementStartDateTime.AddDays(item.DayLimit)))).Count();
+                                    if (orderListCount == item.CountValue)
+                                    {
+                                        customer.WalletAmount += item.Amount;
+                                        db.Entry(customer).State = EntityState.Modified;
+                                        db.SaveChanges();
+                                        //Wallet History
+                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+                                    }
+                                }
+                                else
+                                {
+                                    var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Count();
+                                    if (orderListCount == item.CountValue)
+                                    {
+                                        customer.WalletAmount += item.Amount;
+                                        db.Entry(customer).State = EntityState.Modified;
+                                        db.SaveChanges();
+                                        //Wallet History
+                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+                                    }
+                                }
+                            }
                             break;
                         default:
                             break;

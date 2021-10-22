@@ -319,6 +319,8 @@ namespace ShopNow.ViewModels
             public double Weight { get; set; }
             public bool IsPreorder { get; set; }
             public int PreorderHour { get; set; }
+            public int AddOnType { get; set; }
+            public bool HasAddon { get; set; }
 
             public List<OrderItemAddonList> OrderItemAddonLists { get; set; }
             public class OrderItemAddonList
