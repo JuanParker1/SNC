@@ -180,7 +180,11 @@ namespace ShopNow.ViewModels
                         case 7:
                             return "Cancelled";
                         case 8:
-                            return "Order Prepared";
+                            return "Order Ready";
+                        case 9:
+                            return "Customer Cancelled";
+                        case 10:
+                            return "Customer Not Pickup";
                         default:
                             return "N/A";
                     }
@@ -408,6 +412,12 @@ namespace ShopNow.ViewModels
                             return "Delivered";
                         case 7:
                             return "Cancelled";
+                        case 8:
+                            return "Order Ready";
+                        case 9:
+                            return "Customer Cancelled";
+                        case 10:
+                            return "Customer Not Pickup";
                         default:
                             return "N/A";
                     }
@@ -625,10 +635,12 @@ namespace ShopNow.ViewModels
             public int ItemId { get; set; }
             public bool HasAddon { get; set; }
             public int AddOnType { get; set; }
+            public int AddOnIndex { get; set; }
 
             public List<AddOnListItem> AddOnListItems { get; set; }
             public class AddOnListItem
             {
+                public int Index { get; set; }
                 public long ProductId { get; set; }
                 public int AddonId { get; set; }
                 public string AddonName { get; set; }

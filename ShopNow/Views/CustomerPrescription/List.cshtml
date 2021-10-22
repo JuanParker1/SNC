@@ -26,7 +26,7 @@
                    columns.Add()
   .Encoded(false)
   .Sanitized(false)
-  .RenderValueAs(o => o.Status == 0  ? "<a href='#modal-add' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-add' class='btn btn-sm btn-primary btn-modal-add btn-block'>Add</a>" : "<span class='text-success'>Already Added</span><a href='#modal-added-item-list' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-added-item-list' class='btn-modal-added-item-list ml-2'><u>Check Items</u></a>").Titled("Action").SetWidth(5);
+  .RenderValueAs(o => o.Status == 0  ? "<a href='#modal-add' data-id='" + o.Id + "' data-shopid='"+o.ShopId+"' data-toggle='modal' data-target='#modal-add' class='btn btn-sm btn-primary btn-modal-add btn-block'>Add</a>" : "<span class='text-success'>Already Added</span><a href='#modal-added-item-list' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-added-item-list' class='btn-modal-added-item-list ml-2'><u>Check Items</u></a>").Titled("Action").SetWidth(5);
                }).Sortable(true)
                 </div>
             </div>
@@ -119,23 +119,35 @@
     <script>
         $(document).ready(function () {
             var itemArray = [];
-            $('#select-product').select2({
-                placeholder: "Select Product",
-                width: '100%',
-                ajax: {
-                    url: "/Banner/GetShopProductSelect2?shopid=123",
-                    delay: 250,
-                    dataType: 'json'
-                }
-            }).on('select2:select', function (e) {
-                $('input[name="ProductName"]').val(e.params.data.text);
-            });
+            //$('#select-product').select2({
+            //    placeholder: "Select Product",
+            //    width: '100%',
+            //    ajax: {
+            //        url: "/Banner/GetShopProductSelect2?shopid=123",
+            //        delay: 250,
+            //        dataType: 'json'
+            //    }
+            //}).on('select2:select', function (e) {
+            //    $('input[name="ProductName"]').val(e.params.data.text);
+            //});
 
 
             $(".btn-modal-add").click(function () {
                 $('[name="PrescriptionId"]').val($(this).data('id'));
                 $('[name="ShopId"]').val($(this).data('shopid'));
                 $('#modal-add').modal('show');
+
+                $('#select-product').select2({
+                    placeholder: "Select Product",
+                    width: '100%',
+                    ajax: {
+                        url: "/Banner/GetShopProductSelect2?shopid=" + $(this).data('shopid')+"",
+                        delay: 250,
+                        dataType: 'json'
+                    }
+                }).on('select2:select', function (e) {
+                    $('input[name="ProductName"]').val(e.params.data.text);
+                });
             });
 
             $('#btn-addtolist').on('click', function () {

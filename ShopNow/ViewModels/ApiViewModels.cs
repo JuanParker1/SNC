@@ -45,9 +45,13 @@ namespace ShopNow.ViewModels
             public string RefundRemark { get; set; }
             public string PaymentMode { get; set; }
             public int Onwork { get; set; }
+            public bool? IsPreorder { get; set; }
+            public DateTime? PreorderDeliveryDateTime { get; set; }
             public List<OrderItemList> OrderItemLists { get; set; }
             public class OrderItemList
             {
+                public int ShopId { get; set; }
+                public string ShopName { get; set; }
                 public long OrderId { get; set; }
                 public int OrdeNumber { get; set; }
                 public long ProductId { get; set; }
@@ -298,6 +302,8 @@ namespace ShopNow.ViewModels
         {
             public long Id { get; set; }
             public string Name { get; set; }
+            public int ShopId { get; set; }
+            public string ShopName { get; set; }
             public int CategoryId { get; set; }
             public string CategoryName { get; set; }
             public string ImagePath { get; set; }
@@ -459,6 +465,7 @@ namespace ShopNow.ViewModels
         public string ImagePath { get; set; }
         public string AudioPath { get; set; }
         public string Remarks { get; set; }
+        public int ShopId { get; set; }
     }
 
     public class CustomerPrescriptionListViewModel

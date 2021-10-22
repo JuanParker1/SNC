@@ -1165,7 +1165,7 @@ namespace ShopNow.Controllers
                         {
                             foreach (var addon in item.AddOnListItems)
                             {
-                                if (addon.ProductId == orderItem.ProductId)
+                                if (addon.Index == item.AddOnIndex)
                                 {
                                     var addonItem = _mapper.Map<OrderCreateViewModel.ListItem.AddOnListItem, OrderItemAddon>(addon);
                                     addonItem.Status = 0;
@@ -1732,11 +1732,23 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
 
                 var referralCustomer = db.Customers.FirstOrDefault(c => c.PhoneNumber == customerDetails.ReferralNumber);
-                if(referralCustomer !=null)
+                if (referralCustomer != null)
                 {
                     var referalAmount = db.ReferralSettings.Where(r => r.Status == 0 && r.ShopDistrict == shop.DistrictName).Select(r => r.Amount).FirstOrDefault();
                     referralCustomer.WalletAmount = referralCustomer.WalletAmount + referalAmount;
                     db.Entry(referralCustomer).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+
+                    //Wallet History for Referral
+                    var walletHistory = new CustomerWalletHistory
+                    {
+                        Amount = referalAmount,
+                        CustomerId = referralCustomer.Id,
+                        DateEncoded = DateTime.Now,
+                        Description = "Received from referral",
+                        Type = 1
+                    };
+                    db.CustomerWalletHistories.Add(walletHistory);
                     db.SaveChanges();
                 }
             }
@@ -1750,7 +1762,34 @@ namespace ShopNow.Controllers
                     customerDetails.WalletAmount += order.OfferAmount;
                     db.Entry(customerDetails).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
+
+                    //Wallet History for Wallet Offer
+                    var walletHistory = new CustomerWalletHistory
+                    {
+                        Amount = order.OfferAmount,
+                        CustomerId = customerDetails.Id,
+                        DateEncoded = DateTime.Now,
+                        Description = $"Received from offer({offer.Name})",
+                        Type = 1
+                    };
+                    db.CustomerWalletHistories.Add(walletHistory);
+                    db.SaveChanges();
                 }
+            }
+
+            if (order.WalletAmount > 0)
+            {
+                //Wallet History for Wallet Offer
+                var walletHistory = new CustomerWalletHistory
+                {
+                    Amount = order.WalletAmount,
+                    CustomerId = customerDetails.Id,
+                    DateEncoded = DateTime.Now,
+                    Description = $"Payment to Order(#{order.OrderNumber})",
+                    Type = 2
+                };
+                db.CustomerWalletHistories.Add(walletHistory);
+                db.SaveChanges();
             }
 
             string fcmtocken = customerDetails.FcmTocken ?? "";
@@ -1890,7 +1929,10 @@ namespace ShopNow.Controllers
         {
             db.Configuration.ProxyCreationEnabled = false;
             var model = new GetAllOrderListViewModel();
-            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && (mode == 0 ? i.Status == 2 : (i.Status == 3 || i.Status == 4 || i.Status==8)))
+
+            //if (mode == 0)
+            //{
+                model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && (mode==0? i.Status == 2 :(i.Status==3 || i.Status==4 || i.Status==8)))
                  .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
                  .GroupJoin(db.OrderItems, o => o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
                  .Select(i => new GetAllOrderListViewModel.OrderList
@@ -1928,6 +1970,8 @@ namespace ShopNow.Controllers
                      RefundRemark = i.o.p.RefundRemark,
                      PaymentMode = i.o.p.PaymentMode,
                      WalletAmount = i.o.o.WalletAmount,
+                     IsPreorder = i.o.o.IsPreorder,
+                     PreorderDeliveryDateTime = i.o.o.PreorderDeliveryDateTime,
                      //OrderItemList = i.oi.ToList(),
                      OrderItemLists = i.oi.Select(a => new GetAllOrderListViewModel.OrderList.OrderItemList
                      {
@@ -1954,7 +1998,78 @@ namespace ShopNow.Controllers
                              PortionPrice = b.PortionPrice
                          }).ToList()
                      }).ToList()
-                 }).ToList();
+                 }).OrderByDescending(i=>i.Id).ToList();
+            //}
+            //else
+            //{
+            //    model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && (i.Status == 3 || i.Status == 4 || i.Status == 8))
+            //         .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
+            //         .GroupJoin(db.OrderItems, o => o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
+            //         .Select(i => new GetAllOrderListViewModel.OrderList
+            //         {
+            //             Convinenientcharge = i.o.o.Convinenientcharge,
+            //             CustomerId = i.o.o.CustomerId,
+            //             CustomerName = i.o.o.CustomerName,
+            //             CustomerPhoneNumber = i.o.o.CustomerPhoneNumber,
+            //         //DateStr = i.o.o.DateEncoded.ToString("dd-MMM-yyyy HH:mm"),
+            //         DateEncoded = i.o.o.DateEncoded,
+            //             DeliveryAddress = i.o.o.DeliveryAddress,
+            //             DeliveryBoyId = i.o.o.DeliveryBoyId,
+            //             DeliveryBoyName = i.o.o.DeliveryBoyName,
+            //             DeliveryBoyPhoneNumber = i.o.o.DeliveryBoyPhoneNumber,
+            //             DeliveryCharge = i.o.o.DeliveryCharge,
+            //             Id = i.o.o.Id,
+            //             NetDeliveryCharge = i.o.o.NetDeliveryCharge,
+            //             OrderNumber = i.o.o.OrderNumber,
+            //             Packingcharge = i.o.o.Packingcharge,
+            //             PenaltyAmount = i.o.o.PenaltyAmount,
+            //             PenaltyRemark = i.o.o.PenaltyRemark,
+            //             ShopDeliveryDiscount = i.o.o.ShopDeliveryDiscount,
+            //             ShopId = i.o.o.ShopId,
+            //             ShopName = i.o.o.ShopName,
+            //             ShopOwnerPhoneNumber = i.o.o.ShopOwnerPhoneNumber,
+            //             ShopPhoneNumber = i.o.o.ShopPhoneNumber,
+            //             Status = i.o.o.Status,
+            //             TotalPrice = i.o.o.TotalPrice,
+            //             TotalProduct = i.o.o.TotalProduct,
+            //             TotalQuantity = i.o.o.TotalQuantity,
+            //             NetTotal = i.o.o.NetTotal,
+            //             WaitingCharge = i.o.o.WaitingCharge,
+            //             WaitingRemark = i.o.o.WaitingRemark,
+            //             RefundAmount = i.o.p.RefundAmount,
+            //             RefundRemark = i.o.p.RefundRemark,
+            //             PaymentMode = i.o.p.PaymentMode,
+            //             WalletAmount = i.o.o.WalletAmount,
+            //             IsPreorder = i.o.o.IsPreorder,
+            //             PreorderDeliveryDateTime = i.o.o.PreorderDeliveryDateTime,
+            //             //OrderItemList = i.oi.ToList(),
+            //             OrderItemLists = i.oi.Select(a => new GetAllOrderListViewModel.OrderList.OrderItemList
+            //             {
+            //                 AddOnType = a.AddOnType,
+            //                 BrandId = a.BrandId,
+            //                 BrandName = a.BrandName,
+            //                 CategoryId = a.CategoryId,
+            //                 CategoryName = a.CategoryName,
+            //                 HasAddon = a.HasAddon,
+            //                 ImagePath = a.ImagePath,
+            //                 OrdeNumber = a.OrdeNumber,
+            //                 OrderId = a.OrderId,
+            //                 Price = a.Price,
+            //                 ProductId = a.ProductId,
+            //                 ProductName = a.ProductName,
+            //                 Quantity = a.Quantity,
+            //                 UnitPrice = a.UnitPrice,
+            //                 OrderItemAddonLists = db.OrderItemAddons.Where(b => b.OrderItemId == a.Id).Select(b => new GetAllOrderListViewModel.OrderList.OrderItemList.OrderItemAddonList
+            //                 {
+            //                     AddonName = b.AddonName,
+            //                     AddonPrice = b.AddonPrice,
+            //                     CrustName = b.CrustName,
+            //                     PortionName = b.PortionName,
+            //                     PortionPrice = b.PortionPrice
+            //                 }).ToList()
+            //             }).ToList()
+            //         }).OrderByDescending(i => i.Id).ToList();
+            //}
 
             int count = model.OrderLists.Count();
             int CurrentPage = page;
@@ -2025,6 +2140,8 @@ namespace ShopNow.Controllers
                      Onwork = db.DeliveryBoys.Any(a => a.Id == i.o.o.DeliveryBoyId) ? db.DeliveryBoys.FirstOrDefault(a => a.Id == i.o.o.DeliveryBoyId).OnWork : 0,
                      WalletAmount = i.o.o.WalletAmount,
                      OrderReadyTime = i.o.o.OrderReadyTime,
+                     IsPreorder = i.o.o.IsPreorder,
+                     PreorderDeliveryDateTime = i.o.o.PreorderDeliveryDateTime,
                      //OrderItemList = i.oi.ToList(), 
                      OrderItemLists = i.oi.Select(a => new GetAllOrderListViewModel.OrderList.OrderItemList
                      {
@@ -2051,7 +2168,7 @@ namespace ShopNow.Controllers
                              PortionPrice = b.PortionPrice
                          }).ToList()
                      }).ToList()
-                 }).ToList();
+                 }).OrderByDescending(i => i.DateEncoded).ToList();
 
             int count = model.OrderLists.Count();
             int CurrentPage = page;
@@ -2267,7 +2384,7 @@ namespace ShopNow.Controllers
                                       join m in db.MasterProducts on pl.MasterProductId equals m.Id
                                       join nsc in db.NextSubCategories on m.NextSubCategoryId equals nsc.Id into cat
                                       from nsc in cat.DefaultIfEmpty()
-                                      where pl.ShopId == shopId && pl.Status == 0 && pl.Price != 0 && m.Name.ToLower().Contains(str) && (categoryId != 0 ? m.CategoryId == categoryId : true)
+                                      where pl.ShopId == shopId && pl.Status == 0 && pl.Price != 0 && m.Name.ToLower().Contains(str) && (categoryId != 0 ? nsc.Id == categoryId : true)
                                       select new ShopDetails.ProductList
                                       {
                                           Id = pl.Id,
@@ -2288,7 +2405,6 @@ namespace ShopNow.Controllers
                                           Weight = m.Weight,
                                           IsPreorder = pl.IsPreorder,
                                           PreorderHour = pl.PreorderHour
-                                          //IsOffer = pl.Id != 0 ? GetOfferCheck(pl.Id) : false
                                       }).Where(i => i.Price != 0).ToList();
             }
             return new JsonResult()
@@ -4315,6 +4431,8 @@ namespace ShopNow.Controllers
                          ProductName = a.ProductName,
                          Quantity = a.Quantity,
                          UnitPrice = a.UnitPrice,
+                         ShopId = i.o.o.ShopId,
+                         ShopName = i.o.o.ShopName,
                          OrderItemAddonLists = db.OrderItemAddons.Where(b=>b.OrderItemId == a.Id).Select(b=>new GetAllOrderListViewModel.OrderList.OrderItemList.OrderItemAddonList {
                              AddonName = b.AddonName,
                              AddonPrice = b.AddonPrice,
@@ -4645,6 +4763,8 @@ namespace ShopNow.Controllers
                         TotalPrice = i.p.oi.Quantity * i.p.p.Price,
                         Id = i.p.p.Id,
                         Name = i.m.Name,
+                        ShopId = i.p.p.ShopId,
+                        ShopName = i.p.p.ShopName,
                         Quantity = i.p.oi.Quantity,
                         Price = i.p.p.Price,
                         ColorCode = i.m.ColorCode,
@@ -5005,44 +5125,111 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        public void UpdateAchievements(int customerId)
+        public void UpdateAchievements(int customerId,int orderId)
         {
+            DateTime achievementStartDateTime = new DateTime(2021, 10, 20);
             var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
             if (customer != null)
             {
-                var orderList = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6).ToList();
-
-                //count wise
-                switch (orderList.Count())
+                var achievementlist = db.AchievementSettings.Where(i => i.Status == 0).ToList();
+                foreach (var item in achievementlist)
                 {
-                    case 1:
-                        customer.WalletAmount += 10;
-                        break;
-                    case 50:
-                        customer.WalletAmount += 250;
-                        break;
-                    case 150:
-                        customer.WalletAmount += 500;
-                        break;
-                    case 450:
-                        customer.WalletAmount += 1500;
-                        break;
+                    switch (item.CountType)
+                    {
+                        case 1:
+                            if (item.HasAccept == true)
+                            {
+                                var customerAcceptedAchievements = db.CustomerAchievements.FirstOrDefault(i => i.Status == 1 && i.CustomerId == customer.Id && i.AchievementId == item.Id);
+                                if (customerAcceptedAchievements != null)
+                                {
+                                    if (item.DayLimit > 0)
+                                    {
+                                        var orderListSelectShop = db.Orders.Where(i => i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded.AddDays(item.DayLimit)))).Select(i => i.ShopId); 
+                                        var shopCategoryCount = db.Shops.Where(i => orderListSelectShop.Contains(i.Id)).GroupBy(i => i.ShopCategoryId).Count();
+                                        if (shopCategoryCount == item.CountValue)
+                                        {
+                                            customer.WalletAmount += item.Amount;
+                                            db.Entry(customer).State = EntityState.Modified;
+                                            db.SaveChanges();
+
+                                            //Wallet History
+                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+                                        }
+                                    } else
+                                    {
+                                        var orderListSelectShop = db.Orders.Where(i => i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Select(i => i.ShopId);
+                                        var shopCategoryCount = db.Shops.Where(i => orderListSelectShop.Contains(i.Id)).GroupBy(i => i.ShopCategoryId).Count();
+                                        if (shopCategoryCount == item.CountValue)
+                                        {
+                                            customer.WalletAmount += item.Amount;
+                                            db.Entry(customer).State = EntityState.Modified;
+                                            db.SaveChanges();
+
+                                            //Wallet History
+                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+                                        }
+                                    }
+                                    
+                                }
+                            }
+                            else {
+                                if (item.DayLimit > 0)
+                                {
+                                    var orderListSelectShop = db.Orders.Where(i => i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementStartDateTime.AddDays(item.DayLimit)))).Select(i => i.ShopId);
+                                    var shopCategoryCount = db.Shops.Where(i => orderListSelectShop.Contains(i.Id)).GroupBy(i => i.ShopCategoryId).Count();
+                                    if (shopCategoryCount == item.CountValue)
+                                    {
+                                        customer.WalletAmount += item.Amount;
+                                        db.Entry(customer).State = EntityState.Modified;
+                                        db.SaveChanges();
+                                        //Wallet History
+                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+                                    }
+                                }
+                                else
+                                {
+                                    var orderListSelectShop = db.Orders.Where(i => i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Select(i => i.ShopId);
+                                    var shopCategoryCount = db.Shops.Where(i => orderListSelectShop.Contains(i.Id)).GroupBy(i => i.ShopCategoryId).Count();
+                                    if (shopCategoryCount == item.CountValue)
+                                    {
+                                        customer.WalletAmount += item.Amount;
+                                        db.Entry(customer).State = EntityState.Modified;
+                                        db.SaveChanges();
+                                        //Wallet History
+                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+                                    }
+                                }
+                            }
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            break;
+                        case 5:
+                            break;
+                        case 6:
+                            break;
+                        default:
+                            break;
+                    }
                 }
-
-                //shop wise
-                if (orderList.GroupBy(i=>i.ShopId).Count() == 5)
-                    customer.WalletAmount += 50;
-
                 
-                var orderListItem = db.Orders.Where(i => i.CustomerId == customer.Id)
-                    .Join(db.OrderItems, o => o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
-                    .ToList();
-                //Category wise
-                if (orderListItem.GroupBy(i=>i.oi.CategoryId).Count() == 3)
-                    customer.WalletAmount += 50;
-                else if (orderListItem.GroupBy(i => i.oi.CategoryId).Count() == 6)
-                    customer.WalletAmount += 50;
             }
+        }
+
+        public void AddAchievementCustomerWalletHistory(int custId, double amount, string achievementName)
+        {
+            //Wallet History
+            var walletHistory = new CustomerWalletHistory
+            {
+                Amount = amount,
+                CustomerId = custId,
+                DateEncoded = DateTime.Now,
+                Description = $"Received from Achievement({achievementName})",
+                Type = 1
+            };
         }
 
         ////////////////////////////////////////////

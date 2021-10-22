@@ -36,7 +36,7 @@
                    columns.Add()
                    .Encoded(false)
                    .Sanitized(false)
-                   .RenderValueAs(o => Html.ActionLink("View", "Edit", new { ordernumber=o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-vsm btn-info mt-5", @style = "padding: 3px 26px" }).ToHtmlString()).Titled("Action").SetWidth(10);
+                   .RenderValueAs(o => Html.ActionLink("View", "Edit", new { OrderNumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-vsm btn-info", @style = "padding: 3px 26px" }).ToHtmlString()).Titled("Action").SetWidth(10);
                }).WithPaging(20).Sortable(true)
                 </div>
             </div>

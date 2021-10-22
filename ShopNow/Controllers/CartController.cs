@@ -42,7 +42,7 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             var dt = DateTime.Now;
             var model = new CartListViewModel();
-            model.TodayLists = db.Orders.Where(i => (DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(dt)) && i.Status != 6 && i.Status != 7 && i.Status != 9 && i.Status != 10 && i.Status != 0 && (shopId != 0 ? i.ShopId == shopId : true))
+            model.TodayLists = db.Orders.Where(i => (DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(dt)) && i.Status != 0 && (shopId != 0 ? i.ShopId == shopId : true))
             .Select(i => new CartListViewModel.TodayList
             {
                 Id = i.Id,
@@ -1257,6 +1257,18 @@ namespace ShopNow.Controllers
                     referralCustomer.WalletAmount = referralCustomer.WalletAmount + referalAmount;
                     db.Entry(referralCustomer).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
+
+                    //Wallet History for Referral
+                    var walletHistory = new CustomerWalletHistory
+                    {
+                        Amount = referalAmount,
+                        CustomerId = referralCustomer.Id,
+                        DateEncoded = DateTime.Now,
+                        Description = "Received from referral",
+                        Type = 1
+                    };
+                    db.CustomerWalletHistories.Add(walletHistory);
+                    db.SaveChanges();
                 }
             }
 
@@ -1269,7 +1281,34 @@ namespace ShopNow.Controllers
                     customerDetails.WalletAmount += order.OfferAmount;
                     db.Entry(customerDetails).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
+
+                    //Wallet History for Wallet Offer
+                    var walletHistory = new CustomerWalletHistory
+                    {
+                        Amount = order.OfferAmount,
+                        CustomerId = customerDetails.Id,
+                        DateEncoded = DateTime.Now,
+                        Description = $"Received from offer({offer.Name})",
+                        Type = 1
+                    };
+                    db.CustomerWalletHistories.Add(walletHistory);
+                    db.SaveChanges();
                 }
+            }
+
+            if (order.WalletAmount > 0)
+            {
+                //Wallet History for Wallet Offer
+                var walletHistory = new CustomerWalletHistory
+                {
+                    Amount = order.WalletAmount,
+                    CustomerId = customerDetails.Id,
+                    DateEncoded = DateTime.Now,
+                    Description = $"Payment to Order(#{order.OrderNumber})",
+                    Type = 2
+                };
+                db.CustomerWalletHistories.Add(walletHistory);
+                db.SaveChanges();
             }
 
             string fcmtocken = customerDetails.FcmTocken ?? "";

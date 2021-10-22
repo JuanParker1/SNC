@@ -83,6 +83,7 @@
         <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="28.375" PointY="35.75" />
         <AssociationConnector Association="sncModel.FK_OrderItems_Orders" />
         <EntityTypeShape EntityType="sncModel.CustomerSearchData" Width="1.5" PointX="15.375" PointY="14.75" />
+        <EntityTypeShape EntityType="sncModel.CustomerWalletHistory" Width="1.5" PointX="12.375" PointY="27.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
