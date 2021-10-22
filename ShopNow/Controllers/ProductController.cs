@@ -760,6 +760,7 @@ namespace ShopNow.Controllers
             {
                 var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
                 product.ShopId = shop.Id;
+                product.ShopName = shop.Name;
                 product.ShopCategoryId = shop.ShopCategoryId;
                 product.ShopCategoryName = shop.ShopCategoryName;
             }
@@ -830,6 +831,8 @@ namespace ShopNow.Controllers
                 return HttpNotFound();
             var product = db.Products.FirstOrDefault(i => i.Id == dCode);
             var model = _mapper.Map<Product, FMCGEditViewModel>(product);
+            product.ProductTypeId = 2;
+            product.ProductTypeName = "FMCG";
             var masterProduct = db.MasterProducts.FirstOrDefault(i => i.Id == product.MasterProductId);
             if (masterProduct != null)
             {
@@ -885,6 +888,8 @@ namespace ShopNow.Controllers
             {
                 model.PreorderHour = 0;
             }
+            prod.ProductTypeId = 2;
+            prod.ProductTypeName = "FMCG";
             prod.Name = model.Name;
             prod.UpdatedBy = user.Name;
             prod.DateUpdated = DateTime.Now;
