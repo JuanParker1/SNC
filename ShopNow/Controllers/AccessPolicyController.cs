@@ -39,7 +39,7 @@ namespace ShopNow.Controllers
             _mapper = _mapperConfiguration.CreateMapper();
         }
 
-        [AccessPolicy(PageCode = "SHNAPGL001")]
+        [AccessPolicy(PageCode = "SNCAPL001")]
         public ActionResult List(int customerid=0)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -103,7 +103,7 @@ namespace ShopNow.Controllers
         }
 
         [HttpPost]
-        [AccessPolicy(PageCode = "SHNAPGL001")]
+        [AccessPolicy(PageCode = "SNCAPL001")]
         public ActionResult List(AccessPolicyListViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -150,7 +150,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "SHNAPGM002")]
+        [AccessPolicy(PageCode = "SNCAPM002")]
         public ActionResult Manage(int ShopId=0, int StaffId=0)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -225,7 +225,7 @@ namespace ShopNow.Controllers
         }
 
         [HttpPost]
-        [AccessPolicy(PageCode = "SHNAPGM002")]
+        [AccessPolicy(PageCode = "SNCAPM002")]
         public ActionResult Manage(AccessPolicyListViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -277,205 +277,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "SHNAPGL001")]
-        public JsonResult AddSession(AccessPolicyViewModel model)
-        {
-            List<AccessPolicyViewModel> itemList = Session["ManageList"] as List<AccessPolicyViewModel>;
-            if (itemList == null)
-            {
-                itemList = new List<AccessPolicyViewModel>();
-            }
-            var isExisting = itemList.Any(i => i.PageCode == model.PageCode && i.PageName == model.PageName);
-            if (isExisting)
-            {
-                itemList.RemoveAll(i => i.PageCode == model.PageCode && i.PageName == model.PageName);
-            }
-            itemList.Add(model);
-            Session["ManageList"] = itemList;
-            return Json(new { list = itemList }, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "SHNAPGL001")]
-        public JsonResult RemoveSession(string pageCode, string pageName)
-        {
-            List<AccessPolicyViewModel> itemList = Session["ManageList"] as List<AccessPolicyViewModel>;
-            if (itemList == null)
-            {
-                itemList = new List<AccessPolicyViewModel>();
-            }
-            var isExisting = itemList.Any(i => i.PageCode == pageCode && i.PageName == pageName);
-            if (isExisting)
-            {
-                var code = itemList.FirstOrDefault(i => i.PageCode == pageCode && i.PageName == pageName).Id;
-                if (code != 0)
-                {
-                    var ap = db.AccessPolicies.Where(m => m.Id == code).FirstOrDefault();
-                    ap.isAccess = false;
-                    ap.Status = 2;
-                    ap.DateUpdated = DateTime.Now;
-                    db.Entry(ap).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-                }
-            }
-            if (itemList.Remove(itemList.FirstOrDefault(i => i.PageCode == pageCode && i.PageName == pageName)))
-            {
-                this.Session["ManageList"] = itemList;
-                return Json(true, JsonRequestBehavior.AllowGet);
-            }
-            return Json(false, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "SHNAPGM002")]
-        public JsonResult AddManageSession(AccessPolicyViewModel model)
-        {
-            List<AccessPolicyViewModel> itemList = Session["AccessList"] as List<AccessPolicyViewModel>;
-
-            if (itemList == null)
-            {
-                itemList = new List<AccessPolicyViewModel>();
-            }
-            var isExisting = itemList.Any(i => i.PageCode == model.PageCode && i.PageName == model.PageName);
-            if (isExisting)
-            {
-                itemList.RemoveAll(i => i.PageCode == model.PageCode && i.PageName == model.PageName);
-                itemList.Add(model);
-                Session["AccessList"] = itemList;
-            }
-            return Json(new { list = itemList }, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "SHNAPGM002")]
-        public JsonResult RemoveManageSession(string pageCode, string pageName)
-        {
-            List<AccessPolicyViewModel> itemList = Session["AccessList"] as List<AccessPolicyViewModel>;
-            if (itemList == null)
-            {
-                itemList = new List<AccessPolicyViewModel>();
-            }
-            var isExisting = itemList.Any(i => i.PageCode == pageCode && i.PageName == pageName);
-            if (isExisting)
-            {
-                var code = itemList.FirstOrDefault(i => i.PageCode == pageCode && i.PageName == pageName).Id;
-                if (code != 0)
-                {
-                    var ap = db.AccessPolicies.Where(m => m.Id == code).FirstOrDefault();
-                    ap.isAccess = false;
-                    ap.Status = 2;
-                    ap.DateUpdated = DateTime.Now;
-                    db.Entry(ap).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-                }
-            }
-            if (itemList.Remove(itemList.FirstOrDefault(i => i.PageCode == pageCode && i.PageName == pageName)))
-            {
-                this.Session["AccessList"] = itemList;
-                return Json(true, JsonRequestBehavior.AllowGet);
-            }
-            return Json(false, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "")]
-        public JsonResult AddSelectAllSession(int CustomerId, string CustomerName, bool IsAccess)
-        {
-            List<AccessPolicyViewModel> itemList = Session["AccessList"] as List<AccessPolicyViewModel>;
-
-            if (itemList == null)
-            {
-                itemList = new List<AccessPolicyViewModel>();
-            }
-            if (IsAccess)
-            {
-                var List = db.Pages.Where(i => i.Status == 0).Select(i => new AccessPolicyViewModel
-                {
-                    Id = i.Id,
-                    PageCode = i.Code,
-                    PageName = i.Name,
-                    Status = i.Status
-                }).ToList();
-
-                foreach (var ap in List)
-                {
-                    if (itemList == null)
-                    {
-                        itemList = new List<AccessPolicyViewModel>();
-                    }
-                    AccessPolicyViewModel item = new AccessPolicyViewModel();
-                    item.Id = ap.Id;
-                    item.PageCode = ap.PageCode;
-                    item.PageName = ap.PageName;
-                    item.CustomerId = CustomerId;
-                    item.CustomerName = CustomerName;
-                    item.IsAccess = true;
-                    itemList.Add(item);
-                }
-                Session["AccessList"] = itemList;
-            }
-            return Json(new { list = itemList }, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "")]
-        public JsonResult RemoveSelectAllSession(AccessPolicyViewModel model)
-        {
-            List<AccessPolicyViewModel> itemList = Session["AccessList"] as List<AccessPolicyViewModel>;
-            if (itemList == null)
-            {
-                itemList = new List<AccessPolicyViewModel>();
-            }
-            itemList.Remove(model);
-            Session["AccessList"] = itemList.Remove(model);
-
-            return Json(new { list = itemList }, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "SHNAPGL001")]
-        public async Task<JsonResult> GetStaffSelect2(int shopid)
-        {
-            var model = await db.Staffs.OrderBy(i => i.Name).Where(a => a.ShopId == shopid).Select(i => new
-            {
-                id = i.Id,
-                text = i.Name
-            }).ToListAsync();
-
-            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "SHNAPGL001")]
-        public async Task<JsonResult> GetShopSelect2(string q = "")
-        {
-            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q)).Select(i => new
-            {
-                id = i.Id,
-                text = i.Name
-            }).ToListAsync();
-
-            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "SHNAPGL001")]
-        public async Task<JsonResult> GetCustomerSelect2(string q = "")
-        {
-            var model = await db.Customers.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Position == 4).Select(i => new
-            {
-                id = i.Id,
-                text = i.Name
-            }).ToListAsync();
-
-            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "SHNAPGC005")]
-        public async Task<JsonResult> GetPageSelect2(string q = "")
-        {
-            var model = await db.Pages.Where(i=>i.Status == 0 || i.Status == 3).OrderBy(i => i.Name).Where(a => a.Name.Contains(q)).Select(i => new
-            {
-                id = i.Code,
-                text = i.Name
-            }).ToListAsync();
-
-            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "SHNAPGI003")]
+        [AccessPolicy(PageCode = "SNCAPI003")]
         public ActionResult Index()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -485,7 +287,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNAPGI003")]
+        [AccessPolicy(PageCode = "SNCAPI003")]
         public ActionResult Index(HttpPostedFileBase upload, AccessPolicyMasterViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -563,7 +365,7 @@ namespace ShopNow.Controllers
                         }
                     }
                 }
-               
+
                 // Insert records to database table.
                 foreach (DataRow row in dt.Rows)
                 {
@@ -592,17 +394,17 @@ namespace ShopNow.Controllers
             return View();
         }
 
-        [AccessPolicy(PageCode = "SHNAPGIL004")]
+        [AccessPolicy(PageCode = "SNCAPIL004")]
         public ActionResult ItemList()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var List = (from s in db.AccessPolicies
-                        select s).OrderBy(s => s.PageName).Where(i => i.Status == 0 || i.Status==3).ToList();
+                        select s).OrderBy(s => s.PageName).Where(i => i.Status == 0 || i.Status == 3).ToList();
             return View(List);
         }
 
-        [AccessPolicy(PageCode = "SHNAPGC005")]
+        [AccessPolicy(PageCode = "SNCAPC005")]
         public ActionResult Create()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -612,7 +414,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNAPGC005")]
+        [AccessPolicy(PageCode = "SNCAPC005")]
         public ActionResult Create(AccessPolicyCreateEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -635,7 +437,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("ItemList");
         }
 
-        [AccessPolicy(PageCode = "SHNAPGE006")]
+        [AccessPolicy(PageCode = "SNCAPE006")]
         public ActionResult Edit(string Id)
         {
             var dCode = AdminHelpers.DCodeInt(Id);
@@ -648,7 +450,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNAPGE006")]
+        [AccessPolicy(PageCode = "SNCAPE006")]
         public ActionResult Edit(AccessPolicyCreateEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -670,7 +472,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("ItemList");
         }
 
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCAPD007")]
         public JsonResult Delete(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -684,6 +486,195 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
             }
             return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        //JSON 
+        public JsonResult AddSession(AccessPolicyViewModel model)
+        {
+            List<AccessPolicyViewModel> itemList = Session["ManageList"] as List<AccessPolicyViewModel>;
+            if (itemList == null)
+            {
+                itemList = new List<AccessPolicyViewModel>();
+            }
+            var isExisting = itemList.Any(i => i.PageCode == model.PageCode && i.PageName == model.PageName);
+            if (isExisting)
+            {
+                itemList.RemoveAll(i => i.PageCode == model.PageCode && i.PageName == model.PageName);
+            }
+            itemList.Add(model);
+            Session["ManageList"] = itemList;
+            return Json(new { list = itemList }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult RemoveSession(string pageCode, string pageName)
+        {
+            List<AccessPolicyViewModel> itemList = Session["ManageList"] as List<AccessPolicyViewModel>;
+            if (itemList == null)
+            {
+                itemList = new List<AccessPolicyViewModel>();
+            }
+            var isExisting = itemList.Any(i => i.PageCode == pageCode && i.PageName == pageName);
+            if (isExisting)
+            {
+                var code = itemList.FirstOrDefault(i => i.PageCode == pageCode && i.PageName == pageName).Id;
+                if (code != 0)
+                {
+                    var ap = db.AccessPolicies.Where(m => m.Id == code).FirstOrDefault();
+                    ap.isAccess = false;
+                    ap.Status = 2;
+                    ap.DateUpdated = DateTime.Now;
+                    db.Entry(ap).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+            if (itemList.Remove(itemList.FirstOrDefault(i => i.PageCode == pageCode && i.PageName == pageName)))
+            {
+                this.Session["ManageList"] = itemList;
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            return Json(false, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddManageSession(AccessPolicyViewModel model)
+        {
+            List<AccessPolicyViewModel> itemList = Session["AccessList"] as List<AccessPolicyViewModel>;
+
+            if (itemList == null)
+            {
+                itemList = new List<AccessPolicyViewModel>();
+            }
+            var isExisting = itemList.Any(i => i.PageCode == model.PageCode && i.PageName == model.PageName);
+            if (isExisting)
+            {
+                itemList.RemoveAll(i => i.PageCode == model.PageCode && i.PageName == model.PageName);
+                itemList.Add(model);
+                Session["AccessList"] = itemList;
+            }
+            return Json(new { list = itemList }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult RemoveManageSession(string pageCode, string pageName)
+        {
+            List<AccessPolicyViewModel> itemList = Session["AccessList"] as List<AccessPolicyViewModel>;
+            if (itemList == null)
+            {
+                itemList = new List<AccessPolicyViewModel>();
+            }
+            var isExisting = itemList.Any(i => i.PageCode == pageCode && i.PageName == pageName);
+            if (isExisting)
+            {
+                var code = itemList.FirstOrDefault(i => i.PageCode == pageCode && i.PageName == pageName).Id;
+                if (code != 0)
+                {
+                    var ap = db.AccessPolicies.Where(m => m.Id == code).FirstOrDefault();
+                    ap.isAccess = false;
+                    ap.Status = 2;
+                    ap.DateUpdated = DateTime.Now;
+                    db.Entry(ap).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+            if (itemList.Remove(itemList.FirstOrDefault(i => i.PageCode == pageCode && i.PageName == pageName)))
+            {
+                this.Session["AccessList"] = itemList;
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            return Json(false, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddSelectAllSession(int CustomerId, string CustomerName, bool IsAccess)
+        {
+            List<AccessPolicyViewModel> itemList = Session["AccessList"] as List<AccessPolicyViewModel>;
+
+            if (itemList == null)
+            {
+                itemList = new List<AccessPolicyViewModel>();
+            }
+            if (IsAccess)
+            {
+                var List = db.Pages.Where(i => i.Status == 0).Select(i => new AccessPolicyViewModel
+                {
+                    Id = i.Id,
+                    PageCode = i.Code,
+                    PageName = i.Name,
+                    Status = i.Status
+                }).ToList();
+
+                foreach (var ap in List)
+                {
+                    if (itemList == null)
+                    {
+                        itemList = new List<AccessPolicyViewModel>();
+                    }
+                    AccessPolicyViewModel item = new AccessPolicyViewModel();
+                    item.Id = ap.Id;
+                    item.PageCode = ap.PageCode;
+                    item.PageName = ap.PageName;
+                    item.CustomerId = CustomerId;
+                    item.CustomerName = CustomerName;
+                    item.IsAccess = true;
+                    itemList.Add(item);
+                }
+                Session["AccessList"] = itemList;
+            }
+            return Json(new { list = itemList }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult RemoveSelectAllSession(AccessPolicyViewModel model)
+        {
+            List<AccessPolicyViewModel> itemList = Session["AccessList"] as List<AccessPolicyViewModel>;
+            if (itemList == null)
+            {
+                itemList = new List<AccessPolicyViewModel>();
+            }
+            itemList.Remove(model);
+            Session["AccessList"] = itemList.Remove(model);
+
+            return Json(new { list = itemList }, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<JsonResult> GetStaffSelect2(int shopid)
+        {
+            var model = await db.Staffs.OrderBy(i => i.Name).Where(a => a.ShopId == shopid).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<JsonResult> GetShopSelect2(string q = "")
+        {
+            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q)).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<JsonResult> GetCustomerSelect2(string q = "")
+        {
+            var model = await db.Customers.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Position == 4).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<JsonResult> GetPageSelect2(string q = "")
+        {
+            var model = await db.Pages.Where(i=>i.Status == 0 || i.Status == 3).OrderBy(i => i.Name).Where(a => a.Name.Contains(q)).Select(i => new
+            {
+                id = i.Code,
+                text = i.Name
+            }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)
