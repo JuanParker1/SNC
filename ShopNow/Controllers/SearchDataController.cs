@@ -17,7 +17,7 @@ namespace ShopNow.Controllers
         public ActionResult List(SearchDataListViewModel model)
         {
             //var model = new SearchDataListViewModel();
-            model.AllListItems = db.CustomerSearchDatas.Where(i => (model.StartDate != null && model.EndDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate)) : true)
+            model.AllListItems = db.CustomerSearchDatas.Where(i => (model.StartDate != null && model.EndDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate)) : false)
                 .GroupBy(i => i.SearchKeyword)
                 .Select(i => new SearchDataListViewModel.ListItem
                 {
@@ -115,10 +115,10 @@ namespace ShopNow.Controllers
                         db.Entry(masterProduct).State = EntityState.Modified;
                         db.SaveChanges();
 
-                        var searchDataList = db.CustomerSearchDatas.Where(i => i.SearchKeyword == searchWord).ToList();
+                        var searchDataList = db.CustomerSearchDatas.Where(i => i.SearchKeyword.ToLower() == searchWord.ToLower()).ToList();
                         foreach (var item in searchDataList)
                         {
-                            var sd = db.CustomerSearchDatas.FirstOrDefault(i => i.SearchKeyword == item.SearchKeyword);
+                            var sd = db.CustomerSearchDatas.FirstOrDefault(i => i.SearchKeyword.ToLower() == item.SearchKeyword.ToLower());
                             if (sd != null)
                             {
                                 sd.LinkedMasterProductIds = sd.LinkedMasterProductIds != null ? sd.LinkedMasterProductIds + "," + masterProduct.Id : masterProduct.Id.ToString();
