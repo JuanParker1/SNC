@@ -200,7 +200,7 @@
                             {
                                 <p>@Model.OrderReadyTime.Value.ToString("dd-MMM-yyyy hh:mm tt")</p>
                             }
-                            else
+                            else if(Model.OrderPickupTime != null)
                             {
                                 <p>@Model.OrderPickupTime.Value.ToString("dd-MMM-yyyy hh:mm tt")</p>
                             }
@@ -305,7 +305,7 @@
                         </div>
                     }
                 </div>
-                    </div>
+            </div>
         </div>
         <div class="col-md-4">
             <div class="card h-100">
@@ -360,82 +360,79 @@
                         <thead>
                             <tr>
                                 <th>No.</th>
+                                <th></th>
                                 <th>Product Name</th>
-                                <th>Brand Name</th>
                                 <th>Category Name</th>
                                 <th>Qty</th>
                                 <th>Price</th>
                                 <th>Total</th>
-                                <th>Image</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var item in Model.ListItems)
                             {
-                                <tr>
-                                    <td></td>
-                                    <td>
-                                        <b>@item.ProductName </b><br/>
-                                        @if (item.HasAddon == true)
+                            <tr>
+                                <td></td>
+                                <td><img src="@item.ImagePath" alt="Image" class="img-thumbnail productImages" data-toggle="modal" data-target="#myModal" width="45" height="60" onerror="this.src='/Images/No Photo.png'" /></td>
+                                <td>
+                                    <b>@item.ProductName </b><br />
+                                    @if (item.HasAddon == true)
+                                    {
+                                        foreach (var addon in item.AddonListItems)
                                         {
-                                            foreach (var addon in item.AddonListItems)
+                                            if (item.AddonType == 1)
                                             {
-                                                if (item.AddonType == 1)
+                                                if (item.UnitPrice == addon.PortionPrice)
                                                 {
-                                                    if (item.UnitPrice == addon.PortionPrice)
-                                                    {
                                                     <span>@addon.PortionName - @addon.PortionPrice</span><br />
-                                                    }
                                                 }
-                                                else if (item.AddonType == 2)
+                                            }
+                                            else if (item.AddonType == 2)
+                                            {
+                                                <span>@addon.AddonName - @addon.AddonPrice</span><br />
+                                            }
+                                            else if (item.AddonType == 3)
+                                            {
+                                                if (addon.AddonPrice == 0)
+                                                {
+                                                    <span>@addon.PortionName - @addon.PortionPrice</span><br />
+                                                }
+                                                else
                                                 {
                                                     <span>@addon.AddonName - @addon.AddonPrice</span><br />
                                                 }
-                                                else if (item.AddonType == 3)
+                                            }
+                                            else if (item.AddonType == 4)
+                                            {
+                                                if (addon.AddonPrice == 0 && addon.PortionPrice == 0)
                                                 {
-                                                    if (addon.AddonPrice == 0)
-                                                    {
-                                                        <span>@addon.PortionName - @addon.PortionPrice</span><br />
-                                                    }
-                                                    else
-                                                    {
-                                                        <span>@addon.AddonName - @addon.AddonPrice</span><br />
-                                                    }
+                                                    <span>@addon.CrustName</span><br />
                                                 }
-                                                else if (item.AddonType == 4)
+                                                else if (addon.PortionPrice != 0)
                                                 {
-                                                    if (addon.AddonPrice == 0 && addon.PortionPrice == 0)
-                                                    {
-                                                        <span>@addon.CrustName</span><br />
-                                                    }
-                                                    else if (addon.PortionPrice != 0)
-                                                    {
-                                                        <span>@addon.PortionName - @addon.PortionPrice</span><br />
-                                                    }
-                                                    else
-                                                    {
-                                                        <span>@addon.AddonName - @addon.AddonPrice</span><br />
-                                                    }
+                                                    <span>@addon.PortionName - @addon.PortionPrice</span><br />
+                                                }
+                                                else
+                                                {
+                                                    <span>@addon.AddonName - @addon.AddonPrice</span><br />
                                                 }
                                             }
                                         }
-                                    </td>
-                                    <td>@item.BrandName</td>
-                                    <td>@item.CategoryName</td>
-                                    <td>@item.Quantity</td>
-                                    <td>₹@item.UnitPrice</td>
-                                    <td>₹@item.Price</td>
-                                    <td><img src="@item.ImagePath" alt="Image" class="img-thumbnail productImages" data-toggle="modal" data-target="#myModal" width="45" height="60" onerror="this.src='/Images/No Photo.png'" /></td>
-                                </tr>
+                                    }
+                                </td>
+                                <td>@item.CategoryName</td>
+                                <td>@item.Quantity</td>
+                                <td>₹@item.UnitPrice</td>
+                                <td>₹@item.Price</td>
+                            </tr>
                             }
                         </tbody>
                         <tfoot>
                             <tr>
                                 <th colspan="4">Total</th>
-                                <th>@Model.ListItems.Sum(i=>i.Quantity)</th>
+                                <th>@Model.ListItems.Sum(i => i.Quantity)</th>
                                 <th>₹@Model.ListItems.Sum(i => i.UnitPrice)</th>
                                 <th>₹@Model.ListItems.Sum(i => i.Price)</th>
-                                <th></th>
                             </tr>
                         </tfoot>
                     </table>
@@ -541,13 +538,13 @@
                         <b>₹@Model.NetTotal</b>
                     </div>
                     <hr />
-                    <div class="d-flex justify-content-between">
+                    <div class="d-flex justify-content-between" data-toggle="tooltip" title="@Model.RefundRemark">
                         <label class="mr-3">Refund Amount:</label>
-                        <b title="@Model.RefundRemark">₹@(Model.RefundAmount??0)</b>
+                        <b>₹@(Model.RefundAmount ?? 0)</b>
                     </div>
                     <div class="d-flex justify-content-between">
                         <label class="mr-3">Total Paid:</label>
-                        <b>₹@Math.Abs(Model.NetTotal - (Model.RefundAmount??0))</b>
+                        <b>₹@Math.Abs(Model.NetTotal - (Model.RefundAmount ?? 0))</b>
                     </div>
                 </div>
             </div>
@@ -628,6 +625,8 @@
             window.open('https://www.google.com/maps/place/' + lat + ',' + lng, "_blank");
         }
         $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+
             var t = $('#tbl-items').DataTable({
                 "dom": "<'row'<'col-sm-6'f>>" +
                     "<'row'<'col-sm-5'i><'col-sm-3'l><'col-sm-4'p>>" +
