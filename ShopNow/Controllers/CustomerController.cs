@@ -27,12 +27,11 @@ namespace ShopNow.Controllers
                 config.CreateMap<Customer, CustomerDetailsViewModel>();
                 config.CreateMap<CustomerEditViewModel, Customer>();
                 config.CreateMap<Customer, CustomerEditViewModel>();
-                config.CreateMap<Customer, CustomerDetailsViewModel>();
             });
             _mapper = _mapperConfiguration.CreateMapper();
         }
 
-        [AccessPolicy(PageCode = "SNCCUL101")]
+        //[AccessPolicy(PageCode = "SNCCUL101")]
         public ActionResult List()
         {
             if (Session["USER"] == null)
@@ -42,7 +41,7 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new CustomerListViewModel();
-            model.List = db.Customers.Where(i => i.Status == 0).AsEnumerable().Select((i, index) => new CustomerListViewModel.CustomerList
+            model.List = db.Customers.OrderByDescending(i => i.DateEncoded).Where(i => i.Status == 0).AsEnumerable().Select((i, index) => new CustomerListViewModel.CustomerList
             {
                 No = index + 1,
                 Id = i.Id,
@@ -52,7 +51,7 @@ namespace ShopNow.Controllers
                 DistrictName = i.DistrictName,
                 StateName = i.StateName,
                 DateEncoded = i.DateEncoded
-            }).OrderByDescending(i => i.DateEncoded).ToList();
+            }).ToList();
             return View(model.List);
         }
 
@@ -74,14 +73,31 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "SNCCUD103")]
+        //[AccessPolicy(PageCode = "SNCCUD103")]
         public ActionResult Details(string id)
         {
             var dId = AdminHelpers.DCodeInt(id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var customer = db.Customers.Where(m => m.Id == dId).FirstOrDefault();
+            var customer = db.Customers.FirstOrDefault(m => m.Id == dId);
             var model = _mapper.Map<Customer, CustomerDetailsViewModel>(customer);
+            model.OrderListItems = db.Orders.Where(i => i.CustomerId == dId && (i.Status == 6 || i.Status == 7 || i.Status == 9 || i.Status == 10))
+                .Join(db.Payments, o=>o.OrderNumber, p=>p.OrderNumber, (o,p)=>new { o,p})
+                .Select(i => new CustomerDetailsViewModel.OrderListItem
+                {
+                    Amount = Math.Abs(i.o.NetTotal - (i.p.RefundAmount??0)),
+                    DateEncoded = i.o.DateEncoded,
+                    OrderNumber = i.o.OrderNumber,
+                    QuantityCount = i.o.TotalQuantity,
+                    ProductCount = i.o.TotalProduct,
+                    ShopName = i.o.ShopName,
+                    Status = i.o.Status
+                }).ToList();
+            model.Name = (string.IsNullOrEmpty(model.Name) || model.Name=="Null" ) ? "N/A" : model.Name;
+            model.TotalOrderCount = model.OrderListItems.Count();
+            model.CancelOrderCount = model.OrderListItems.Where(i => i.Status != 6).Count();
+            model.DeliveredOrderCount = model.OrderListItems.Where(i => i.Status == 6).Count();
+            model.LastPurchaseDate = model.OrderListItems.Count() > 0 ? model.OrderListItems.OrderByDescending(i => i.DateEncoded).FirstOrDefault().DateEncoded : model.LastPurchaseDate;
             return View(model);
         }
 
