@@ -12,7 +12,6 @@ namespace ShopNow.Controllers
 {
     public class PaymentController : Controller
     {
-
         private sncEntities db = new sncEntities();
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
@@ -23,13 +22,12 @@ namespace ShopNow.Controllers
             {
                 config.CreateMap<Payment, PaymentReportViewModel>();
                 config.CreateMap<Payment, PaymentReportViewModel.PaymentReportList>();
-                                                                                                             
-                                                                        
+                                                                       
             });
             _mapper = _mapperConfiguration.CreateMapper();
         }
 
-        [AccessPolicy(PageCode = "SHNPAYR001")]
+        [AccessPolicy(PageCode = "SNCPYR182")]
         public ActionResult Report()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -52,7 +50,7 @@ namespace ShopNow.Controllers
             return View(model.List);
         }
 
-        [AccessPolicy(PageCode = "SHNPAYPR002")]
+        [AccessPolicy(PageCode = "SNCPYPR183")]
         public ActionResult PlatformCreditReport(DateTime? StartDate, DateTime? EndDate, int shopId=0)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -126,7 +124,7 @@ namespace ShopNow.Controllers
             return View(model.List);
         }
 
-        [AccessPolicy(PageCode = "SHNPAYTPR003")]
+        [AccessPolicy(PageCode = "SNCPYTPR184")]
         public ActionResult TodayPlatformCreditReport(int shopId = 0)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -161,7 +159,7 @@ namespace ShopNow.Controllers
             return View(model.List);
         }
 
-        [AccessPolicy(PageCode = "SHNPAYDR004")]
+        [AccessPolicy(PageCode = "SNCPYDR185")]
         public ActionResult DeliveryCreditReport(DateTime? StartDate, DateTime? EndDate, int shopId=0)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -269,18 +267,7 @@ namespace ShopNow.Controllers
         //    return View(model.List);
         //}
 
-        [AccessPolicy(PageCode = "SHNPAYR001")]
-        public async Task<JsonResult> GetShopSelect2(string q = "")
-        {
-            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
-            {
-                id = i.Id,
-                text = i.Name
-            }).ToListAsync();
-
-            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
-        }
-       
+        [AccessPolicy(PageCode = "SNCPYSP186")]
         public ActionResult ShopPayment(ShopPaymentListViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -368,6 +355,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("ShopPayment", "Payment");
         }
 
+        [AccessPolicy(PageCode = "SNCPYDP187")]
         public ActionResult DeliveryBoyPayment(DeliveryBoyPaymentListViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -416,6 +404,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("DeliveryBoyPayment", "Payment");
         }
 
+        [AccessPolicy(PageCode = "SNCPYRP188")]
         public ActionResult RetailerPayment(RetailerPaymentListViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -475,7 +464,6 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "")]
         public ActionResult ShopPay(int orderNo)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -486,7 +474,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("RetailerPayment");
         }
 
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCPYC189")]
         public ActionResult Create()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -496,7 +484,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCPYC189")]
         public ActionResult Create(PaymentCreditsViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -570,6 +558,7 @@ namespace ShopNow.Controllers
             return View();
         }
 
+        [AccessPolicy(PageCode = "SNCPYCO190")]
         public ActionResult CheckOut(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -593,6 +582,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
+        [AccessPolicy(PageCode = "SNCPYCL191")]
         public ActionResult CreditList()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -611,6 +601,17 @@ namespace ShopNow.Controllers
             return View(model.creditLists);
         }
 
+        public async Task<JsonResult> GetShopSelect2(string q = "")
+        {
+            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
         public async Task<JsonResult> GetShopOwnerSelect2(string q = "")
         {
             var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
@@ -621,6 +622,7 @@ namespace ShopNow.Controllers
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -629,5 +631,6 @@ namespace ShopNow.Controllers
             }
             base.Dispose(disposing);
         }
+
     }
 }

@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using ShopNow.Filters;
 
 namespace ShopNow.Controllers
 {
@@ -18,11 +19,14 @@ namespace ShopNow.Controllers
     {
         private sncEntities db = new sncEntities();
        
+        [AccessPolicy(PageCode = "SNCSUSM284")]
         public ActionResult StockMaintenance()
         {
 
             return View();
         }
+
+        [AccessPolicy(PageCode = "SNCSUDM285")]
         public ActionResult DiscountMaintenance()
         {
 
@@ -31,6 +35,7 @@ namespace ShopNow.Controllers
        
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AccessPolicy(PageCode = "SNCSUU286")]
         public ActionResult Update(FormCollection formCollection, stockmodel model)
         {
             try
@@ -237,6 +242,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AccessPolicy(PageCode = "SNCSUUD287")]
         public ActionResult UpdateDiscount(FormCollection formCollection, stockmodel model)
         {
             try
@@ -387,5 +393,6 @@ namespace ShopNow.Controllers
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
+
     }
 }

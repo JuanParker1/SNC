@@ -1,4 +1,5 @@
-﻿using ShopNow.Models;
+﻿using ShopNow.Filters;
+using ShopNow.Models;
 using ShopNow.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace ShopNow.Controllers
     {
         private sncEntities db = new sncEntities();
 
+        [AccessPolicy(PageCode = "SNCSDL246")]
         public ActionResult List(SearchDataListViewModel model)
         {
             //var model = new SearchDataListViewModel();
@@ -59,6 +61,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
+        [AccessPolicy(PageCode = "SNCSDE247")]
         public ActionResult Entry(string str = "")
         {
             var model = new SearchDataEntryViewModel();
@@ -73,6 +76,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
+        [AccessPolicy(PageCode = "SNCSDE247")]
         public JsonResult Add(string keyword, string keys)
         {
             if (!string.IsNullOrEmpty(keyword) && !string.IsNullOrEmpty(keys))

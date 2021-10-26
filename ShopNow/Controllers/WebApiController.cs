@@ -24,7 +24,7 @@ namespace ShopNow.Controllers
                 return ShopNow.Helpers.DRC.Generate(_prefix);
         }
 
-        [AccessPolicy(PageCode = "SHNCAPI001")]
+        [AccessPolicy(PageCode = "SNCWAC294")]
         public ActionResult Create()
         {
             return View();
@@ -32,7 +32,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNCAPI001")]
+        [AccessPolicy(PageCode = "SNCWAC294")]
         public ActionResult Create(WebApiCreateViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -204,35 +204,7 @@ namespace ShopNow.Controllers
             }
         }
 
-        public int CheckCategory(string CategoryName,double percentage)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            var category = db.DiscountCategories.FirstOrDefault(i => i.Name == CategoryName); // Category.GetName(CategoryName);
-            if (category != null)
-            {
-
-                return category.Id;
-            }
-            else
-            {
-                DiscountCategory cat = new DiscountCategory();
-                cat.Name = CategoryName;
-                //cat.CategoryType = 0;
-                //cat.Type = 0;
-                cat.Percentage = percentage;
-                cat.DateEncoded = DateTime.Now;
-                cat.DateUpdated = DateTime.Now;
-                cat.CreatedBy = user.Name;
-                cat.UpdatedBy = user.Name;
-                cat.Status = 0;
-                db.DiscountCategories.Add(cat);
-                db.SaveChanges();
-                return cat.Id;
-            }
-
-        }
-
-        [AccessPolicy(PageCode = "SHNUAPI002")]
+        [AccessPolicy(PageCode = "SNCWAU295")]
         public ActionResult Update()
         {
             return View();
@@ -240,7 +212,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNUAPI002")]
+        [AccessPolicy(PageCode = "SNCWAU295")]
         public ActionResult Update(WebApiCreateViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -409,7 +381,7 @@ namespace ShopNow.Controllers
             }
         }
 
-        [AccessPolicy(PageCode = "SHNAPITSU003")]
+        [AccessPolicy(PageCode = "SNCWATSU296")]
         public ActionResult TSUpdate()
         {
             return View();
@@ -417,7 +389,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNAPITSU003")]
+        [AccessPolicy(PageCode = "SNCWATSU296")]
         public ActionResult TSUpdate(WebApiTSViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -627,8 +599,34 @@ namespace ShopNow.Controllers
             }
         }
 
+        public int CheckCategory(string CategoryName, double percentage)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var category = db.DiscountCategories.FirstOrDefault(i => i.Name == CategoryName); // Category.GetName(CategoryName);
+            if (category != null)
+            {
 
-        [AccessPolicy(PageCode = "SHNCAPI001")]
+                return category.Id;
+            }
+            else
+            {
+                DiscountCategory cat = new DiscountCategory();
+                cat.Name = CategoryName;
+                //cat.CategoryType = 0;
+                //cat.Type = 0;
+                cat.Percentage = percentage;
+                cat.DateEncoded = DateTime.Now;
+                cat.DateUpdated = DateTime.Now;
+                cat.CreatedBy = user.Name;
+                cat.UpdatedBy = user.Name;
+                cat.Status = 0;
+                db.DiscountCategories.Add(cat);
+                db.SaveChanges();
+                return cat.Id;
+            }
+
+        }
+
         public async Task<JsonResult> GetShopSelect2(string pincode, string q = "")
         {
             var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.PinCode == pincode && a.Name.Contains(q) && a.Status == 0).Select(i => new

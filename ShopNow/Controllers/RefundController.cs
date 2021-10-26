@@ -17,7 +17,7 @@ namespace ShopNow.Controllers
     {
         private sncEntities db = new sncEntities();
 
-        [AccessPolicy(PageCode = "SHNRFNP001")]
+        [AccessPolicy(PageCode = "SNCRP242")]
         public ActionResult Pending(RefundPendingViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -39,7 +39,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "SHNRFNH002")]
+        [AccessPolicy(PageCode = "SNCRH243")]
         public ActionResult History(RefundHistoryViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -66,7 +66,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "SHNRFNS003")]
+        [AccessPolicy(PageCode = "SNCRSR244")]
         public ActionResult SendRefund(string paymentId, double amount, int orderNo)
         {
             Refund refund = new Refund();
@@ -119,5 +119,6 @@ namespace ShopNow.Controllers
 
             return RedirectToAction("History", "Refund");
         }
+
     }
 }

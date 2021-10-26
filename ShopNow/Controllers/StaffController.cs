@@ -30,6 +30,7 @@ namespace ShopNow.Controllers
         private static readonly RegionEndpoint bucketRegion = RegionEndpoint.APSouth1;
         private static readonly string accesskey = ConfigurationManager.AppSettings["AWSAccessKey"];
         private static readonly string secretkey = ConfigurationManager.AppSettings["AWSSecretKey"];
+
         private static string _generatedPassword
         {
             get
@@ -37,6 +38,7 @@ namespace ShopNow.Controllers
                 return ShopNow.Helpers.DRC.GeneratePassword();
             }
         }
+
         public StaffController()
         {
             _mapperConfiguration = new MapperConfiguration(config =>
@@ -49,7 +51,7 @@ namespace ShopNow.Controllers
             _mapper = _mapperConfiguration.CreateMapper();
         }
 
-        [AccessPolicy(PageCode = "SHNSTFL001")]
+        [AccessPolicy(PageCode = "SNCSFL279")]
         public ActionResult List()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -59,7 +61,7 @@ namespace ShopNow.Controllers
             return View(List);
         }
 
-        [AccessPolicy(PageCode = "SHNSTFC002")]
+        [AccessPolicy(PageCode = "SNCSFC280")]
         public ActionResult Create()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -69,7 +71,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNSTFC002")]
+        [AccessPolicy(PageCode = "SNCSFC280")]
         public ActionResult Create(StaffCreateEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -113,7 +115,7 @@ namespace ShopNow.Controllers
             }
         }
 
-        [AccessPolicy(PageCode = "SHNSTFE003")]
+        [AccessPolicy(PageCode = "SNCSFE281")]
         public ActionResult Edit(string Id)
         {
             var dCode = AdminHelpers.DCodeInt(Id);
@@ -128,7 +130,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNSTFE003")]
+        [AccessPolicy(PageCode = "SNCSFE281")]
         public ActionResult Edit(StaffCreateEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -167,7 +169,7 @@ namespace ShopNow.Controllers
 
         }
 
-        [AccessPolicy(PageCode = "SHNSTFD004")]
+        [AccessPolicy(PageCode = "SNCSFDT282")]
         public ActionResult Details(string Id)
         {
             var dCode = AdminHelpers.DCodeInt(Id);
@@ -190,7 +192,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "SHNSTFR005")]
+        [AccessPolicy(PageCode = "SNCSFD283")]
         public JsonResult Delete(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -206,7 +208,6 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNSTFGP006")]
         public JsonResult GeneratePassword(int Id)
         {
             var staff = db.Staffs.FirstOrDefault(i => i.Id == Id);
@@ -220,7 +221,6 @@ namespace ShopNow.Controllers
             return Json(new { data = staff.Password, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNSTFC002")]
         public async Task<JsonResult> GetShopSelect2(string q = "")
         {
             var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new

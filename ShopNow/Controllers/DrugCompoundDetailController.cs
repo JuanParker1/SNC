@@ -33,7 +33,7 @@ namespace ShopNow.Controllers
             _mapper = _mapperConfiguration.CreateMapper();
         }
 
-        [AccessPolicy(PageCode = "SHNDCDL001")]
+        [AccessPolicy(PageCode = "SNCDRL129")]
         public ActionResult List()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -45,7 +45,7 @@ namespace ShopNow.Controllers
             return View(model.List);
         }
 
-        [AccessPolicy(PageCode = "SHNDCDC002")]
+        [AccessPolicy(PageCode = "SNCDRC130")]
         public ActionResult Create()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -55,7 +55,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNDCDC002")]
+        [AccessPolicy(PageCode = "SNCDRC130")]
         public ActionResult Create(DrugCompoundDetailCreateEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -77,7 +77,7 @@ namespace ShopNow.Controllers
             }
         }
 
-        [AccessPolicy(PageCode = "SHNDCDE003")]
+        [AccessPolicy(PageCode = "SNCDRE131")]
         public ActionResult Edit(string Id)
         {
             var dId = AdminHelpers.DCodeInt(Id);
@@ -92,7 +92,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNDCDE003")]
+        [AccessPolicy(PageCode = "SNCDRE131")]
         public ActionResult Edit(DrugCompoundDetailCreateEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -115,7 +115,7 @@ namespace ShopNow.Controllers
             }
         }
 
-        [AccessPolicy(PageCode = "SHNDCDD004")]
+        [AccessPolicy(PageCode = "SNCDRD132")]
         public JsonResult Delete(string Id)
         {
             var dId = AdminHelpers.DCodeInt(Id);
@@ -131,7 +131,7 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNDCDI005")]
+        [AccessPolicy(PageCode = "SNCDRI133")]
         public ActionResult Index()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -141,7 +141,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNDCDI005")]
+        [AccessPolicy(PageCode = "SNCDRI133")]
         public ActionResult Index(HttpPostedFileBase upload, DrugCompoundDetailMasterViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -256,6 +256,7 @@ namespace ShopNow.Controllers
             }
             return View();
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

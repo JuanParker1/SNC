@@ -31,10 +31,12 @@ namespace ShopNow.Controllers
         private static readonly RegionEndpoint bucketRegion = RegionEndpoint.APSouth1;
         private static readonly string accesskey = ConfigurationManager.AppSettings["AWSAccessKey"];
         private static readonly string secretkey = ConfigurationManager.AppSettings["AWSSecretKey"];
+
         private static string _genCode(string _prefix)
         {
             return ShopNow.Helpers.DRC.Generate(_prefix);
         }
+
         private static string _referenceCode
         {
             get
@@ -50,6 +52,7 @@ namespace ShopNow.Controllers
                 return ShopNow.Helpers.DRC.GenerateOTP();
             }
         }
+
         private static string _generatedPassword
         {
             get
@@ -73,7 +76,7 @@ namespace ShopNow.Controllers
             _mapper = _mapperConfiguration.CreateMapper();
         }
 
-        [AccessPolicy(PageCode = "SHNSHPL005")]
+        [AccessPolicy(PageCode = "SNCSL253")]
         public ActionResult List(string district = "")
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -85,7 +88,7 @@ namespace ShopNow.Controllers
             return View(List);
         }
 
-        [AccessPolicy(PageCode = "SHNSHPIL004")]
+        [AccessPolicy(PageCode = "SNCSIL254")]
         public ActionResult InactiveList()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -95,7 +98,7 @@ namespace ShopNow.Controllers
             return View(List);
         }
 
-        [AccessPolicy(PageCode = "SHNSHPC001")]
+        [AccessPolicy(PageCode = "SNCSC255")]
         public ActionResult Create()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -105,7 +108,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNSHPC001")]
+        [AccessPolicy(PageCode = "SNCSC255")]
         public ActionResult Create(ShopRegisterViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -286,7 +289,7 @@ namespace ShopNow.Controllers
             }
         }
 
-        [AccessPolicy(PageCode = "SHNSHPE003")]
+        [AccessPolicy(PageCode = "SNCSE256")]
         public ActionResult Edit(string id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -343,7 +346,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNSHPE003")]
+        [AccessPolicy(PageCode = "SNCSE256")]
         public ActionResult Edit(ShopEditViewModel model)
         {
             var shop = db.Shops.FirstOrDefault(i => i.Id == model.Id);
@@ -515,7 +518,7 @@ namespace ShopNow.Controllers
             }
         }
 
-        [AccessPolicy(PageCode = "SHNSHPD002")]
+        [AccessPolicy(PageCode = "SNCSDT257")]
         public ActionResult Details(string Id)
         {
             var dId = AdminHelpers.DCodeInt(Id);
@@ -527,7 +530,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "SHNSHPR006")]
+        [AccessPolicy(PageCode = "SNCSD258")]
         public JsonResult Delete(string id)
         {
             var dId = AdminHelpers.DCodeInt(id);
@@ -544,7 +547,48 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNSHPIA007")]
+        [AccessPolicy(PageCode = "SNCSCL259")]
+        public ActionResult CreditList()
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            var model = new ShopCreditViewModel();
+            model.ListItems = db.ShopCredits.Where(i => i.PlatformCredit <= 100 && i.DeliveryCredit <= 100) //Low credits
+                .Join(db.Shops.Where(i => i.IsTrail == false), sc => sc.CustomerId, s => s.CustomerId, (sc, s) => new { sc, s })
+                .Select(i => new ShopCreditViewModel.ListItem
+                {
+                    DeliveryCredit = i.sc.DeliveryCredit,
+                    Id = i.sc.Id,
+                    PlatformCredit = i.sc.PlatformCredit,
+                    ShopName = i.s.Name,
+                    ShopOwnerName = i.s.CustomerName,
+                    ShopOwnerPhoneNumber = i.s.OwnerPhoneNumber,
+                    DeliveryCreditCssColor = i.sc.DeliveryCredit <= 150 ? "text-danger" : (i.sc.DeliveryCredit <= 250 && i.sc.DeliveryCredit > 150) ? "text-warning" : "text-success",
+                    PlatformCreditCssColor = i.sc.PlatformCredit <= 100 ? "text-danger" : (i.sc.PlatformCredit <= 200 && i.sc.PlatformCredit > 100) ? "text-warning" : "text-success"
+                }).ToList();
+            return View(model);
+        }
+
+        [AccessPolicy(PageCode = "SNCSCH260")]
+        public ActionResult CreditsHistory()
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var model = new ShopCreditViewModel();
+            model.Lists = db.Payments.Where(i => i.CreditType == 0 || i.CreditType == 1 && i.Amount != -20)
+                 .Join(db.Shops, p => p.ShopId, s => s.Id, (p, s) => new { p, s })
+                .Select(i => new ShopCreditViewModel.List
+                {
+                    Id = i.p.Id,
+                    ShopName = i.s.Name,
+                    ShopOwnerName = i.s.CustomerName != null ? i.s.CustomerName : "N/A",
+                    ShopOwnerPhoneNumber = i.s.OwnerPhoneNumber,
+                    Amount = i.p.Amount,
+                    CreditType = i.p.CreditType
+                }).ToList();
+            return View(model);
+        }
+
+        [AccessPolicy(PageCode = "SNCSIA261")]
         public ActionResult InActive(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -557,7 +601,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("List", "Shop");
         }
 
-        [AccessPolicy(PageCode = "SHNSHPIA007")]
+        [AccessPolicy(PageCode = "SNCSILB262")]
         public ActionResult InActiveLowBalance(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -570,7 +614,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("List", "Shop");
         }
 
-        [AccessPolicy(PageCode = "SHNSHPA008")]
+        [AccessPolicy(PageCode = "SNCSA263")]
         public ActionResult Active(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -583,7 +627,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("List", "Shop");
         }
 
-        [AccessPolicy(PageCode = "SHNSHPA008")]
+        [AccessPolicy(PageCode = "SNCSA263")]
         public ActionResult Activate(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -596,107 +640,27 @@ namespace ShopNow.Controllers
             return RedirectToAction("List", "Shop");
         }
 
-        [AccessPolicy(PageCode = "SHNSHPAF015")]
-        public ActionResult AssignFranchise()
+        public ActionResult UpdateShopOnline(int Id, bool isOnline)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-
-            return View();
+            var shop = db.Shops.Where(i => i.Id == Id && i.Status == 0).FirstOrDefault();
+            shop.IsOnline = isOnline;
+            db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("List");
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNSHPAF015")]
-        public ActionResult AssignFranchise(ShopFranchiseViewModel model)
+        public ActionResult UpdateShopTrail(int Id, bool isTrail)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
-            if (shop != null)
-            {
-                shop.AgencyId = model.MarketingAgentId;
-                shop.AgencyName = model.MarketingAgentName;
-                db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-            }
-
-            return RedirectToAction("AssignedFranchiseList");
-        }
-
-        [AccessPolicy(PageCode = "SHNSHPFL017")]
-        public ActionResult AssignedFranchiseList()
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            var model = new ShopFranchiseViewModel();
-            model.List = db.Shops.Where(i => i.Status == 0 && i.AgencyId != 0 && i.AgencyName != null)
-                .Select(i => new ShopFranchiseViewModel.FranchiseList
-                {
-                    Name = i.Name,
-                    Id = i.Id,
-                    MarketingAgentId = Convert.ToInt32(i.AgencyId),
-                    MarketingAgentName = i.AgencyName
-                }).OrderBy(i => i.Name).ToList();
-            return View(model.List);
-        }
-
-        [AccessPolicy(PageCode = "SHNSHPFU016")]
-        public ActionResult FranchiseUpdate(string code)
-        {
-            var dCode = AdminHelpers.DCodeInt(code);
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            var model = new ShopFranchiseViewModel();
-            var shop = db.Shops.FirstOrDefault(i => i.Id == dCode);
-            _mapper.Map(shop, model);
-            if (shop != null)
-            {
-                model.ShopId = shop.Id;
-                model.ShopName = shop.Name;
-            }
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNSHPFU016")]
-        public ActionResult FranchiseUpdate(ShopFranchiseViewModel model)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
-            if (shop != null)
-            {
-                shop.AgencyId = model.MarketingAgentId;
-                shop.AgencyName = model.MarketingAgentName;
-                shop.UpdatedBy = user.Name;
-                shop.DateUpdated = DateTime.Now;
-                db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-            }
-
-            return RedirectToAction("AssignedFranchiseList");
-        }
-
-        [AccessPolicy(PageCode = "SHNSHPFR018")]
-        public JsonResult FranchiseRemove(int id)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            bool IsAdded = false;
-            var shop = db.Shops.FirstOrDefault(i => i.Id == id);
-            if (shop != null)
-            {
-                shop.AgencyId = 0;
-                shop.AgencyName = null;
-                db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-                IsAdded = true;
-            }
-            return Json(new { IsAdded = IsAdded }, JsonRequestBehavior.AllowGet);
+            var shop = db.Shops.Where(i => i.Id == Id).FirstOrDefault();
+            shop.IsTrail = isTrail;
+            db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("List");
         }
 
         // Json Result
-
-        [AccessPolicy(PageCode = "SHNSHPGO009")]
         public JsonResult GenerateOTP(string MobileNo, int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -729,7 +693,6 @@ namespace ShopNow.Controllers
             return Json(new { data = models.Otp, models.Verify, model.ErrorMessage, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNSHPOG010")]
         public JsonResult OTPGenerate(string MobileNo, int Customerid)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -764,7 +727,6 @@ namespace ShopNow.Controllers
             return Json(new { data = models.Otp, models.Verify, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNSHPOV011")]
         public JsonResult OTPVerify(string Otp)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -783,7 +745,6 @@ namespace ShopNow.Controllers
             return Json(new { data, otp = Otp, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNSHPGP012")]
         public JsonResult GeneratePassword(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -799,14 +760,12 @@ namespace ShopNow.Controllers
             return Json(new { data = customer.Password, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNSHPA008")]
         public JsonResult Activation(int id)
         {
             var count = db.Products.Where(i => i.ShopId == id).Count();
             return Json(new { count, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNSHPOV011")]
         public JsonResult VerifyOTP(int Id, string phoneNumber)
         {
             bool Verify = false;
@@ -841,7 +800,6 @@ namespace ShopNow.Controllers
             return Json(new { Verify, otp, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNSHPVI013")]
         public JsonResult VerifyImage(int code)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -855,7 +813,6 @@ namespace ShopNow.Controllers
             return Json(new { data = shop.Verify, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNSHPCC014")]
         public JsonResult CustomerCheck(string phoneNumber)
         {
             bool code = false;
@@ -880,8 +837,18 @@ namespace ShopNow.Controllers
             return Json(new { data = code, CustomerId, CustomerName, PhoneNumber, AadharName, AadharNumber, Email, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetShop(string placeid)
+        {
+            using (WebClient myData = new WebClient())
+            {
+                string getDetails = myData.DownloadString("https://maps.googleapis.com/maps/api/place/details/json?place_id=" + placeid + "&key=AIzaSyCRsR3Wpkj_Vofy5FSU0otOx-6k-YFiNBk");
+                var result = JsonConvert.DeserializeObject<Results>(getDetails);
+                return Json(new { result, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+
         // Select2
-        [AccessPolicy(PageCode = "SHNSHPC001")]
         public async Task<JsonResult> GetListSelect2(string q = "")
         {
             var model = await db.Shops.Where(a => a.Name.Contains(q)).OrderBy(i => i.Name).Select(i => new
@@ -904,7 +871,6 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNSHPC001")]
         public async Task<JsonResult> GetShopCategorySelect2(string q = "")
         {
             var model = await db.ShopCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q)).Select(i => new
@@ -916,7 +882,6 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNSHPC001")]
         public async Task<JsonResult> GetBrandSelect2(string q = "")
         {
             var model = await db.Brands.OrderBy(i => i.Name).Where(a => a.Name.Contains(q)).Select(i => new
@@ -928,7 +893,6 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNSHPAF015")]
         public async Task<JsonResult> GetShopSelect2(string q = "")
         {
             var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.AgencyName == null).Select(i => new
@@ -940,91 +904,6 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNSHPAF015")]
-        public async Task<JsonResult> GetMarketingAgentSelect2(string q = "")
-        {
-            var model = await db.MarketingAgents.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
-            {
-                id = i.Id,
-                text = i.Name
-            }).ToListAsync();
-
-            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult GetShop(string placeid)
-        {
-            using (WebClient myData = new WebClient())
-            {
-                string getDetails = myData.DownloadString("https://maps.googleapis.com/maps/api/place/details/json?place_id=" + placeid + "&key=AIzaSyCRsR3Wpkj_Vofy5FSU0otOx-6k-YFiNBk");
-                var result = JsonConvert.DeserializeObject<Results>(getDetails);
-                return Json(new { result, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
-            }
-
-        }
-
-        public ActionResult UpdateShopOnline(int Id, bool isOnline)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            var shop = db.Shops.Where(i => i.Id == Id && i.Status == 0).FirstOrDefault();
-            shop.IsOnline = isOnline;
-            db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
-            return RedirectToAction("List");
-        }
-
-        public ActionResult UpdateShopTrail(int Id, bool isTrail)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            var shop = db.Shops.Where(i => i.Id == Id).FirstOrDefault();
-            shop.IsTrail = isTrail;
-            db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
-            return RedirectToAction("List");
-        }
-
-        [AccessPolicy(PageCode = "")]
-        public ActionResult CreditList()
-        {
-            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-            var model = new ShopCreditViewModel();
-            model.ListItems = db.ShopCredits.Where(i => i.PlatformCredit <= 100 && i.DeliveryCredit <= 100) //Low credits
-                .Join(db.Shops.Where(i=>i.IsTrail == false), sc => sc.CustomerId, s => s.CustomerId, (sc, s) => new { sc, s })
-                .Select(i => new ShopCreditViewModel.ListItem
-                {
-                    DeliveryCredit = i.sc.DeliveryCredit,
-                    Id = i.sc.Id,
-                    PlatformCredit = i.sc.PlatformCredit,
-                    ShopName = i.s.Name,
-                    ShopOwnerName = i.s.CustomerName,
-                    ShopOwnerPhoneNumber = i.s.OwnerPhoneNumber,
-                    DeliveryCreditCssColor = i.sc.DeliveryCredit <= 150 ? "text-danger" : (i.sc.DeliveryCredit <= 250 && i.sc.DeliveryCredit > 150) ? "text-warning" : "text-success",
-                    PlatformCreditCssColor = i.sc.PlatformCredit <= 100 ? "text-danger" : (i.sc.PlatformCredit <= 200 && i.sc.PlatformCredit > 100) ? "text-warning" : "text-success"
-                }).ToList();
-            return View(model);
-        }
-
-        [AccessPolicy(PageCode = "")]
-        public ActionResult CreditsHistory()
-        {
-            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            var model = new ShopCreditViewModel();
-            model.Lists = db.Payments.Where(i => i.CreditType == 0 || i.CreditType == 1 && i.Amount != -20)
-                 .Join(db.Shops, p => p.ShopId, s => s.Id, (p, s) => new { p, s })
-                .Select(i => new ShopCreditViewModel.List
-                {
-                    Id = i.p.Id,
-                    ShopName = i.s.Name,
-                    ShopOwnerName = i.s.CustomerName != null ? i.s.CustomerName : "N/A",
-                    ShopOwnerPhoneNumber = i.s.OwnerPhoneNumber,
-                    Amount = i.p.Amount,
-                    CreditType = i.p.CreditType
-                }).ToList();
-            return View(model);
-        }
-
-        [AccessPolicy(PageCode = "")]
         public async Task<JsonResult> GetDistrictSelect2(string q = "")
         {
             var model = await db.Shops
@@ -1039,7 +918,6 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "")]
         public async Task<JsonResult> GetShopByDistrictSelect2(string district, string q = "")
         {
             var model = await db.Shops.Where(a => a.Name.Contains(q) && a.Status == 0 && a.DistrictName == district).OrderBy(i => i.Name).Select(i => new
@@ -1050,7 +928,6 @@ namespace ShopNow.Controllers
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
-
 
         protected override void Dispose(bool disposing)
         {

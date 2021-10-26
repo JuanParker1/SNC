@@ -13,7 +13,7 @@ namespace ShopNow.Controllers
     {
         private sncEntities db = new sncEntities();
 
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCCPL111")]
         public ActionResult List()
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);

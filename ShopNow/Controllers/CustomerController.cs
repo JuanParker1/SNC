@@ -32,7 +32,7 @@ namespace ShopNow.Controllers
             _mapper = _mapperConfiguration.CreateMapper();
         }
 
-        [AccessPolicy(PageCode = "SHNCUSL001")]
+        [AccessPolicy(PageCode = "SNCCUL101")]
         public ActionResult List()
         {
             if (Session["USER"] == null)
@@ -56,7 +56,7 @@ namespace ShopNow.Controllers
             return View(model.List);
         }
 
-        [AccessPolicy(PageCode = "SHNCUSL001")]
+        [AccessPolicy(PageCode = "SNCCUAP102")]
         public ActionResult AadharPending()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -74,7 +74,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "SHNCUSD002")]
+        [AccessPolicy(PageCode = "SNCCUD103")]
         public ActionResult Details(string id)
         {
             var dId = AdminHelpers.DCodeInt(id);
@@ -85,7 +85,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "SHNCUSE003")]
+        [AccessPolicy(PageCode = "SNCCUE104")]
         public ActionResult Edit(string id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -99,7 +99,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "SHNCUSIA005")]
+        [AccessPolicy(PageCode = "SNCCUIA105")]
         public ActionResult InActive(int code)
         {
             var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();
@@ -109,7 +109,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("List", "Customer");
         }
 
-        [AccessPolicy(PageCode = "SHNCUSA006")]
+        [AccessPolicy(PageCode = "SNCCUA106")]
         public ActionResult Active(int id)
         {
             var customer = db.Customers.Where(m => m.Id == id).FirstOrDefault();
@@ -119,7 +119,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("List", "Customer");
         }
 
-        [AccessPolicy(PageCode = "SHNCUSR004")]
+        [AccessPolicy(PageCode = "SNCCUD107")]
         public JsonResult Delete(string id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -136,7 +136,70 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNCUSVAI007")]
+        [AccessPolicy(PageCode = "SNCCUAD108")]
+        public ActionResult Admin()
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var model = new CustomerListViewModel();
+
+            model.List = db.Customers.Where(i => i.Position == 4 && i.Status == 0).Select(i => new CustomerListViewModel.CustomerList
+            {
+                Id = i.Id,
+                Name = i.Name,
+                PhoneNumber = i.PhoneNumber,
+                Address = i.Address,
+                DistrictName = i.DistrictName,
+                StateName = i.StateName
+            }).OrderBy(i => i.Name).ToList();
+
+            return View(model.List);
+        }
+
+        [AccessPolicy(PageCode = "SNCCUS109")]
+        public JsonResult Save(int Id)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            bool IsAdded = false;
+            string message = "";
+            string message1 = "";
+
+            var customer = db.Customers.Where(m => m.Id == Id).FirstOrDefault();
+            if (customer != null && customer.Position != 4)
+            {
+                customer.Position = 4;
+                customer.UpdatedBy = user.Name;
+                customer.DateUpdated = DateTime.Now;
+                customer.DateUpdated = DateTime.Now;
+                db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                IsAdded = true;
+                message = customer.Name + " Added Successfully";
+            }
+            else if (customer != null && customer.Position == 4)
+            {
+                message1 = customer.Name + " Already Exist";
+            }
+
+            return Json(new { IsAdded = IsAdded, message = message, message1 = message1 }, JsonRequestBehavior.AllowGet);
+        }
+
+        [AccessPolicy(PageCode = "SNCCUR110")]
+        public JsonResult Remove(int Id)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var customer = db.Customers.Where(m => m.Id == Id).FirstOrDefault();
+            if (customer != null)
+            {
+                customer.Position = 0;
+                customer.DateUpdated = DateTime.Now;
+                customer.UpdatedBy = user.Name;
+                db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult VerifyAadharImage(int code)
         {
             var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();
@@ -187,7 +250,6 @@ namespace ShopNow.Controllers
             return Json(new { IsAdded = IsAdded, message = message }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNCUSVA008")]
         public JsonResult VerifyAge(int code)
         {
             var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();
@@ -198,7 +260,6 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNCUSRAI009")]
         public JsonResult RejectAadharImage(int code)
         {
             var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();
@@ -213,7 +274,6 @@ namespace ShopNow.Controllers
             return Json(false, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNCUSCAI010")]
         public JsonResult CheckAadharImage(int code)
         {
             var customer = db.Customers.Where(m => m.Id == code).FirstOrDefault();
@@ -227,72 +287,7 @@ namespace ShopNow.Controllers
             }
             return Json(false, JsonRequestBehavior.AllowGet);
         }
-
-        [AccessPolicy(PageCode = "SHNCUSAD011")]
-        public ActionResult Admin()
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            var model = new CustomerListViewModel();
-
-            model.List = db.Customers.Where(i => i.Position == 4 && i.Status == 0).Select(i => new CustomerListViewModel.CustomerList
-            {
-                Id = i.Id,
-                Name = i.Name,
-                PhoneNumber = i.PhoneNumber,
-                Address = i.Address,
-                DistrictName = i.DistrictName,
-                StateName = i.StateName
-            }).OrderBy(i => i.Name).ToList();
-
-            return View(model.List);
-        }
-
-        [AccessPolicy(PageCode = "SHNCUSSA012")]
-        public JsonResult Save(int Id)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            bool IsAdded = false;
-            string message = "";
-            string message1 = "";
-
-            var customer = db.Customers.Where(m => m.Id == Id).FirstOrDefault();
-            if (customer != null && customer.Position != 4)
-            {
-                customer.Position = 4;
-                customer.UpdatedBy = user.Name;
-                customer.DateUpdated = DateTime.Now;
-                customer.DateUpdated = DateTime.Now;
-                db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-                IsAdded = true;
-                message = customer.Name + " Added Successfully";
-            }
-            else if (customer != null && customer.Position == 4)
-            {
-                message1 = customer.Name + " Already Exist";
-            }
-
-            return Json(new { IsAdded = IsAdded, message = message, message1 = message1 }, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "SHNCUSSA012")]
-        public JsonResult Remove(int Id)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            var customer = db.Customers.Where(m => m.Id == Id).FirstOrDefault();
-            if (customer != null)
-            {
-                customer.Position = 0;
-                customer.DateUpdated = DateTime.Now;
-                customer.UpdatedBy = user.Name;
-                db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-            }
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "SHNCUSSA012")]
+               
         public async Task<JsonResult> GetCustomerSelect2(string q = "")
         {
             var model = await db.Customers.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.Position != 4).Select(i => new
@@ -304,7 +299,6 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "")]
         public async Task<JsonResult> GetDistrictSelect2(string q = "")
         {
             var model = await db.Customers
@@ -318,6 +312,7 @@ namespace ShopNow.Controllers
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -22,7 +22,7 @@ namespace ShopNow.Controllers
         private MapperConfiguration _mapperConfiguration;
         // GET: ProductDishAddOn
 
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCPDAI224")]
         public ActionResult Index()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -32,7 +32,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCPDAI224")]
         public ActionResult Index(HttpPostedFileBase upload, ProductDishAddOnViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);

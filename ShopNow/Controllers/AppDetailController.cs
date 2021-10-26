@@ -14,7 +14,7 @@ namespace ShopNow.Controllers
     {
         private sncEntities db = new sncEntities();
 
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCADI034")]
         public ActionResult Index()
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -31,7 +31,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCADC035")]
         [HttpPost]
         public ActionResult Create(string name, string version)
         {
@@ -51,21 +51,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("Index");
         }
 
-        [AccessPolicy(PageCode = "")]
-        public JsonResult Delete(string id)
-        {
-            int dId = AdminHelpers.DCodeInt(id);
-            var appDetail = db.AppDetails.FirstOrDefault(i => i.Id == dId);
-            if (appDetail != null)
-            {
-                appDetail.Status = 2;
-                db.Entry(appDetail).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-            }
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCADE036")]
         [HttpPost]
         public ActionResult Edit(int id, string name, string version)
         {
@@ -77,6 +63,20 @@ namespace ShopNow.Controllers
             db.Entry(appDetail).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        [AccessPolicy(PageCode = "SNCADD037")]
+        public JsonResult Delete(string id)
+        {
+            int dId = AdminHelpers.DCodeInt(id);
+            var appDetail = db.AppDetails.FirstOrDefault(i => i.Id == dId);
+            if (appDetail != null)
+            {
+                appDetail.Status = 2;
+                db.Entry(appDetail).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
     }
 }

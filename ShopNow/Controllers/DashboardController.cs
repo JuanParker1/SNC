@@ -12,7 +12,7 @@ namespace ShopNow.Controllers
     {
         private sncEntities _db = new sncEntities();
 
-        [AccessPolicy(PageCode = "SHNDASI001")]
+        [AccessPolicy(PageCode = "SNCDI112")]
         public ActionResult Index()
         {
             ViewBag.Name = ((ShopNow.Helpers.Sessions.User)System.Web.HttpContext.Current.Session["USER"]).Name;
@@ -40,6 +40,7 @@ namespace ShopNow.Controllers
         {
             return Json(_db.Orders.Where(i => i.Status == 2).Count(), JsonRequestBehavior.AllowGet);
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
