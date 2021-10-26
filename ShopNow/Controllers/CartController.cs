@@ -35,7 +35,7 @@ namespace ShopNow.Controllers
             _mapper = _mapperConfiguration.CreateMapper();
         }
 
-        [AccessPolicy(PageCode = "SHNCARL001")]
+        [AccessPolicy(PageCode = "SNCCL059")]
         public ActionResult List(int shopId = 0)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -57,7 +57,7 @@ namespace ShopNow.Controllers
             return View(model.TodayLists);
         }
 
-        [AccessPolicy(PageCode = "SHNCARPE016")]
+        [AccessPolicy(PageCode = "SNCCP060")]
         public ActionResult Pending(int shopId = 0)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -83,7 +83,7 @@ namespace ShopNow.Controllers
             return View(model.CartPendingLists);
         }
 
-        [AccessPolicy(PageCode = "SHNCARPE016")]
+        [AccessPolicy(PageCode = "SNCCPL061")]
         public ActionResult PendingList(int shopId = 0)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -109,7 +109,7 @@ namespace ShopNow.Controllers
             return View(model.CartPendingLists);
         }
 
-        [AccessPolicy(PageCode = "SHNCAROP017")]
+        [AccessPolicy(PageCode = "SNCCOP062")]
         public ActionResult OrderPrepared(int shopId = 0) //Order Processing
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -137,7 +137,7 @@ namespace ShopNow.Controllers
             return View(model.CartPreparedLists);
         }
 
-        [AccessPolicy(PageCode = "SHNCARDA018")]
+        [AccessPolicy(PageCode = "SNCCDA063")]
         public ActionResult DeliveryAgentAssigned(int shopId = 0)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -163,7 +163,7 @@ namespace ShopNow.Controllers
             return View(model.DeliveryAgentAssignedLists);
         }
 
-        [AccessPolicy(PageCode = "SHNCARDA018")]
+        [AccessPolicy(PageCode = "SNCCDAL064")]
         public ActionResult DeliveryAgentAssignedList(int shopId = 0)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -188,7 +188,7 @@ namespace ShopNow.Controllers
             return View(model.DeliveryAgentAssignedLists);
         }
 
-        [AccessPolicy(PageCode = "SHNCARWP021")]
+        [AccessPolicy(PageCode = "SNCCWP065")]
         public ActionResult WaitingForPickup(int shopId=0)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -215,7 +215,7 @@ namespace ShopNow.Controllers
             return View(model.PickupLists);
         }
 
-        [AccessPolicy(PageCode = "SHNCARWP021")]
+        [AccessPolicy(PageCode = "SNCCWPL066")]
         public ActionResult WaitingForPickupList(int shopId = 0)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -242,7 +242,7 @@ namespace ShopNow.Controllers
             return View(model.PickupLists);
         }
 
-        [AccessPolicy(PageCode = "SHNCAROT007")]
+        [AccessPolicy(PageCode = "SNCCOW067")]
         public ActionResult OnTheWay(int shopId=0)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -267,7 +267,7 @@ namespace ShopNow.Controllers
             return View(model.OntheWayLists);
         }
 
-        [AccessPolicy(PageCode = "SHNCAROT007")]
+        [AccessPolicy(PageCode = "SNCCOWL068")]
         public ActionResult OnTheWayList(int shopId = 0)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -292,7 +292,7 @@ namespace ShopNow.Controllers
             return View(model.OntheWayLists);
         }
 
-        [AccessPolicy(PageCode = "SHNCARDL006")]
+        [AccessPolicy(PageCode = "SNCCD069")]
         public ActionResult Delivered(int shopId = 0)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -322,7 +322,7 @@ namespace ShopNow.Controllers
             return View(model.DeliveredLists);
         }
 
-        [AccessPolicy(PageCode = "SHNCARDR010")]
+        [AccessPolicy(PageCode = "SNCCDR070")]
         public ActionResult DeliveredReport(CartReportViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -344,7 +344,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "SHNCARCA019")]
+        [AccessPolicy(PageCode = "SNCCC071")]
         public ActionResult Cancelled(int shopId = 0)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -370,7 +370,7 @@ namespace ShopNow.Controllers
             return View(model.CancelledLists);
         }
 
-        [AccessPolicy(PageCode = "SHNCARCR020")]
+        [AccessPolicy(PageCode = "SNCCCR072")]
         public ActionResult CancelledReport(CartReportViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -390,6 +390,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
+        [AccessPolicy(PageCode = "SNCCCC073")]
         public ActionResult CustomerCancelled(int shopId = 0)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["User"]);
@@ -413,6 +414,7 @@ namespace ShopNow.Controllers
             return View(model.CustomerCancelledLists);
         }
 
+        [AccessPolicy(PageCode = "SNCCCNP074")]
         public ActionResult CustomerNotPickupList(int shopId = 0)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -441,8 +443,7 @@ namespace ShopNow.Controllers
             return View(model.CustomerNotPickupLists);
         }
 
-
-        [AccessPolicy(PageCode = "SHNCARD005")]
+        [AccessPolicy(PageCode = "SNCCD075")]
         public ActionResult Details(int id)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -481,11 +482,19 @@ namespace ShopNow.Controllers
                             PortionPrice = a.PortionPrice
                         }).ToList()
                     }).ToList();
+
+                var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == order.OrderNumber);
+                if (payment != null)
+                {
+                    model.RefundAmount = payment.RefundAmount;
+                    model.RefundRemark = payment.RefundRemark;
+                    model.PaymentMode = payment.PaymentMode;
+                }
             }
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "SHNCARPS025")]
+        [AccessPolicy(PageCode = "SNCCPS076")]
         public ActionResult PickupSlip(int OrderNumber, string id)
         {
             var dInt = AdminHelpers.DCodeLong(id);
@@ -540,7 +549,7 @@ namespace ShopNow.Controllers
             return View(model);            
         }
          
-        [AccessPolicy(PageCode = "SHNCARE004")]
+        [AccessPolicy(PageCode = "SNCCE077")]
         public ActionResult Edit(int OrderNumber, string id)
         {
             var dInt = AdminHelpers.DCodeLong(id);
@@ -589,7 +598,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "SHNCARAD015")]
+        [AccessPolicy(PageCode = "SNCCAD078")]
         public ActionResult AssignDeliveryBoy(int OrderNumber)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -621,7 +630,7 @@ namespace ShopNow.Controllers
         }
 
         [HttpPost]
-        [AccessPolicy(PageCode = "SHNCARAD015")]
+        [AccessPolicy(PageCode = "SNCCAD078")]
         public ActionResult AssignDeliveryBoy(CartAssignDeliveryBoyViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -665,7 +674,7 @@ namespace ShopNow.Controllers
 
         }
 
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCCDHR079")]
         public ActionResult DeliveryBoyCashHandoverReport(DateTime? StartDate, DateTime? EndDate, int deliveryboyId = 0)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -773,7 +782,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCCDPS080")]
         public ActionResult DeliveryBoyPaymentStatus(DateTime? StartDate, DateTime? EndDate, int DeliveryBoyId = 0)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -878,48 +887,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        DeliveryBoy getDBoy(int id)
-        {
-            var deliveryBoy = db.DeliveryBoys.Where(d => d.Id == id).FirstOrDefault();
-            return deliveryBoy;
-        }
-        public int getDeliveryBoy(int id)
-        {
-            var deliveryBoy = db.DeliveryBoys.Where(d => d.Id == id).FirstOrDefault();
-            return deliveryBoy.Id;
-        }
-        
-        double GetMeters(Double Latitudes, Double Longitudes, Double Latitude, Double Longitude)
-        {
-            return (((Math.Acos(Math.Sin((Latitude * Math.PI / 180)) * Math.Sin((Latitudes * Math.PI / 180)) + Math.Cos((Latitude * Math.PI / 180)) * Math.Cos((Latitudes * Math.PI / 180))
-                    * Math.Cos(((Longitude - Longitudes) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344);
-        }
-        [AccessPolicy(PageCode = "SHNCARL001")]
-        public async Task<JsonResult> GetShopSelect2(string q = "")
-        {
-            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
-            {
-                id = i.Id,
-                text = i.Name,
-                shopCategoryId = i.ShopCategoryId
-            }).ToListAsync();
-
-            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "")]
-        public async Task<JsonResult> GetDeliveryBoySelect2(string q = "")
-        {
-            var model = await db.DeliveryBoys.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
-            {
-                id = i.Id,
-                text = i.Name
-            }).ToListAsync();
-
-            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "SHNCARAC011")]
+        [AccessPolicy(PageCode = "SNCCA081")]
         public JsonResult Accept(int OrderNumber)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -947,7 +915,7 @@ namespace ShopNow.Controllers
             }
         }
 
-        [AccessPolicy(PageCode = "SHNCARR012")]
+        [AccessPolicy(PageCode = "SNCCC082")]
         public JsonResult Cancel(int OrderNumber, int customerId, int? status)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -1011,68 +979,7 @@ namespace ShopNow.Controllers
             }
         }
 
-        [AccessPolicy(PageCode = "")]
-        public JsonResult ShopPay(int OrderNumber)
-        {
-            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-            var order = db.Orders.FirstOrDefault(i => i.OrderNumber == OrderNumber && i.ShopPaymentStatus == 0);
-            order.ShopPaymentStatus = 1;
-            db.Entry(order).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "")]
-        public JsonResult ShopNowChatPay(int OrderNumber)
-        {
-            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-            var order = db.Orders.FirstOrDefault(i => i.OrderNumber == OrderNumber && i.DeliveryBoyPaymentStatus == 0);
-            order.DeliveryBoyPaymentStatus = 1;
-            db.Entry(order).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "")]
-        public JsonResult DeliveryBoyPay(int OrderNumber)
-        {
-            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-            var order = db.Orders.FirstOrDefault(i => i.OrderNumber == OrderNumber && i.DeliveryBoyPaymentStatus == 0);
-            order.DeliveryBoyPaymentStatus = 1;
-            db.Entry(order).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "")]
-        public JsonResult DeliveryBoyReject(int OrderNumber)
-        {
-            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-            if (OrderNumber != 0)
-            {
-                var order =  db.Orders.FirstOrDefault(i => i.OrderNumber == OrderNumber);
-                order.DeliveryBoyId = 0;
-                order.DeliveryBoyName = null;
-                order.DeliveryBoyPhoneNumber = null;
-                order.Status = 3;
-                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-
-                var dboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId);
-                dboy.isAssign = 0;
-                dboy.OnWork = 0;
-                dboy.DateUpdated = DateTime.Now;
-                db.Entry(dboy).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-                return Json(true, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                return Json(false, JsonRequestBehavior.AllowGet);
-            }
-        }
-        
-
+        [AccessPolicy(PageCode = "SNCCUAD083")]
         public ActionResult UnAssignDeliveryBoy(int OrderNumber)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -1093,43 +1000,7 @@ namespace ShopNow.Controllers
             db.SaveChanges();
             return RedirectToAction("DeliveryAgentAssigned");
         }
-
-        public ActionResult AddRefundFromShopOrderProcessing(long id, double amount, string remark, int redirection = 0)
-        {
-            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-
-            var order = db.Orders.FirstOrDefault(i => i.Id == id);
-            //Refund
-            var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == order.OrderNumber);
-            payment.RefundAmount = amount;
-            payment.RefundRemark = remark;
-            payment.UpdatedBy = user.Name;
-            payment.DateUpdated = DateTime.Now;
-            db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
-
-            var fcmToken = (from c in db.Customers
-                            where c.Id == order.CustomerId
-                            select c.FcmTocken ?? "").FirstOrDefault().ToString();
-            if (payment.PaymentMode == "Online Payment")
-                Helpers.PushNotification.SendbydeviceId($"Your refund of amount {payment.RefundAmount} for order no {payment.OrderNumber} is for {payment.RefundRemark} initiated and you will get credited with in 7 working days.", "ShopNowChat", "a.mp3", fcmToken.ToString());
-            else
-                Helpers.PushNotification.SendbydeviceId($"Your order is reduced with {payment.RefundAmount} amount for {payment.RefundRemark}", "ShopNowChat", "a.mp3", fcmToken.ToString());
-
-            if (redirection == 0)
-                return RedirectToAction("Pending");
-            else if (redirection == 1)
-                return RedirectToAction("OrderPrepared");
-            else if (redirection == 2)
-                return RedirectToAction("DeliveryAgentAssigned");
-            else if (redirection == 3)
-                return RedirectToAction("WaitingForPickup");
-            else if (redirection == 4)
-                return RedirectToAction("OntheWay");
-            else
-                return RedirectToAction("Delivered");
-        }
-
+        [AccessPolicy(PageCode = "SNCCDA084")]
         public ActionResult DeliveryBoyAccept(int OrderNumber, long id)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -1144,6 +1015,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("Edit", "Cart", new { OrderNumber = OrderNumber, id = AdminHelpers.ECodeLong(id )});
         }
 
+        [AccessPolicy(PageCode = "SNCCDP085")]
         public ActionResult DeliveryBoyPickup(int OrderNumber, int id)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -1194,6 +1066,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("Edit", "Cart", new { OrderNumber = OrderNumber, id = AdminHelpers.ECodeLong(id) });
         }
 
+        [AccessPolicy(PageCode = "SNCCMD086")]
         public ActionResult MarkAsDelivered(int OrderNumber, int id)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -1320,6 +1193,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("Edit", "Cart", new { OrderNumber = OrderNumber, id = AdminHelpers.ECodeLong(id) });
         }
 
+        [AccessPolicy(PageCode = "SNCCCNP087")]
         public ActionResult CustomerNotPickUp(int OrderNumber, int id)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -1344,6 +1218,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("Edit", "Cart", new { OrderNumber = OrderNumber, id = AdminHelpers.ECodeLong(id) });
         }
 
+        [AccessPolicy(PageCode = "SNCCAW088")]
         public ActionResult AddWaitingCharge(int orderId, string remark, double amount)
         {
             var order = db.Orders.FirstOrDefault(i => i.Id == orderId);
@@ -1367,6 +1242,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("Edit", "Cart", new { OrderNumber = order.OrderNumber, id = AdminHelpers.ECodeLong(orderId) });
         }
 
+        [AccessPolicy(PageCode = "SNCCAP089")]
         public ActionResult AddPenaltyCharge(int orderId, string remark, double amount)
         {
             var order = db.Orders.FirstOrDefault(i => i.Id == orderId);
@@ -1388,6 +1264,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("Edit", "Cart", new { OrderNumber = order.OrderNumber, id = AdminHelpers.ECodeLong(orderId) });
         }
 
+        [AccessPolicy(PageCode = "SNCCOR090")]
         public ActionResult OrderRatios(OrderRatioViewModel model)
         {
             model.MonthFilter = model.MonthFilter != 0 ? model.MonthFilter : DateTime.Now.Month;
@@ -1413,6 +1290,139 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
+        public ActionResult AddRefundFromShopOrderProcessing(long id, double amount, string remark, int redirection = 0)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+
+            var order = db.Orders.FirstOrDefault(i => i.Id == id);
+            //Refund
+            var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == order.OrderNumber);
+            payment.RefundAmount = amount;
+            payment.RefundRemark = remark;
+            payment.UpdatedBy = user.Name;
+            payment.DateUpdated = DateTime.Now;
+            db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+
+            var fcmToken = (from c in db.Customers
+                            where c.Id == order.CustomerId
+                            select c.FcmTocken ?? "").FirstOrDefault().ToString();
+            if (payment.PaymentMode == "Online Payment")
+                Helpers.PushNotification.SendbydeviceId($"Your refund of amount {payment.RefundAmount} for order no {payment.OrderNumber} is for {payment.RefundRemark} initiated and you will get credited with in 7 working days.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+            else
+                Helpers.PushNotification.SendbydeviceId($"Your order is reduced with {payment.RefundAmount} amount for {payment.RefundRemark}", "ShopNowChat", "a.mp3", fcmToken.ToString());
+
+            if (redirection == 0)
+                return RedirectToAction("Pending");
+            else if (redirection == 1)
+                return RedirectToAction("OrderPrepared");
+            else if (redirection == 2)
+                return RedirectToAction("DeliveryAgentAssigned");
+            else if (redirection == 3)
+                return RedirectToAction("WaitingForPickup");
+            else if (redirection == 4)
+                return RedirectToAction("OntheWay");
+            else
+                return RedirectToAction("Delivered");
+        }
+
+        DeliveryBoy getDBoy(int id)
+        {
+            var deliveryBoy = db.DeliveryBoys.Where(d => d.Id == id).FirstOrDefault();
+            return deliveryBoy;
+        }
+
+        public int getDeliveryBoy(int id)
+        {
+            var deliveryBoy = db.DeliveryBoys.Where(d => d.Id == id).FirstOrDefault();
+            return deliveryBoy.Id;
+        }
+
+        double GetMeters(Double Latitudes, Double Longitudes, Double Latitude, Double Longitude)
+        {
+            return (((Math.Acos(Math.Sin((Latitude * Math.PI / 180)) * Math.Sin((Latitudes * Math.PI / 180)) + Math.Cos((Latitude * Math.PI / 180)) * Math.Cos((Latitudes * Math.PI / 180))
+                    * Math.Cos(((Longitude - Longitudes) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344);
+        }
+
+        public JsonResult ShopPay(int OrderNumber)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            var order = db.Orders.FirstOrDefault(i => i.OrderNumber == OrderNumber && i.ShopPaymentStatus == 0);
+            order.ShopPaymentStatus = 1;
+            db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult ShopNowChatPay(int OrderNumber)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            var order = db.Orders.FirstOrDefault(i => i.OrderNumber == OrderNumber && i.DeliveryBoyPaymentStatus == 0);
+            order.DeliveryBoyPaymentStatus = 1;
+            db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeliveryBoyPay(int OrderNumber)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            var order = db.Orders.FirstOrDefault(i => i.OrderNumber == OrderNumber && i.DeliveryBoyPaymentStatus == 0);
+            order.DeliveryBoyPaymentStatus = 1;
+            db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeliveryBoyReject(int OrderNumber)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            if (OrderNumber != 0)
+            {
+                var order = db.Orders.FirstOrDefault(i => i.OrderNumber == OrderNumber);
+                order.DeliveryBoyId = 0;
+                order.DeliveryBoyName = null;
+                order.DeliveryBoyPhoneNumber = null;
+                order.Status = 3;
+                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+
+                var dboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId);
+                dboy.isAssign = 0;
+                dboy.OnWork = 0;
+                dboy.DateUpdated = DateTime.Now;
+                db.Entry(dboy).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public async Task<JsonResult> GetShopSelect2(string q = "")
+        {
+            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name,
+                shopCategoryId = i.ShopCategoryId
+            }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<JsonResult> GetDeliveryBoySelect2(string q = "")
+        {
+            var model = await db.DeliveryBoys.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
         public int GetNewOrderCount(DateTime date,int categoryType)
         {
             var orders = db.Orders.Where(i => DbFunctions.TruncateTime(i.DateEncoded) < DbFunctions.TruncateTime(date) && i.Status==6)
@@ -1424,7 +1434,6 @@ namespace ShopNow.Controllers
             return count;
         }
        
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -28,6 +28,7 @@ namespace ShopNow.Controllers
                 return ShopNow.Helpers.DRC.Generate(_prefix);
             }
         }
+
         public PageController()
         {
             _mapperConfiguration = new MapperConfiguration(config =>
@@ -39,7 +40,7 @@ namespace ShopNow.Controllers
             _mapper = _mapperConfiguration.CreateMapper();
         }
 
-        [AccessPolicy(PageCode = "SHNPGEL004")]
+        [AccessPolicy(PageCode = "SNCPGL177")]
         public ActionResult List()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -50,7 +51,7 @@ namespace ShopNow.Controllers
        
         }
 
-        [AccessPolicy(PageCode = "SHNPGEC002")]
+        [AccessPolicy(PageCode = "SNCPGC178")]
         public ActionResult Create()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -60,7 +61,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNPGEC002")]
+        [AccessPolicy(PageCode = "SNCPGC178")]
         public ActionResult Create(PageCreateEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -85,7 +86,7 @@ namespace ShopNow.Controllers
             }
         }
 
-        [AccessPolicy(PageCode = "SHNPGEE003")]
+        [AccessPolicy(PageCode = "SNCPGE179")]
         public ActionResult Edit(string Id)
         {
             var dCode = AdminHelpers.DCodeInt(Id);
@@ -98,7 +99,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNPGEE003")]
+        [AccessPolicy(PageCode = "SNCPGE179")]
         public ActionResult Edit(PageCreateEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -121,7 +122,7 @@ namespace ShopNow.Controllers
             }
         }
 
-        [AccessPolicy(PageCode = "SHNPGED005")]
+        [AccessPolicy(PageCode = "SNCPGD180")]
         public JsonResult Delete(string Id)
         {
             var dCode = AdminHelpers.DCodeInt(Id);
@@ -138,7 +139,7 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNPGEI001")]
+        [AccessPolicy(PageCode = "SNCPGI181")]
         public ActionResult Index()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -148,7 +149,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNPGEI001")]
+        [AccessPolicy(PageCode = "SNCPGI181")]
         public ActionResult Index(HttpPostedFileBase upload, PageMasterViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);

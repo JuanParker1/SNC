@@ -3018,9 +3018,7 @@
     <Content Include="Views\Customer\Details.cshtml" />
     <Content Include="Views\Customer\List.cshtml" />
     <Content Include="Views\Product\FoodCreate.cshtml" />
-    <Content Include="Views\Product\ServiceCreate.cshtml" />
     <Content Include="Views\Product\FoodEdit.cshtml" />
-    <Content Include="Views\Product\ServiceEdit.cshtml" />
     <Content Include="Views\Shop\InActiveList.cshtml" />
     <Content Include="Views\AddOnCategory\List.cshtml" />
     <Content Include="Views\ShopCategory\List.cshtml" />
@@ -3070,7 +3068,6 @@
     <Content Include="Views\DeliveryBoy\Edit.cshtml" />
     <Content Include="Views\DeliveryBoy\InactiveList.cshtml" />
     <Content Include="Views\DeliveryBoy\List.cshtml" />
-    <Content Include="Views\DeliveryBoy\Assign.cshtml" />
     <Content Include="Views\WebAPI\Create.cshtml" />
     <Content Include="Views\Staff\Details.cshtml" />
     <Content Include="Views\Home\Access.cshtml" />
@@ -3106,12 +3103,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Product\ShopItemMapping.cshtml" />
-    <Content Include="Views\DeliveryBoy\AssignFranchise.cshtml" />
-    <Content Include="Views\Shop\AssignFranchise.cshtml" />
-    <Content Include="Views\DeliveryBoy\AssignedFranchiseList.cshtml" />
-    <Content Include="Views\DeliveryBoy\FranchiseUpdate.cshtml" />
-    <Content Include="Views\Shop\AssignedFranchiseList.cshtml" />
-    <Content Include="Views\Shop\FranchiseUpdate.cshtml" />
     <Content Include="Views\MasterProduct\PendingList.cshtml" />
     <Content Include="Views\MasterProduct\MappedList.cshtml" />
     <Content Include="Views\Cart\Pending.cshtml" />

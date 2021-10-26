@@ -25,7 +25,7 @@ namespace ShopNow.Controllers
 
         }
 
-        [AccessPolicy(PageCode = "SHNPRTL001")]
+        [AccessPolicy(PageCode = "SNCPCL192")]
         public ActionResult List()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -40,6 +40,7 @@ namespace ShopNow.Controllers
              
             return View(model);
         }
+
         private const string _prefix = "PRT";
 
         private static string _generatedCode
@@ -49,7 +50,8 @@ namespace ShopNow.Controllers
                 return ShopNow.Helpers.DRC.Generate(_prefix);
             }
         }
-        [AccessPolicy(PageCode = "SHNPRTU002")]
+
+        [AccessPolicy(PageCode = "SNCPCU193")]
         public JsonResult Update(string pincode, int deliveryRateSet, int remarks)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);

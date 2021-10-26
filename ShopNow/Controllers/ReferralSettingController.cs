@@ -28,7 +28,7 @@ namespace ShopNow.Controllers
             _mapper = _mapperConfiguration.CreateMapper();
         }
 
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCRSI238")]
         public ActionResult Index()
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -45,8 +45,8 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "")]
         [HttpPost]
+        [AccessPolicy(PageCode = "SNCRSC239")]
         public ActionResult Create(ReferralSettingCreateViewModel model)
         {
             var isExist = db.ReferralSettings.Any(i => i.ShopDistrict == model.ShopDistrict);
@@ -62,7 +62,20 @@ namespace ShopNow.Controllers
             return RedirectToAction("Index");
         }
 
-        [AccessPolicy(PageCode = "")]
+        [HttpPost]
+        [AccessPolicy(PageCode = "SNCRSE240")]
+        public ActionResult Edit(ReferralSettingEditViewModel model)
+        {
+
+            var referralSetting = db.ReferralSettings.FirstOrDefault(i => i.Id == model.Id);
+            _mapper.Map(model, referralSetting);
+            referralSetting.DateUpdated = DateTime.Now;
+            db.Entry(referralSetting).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        [AccessPolicy(PageCode = "SNCRSD241")]
         public JsonResult Delete(string id)
         {
             int dId = AdminHelpers.DCodeInt(id);
@@ -76,18 +89,6 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "")]
-        [HttpPost]
-        public ActionResult Edit(ReferralSettingEditViewModel model)
-        {
-
-            var referralSetting = db.ReferralSettings.FirstOrDefault(i => i.Id == model.Id);
-            _mapper.Map(model, referralSetting);
-            referralSetting.DateUpdated = DateTime.Now;
-            db.Entry(referralSetting).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
     }
 
 }

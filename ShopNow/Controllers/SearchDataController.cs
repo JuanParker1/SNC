@@ -1,4 +1,5 @@
-﻿using ShopNow.Models;
+﻿using ShopNow.Filters;
+using ShopNow.Models;
 using ShopNow.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -14,10 +15,11 @@ namespace ShopNow.Controllers
     {
         private sncEntities db = new sncEntities();
 
+        [AccessPolicy(PageCode = "SNCSDL246")]
         public ActionResult List(SearchDataListViewModel model)
         {
             //var model = new SearchDataListViewModel();
-            model.AllListItems = db.CustomerSearchDatas.Where(i => (model.StartDate != null && model.EndDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate)) : true)
+            model.AllListItems = db.CustomerSearchDatas.Where(i => (model.StartDate != null && model.EndDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate)) : false)
                 .GroupBy(i => i.SearchKeyword)
                 .Select(i => new SearchDataListViewModel.ListItem
                 {
@@ -59,6 +61,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
+        [AccessPolicy(PageCode = "SNCSDE247")]
         public ActionResult Entry(string str = "")
         {
             var model = new SearchDataEntryViewModel();
@@ -73,6 +76,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
+        [AccessPolicy(PageCode = "SNCSDE247")]
         public JsonResult Add(string keyword, string keys)
         {
             if (!string.IsNullOrEmpty(keyword) && !string.IsNullOrEmpty(keys))
@@ -115,10 +119,10 @@ namespace ShopNow.Controllers
                         db.Entry(masterProduct).State = EntityState.Modified;
                         db.SaveChanges();
 
-                        var searchDataList = db.CustomerSearchDatas.Where(i => i.SearchKeyword == searchWord).ToList();
+                        var searchDataList = db.CustomerSearchDatas.Where(i => i.SearchKeyword.ToLower() == searchWord.ToLower()).ToList();
                         foreach (var item in searchDataList)
                         {
-                            var sd = db.CustomerSearchDatas.FirstOrDefault(i => i.SearchKeyword == item.SearchKeyword);
+                            var sd = db.CustomerSearchDatas.FirstOrDefault(i => i.SearchKeyword.ToLower() == item.SearchKeyword.ToLower());
                             if (sd != null)
                             {
                                 sd.LinkedMasterProductIds = sd.LinkedMasterProductIds != null ? sd.LinkedMasterProductIds + "," + masterProduct.Id : masterProduct.Id.ToString();

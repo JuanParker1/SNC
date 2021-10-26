@@ -66,6 +66,10 @@ namespace ShopNow.ViewModels
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
 
+        public double? RefundAmount{ get; set; }
+        public string RefundRemark{ get; set; }
+        public string PaymentMode{ get; set; }
+
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {

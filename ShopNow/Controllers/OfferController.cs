@@ -28,7 +28,7 @@ namespace ShopNow.Controllers
             _mapper = _mapperConfiguration.CreateMapper();
         }
 
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCOL167")]
         public ActionResult List()
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -54,7 +54,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCOC168")]
         public ActionResult Create()
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -62,7 +62,7 @@ namespace ShopNow.Controllers
             return View();
         }
 
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCOC168")]
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult Create(OfferCreateViewModel model)
@@ -121,21 +121,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("List");
         }
 
-        [AccessPolicy(PageCode = "")]
-        public JsonResult Delete(string id)
-        {
-            int dId = AdminHelpers.DCodeInt(id);
-            var offer = db.Offers.FirstOrDefault(i => i.Id == dId);
-            if(offer != null)
-            {            
-                offer.Status = 2;
-                db.Entry(offer).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-            }
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCOE169")]
         public ActionResult Edit(string id)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -171,7 +157,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCOE169")]
         [HttpPost]
         [ValidateInput(false)]
         public ActionResult Edit(OfferEditViewModel model)
@@ -185,5 +171,20 @@ namespace ShopNow.Controllers
             db.SaveChanges();
             return RedirectToAction("Edit", new { id = AdminHelpers.ECodeInt(model.Id) });
         }
+
+        [AccessPolicy(PageCode = "SNCOD170")]
+        public JsonResult Delete(string id)
+        {
+            int dId = AdminHelpers.DCodeInt(id);
+            var offer = db.Offers.FirstOrDefault(i => i.Id == dId);
+            if (offer != null)
+            {
+                offer.Status = 2;
+                db.Entry(offer).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
     }
 }

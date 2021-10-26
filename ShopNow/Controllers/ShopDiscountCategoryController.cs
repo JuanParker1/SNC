@@ -25,6 +25,7 @@ namespace ShopNow.Controllers
                 return ShopNow.Helpers.DRC.Generate(_prefix);
             }
         }
+
         public ShopDiscountCategoryController()
         {
             _mapperConfiguration = new MapperConfiguration(config =>
@@ -39,7 +40,7 @@ namespace ShopNow.Controllers
 
         }
 
-        [AccessPolicy(PageCode = "SHNSDCL001")]
+        [AccessPolicy(PageCode = "SNCSDL264")]
         public ActionResult List()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -56,7 +57,7 @@ namespace ShopNow.Controllers
             return View(model.CategoryLists);
         }
 
-        [AccessPolicy(PageCode = "SHNSDCC002")]
+        [AccessPolicy(PageCode = "SNCSDC265")]
         public ActionResult Create()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -67,7 +68,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNSDCC002")]
+        [AccessPolicy(PageCode = "SNCSDC265")]
         public ActionResult Create(ShopDiscountCategoryViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -77,7 +78,7 @@ namespace ShopNow.Controllers
 
         }
 
-        [AccessPolicy(PageCode = "SHNSDCE003")]
+        [AccessPolicy(PageCode = "SNCSDE266")]
         public ActionResult Edit(string code)
         {
             var dCode = AdminHelpers.DCodeInt(code);
@@ -90,7 +91,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNSDCE003")]
+        [AccessPolicy(PageCode = "SNCSDE266")]
         public ActionResult Edit(ShopDiscountCategoryEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -433,7 +434,6 @@ namespace ShopNow.Controllers
         //    return Json(true, JsonRequestBehavior.AllowGet);
         //}
 
-        [AccessPolicy(PageCode = "SHNSDCC002")]
         public async Task<JsonResult> GetShopSelect2(string q = "")
         {
             var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
@@ -444,6 +444,7 @@ namespace ShopNow.Controllers
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
