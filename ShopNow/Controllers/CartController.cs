@@ -482,6 +482,14 @@ namespace ShopNow.Controllers
                             PortionPrice = a.PortionPrice
                         }).ToList()
                     }).ToList();
+
+                var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == order.OrderNumber);
+                if (payment != null)
+                {
+                    model.RefundAmount = payment.RefundAmount;
+                    model.RefundRemark = payment.RefundRemark;
+                    model.PaymentMode = payment.PaymentMode;
+                }
             }
             return View(model);
         }

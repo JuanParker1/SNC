@@ -1710,9 +1710,9 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        public async Task<JsonResult> GetMedicalDiscountCategorySelect2(string q = "")
+        public async Task<JsonResult> GetMedicalDiscountCategorySelect2(string q = "",int shopid=0)
         {
-            var model = await db.DiscountCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q))
+            var model = await db.DiscountCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.ShopId==shopid)
                 .Select(i => new
                 {
                     id = i.Id,

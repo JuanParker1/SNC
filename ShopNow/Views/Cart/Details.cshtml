@@ -16,7 +16,8 @@
     .top {
         /*padding-top: 40px;*/
         padding-left: 13% !important;
-        padding-right: 13% !important
+        /*padding-right: 13% !important*/
+        padding-right: 5% !important;
     }
 
     #progressbar {
@@ -30,7 +31,8 @@
         #progressbar li {
             list-style-type: none;
             font-size: 13px;
-            width: 25%;
+            /*width: 25%;*/
+            width: 24%;
             float: left;
             position: relative;
             font-weight: 400
@@ -186,58 +188,80 @@
                     <div class="row d-flex icon-content">
                         <img class="icon" src="https://i.imgur.com/9nnc9Et.png">
                         <div class="d-flex flex-column">
-                            <p class="font-weight-bold">Order<br>Pending</p>
+                            <p class="font-weight-bold mb-0">Order Pending</p>
+                            <p>@Model.DateEncoded.ToString("dd-MMM-yyyy hh:mm tt")</p>
                         </div>
                     </div>
                     <div class="row d-flex icon-content">
                         <img class="icon" src="https://i.imgur.com/u1AzR7w.png">
                         <div class="d-flex flex-column">
-                            <p class="font-weight-bold">Order<br>Ready</p>
+                            <p class="font-weight-bold mb-0">Order Ready</p>
+                            @if (Model.OrderReadyTime != null)
+                            {
+                                <p>@Model.OrderReadyTime.Value.ToString("dd-MMM-yyyy hh:mm tt")</p>
+                            }
+                            else if(Model.OrderPickupTime != null)
+                            {
+                                <p>@Model.OrderPickupTime.Value.ToString("dd-MMM-yyyy hh:mm tt")</p>
+                            }
                         </div>
                     </div>
                     <div class="row d-flex icon-content">
                         <img class="icon" src="https://i.imgur.com/TkPm63y.png">
                         <div class="d-flex flex-column">
-                            <p class="font-weight-bold">On the<br>Way</p>
+                            <p class="font-weight-bold mb-0">On the Way</p>
+                            @if (Model.OrderPickupTime != null)
+                            {
+                                <p>@Model.OrderPickupTime.Value.ToString("dd-MMM-yyyy hh:mm tt")</p>
+                            }
                         </div>
                     </div>
                     <div class="row d-flex icon-content">
                         <img class="icon" src="https://i.imgur.com/HdsziHP.png">
                         <div class="d-flex flex-column">
-                            <p class="font-weight-bold">Order<br>Delivered</p>
+                            <p class="font-weight-bold mb-0">Order Delivered</p>
+                            @if (Model.DeliveredTime != null)
+                            {
+                                <p>@Model.DeliveredTime.Value.ToString("dd-MMM-yyyy hh:mm tt")</p>
+                            }
                         </div>
                     </div>
                 </div>
             }
             else
             {
-                <div class="row d-flex justify-content-center">
+                <div class="row d-flex justify-content-center" style="margin-left:20%;">
                     <div class="col-12">
                         <ul id="progressbar" class="text-center">
                             @if (Model.Status == 2 || Model.Status == 3)
                             {
-                                <li class="step0 active-danger"></li>
-                                <li class="step0"></li>
+                                <li class="step0 active-danger" style="width:34%;"></li>
+                                <li class="step0" style="width:34%;"></li>
                             }
                             else
                             {
-                                <li class="step0 active-danger"></li>
-                                <li class="step0 active-danger"></li>
+                                <li class="step0 active-danger" style="width:37%;"></li>
+                                <li class="step0 active-danger" style="width:37%;"></li>
                             }
                         </ul>
                     </div>
                 </div>
-                <div class="row top">
+                <div class="row top" style="margin-left:22%;">
                     <div class="row d-flex icon-content">
                         <img class="icon" src="https://i.imgur.com/9nnc9Et.png">
                         <div class="d-flex flex-column">
-                            <p class="font-weight-bold">Order<br>Pending</p>
+                            <p class="font-weight-bold mb-0">Order Pending</p>
+                            <p>@Model.DateEncoded.ToString("dd-MMM-yyyy hh:mm tt")</p>
                         </div>
                     </div>
                     <div class="row d-flex icon-content" style="margin-left:14rem;">
                         <img class="icon" src="https://i.imgur.com/u1AzR7w.png">
                         <div class="d-flex flex-column">
-                            <p class="font-weight-bold">Order<br>Cancelled</p>
+                            <p class="font-weight-bold mb-0">Order Cancelled</p>
+                            @if (Model.DeliveredTime != null)
+                            {
+                                <p>@Model.DeliveredTime.Value.ToString("dd-MMM-yyyy hh:mm tt")</p>
+                            }
                         </div>
                     </div>
                 </div>
@@ -255,19 +279,30 @@
                         <b>@Model.OrderNumber</b>
                     </div>
                     <div class="d-flex">
-                        <label class="mr-3">Date:</label>
-                        <b>@Model.DateEncoded.ToString("dd-MMM-yyyy")</b>
+                        <label class="mr-3">Date/Time:</label>
+                        <b>@Model.DateEncoded.ToString("dd-MMM-yyyy hh:mm tt")</b>
                     </div>
                     <div class="d-flex">
                         <label class="mr-3">Total Amount:</label>
-                        <b>₹@Model.NetTotal</b>
+                        <b>₹@Model.NetTotal - (@Model.PaymentMode)</b>
                     </div>
                     @if (Model.IsPreorder == true)
                     {
-                    <div class="d-flex">
-                        <label class="mr-3">Delivery Date/Time:</label>
-                        <b>@Model.PreorderDeliveryDateTime.Value.ToString("dd-MMM-yyyy HH:mm tt")</b>
-                    </div>
+                        <div class="d-flex">
+                            <label class="mr-3">Delivery Date/Time:</label>
+                            <b>@Model.PreorderDeliveryDateTime.Value.ToString("dd-MMM-yyyy HH:mm tt")</b>
+                        </div>
+                    }
+                    @if (Model.DeliveryBoyId != 0)
+                    {
+                        <div class="d-flex">
+                            <label class="mr-3">Delivery Boy:</label>
+                            <b>@Model.DeliveryBoyName</b>
+                        </div>
+                        <div class="d-flex">
+                            <label class="mr-3">DeliveryBoy Ph No:</label>
+                            <b>@Model.DeliveryBoyPhoneNumber</b>
+                        </div>
                     }
                 </div>
             </div>
@@ -325,75 +360,81 @@
                         <thead>
                             <tr>
                                 <th>No.</th>
+                                <th></th>
                                 <th>Product Name</th>
-                                <th>Brand Name</th>
                                 <th>Category Name</th>
                                 <th>Qty</th>
                                 <th>Price</th>
                                 <th>Total</th>
-                                <th>Image</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var item in Model.ListItems)
                             {
-                                <tr>
-                                    <td></td>
-                                    <td>
-                                        <b>@item.ProductName </b><br/>
-                                        @if (item.HasAddon == true)
+                            <tr>
+                                <td></td>
+                                <td><img src="@item.ImagePath" alt="Image" class="img-thumbnail productImages" data-toggle="modal" data-target="#myModal" width="45" height="60" onerror="this.src='/Images/No Photo.png'" /></td>
+                                <td>
+                                    <b>@item.ProductName </b><br />
+                                    @if (item.HasAddon == true)
+                                    {
+                                        foreach (var addon in item.AddonListItems)
                                         {
-                                            foreach (var addon in item.AddonListItems)
+                                            if (item.AddonType == 1)
                                             {
-                                                if (item.AddonType == 1)
+                                                if (item.UnitPrice == addon.PortionPrice)
                                                 {
-                                                    if (item.UnitPrice == addon.PortionPrice)
-                                                    {
                                                     <span>@addon.PortionName - @addon.PortionPrice</span><br />
-                                                    }
                                                 }
-                                                else if (item.AddonType == 2)
+                                            }
+                                            else if (item.AddonType == 2)
+                                            {
+                                                <span>@addon.AddonName - @addon.AddonPrice</span><br />
+                                            }
+                                            else if (item.AddonType == 3)
+                                            {
+                                                if (addon.AddonPrice == 0)
+                                                {
+                                                    <span>@addon.PortionName - @addon.PortionPrice</span><br />
+                                                }
+                                                else
                                                 {
                                                     <span>@addon.AddonName - @addon.AddonPrice</span><br />
                                                 }
-                                                else if (item.AddonType == 3)
+                                            }
+                                            else if (item.AddonType == 4)
+                                            {
+                                                if (addon.AddonPrice == 0 && addon.PortionPrice == 0)
                                                 {
-                                                    if (addon.AddonPrice == 0)
-                                                    {
-                                                        <span>@addon.PortionName - @addon.PortionPrice</span><br />
-                                                    }
-                                                    else
-                                                    {
-                                                        <span>@addon.AddonName - @addon.AddonPrice</span><br />
-                                                    }
+                                                    <span>@addon.CrustName</span><br />
                                                 }
-                                                else if (item.AddonType == 4)
+                                                else if (addon.PortionPrice != 0)
                                                 {
-                                                    if (addon.AddonPrice == 0 && addon.PortionPrice == 0)
-                                                    {
-                                                        <span>@addon.CrustName</span><br />
-                                                    }
-                                                    else if (addon.PortionPrice != 0)
-                                                    {
-                                                        <span>@addon.PortionName - @addon.PortionPrice</span><br />
-                                                    }
-                                                    else
-                                                    {
-                                                        <span>@addon.AddonName - @addon.AddonPrice</span><br />
-                                                    }
+                                                    <span>@addon.PortionName - @addon.PortionPrice</span><br />
+                                                }
+                                                else
+                                                {
+                                                    <span>@addon.AddonName - @addon.AddonPrice</span><br />
                                                 }
                                             }
                                         }
-                                    </td>
-                                    <td>@item.BrandName</td>
-                                    <td>@item.CategoryName</td>
-                                    <td>@item.Quantity</td>
-                                    <td>@item.UnitPrice</td>
-                                    <td>@item.Price</td>
-                                    <td><img src="@item.ImagePath" alt="Image" class="img-thumbnail productImages" data-toggle="modal" data-target="#myModal" width="45" height="60" onerror="this.src='/Images/No Photo.png'" /></td>
-                                </tr>
+                                    }
+                                </td>
+                                <td>@item.CategoryName</td>
+                                <td>@item.Quantity</td>
+                                <td>₹@item.UnitPrice</td>
+                                <td>₹@item.Price</td>
+                            </tr>
                             }
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="4">Total</th>
+                                <th>@Model.ListItems.Sum(i => i.Quantity)</th>
+                                <th>₹@Model.ListItems.Sum(i => i.UnitPrice)</th>
+                                <th>₹@Model.ListItems.Sum(i => i.Price)</th>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>
@@ -467,6 +508,44 @@
                             break;
                     }
                     <a href="~/Cart/PickupSlip?OrderNumber=@Model.OrderNumber&id=@ShopNow.Helpers.AdminHelpers.ECodeLong(Model.Id)" class="btn btn-sm btn-secondary btn-block mt-3"><span><i class="fa fa-print mr-1" aria-hidden="true"></i></span> Pickup Slip</a>
+                    <label class="font-weight-bold text-muted mt-3"><u>Amount Details:</u></label>
+                    <div class="d-flex justify-content-between">
+                        <label class="mr-3">Items Total:</label>
+                        <b>₹@Model.ListItems.Sum(i => i.Price)</b>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <label class="mr-3">Packing Charge:</label>
+                        <b>₹@Model.Packingcharge</b>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <label class="mr-3">Convenience Charge:</label>
+                        <b>₹@Model.Convinenientcharge</b>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <label class="mr-3">Delivery Charge:</label>
+                        <b>₹@Model.NetDeliveryCharge</b>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <label class="mr-3">Offer Amount:</label>
+                        <b>₹@Model.OfferAmount</b>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <label class="mr-3">Wallet Amount Used:</label>
+                        <b>₹@Model.WalletAmount</b>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <label class="mr-3">Grand Total:</label>
+                        <b>₹@Model.NetTotal</b>
+                    </div>
+                    <hr />
+                    <div class="d-flex justify-content-between" data-toggle="tooltip" title="@Model.RefundRemark">
+                        <label class="mr-3">Refund Amount:</label>
+                        <b>₹@(Model.RefundAmount ?? 0)</b>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <label class="mr-3">Total Paid:</label>
+                        <b>₹@Math.Abs(Model.NetTotal - (Model.RefundAmount ?? 0))</b>
+                    </div>
                 </div>
             </div>
         </div>
@@ -546,6 +625,8 @@
             window.open('https://www.google.com/maps/place/' + lat + ',' + lng, "_blank");
         }
         $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+
             var t = $('#tbl-items').DataTable({
                 "dom": "<'row'<'col-sm-6'f>>" +
                     "<'row'<'col-sm-5'i><'col-sm-3'l><'col-sm-4'p>>" +

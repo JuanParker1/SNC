@@ -98,7 +98,7 @@
                     $('.select-discountcategory').select2({
                         placeholder: "Search Discount",
                         ajax: {
-                            url: "/Product/GetMedicalDiscountCategorySelect2",
+                            url: "/Product/GetMedicalDiscountCategorySelect2?shopid=" + $('#select-shop').val() + "",
                             width: '100%',
                             delay: 250,
                             dataType: 'json'

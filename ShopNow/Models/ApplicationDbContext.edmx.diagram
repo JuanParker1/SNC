@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="8c1ea3248a084182bb3a5bf766ce58e3" Name="Diagram1" ZoomLevel="79">
+      <Diagram DiagramId="8c1ea3248a084182bb3a5bf766ce58e3" Name="Diagram1" ZoomLevel="63">
         <EntityTypeShape EntityType="sncModel.AccessPolicy" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.AchievementProduct" Width="1.5" PointX="5.75" PointY="5.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.AchievementShop" Width="1.5" PointX="9.75" PointY="0.75" IsExpanded="true" />
