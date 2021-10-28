@@ -1,11 +1,7 @@
 ﻿@model IEnumerable<ShopNow.Models.Page>
 @using GridMvc.Html
 @{
-                /**/
-
-                /**/
-
-                ViewBag.Title = "Page List";
+    ViewBag.Title = "Page List";
 }
 <title>ShopNow | Page List</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
@@ -23,8 +19,8 @@
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
                {
-               columns.Add(p => p.Name).Titled("Name").Filterable(true).SetWidth(20);
-               columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
+               columns.Add(p => p.Name).Titled("Name").Filterable(true).SetWidth(50);
+               columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(30)
                          .RenderValueAs(o => @<div>
                                 <a href="~/Page/Edit?Id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
                                 <a href="javascript:void(0)" data-id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>

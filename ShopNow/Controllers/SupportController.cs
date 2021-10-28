@@ -23,7 +23,7 @@ namespace ShopNow.Controllers
             _mapper = _mapperConfiguration.CreateMapper();
         }
 
-        [AccessPolicy(PageCode = "SHNSUPL001")]
+        [AccessPolicy(PageCode = "SNCSLP292")]
         public ActionResult LivePending()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -56,7 +56,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "SHNSUPLD002")]
+        [AccessPolicy(PageCode = "SNCSLDA293")]
         public ActionResult LiveDeliveryboyAssignment(int shopId = 0)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);

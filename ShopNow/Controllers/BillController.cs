@@ -41,7 +41,7 @@ namespace ShopNow.Controllers
             _mapper = _mapperConfiguration.CreateMapper();
         }
 
-        [AccessPolicy(PageCode = "SHNBILBL001")]
+        [AccessPolicy(PageCode = "SNCBBL043")]
         public ActionResult BillingChargeList()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -59,7 +59,7 @@ namespace ShopNow.Controllers
             return View(model.List);
         }
 
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCBBEL044")]
         public ActionResult BillingChargeEmptyList()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -76,7 +76,8 @@ namespace ShopNow.Controllers
             }).Where(i=> i.HasBilling == false).ToList();
             return View(model.EmptyList);
         }
-        [AccessPolicy(PageCode = "SHNBILBC003")]
+
+        [AccessPolicy(PageCode = "SNCBB045")]
         public ActionResult BillingCharge(string shopname, int shopid=0)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -96,7 +97,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNBILBC003")]
+        [AccessPolicy(PageCode = "SNCBB045")]
         public ActionResult BillingCharge(BillingChargeCreateViewModel model)
         {
             bool isCheck = db.BillingCharges.Any(i => i.ShopId == model.ShopId && i.Status == 0);
@@ -118,7 +119,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("BillingChargeList");
         }
 
-        [AccessPolicy(PageCode = "SHNBILBU005")]
+        [AccessPolicy(PageCode = "SNCBBU046")]
         public ActionResult BillingUpdate(string Id)
         {
             var dCode = AdminHelpers.DCodeInt(Id);
@@ -141,7 +142,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNBILBU005")]
+        [AccessPolicy(PageCode = "SNCBBU046")]
         public ActionResult BillingUpdate(BillingChargeEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -157,7 +158,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("BillingChargeList");
         }
 
-        [AccessPolicy(PageCode = "SHNBILBD007")]
+        [AccessPolicy(PageCode = "SNCBBD047")]
         public JsonResult BillingDelete(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -175,7 +176,7 @@ namespace ShopNow.Controllers
 
         // Delivery Charge Entry
 
-        [AccessPolicy(PageCode = "SHNBILDL002")]
+        [AccessPolicy(PageCode = "SNCBDL048")]
         public ActionResult DeliveryChargeList()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -193,7 +194,7 @@ namespace ShopNow.Controllers
             return View(model.List);
         }
 
-        [AccessPolicy(PageCode = "SHNBILDC004")]
+        [AccessPolicy(PageCode = "SNCBD049")]
         public ActionResult DeliveryCharge()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -203,7 +204,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNBILDC004")]
+        [AccessPolicy(PageCode = "SNCBD049")]
         public ActionResult DeliveryCharge(DeliveryChargeCreateViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -225,7 +226,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("DeliveryChargeList");
         }
 
-        [AccessPolicy(PageCode = "SHNBILDU006")]
+        [AccessPolicy(PageCode = "SNCBDU050")]
         public ActionResult DeliveryUpdate(string id)
         {
             var dCode = AdminHelpers.DCodeInt(id);
@@ -245,7 +246,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNBILDU006")]
+        [AccessPolicy(PageCode = "SNCBDU050")]
         public ActionResult DeliveryUpdate(DeliveryChargeEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -268,7 +269,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("DeliveryChargeList");
         }
 
-        [AccessPolicy(PageCode = "SHNBILDD008")]
+        [AccessPolicy(PageCode = "SNCBDD051")]
         public JsonResult DeliveryDelete(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -285,8 +286,7 @@ namespace ShopNow.Controllers
         }
 
         // Delivery Charge Assign
-
-        [AccessPolicy(PageCode = "SHNBILDCAL09")]
+        [AccessPolicy(PageCode = "SNCBDAL052")]
         public ActionResult DeliveryChargeAssignList()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -302,7 +302,7 @@ namespace ShopNow.Controllers
             return View(model.List);
         }
 
-        [AccessPolicy(PageCode = "SHNBILDCA010")]
+        [AccessPolicy(PageCode = "SNCBDA053")]
         public ActionResult DeliveryChargeAssign()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -312,7 +312,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNBILDCA010")]
+        [AccessPolicy(PageCode = "SNCBDA053")]
         public ActionResult DeliveryChargeAssign(DeliveryChargeAssignCreateViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -343,8 +343,6 @@ namespace ShopNow.Controllers
         //    return Json(true, JsonRequestBehavior.AllowGet);
         //}
 
-
-        [AccessPolicy(PageCode = "SHNBILBC003")]
         public async Task<JsonResult> GetBillShopSelect2(string q = "")
         {
             var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
@@ -357,7 +355,6 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNBILDC004")]
         public JsonResult DeliveryChargeExist(int tiretype, int vehicletype)
         {
             var GeneralCount = db.DeliveryCharges.Where(i => i.Type == 0 && i.TireType == tiretype && i.VehicleType == vehicletype && i.Status == 0).Count();
@@ -384,7 +381,6 @@ namespace ShopNow.Controllers
             return Json(new { IsAdded = IsAdded, message = message }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNBILDCA010")]
         public async Task<JsonResult> GetDeliveryChargeType(int type, int tiretype)
         {
             var model = new DeliveryChargeListViewModel();
@@ -400,6 +396,7 @@ namespace ShopNow.Controllers
 
             return Json(new { model.List, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

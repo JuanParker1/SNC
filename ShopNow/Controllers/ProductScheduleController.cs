@@ -16,7 +16,7 @@ namespace ShopNow.Controllers
     {
         private sncEntities db = new sncEntities();
 
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCPSI225")]
         public ActionResult Index(ProductScheduleIndexViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -40,12 +40,81 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
+        [AccessPolicy(PageCode = "SNCPSD226")]
+        public JsonResult Delete(string productId)
+        {
+            long dId = AdminHelpers.DCodeLong(productId);
+            var productSchedules = db.ProductSchedules.Where(i => i.ProductId == dId).ToList();
+            if (productSchedules.Count() > 0)
+            {
+                productSchedules.ForEach(i => i.Status = 2);
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        [AccessPolicy(PageCode = "SNCPSUS227")]
+        public JsonResult UpdateSchedule(int productid, bool hasSchedule)
+        {
+            var product = db.Products.FirstOrDefault(i => i.Id == productid && i.Status == 0);
+            product.HasSchedule = hasSchedule;
+            db.Entry(product).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        [AccessPolicy(PageCode = "SNCPSAT228")]
+        public ActionResult AddTiming(long productid, TimeSpan onTime, TimeSpan offTime)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var ProductSchedule = new ProductSchedule
+            {
+                DateTimeUpdated = DateTime.Now,
+                OffTime = offTime,
+                OnTime = onTime,
+                ProductId = productid,
+                Status = 0,
+                UpdatedBy = user.Name
+            };
+            db.ProductSchedules.Add(ProductSchedule);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        [AccessPolicy(PageCode = "SNCPSUT229")]
+        public ActionResult UpdateTiming(int id, TimeSpan onTime, TimeSpan offTime)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var productSchedule = db.ProductSchedules.FirstOrDefault(i => i.Id == id);
+            productSchedule.OnTime = onTime;
+            productSchedule.OffTime = offTime;
+            productSchedule.UpdatedBy = user.Name;
+            db.Entry(productSchedule).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        [AccessPolicy(PageCode = "SNCPSDT230")]
+        public ActionResult DeleteTiming(string id)
+        {
+            int dId = AdminHelpers.DCodeInt(id);
+            var productSchedule = db.ProductSchedules.FirstOrDefault(i => i.Id == dId);
+            if (productSchedule != null)
+            {
+                productSchedule.Status = 2;
+                db.Entry(productSchedule).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }
+
+        [AccessPolicy(PageCode = "SNCPSAS231")]
         public JsonResult Add(ProductScheduleAddViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             foreach (var proId in model.ProductId)
             {
-                var isExist = db.ProductSchedules.Any(i => i.ProductId == proId && i.Status==0);
+                var isExist = db.ProductSchedules.Any(i => i.ProductId == proId && i.Status == 0);
                 if (!isExist)
                 {
                     foreach (var item in model.TimeListItems)
@@ -66,74 +135,6 @@ namespace ShopNow.Controllers
                 //return Json(false, JsonRequestBehavior.AllowGet);
             }
             return Json(true, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "")]
-        public JsonResult Delete(string productId)
-        {
-            long dId = AdminHelpers.DCodeLong(productId);
-            var productSchedules = db.ProductSchedules.Where(i => i.ProductId == dId).ToList();
-            if (productSchedules.Count() > 0)
-            {
-                productSchedules.ForEach(i => i.Status = 2);
-                db.SaveChanges();
-            }
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "")]
-        public JsonResult UpdateSchedule(int productid, bool hasSchedule)
-        {
-            var product = db.Products.FirstOrDefault(i => i.Id == productid && i.Status == 0);
-            product.HasSchedule = hasSchedule;
-            db.Entry(product).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "")]
-        public ActionResult AddTiming(long productid, TimeSpan onTime, TimeSpan offTime)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            var ProductSchedule = new ProductSchedule
-            {
-                DateTimeUpdated = DateTime.Now,
-                OffTime = offTime,
-                OnTime = onTime,
-                ProductId = productid,
-                Status = 0,
-                UpdatedBy = user.Name
-            };
-            db.ProductSchedules.Add(ProductSchedule);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        [AccessPolicy(PageCode = "")]
-        public ActionResult UpdateTiming(int id, TimeSpan onTime, TimeSpan offTime)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            var productSchedule = db.ProductSchedules.FirstOrDefault(i => i.Id == id);
-            productSchedule.OnTime = onTime;
-            productSchedule.OffTime = offTime;
-            productSchedule.UpdatedBy = user.Name;
-            db.Entry(productSchedule).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        [AccessPolicy(PageCode = "")]
-        public ActionResult DeleteTiming(string id)
-        {
-            int dId = AdminHelpers.DCodeInt(id);
-            var productSchedule = db.ProductSchedules.FirstOrDefault(i => i.Id == dId);
-            if (productSchedule != null)
-            {
-                productSchedule.Status = 2;
-                db.Entry(productSchedule).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-            }
-            return RedirectToAction("Index");
         }
 
         public async Task<JsonResult> GetScheduleProductSelect2(string q = "")

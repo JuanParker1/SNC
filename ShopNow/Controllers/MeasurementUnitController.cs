@@ -22,7 +22,6 @@ namespace ShopNow.Controllers
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
         
-
         public MeasurementUnitController()
         {
             _mapperConfiguration = new MapperConfiguration(config =>
@@ -34,7 +33,7 @@ namespace ShopNow.Controllers
             _mapper = _mapperConfiguration.CreateMapper();
         }
 
-        [AccessPolicy(PageCode = "SHNDMUL001")]
+        [AccessPolicy(PageCode = "SNCMUL158")]
         public ActionResult List()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -44,7 +43,7 @@ namespace ShopNow.Controllers
             return View(model.List);
         }
 
-        [AccessPolicy(PageCode = "SHNDMUC002")]
+        [AccessPolicy(PageCode = "SNCMUC159")]
         public ActionResult Create()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -54,7 +53,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNDMUC002")]
+        [AccessPolicy(PageCode = "SNCMUC159")]
         public ActionResult Create(MeasurementUnitCreateEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -78,7 +77,7 @@ namespace ShopNow.Controllers
             }
         }
 
-        [AccessPolicy(PageCode = "SHNDMUE003")]
+        [AccessPolicy(PageCode = "SNCMUE160")]
         public ActionResult Edit(string id)
         {
             var dCode = AdminHelpers.DCodeInt(id);
@@ -93,7 +92,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNDMUE003")]
+        [AccessPolicy(PageCode = "SNCMUE160")]
         public ActionResult Edit(MeasurementUnitCreateEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -119,7 +118,7 @@ namespace ShopNow.Controllers
             }
         }
 
-        [AccessPolicy(PageCode = "SHNDMUD004")]
+        [AccessPolicy(PageCode = "SNCMUD161")]
         public JsonResult Delete(string id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -136,7 +135,7 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNDMUI005")]
+        [AccessPolicy(PageCode = "SNCMUI162")]
         public ActionResult Index()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -146,7 +145,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNDMUI005")]
+        [AccessPolicy(PageCode = "SNCMUI162")]
         public ActionResult Index(HttpPostedFileBase upload, MeasurementUnitMasterViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -263,7 +262,6 @@ namespace ShopNow.Controllers
             return View();
         }
 
-        [AccessPolicy(PageCode = "SHNDMUC002")]
         public JsonResult GetUnitName(string name)
         {
             var msu = db.MeasurementUnits.FirstOrDefault(i => i.UnitName == name.ToString() && i.Status == 0);// MeasurementUnit.GetName(name);
@@ -276,6 +274,7 @@ namespace ShopNow.Controllers
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

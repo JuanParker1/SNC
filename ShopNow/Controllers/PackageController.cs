@@ -30,7 +30,7 @@ namespace ShopNow.Controllers
             _mapper = _mapperConfiguration.CreateMapper();
         }
 
-        [AccessPolicy(PageCode = "SHNMPKL001")]
+        [AccessPolicy(PageCode = "SNCPL172")]
         public ActionResult List()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -41,7 +41,7 @@ namespace ShopNow.Controllers
             return View(model.List);
         }
 
-        [AccessPolicy(PageCode = "SHNMPKS002")]
+        [AccessPolicy(PageCode = "SNCPS173")]
         public JsonResult Save(string name)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -71,7 +71,7 @@ namespace ShopNow.Controllers
             return Json(new { IsAdded = IsAdded, message = message, message1 = message1 }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNMPKE003")]
+        [AccessPolicy(PageCode = "SNCPE174")]
         public JsonResult Edit(int Id, string name)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -89,7 +89,7 @@ namespace ShopNow.Controllers
             return Json(new { result = true, message = message }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNMPKD004")]
+        [AccessPolicy(PageCode = "SNCPD175")]
         public JsonResult Delete(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -105,7 +105,7 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNMPKI005")]
+        [AccessPolicy(PageCode = "SNCPI176")]
         public ActionResult Index()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -115,7 +115,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNMPKI005")]
+        [AccessPolicy(PageCode = "SNCPI176")]
         public ActionResult Index(HttpPostedFileBase upload, PackageMasterViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -226,6 +226,7 @@ namespace ShopNow.Controllers
             }
             return View();
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

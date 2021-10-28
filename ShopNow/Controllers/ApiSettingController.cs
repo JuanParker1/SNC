@@ -28,7 +28,7 @@ namespace ShopNow.Controllers
             _mapper = _mapperConfiguration.CreateMapper();
         }
 
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCAPISL030")]
         public ActionResult List()
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -50,7 +50,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCAPISC031")]
         public ActionResult Create()
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -58,7 +58,7 @@ namespace ShopNow.Controllers
             return View();
         }
 
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCAPISC031")]
         [HttpPost]
         public ActionResult Create(ApiSettingCreateViewModel model)
         {
@@ -74,7 +74,32 @@ namespace ShopNow.Controllers
             return RedirectToAction("List");
         }
 
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCAPISE032")]
+        public ActionResult Edit(string id)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            int dId = AdminHelpers.DCodeInt(id);
+            var apiSetting = db.ApiSettings.FirstOrDefault(i => i.Id == dId);
+            var model = _mapper.Map<ApiSetting, ApiSettingEditViewModel>(apiSetting);
+            return View(model);
+        }
+
+        [AccessPolicy(PageCode = "SNCAPISE032")]
+        [HttpPost]
+        public ActionResult Edit(ApiSettingEditViewModel model)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var apiSetting = db.ApiSettings.FirstOrDefault(i => i.Id == model.Id);
+            _mapper.Map(model, apiSetting);
+            apiSetting.DateUpdated = DateTime.Now;
+            apiSetting.UpdatedBy = user.Name;
+            db.Entry(apiSetting).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Edit", new { id = AdminHelpers.ECodeInt(model.Id) });
+        }
+
+        [AccessPolicy(PageCode = "SNCAPISD033")]
         public JsonResult Delete(string id)
         {
             int dId = AdminHelpers.DCodeInt(id);
@@ -88,29 +113,5 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "")]
-        public ActionResult Edit(string id)
-        {
-            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            int dId = AdminHelpers.DCodeInt(id);
-            var apiSetting = db.ApiSettings.FirstOrDefault(i => i.Id == dId);
-            var model = _mapper.Map<ApiSetting, ApiSettingEditViewModel>(apiSetting);
-            return View(model);
-        }
-
-        [AccessPolicy(PageCode = "")]
-        [HttpPost]
-        public ActionResult Edit(ApiSettingEditViewModel model)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            var apiSetting = db.ApiSettings.FirstOrDefault(i => i.Id == model.Id);
-            _mapper.Map(model, apiSetting);
-            apiSetting.DateUpdated = DateTime.Now;
-            apiSetting.UpdatedBy = user.Name;
-            db.Entry(apiSetting).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
-            return RedirectToAction("Edit", new { id = AdminHelpers.ECodeInt(model.Id) });
-        }
     }
 }

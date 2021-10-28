@@ -39,7 +39,7 @@ namespace ShopNow.Controllers
 
         }
 
-        [AccessPolicy(PageCode = "SHNCTAL002")]
+        [AccessPolicy(PageCode = "SNCACL012")]
         public ActionResult List()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -54,7 +54,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "SHNCTAS003")]
+        [AccessPolicy(PageCode = "SNCACS013")]
         public JsonResult Save(string name = "")
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -84,7 +84,7 @@ namespace ShopNow.Controllers
             return Json(new { IsAdded = IsAdded, message = message, message1 = message1 }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNCTAE004")]
+        [AccessPolicy(PageCode = "SNCACE014")]
         public JsonResult Edit(int Id, string name)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -104,23 +104,7 @@ namespace ShopNow.Controllers
             return Json(new { message = message }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNCTAD005")]
-        public JsonResult Delete(int Id)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            var addOnCategory = db.AddOnCategories.Where(i=>i.Id == Id).FirstOrDefault();
-            if (addOnCategory != null)
-            {
-                addOnCategory.Status = 2;
-                addOnCategory.DateUpdated = DateTime.Now;
-                addOnCategory.UpdatedBy = user.Name;
-                db.Entry(addOnCategory).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-            }
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "SHNCTAI001")]
+        [AccessPolicy(PageCode = "SNCACI015")]
         public ActionResult Index()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -130,7 +114,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNCTAI001")]
+        [AccessPolicy(PageCode = "SNCACI015")]
         public ActionResult Index(HttpPostedFileBase upload, AddOnCategoryMasterViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -240,6 +224,23 @@ namespace ShopNow.Controllers
             }
             return View();
         }
+
+        [AccessPolicy(PageCode = "SNCACD016")]
+        public JsonResult Delete(int Id)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var addOnCategory = db.AddOnCategories.Where(i => i.Id == Id).FirstOrDefault();
+            if (addOnCategory != null)
+            {
+                addOnCategory.Status = 2;
+                addOnCategory.DateUpdated = DateTime.Now;
+                addOnCategory.UpdatedBy = user.Name;
+                db.Entry(addOnCategory).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -335,8 +335,8 @@
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
-    <Reference Include="Z.EntityFramework.Extensions, Version=5.2.7.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
-      <HintPath>..\packages\Z.EntityFramework.Extensions.5.2.7\lib\net45\Z.EntityFramework.Extensions.dll</HintPath>
+    <Reference Include="Z.EntityFramework.Extensions, Version=5.2.15.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
+      <HintPath>..\packages\Z.EntityFramework.Extensions.5.2.15\lib\net45\Z.EntityFramework.Extensions.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -406,6 +406,7 @@
     </Compile>
     <Compile Include="Global\Common.cs" />
     <Compile Include="Global\Utility.cs" />
+    <Compile Include="Helpers\AchievementHelpers.cs" />
     <Compile Include="Helpers\AdminHelpers.cs" />
     <Compile Include="Helpers\CallHelpers.cs" />
     <Compile Include="Helpers\CommonHelpers.cs" />
@@ -781,6 +782,7 @@
     <Content Include="Images\503.png" />
     <Content Include="Images\undraw_authentication_fsn5.svg" />
     <Content Include="Images\undraw_press_play_bx2d.svg" />
+    <Content Include="Images\user.jpg" />
     <Content Include="Models\ApplicationDbContext.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>ApplicationDbContext.edmx</DependentUpon>
@@ -3017,9 +3019,7 @@
     <Content Include="Views\Customer\Details.cshtml" />
     <Content Include="Views\Customer\List.cshtml" />
     <Content Include="Views\Product\FoodCreate.cshtml" />
-    <Content Include="Views\Product\ServiceCreate.cshtml" />
     <Content Include="Views\Product\FoodEdit.cshtml" />
-    <Content Include="Views\Product\ServiceEdit.cshtml" />
     <Content Include="Views\Shop\InActiveList.cshtml" />
     <Content Include="Views\AddOnCategory\List.cshtml" />
     <Content Include="Views\ShopCategory\List.cshtml" />
@@ -3069,7 +3069,6 @@
     <Content Include="Views\DeliveryBoy\Edit.cshtml" />
     <Content Include="Views\DeliveryBoy\InactiveList.cshtml" />
     <Content Include="Views\DeliveryBoy\List.cshtml" />
-    <Content Include="Views\DeliveryBoy\Assign.cshtml" />
     <Content Include="Views\WebAPI\Create.cshtml" />
     <Content Include="Views\Staff\Details.cshtml" />
     <Content Include="Views\Home\Access.cshtml" />
@@ -3105,12 +3104,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Product\ShopItemMapping.cshtml" />
-    <Content Include="Views\DeliveryBoy\AssignFranchise.cshtml" />
-    <Content Include="Views\Shop\AssignFranchise.cshtml" />
-    <Content Include="Views\DeliveryBoy\AssignedFranchiseList.cshtml" />
-    <Content Include="Views\DeliveryBoy\FranchiseUpdate.cshtml" />
-    <Content Include="Views\Shop\AssignedFranchiseList.cshtml" />
-    <Content Include="Views\Shop\FranchiseUpdate.cshtml" />
     <Content Include="Views\MasterProduct\PendingList.cshtml" />
     <Content Include="Views\MasterProduct\MappedList.cshtml" />
     <Content Include="Views\Cart\Pending.cshtml" />

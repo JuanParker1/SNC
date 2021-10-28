@@ -1792,6 +1792,9 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
             }
 
+            //Update Achievement Wallet
+            Helpers.AchievementHelpers.UpdateAchievements(order.CustomerId);
+
             string fcmtocken = customerDetails.FcmTocken ?? "";
 
             Helpers.PushNotification.SendbydeviceId("Your order has been delivered.", "ShopNowChat", "a.mp3", fcmtocken.ToString());
@@ -4984,8 +4987,10 @@ namespace ShopNow.Controllers
                 int orderCountAfterLC = db.Orders.Where(i => i.CustomerId == customerId && i.Status == 6 && (i.DateEncoded > lastCancelledOrder.DateEncoded)).Count();
                 if (orderCountAfterLC < 5)
                     return Json(new { isOnlinePayment = true }, JsonRequestBehavior.AllowGet);
+                else
+                    return Json(new { isOnlinePayment = false }, JsonRequestBehavior.AllowGet);
             }
-            return Json(new { isOnlinePayment = false }, JsonRequestBehavior.AllowGet);
+            return Json(new { isOnlinePayment = true }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult UpdateCustomerDistrict(int customerId, string district)
@@ -5127,234 +5132,436 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        public void UpdateAchievements(int customerId,int orderId)
-        {
-            DateTime achievementStartDateTime = new DateTime(2021, 10, 20);
-            var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
-            if (customer != null)
-            {
-                var achievementlist = db.AchievementSettings.Where(i => i.Status == 0).ToList();
-                foreach (var item in achievementlist)
-                {
-                    switch (item.CountType)
-                    {
-                        case 1:
-                            if (item.HasAccept == true)
-                            {
-                                var customerAcceptedAchievements = db.CustomerAchievements.FirstOrDefault(i => i.Status == 1 && i.CustomerId == customer.Id && i.AchievementId == item.Id);
-                                if (customerAcceptedAchievements != null)
-                                {
-                                    if (item.DayLimit > 0)
-                                    {
-                                        var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded.AddDays(item.DayLimit)))).Select(i => i.ShopId); 
-                                        var shopCategoryCount = db.Shops.Where(i => orderListSelectShop.Contains(i.Id)).GroupBy(i => i.ShopCategoryId).Count();
-                                        if (shopCategoryCount == item.CountValue)
-                                        {
-                                            customer.WalletAmount += item.Amount;
-                                            db.Entry(customer).State = EntityState.Modified;
-                                            db.SaveChanges();
+        //public void UpdateAchievements(int customerId,int orderId)
+        //{
+        //    DateTime achievementStartDateTime = new DateTime(2021, 10, 20);
+        //    var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
+        //    if (customer != null)
+        //    {
+        //        var achievementlist = db.AchievementSettings.Where(i => i.Status == 0).ToList();
+        //        foreach (var item in achievementlist)
+        //        {
+        //            switch (item.CountType)
+        //            {
+        //                case 1:
+        //                    if (item.HasAccept == true)
+        //                    {
+        //                        var customerAcceptedAchievements = db.CustomerAchievements.FirstOrDefault(i => i.Status == 1 && i.CustomerId == customer.Id && i.AchievementId == item.Id);
+        //                        if (customerAcceptedAchievements != null)
+        //                        {
+        //                            if (item.DayLimit > 0)
+        //                            {
+        //                                var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded.AddDays(item.DayLimit)))).Select(i => i.ShopId); 
+        //                                var shopCategoryCount = db.Shops.Where(i => orderListSelectShop.Contains(i.Id)).GroupBy(i => i.ShopCategoryId).Count();
+        //                                if (shopCategoryCount == item.CountValue)
+        //                                {
+        //                                    customer.WalletAmount += item.Amount;
+        //                                    db.Entry(customer).State = EntityState.Modified;
+        //                                    db.SaveChanges();
 
-                                            //Wallet History
-                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-                                        }
-                                    } else
-                                    {
-                                        var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Select(i => i.ShopId);
-                                        var shopCategoryCount = db.Shops.Where(i => orderListSelectShop.Contains(i.Id)).GroupBy(i => i.ShopCategoryId).Count();
-                                        if (shopCategoryCount == item.CountValue)
-                                        {
-                                            customer.WalletAmount += item.Amount;
-                                            db.Entry(customer).State = EntityState.Modified;
-                                            db.SaveChanges();
+        //                                    //Wallet History
+        //                                    AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+        //                                }
+        //                            } else
+        //                            {
+        //                                var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Select(i => i.ShopId);
+        //                                var shopCategoryCount = db.Shops.Where(i => orderListSelectShop.Contains(i.Id)).GroupBy(i => i.ShopCategoryId).Count();
+        //                                if (shopCategoryCount == item.CountValue)
+        //                                {
+        //                                    customer.WalletAmount += item.Amount;
+        //                                    db.Entry(customer).State = EntityState.Modified;
+        //                                    db.SaveChanges();
 
-                                            //Wallet History
-                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-                                        }
-                                    }
+        //                                    //Wallet History
+        //                                    AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+        //                                }
+        //                            }
                                     
-                                }
-                            }
-                            else {
-                                if (item.DayLimit > 0)
-                                {
-                                    var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementStartDateTime.AddDays(item.DayLimit)))).Select(i => i.ShopId);
-                                    var shopCategoryCount = db.Shops.Where(i => orderListSelectShop.Contains(i.Id)).GroupBy(i => i.ShopCategoryId).Count();
-                                    if (shopCategoryCount == item.CountValue)
-                                    {
-                                        customer.WalletAmount += item.Amount;
-                                        db.Entry(customer).State = EntityState.Modified;
-                                        db.SaveChanges();
-                                        //Wallet History
-                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-                                    }
-                                }
-                                else
-                                {
-                                    var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Select(i => i.ShopId);
-                                    var shopCategoryCount = db.Shops.Where(i => orderListSelectShop.Contains(i.Id)).GroupBy(i => i.ShopCategoryId).Count();
-                                    if (shopCategoryCount == item.CountValue)
-                                    {
-                                        customer.WalletAmount += item.Amount;
-                                        db.Entry(customer).State = EntityState.Modified;
-                                        db.SaveChanges();
-                                        //Wallet History
-                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-                                    }
-                                }
-                            }
-                            break;
-                        case 2:
-                            if (item.HasAccept == true)
-                            {
-                                var customerAcceptedAchievements = db.CustomerAchievements.FirstOrDefault(i => i.Status == 1 && i.CustomerId == customer.Id && i.AchievementId == item.Id);
-                                if (customerAcceptedAchievements != null)
-                                {
-                                    if (item.DayLimit > 0)
-                                    {
-                                        var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded.AddDays(item.DayLimit)))).GroupBy(i => i.ShopId).Count();
-                                        if (orderListShopCount == item.CountValue)
-                                        {
-                                            customer.WalletAmount += item.Amount;
-                                            db.Entry(customer).State = EntityState.Modified;
-                                            db.SaveChanges();
+        //                        }
+        //                    }
+        //                    else {
+        //                        if (item.DayLimit > 0)
+        //                        {
+        //                            var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementStartDateTime.AddDays(item.DayLimit)))).Select(i => i.ShopId);
+        //                            var shopCategoryCount = db.Shops.Where(i => orderListSelectShop.Contains(i.Id)).GroupBy(i => i.ShopCategoryId).Count();
+        //                            if (shopCategoryCount == item.CountValue)
+        //                            {
+        //                                customer.WalletAmount += item.Amount;
+        //                                db.Entry(customer).State = EntityState.Modified;
+        //                                db.SaveChanges();
+        //                                //Wallet History
+        //                                AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+        //                            }
+        //                        }
+        //                        else
+        //                        {
+        //                            var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Select(i => i.ShopId);
+        //                            var shopCategoryCount = db.Shops.Where(i => orderListSelectShop.Contains(i.Id)).GroupBy(i => i.ShopCategoryId).Count();
+        //                            if (shopCategoryCount == item.CountValue)
+        //                            {
+        //                                customer.WalletAmount += item.Amount;
+        //                                db.Entry(customer).State = EntityState.Modified;
+        //                                db.SaveChanges();
+        //                                //Wallet History
+        //                                AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+        //                            }
+        //                        }
+        //                    }
+        //                    break;
+        //                case 2:
+        //                    if (item.HasAccept == true)
+        //                    {
+        //                        var customerAcceptedAchievements = db.CustomerAchievements.FirstOrDefault(i => i.Status == 1 && i.CustomerId == customer.Id && i.AchievementId == item.Id);
+        //                        if (customerAcceptedAchievements != null)
+        //                        {
+        //                            if (item.DayLimit > 0)
+        //                            {
+        //                                var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded.AddDays(item.DayLimit)))).GroupBy(i => i.ShopId).Count();
+        //                                if (orderListShopCount == item.CountValue)
+        //                                {
+        //                                    customer.WalletAmount += item.Amount;
+        //                                    db.Entry(customer).State = EntityState.Modified;
+        //                                    db.SaveChanges();
 
-                                            //Wallet History
-                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).GroupBy(i => i.ShopId).Count();
-                                        if (orderListShopCount == item.CountValue)
-                                        {
-                                            customer.WalletAmount += item.Amount;
-                                            db.Entry(customer).State = EntityState.Modified;
-                                            db.SaveChanges();
+        //                                    //Wallet History
+        //                                    AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+        //                                }
+        //                            }
+        //                            else
+        //                            {
+        //                                var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).GroupBy(i => i.ShopId).Count();
+        //                                if (orderListShopCount == item.CountValue)
+        //                                {
+        //                                    customer.WalletAmount += item.Amount;
+        //                                    db.Entry(customer).State = EntityState.Modified;
+        //                                    db.SaveChanges();
 
-                                            //Wallet History
-                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-                                        }
-                                    }
+        //                                    //Wallet History
+        //                                    AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+        //                                }
+        //                            }
 
-                                }
-                            }
-                            else
-                            {
-                                if (item.DayLimit > 0)
-                                {
-                                    var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementStartDateTime.AddDays(item.DayLimit)))).GroupBy(i => i.ShopId).Count();
-                                    if (orderListShopCount == item.CountValue)
-                                    {
-                                        customer.WalletAmount += item.Amount;
-                                        db.Entry(customer).State = EntityState.Modified;
-                                        db.SaveChanges();
-                                        //Wallet History
-                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-                                    }
-                                }
-                                else
-                                {
-                                    var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).GroupBy(i => i.ShopId).Count();
-                                    if (orderListShopCount == item.CountValue)
-                                    {
-                                        customer.WalletAmount += item.Amount;
-                                        db.Entry(customer).State = EntityState.Modified;
-                                        db.SaveChanges();
-                                        //Wallet History
-                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-                                    }
-                                }
-                            }
-                            break;
-                        case 3:
-                            break;
-                        case 4:
-                            break;
-                        case 5:
-                            break;
-                        case 6:
-                            if (item.HasAccept == true)
-                            {
-                                var customerAcceptedAchievements = db.CustomerAchievements.FirstOrDefault(i => i.Status == 1 && i.CustomerId == customer.Id && i.AchievementId == item.Id);
-                                if (customerAcceptedAchievements != null)
-                                {
-                                    if (item.DayLimit > 0)
-                                    {
-                                        var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded.AddDays(item.DayLimit)))).Count();
-                                        if (orderListCount == item.CountValue)
-                                        {
-                                            customer.WalletAmount += item.Amount;
-                                            db.Entry(customer).State = EntityState.Modified;
-                                            db.SaveChanges();
+        //                        }
+        //                    }
+        //                    else
+        //                    {
+        //                        if (item.DayLimit > 0)
+        //                        {
+        //                            var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementStartDateTime.AddDays(item.DayLimit)))).GroupBy(i => i.ShopId).Count();
+        //                            if (orderListShopCount == item.CountValue)
+        //                            {
+        //                                customer.WalletAmount += item.Amount;
+        //                                db.Entry(customer).State = EntityState.Modified;
+        //                                db.SaveChanges();
+        //                                //Wallet History
+        //                                AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+        //                            }
+        //                        }
+        //                        else
+        //                        {
+        //                            var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).GroupBy(i => i.ShopId).Count();
+        //                            if (orderListShopCount == item.CountValue)
+        //                            {
+        //                                customer.WalletAmount += item.Amount;
+        //                                db.Entry(customer).State = EntityState.Modified;
+        //                                db.SaveChanges();
+        //                                //Wallet History
+        //                                AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+        //                            }
+        //                        }
+        //                    }
+        //                    break;
+        //                case 3:
+        //                    if (item.HasAccept == true)
+        //                    {
+        //                        var customerAcceptedAchievements = db.CustomerAchievements.FirstOrDefault(i => i.Status == 1 && i.CustomerId == customer.Id && i.AchievementId == item.Id);
+        //                        if (customerAcceptedAchievements != null)
+        //                        {
+        //                            var achievementSelectedShopList = db.AchievementShops.Where(i => i.AchievementId == item.Id).Select(i=>i.ShopId).ToList(); 
+        //                            if (item.DayLimit > 0)
+        //                            {
+        //                                var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded.AddDays(item.DayLimit))) && achievementSelectedShopList.Contains(i.ShopId)).GroupBy(i => i.ShopId).Count();
+        //                                if (orderListShopCount == item.CountValue)
+        //                                {
+        //                                    customer.WalletAmount += item.Amount;
+        //                                    db.Entry(customer).State = EntityState.Modified;
+        //                                    db.SaveChanges();
 
-                                            //Wallet History
-                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Count();
-                                        if (orderListCount == item.CountValue)
-                                        {
-                                            customer.WalletAmount += item.Amount;
-                                            db.Entry(customer).State = EntityState.Modified;
-                                            db.SaveChanges();
+        //                                    //Wallet History
+        //                                    AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+        //                                }
+        //                            }
+        //                            else
+        //                            {
+        //                                var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && achievementSelectedShopList.Contains(i.ShopId)).GroupBy(i => i.ShopId).Count();
+        //                                if (orderListShopCount == item.CountValue)
+        //                                {
+        //                                    customer.WalletAmount += item.Amount;
+        //                                    db.Entry(customer).State = EntityState.Modified;
+        //                                    db.SaveChanges();
 
-                                            //Wallet History
-                                            AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-                                        }
-                                    }
+        //                                    //Wallet History
+        //                                    AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+        //                                }
+        //                            }
 
-                                }
-                            }
-                            else
-                            {
-                                if (item.DayLimit > 0)
-                                {
-                                    var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementStartDateTime.AddDays(item.DayLimit)))).Count();
-                                    if (orderListCount == item.CountValue)
-                                    {
-                                        customer.WalletAmount += item.Amount;
-                                        db.Entry(customer).State = EntityState.Modified;
-                                        db.SaveChanges();
-                                        //Wallet History
-                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-                                    }
-                                }
-                                else
-                                {
-                                    var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Count();
-                                    if (orderListCount == item.CountValue)
-                                    {
-                                        customer.WalletAmount += item.Amount;
-                                        db.Entry(customer).State = EntityState.Modified;
-                                        db.SaveChanges();
-                                        //Wallet History
-                                        AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-                                    }
-                                }
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                }
+        //                        }
+        //                    }
+        //                    else
+        //                    {
+        //                        var achievementSelectedShopList = db.AchievementShops.Where(i => i.AchievementId == item.Id).Select(i => i.ShopId).ToList();
+        //                        if (item.DayLimit > 0)
+        //                        {
+        //                            var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementStartDateTime.AddDays(item.DayLimit))) && achievementSelectedShopList.Contains(i.ShopId)).GroupBy(i => i.ShopId).Count();
+        //                            if (orderListShopCount == item.CountValue)
+        //                            {
+        //                                customer.WalletAmount += item.Amount;
+        //                                db.Entry(customer).State = EntityState.Modified;
+        //                                db.SaveChanges();
+        //                                //Wallet History
+        //                                AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+        //                            }
+        //                        }
+        //                        else
+        //                        {
+        //                            var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && achievementSelectedShopList.Contains(i.ShopId)).GroupBy(i => i.ShopId).Count();
+        //                            if (orderListShopCount == item.CountValue)
+        //                            {
+        //                                customer.WalletAmount += item.Amount;
+        //                                db.Entry(customer).State = EntityState.Modified;
+        //                                db.SaveChanges();
+        //                                //Wallet History
+        //                                AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+        //                            }
+        //                        }
+        //                    }
+        //                    break;
+        //                case 4:
+        //                    if (item.HasAccept == true)
+        //                    {
+        //                        var customerAcceptedAchievements = db.CustomerAchievements.FirstOrDefault(i => i.Status == 1 && i.CustomerId == customer.Id && i.AchievementId == item.Id);
+        //                        if (customerAcceptedAchievements != null)
+        //                        {
+        //                            if (item.DayLimit > 0)
+        //                            {
+        //                                var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded.AddDays(item.DayLimit))))
+        //                                    .Join(db.OrderItems.GroupBy(i=>i.ProductId),o=>o.Id,oi=>oi.FirstOrDefault().OrderId,(o,oi)=>new { o,oi})
+        //                                    .Count();
+        //                                if (orderListProductCount == item.CountValue)
+        //                                {
+        //                                    customer.WalletAmount += item.Amount;
+        //                                    db.Entry(customer).State = EntityState.Modified;
+        //                                    db.SaveChanges();
+
+        //                                    //Wallet History
+        //                                    AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+        //                                }
+        //                            }
+        //                            else
+        //                            {
+        //                                var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime))
+        //                                     .Join(db.OrderItems.GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
+        //                                    .Count();
+        //                                if (orderListProductCount == item.CountValue)
+        //                                {
+        //                                    customer.WalletAmount += item.Amount;
+        //                                    db.Entry(customer).State = EntityState.Modified;
+        //                                    db.SaveChanges();
+
+        //                                    //Wallet History
+        //                                    AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+        //                                }
+        //                            }
+
+        //                        }
+        //                    }
+        //                    else
+        //                    {
+        //                        if (item.DayLimit > 0)
+        //                        {
+        //                            var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementStartDateTime.AddDays(item.DayLimit))))
+        //                                .Join(db.OrderItems.GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
+        //                                    .Count();
+        //                            if (orderListProductCount == item.CountValue)
+        //                            {
+        //                                customer.WalletAmount += item.Amount;
+        //                                db.Entry(customer).State = EntityState.Modified;
+        //                                db.SaveChanges();
+        //                                //Wallet History
+        //                                AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+        //                            }
+        //                        }
+        //                        else
+        //                        {
+        //                            var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime))
+        //                                .Join(db.OrderItems.GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
+        //                                    .Count();
+        //                            if (orderListProductCount == item.CountValue)
+        //                            {
+        //                                customer.WalletAmount += item.Amount;
+        //                                db.Entry(customer).State = EntityState.Modified;
+        //                                db.SaveChanges();
+        //                                //Wallet History
+        //                                AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+        //                            }
+        //                        }
+        //                    }
+        //                    break;
+        //                case 5:
+        //                    if (item.HasAccept == true)
+        //                    {
+        //                        var customerAcceptedAchievements = db.CustomerAchievements.FirstOrDefault(i => i.Status == 1 && i.CustomerId == customer.Id && i.AchievementId == item.Id);
+        //                        if (customerAcceptedAchievements != null)
+        //                        {
+        //                            var achievementSelectedProductList = db.AchievementProducts.Where(i => i.AchievementId == item.Id).Select(i => i.ProductId).ToList();
+        //                            if (item.DayLimit > 0)
+        //                            {
+        //                                var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded.AddDays(item.DayLimit))))
+        //                                    .Join(db.OrderItems.Where(i=> achievementSelectedProductList.Contains(i.ProductId)).GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
+        //                                    .Count();
+        //                                if (orderListProductCount == item.CountValue)
+        //                                {
+        //                                    customer.WalletAmount += item.Amount;
+        //                                    db.Entry(customer).State = EntityState.Modified;
+        //                                    db.SaveChanges();
+
+        //                                    //Wallet History
+        //                                    AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+        //                                }
+        //                            }
+        //                            else
+        //                            {
+        //                                var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime))
+        //                                     .Join(db.OrderItems.Where(i => achievementSelectedProductList.Contains(i.ProductId)).GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
+        //                                    .Count();
+        //                                if (orderListProductCount == item.CountValue)
+        //                                {
+        //                                    customer.WalletAmount += item.Amount;
+        //                                    db.Entry(customer).State = EntityState.Modified;
+        //                                    db.SaveChanges();
+
+        //                                    //Wallet History
+        //                                    AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+        //                                }
+        //                            }
+
+        //                        }
+        //                    }
+        //                    else
+        //                    {
+        //                        var achievementSelectedProductList = db.AchievementProducts.Where(i => i.AchievementId == item.Id).Select(i => i.ProductId).ToList();
+        //                        if (item.DayLimit > 0)
+        //                        {
+        //                            var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementStartDateTime.AddDays(item.DayLimit))))
+        //                                .Join(db.OrderItems.Where(i => achievementSelectedProductList.Contains(i.ProductId)).GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
+        //                                    .Count();
+        //                            if (orderListProductCount == item.CountValue)
+        //                            {
+        //                                customer.WalletAmount += item.Amount;
+        //                                db.Entry(customer).State = EntityState.Modified;
+        //                                db.SaveChanges();
+        //                                //Wallet History
+        //                                AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+        //                            }
+        //                        }
+        //                        else
+        //                        {
+        //                            var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime))
+        //                                .Join(db.OrderItems.Where(i => achievementSelectedProductList.Contains(i.ProductId)).GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
+        //                                    .Count();
+        //                            if (orderListProductCount == item.CountValue)
+        //                            {
+        //                                customer.WalletAmount += item.Amount;
+        //                                db.Entry(customer).State = EntityState.Modified;
+        //                                db.SaveChanges();
+        //                                //Wallet History
+        //                                AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+        //                            }
+        //                        }
+        //                    }
+        //                    break;
+        //                case 6:
+        //                    if (item.HasAccept == true)
+        //                    {
+        //                        var customerAcceptedAchievements = db.CustomerAchievements.FirstOrDefault(i => i.Status == 1 && i.CustomerId == customer.Id && i.AchievementId == item.Id);
+        //                        if (customerAcceptedAchievements != null)
+        //                        {
+        //                            if (item.DayLimit > 0)
+        //                            {
+        //                                var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded.AddDays(item.DayLimit)))).Count();
+        //                                if (orderListCount == item.CountValue)
+        //                                {
+        //                                    customer.WalletAmount += item.Amount;
+        //                                    db.Entry(customer).State = EntityState.Modified;
+        //                                    db.SaveChanges();
+
+        //                                    //Wallet History
+        //                                    AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+        //                                }
+        //                            }
+        //                            else
+        //                            {
+        //                                var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Count();
+        //                                if (orderListCount == item.CountValue)
+        //                                {
+        //                                    customer.WalletAmount += item.Amount;
+        //                                    db.Entry(customer).State = EntityState.Modified;
+        //                                    db.SaveChanges();
+
+        //                                    //Wallet History
+        //                                    AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+        //                                }
+        //                            }
+
+        //                        }
+        //                    }
+        //                    else
+        //                    {
+        //                        if (item.DayLimit > 0)
+        //                        {
+        //                            var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementStartDateTime.AddDays(item.DayLimit)))).Count();
+        //                            if (orderListCount == item.CountValue)
+        //                            {
+        //                                customer.WalletAmount += item.Amount;
+        //                                db.Entry(customer).State = EntityState.Modified;
+        //                                db.SaveChanges();
+        //                                //Wallet History
+        //                                AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+        //                            }
+        //                        }
+        //                        else
+        //                        {
+        //                            var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Count();
+        //                            if (orderListCount == item.CountValue)
+        //                            {
+        //                                customer.WalletAmount += item.Amount;
+        //                                db.Entry(customer).State = EntityState.Modified;
+        //                                db.SaveChanges();
+        //                                //Wallet History
+        //                                AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
+        //                            }
+        //                        }
+        //                    }
+        //                    break;
+        //                default:
+        //                    break;
+        //            }
+        //        }
                 
-            }
-        }
+        //    }
+        //}
 
-        public void AddAchievementCustomerWalletHistory(int custId, double amount, string achievementName)
-        {
-            //Wallet History
-            var walletHistory = new CustomerWalletHistory
-            {
-                Amount = amount,
-                CustomerId = custId,
-                DateEncoded = DateTime.Now,
-                Description = $"Received from Achievement({achievementName})",
-                Type = 1
-            };
-        }
+        //public void AddAchievementCustomerWalletHistory(int custId, double amount, string achievementName)
+        //{
+        //    var walletHistory = new CustomerWalletHistory
+        //    {
+        //        Amount = amount,
+        //        CustomerId = custId,
+        //        DateEncoded = DateTime.Now,
+        //        Description = $"Received from Achievement({achievementName})",
+        //        Type = 1
+        //    };
+        //}
 
         ////////////////////////////////////////////
 

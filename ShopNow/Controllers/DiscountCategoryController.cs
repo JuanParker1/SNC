@@ -30,7 +30,7 @@ namespace ShopNow.Controllers
 
         }
 
-        [AccessPolicy(PageCode = "SHNDCAL001")]
+        [AccessPolicy(PageCode = "SNCDCL125")]
         public ActionResult List()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -42,7 +42,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "SHNDCAS002")]
+        [AccessPolicy(PageCode = "SNCDCS126")]
         public JsonResult Save(string Name, double Percentage, int ShopId, string ShopName)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -74,7 +74,7 @@ namespace ShopNow.Controllers
             return Json(new { IsAdded = IsAdded, message = message, message1 = message1 }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNDCAE003")]
+        [AccessPolicy(PageCode = "SNCDCE127")]
         public JsonResult Edit(int Id, string name, double percentage, int shopid, string shopname)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -97,7 +97,7 @@ namespace ShopNow.Controllers
             return Json(new { message = message }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNDCAD004")]
+        [AccessPolicy(PageCode = "SNCDCD128")]
         public JsonResult Delete(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -113,7 +113,6 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNCATL002")]
         public async Task<JsonResult> GetListSelect2(string q = "")
         {
             var model = await db.Shops.Where(a => a.Name.Contains(q)).OrderBy(i => i.Name).Select(i => new

@@ -32,7 +32,7 @@ namespace ShopNow.Controllers
 
         }
 
-        [AccessPolicy(PageCode = "SHNSCTI001")]
+        [AccessPolicy(PageCode = "SNCSCI248")]
         public ActionResult Index()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -42,7 +42,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNSCTI001")]
+        [AccessPolicy(PageCode = "SNCSCI248")]
         public ActionResult Index(HttpPostedFileBase upload, ShopCategoryMasterViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -154,7 +154,7 @@ namespace ShopNow.Controllers
             return View();
         }
 
-        [AccessPolicy(PageCode = "SHNSCTL004")]
+        [AccessPolicy(PageCode = "SNCSCL249")]
         public ActionResult List()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -165,7 +165,7 @@ namespace ShopNow.Controllers
             return View(model.List);
         }
 
-        [AccessPolicy(PageCode = "SHNSCTS002")]
+        [AccessPolicy(PageCode = "SNCSCS250")]
         public JsonResult Save(string name = "")
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -197,7 +197,7 @@ namespace ShopNow.Controllers
             return Json(new { IsAdded = IsAdded, message = message, message1 = message1 }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNSCTE003")]
+        [AccessPolicy(PageCode = "SNCSCE251")]
         public JsonResult Edit(int Id, string name)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -218,7 +218,7 @@ namespace ShopNow.Controllers
             return Json(new { message = message }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNSCTD005")]
+        [AccessPolicy(PageCode = "SNCSCD252")]
         public JsonResult Delete(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -233,6 +233,7 @@ namespace ShopNow.Controllers
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -241,5 +242,6 @@ namespace ShopNow.Controllers
             }
             base.Dispose(disposing);
         }
+
     }
 }

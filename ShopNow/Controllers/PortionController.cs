@@ -32,7 +32,7 @@ namespace ShopNow.Controllers
 
         }
 
-        [AccessPolicy(PageCode = "SHNCSTL001")]
+        [AccessPolicy(PageCode = "SNCPOL198")]
         public ActionResult List()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -44,7 +44,7 @@ namespace ShopNow.Controllers
             return View(model.List);
         }
 
-        [AccessPolicy(PageCode = "SHNCSTS002")]
+        [AccessPolicy(PageCode = "SNCPOS199")]
         public JsonResult Save(string name = "")
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -75,7 +75,7 @@ namespace ShopNow.Controllers
             return Json(new { IsAdded = IsAdded, message = message, message1 = message1 }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNCSTE003")]
+        [AccessPolicy(PageCode = "SNCPOE200")]
         public JsonResult Edit(int Id, string name)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -93,7 +93,7 @@ namespace ShopNow.Controllers
             return Json(new { message = message }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNCSTD004")]
+        [AccessPolicy(PageCode = "SNCPOD201")]
         public JsonResult Delete(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -109,7 +109,7 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNCSTI005")]
+        [AccessPolicy(PageCode = "SNCPOI202")]
         public ActionResult Index()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -119,7 +119,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNCSTI005")]
+        [AccessPolicy(PageCode = "SNCPOI202")]
         public ActionResult Index(HttpPostedFileBase upload, PortionMasterViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -230,6 +230,7 @@ namespace ShopNow.Controllers
             }
             return View();
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

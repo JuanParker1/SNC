@@ -33,7 +33,7 @@ namespace ShopNow.Controllers
             _mapper = _mapperConfiguration.CreateMapper();
         }
 
-        [AccessPolicy(PageCode = "SHNBANL001")]
+        [AccessPolicy(PageCode = "SNCBL038")]
         public ActionResult List()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -59,7 +59,7 @@ namespace ShopNow.Controllers
             return View(model.List);
         }
 
-        [AccessPolicy(PageCode = "SHNBANPL002")]
+        [AccessPolicy(PageCode = "SNCBPL039")]
         public ActionResult PendingList()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -85,7 +85,7 @@ namespace ShopNow.Controllers
             return View(model.List);
         }
 
-        [AccessPolicy(PageCode = "SHNBANE003")]
+        [AccessPolicy(PageCode = "SNCBE040")]
         public ActionResult Edit(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -99,7 +99,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNBANE003")]
+        [AccessPolicy(PageCode = "SNCBE040")]
         public ActionResult Edit(BannerEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -141,7 +141,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("List", "Banner");
         }
 
-        [AccessPolicy(PageCode = "SHNBAND004")]
+        [AccessPolicy(PageCode = "SNCBD041")]
         public ActionResult Delete(int id)
         {
             var banner = db.Banners.FirstOrDefault(i => i.Id == id);
@@ -153,6 +153,7 @@ namespace ShopNow.Controllers
 
         //[AccessPolicy(PageCode = "")]
         [HttpPost]
+        [AccessPolicy(PageCode = "SNCBUA042")]
         public ActionResult UpdateActive(int Id, int status)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -165,7 +166,6 @@ namespace ShopNow.Controllers
             return RedirectToAction("List");
         }
 
-        [AccessPolicy(PageCode = "SHNBANE003")]
         public async Task<JsonResult> GetShopSelect2(string q = "")
         {
             var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
@@ -176,7 +176,6 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNBANE003")]
         public async Task<JsonResult> GetShopProductSelect2(int shopid, string q = "")
         {
             var model = await db.Products.Where(a => a.ShopId == shopid && a.Status == 0)

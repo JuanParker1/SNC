@@ -25,7 +25,8 @@ namespace ShopNow.Controllers
             _mapper = _mapperConfiguration.CreateMapper();
 
         }
-        [AccessPolicy(PageCode = "SHNPFCL001")]
+
+        [AccessPolicy(PageCode = "SNCPFL194")]
         public ActionResult List()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -38,7 +39,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "SHNPFCS002")]
+        [AccessPolicy(PageCode = "SNCPFS195")]
         public JsonResult Save(double RatePerOrder, int DailyViewer)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -61,7 +62,7 @@ namespace ShopNow.Controllers
             return Json(new { IsAdded = IsAdded, message = message }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNPFCE003")]
+        [AccessPolicy(PageCode = "SNCPFE196")]
         public JsonResult Edit(int id, double ratePerOrder, int dailyViewer)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -88,7 +89,7 @@ namespace ShopNow.Controllers
             return Json(new { message = message }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNPFCD004")]
+        [AccessPolicy(PageCode = "SNCPFD197")]
         public JsonResult Delete(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);

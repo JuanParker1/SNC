@@ -32,7 +32,7 @@ namespace ShopNow.Controllers
             _mapper = _mapperConfiguration.CreateMapper();
         }
 
-        [AccessPolicy(PageCode = "SHNBRAL004")]
+        [AccessPolicy(PageCode = "SNCBRL054")]
         public ActionResult List()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -43,7 +43,7 @@ namespace ShopNow.Controllers
 
         }
 
-        [AccessPolicy(PageCode = "SHNBRAC001")]
+        [AccessPolicy(PageCode = "SNCBRS055")]
         public JsonResult Save(string name)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -73,7 +73,7 @@ namespace ShopNow.Controllers
             return Json(new { IsAdded = IsAdded, message = message, message1 = message1 }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNBRAE002")]
+        [AccessPolicy(PageCode = "SNCBRE056")]
         public JsonResult Edit(Brand brandmodel)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -91,24 +91,8 @@ namespace ShopNow.Controllers
             return Json(new { message = message }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNBRAR005")]
-        public JsonResult Delete(int Id)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            var brand = db.Brands.Where(b => b.Id == Id).FirstOrDefault(); 
-            if (brand != null)
-            {
-                brand.Status = 2;
-                brand.DateUpdated = DateTime.Now;
-                brand.UpdatedBy = user.Name;
-                db.Entry(brand).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-            }
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
-
         // GET: Brand
-        [AccessPolicy(PageCode = "SHNBRAI003")]
+        [AccessPolicy(PageCode = "SNCBRI057")]
         public ActionResult Index()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -118,7 +102,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNBRAI003")]
+        [AccessPolicy(PageCode = "SNCBRI057")]
         public ActionResult Index(HttpPostedFileBase upload, BrandMasterViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -228,6 +212,23 @@ namespace ShopNow.Controllers
             }
             return View();
         }
+
+        [AccessPolicy(PageCode = "SNCBRD058")]
+        public JsonResult Delete(int Id)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var brand = db.Brands.Where(b => b.Id == Id).FirstOrDefault();
+            if (brand != null)
+            {
+                brand.Status = 2;
+                brand.DateUpdated = DateTime.Now;
+                brand.UpdatedBy = user.Name;
+                db.Entry(brand).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

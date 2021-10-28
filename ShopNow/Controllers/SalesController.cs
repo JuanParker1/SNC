@@ -26,7 +26,7 @@ namespace ShopNowPay.Controllers
             _mapper = _mapperConfiguration.CreateMapper();
         }
        
-        [AccessPolicy(PageCode = "SHNSALR001")]
+        [AccessPolicy(PageCode = "SNCSR245")]
         public ActionResult Report(DateTime? startDate, DateTime? endDate)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -70,6 +70,7 @@ namespace ShopNowPay.Controllers
             }
             return View(model.List);
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

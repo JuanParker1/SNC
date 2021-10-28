@@ -35,7 +35,7 @@ namespace ShopNow.Controllers
 
         }
 
-        [AccessPolicy(PageCode = "SHNCATL002")]
+        [AccessPolicy(PageCode = "SNCCAL091")]
         public ActionResult List()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -46,7 +46,7 @@ namespace ShopNow.Controllers
 
         }
 
-        [AccessPolicy(PageCode = "SHNCATS003")]
+        [AccessPolicy(PageCode = "SNCCAS092")]
         public JsonResult Save(Category category)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -73,7 +73,7 @@ namespace ShopNow.Controllers
             return Json(new { IsAdded = IsAdded, message = message, message1 = message1 }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNCATE004")]
+        [AccessPolicy(PageCode = "SNCCAE093")]
         public JsonResult Edit(Category categoryModel)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -96,7 +96,7 @@ namespace ShopNow.Controllers
             return Json(new { message = message }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNCATD005")]
+        [AccessPolicy(PageCode = "SNCCAD094")]
         public JsonResult Delete(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -112,20 +112,8 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNCATL002")]
-        public async Task<JsonResult> GetListSelect2(string q = "")
-        {
-            var model = await db.Categories.Where(a => a.Name.Contains(q)).OrderBy(i => i.Name).Select(i => new
-            {
-                id = i.Id,
-                text = i.Name
-            }).OrderBy(i => i.text).ToListAsync();
-
-            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
-        }
-
         // GET: Category
-        [AccessPolicy(PageCode = "SHNCATI001")]
+        [AccessPolicy(PageCode = "SNCCAI095")]
         public ActionResult Index()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -135,7 +123,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNCATI001")]
+        [AccessPolicy(PageCode = "SNCCAI095")]
         public ActionResult Index(HttpPostedFileBase upload, CategoryMasterViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -249,6 +237,18 @@ namespace ShopNow.Controllers
             }
             return View();
         }
+
+        public async Task<JsonResult> GetListSelect2(string q = "")
+        {
+            var model = await db.Categories.Where(a => a.Name.Contains(q)).OrderBy(i => i.Name).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).OrderBy(i => i.text).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

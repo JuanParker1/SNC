@@ -31,7 +31,7 @@ namespace ShopNow.Controllers
 
         }
 
-        [AccessPolicy(PageCode = "SHNSUCL001")]
+        [AccessPolicy(PageCode = "SNCSCL288")]
         public ActionResult List()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -42,7 +42,7 @@ namespace ShopNow.Controllers
 
         }
 
-        [AccessPolicy(PageCode = "SHNSUCS002")]
+        [AccessPolicy(PageCode = "SNCSCS289")]
         public JsonResult Save(SubCategory subCategory)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -69,7 +69,7 @@ namespace ShopNow.Controllers
             return Json(new { IsAdded = IsAdded, message = message, message1 = message1 }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNSUCE003")]
+        [AccessPolicy(PageCode = "SNCSCE290")]
         public ActionResult Edit(string Id)
         {
             var dcode = AdminHelpers.DCodeInt(Id);
@@ -84,7 +84,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNSUCE003")]
+        [AccessPolicy(PageCode = "SNCSCE290")]
         public ActionResult Edit(SubCategoryEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -97,7 +97,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("List");
         }
 
-        [AccessPolicy(PageCode = "SHNSUCD004")]
+        [AccessPolicy(PageCode = "SNCSCD291")]
         public JsonResult Delete(string Id)
         {
             var dId = AdminHelpers.DCodeInt(Id);
@@ -114,7 +114,6 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNSUCL001")]
         public async Task<JsonResult> GetCategorySelect2(string q = "")
         {
             var model = await db.Categories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 2).Select(i => new
@@ -127,5 +126,6 @@ namespace ShopNow.Controllers
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
+
     }
 }

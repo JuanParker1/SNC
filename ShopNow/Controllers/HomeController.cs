@@ -18,8 +18,7 @@ namespace ShopNow.Controllers
 
         [AllowAnonymous]
         public ActionResult Index(string returnUrl)
-        {
-           
+        {           
             if (CheckAlreadyLoggedIn())
                 return Redirect(returnUrl != null ? returnUrl : "/dashboard/index");
             else
@@ -77,9 +76,8 @@ namespace ShopNow.Controllers
                         Response.Cookies["PhoneNumber"].Expires = DateTime.Now.AddDays(-1);
                         Response.Cookies["Password"].Expires = DateTime.Now.AddDays(-1);
                     }
-
                     return RedirectToAction(returnUrl != null ? returnUrl : "Index", "Dashboard");
-                    //}
+                    
                 }
                 else if (user != null && !string.IsNullOrEmpty(user.IpAddress))
                 {
@@ -113,14 +111,13 @@ namespace ShopNow.Controllers
                     ViewBag.ErrorMessage = "Invalid Phone Number or Password";
                     ModelState.AddModelError("Password", "Invalid email address or password");
                 }
-
             }
             return View(model);
         }
 
 
         [HttpGet]
-        [AccessPolicy(PageCode = "SHNHOMCP002")]
+        [AccessPolicy(PageCode = "SNCHCP134")]
         public ActionResult ChangePassword()
         {
             return View();
@@ -129,7 +126,7 @@ namespace ShopNow.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
-        [AccessPolicy(PageCode = "SHNHOMCP002")]
+        [AccessPolicy(PageCode = "SNCHCP134")]
         public ActionResult ChangePassword(ChangePasswordViewModel cpm)
         {
             string LoginMemberId = Convert.ToString(Session["UserCode"]);
@@ -144,8 +141,7 @@ namespace ShopNow.Controllers
                 ModelState.AddModelError("OldPassword", "Current password is wrong");
             return View();
         }
-
-        //[AccessPolicy(PageCode = "SHNHOML001")]
+                
         public ActionResult LogOut()
         {
             Session.Abandon();
@@ -174,6 +170,7 @@ namespace ShopNow.Controllers
         {
             return Json("Bad Authorization", JsonRequestBehavior.AllowGet);
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -196,6 +193,5 @@ namespace ShopNow.Controllers
             return addr[addr.Length - 1].ToString();
 
         }
-
     }
 }

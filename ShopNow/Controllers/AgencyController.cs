@@ -43,6 +43,7 @@ namespace ShopNow.Controllers
             _mapper = _mapperConfiguration.CreateMapper();
         }
 
+        [AccessPolicy(PageCode = "SNCAGL017")]
         public ActionResult List()
         {
             var model = new AgencyListViewModel();
@@ -59,6 +60,7 @@ namespace ShopNow.Controllers
             return View(model.List);
         }
 
+        [AccessPolicy(PageCode = "SNCAGIAL018")]
         public ActionResult InActiveList()
         {
             var model = new AgencyListViewModel();
@@ -75,6 +77,7 @@ namespace ShopNow.Controllers
             return View(model.List);
         }
 
+        [AccessPolicy(PageCode = "SNCAGC019")]
         public ActionResult Create()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -85,7 +88,7 @@ namespace ShopNow.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCAGC019")]
         public ActionResult Create(AgencyCreateViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -215,6 +218,7 @@ namespace ShopNow.Controllers
             }
         }
 
+        [AccessPolicy(PageCode = "SNCAGE020")]
         public ActionResult Edit(string id)
         {
             var dId = AdminHelpers.DCodeInt(id);
@@ -233,7 +237,7 @@ namespace ShopNow.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
-        [AccessPolicy(PageCode = "")]
+        [AccessPolicy(PageCode = "SNCAGE020")]
         public ActionResult Edit(AgencyEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -296,7 +300,34 @@ namespace ShopNow.Controllers
 
         }
 
+        [AccessPolicy(PageCode = "SNCAGAL021")]
+        public ActionResult AssignList(AgencyAssignListViewModel model)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            model.Lists = db.Agencies.Where(i => i.Status == 0 && (model.FilterAgencyId != 0 ? i.Id == model.FilterAgencyId : true))
+                .GroupJoin(db.Shops.Where(i => i.Status == 0), a => a.Id, s => s.AgencyId, (a, s) => new { a, s })
+                .GroupJoin(db.DeliveryBoys.Where(i => i.Status == 0), ss => ss.s.FirstOrDefault().AgencyId, d => d.AgencyId, (ss, d) => new { ss, d })
+            .Select(i => new AgencyAssignListViewModel.AgencyList
+            {
+                AgencyId = i.ss.a.Id,
+                AgencyName = i.ss.a.Name,
+                ShopListItems = i.ss.s.Select(a => new AgencyAssignListViewModel.AgencyList.ShopListItem
+                {
+                    ShopId = a.Id,
+                    ShopName = a.Name,
+                }).ToList(),
+                DeliveryBoyListItems = i.d.Select(a => new AgencyAssignListViewModel.AgencyList.DeliveryBoyListItem
+                {
+                    DeliveryBoyId = a.Id,
+                    DeliveryBoyName = a.Name
+                }).ToList()
+            }).ToList();
+            return View(model);
+        }
+
         // Agency Delete 
+        [AccessPolicy(PageCode = "SNCAGDA022")]
         public JsonResult DeleteAgency(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -323,6 +354,7 @@ namespace ShopNow.Controllers
         }
 
         // Assign Agency Remove
+        [AccessPolicy(PageCode = "SNCAGDAA023")]
         public JsonResult Delete(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -343,6 +375,7 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        [AccessPolicy(PageCode = "SNCAGDAS024")]
         public JsonResult DeleteShop(int id)
         {
             var shop = db.Shops.FirstOrDefault(i => i.Id == id);
@@ -356,6 +389,7 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        [AccessPolicy(PageCode = "SNCAGDAD025")]
         public JsonResult DeleteDeliveryBoy(int id)
         {
             var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == id);
@@ -370,32 +404,98 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        // Agency Assign List
-
-        [AccessPolicy(PageCode = "")]
-        public ActionResult AssignList(AgencyAssignListViewModel model)
+        [AccessPolicy(PageCode = "SNCAGAA026")]
+        public JsonResult Add(AgencyAssignViewModel model)
         {
-            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            model.Lists = db.Agencies.Where(i => i.Status == 0 && (model.FilterAgencyId != 0 ? i.Id == model.FilterAgencyId : true))
-                .GroupJoin(db.Shops.Where(i => i.Status == 0), a => a.Id, s => s.AgencyId, (a, s) => new { a, s })
-                .GroupJoin(db.DeliveryBoys.Where(i => i.Status == 0), ss => ss.s.FirstOrDefault().AgencyId, d => d.AgencyId, (ss, d) => new { ss, d })
-            .Select(i => new AgencyAssignListViewModel.AgencyList
+            if (model.ShopIds != null)
             {
-                AgencyId = i.ss.a.Id,
-                AgencyName = i.ss.a.Name,
-                ShopListItems = i.ss.s.Select(a=> new AgencyAssignListViewModel.AgencyList.ShopListItem
+                foreach (var item in model.ShopIds)
                 {
-                    ShopId = a.Id,
-                    ShopName = a.Name,
-                }).ToList(),
-                DeliveryBoyListItems = i.d.Select(a => new AgencyAssignListViewModel.AgencyList.DeliveryBoyListItem
+                    var shop = db.Shops.FirstOrDefault(i => i.Id == item);
+                    shop.AgencyId = model.AgencyId;
+                    shop.AgencyName = model.AgencyName;
+                    db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+            if (model.DeliveryBoyIds != null)
+            {
+                foreach (var item in model.DeliveryBoyIds)
                 {
-                    DeliveryBoyId = a.Id,
-                    DeliveryBoyName = a.Name
-                }).ToList()
-            }).ToList();
-            return View(model);
+                    var deliveryboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == item);
+                    deliveryboy.AgencyId = model.AgencyId;
+                    deliveryboy.AgencyName = model.AgencyName;
+                    db.Entry(deliveryboy).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        [AccessPolicy(PageCode = "SNCAGAAP027")]
+        public ActionResult Approve(int Id)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var agency = db.Agencies.FirstOrDefault(i => i.Id == Id);
+            var customer = db.Customers.FirstOrDefault(i => i.Id == agency.CustomerId);
+            if (agency != null)
+            {
+                agency.Status = 0;
+                agency.UpdatedBy = user.Name;
+                agency.DateUpdated = DateTime.Now;
+                db.Entry(agency).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            if (customer != null)
+            {
+                customer.Position = 5;   // Agency Login
+                customer.DateUpdated = DateTime.Now;
+                customer.UpdatedBy = user.Name;
+                db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return RedirectToAction("List");
+        }
+
+        [AccessPolicy(PageCode = "SNCAGAR028")]
+        public ActionResult Reject(int Id)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var agency = db.Agencies.FirstOrDefault(i => i.Id == Id);
+            agency.Status = 3;
+            agency.UpdatedBy = user.Name;
+            agency.DateUpdated = DateTime.Now;
+            db.Entry(agency).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("List");
+        }
+
+        [AccessPolicy(PageCode = "SNCAGAU029")]
+        public ActionResult Update(AgencyAssignListViewModel model)
+        {
+            if (model.ShopIds != null)
+            {
+                foreach (var item in model.ShopIds)
+                {
+                    var shop = db.Shops.FirstOrDefault(i => i.Id == item);
+                    shop.AgencyId = model.AgencyId;
+                    shop.AgencyName = model.AgencyName;
+                    db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+            if (model.DeliveryBoyIds != null)
+            {
+                foreach (var item in model.DeliveryBoyIds)
+                {
+                    var deliveryboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == item);
+                    deliveryboy.AgencyId = model.AgencyId;
+                    deliveryboy.AgencyName = model.AgencyName;
+                    db.Entry(deliveryboy).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetPhoneNumberCheck(string phone)
@@ -437,96 +537,6 @@ namespace ShopNow.Controllers
             return Json(msg = 0, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Approve(int Id)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            var agency = db.Agencies.FirstOrDefault(i => i.Id == Id);
-            var customer = db.Customers.FirstOrDefault(i => i.Id == agency.CustomerId);
-            if (agency != null)
-            {
-                agency.Status = 0;
-                agency.UpdatedBy = user.Name;
-                agency.DateUpdated = DateTime.Now;
-                db.Entry(agency).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-            }
-            if (customer != null)
-            {
-                customer.Position = 5;   // Agency Login
-                customer.DateUpdated = DateTime.Now;
-                customer.UpdatedBy = user.Name;
-                db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-            }
-            return RedirectToAction("List");
-        }
-
-        public ActionResult Reject(int Id)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            var agency = db.Agencies.FirstOrDefault(i => i.Id == Id);
-            agency.Status = 3;
-            agency.UpdatedBy = user.Name;
-            agency.DateUpdated = DateTime.Now;
-            db.Entry(agency).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
-            return RedirectToAction("List");
-        }
-
-        public JsonResult Add(AgencyAssignViewModel model)
-        {
-            if (model.ShopIds != null)
-            {
-                foreach (var item in model.ShopIds)
-                {
-                    var shop = db.Shops.FirstOrDefault(i => i.Id == item);
-                    shop.AgencyId = model.AgencyId;
-                    shop.AgencyName = model.AgencyName;
-                    db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-                }
-            }
-            if (model.DeliveryBoyIds != null)
-            {
-                foreach (var item in model.DeliveryBoyIds)
-                {
-                    var deliveryboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == item);
-                    deliveryboy.AgencyId = model.AgencyId;
-                    deliveryboy.AgencyName = model.AgencyName;
-                    db.Entry(deliveryboy).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-                }
-            }
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult Update(AgencyAssignListViewModel model)
-        {
-            if (model.ShopIds != null)
-            {
-                foreach (var item in model.ShopIds)
-                {
-                    var shop = db.Shops.FirstOrDefault(i => i.Id == item);
-                    shop.AgencyId = model.AgencyId;
-                    shop.AgencyName = model.AgencyName;
-                    db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-                }
-            }
-            if (model.DeliveryBoyIds != null)
-            {
-                foreach (var item in model.DeliveryBoyIds)
-                {
-                    var deliveryboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == item);
-                    deliveryboy.AgencyId = model.AgencyId;
-                    deliveryboy.AgencyName = model.AgencyName;
-                    db.Entry(deliveryboy).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-                }
-            }
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
-
         public async Task<JsonResult> GetShopSelect2(string q = "")
         {
             var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.AgencyId == 0).Select(i => new
@@ -559,6 +569,7 @@ namespace ShopNow.Controllers
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -568,6 +579,7 @@ namespace ShopNow.Controllers
             base.Dispose(disposing);
         }
 
+
         //public static string RandomString()
         //{
         //    const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -576,6 +588,7 @@ namespace ShopNow.Controllers
         //}
 
         private static Random random = new Random();
+
         public JsonResult GeneratePassword(int customerid)
         {
             string password = "";

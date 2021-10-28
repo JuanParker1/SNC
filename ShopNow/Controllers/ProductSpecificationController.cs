@@ -36,7 +36,7 @@ namespace ShopNow.Controllers
             _mapper = _mapperConfiguration.CreateMapper();
         }
 
-        [AccessPolicy(PageCode = "SHNPSFL001")]
+        [AccessPolicy(PageCode = "SNCPSPL232")]
         public ActionResult List()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -48,7 +48,7 @@ namespace ShopNow.Controllers
             return View(model.List);
         }
 
-        [AccessPolicy(PageCode = "SHNPSFC002")]
+        [AccessPolicy(PageCode = "SNCPSPC233")]
         public ActionResult Create()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -58,7 +58,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNPSFC002")]
+        [AccessPolicy(PageCode = "SNCPSPC233")]
         public ActionResult Create(ProductSpecificationCreateViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -81,7 +81,7 @@ namespace ShopNow.Controllers
             }
         }
 
-        [AccessPolicy(PageCode = "SHNPSFE003")]
+        [AccessPolicy(PageCode = "SNCPSPE234")]
         public ActionResult Edit(string id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -96,7 +96,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNPSFE003")]
+        [AccessPolicy(PageCode = "SNCPSPE234")]
         public ActionResult Edit(ProductSpecificationEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -120,7 +120,7 @@ namespace ShopNow.Controllers
             }
         }
 
-        [AccessPolicy(PageCode = "SHNPSFD004")]
+        [AccessPolicy(PageCode = "SNCPSPD235")]
         public ActionResult Delete(string id)
         {
             var dCode = AdminHelpers.DCodeInt(id);
@@ -135,7 +135,7 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNPSFI005")]
+        [AccessPolicy(PageCode = "SNCPSPI236")]
         public ActionResult Index()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -145,7 +145,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNPSFI005")]
+        [AccessPolicy(PageCode = "SNCPSPI236")]
         public ActionResult Index(HttpPostedFileBase upload, ProductSpecificationViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -263,6 +263,7 @@ namespace ShopNow.Controllers
             var master = _db.MasterProducts.FirstOrDefault(i => i.Name == ProductName && i.Status == 0);
             return master.Id;
         }
+
         public int CheckSpecification(string SpecificationName)
         {
             var specification = _db.Specifications.FirstOrDefault(i => i.Name == SpecificationName && i.Status == 0); ;// Specification.GetName(SpecificationName);
@@ -283,7 +284,6 @@ namespace ShopNow.Controllers
             }
         }
 
-        [AccessPolicy(PageCode = "SHNPSFC002")]
         public async Task<JsonResult> GetMasterProductSelect2(string q = "")
         {
             var model = await _db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 4).Select(i => new
@@ -295,7 +295,6 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNPSFC002")]
         public async Task<JsonResult> GetSpecificationSelect2(string q = "")
         {
             var model = await _db.Specifications.Where(a => a.Name.Contains(q) && a.Status == 0).OrderBy(i => i.Name).Select(i => new
@@ -306,6 +305,7 @@ namespace ShopNow.Controllers
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -314,5 +314,6 @@ namespace ShopNow.Controllers
             }
             base.Dispose(disposing);
         }
+
     }
 }

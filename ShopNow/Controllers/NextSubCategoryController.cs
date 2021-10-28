@@ -17,6 +17,7 @@ namespace ShopNow.Controllers
         private sncEntities db = new sncEntities();
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
+
         public NextSubCategoryController()
         {
             _mapperConfiguration = new MapperConfiguration(config =>
@@ -28,7 +29,7 @@ namespace ShopNow.Controllers
             _mapper = _mapperConfiguration.CreateMapper();
         }
 
-        [AccessPolicy(PageCode = "SHNNSCL001")]
+        [AccessPolicy(PageCode = "SNCNSL163")]
         public ActionResult List()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -39,7 +40,7 @@ namespace ShopNow.Controllers
 
         }
 
-        [AccessPolicy(PageCode = "SHNNSCS002")]
+        [AccessPolicy(PageCode = "SNCNSS164")]
         public JsonResult Save(NextSubCategory nextSubCategory)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -66,7 +67,7 @@ namespace ShopNow.Controllers
             return Json(new { IsAdded = IsAdded, message = message, message1 = message1 }, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNNSCD004")]
+        [AccessPolicy(PageCode = "SNCNSD165")]
         public JsonResult Delete(string Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -83,7 +84,7 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        [AccessPolicy(PageCode = "SHNNSCE003")]
+        [AccessPolicy(PageCode = "SNCNSE166")]
         public ActionResult Edit(string id)
         {
             var dcode = AdminHelpers.DCodeInt(id);
@@ -96,7 +97,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SHNNSCE003")]
+        [AccessPolicy(PageCode = "SNCNSE166")]
         public ActionResult Edit(NextSubCategoryEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -121,6 +122,7 @@ namespace ShopNow.Controllers
             }).ToListAsync();
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
