@@ -14,12 +14,6 @@ namespace ShopNow.Models
     
     public partial class Payment
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Payment()
-        {
-            this.Banners = new HashSet<Banner>();
-        }
-    
         public long Id { get; set; }
         public string CorporateID { get; set; }
         public double Amount { get; set; }
@@ -56,8 +50,5 @@ namespace ShopNow.Models
         public string CreatedBy { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Banner> Banners { get; set; }
     }
 }

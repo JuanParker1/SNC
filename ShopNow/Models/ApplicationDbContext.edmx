@@ -411,11 +411,11 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="SearchKeyword" Type="nvarchar(max)" />
           <Property Name="ResultCount" Type="int" Nullable="false" />
           <Property Name="LinkedMasterProductIds" Type="nvarchar(max)" />
           <Property Name="LinkedMasterProductName" Type="nvarchar(max)" />
+          <Property Name="DateEncoded" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="CustomerWalletHistory">
           <Key>
@@ -1331,7 +1331,7 @@
           <Property Name="AgencyName" Type="nvarchar(max)" />
           <Property Name="Adscore" Type="int" Nullable="false" />
           <Property Name="IsOnline" Type="bit" />
-          <Property Name="GooglePlaceId" Type="nvarchar" MaxLength="100" />
+          <Property Name="GooglePlaceId" Type="nvarchar(max)" />
           <Property Name="HasSchedule" Type="bit" />
           <Property Name="NextOnTime" Type="time" Precision="7" />
           <Property Name="DeliveryType" Type="int" Nullable="false" />
@@ -1423,18 +1423,6 @@
           <Property Name="UpdatedBy" Type="nvarchar(max)" />
           <Property Name="CreatedBy" Type="nvarchar(max)" />
         </EntityType>
-        <Association Name="FK_Banners_Payments">
-          <End Role="Payments" Type="Self.Payments" Multiplicity="1" />
-          <End Role="Banners" Type="Self.Banners" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Payments">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Banners">
-              <PropertyRef Name="PaymentId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_CustomerAddresses_Customers">
           <End Role="Customers" Type="Self.Customers" Multiplicity="1" />
           <End Role="CustomerAddresses" Type="Self.CustomerAddresses" Multiplicity="*" />
@@ -1663,10 +1651,6 @@
           <EntitySet Name="Staffs" EntityType="Self.Staffs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SubCategories" EntityType="Self.SubCategories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserEnquiries" EntityType="Self.UserEnquiries" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_Banners_Payments" Association="Self.FK_Banners_Payments">
-            <End Role="Payments" EntitySet="Payments" />
-            <End Role="Banners" EntitySet="Banners" />
-          </AssociationSet>
           <AssociationSet Name="FK_CustomerAddresses_Customers" Association="Self.FK_CustomerAddresses_Customers">
             <End Role="Customers" EntitySet="Customers" />
             <End Role="CustomerAddresses" EntitySet="CustomerAddresses" />
@@ -1792,29 +1776,6 @@
           <Property Name="Version" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
-        <EntityType Name="Banner">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ShopId" Type="Int32" Nullable="false" />
-          <Property Name="ProductId" Type="Int64" Nullable="false" />
-          <Property Name="MasterProductId" Type="Int64" Nullable="false" />
-          <Property Name="Position" Type="Int32" Nullable="false" />
-          <Property Name="BannerPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="FromDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Todate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Days" Type="Int32" Nullable="false" />
-          <Property Name="BannerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PaymentId" Type="Int64" Nullable="false" />
-          <Property Name="CreditType" Type="Int32" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Payment" Relationship="Self.FK_Banners_Payments" FromRole="Banners" ToRole="Payments" />
         </EntityType>
         <EntityType Name="BrandOwner">
           <Key>
@@ -2224,7 +2185,6 @@
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Banners" Relationship="Self.FK_Banners_Payments" FromRole="Payments" ToRole="Banners" />
         </EntityType>
         <EntityType Name="PaymentsData">
           <Key>
@@ -2516,18 +2476,6 @@
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
-        <Association Name="FK_Banners_Payments">
-          <End Role="Payments" Type="Self.Payment" Multiplicity="1" />
-          <End Role="Banners" Type="Self.Banner" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Payments">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Banners">
-              <PropertyRef Name="PaymentId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_SubCategories_Categories">
           <End Role="Categories" Type="Self.Category" Multiplicity="1" />
           <End Role="SubCategories" Type="Self.SubCategory" Multiplicity="*" />
@@ -2619,7 +2567,6 @@
           <EntitySet Name="AddOnCategories" EntityType="Self.AddOnCategory" />
           <EntitySet Name="ApiSettings" EntityType="Self.ApiSetting" />
           <EntitySet Name="AppDetails" EntityType="Self.AppDetail" />
-          <EntitySet Name="Banners" EntityType="Self.Banner" />
           <EntitySet Name="BrandOwners" EntityType="Self.BrandOwner" />
           <EntitySet Name="Brands" EntityType="Self.Brand" />
           <EntitySet Name="Categories" EntityType="Self.Category" />
@@ -2657,10 +2604,6 @@
           <EntitySet Name="Staffs" EntityType="Self.Staff" />
           <EntitySet Name="SubCategories" EntityType="Self.SubCategory" />
           <EntitySet Name="UserEnquiries" EntityType="Self.UserEnquiry" />
-          <AssociationSet Name="FK_Banners_Payments" Association="Self.FK_Banners_Payments">
-            <End Role="Payments" EntitySet="Payments" />
-            <End Role="Banners" EntitySet="Banners" />
-          </AssociationSet>
           <AssociationSet Name="FK_SubCategories_Categories" Association="Self.FK_SubCategories_Categories">
             <End Role="Categories" EntitySet="Categories" />
             <End Role="SubCategories" EntitySet="SubCategories" />
@@ -2759,6 +2702,7 @@
             <End Role="Order" EntitySet="Orders" />
             <End Role="OrderItem" EntitySet="OrderItems" />
           </AssociationSet>
+          <EntitySet Name="Banners" EntityType="sncModel.Banner" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3372,7 +3316,7 @@
           <Property Name="AgencyName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Adscore" Type="Int32" Nullable="false" />
           <Property Name="IsOnline" Type="Boolean" />
-          <Property Name="GooglePlaceId" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="GooglePlaceId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="HasSchedule" Type="Boolean" />
           <Property Name="NextOnTime" Type="Time" Precision="7" />
           <Property Name="DeliveryType" Type="Int32" Nullable="false" />
@@ -3492,6 +3436,28 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Banner">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShopId" Type="Int32" Nullable="false" />
+          <Property Name="ProductId" Type="Int64" Nullable="false" />
+          <Property Name="MasterProductId" Type="Int64" Nullable="false" />
+          <Property Name="Position" Type="Int32" Nullable="false" />
+          <Property Name="BannerPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FromDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Todate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Days" Type="Int32" Nullable="false" />
+          <Property Name="BannerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PaymentId" Type="Int64" Nullable="false" />
+          <Property Name="CreditType" Type="Int32" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3582,29 +3548,6 @@
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Version" ColumnName="Version" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Banners">
-            <EntityTypeMapping TypeName="sncModel.Banner">
-              <MappingFragment StoreEntitySet="Banners">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="MasterProductId" ColumnName="MasterProductId" />
-                <ScalarProperty Name="Position" ColumnName="Position" />
-                <ScalarProperty Name="BannerPath" ColumnName="BannerPath" />
-                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
-                <ScalarProperty Name="Todate" ColumnName="Todate" />
-                <ScalarProperty Name="Days" ColumnName="Days" />
-                <ScalarProperty Name="BannerName" ColumnName="BannerName" />
-                <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
-                <ScalarProperty Name="CreditType" ColumnName="CreditType" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
                 <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -5083,6 +5026,29 @@
                 <ScalarProperty Name="CustomerPhoneNumber" ColumnName="CustomerPhoneNumber" />
                 <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Banners">
+            <EntityTypeMapping TypeName="sncModel.Banner">
+              <MappingFragment StoreEntitySet="Banners">
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreditType" ColumnName="CreditType" />
+                <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
+                <ScalarProperty Name="BannerName" ColumnName="BannerName" />
+                <ScalarProperty Name="Days" ColumnName="Days" />
+                <ScalarProperty Name="Todate" ColumnName="Todate" />
+                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+                <ScalarProperty Name="BannerPath" ColumnName="BannerPath" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="MasterProductId" ColumnName="MasterProductId" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
