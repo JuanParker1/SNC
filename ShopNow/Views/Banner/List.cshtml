@@ -4,9 +4,14 @@
     ViewBag.Title = "Banner List";
 }
 <title>ShopNow | Banner List</title>
-<link href="~/Content/switch.css" rel="stylesheet" />
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
+<link href="~/Content/switch.css" rel="stylesheet" />
+<style>
+    table {
+    table-layout:auto;
+    }
+</style>
 <div class="container-fluid">
     <div class="row my-2">
         <div class="col-md-6">
@@ -29,15 +34,15 @@
                columns.Add(s => s.FromDate).Format("{0:dd/MMM/yyyy}").Titled("From Date").Filterable(true).SetWidth(10);
                columns.Add(s => s.ToDate).Format("{0:dd/MMM/yyyy}").Titled("To Date").Filterable(true).SetWidth(10);
                columns.Add().Encoded(false).Sanitized(false).Titled("Image").Filterable(false).SetWidth(10).RenderValueAs(s => @<div><a href="~/Home/ImageDenied" data-toggle="modal" data-target="#myModal" title="Click Here To Preview!"><img id='img-upload' src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@s.Bannerpath" class="img-thumbnail BannerImage" width="60" height="60" onerror="this.src='/Images/No Photo.png'" /></a></div>);
-columns.Add().Encoded(false).Sanitized(false)
-.RenderValueAs(o => @<div>
-                <a href="/Banner/Edit?Id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
-                <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
-            </div>);
-       columns.Add().Encoded(false).Sanitized(false)
-     .RenderValueAs(s => new HtmlString
-              ("<label class='switch'> <input type='checkbox' value='" + s.Status + "' data-id='" + s.Id + "' Id='Id_" + s.Id + "' class='check-active' data-code='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsActive").SetWidth(10);
-   }).WithPaging(10).Sortable(true)
+                 columns.Add().Encoded(false).Sanitized(false)
+                    .RenderValueAs(o => @<div>
+    <a href="/Banner/Edit?Id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
+    <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+</div>);
+            columns.Add().Encoded(false).Sanitized(false)
+             .RenderValueAs(s => new HtmlString
+                      ("<label class='switch'> <input type='checkbox' value='" + s.Status + "' data-id='" + s.Id + "' Id='Id_" + s.Id + "' class='check-active' data-code='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsActive").SetWidth(10);
+        }).WithPaging(10).Sortable(true)
                 </div>
             </div>
         </div>
