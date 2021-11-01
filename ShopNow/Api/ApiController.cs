@@ -5013,6 +5013,10 @@ namespace ShopNow.Controllers
                 order.Status = 9;
                 db.Entry(order).State = EntityState.Modified;
                 db.SaveChanges();
+
+
+
+
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
             return Json(false, JsonRequestBehavior.AllowGet);

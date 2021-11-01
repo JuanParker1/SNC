@@ -19,7 +19,27 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var list = db.CustomerPrescriptions.OrderByDescending(i => i.Id).ToList();
-            return View(list);
+            var model = new CustomerPrescriptionWebListViewModel();
+            model.ListItems = db.CustomerPrescriptions.OrderByDescending(i => i.Id)
+                .GroupJoin(db.CustomerPrescriptionImages, cp => cp.Id, cpi => cpi.CustomerPrescriptionId, (cp, cpi) => new { cp, cpi })
+                .Select(i => new CustomerPrescriptionWebListViewModel.ListItem
+                {
+                    Id = i.cp.Id,
+                    AudioPath = i.cp.AudioPath,
+                    CustomerId = i.cp.CustomerId,
+                    CustomerName = i.cp.CustomerName,
+                    CustomerPhoneNumber = i.cp.CustomerPhoneNumber,
+                    ImagePath = i.cp.ImagePath,
+                    Remarks = i.cp.Remarks,
+                    ShopId = i.cp.ShopId,
+                    DateEncoded = i.cp.DateEncoded,
+                    Status = i.cp.Status,
+                    ImagePathLists = i.cpi.Select(a => new CustomerPrescriptionWebListViewModel.ListItem.ImagePathList
+                    {
+                        ImagePath = a.ImagePath
+                    }).ToList()
+                }).ToList();
+            return View(model);
         }
 
         public JsonResult AddPrescriptionItem(PrescriptionItemAddViewModel model)
