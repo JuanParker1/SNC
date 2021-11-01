@@ -69,7 +69,6 @@
         <EntityTypeShape EntityType="sncModel.Offer" Width="1.5" PointX="0.75" PointY="13.75" />
         <EntityTypeShape EntityType="sncModel.CustomerPrescriptionItem" Width="1.5" PointX="23.375" PointY="28.75" />
         <EntityTypeShape EntityType="sncModel.CustomerPrescription" Width="1.5" PointX="28.375" PointY="24.75" />
-        <EntityTypeShape EntityType="sncModel.Product" Width="1.5" PointX="30.375" PointY="24.75" />
         <EntityTypeShape EntityType="sncModel.DeliveryBoy" Width="1.5" PointX="29.375" PointY="4.75" />
         <EntityTypeShape EntityType="sncModel.Agency" Width="1.5" PointX="25.375" PointY="30.75" />
         <EntityTypeShape EntityType="sncModel.ProductDishAddOn" Width="1.5" PointX="8.375" PointY="15.75" />
@@ -84,6 +83,7 @@
         <AssociationConnector Association="sncModel.FK_OrderItems_Orders" />
         <EntityTypeShape EntityType="sncModel.Banner" Width="1.5" PointX="28.375" PointY="15.75" />
         <EntityTypeShape EntityType="sncModel.CustomerPrescriptionImage" Width="1.5" PointX="28.375" PointY="21.75" />
+        <EntityTypeShape EntityType="sncModel.Product" Width="1.5" PointX="12.375" PointY="30.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

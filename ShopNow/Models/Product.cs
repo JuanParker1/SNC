@@ -57,6 +57,7 @@ namespace ShopNow.Models
         public Nullable<System.TimeSpan> NextOnTime { get; set; }
         public bool IsPreorder { get; set; }
         public int PreorderHour { get; set; }
+        public int OfferQuantityLimit { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }
