@@ -336,6 +336,14 @@
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="CustomerPrescriptionImages">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerPrescriptionId" Type="int" Nullable="false" />
+          <Property Name="ImagePath" Type="nvarchar(max)" />
+        </EntityType>
         <EntityType Name="CustomerPrescriptionItem">
           <Key>
             <PropertyRef Name="Id" />
@@ -1600,6 +1608,7 @@
           <EntitySet Name="CustomerAchievements" EntityType="Self.CustomerAchievements" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerAddresses" EntityType="Self.CustomerAddresses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerPrescription" EntityType="Self.CustomerPrescription" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustomerPrescriptionImages" EntityType="Self.CustomerPrescriptionImages" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerPrescriptionItem" EntityType="Self.CustomerPrescriptionItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerReview" EntityType="Self.CustomerReview" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
@@ -2703,6 +2712,7 @@
             <End Role="OrderItem" EntitySet="OrderItems" />
           </AssociationSet>
           <EntitySet Name="Banners" EntityType="sncModel.Banner" />
+          <EntitySet Name="CustomerPrescriptionImages" EntityType="sncModel.CustomerPrescriptionImage" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3457,6 +3467,14 @@
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="CustomerPrescriptionImage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerPrescriptionId" Type="Int32" Nullable="false" />
+          <Property Name="ImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -5049,6 +5067,15 @@
                 <ScalarProperty Name="MasterProductId" ColumnName="MasterProductId" />
                 <ScalarProperty Name="ProductId" ColumnName="ProductId" />
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerPrescriptionImages">
+            <EntityTypeMapping TypeName="sncModel.CustomerPrescriptionImage">
+              <MappingFragment StoreEntitySet="CustomerPrescriptionImages">
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="CustomerPrescriptionId" ColumnName="CustomerPrescriptionId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

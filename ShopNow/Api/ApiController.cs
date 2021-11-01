@@ -5026,6 +5026,20 @@ namespace ShopNow.Controllers
             prescription.Status = 0;
             db.CustomerPrescriptions.Add(prescription);
             db.SaveChanges();
+
+            if (model.ImageListItems != null)
+            {
+                foreach (var image in model.ImageListItems)
+                {
+                    var prescriptionImage = new CustomerPrescriptionImage
+                    {
+                        CustomerPrescriptionId = prescription.Id,
+                        ImagePath = image.ImagePath
+                    };
+                    db.CustomerPrescriptionImages.Add(prescriptionImage);
+                    db.SaveChanges();
+                }
+            }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 

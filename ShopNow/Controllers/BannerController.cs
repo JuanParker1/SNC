@@ -40,22 +40,24 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new BannerListViewModel();
-            model.List = db.Banners.Where(i => i.Status == 0 || i.Status == 2).Select(i => new BannerListViewModel.BannerList
-            {
-                BannerName = i.BannerName,
-                Bannerpath = i.BannerPath,
-                Id = i.Id,
-                Days = i.Days,
-                FromDate = i.FromDate,
-                Position = i.Position,
-                ProductId = i.ProductId,
-                // ProductName = i.ProductName,
-                ShopId = i.ShopId,
-                // ShopName = i.ShopName,
-                ToDate = i.Todate,
-                CreditType = i.CreditType,
-                Status = i.Status
-            }).ToList();
+            model.List = db.Banners.Where(i => i.Status == 0 || i.Status == 2)
+                .GroupJoin(db.MasterProducts, b => b.MasterProductId, m => m.Id, (b, m) => new { b, m })
+                .GroupJoin(db.Shops, b => b.b.ShopId, s => s.Id, (b, s) => new { b, s })
+                .Select(i => new BannerListViewModel.BannerList
+                {
+                    BannerName = i.b.b.BannerName,
+                    Bannerpath = i.b.b.BannerPath,
+                    Id = i.b.b.Id,
+                    Days = i.b.b.Days,
+                    FromDate = i.b.b.FromDate,
+                    Position = i.b.b.Position,
+                    ProductId = i.b.b.ProductId,
+                    ProductName = i.b.m.Any() ? i.b.m.FirstOrDefault().Name : "N/A",
+                    ShopId = i.b.b.ShopId,
+                    ShopName = i.s.Any() ? i.s.FirstOrDefault().Name : "N/A",
+                    ToDate = i.b.b.Todate,
+                    CreditType = i.b.b.CreditType
+                }).ToList();
 
             return View(model.List);
         }
@@ -67,21 +69,24 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             var model = new BannerListViewModel();
 
-            model.List = db.Banners.Where(i => i.Status == 1).Select(i => new BannerListViewModel.BannerList
-            {
-                BannerName = i.BannerName,
-                Bannerpath = i.BannerPath,
-                Id= i.Id,
-                Days = i.Days,
-                FromDate = i.FromDate,
-                Position = i.Position,
-                ProductId = i.ProductId,
-               // ProductName = i.ProductName,
-                ShopId = i.ShopId,
-               // ShopName = i.ShopName,
-                ToDate = i.Todate,
-                CreditType = i.CreditType
-            }).ToList();
+            model.List = db.Banners.Where(i => i.Status == 1)
+                .GroupJoin(db.MasterProducts, b => b.MasterProductId, m => m.Id, (b, m) => new { b, m })
+                .GroupJoin(db.Shops, b => b.b.ShopId, s => s.Id, (b, s) => new { b, s })
+                .Select(i => new BannerListViewModel.BannerList
+                {
+                    BannerName = i.b.b.BannerName,
+                    Bannerpath = i.b.b.BannerPath,
+                    Id = i.b.b.Id,
+                    Days = i.b.b.Days,
+                    FromDate = i.b.b.FromDate,
+                    Position = i.b.b.Position,
+                    ProductId = i.b.b.ProductId,
+                    ProductName = i.b.m.Any()? i.b.m.FirstOrDefault().Name : "N/A",
+                    ShopId = i.b.b.ShopId,
+                    ShopName = i.s.Any() ? i.s.FirstOrDefault().Name:"N/A",
+                    ToDate = i.b.b.Todate,
+                    CreditType = i.b.b.CreditType
+                }).ToList();
 
             return View(model.List);
         }
@@ -94,8 +99,8 @@ namespace ShopNow.Controllers
             var dcode = AdminHelpers.DCodeInt(id);
             var banner = db.Banners.FirstOrDefault(i => i.Id == dcode);
             var model = _mapper.Map<Banner, BannerEditViewModel>(banner);
-            model.ShopName = db.Shops.FirstOrDefault(i => i.Id == banner.ShopId).Name;
-            model.ProductName = db.Products.FirstOrDefault(i => i.Id == banner.ProductId).Name;
+            model.ShopName = db.Shops.FirstOrDefault(i => i.Id == banner.ShopId)?.Name;
+            model.ProductName = db.Products.FirstOrDefault(i => i.Id == banner.ProductId)?.Name;
             return View(model);
         }
 

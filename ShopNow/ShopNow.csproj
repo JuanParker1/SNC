@@ -490,6 +490,9 @@
     <Compile Include="Models\CustomerPrescription.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CustomerPrescriptionImage.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CustomerPrescriptionItem.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
