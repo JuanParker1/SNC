@@ -70,6 +70,7 @@ namespace ShopNow.Models
         public string Remarks { get; set; }
         public string PrescriptionImagePath { get; set; }
         public string CancelledRemark { get; set; }
+        public string PaymentMode { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }

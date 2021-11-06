@@ -26,6 +26,7 @@ namespace ShopNow.Controllers
         {
             _mapperConfiguration = new MapperConfiguration(config =>
             {
+                config.CreateMap<BannerCreateViewModel, Banner>();
                 config.CreateMap<Banner, BannerEditViewModel>();
                 config.CreateMap<BannerEditViewModel, Banner>();
                 config.CreateMap<Banner, BannerListViewModel.BannerList>();
@@ -39,22 +40,24 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new BannerListViewModel();
-            model.List = db.Banners.Where(i => i.Status == 0 || i.Status == 2).Select(i => new BannerListViewModel.BannerList
-            {
-                BannerName = i.BannerName,
-                Bannerpath = i.BannerPath,
-                Id = i.Id,
-                Days = i.Days,
-                FromDate = i.FromDate,
-                Position = i.Position,
-                ProductId = i.ProductId,
-                // ProductName = i.ProductName,
-                ShopId = i.ShopId,
-                // ShopName = i.ShopName,
-                ToDate = i.Todate,
-                CreditType = i.CreditType,
-                Status = i.Status
-            }).ToList();
+            model.List = db.Banners.Where(i => i.Status == 0 || i.Status == 2)
+                .GroupJoin(db.MasterProducts, b => b.MasterProductId, m => m.Id, (b, m) => new { b, m })
+                .GroupJoin(db.Shops, b => b.b.ShopId, s => s.Id, (b, s) => new { b, s })
+                .Select(i => new BannerListViewModel.BannerList
+                {
+                    BannerName = i.b.b.BannerName,
+                    Bannerpath = i.b.b.BannerPath,
+                    Id = i.b.b.Id,
+                    Days = i.b.b.Days,
+                    FromDate = i.b.b.FromDate,
+                    Position = i.b.b.Position,
+                    ProductId = i.b.b.ProductId,
+                    ProductName = i.b.m.Any() ? i.b.m.FirstOrDefault().Name : "N/A",
+                    ShopId = i.b.b.ShopId,
+                    ShopName = i.s.Any() ? i.s.FirstOrDefault().Name : "N/A",
+                    ToDate = i.b.b.Todate,
+                    CreditType = i.b.b.CreditType
+                }).ToList();
 
             return View(model.List);
         }
@@ -66,34 +69,38 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             var model = new BannerListViewModel();
 
-            model.List = db.Banners.Where(i => i.Status == 1).Select(i => new BannerListViewModel.BannerList
-            {
-                BannerName = i.BannerName,
-                Bannerpath = i.BannerPath,
-                Id= i.Id,
-                Days = i.Days,
-                FromDate = i.FromDate,
-                Position = i.Position,
-                ProductId = i.ProductId,
-               // ProductName = i.ProductName,
-                ShopId = i.ShopId,
-               // ShopName = i.ShopName,
-                ToDate = i.Todate,
-                CreditType = i.CreditType
-            }).ToList();
+            model.List = db.Banners.Where(i => i.Status == 1)
+                .GroupJoin(db.MasterProducts, b => b.MasterProductId, m => m.Id, (b, m) => new { b, m })
+                .GroupJoin(db.Shops, b => b.b.ShopId, s => s.Id, (b, s) => new { b, s })
+                .Select(i => new BannerListViewModel.BannerList
+                {
+                    BannerName = i.b.b.BannerName,
+                    Bannerpath = i.b.b.BannerPath,
+                    Id = i.b.b.Id,
+                    Days = i.b.b.Days,
+                    FromDate = i.b.b.FromDate,
+                    Position = i.b.b.Position,
+                    ProductId = i.b.b.ProductId,
+                    ProductName = i.b.m.Any()? i.b.m.FirstOrDefault().Name : "N/A",
+                    ShopId = i.b.b.ShopId,
+                    ShopName = i.s.Any() ? i.s.FirstOrDefault().Name:"N/A",
+                    ToDate = i.b.b.Todate,
+                    CreditType = i.b.b.CreditType
+                }).ToList();
 
             return View(model.List);
         }
 
         [AccessPolicy(PageCode = "SNCBE040")]
-        public ActionResult Edit(int id)
+        public ActionResult Edit(string id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var dcode = AdminHelpers.DCodeInt(id.ToString());
+            var dcode = AdminHelpers.DCodeInt(id);
             var banner = db.Banners.FirstOrDefault(i => i.Id == dcode);
             var model = _mapper.Map<Banner, BannerEditViewModel>(banner);
-
+            model.ShopName = db.Shops.FirstOrDefault(i => i.Id == banner.ShopId)?.Name;
+            model.ProductName = db.Products.FirstOrDefault(i => i.Id == banner.ProductId)?.Name;
             return View(model);
         }
 
@@ -103,7 +110,8 @@ namespace ShopNow.Controllers
         public ActionResult Edit(BannerEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            var banner = _mapper.Map<BannerEditViewModel, Banner>(model);
+            var banner = db.Banners.FirstOrDefault(i => i.Id == model.Id);
+            _mapper.Map(model, banner);
             banner.UpdatedBy = user.Name;
             banner.DateUpdated = DateTime.Now;
             if (banner.ProductId != 0)
@@ -188,7 +196,66 @@ namespace ShopNow.Controllers
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
-        
+
+        public ActionResult Create()
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(BannerCreateViewModel model)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var banner = _mapper.Map<BannerCreateViewModel, Banner>(model);
+            banner.PaymentId = 123456;
+            banner.Status = 0;
+            banner.DateEncoded = DateTime.Now;
+            banner.DateUpdated = DateTime.Now;
+            banner.CreatedBy = user.Name;
+            banner.UpdatedBy = user.Name;
+            if (model.ProductId == 0)
+            {
+                banner.ProductId = 0;
+                // banner.ProductName = "N/A";
+            }
+            else
+            {
+                var product = db.Products.FirstOrDefault(i => i.Id == model.ProductId && i.Status == 0);
+                banner.MasterProductId = product.MasterProductId;
+                // banner.MasterProductName = db.MasterProducts.FirstOrDefault(i => i.Id == product.MasterProductId).Name;
+            }
+            try
+            {
+                //Banner Image
+                if (model.BannerImage != null)
+                {
+                    uc.UploadMediumFile(model.BannerImage.InputStream, banner.Id + "_" + model.BannerImage.FileName, accesskey, secretkey, "image");  // Upload Medium Image
+                    banner.BannerPath = banner.Id + "_" + model.BannerImage.FileName;
+                }
+                db.Banners.Add(banner);
+                db.SaveChanges();
+            }
+            catch (AmazonS3Exception amazonS3Exception)
+            {
+                if (amazonS3Exception.ErrorCode != null &&
+                    (amazonS3Exception.ErrorCode.Equals("InvalidAccessKeyId")
+                    ||
+                    amazonS3Exception.ErrorCode.Equals("InvalidSecurity")))
+                {
+                    ViewBag.Message = "Check the provided AWS Credentials.";
+                }
+                else
+                {
+                    ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
+                }
+            }
+            return RedirectToAction("List");
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
