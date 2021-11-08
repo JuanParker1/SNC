@@ -5,7 +5,21 @@ using System.Web;
 
 namespace ShopNow.ViewModels
 {
-    public class BannerEditViewModel
+    public class BannerCreateViewModel
+    {
+        public HttpPostedFileBase BannerImage { get; set; }
+        public int ShopId { get; set; }
+        public long ProductId { get; set; }
+        public long MasterProductId { get; set; }
+        public int Position { get; set; }
+        public System.DateTime FromDate { get; set; }
+        public System.DateTime Todate { get; set; }
+        public int Days { get; set; }
+        public string BannerName { get; set; }
+        public long PaymentId { get; set; }
+        public Nullable<int> CreditType { get; set; }
+    }
+        public class BannerEditViewModel
     {
         public HttpPostedFileBase BannerImage { get; set; }
         public int Id { get; set; }
@@ -18,14 +32,9 @@ namespace ShopNow.ViewModels
         public string Bannerpath { get; set; }
         public System.DateTime FromDate { get; set; }
         public System.DateTime ToDate { get; set; }
-        public string CreatedBy { get; set; }
-        public string UpdatedBy { get; set; }
         public int Status { get; set; }
-        public System.DateTime DateEncoded { get; set; }
-        public System.DateTime DateUpdated { get; set; }
         public int Days { get; set; }
         public string BannerName { get; set; }
-        public int PaymentId { get; set; }
         public int? CreditType { get; set; }
     }
 

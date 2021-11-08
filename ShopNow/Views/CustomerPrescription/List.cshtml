@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ShopNow.Models.CustomerPrescription>
+﻿@model ShopNow.ViewModels.CustomerPrescriptionWebListViewModel
 @using GridMvc.Html
 @{
     ViewBag.Title = "Customer Prescription List";
@@ -15,7 +15,7 @@
             <div class="card shadow">
                 <div class="card-body">
                     <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
-                    @Html.Grid(Model).Columns(columns =>
+                    @Html.Grid(Model.ListItems).Columns(columns =>
                {
                    columns.Add(c => c.CustomerName).Titled("Name").Filterable(false).SetWidth(15);
                    columns.Add(c => c.CustomerPhoneNumber).Titled("Phone No").Filterable(false).SetWidth(12);
