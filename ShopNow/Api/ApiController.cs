@@ -5136,6 +5136,7 @@ namespace ShopNow.Controllers
             var banner = db.Banners.FirstOrDefault(i => i.ProductId == productid && i.Status == 0);
             var isAvailable = db.Orders.Where(i => i.CustomerId == customerid && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(banner.FromDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(banner.Todate)))
                 .GroupJoin(db.OrderItems.Where(i => i.ProductId == productid), o => o.Id, oi => oi.OrderId, (o, oi) => new { o, oi }).Any();
+            return Json(new { isAvailable = isAvailable, JsonRequestBehavior.AllowGet });
         }
 
         //public JsonResult GetMedicalShopDropdownValues(double Latitude, double Longitude)
