@@ -226,7 +226,9 @@ namespace ShopNow.Controllers
             {
                 var product = db.Products.FirstOrDefault(i => i.Id == model.ProductId && i.Status == 0);
                 banner.MasterProductId = product.MasterProductId;
-                // banner.MasterProductName = db.MasterProducts.FirstOrDefault(i => i.Id == product.MasterProductId).Name;
+                product.OfferQuantityLimit = model.OfferQuantityLimit;
+                db.Entry(product).State = EntityState.Modified;
+                db.SaveChanges();
             }
             try
             {

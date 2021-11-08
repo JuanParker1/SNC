@@ -56,9 +56,12 @@
                                     <div class="col-md-3 text-md-left">
                                         <label class="col-form-label text-secondary font-weight-bold">Product Name*</label>
                                     </div>
-                                    <div class="col-md-9">
+                                    <div class="col-md-6">
                                         <select id="ProductId" name="ProductId" class="form-control" style="width: 100%"></select>
                                         <input type="hidden" name="ProductName" id="ProductName" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input class="form-control" type="number" placeholder="Quantity Limit" name="OfferQuantityLimit" />
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -107,11 +110,11 @@
                                     <label class="col-md-12 text-center font-weight-bold text-secondary">Banner Image</label>
                                     <div class="img-upload-container mx-auto">
                                         <img class="img-container text-center w-100 h-100" id="img-upload" />
-                                        <input type="file" id="BannerImage" name="BannerImage" class="d-none" required/>
+                                        <input type="file" id="BannerImage" name="BannerImage" class="d-none" required />
                                         <label for="BannerImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                     </div>
-                                    <div class="mx-auto"><small class="text-danger">*Image Dimension should be 456 x 142</small></div>
                                 </div>
+                                <p class="text-danger text-center small">*Image Dimension should be 456 x 142</p>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -192,16 +195,16 @@
             $('#Todate').val(minDate);
 
             // max date
-            fromdate.setDate(fromdate.getDate() + 2);
-            var month1 = fromdate.getMonth() + 1;
-            var day1 = fromdate.getDate();
-            var year1 = fromdate.getFullYear();
-            if (month1 < 10)
-                month1 = '0' + month1.toString();
-            if (day1 < 10)
-                day1 = '0' + day1.toString();
-            var maxDate = year1 + '-' + month1 + '-' + day1;
-            $('#Todate').attr('max', maxDate);
+            //fromdate.setDate(fromdate.getDate() + 2);
+            //var month1 = fromdate.getMonth() + 1;
+            //var day1 = fromdate.getDate();
+            //var year1 = fromdate.getFullYear();
+            //if (month1 < 10)
+            //    month1 = '0' + month1.toString();
+            //if (day1 < 10)
+            //    day1 = '0' + day1.toString();
+            //var maxDate = year1 + '-' + month1 + '-' + day1;
+            //$('#Todate').attr('max', maxDate);
 
             // Days Calculation
 
