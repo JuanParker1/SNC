@@ -919,7 +919,7 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCCC082")]
-        public JsonResult Cancel(int OrderNumber, int customerId, int? status)
+        public JsonResult Cancel(int OrderNumber, int customerId, int? status,string remark)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             if (OrderNumber != 0 && customerId != 0 && status != 0)
@@ -928,6 +928,7 @@ namespace ShopNow.Controllers
 
                 var order = db.Orders.FirstOrDefault(i => i.OrderNumber ==OrderNumber);
                 order.Status = 7;
+                order.CancelledRemark = remark;
                 order.UpdatedBy = user.Name;
                 order.DateUpdated = DateTime.Now;
                 order.ShopAcceptedTime = DateTime.Now;

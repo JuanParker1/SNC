@@ -2377,7 +2377,8 @@ namespace ShopNow.Controllers
                                           Size = m.SizeLWH,
                                           Weight = m.Weight,
                                           IsPreorder = pl.IsPreorder,
-                                          PreorderHour = pl.PreorderHour
+                                          PreorderHour = pl.PreorderHour,
+                                          OfferQuantityLimit = pl.OfferQuantityLimit
                                           //IsOffer = pl.Id != 0 ? GetOfferCheck(pl.Id) : false //false
                                       }).Where(i => i.Price != 0 && (str != "" ? i.Name.ToLower().Contains(str) : true)).ToList();
             }
@@ -2407,7 +2408,8 @@ namespace ShopNow.Controllers
                                           Size = m.SizeLWH,
                                           Weight = m.Weight,
                                           IsPreorder = pl.IsPreorder,
-                                          PreorderHour = pl.PreorderHour
+                                          PreorderHour = pl.PreorderHour,
+                                          OfferQuantityLimit = pl.OfferQuantityLimit
                                       }).Where(i => i.Price != 0).ToList();
             }
             return new JsonResult()
@@ -5129,20 +5131,28 @@ namespace ShopNow.Controllers
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetMedicalShopDropdownValues(double Latitude, double Longitude)
+        public JsonResult GetCheckCustomerProductOffer(int customerid, int productid)
         {
-            string query = "SELECT * " +
-                               " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and Status = 0  and ShopCategoryId=4  and Latitude != 0 and Longitude != 0";
-            var list = db.Shops.SqlQuery(query,
-                  new SqlParameter("Latitude", Latitude),
-                  new SqlParameter("Longitude", Longitude))
-                 .Select(i => new
-                 {
-                     id = i.Id,
-                     name = i.Name
-                 }).ToList();
-            return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+            var banner = db.Banners.FirstOrDefault(i => i.ProductId == productid && i.Status == 0);
+            var isAvailable = db.Orders.Where(i => i.CustomerId == customerid && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(banner.FromDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(banner.Todate)))
+                .GroupJoin(db.OrderItems.Where(i => i.ProductId == productid), o => o.Id, oi => oi.OrderId, (o, oi) => new { o, oi }).Any();
+            return Json(new { isAvailable = isAvailable, JsonRequestBehavior.AllowGet });
         }
+
+        //public JsonResult GetMedicalShopDropdownValues(double Latitude, double Longitude)
+        //{
+        //    string query = "SELECT * " +
+        //                       " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and Status = 0  and ShopCategoryId=4  and Latitude != 0 and Longitude != 0";
+        //    var list = db.Shops.SqlQuery(query,
+        //          new SqlParameter("Latitude", Latitude),
+        //          new SqlParameter("Longitude", Longitude))
+        //         .Select(i => new
+        //         {
+        //             id = i.Id,
+        //             name = i.Name
+        //         }).ToList();
+        //    return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+        //}
 
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "")
         {

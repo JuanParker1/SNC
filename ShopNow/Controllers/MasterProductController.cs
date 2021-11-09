@@ -1768,6 +1768,7 @@ namespace ShopNow.Controllers
                     }
                     product.UpdatedBy = user.Name;
                     product.DateUpdated = DateTime.Now;
+                    product.MappedDate = DateTime.Now;
                     _db.Entry(product).State = System.Data.Entity.EntityState.Modified;
                     _db.SaveChanges();
 
@@ -1797,6 +1798,7 @@ namespace ShopNow.Controllers
                 product.IBarU = 0;
                 product.UpdatedBy = user.Name;
                 product.DateUpdated = DateTime.Now;
+                product.MappedDate = null;
                 _db.Entry(product).State = System.Data.Entity.EntityState.Modified;
                 _db.SaveChanges();
             }
@@ -1825,6 +1827,7 @@ namespace ShopNow.Controllers
                     }
                     product.UpdatedBy = user.Name;
                     product.DateUpdated = DateTime.Now;
+                    product.MappedDate = DateTime.Now;
                     _db.Entry(product).State = System.Data.Entity.EntityState.Modified;
                     _db.SaveChanges();
                 }

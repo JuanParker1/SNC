@@ -81,9 +81,9 @@
         <EntityTypeShape EntityType="sncModel.CustomerWalletHistory" Width="1.5" PointX="12.375" PointY="27.75" />
         <EntityTypeShape EntityType="sncModel.Banner" Width="1.5" PointX="28.375" PointY="15.75" />
         <EntityTypeShape EntityType="sncModel.CustomerPrescriptionImage" Width="1.5" PointX="28.375" PointY="21.75" />
-        <EntityTypeShape EntityType="sncModel.Product" Width="1.5" PointX="12.375" PointY="30.75" />
         <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="28.375" PointY="32.625" />
         <AssociationConnector Association="sncModel.FK_OrderItems_Orders" />
+        <EntityTypeShape EntityType="sncModel.Product" Width="1.5" PointX="12.375" PointY="30.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
