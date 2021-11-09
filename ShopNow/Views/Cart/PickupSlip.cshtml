@@ -44,6 +44,7 @@
                                 <tr class="table-secondary">
                                     <th>Sl.No</th>
                                     <th>Item Name</th>
+                                    <th>MRP Price</th>
                                     <th>Rate</th>
                                     <th>Qty</th>
                                     <th>Amount</th>
@@ -55,38 +56,40 @@
                                     var totalcount = Model.List.Count();
                                     var count = Model.List.IndexOf(item);
                                     count++;
-                                    <tr>
-                                        <td>@count</td>
-                                        @if (item.ProductName != null)
-                                        {
-                                            <td>@item.ProductName</td>}
-                                        else
-                                        {
-                                            <td>N/A</td>
-                                        }
-                                        <td>@item.SinglePrice</td>
-                                        <td>@item.Qty</td>
-                                        <td id="amount">@item.Price</td>
-                                    </tr>
+                                <tr>
+                                    <td>@count</td>
+                                    @if (item.ProductName != null)
+                                    {
+                                        <td>@item.ProductName</td>
+}
+                                    else
+                                    {
+                                        <td>N/A</td>
+                                    }
+                                    <td>@item.MRPPrice</td>
+                                    <td>@item.SinglePrice</td>
+                                    <td>@item.Qty</td>
+                                    <td id="amount">@item.Price</td>
+                                </tr>
                                 }
                                 <tr>
-                                    <td colspan="5">&nbsp;</td>
+                                    <td colspan="6">&nbsp;</td>
                                 </tr>
                                 <tr>
                                     <td>A</td>
-                                    <td colspan="3">App items value</td>
+                                    <td colspan="4">App items value</td>
                                     @*<td>@Model.Amount</td>*@
                                     <td>@Model.List.Sum(i=>i.Price)</td>
                                 </tr>
                                 <tr>
                                     <td colspan="1">B</td>
-                                    <td colspan="2">Shop bill No.</td>
+                                    <td colspan="3">Shop bill No.</td>
                                     <td>Value</td>
                                     <td></td>
                                 </tr>
                                 <tr>
                                     <td colspan="1">C</td>
-                                    <td colspan="3">Difference (Only refund amount)</td>
+                                    <td colspan="4">Difference (Only refund amount)</td>
                                     <td colspan="1"></td>
                                 </tr>
                                 @*<tr class="hide-print">
