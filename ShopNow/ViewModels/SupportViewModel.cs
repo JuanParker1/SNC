@@ -20,12 +20,17 @@ namespace ShopNow.ViewModels
         public int RefundCount { get; set; }
         public int ShopLowCreditCount { get; set; }
 
-
         //Verification Count
         public int CustomerAadhaarVerifyCount { get; set; }
         public int ShopOnBoardingVerifyCount { get; set; }
         public int DeliveryBoyVerifyCount { get; set; }
         public int BannerPendingCount { get; set; }
+
+        // Error Count
+        public int UnMappedCount { get; set; }
+        public int OrderMissedCount { get; set; }
+        public int ProductUnMappedCount { get; set; }
+
     }
 
     public class DeliveryBoyAssignViewModel
@@ -46,6 +51,79 @@ namespace ShopNow.ViewModels
         {
             public int Id { get; set; }
             public string Name { get; set; }
+        }
+    }
+
+    public class UnMappedListViewModel
+    {
+        public List<UnMappedList> List { get; set; }
+        public class UnMappedList
+        {
+            public int SlNo { get; set; }
+            public long Id { get; set; }
+            public string Name { get; set; }
+            public int MasterProductId { get; set; }
+            public string MasterProductName { get; set; }
+            public string ShopId { get; set; }
+            public string ShopName { get; set; }
+            public DateTime DateUpdated { get; set; }
+        }
+    }
+    public class OrderMissedListViewModel
+    {
+        public double CartTotalPrice { get; set; }
+        public string OrderNo { get; set; }
+        public string ShopName { get; set; }
+        public string Distance { get; set; }
+
+        // Payment
+        public double Amount { get; set; }
+        public string ReferenceCode { get; set; }
+        public double PackagingCharge { get; set; }
+
+        // PaymentDatas
+        public string paymentId { get; set; }
+        public string order_id { get; set; }
+        public string method { get; set; }
+        public decimal? fee { get; set; }
+        public decimal? tax { get; set; }
+
+        // ShopCharge
+        public double GrossDeliveryCharge { get; set; }
+        public double ShopDeliveryDiscount { get; set; }
+        public double NetDeliveryCharge { get; set; }
+
+        public List<OrderMissedList> List { get; set; }
+        public class OrderMissedList
+        {
+            public int SlNo { get; set; }
+            public int OrderNo { get; set; }
+            public long Id { get; set; }
+            public string PaymentMode { get; set; }
+            public DateTime DateEncoded { get; set; }
+            public bool HasPayment { get; set; }
+            public string PhoneNumber { get; set; }
+            public string ShopName { get; set; }
+            public string Amount { get; set; }
+
+        }
+    }
+
+    public class ProductUnMappedList
+    {
+        public int ShopId { get; set; }
+        public string ShopName { get; set; }
+        public List<ListItem> ListItems { get; set; }
+        public class ListItem
+        {
+            public long Id { get; set; }
+            public string Name { get; set; }
+            public string ShopName { get; set; }
+            public double MenuPrice { get; set; }
+            public double SellingPrice { get; set; }
+            public int Quantity { get; set; }
+            public int Status { get; set; }
+            public int ItemId { get; set; }
         }
     }
 }
