@@ -531,21 +531,24 @@ namespace ShopNow.Controllers
                 model.Convinenientcharge = payment.ConvenientCharge;
                 model.DeliveryCharge = payment.DeliveryCharge;
             }
-                model.List = db.OrderItems.Where(i => i.OrdeNumber == OrderNumber && i.Status == 0).Select(i => new CartListViewModel.CartList
+                model.List = db.OrderItems.Where(i => i.OrdeNumber == OrderNumber && i.Status == 0)
+                .Join(db.Products, c => c.ProductId, p => p.Id, (c, p) => new { c, p })
+                .Select(i => new CartListViewModel.CartList
             {
-                Id = i.Id,
-                BrandName = i.BrandName,
-                CategoryName = i.CategoryName,
-                ShopName = cart.ShopName,
-                ProductId = i.ProductId,
-                ProductName = i.ProductName,
-                Qty = i.Quantity,
-                Price = i.Price,
-                Status = cart.Status,
-                PhoneNumber = cart.CustomerPhoneNumber,
-                ImagePath = i.ImagePath == "N/A" ? null : i.ImagePath,
-                SinglePrice = i.UnitPrice
-            }).ToList();
+                    Id = i.c.Id,
+                    BrandName = i.c.BrandName,
+                    CategoryName = i.c.CategoryName,
+                    ShopName = cart.ShopName,
+                    ProductId = i.c.ProductId,
+                    ProductName = i.c.ProductName,
+                    Qty = i.c.Quantity,
+                    Price = i.c.Price,
+                    Status = cart.Status,
+                    PhoneNumber = cart.CustomerPhoneNumber,
+                    ImagePath = i.c.ImagePath == "N/A" ? null : i.c.ImagePath,
+                    SinglePrice = i.c.UnitPrice,
+                    MRPPrice = i.p.MenuPrice
+                }).ToList();
             return View(model);            
         }
          
