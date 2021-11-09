@@ -103,35 +103,30 @@ namespace ShopNow.Helpers
         }
         public static string ECodeInt(int input)
         {
-            int encrptInt = input + 2;
-            byte[] b = BitConverter.GetBytes(encrptInt);
-            string str = Convert.ToBase64String(b);
-            return str;
+            string s = Convert.ToString(input) + "f";
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(s);
+            return System.Convert.ToBase64String(plainTextBytes);
         }
         public static int DCodeInt(string input)
         {
-            byte[] b = Convert.FromBase64String(input);
-
-            // Return the decoded int.
-            int i = BitConverter.ToInt32(b, 0);
-            int j = i - 2;
-            return j;
+            var base64EncodedBytes = System.Convert.FromBase64String(input);
+            string previousDecode = System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+            previousDecode = previousDecode.Remove(previousDecode.Length - 1, 1);
+            return Convert.ToInt32(previousDecode);
         }
 
         public static string ECodeLong(long input)
         {
-            long encrptInt = input + 2;
-            byte[] b = BitConverter.GetBytes(encrptInt);
-            string str = Convert.ToBase64String(b);
-            return str;
+            string s = Convert.ToString(input) + "f";
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(s);
+            return System.Convert.ToBase64String(plainTextBytes);
         }
         public static long DCodeLong(string input)
         {
-            byte[] b = Convert.FromBase64String(input);
-
-            // Return the decoded int.
-            long i = BitConverter.ToInt32(b, 0);
-            return i - 2;
+            var base64EncodedBytes = System.Convert.FromBase64String(input);
+            string previousDecode = System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+            previousDecode = previousDecode.Remove(previousDecode.Length - 1, 1);
+            return Convert.ToInt64(previousDecode);
         }
     }
 }

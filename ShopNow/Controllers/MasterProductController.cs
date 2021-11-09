@@ -1558,9 +1558,9 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCMPIMU156")]
-        public ActionResult ItemMappingUpdate(int id)
+        public ActionResult ItemMappingUpdate(string id)
         {
-            var dCode = AdminHelpers.DCodeLong(id.ToString());
+            var dCode = AdminHelpers.DCodeLong(id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var product = _db.Products.FirstOrDefault(i => i.Id == dCode);
