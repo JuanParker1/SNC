@@ -538,4 +538,40 @@ namespace ShopNow.ViewModels
             public double Weight { get; set; }
         }
     }
+
+    public class ProductDetailsApiViewModel
+    {
+        public long Id { get; set; }
+        public string Name { get; set; }
+        public int CategoryId { get; set; }
+        public string CategoryName { get; set; }
+        public double DiscountCategoryPercentage { get; set; }
+        public int ShopId { get; set; }
+        public string ShopName { get; set; }
+        public int ShopCategoryId { get; set; }
+        public string ShopCategoryName { get; set; }
+        public double MenuPrice { get; set; }
+        public double Price { get; set; }
+        public string ShortDescription { get; set; }
+        public string LongDescription { get; set; }
+        public string ColorCode { get; set; }
+        public string DrugCompoundDetailIds { get; set; }
+        public string DrugCompoundDetailName { get; set; }
+        public string ImagePath1 { get; set; }
+        public string ImagePath2 { get; set; }
+        public string ImagePath3 { get; set; }
+        public string ImagePath4 { get; set; }
+        public string ImagePath5 { get; set; }
+
+        public List<SimilarProductsListItem> SimilarProductsListItems { get; set; }
+        public class SimilarProductsListItem
+        {
+            public string Name { get; set; }
+            public double Distance { get; set; }
+            public string ShopName { get; set; }
+            public double MenuPrice { get; set; }
+            public double Price { get; set; }
+            public double DiscountPercentage { get; set; }
+        }
+    }
 }
