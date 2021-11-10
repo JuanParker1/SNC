@@ -395,6 +395,7 @@ namespace ShopNow.ViewModels
             public string RefundRemark { get; set; }
             public string PaymentMode { get; set; }
             public double Amount { get; set; }
+            public double MRPPrice { get; set; }
             public Nullable<System.DateTime> ShopCancelledTime { get; set; }
             public double ShopAcceptedTime { get; set; }
             public double OrderPeriod { get; set; }
@@ -622,6 +623,7 @@ namespace ShopNow.ViewModels
         public string RouteAudioPath { get; set; }
         public string Remarks { get; set; }
         public string PrescriptionImagePath { get; set; }
+        public string PaymentMode { get; set; }
 
         public List<ListItem> ListItems { get; set; } 
         public class ListItem

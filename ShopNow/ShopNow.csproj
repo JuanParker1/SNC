@@ -3235,6 +3235,7 @@
     <Content Include="Views\Banner\Create.cshtml" />
     <Content Include="Views\Support\UnMappedList.cshtml" />
     <Content Include="Views\Support\OrderMissed.cshtml" />
+    <Content Include="Views\Support\ProductsUnMappedList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

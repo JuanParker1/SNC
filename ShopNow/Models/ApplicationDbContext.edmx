@@ -831,6 +831,7 @@
           <Property Name="Remarks" Type="nvarchar(max)" />
           <Property Name="PrescriptionImagePath" Type="nvarchar(max)" />
           <Property Name="CancelledRemark" Type="nvarchar(max)" />
+          <Property Name="PaymentMode" Type="nvarchar" MaxLength="100" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
@@ -1053,6 +1054,7 @@
           <Property Name="IsPreorder" Type="bit" Nullable="false" />
           <Property Name="PreorderHour" Type="int" Nullable="false" />
           <Property Name="OfferQuantityLimit" Type="int" Nullable="false" />
+          <Property Name="MappedDate" Type="datetime" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
@@ -2706,13 +2708,13 @@
           </AssociationSet>
           <EntitySet Name="CustomerSearchDatas" EntityType="sncModel.CustomerSearchData" />
           <EntitySet Name="CustomerWalletHistories" EntityType="sncModel.CustomerWalletHistory" />
+          <EntitySet Name="Banners" EntityType="sncModel.Banner" />
+          <EntitySet Name="CustomerPrescriptionImages" EntityType="sncModel.CustomerPrescriptionImage" />
           <EntitySet Name="Orders" EntityType="sncModel.Order" />
           <AssociationSet Name="FK_OrderItems_Orders" Association="sncModel.FK_OrderItems_Orders">
             <End Role="Order" EntitySet="Orders" />
             <End Role="OrderItem" EntitySet="OrderItems" />
           </AssociationSet>
-          <EntitySet Name="Banners" EntityType="sncModel.Banner" />
-          <EntitySet Name="CustomerPrescriptionImages" EntityType="sncModel.CustomerPrescriptionImage" />
           <EntitySet Name="Products" EntityType="sncModel.Product" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
@@ -3321,6 +3323,36 @@
           <Property Name="DateEncoded" Type="DateTime" Precision="3" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="Banner">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShopId" Type="Int32" Nullable="false" />
+          <Property Name="ProductId" Type="Int64" Nullable="false" />
+          <Property Name="MasterProductId" Type="Int64" Nullable="false" />
+          <Property Name="Position" Type="Int32" Nullable="false" />
+          <Property Name="BannerPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FromDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Todate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Days" Type="Int32" Nullable="false" />
+          <Property Name="BannerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PaymentId" Type="Int64" Nullable="false" />
+          <Property Name="CreditType" Type="Int32" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="CustomerPrescriptionImage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerPrescriptionId" Type="Int32" Nullable="false" />
+          <Property Name="ImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
         <EntityType Name="Order">
           <Key>
             <PropertyRef Name="Id" />
@@ -3375,6 +3407,7 @@
           <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="PrescriptionImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CancelledRemark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PaymentMode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
@@ -3394,36 +3427,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Banner">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ShopId" Type="Int32" Nullable="false" />
-          <Property Name="ProductId" Type="Int64" Nullable="false" />
-          <Property Name="MasterProductId" Type="Int64" Nullable="false" />
-          <Property Name="Position" Type="Int32" Nullable="false" />
-          <Property Name="BannerPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="FromDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Todate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Days" Type="Int32" Nullable="false" />
-          <Property Name="BannerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PaymentId" Type="Int64" Nullable="false" />
-          <Property Name="CreditType" Type="Int32" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
-        <EntityType Name="CustomerPrescriptionImage">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CustomerPrescriptionId" Type="Int32" Nullable="false" />
-          <Property Name="ImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="Product">
           <Key>
             <PropertyRef Name="Id" />
@@ -3472,6 +3475,7 @@
           <Property Name="IsPreorder" Type="Boolean" Nullable="false" />
           <Property Name="PreorderHour" Type="Int32" Nullable="false" />
           <Property Name="OfferQuantityLimit" Type="Int32" Nullable="false" />
+          <Property Name="MappedDate" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
@@ -4935,6 +4939,38 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Banners">
+            <EntityTypeMapping TypeName="sncModel.Banner">
+              <MappingFragment StoreEntitySet="Banners">
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CreditType" ColumnName="CreditType" />
+                <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
+                <ScalarProperty Name="BannerName" ColumnName="BannerName" />
+                <ScalarProperty Name="Days" ColumnName="Days" />
+                <ScalarProperty Name="Todate" ColumnName="Todate" />
+                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+                <ScalarProperty Name="BannerPath" ColumnName="BannerPath" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="MasterProductId" ColumnName="MasterProductId" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerPrescriptionImages">
+            <EntityTypeMapping TypeName="sncModel.CustomerPrescriptionImage">
+              <MappingFragment StoreEntitySet="CustomerPrescriptionImages">
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="CustomerPrescriptionId" ColumnName="CustomerPrescriptionId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="sncModel.Order">
               <MappingFragment StoreEntitySet="Orders">
@@ -4943,6 +4979,7 @@
                 <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
                 <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="PaymentMode" ColumnName="PaymentMode" />
                 <ScalarProperty Name="CancelledRemark" ColumnName="CancelledRemark" />
                 <ScalarProperty Name="PrescriptionImagePath" ColumnName="PrescriptionImagePath" />
                 <ScalarProperty Name="Remarks" ColumnName="Remarks" />
@@ -4996,38 +5033,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Banners">
-            <EntityTypeMapping TypeName="sncModel.Banner">
-              <MappingFragment StoreEntitySet="Banners">
-                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="CreditType" ColumnName="CreditType" />
-                <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
-                <ScalarProperty Name="BannerName" ColumnName="BannerName" />
-                <ScalarProperty Name="Days" ColumnName="Days" />
-                <ScalarProperty Name="Todate" ColumnName="Todate" />
-                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
-                <ScalarProperty Name="BannerPath" ColumnName="BannerPath" />
-                <ScalarProperty Name="Position" ColumnName="Position" />
-                <ScalarProperty Name="MasterProductId" ColumnName="MasterProductId" />
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CustomerPrescriptionImages">
-            <EntityTypeMapping TypeName="sncModel.CustomerPrescriptionImage">
-              <MappingFragment StoreEntitySet="CustomerPrescriptionImages">
-                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
-                <ScalarProperty Name="CustomerPrescriptionId" ColumnName="CustomerPrescriptionId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Products">
             <EntityTypeMapping TypeName="sncModel.Product">
               <MappingFragment StoreEntitySet="Products">
@@ -5036,6 +5041,7 @@
                 <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
                 <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="MappedDate" ColumnName="MappedDate" />
                 <ScalarProperty Name="OfferQuantityLimit" ColumnName="OfferQuantityLimit" />
                 <ScalarProperty Name="PreorderHour" ColumnName="PreorderHour" />
                 <ScalarProperty Name="IsPreorder" ColumnName="IsPreorder" />

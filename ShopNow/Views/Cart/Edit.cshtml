@@ -43,7 +43,7 @@
                             @if (Model.Status == 2)
                             {
                                 <button type="button" class="btn btn-sm btn-success mr-3" id="Accept">Accept</button>
-                                <button type="button" class="btn btn-sm btn-danger mr-3" id="Cancel">Cancel</button>
+                                <button type="button" class="btn btn-sm btn-danger mr-3" data-toggle="modal" data-target="#modal-add-cancel-remark" @*id="Cancel"*@>Cancel</button>
                                 <a href="~/Cart/PickupSlip?OrderNumber=@Model.OrderNumber&id=@ShopNow.Helpers.AdminHelpers.ECodeLong(Model.Id)" class="btn btn-secondary btn-sm" style="padding: 3px 16px"><span><i class="fa fa-print mr-1" aria-hidden="true"></i></span> Pickup Slip</a>
                             }
                             else if (Model.Status == 7)
@@ -220,6 +220,24 @@
     </div>
 </div>
 
+<div class="modal fade" id="modal-add-cancel-remark" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                    <h5>Add Cancel Remarks</h5>
+                    <div class="form-group">
+                        <label>Remarks</label>
+                        <textarea class="form-control" type="text" name="CancelledRemark" required></textarea>
+                    </div>
+                    <div class="text-right">
+                        <button id="btn-cancel" type="button" class="btn btn-sm btn-success mr-3">Submit</button>
+                        <button class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts
 {
     <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
@@ -285,11 +303,12 @@
                 }
             });
 
-            $("#Cancel").click(function () {
+            $("#btn-cancel").click(function () {
                 var ordernumber = $("#OrderNumber").val();
                 var customerId = $('#CustomerId').val();
                 var status = $('#Status').val();
-                $.getJSON("/Cart/Cancel?OrderNumber=" + ordernumber + "&customerId=" + customerId + "&status=" + status, function (data) {
+                var remark = $('[name="CancelledRemark"]').val();
+                $.getJSON("/Cart/Cancel?OrderNumber=" + ordernumber + "&customerId=" + customerId + "&status=" + status + "&remark=" + remark, function (data) {
                     if (data.message != null) {
                         swal({
                             title: data.message,

@@ -18,6 +18,7 @@ namespace ShopNow.ViewModels
         public string BannerName { get; set; }
         public long PaymentId { get; set; }
         public Nullable<int> CreditType { get; set; }
+        public int OfferQuantityLimit { get; set; }
     }
         public class BannerEditViewModel
     {

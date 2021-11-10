@@ -667,6 +667,7 @@ namespace ShopNow.ViewModels
             public double Weight { get; set; }
             public bool IsPreorder { get; set; }
             public int PreorderHour { get; set; }
+            public int OfferQuantityLimit { get; set; }
         }
         public class DrugCompundDetailList
         {
