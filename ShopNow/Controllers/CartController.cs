@@ -78,7 +78,8 @@ namespace ShopNow.Controllers
                               Price = i.c.TotalPrice,
                               RefundAmount = i.p.RefundAmount ?? 0,
                               RefundRemark = i.p.RefundRemark ?? "",
-                              PaymentMode = i.p.PaymentMode,
+                              PaymentMode = i.p.PaymentMode
+
                     }).OrderByDescending(i => i.DateEncoded).ToList();
             return View(model.CartPendingLists);
         }
