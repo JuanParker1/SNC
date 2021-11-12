@@ -647,6 +647,9 @@
     <Compile Include="Models\ShopSchedule.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ShopStaff.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Specification.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
