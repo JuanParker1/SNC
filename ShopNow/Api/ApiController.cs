@@ -5131,6 +5131,7 @@ namespace ShopNow.Controllers
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
         public JsonResult GetCheckCustomerProductOffer(int customerid, int productid)
         {
             var banner = db.Banners.FirstOrDefault(i => i.ProductId == productid && i.Status == 0);
@@ -5139,6 +5140,7 @@ namespace ShopNow.Controllers
             return Json(new { isAvailable = !isAvailable, JsonRequestBehavior.AllowGet });
         }
 
+        [HttpGet]
         public JsonResult GetProductDetails(int productid, double latitude, double longitude)
         {
             var product = db.Products.FirstOrDefault(i => i.Id == productid);
