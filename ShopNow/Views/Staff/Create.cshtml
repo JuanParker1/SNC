@@ -65,8 +65,7 @@
                             </div>
                             <div class="col-md-3 mt-1">
                                 <label class="control-label" for="ShopName"><strong class="text-secondary">Shop Name</strong></label>
-                                <select id="ShopId" name="ShopId" class="form-control"></select>
-                                <input type="hidden" name="ShopName" id="ShopName" />
+                                <select id="ShopId" name="ShopIds" class="form-control" multiple></select>
                             </div>
                             <div class="col-md-2">
                                 <div class="row">
@@ -129,7 +128,6 @@
                     dataType: 'json'
                 }
             }).on('select2:select', function (e) {
-                $('input[name="ShopName"]').val(e.params.data.text);
             });
 
             function readURL(input) {
