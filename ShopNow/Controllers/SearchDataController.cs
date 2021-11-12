@@ -122,7 +122,8 @@ namespace ShopNow.Controllers
                         var searchDataList = db.CustomerSearchDatas.Where(i => i.SearchKeyword.ToLower() == searchWord.ToLower()).ToList();
                         foreach (var item in searchDataList)
                         {
-                            var sd = db.CustomerSearchDatas.FirstOrDefault(i => i.SearchKeyword.ToLower() == item.SearchKeyword.ToLower());
+                           // var sd = db.CustomerSearchDatas.FirstOrDefault(i => i.SearchKeyword.ToLower() == item.SearchKeyword.ToLower());
+                            var sd = db.CustomerSearchDatas.FirstOrDefault(i => i.Id == item.Id);
                             if (sd != null)
                             {
                                 sd.LinkedMasterProductIds = sd.LinkedMasterProductIds != null ? sd.LinkedMasterProductIds + "," + masterProduct.Id : masterProduct.Id.ToString();
