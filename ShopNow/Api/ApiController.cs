@@ -102,6 +102,9 @@ namespace ShopNow.Controllers
                 config.CreateMap<Models.Order, OrderDetailsApiViewModel>();
                 config.CreateMap<SavePrescriptionViewModel, CustomerPrescription>();
                 config.CreateMap<OrderCreateViewModel.ListItem.AddOnListItem, OrderItemAddon>();
+
+                config.CreateMap<Product, ProductDetailsApiViewModel>();
+
             });
 
             _mapper = _mapperConfiguration.CreateMapper();
@@ -5156,7 +5159,7 @@ namespace ShopNow.Controllers
                     model.ImagePath3 = masterProduct.ImagePath3;
                     model.ImagePath4 = masterProduct.ImagePath4;
                     model.ImagePath5 = masterProduct.ImagePath5;
-                    model.CategoryName = db.Categories.FirstOrDefault(i => i.Id == product.CategoryId).Name;
+                    model.CategoryName = db.Categories.FirstOrDefault(i => i.Id == product.CategoryId)?.Name;
                     model.ColorCode = masterProduct.ColorCode;
                     model.DrugCompoundDetailIds = masterProduct.DrugCompoundDetailIds;
                     model.DrugCompoundDetailName = masterProduct.DrugCompoundDetailName;
@@ -5177,7 +5180,7 @@ namespace ShopNow.Controllers
                     Price = i.p.p.p.Price,
                     ShopName = i.p.p.p.ShopName,
                     Distance = (((Math.Acos(Math.Sin((i.s.Latitude * Math.PI / 180)) * Math.Sin((latitude * Math.PI / 180)) + Math.Cos((i.s.Latitude * Math.PI / 180)) * Math.Cos((latitude * Math.PI / 180))
-                 * Math.Cos(((i.s.Longitude - longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344)
+                 * Math.Cos(((i.s.Longitude - longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) /1000
                 }).ToList();
             return Json(model,JsonRequestBehavior.AllowGet);
         }
