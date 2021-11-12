@@ -1,6 +1,6 @@
 ﻿@model ShopNow.ViewModels.OrderMissedListViewModel
 @{
-    ViewBag.Title = "Order Missed";
+    ViewBag.Title = "Order Missed List";
 }
 <title>ShopNow | @ViewBag.Title</title>
 
@@ -22,8 +22,10 @@
                                 <thead>
                                     <tr>
                                         <th>Sl.No.</th>
+                                        <th>Order Number</th>
                                         <th>Shop Name</th>
-                                        <th>Customer PhoneNumber</th>
+                                        <th>Customer PhoneNo.</th>
+                                        <th>Payment Mode</th>
                                         <th>Amount</th>
                                         <th>DateTime</th>
                                         <th>Action</th>
@@ -36,24 +38,22 @@
                                         count++;
                                         <tr>
                                             <td>@count</td>
+                                            <td>@item.OrderNumber</td>
                                             <td>@item.ShopName</td>
                                             <td>@item.PhoneNumber</td>
-                                            <td>@item.Amount</td>
+                                            <td>@item.PaymentMode</td>
+                                            <td>@item.TotalPrice</td>
                                             <td class="text-nowrap">@item.DateEncoded</td>
                                             <td>
-                                                @if (item.PaymentMode == "Cash On Hand" && item.HasPayment == true)
+                                                @if (item.PaymentMode == "Cash On Hand")
                                                 {
-                                                    <a href="~/Support/StatusUpdate?orderno=@item.OrderNumber" class="btn btn-sm btn-info mr-5">Change Status 0 to 2</a>
+                                                    <a href="~/Support/COHPaymentUpdate?orderno=@item.OrderNumber" class="btn btn-sm btn-info mr-5">Payment Update</a>
                                                 }
-                                                else if (item.PaymentMode == "Online Payment" && item.HasPayment == true)
+                                                else if (item.PaymentMode == "Online Payment")
                                                 {
-                                                    <a href="~/Support/StatusUpdate?orderno=@item.OrderNumber" class="btn btn-sm btn-info mr-5">Change Status 0 to 2</a>
+                                                    <a href="~/Support/OnlinePaymentUpdate?orderno=@item.OrderNumber" class="btn btn-sm btn-info">PaymentUpdate</a>
                                                 }
-                                                else
-                                                {
-                                                    <a href="~/Support/PaymentUpdate?orderno=@item.OrderNumber" target="_blank" class="btn btn-sm btn-info mr-5"> Payment Update </a>
-                                                    <a href="javascript:void(0)" data-id="@item.OrderNumber" class="btn btn-sm btn-danger btnReject"> Reject</a>
-                                                }
+                                                <a href="javascript:void(0)" data-id="@item.OrderNumber" class="btn btn-sm btn-danger btnReject"> Reject</a>
                                             </td>
                                         </tr>
                                     }
