@@ -545,6 +545,7 @@ namespace ShopNow.ViewModels
         public string Name { get; set; }
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
+        public string BrandName { get; set; }
         public double DiscountCategoryPercentage { get; set; }
         public int ShopId { get; set; }
         public string ShopName { get; set; }

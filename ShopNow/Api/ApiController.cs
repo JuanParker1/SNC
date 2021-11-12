@@ -5150,21 +5150,28 @@ namespace ShopNow.Controllers
             var model = new ProductDetailsApiViewModel();
             if (product != null)
             {
+
+                var shid = db.Shops.FirstOrDefault(s => s.Id == product.ShopId);
+                string defaultImagePath = "../../assets/images/noimageres.svg";
+                if (shid.ShopCategoryId == 4)
+                    defaultImagePath = "../../assets/images/1.5-cm-X-1.5-cm.png";
+
                 _mapper.Map(product, model);
                 var masterProduct = db.MasterProducts.FirstOrDefault(i => i.Id == product.MasterProductId);
                 if (masterProduct != null)
                 {
-                    model.ImagePath1 = masterProduct.ImagePath1;
-                    model.ImagePath2 = masterProduct.ImagePath2;
-                    model.ImagePath3 = masterProduct.ImagePath3;
-                    model.ImagePath4 = masterProduct.ImagePath4;
-                    model.ImagePath5 = masterProduct.ImagePath5;
+                    model.ImagePath1 = ((!string.IsNullOrEmpty(masterProduct.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + masterProduct.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : defaultImagePath);
+                    model.ImagePath2 = ((!string.IsNullOrEmpty(masterProduct.ImagePath2)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + masterProduct.ImagePath2.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : null);
+                    model.ImagePath3 = ((!string.IsNullOrEmpty(masterProduct.ImagePath3)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + masterProduct.ImagePath3.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : null);
+                    model.ImagePath4 = ((!string.IsNullOrEmpty(masterProduct.ImagePath4)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + masterProduct.ImagePath4.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : null);
+                    model.ImagePath5 = ((!string.IsNullOrEmpty(masterProduct.ImagePath5)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + masterProduct.ImagePath5.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : null);
                     model.CategoryName = db.Categories.FirstOrDefault(i => i.Id == product.CategoryId)?.Name;
                     model.ColorCode = masterProduct.ColorCode;
                     model.DrugCompoundDetailIds = masterProduct.DrugCompoundDetailIds;
                     model.DrugCompoundDetailName = masterProduct.DrugCompoundDetailName;
                     model.LongDescription = masterProduct.LongDescription;
                     model.ShortDescription = masterProduct.ShortDescription;
+                    model.BrandName = masterProduct.BrandName;
                 }
             }
             model.SimilarProductsListItems = db.Products.Where(i => i.MasterProductId == product.MasterProductId)
@@ -5174,7 +5181,7 @@ namespace ShopNow.Controllers
                 .AsEnumerable()
                 .Select(i => new ProductDetailsApiViewModel.SimilarProductsListItem
                 {
-                    DiscountPercentage = i.p.p.p.ShopCategoryId != 3 ? i.p.p.p.Percentage : i.p.dc.Percentage,
+                    DiscountPercentage = i.p.p.p.ShopCategoryId != 4 ? i.p.p.p.Percentage : i.p.dc.Percentage,
                     MenuPrice = i.p.p.p.MenuPrice,
                     Name = i.p.p.m.Name,
                     Price = i.p.p.p.Price,
