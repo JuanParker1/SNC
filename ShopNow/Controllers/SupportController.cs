@@ -113,74 +113,184 @@ namespace ShopNow.Controllers
                                Id = i.FirstOrDefault().p.Id,
                                Name = i.FirstOrDefault().p.Name,
                                DateUpdated = i.FirstOrDefault().p.DateUpdated,
-                              // MasterProductName = i.FirstOrDefault().oi.ProductName,
                                ShopName = i.FirstOrDefault().p.ShopName
                            }).ToList();
             return View(model);
         }
 
-        //public ActionResult OrderMissed()
-        //{
-        //    var user = ((Helpers.Sessions.User)Session["USER"]);
-        //    ViewBag.Name = user.Name;
-        //    var model = new OrderMissedListViewModel();
-        //    DateTime start = new DateTime(2021, 10, 29);
-        //    var list1 = db.Orders.Where(i => i.Status == 0 && DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(DateTime.Now)).OrderByDescending(i => i.DateUpdated)
-        //        .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
-        //         .AsEnumerable()
-        //        .Select((i, index) => new OrderMissedListViewModel.OrderMissedList
-        //        {
-        //            SlNo = index + 1,
-        //            Id = i.c.Id,
-        //            PaymentMode = i.c.PaymentMode,
-        //            DateEncoded = i.c.DateEncoded,
-        //            OrderNo = i.c.OrderNumber,
-        //            HasPayment = i.Any(),
-        //            PhoneNumber = i.c.CustomerPhoneNumber,
-        //            ShopName = i.c.ShopName,
-        //            Amount = i.c.NetTotal.ToString("#,#.00")
-        //        }).ToList();
-
-        //    var list2 = db.Orders.Where(i => i.Status == 0 && DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(DateTime.Now)).OrderByDescending(i => i.DateUpdated)
-        //        .AsEnumerable()
-        //       .Select((i, index) => new OrderMissedListViewModel.OrderMissedList
-        //       {
-        //           SlNo = index + 1,
-        //           Id = i.Id,
-        //           PaymentMode = i.PaymentMode,
-        //           DateEncoded = i.DateEncoded,
-        //           OrderNo = i.OrderNumber,
-        //           HasPayment = false,
-        //           PhoneNumber = i.CustomerPhoneNumber,
-        //           ShopName = i.ShopName,
-        //           Amount = i.NetTotal.ToString("#,#.00")
-        //       }).ToList();
-
-        //    model.List = list1.Union(list2).ToList();
-
-        //    return View(model);
-        //}
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult PaymentUpdate(OrderMissedListViewModel model)
+        public ActionResult OrderMissed()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var cart = db.Orders.FirstOrDefault(i => i.OrderNumber == model.OrderNumber);
+            var model = new OrderMissedListViewModel();
+            model.List = db.Orders.Where(i => i.Status == 0 && DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(DateTime.Now)).OrderByDescending(i => i.DateUpdated)
+                .Select(i => new OrderMissedListViewModel.OrderMissedList
+                {
+                    Id = i.Id,
+                    PaymentMode = i.PaymentMode,
+                    DateEncoded = i.DateEncoded,
+                    OrderNumber = i.OrderNumber,
+                    PhoneNumber = i.CustomerPhoneNumber,
+                    ShopName = i.ShopName,
+                    TotalPrice = i.TotalPrice
+                }).ToList();
+
+            return View(model);
+        }
+
+        public ActionResult COHPaymentUpdate(int orderno)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var cart = db.Orders.FirstOrDefault(i => i.OrderNumber == orderno);
+            var shop = db.Shops.FirstOrDefault(i => i.Id == cart.ShopId && i.Status == 0);
+            var model = new OrderMissedListViewModel();
+            model.OrderNumber = cart.OrderNumber;
+            model.Amount = cart.NetTotal;
+            model.TotalPrice = cart.TotalPrice;
+            model.PackingCharge = db.Bills.Where(i => i.ShopId == cart.ShopId && i.NameOfBill == 1 && i.Status == 0).Select(i => i.PackingCharge).FirstOrDefault();
+
+            // Gross Delivery Charge
+            var Distance = (((Math.Acos(Math.Sin((shop.Latitude * Math.PI / 180)) * Math.Sin((cart.Latitude * Math.PI / 180)) + Math.Cos((shop.Latitude * Math.PI / 180)) * Math.Cos((cart.Latitude * Math.PI / 180))
+                 * Math.Cos(((shop.Longitude - cart.Longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000;
+            var deliverybill = db.Bills.Where(i => i.ShopId == cart.ShopId && i.NameOfBill == 0 && i.DeliveryRateSet == 0 && i.Status == 0).FirstOrDefault();
+            if (Distance < 5)
+            {
+                model.GrossDeliveryCharge = deliverybill.DeliveryChargeKM;
+            }
+            else
+            {
+                var dist = Distance - 5;
+                var amount = dist * deliverybill.DeliveryChargeOneKM;
+                model.GrossDeliveryCharge = deliverybill.DeliveryChargeKM + amount;
+            }
+            model.ShopDeliveryDiscount = model.TotalPrice * (deliverybill.DeliveryChargeCustomer / 100);
+            model.NetDeliveryCharge = model.GrossDeliveryCharge - model.ShopDeliveryDiscount;
+            model.Distance = Distance.ToString("0.##");
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult COHPaymentUpdate(OrderMissedListViewModel model)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var order = db.Orders.FirstOrDefault(i => i.OrderNumber == model.OrderNumber);
             var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == model.OrderNumber);
-            var paymentData = db.PaymentsDatas.FirstOrDefault(i => i.OrderNumber == model.OrderNumber);
             var perOrderAmount = db.PlatFormCreditRates.Where(s => s.Status == 0).FirstOrDefault();
 
-            if (cart != null)
+            if (order != null)
             {
-                cart.Status = 2;
-                cart.UpdatedBy = user.Name;
-                cart.DateUpdated = DateTime.Now;
-                db.Entry(cart).State = System.Data.Entity.EntityState.Modified;
+                order.Status = 2;
+                order.UpdatedBy = user.Name;
+                order.DateUpdated = DateTime.Now;
+                order.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
+                order.NetDeliveryCharge = model.NetDeliveryCharge;
+                order.DeliveryCharge = model.GrossDeliveryCharge;
+                order.ShopDeliveryDiscount = model.ShopDeliveryDiscount;
+                order.Packingcharge = model.PackingCharge;
+                order.NetTotal = model.Amount;
+                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            if (payment == null)
+            {
+                Payment pay = new Payment();
+                pay.CorporateID = null;
+                pay.Amount = order.NetTotal;
+                pay.PaymentMode = "Cash On Hand";
+                pay.Key = null;
+                pay.ReferenceCode = null;
+                pay.CustomerId = order.CustomerId;
+                pay.CustomerName = order.CustomerName;
+                pay.ShopId = order.ShopId;
+                pay.ShopName = order.ShopName;
+                pay.GSTINNumber = null;
+                pay.OriginalAmount = order.TotalPrice;
+                pay.GSTAmount = order.NetTotal;
+                pay.Currency = "Rupees";
+                pay.CountryName = null;
+                pay.PaymentResult = "pending";
+                pay.Credits = "N/A";
+                pay.OrderNumber = order.OrderNumber;
+                pay.PaymentCategoryType = 0;
+                pay.CreditType = 2;
+                pay.ConvenientCharge = order.Convinenientcharge;
+                pay.PackingCharge = order.Packingcharge;
+                pay.DeliveryCharge = order.DeliveryCharge;
+                pay.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
+                pay.RefundStatus = 1;
+                pay.Status = 0;
+                pay.UpdatedBy = order.UpdatedBy;
+                pay.CreatedBy = order.CreatedBy;
+                pay.DateEncoded = order.DateEncoded;
+                pay.DateUpdated = order.DateUpdated;
+                db.Payments.Add(pay);
                 db.SaveChanges();
             }
             
+            return RedirectToAction("OrderMissed");
+        }
+
+        public ActionResult OnlinePaymentUpdate(int orderno)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var cart = db.Orders.FirstOrDefault(i => i.OrderNumber == orderno);
+            var shop = db.Shops.FirstOrDefault(i => i.Id == cart.ShopId && i.Status == 0);
+            var model = new OrderMissedListViewModel();
+            model.OrderNumber = cart.OrderNumber;
+            model.Amount = cart.NetTotal;
+            model.TotalPrice = cart.TotalPrice;
+            model.PackingCharge = db.Bills.Where(i => i.ShopId == cart.ShopId && i.NameOfBill == 1 && i.Status == 0).Select(i => i.PackingCharge).FirstOrDefault();
+
+            // Gross Delivery Charge
+            var Distance = (((Math.Acos(Math.Sin((shop.Latitude * Math.PI / 180)) * Math.Sin((cart.Latitude * Math.PI / 180)) + Math.Cos((shop.Latitude * Math.PI / 180)) * Math.Cos((cart.Latitude * Math.PI / 180))
+                 * Math.Cos(((shop.Longitude - cart.Longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000;
+            var deliverybill = db.Bills.Where(i => i.ShopId == cart.ShopId && i.NameOfBill == 0 && i.DeliveryRateSet == 0 && i.Status == 0).FirstOrDefault();
+            if (Distance < 5)
+            {
+                model.GrossDeliveryCharge = deliverybill.DeliveryChargeKM;
+            }
+            else
+            {
+                var dist = Distance - 5;
+                var amount = dist * deliverybill.DeliveryChargeOneKM;
+                model.GrossDeliveryCharge = deliverybill.DeliveryChargeKM + amount;
+            }
+            model.ShopDeliveryDiscount = model.TotalPrice * (deliverybill.DeliveryChargeCustomer / 100);
+            model.NetDeliveryCharge = model.GrossDeliveryCharge - model.ShopDeliveryDiscount;
+            model.Distance = Distance.ToString("0.##");
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult OnlinePaymentUpdate(OrderMissedListViewModel model)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var order = db.Orders.FirstOrDefault(i => i.OrderNumber == model.OrderNumber);
+            var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == model.OrderNumber);
+            var paymentData = db.PaymentsDatas.FirstOrDefault(i => i.OrderNumber == model.OrderNumber);
+            var perOrderAmount = db.PlatFormCreditRates.Where(s => s.Status == 0).FirstOrDefault();
+            if (order != null)
+            {
+                order.Status = 2;
+                order.UpdatedBy = user.Name;
+                order.DateUpdated = DateTime.Now;
+                order.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
+                order.NetDeliveryCharge = model.NetDeliveryCharge;
+                order.DeliveryCharge = model.GrossDeliveryCharge;
+                order.ShopDeliveryDiscount = model.ShopDeliveryDiscount;
+                order.Packingcharge = model.PackingCharge;
+                order.NetTotal = model.Amount;
+                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
             if (payment == null)
             {
                 Payment pay = new Payment();
@@ -188,21 +298,21 @@ namespace ShopNow.Controllers
                 pay.PaymentMode = "Online Payment";
                 pay.Key = "Razor";
                 pay.Status = 0;
-                pay.DateEncoded = cart.DateEncoded;
-                pay.DateUpdated = cart.DateUpdated;
+                pay.DateEncoded = order.DateEncoded;
+                pay.DateUpdated = order.DateUpdated;
                 pay.ReferenceCode = model.PaymentId;
-                pay.CustomerId = cart.CustomerId;
-                pay.CustomerName = cart.CustomerName;
-                pay.ShopId = cart.ShopId;
-                pay.ShopName = cart.ShopName;
-                pay.OriginalAmount = cart.TotalPrice;
+                pay.CustomerId = order.CustomerId;
+                pay.CustomerName = order.CustomerName;
+                pay.ShopId = order.ShopId;
+                pay.ShopName = order.ShopName;
+                pay.OriginalAmount = order.TotalPrice;
                 pay.GSTAmount = model.Amount;
                 pay.Currency = "Rupees";
                 pay.PaymentResult = "success";
                 pay.Credits = "N/A";
-                pay.UpdatedBy = cart.UpdatedBy;
-                pay.CreatedBy = cart.CreatedBy;
-                pay.OrderNumber = cart.OrderNumber;
+                pay.UpdatedBy = order.UpdatedBy;
+                pay.CreatedBy = order.CreatedBy;
+                pay.OrderNumber = order.OrderNumber;
                 pay.PaymentCategoryType = 0;
                 pay.CreditType = 2;
                 pay.PackingCharge = model.PackingCharge;
@@ -231,7 +341,6 @@ namespace ShopNow.Controllers
 
             return RedirectToAction("OrderMissed");
         }
-
         public ActionResult StatusUpdate(int orderno)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);

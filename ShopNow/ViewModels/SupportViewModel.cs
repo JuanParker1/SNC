@@ -141,7 +141,7 @@ namespace ShopNow.ViewModels
     }
     public class OrderMissedListViewModel
     {
-        public double CartTotalPrice { get; set; }
+        public double TotalPrice { get; set; }
         public int OrderNumber { get; set; }
         public string ShopName { get; set; }
         public string Distance { get; set; }
@@ -167,16 +167,14 @@ namespace ShopNow.ViewModels
         public List<OrderMissedList> List { get; set; }
         public class OrderMissedList
         {
-            public int SlNo { get; set; }
-            public double OrderNumber { get; set; }
             public long Id { get; set; }
+            public double OrderNumber { get; set; }
             public System.DateTime DateEncoded { get; set; }
-            public bool HasPayment { get; set; }
             public string PaymentMode { get; set; }
             public string PhoneNumber { get; set; }
             public string ShopName { get; set; }
             public string Amount { get; set; }
-
+            public double TotalPrice { get; set; }
         }
     }
 }
