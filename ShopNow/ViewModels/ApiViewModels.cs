@@ -563,6 +563,15 @@ namespace ShopNow.ViewModels
         public string ImagePath3 { get; set; }
         public string ImagePath4 { get; set; }
         public string ImagePath5 { get; set; }
+        public int Status { get; set; }
+        public bool Customisation { get; set; }
+        public bool IsOnline { get; set; }
+        public TimeSpan? NextOnTime { get; set; }
+        public double Size { get; set; }
+        public double Weight { get; set; }
+        public bool IsPreorder { get; set; }
+        public int PreorderHour { get; set; }
+        public int OfferQuantityLimit { get; set; }
 
         public List<SimilarProductsListItem> SimilarProductsListItems { get; set; }
         public class SimilarProductsListItem

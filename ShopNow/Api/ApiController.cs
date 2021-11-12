@@ -5151,9 +5151,9 @@ namespace ShopNow.Controllers
             if (product != null)
             {
 
-                var shid = db.Shops.FirstOrDefault(s => s.Id == product.ShopId);
+                var shop = db.Shops.FirstOrDefault(s => s.Id == product.ShopId);
                 string defaultImagePath = "../../assets/images/noimageres.svg";
-                if (shid.ShopCategoryId == 4)
+                if (shop.ShopCategoryId == 4)
                     defaultImagePath = "../../assets/images/1.5-cm-X-1.5-cm.png";
 
                 _mapper.Map(product, model);
@@ -5165,13 +5165,15 @@ namespace ShopNow.Controllers
                     model.ImagePath3 = ((!string.IsNullOrEmpty(masterProduct.ImagePath3)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + masterProduct.ImagePath3.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : null);
                     model.ImagePath4 = ((!string.IsNullOrEmpty(masterProduct.ImagePath4)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + masterProduct.ImagePath4.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : null);
                     model.ImagePath5 = ((!string.IsNullOrEmpty(masterProduct.ImagePath5)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + masterProduct.ImagePath5.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : null);
-                    model.CategoryName = db.Categories.FirstOrDefault(i => i.Id == product.CategoryId)?.Name;
+                    model.CategoryName = shop.ShopCategoryId == 2 ? db.NextSubCategories.FirstOrDefault(i => i.Id == masterProduct.NextSubCategoryId)?.Name : db.Categories.FirstOrDefault(i => i.Id == product.CategoryId)?.Name;
                     model.ColorCode = masterProduct.ColorCode;
                     model.DrugCompoundDetailIds = masterProduct.DrugCompoundDetailIds;
                     model.DrugCompoundDetailName = masterProduct.DrugCompoundDetailName;
                     model.LongDescription = masterProduct.LongDescription;
                     model.ShortDescription = masterProduct.ShortDescription;
                     model.BrandName = masterProduct.BrandName;
+                    model.Size = masterProduct.SizeLWH;
+                    model.Weight = masterProduct.Weight;
                 }
             }
             model.SimilarProductsListItems = db.Products.Where(i => i.MasterProductId == product.MasterProductId)
