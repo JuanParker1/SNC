@@ -35,7 +35,7 @@ namespace ShopNow.Controllers
     public class ApiController : Controller
     {
         private sncEntities db = new sncEntities();
-        
+
 
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
@@ -102,6 +102,9 @@ namespace ShopNow.Controllers
                 config.CreateMap<Models.Order, OrderDetailsApiViewModel>();
                 config.CreateMap<SavePrescriptionViewModel, CustomerPrescription>();
                 config.CreateMap<OrderCreateViewModel.ListItem.AddOnListItem, OrderItemAddon>();
+
+                config.CreateMap<Product, ProductDetailsApiViewModel>();
+
             });
 
             _mapper = _mapperConfiguration.CreateMapper();
@@ -581,7 +584,7 @@ namespace ShopNow.Controllers
             if (shid.ShopCategoryId == 4)
                 defaultImagePath = "../../assets/images/1.5-cm-X-1.5-cm.png";
             var model = db.Products.Where(i => (i.Price != 0 || i.MenuPrice != 0) && i.ShopId == shid.Id && (i.Status == 0 || i.Status == 1))
-                .Join(db.MasterProducts.Where(i=> (str != "" ? i.Name.ToLower().StartsWith(str.ToLower()) : true)), p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+                .Join(db.MasterProducts.Where(i => (str != "" ? i.Name.ToLower().StartsWith(str.ToLower()) : true)), p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
                         .Select(i => new ActiveProductListViewModel.ProductList
                         {
                             Id = i.p.Id,
@@ -704,7 +707,7 @@ namespace ShopNow.Controllers
                 mode = 2;
             if (totalWeight > 40 || liters > 120)
                 mode = 3;
-            var deliveryCharge = db.DeliveryCharges.FirstOrDefault(i => i.Type == shop.DeliveryType && i.TireType == shop.DeliveryTierType && i.VehicleType == mode && i.Status==0);
+            var deliveryCharge = db.DeliveryCharges.FirstOrDefault(i => i.Type == shop.DeliveryType && i.TireType == shop.DeliveryTierType && i.VehicleType == mode && i.Status == 0);
             if (deliveryCharge != null)
             {
                 model.DeliveryChargeKM = deliveryCharge.ChargeUpto5Km;
@@ -713,7 +716,7 @@ namespace ShopNow.Controllers
                 model.Distance = 5;
             }
 
-            var billingCharge = db.BillingCharges.FirstOrDefault(i => i.ShopId == shopId && i.Status==0);
+            var billingCharge = db.BillingCharges.FirstOrDefault(i => i.ShopId == shopId && i.Status == 0);
             if (billingCharge != null)
             {
                 model.BillingId = billingCharge.Id;
@@ -978,25 +981,25 @@ namespace ShopNow.Controllers
                     db.SaveChanges();
                 }
 
-                    if (model.CreditType == 0 || model.CreditType == 1)
-                    {
-                        payment.PaymentCategoryType = 1;
-                        payment.Credits = model.CreditType == 0 ? "Platform Credits" : "Delivery Credits";
-                        //payment.CreditType = model.CreditType;
-                    }
-                    else
-                    {
-                        payment.PaymentCategoryType = 0;
-                        payment.Credits = "N/A";
-                    }
-                    
-                    payment.DateEncoded = DateTime.Now;
-                    payment.DateUpdated = DateTime.Now;
-                    payment.Status = 0;
-                    payment.RefundStatus = 1;
-                    db.Payments.Add(payment);
-                    db.SaveChanges();
-                
+                if (model.CreditType == 0 || model.CreditType == 1)
+                {
+                    payment.PaymentCategoryType = 1;
+                    payment.Credits = model.CreditType == 0 ? "Platform Credits" : "Delivery Credits";
+                    //payment.CreditType = model.CreditType;
+                }
+                else
+                {
+                    payment.PaymentCategoryType = 0;
+                    payment.Credits = "N/A";
+                }
+
+                payment.DateEncoded = DateTime.Now;
+                payment.DateUpdated = DateTime.Now;
+                payment.Status = 0;
+                payment.RefundStatus = 1;
+                db.Payments.Add(payment);
+                db.SaveChanges();
+
                 if (payment.Id != 0)
                 {
                     if (model.WalletAmount != 0)
@@ -1032,7 +1035,7 @@ namespace ShopNow.Controllers
                         }
                     }
 
-                        return Json(new { message = "Successfully Added to Payment!", Details = model });
+                    return Json(new { message = "Successfully Added to Payment!", Details = model });
                 }
                 else
                 {
@@ -1094,7 +1097,7 @@ namespace ShopNow.Controllers
             {
                 var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
                 var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
-                if ((shopCredits.PlatformCredit < 26 && shopCredits.DeliveryCredit < 67) && shop.IsTrail ==false)
+                if ((shopCredits.PlatformCredit < 26 && shopCredits.DeliveryCredit < 67) && shop.IsTrail == false)
                 {
                     //Shop DeActivate
                     shop.Status = 6;
@@ -1121,16 +1124,16 @@ namespace ShopNow.Controllers
                         db.SaveChanges();
                     }
                     //if (model.ReferralNumber == string.Empty)
-                   // {
+                    // {
                     //    customer.IsReferred = true;
 
                     //}
-                  //  else
-                   // {
-                       // customer.IsReferred = false;
-                        
-                   // }
-                    
+                    //  else
+                    // {
+                    // customer.IsReferred = false;
+
+                    // }
+
                     order.OrderNumber = Convert.ToInt32(model.OrderNumber);
                     order.ShopId = shop.Id;
                     order.ShopName = shop.Name;
@@ -1276,7 +1279,7 @@ namespace ShopNow.Controllers
             }
         }
 
-        
+
         public JsonResult GetShopDeliveredOrders(int shopId, int status, int page = 1, int pageSize = 5)
         {
             db.Configuration.ProxyCreationEnabled = false;
@@ -1313,7 +1316,7 @@ namespace ShopNow.Controllers
                      TotalProduct = i.o.o.TotalProduct,
                      TotalQuantity = i.o.o.TotalQuantity,
                      NetTotal = i.o.o.NetTotal,
-                     WalletAmount= i.o.o.WalletAmount,
+                     WalletAmount = i.o.o.WalletAmount,
                      WaitingCharge = i.o.o.WaitingCharge,
                      WaitingRemark = i.o.o.WaitingRemark,
                      RefundAmount = i.o.p.RefundAmount,
@@ -1710,7 +1713,7 @@ namespace ShopNow.Controllers
             order.DeliveredTime = DateTime.Now;
             db.Entry(order).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
-            
+
             //Reducing Platformcredits
             var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == orderNo);
             var shop = db.Shops.FirstOrDefault(i => i.Id == order.ShopId);
@@ -1720,11 +1723,11 @@ namespace ShopNow.Controllers
             db.SaveChanges();
 
             var customerDetails = (from c in db.Customers
-                            where c.Id == order.CustomerId
-                            //select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                            select c).FirstOrDefault();
+                                   where c.Id == order.CustomerId
+                                   //select c.FcmTocken ?? "").FirstOrDefault().ToString();
+                                   select c).FirstOrDefault();
 
-            if(customerDetails.IsReferred == false && !string.IsNullOrEmpty(customerDetails.ReferralNumber))
+            if (customerDetails.IsReferred == false && !string.IsNullOrEmpty(customerDetails.ReferralNumber))
             {
                 //customerDetails.Id = customerDetails.Id;
                 customerDetails.IsReferred = true;
@@ -1867,7 +1870,7 @@ namespace ShopNow.Controllers
                }).OrderByDescending(i => i.DateUpdated).ToList();
             return Json(model, JsonRequestBehavior.AllowGet);
         }
-       
+
         public JsonResult GetShopReAssignOrders(int shopId, int page = 1, int pageSize = 5)
         {
             var model = new CartAcceptListApiViewModel();
@@ -1875,7 +1878,7 @@ namespace ShopNow.Controllers
                  .GroupJoin(db.OrderItems, o => o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
                 .Join(db.Payments.Where(i => i.PaymentResult == "success" || i.PaymentMode == "Cash On Hand"), c => c.o.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Join(db.Shops, py => py.c.o.ShopId, s => s.Id, (py, s) => new { py, s })
-                   //.AsEnumerable()
+               //.AsEnumerable()
                .Select(i => new CartAcceptListApiViewModel.CartList
                {
                    Id = i.py.c.o.Id,
@@ -1935,73 +1938,73 @@ namespace ShopNow.Controllers
 
             //if (mode == 0)
             //{
-                model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && (mode==0? i.Status == 2 :(i.Status==3 || i.Status==4 || i.Status==8)))
-                 .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
-                 .GroupJoin(db.OrderItems, o => o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
-                 .Select(i => new GetAllOrderListViewModel.OrderList
-                 {
-                     Convinenientcharge = i.o.o.Convinenientcharge,
-                     CustomerId = i.o.o.CustomerId,
-                     CustomerName = i.o.o.CustomerName,
-                     CustomerPhoneNumber = i.o.o.CustomerPhoneNumber,
+            model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && (mode == 0 ? i.Status == 2 : (i.Status == 3 || i.Status == 4 || i.Status == 8)))
+             .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
+             .GroupJoin(db.OrderItems, o => o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
+             .Select(i => new GetAllOrderListViewModel.OrderList
+             {
+                 Convinenientcharge = i.o.o.Convinenientcharge,
+                 CustomerId = i.o.o.CustomerId,
+                 CustomerName = i.o.o.CustomerName,
+                 CustomerPhoneNumber = i.o.o.CustomerPhoneNumber,
                      //DateStr = i.o.o.DateEncoded.ToString("dd-MMM-yyyy HH:mm"),
                      DateEncoded = i.o.o.DateEncoded,
-                     DeliveryAddress = i.o.o.DeliveryAddress,
-                     DeliveryBoyId = i.o.o.DeliveryBoyId,
-                     DeliveryBoyName = i.o.o.DeliveryBoyName,
-                     DeliveryBoyPhoneNumber = i.o.o.DeliveryBoyPhoneNumber,
-                     DeliveryCharge = i.o.o.DeliveryCharge,
-                     Id = i.o.o.Id,
-                     NetDeliveryCharge = i.o.o.NetDeliveryCharge,
-                     OrderNumber = i.o.o.OrderNumber,
-                     Packingcharge = i.o.o.Packingcharge,
-                     PenaltyAmount = i.o.o.PenaltyAmount,
-                     PenaltyRemark = i.o.o.PenaltyRemark,
-                     ShopDeliveryDiscount = i.o.o.ShopDeliveryDiscount,
-                     ShopId = i.o.o.ShopId,
-                     ShopName = i.o.o.ShopName,
-                     ShopOwnerPhoneNumber = i.o.o.ShopOwnerPhoneNumber,
-                     ShopPhoneNumber = i.o.o.ShopPhoneNumber,
-                     Status = i.o.o.Status,
-                     TotalPrice = i.o.o.TotalPrice,
-                     TotalProduct = i.o.o.TotalProduct,
-                     TotalQuantity = i.o.o.TotalQuantity,
-                     NetTotal = i.o.o.NetTotal,
-                     WaitingCharge = i.o.o.WaitingCharge,
-                     WaitingRemark = i.o.o.WaitingRemark,
-                     RefundAmount = i.o.p.RefundAmount,
-                     RefundRemark = i.o.p.RefundRemark,
-                     PaymentMode = i.o.p.PaymentMode,
-                     WalletAmount = i.o.o.WalletAmount,
-                     IsPreorder = i.o.o.IsPreorder,
-                     PreorderDeliveryDateTime = i.o.o.PreorderDeliveryDateTime,
+                 DeliveryAddress = i.o.o.DeliveryAddress,
+                 DeliveryBoyId = i.o.o.DeliveryBoyId,
+                 DeliveryBoyName = i.o.o.DeliveryBoyName,
+                 DeliveryBoyPhoneNumber = i.o.o.DeliveryBoyPhoneNumber,
+                 DeliveryCharge = i.o.o.DeliveryCharge,
+                 Id = i.o.o.Id,
+                 NetDeliveryCharge = i.o.o.NetDeliveryCharge,
+                 OrderNumber = i.o.o.OrderNumber,
+                 Packingcharge = i.o.o.Packingcharge,
+                 PenaltyAmount = i.o.o.PenaltyAmount,
+                 PenaltyRemark = i.o.o.PenaltyRemark,
+                 ShopDeliveryDiscount = i.o.o.ShopDeliveryDiscount,
+                 ShopId = i.o.o.ShopId,
+                 ShopName = i.o.o.ShopName,
+                 ShopOwnerPhoneNumber = i.o.o.ShopOwnerPhoneNumber,
+                 ShopPhoneNumber = i.o.o.ShopPhoneNumber,
+                 Status = i.o.o.Status,
+                 TotalPrice = i.o.o.TotalPrice,
+                 TotalProduct = i.o.o.TotalProduct,
+                 TotalQuantity = i.o.o.TotalQuantity,
+                 NetTotal = i.o.o.NetTotal,
+                 WaitingCharge = i.o.o.WaitingCharge,
+                 WaitingRemark = i.o.o.WaitingRemark,
+                 RefundAmount = i.o.p.RefundAmount,
+                 RefundRemark = i.o.p.RefundRemark,
+                 PaymentMode = i.o.p.PaymentMode,
+                 WalletAmount = i.o.o.WalletAmount,
+                 IsPreorder = i.o.o.IsPreorder,
+                 PreorderDeliveryDateTime = i.o.o.PreorderDeliveryDateTime,
                      //OrderItemList = i.oi.ToList(),
                      OrderItemLists = i.oi.Select(a => new GetAllOrderListViewModel.OrderList.OrderItemList
+                 {
+                     AddOnType = a.AddOnType,
+                     BrandId = a.BrandId,
+                     BrandName = a.BrandName,
+                     CategoryId = a.CategoryId,
+                     CategoryName = a.CategoryName,
+                     HasAddon = a.HasAddon,
+                     ImagePath = a.ImagePath,
+                     OrdeNumber = a.OrdeNumber,
+                     OrderId = a.OrderId,
+                     Price = a.Price,
+                     ProductId = a.ProductId,
+                     ProductName = a.ProductName,
+                     Quantity = a.Quantity,
+                     UnitPrice = a.UnitPrice,
+                     OrderItemAddonLists = db.OrderItemAddons.Where(b => b.OrderItemId == a.Id).Select(b => new GetAllOrderListViewModel.OrderList.OrderItemList.OrderItemAddonList
                      {
-                         AddOnType = a.AddOnType,
-                         BrandId = a.BrandId,
-                         BrandName = a.BrandName,
-                         CategoryId = a.CategoryId,
-                         CategoryName = a.CategoryName,
-                         HasAddon = a.HasAddon,
-                         ImagePath = a.ImagePath,
-                         OrdeNumber = a.OrdeNumber,
-                         OrderId = a.OrderId,
-                         Price = a.Price,
-                         ProductId = a.ProductId,
-                         ProductName = a.ProductName,
-                         Quantity = a.Quantity,
-                         UnitPrice = a.UnitPrice,
-                         OrderItemAddonLists = db.OrderItemAddons.Where(b => b.OrderItemId == a.Id).Select(b => new GetAllOrderListViewModel.OrderList.OrderItemList.OrderItemAddonList
-                         {
-                             AddonName = b.AddonName,
-                             AddonPrice = b.AddonPrice,
-                             CrustName = b.CrustName,
-                             PortionName = b.PortionName,
-                             PortionPrice = b.PortionPrice
-                         }).ToList()
+                         AddonName = b.AddonName,
+                         AddonPrice = b.AddonPrice,
+                         CrustName = b.CrustName,
+                         PortionName = b.PortionName,
+                         PortionPrice = b.PortionPrice
                      }).ToList()
-                 }).OrderByDescending(i=>i.Id).ToList();
+                 }).ToList()
+             }).OrderByDescending(i => i.Id).ToList();
             //}
             //else
             //{
@@ -2101,7 +2104,7 @@ namespace ShopNow.Controllers
         public JsonResult GetShopAllOrders(int shopId, int page = 1, int pageSize = 5)
         {
             db.Configuration.ProxyCreationEnabled = false;
-            
+
             var model = new GetAllOrderListViewModel();
             model.OrderLists = db.Orders.Where(i => i.ShopId == shopId && (i.Status == 3 || i.Status == 4 || i.Status == 5 || i.Status == 8))
                  .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
@@ -2493,18 +2496,18 @@ namespace ShopNow.Controllers
                 previousPage,
                 nextPage
             };
-           
+
             return Json(new { Page = paginationMetadata, items }, JsonRequestBehavior.AllowGet);
         }
 
-        public  class Productss
+        public class Productss
         {
             public long Id { get; set; }
             public string Name { get; set; }
             public long MasterProductId { get; set; }
             public int ShopId { get; set; }
             public int ShopCategoryId { get; set; }
-   
+
             public double Price { get; set; }
             public int Qty { get; set; }
             public int ProductTypeId { get; set; }
@@ -2543,12 +2546,12 @@ namespace ShopNow.Controllers
             List<Products1> creatlisdt = new List<Products1>();
             Products1 varProduct = new Products1();
             //varProduct.Id = 0;
-            
+
             varProduct.MasterProductId = 0;
             varProduct.ShopId = 212;
-           // varProduct.ShopName = "anna";
+            // varProduct.ShopName = "anna";
             varProduct.ShopCategoryId = 4;
-           // varProduct.ShopCategoryName = "veg";
+            // varProduct.ShopCategoryName = "veg";
             varProduct.GTIN = "";
             varProduct.UPC = "";
             varProduct.GTIN14 = "";
@@ -2556,7 +2559,7 @@ namespace ShopNow.Controllers
             varProduct.ISBN = "";
             varProduct.Price = 10;
             varProduct.Qty = 2;
-            varProduct.ProductTypeName= "ytesg";
+            varProduct.ProductTypeName = "ytesg";
             varProduct.ProductTypeId = 0;
             varProduct.MinSelectionLimit = 0;
             varProduct.MaxSelectionLimit = 0;
@@ -2592,9 +2595,9 @@ namespace ShopNow.Controllers
 
             return Json(new { Page = "" }, JsonRequestBehavior.AllowGet);
         }
-            public JsonResult GetP(string str = "")
+        public JsonResult GetP(string str = "")
         {
-            
+
             sncEntities context = new sncEntities();
 
             var apiSettings = db.ApiSettings.Where(m => m.Status == 0).ToList();
@@ -2612,10 +2615,10 @@ namespace ShopNow.Controllers
                         s = client.DownloadString(Url);
                     }
 
-                    var lst = db.Products1.Where(m => m.ShopId == api.ShopId).Select(i => new 
+                    var lst = db.Products1.Where(m => m.ShopId == api.ShopId).Select(i => new
                     {
                         ItemId = i.ItemId,
-                        Id=i.Id
+                        Id = i.Id
                     }).ToList();
                     List<Products1> updateList = new List<Products1>();
                     List<Products1> createList = new List<Products1>();
@@ -2627,12 +2630,12 @@ namespace ShopNow.Controllers
                 GetDiscoutCatecories:
                     lstDiscount = db.DiscountCategories1.Where(m => m.ShopId == api.ShopId).ToList();
 
-                    
 
-                        dynamic config = JsonConvert.DeserializeObject<ExpandoObject>(s, new ExpandoObjectConverter());
+
+                    dynamic config = JsonConvert.DeserializeObject<ExpandoObject>(s, new ExpandoObjectConverter());
                     foreach (var pro in ((IEnumerable<dynamic>)config.items).Where(t => t.status == "R"))
                     {
-                       
+
                         varProduct.ItemId = Convert.ToInt32(pro.itemId);
                         varProduct.Name = pro.itemName;
                         varProduct.IBarU = Convert.ToInt32(pro.iBarU);
@@ -2711,7 +2714,7 @@ namespace ShopNow.Controllers
                             }
                             else
                             {
-                                var catId = lstDiscount.Where(c => c.ShopId == api.ShopId && c.Name == varProduct.DiscountCategoryName).Select(c=>c.Id).ToList();
+                                var catId = lstDiscount.Where(c => c.ShopId == api.ShopId && c.Name == varProduct.DiscountCategoryName).Select(c => c.Id).ToList();
                                 varProduct.DiscountCategoryId = Convert.ToInt32(catId[0]);
                             }
 
@@ -2752,7 +2755,7 @@ namespace ShopNow.Controllers
                                 OutletId = varProduct.OutletId,
                                 DateUpdated = DateTime.Now,
                                 DiscountCategoryName = varProduct.DiscountCategoryName
-                            }) ;
+                            });
                             //update
                         }
                         else
@@ -2761,9 +2764,9 @@ namespace ShopNow.Controllers
                             long id = 0;
                             createList.Add(new Products1
                             {
-                               ProductTypeId = 0,
+                                ProductTypeId = 0,
                                 MinSelectionLimit = 0,
-                               MaxSelectionLimit = 0,
+                                MaxSelectionLimit = 0,
                                 Customisation = false,
                                 Percentage = 0,
                                 DiscountCategoryId = 0,
@@ -2791,15 +2794,15 @@ namespace ShopNow.Controllers
                                 AppliesOnline = varProduct.AppliesOnline,
                                 OutletId = varProduct.OutletId,
                                 DateUpdated = DateTime.Now,
-                                DiscountCategoryName= varProduct.DiscountCategoryName
+                                DiscountCategoryName = varProduct.DiscountCategoryName
                             });
                             //createList.Add(varProduct);
                         }
 
                     }
-                      db.BulkInsert(createList);
-                    if(updateList.Count>0)
-                      db.BulkUpdate(updateList);
+                    db.BulkInsert(createList);
+                    if (updateList.Count > 0)
+                        db.BulkUpdate(updateList);
                     //db.Products1.AddRange(createList);
                     //db.BulkSaveChanges();
                 }
@@ -2900,11 +2903,11 @@ namespace ShopNow.Controllers
             model.ImageFSSAIPath = ((!string.IsNullOrEmpty(model.ImageFSSAIPath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + model.ImageFSSAIPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/notavailable.png");
             model.ImagePanPath = ((!string.IsNullOrEmpty(model.ImagePanPath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + model.ImagePanPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/notavailable.png");
             model.ImageGSTINPath = ((!string.IsNullOrEmpty(model.ImageGSTINPath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + model.ImageGSTINPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/notavailable.png");
-            model.ImageDrugPath = ((!string.IsNullOrEmpty(model.ImageDrugPath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + model.ImageDrugPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/notavailable.png"); 
+            model.ImageDrugPath = ((!string.IsNullOrEmpty(model.ImageDrugPath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + model.ImageDrugPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/notavailable.png");
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
-     
+
         public JsonResult GetShopBalanceNotification(int customerId)
         {
             var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == customerId);
@@ -3046,12 +3049,12 @@ namespace ShopNow.Controllers
             return Json(new { message = "Successfully Updated Your Shop Image!", Details = shop });
         }
 
-        public JsonResult GetProductDetails(int id)
-        {
-            var product = db.Products.FirstOrDefault(i => i.Id == id);
-            ProductDetailsViewModel model = _mapper.Map<Product, ProductDetailsViewModel>(product);
-            return Json(model, JsonRequestBehavior.AllowGet);
-        }
+        //public JsonResult GetProductDetails(int id)
+        //{
+        //    var product = db.Products.FirstOrDefault(i => i.Id == id);
+        //    ProductDetailsViewModel model = _mapper.Map<Product, ProductDetailsViewModel>(product);
+        //    return Json(model, JsonRequestBehavior.AllowGet);
+        //}
 
         [HttpPost]
         public JsonResult ProductQuickUpdate(ProductQuickUpdateViewModel model)
@@ -3210,7 +3213,7 @@ namespace ShopNow.Controllers
             }
 
         }
-    
+
 
         public JsonResult GetNearDelivaryBoy(double Latitude, double Longitude)
         {
@@ -3817,7 +3820,7 @@ namespace ShopNow.Controllers
             if (dt == "1")
             {
                 model.List = db.Orders.Where(i => i.Status == 6 && i.DeliveryBoyPhoneNumber == phoneNumber && DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(DateTime.Now) && i.DeliveryOrderPaymentStatus == 0)
-                    .Join(db.Payments.Where(i=>i.PaymentMode != "Online Payment"), c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })                 
+                    .Join(db.Payments.Where(i => i.PaymentMode != "Online Payment"), c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                    .Select(i => new DelivaryCreditAmountApiViewModel.CartList
                    {
                        OrderNumber = i.c.OrderNumber,
@@ -3847,7 +3850,7 @@ namespace ShopNow.Controllers
                 DateTime from1 = DateTime.Parse(from);
                 DateTime to1 = DateTime.Parse(to);
                 model.List = db.Orders.Where(i => i.Status == 6 && i.DeliveryBoyPhoneNumber == phoneNumber && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(from1) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(to1)) && i.DeliveryOrderPaymentStatus == 0)
-                    .Join(db.Payments.Where(i=> i.PaymentMode != "Online Payment"), c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+                    .Join(db.Payments.Where(i => i.PaymentMode != "Online Payment"), c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                    .Select(i => new DelivaryCreditAmountApiViewModel.CartList
                    {
                        OrderNumber = i.c.OrderNumber,
@@ -4072,8 +4075,8 @@ namespace ShopNow.Controllers
             {
                 var d = DateTime.Now.Date.Date;
                 var banners = (from s in db.Banners
-                                        where (s.Status == 0 || s.Status == 6) && s.ShopId == id && (DbFunctions.TruncateTime(s.FromDate) <= DbFunctions.TruncateTime(DateTime.Now) && DbFunctions.TruncateTime(s.Todate) >= DbFunctions.TruncateTime(DateTime.Now))
-                                        select new BannerImages { Bannerpath = (s.BannerPath != null) ? s.BannerPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "", ShopId = s.ShopId, ProductId = s.MasterProductId }).ToList();
+                               where (s.Status == 0 || s.Status == 6) && s.ShopId == id && (DbFunctions.TruncateTime(s.FromDate) <= DbFunctions.TruncateTime(DateTime.Now) && DbFunctions.TruncateTime(s.Todate) >= DbFunctions.TruncateTime(DateTime.Now))
+                               select new BannerImages { Bannerpath = (s.BannerPath != null) ? s.BannerPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "", ShopId = s.ShopId, ProductId = s.MasterProductId }).ToList();
 
                 return banners;
             }
@@ -4214,7 +4217,7 @@ namespace ShopNow.Controllers
                  .AsEnumerable()
                  .Select(i => new ShopApiReportsViewModel.EarningListItem
                  {
-                    // Date = i.Any() ? i.FirstOrDefault().p.DateEncoded.ToString("dd-MMM-yyyy HH:ss") : "",
+                     // Date = i.Any() ? i.FirstOrDefault().p.DateEncoded.ToString("dd-MMM-yyyy HH:ss") : "",
                      DateEncoded = i.FirstOrDefault().p.DateEncoded,
                      Earning = i.Sum(a => a.p.Amount),
                      Paid = GetShopPaidAmount(i.Key.Value, shopId),
@@ -4229,10 +4232,10 @@ namespace ShopNow.Controllers
                 //.Join(db.Shops.Where(i => i.Id == shopId), p => p.ShopId, s => s.Id, (p, s) => new { p, s })
                 .Join(db.Orders.Where(i => i.Status == 6 && i.ShopId == shopId), p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
                 // .Join(db.ShopCharges.Where(i => i.Status == 0), p => p.p.p.OrderNo, sc => sc.OrderNo, (p, sc) => new { p, sc })
-               // .AsEnumerable()
+                // .AsEnumerable()
                 .Select(i => new ShopApiReportsViewModel.RefundListItem
                 {
-                   // Date = i.p.DateEncoded.ToString("dd-MMM-yyyy HH:ss"),
+                    // Date = i.p.DateEncoded.ToString("dd-MMM-yyyy HH:ss"),
                     DateEncoded = i.p.DateEncoded,
                     Earning = i.p.Amount,
                     Refund = i.p.RefundAmount ?? 0,
@@ -4259,7 +4262,7 @@ namespace ShopNow.Controllers
             else
                 return 0;
         }
-        
+
         public JsonResult GetAddonList(long productId)
         {
             var product = db.Products.FirstOrDefault(i => i.Id == productId);
@@ -4312,7 +4315,7 @@ namespace ShopNow.Controllers
                         model.AddonListItems = list.Where(i => i.AddOnType == 3).Select((i, index) => new ApiProductAddonViewModel.AddonListItem
                         {
                             Index = index + 1,
-                            AddonId=i.Id,
+                            AddonId = i.Id,
                             PortionId = i.PortionId,
                             AddonName = i.AddOnItemName,
                             AddonPrice = i.AddOnsPrice,
@@ -4323,7 +4326,7 @@ namespace ShopNow.Controllers
 
                     if (list.FirstOrDefault().AddOnType == 4)
                     {
-                        model.PortionListItems = list.Where(i => i.AddOnType == 4).GroupBy(i => new { i.PortionId,i.CrustId }).Select((i, index) => new ApiProductAddonViewModel.PortionListItem
+                        model.PortionListItems = list.Where(i => i.AddOnType == 4).GroupBy(i => new { i.PortionId, i.CrustId }).Select((i, index) => new ApiProductAddonViewModel.PortionListItem
                         {
                             Index = index + 1,
                             AddonId = i.FirstOrDefault().Id,
@@ -4345,7 +4348,7 @@ namespace ShopNow.Controllers
                             CrustId = i.CrustId
                         }).ToList();
 
-                        model.CrustListItems = list.Where(i => i.AddOnType == 4).GroupBy(i=>i.CrustId).Select((i, index) => new ApiProductAddonViewModel.CrustListItem
+                        model.CrustListItems = list.Where(i => i.AddOnType == 4).GroupBy(i => i.CrustId).Select((i, index) => new ApiProductAddonViewModel.CrustListItem
                         {
                             Index = index + 1,
                             CrustName = i.FirstOrDefault().CrustName,
@@ -4380,11 +4383,11 @@ namespace ShopNow.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetAllOrders(int customerId, int page = 1, int pageSize = 5,int type=0) //1-Live,2-Past
+        public JsonResult GetAllOrders(int customerId, int page = 1, int pageSize = 5, int type = 0) //1-Live,2-Past
         {
             db.Configuration.ProxyCreationEnabled = false;
             var model = new GetAllOrderListViewModel();
-            model.OrderLists = db.Orders.Where(i => i.CustomerId == customerId && (type == 1 ? (i.Status >= 2 && i.Status <= 5) || i.Status == 8 : (i.Status == 6 || i.Status == 7 || i.Status ==9 || i.Status ==10)))
+            model.OrderLists = db.Orders.Where(i => i.CustomerId == customerId && (type == 1 ? (i.Status >= 2 && i.Status <= 5) || i.Status == 8 : (i.Status == 6 || i.Status == 7 || i.Status == 9 || i.Status == 10)))
                  .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
                  .GroupJoin(db.OrderItems, o => o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
                  .Select(i => new GetAllOrderListViewModel.OrderList
@@ -4417,12 +4420,12 @@ namespace ShopNow.Controllers
                      NetTotal = i.o.o.NetTotal,
                      WaitingCharge = i.o.o.WaitingCharge,
                      WaitingRemark = i.o.o.WaitingRemark,
-                     RefundAmount=i.o.p.RefundAmount,
+                     RefundAmount = i.o.p.RefundAmount,
                      RefundRemark = i.o.p.RefundRemark,
                      PaymentMode = i.o.p.PaymentMode,
                      WalletAmount = i.o.o.WalletAmount,
-                     OrderItemLists = i.oi.Select(a=>new GetAllOrderListViewModel.OrderList.OrderItemList {
-                         AddOnType= a.AddOnType,
+                     OrderItemLists = i.oi.Select(a => new GetAllOrderListViewModel.OrderList.OrderItemList {
+                         AddOnType = a.AddOnType,
                          BrandId = a.BrandId,
                          BrandName = a.BrandName,
                          CategoryId = a.CategoryId,
@@ -4438,7 +4441,7 @@ namespace ShopNow.Controllers
                          UnitPrice = a.UnitPrice,
                          ShopId = i.o.o.ShopId,
                          ShopName = i.o.o.ShopName,
-                         OrderItemAddonLists = db.OrderItemAddons.Where(b=>b.OrderItemId == a.Id).Select(b=>new GetAllOrderListViewModel.OrderList.OrderItemList.OrderItemAddonList {
+                         OrderItemAddonLists = db.OrderItemAddons.Where(b => b.OrderItemId == a.Id).Select(b => new GetAllOrderListViewModel.OrderList.OrderItemList.OrderItemAddonList {
                              AddonName = b.AddonName,
                              AddonPrice = b.AddonPrice,
                              CrustName = b.CrustName,
@@ -4446,7 +4449,7 @@ namespace ShopNow.Controllers
                              PortionPrice = b.PortionPrice
                          }).ToList()
                      }).ToList()
-                 }).OrderByDescending(i=>i.DateEncoded).ToList();
+                 }).OrderByDescending(i => i.DateEncoded).ToList();
 
             int count = model.OrderLists.Count();
             int CurrentPage = page;
@@ -4478,12 +4481,12 @@ namespace ShopNow.Controllers
             string query = "SELECT * " +
                                " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and Status = 0  and Latitude != 0 and Longitude != 0";
             var model = new OfferApiListViewModel();
-            model.OfferListItems = db.Offers.ToList().Where(i => i.Status == 0 && i.Type==1) //now only for cart offer
+            model.OfferListItems = db.Offers.ToList().Where(i => i.Status == 0 && i.Type == 1) //now only for cart offer
                 .Join(db.OfferShops, o => o.Id, oShp => oShp.OfferId, (o, oShp) => new { o, oShp })
              .Join(db.Shops.SqlQuery(query,
                  new SqlParameter("Latitude", Latitude),
                  new SqlParameter("Longitude", Longitude)), o => o.oShp.ShopId, s => s.Id, (o, s) => new { o, s })
-                 .GroupBy(i=>i.o.o.Id)
+                 .GroupBy(i => i.o.o.Id)
                 .Select(i => new OfferApiListViewModel.OfferListItem
                 {
                     AmountLimit = i.FirstOrDefault().o.o.AmountLimit,
@@ -4581,7 +4584,7 @@ namespace ShopNow.Controllers
             var model = new CartOfferApiListViewModel();
 
             model.OfferListItems = db.Offers.Where(i => i.Status == 0 && i.Type == 1)
-                .Join(db.OfferShops.Where(i=>i.ShopId == shopId), o => o.Id, oShp => oShp.OfferId, (o, oShp) => new { o, oShp })
+                .Join(db.OfferShops.Where(i => i.ShopId == shopId), o => o.Id, oShp => oShp.OfferId, (o, oShp) => new { o, oShp })
                 .Select(i => new CartOfferApiListViewModel.OfferListItem
                 {
                     AmountLimit = i.o.AmountLimit,
@@ -4640,7 +4643,7 @@ namespace ShopNow.Controllers
 
         public JsonResult GetCheckOffer(int shopId, int customerId, double amount, bool isOnlinePayment, string offerCode)
         {
-           
+
             var offer = db.Offers.FirstOrDefault(i => i.OfferCode == offerCode && i.Status == 0);
             if (offer != null)
             {
@@ -4650,7 +4653,7 @@ namespace ShopNow.Controllers
                     .Join(db.OfferShops.Where(i => i.ShopId == shopId), o => o.Id, oShp => oShp.OfferId, (o, oShp) => new { o, oShp })
                     .Count();
                 if (offercount > 0)
-                    return Json(new { status = true, offerPercentage = offer.Percentage, offerAmountLimit = offer.AmountLimit, discountType = offer.DiscountType,id=offer.Id }, JsonRequestBehavior.AllowGet);
+                    return Json(new { status = true, offerPercentage = offer.Percentage, offerAmountLimit = offer.AmountLimit, discountType = offer.DiscountType, id = offer.Id }, JsonRequestBehavior.AllowGet);
                 else
                     return Json(new { status = false }, JsonRequestBehavior.AllowGet);
             }
@@ -4658,7 +4661,7 @@ namespace ShopNow.Controllers
 
         }
 
-        public JsonResult GetAllAchievements(int customerid=0)
+        public JsonResult GetAllAchievements(int customerid = 0)
         {
             var model = new AchievementApiListViewModel();
             model.AchievementListItems = db.AchievementSettings.Where(i => i.Status == 0).ToList()
@@ -4825,7 +4828,7 @@ namespace ShopNow.Controllers
                 response.ShopIsOnline = shop.IsOnline;
                 response.ShopNextOnTime = shop.NextOnTime;
                 response.ProductListItems = db.Products.AsEnumerable().Where(i => model.ProductListItems.Select(a => a.Id).ToArray().Contains(i.Id))
-                    
+
                     .Select(i => new OldCartResponseViewModel.ProductListItem
                     {
                         Id = i.Id,
@@ -5093,66 +5096,170 @@ namespace ShopNow.Controllers
                     model.ShopRating = shopReview.Sum(l => l.Rating) / model.ShopReview;
                 else
                     model.ShopRating = 0;
-                
-                    model.ItemLists = db.CustomerPrescriptionItems.Where(i => i.CustomerPrescriptionId == prescription.Id)
-                   .Join(db.Products, cp => cp.ProductId, p => p.Id, (cp, p) => new { cp, p })
-                   .Join(db.MasterProducts, p => p.p.MasterProductId, m => m.Id, (p, m) => new { p, m })
-                   .Join(db.Categories, p => p.p.p.CategoryId, c => c.Id, (p, c) => new { p, c })
-                   .Join(db.DiscountCategories, p => p.p.p.p.DiscountCategoryId, dc => dc.Id, (p, dc) => new { p, dc })
-                   .Select(i => new PrescriptionDetailsApiViewModel.ItemList
-                   {
-                       CategoryId = i.p.p.m.CategoryId,
-                       CategoryName = i.p.c.Name,
-                       ImagePath = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
-                       ProductId = i.p.p.p.p.Id,
-                       ProductName = i.p.p.m.Name,
-                       Qty = i.p.p.p.cp.Quantity,
-                       Price = i.p.p.p.p.Price,
-                       Status = i.p.p.p.p.Status,
-                       IsProductOnline = i.p.p.p.p.IsOnline,
-                       IBarU = i.p.p.p.p.IBarU,
-                       ImagePathLarge1 = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
-                       ImagePathLarge2 = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath2)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath2.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
-                       ImagePathLarge3 = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath3)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath3.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
-                       ImagePathLarge4 = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath4)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath4.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
-                       ImagePathLarge5 = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath5)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath5.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
-                       Itemid = i.p.p.p.p.ItemId,
-                       MRP = i.p.p.p.p.MenuPrice,
-                       SalePrice = i.p.p.p.p.Price,
-                       Quantity = i.p.p.p.p.Qty,
-                       ShopId = shop.Id,
-                       ShopName = shop.Name,
-                       DiscountCategoryPercentage = i.dc.Percentage,
-                       Size = i.p.p.m.SizeLWH,
-                       Weight = i.p.p.m.Weight
-                   }).ToList();
-               
+
+                model.ItemLists = db.CustomerPrescriptionItems.Where(i => i.CustomerPrescriptionId == prescription.Id)
+               .Join(db.Products, cp => cp.ProductId, p => p.Id, (cp, p) => new { cp, p })
+               .Join(db.MasterProducts, p => p.p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+               .Join(db.Categories, p => p.p.p.CategoryId, c => c.Id, (p, c) => new { p, c })
+               .Join(db.DiscountCategories, p => p.p.p.p.DiscountCategoryId, dc => dc.Id, (p, dc) => new { p, dc })
+               .Select(i => new PrescriptionDetailsApiViewModel.ItemList
+               {
+                   CategoryId = i.p.p.m.CategoryId,
+                   CategoryName = i.p.c.Name,
+                   ImagePath = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                   ProductId = i.p.p.p.p.Id,
+                   ProductName = i.p.p.m.Name,
+                   Qty = i.p.p.p.cp.Quantity,
+                   Price = i.p.p.p.p.Price,
+                   Status = i.p.p.p.p.Status,
+                   IsProductOnline = i.p.p.p.p.IsOnline,
+                   IBarU = i.p.p.p.p.IBarU,
+                   ImagePathLarge1 = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                   ImagePathLarge2 = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath2)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath2.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                   ImagePathLarge3 = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath3)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath3.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                   ImagePathLarge4 = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath4)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath4.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                   ImagePathLarge5 = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath5)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath5.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                   Itemid = i.p.p.p.p.ItemId,
+                   MRP = i.p.p.p.p.MenuPrice,
+                   SalePrice = i.p.p.p.p.Price,
+                   Quantity = i.p.p.p.p.Qty,
+                   ShopId = shop.Id,
+                   ShopName = shop.Name,
+                   DiscountCategoryPercentage = i.dc.Percentage,
+                   Size = i.p.p.m.SizeLWH,
+                   Weight = i.p.p.m.Weight
+               }).ToList();
+
             }
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpGet]
         public JsonResult GetCheckCustomerProductOffer(int customerid, int productid)
         {
             var banner = db.Banners.FirstOrDefault(i => i.ProductId == productid && i.Status == 0);
             var isAvailable = db.Orders.Where(i => i.CustomerId == customerid && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(banner.FromDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(banner.Todate)))
                 .GroupJoin(db.OrderItems.Where(i => i.ProductId == productid), o => o.Id, oi => oi.OrderId, (o, oi) => new { o, oi }).Any();
-            return Json(new { isAvailable = isAvailable, JsonRequestBehavior.AllowGet });
+            return Json(new { isAvailable = !isAvailable, JsonRequestBehavior.AllowGet });
         }
 
-        //public JsonResult GetMedicalShopDropdownValues(double Latitude, double Longitude)
-        //{
-        //    string query = "SELECT * " +
-        //                       " FROM Shops where(3959 * acos(cos(radians(@Latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@Longitude)) + sin(radians(@Latitude)) * sin(radians(Latitude)))) < 8 and Status = 0  and ShopCategoryId=4  and Latitude != 0 and Longitude != 0";
-        //    var list = db.Shops.SqlQuery(query,
-        //          new SqlParameter("Latitude", Latitude),
-        //          new SqlParameter("Longitude", Longitude))
-        //         .Select(i => new
-        //         {
-        //             id = i.Id,
-        //             name = i.Name
-        //         }).ToList();
-        //    return Json(new { list = list }, JsonRequestBehavior.AllowGet);
-        //}
+        [HttpGet]
+        public JsonResult GetProductDetails(int productid, double latitude, double longitude)
+        {
+            var product = db.Products.FirstOrDefault(i => i.Id == productid);
+            var model = new ProductDetailsApiViewModel();
+            if (product != null)
+            {
+                int nearbydistance = 8;
+                var shop = db.Shops.FirstOrDefault(s => s.Id == product.ShopId);
+                string defaultImagePath = "../../assets/images/noimageres.svg";
+                if (shop.ShopCategoryId == 4)
+                {
+                    defaultImagePath = "../../assets/images/1.5-cm-X-1.5-cm.png";
+                    nearbydistance = 16;
+                }
+
+                _mapper.Map(product, model);
+
+                var masterProduct = db.MasterProducts.FirstOrDefault(i => i.Id == product.MasterProductId);
+                if (masterProduct != null)
+                {
+                    model.ImagePath1 = ((!string.IsNullOrEmpty(masterProduct.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + masterProduct.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : defaultImagePath);
+                    model.ImagePath2 = ((!string.IsNullOrEmpty(masterProduct.ImagePath2)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + masterProduct.ImagePath2.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : null);
+                    model.ImagePath3 = ((!string.IsNullOrEmpty(masterProduct.ImagePath3)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + masterProduct.ImagePath3.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : null);
+                    model.ImagePath4 = ((!string.IsNullOrEmpty(masterProduct.ImagePath4)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + masterProduct.ImagePath4.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : null);
+                    model.ImagePath5 = ((!string.IsNullOrEmpty(masterProduct.ImagePath5)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + masterProduct.ImagePath5.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : null);
+                    model.CategoryName = shop.ShopCategoryId == 2 ? db.NextSubCategories.FirstOrDefault(i => i.Id == masterProduct.NextSubCategoryId)?.Name : db.Categories.FirstOrDefault(i => i.Id == product.CategoryId)?.Name;
+                    model.ColorCode = masterProduct.ColorCode;
+                    model.DrugCompoundDetailIds = masterProduct.DrugCompoundDetailIds;
+                    model.DrugCompoundDetailName = masterProduct.DrugCompoundDetailName;
+                    model.LongDescription = masterProduct.LongDescription;
+                    model.ShortDescription = masterProduct.ShortDescription;
+                    model.BrandName = masterProduct.BrandName;
+                    model.Size = masterProduct.SizeLWH;
+                    model.Weight = masterProduct.Weight;
+                }
+
+
+                string query = "SELECT * " +
+                                   " FROM Shops where(3959 * acos(cos(radians(@latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@longitude)) + sin(radians(@latitude)) * sin(radians(Latitude)))) < " + nearbydistance + " and ShopCategoryId =" + shop.ShopCategoryId + " and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
+                                   " order by IsOnline desc,Adscore desc,Rating desc";
+
+                //model.SimilarProductsListItems = db.Products.Where(i => i.MasterProductId == product.MasterProductId)
+                //    .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+                //    .Join(db.DiscountCategories, p => p.p.DiscountCategoryName, dc => dc.Name, (p, dc) => new { p, dc })
+                //    .Join(db.Shops.SqlQuery(query,new SqlParameter("Latitude", latitude), new SqlParameter("Longitude", longitude)), p => p.p.p.ShopId, s => s.Id, (p, s) => new { p, s })
+                //    .AsEnumerable()
+                //    .Select(i => new ProductDetailsApiViewModel.SimilarProductsListItem
+                //    {
+                //        DiscountPercentage = i.p.p.p.ShopCategoryId != 4 ? i.p.p.p.Percentage : i.p.dc.Percentage,
+                //        MenuPrice = i.p.p.p.MenuPrice,
+                //        Name = i.p.p.m.Name,
+                //        Price = i.p.p.p.Price,
+                //        ShopName = i.p.p.p.ShopName,
+                //        Distance = (((Math.Acos(Math.Sin((i.s.Latitude * Math.PI / 180)) * Math.Sin((latitude * Math.PI / 180)) + Math.Cos((i.s.Latitude * Math.PI / 180)) * Math.Cos((latitude * Math.PI / 180))
+                //     * Math.Cos(((i.s.Longitude - longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000
+                //    }).ToList();
+
+                //var list = db.Shops.SqlQuery(query, new SqlParameter("latitude", latitude), new SqlParameter("longitude", longitude)).ToList();
+                if (shop.ShopCategoryId == 4)
+                {
+                    model.SimilarProductsListItems = db.Shops.SqlQuery(query, new SqlParameter("latitude", latitude), new SqlParameter("longitude", longitude))
+                       .Join(db.Products.Where(i => i.MasterProductId == product.MasterProductId), s => s.Id, p => p.ShopId, (s, p) => new { s, p })
+                           .Join(db.MasterProducts, p => p.p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+                           .Join(db.DiscountCategories, p => p.p.p.DiscountCategoryName, dc => dc.Name, (p, dc) => new { p, dc })
+                           .AsEnumerable()
+                           .Select(i => new ProductDetailsApiViewModel.SimilarProductsListItem
+                           {
+                               DiscountPercentage = i.dc.Percentage,
+                               MenuPrice = i.p.p.p.MenuPrice,
+                               Name = i.p.m.Name,
+                               Price = i.p.p.p.Price,
+                               ShopName = i.p.p.p.ShopName,
+                               Distance = Math.Round((((Math.Acos(Math.Sin((i.p.p.s.Latitude * Math.PI / 180)) * Math.Sin((latitude * Math.PI / 180)) + Math.Cos((i.p.p.s.Latitude * Math.PI / 180)) * Math.Cos((latitude * Math.PI / 180))
+                            * Math.Cos(((i.p.p.s.Longitude - longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000, 2)
+                           }).ToList();
+                }
+                else
+                {
+                    model.SimilarProductsListItems = db.Shops.SqlQuery(query, new SqlParameter("latitude", latitude), new SqlParameter("longitude", longitude))
+                       .Join(db.Products.Where(i => i.MasterProductId == product.MasterProductId), s => s.Id, p => p.ShopId, (s, p) => new { s, p })
+                           .Join(db.MasterProducts, p => p.p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+                           .AsEnumerable()
+                           .Select(i => new ProductDetailsApiViewModel.SimilarProductsListItem
+                           {
+                               DiscountPercentage = i.p.p.Percentage,
+                               MenuPrice = i.p.p.MenuPrice,
+                               Name = i.m.Name,
+                               Price = i.p.p.Price,
+                               ShopName = i.p.p.ShopName,
+                               Distance = Math.Round((((Math.Acos(Math.Sin((i.p.s.Latitude * Math.PI / 180)) * Math.Sin((latitude * Math.PI / 180)) + Math.Cos((i.p.s.Latitude * Math.PI / 180)) * Math.Cos((latitude * Math.PI / 180))
+                            * Math.Cos(((i.p.s.Longitude - longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000, 2)
+                           }).ToList();
+                }
+            }
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult GetCheckDeliveryAddressWithShop(int shopid, double latitude, double longitude)
+        {
+            bool isValid = false;
+            var shop = db.Shops.FirstOrDefault(i => i.Id == shopid);
+            if (shop != null)
+            {
+                int nearbydistance = 8;
+                if (shop.ShopCategoryId == 4)
+                    nearbydistance = 16;
+
+                string query = "SELECT * " +
+                                   " FROM Shops where(3959 * acos(cos(radians(@latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@longitude)) + sin(radians(@latitude)) * sin(radians(Latitude)))) < " + nearbydistance + " and ShopCategoryId =" + shop.ShopCategoryId + " and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
+                                   " order by IsOnline desc,Adscore desc,Rating desc";
+                isValid = db.Shops.SqlQuery(query, new SqlParameter("latitude", latitude), new SqlParameter("longitude", longitude)).Select(i => i.Id).Contains(shopid);
+                
+            }
+            return Json(isValid, JsonRequestBehavior.AllowGet);
+        }
 
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "")
         {
@@ -5160,440 +5267,7 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        //public void UpdateAchievements(int customerId,int orderId)
-        //{
-        //    DateTime achievementStartDateTime = new DateTime(2021, 10, 20);
-        //    var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
-        //    if (customer != null)
-        //    {
-        //        var achievementlist = db.AchievementSettings.Where(i => i.Status == 0).ToList();
-        //        foreach (var item in achievementlist)
-        //        {
-        //            switch (item.CountType)
-        //            {
-        //                case 1:
-        //                    if (item.HasAccept == true)
-        //                    {
-        //                        var customerAcceptedAchievements = db.CustomerAchievements.FirstOrDefault(i => i.Status == 1 && i.CustomerId == customer.Id && i.AchievementId == item.Id);
-        //                        if (customerAcceptedAchievements != null)
-        //                        {
-        //                            if (item.DayLimit > 0)
-        //                            {
-        //                                var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded.AddDays(item.DayLimit)))).Select(i => i.ShopId); 
-        //                                var shopCategoryCount = db.Shops.Where(i => orderListSelectShop.Contains(i.Id)).GroupBy(i => i.ShopCategoryId).Count();
-        //                                if (shopCategoryCount == item.CountValue)
-        //                                {
-        //                                    customer.WalletAmount += item.Amount;
-        //                                    db.Entry(customer).State = EntityState.Modified;
-        //                                    db.SaveChanges();
-
-        //                                    //Wallet History
-        //                                    AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-        //                                }
-        //                            } else
-        //                            {
-        //                                var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Select(i => i.ShopId);
-        //                                var shopCategoryCount = db.Shops.Where(i => orderListSelectShop.Contains(i.Id)).GroupBy(i => i.ShopCategoryId).Count();
-        //                                if (shopCategoryCount == item.CountValue)
-        //                                {
-        //                                    customer.WalletAmount += item.Amount;
-        //                                    db.Entry(customer).State = EntityState.Modified;
-        //                                    db.SaveChanges();
-
-        //                                    //Wallet History
-        //                                    AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-        //                                }
-        //                            }
-                                    
-        //                        }
-        //                    }
-        //                    else {
-        //                        if (item.DayLimit > 0)
-        //                        {
-        //                            var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementStartDateTime.AddDays(item.DayLimit)))).Select(i => i.ShopId);
-        //                            var shopCategoryCount = db.Shops.Where(i => orderListSelectShop.Contains(i.Id)).GroupBy(i => i.ShopCategoryId).Count();
-        //                            if (shopCategoryCount == item.CountValue)
-        //                            {
-        //                                customer.WalletAmount += item.Amount;
-        //                                db.Entry(customer).State = EntityState.Modified;
-        //                                db.SaveChanges();
-        //                                //Wallet History
-        //                                AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-        //                            }
-        //                        }
-        //                        else
-        //                        {
-        //                            var orderListSelectShop = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Select(i => i.ShopId);
-        //                            var shopCategoryCount = db.Shops.Where(i => orderListSelectShop.Contains(i.Id)).GroupBy(i => i.ShopCategoryId).Count();
-        //                            if (shopCategoryCount == item.CountValue)
-        //                            {
-        //                                customer.WalletAmount += item.Amount;
-        //                                db.Entry(customer).State = EntityState.Modified;
-        //                                db.SaveChanges();
-        //                                //Wallet History
-        //                                AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-        //                            }
-        //                        }
-        //                    }
-        //                    break;
-        //                case 2:
-        //                    if (item.HasAccept == true)
-        //                    {
-        //                        var customerAcceptedAchievements = db.CustomerAchievements.FirstOrDefault(i => i.Status == 1 && i.CustomerId == customer.Id && i.AchievementId == item.Id);
-        //                        if (customerAcceptedAchievements != null)
-        //                        {
-        //                            if (item.DayLimit > 0)
-        //                            {
-        //                                var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded.AddDays(item.DayLimit)))).GroupBy(i => i.ShopId).Count();
-        //                                if (orderListShopCount == item.CountValue)
-        //                                {
-        //                                    customer.WalletAmount += item.Amount;
-        //                                    db.Entry(customer).State = EntityState.Modified;
-        //                                    db.SaveChanges();
-
-        //                                    //Wallet History
-        //                                    AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-        //                                }
-        //                            }
-        //                            else
-        //                            {
-        //                                var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).GroupBy(i => i.ShopId).Count();
-        //                                if (orderListShopCount == item.CountValue)
-        //                                {
-        //                                    customer.WalletAmount += item.Amount;
-        //                                    db.Entry(customer).State = EntityState.Modified;
-        //                                    db.SaveChanges();
-
-        //                                    //Wallet History
-        //                                    AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-        //                                }
-        //                            }
-
-        //                        }
-        //                    }
-        //                    else
-        //                    {
-        //                        if (item.DayLimit > 0)
-        //                        {
-        //                            var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementStartDateTime.AddDays(item.DayLimit)))).GroupBy(i => i.ShopId).Count();
-        //                            if (orderListShopCount == item.CountValue)
-        //                            {
-        //                                customer.WalletAmount += item.Amount;
-        //                                db.Entry(customer).State = EntityState.Modified;
-        //                                db.SaveChanges();
-        //                                //Wallet History
-        //                                AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-        //                            }
-        //                        }
-        //                        else
-        //                        {
-        //                            var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).GroupBy(i => i.ShopId).Count();
-        //                            if (orderListShopCount == item.CountValue)
-        //                            {
-        //                                customer.WalletAmount += item.Amount;
-        //                                db.Entry(customer).State = EntityState.Modified;
-        //                                db.SaveChanges();
-        //                                //Wallet History
-        //                                AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-        //                            }
-        //                        }
-        //                    }
-        //                    break;
-        //                case 3:
-        //                    if (item.HasAccept == true)
-        //                    {
-        //                        var customerAcceptedAchievements = db.CustomerAchievements.FirstOrDefault(i => i.Status == 1 && i.CustomerId == customer.Id && i.AchievementId == item.Id);
-        //                        if (customerAcceptedAchievements != null)
-        //                        {
-        //                            var achievementSelectedShopList = db.AchievementShops.Where(i => i.AchievementId == item.Id).Select(i=>i.ShopId).ToList(); 
-        //                            if (item.DayLimit > 0)
-        //                            {
-        //                                var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded.AddDays(item.DayLimit))) && achievementSelectedShopList.Contains(i.ShopId)).GroupBy(i => i.ShopId).Count();
-        //                                if (orderListShopCount == item.CountValue)
-        //                                {
-        //                                    customer.WalletAmount += item.Amount;
-        //                                    db.Entry(customer).State = EntityState.Modified;
-        //                                    db.SaveChanges();
-
-        //                                    //Wallet History
-        //                                    AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-        //                                }
-        //                            }
-        //                            else
-        //                            {
-        //                                var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && achievementSelectedShopList.Contains(i.ShopId)).GroupBy(i => i.ShopId).Count();
-        //                                if (orderListShopCount == item.CountValue)
-        //                                {
-        //                                    customer.WalletAmount += item.Amount;
-        //                                    db.Entry(customer).State = EntityState.Modified;
-        //                                    db.SaveChanges();
-
-        //                                    //Wallet History
-        //                                    AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-        //                                }
-        //                            }
-
-        //                        }
-        //                    }
-        //                    else
-        //                    {
-        //                        var achievementSelectedShopList = db.AchievementShops.Where(i => i.AchievementId == item.Id).Select(i => i.ShopId).ToList();
-        //                        if (item.DayLimit > 0)
-        //                        {
-        //                            var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementStartDateTime.AddDays(item.DayLimit))) && achievementSelectedShopList.Contains(i.ShopId)).GroupBy(i => i.ShopId).Count();
-        //                            if (orderListShopCount == item.CountValue)
-        //                            {
-        //                                customer.WalletAmount += item.Amount;
-        //                                db.Entry(customer).State = EntityState.Modified;
-        //                                db.SaveChanges();
-        //                                //Wallet History
-        //                                AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-        //                            }
-        //                        }
-        //                        else
-        //                        {
-        //                            var orderListShopCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && achievementSelectedShopList.Contains(i.ShopId)).GroupBy(i => i.ShopId).Count();
-        //                            if (orderListShopCount == item.CountValue)
-        //                            {
-        //                                customer.WalletAmount += item.Amount;
-        //                                db.Entry(customer).State = EntityState.Modified;
-        //                                db.SaveChanges();
-        //                                //Wallet History
-        //                                AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-        //                            }
-        //                        }
-        //                    }
-        //                    break;
-        //                case 4:
-        //                    if (item.HasAccept == true)
-        //                    {
-        //                        var customerAcceptedAchievements = db.CustomerAchievements.FirstOrDefault(i => i.Status == 1 && i.CustomerId == customer.Id && i.AchievementId == item.Id);
-        //                        if (customerAcceptedAchievements != null)
-        //                        {
-        //                            if (item.DayLimit > 0)
-        //                            {
-        //                                var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded.AddDays(item.DayLimit))))
-        //                                    .Join(db.OrderItems.GroupBy(i=>i.ProductId),o=>o.Id,oi=>oi.FirstOrDefault().OrderId,(o,oi)=>new { o,oi})
-        //                                    .Count();
-        //                                if (orderListProductCount == item.CountValue)
-        //                                {
-        //                                    customer.WalletAmount += item.Amount;
-        //                                    db.Entry(customer).State = EntityState.Modified;
-        //                                    db.SaveChanges();
-
-        //                                    //Wallet History
-        //                                    AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-        //                                }
-        //                            }
-        //                            else
-        //                            {
-        //                                var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime))
-        //                                     .Join(db.OrderItems.GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
-        //                                    .Count();
-        //                                if (orderListProductCount == item.CountValue)
-        //                                {
-        //                                    customer.WalletAmount += item.Amount;
-        //                                    db.Entry(customer).State = EntityState.Modified;
-        //                                    db.SaveChanges();
-
-        //                                    //Wallet History
-        //                                    AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-        //                                }
-        //                            }
-
-        //                        }
-        //                    }
-        //                    else
-        //                    {
-        //                        if (item.DayLimit > 0)
-        //                        {
-        //                            var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementStartDateTime.AddDays(item.DayLimit))))
-        //                                .Join(db.OrderItems.GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
-        //                                    .Count();
-        //                            if (orderListProductCount == item.CountValue)
-        //                            {
-        //                                customer.WalletAmount += item.Amount;
-        //                                db.Entry(customer).State = EntityState.Modified;
-        //                                db.SaveChanges();
-        //                                //Wallet History
-        //                                AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-        //                            }
-        //                        }
-        //                        else
-        //                        {
-        //                            var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime))
-        //                                .Join(db.OrderItems.GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
-        //                                    .Count();
-        //                            if (orderListProductCount == item.CountValue)
-        //                            {
-        //                                customer.WalletAmount += item.Amount;
-        //                                db.Entry(customer).State = EntityState.Modified;
-        //                                db.SaveChanges();
-        //                                //Wallet History
-        //                                AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-        //                            }
-        //                        }
-        //                    }
-        //                    break;
-        //                case 5:
-        //                    if (item.HasAccept == true)
-        //                    {
-        //                        var customerAcceptedAchievements = db.CustomerAchievements.FirstOrDefault(i => i.Status == 1 && i.CustomerId == customer.Id && i.AchievementId == item.Id);
-        //                        if (customerAcceptedAchievements != null)
-        //                        {
-        //                            var achievementSelectedProductList = db.AchievementProducts.Where(i => i.AchievementId == item.Id).Select(i => i.ProductId).ToList();
-        //                            if (item.DayLimit > 0)
-        //                            {
-        //                                var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded.AddDays(item.DayLimit))))
-        //                                    .Join(db.OrderItems.Where(i=> achievementSelectedProductList.Contains(i.ProductId)).GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
-        //                                    .Count();
-        //                                if (orderListProductCount == item.CountValue)
-        //                                {
-        //                                    customer.WalletAmount += item.Amount;
-        //                                    db.Entry(customer).State = EntityState.Modified;
-        //                                    db.SaveChanges();
-
-        //                                    //Wallet History
-        //                                    AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-        //                                }
-        //                            }
-        //                            else
-        //                            {
-        //                                var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime))
-        //                                     .Join(db.OrderItems.Where(i => achievementSelectedProductList.Contains(i.ProductId)).GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
-        //                                    .Count();
-        //                                if (orderListProductCount == item.CountValue)
-        //                                {
-        //                                    customer.WalletAmount += item.Amount;
-        //                                    db.Entry(customer).State = EntityState.Modified;
-        //                                    db.SaveChanges();
-
-        //                                    //Wallet History
-        //                                    AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-        //                                }
-        //                            }
-
-        //                        }
-        //                    }
-        //                    else
-        //                    {
-        //                        var achievementSelectedProductList = db.AchievementProducts.Where(i => i.AchievementId == item.Id).Select(i => i.ProductId).ToList();
-        //                        if (item.DayLimit > 0)
-        //                        {
-        //                            var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementStartDateTime.AddDays(item.DayLimit))))
-        //                                .Join(db.OrderItems.Where(i => achievementSelectedProductList.Contains(i.ProductId)).GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
-        //                                    .Count();
-        //                            if (orderListProductCount == item.CountValue)
-        //                            {
-        //                                customer.WalletAmount += item.Amount;
-        //                                db.Entry(customer).State = EntityState.Modified;
-        //                                db.SaveChanges();
-        //                                //Wallet History
-        //                                AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-        //                            }
-        //                        }
-        //                        else
-        //                        {
-        //                            var orderListProductCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime))
-        //                                .Join(db.OrderItems.Where(i => achievementSelectedProductList.Contains(i.ProductId)).GroupBy(i => i.ProductId), o => o.Id, oi => oi.FirstOrDefault().OrderId, (o, oi) => new { o, oi })
-        //                                    .Count();
-        //                            if (orderListProductCount == item.CountValue)
-        //                            {
-        //                                customer.WalletAmount += item.Amount;
-        //                                db.Entry(customer).State = EntityState.Modified;
-        //                                db.SaveChanges();
-        //                                //Wallet History
-        //                                AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-        //                            }
-        //                        }
-        //                    }
-        //                    break;
-        //                case 6:
-        //                    if (item.HasAccept == true)
-        //                    {
-        //                        var customerAcceptedAchievements = db.CustomerAchievements.FirstOrDefault(i => i.Status == 1 && i.CustomerId == customer.Id && i.AchievementId == item.Id);
-        //                        if (customerAcceptedAchievements != null)
-        //                        {
-        //                            if (item.DayLimit > 0)
-        //                            {
-        //                                var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(customerAcceptedAchievements.DateEncoded.AddDays(item.DayLimit)))).Count();
-        //                                if (orderListCount == item.CountValue)
-        //                                {
-        //                                    customer.WalletAmount += item.Amount;
-        //                                    db.Entry(customer).State = EntityState.Modified;
-        //                                    db.SaveChanges();
-
-        //                                    //Wallet History
-        //                                    AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-        //                                }
-        //                            }
-        //                            else
-        //                            {
-        //                                var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Count();
-        //                                if (orderListCount == item.CountValue)
-        //                                {
-        //                                    customer.WalletAmount += item.Amount;
-        //                                    db.Entry(customer).State = EntityState.Modified;
-        //                                    db.SaveChanges();
-
-        //                                    //Wallet History
-        //                                    AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-        //                                }
-        //                            }
-
-        //                        }
-        //                    }
-        //                    else
-        //                    {
-        //                        if (item.DayLimit > 0)
-        //                        {
-        //                            var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(achievementStartDateTime.AddDays(item.DayLimit)))).Count();
-        //                            if (orderListCount == item.CountValue)
-        //                            {
-        //                                customer.WalletAmount += item.Amount;
-        //                                db.Entry(customer).State = EntityState.Modified;
-        //                                db.SaveChanges();
-        //                                //Wallet History
-        //                                AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-        //                            }
-        //                        }
-        //                        else
-        //                        {
-        //                            var orderListCount = db.Orders.Where(i => i.CustomerId == customer.Id && i.Status == 6 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(achievementStartDateTime)).Count();
-        //                            if (orderListCount == item.CountValue)
-        //                            {
-        //                                customer.WalletAmount += item.Amount;
-        //                                db.Entry(customer).State = EntityState.Modified;
-        //                                db.SaveChanges();
-        //                                //Wallet History
-        //                                AddAchievementCustomerWalletHistory(customer.Id, item.Amount, item.Name);
-        //                            }
-        //                        }
-        //                    }
-        //                    break;
-        //                default:
-        //                    break;
-        //            }
-        //        }
-                
-        //    }
-        //}
-
-        //public void AddAchievementCustomerWalletHistory(int custId, double amount, string achievementName)
-        //{
-        //    var walletHistory = new CustomerWalletHistory
-        //    {
-        //        Amount = amount,
-        //        CustomerId = custId,
-        //        DateEncoded = DateTime.Now,
-        //        Description = $"Received from Achievement({achievementName})",
-        //        Type = 1
-        //    };
-        //}
-
-        ////////////////////////////////////////////
-
-        //Store old olders from cart
+        
         public class OldOrder
         {
 

@@ -8,9 +8,9 @@ namespace ShopNow.Helpers
    
     public class AdminHelpers 
     {
-       // public static string key = "shopnow789123456";
-       // public static string pass = "TrendJoyra123456";
-        public static string pass = "Aryoj987654";
+       public static string key = "shopnow789123456";
+        public static string pass = "TrendJoyra123456";
+      //  public static string pass = "Aryoj987654";
         //Admin Security
 
         public static string ECode(string input)

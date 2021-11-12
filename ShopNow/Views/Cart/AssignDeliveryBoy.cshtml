@@ -46,8 +46,8 @@
                                     <tbody>
                                         @foreach (var item in Model.Lists)
                                         {
-                                            if (@item.Amount < 1500)
-                                            {
+                                            //if (@item.Amount < 1500)
+                                            //{
                                             <tr>
                                                 <td></td>
                                                 <td>
@@ -58,7 +58,7 @@
                                                     <input type="button" class="btn btn-sm btn-success assign" value="Assign" data-id="@item.Id" />
                                                 </td>
                                             </tr>
-                                            }
+                                           // }
                                         }
                                     </tbody>
                                 </table>

@@ -116,7 +116,7 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new CartListViewModel();
-            model.CartPreparedLists = db.Orders.Where(i => (shopId != 0 ? i.ShopId == shopId : true) && (i.Status == 3 || i.Status == 4))
+            model.CartPreparedLists = db.Orders.Where(i => (shopId != 0 ? i.ShopId == shopId : true) && (i.Status == 3 || i.Status == 4 || i.Status ==8))
                 .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .Select(i => new CartListViewModel.CartPreparedList
                 {
@@ -614,7 +614,7 @@ namespace ShopNow.Controllers
             DateTime date = DateTime.Now;
             
             var amount = (from i in db.Orders
-                                   where i.OrderNumber == OrderNumber && i.Status == 0 && i.Status == 6 && i.DateUpdated.Year == date.Year && i.DateUpdated.Month == date.Month && i.DateUpdated.Day == date.Day
+                                   where i.OrderNumber == OrderNumber && i.Status == 6 && i.DateUpdated.Year == date.Year && i.DateUpdated.Month == date.Month && i.DateUpdated.Day == date.Day
                                    select (Double?)i.DeliveryCharge).Sum() ?? 0;
 
             model.Lists = db.DeliveryBoys
@@ -1096,8 +1096,6 @@ namespace ShopNow.Controllers
                 db.Entry(otpVerify).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
-
-
             order.Status = 6;
             order.UpdatedBy = user.Name;
             order.DateUpdated = DateTime.Now;
