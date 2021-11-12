@@ -5150,11 +5150,14 @@ namespace ShopNow.Controllers
             var model = new ProductDetailsApiViewModel();
             if (product != null)
             {
-
+                int nearbydistance = 8;
                 var shop = db.Shops.FirstOrDefault(s => s.Id == product.ShopId);
                 string defaultImagePath = "../../assets/images/noimageres.svg";
                 if (shop.ShopCategoryId == 4)
+                {
                     defaultImagePath = "../../assets/images/1.5-cm-X-1.5-cm.png";
+                    nearbydistance = 16;
+                }
 
                 _mapper.Map(product, model);
                 var masterProduct = db.MasterProducts.FirstOrDefault(i => i.Id == product.MasterProductId);
@@ -5175,22 +5178,44 @@ namespace ShopNow.Controllers
                     model.Size = masterProduct.SizeLWH;
                     model.Weight = masterProduct.Weight;
                 }
+
+
+                string query = "SELECT * " +
+                                   " FROM Shops where(3959 * acos(cos(radians(@latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@longitude)) + sin(radians(@latitude)) * sin(radians(Latitude)))) < "+ nearbydistance + " and ShopCategoryId =" + shop.ShopCategoryId + " and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
+                                   " order by IsOnline desc,Adscore desc,Rating desc";
+
+                //model.SimilarProductsListItems = db.Products.Where(i => i.MasterProductId == product.MasterProductId)
+                //    .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+                //    .Join(db.DiscountCategories, p => p.p.DiscountCategoryName, dc => dc.Name, (p, dc) => new { p, dc })
+                //    .Join(db.Shops.SqlQuery(query,new SqlParameter("Latitude", latitude), new SqlParameter("Longitude", longitude)), p => p.p.p.ShopId, s => s.Id, (p, s) => new { p, s })
+                //    .AsEnumerable()
+                //    .Select(i => new ProductDetailsApiViewModel.SimilarProductsListItem
+                //    {
+                //        DiscountPercentage = i.p.p.p.ShopCategoryId != 4 ? i.p.p.p.Percentage : i.p.dc.Percentage,
+                //        MenuPrice = i.p.p.p.MenuPrice,
+                //        Name = i.p.p.m.Name,
+                //        Price = i.p.p.p.Price,
+                //        ShopName = i.p.p.p.ShopName,
+                //        Distance = (((Math.Acos(Math.Sin((i.s.Latitude * Math.PI / 180)) * Math.Sin((latitude * Math.PI / 180)) + Math.Cos((i.s.Latitude * Math.PI / 180)) * Math.Cos((latitude * Math.PI / 180))
+                //     * Math.Cos(((i.s.Longitude - longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000
+                //    }).ToList();
+
+                model.SimilarProductsListItems = db.Shops.SqlQuery(query, new SqlParameter("Latitude", latitude), new SqlParameter("Longitude", longitude))
+                   .Join(db.Products.Where(i => i.MasterProductId == product.MasterProductId),s=>s.Id,p=>p.ShopId,(s,p)=>new { s,p})
+                       .Join(db.MasterProducts, p => p.p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+                       .Join(db.DiscountCategories, p => p.p.p.DiscountCategoryName, dc => dc.Name, (p, dc) => new { p, dc })
+                       .AsEnumerable()
+                       .Select(i => new ProductDetailsApiViewModel.SimilarProductsListItem
+                       {
+                           DiscountPercentage = i.p.p.s.ShopCategoryId != 4 ? i.p.p.p.Percentage : i.dc.Percentage,
+                           MenuPrice = i.p.p.p.MenuPrice,
+                           Name = i.p.m.Name,
+                           Price = i.p.p.p.Price,
+                           ShopName = i.p.p.p.ShopName,
+                           Distance = (((Math.Acos(Math.Sin((i.p.p.s.Latitude * Math.PI / 180)) * Math.Sin((latitude * Math.PI / 180)) + Math.Cos((i.p.p.s.Latitude * Math.PI / 180)) * Math.Cos((latitude * Math.PI / 180))
+                        * Math.Cos(((i.p.p.s.Longitude - longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000
+                       }).ToList();
             }
-            model.SimilarProductsListItems = db.Products.Where(i => i.MasterProductId == product.MasterProductId)
-                .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
-                .Join(db.DiscountCategories, p => p.p.DiscountCategoryName, dc => dc.Name, (p, dc) => new { p, dc })
-                .Join(db.Shops, p => p.p.p.ShopId, s => s.Id, (p, s) => new { p, s })
-                .AsEnumerable()
-                .Select(i => new ProductDetailsApiViewModel.SimilarProductsListItem
-                {
-                    DiscountPercentage = i.p.p.p.ShopCategoryId != 4 ? i.p.p.p.Percentage : i.p.dc.Percentage,
-                    MenuPrice = i.p.p.p.MenuPrice,
-                    Name = i.p.p.m.Name,
-                    Price = i.p.p.p.Price,
-                    ShopName = i.p.p.p.ShopName,
-                    Distance = (((Math.Acos(Math.Sin((i.s.Latitude * Math.PI / 180)) * Math.Sin((latitude * Math.PI / 180)) + Math.Cos((i.s.Latitude * Math.PI / 180)) * Math.Cos((latitude * Math.PI / 180))
-                 * Math.Cos(((i.s.Longitude - longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) /1000
-                }).ToList();
             return Json(model,JsonRequestBehavior.AllowGet);
         }
 
