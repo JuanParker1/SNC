@@ -67,7 +67,8 @@ namespace ShopNow.Controllers
 
             model.UnMappedCount = db.Products.Where(i => i.MasterProductId == 0)
                            .Join(db.OrderItems, p => p.Id, oi => oi.ProductId, (p, oi) => new { p, oi }).GroupBy(i => i.oi.Id).Count();
-            model.ProductUnMappedCount = db.Products.Where(i => i.MappedDate == null && i.MasterProductId != 0 && i.Status == 0 && i.ShopId != 0).Count();
+            model.ProductUnMappedCount = db.Products.Where(i => i.MappedDate != null && (i.MasterProductId == 0) && i.Status == 0 && i.ShopId != 0)
+               .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m }).Count();
 
 
             model.CustomerAadhaarVerifyCount = db.Customers.Where(i => i.AadharVerify == false && i.Status == 0 && i.ImageAadharPath != null && i.ImageAadharPath != "Rejected" && i.ImageAadharPath != "NULL").Count();
@@ -111,17 +112,20 @@ namespace ShopNow.Controllers
             model.UnMappedCount = db.Products.Where(i => i.MasterProductId == 0)
                                       .Join(db.OrderItems, p => p.Id, c => c.ProductId, (p, c) => new { p, c }).AsEnumerable().GroupBy(i => i.c.ProductId).Count();
 
-            DateTime start = new DateTime(2021, 10, 29);
-            var count1 = db.Orders.Where(i => i.Status == 0 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(start)))
-                .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p }).GroupBy(i => i.c.OrderNumber).Count();
-            var count2 = db.Orders.Where(i => i.Status == 0 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(start)))
-                        .GroupBy(i => i.OrderNumber).Count();
+            //DateTime start = new DateTime(2021, 10, 29);
+            //var count1 = db.Orders.Where(i => i.Status == 0 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(start)))
+            //    .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p }).GroupBy(i => i.c.OrderNumber).Count();
+            //var count2 = db.Orders.Where(i => i.Status == 0 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(start)))
+            //            .GroupBy(i => i.OrderNumber).Count();
 
-            model.OrderMissedCount = Math.Abs(count2 - count1);
+            //model.OrderMissedCount = Math.Abs(count2 - count1);
+
+            model.OrderMissedCount = db.Orders.Where(i => i.Status == 0 && DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(DateTime.Now)).Count();
 
             model.UnMappedCount = db.Products.Where(i => i.MasterProductId == 0)
                            .Join(db.OrderItems, p => p.Id, oi => oi.ProductId, (p, oi) => new { p, oi }).GroupBy(i => i.oi.Id).Count();
-            model.ProductUnMappedCount = db.Products.Where(i => i.MappedDate == null && i.MasterProductId != 0 && i.Status == 0 && i.ShopId != 0).Count();
+            model.ProductUnMappedCount = db.Products.Where(i => i.MappedDate != null && (i.MasterProductId == 0) && i.Status == 0 && i.ShopId != 0)
+               .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m }).Count();
 
 
             model.CustomerAadhaarVerifyCount = db.Customers.Where(i => i.AadharVerify == false && i.Status == 0 && i.ImageAadharPath != null && i.ImageAadharPath != "Rejected" && i.ImageAadharPath != "NULL").Count();
@@ -440,6 +444,35 @@ namespace ShopNow.Controllers
                 
             return Json(true, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult ProductsUnMappedList(ProductUnMappedList model)
+        {
+            model.ListItems = db.Products.Where(i => i.MappedDate != null && (i.MasterProductId == 0) && i.Status == 0 && i.ShopId != 0 && (model.ShopId != 0 ? i.ShopId == model.ShopId : true))
+               .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+               .Select(i => new ProductUnMappedList.ListItem
+               {
+                   MappedDate = i.p.MappedDate,
+                   Id = i.p.Id,
+                   MenuPrice = i.p.MenuPrice,
+                   Name = i.m.Name,
+                   Quantity = i.p.Qty,
+                   SellingPrice = i.p.Price,
+                   ItemId = i.p.ItemId,
+                   ShopId = i.p.ShopId,
+                   ShopName = i.p.ShopName,
+                   Status = i.p.Status
+               }).ToList();
+            model.CountListItems = model.ListItems
+                .GroupBy(i => i.ShopId)
+                .Select(i => new ProductUnMappedList.CountListItem
+                {
+                    Count = i.Count(),
+                    ShopName = i.FirstOrDefault().ShopName,
+                    ShopId = i.Key
+                }).ToList();
+            return View(model);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

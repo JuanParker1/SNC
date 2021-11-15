@@ -4947,25 +4947,34 @@ namespace ShopNow.Controllers
         public JsonResult GetWalletHistory(int customerId)
         {
             var model = new WalletHistoryViewModel();
-            var debitList = db.Orders.Where(i => i.CustomerId == customerId && i.Status == 2 && i.WalletAmount > 0)
+            //var debitList = db.Orders.Where(i => i.CustomerId == customerId && i.Status == 2 && i.WalletAmount > 0)
+            //    .Select(i => new WalletHistoryViewModel.ListItem
+            //    {
+            //        Text = "Payment to " + i.ShopName,
+            //        Amount = i.WalletAmount,
+            //        Type = 2,
+            //        Date = i.DeliveredTime ?? DateTime.Now
+            //    }).ToList();
+
+            //var creditList = db.CustomerAchievements.Where(i => i.CustomerId == customerId && i.Status == 0)
+            //    .Join(db.AchievementSettings, ca => ca.AchievementId, a => a.Id, (ca, a) => new { ca, a })
+            //   .Select(i => new WalletHistoryViewModel.ListItem
+            //   {
+            //       Text = "Received from " + i.a.Name,
+            //       Amount = i.a.Amount,
+            //       Type = 1,
+            //       Date = i.ca.DateEncoded
+            //   }).ToList();
+            //model.ListItems = debitList.Concat(creditList).OrderByDescending(i => i.Date).ToList();
+
+            model.ListItems = db.CustomerWalletHistories.Where(i => i.CustomerId == customerId).OrderByDescending(i => i.DateEncoded)
                 .Select(i => new WalletHistoryViewModel.ListItem
                 {
-                    Text = "Payment to " + i.ShopName,
-                    Amount = i.WalletAmount,
-                    Type = 2,
-                    Date = i.DeliveredTime ?? DateTime.Now
+                    Amount = i.Amount,
+                    Date = i.DateEncoded,
+                    Description = i.Description,
+                    Type = i.Type
                 }).ToList();
-
-            var creditList = db.CustomerAchievements.Where(i => i.CustomerId == customerId && i.Status == 0)
-                .Join(db.AchievementSettings, ca => ca.AchievementId, a => a.Id, (ca, a) => new { ca, a })
-               .Select(i => new WalletHistoryViewModel.ListItem
-               {
-                   Text = "Received from " + i.a.Name,
-                   Amount = i.a.Amount,
-                   Type = 1,
-                   Date = i.ca.DateEncoded
-               }).ToList();
-            model.ListItems = debitList.Concat(creditList).OrderByDescending(i => i.Date).ToList();
             return Json(new { list = model.ListItems }, JsonRequestBehavior.AllowGet);
         }
 
