@@ -76,12 +76,13 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var staff = _mapper.Map<StaffCreateEditViewModel, Staff>(model);
-            if(model.ShopId != 0)
-            {
-                var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
-                staff.CustomerId = shop.CustomerId;
-                staff.CustomerName = shop.CustomerName;
-            }
+            //var shopid = model.ShopIds[0];
+            //var shop = db.Shops.FirstOrDefault(i => i.Id == shopid);
+            //if (shop != null)
+            //{
+            //    staff.CustomerId = shop.CustomerId;
+            //    staff.CustomerName = shop.CustomerName;
+            //}
             staff.CreatedBy = user.Name;
             staff.UpdatedBy = user.Name;
             staff.Status = 0;
@@ -97,6 +98,19 @@ namespace ShopNow.Controllers
                 }
                 db.Staffs.Add(staff);
                 db.SaveChanges();
+
+                // ShopStaff
+                if (staff != null && model.ShopIds != null)
+                {
+                    foreach (var item in model.ShopIds)
+                    {
+                        ShopStaff ss = new ShopStaff();
+                        ss.ShopId = item;
+                        ss.StaffId = staff.Id;
+                        db.ShopStaffs.Add(ss);
+                        db.SaveChanges();
+                    }
+                }
                 return RedirectToAction("List");
             }
             catch (AmazonS3Exception amazonS3Exception)
