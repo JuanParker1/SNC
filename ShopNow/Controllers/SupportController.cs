@@ -32,39 +32,105 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             var model = new SupportViewModel();
 
-            model.ShopAcceptanceCount = db.Orders.Where(i => i.Status == 2 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5)
+            //To take count for last 3days
+            DateTime last3Date = DateTime.Now.AddDays(-3);
+
+            model.ShopAcceptanceCount = db.Orders.Where(i => i.Status == 2 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(last3Date)) && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5)
                    .AsEnumerable().Count();
-            model.DeliveryAcceptanceCount = db.Orders.Join(db.DeliveryBoys, c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
-                      .Where(i => i.c.Status == 4 && i.d.isAssign == 1 && i.d.OnWork == 0 && SqlFunctions.DateDiff("minute", i.c.DateUpdated, DateTime.Now) >= 5)
+
+            model.DeliveryAcceptanceCount = db.Orders.Where(i => i.Status == 4 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(last3Date)) && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5)
+                .Join(db.DeliveryBoys.Where(i => i.isAssign == 1 && i.OnWork == 0), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
                       .AsEnumerable().Count();
-            model.ShopPickupCount = db.Orders.Join(db.DeliveryBoys, c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
-                    .Where(i => i.c.Status == 4 && i.d.isAssign == 1 && i.d.OnWork == 1 && SqlFunctions.DateDiff("minute", i.c.DateUpdated, DateTime.Now) >= 15)
+
+            model.ShopPickupCount = db.Orders.Where(i => i.Status == 4 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(last3Date)) && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5)
+                .Join(db.DeliveryBoys.Where(i => i.isAssign == 1 && i.OnWork == 1), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
+                      .AsEnumerable().Count();
+
+            model.CustomerDeliveryCount = db.Orders.Where(i => i.Status == 5 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(last3Date)) && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 15)
                     .AsEnumerable().Count();
-            model.CustomerDeliveryCount = db.Orders.Where(i => i.Status == 5 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 15)
+
+            model.OrderswithoutDeliveryboyCount = db.Orders.Where(i => i.Status == 3 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(last3Date)))
                     .AsEnumerable().Count();
-            model.OrderswithoutDeliveryboyCount = db.Orders.Where(i => i.Status == 3)
-                    .AsEnumerable().Count();
+
+            model.OrderCount = db.Orders.Where(i => i.Status != 7 && i.Status != 6 && i.Status != 0 && i.Status != -1 && i.Status != 9 && i.Status != 10 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(last3Date))).Count();
+
             model.UnMappedCount = db.Products.Where(i => i.MasterProductId == 0)
                                       .Join(db.OrderItems, p => p.Id, c => c.ProductId, (p, c) => new { p, c }).AsEnumerable().GroupBy(i => i.c.ProductId).Count();
+
             DateTime start = new DateTime(2021, 10, 29);
             var count1 = db.Orders.Where(i => i.Status == 0 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(start)))
                 .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p }).GroupBy(i => i.c.OrderNumber).Count();
             var count2 = db.Orders.Where(i => i.Status == 0 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(start)))
                         .GroupBy(i => i.OrderNumber).Count();
+
             model.OrderMissedCount = Math.Abs(count2 - count1);
 
             model.UnMappedCount = db.Products.Where(i => i.MasterProductId == 0)
                            .Join(db.OrderItems, p => p.Id, oi => oi.ProductId, (p, oi) => new { p, oi }).GroupBy(i => i.oi.Id).Count();
             model.ProductUnMappedCount = db.Products.Where(i => i.MappedDate == null && i.MasterProductId != 0 && i.Status == 0 && i.ShopId != 0).Count();
-               
 
-                        model.CustomerAadhaarVerifyCount = db.Customers.Where(i => i.AadharVerify == false && i.Status == 0 && i.ImageAadharPath != null && i.ImageAadharPath != "Rejected" && i.ImageAadharPath != "NULL").Count();
+
+            model.CustomerAadhaarVerifyCount = db.Customers.Where(i => i.AadharVerify == false && i.Status == 0 && i.ImageAadharPath != null && i.ImageAadharPath != "Rejected" && i.ImageAadharPath != "NULL").Count();
             model.ShopOnBoardingVerifyCount = db.Shops.Where(i => i.Status == 1).Count();
             model.DeliveryBoyVerifyCount = db.DeliveryBoys.Where(i => i.Status == 1).Count();
             model.BannerPendingCount = db.Banners.Where(i => i.Status == 1).Count();
             model.ShopCount = db.Shops.Where(i => i.Status == 0 || i.Status == 6).Count();
             model.CustomerCount = db.CustomerAddresses.GroupBy(a => a.CustomerId).Count();
-            model.OrderCount = db.Orders.Where(i => i.Status != 7 && i.Status != 6 && i.Status != 0 && i.Status != -1).Count();
+
+            model.DeliveryBoyLiveCount = db.DeliveryBoys.Where(i => i.Status == 0 && i.isAssign == 0 && i.OnWork == 0 && i.Active == 1).Count();
+            model.RefundCount = db.Payments.Where(i => i.RefundAmount != 0 && i.RefundStatus == 1 && i.RefundAmount != null && i.PaymentMode == "Online Payment").Count();
+            model.ShopLowCreditCount = db.ShopCredits.Where(i => i.PlatformCredit <= 200 || i.DeliveryCredit <= 250).Count();
+            return View(model);
+        }
+
+        public ActionResult Live()
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var model = new SupportViewModel();
+            
+            model.ShopAcceptanceCount = db.Orders.Where(i => i.Status == 2 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5)
+                   .AsEnumerable().Count();
+
+            model.DeliveryAcceptanceCount = db.Orders.Where(i => i.Status == 4 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5)
+                .Join(db.DeliveryBoys.Where(i => i.isAssign == 1 && i.OnWork == 0), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
+                      .AsEnumerable().Count();
+
+            model.ShopPickupCount = db.Orders.Where(i => i.Status == 4 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5)
+                .Join(db.DeliveryBoys.Where(i => i.isAssign == 1 && i.OnWork == 1), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
+                      .AsEnumerable().Count();
+
+            model.CustomerDeliveryCount = db.Orders.Where(i => i.Status == 5 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 15)
+                    .AsEnumerable().Count();
+
+            model.OrderswithoutDeliveryboyCount = db.Orders.Where(i => i.Status == 3)
+                    .AsEnumerable().Count();
+
+            model.OrderCount = db.Orders.Where(i => i.Status != 7 && i.Status != 6 && i.Status != 0 && i.Status != -1 && i.Status != 9 && i.Status != 10).Count();
+
+            model.UnMappedCount = db.Products.Where(i => i.MasterProductId == 0)
+                                      .Join(db.OrderItems, p => p.Id, c => c.ProductId, (p, c) => new { p, c }).AsEnumerable().GroupBy(i => i.c.ProductId).Count();
+
+            DateTime start = new DateTime(2021, 10, 29);
+            var count1 = db.Orders.Where(i => i.Status == 0 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(start)))
+                .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p }).GroupBy(i => i.c.OrderNumber).Count();
+            var count2 = db.Orders.Where(i => i.Status == 0 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(start)))
+                        .GroupBy(i => i.OrderNumber).Count();
+
+            model.OrderMissedCount = Math.Abs(count2 - count1);
+
+            model.UnMappedCount = db.Products.Where(i => i.MasterProductId == 0)
+                           .Join(db.OrderItems, p => p.Id, oi => oi.ProductId, (p, oi) => new { p, oi }).GroupBy(i => i.oi.Id).Count();
+            model.ProductUnMappedCount = db.Products.Where(i => i.MappedDate == null && i.MasterProductId != 0 && i.Status == 0 && i.ShopId != 0).Count();
+
+
+            model.CustomerAadhaarVerifyCount = db.Customers.Where(i => i.AadharVerify == false && i.Status == 0 && i.ImageAadharPath != null && i.ImageAadharPath != "Rejected" && i.ImageAadharPath != "NULL").Count();
+            model.ShopOnBoardingVerifyCount = db.Shops.Where(i => i.Status == 1).Count();
+            model.DeliveryBoyVerifyCount = db.DeliveryBoys.Where(i => i.Status == 1).Count();
+            model.BannerPendingCount = db.Banners.Where(i => i.Status == 1).Count();
+            model.ShopCount = db.Shops.Where(i => i.Status == 0 || i.Status == 6).Count();
+            model.CustomerCount = db.CustomerAddresses.GroupBy(a => a.CustomerId).Count();
+
             model.DeliveryBoyLiveCount = db.DeliveryBoys.Where(i => i.Status == 0 && i.isAssign == 0 && i.OnWork == 0 && i.Active == 1).Count();
             model.RefundCount = db.Payments.Where(i => i.RefundAmount != 0 && i.RefundStatus == 1 && i.RefundAmount != null && i.PaymentMode == "Online Payment").Count();
             model.ShopLowCreditCount = db.ShopCredits.Where(i => i.PlatformCredit <= 200 || i.DeliveryCredit <= 250).Count();

@@ -113,7 +113,8 @@ namespace ShopNow.Controllers
                 foreach (var id in masterIds)
                 {
                     var masterProduct = db.MasterProducts.FirstOrDefault(i => i.Id == id);
-                    if (!masterProduct.NickName.Contains(searchWord))
+                    string[] result = masterProduct.NickName.Split(' ');
+                    if (!result.Contains(searchWord))
                     {
                         masterProduct.NickName = masterProduct.NickName + " " + searchWord;
                         db.Entry(masterProduct).State = EntityState.Modified;
@@ -122,7 +123,6 @@ namespace ShopNow.Controllers
                         var searchDataList = db.CustomerSearchDatas.Where(i => i.SearchKeyword.ToLower() == searchWord.ToLower()).ToList();
                         foreach (var item in searchDataList)
                         {
-                           // var sd = db.CustomerSearchDatas.FirstOrDefault(i => i.SearchKeyword.ToLower() == item.SearchKeyword.ToLower());
                             var sd = db.CustomerSearchDatas.FirstOrDefault(i => i.Id == item.Id);
                             if (sd != null)
                             {
