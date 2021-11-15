@@ -119,18 +119,17 @@ namespace ShopNow.Controllers
                         masterProduct.NickName = masterProduct.NickName + " " + searchWord;
                         db.Entry(masterProduct).State = EntityState.Modified;
                         db.SaveChanges();
-
-                        var searchDataList = db.CustomerSearchDatas.Where(i => i.SearchKeyword.ToLower() == searchWord.ToLower()).ToList();
-                        foreach (var item in searchDataList)
+                    }
+                    var searchDataList = db.CustomerSearchDatas.Where(i => i.SearchKeyword.ToLower() == searchWord.ToLower()).ToList();
+                    foreach (var item in searchDataList)
+                    {
+                        var sd = db.CustomerSearchDatas.FirstOrDefault(i => i.Id == item.Id && i.ResultCount == 0);
+                        if (sd != null)
                         {
-                            var sd = db.CustomerSearchDatas.FirstOrDefault(i => i.Id == item.Id);
-                            if (sd != null)
-                            {
-                                sd.LinkedMasterProductIds = sd.LinkedMasterProductIds != null ? sd.LinkedMasterProductIds + "," + masterProduct.Id : masterProduct.Id.ToString();
-                                sd.LinkedMasterProductName = sd.LinkedMasterProductName != null ? sd.LinkedMasterProductName + "," + masterProduct.Name : masterProduct.Name;
-                                db.Entry(sd).State = EntityState.Modified;
-                                db.SaveChanges();
-                            }
+                            sd.LinkedMasterProductIds = sd.LinkedMasterProductIds != null ? sd.LinkedMasterProductIds + "," + masterProduct.Id : masterProduct.Id.ToString();
+                            sd.LinkedMasterProductName = sd.LinkedMasterProductName != null ? sd.LinkedMasterProductName + "," + masterProduct.Name : masterProduct.Name;
+                            db.Entry(sd).State = EntityState.Modified;
+                            db.SaveChanges();
                         }
                     }
                 }
