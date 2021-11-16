@@ -30,9 +30,9 @@ namespace ShopNow.Controllers
 
             model.ZeroCountListItems = db.CustomerSearchDatas
                 .Where(i => i.ResultCount == 0 && ((model.StartDate != null && model.EndDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate)) : true) && string.IsNullOrEmpty(i.LinkedMasterProductIds))
+                .AsEnumerable()
                  .GroupBy(i => i.SearchKeyword).Where(i => i.Sum(a => a.ResultCount) == 0)
-                 .GroupJoin(db.SearchDatas, k => k.Key, sd => sd.KeyValue, (k, sd) => new { k, sd })
-                 .AsEnumerable()
+                 .GroupJoin(db.SearchDatas, k => k.Key?.ToLower(), sd => sd.KeyValue?.ToLower(), (k, sd) => new { k, sd })
                 .Select(i => new SearchDataListViewModel.ListItem
                 {
                     Count = i.k.Max(a => a.ResultCount),
@@ -43,9 +43,9 @@ namespace ShopNow.Controllers
 
             model.ListWithLinkedKeywords = db.CustomerSearchDatas
               .Where(i => ((model.StartDate != null && model.EndDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate)) : true))
+              .AsEnumerable()
                .GroupBy(i => i.SearchKeyword).Where(i => i.Sum(a => a.ResultCount) == 0)
-               .GroupJoin(db.SearchDatas, k => k.Key, sd => sd.KeyValue, (k, sd) => new { k, sd })
-               .AsEnumerable()
+               .GroupJoin(db.SearchDatas, k => k.Key?.ToLower(), sd => sd.KeyValue?.ToLower(), (k, sd) => new { k, sd })
               .Select(i => new SearchDataListViewModel.ListItem
               {
                   Count = i.k.Max(a => a.ResultCount),
