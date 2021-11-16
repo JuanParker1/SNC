@@ -5273,6 +5273,45 @@ namespace ShopNow.Controllers
             return Json(isValid, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetCustomerFavoriteList(int customerid)
+        {
+            var list = db.CustomerFavorites.Where(i => i.CustomerId == customerid).ToList();
+            return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddUpdateCustomerFavorite(int customerid, int productid, bool isfavorite)
+        {
+            try
+            {
+                var customerFavorite = db.CustomerFavorites.FirstOrDefault(i => i.CustomerId == customerid && i.ProductId == productid);
+                if (customerFavorite != null)
+                {
+                    customerFavorite.IsFavorite = isfavorite;
+                    customerFavorite.DateUpdated = DateTime.Now;
+                    db.Entry(customerFavorite).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+                else
+                {
+                    var custFav = new CustomerFavorite
+                    {
+                        CustomerId = customerid,
+                        ProductId = productid,
+                        IsFavorite = isfavorite,
+                        DateEncoded = DateTime.Now,
+                        DateUpdated = DateTime.Now
+                    };
+                    db.CustomerFavorites.Add(custFav);
+                    db.SaveChanges();
+                }
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            catch
+            {
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "")
         {
             Helpers.PushNotification.SendbydeviceId(body, title, "", deviceId);
