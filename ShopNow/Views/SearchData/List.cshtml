@@ -136,6 +136,7 @@
             $('.select-source').select2({
                 placeholder: "Search Keyword",
                 //minimumInputLength: 3,
+                closeOnSelect: false,
                 width: "100%",
                 ajax: {
                     url: "/SearchData/GetKeywordSelect2",
@@ -147,6 +148,7 @@
             $('.select-masterproduct').select2({
                 placeholder: "Search Product",
                 //minimumInputLength: 3,
+                closeOnSelect: false,
                 width: "100%",
                 ajax: {
                     url: "/MasterProduct/GetAllSelect2",

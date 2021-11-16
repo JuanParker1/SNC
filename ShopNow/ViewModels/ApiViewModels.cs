@@ -399,10 +399,10 @@ namespace ShopNow.ViewModels
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {
-            public string Text { get; set; }
+            public string Description { get; set; }
             public double Amount { get; set; }
             public int Type { get; set; } //1-Credit,2-Debit
-            public DateTime Date { get; set; }
+            public DateTime? Date { get; set; }
         }
     }
 

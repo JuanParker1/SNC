@@ -116,8 +116,10 @@ namespace ShopNow.ViewModels
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {
+            public DateTime? MappedDate { get; set; }
             public long Id { get; set; }
             public string Name { get; set; }
+            public int ShopId { get; set; }
             public string ShopName { get; set; }
             public double MenuPrice { get; set; }
             public double SellingPrice { get; set; }
@@ -125,6 +127,14 @@ namespace ShopNow.ViewModels
             public int Status { get; set; }
             public int ItemId { get; set; }
         }
+        public List<CountListItem> CountListItems { get; set; }
+        public class CountListItem
+        {
+            public int ShopId { get; set; }
+            public string ShopName { get; set; }
+            public int Count { get; set; }
+        }
+
     }
     public class UnMappedListViewModel
     {
