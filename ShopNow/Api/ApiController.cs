@@ -2336,7 +2336,7 @@ namespace ShopNow.Controllers
             return Json(new { message = "Your Todays OTP is: " + otpmodel.Otp }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetShopDetailsNew(int shopId = 0, int categoryId = 0, string str = "")
+        public JsonResult GetShopDetailsNew(int shopId = 0, int categoryId = 0, string str = "",int customerId=0)
         {
             var shop = db.Shops.FirstOrDefault(i => i.Id == shopId);
             //shop.Code = ss[0].Code;
@@ -2384,7 +2384,8 @@ namespace ShopNow.Controllers
                                           Weight = m.Weight,
                                           IsPreorder = pl.IsPreorder,
                                           PreorderHour = pl.PreorderHour,
-                                          OfferQuantityLimit = pl.OfferQuantityLimit
+                                          OfferQuantityLimit = pl.OfferQuantityLimit,
+                                         // LikeText = GetProductFavorites(customerId, pl.Id)
                                           //IsOffer = pl.Id != 0 ? GetOfferCheck(pl.Id) : false //false
                                       }).Where(i => i.Price != 0 && (str != "" ? i.Name.ToLower().Contains(str) : true)).ToList();
             }
@@ -2415,7 +2416,8 @@ namespace ShopNow.Controllers
                                           Weight = m.Weight,
                                           IsPreorder = pl.IsPreorder,
                                           PreorderHour = pl.PreorderHour,
-                                          OfferQuantityLimit = pl.OfferQuantityLimit
+                                          OfferQuantityLimit = pl.OfferQuantityLimit,
+                                          //LikeText = GetProductFavorites(customerId, pl.Id)
                                       }).Where(i => i.Price != 0).ToList();
             }
             return new JsonResult()
@@ -2425,6 +2427,18 @@ namespace ShopNow.Controllers
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet,
                 MaxJsonLength = int.MaxValue
             };
+        }
+
+        public string GetProductFavorites(int custId, long prodId)
+        {
+            var custFav = db.CustomerFavorites.FirstOrDefault(i => i.CustomerId == custId && i.ProductId == prodId && i.IsFavorite == true);
+            int totalLikes = db.CustomerFavorites.Where(i => i.ProductId == prodId && i.IsFavorite == true).Count();
+            if (custFav != null)
+                return $"You & {totalLikes} others";
+            else if (totalLikes > 0)
+                return $"{totalLikes} others";
+            else
+                return "No Likes";
         }
 
         public JsonResult GetCustomerRefered(int CustomerId, int shopid)
@@ -5150,9 +5164,14 @@ namespace ShopNow.Controllers
         public JsonResult GetCheckCustomerProductOffer(int customerid, int productid)
         {
             var banner = db.Banners.FirstOrDefault(i => i.ProductId == productid && i.Status == 0);
-            var isAvailable = db.Orders.Where(i => i.CustomerId == customerid && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(banner.FromDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(banner.Todate)))
-                .GroupJoin(db.OrderItems.Where(i => i.ProductId == productid), o => o.Id, oi => oi.OrderId, (o, oi) => new { o, oi }).Any();
-            return Json(new { isAvailable = !isAvailable, JsonRequestBehavior.AllowGet });
+            if (banner != null)
+            {
+                bool isAvailable = db.Orders.Where(i => i.CustomerId == customerid && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(banner.FromDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(banner.Todate)))
+                    .GroupJoin(db.OrderItems.Where(i => i.ProductId == productid), o => o.Id, oi => oi.OrderId, (o, oi) => new { o, oi }).Any();
+                return Json(new { isAvailable = !isAvailable }, JsonRequestBehavior.AllowGet );
+            }
+            else
+                return Json(new { isAvailable = true }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
