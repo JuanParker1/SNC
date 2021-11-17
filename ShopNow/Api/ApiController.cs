@@ -117,7 +117,7 @@ namespace ShopNow.Controllers
                 myData.Headers["X-ApiKey"] = "Tx9ANC5RqngpTOM9VJ0JP2+1LbZvo1LI";
                 myData.Headers[HttpRequestHeader.Accept] = "application/json";
                 myData.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-                string getDetails = myData.DownloadString("https://maps.googleapis.com/maps/api/place/details/json?place_id=" + placeid + "&key=AIzaSyCRsR3Wpkj_Vofy5FSU0otOx-6k-YFiNBk");
+                string getDetails = myData.DownloadString("https://maps.googleapis.com/maps/api/place/details/json?place_id=" + placeid + "&key=AIzaSyCl_9yf43Z6hWLvVvwd68p7WXwq_oYcS_0");  //AIzaSyCRsR3Wpkj_Vofy5FSU0otOx-6k-YFiNBk
                 var result = JsonConvert.DeserializeObject<Results>(getDetails);
                 return Json(new { result, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
             }
@@ -5271,6 +5271,45 @@ namespace ShopNow.Controllers
                 
             }
             return Json(isValid, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetCustomerFavoriteList(int customerid)
+        {
+            var list = db.CustomerFavorites.Where(i => i.CustomerId == customerid).ToList();
+            return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddUpdateCustomerFavorite(int customerid, int productid, bool isfavorite)
+        {
+            try
+            {
+                var customerFavorite = db.CustomerFavorites.FirstOrDefault(i => i.CustomerId == customerid && i.ProductId == productid);
+                if (customerFavorite != null)
+                {
+                    customerFavorite.IsFavorite = isfavorite;
+                    customerFavorite.DateUpdated = DateTime.Now;
+                    db.Entry(customerFavorite).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+                else
+                {
+                    var custFav = new CustomerFavorite
+                    {
+                        CustomerId = customerid,
+                        ProductId = productid,
+                        IsFavorite = isfavorite,
+                        DateEncoded = DateTime.Now,
+                        DateUpdated = DateTime.Now
+                    };
+                    db.CustomerFavorites.Add(custFav);
+                    db.SaveChanges();
+                }
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            catch
+            {
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
         }
 
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "")
