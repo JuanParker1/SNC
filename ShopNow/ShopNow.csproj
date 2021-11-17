@@ -487,6 +487,9 @@
     <Compile Include="Models\CustomerAddress.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CustomerFavorite.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CustomerPrescription.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
