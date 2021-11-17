@@ -15,8 +15,6 @@ namespace ShopNow.ViewModels
         public int CustomerId { get; set; }
         public string CustomerName { get; set; }
         public int[] ShopIds { get; set; }
-
-       // public string ShopName { get; set; }
         public string ImagePath { get; set; }
         public string IpAddress { get; set; }
         public string Password { get; set; }
@@ -40,13 +38,12 @@ namespace ShopNow.ViewModels
         public List<StaffList> List { get; set; }
         public class StaffList
         {
-            public string Code { get; set; }
+            public int Id { get; set; }
             public string Name { get; set; }
             public string PhoneNumber { get; set; }
-            public string CustomerCode { get; set; }
+            public int CustomerId { get; set; }
             public string CustomerName { get; set; }
-            public string ShopCode { get; set; }
-            public string ShopName { get; set; }
+            public int[] ShopIds { get; set; }
             public string ImagePath { get; set; }
             public string IpAddress { get; set; }
         }
