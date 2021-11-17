@@ -31,7 +31,7 @@
    {
        columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
        columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
-       columns.Add(c => c.PaymentMode).Titled("PaymentMode").Filterable(true).SetWidth(15);
+       columns.Add(c => c.PaymentMode).Titled("PaymentMode").Filterable(true).SetWidth(20);
        columns.Add(c => c.DeliveryBoyName).Titled("DeliveryBoy").Filterable(true).SetWidth(10);
        columns.Add(c => c.DeliveryBoyPhoneNumber).Titled("D.Boy Phone").Filterable(true).SetWidth(15);
        columns.Add().RenderValueAs(c => c.Status == 4 ? "Assigned for Delivery" : "Waiting for Pickup").Titled("Order Status").Filterable(true).SetWidth(10);
@@ -39,9 +39,9 @@
        columns.Add()
       .Encoded(false)
       .Sanitized(false)
-      .RenderValueAs(o => Html.ActionLink("View", "Edit", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-vsm btn-info mr-1" }).ToHtmlString()
-      + Html.ActionLink("Pickup Slip", "PickupSlip", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-vsm btn-secondary mr-1" }).ToHtmlString()
-      + Html.ActionLink("UnAssigned", "UnAssignDeliveryBoy", new { ordernumber = o.OrderNumber }, new { @class = "btn  btn-vsm btn-danger", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
+      .RenderValueAs(o => Html.ActionLink("View", "Edit", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-info mr-1" }).ToHtmlString()
+      + Html.ActionLink("Pickup Slip", "PickupSlip", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-secondary mr-1 mt-2" }).ToHtmlString()
+      + Html.ActionLink("UnAssigned", "UnAssignDeliveryBoy", new { ordernumber = o.OrderNumber }, new { @class = "btn btn-sm btn-danger mt-2", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
       columns.Add()
       .Encoded(false)
       .Sanitized(false)

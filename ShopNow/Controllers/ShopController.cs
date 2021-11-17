@@ -103,6 +103,11 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
+            var customer = db.Customers.Any(i => i.Id == user.Id);
+            if(customer != false)
+            {
+                ViewBag.Name = user.Name;
+            }
             return View();
         }
 
@@ -822,6 +827,7 @@ namespace ShopNow.Controllers
             var AadharName = "";
             var AadharNumber = "";
             var Email = "";
+            var AadharImage = "";
             int CustomerId = 0;
             var customer = db.Customers.FirstOrDefault(i => i.PhoneNumber == phoneNumber);
             if (customer != null)
@@ -833,9 +839,10 @@ namespace ShopNow.Controllers
                 AadharName = customer.AadharName;
                 AadharNumber = customer.AadharNumber;
                 Email = customer.Email;
+                AadharImage = customer.ImagePath;
             }
 
-            return Json(new { data = code, CustomerId, CustomerName, PhoneNumber, AadharName, AadharNumber, Email, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+            return Json(new { data = code, CustomerId, CustomerName, PhoneNumber, AadharName, AadharNumber, Email, AadharImage, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetShop(string placeid)
