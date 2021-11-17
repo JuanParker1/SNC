@@ -185,6 +185,7 @@ namespace ShopNow.Controllers
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
+                    DeliveryBoyPhoneNumber = i.c.c.DeliveryBoyPhoneNumber
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             return View(model.DeliveryAgentAssignedLists);
         }

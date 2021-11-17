@@ -54,7 +54,7 @@
                         <label class="control-label text-secondary font-weight-bold" for="Id">Admin Name</label>
                     </div>
                     <div class="col-md-8">
-                        <select class="form-control" name="Id" id="Id" style="width:100%;"></select>
+                        <select class="form-control" name="Id" id="Id"></select>
                         <input type="hidden" name="Name" id="Name" />
                     </div>
                 </div>
@@ -81,9 +81,9 @@
 
             $('#Id').select2({
                 placeholder: "Search Admin",
+                width: '100%',
                 ajax: {
                     url: "/Customer/GetCustomerSelect2",
-                    width: '100%',
                     delay: 250,
                     dataType: 'json'
                 }
