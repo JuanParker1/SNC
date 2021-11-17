@@ -668,6 +668,7 @@ namespace ShopNow.ViewModels
             public bool IsPreorder { get; set; }
             public int PreorderHour { get; set; }
             public int OfferQuantityLimit { get; set; }
+            public bool IsLiked { get; set; }
             public string LikeText { get; set; }
         }
         public class DrugCompundDetailList

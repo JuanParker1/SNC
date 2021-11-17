@@ -585,4 +585,12 @@ namespace ShopNow.ViewModels
             public double DiscountPercentage { get; set; }
         }
     }
+
+    public class CustomerFavoriteAddUpdateViewModel
+    {
+        public int CustomerId { get; set; }
+        public int ProductId { get; set; }
+        public bool IsFavorite { get; set; }
+
+    }
 }
