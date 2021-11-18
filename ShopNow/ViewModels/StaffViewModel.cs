@@ -15,6 +15,7 @@ namespace ShopNow.ViewModels
         public int CustomerId { get; set; }
         public string CustomerName { get; set; }
         public int[] ShopIds { get; set; }
+        public string ShopId { get; set; }
         public string ShopNames { get; set; }
         public string ImagePath { get; set; }
         public string IpAddress { get; set; }
@@ -42,11 +43,8 @@ namespace ShopNow.ViewModels
             public int Id { get; set; }
             public string Name { get; set; }
             public string PhoneNumber { get; set; }
-            public int CustomerId { get; set; }
-            public string CustomerName { get; set; }
-            public int[] ShopIds { get; set; }
+            public string ShopName { get; set; }
             public string ImagePath { get; set; }
-            public string IpAddress { get; set; }
         }
     }
 
