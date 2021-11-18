@@ -63,8 +63,8 @@
             </div>
         }
     </div>
-    @if (Model.Status == 1 && Model.Verify == true )
-    {
+    @*@if (Model.Status == 1 && Model.Verify == true )
+    {*@
         <div class="row text-center">
             <div class="col-md-6">
                 <button type="button" id="GeneratePassword" class="btn btn-success showPasswordtext">Generate Password</button>
@@ -74,7 +74,7 @@
                 <input type="text" class="form-control" id="Password" value="@Model.Password" readonly />
             </div>
         </div>
-    }
+    @*}*@
     @if (Model.Status == 1 && Model.Verify == false && (Model.PhoneNumber != "" || Model.PhoneNumber != null) && Model.PhoneVerify == false)
     {
         <div class="col-md-5 PhoneVerify">

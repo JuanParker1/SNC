@@ -15,6 +15,7 @@ namespace ShopNow.ViewModels
         public int CustomerId { get; set; }
         public string CustomerName { get; set; }
         public int[] ShopIds { get; set; }
+        public string ShopNames { get; set; }
         public string ImagePath { get; set; }
         public string IpAddress { get; set; }
         public string Password { get; set; }

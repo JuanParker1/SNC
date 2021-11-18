@@ -12,6 +12,7 @@ using System.Configuration;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
@@ -139,6 +140,30 @@ namespace ShopNow.Controllers
                 return HttpNotFound();
             var staff = db.Staffs.FirstOrDefault(i => i.Id == dCode);
             var model = _mapper.Map<Staff, StaffCreateEditViewModel>(staff);
+            if (staff != null)
+            {
+                model.ShopIds = db.ShopStaffs.Where(i => i.StaffId == staff.Id).Select(i => i.ShopId).ToArray();
+                if (model.ShopIds != null)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    foreach (var s in model.ShopIds)
+                    {
+                        
+                        var sid = Convert.ToInt32(s);
+                        var sh = db.Shops.FirstOrDefault(i => i.Id == sid && i.Status == 0);
+                        sb.Append(sh.Name);
+                        sb.Append(",");
+                    }
+                    if (sb.Length >= 1)
+                    {
+                        model.ShopNames = sb.ToString().Remove(sb.Length - 1);
+                    }
+                    else
+                    {
+                        model.ShopNames = sb.ToString();
+                    }
+                }
+            }
             return View(model);
         }
 
