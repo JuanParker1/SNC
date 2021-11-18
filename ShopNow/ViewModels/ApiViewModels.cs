@@ -546,7 +546,7 @@ namespace ShopNow.ViewModels
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
         public string BrandName { get; set; }
-        public double DiscountCategoryPercentage { get; set; }
+        public double? DiscountCategoryPercentage { get; set; }
         public int ShopId { get; set; }
         public string ShopName { get; set; }
         public int ShopCategoryId { get; set; }
@@ -583,6 +583,34 @@ namespace ShopNow.ViewModels
             public double MenuPrice { get; set; }
             public double Price { get; set; }
             public double DiscountPercentage { get; set; }
+        }
+    }
+
+    public class CustomerFavoriteAddUpdateViewModel
+    {
+        public int CustomerId { get; set; }
+        public int ProductId { get; set; }
+        public bool IsFavorite { get; set; }
+
+    }
+
+    public class CustomerFavoriteListApiViewModel
+    {
+        public List<ListItem> ListItems { get; set; }
+        public class ListItem
+        {
+            public long ProductId { get; set; }
+            public string ProductName { get; set; }
+            public int CategoryId { get; set; }
+            public string CategoryName { get; set; }
+            public double Percentage { get; set; }
+            public int ShopId { get; set; }
+            public string ShopName { get; set; }
+            public string ImagePath { get; set; }
+            public int Itemid { get; set; }
+            public int Quantity { get; set; }
+            public double Price { get; set; }
+            public double MRP { get; set; }
         }
     }
 }
