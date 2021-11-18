@@ -58,34 +58,19 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new StaffListViewModel();
-            //var List = (from s in db.Staffs
-            //            select s).OrderBy(s => s.Name).Where(i => i.Status == 0).ToList();
-            //model.List = db.Staffs.Where(i => i.Status == 0)
-            //    .Join(db.ShopStaffs, s=> s.Id, ss=> ss.StaffId,(s,ss)=> new { s,ss})
-            //    .Join(db.Shops, p=> p.ss.ShopId, sh=>sh.Id,(p,sh)=>new { p,sh})
-            //    .GroupBy(i=>i.p.s.Id)
-            //    .Select(i => new StaffListViewModel.StaffList
-            //{
-            //    Id = i.FirstOrDefault().p.s.Id,
-            //    ImagePath = i.FirstOrDefault().p.s.ImagePath,
-            //    Name = i.FirstOrDefault().p.s.Name,
-            //    PhoneNumber = i.FirstOrDefault().p.s.PhoneNumber,
-            // //   ShopName = i.
-            //}).ToList();
-
-
-            model.List = db.ShopStaffs
-               .Join(db.Staffs.Where(i => i.Status == 0), ss => ss.StaffId, s => s.Id, (ss, s) => new { ss, s })
-               .Join(db.Shops,ss=>ss.ss.ShopId,sh=>sh.Id,(ss,sh)=>new { ss,sh})
-               .GroupBy(i => i.ss.ss.StaffId)
+            
+            model.List = db.Staffs.Where(i => i.Status == 0)
+               .Join(db.ShopStaffs, st => st.Id, ss => ss.StaffId, (st, ss) => new { st, ss })
+               .Join(db.Shops, st => st.ss.ShopId, sh => sh.Id, (st, sh) => new { st, sh })
+               .GroupBy(i => i.st.ss.StaffId)
                .AsEnumerable()
                .Select(i => new StaffListViewModel.StaffList
                {
-                   Id=i.FirstOrDefault().ss.s.Id,
-                   ImagePath=i.FirstOrDefault().ss.s.ImagePath,
-                   Name=i.FirstOrDefault().ss.s.Name,
-                   PhoneNumber=i.FirstOrDefault().ss.s.PhoneNumber,
-                  ShopName = string.Join(", ", i.Select(a=>a.sh.Name)) 
+                   Id = i.FirstOrDefault().st.st.Id,
+                   ImagePath = i.FirstOrDefault().st.st.ImagePath,
+                   Name = i.FirstOrDefault().st.st.Name,
+                   PhoneNumber = i.FirstOrDefault().st.st.PhoneNumber,
+                   ShopName = string.Join(", ", i.Select(a => a.sh.Name))
                }).ToList();
             return View(model.List);
         }
