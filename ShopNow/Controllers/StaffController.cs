@@ -43,7 +43,7 @@ namespace ShopNow.Controllers
         {
             _mapperConfiguration = new MapperConfiguration(config =>
             {
-                config.CreateMap<Staff, StaffListViewModel.StaffList > ();
+                config.CreateMap<Staff, StaffListViewModel.StaffList> ();
                 config.CreateMap<StaffCreateEditViewModel, Staff>();
                 config.CreateMap<Staff, StaffCreateEditViewModel>();
                 config.CreateMap<Shop, StaffCreateEditViewModel.ShopList>();
