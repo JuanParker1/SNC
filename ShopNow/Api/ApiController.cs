@@ -5214,7 +5214,7 @@ namespace ShopNow.Controllers
             var banner = db.Banners.FirstOrDefault(i => i.ProductId == productid && i.Status == 0);
             if (banner != null)
             {
-                bool isAvailable = db.Orders.Where(i => i.CustomerId == customerid && i.Status == 6 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(banner.FromDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(banner.Todate)))
+                bool isAvailable = db.Orders.Where(i => i.CustomerId == customerid && i.Status != 0 && i.Status != 7 && i.Status != 9 && i.Status != 10 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(banner.FromDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(banner.Todate)))
                     .GroupJoin(db.OrderItems.Where(i => i.ProductId == productid), o => o.Id, oi => oi.OrderId, (o, oi) => new { o, oi }).Any();
                 return Json(new { isAvailable = !isAvailable }, JsonRequestBehavior.AllowGet );
             }
@@ -5236,6 +5236,11 @@ namespace ShopNow.Controllers
                 {
                     defaultImagePath = "../../assets/images/1.5-cm-X-1.5-cm.png";
                     nearbydistance = 16;
+                    model.DiscountCategoryPercentage = db.DiscountCategories.FirstOrDefault(i => i.Name == product.DiscountCategoryName && i.ShopId == shop.Id)?.Percentage;
+                }
+                else
+                {
+                    model.DiscountCategoryPercentage = product.Percentage;
                 }
 
                 _mapper.Map(product, model);
@@ -5341,10 +5346,29 @@ namespace ShopNow.Controllers
             return Json(isValid, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetCustomerFavoriteList(int customerid)
+        public JsonResult GetCustomerLikedList(int customerid)
         {
-            var list = db.CustomerFavorites.Where(i => i.CustomerId == customerid).ToList();
-            return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+            var model = new CustomerFavoriteListApiViewModel();
+            model.ListItems = db.CustomerFavorites.Where(i => i.CustomerId == customerid)
+                .Join(db.Products, cf => cf.ProductId, p => p.Id, (cf, p) => new { cf, p })
+                .Join(db.MasterProducts, p => p.p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+                .Join(db.Categories, p => p.p.p.CategoryId, c => c.Id, (p, c) => new { p, c })
+                .Select(i => new CustomerFavoriteListApiViewModel.ListItem
+                {
+                    CategoryId = i.c.Id,
+                    CategoryName = i.c.Name,
+                    ImagePath = ((!string.IsNullOrEmpty(i.p.m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + i.p.m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : ""),
+                    Itemid = i.p.p.p.ItemId,
+                    MRP = i.p.p.p.MenuPrice,
+                    Percentage = i.p.p.p.Percentage,
+                    Price = i.p.p.p.Price,
+                    ProductId = i.p.p.p.Id,
+                    ProductName = i.p.p.p.Name,
+                    Quantity = i.p.p.p.Qty,
+                    ShopId = i.p.p.p.ShopId,
+                    ShopName = i.p.p.p.ShopName
+                }).ToList();
+            return Json(new { list = model.ListItems }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
