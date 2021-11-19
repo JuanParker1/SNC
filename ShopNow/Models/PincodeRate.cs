@@ -15,9 +15,8 @@ namespace ShopNow.Models
     public partial class PincodeRate
     {
         public int Id { get; set; }
-        public string PinCode { get; set; }
-        public int DeliveryRateSet { get; set; }
-        public int Remarks { get; set; }
+        public string Pincode { get; set; }
+        public string Remarks { get; set; }
         public int Status { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }

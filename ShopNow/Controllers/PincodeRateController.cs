@@ -31,11 +31,11 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new PincodeRateListViewModel();
-            model.List = db.Shops.Where(i=>i.Status == 0).GroupBy(i => new { PinCode = i.PinCode, PincodeRateDeliveryRateSet = i.PincodeRateDeliveryRateSet })
+            model.List = db.Shops.Where(i=>i.Status == 0).GroupBy(i => new { PinCode = i.PinCode })
                 .Select(i => new PincodeRateListViewModel.PincodeRateList
             {
                 PinCode = i.Key.PinCode,
-                PincodeRateDeliveryRateSet = i.Key.PincodeRateDeliveryRateSet
+               // PincodeRateDeliveryRateSet = i.Key.PincodeRateDeliveryRateSet
             }).ToList();
              
             return View(model);
@@ -52,24 +52,20 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCPCU193")]
-        public JsonResult Update(string pincode, int deliveryRateSet, int remarks)
+        public JsonResult Update(string pincode, int deliveryRateSet, string remarks)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             string message = "";
             var pincodeRate = new PincodeRate();
-            pincodeRate.PinCode = pincode;
-            pincodeRate.DeliveryRateSet = deliveryRateSet;
+            pincodeRate.Pincode = pincode;
             pincodeRate.Remarks = remarks;
             pincodeRate.CreatedBy = user.Name;
             pincodeRate.UpdatedBy = user.Name;
-            // string code = PincodeRate.Add(pincodeRate, out int error);
-           // pincodeRate.Code = _generatedCode;
             pincodeRate.Status = 0;
             pincodeRate.DateEncoded = DateTime.Now;
             pincodeRate.DateUpdated = DateTime.Now;
             db.PincodeRates.Add(pincodeRate);
             db.SaveChanges();
-            //string code = pincodeRate.Code;
             message = pincode + " Successfully Updated";
 
             var shopList = db.Shops.Where(i => i.Status == 0 && i.PinCode == pincode).ToList();
@@ -81,7 +77,7 @@ namespace ShopNow.Controllers
                     if (shop != null)
                     {
                         shop.PincodeRateId = pincodeRate.Id;
-                        shop.PincodeRateDeliveryRateSet = deliveryRateSet;
+                        //shop.PincodeRateDeliveryRateSet = deliveryRateSet;
                         shop.DateUpdated = DateTime.Now;
 
                         shop.DateUpdated = DateTime.Now;
