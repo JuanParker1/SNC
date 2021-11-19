@@ -12,14 +12,14 @@
         </div>
         <div class="mb-2 data-search col-md-2">
         </div>
-        <div class="col-md-3">
+        @*<div class="col-md-3">
             <select name="ShopId" id="ShopId" class="form-control">
                 @if(Model.ShopId != 0){
                 <option value="@Model.ShopId">@Model.ShopName</option>
                 }
             </select>
             <input type="hidden" name="ShopName" id="ShopName" value="@Model.ShopName" />
-        </div>
+        </div>*@
         <div class="col-md-2">
             <select name="StaffId" id="StaffId" class="form-control">
                 @if (Model.StaffId != 0)
@@ -55,8 +55,8 @@
                                 {
                                 <tr>
                                     <td></td>
-                                    <td class="td"><input type="hidden" value="@item.PageCode @item.PageName" class="txt">@item.PageName.Split('.')[0]</td>
-                                    <td>@item.PageName.Split('.')[1]</td>
+                                    <td class="td"><input type="hidden" value="@item.PageCode @item.PageName" class="txt">@item.PageName.Split('.')[0]-@item.PageName.Split('.')[1]</td>
+                                   @* <td>@item.PageName.Split('.')[1]</td>*@
                                     @if (item.IsAccess == true)
                                     {
                                         <td><input id="Access" type="checkbox" class="form-control Access" name="Access" style="height:calc(0.7em + 0.75rem + 2px)" checked /></td>
@@ -124,30 +124,43 @@
                 });
             }).draw();
 
-            $('#ShopId').select2({
-                placeholder: "Select Shop",
+            //$('#ShopId').select2({
+            //    placeholder: "Select Shop",
+            //    ajax: {
+            //        url: "/AccessPolicy/GetShopSelect2",
+            //        width: '100%',
+            //        delay: 250,
+            //        dataType: 'json'
+            //    }
+            //}).on('select2:select', function (e) {
+            //    $('input[name="ShopName"]').val(e.params.data.text);
+            //    $("#StaffId").select2({
+            //        placeholder: "Select Staff",
+            //        ajax: {
+            //            url: "/AccessPolicy/GetStaffSelect2?ShopId=" + e.params.data.id,
+            //            width: "100%",
+            //            delay: 250,
+            //            dataType: 'json'
+            //        }
+            //    }).on("select2:select", function (e) {
+            //        //var ShopId = $("#ShopId").val();
+            //        $('input[name="StaffName"]').val(e.params.data.text);
+            //        //window.location.href = "/AccessPolicy/Manage/?StaffId=" + e.params.data.id + "&ShopId=" + ShopId;
+            //    });
+            //});
+
+            $("#StaffId").select2({
+                placeholder: "Select Staff",
                 ajax: {
-                    url: "/AccessPolicy/GetShopSelect2",
-                    width: '100%',
+                    url: "/AccessPolicy/GetStaffSelect2?ShopId=" + e.params.data.id,
+                    width: "100%",
                     delay: 250,
                     dataType: 'json'
                 }
-            }).on('select2:select', function (e) {
-                $('input[name="ShopName"]').val(e.params.data.text);
-                $("#StaffId").select2({
-                    placeholder: "Select Staff",
-                    ajax: {
-                        url: "/AccessPolicy/GetStaffSelect2?ShopId=" + e.params.data.id,
-                        width: "100%",
-                        delay: 250,
-                        dataType: 'json'
-                    }
-                }).on("select2:select", function (e) {
-                    //var ShopId = $("#ShopId").val();
-                    $('input[name="StaffName"]').val(e.params.data.text);
-                    //window.location.href = "/AccessPolicy/Manage/?StaffId=" + e.params.data.id + "&ShopId=" + ShopId;
-                });
+            }).on("select2:select", function (e) {
+                $('input[name="StaffName"]').val(e.params.data.text);
             });
+
             $("#btnFilter").click(function () {
                 var ShopId = $("#ShopId").val();
                 var StaffId = $("#StaffId").val();

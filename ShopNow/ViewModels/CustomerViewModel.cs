@@ -166,6 +166,7 @@ namespace ShopNow.ViewModels
         public string PinCode { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        public string AlternateNumber { get; set; }
     }
 
     public class CustomerAddOnsAddressViewModel
@@ -242,6 +243,7 @@ namespace ShopNow.ViewModels
         public bool AgeVerify { get; set; }
         public bool AadharVerify { get; set; }
         public string DOB { get; set; }
+        public string AlternateNumber { get; set; }
     }
 }
 

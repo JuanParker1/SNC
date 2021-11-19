@@ -27,7 +27,7 @@ namespace ShopNow.Models
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }
     
-        public virtual Customer Customer { get; set; }
         public virtual Shop Shop { get; set; }
+        public virtual Customer Customer { get; set; }
     }
 }

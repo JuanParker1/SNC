@@ -633,9 +633,9 @@ namespace ShopNow.Controllers
             return Json(new { list = itemList }, JsonRequestBehavior.AllowGet);
         }
 
-        public async Task<JsonResult> GetStaffSelect2(int shopid)
+        public async Task<JsonResult> GetStaffSelect2(string q="")
         {
-            var model = await db.Staffs.OrderBy(i => i.Name).Where(a => a.ShopId == shopid).Select(i => new
+            var model = await db.Staffs.OrderBy(i => i.Name).Where(a => a.Name.Contains(q)).Select(i => new
             {
                 id = i.Id,
                 text = i.Name
@@ -644,16 +644,16 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        public async Task<JsonResult> GetShopSelect2(string q = "")
-        {
-            var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q)).Select(i => new
-            {
-                id = i.Id,
-                text = i.Name
-            }).ToListAsync();
+        //public async Task<JsonResult> GetShopSelect2(string q = "")
+        //{
+        //    var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q)).Select(i => new
+        //    {
+        //        id = i.Id,
+        //        text = i.Name
+        //    }).ToListAsync();
 
-            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        //}
 
         public async Task<JsonResult> GetCustomerSelect2(string q = "")
         {

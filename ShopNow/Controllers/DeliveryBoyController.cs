@@ -535,16 +535,16 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        public async Task<JsonResult> GetStaffSelect2(int ShopId)
-        {
-            var model = await db.Staffs.OrderBy(i => i.Name).Where(a => a.ShopId == ShopId && a.Status == 0).Select(i => new
-            {
-                id = i.Id,
-                text = i.Name
-            }).ToListAsync();
+        //public async Task<JsonResult> GetStaffSelect2(string q = "")
+        //{
+        //    var model = await db.Staffs.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
+        //    {
+        //        id = i.Id,
+        //        text = i.Name
+        //    }).ToListAsync();
 
-            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        //}
 
         public async Task<JsonResult> GetDeliveryBoySelect2(string q = "")
         {
