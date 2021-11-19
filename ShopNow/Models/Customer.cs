@@ -52,6 +52,7 @@ namespace ShopNow.Models
         public double DeliveryWaitingCharge { get; set; }
         public Nullable<bool> IsReferred { get; set; }
         public string ReferralNumber { get; set; }
+        public string AlternateNumber { get; set; }
         public int Status { get; set; }
         public string UpdatedBy { get; set; }
         public string CreatedBy { get; set; }
