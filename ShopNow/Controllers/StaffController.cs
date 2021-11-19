@@ -257,17 +257,6 @@ namespace ShopNow.Controllers
             Staff staff = db.Staffs.FirstOrDefault(i => i.Id == dCode);
             var model = new StaffCreateEditViewModel();
             _mapper.Map(staff, model);
-            model.List = db.Shops.Where(i => i.Id == staff.ShopId).Select(i => new StaffCreateEditViewModel.ShopList
-            {
-                Address = i.Address,
-                CountryName = i.CountryName,
-                Id = i.Id,
-                DistrictName = i.DistrictName,
-                Name=i.Name,
-                PinCode=i.PinCode,
-                StateName=i.StateName,
-                StreetName=i.StreetName
-            }).ToList();
             return View(model);
         }
 

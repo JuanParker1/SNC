@@ -267,12 +267,12 @@ namespace ShopNow.Controllers
                 staff.DateUpdated = DateTime.Now;
                 db.Entry(staff).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                var customer = db.Customers.FirstOrDefault(i => i.Id == staff.CustomerId);
-                customer.Position = 2;
-                customer.UpdatedBy = customer.Name;
-                customer.DateUpdated = DateTime.Now;
-                db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
+                //var customer = db.Customers.FirstOrDefault(i => i.Id == staff.CustomerId);
+                //customer.Position = 2;
+                //customer.UpdatedBy = customer.Name;
+                //customer.DateUpdated = DateTime.Now;
+                //db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                //db.SaveChanges();
                 return Json(new { message = "Successfully Your Staff Password Created!" });
             }
             else
