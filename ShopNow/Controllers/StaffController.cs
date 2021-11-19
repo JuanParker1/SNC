@@ -57,9 +57,22 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var List = (from s in db.Staffs
-                        select s).OrderBy(s => s.Name).Where(i => i.Status == 0).ToList();
-            return View(List);
+            var model = new StaffListViewModel();
+            
+            model.List = db.Staffs.Where(i => i.Status == 0)
+               .Join(db.ShopStaffs, st => st.Id, ss => ss.StaffId, (st, ss) => new { st, ss })
+               .Join(db.Shops, st => st.ss.ShopId, sh => sh.Id, (st, sh) => new { st, sh })
+               .GroupBy(i => i.st.ss.StaffId)
+               .AsEnumerable()
+               .Select(i => new StaffListViewModel.StaffList
+               {
+                   Id = i.FirstOrDefault().st.st.Id,
+                   ImagePath = i.FirstOrDefault().st.st.ImagePath,
+                   Name = i.FirstOrDefault().st.st.Name,
+                   PhoneNumber = i.FirstOrDefault().st.st.PhoneNumber,
+                   ShopName = string.Join(", ", i.Select(a => a.sh.Name))
+               }).ToList();
+            return View(model.List);
         }
 
         [AccessPolicy(PageCode = "SNCSFC280")]
@@ -143,6 +156,7 @@ namespace ShopNow.Controllers
             if (staff != null)
             {
                 model.ShopIds = db.ShopStaffs.Where(i => i.StaffId == staff.Id).Select(i => i.ShopId).ToArray();
+                model.ShopId = String.Join(",", model.ShopIds);
                 if (model.ShopIds != null)
                 {
                     StringBuilder sb = new StringBuilder();
@@ -189,6 +203,32 @@ namespace ShopNow.Controllers
                 }
                 db.Entry(staff).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
+
+                // ShopStaff
+                if (staff != null && model.ShopIds != null)
+                {
+                    var shopStafflist = db.ShopStaffs.Where(i => i.StaffId == staff.Id).ToList();
+                    foreach (var sid in model.ShopIds)
+                    {
+                        var shopStaff = db.ShopStaffs.Where(i=> i.ShopId == sid && i.StaffId == staff.Id).FirstOrDefault();
+                        if (shopStaff == null)
+                        {
+                            ShopStaff ss = new ShopStaff();
+                            ss.ShopId = sid;
+                            ss.StaffId = staff.Id;
+                            db.ShopStaffs.Add(ss);
+                            db.SaveChanges();
+                        }
+                    }
+
+                    var removeShop = shopStafflist.Where(i => !model.ShopIds.Contains(i.ShopId)).ToList();
+                    if (removeShop != null)
+                    {
+                        db.ShopStaffs.RemoveRange(removeShop);
+                        db.SaveChanges();
+                    }
+
+                }
                 return RedirectToAction("List");
             }
             catch (AmazonS3Exception amazonS3Exception)

@@ -47,7 +47,7 @@
                 <button type="button" class="btn btn-sm btn-info mb-2 passwordtext" disabled>Password</button>
             </div>
             <div class="col-md-2">
-                <input type="text" class="form-control-sm mb-2" name="Password" id="Password" value="@Model.Password" readonly />
+                <input type="text" class="form-control mb-2" name="Password" id="Password" value="@Model.Password" readonly />
             </div>
             <div class="col-md-5 text-right">
                 <a href="~/Staff/List" target="_blank"><span class="fa fa-bars"></span>&nbsp;Staff List</a>
@@ -74,9 +74,7 @@
                             </div>
                             <div class="col-md-3 mt-1">
                                 <label class="control-label" for="ShopName"><strong class="text-secondary">Shop Name</strong></label>
-                                <select id="ShopIds" name="ShopIds" class="form-control">
-                                    @if (Model.ShopIds != null)
-                                    { <option>@Model.ShopNames</option>}
+                                <select id="ShopIds" name="ShopIds" class="form-control" multiple>
                                 </select>
                             </div>
                             <div class="col-md-3 text-center">
@@ -120,6 +118,19 @@
 
     <script>
         $(document).ready(function () {
+            var shopSelect = $('#ShopIds');
+            var shopIds = "@Model.ShopId";
+            var shopNames = "@Model.ShopNames";
+            if (shopIds) {
+                var array_code = shopIds.split(',');
+                var array_name = shopNames.split(',');
+                $.each(array_code, function (i) {
+                    $('select[name="ShopIds"] option[value=' + array_code[i] + ']').attr('selected', 'selected');
+                    var option = new Option(array_name[i], array_code[i], true, true);
+                    shopSelect.append(option).trigger('change');
+                });
+            }
+
             $(function () {
                 $('#GeneratePassword').click(function () {
                     var Id = $('#Id').val();
@@ -149,7 +160,7 @@
                 var requiredArr = [
                     'Name',
                     'PhoneNumber',
-                    'ShopId'
+                    'ShopIds'
                 ];
                 isValidated = ValidateEmptyRequiredFiels(requiredArr);
 
@@ -159,7 +170,7 @@
                 };
             });
 
-            $('#ShopId').select2({
+            $('#ShopIds').select2({
                 placeholder: "Search Shop",
                 ajax: {
                     url: "/Staff/GetShopSelect2",
@@ -168,7 +179,6 @@
                     dataType: 'json'
                 }
             }).on('select2:select', function (e) {
-                $('input[name="ShopName"]').val(e.params.data.text);
             });
 
             function readURL(input) {
