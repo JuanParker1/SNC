@@ -32,7 +32,6 @@
         <EntityTypeShape EntityType="sncModel.Page" Width="1.5" PointX="10.75" PointY="22.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.Payment" Width="1.5" PointX="13.75" PointY="1.25" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.PaymentsData" Width="1.5" PointX="12.75" PointY="22.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.PincodeRate" Width="1.5" PointX="22.75" PointY="14.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.PlatFormCreditRate" Width="1.5" PointX="23.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.Portion" Width="1.5" PointX="23.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.Products1" Width="1.5" PointX="2.75" PointY="24.75" IsExpanded="true" />
@@ -75,8 +74,6 @@
         <EntityTypeShape EntityType="sncModel.ShopDishAddOn" Width="1.5" PointX="10.375" PointY="15.75" />
         <EntityTypeShape EntityType="sncModel.OrderItem" Width="1.5" PointX="30.625" PointY="36.125" />
         <EntityTypeShape EntityType="sncModel.OrderItemAddon" Width="1.5" PointX="12.375" PointY="18.75" />
-        <EntityTypeShape EntityType="sncModel.Shop" Width="1.5" PointX="7.375" PointY="28.625" />
-        <AssociationConnector Association="sncModel.FK_CustomerReview_Shops" />
         <EntityTypeShape EntityType="sncModel.CustomerSearchData" Width="1.5" PointX="15.375" PointY="14.75" />
         <EntityTypeShape EntityType="sncModel.CustomerWalletHistory" Width="1.5" PointX="12.375" PointY="27.75" />
         <EntityTypeShape EntityType="sncModel.Banner" Width="1.5" PointX="28.375" PointY="15.75" />
@@ -86,6 +83,9 @@
         <EntityTypeShape EntityType="sncModel.Product" Width="1.5" PointX="12.375" PointY="30.75" />
         <EntityTypeShape EntityType="sncModel.ShopStaff" Width="1.5" PointX="28.375" PointY="28.75" />
         <EntityTypeShape EntityType="sncModel.CustomerFavorite" Width="1.5" PointX="30.375" PointY="0.75" />
+        <EntityTypeShape EntityType="sncModel.PincodeRate" Width="1.5" PointX="30.375" PointY="13.75" />
+        <EntityTypeShape EntityType="sncModel.Shop" Width="1.5" PointX="7.375" PointY="28.625" />
+        <AssociationConnector Association="sncModel.FK_CustomerReview_Shops" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
