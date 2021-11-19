@@ -37,6 +37,7 @@ namespace ShopNow.ViewModels
         public int Days { get; set; }
         public string BannerName { get; set; }
         public int? CreditType { get; set; }
+        public int OfferQuantityLimit { get; set; }
     }
 
     public class BannerListViewModel

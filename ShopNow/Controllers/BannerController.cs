@@ -56,7 +56,8 @@ namespace ShopNow.Controllers
                     ShopId = i.b.b.ShopId,
                     ShopName = i.s.Any() ? i.s.FirstOrDefault().Name : "N/A",
                     ToDate = i.b.b.Todate,
-                    CreditType = i.b.b.CreditType
+                    CreditType = i.b.b.CreditType,
+                    Status = i.b.b.Status
                 }).ToList();
 
             return View(model.List);
@@ -100,7 +101,8 @@ namespace ShopNow.Controllers
             var banner = db.Banners.FirstOrDefault(i => i.Id == dcode);
             var model = _mapper.Map<Banner, BannerEditViewModel>(banner);
             model.ShopName = db.Shops.FirstOrDefault(i => i.Id == banner.ShopId)?.Name;
-            model.ProductName = db.Products.FirstOrDefault(i => i.Id == banner.ProductId)?.Name;
+            model.ProductName = db.MasterProducts.FirstOrDefault(i => i.Id == banner.MasterProductId)?.Name;
+            model.OfferQuantityLimit = db.Products.FirstOrDefault(i => i.Id == banner.ProductId).OfferQuantityLimit;
             return View(model);
         }
 
@@ -118,7 +120,9 @@ namespace ShopNow.Controllers
             {
                 var product = db.Products.FirstOrDefault(i => i.Id == banner.ProductId && i.Status == 0);
                 banner.MasterProductId = product.MasterProductId;
-               // banner.MasterProductName = product.Name;
+                product.OfferQuantityLimit = model.OfferQuantityLimit;
+                db.Entry(product).State = EntityState.Modified;
+                db.SaveChanges();
             }
             try
             {
@@ -156,6 +160,12 @@ namespace ShopNow.Controllers
             banner.Status = 2;
             db.Entry(banner).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
+
+            var product = db.Products.FirstOrDefault(i => i.Id == banner.ProductId);
+            product.OfferQuantityLimit = 0;
+            db.Entry(product).State = EntityState.Modified;
+            db.SaveChanges();
+
             return RedirectToAction("List", "Banner");
         }
 
@@ -171,6 +181,14 @@ namespace ShopNow.Controllers
             banner.DateUpdated = DateTime.Now;
             db.Entry(banner).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
+
+            if (status == 2)
+            {
+                var product = db.Products.FirstOrDefault(i => i.Id == banner.ProductId);
+                product.OfferQuantityLimit = 0;
+                db.Entry(product).State = EntityState.Modified;
+                db.SaveChanges();
+            }
             return RedirectToAction("List");
         }
 

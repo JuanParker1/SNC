@@ -60,11 +60,14 @@
                                     <div class="col-md-3 text-md-left">
                                         <label class="col-form-label text-secondary font-weight-bold">Product Name*</label>
                                     </div>
-                                    <div class="col-md-9">
+                                    <div class="col-md-6">
                                         <select id="ProductId" name="ProductId" class="form-control" style="width: 100%">
                                             <option value="@Model.ProductId">@Model.ProductName</option>
                                         </select>
                                         <input type="hidden" name="ProductName" id="ProductName" value="@Model.ProductName" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input class="form-control" type="number" placeholder="Quantity Limit" name="OfferQuantityLimit" value="@Model.OfferQuantityLimit" />
                                     </div>
                                 </div>
                                 <div class="form-group row">
