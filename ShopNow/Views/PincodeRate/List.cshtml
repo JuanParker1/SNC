@@ -7,110 +7,51 @@
 <title>ShopNow | PIN Code Rate List</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-@*@using (Html.BeginForm("List", "PincodeRate", FormMethod.Post, new { id = "PincodeRateForm" }))
-    {*@
+<link href="~/Content/switch.css" rel="stylesheet" />
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-4">
             <h5 class="text-success" style="letter-spacing:1px">PIN CODE DELIVERY RATE LIST</h5>
         </div>
-        @*<div class="col-md-2 col-sm-4 mb-2 data-search">
-            </div>*@
     </div>
     <div class="row">
         <div class="col-md-12">
             <div class="card shadow">
                 <div class="card-body">
-
-                    @*<table class="table table-striped table-hover table-borderless table-hover" id="PinCodeRate-list">
-                            <thead>
-                                <tr>
-                                    <th>No.</th>
-                                    <th>PIN Code</th>
-                                    <th>Delivery Mode</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model.List)
-                                {
-                                    var count = Model.List.IndexOf(item);
-                                    var totalcount = Model.List.Count();
-                                    count++;
-                                    <tr>
-                                        <td></td>
-                                        <td>@item.PinCode</td>
-                                        <td>
-                                            <input type="hidden" name="PincodeRateDeliveryRateSet_@count" value="@item.PincodeRateDeliveryRateSet" />
-                                            <label class="form-check-label">
-                                                <input type="radio" class="form-check-input" id="General_@count" name="DeliveryRateSet_@count" value="0" data-id="@item.PinCode" data-id1="DeliveryRateSet_@count"> General
-                                            </label>
-                                            <label class="form-check-label ml-5">
-                                                <input type="radio" class="form-check-input" id="Special_@count" name="DeliveryRateSet_@count" value="1" data-id="@item.PinCode" data-id1="DeliveryRateSet_@count" data-toggle="modal" data-target="#myModal"> Special
-                                            </label>
-                                            <input type="hidden" name="Count" id="Count" value="@totalcount" />
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>*@
                     @Html.Grid(Model.List).Columns(columns =>
-       {
-           columns.Add(b => b.Pincode).Titled("Pincode").Filterable(true).SetWidth(10);
-           columns.Add()
-     .Encoded(false)
-     .Sanitized(false)
-      .RenderValueAs(b => new HtmlString
-               ("<select class='form-control select-type'><option disabled selected>Select Type</option><option value='0'>General</option><option value='1'>Special</option></select>")).Titled("Select Type").SetWidth(20);
-           columns.Add()
-     .Encoded(false)
-     .Sanitized(false)
-      .RenderValueAs(b => new HtmlString
-               ("<select class='form-control select-tier'><option disabled selected>Select Tier</option><option value='1'>1<sup>st</sup> Tier</option><option value='2'>2<sup>nd</sup> Tier</option><option value='3'>3<sup>rd</sup> Tier</option></select>")).Titled("Select Tier").SetWidth(20);
-           columns.Add()
-     .Encoded(false)
-     .Sanitized(false)
-      .RenderValueAs(b => new HtmlString
-               ("<select class='form-control select-remark'><option disabled selected>Select Remark</option><option value='Rain'>Rain</option><option value='Delivery Person Shortage'>Delivery Person Shortage</option><option value='Festival'>Festival</option><option value='Road Block'>Road Block</option></select>")).Titled("Remark").SetWidth(30);
-           columns.Add()
-     .Encoded(false)
-     .Sanitized(false)
-      .RenderValueAs(b => new HtmlString
-               ("<input type='button' class='btn btn-sm btn-success btn-save' data-id="+b.Id+" data-pincode="+b.Pincode+" value='Update' />")).Titled("Action").Css("text-center").SetWidth(5);
-       }).WithPaging(20).Sortable(true)
+               {
+                   columns.Add(b => b.Pincode).Titled("Pincode").Filterable(true).SetWidth(10);
+                   columns.Add()
+             .Encoded(false)
+             .Sanitized(false)
+              .RenderValueAs(b => new HtmlString
+                       ("<select class='form-control select-type'><option disabled selected>Select Type</option><option value='0'>General</option><option value='1'>Special</option></select>")).Titled("Select Type").SetWidth(20);
+                   columns.Add()
+             .Encoded(false)
+             .Sanitized(false)
+              .RenderValueAs(b => new HtmlString
+                       ("<select class='form-control select-tier'><option disabled selected>Select Tier</option><option value='1'>1<sup>st</sup> Tier</option><option value='2'>2<sup>nd</sup> Tier</option><option value='3'>3<sup>rd</sup> Tier</option></select>")).Titled("Select Tier").SetWidth(20);
+                   columns.Add()
+             .Encoded(false)
+             .Sanitized(false)
+              .RenderValueAs(b => new HtmlString
+                       ("<select class='form-control select-remark'><option disabled selected>Select Remark</option><option value='Rain'>Rain</option><option value='Delivery Person Shortage'>Delivery Person Shortage</option><option value='Festival'>Festival</option><option value='Road Block'>Road Block</option></select>")).Titled("Remark").SetWidth(30);
+                   columns.Add()
+             .Encoded(false)
+             .Sanitized(false)
+              .RenderValueAs(b => new HtmlString
+                       ("<input type='button' class='btn btn-sm btn-success btn-save' data-id="+b.Id+" data-pincode="+b.Pincode+" data-type="+b.Type+ " data-tier=" + b.Tier + " data-remark='" + b.Remarks + "' value='Update' />")).Titled("Action").Css("text-center").SetWidth(5);
+                   columns.Add().Encoded(false).Sanitized(false)
+             .RenderValueAs(s => new HtmlString
+                      ("<label class='switch'> <input type='checkbox' value='" + s.Status + "' data-id='" + s.Id + "' class='check-active'><span class='slider round'></span></label>")).Titled("Active/Inactive").SetWidth(5);
+               }).WithPaging(10).Sortable(true)
                 </div>
 
             </div>
         </div>
     </div>
 </div>
-@*}*@
-@*<div class="modal" id="myModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Special Delivery Mode</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label class="text-secondary font-weight-bold">Remarks</label>
-                            <select class="form-control" name="Remarks" id="Remarks">
-                                <option disabled selected>Select Remark</option>
-                                <option value="Rain">Rain</option>
-                                <option value="Delivery Person Shortage">Delivery Person Shortage</option>
-                                <option value="Festival">Festival</option>
-                                <option value="Road Block">Road Block</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success Save" id="Save">Save</button>
-                </div>
-            </div>
-        </div>
-    </div>*@
 
 @section Scripts
 {
@@ -119,6 +60,25 @@
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
+            $('table tbody tr').each(function () {
+                var $this = $(this).find(".btn-save");
+                var id = $this.data('id');
+                var type = $this.data('type');
+                var tier = $this.data('tier');
+                var remark = $this.data('remark');
+                if (id != '0') {
+                    $this.closest('tr').find('.select-type option[value=' + type + ']').prop("selected", true);
+                    $this.closest('tr').find('.select-tier option[value=' + tier + ']').prop("selected", true);
+                    $this.closest('tr').find('.select-remark option[value="' + remark + '"]').prop("selected", true);
+                }
+
+                var $thisactive = $(this).find(".check-active");
+                if ($thisactive.val() == '0')
+                    $thisactive.prop('checked', true);
+                else
+                    $thisactive.prop('checked', false);
+            });
+
 
             $('.btn-save').on('click', function () {
                 var tr = $(this).closest('tr');
@@ -128,7 +88,7 @@
                 var id = $(this).data('id');
                 var pincode = $(this).data('pincode');
                 if (type && tier && remark) {
-                    $.post('/PincodeRate/AddUpdate', { id: id, type: type, tier: tier, remark: remark, pincode: pincode }, function (data) {
+                    $.post('/PincodeRate/AddUpdate', { id: id, type: type, tier: tier, remarks: remark, pincode: pincode }, function (data) {
                         if (data) {
                             swal('Success!', 'Save Successfully', 'success');
                             window.location.reload();
@@ -140,91 +100,16 @@
                     swal('Warning!', 'All fields are required', 'warning');
             });
 
-
-            //var count = $("#Count").val();
-            //if (count != null || count != "") {
-            //    for (var i = 1; i <= count; i++) {
-            //        var deliveryRateSet = $('input[name=PincodeRateDeliveryRateSet_' + i + ']').val();
-            //        if (deliveryRateSet == 0) {
-            //            $('#General_' + i).prop('checked', true);
-            //        }
-            //        else if (deliveryRateSet == 1) {
-            //            $('#Special_' + i).prop('checked', true);
-            //        }
-            //    }
-            //}
-
-            //$('input[type=radio]').change(function () {
-            //    var pincode = $(this).attr('data-id');
-            //    var test = $(this).attr('data-id1');
-            //    var deliveryRateSet = $('input[name=' + test + ']:checked').val();
-            //    var remarks = 0;
-            //    if (deliveryRateSet == 0) {
-            //        $.getJSON("/PincodeRate/Update", { pincode: pincode, deliveryRateSet: deliveryRateSet, remarks: remarks }, function (data) {
-            //            if (data.message != null || data.message != "") {
-            //                swal({
-            //                    title: data.message,
-            //                    text: "",
-            //                    type: "success"
-            //                }, function () {
-            //                    window.location.reload();
-            //                });
-            //            }
-            //        });
-            //    }
-            //    else if (deliveryRateSet == 1) {
-            //        $(".Save").click(function () {
-            //            var remarks = $("#Remarks").val();
-            //            var isValidate = false;
-            //            var requiredArr = [
-            //                'Remarks'
-            //            ];
-            //            isValidate = ValidateEmptyRequiredFiels(requiredArr);
-            //            if (isValidate) {
-            //                $.getJSON("/PincodeRate/Update?pincode=" + pincode + "&deliveryRateSet=" + deliveryRateSet + "&remarks=" + remarks, function (data) {
-            //                    if (data.message != null || data.message != "") {
-            //                        swal({
-            //                            title: data.message,
-            //                            text: "",
-            //                            type: "success"
-            //                        }, function () {
-            //                            window.location.reload();
-            //                        });
-            //                    }
-            //                });
-            //            }
-            //        });
-            //    }
-            //});
-
-            //$("#myModal").on("hidden.bs.modal", function () {
-            //    window.location.reload();
-            //});
-
-            //var t = $('#PinCodeRate-list').DataTable({
-            //    "dom": "<'row'<'col-sm-6'f>>" +
-            //        "<'row'<'col-sm-12'tr>>",
-            //    "bPaginate": false,
-            //    "scrollY": 400,
-            //    "paging": true,
-            //    "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "ALL"]],
-            //    "pageLength": -1,
-            //    initComplete: function (settings, json) {
-            //        $('.index input').remove();
-            //        $('.action-btn input').remove();
-            //        $('.dataTables_filter input').appendTo('.data-search');
-            //        $('.dataTables_filter label').remove();
-            //        $('.data-search input').attr('placeholder', 'Quick Search');
-            //        $('.data-search input').addClass('form-control');
-            //        $('.data-search input').removeClass('form-control-sm');
-            //    },
-            //});
-
-            //t.on('order.dt search.dt', function () {
-            //    t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
-            //        cell.innerHTML = i + 1;
-            //    });
-            //}).draw();
+            $('.check-active').on('click', function () {
+                var id = $(this).data('id');
+                if ($(this).is(':checked') == true) {
+                    $.post('/PincodeRate/UpdateActive', { id: id, status: 0 }, function () { });
+                }
+                else {
+                    $.post('/PincodeRate/UpdateActive', { id: id, status: 2 }, function () { });
+                }
+                window.location.reload();
+            });
 
         });
 

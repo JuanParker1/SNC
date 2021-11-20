@@ -20,6 +20,7 @@ namespace ShopNow.ViewModels
             public int Type { get; set; }
             public int Tier { get; set; }
             public string Remarks { get; set; }
+            public int Status { get; set; }
         }
         
     }
