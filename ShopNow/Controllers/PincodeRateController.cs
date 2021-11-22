@@ -31,65 +31,115 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new PincodeRateListViewModel();
-            model.List = db.Shops.Where(i=>i.Status == 0).GroupBy(i => new { PinCode = i.PinCode })
+            model.List = db.Shops.Where(i => i.Status == 0 && !string.IsNullOrEmpty(i.PinCode)).GroupBy(i => i.PinCode)
+                .GroupJoin(db.PincodeRates, s => s.FirstOrDefault().PincodeRateId, p => p.Id, (s, p) => new { s, p })
                 .Select(i => new PincodeRateListViewModel.PincodeRateList
-            {
-                PinCode = i.Key.PinCode,
-               // PincodeRateDeliveryRateSet = i.Key.PincodeRateDeliveryRateSet
-            }).ToList();
-             
+                {
+                    Pincode = i.s.FirstOrDefault().PinCode,
+                    Id = i.p.Any() ? i.p.FirstOrDefault().Id : 0,
+                    Status = i.p.Any() ? i.p.FirstOrDefault().Status : 0,
+                    Remarks = i.p.Any() ? i.p.FirstOrDefault().Remarks : "",
+                    Tier = i.s.FirstOrDefault().DeliveryTierType,
+                    Type = i.s.FirstOrDefault().DeliveryType,
+                }).ToList();
             return View(model);
         }
 
-        private const string _prefix = "PRT";
-
-        private static string _generatedCode
-        {
-            get
-            {
-                return ShopNow.Helpers.DRC.Generate(_prefix);
-            }
-        }
-
-        [AccessPolicy(PageCode = "SNCPCU193")]
-        public JsonResult Update(string pincode, int deliveryRateSet, string remarks)
+        [AccessPolicy(PageCode = "")]
+        public JsonResult AddUpdate(int id, int type, int tier, string remarks, string pincode)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            string message = "";
-            var pincodeRate = new PincodeRate();
-            pincodeRate.Pincode = pincode;
-            pincodeRate.Remarks = remarks;
-            pincodeRate.CreatedBy = user.Name;
-            pincodeRate.UpdatedBy = user.Name;
-            pincodeRate.Status = 0;
-            pincodeRate.DateEncoded = DateTime.Now;
-            pincodeRate.DateUpdated = DateTime.Now;
-            db.PincodeRates.Add(pincodeRate);
-            db.SaveChanges();
-            message = pincode + " Successfully Updated";
-
-            var shopList = db.Shops.Where(i => i.Status == 0 && i.PinCode == pincode).ToList();
-            if (shopList != null)
+            if (id == 0)
             {
-                foreach(var s in shopList)
+                var pincodeRate = new PincodeRate
                 {
-                    var shop = db.Shops.FirstOrDefault(i => i.Id == s.Id);// Shop.Get(s.Code);
-                    if (shop != null)
-                    {
-                        shop.PincodeRateId = pincodeRate.Id;
-                        //shop.PincodeRateDeliveryRateSet = deliveryRateSet;
-                        shop.DateUpdated = DateTime.Now;
-
-                        shop.DateUpdated = DateTime.Now;
-                        db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
-                        db.SaveChanges();
-                        // Shop.Edit(shop, out int errorCode);
-                    }
-                }
+                    Pincode = pincode,
+                    CreatedBy = user.Name,
+                    DateEncoded = DateTime.Now,
+                    DateUpdated = DateTime.Now,
+                    Remarks = remarks,
+                    UpdatedBy = user.Name
+                };
+                db.PincodeRates.Add(pincodeRate);
+                db.SaveChanges();
+                UpdateShopDeliveryType(pincodeRate.Id, type, tier, pincode);
             }
-
-            return Json(new {message = message }, JsonRequestBehavior.AllowGet);
+            else
+            {
+                var pincodeRate = db.PincodeRates.FirstOrDefault(i => i.Id == id);
+                pincodeRate.Remarks = remarks;
+                db.Entry(pincodeRate).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+                UpdateShopDeliveryType(pincodeRate.Id, type, tier, pincode);
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
+
+        public void UpdateShopDeliveryType(int id, int type, int tier, string pincode)
+        {
+            var shopList = db.Shops.Where(i => i.PinCode == pincode).ToList();
+            shopList.ForEach(i =>
+            {
+                i.PincodeRateId = id;
+                i.DeliveryTierType = tier;
+                i.DeliveryType = type;
+            });
+            db.SaveChanges();
+        }
+
+        [HttpPost]
+        [AccessPolicy(PageCode = "")]
+        public ActionResult UpdateActive(int id, int status)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var pincodeRate = db.PincodeRates.FirstOrDefault(i => i.Id == id);
+            pincodeRate.Status = status;
+            pincodeRate.UpdatedBy = user.Name;
+            pincodeRate.DateUpdated = DateTime.Now;
+            db.Entry(pincodeRate).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("List");
+        }
+
+        //[AccessPolicy(PageCode = "SNCPCU193")]
+        //public JsonResult Update(string pincode, int deliveryRateSet, string remarks)
+        //{
+        //    var user = ((Helpers.Sessions.User)Session["USER"]);
+        //    string message = "";
+        //    var pincodeRate = new PincodeRate();
+        //    pincodeRate.Pincode = pincode;
+        //    pincodeRate.Remarks = remarks;
+        //    pincodeRate.CreatedBy = user.Name;
+        //    pincodeRate.UpdatedBy = user.Name;
+        //    pincodeRate.Status = 0;
+        //    pincodeRate.DateEncoded = DateTime.Now;
+        //    pincodeRate.DateUpdated = DateTime.Now;
+        //    db.PincodeRates.Add(pincodeRate);
+        //    db.SaveChanges();
+        //    message = pincode + " Successfully Updated";
+
+        //    var shopList = db.Shops.Where(i => i.Status == 0 && i.PinCode == pincode).ToList();
+        //    if (shopList != null)
+        //    {
+        //        foreach(var s in shopList)
+        //        {
+        //            var shop = db.Shops.FirstOrDefault(i => i.Id == s.Id);// Shop.Get(s.Code);
+        //            if (shop != null)
+        //            {
+        //                shop.PincodeRateId = pincodeRate.Id;
+        //                //shop.PincodeRateDeliveryRateSet = deliveryRateSet;
+        //                shop.DateUpdated = DateTime.Now;
+
+        //                shop.DateUpdated = DateTime.Now;
+        //                db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
+        //                db.SaveChanges();
+        //                // Shop.Edit(shop, out int errorCode);
+        //            }
+        //        }
+        //    }
+
+        //    return Json(new {message = message }, JsonRequestBehavior.AllowGet);
+        //}
 
     }
 }

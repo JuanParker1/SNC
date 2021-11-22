@@ -75,8 +75,8 @@ namespace ShopNow.Controllers
                     item.Id = ap.Id;
                     item.PageCode = ap.PageCode;
                     item.PageName = ap.PageName;
-                    item.ShopId = ap.ShopId;
-                    item.ShopName = ap.ShopName;
+                    //item.ShopId = ap.ShopId;
+                    //item.ShopName = ap.ShopName;
                     item.StaffId = ap.StaffId;
                     item.StaffName = ap.StaffName;
                     item.CustomerId = ap.CustomerId;
@@ -117,8 +117,6 @@ namespace ShopNow.Controllers
                     var access = new AccessPolicy();
                     access.PageCode = s.PageCode;
                     access.PageName = s.PageName;
-                    access.ShopId = model.ShopId;
-                    access.ShopName = model.ShopName;
                     access.StaffId = model.StaffId;
                     access.StaffName = model.StaffName;
                     access.CustomerId = model.CustomerId;
@@ -151,28 +149,26 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCAPM002")]
-        public ActionResult Manage(int ShopId=0, int StaffId=0)
+        public ActionResult Manage(int StaffId=0)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             Session["ManageList"] = new List<AccessPolicyViewModel>();
             var model = new AccessPolicyListViewModel();
-            if (ShopId == 0 && StaffId == 0)
+            if (StaffId == 0)
             {
                 model.ManageList = db.Pages.Where(i => i.Status == 3).Select(i => new AccessPolicyListViewModel.AccessManage
                 {
                     PageCode = i.Code,
                     PageName = i.Name
                 }).OrderBy(i => i.PageName).ToList();
-                model.ShopId = 0;
-                model.ShopName = null;
                 model.StaffId = 0;
                 model.StaffName = null;
             }
             else
             {
                 model.ManageList = db.Pages.Where(i=> i.Status == 3)
-                    .GroupJoin(db.AccessPolicies.Where(i => i.ShopId == ShopId && i.StaffId == StaffId && i.isAccess == true), p => p.Code, a => a.PageCode, (p, a) => new { p, a })
+                    .GroupJoin(db.AccessPolicies.Where(i => i.StaffId == StaffId && i.isAccess == true), p => p.Code, a => a.PageCode, (p, a) => new { p, a })
                 .Select(i => new AccessPolicyListViewModel.AccessManage
                 {
                     PageCode = i.p.Code,
@@ -182,15 +178,11 @@ namespace ShopNow.Controllers
                     CustomerId = i.a.Any() ? i.a.FirstOrDefault().CustomerId:0,
                     CustomerName = i.a.Any() ? i.a.FirstOrDefault().CustomerName:"",
                     Position = i.a.Any() ? i.a.FirstOrDefault().Position:0,
-                    ShopId = i.a.Any() ? i.a.FirstOrDefault().ShopId:0,
-                    ShopName = i.a.Any() ? i.a.FirstOrDefault().ShopName:"",
                     StaffId = i.a.Any() ? i.a.FirstOrDefault().StaffId:0,
                     StaffName = i.a.Any() ? i.a.FirstOrDefault().StaffName:"",
                     Status = i.a.Any() ? i.a.FirstOrDefault().Status:0
                 }).ToList();
 
-                model.ShopId = ShopId;
-                model.ShopName = db.Shops.FirstOrDefault(i=> i.Id == ShopId).Name;
                 model.StaffId = StaffId;
                 model.StaffName = db.Staffs.FirstOrDefault(i => i.Id == StaffId).Name;
 
@@ -207,8 +199,6 @@ namespace ShopNow.Controllers
                         item.Id = ap.Id;
                         item.PageCode = ap.PageCode;
                         item.PageName = ap.PageName;
-                        item.ShopId = ap.ShopId;
-                        item.ShopName = ap.ShopName;
                         item.StaffId = ap.StaffId;
                         item.StaffName = ap.StaffName;
                         item.CustomerId = ap.CustomerId;
@@ -240,33 +230,23 @@ namespace ShopNow.Controllers
 
                     access.PageCode = s.PageCode;
                     access.PageName = s.PageName;
-                    access.ShopId = s.ShopId;
-                    access.ShopName = s.ShopName;
                     access.StaffId = s.StaffId;
                     access.StaffName = s.StaffName;
-                    var shop = db.Shops.Where(m => m.Id == s.ShopId).FirstOrDefault();
-                    var customer = db.Customers.Where(m => m.Id == shop.CustomerId).FirstOrDefault();
-                    if (customer != null)
-                    {
-                        access.CustomerId = customer.Id;
-                        access.CustomerName = customer.Name;
-                        access.Position = customer.Position;
-                    }
+                    access.CustomerId = s.StaffId;
+                    access.CustomerName = s.StaffName;
                     access.isAccess = true;
                     access.CreatedBy = user.Name;
                     access.UpdatedBy = user.Name;
                     access.DateEncoded = DateTime.Now;
                     access.DateUpdated = DateTime.Now;
-                    if (access.Position == 1)
-                        access.Status = 3;
-                    else
-                        access.Status = 0;
+                    access.Position = 1;
+                    access.Status = 3;
                     db.AccessPolicies.Add(access);
                     db.SaveChanges();
                 }
             }
             model.ManageList = db.Pages.Where(i => i.Status == 3)
-               .GroupJoin(db.AccessPolicies.Where(i => i.ShopId == model.ShopId && i.StaffId == model.StaffId && i.isAccess == true), p => p.Code, a => a.PageCode, (p, a) => new { p, a })
+               .GroupJoin(db.AccessPolicies.Where(i => i.StaffId == model.StaffId && i.isAccess == true), p => p.Code, a => a.PageCode, (p, a) => new { p, a })
                            .Select(i => new AccessPolicyListViewModel.AccessManage
                            {
                                PageCode = i.p.Code,

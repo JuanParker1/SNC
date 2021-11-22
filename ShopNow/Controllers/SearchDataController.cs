@@ -120,7 +120,7 @@ namespace ShopNow.Controllers
                         db.Entry(masterProduct).State = EntityState.Modified;
                         db.SaveChanges();
                     }
-                    var searchDataList = db.CustomerSearchDatas.Where(i => i.SearchKeyword.ToLower() == searchWord.ToLower()).ToList();
+                    var searchDataList = db.CustomerSearchDatas.Where(i => i.SearchKeyword.ToLower().Replace("  ", " ") == searchWord.ToLower().Replace("  ", " ")).ToList();
                     foreach (var item in searchDataList)
                     {
                         var sd = db.CustomerSearchDatas.FirstOrDefault(i => i.Id == item.Id && i.ResultCount == 0);

@@ -7,8 +7,8 @@
 {
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-2">
-            <h5 class="mt-1 text-nowrap text-theme" style="letter-spacing:1px">Manage AccessPolicy</h5>
+        <div class="col-md-3">
+            <h5 class="mt-1 text-nowrap text-theme" style="letter-spacing:1px">Manage Staff AccessPolicy</h5>
         </div>
         <div class="mb-2 data-search col-md-2">
         </div>
@@ -20,7 +20,7 @@
             </select>
             <input type="hidden" name="ShopName" id="ShopName" value="@Model.ShopName" />
         </div>*@
-        <div class="col-md-2">
+        <div class="col-md-3">
             <select name="StaffId" id="StaffId" class="form-control">
                 @if (Model.StaffId != 0)
                 {
@@ -32,8 +32,8 @@
         <div class="col-md-1 p-0 m-0">
             <button type="button" class="btn btn btn-info" id="btnFilter">Apply Filter</button>
         </div>
-        <div class="col-md-2 text-right">
-            <a href="~/AccessPolicy/List" target="_blank" class="text-theme_light"><span class="fa fa-user mr-2"></span>Single User Access</a>
+        <div class="col-md-3 text-right mt-1">
+            <a href="~/AccessPolicy/List" target="_blank" class="text-theme"><span class="fa fa-user mr-2"></span>Single User Access</a>
         </div>
     </div>
     <div class="row">
@@ -45,7 +45,6 @@
                             <thead>
                                 <tr>
                                     <th>No.</th>
-                                    <th>Module Name</th>
                                     <th>Page Name</th>
                                     <th>Action</th>
                                 </tr>
@@ -151,9 +150,9 @@
 
             $("#StaffId").select2({
                 placeholder: "Select Staff",
+                width: "100%",
                 ajax: {
-                    url: "/AccessPolicy/GetStaffSelect2?ShopId=" + e.params.data.id,
-                    width: "100%",
+                    url: "/AccessPolicy/GetStaffSelect2",
                     delay: 250,
                     dataType: 'json'
                 }
@@ -162,26 +161,26 @@
             });
 
             $("#btnFilter").click(function () {
-                var ShopId = $("#ShopId").val();
+               // var ShopId = $("#ShopId").val();
                 var StaffId = $("#StaffId").val();
-                if (ShopId == null || ShopId == "") {
-                    swal("Notice!", "Please Select Shop Name and Staff Name!", "warning");
-                } else {
+                //if (ShopId == null || ShopId == "") {
+                //    swal("Notice!", "Please Select Shop Name and Staff Name!", "warning");
+                //} else {
                     if (StaffId == null || StaffId == "") {
                         swal("Notice!", "Please Select Staff Name!", "warning");
                     }
                     else {
-                        window.location.href = "/AccessPolicy/Manage/?StaffId=" + StaffId + "&ShopId=" + ShopId;
+                        window.location.href = "/AccessPolicy/Manage/?StaffId=" + StaffId;
                     }
-                }
             });
+
             $(".Save").click(function () {
-                var ShopId = $("#ShopId").val();
+                //var ShopId = $("#ShopId").val();
                 var StaffId = $("#StaffId").val();
-                if (ShopId != null && StaffId != null) {
+                if (StaffId != null) {
                     $('#AccessPolicyForm').submit();
                 } else {
-                    swal("Notice!", "Please Select Shop Name and Staff Name!", "warning");
+                    swal("Notice!", "Please Select Staff Name!", "warning");
                 }
             });
 
@@ -189,9 +188,9 @@
                 var $row = $(this).closest("tr").find(".td");
                 var $txtValue = $row.find(".txt").val();
                 var geek = $txtValue.split(' ');
-                var ShopId = $("#ShopId").val();
+               /* var ShopId = $("#ShopId").val();*/
                 var StaffId = $("#StaffId").val();
-                var shopname = $("#ShopName").val();
+               /* var shopname = $("#ShopName").val();*/
                 var staffname = $("#StaffName").val();
                 if ($(this).is(":checked")) {
                     var PageCode = geek[0];
@@ -199,7 +198,7 @@
                     var IsAccess = true;
                     $.getJSON("/AccessPolicy/AddSession/", {
                         PageCode: PageCode, PageName: PageName, IsAccess: IsAccess,
-                        ShopId: ShopId, StaffId: StaffId, ShopName: shopname, StaffName: staffname
+                       StaffId: StaffId, StaffName: staffname
                     }, function (data) {
                     });
                 }
@@ -209,7 +208,7 @@
                     var IsAccess = false;
                     $.getJSON("/AccessPolicy/RemoveSession/", {
                         PageCode: PageCode, PageName: PageName, IsAccess: IsAccess,
-                        ShopId: ShopId, StaffId: StaffId, ShopName: shopname, StaffName: staffname
+                        StaffId: StaffId, StaffName: staffname
                     }, function (data) {
                     });
                 }
