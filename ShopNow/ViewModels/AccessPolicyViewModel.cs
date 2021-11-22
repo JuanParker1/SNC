@@ -10,8 +10,8 @@ namespace ShopNow.ViewModels
         public int Id { get; set; }
         public string PageCode { get; set; }
         public string PageName { get; set; }
-        public int ShopId { get; set; }
-        public string ShopName { get; set; }
+        //public int ShopId { get; set; }
+        //public string ShopName { get; set; }
         public int StaffId { get; set; }
         public string StaffName { get; set; }
         public int CustomerId { get; set; }
@@ -59,8 +59,8 @@ namespace ShopNow.ViewModels
         public int Id { get; set; }
         public string PageCode { get; set; }
         public string PageName { get; set; }
-        public int ShopId { get; set; }
-        public string ShopName { get; set; }
+        //public int ShopId { get; set; }
+        //public string ShopName { get; set; }
         public int StaffId { get; set; }
         public string StaffName { get; set; }
         public int CustomerId { get; set; }
