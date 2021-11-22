@@ -235,8 +235,7 @@ namespace ShopNow.Controllers
             {
                 customer.Name = model.Name;
                 customer.Email = model.Email;
-                if (!string.IsNullOrEmpty(model.AlternateNumber))
-                    customer.AlternateNumber = model.AlternateNumber;
+                customer.AlternateNumber = model.AlternateNumber;
                 customer.UpdatedBy = customer.Name;
                 customer.DateUpdated = DateTime.Now;
                 db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
