@@ -37,7 +37,7 @@
                  columns.Add().Encoded(false).Sanitized(false)
                     .RenderValueAs(o => @<div>
     <a href="/Banner/Edit?Id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
-    <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+    @*<a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>*@
 </div>);
             columns.Add().Encoded(false).Sanitized(false)
              .RenderValueAs(s => new HtmlString

@@ -457,6 +457,7 @@ namespace ShopNow.ViewModels
         public int DeliveryMode { get; set; }
         public double DeliveryDiscountPercentage { get; set; }
         public int Distance { get; set; }
+        public string Remark { get; set; }
     }
 
     public class SavePrescriptionViewModel
