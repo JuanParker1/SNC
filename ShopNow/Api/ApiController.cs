@@ -5250,6 +5250,8 @@ namespace ShopNow.Controllers
                 _mapper.Map(product, model);
                 model.ShopCategoryId = shop.ShopCategoryId;
                 model.ShopCategoryName = shop.ShopCategoryName;
+                model.ShopIsOnline = shop.IsOnline;
+                model.ShopNextOnTime = shop.NextOnTime;
                 var masterProduct = db.MasterProducts.FirstOrDefault(i => i.Id == product.MasterProductId);
                 if (masterProduct != null)
                 {
