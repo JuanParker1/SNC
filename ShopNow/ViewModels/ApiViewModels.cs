@@ -574,6 +574,8 @@ namespace ShopNow.ViewModels
         public int PreorderHour { get; set; }
         public int OfferQuantityLimit { get; set; }
         public int Qty { get; set; }
+        public bool? ShopIsOnline { get; set; }
+        public TimeSpan? ShopNextOnTime { get; set; }
 
         public List<SimilarProductsListItem> SimilarProductsListItems { get; set; }
         public class SimilarProductsListItem
