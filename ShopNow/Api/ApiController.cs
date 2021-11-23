@@ -5356,6 +5356,7 @@ namespace ShopNow.Controllers
                     model.Size = masterProduct.SizeLWH;
                     model.Weight = masterProduct.Weight;
                     model.PriscriptionCategory = masterProduct.PriscriptionCategory;
+                    model.ProductName = masterProduct.Name;
                 }
 
 
