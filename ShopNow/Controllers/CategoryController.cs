@@ -1,10 +1,13 @@
-﻿using AutoMapper;
+﻿using Amazon.S3;
+using AutoMapper;
 using ExcelDataReader;
 using ShopNow.Filters;
+using ShopNow.Helpers;
 using ShopNow.Models;
 using ShopNow.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.Entity;
 using System.Data.OleDb;
@@ -23,7 +26,9 @@ namespace ShopNow.Controllers
         private sncEntities db = new sncEntities();
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
-
+        UploadContent uc = new UploadContent();
+        private static readonly string accesskey = ConfigurationManager.AppSettings["AWSAccessKey"];
+        private static readonly string secretkey = ConfigurationManager.AppSettings["AWSSecretKey"];
         public CategoryController()
         {
             _mapperConfiguration = new MapperConfiguration(config =>
@@ -47,13 +52,14 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCCAS092")]
-        public JsonResult Save(Category category)
+        public ActionResult Save(CategoryCreateViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            bool IsAdded = false;
-            string message = "";
-            string message1 = "";
-            var categoryname = db.Categories.FirstOrDefault(i => i.Name == category.Name && i.ProductTypeId == category.ProductTypeId && i.Status == 0);
+            //bool IsAdded = false;
+            //string message = "";
+            //string message1 = "";
+            Category category = new Category();
+            var categoryname = db.Categories.FirstOrDefault(i => i.Name == model.Name && i.ProductTypeId == model.ProductTypeId && i.Status == 0);
             if (categoryname == null)
             {
                 category.CreatedBy = user.Name;
@@ -61,23 +67,50 @@ namespace ShopNow.Controllers
                 category.Status = 0;
                 category.DateEncoded = DateTime.Now;
                 category.DateUpdated = DateTime.Now;
+                category.Name = model.Name;
+                category.OrderNo = model.OrderNo;
+                category.ProductTypeId = model.ProductTypeId;
+                category.ProductTypeName = model.ProductTypeName;
+                try
+                {
+                    if (model.CategoryImage != null)
+                    {
+                        uc.UploadFiles(model.CategoryImage.InputStream, model.CategoryImage.FileName, accesskey, secretkey, "image");
+                        category.ImagePath = model.CategoryImage.FileName.Replace(" ", "");
+                    }
+                }
+                catch (AmazonS3Exception amazonS3Exception)
+                {
+                    if (amazonS3Exception.ErrorCode != null &&
+                        (amazonS3Exception.ErrorCode.Equals("InvalidAccessKeyId")
+                        ||
+                        amazonS3Exception.ErrorCode.Equals("InvalidSecurity")))
+                    {
+                        ViewBag.Message = "Check the provided AWS Credentials.";
+                    }
+                    else
+                    {
+                        ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
+                    }
+                }
                 db.Categories.Add(category);
                 db.SaveChanges();
-                IsAdded = category.Id != 0 ? true : false;
-                message = category.Name + " Successfully Added";
+                //IsAdded = category.Id != 0 ? true : false;
+                //message = category.Name + " Successfully Added";
             }
-            else
-            {
-                message1 = category.Name + " Already Exist!";
-            }
-            return Json(new { IsAdded = IsAdded, message = message, message1 = message1 }, JsonRequestBehavior.AllowGet);
+            //else
+            //{
+            //    message1 = category.Name + " Already Exist!";
+            //}
+            // return View(new { IsAdded = IsAdded, message = message, message1 = message1 }, JsonRequestBehavior.AllowGet);
+            return RedirectToAction("List");
         }
 
         [AccessPolicy(PageCode = "SNCCAE093")]
-        public JsonResult Edit(Category categoryModel)
+        public ActionResult Edit(Category categoryModel)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            string message = "";
+            //string message = "";
             Category category = db.Categories.FirstOrDefault(i => i.Id == categoryModel.Id);
             if (category != null)
             {
@@ -91,9 +124,10 @@ namespace ShopNow.Controllers
                 db.Entry(category).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
                 
-                message = categoryModel.Name + " Updated Successfully";
+                //message = categoryModel.Name + " Updated Successfully";
             }
-            return Json(new { message = message }, JsonRequestBehavior.AllowGet);
+            //return Json(new { message = message }, JsonRequestBehavior.AllowGet);
+            return RedirectToAction("List");
         }
 
         [AccessPolicy(PageCode = "SNCCAD094")]
