@@ -2411,7 +2411,7 @@ namespace ShopNow.Controllers
                         PreorderHour = i.p.p.p.PreorderHour,
                         OfferQuantityLimit = i.p.p.p.OfferQuantityLimit,
                         IsLiked = i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id),
-                        LikeText = (i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true && i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() == 1) ? "You Liked" : i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true ? "You & " + (i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() - 1) + " others" : i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? "" + i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() + " others" : "No Likes"
+                        LikeText = (i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true && i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() == 1) ? "You Liked" : i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true ? "You & " + (i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() - 1) + " more" : i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? "" + i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() + " like" : ""
                     }).ToList();
             }
             else if (shop.ShopCategoryId == 2)
@@ -2471,7 +2471,7 @@ namespace ShopNow.Controllers
                         PreorderHour = i.p.p.p.PreorderHour,
                         OfferQuantityLimit = i.p.p.p.OfferQuantityLimit,
                         IsLiked = i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id),
-                        LikeText = (i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true && i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() == 1) ? "You Liked" : i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true ? "You & " + (i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() - 1) + " others" : i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? "" + i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() + " others" : "No Likes"
+                        LikeText = (i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true && i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() == 1) ? "You Liked" : i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true ? "You & " + (i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() - 1) + " more" : i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? "" + i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() + " like" : ""
                     }).ToList();
             }
             return new JsonResult()
@@ -5235,7 +5235,6 @@ namespace ShopNow.Controllers
             var model = new ProductDetailsApiViewModel();
             if (product != null)
             {
-                int nearbydistance = 8;
                 var shop = db.Shops.FirstOrDefault(s => s.Id == product.ShopId);
                 string defaultImagePath = "../../assets/images/noimageres.svg";
                 //if (shop.ShopCategoryId == 4)
@@ -5257,6 +5256,7 @@ namespace ShopNow.Controllers
                 var masterProduct = db.MasterProducts.FirstOrDefault(i => i.Id == product.MasterProductId);
                 if (masterProduct != null)
                 {
+                    model.ImagePath = ((!string.IsNullOrEmpty(masterProduct.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + masterProduct.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : defaultImagePath);
                     model.ImagePath1 = ((!string.IsNullOrEmpty(masterProduct.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + masterProduct.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : defaultImagePath);
                     model.ImagePath2 = ((!string.IsNullOrEmpty(masterProduct.ImagePath2)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + masterProduct.ImagePath2.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : null);
                     model.ImagePath3 = ((!string.IsNullOrEmpty(masterProduct.ImagePath3)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + masterProduct.ImagePath3.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : null);
@@ -5264,8 +5264,6 @@ namespace ShopNow.Controllers
                     model.ImagePath5 = ((!string.IsNullOrEmpty(masterProduct.ImagePath5)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + masterProduct.ImagePath5.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : null);
                     model.CategoryName = shop.ShopCategoryId == 2 ? db.NextSubCategories.FirstOrDefault(i => i.Id == masterProduct.NextSubCategoryId)?.Name : db.Categories.FirstOrDefault(i => i.Id == product.CategoryId)?.Name;
                     model.ColorCode = masterProduct.ColorCode;
-                    model.DrugCompoundDetailIds = masterProduct.DrugCompoundDetailIds;
-                    model.DrugCompoundDetailName = masterProduct.DrugCompoundDetailName;
                     model.LongDescription = masterProduct.LongDescription;
                     model.ShortDescription = masterProduct.ShortDescription;
                     model.BrandName = masterProduct.BrandName;
@@ -5275,7 +5273,7 @@ namespace ShopNow.Controllers
 
 
                 string query = "SELECT * " +
-                                   " FROM Shops where(3959 * acos(cos(radians(@latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@longitude)) + sin(radians(@latitude)) * sin(radians(Latitude)))) < " + nearbydistance + " and ShopCategoryId =" + shop.ShopCategoryId + " and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
+                                   " FROM Shops where(3959 * acos(cos(radians(@latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@longitude)) + sin(radians(@latitude)) * sin(radians(Latitude)))) < 8 and ShopCategoryId =" + shop.ShopCategoryId + " and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
                                    " order by IsOnline desc,Adscore desc,Rating desc";
 
                 //if (shop.ShopCategoryId == 4)
@@ -5446,11 +5444,11 @@ namespace ShopNow.Controllers
                     if (model.IsFavorite == true && count == 1)
                         return Json(new { status = true, isLiked = model.IsFavorite, likeText = $"You Liked", productId = model.ProductId }, JsonRequestBehavior.AllowGet);
                     else if (model.IsFavorite == true && count > 1)
-                        return Json(new { status = true, isLiked = model.IsFavorite, likeText = $"You & {count - 1} others", productId = model.ProductId }, JsonRequestBehavior.AllowGet);
+                        return Json(new { status = true, isLiked = model.IsFavorite, likeText = $"You & {count - 1} more", productId = model.ProductId }, JsonRequestBehavior.AllowGet);
                     else if (model.IsFavorite == false && count == 0)
-                        return Json(new { status = true, isLiked = model.IsFavorite, likeText = $"No Likes", productId = model.ProductId }, JsonRequestBehavior.AllowGet);
+                        return Json(new { status = true, isLiked = model.IsFavorite, likeText = $"", productId = model.ProductId }, JsonRequestBehavior.AllowGet);
                     else
-                        return Json(new { status = true, isLiked = model.IsFavorite, likeText = $"{count} others", productId = model.ProductId }, JsonRequestBehavior.AllowGet);
+                        return Json(new { status = true, isLiked = model.IsFavorite, likeText = $"{count} like", productId = model.ProductId }, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
