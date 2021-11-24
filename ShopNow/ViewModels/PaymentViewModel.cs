@@ -215,6 +215,7 @@ namespace ShopNow.ViewModels
         public int PaymentCategoryType { get; set; }
         public int OfferId { get; set; }
         public double OfferAmount { get; set; }
+        public double TipsAmount { get; set; }
         //public string Currency { get; set; }
         //public string CountryName { get; set; }
         //public string CheckSumString { get; set; }

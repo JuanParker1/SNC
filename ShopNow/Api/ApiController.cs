@@ -927,6 +927,7 @@ namespace ShopNow.Controllers
                     order.WalletAmount = model.WalletAmount;
                     order.OfferId = model.OfferId;
                     order.OfferAmount = model.OfferAmount;
+                    order.TipsAmount = model.TipsAmount;
                     db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
 

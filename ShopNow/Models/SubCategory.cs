@@ -33,9 +33,9 @@ namespace ShopNow.Models
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }
     
-        public virtual Category Category { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<NextSubCategory> NextSubCategories { get; set; }
         public virtual ProductType ProductType { get; set; }
+        public virtual Category Category { get; set; }
     }
 }
