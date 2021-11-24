@@ -28,7 +28,7 @@ columns.Add(c => c.ProductTypeName).Titled("Product Type").Filterable(true).SetW
 columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
    columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
              .RenderValueAs(o => @<div>
-                    <a href="editModal" class="text-info edit-prompt mr-5" data-id=@o.Id data-name="@o.Name"  data-producttypeid="@o.ProductTypeId"  data-producttypename="@o.ProductTypeName" data-orderno=@o.OrderNo data-target="#editModal" data-toggle="modal" ><i class="fa fa-edit fa-lg"></i></a>
+                    <a href="editModal" class="text-info edit-prompt mr-5" data-id=@o.Id data-name="@o.Name" data-producttypeid="@o.ProductTypeId" data-producttypename="@o.ProductTypeName" data-orderno=@o.OrderNo data-imagepath="@o.ImagePath" data-target="#editModal" data-toggle="modal"><i class="fa fa-edit fa-lg"></i></a>
                     <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
                 </div>);
 }).WithPaging(20).Sortable(true)
@@ -40,71 +40,94 @@ columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
 
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header alert alert-info">
-                <h5 class="modal-title" id="createModalLabel">New Category</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group row">
-                    <div class="col-md-6">
-                        <label class="col-form-label font-weight-bold text-secondary">Category Name</label>
-                        <input type="text" name="Name" id="Name" class="form-control" />
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-form-label"><strong class="text-secondary">Item Type</strong></label>
-                        <select name="ProductTypeId" class="form-control" id="ProductTypeId">                           
-                        </select>
-                        <input type="hidden" id="ProductTypeName" name="ProductTypeName" />
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-form-label font-weight-bold text-secondary">Adscore</label>
-                        <input type="number" min="1" value="1" name="OrderNo" id="OrderNo" class="form-control" />
+        <form action="/Category/Save" method="post" enctype="multipart/form-data">
+            <div class="modal-content">
+                <div class="modal-header alert alert-info">
+                    <h5 class="modal-title" id="createModalLabel">New Category</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <label class="col-form-label font-weight-bold text-secondary">Category Name</label>
+                            <input type="text" name="Name" id="Name" class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-form-label"><strong class="text-secondary">Item Type</strong></label>
+                            <select name="ProductTypeId" class="form-control" id="ProductTypeId">
+                            </select>
+                            <input type="hidden" id="ProductTypeName" name="ProductTypeName" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-form-label font-weight-bold text-secondary">Adscore</label>
+                            <input type="number" min="1" value="1" name="OrderNo" id="OrderNo" class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <p class="col-form-label font-weight-bold text-secondary">Image</p>
+                            <div class="img-upload-container ml-2">
+                                <img class="img-container w-100 h-100" id="img-CategoryImage" onerror="this.src='/Images/No Photo.png'" />
+                                <input type="file" id="CategoryImage" name="CategoryImage" class="d-none" />
+                                <label for="CategoryImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <div class="modal-footer">
+                    <input type="submit" id="Create" name="Create" value="Save" class="btn btn-success float-right Save" />
+                </div>
             </div>
-            <div class="modal-footer">
-                <input type="button" id="Create" name="Create" value="Save" class="btn btn-success float-right Save" />
-            </div>
-        </div>
+        </form>
     </div>
 </div>
 
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header alert alert-info">
-                <h5 class="modal-title" id="editModalLabel">Update Category</h5>
-                <button type="button" class="btnClose close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group row">
-                    <div class="col-md-6">
-                        <input type="hidden" id="CategoryId" />
-                        <label class="col-form-label font-weight-bold text-secondary">Category Name</label>
-                        <input type="text" name="Name" id="edit-Name" class="form-control" />
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-form-label font-weight-bold text-secondary">Item Type</label>
-                        <select name="edit-ProductTypeId" class="form-control" id="edit-ProductTypeId">
-                        </select>
-                        <input type="hidden" id="edit-ProductTypeName" name="edit-ProductTypeName" />
-                        <div id="ProductTypeEdit"></div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="col-form-label font-weight-bold text-secondary">Adscore</label>
-                        <input type="number" min="1" name="OrderNo" id="edit-OrderNo" class="form-control" />
+        <form action="/Category/Edit" method="post" enctype="multipart/form-data">
+            <div class="modal-content">
+                <div class="modal-header alert alert-info">
+                    <h5 class="modal-title" id="editModalLabel">Update Category</h5>
+                    <button type="button" class="btnClose close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <div class="col-md-6">
+                            <input type="hidden" id="CategoryId" />
+                            <label class="col-form-label font-weight-bold text-secondary">Category Name</label>
+                            <input type="text" name="edit-Name" id="edit-Name" class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-form-label font-weight-bold text-secondary">Item Type</label>
+                            <select name="edit-ProductTypeId" class="form-control" id="edit-ProductTypeId">
+                            </select>
+                            <input type="hidden" id="edit-ProductTypeName" name="edit-ProductTypeName" />
+                            <div id="ProductTypeEdit"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="col-form-label font-weight-bold text-secondary">Adscore</label>
+                            <input type="number" min="1" name="OrderNo" id="edit-OrderNo" class="form-control" />
+                        </div>
+                        <div class="col-md-2">
+                            <p class="col-form-label text-secondary font-weight-bold">Image</p>
+                            <img class="img-container" id="img-edit-CategoryImage" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
+                            <input type="hidden" name="ImagePath" />
+                            @*<div class="img-upload-container ml-2">
+                                <img class="img-container w-100 h-100" id="img-edit-CategoryImage" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath1" onerror="this.src='/Images/No Photo.png'" />
+                                <input type="file" id="edit-CategoryImage" name="edit-CategoryImage" class="d-none" />
+                                <input type="hidden" name="ImagePath" value="@Model.ImagePath" />
+                                <label for="edit-CategoryImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                            </div>*@
+                        </div>
                     </div>
                 </div>
+                <div class="modal-footer">
+                    <input type="submit" id="Edit" name="Edit" value="Save" class="btn btn-success float-right Edit" />
+                </div>
             </div>
-            <div class="modal-footer">
-                <input type="button" id="Edit" name="Edit" value="Save" class="btn btn-success float-right Edit" />
-            </div>
-        </div>
+        </form>
     </div>
 </div>
 @section Scripts
@@ -115,6 +138,7 @@ columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
     <script src="~/Scripts/select2/js/select2.js"></script>
     <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
     <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <link href="~/Content/multiple-image-upload.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
             //$('#ProductTypeId').on('change', function () {
@@ -149,49 +173,52 @@ columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
                 $('#edit-ProductTypeName').val(e.params.data.text);
             });
 
-            $('#Create').on('click', function () {
-                var isValidate = false;
-                var requiredArr = [
-                    'Name',
-                    'ProductTypeId'
-                ];
-                isValidate = ValidateEmptyRequiredFiels(requiredArr);
-                if (isValidate) {
-                    var category = {
-                        Name: $('#Name').val(),
-                        ProductTypeId: $('#ProductTypeId').val(),
-                        ProductTypeName: $('#ProductTypeName').val(),
-                        OrderNo: $('#OrderNo').val()
-                    }
-                    $.post("/Category/Save?", { category: category }, function (data) {
-                        if (data.IsAdded == true) {
-                            swal({
-                                title: data.message,
-                                text: "",
-                                type: "success"
-                            }, function () {
-                                window.location.reload();
-                            });
-                        } else {
-                            if (data.message1 != null || data.message1 != "") {
-                                swal(data.message1, "", "warning");
-                                $('#Name').val("");
-                                $('#ProductTypeId').val("");
-                                $('#OrderNo').val("");
-                            }
-                        }
-                    });
-                }
-            });
+            //$('#Create').on('click', function () {
+            //    var isValidate = false;
+            //    var requiredArr = [
+            //        'Name',
+            //        'ProductTypeId'
+            //    ];
+            //    isValidate = ValidateEmptyRequiredFiels(requiredArr);
+            //    if (isValidate) {
+            //        var category = {
+            //            Name: $('#Name').val(),
+            //            ProductTypeId: $('#ProductTypeId').val(),
+            //            ProductTypeName: $('#ProductTypeName').val(),
+            //            OrderNo: $('#OrderNo').val()
+            //        }
+            //        $.post("/Category/Save?", { category: category }, function (data) {
+            //            if (data.IsAdded == true) {
+            //                swal({
+            //                    title: data.message,
+            //                    text: "",
+            //                    type: "success"
+            //                }, function () {
+            //                    window.location.reload();
+            //                });
+            //            } else {
+            //                if (data.message1 != null || data.message1 != "") {
+            //                    swal(data.message1, "", "warning");
+            //                    $('#Name').val("");
+            //                    $('#ProductTypeId').val("");
+            //                    $('#OrderNo').val("");
+            //                }
+            //            }
+            //        });
+            //    }
+            //});
 
             $(".edit-prompt").click(function () {
                 var typeid = $(this).attr('data-producttypeid');
                 var typename = $(this).attr('data-producttypename');
+                var imagepath = $(this).attr('data-imagepath');
                 $('#CategoryId').val($(this).attr('data-id'));
                 $('#edit-Name').val($(this).attr('data-name'));
                 $('#edit-ProductTypeId').append($("<option></option>").attr("value", typeid).text(typename));
                 $('#edit-ProductTypeName').val($(this).attr('data-producttypename'));
                 $('#edit-OrderNo').val($(this).attr('data-orderno'));
+                $('#img-edit-CategoryImage').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + imagepath);
+                $('input[name="ImagePath"]').val(imagepath);
             });
 
             $(".Edit").click(function () {
@@ -247,6 +274,20 @@ columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
                         }
                     }
                 );
+            });
+
+            function readURLCategory(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#img-CategoryImage').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $("#CategoryImage").change(function () {
+                readURLCategory(this);
             });
 
         });

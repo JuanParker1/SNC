@@ -33,6 +33,16 @@ namespace ShopNow.ViewModels
         public string button { get; set; }
         public string Filename { get; set; }
     }
-
+    public class CategoryCreateViewModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int OrderNo { get; set; }
+        public int ProductTypeId { get; set; }
+        public string ProductTypeName { get; set; }
+        public string ImagePath { get; set; }
+        public HttpPostedFileBase CategoryImage { get; set; }
+       
+    }
 }
 
