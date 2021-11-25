@@ -557,8 +557,7 @@ namespace ShopNow.ViewModels
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
         public string ColorCode { get; set; }
-        public string DrugCompoundDetailIds { get; set; }
-        public string DrugCompoundDetailName { get; set; }
+        public string ImagePath { get; set; }
         public string ImagePath1 { get; set; }
         public string ImagePath2 { get; set; }
         public string ImagePath3 { get; set; }
@@ -573,7 +572,6 @@ namespace ShopNow.ViewModels
         public bool IsPreorder { get; set; }
         public int PreorderHour { get; set; }
         public int OfferQuantityLimit { get; set; }
-        public int Qty { get; set; }
         public bool? ShopIsOnline { get; set; }
         public TimeSpan? ShopNextOnTime { get; set; }
 
