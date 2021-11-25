@@ -44,5 +44,15 @@ namespace ShopNow.ViewModels
         public HttpPostedFileBase CategoryImage { get; set; }
        
     }
+    public class CategoryEditViewModel
+    {
+        public int Id { get; set; }
+        public string editName { get; set; }
+        public int editOrderNo { get; set; }
+        public int editProductTypeId { get; set; }
+        public string editProductTypeName { get; set; }
+        public string ImagePath { get; set; }
+        public HttpPostedFileBase editCategoryImage { get; set; }
+    }
 }
 

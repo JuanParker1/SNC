@@ -107,26 +107,43 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCCAE093")]
-        public ActionResult Edit(Category categoryModel)
+        public ActionResult Edit(CategoryEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
-            //string message = "";
-            Category category = db.Categories.FirstOrDefault(i => i.Id == categoryModel.Id);
+            Category category = db.Categories.FirstOrDefault(i => i.Id == model.Id);
             if (category != null)
             {
-                category.Name = categoryModel.Name;
-                category.ProductTypeId = categoryModel.ProductTypeId;
-                category.ProductTypeName= categoryModel.ProductTypeName;
-                category.OrderNo = categoryModel.OrderNo;
-                category.DateUpdated = DateTime.Now;
+                category.Name = model.editName;
+                category.ProductTypeId = model.editProductTypeId;
+                category.ProductTypeName= model.editProductTypeName;
+                category.OrderNo = model.editOrderNo;
                 category.UpdatedBy = user.Name;
                 category.DateUpdated = DateTime.Now;
+                try
+                {
+                    if (model.editCategoryImage != null)
+                    {
+                        uc.UploadFiles(model.editCategoryImage.InputStream, model.editCategoryImage.FileName, accesskey, secretkey, "image");
+                        category.ImagePath = model.editCategoryImage.FileName.Replace(" ", "");
+                    }
+                }
+                catch (AmazonS3Exception amazonS3Exception)
+                {
+                    if (amazonS3Exception.ErrorCode != null &&
+                        (amazonS3Exception.ErrorCode.Equals("InvalidAccessKeyId")
+                        ||
+                        amazonS3Exception.ErrorCode.Equals("InvalidSecurity")))
+                    {
+                        ViewBag.Message = "Check the provided AWS Credentials.";
+                    }
+                    else
+                    {
+                        ViewBag.Message = "Error occurred: " + amazonS3Exception.Message;
+                    }
+                }
                 db.Entry(category).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                
-                //message = categoryModel.Name + " Updated Successfully";
             }
-            //return Json(new { message = message }, JsonRequestBehavior.AllowGet);
             return RedirectToAction("List");
         }
 

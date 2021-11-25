@@ -95,36 +95,34 @@ columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
                 <div class="modal-body">
                     <div class="form-group row">
                         <div class="col-md-6">
-                            <input type="hidden" id="CategoryId" />
+                            <input type="hidden"name="Id" id="CategoryId" />
                             <label class="col-form-label font-weight-bold text-secondary">Category Name</label>
-                            <input type="text" name="edit-Name" id="edit-Name" class="form-control" />
+                            <input type="text" name="editName" id="editName" class="form-control" />
                         </div>
                         <div class="col-md-6">
                             <label class="col-form-label font-weight-bold text-secondary">Item Type</label>
-                            <select name="edit-ProductTypeId" class="form-control" id="edit-ProductTypeId">
+                            <select name="editProductTypeId" class="form-control" id="editProductTypeId">
                             </select>
-                            <input type="hidden" id="edit-ProductTypeName" name="edit-ProductTypeName" />
+                            <input type="hidden" id="editProductTypeName" name="editProductTypeName" />
                             <div id="ProductTypeEdit"></div>
                         </div>
                         <div class="col-md-6">
                             <label class="col-form-label font-weight-bold text-secondary">Adscore</label>
-                            <input type="number" min="1" name="OrderNo" id="edit-OrderNo" class="form-control" />
+                            <input type="number" min="1" name="editOrderNo" id="editOrderNo" class="form-control" />
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-6">
                             <p class="col-form-label text-secondary font-weight-bold">Image</p>
-                            <img class="img-container" id="img-edit-CategoryImage" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
-                            <input type="hidden" name="ImagePath" />
-                            @*<div class="img-upload-container ml-2">
-                                <img class="img-container w-100 h-100" id="img-edit-CategoryImage" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath1" onerror="this.src='/Images/No Photo.png'" />
-                                <input type="file" id="edit-CategoryImage" name="edit-CategoryImage" class="d-none" />
-                                <input type="hidden" name="ImagePath" value="@Model.ImagePath" />
-                                <label for="edit-CategoryImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                            </div>*@
+                            <div class="img-upload-container ml-2">
+                                <img class="img-container" id="imgeditCategoryImage" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
+                                <input type="file" id="editCategoryImage" name="editCategoryImage" class="d-none" />
+                                <input type="hidden" name="ImagePath" />
+                                <label for="editCategoryImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <input type="submit" id="Edit" name="Edit" value="Save" class="btn btn-success float-right Edit" />
+                    <input type="submit" name="Edit" value="Update" class="btn btn-success float-right" />
                 </div>
             </div>
         </form>
@@ -161,7 +159,7 @@ columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
                 $('input[name="ProductTypeName"]').val(e.params.data.text);
             });
 
-            $('#edit-ProductTypeId').select2({
+            $('#editProductTypeId').select2({
                 placeholder: "Search Type",
                 width: '100%',
                 ajax: {
@@ -170,7 +168,7 @@ columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
                     dataType: 'json'
                 }
             }).on('select2:select', function (e) {
-                $('#edit-ProductTypeName').val(e.params.data.text);
+                $('#editProductTypeName').val(e.params.data.text);
             });
 
             //$('#Create').on('click', function () {
@@ -213,39 +211,39 @@ columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
                 var typename = $(this).attr('data-producttypename');
                 var imagepath = $(this).attr('data-imagepath');
                 $('#CategoryId').val($(this).attr('data-id'));
-                $('#edit-Name').val($(this).attr('data-name'));
-                $('#edit-ProductTypeId').append($("<option></option>").attr("value", typeid).text(typename));
-                $('#edit-ProductTypeName').val($(this).attr('data-producttypename'));
-                $('#edit-OrderNo').val($(this).attr('data-orderno'));
-                $('#img-edit-CategoryImage').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + imagepath);
+                $('#editName').val($(this).attr('data-name'));
+                $('#editProductTypeId').append($("<option></option>").attr("value", typeid).text(typename));
+                $('#editProductTypeName').val($(this).attr('data-producttypename'));
+                $('#editOrderNo').val($(this).attr('data-orderno'));
+                $('#imgeditCategoryImage').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + imagepath);
                 $('input[name="ImagePath"]').val(imagepath);
             });
 
-            $(".Edit").click(function () {
-                var category = {
-                    Id: $('#CategoryId').val(),
-                    Name: $('#edit-Name').val(),
-                    ProductTypeId: $('#edit-ProductTypeId').val(),
-                    ProductTypeName: $('#edit-ProductTypeName').val(),
-                    OrderNo: $('#edit-OrderNo').val()
-                }
-                if ($('#edit-Name').val() == "" || $('#edit-Name').val() == null) {
-                    swal("Name is Empty.", "Please Enter a Category Name", "warning");
-                }
-                else {
-                    $.post("/Category/Edit", { categoryModel: category }, function (data) {
-                        if (data.message != null || data.message != "") {
-                            swal({
-                                title: data.message,
-                                text: "",
-                                type: "success"
-                            }, function () {
-                                window.location.reload();
-                            });
-                        }
-                    });
-                }
-            });
+            //$(".Edit").click(function () {
+            //    var category = {
+            //        Id: $('#CategoryId').val(),
+            //        Name: $('#edit-Name').val(),
+            //        ProductTypeId: $('#edit-ProductTypeId').val(),
+            //        ProductTypeName: $('#edit-ProductTypeName').val(),
+            //        OrderNo: $('#edit-OrderNo').val()
+            //    }
+            //    if ($('#edit-Name').val() == "" || $('#edit-Name').val() == null) {
+            //        swal("Name is Empty.", "Please Enter a Category Name", "warning");
+            //    }
+            //    else {
+            //        $.post("/Category/Edit", { categoryModel: category }, function (data) {
+            //            if (data.message != null || data.message != "") {
+            //                swal({
+            //                    title: data.message,
+            //                    text: "",
+            //                    type: "success"
+            //                }, function () {
+            //                    window.location.reload();
+            //                });
+            //            }
+            //        });
+            //    }
+            //});
 
             //$("#editModal").on("hidden.bs.modal", function () {
             //    window.location.reload();
@@ -285,9 +283,21 @@ columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
                     reader.readAsDataURL(input.files[0]);
                 }
             }
+            function readURLEditCategory(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#imgeditCategoryImage').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
 
             $("#CategoryImage").change(function () {
                 readURLCategory(this);
+            });
+            $("#editCategoryImage").change(function () {
+                readURLEditCategory(this);
             });
 
         });
