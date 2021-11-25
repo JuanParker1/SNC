@@ -2365,7 +2365,7 @@ namespace ShopNow.Controllers
                         OrderNo = i.OrderNo
                     }).ToList<ShopDetails.CategoryList>();
 
-                model.TrendingCategoryLists = model.CategoryLists.Where(i=>i.OrderNo !=0).OrderBy(i => i.OrderNo).Take(12).Select(i => new ShopDetails.CategoryList
+                model.TrendingCategoryLists = model.CategoryLists.Where(i=>i.OrderNo !=0).OrderBy(i => i.OrderNo).Take(8).Select(i => new ShopDetails.CategoryList
                 {
                     Id = i.Id,
                     ImagePath = i.ImagePath,
