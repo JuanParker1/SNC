@@ -641,10 +641,12 @@ namespace ShopNow.ViewModels
         public TimeSpan? NextOnTime { get; set; }
         public List<ProductList> ProductLists { get; set; }
         public List<CategoryList> CategoryLists { get; set; }
+        public List<CategoryList> TrendingCategoryLists { get; set; }
         public class CategoryList
         {
             public int Id { get; set; }
             public string Name { get; set; }
+            public string ImagePath { get; set; }
         }
         public class ProductList
         {

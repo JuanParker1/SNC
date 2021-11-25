@@ -2353,7 +2353,22 @@ namespace ShopNow.Controllers
             else
                 reviewCount = 0;
             model.CustomerReview = reviewCount;
-            model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryId as Id, c.Name as Name from Products p join Categories c on c.Id = p.CategoryId where ShopId ={shopId}  and c.Status = 0 and CategoryId !=0 and c.Name is not null group by CategoryId,c.Name order by Name").ToList<ShopDetails.CategoryList>();
+            
+            if (shop.ShopCategoryId == 4)
+            {
+                model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryId as Id, c.Name as Name,c.ImagePath from Products p join Categories c on c.Id = p.CategoryId where ShopId ={shopId}  and c.Status = 0 and CategoryId !=0 and c.Name is not null group by CategoryId,c.Name,c.ImagePath order by Name").ToList<ShopDetails.CategoryList>();
+
+                model.TrendingCategoryLists = model.CategoryLists.Take(6).Where(i => !string.IsNullOrEmpty(i.ImagePath)).Select(i => new ShopDetails.CategoryList
+                {
+                    Id = i.Id,
+                    ImagePath = i.ImagePath,
+                    Name = i.Name
+                }).ToList();
+            }
+            else
+            {
+                model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryId as Id, c.Name as Name from Products p join Categories c on c.Id = p.CategoryId where ShopId ={shopId}  and c.Status = 0 and CategoryId !=0 and c.Name is not null group by CategoryId,c.Name order by Name").ToList<ShopDetails.CategoryList>();
+            }
             if (shop.ShopCategoryId == 1)
             {
                 //model.ProductLists = (from pl in db.Products
@@ -5467,7 +5482,7 @@ namespace ShopNow.Controllers
                     if (model.IsFavorite == true && count == 1)
                         return Json(new { status = true, isLiked = model.IsFavorite, likeText = $"You Liked", productId = model.ProductId }, JsonRequestBehavior.AllowGet);
                     else
-                        return Json(new { status = true, isLiked = model.IsFavorite, likeText = $"You & {count - 1} others", productId = model.ProductId }, JsonRequestBehavior.AllowGet);
+                        return Json(new { status = true, isLiked = model.IsFavorite, likeText = $"You & {count - 1} more", productId = model.ProductId }, JsonRequestBehavior.AllowGet);
                 }
             }
             catch
