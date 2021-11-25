@@ -2358,7 +2358,7 @@ namespace ShopNow.Controllers
             {
                 model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryId as Id, c.Name as Name,c.ImagePath from Products p join Categories c on c.Id = p.CategoryId where ShopId ={shopId}  and c.Status = 0 and CategoryId !=0 and c.Name is not null group by CategoryId,c.Name,c.ImagePath order by Name").ToList<ShopDetails.CategoryList>();
 
-                model.TrendingCategoryLists = model.CategoryLists.Take(6).Where(i => !string.IsNullOrEmpty(i.ImagePath)).Select(i => new ShopDetails.CategoryList
+                model.TrendingCategoryLists = model.CategoryLists.Take(8).Where(i => !string.IsNullOrEmpty(i.ImagePath)).Select(i => new ShopDetails.CategoryList
                 {
                     Id = i.Id,
                     ImagePath = i.ImagePath,
