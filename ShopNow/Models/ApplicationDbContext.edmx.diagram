@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="8c1ea3248a084182bb3a5bf766ce58e3" Name="Diagram1" ZoomLevel="71">
+      <Diagram DiagramId="8c1ea3248a084182bb3a5bf766ce58e3" Name="Diagram1" ZoomLevel="81">
         <EntityTypeShape EntityType="sncModel.AccessPolicy" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.AchievementProduct" Width="1.5" PointX="5.75" PointY="5.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.AchievementShop" Width="1.5" PointX="9.75" PointY="0.75" IsExpanded="true" />
@@ -68,7 +68,6 @@
         <EntityTypeShape EntityType="sncModel.ShopDishAddOn" Width="1.5" PointX="10.375" PointY="15.75" />
         <EntityTypeShape EntityType="sncModel.OrderItem" Width="1.5" PointX="30.625" PointY="36.125" />
         <EntityTypeShape EntityType="sncModel.OrderItemAddon" Width="1.5" PointX="12.375" PointY="18.75" />
-        <EntityTypeShape EntityType="sncModel.CustomerSearchData" Width="1.5" PointX="15.375" PointY="14.75" />
         <EntityTypeShape EntityType="sncModel.CustomerWalletHistory" Width="1.5" PointX="12.375" PointY="27.75" />
         <EntityTypeShape EntityType="sncModel.Banner" Width="1.5" PointX="28.375" PointY="15.75" />
         <EntityTypeShape EntityType="sncModel.CustomerPrescriptionImage" Width="1.5" PointX="28.375" PointY="21.75" />
@@ -86,6 +85,7 @@
         <AssociationConnector Association="sncModel.FK_SubCategories_Categories" />
         <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="28.375" PointY="32.5" />
         <AssociationConnector Association="sncModel.FK_OrderItems_Orders" />
+        <EntityTypeShape EntityType="sncModel.CustomerSearchData" Width="1.5" PointX="15.375" PointY="14.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

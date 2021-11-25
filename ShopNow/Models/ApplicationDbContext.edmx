@@ -437,6 +437,7 @@
           <Property Name="LinkedMasterProductIds" Type="nvarchar(max)" />
           <Property Name="LinkedMasterProductName" Type="nvarchar(max)" />
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="CustomerWalletHistory">
           <Key>
@@ -2574,7 +2575,6 @@
           </FunctionImport>
           <EntitySet Name="OrderItems" EntityType="sncModel.OrderItem" />
           <EntitySet Name="OrderItemAddons" EntityType="sncModel.OrderItemAddon" />
-          <EntitySet Name="CustomerSearchDatas" EntityType="sncModel.CustomerSearchData" />
           <EntitySet Name="CustomerWalletHistories" EntityType="sncModel.CustomerWalletHistory" />
           <EntitySet Name="Banners" EntityType="sncModel.Banner" />
           <EntitySet Name="CustomerPrescriptionImages" EntityType="sncModel.CustomerPrescriptionImage" />
@@ -2607,6 +2607,7 @@
             <End Role="Order" EntitySet="Orders" />
             <End Role="OrderItem" EntitySet="OrderItems" />
           </AssociationSet>
+          <EntitySet Name="CustomerSearchDatas" EntityType="sncModel.CustomerSearchData" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3098,17 +3099,6 @@
           <Property Name="PortionName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Int32" Nullable="false" />
         </EntityType>
-        <EntityType Name="CustomerSearchData">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="SearchKeyword" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ResultCount" Type="Int32" Nullable="false" />
-          <Property Name="LinkedMasterProductIds" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="LinkedMasterProductName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="CustomerWalletHistory">
           <Key>
             <PropertyRef Name="Id" />
@@ -3518,6 +3508,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="CustomerSearchData">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SearchKeyword" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ResultCount" Type="Int32" Nullable="false" />
+          <Property Name="LinkedMasterProductIds" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LinkedMasterProductName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -4775,18 +4777,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="CustomerSearchDatas">
-            <EntityTypeMapping TypeName="sncModel.CustomerSearchData">
-              <MappingFragment StoreEntitySet="CustomerSearchData">
-                <ScalarProperty Name="LinkedMasterProductName" ColumnName="LinkedMasterProductName" />
-                <ScalarProperty Name="LinkedMasterProductIds" ColumnName="LinkedMasterProductIds" />
-                <ScalarProperty Name="ResultCount" ColumnName="ResultCount" />
-                <ScalarProperty Name="SearchKeyword" ColumnName="SearchKeyword" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="CustomerWalletHistories">
             <EntityTypeMapping TypeName="sncModel.CustomerWalletHistory">
               <MappingFragment StoreEntitySet="CustomerWalletHistory">
@@ -5139,6 +5129,19 @@
                 <ScalarProperty Name="CustomerPhoneNumber" ColumnName="CustomerPhoneNumber" />
                 <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerSearchDatas">
+            <EntityTypeMapping TypeName="sncModel.CustomerSearchData">
+              <MappingFragment StoreEntitySet="CustomerSearchData">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="LinkedMasterProductName" ColumnName="LinkedMasterProductName" />
+                <ScalarProperty Name="LinkedMasterProductIds" ColumnName="LinkedMasterProductIds" />
+                <ScalarProperty Name="ResultCount" ColumnName="ResultCount" />
+                <ScalarProperty Name="SearchKeyword" ColumnName="SearchKeyword" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

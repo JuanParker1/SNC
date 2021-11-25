@@ -19,7 +19,7 @@ namespace ShopNow.Controllers
         public ActionResult List(SearchDataListViewModel model)
         {
             //var model = new SearchDataListViewModel();
-            model.AllListItems = db.CustomerSearchDatas.Where(i => (model.StartDate != null && model.EndDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate)) : false)
+            model.AllListItems = db.CustomerSearchDatas.Where(i => i.Status == 0 && (model.StartDate != null && model.EndDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate)) : false)
                 .GroupBy(i => i.SearchKeyword)
                 .Select(i => new SearchDataListViewModel.ListItem
                 {
@@ -29,22 +29,24 @@ namespace ShopNow.Controllers
                 }).OrderByDescending(i => i.Date).ToList();
 
             model.ZeroCountListItems = db.CustomerSearchDatas
-                .Where(i => i.ResultCount == 0 && ((model.StartDate != null && model.EndDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate)) : true) && string.IsNullOrEmpty(i.LinkedMasterProductIds))
+                .Where(i => i.Status == 0 && ((model.StartDate != null && model.EndDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate)) : true) && string.IsNullOrEmpty(i.LinkedMasterProductIds))
                 .AsEnumerable()
-                 .GroupBy(i => i.SearchKeyword).Where(i => i.Sum(a => a.ResultCount) == 0)
+                 .GroupBy(i => i.SearchKeyword, StringComparer.InvariantCultureIgnoreCase).Where(i => i.Sum(a => a.ResultCount) == 0)
                  .GroupJoin(db.SearchDatas, k => k.Key?.ToLower(), sd => sd.KeyValue?.ToLower(), (k, sd) => new { k, sd })
                 .Select(i => new SearchDataListViewModel.ListItem
                 {
+                    Id = i.k.FirstOrDefault().Id,
                     Count = i.k.Max(a => a.ResultCount),
                     Date = i.k.FirstOrDefault().DateEncoded,
                     Key = i.k.Key,
-                    OldCommonWord = string.Join(",", i.sd.Select(a => a.Source).ToList()).ToString()
-                }).Where(i => string.IsNullOrEmpty(i.OldCommonWord)).OrderByDescending(i => i.Date).ToList();
+                    OldCommonWord = string.Join(",", i.sd.Select(a => a.Source).ToList()).ToString(),
+                    IsLinked = i.k.Any(a => a.LinkedMasterProductIds != null)
+                }).Where(i => string.IsNullOrEmpty(i.OldCommonWord) && i.IsLinked != true).OrderByDescending(i => i.Date).ToList();
 
             model.ListWithLinkedKeywords = db.CustomerSearchDatas
-              .Where(i => ((model.StartDate != null && model.EndDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate)) : true))
+              .Where(i => i.Status==0  && ((model.StartDate != null && model.EndDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate)) : true))
               .AsEnumerable()
-               .GroupBy(i => i.SearchKeyword).Where(i => i.Sum(a => a.ResultCount) == 0)
+               .GroupBy(i => i.SearchKeyword, StringComparer.InvariantCultureIgnoreCase).Where(i => i.Sum(a => a.ResultCount) == 0)
                .GroupJoin(db.SearchDatas, k => k.Key?.ToLower(), sd => sd.KeyValue?.ToLower(), (k, sd) => new { k, sd })
               .Select(i => new SearchDataListViewModel.ListItem
               {
@@ -154,6 +156,15 @@ namespace ShopNow.Controllers
             }
 
             return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult RemoveCustomerSearch(int id, DateTime? startDate, DateTime? endDate)
+        {
+            var searchData = db.CustomerSearchDatas.FirstOrDefault(i => i.Id == id);
+            searchData.Status = 2;
+            db.Entry(searchData).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("List", new { StartDate = startDate, EndDate = endDate });
         }
 
         public async Task<JsonResult> GetKeywordSelect2(string q = "")
