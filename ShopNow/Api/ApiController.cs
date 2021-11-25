@@ -2356,7 +2356,13 @@ namespace ShopNow.Controllers
             
             if (shop.ShopCategoryId == 4)
             {
-                model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryId as Id, c.Name as Name,c.ImagePath from Products p join Categories c on c.Id = p.CategoryId where ShopId ={shopId}  and c.Status = 0 and CategoryId !=0 and c.Name is not null group by CategoryId,c.Name,c.ImagePath order by Name").ToList<ShopDetails.CategoryList>();
+                model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryId as Id, c.Name as Name,c.ImagePath from Products p join Categories c on c.Id = p.CategoryId where ShopId ={shopId}  and c.Status = 0 and CategoryId !=0 and c.Name is not null group by CategoryId,c.Name,c.ImagePath order by Name")
+                    .Select(i => new ShopDetails.CategoryList
+                    {
+                        Id = i.Id,
+                        ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                        Name = i.Name
+                    }).ToList<ShopDetails.CategoryList>();
 
                 model.TrendingCategoryLists = model.CategoryLists.Take(8).Where(i => !string.IsNullOrEmpty(i.ImagePath)).Select(i => new ShopDetails.CategoryList
                 {
