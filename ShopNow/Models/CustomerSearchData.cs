@@ -15,10 +15,11 @@ namespace ShopNow.Models
     public partial class CustomerSearchData
     {
         public int Id { get; set; }
-        public System.DateTime DateEncoded { get; set; }
         public string SearchKeyword { get; set; }
         public int ResultCount { get; set; }
         public string LinkedMasterProductIds { get; set; }
         public string LinkedMasterProductName { get; set; }
+        public System.DateTime DateEncoded { get; set; }
+        public int Status { get; set; }
     }
 }

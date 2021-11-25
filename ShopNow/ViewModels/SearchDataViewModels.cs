@@ -14,12 +14,14 @@ namespace ShopNow.ViewModels
         public List<ListItem> ListWithLinkedKeywords { get; set; }
         public class ListItem
         {
+            public int Id { get; set; }
             public DateTime? Date { get; set; }
             public string Key { get; set; }
             public int? Count { get; set; }
             //public string Color { get; set; }
             public string OldCommonWord { get; set; }
             public string LinkedMasterProduct { get; set; }
+            public bool IsLinked { get; set; }
         }
 
         public int AllCount { get; set; }

@@ -79,7 +79,7 @@
              .Encoded(false)
              .Sanitized(false)
               .RenderValueAs(b => new HtmlString
-                       ("<input type='button' class='btn btn-sm btn-success btn-save-keyword' value='Save' />")).Titled("Action").Css("text-center").SetWidth(5);
+                       ("<input type='button' class='btn btn-sm btn-success btn-save-keyword' value='Save' /><a href='/SearchData/RemoveCustomerSearch?id=" + b.Id + "&startDate=" + Model.StartDate + "&endDate=" + Model.EndDate + "' class='ml-3 btn btn-sm btn-danger'>Remove</a>")).Titled("Action").Css("text-center").SetWidth(5);
                }).WithPaging(20).Sortable(true)
                 </div>
                 <div class="tab-pane fade" id="mapped">

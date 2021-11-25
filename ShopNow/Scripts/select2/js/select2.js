@@ -883,14 +883,14 @@ S2.define('select2/results',[
     // Check if there are any selected options
     if ($selected.length > 0) {
       // If there are selected options, highlight the first
-      $selected.first().trigger('mouseenter');
+     // $selected.first().trigger('mouseenter');
     } else {
       // If there are no selected options, highlight the first option
       // in the dropdown
       $options.first().trigger('mouseenter');
     }
 
-    this.ensureHighlightVisible();
+   // this.ensureHighlightVisible();
   };
 
   Results.prototype.setClasses = function () {
