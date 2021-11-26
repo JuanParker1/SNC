@@ -4535,7 +4535,7 @@ namespace ShopNow.Controllers
                          UnitPrice = a.UnitPrice,
                          ShopId = i.o.o.ShopId,
                          ShopName = i.o.o.ShopName,
-                         OfferQuantityLimit = db.Products.FirstOrDefault(b=>b.Id == a.ProductId).OfferQuantityLimit,
+                         //OfferQuantityLimit = db.Products.FirstOrDefault(b=>b.Id == a.ProductId).OfferQuantityLimit,
                          OrderItemAddonLists = db.OrderItemAddons.Where(b => b.OrderItemId == a.Id).Select(b => new GetAllOrderListViewModel.OrderList.OrderItemList.OrderItemAddonList {
                              AddonName = b.AddonName,
                              AddonPrice = b.AddonPrice,
@@ -4850,7 +4850,8 @@ namespace ShopNow.Controllers
                        Size = i.p.m.SizeLWH,
                        Weight = i.p.m.Weight,
                        IsPreorder = i.p.p.p.IsPreorder,
-                       PreorderHour = i.p.p.p.PreorderHour
+                       PreorderHour = i.p.p.p.PreorderHour,
+                       OfferQuantityLimit = i.p.p.p.OfferQuantityLimit
                    }).ToList();
                 }
                 else
@@ -4881,6 +4882,7 @@ namespace ShopNow.Controllers
                         PreorderHour = i.p.p.PreorderHour,
                         AddOnType = i.p.oi.AddOnType,
                         HasAddon = i.p.oi.HasAddon,
+                        OfferQuantityLimit = i.p.p.OfferQuantityLimit,
                         OrderItemAddonLists = db.OrderItemAddons.Where(a => a.OrderItemId == i.p.oi.Id).Select(a => new OrderDetailsApiViewModel.OrderItemList.OrderItemAddonList {
                             AddonId = a.AddonId,
                             AddonName = a.AddonName,
@@ -5061,16 +5063,20 @@ namespace ShopNow.Controllers
             //       Date = i.ca.DateEncoded
             //   }).ToList();
             //model.ListItems = debitList.Concat(creditList).OrderByDescending(i => i.Date).ToList();
-
-            model.ListItems = db.CustomerWalletHistories.Where(i => i.CustomerId == customerId).OrderByDescending(i => i.DateEncoded)
-                .Select(i => new WalletHistoryViewModel.ListItem
-                {
-                    Amount = i.Amount,
-                    Date = i.DateEncoded,
-                    Description = i.Description,
-                    Type = i.Type
-                }).ToList();
-            return Json(new { list = model.ListItems }, JsonRequestBehavior.AllowGet);
+            var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
+            if (customer != null)
+            {
+                model.WalletAmount = customer.WalletAmount;
+                model.ListItems = db.CustomerWalletHistories.Where(i => i.CustomerId == customerId).OrderByDescending(i => i.DateEncoded)
+                    .Select(i => new WalletHistoryViewModel.ListItem
+                    {
+                        Amount = i.Amount,
+                        Date = i.DateEncoded,
+                        Description = i.Description,
+                        Type = i.Type
+                    }).ToList();
+            }
+            return Json(new { amount = model.WalletAmount, list = model.ListItems }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetDeliveryMode(double totalSize, double totalWeight)

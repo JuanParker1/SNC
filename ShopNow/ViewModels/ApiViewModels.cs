@@ -322,7 +322,7 @@ namespace ShopNow.ViewModels
             public int PreorderHour { get; set; }
             public int AddOnType { get; set; }
             public bool HasAddon { get; set; }
-
+            public int OfferQuantityLimit { get; set; }
             public List<OrderItemAddonList> OrderItemAddonLists { get; set; }
             public class OrderItemAddonList
             {
@@ -366,6 +366,7 @@ namespace ShopNow.ViewModels
             public double Weight { get; set; }
             public bool IsPreorder { get; set; }
             public int PreorderHour { get; set; }
+            public int OfferQuantityLimit { get; set; }
         }
     }
 
@@ -397,6 +398,7 @@ namespace ShopNow.ViewModels
 
     public class WalletHistoryViewModel
     {
+        public double WalletAmount { get; set; }
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {
