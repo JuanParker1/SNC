@@ -5063,16 +5063,20 @@ namespace ShopNow.Controllers
             //       Date = i.ca.DateEncoded
             //   }).ToList();
             //model.ListItems = debitList.Concat(creditList).OrderByDescending(i => i.Date).ToList();
-
-            model.ListItems = db.CustomerWalletHistories.Where(i => i.CustomerId == customerId).OrderByDescending(i => i.DateEncoded)
-                .Select(i => new WalletHistoryViewModel.ListItem
-                {
-                    Amount = i.Amount,
-                    Date = i.DateEncoded,
-                    Description = i.Description,
-                    Type = i.Type
-                }).ToList();
-            return Json(new { list = model.ListItems }, JsonRequestBehavior.AllowGet);
+            var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
+            if (customer != null)
+            {
+                model.WalletAmount = customer.WalletAmount;
+                model.ListItems = db.CustomerWalletHistories.Where(i => i.CustomerId == customerId).OrderByDescending(i => i.DateEncoded)
+                    .Select(i => new WalletHistoryViewModel.ListItem
+                    {
+                        Amount = i.Amount,
+                        Date = i.DateEncoded,
+                        Description = i.Description,
+                        Type = i.Type
+                    }).ToList();
+            }
+            return Json(new { amount = model.WalletAmount, list = model.ListItems }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetDeliveryMode(double totalSize, double totalWeight)
