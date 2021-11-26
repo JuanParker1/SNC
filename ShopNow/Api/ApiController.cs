@@ -4535,7 +4535,7 @@ namespace ShopNow.Controllers
                          UnitPrice = a.UnitPrice,
                          ShopId = i.o.o.ShopId,
                          ShopName = i.o.o.ShopName,
-                         OfferQuantityLimit = db.Products.FirstOrDefault(b=>b.Id == a.ProductId).OfferQuantityLimit,
+                         //OfferQuantityLimit = db.Products.FirstOrDefault(b=>b.Id == a.ProductId).OfferQuantityLimit,
                          OrderItemAddonLists = db.OrderItemAddons.Where(b => b.OrderItemId == a.Id).Select(b => new GetAllOrderListViewModel.OrderList.OrderItemList.OrderItemAddonList {
                              AddonName = b.AddonName,
                              AddonPrice = b.AddonPrice,
@@ -4850,7 +4850,8 @@ namespace ShopNow.Controllers
                        Size = i.p.m.SizeLWH,
                        Weight = i.p.m.Weight,
                        IsPreorder = i.p.p.p.IsPreorder,
-                       PreorderHour = i.p.p.p.PreorderHour
+                       PreorderHour = i.p.p.p.PreorderHour,
+                       OfferQuantityLimit = i.p.p.p.OfferQuantityLimit
                    }).ToList();
                 }
                 else
@@ -4881,6 +4882,7 @@ namespace ShopNow.Controllers
                         PreorderHour = i.p.p.PreorderHour,
                         AddOnType = i.p.oi.AddOnType,
                         HasAddon = i.p.oi.HasAddon,
+                        OfferQuantityLimit = i.p.p.OfferQuantityLimit,
                         OrderItemAddonLists = db.OrderItemAddons.Where(a => a.OrderItemId == i.p.oi.Id).Select(a => new OrderDetailsApiViewModel.OrderItemList.OrderItemAddonList {
                             AddonId = a.AddonId,
                             AddonName = a.AddonName,

@@ -6,7 +6,7 @@
 <div class="container-fluid my-3">
     <div class="row">
         <div class="col-md-6">
-            <h5 class="text-theme_SemiDark" style="letter-spacing:1px">@ViewBag.Title</h5>
+            <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
         </div>
         <div class="col-md-6 text-right">
             <a href="~/Banner/List" target="_self"><span class="fa fa-list-ul"></span> Banner List</a>
@@ -22,7 +22,7 @@
                 <input type="hidden" name="Bannerpath" id="Bannerpath" value="@Model.Bannerpath" />
                 <input type="hidden" name="Fromdate" id="Fromdate" value="@Model.FromDate" />
                 <input type="hidden" name="Todate" id="Todate" value="@Model.ToDate" />
-                <div class="card mt-2">
+                <div class="card shadow mt-2">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-9">
@@ -145,9 +145,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row mt-2">
                             <div class="col-md-2 mx-auto">
-                                <input type="submit" class="btn btn-success" value="Update" />
+                                <input type="submit" class="btn btn-block btn-success" value="Update" />
                             </div>
                         </div>
                     </div>
