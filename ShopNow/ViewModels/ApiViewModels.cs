@@ -69,6 +69,7 @@ namespace ShopNow.ViewModels
                 public double MiddlePrice { get; set; }
                 public bool HasAddon { get; set; }
                 public int AddOnType { get; set; }
+                public int OfferQuantityLimit { get; set; }
 
                 public List<OrderItemAddonList> OrderItemAddonLists { get; set; }
                 public class OrderItemAddonList
