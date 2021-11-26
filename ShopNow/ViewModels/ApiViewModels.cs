@@ -398,6 +398,7 @@ namespace ShopNow.ViewModels
 
     public class WalletHistoryViewModel
     {
+        public double WalletAmount { get; set; }
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {
