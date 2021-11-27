@@ -5506,6 +5506,68 @@ namespace ShopNow.Controllers
             }
         }
 
+        public JsonResult GetTopCategoryAndProducts(int shopid)
+        {
+            var shop = db.Shops.FirstOrDefault(i => i.Id == shopid);
+            var model = new TopCategoriesAndProductsViewModel();
+            model.CategoryListItems = db.Database.SqlQuery<TopCategoriesAndProductsViewModel.CategoryListItem>($"select distinct top 8 CategoryId as Id, c.Name as Name,c.ImagePath,c.OrderNo from Products p join Categories c on c.Id = p.CategoryId where ShopId ={shop.Id} and OrderNo !=0 and c.Status = 0 and CategoryId !=0 and c.Name is not null group by CategoryId,c.Name,c.ImagePath,c.OrderNo order by OrderNo")
+                    .Select(i => new TopCategoriesAndProductsViewModel.CategoryListItem
+                    {
+                        Id = i.Id,
+                        ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                        Name = i.Name
+                    }).ToList<TopCategoriesAndProductsViewModel.CategoryListItem>();
+
+            var discountCategory = db.DiscountCategories.Where(i => i.ShopId == shopid).OrderByDescending(i => i.Percentage).Select(i=>i.Name).Take(6).ToList();
+
+            model.ProductListItems = db.Products.Where(i => discountCategory.Contains(i.DiscountCategoryName) && i.ShopId == shopid && i.MasterProductId != 0 && i.Status == 0 && i.MenuPrice != 0 && i.Price != 0 && i.CategoryId != 0).Take(6)
+                .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+                .Join(db.Categories, p => p.p.CategoryId, c => c.Id, (p, c) => new { p, c })
+                .Join(db.DiscountCategories, p => p.p.p.DiscountCategoryName, dc => dc.Name, (p, dc) => new { p, dc })
+                .Select(i => new TopCategoriesAndProductsViewModel.ProductListItem
+                {
+                    BrandName = i.p.p.m.BrandName,
+                    CategoryId = i.p.p.p.CategoryId,
+                    CategoryName = i.p.c.Name,
+                    ColorCode = i.p.p.m.ColorCode,
+                    Customisation = i.p.p.m.Customisation,
+                    DiscountCategoryPercentage = i.dc.Percentage,
+                    DrugCompoundDetailIds = i.p.p.m.DrugCompoundDetailIds,
+                    DrugCompoundDetailName = i.p.p.m.DrugCompoundDetailName,
+                    iBarU = i.p.p.m.IBarU,
+                    ImagePath = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                    ImagePath1 = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                    ImagePath2 = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath2)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath2.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                    ImagePath3 = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath3)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath3.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                    ImagePath4 = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath4)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath4.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                    ImagePath5 = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath5)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath5.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                    IsOnline = i.p.p.p.IsOnline,
+                    IsPreorder = i.p.p.p.IsPreorder,
+                    Itemid = i.p.p.p.ItemId,
+                    LongDescription = i.p.p.m.LongDescription,
+                    MRP = i.p.p.p.MenuPrice,
+                    NextOnTime = i.p.p.p.NextOnTime,
+                    OfferQuantityLimit = i.p.p.p.OfferQuantityLimit,
+                    PreorderHour= i.p.p.p.PreorderHour,
+                    PriscriptionCategory= i.p.p.m.PriscriptionCategory,
+                    ProductId= i.p.p.p.Id,
+                    ProductName= i.p.p.m.Name,
+                    Quantity = i.p.p.p.Qty,
+                    SalePrice = i.p.p.p.Price,
+                    ShopCategoryId = shop.ShopCategoryId,
+                    ShopCategoryName = shop.ShopCategoryName,
+                    ShopId = shop.Id,
+                    ShopIsOnline = shop.IsOnline,
+                    ShopName = shop.Name,
+                    ShopNextOnTime = shop.NextOnTime,
+                    ShortDescription = i.p.p.m.ShortDescription,
+                    Size = i.p.p.m.SizeLWH,
+                    Status = i.p.p.p.Status,
+                    Weight = i.p.p.m.Weight
+                }).OrderByDescending(i=>i.DiscountCategoryPercentage).ToList();
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "")
         {
             Helpers.PushNotification.SendbydeviceId(body, title, "", deviceId);
