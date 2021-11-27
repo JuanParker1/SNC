@@ -1,5 +1,4 @@
 ﻿@model ShopNow.ViewModels.PaymentCreateViewModel
-
 @{
     ViewBag.Title = "Payment";
 }
@@ -18,8 +17,7 @@
             @using (Html.BeginForm("Create", "Payment", FormMethod.Post, new { id = "CreateForm", role = "form", enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
-
-                <div class="card">
+                <div class="card shadow">
                     <div class="card-header">
                         <label class="col-form-label text-success font-weight-bold mr-5">Credit Type</label>
                         <div class="form-check-inline">
@@ -75,7 +73,6 @@
     <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
     <script>
-
         $(document).ready(function () {
             $('#ShopId').select2({
                 placeholder: "Search Shop",
@@ -89,7 +86,6 @@
                 $('input[name="ShopName"]').val(e.params.data.text);
             });
         });
-
     </script>
 }
 
