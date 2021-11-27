@@ -5568,6 +5568,32 @@ namespace ShopNow.Controllers
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult SaveRouteAudioPath(int addressId,string deliveryBoyName, string audiopath)
+        {
+            var customerAddress = db.CustomerAddresses.FirstOrDefault(i => i.Id == addressId);
+            customerAddress.RouteAudioPath = audiopath;
+            customerAddress.RouteAudioUploadedBy = deliveryBoyName;
+            customerAddress.RouteAudioUploadedDateTime = DateTime.Now;
+            db.Entry(customerAddress).State = EntityState.Modified;
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult SaveReviewReply(int reviewId,string reply,string repliedBy)
+        {
+            var customerReviewReply = new CustomerReviewReply
+            {
+                CreatedBy = repliedBy,
+                CustomerReviewId = reviewId,
+                DateEncoded = DateTime.Now,
+                ReplyText = reply,
+                Status = 0
+            };
+            db.CustomerReviewReplies.Add(customerReviewReply);
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "")
         {
             Helpers.PushNotification.SendbydeviceId(body, title, "", deviceId);
