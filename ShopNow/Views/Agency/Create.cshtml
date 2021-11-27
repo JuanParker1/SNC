@@ -3,7 +3,6 @@
     ViewBag.Title = "Agency Entry";
 }
 <title>ShopNow | @ViewBag.Title</title>
-
 <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-md-3">
@@ -144,12 +143,12 @@
                                                 <label class="col-md-12 text-center"><strong class="text-secondary">Bank Account</strong></label>
                                                 <label class="col-md-12"><small class="text-secondary"><i>Bank Passbook Image</i></small></label>
                                                 @*<span class="col-md-12">
-                                                <input type="radio" class="text-center" name="AccountDocument" id="AccountImage" value="Image" checked> <label for="AccountImage"> Image</label>
-                                                <input type="radio" class="text-center" name="AccountDocument" id="AccountPDF" value="PDF"> <label for="AccountPDF"> PDF</label>
-                                                </span>
-                                                <div class="row AccountDocumentPdf mx-auto d-none mt-2 mb-3">
-                                                    <input class="mx-auto" type="file" id="BankPassbookPdf" name="BankPassbookPdf" />
-                                                </div>*@
+                                                    <input type="radio" class="text-center" name="AccountDocument" id="AccountImage" value="Image" checked> <label for="AccountImage"> Image</label>
+                                                    <input type="radio" class="text-center" name="AccountDocument" id="AccountPDF" value="PDF"> <label for="AccountPDF"> PDF</label>
+                                                    </span>
+                                                    <div class="row AccountDocumentPdf mx-auto d-none mt-2 mb-3">
+                                                        <input class="mx-auto" type="file" id="BankPassbookPdf" name="BankPassbookPdf" />
+                                                    </div>*@
                                                 <div class="row">
                                                     <div class="img-upload-container mx-auto mb-3 AccountDocumentImg">
                                                         <img class="img-container w-100 h-100 mb-2" id="img-account" onerror="this.src='/Images/No Photo.png'" />
@@ -226,6 +225,7 @@
         </div>
     </div>
 </div>
+
 @section Scripts
 {
     <script src="~/Scripts/ValidateRequiredFields.js"></script>
@@ -280,6 +280,7 @@
                     });
                 }
             });
+
             $('#Create').on('click', function () {
                 var isValidated = false;
                 var requiredArr = [
@@ -293,19 +294,19 @@
                 }
             });
 
-            $('input:radio[name="AccountDocument"]').change(
-                function () {
-                    if (this.checked && this.value == 'Image') {
-                        $('.AccountDocumentImg').removeClass('d-none');
-                        $('.AccountDocumentPdf').addClass('d-none');
-                        $("#BankPassbookPdf").val("");
-                    } else {
-                        $('.AccountDocumentImg').addClass('d-none');
-                        $('.AccountDocumentPdf').removeClass('d-none');
-                        $("#BankPassbookImage").val("");
-                        $("#img-account").attr('src', '');
-                    }
-                });
+            $('input:radio[name="AccountDocument"]').change(function () {
+                if (this.checked && this.value == 'Image') {
+                    $('.AccountDocumentImg').removeClass('d-none');
+                    $('.AccountDocumentPdf').addClass('d-none');
+                    $("#BankPassbookPdf").val("");
+                } else {
+                    $('.AccountDocumentImg').addClass('d-none');
+                    $('.AccountDocumentPdf').removeClass('d-none');
+                    $("#BankPassbookImage").val("");
+                    $("#img-account").attr('src', '');
+                }
+            });
+
             function readURL(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
@@ -353,10 +354,7 @@
             $("#BankPassbookImage").change(function () {
                 readURLaccount(this);
             });
-
-
         });
-
 
         var map, infoWindow, markers = [], marker;
         function initMap() {
@@ -417,7 +415,6 @@
                                             if (this.types[0] == "postal_code") {
                                                 $('#PinCode').val(this.long_name);
                                             }
-
                                         });
                                         $('#Latitude').val(results[0].geometry.location.lat);
                                         $('#Longitude').val(results[0].geometry.location.lng);
@@ -471,7 +468,6 @@
                                     if (this.types[0] == "postal_code") {
                                         $('#PinCode').val(this.long_name);
                                     }
-
                                 });
 
                                 $('#Latitude').val(place.geometry.location.lat);
@@ -485,12 +481,10 @@
 
                         handleLocationError(false, infoWindow, map.getCenter());
                     }
-
                 });
             } else {
                 x.innerHTML = "Geolocation is not supported by this browser.";
             }
-
         }
 
         function handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -500,7 +494,6 @@
                 'Error: Your browser doesn\'t support geolocation.');
             infoWindow.open(map);
         }
-
     </script>
 }
 

@@ -2,10 +2,8 @@
 @{
     ViewBag.Title = "Agency Assign List";
 }
-
 <title>ShopNow | @ViewBag.Title</title>
 @*<style>
-
     #select-multiple .select2-results__option {
         padding-right: 20px;
         vertical-align: middle;
@@ -181,8 +179,6 @@
     </div>
 </div>
 
-
-
 <div class="modal fade" id="modal-update-agency" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -245,8 +241,6 @@
                 $('input[name="AgencyName"]').val(e.params.data.text);
             });
 
-
-
             $(".js-select2").select2({
                 closeOnSelect: false,
                 allowHtml: true,
@@ -260,8 +254,6 @@
                     dataType: 'json'
                 }
             });
-
-
 
             $('#ShopIds').select2({
                 placeholder: "Select Shop",
@@ -419,7 +411,6 @@
                     }
                 );
             });
-
         });
     </script>
 }
