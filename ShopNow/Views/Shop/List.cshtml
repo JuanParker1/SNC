@@ -7,7 +7,6 @@
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 <link href="~/Content/switch.css" rel="stylesheet" />
-
 <div class="container-fluid mb-3">
     <div class="row">
         <div class="col-md-3">
@@ -20,7 +19,6 @@
             <a href="~/Shop/Create" target="_self"><span class="fa fa-plus"></span> Shop</a>
         </div>
     </div>
-
     <div class="row">
         <div class="col-md-12">
             <div class="card shadow mt-3">
@@ -44,10 +42,10 @@
                     @Html.Grid(Model).Columns(columns =>
                {
                columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(15);
-               columns.Add(c => c.OwnerPhoneNumber).Titled("OwnerPhoneNo").Filterable(true).SetWidth(10);
+               columns.Add(c => c.OwnerPhoneNumber).Titled("OwnerPhoneNo").Filterable(true).SetWidth(30);
                columns.Add(c => c.PhoneNumber).Titled("PhoneNo.").Filterable(true).SetWidth(10);
-               columns.Add(c => c.ShopCategoryName).Titled("Shop Type").Filterable(true).SetWidth(10);
-               columns.Add(c => c.Address).Titled("Address").Filterable(true).SetWidth(30);
+               columns.Add(c => c.ShopCategoryName).Titled("Shop Type").Filterable(true).SetWidth(20);
+               columns.Add(c => c.Address).Titled("Address").Filterable(true).SetWidth(40);
                columns.Add().Encoded(false).Sanitized(false).RenderValueAs(cs => cs.Status == 6 ?
                     Html.ActionLink("Activate", "Active", new { Id = cs.Id }, new { @class = "btn btn-success btn-vsm mb-1", @style = "padding: 3px 14px" }).ToHtmlString():
                     Html.ActionLink("InActive", "InActiveLowBalance", new { Id =cs.Id }, new { @class = "btn btn-secondary btn-vsm mb-1", @style = "padding: 3px 14px" }).ToHtmlString()).Titled("Status").SetWidth(8);

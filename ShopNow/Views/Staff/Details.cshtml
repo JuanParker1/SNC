@@ -3,37 +3,32 @@
     ViewBag.Title = "Staff Details";
 }
 <title>ShopNow | Staff Details</title>
-
 <div class="container-fluid">
-    <div class="row">
+    <div class="row mx-auto">
         <div class="col-md-4">
             <h5 class="text-success mt-1" style="letter-spacing:1px">STAFF DETAILS</h5>
         </div>
         <div class="col-md-8 text-right">
             <a href="~/Staff/List" target="_blank"><span class="fa fa-bars"></span>&nbsp;Staff List</a>
         </div>
-    </div>
-    <div class="row mx-4">
-        <div class="col-md-12 mx-auto">
-           
-                <div class="card shadow mb-3">
-                    <div class="card-body">
-                        <div class="row text-center">
-                            <div class="col-md-12">
-                                <div class="img-browse col-md-12 text-center mb-4">
-                                    <img class="img-container h-100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath" onerror="this.src='/Images/No Photo.png'" />
-                                </div>
+        <div class="col-md-12">
+            <div class="card shadow mb-3">
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-12">
+                            <div class="img-browse text-center mb-4">
+                                <img class="img-container" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath"  width="250" height="250" onerror="this.src='/Images/No Photo.png'" style="" />
                             </div>
-                            <div class="col-md-12">
-                                <p class="col-md-12 font-weight-bold" style="font-size:22px"><span><i class="fa fa-user text-theme_light mr-3" aria-hidden="true"></i></span>@Model.Name</p>
-                                <p class="col-md-12"><span><i class="fa fa-phone text-theme_light mr-3" aria-hidden="true"></i></span>@Model.PhoneNumber</p>
-                                @*<p class="col-md-12"><span><i class="fa fa-building text-theme_light mr-3" aria-hidden="true"></i></span>@Model.ShopName</p>*@
-                                <p class="col-md-12"><span><i class="fa fa-map-marker text-theme_light mr-3" aria-hidden="true"></i>@item.Address</span></p>
-                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <p class="col-md-12 font-weight-bold" style="font-size:22px"><span><i class="fa fa-user text-theme_light mr-3" aria-hidden="true"></i></span>@Model.Name</p>
+                            <p class="col-md-12"><span><i class="fa fa-phone text-theme_light mr-3" aria-hidden="true"></i></span>@Model.PhoneNumber</p>
+                            @*<p class="col-md-12"><span><i class="fa fa-building text-theme_light mr-3" aria-hidden="true"></i></span>@Model.ShopName</p>*@
+                            @*  <p class="col-md-12"><span><i class="fa fa-map-marker text-theme_light mr-3" aria-hidden="true"></i>@item.Address</span></p>*@
                         </div>
                     </div>
                 </div>
-           
+            </div>
         </div>
     </div>
 </div>
