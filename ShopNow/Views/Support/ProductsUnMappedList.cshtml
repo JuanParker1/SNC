@@ -6,7 +6,6 @@
 <title>ShopNow | @ViewBag.Title</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-
 <div class="container-fluid">
     <form method="get" action="/Support/ProductsUnMappedList" class="my-3">
         <div class="row my-2  d-print-none">
@@ -38,21 +37,20 @@
             </div>
         </div>
     </form>
-    @if (Model.CountListItems.Count > 0)
+   @if (Model.CountListItems.Count > 0)
     {
-    <div class="card mb-3  d-print-none">
-        <div class="card-body">
-            <div class="d-flex justify-content-between">
-                @foreach (var item in Model.CountListItems)
-                {
-                    <div><a href="/Support/ProductsUnMappedList?shopid=@item.ShopId&shopname=@item.ShopName">@item.ShopName - <b>@item.Count</b></a></div>
-                }
+        <div class="card mb-3  d-print-none">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    @foreach (var item in Model.CountListItems)
+                    {
+                        <div><a href="/Support/ProductsUnMappedList?shopid=@item.ShopId&shopname=@item.ShopName">@item.ShopName - <b>@item.Count</b></a></div>
+                    }
+                </div>
             </div>
         </div>
-    </div>
     }
-
-    <div class="card mb-3">
+    <div class="card shadow mb-3">
         <div class="card-body">
             @Html.Grid(Model.ListItems).Columns(columns =>
         {
@@ -72,59 +70,45 @@
         </div>
     </div>
 </div>
-        @section Scripts
+
+@section Scripts
 {
-            <script src="~/Scripts/select2/js/select2.js"></script>
-            <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
-            <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
-            <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
-            <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
-            <script src="~/Scripts/exporttoexcel/jquery.table2excel.js"></script>
-            <script>
-                $(document).ready(function () {
-                    $('#select-shop').select2({
-                        placeholder: "Search Shop",
-                        ajax: {
-                            url: "/Product/GetActiveShopSelect2",
-                            width: '100%',
-                            delay: 250,
-                            dataType: 'json'
-                        }
-                    }).on('select2:select', function (e) {
-                        $('input[name="ShopName"]').val(e.params.data.text);
-                    });
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script src="~/Scripts/exporttoexcel/jquery.table2excel.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#select-shop').select2({
+                placeholder: "Search Shop",
+                ajax: {
+                    url: "/Product/GetActiveShopSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ShopName"]').val(e.params.data.text);
+            });
 
-                    //$('.btn-update-active').on('click', function () {
-                    //    var tr = $(this).closest('tr');
-                    //    var code = tr.find('.btn-update-active').data('code');
-                    //    $.post('/Product/UpdateActive', { code: code }, function (data) {
-                    //        if (data) {
-                    //            swal('Success!', 'Updated Successfully', 'success');
-                    //            window.location.reload();
-                    //        }
-                    //        else
-                    //            swal('Warning!', 'Something went wrong', 'warning');
-                    //    });
-                    //});
-                    $('#btnPrint').click(function () {
-                        $('.container-fluid *').removeClass('card');
-                        $('.container-fluid *').removeClass('card-body');
-                        //$('.dataTables_info').addClass('d-none');
-                        //$('.dataTables_paginate').addClass('d-none');
-                        window.print();
-                    });
-                    $("#btnExport").click(function () {
-                        $("table").table2excel({
-                            name: "Worksheet Name",
-                            filename: "UnMappingReport",
-                            fileext: ".xls",
-                            exclude_links: true,
-                        });
-                    });
+            $('#btnPrint').click(function () {
+                $('.container-fluid *').removeClass('card');
+                $('.container-fluid *').removeClass('card-body');
+                //$('.dataTables_info').addClass('d-none');
+                //$('.dataTables_paginate').addClass('d-none');
+                window.print();
+            });
 
-
+            $("#btnExport").click(function () {
+                $("table").table2excel({
+                    name: "Worksheet Name",
+                    filename: "UnMappingReport",
+                    fileext: ".xls",
+                    exclude_links: true,
                 });
-            </script>
-
-        }
-
+            });
+        });
+    </script>
+}

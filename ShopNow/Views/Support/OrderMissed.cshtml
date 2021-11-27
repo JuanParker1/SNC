@@ -14,7 +14,7 @@
     </div>
     <div class="row">
         <div class="col-md-12 mx-auto">
-            <div class="card mb-3">
+            <div class="card shadow mb-3">
                 <div class="card-body">
                     <div class="form-group row">
                         <div class="table-responsive">
@@ -75,6 +75,7 @@
         </div>
     </div>
 </div>
+
 @section Scripts
 {
     <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
@@ -92,7 +93,7 @@
                     cancelButtonText: "No, cancel",
                     closeOnConfirm: false,
                     closeOnCancel: true
-                },
+                  },
                     function (isConfirm) {
                         if (isConfirm) {
                             $.getJSON("/Support/RejectUpdate", { orderno: orderno }, function (data) {
@@ -101,7 +102,8 @@
                                 }
                             });
                         }
-                    });
+                    }
+                );
             });
         });
     </script>
