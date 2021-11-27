@@ -15,10 +15,9 @@
             <a href="~/Agency/List" class="mr-2" target="_self"><span class="fa fa-list-ul"></span> Agency List</a>
         </div>
     </div>
-
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
                     {
@@ -28,14 +27,14 @@
                     columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(10)
                         .RenderValueAs(o => @<div>
                                 <a href="~/Agency/Edit?id=@HttpUtility.UrlEncode(ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id))" class="text-info mr-4"><i class="fa fa-edit fa-2x"></i></a>
-                                <a href="javascript:void(0)" data-id="@o.Id" class="text-danger btnDelete"><i class="fa fa-trash fa-2x"></i></a>
-                            </div>);
+                                <a href="javascript:void(0)" data-id="@o.Id" class="text-danger btnDelete"><i class="fa fa-trash fa-2x"></i></a> </div>);
                       }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 @section Scripts
 {
     <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
