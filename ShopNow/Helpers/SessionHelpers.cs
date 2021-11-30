@@ -33,8 +33,6 @@ namespace ShopNow.Helpers
             public double Longitude { get; set; }
             public int Status { get; set; }
 
-           
-
             public bool HasAccess(string pageCode)
             {
                 return Access.Contains(pageCode) || Access.Contains("*");
