@@ -1,15 +1,13 @@
 ﻿@model ShopNow.ViewModels.ProductUpdateStockViewModel
-
 @{
     ViewBag.Title = "Update Product Stock";
 }
 <title>ShopNow | @ViewBag.Title</title>
-
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-8 mx-auto mt-3">
             <h4 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h4>
-            <div class="card shadow-sm">
+            <div class="card shadow">
                 <div class="card-body">
                     <form action="/Product/UpdateStock" method="get">
                         <div class="row">

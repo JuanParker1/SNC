@@ -6,11 +6,10 @@
 <title>ShopNow | @ViewBag.Title</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-3">
-            <h5 class="mt-1" style="letter-spacing:1px">@ViewBag.Title</h5>
+            <h5 class="mt-1 text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
         </div>
         <div class="col-md-2 col-sm-4 mb-2 data-search">
         </div>
@@ -18,21 +17,17 @@
             <a href="~/Payment/Create" target="_self"><span class="fa fa-plus"></span> Shop Credits</a>
         </div>
     </div>
-    @Html.Grid(Model).Columns(columns =>
-{
-    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
-    columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(15);
-    columns.Add(c => c.CreditTypeText).Titled("Credit Type").Filterable(true).SetWidth(10);
-    columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10);
-    columns.Add()
-    .Encoded(false)
-    .Sanitized(false)
-    .RenderValueAs(o => Html.ActionLink("Receipt", "CheckOut", new { id = o.Id }, new { @class = "btn  btn-vsm btn-info", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
-}).WithPaging(20).Sortable(true)
-
+    <div class="card shadow mb-2">
+        <div class="card-body">
+            @Html.Grid(Model).Columns(columns =>
+        {
+            columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
+            columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(15);
+            columns.Add(c => c.CreditTypeText).Titled("Credit Type").Filterable(true).SetWidth(10);
+            columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10);
+            columns.Add().Encoded(false).Sanitized(false)
+            .RenderValueAs(o => Html.ActionLink("Receipt", "CheckOut", new { id = o.Id }, new { @class = "btn  btn-vsm btn-info", @style = "padding: 3px 18px" }).ToHtmlString()).Titled("Action").SetWidth(15);
+        }).WithPaging(20).Sortable(true)
+        </div>
+    </div>
 </div>
-<script>
-    $(document).ready(function () {
-
-    });
-</script>

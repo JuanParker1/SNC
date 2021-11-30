@@ -30,7 +30,6 @@
                 <input type="button" id="btnExport" class="btn btn-vsm btn-secondary" value="Export To Excel" />
             </div>
         }
-
         <div class="col-md-12">
             <div class="card shadow mt-3">
                 <div class="card-body">
@@ -39,13 +38,13 @@
       columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
       columns.Add(c => c.ShopOwnerPhoneNumber).Titled("Phone No.").Filterable(true).SetWidth(9);
       columns.Add(c => c.TransactionType).Titled("Trans Type").Filterable(true).SetWidth(10);
-      columns.Add(c => c.FinalAmount).Titled("Amount").Filterable(true).SetWidth(8);
-      columns.Add(c => c.PaymentDate).Titled("Payment Date").Filterable(true).SetWidth(12).Format("{0:dd-MMM-yyyy}");
-      columns.Add(c => c.AccountName).Titled("Account Name").Filterable(true).SetWidth(12);
+      columns.Add(c => c.FinalAmount).Titled("Amount").Filterable(true).SetWidth(4);
+      columns.Add(c => c.PaymentDate).Titled("Payment Date").Filterable(true).SetWidth(30).Format("{0:dd-MMM-yyyy}");
+      columns.Add(c => c.AccountName).Titled("Account Name").Filterable(true).SetWidth(30);
       columns.Add(c => c.AccountNumber).Titled("Account No.").Filterable(true).SetWidth(10);
       columns.Add(c => c.PaymentId).Titled("Payment Id").Filterable(true).SetWidth(10);
       columns.Add(c => c.IfscCode).Titled("IFSC Code").Filterable(true).SetWidth(8);
-      columns.Add(c => c.AccountType).Titled("Account Type").Filterable(true).SetWidth(11);
+      columns.Add(c => c.AccountType).Titled("Account Type").Filterable(true).SetWidth(30);
    }).WithPaging(20).Sortable(true)
                 </div>
             </div>

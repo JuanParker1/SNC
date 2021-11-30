@@ -17,8 +17,8 @@ namespace ShopNow.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Customer()
         {
-            this.CustomerAddresses = new HashSet<CustomerAddress>();
             this.CustomerReviews = new HashSet<CustomerReview>();
+            this.CustomerAddresses = new HashSet<CustomerAddress>();
         }
     
         public int Id { get; set; }
@@ -60,8 +60,8 @@ namespace ShopNow.Models
         public System.DateTime DateUpdated { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CustomerAddress> CustomerAddresses { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CustomerReview> CustomerReviews { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CustomerAddress> CustomerAddresses { get; set; }
     }
 }

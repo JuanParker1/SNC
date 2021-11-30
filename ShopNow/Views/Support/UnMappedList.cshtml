@@ -6,7 +6,6 @@
 <title>ShopNow | Order List</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-
 <div class="container-fluid">
     <div class="row my-2">
         <div class="col-md-4">
@@ -24,18 +23,22 @@
             </div>
         </div>
     </div>
-    @Html.Grid(Model.List).Columns(columns =>
-{
-    columns.Add(c => c.SlNo).Titled("Sl.No").Filterable(true).SetWidth(5);
-    columns.Add(c => c.DateUpdated).Titled("DateTime").Filterable(true).SetWidth(10);
-    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(20);
-    columns.Add(c => c.Name).Titled("Shop Item Name").Filterable(true).SetWidth(20);
-   // columns.Add(c => c.MasterProductName).Titled("Master ItemName").Filterable(true).SetWidth(10);
-    columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(10)
-    .RenderValueAs(o => @<div>
-            <a href="~/MasterProduct/ItemMappingUpdate?id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" target="_blank" class="btn btn-sm btn-info mr-5">Map</a>
-        </div>);
-}).WithPaging(20).Sortable(true)
+    <div class="card shadow">
+        <div class="card-body">
+            @Html.Grid(Model.List).Columns(columns =>
+        {
+            columns.Add(c => c.SlNo).Titled("Sl.No").Filterable(true).SetWidth(5);
+            columns.Add(c => c.DateUpdated).Titled("DateTime").Filterable(true).SetWidth(10);
+            columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(20);
+            columns.Add(c => c.Name).Titled("Shop Item Name").Filterable(true).SetWidth(20);
+           // columns.Add(c => c.MasterProductName).Titled("Master ItemName").Filterable(true).SetWidth(10);
+            columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(10)
+            .RenderValueAs(o => @<div>
+                    <a href="~/MasterProduct/ItemMappingUpdate?id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" target="_blank" class="btn btn-sm btn-info mr-5">Map</a>
+                </div>  );
+        }).WithPaging(20).Sortable(true)
+        </div>
+    </div>
 </div>
 
 @section Scripts
@@ -63,11 +66,8 @@
                 var ShopId = $("#ShopId").val();
                 window.location.href = "/Support/UnMappedList/?ShopId=" + ShopId;
             });
-
         });
-
     </script>
-
 }
 
 

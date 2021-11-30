@@ -29,6 +29,9 @@ namespace ShopNow.Models
         public int AddressType { get; set; }
         public string LandMark { get; set; }
         public string FlatNo { get; set; }
+        public string RouteAudioPath { get; set; }
+        public string RouteAudioUploadedBy { get; set; }
+        public Nullable<System.DateTime> RouteAudioUploadedDateTime { get; set; }
         public int Status { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
