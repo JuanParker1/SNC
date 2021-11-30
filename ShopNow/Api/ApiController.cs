@@ -5337,8 +5337,9 @@ namespace ShopNow.Controllers
                                Name = i.m.Name,
                                Price = i.p.p.Price,
                                ShopName = i.p.p.ShopName,
-                               Distance = Math.Round((((Math.Acos(Math.Sin((i.p.s.Latitude * Math.PI / 180)) * Math.Sin((latitude * Math.PI / 180)) + Math.Cos((i.p.s.Latitude * Math.PI / 180)) * Math.Cos((latitude * Math.PI / 180))
-                            * Math.Cos(((i.p.s.Longitude - longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000, 2)
+                               //   Distance = Math.Round((((Math.Acos(Math.Sin((i.p.s.Latitude * Math.PI / 180)) * Math.Sin((latitude * Math.PI / 180)) + Math.Cos((i.p.s.Latitude * Math.PI / 180)) * Math.Cos((latitude * Math.PI / 180))
+                               //* Math.Cos(((i.p.s.Longitude - longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000, 2)
+                               Distance = Math.Round((double)(GetMeters(latitude, longitude, i.p.s.Latitude, i.p.s.Longitude) / 1000), 2)
                            }).ToList();
                 //}
             }
@@ -5393,20 +5394,21 @@ namespace ShopNow.Controllers
                                    " FROM Shops where(3959 * acos(cos(radians(@latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@longitude)) + sin(radians(@latitude)) * sin(radians(Latitude)))) < 16 and ShopCategoryId =" + shop.ShopCategoryId + " and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
                                    " order by IsOnline desc,Adscore desc,Rating desc";
 
-                    model.SimilarProductsListItems = db.Shops.SqlQuery(query, new SqlParameter("latitude", latitude), new SqlParameter("longitude", longitude))
-                       .Join(db.Products.Where(i => i.MasterProductId == product.MasterProductId), s => s.Id, p => p.ShopId, (s, p) => new { s, p })
-                           .Join(db.MasterProducts, p => p.p.MasterProductId, m => m.Id, (p, m) => new { p, m })
-                           .Join(db.DiscountCategories, p => p.p.p.DiscountCategoryName, dc => dc.Name, (p, dc) => new { p, dc })
-                           .AsEnumerable()
-                           .Select(i => new MedicalProductDetailsApiViewModel.SimilarProductsListItem
-                           {
-                               DiscountPercentage = i.dc.Percentage,
-                               MenuPrice = i.p.p.p.MenuPrice,
-                               Name = i.p.m.Name,
-                               Price = i.p.p.p.Price,
-                               ShopName = i.p.p.p.ShopName,
-                               Distance = Math.Round((((Math.Acos(Math.Sin((i.p.p.s.Latitude * Math.PI / 180)) * Math.Sin((latitude * Math.PI / 180)) + Math.Cos((i.p.p.s.Latitude * Math.PI / 180)) * Math.Cos((latitude * Math.PI / 180))
-                            * Math.Cos(((i.p.p.s.Longitude - longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000, 2)
+                model.SimilarProductsListItems = db.Shops.SqlQuery(query, new SqlParameter("latitude", latitude), new SqlParameter("longitude", longitude))
+                   .Join(db.Products.Where(i => i.MasterProductId == product.MasterProductId), s => s.Id, p => p.ShopId, (s, p) => new { s, p })
+                       .Join(db.MasterProducts, p => p.p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+                       .Join(db.DiscountCategories, p => p.p.p.DiscountCategoryName, dc => dc.Name, (p, dc) => new { p, dc })
+                       .AsEnumerable()
+                       .Select(i => new MedicalProductDetailsApiViewModel.SimilarProductsListItem
+                       {
+                           DiscountPercentage = i.dc.Percentage,
+                           MenuPrice = i.p.p.p.MenuPrice,
+                           Name = i.p.m.Name,
+                           Price = i.p.p.p.Price,
+                           ShopName = i.p.p.p.ShopName,
+                               //   Distance = Math.Round((((Math.Acos(Math.Sin((i.p.p.s.Latitude * Math.PI / 180)) * Math.Sin((latitude * Math.PI / 180)) + Math.Cos((i.p.p.s.Latitude * Math.PI / 180)) * Math.Cos((latitude * Math.PI / 180))
+                               //* Math.Cos(((i.p.p.s.Longitude - longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000, 2)
+                               Distance = Math.Round((double)(GetMeters(latitude, longitude,i.p.p.s.Latitude, i.p.p.s.Longitude)/1000),2)
                            }).ToList();
             }
             return Json(model, JsonRequestBehavior.AllowGet);
