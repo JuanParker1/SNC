@@ -13,16 +13,30 @@
             <div class="card shadow">
                 <div class="card-body">
                     @Html.Grid(Model.ListItems).Columns(columns =>
-                {
-                   columns.Add(c => c.CustomerName).Titled("Name").Filterable(false).SetWidth(15);
-                   columns.Add(c => c.CustomerPhoneNumber).Titled("Phone No").Filterable(false).SetWidth(12);
-                   columns.Add(c => c.ImagePath).Titled("Image").Filterable(false).SetWidth(10);
-                   columns.Add(c => c.AudioPath).Titled("Audio").Filterable(false).SetWidth(10);
+               {
+                   columns.Add(c => c.CustomerName).Titled("Name").Filterable(false).SetWidth(10);
+                   columns.Add(c => c.CustomerPhoneNumber).Titled("Phone No").Filterable(false).SetWidth(10);
+                    columns.Add().Encoded(false).Sanitized(false)
+                 .RenderValueAs(o => @<div>
+                        @foreach (var im in o.ImagePathLists)
+                                        {
+                                        <img alt="Image" data-toggle="modal" data-target="#myModal" class="img-thumbnail PrescriptionImage p-1" src="@im.ImagePath" onerror="this.src='/Images/No Photo.png'" style="width:50px;height:50px" />
+                                        }
+                       </div>).Titled("Image").SetWidth(30);
+                   columns.Add().Encoded(false).Sanitized(false)
+                 .RenderValueAs(o => @<div> @if (o.AudioPath == null)
+                 {<span>N/A</span>}
+                     else {
+                       <audio controls>
+                           <source src="@o.AudioPath" type="audio/wav">
+                        Your browser does not support the audio element.
+                        </audio>}
+                       </div>).Titled("Audio").SetWidth(25);
                    columns.Add(c => c.Remarks).Titled("Remarks").Filterable(false).SetWidth(10);
                    columns.Add(c => c.DateEncoded).Titled("Date").Format("{0:dd-MMM-yyyy}").Filterable(false).SetWidth(10);
                    columns.Add().Encoded(false).Sanitized(false)
                   .RenderValueAs(o => o.Status == 0 ? "<a href='#modal-add' data-id='" + o.Id + "' data-shopid='" + o.ShopId + "' data-toggle='modal' data-target='#modal-add' class='btn btn-sm btn-primary btn-modal-add btn-block'>Add</a>" : "<span class='text-success'>Already Added</span><a href='#modal-added-item-list' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-added-item-list' class='btn-modal-added-item-list ml-2'><u>Check Items</u></a>").Titled("Action").SetWidth(5);
-                }).Sortable(true)
+               }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
@@ -101,6 +115,14 @@
     </div>
 </div>
 
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <span class="close" data-dismiss="modal">&times;</span>
+        @*<a href="~/Home/ImageDenied">*@
+            <img class="modal-content" id="myImage">
+        @*</a>*@
+    </div>
+</div>
 @section Scripts
 {
     <!--Select2-->
@@ -112,6 +134,20 @@
     <!--Select2 End-->
     <script>
         $(document).ready(function () {
+            var modal = document.getElementById('myModal');
+            var img = document.getElementsByClassName('PrescriptionImage');
+            var modalImg = document.getElementById("myImage");
+            $(img).click(function () {
+                modal.style.display = "block";
+                modalImg.src = this.src;
+                if (this.src == "") {
+                    $('#myModal').hide();
+                }
+                else {
+                    $('#myModal').modal('show');
+                }
+            });
+
             var itemArray = [];
             $(".btn-modal-add").click(function () {
                 $('[name="PrescriptionId"]').val($(this).data('id'));
