@@ -25,7 +25,7 @@ namespace ShopNow.Controllers
                 .Select(i => new CustomerPrescriptionWebListViewModel.ListItem
                 {
                     Id = i.cp.Id,
-                    AudioPath = i.cp.AudioPath,
+                    AudioPath = i.cp.AudioPath.Any() ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Audio/" + i.cp.AudioPath : null,
                     CustomerId = i.cp.CustomerId,
                     CustomerName = i.cp.CustomerName,
                     CustomerPhoneNumber = i.cp.CustomerPhoneNumber,
@@ -36,7 +36,7 @@ namespace ShopNow.Controllers
                     Status = i.cp.Status,
                     ImagePathLists = i.cpi.Select(a => new CustomerPrescriptionWebListViewModel.ListItem.ImagePathList
                     {
-                        ImagePath = a.ImagePath
+                        ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + a.ImagePath
                     }).ToList()
                 }).ToList();
             return View(model);
