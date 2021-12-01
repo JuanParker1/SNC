@@ -6,7 +6,6 @@
 <title>ShopNow | Cancelled Order </title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-
 <div class="container-fluid">
     <div class="row my-2">
         <div class="col-md-4">
@@ -29,12 +28,12 @@
                {
                    columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
                    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
-                   columns.Add(c => c.PaymentMode).Titled("Payment Mode").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.PaymentMode).Titled("Payment Mode").Filterable(true).SetWidth(30);
                    columns.Add(c => c.Price).Titled("Amount").Filterable(true).SetWidth(1);
-                   columns.Add(c => c.CustomerPhoneNumber).Titled("Cust.Phone No.").Filterable(true).SetWidth(15);
+                   columns.Add(c => c.CustomerPhoneNumber).Titled("Cust.Phone No.").Filterable(true).SetWidth(30);
                    columns.Add(c => c.DateEncoded).Titled("Order Time").Filterable(true).SetWidth(10);
-                   columns.Add(c => c.ShopCancelledTime).Titled("Cancelled Time").Filterable(true).SetWidth(10);
-                   columns.Add(c => c.ShopCancelPeriod).Titled("Shop Cancel Period").Filterable(true).SetWidth(15);
+                   columns.Add(c => c.ShopCancelledTime).Titled("Cancelled Time").Filterable(true).SetWidth(30);
+                   columns.Add(c => c.ShopCancelPeriod).Titled("Shop Cancel Period").Filterable(true).SetWidth(40);
                    columns.Add().Encoded(false).Sanitized(false)
                   .RenderValueAs(o => Html.ActionLink("View", "Edit", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-info btn-block mt-2", }).ToHtmlString()).Titled("Action").SetWidth(10);
                }).WithPaging(20).Sortable(true)

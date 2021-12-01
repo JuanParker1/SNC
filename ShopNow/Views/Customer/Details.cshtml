@@ -1,6 +1,5 @@
 ﻿@model ShopNow.ViewModels.CustomerDetailsViewModel
 @{
-
     ViewBag.Title = "Customer Details";
 }
 <title>ShopNow | Customer Details</title>
@@ -23,7 +22,6 @@
         #order-div::-webkit-scrollbar-thumb:hover {
             background: #28a745;
         }
-
 </style>
 <div class="container-fluid my-0">
     <div class="row">
@@ -35,100 +33,96 @@
         </div>
     </div>
     <div class="row mt-3">
-            <div class="col-md-3">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <label class="font-weight-bold text-muted"><u>Profile Details:</u></label>
-                        <img src="~/Images/user.jpg" class="rounded-circle my-3 d-block mx-auto img-thumbnail shadow" alt="customerimage" style="width:170px;">
-                        <div class="text-center">
-                            <h5>@Model.Name</h5>
-                            <h5>@Model.PhoneNumber</h5>
-                            <p>@Model.Address</p>
-                        </div>
-                        <div class="border-bottom border-success mb-3"></div>
-                        <div class="d-flex">
-                            <label class="mr-3">Wallet Amount:</label>
-                            <b>₹@Model.WalletAmount</b>
-                        </div>
-                        <div class="d-flex">
-                            <label class="mr-3">Penalty Charge:</label>
-                            <b>₹@Model.PenaltyAmount</b>
-                        </div>
-                        <div class="d-flex">
-                            <label class="mr-3">Waiting Charge:</label>
-                            <b>₹@Model.DeliveryWaitingCharge</b>
-                        </div>
-                       
-                        <div class="d-flex">
-                            <label class="mr-3">Last Purchase Date:</label>
-                                <b>@(Model.LastPurchaseDate != null ? Model.LastPurchaseDate.Value.ToString("dd-MMM-yyyy") : "N/A")</b>
-                            </div>
-                        
+        <div class="col-md-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <label class="font-weight-bold text-muted"><u>Profile Details:</u></label>
+                    <img src="~/Images/user.jpg" class="rounded-circle my-3 d-block mx-auto img-thumbnail shadow" alt="customerimage" style="width:170px;">
+                    <div class="text-center">
+                        <h5>@Model.Name</h5>
+                        <h5>@Model.PhoneNumber</h5>
+                        <p>@Model.Address</p>
+                    </div>
+                    <div class="border-bottom border-success mb-3"></div>
+                    <div class="d-flex">
+                        <label class="mr-3">Wallet Amount:</label>
+                        <b>₹@Model.WalletAmount</b>
+                    </div>
+                    <div class="d-flex">
+                        <label class="mr-3">Penalty Charge:</label>
+                        <b>₹@Model.PenaltyAmount</b>
+                    </div>
+                    <div class="d-flex">
+                        <label class="mr-3">Waiting Charge:</label>
+                        <b>₹@Model.DeliveryWaitingCharge</b>
+                    </div>
+                    <div class="d-flex">
+                        <label class="mr-3">Last Purchase Date:</label>
+                        <b>@(Model.LastPurchaseDate != null ? Model.LastPurchaseDate.Value.ToString("dd-MMM-yyyy") : "N/A")</b>
                     </div>
                 </div>
             </div>
-            <div class="col-md-9">
-                <div class="card h-100">
-                    <div class=" card-body">
-                        <label class="font-weight-bold text-muted"><u>Order Details:</u></label>
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <label class="mr-3">Total Orders:</label>
-                                <b class="text-primary h3">@Model.TotalOrderCount</b>
-                            </div>
-                            <div>
-                                <label class="mr-3">Delivered Orders:</label>
-                                <b class="text-success h3">@Model.DeliveredOrderCount</b>
-                            </div>
-                            <div>
-                                <label class="mr-3">Cancel Orders:</label>
-                                <b class="text-danger h3">@Model.CancelOrderCount</b>
-                            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card h-100">
+                <div class=" card-body">
+                    <label class="font-weight-bold text-muted"><u>Order Details:</u></label>
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <label class="mr-3">Total Orders:</label>
+                            <b class="text-primary h3">@Model.TotalOrderCount</b>
                         </div>
-                      
-                        <div style="height:500px;overflow:auto;" id="order-div">
-                            <table class="table table-striped table-borderless">
-                                <thead>
+                        <div>
+                            <label class="mr-3">Delivered Orders:</label>
+                            <b class="text-success h3">@Model.DeliveredOrderCount</b>
+                        </div>
+                        <div>
+                            <label class="mr-3">Cancel Orders:</label>
+                            <b class="text-danger h3">@Model.CancelOrderCount</b>
+                        </div>
+                    </div>
+                    <div style="height:500px;overflow:auto;" id="order-div">
+                        <table class="table table-striped table-borderless">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Number</th>
+                                    <th>Shop</th>
+                                    <th>Product Count</th>
+                                    <th>Quantity Count</th>
+                                    <th>Total Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.OrderListItems.Count() == 0)
+                                {
                                     <tr>
-                                        <th>#</th>
-                                        <th>Status</th>
-                                        <th>Date</th>
-                                        <th>Number</th>
-                                        <th>Shop</th>
-                                        <th>Product Count</th>
-                                        <th>Quantity Count</th>
-                                        <th>Total Amount</th>
+                                        <td class="bg-light text-center" colspan="8">No Records Found</td>
                                     </tr>
-                                </thead>
-                                <tbody>
-
-                                    @if (Model.OrderListItems.Count() == 0)
+                                }
+                                else
+                                {
+                                    foreach (var item in Model.OrderListItems)
                                     {
+                                        var count = Model.OrderListItems.IndexOf(item);
+                                        count++;
                                         <tr>
-                                            <td class="bg-light text-center" colspan="8">No Records Found</td>
+                                            <td>@count</td>
+                                            <td><b class="@item.StatusTextColor">@item.StatusText</b></td>
+                                            <td>@item.DateEncoded.ToString("dd-MMM-yyyy hh:mm tt")</td>
+                                            <td>@item.OrderNumber</td>
+                                            <td>@item.ShopName</td>
+                                            <td>@item.ProductCount</td>
+                                            <td>@item.QuantityCount</td>
+                                            <td>₹@item.Amount</td>
                                         </tr>
                                     }
-                                    else
-                                    {
-                                        foreach (var item in Model.OrderListItems)
-                                        {
-                                            var count = Model.OrderListItems.IndexOf(item);
-                                            count++;
-                                            <tr>
-                                                <td>@count</td>
-                                                <td><b class="@item.StatusTextColor">@item.StatusText</b></td>
-                                                <td>@item.DateEncoded.ToString("dd-MMM-yyyy hh:mm tt")</td>
-                                                <td>@item.OrderNumber</td>
-                                                <td>@item.ShopName</td>
-                                                <td>@item.ProductCount</td>
-                                                <td>@item.QuantityCount</td>
-                                                <td>₹@item.Amount</td>
-                                            </tr>
-                                        }
-                                    }
-                                </tbody>
-                                @if (Model.OrderListItems.Count > 0)
-                                {
+                                }
+                            </tbody>
+                            @if (Model.OrderListItems.Count > 0)
+                            {
                                 <tfoot>
                                     <tr>
                                         <th colspan="5">Total</th>
@@ -137,12 +131,12 @@
                                         <th>₹@Model.OrderListItems.Sum(i => i.Amount)</th>
                                     </tr>
                                 </tfoot>
-                                }
-                            </table>
-                        </div>
+                            }
+                        </table>
                     </div>
                 </div>
             </div>
+        </div>
     </div>
 </div>
 
@@ -154,7 +148,6 @@
         </a>
     </div>
 </div>
-
 <div id="ModalAadharImg" class="modal fade">
     <div class="modal-dialog">
         <span class="close" data-dismiss="modal">&times;</span>
@@ -164,14 +157,10 @@
     </div>
 </div>
 
-
-
 @section Scripts
 {
-  
     <script>
         $(document).ready(function () {
-
             var modal1 = document.getElementById('ModalCustomerImg');
             var img1 = document.getElementsByClassName('ProfileImg');
             var modalImg1 = document.getElementById("CustomerImg");
@@ -200,7 +189,7 @@
                 }
             });
 
-        });        
+        });
     </script>
 }
 

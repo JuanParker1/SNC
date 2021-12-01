@@ -322,7 +322,7 @@ namespace ShopNow.ViewModels
             public int PreorderHour { get; set; }
             public int AddOnType { get; set; }
             public bool HasAddon { get; set; }
-
+            public int OfferQuantityLimit { get; set; }
             public List<OrderItemAddonList> OrderItemAddonLists { get; set; }
             public class OrderItemAddonList
             {
@@ -366,6 +366,7 @@ namespace ShopNow.ViewModels
             public double Weight { get; set; }
             public bool IsPreorder { get; set; }
             public int PreorderHour { get; set; }
+            public int OfferQuantityLimit { get; set; }
         }
     }
 
@@ -397,6 +398,7 @@ namespace ShopNow.ViewModels
 
     public class WalletHistoryViewModel
     {
+        public double WalletAmount { get; set; }
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {
@@ -666,6 +668,60 @@ namespace ShopNow.ViewModels
             public int Quantity { get; set; }
             public double Price { get; set; }
             public double MRP { get; set; }
+        }
+    }
+
+    public class TopCategoriesAndProductsViewModel
+    {
+        public List<CategoryListItem> CategoryListItems { get; set; }
+        public List<ProductListItem> ProductListItems { get; set; }
+        public class CategoryListItem
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public string ImagePath { get; set; }
+        }
+
+        public class ProductListItem
+        {
+            public long ProductId { get; set; }
+            public string ProductName { get; set; }
+            public int? iBarU { get; set; }
+            public int CategoryId { get; set; }
+            public string CategoryName { get; set; }
+            public string BrandName { get; set; }
+            public double? DiscountCategoryPercentage { get; set; }
+            public int ShopId { get; set; }
+            public string ShopName { get; set; }
+            public int ShopCategoryId { get; set; }
+            public string ShopCategoryName { get; set; }
+            public double MRP { get; set; }
+            public double SalePrice { get; set; }
+            public string ShortDescription { get; set; }
+            public string LongDescription { get; set; }
+            public string ColorCode { get; set; }
+            public string DrugCompoundDetailIds { get; set; }
+            public string DrugCompoundDetailName { get; set; }
+            public string ImagePath { get; set; }
+            public string ImagePath1 { get; set; }
+            public string ImagePath2 { get; set; }
+            public string ImagePath3 { get; set; }
+            public string ImagePath4 { get; set; }
+            public string ImagePath5 { get; set; }
+            public int Status { get; set; }
+            public bool Customisation { get; set; }
+            public bool IsOnline { get; set; }
+            public TimeSpan? NextOnTime { get; set; }
+            public double Size { get; set; }
+            public double Weight { get; set; }
+            public bool IsPreorder { get; set; }
+            public int PreorderHour { get; set; }
+            public int OfferQuantityLimit { get; set; }
+            public int Quantity { get; set; }
+            public int Itemid { get; set; }
+            public bool PriscriptionCategory { get; set; }
+            public bool? ShopIsOnline { get; set; }
+            public TimeSpan? ShopNextOnTime { get; set; }
         }
     }
 }

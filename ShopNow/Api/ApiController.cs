@@ -4535,7 +4535,7 @@ namespace ShopNow.Controllers
                          UnitPrice = a.UnitPrice,
                          ShopId = i.o.o.ShopId,
                          ShopName = i.o.o.ShopName,
-                         OfferQuantityLimit = db.Products.FirstOrDefault(b=>b.Id == a.ProductId).OfferQuantityLimit,
+                         //OfferQuantityLimit = db.Products.FirstOrDefault(b=>b.Id == a.ProductId).OfferQuantityLimit,
                          OrderItemAddonLists = db.OrderItemAddons.Where(b => b.OrderItemId == a.Id).Select(b => new GetAllOrderListViewModel.OrderList.OrderItemList.OrderItemAddonList {
                              AddonName = b.AddonName,
                              AddonPrice = b.AddonPrice,
@@ -4850,7 +4850,8 @@ namespace ShopNow.Controllers
                        Size = i.p.m.SizeLWH,
                        Weight = i.p.m.Weight,
                        IsPreorder = i.p.p.p.IsPreorder,
-                       PreorderHour = i.p.p.p.PreorderHour
+                       PreorderHour = i.p.p.p.PreorderHour,
+                       OfferQuantityLimit = i.p.p.p.OfferQuantityLimit
                    }).ToList();
                 }
                 else
@@ -4881,6 +4882,7 @@ namespace ShopNow.Controllers
                         PreorderHour = i.p.p.PreorderHour,
                         AddOnType = i.p.oi.AddOnType,
                         HasAddon = i.p.oi.HasAddon,
+                        OfferQuantityLimit = i.p.p.OfferQuantityLimit,
                         OrderItemAddonLists = db.OrderItemAddons.Where(a => a.OrderItemId == i.p.oi.Id).Select(a => new OrderDetailsApiViewModel.OrderItemList.OrderItemAddonList {
                             AddonId = a.AddonId,
                             AddonName = a.AddonName,
@@ -5061,16 +5063,20 @@ namespace ShopNow.Controllers
             //       Date = i.ca.DateEncoded
             //   }).ToList();
             //model.ListItems = debitList.Concat(creditList).OrderByDescending(i => i.Date).ToList();
-
-            model.ListItems = db.CustomerWalletHistories.Where(i => i.CustomerId == customerId).OrderByDescending(i => i.DateEncoded)
-                .Select(i => new WalletHistoryViewModel.ListItem
-                {
-                    Amount = i.Amount,
-                    Date = i.DateEncoded,
-                    Description = i.Description,
-                    Type = i.Type
-                }).ToList();
-            return Json(new { list = model.ListItems }, JsonRequestBehavior.AllowGet);
+            var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
+            if (customer != null)
+            {
+                model.WalletAmount = customer.WalletAmount;
+                model.ListItems = db.CustomerWalletHistories.Where(i => i.CustomerId == customerId).OrderByDescending(i => i.DateEncoded)
+                    .Select(i => new WalletHistoryViewModel.ListItem
+                    {
+                        Amount = i.Amount,
+                        Date = i.DateEncoded,
+                        Description = i.Description,
+                        Type = i.Type
+                    }).ToList();
+            }
+            return Json(new { amount = model.WalletAmount, list = model.ListItems }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetDeliveryMode(double totalSize, double totalWeight)
@@ -5331,8 +5337,9 @@ namespace ShopNow.Controllers
                                Name = i.m.Name,
                                Price = i.p.p.Price,
                                ShopName = i.p.p.ShopName,
-                               Distance = Math.Round((((Math.Acos(Math.Sin((i.p.s.Latitude * Math.PI / 180)) * Math.Sin((latitude * Math.PI / 180)) + Math.Cos((i.p.s.Latitude * Math.PI / 180)) * Math.Cos((latitude * Math.PI / 180))
-                            * Math.Cos(((i.p.s.Longitude - longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000, 2)
+                               //   Distance = Math.Round((((Math.Acos(Math.Sin((i.p.s.Latitude * Math.PI / 180)) * Math.Sin((latitude * Math.PI / 180)) + Math.Cos((i.p.s.Latitude * Math.PI / 180)) * Math.Cos((latitude * Math.PI / 180))
+                               //* Math.Cos(((i.p.s.Longitude - longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000, 2)
+                               Distance = Math.Round((double)(GetMeters(latitude, longitude, i.p.s.Latitude, i.p.s.Longitude) / 1000), 2)
                            }).ToList();
                 //}
             }
@@ -5387,20 +5394,21 @@ namespace ShopNow.Controllers
                                    " FROM Shops where(3959 * acos(cos(radians(@latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@longitude)) + sin(radians(@latitude)) * sin(radians(Latitude)))) < 16 and ShopCategoryId =" + shop.ShopCategoryId + " and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
                                    " order by IsOnline desc,Adscore desc,Rating desc";
 
-                    model.SimilarProductsListItems = db.Shops.SqlQuery(query, new SqlParameter("latitude", latitude), new SqlParameter("longitude", longitude))
-                       .Join(db.Products.Where(i => i.MasterProductId == product.MasterProductId), s => s.Id, p => p.ShopId, (s, p) => new { s, p })
-                           .Join(db.MasterProducts, p => p.p.MasterProductId, m => m.Id, (p, m) => new { p, m })
-                           .Join(db.DiscountCategories, p => p.p.p.DiscountCategoryName, dc => dc.Name, (p, dc) => new { p, dc })
-                           .AsEnumerable()
-                           .Select(i => new MedicalProductDetailsApiViewModel.SimilarProductsListItem
-                           {
-                               DiscountPercentage = i.dc.Percentage,
-                               MenuPrice = i.p.p.p.MenuPrice,
-                               Name = i.p.m.Name,
-                               Price = i.p.p.p.Price,
-                               ShopName = i.p.p.p.ShopName,
-                               Distance = Math.Round((((Math.Acos(Math.Sin((i.p.p.s.Latitude * Math.PI / 180)) * Math.Sin((latitude * Math.PI / 180)) + Math.Cos((i.p.p.s.Latitude * Math.PI / 180)) * Math.Cos((latitude * Math.PI / 180))
-                            * Math.Cos(((i.p.p.s.Longitude - longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000, 2)
+                model.SimilarProductsListItems = db.Shops.SqlQuery(query, new SqlParameter("latitude", latitude), new SqlParameter("longitude", longitude))
+                   .Join(db.Products.Where(i => i.MasterProductId == product.MasterProductId), s => s.Id, p => p.ShopId, (s, p) => new { s, p })
+                       .Join(db.MasterProducts, p => p.p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+                       .Join(db.DiscountCategories, p => p.p.p.DiscountCategoryName, dc => dc.Name, (p, dc) => new { p, dc })
+                       .AsEnumerable()
+                       .Select(i => new MedicalProductDetailsApiViewModel.SimilarProductsListItem
+                       {
+                           DiscountPercentage = i.dc.Percentage,
+                           MenuPrice = i.p.p.p.MenuPrice,
+                           Name = i.p.m.Name,
+                           Price = i.p.p.p.Price,
+                           ShopName = i.p.p.p.ShopName,
+                               //   Distance = Math.Round((((Math.Acos(Math.Sin((i.p.p.s.Latitude * Math.PI / 180)) * Math.Sin((latitude * Math.PI / 180)) + Math.Cos((i.p.p.s.Latitude * Math.PI / 180)) * Math.Cos((latitude * Math.PI / 180))
+                               //* Math.Cos(((i.p.p.s.Longitude - longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000, 2)
+                               Distance = Math.Round((double)(GetMeters(latitude, longitude,i.p.p.s.Latitude, i.p.p.s.Longitude)/1000),2)
                            }).ToList();
             }
             return Json(model, JsonRequestBehavior.AllowGet);
@@ -5498,6 +5506,94 @@ namespace ShopNow.Controllers
             {
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        public JsonResult GetTopCategoryAndProducts(int shopid)
+        {
+            var shop = db.Shops.FirstOrDefault(i => i.Id == shopid);
+            var model = new TopCategoriesAndProductsViewModel();
+            model.CategoryListItems = db.Database.SqlQuery<TopCategoriesAndProductsViewModel.CategoryListItem>($"select distinct top 8 CategoryId as Id, c.Name as Name,c.ImagePath,c.OrderNo from Products p join Categories c on c.Id = p.CategoryId where ShopId ={shop.Id} and OrderNo !=0 and c.Status = 0 and CategoryId !=0 and c.Name is not null group by CategoryId,c.Name,c.ImagePath,c.OrderNo order by OrderNo")
+                    .Select(i => new TopCategoriesAndProductsViewModel.CategoryListItem
+                    {
+                        Id = i.Id,
+                        ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                        Name = i.Name
+                    }).ToList<TopCategoriesAndProductsViewModel.CategoryListItem>();
+
+            var discountCategory = db.DiscountCategories.Where(i => i.ShopId == shopid).OrderByDescending(i => i.Percentage).Select(i=>i.Name).Take(6).ToList();
+
+            model.ProductListItems = db.Products.Where(i => discountCategory.Contains(i.DiscountCategoryName) && i.ShopId == shopid && i.MasterProductId != 0 && i.Status == 0 && i.MenuPrice != 0 && i.Price != 0 && i.CategoryId != 0).Take(6)
+                .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+                .Join(db.Categories, p => p.p.CategoryId, c => c.Id, (p, c) => new { p, c })
+                .Join(db.DiscountCategories, p => p.p.p.DiscountCategoryName, dc => dc.Name, (p, dc) => new { p, dc })
+                .Select(i => new TopCategoriesAndProductsViewModel.ProductListItem
+                {
+                    BrandName = i.p.p.m.BrandName,
+                    CategoryId = i.p.p.p.CategoryId,
+                    CategoryName = i.p.c.Name,
+                    ColorCode = i.p.p.m.ColorCode,
+                    Customisation = i.p.p.m.Customisation,
+                    DiscountCategoryPercentage = i.dc.Percentage,
+                    DrugCompoundDetailIds = i.p.p.m.DrugCompoundDetailIds,
+                    DrugCompoundDetailName = i.p.p.m.DrugCompoundDetailName,
+                    iBarU = i.p.p.m.IBarU,
+                    ImagePath = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                    ImagePath1 = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                    ImagePath2 = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath2)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath2.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                    ImagePath3 = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath3)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath3.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                    ImagePath4 = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath4)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath4.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                    ImagePath5 = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath5)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath5.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                    IsOnline = i.p.p.p.IsOnline,
+                    IsPreorder = i.p.p.p.IsPreorder,
+                    Itemid = i.p.p.p.ItemId,
+                    LongDescription = i.p.p.m.LongDescription,
+                    MRP = i.p.p.p.MenuPrice,
+                    NextOnTime = i.p.p.p.NextOnTime,
+                    OfferQuantityLimit = i.p.p.p.OfferQuantityLimit,
+                    PreorderHour= i.p.p.p.PreorderHour,
+                    PriscriptionCategory= i.p.p.m.PriscriptionCategory,
+                    ProductId= i.p.p.p.Id,
+                    ProductName= i.p.p.m.Name,
+                    Quantity = i.p.p.p.Qty,
+                    SalePrice = i.p.p.p.Price,
+                    ShopCategoryId = shop.ShopCategoryId,
+                    ShopCategoryName = shop.ShopCategoryName,
+                    ShopId = shop.Id,
+                    ShopIsOnline = shop.IsOnline,
+                    ShopName = shop.Name,
+                    ShopNextOnTime = shop.NextOnTime,
+                    ShortDescription = i.p.p.m.ShortDescription,
+                    Size = i.p.p.m.SizeLWH,
+                    Status = i.p.p.p.Status,
+                    Weight = i.p.p.m.Weight
+                }).OrderByDescending(i=>i.DiscountCategoryPercentage).ToList();
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult SaveRouteAudioPath(int addressId,string deliveryBoyName, string audiopath)
+        {
+            var customerAddress = db.CustomerAddresses.FirstOrDefault(i => i.Id == addressId);
+            customerAddress.RouteAudioPath = audiopath;
+            customerAddress.RouteAudioUploadedBy = deliveryBoyName;
+            customerAddress.RouteAudioUploadedDateTime = DateTime.Now;
+            db.Entry(customerAddress).State = EntityState.Modified;
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult SaveReviewReply(int reviewId,string reply,string repliedBy)
+        {
+            var customerReviewReply = new CustomerReviewReply
+            {
+                CreatedBy = repliedBy,
+                CustomerReviewId = reviewId,
+                DateEncoded = DateTime.Now,
+                ReplyText = reply,
+                Status = 0
+            };
+            db.CustomerReviewReplies.Add(customerReviewReply);
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "")

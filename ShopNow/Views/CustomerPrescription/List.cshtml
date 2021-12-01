@@ -3,37 +3,31 @@
 @{
     ViewBag.Title = "Customer Prescription List";
 }
-
 <title>ShopNow | @ViewBag.Title</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-
-
 <div class="container-fluid mb-5">
     <div class="row">
+        <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
         <div class="col-md-12 mx-auto mt-3">
             <div class="card shadow">
                 <div class="card-body">
-                    <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
                     @Html.Grid(Model.ListItems).Columns(columns =>
-               {
+                {
                    columns.Add(c => c.CustomerName).Titled("Name").Filterable(false).SetWidth(15);
                    columns.Add(c => c.CustomerPhoneNumber).Titled("Phone No").Filterable(false).SetWidth(12);
                    columns.Add(c => c.ImagePath).Titled("Image").Filterable(false).SetWidth(10);
                    columns.Add(c => c.AudioPath).Titled("Audio").Filterable(false).SetWidth(10);
                    columns.Add(c => c.Remarks).Titled("Remarks").Filterable(false).SetWidth(10);
                    columns.Add(c => c.DateEncoded).Titled("Date").Format("{0:dd-MMM-yyyy}").Filterable(false).SetWidth(10);
-                   columns.Add()
-  .Encoded(false)
-  .Sanitized(false)
-  .RenderValueAs(o => o.Status == 0  ? "<a href='#modal-add' data-id='" + o.Id + "' data-shopid='"+o.ShopId+"' data-toggle='modal' data-target='#modal-add' class='btn btn-sm btn-primary btn-modal-add btn-block'>Add</a>" : "<span class='text-success'>Already Added</span><a href='#modal-added-item-list' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-added-item-list' class='btn-modal-added-item-list ml-2'><u>Check Items</u></a>").Titled("Action").SetWidth(5);
-               }).Sortable(true)
+                   columns.Add().Encoded(false).Sanitized(false)
+                  .RenderValueAs(o => o.Status == 0 ? "<a href='#modal-add' data-id='" + o.Id + "' data-shopid='" + o.ShopId + "' data-toggle='modal' data-target='#modal-add' class='btn btn-sm btn-primary btn-modal-add btn-block'>Add</a>" : "<span class='text-success'>Already Added</span><a href='#modal-added-item-list' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-added-item-list' class='btn-modal-added-item-list ml-2'><u>Check Items</u></a>").Titled("Action").SetWidth(5);
+                }).Sortable(true)
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 
 <div class="modal fade" id="modal-add" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">
@@ -119,19 +113,6 @@
     <script>
         $(document).ready(function () {
             var itemArray = [];
-            //$('#select-product').select2({
-            //    placeholder: "Select Product",
-            //    width: '100%',
-            //    ajax: {
-            //        url: "/Banner/GetShopProductSelect2?shopid=123",
-            //        delay: 250,
-            //        dataType: 'json'
-            //    }
-            //}).on('select2:select', function (e) {
-            //    $('input[name="ProductName"]').val(e.params.data.text);
-            //});
-
-
             $(".btn-modal-add").click(function () {
                 $('[name="PrescriptionId"]').val($(this).data('id'));
                 $('[name="ShopId"]').val($(this).data('shopid'));

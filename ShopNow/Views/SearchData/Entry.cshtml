@@ -6,17 +6,15 @@
 <title>ShopNow | @ViewBag.Title</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-
 <div class="container-fluid">
     <div class="row my-2">
         <div class="col-md-6">
             <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
         </div>
         <div class="col-md-6 text-right">
-
         </div>
         <div class="col-md-12">
-            <div class="card shadow-sm">
+            <div class="card shadow">
                 <div class="card-body">
                     <div class="mb-5">
                         <h6>Filter By Letters</h6>
@@ -27,26 +25,19 @@
                         <a href="/SearchData/Entry" class="float-right"><u>Clear Filter</u></a>
                     </div>
                     @Html.Grid(Model.KeywordLists).Columns(columns =>
-{
-   columns.Add(b => b.Keyword).Titled("Keyword").Filterable(true).SetWidth(10);
-   columns.Add(b => b.AvailableKeyword).Titled("Available Keyword").Filterable(true).SetWidth(40);
-   columns.Add()
-    .Encoded(false)
-    .Sanitized(false)
-     .RenderValueAs(b => new HtmlString
-              ("<textarea class='form-control input-keys'></textarea>")).Titled("Enter Keys(comma seperated)").SetWidth(60);
-   columns.Add().Css("text-center")
-.Encoded(false)
-.Sanitized(false)
-.RenderValueAs(b => "<a data-keyword='" + b.Keyword + "' class='btn btn-sm btn-primary btn-add-keyword'>Add</a>").Titled("Action").SetWidth(5);
-}).WithPaging(50).Sortable(true)
+                    {
+                        columns.Add(b => b.Keyword).Titled("Keyword").Filterable(true).SetWidth(10);
+                        columns.Add(b => b.AvailableKeyword).Titled("Available Keyword").Filterable(true).SetWidth(40);
+                        columns.Add().Encoded(false).Sanitized(false)
+                       .RenderValueAs(b => new HtmlString ("<textarea class='form-control input-keys'></textarea>")).Titled("Enter Keys(comma seperated)").SetWidth(60);
+                        columns.Add().Css("text-center").Encoded(false).Sanitized(false)
+                       .RenderValueAs(b => "<a data-keyword='" + b.Keyword + "' class='btn btn-sm btn-primary btn-add-keyword'>Add</a>").Titled("Action").SetWidth(5);
+                     }).WithPaging(50).Sortable(true)
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
 
 @section Scripts
 {
@@ -68,11 +59,10 @@
                             swal('Warning!', 'Something went wrong, try again later!', 'warning');
                     });
                 } else
-                swal('Warning!', 'Enter Key Values', 'warning');
+                    swal('Warning!', 'Enter Key Values', 'warning');
             });
         });
     </script>
-
 }
 
 

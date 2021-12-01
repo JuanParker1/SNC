@@ -3,18 +3,14 @@
 @{
     ViewBag.Title = "Deliveryboy Payment";
 }
-
 <title>ShopNow | @ViewBag.Title</title>
-
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-
 <div class="container-fluid">
     <div class="row mb-3">
         <div class="col-md-3">
-            <h5 class="mt-1 text-uppercase" style="letter-spacing:1px">@ViewBag.Title</h5>
+            <h5 class="mt-1 text-uppercase text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
         </div>
-
         <div class="col-md-6">
             <form method="get" action="/Payment/DeliveryboyPayment">
                 <div class="row">
@@ -38,20 +34,17 @@
     columns.Add(c => c.DeliveryBoyPhoneNumber).Titled("Phone No.").Filterable(true).SetWidth(10);
     columns.Add(c => c.TransactionType).Titled("Trans Type").Filterable(true).SetWidth(10);
     columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(8);
-    columns.Add(c => c.PaymentDate).Titled("Payment Date").Filterable(true).SetWidth(12).Format("{0:dd-MMM-yyyy}");
+    columns.Add(c => c.PaymentDate).Titled("Payment Date").Filterable(true).SetWidth(30).Format("{0:dd-MMM-yyyy}");
     columns.Add(c => c.AccountName).Titled("A/c Name").Filterable(true).SetWidth(10);
     columns.Add(c => c.AccountNumber).Titled("A/c No.").Filterable(true).SetWidth(10);
     columns.Add(c => c.PaymentId).Titled("Payment Id").Filterable(true).SetWidth(10);
     columns.Add(c => c.IfscCode).Titled("IFSC Code").Filterable(true).SetWidth(9);
-    columns.Add(c => c.AccountType).Titled("Account Type").Filterable(true).SetWidth(12);
+    columns.Add(c => c.AccountType).Titled("Account Type").Filterable(true).SetWidth(30);
 }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
-
-    </div>
-    
-
+    </div> 
 </div>
 <table id="table-excel" class="d-none">
     <thead>
@@ -129,7 +122,6 @@
     </tbody>
 </table>
 
-
 @if (Model.ListItems.Count != 0 && Model.ListItems.Any(i => i.DeliveryBoyPaymentStatus != 1))
 {
     <form method="post" action="/Payment/MarkDeliveryBoyPaymentAsPaidInCart">
@@ -140,6 +132,7 @@
         </div>
     </form>
 }
+
 <script src="/Scripts/exporttoexcel/Table2ExcelNew.js"></script>
 <script>
     $(document).ready(function () {

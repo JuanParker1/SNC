@@ -13,7 +13,6 @@
         <EntityTypeShape EntityType="sncModel.AppDetail" Width="1.5" PointX="17.75" PointY="8.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.BrandOwner" Width="1.5" PointX="5.75" PointY="18.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.Brand" Width="1.5" PointX="18.75" PointY="11.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.CustomerAddress" Width="1.5" PointX="11" PointY="4" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.CustomerReview" Width="1.5" PointX="11" PointY="9.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.DeliveryBoyShop" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.DiscountCategory" Width="1.5" PointX="18.75" PointY="15.75" IsExpanded="true" />
@@ -79,13 +78,15 @@
         <AssociationConnector Association="sncModel.FK_CustomerReview_Shops" />
         <EntityTypeShape EntityType="sncModel.Staff" Width="1.5" PointX="30.375" PointY="17.75" />
         <EntityTypeShape EntityType="sncModel.Customer" Width="1.5" PointX="8.75" PointY="4.5" />
-        <AssociationConnector Association="sncModel.FK_CustomerAddresses_Customers" />
         <AssociationConnector Association="sncModel.FK_CustomerReview_Customers" />
         <EntityTypeShape EntityType="sncModel.Category" Width="1.5" PointX="30.375" PointY="22" />
         <AssociationConnector Association="sncModel.FK_SubCategories_Categories" />
         <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="28.375" PointY="32.5" />
         <AssociationConnector Association="sncModel.FK_OrderItems_Orders" />
         <EntityTypeShape EntityType="sncModel.CustomerSearchData" Width="1.5" PointX="15.375" PointY="14.75" />
+        <EntityTypeShape EntityType="sncModel.CustomerAddress" Width="1.5" PointX="11" PointY="43" />
+        <AssociationConnector Association="sncModel.FK_CustomerAddresses_Customers" />
+        <EntityTypeShape EntityType="sncModel.CustomerReviewReply" Width="1.5" PointX="24.375" PointY="21.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

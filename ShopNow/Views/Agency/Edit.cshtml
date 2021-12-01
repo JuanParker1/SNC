@@ -3,7 +3,6 @@
     ViewBag.Title = "Agency Update";
 }
 <title>ShopNow | @ViewBag.Title</title>
-
 <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-md-2">
@@ -24,9 +23,9 @@
         </div>
         @if (Model.Password != null)
         {
-        <div class="col-md-1 mt-2">
-            <a href="#modal-Password" data-target="#modal-Password" data-toggle="modal">Update</a>
-        </div>
+            <div class="col-md-1 mt-2">
+                <a href="#modal-Password" data-target="#modal-Password" data-toggle="modal">Update</a>
+            </div>
         }
         <div class="col-md-5 text-right">
             @if (Model.Status == 1)
@@ -254,6 +253,7 @@
         </div>
     </div>
 </div>
+
 @section Scripts
 {
     <script src="~/Scripts/ValidateRequiredFields.js"></script>
@@ -295,7 +295,7 @@
 
             $('#btnPassword').on('click', function () {
                 var customerid = $("#CustomerId").val();
-                $.getJSON("/Agency/GeneratePassword", { customerid: customerid}, function (data) {
+                $.getJSON("/Agency/GeneratePassword", { customerid: customerid }, function (data) {
                     if (data != "")
                         $("#txtPassword").val(data);
                     location.reload();
@@ -305,7 +305,7 @@
             $('#btnUpdatePassword').on('click', function () {
                 var customerid = $("#CustomerId").val();
                 var password = $("#Password").val();
-                $.getJSON("/Agency/UpdatePassword", { customerid: customerid , password:password}, function (data) {
+                $.getJSON("/Agency/UpdatePassword", { customerid: customerid, password: password }, function (data) {
                     if (data != "")
                         $("#txtPassword").val(data);
                     location.reload();
@@ -338,19 +338,18 @@
                     }
                 });
 
-            $('input:radio[name="AccountDocument"]').change(
-                function () {
-                    if (this.checked && this.value == 'Image') {
-                        $('.AccountDocumentImg').removeClass('d-none');
-                        $('.AccountDocumentPdf').addClass('d-none');
-                        $("#BankPassbookPdf").val("");
-                    } else {
-                        $('.AccountDocumentImg').addClass('d-none');
-                        $('.AccountDocumentPdf').removeClass('d-none');
-                        $("#BankPassbookImage").val("");
-                        $("#img-account").attr('src', '');
-                    }
-                });
+            $('input:radio[name="AccountDocument"]').change(function () {
+                if (this.checked && this.value == 'Image') {
+                    $('.AccountDocumentImg').removeClass('d-none');
+                    $('.AccountDocumentPdf').addClass('d-none');
+                    $("#BankPassbookPdf").val("");
+                } else {
+                    $('.AccountDocumentImg').addClass('d-none');
+                    $('.AccountDocumentPdf').removeClass('d-none');
+                    $("#BankPassbookImage").val("");
+                    $("#img-account").attr('src', '');
+                }
+            });
 
             function readURL(input) {
                 if (input.files && input.files[0]) {
@@ -400,9 +399,7 @@
                 readURLaccount(this);
             });
 
-
         });
-
 
         var map, infoWindow, markers = [];
         function initMap() {
@@ -487,7 +484,6 @@
 
             });
         }
-
     </script>
 }
 
