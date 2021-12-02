@@ -1,4 +1,5 @@
-﻿using ShopNow.Filters;
+﻿using AutoMapper;
+using ShopNow.Filters;
 using ShopNow.Models;
 using ShopNow.ViewModels;
 using System;
@@ -12,6 +13,16 @@ namespace ShopNow.Controllers
     public class CustomerPrescriptionController : Controller
     {
         private sncEntities db = new sncEntities();
+        private IMapper _mapper;
+        private MapperConfiguration _mapperConfiguration;
+        public CustomerPrescriptionController()
+        {
+            _mapperConfiguration = new MapperConfiguration(config =>
+            {
+                config.CreateMap<CustomerPrescription, AddToCartViewModel>();
+            });
+            _mapper = _mapperConfiguration.CreateMapper();
+        }
 
         [AccessPolicy(PageCode = "SNCCPL111")]
         public ActionResult List()
@@ -25,7 +36,8 @@ namespace ShopNow.Controllers
                 .Select(i => new CustomerPrescriptionWebListViewModel.ListItem
                 {
                     Id = i.cp.Id,
-                    AudioPath = i.cp.AudioPath.Any() ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Audio/" + i.cp.AudioPath : null,
+                    //AudioPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Audio/" + i.cp.AudioPath,
+                    AudioPath = (!string.IsNullOrEmpty(i.cp.AudioPath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Audio/" + i.cp.AudioPath : "",
                     CustomerId = i.cp.CustomerId,
                     CustomerName = i.cp.CustomerName,
                     CustomerPhoneNumber = i.cp.CustomerPhoneNumber,
@@ -40,6 +52,37 @@ namespace ShopNow.Controllers
                     }).ToList()
                 }).ToList();
             return View(model);
+        }
+
+        public ActionResult AddToCart(int id)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var model = new AddToCartViewModel();
+            var cp = db.CustomerPrescriptions.FirstOrDefault(i => i.Id == id);
+            if (cp != null)
+            {
+                _mapper.Map(cp, model);
+                var shop = db.Shops.FirstOrDefault(i => i.Id == cp.ShopId);
+                if (shop != null)
+                {
+                    model.ShopName = shop.Name;
+                    model.ShopPhoneNumber = shop.PhoneNumber;
+                    model.ShopImagePath = shop.ImagePath;
+                    model.ShopAddress = shop.Address;
+                }
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddToCart(AddToCartViewModel model)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+
+            return View();
         }
 
         public JsonResult AddPrescriptionItem(PrescriptionItemAddViewModel model)

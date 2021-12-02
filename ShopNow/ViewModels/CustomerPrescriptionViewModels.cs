@@ -39,4 +39,24 @@ namespace ShopNow.ViewModels
             public int Quantity { get; set; }
         }
     }
+
+    public class AddToCartViewModel
+    {
+        public int Id { get; set; }
+        public int ShopId { get; set; }
+        public int CustomerId { get; set; }
+        public string CustomerName { get; set; }
+        public string CustomerPhoneNumber { get; set; }
+        public string ImagePath { get; set; }
+        public string AudioPath { get; set; }
+        public string Remarks { get; set; }
+        public int Status { get; set; }
+        public System.DateTime DateEncoded { get; set; }
+
+        // Shop
+        public string ShopName { get; set; }
+        public string ShopPhoneNumber { get; set; }
+        public string ShopImagePath { get; set; }
+        public string ShopAddress { get; set; }
+    }
 }

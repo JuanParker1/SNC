@@ -3248,6 +3248,7 @@
     <Content Include="Views\Support\COHPaymentUpdate.cshtml" />
     <Content Include="Views\Support\OnlinePaymentUpdate.cshtml" />
     <Content Include="Views\Support\Live.cshtml" />
+    <Content Include="Views\CustomerPrescription\AddToCart.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
