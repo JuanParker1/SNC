@@ -3,29 +3,47 @@
     ViewBag.Title = "AddToCart";
 }
 <title>ShopNow | @ViewBag.Title</title>
-
-<div class="container-fluid mb-5">
-    <div class="row">
-        <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
-        <div class="col-md-12 mt-3">
-            <div class="card shadow">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-2">
-                            <img alt="Image" data-toggle="modal" data-target="#myModal" class="img-thumbnail PrescriptionImage p-1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ShopImagePath" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px" />
-                        </div>
-                        <div class="col-md-4">
-                            <label class="font-weight-bold text-secondary">@Model.ShopName</label><br />
-                            <label class="font-weight-bold text-secondary">@Model.ShopPhoneNumber</label><br />
-                            <label class="font-weight-bold text-secondary">@Model.ShopAddress</label><br />
+@using (Html.BeginForm("AddToCart", "CustomerPrescription", FormMethod.Post, new { id = "PrescriptionForm", role = "form", enctype = "multipart/form-data", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="container-fluid mb-5">
+        <div class="row">
+            <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+            <input type="hidden" name="Id" id="Id" value="@Model.Id" />
+            <input type="hidden" name="ShopId" id="ShopId" value="@Model.ShopId" />
+            <input type="hidden" name="CustomerId" id="CustomerId" value="@Model.CustomerId" />
+            <input type="hidden" name="CustomerName" id="CustomerName" value="@Model.CustomerName" />
+            <input type="hidden" name="Latitude" id="Latitude" value="@Model.Latitude" />
+            <input type="hidden" name="Longitude" id="Longitude" value="@Model.Longitude" />
+            <div class="col-md-12 mt-3">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <img alt="Image" data-toggle="modal" data-target="#myModal" class="img-thumbnail PrescriptionImage p-1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ShopImagePath" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="font-weight-bold text-secondary">@Model.ShopName</label><br />
+                                <label class="font-weight-bold text-secondary">@Model.ShopPhoneNumber</label><br />
+                                <label class="font-weight-bold text-secondary">@Model.ShopAddress</label><br />
+                            </div>
+                            <div class="col-md-4">
+                                <h6 class="font-weight-bold text-secondary">
+                                    @if (Model.CustomerName != null)
+                                    {@Model.CustomerName.ToUpper()}
+                            </h6>
+                            <p class="font-weight-bold text-secondary">@Model.CustomerPhoneNumber</p>
+                            <p class="font-weight-bold text-secondary">@Model.DeliveryAddress</p>
                         </div>
                     </div>
-                    <div class="row">
+                    <h6 class="mt-3">Add Order Item(s)</h6>
+                    <div class="row mt-1">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Select Product</label>
                                 <select class="form-control" name="ProductId" id="select-product"></select>
                                 <input type="hidden" name="ProductName" />
+                                <input type="hidden" name="Price" />
                             </div>
                         </div>
                         <div class="col-md-2">
@@ -40,17 +58,77 @@
                     </div>
                     <div class="row d-none" id="div-items">
                         <div class="col-md-12">
-                            <h6>Item List</h6>
+                            <h6>Cart Items</h6>
                             <table class="table table-bordered table-sm table-striped" id="tbl-items">
                                 <thead class="bg-light">
                                     <tr>
-                                        <th class="w-75">Product</th>
+                                        <th class="w-50">Product</th>
+                                        <th class="w-25">Price</th>
                                         <th class="w-25">Quantity</th>
+                                        <th>Total</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
                             </table>
                         </div>
+                        <div class="col-md-4">
+                            <h6>Billing Details</h6>
+                            <table class="table table-bordered table-sm table-striped" id="tbl-billing">
+                                <tbody>
+                                    <tr>
+                                        <td>Items Total</td>
+                                        <td>
+                                            &#8377;<span class="ItemTotal">0</span>
+                                            <input type="hidden" name="ItemTotal" id="ItemTotal" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Packing Charge</td>
+                                        <td>
+                                            &#8377;<span class="PackingCharge">0</span>
+                                            <input type="hidden" name="PackingCharge" id="PackingCharge" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Convenient Charge</td>
+                                        <td>
+                                            &#8377;<span class="ConvenientCharge">0</span>
+                                            <input type="hidden" name="ConvenientCharge" id="ConvenientCharge" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Gross Delivery Charge</td>
+                                        <td>
+                                            &#8377;<span class="GrossDeliveryCharge">0</span>
+                                            <input type="hidden" name="GrossDeliveryCharge" id="GrossDeliveryCharge" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Shop Delivery Discount</td>
+                                        <td>
+                                            &#8377;<span class="ShopDeliveryDiscount">0</span>
+                                            <input type="hidden" name="ShopDeliveryDiscount" id="ShopDeliveryDiscount" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Net Delivery Charge</td>
+                                        <td>
+                                            &#8377;<span class="NetDeliveryCharge">0</span>
+                                            <input type="hidden" name="NetDeliveryCharge" id="NetDeliveryCharge" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>To Pay</td>
+                                        <td>
+                                            &#8377;<span class="ToPay">0</span>
+                                            <input type="hidden" name="ToPay" id="ToPay" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
                     </div>
                     <div class="row mt-3">
                         <div class="col-md-2 mx-auto">
@@ -60,93 +138,144 @@
                 </div>
             </div>
         </div>
+        </div>
     </div>
-</div>
+}
 
-@section Scripts
+    @section Scripts
 {
-    <!--Select2-->
-    <script src="~/Scripts/select2/js/select2.js"></script>
-    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
-    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
-    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
-    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
-    <!--Select2 End-->
-    <script>
-        $(document).ready(function () {
-           
-           
-                $('[name="PrescriptionId"]').val($(this).data('id'));
-                $('[name="ShopId"]').val($(this).data('shopid'));
-                $('#modal-add').modal('show');
-
+        <!--Select2-->
+        <script src="~/Scripts/select2/js/select2.js"></script>
+        <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+        <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+        <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+        <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+        <!--Select2 End-->
+        <script>
+            $(document).ready(function () {
+                var id = $("#Id").val();
+                var shopid = $("#ShopId").val();
+                var customerid = $("#CustomerId").val();
                 $('#select-product').select2({
                     placeholder: "Select Product",
                     width: '100%',
                     ajax: {
-                        url: "/Banner/GetShopProductSelect2?shopid=" + $(this).data('shopid') + "",
+                        url: "/CustomerPrescription/GetShopProductSelect2?shopid=" + shopid,
                         delay: 250,
                         dataType: 'json'
                     }
                 }).on('select2:select', function (e) {
                     $('input[name="ProductName"]').val(e.params.data.text);
+                    $('input[name="Price"]').val(e.params.data.price);
                 });
-           
 
-            $('#btn-addtolist').on('click', function () {
-                var productId = $('[name="ProductId"]').val();
-                var productName = $('[name="ProductName"]').val();
-                var qty = $('[name="Quantity"]').val();
-                if (productId && qty) {
-                    var item = {
-                        productId: productId,
-                        quantity: qty
-                    };
-                    itemArray.push(item);
-                    var $tr = '<tr><td>' + productName + '</td><td>' + qty + '</td></tr>';
-                    $('#tbl-items tbody').append($tr);
-                    $('#div-items').removeClass('d-none');
-                    $('[name="ProductId"]').val('').trigger('change');
-                    $('[name="Quantity"]').val('');
-                } else
-                    swal('Warning', 'All fields are required!', 'warning');
-            });
+                var itemTotal = 0;
+                var itemArray = [];
+                $('#btn-addtolist').on('click', function () {
+                    var productId = $('[name="ProductId"]').val();
+                    var productName = $('[name="ProductName"]').val();
+                    var qty = $('[name="Quantity"]').val();
+                    var price = $('[name="Price"]').val();
+                    if (productId && qty) {
+                        var total = Math.round(price * qty).toFixed(2);
+                        var item = {
+                            productId: productId,
+                            quantity: qty,
+                            price: price,
+                            total:total
+                        };
+                        itemArray.push(item);
+                        var $tr = '<tr><td>' + productName + '</td><td>' + price + '</td><td>' + qty + '</td><td>' + total + '</td><td><a class="btn btn-sm btn-danger removeProduct" data-amount=' + total + ' data-id=' + id +'>Remove</a></td></tr>';
+                        $('#tbl-items tbody').append($tr);
+                        $('#div-items').removeClass('d-none');
+                        $('[name="ProductId"]').val('').trigger('change');
+                        $('[name="Quantity"]').val('');
+                        $('[name="Price"]').val('');
 
-            $('#btn-save-prescription').on('click', function () {
-                if (itemArray.length > 0) {
-                    var model = {
-                        prescriptionId: $('[name="PrescriptionId"]').val(),
-                        shopId: $('#select-shop').val(),
-                        customerId: $('#CustomerId').val(),
-                        ListItems: itemArray
+                        itemTotal += parseFloat(total);
+                        $(".ItemTotal").text(itemTotal);
+                        $.getJSON("/CustomerPrescription/GetShopCharge", { shopid: shopid, itemTotal: itemTotal, customerid: customerid }, function (data) {
+                            $("#PackingCharge").val(data.PackingCharge);
+                            $(".PackingCharge").text(data.PackingCharge);
+                            $("#ConvenientCharge").val(data.ConvenientCharge);
+                            $(".ConvenientCharge").text(data.ConvenientCharge);
+
+                            $("#GrossDeliveryCharge").val(data.GrossDeliveryCharge);
+                            $(".GrossDeliveryCharge").text(data.GrossDeliveryCharge);
+                            $("#ShopDeliveryDiscount").val(data.ShopDeliveryDiscount);
+                            $(".ShopDeliveryDiscount").text(data.ShopDeliveryDiscount);
+                            $("#NetDeliveryCharge").val(data.NetDeliveryCharge);
+                            $(".NetDeliveryCharge").text(data.NetDeliveryCharge);
+                            var pack = $("#PackingCharge").val();
+                            var conv = $("#ConvenientCharge").val();
+                            var net = $("#NetDeliveryCharge").val();
+                            var toPay = parseFloat(total) + parseFloat(pack) + parseFloat(conv) + parseFloat(net);
+                            $(".ToPay").text(toPay);
+                            $("#ToPay").val(topay);
+                        });
+                        
+                    } else
+                        swal('Warning', 'All fields are required!', 'warning');
+                });
+
+                $(document).on('click', '.removeProduct', function () {
+                    var id = $(this).data('id');
+                    var itemAmount = $(this).data('amount');
+                    var thisRow = $(this).closest("tr");
+                    var count = $('#tbl-items tr').length;
+                    if (count == 2) {
+                        $("#div-items").addClass("d-none");
                     }
-                    $.post('/CustomerPrescription/AddPrescriptionItem', model, function (data) {
-                        if (data) {
-                            swal('Success', 'Prescription Items saved successfully', 'success');
-                            window.location.reload();
-                        } else {
-                            // swal('Warning', 'Shop already has Schedules, Kindly update there.', 'warning');
-                            timeArray.length = 0;
-                            $('#tbl-items tbody').empty();
-                            $('#div-items').addClass('d-none');
-                            //$('#select-shop').val('').trigger('change');
-                            $('#modal-add').modal('hide');
-                        }
-                    });
-                } else
-                    swal('Warning', 'Item List should not be empty!', 'warning');
-            });
+                    thisRow.remove();
+                    //itemArray = jQuery.grep(itemArray, function (value) {
+                    //    return value != id;
+                    //});
+                    //alert('Array after removing the element = ' + itemArray);
+                    swal("Success!", "Item Successfully Removed!", "success");
+                    itemTotal -= parseFloat(itemAmount);
+                    $(".ItemTotal").text(itemTotal);
+                    $.getJSON("/CustomerPrescription/GetShopCharge", { shopid: shopid, itemTotal: itemTotal, customerid: customerid }, function (data) {
+                        $("#PackingCharge").val(data.PackingCharge);
+                        $(".PackingCharge").text(data.PackingCharge);
+                        $("#ConvenientCharge").val(data.ConvenientCharge);
+                        $(".ConvenientCharge").text(data.ConvenientCharge);
 
-            $('.btn-modal-added-item-list').on('click', function () {
-                $.getJSON('/CustomerPrescription/GetItemList', { id: $(this).data('id') }, function (data) {
-                    $.each(data, function (index, item) {
-                        var $tr = '<tr><td>' + item.ProductName + '</td><td class="text-center">' + item.Quantity + '</td></tr>';
-                        $('#tbl-added-items tbody').append($tr);
+                        $("#GrossDeliveryCharge").val(data.GrossDeliveryCharge);
+                        $(".GrossDeliveryCharge").text(data.GrossDeliveryCharge);
+                        $("#ShopDeliveryDiscount").val(data.ShopDeliveryDiscount);
+                        $(".ShopDeliveryDiscount").text(data.ShopDeliveryDiscount);
+                        $("#NetDeliveryCharge").val(data.NetDeliveryCharge);
+                        $(".NetDeliveryCharge").text(data.NetDeliveryCharge);
                     });
                 });
+
+                $('#btn-save-prescription').on('click', function () {
+                    if (itemArray.length > 0) {
+                        var model = {
+                            prescriptionId: $('[name="PrescriptionId"]').val(),
+                            shopId: $('#select-shop').val(),
+                            customerId: $('#CustomerId').val(),
+                            ListItems: itemArray,
+                            OrderNumber: Math.floor(Math.random() * 1000000000),
+                        };
+                        $.post('/CustomerPrescription/AddPrescriptionItem', model, function (data) {
+                            if (data) {
+                                swal('Success', 'Prescription Items saved successfully', 'success');
+                                window.location.reload();
+                            } else {
+                                // swal('Warning', 'Shop already has Schedules, Kindly update there.', 'warning');
+                                timeArray.length = 0;
+                                $('#tbl-items tbody').empty();
+                                $('#div-items').addClass('d-none');
+                                //$('#select-shop').val('').trigger('change');
+                                $('#modal-add').modal('hide');
+                            }
+                        });
+                    } else
+                        swal('Warning', 'Item List should not be empty!', 'warning');
+                });
+                
+
             });
-        });
-    </script>
-}
-
-
+        </script>
+    }
