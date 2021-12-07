@@ -22,6 +22,7 @@ namespace ShopNow.ViewModels
             public int ShopId { get; set; }
             public string ShopName { get; set; }
             public double DiscountCategoryPercentage { get; set; }
+            public bool IsOnline { get; set; }
         }
     }
 

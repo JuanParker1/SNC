@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ShopNow.Filters;
+using ShopNow.Helpers;
 using ShopNow.Models;
 using ShopNow.ViewModels;
 using System;
@@ -65,6 +66,11 @@ namespace ShopNow.Controllers
             if (cp != null)
             {
                 _mapper.Map(cp, model);
+                model.ImagePathLists = db.CustomerPrescriptionImages.Where(i => i.CustomerPrescriptionId == cp.Id)
+                        .Select(i=> new AddToCartViewModel.ImagePathList { 
+                                    ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + i.ImagePath
+                        }).ToList();
+                model.AudioPath = (!string.IsNullOrEmpty(cp.AudioPath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Audio/" + cp.AudioPath : "";
                 var shop = db.Shops.FirstOrDefault(i => i.Id == cp.ShopId);
                 if (shop != null)
                 {
@@ -111,24 +117,31 @@ namespace ShopNow.Controllers
                     {
                         var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
                         order.CustomerId = customer.Id;
+                        order.CustomerName = customer.Name;
+                        order.CustomerPhoneNumber = customer.PhoneNumber; 
                         order.CreatedBy = customer.Name;
                         order.UpdatedBy = customer.Name;
-                        order.CustomerName = customer.Name;
-                        order.CustomerPhoneNumber = customer.PhoneNumber;
-
-                        //Store Referral Number
-                        //customer.ReferralNumber = model.ReferralNumber;
-                        //db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
-                        //db.SaveChanges();
                     }
-                    //order.OrderNumber = Math.Floor(Random *100);
+                    order.OrderNumber = model.OrderNumber;
                     order.ShopId = shop.Id;
                     order.ShopName = shop.Name;
+                    order.DeliveryAddress = model.DeliveryAddress;
                     order.ShopPhoneNumber = shop.PhoneNumber ?? shop.ManualPhoneNumber;
                     order.ShopOwnerPhoneNumber = shop.OwnerPhoneNumber;
                     order.TotalPrice = model.ListItems.Sum(i => i.Price);
                     order.TotalProduct = model.ListItems.Count();
                     order.TotalQuantity = model.ListItems.Sum(i => Convert.ToInt32(i.Quantity));
+                    order.NetTotal = model.ToPay;
+                    order.DeliveryCharge = model.GrossDeliveryCharge;
+                    order.ShopDeliveryDiscount = model.ShopDeliveryDiscount;
+                    order.NetDeliveryCharge = model.NetDeliveryCharge;
+                    order.Convinenientcharge = model.ConvenientCharge;
+                    order.Packingcharge = model.Packingcharge;
+                    order.Latitude = model.Latitude;
+                    order.Longitude = model.Longitude;
+                    order.Distance = model.Distance;
+                    order.RatePerOrder = db.PlatFormCreditRates.FirstOrDefault(i => i.Status == 0).RatePerOrder;
+                    order.PaymentMode = "Cash On Hand";
                     order.DateEncoded = DateTime.Now;
                     order.DateUpdated = DateTime.Now;
                     order.Status = 0;
@@ -138,10 +151,10 @@ namespace ShopNow.Controllers
                     {
                         if (item.ItemId != 0)
                         {
-                            var productMedicalStock = db.Products.FirstOrDefault(i => i.ItemId == item.ItemId && i.Status == 0);
-                            productMedicalStock.HoldOnStok = Convert.ToInt32(item.Quantity);
-                            productMedicalStock.Qty = productMedicalStock.Qty - Convert.ToInt32(item.Quantity);
-                            db.Entry(productMedicalStock).State = System.Data.Entity.EntityState.Modified;
+                            var product = db.Products.FirstOrDefault(i => i.ItemId == item.ItemId && i.Status == 0);
+                            product.HoldOnStok = Convert.ToInt32(item.Quantity);
+                            product.Qty = product.Qty - Convert.ToInt32(item.Quantity);
+                            db.Entry(product).State = System.Data.Entity.EntityState.Modified;
                             db.SaveChanges();
                         }
                         var orderItem = _mapper.Map<AddToCartViewModel.ListItem, OrderItem>(item);
@@ -150,21 +163,6 @@ namespace ShopNow.Controllers
                         orderItem.OrdeNumber = order.OrderNumber;
                         db.OrderItems.Add(orderItem);
                         db.SaveChanges();
-
-                        //if (item.AddOnListItems != null)
-                        //{
-                        //    foreach (var addon in item.AddOnListItems)
-                        //    {
-                        //        if (addon.Index == item.AddOnIndex)
-                        //        {
-                        //            var addonItem = _mapper.Map<OrderCreateViewModel.ListItem.AddOnListItem, OrderItemAddon>(addon);
-                        //            addonItem.Status = 0;
-                        //            addonItem.OrderItemId = orderItem.Id;
-                        //            db.OrderItemAddons.Add(addonItem);
-                        //            db.SaveChanges();
-                        //        }
-                        //    }
-                        //}
                     }
 
                     if (order != null)
@@ -196,43 +194,46 @@ namespace ShopNow.Controllers
                 {
                     id = i.p.Id,
                     text = i.m.Name,
-                    price = i.p.Price
+                    itemId = i.p.ItemId,
+                    price = i.p.Price,
+                    weight = i.m.Weight,
+                    size = i.m.SizeLWH
                 }).OrderBy(i => i.text).ToListAsync();
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetShopCharge(int shopid, double itemTotal,int customerid)
+        public JsonResult GetShopCharge(int shopid, double itemTotal,int customerid, double totalSize, double totalWeight)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            var model = new BillingDeliveryChargeViewModel();
+            model = CommonHelpers.GetDeliveryCharge(shopid, totalSize, totalWeight);
             var customer = db.Customers.FirstOrDefault(i => i.Id == customerid);
-            var shopbill = db.BillingCharges.Where(i => i.ShopId == shopid).FirstOrDefault();
+
             var shop = db.Shops.Where(i => i.Id == shopid && i.Status == 0).FirstOrDefault();
             var ConvenientCharge = 0.0;
             var GrossDeliveryCharge = 0.0;
             var ShopDeliveryDiscount = 0.0;
             var NetDeliveryCharge = 0.0;
-            var PackingCharge = shopbill.PackingCharge;
-            if(itemTotal < shopbill.ConvenientCharge)
+            var PackingCharge = model.PackingCharge;
+            if(itemTotal < model.ConvenientChargeRange)
             {
-                ConvenientCharge = db.PlatFormCreditRates.FirstOrDefault(i=> i.Status == 0).RatePerOrder;
+                ConvenientCharge = model.ConvenientCharge;
             }
             // Gross Delivery Charge
             var Distance = (((Math.Acos(Math.Sin((shop.Latitude * Math.PI / 180)) * Math.Sin((customer.Latitude * Math.PI / 180)) + Math.Cos((shop.Latitude * Math.PI / 180)) * Math.Cos((customer.Latitude * Math.PI / 180))
                  * Math.Cos(((shop.Longitude - customer.Longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000;
-            var shopdelivery = db.DeliveryCharges.Where(i => i.Type == shop.DeliveryType && i.TireType == shop.DeliveryTierType ).FirstOrDefault();
-            //var deliverybill = db.Bills.Where(i => i.ShopId == cart.ShopId && i.NameOfBill == 0 && i.DeliveryRateSet == 0 && i.Status == 0).FirstOrDefault();
             if (Distance < 5)
             {
-                GrossDeliveryCharge = shopdelivery.ChargeUpto5Km;
+                GrossDeliveryCharge = model.DeliveryChargeKM;
             }
             else
             {
                 var dist = Distance - 5;
-                var amount = dist * shopdelivery.ChargePerKm;
-                GrossDeliveryCharge = shopdelivery.ChargePerKm + amount;
+                var amount = dist * model.DeliveryChargeOneKM;
+                GrossDeliveryCharge = model.DeliveryChargeOneKM + amount;
             }
-            ShopDeliveryDiscount = itemTotal * (shopbill.DeliveryDiscountPercentage / 100);
+            ShopDeliveryDiscount = itemTotal * (model.DeliveryDiscountPercentage / 100);
             if(ShopDeliveryDiscount >= GrossDeliveryCharge)
             {
                 ShopDeliveryDiscount = GrossDeliveryCharge;
@@ -242,7 +243,6 @@ namespace ShopNow.Controllers
             {
                 NetDeliveryCharge = GrossDeliveryCharge - ShopDeliveryDiscount;
             }
-           // var Distance = Distance.ToString("0.##");
             return Json(new { PackingCharge, ConvenientCharge, GrossDeliveryCharge, ShopDeliveryDiscount, NetDeliveryCharge, Distance }, JsonRequestBehavior.AllowGet);
         }
 

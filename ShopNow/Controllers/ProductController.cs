@@ -1031,6 +1031,19 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
+        public ActionResult UpdateProductOnline(int Id, bool isOnline)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var product = db.Products.Where(i => i.Id == Id).FirstOrDefault();
+            if (product != null)
+            {
+                product.IsOnline = isOnline;
+                db.Entry(product).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return RedirectToAction("List");
+        }
+
         string GetMasterProductName(long Id)
         {
             var masterProduct = db.MasterProducts.FirstOrDefault(i => i.Id == Id);
