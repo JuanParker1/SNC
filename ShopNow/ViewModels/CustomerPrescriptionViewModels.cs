@@ -42,6 +42,15 @@ namespace ShopNow.ViewModels
 
     public class AddToCartViewModel
     {
+        //Prescription
+        public string AudioPath { get; set; }
+        public List<ImagePathList> ImagePathLists { get; set; }
+        public class ImagePathList
+        {
+            public string ImagePath { get; set; }
+        }
+
+        //AddToCart
         public int Id { get; set; }
         public int ShopId { get; set; }
         public int CustomerId { get; set; }
@@ -58,22 +67,22 @@ namespace ShopNow.ViewModels
         // Order
         public int OrderNumber { get; set; }
         public string DeliveryAddress { get; set; }
+        public double ToPay { get; set; }
+        public double GrossDeliveryCharge { get; set; }
+        public double ShopDeliveryDiscount { get; set; }
+        public double NetDeliveryCharge { get; set; }
+        public double ConvenientCharge { get; set; }
+        public double Packingcharge { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public double Distance { get; set; }
-        public string ReferralNumber { get; set; }
-        public int? OfferId { get; set; }
-        public int? ProductFreeOfferId { get; set; }
-        public bool? IsPreorder { get; set; }
-        public DateTime? PreorderDeliveryDateTime { get; set; }
-        public string RouteAudioPath { get; set; }
-        public string Remarks { get; set; }
-        public string PrescriptionImagePath { get; set; }
-        public string PaymentMode { get; set; }
 
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {
+            public int ItemId { get; set; }
+            public long OrderId { get; set; }
+            public int OrdeNumber { get; set; }
             public long ProductId { get; set; }
             public string ProductName { get; set; }
             public int BrandId { get; set; }
@@ -84,25 +93,6 @@ namespace ShopNow.ViewModels
             public int Quantity { get; set; }
             public double UnitPrice { get; set; }
             public double Price { get; set; }
-            public int ItemId { get; set; }
-            public bool HasAddon { get; set; }
-            public int AddOnType { get; set; }
-            public int AddOnIndex { get; set; }
-
-            public List<AddOnListItem> AddOnListItems { get; set; }
-            public class AddOnListItem
-            {
-                public int Index { get; set; }
-                public long ProductId { get; set; }
-                public int AddonId { get; set; }
-                public string AddonName { get; set; }
-                public double AddonPrice { get; set; }
-                public int CrustId { get; set; }
-                public string CrustName { get; set; }
-                public int PortionId { get; set; }
-                public double PortionPrice { get; set; }
-                public string PortionName { get; set; }
-            }
         }
     }
 }
