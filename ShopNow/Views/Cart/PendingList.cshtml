@@ -3,12 +3,9 @@
 @{
     ViewBag.Title = "Pending List";
 }
-
 <title>ShopNow | @ViewBag.Title</title>
-
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-
 <div class="container-fluid">
     <div class="row my-2">
         <div class="col-md-4">
@@ -31,9 +28,9 @@
     {
        columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
        columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
-       columns.Add(c => c.PaymentMode).Titled("PaymentMode").Filterable(true).SetWidth(12);
-       columns.Add(c => c.ShopOwnerPhoneNumber).Titled("PhoneNo").Filterable(true).SetWidth(10);
-       columns.Add(c => c.Price).Titled("Amount").Filterable(true).SetWidth(10);
+       columns.Add(c => c.PaymentMode).Titled("PaymentMode").Filterable(true).SetWidth(28);
+       columns.Add(c => c.ShopOwnerPhoneNumber).Titled("ShopOwnerPh.No").Filterable(true).SetWidth(30);
+       columns.Add(c => c.Price).Titled("Amount").Filterable(true).SetWidth(5);
        columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(13).Format("{0:dd-MMM-yyyy}");
        columns.Add().RenderValueAs(c => c.Status == 2 ? "Pending" : "N/A").Titled("Order Status").Filterable(true).SetWidth(12);
        columns.Add()
