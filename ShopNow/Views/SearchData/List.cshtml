@@ -56,7 +56,7 @@
                 </div>
                 <div class="tab-pane fade" id="zero">
                     @Html.Grid(Model.ZeroCountListItems).Columns(columns =>
-                {
+               {
                    columns.Add(b => b.Date).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
                    columns.Add(b => b.Key).Titled("Cust Search Word-0").Filterable(true).SetWidth(10);
                    columns.Add(b => b.OldCommonWord).Titled("Old Common Word").Filterable(true).SetWidth(10);
@@ -71,8 +71,8 @@
                        ("<select class='form-control select-masterproduct' multiple></select>")).Titled("Nickname").SetWidth(30);
                    columns.Add().Encoded(false).Sanitized(false)
                 .RenderValueAs(b => new HtmlString
-                       ("<input type='button' class='btn btn-sm btn-success btn-save-keyword' value='Save' /><a href='/SearchData/RemoveCustomerSearch?id=" + b.Id + "&startDate=" + Model.StartDate + "&endDate=" + Model.EndDate + "' class='ml-3 btn btn-sm btn-danger'>Remove</a>")).Titled("Action").Css("text-center").SetWidth(5);
-                }).WithPaging(20).Sortable(true)
+                       ("<input type='button' class='btn btn-sm btn-success btn-save-keyword' data-id=" + b.Id + " value='Save' /><a href='/SearchData/RemoveCustomerSearch?id=" + b.Id + "&startDate=" + Model.StartDate + "&endDate=" + Model.EndDate + "' class='ml-3 btn btn-sm btn-danger'>Remove</a>")).Titled("Action").Css("text-center").SetWidth(5);
+               }).WithPaging(20).Sortable(true)
                 </div>
                 <div class="tab-pane fade" id="mapped">
                     @Html.Grid(Model.ListWithLinkedKeywords).Columns(columns =>
@@ -138,8 +138,9 @@
                 var searchWord = tr.find('.input-keyword').val();
                 var searchSource = tr.find('.select-source').val();
                 var masterIds = tr.find('.select-masterproduct').val();
+                var id = $(this).data('id');
                 if (searchWord) {
-                    $.post('/SearchData/AddToSourceAndNickname', { searchWord: searchWord, searchSource: searchSource, masterIds: masterIds }, function (data) {
+                    $.post('/SearchData/AddToSourceAndNickname', { id: id, searchWord: searchWord, searchSource: searchSource, masterIds: masterIds }, function (data) {
                         if (data) {
                             swal('Success!', 'Save Successfully', 'success');
                             tr.find('.select-source').val('').trigger('change');
