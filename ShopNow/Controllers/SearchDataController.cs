@@ -103,7 +103,7 @@ namespace ShopNow.Controllers
             return Json(false, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult AddToSourceAndNickname(string searchWord, string[] searchSource, long[] masterIds)
+        public JsonResult AddToSourceAndNickname(int id, string searchWord, string[] searchSource, long[] masterIds)
         {
             if (masterIds == null && searchSource == null)
             {
@@ -112,9 +112,9 @@ namespace ShopNow.Controllers
 
             if (masterIds != null)
             {
-                foreach (var id in masterIds)
+                foreach (var masterId in masterIds)
                 {
-                    var masterProduct = db.MasterProducts.FirstOrDefault(i => i.Id == id);
+                    var masterProduct = db.MasterProducts.FirstOrDefault(i => i.Id == masterId);
                     string[] result = masterProduct.NickName.Split(' ');
                     if (!result.Contains(searchWord))
                     {
@@ -134,6 +134,16 @@ namespace ShopNow.Controllers
                             db.SaveChanges();
                         }
                     }
+
+                    //
+                    var searchData = db.CustomerSearchDatas.FirstOrDefault(i => i.Id == id);
+                    if (searchData != null)
+                    {
+                        searchData.LinkedMasterProductIds = searchData.LinkedMasterProductIds != null ? searchData.LinkedMasterProductIds + "," + masterProduct.Id : masterProduct.Id.ToString();
+                        searchData.LinkedMasterProductName = searchData.LinkedMasterProductName != null ? searchData.LinkedMasterProductName + "," + masterProduct.Name : masterProduct.Name;
+                        db.Entry(searchData).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
                 }
             }
 
@@ -152,6 +162,17 @@ namespace ShopNow.Controllers
                         db.SearchDatas.Add(searchData);
                         db.SaveChanges();
                     }
+
+
+                    var custSearchData = db.CustomerSearchDatas.FirstOrDefault(i => i.Id == id);
+                    if (custSearchData != null)
+                    {
+                        custSearchData.LinkedMasterProductIds = custSearchData.LinkedMasterProductIds != null ? custSearchData.LinkedMasterProductIds + "," + source : source;
+                        custSearchData.LinkedMasterProductName = custSearchData.LinkedMasterProductName != null ? custSearchData.LinkedMasterProductName + "," + source : source;
+                        db.Entry(custSearchData).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+
                 }
             }
 
