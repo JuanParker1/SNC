@@ -161,6 +161,16 @@ namespace ShopNow.Controllers
                         orderItem.Status = 0;
                         orderItem.OrderId = order.Id;
                         orderItem.OrdeNumber = order.OrderNumber;
+                        orderItem.ProductId = item.ProductId;
+                        orderItem.ProductName = item.ProductName;
+                        orderItem.BrandId = item.BrandId;
+                        orderItem.BrandName = item.BrandName;
+                        orderItem.CategoryId = item.CategoryId;
+                        orderItem.CategoryName = item.CategoryName;
+                        orderItem.ImagePath = item.ImagePath;
+                        orderItem.Quantity = item.Quantity;
+                        orderItem.UnitPrice = item.UnitPrice;
+                        orderItem.Price = item.Price;
                         db.OrderItems.Add(orderItem);
                         db.SaveChanges();
                     }

@@ -299,10 +299,20 @@
                 $('#btn-save').on('click', function () {
                     if (itemArray.length > 0) {
                         var model = {
+                            OrderNumber: Math.floor(Math.random() * 1000000000),
                             shopId: $("#ShopId").val(),
                             customerId: $('#CustomerId').val(),
+                            DeliveryAddress: $('#DeliveryAddress').val(),
+                            ToPay: $('#ToPay').val(),
+                            GrossDeliveryCharge: $('#GrossDeliveryCharge').val(),
+                            ShopDeliveryDiscount: $('#ShopDeliveryDiscount').val(),
+                            NetDeliveryCharge: $('#NetDeliveryCharge').val(),
+                            ConvenientCharge: $('#ConvenientCharge').val(),
+                            Packingcharge: $('#Packingcharge').val(),
+                            Latitude: $('#Latitude').val(),
+                            Longitude: $('#Longitude').val(),
+                            Distance: $('#Distance').val(),
                             ListItems: itemArray,
-                            OrderNumber: Math.floor(Math.random() * 1000000000),
                         };
                         $.post('/CustomerPrescription/AddToCart', model, function (data) {
                             if (data) {

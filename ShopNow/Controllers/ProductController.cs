@@ -79,7 +79,8 @@ namespace ShopNow.Controllers
                     ProductTypeName = i.p.m.ProductTypeName,
                     Name = i.p.m.Name,
                     ShopId = i.p.p.ShopId,
-                    ShopName = i.p.p.ShopName
+                    ShopName = i.p.p.ShopName,
+                    IsOnline = i.p.p.IsOnline
                 }).ToList();
 
             return View(model);
