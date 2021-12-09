@@ -570,6 +570,7 @@ namespace ShopNow.Controllers
                 model.CustomerName = cart.CustomerName;
                 model.Status = cart.Status;
                 model.ShopName = cart.ShopName;
+                model.ShopPhoneNumber = cart.ShopPhoneNumber;
                 model.DeliveryAddress = cart.DeliveryAddress;
                 model.CustomerPhoneNumber = cart.CustomerPhoneNumber;
                 model.DeliveryBoyName = cart.DeliveryBoyName;

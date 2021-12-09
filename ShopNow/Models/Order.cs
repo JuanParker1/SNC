@@ -72,6 +72,7 @@ namespace ShopNow.Models
         public string CancelledRemark { get; set; }
         public string PaymentMode { get; set; }
         public double TipsAmount { get; set; }
+        public int PaymentModeType { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }

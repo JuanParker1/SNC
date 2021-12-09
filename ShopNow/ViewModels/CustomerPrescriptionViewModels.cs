@@ -51,7 +51,6 @@ namespace ShopNow.ViewModels
         }
 
         //AddToCart
-        public int Id { get; set; }
         public int ShopId { get; set; }
         public int CustomerId { get; set; }
         public string CustomerName { get; set; }
@@ -72,7 +71,7 @@ namespace ShopNow.ViewModels
         public double ShopDeliveryDiscount { get; set; }
         public double NetDeliveryCharge { get; set; }
         public double ConvenientCharge { get; set; }
-        public double Packingcharge { get; set; }
+        public double PackingCharge { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public double Distance { get; set; }
@@ -81,8 +80,6 @@ namespace ShopNow.ViewModels
         public class ListItem
         {
             public int ItemId { get; set; }
-            public long OrderId { get; set; }
-            public int OrdeNumber { get; set; }
             public long ProductId { get; set; }
             public string ProductName { get; set; }
             public int BrandId { get; set; }
