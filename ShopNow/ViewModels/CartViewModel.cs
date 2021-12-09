@@ -145,6 +145,7 @@ namespace ShopNow.ViewModels
         public double NetDeliveryCharge { get; set; }
         public double Convinenientcharge { get; set; }
         public double Packingcharge { get; set; }
+        public string PaymentMode { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }

@@ -144,6 +144,7 @@ namespace ShopNow.Controllers
                     order.Distance = model.Distance;
                     order.RatePerOrder = db.PlatFormCreditRates.FirstOrDefault(i => i.Status == 0).RatePerOrder;
                     order.PaymentMode = "Cash On Hand";
+                    order.PaymentModeType = 2;
                     order.DateEncoded = DateTime.Now;
                     order.DateUpdated = DateTime.Now;
                     order.Status = 0;
@@ -181,6 +182,7 @@ namespace ShopNow.Controllers
                     var payment = new Payment();
                     payment.Amount = model.ToPay;
                     payment.PaymentMode = "Cash On Hand";
+                    payment.PaymentModeType = 2;
                     payment.CustomerId = customer.Id;
                     payment.CustomerName = customer.Name;
                     payment.ShopId = shop.Id;
