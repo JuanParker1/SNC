@@ -5597,6 +5597,12 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetCustomerSearchHistory(int customerid)
+        {
+            var list = db.CustomerSearchHistories.Where(i => i.Status == 0 && i.CustomerId == customerid).OrderByDescending(i => i.DateEncoded).Take(5).ToList();
+            return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "")
         {
             Helpers.PushNotification.SendbydeviceId(body, title, "", deviceId);
