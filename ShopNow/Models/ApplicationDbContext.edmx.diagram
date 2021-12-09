@@ -27,7 +27,6 @@
         <EntityTypeShape EntityType="sncModel.OtpVerification" Width="1.5" PointX="21.75" PointY="18.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.Package" Width="1.5" PointX="22.75" PointY="10.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.Page" Width="1.5" PointX="10.75" PointY="22.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.Payment" Width="1.5" PointX="13.75" PointY="1.25" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.PaymentsData" Width="1.5" PointX="12.75" PointY="22.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.PlatFormCreditRate" Width="1.5" PointX="23.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.Portion" Width="1.5" PointX="23.75" PointY="4.75" IsExpanded="true" />
@@ -81,12 +80,14 @@
         <AssociationConnector Association="sncModel.FK_CustomerReview_Customers" />
         <EntityTypeShape EntityType="sncModel.Category" Width="1.5" PointX="30.375" PointY="22" />
         <AssociationConnector Association="sncModel.FK_SubCategories_Categories" />
-        <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="28.375" PointY="32.5" />
-        <AssociationConnector Association="sncModel.FK_OrderItems_Orders" />
         <EntityTypeShape EntityType="sncModel.CustomerSearchData" Width="1.5" PointX="15.375" PointY="14.75" />
         <EntityTypeShape EntityType="sncModel.CustomerAddress" Width="1.5" PointX="11" PointY="43" />
         <AssociationConnector Association="sncModel.FK_CustomerAddresses_Customers" />
         <EntityTypeShape EntityType="sncModel.CustomerReviewReply" Width="1.5" PointX="24.375" PointY="21.75" />
+        <EntityTypeShape EntityType="sncModel.CustomerSearchHistory" Width="1.5" PointX="11.375" PointY="3.75" />
+        <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="28.375" PointY="32.375" />
+        <EntityTypeShape EntityType="sncModel.Payment" Width="1.5" PointX="30.375" PointY="26.75" />
+        <AssociationConnector Association="sncModel.FK_OrderItems_Orders" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
