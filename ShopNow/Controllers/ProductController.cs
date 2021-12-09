@@ -69,7 +69,7 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             model.ListItems = db.Products.Where(i => i.Status == 0 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
                 .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
-                .Join(db.Categories, p => p.m.CategoryId, c => c.Id, (p, c) => new { p, c })
+                .Join(db.Categories, p => p.p.CategoryId, c => c.Id, (p, c) => new { p, c })
                 .Select(i => new ProductItemListViewModel.ListItem
                 {
                     Id = i.p.p.Id,
@@ -219,8 +219,8 @@ namespace ShopNow.Controllers
                 model.MasterProductName = masterProduct.Name;
                 model.BrandId = masterProduct.BrandId;
                 model.BrandName = masterProduct.BrandName;
-                model.CategoryId = masterProduct.CategoryId;
-                var categoryName = db.Categories.FirstOrDefault(i => i.Id == masterProduct.CategoryId);
+                model.CategoryId = product.CategoryId;
+                var categoryName = db.Categories.FirstOrDefault(i => i.Id == product.CategoryId);
                 if (categoryName != null)
                     model.CategoryName = categoryName.Name;
                 else
@@ -276,14 +276,15 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             model.ListItems = db.Products.Where(i => i.Status == 0 && i.ProductTypeId == 3 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
               .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+              .Join(db.Categories, p=> p.p.CategoryId, c=>c.Id, (p,c) => new { p,c})
             .Select(i => new MedicalListViewModel.ListItem
             {
-                CategoryName = db.Categories.FirstOrDefault(j => j.Id == i.m.CategoryId).Name,
-                Id = i.p.Id,
-                Name = i.m.Name,
-                Percentage = i.p.Percentage,
-                ShopId = i.p.ShopId,
-                ShopName = i.p.ShopName
+                CategoryName = i.c.Name,
+                Id = i.p.p.Id,
+                Name = i.p.m.Name,
+                Percentage = i.p.p.Percentage,
+                ShopId = i.p.p.ShopId,
+                ShopName = i.p.p.ShopName
             }).ToList();
             return View(model);
         }
@@ -297,7 +298,7 @@ namespace ShopNow.Controllers
              .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
             .Select(i => new FoodListViewModel.ListItem
             {
-                CategoryName = db.Categories.FirstOrDefault(j => j.Id == i.m.CategoryId).Name,
+                CategoryName = db.Categories.FirstOrDefault(j => j.Id == i.p.CategoryId).Name,
                 Id = i.p.Id,
                 Name = i.m.Name,
                 Percentage = i.p.Percentage,
@@ -444,9 +445,9 @@ namespace ShopNow.Controllers
             if (masterProduct != null)
             {
                 model.MasterProductName = masterProduct.Name;
-                model.CategoryId = masterProduct.CategoryId;
+                model.CategoryId = product.CategoryId;
                 model.GoogleTaxonomyCode = masterProduct.GoogleTaxonomyCode;
-                var categoryName = db.Categories.FirstOrDefault(i => i.Id == masterProduct.CategoryId);
+                var categoryName = db.Categories.FirstOrDefault(i => i.Id == product.CategoryId);
                 if (categoryName != null)
                     model.CategoryName = categoryName.Name;
                 else
@@ -547,7 +548,7 @@ namespace ShopNow.Controllers
                 .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
             .Select(i => new FMCGListViewModel.ListItem
             {
-                CategoryName = db.Categories.FirstOrDefault(j => j.Id == i.m.CategoryId).Name,
+                CategoryName = db.Categories.FirstOrDefault(j => j.Id == i.p.CategoryId).Name,
                 Id = i.p.Id,
                 Name = i.m.Name,
                 Percentage = i.p.Percentage,
@@ -672,8 +673,8 @@ namespace ShopNow.Controllers
                 model.MasterProductName = masterProduct.Name;
                 model.BrandId = masterProduct.BrandId;
                 model.BrandName = masterProduct.BrandName;
-                model.CategoryId = masterProduct.CategoryId;
-                var categoryName = db.Categories.FirstOrDefault(i => i.Id == masterProduct.CategoryId);
+                model.CategoryId = product.CategoryId;
+                var categoryName = db.Categories.FirstOrDefault(i => i.Id == product.CategoryId);
                 if (categoryName != null)
                     model.CategoryName = categoryName.Name;
                 else
@@ -849,8 +850,8 @@ namespace ShopNow.Controllers
                 model.ImagePath3 = master.ImagePath3;
                 model.ImagePath4 = master.ImagePath4;
                 model.ImagePath5 = master.ImagePath5;
-                model.CategoryId = master.CategoryId;
-                var categoryName = db.Categories.FirstOrDefault(i => i.Id == master.CategoryId);
+                model.CategoryId = product.CategoryId;
+                var categoryName = db.Categories.FirstOrDefault(i => i.Id == product.CategoryId);
                 if (categoryName != null)
                     model.CategoryName = categoryName.Name;
                 else
@@ -892,7 +893,7 @@ namespace ShopNow.Controllers
            .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
             .Select(i => new ElectronicListViewModel.ListItem
             {
-                CategoryName = db.Categories.FirstOrDefault(j => j.Id == i.m.CategoryId).Name,
+                CategoryName = db.Categories.FirstOrDefault(j => j.Id == i.p.CategoryId).Name,
                 Id = i.p.Id,
                 Name = i.m.Name,
                 Percentage = i.p.Percentage,
