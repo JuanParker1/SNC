@@ -753,22 +753,23 @@ namespace ShopNow.Controllers
         public ActionResult ElectronicCreate(ElectronicCreateEditViewModel model)
         {
             //Return to View if product already exist
-            var name = db.Products.FirstOrDefault(i => i.MasterProductId == model.MasterProductId && i.Status == 0 && i.ProductTypeId == 4 && i.ShopId == model.ShopId);
-            if (name != null)
+            var name = db.Products.Any(i => i.MasterProductId == model.MasterProductId && i.Status == 0 && i.ProductTypeId == 4 && i.ShopId == model.ShopId);
+            if (name)
             {
                 ViewBag.ErrorMessage = model.Name + " Already Exist";
                 return View();
             }
-
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var product = _mapper.Map<ElectronicCreateEditViewModel, Product>(model);
             product.CreatedBy = user.Name;
             product.UpdatedBy = user.Name;
+            product.ProductTypeId = 4;
             product.ProductTypeName = "Electronic";
             if (model.ShopId != 0)
             {
                 var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
                 product.ShopId = shop.Id;
+                product.ShopName = shop.Name;
                 product.ShopCategoryId = shop.ShopCategoryId;
                 product.ShopCategoryName = shop.ShopCategoryName;
             }
@@ -890,7 +891,7 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             model.ListItems = db.Products.Where(i => i.Status == 0 && i.ProductTypeId == 4 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
-           .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+                .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
             .Select(i => new ElectronicListViewModel.ListItem
             {
                 CategoryName = db.Categories.FirstOrDefault(j => j.Id == i.p.CategoryId).Name,
@@ -1646,34 +1647,29 @@ namespace ShopNow.Controllers
 
         public async Task<JsonResult> GetElectronicSelect2(string q = "")
         {
-            var model = await db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 4).Select(i => new
-            {
-                id = i.Id,
-                text = i.Name,
-                CategoryId = i.CategoryId,
-                SubCategoryId = i.SubCategoryId,
-                NextSubCategoryId = i.NextSubCategoryId,
-                BrandId = i.BrandId,
-                BrandName = i.BrandName,
-                ShortDescription = i.ShortDescription,
-                LongDescription = i.LongDescription,
-                ImagePath1 = i.ImagePath1,
-                ImagePath2 = i.ImagePath2,
-                ImagePath3 = i.ImagePath3,
-                ImagePath4 = i.ImagePath4,
-                ImagePath5 = i.ImagePath5,
-                Price = i.Price,
-                ProductTypeId = i.ProductTypeId,
-                ASIN = i.ASIN,
-                GoogleTaxonomyCode = i.GoogleTaxonomyCode,
-                weight = i.Weight,
-                SizeLB = i.SizeLWH,
-                MeasurementUnitId = i.MeasurementUnitId,
-                MeasurementUnitName = i.MeasurementUnitName,
-                PackageId = i.PackageId,
-                PackageName = i.PackageName,
-                MasterId = i.Id
-            }).ToListAsync();
+            var model = await db.MasterProducts.Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 4)
+              .Join(db.Categories, m => m.CategoryId, c => c.Id, (m, c) => new { m, c })
+              .Select(i => new
+              {
+                  id = i.m.Id,
+                  text = i.m.Name,
+                  CategoryId = i.m.CategoryId,
+                  CategoryName = i.c.Name,
+                  BrandId = i.m.BrandId,
+                  BrandName = i.m.BrandName,
+                  ShortDescription = i.m.ShortDescription,
+                  LongDescription = i.m.LongDescription,
+                  Customisation = i.m.Customisation,
+                  ColorCode = i.m.ColorCode,
+                  Price = i.m.Price,
+                  SizeLWH = i.m.SizeLWH,
+                  ProductTypeId = i.m.ProductTypeId,
+                  ProductTypeName = i.m.ProductTypeName,
+                  ImagePath1 = i.m.ImagePath1,
+                  GoogleTaxonomyCode = i.m.GoogleTaxonomyCode,
+                  MasterId = i.m.Id
+              }).Take(500).OrderBy(i => i.text).ToListAsync();
+
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
