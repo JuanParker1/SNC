@@ -68,6 +68,7 @@ namespace ShopNow.Controllers
             if (cp != null)
             {
                 _mapper.Map(cp, model);
+                model.PrescriptionId = cp.Id;
                 model.ImagePathLists = db.CustomerPrescriptionImages.Where(i => i.CustomerPrescriptionId == cp.Id)
                         .Select(i=> new AddToCartViewModel.ImagePathList { 
                                     ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + i.ImagePath
@@ -144,6 +145,7 @@ namespace ShopNow.Controllers
                     order.Distance = model.Distance;
                     order.RatePerOrder = db.PlatFormCreditRates.FirstOrDefault(i => i.Status == 0).RatePerOrder;
                     order.PaymentMode = "Cash On Hand";
+                    order.PaymentModeType = 2;
                     order.DateEncoded = DateTime.Now;
                     order.DateUpdated = DateTime.Now;
                     order.Status = 0;
@@ -181,6 +183,7 @@ namespace ShopNow.Controllers
                     var payment = new Payment();
                     payment.Amount = model.ToPay;
                     payment.PaymentMode = "Cash On Hand";
+                    payment.PaymentModeType = 2;
                     payment.CustomerId = customer.Id;
                     payment.CustomerName = customer.Name;
                     payment.ShopId = shop.Id;
@@ -207,6 +210,14 @@ namespace ShopNow.Controllers
                     payment.DateUpdated = DateTime.Now;
                     db.Payments.Add(payment);
                     db.SaveChanges();
+                    // Prescription 
+                    var prescription = db.CustomerPrescriptions.FirstOrDefault(i => i.Id == model.PrescriptionId);
+                    if (prescription != null)
+                    {
+                        prescription.Status = 1;
+                        db.Entry(prescription).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                    }
 
                     // Shop Credits Balance
                     shopCredits.PlatformCredit -= payment.RatePerOrder.Value;

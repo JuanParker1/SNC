@@ -574,9 +574,12 @@ namespace ShopNow.Controllers
                 model.DeliveryAddress = cart.DeliveryAddress;
                 model.CustomerPhoneNumber = cart.CustomerPhoneNumber;
                 model.DeliveryBoyName = cart.DeliveryBoyName;
+                model.DeliveryBoyPhoneNumber = cart.DeliveryBoyPhoneNumber;
                 model.DateEncoded = cart.DateEncoded;
                 model.PenaltyAmount = cart.PenaltyAmount;
                 model.WaitingCharge = cart.WaitingCharge;
+                model.TotalPrice = cart.TotalPrice;
+                model.PaymentMode = cart.PaymentMode;
                 var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == cart.DeliveryBoyId);
                 if (deliveryBoy != null)
                 {

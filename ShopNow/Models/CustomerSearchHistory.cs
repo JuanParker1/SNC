@@ -17,6 +17,7 @@ namespace ShopNow.Models
         public int Id { get; set; }
         public int CustomerId { get; set; }
         public int SearchId { get; set; }
+        public string SearchText { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public int Status { get; set; }
         public int Type { get; set; }
