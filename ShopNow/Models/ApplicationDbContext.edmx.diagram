@@ -84,10 +84,10 @@
         <EntityTypeShape EntityType="sncModel.CustomerAddress" Width="1.5" PointX="11" PointY="43" />
         <AssociationConnector Association="sncModel.FK_CustomerAddresses_Customers" />
         <EntityTypeShape EntityType="sncModel.CustomerReviewReply" Width="1.5" PointX="24.375" PointY="21.75" />
-        <EntityTypeShape EntityType="sncModel.CustomerSearchHistory" Width="1.5" PointX="11.375" PointY="3.75" />
         <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="28.375" PointY="32.375" />
         <EntityTypeShape EntityType="sncModel.Payment" Width="1.5" PointX="30.375" PointY="26.75" />
         <AssociationConnector Association="sncModel.FK_OrderItems_Orders" />
+        <EntityTypeShape EntityType="sncModel.CustomerSearchHistory" Width="1.5" PointX="11.375" PointY="3.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
