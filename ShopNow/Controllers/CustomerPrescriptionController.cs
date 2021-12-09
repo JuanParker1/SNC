@@ -23,6 +23,8 @@ namespace ShopNow.Controllers
             _mapperConfiguration = new MapperConfiguration(config =>
             {
                 config.CreateMap<CustomerPrescription, AddToCartViewModel>();
+                config.CreateMap<AddToCartViewModel, Order>();
+                config.CreateMap<AddToCartViewModel.ListItem, OrderItem>();
             });
             _mapper = _mapperConfiguration.CreateMapper();
         }
@@ -94,7 +96,6 @@ namespace ShopNow.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult AddToCart(AddToCartViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -102,6 +103,7 @@ namespace ShopNow.Controllers
             try
             {
                 var shop = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
+                var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
                 var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
                 if ((shopCredits.PlatformCredit < 26 && shopCredits.DeliveryCredit < 67) && shop.IsTrail == false)
                 {
@@ -112,13 +114,13 @@ namespace ShopNow.Controllers
                 }
                 else
                 {
+                    //Order 
                     var order = _mapper.Map<AddToCartViewModel, Models.Order>(model);
                     if (model.CustomerId != 0)
                     {
-                        var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
                         order.CustomerId = customer.Id;
                         order.CustomerName = customer.Name;
-                        order.CustomerPhoneNumber = customer.PhoneNumber; 
+                        order.CustomerPhoneNumber = customer.PhoneNumber;
                         order.CreatedBy = customer.Name;
                         order.UpdatedBy = customer.Name;
                     }
@@ -136,7 +138,7 @@ namespace ShopNow.Controllers
                     order.ShopDeliveryDiscount = model.ShopDeliveryDiscount;
                     order.NetDeliveryCharge = model.NetDeliveryCharge;
                     order.Convinenientcharge = model.ConvenientCharge;
-                    order.Packingcharge = model.Packingcharge;
+                    order.Packingcharge = model.PackingCharge;
                     order.Latitude = model.Latitude;
                     order.Longitude = model.Longitude;
                     order.Distance = model.Distance;
@@ -147,6 +149,7 @@ namespace ShopNow.Controllers
                     order.Status = 0;
                     db.Orders.Add(order);
                     db.SaveChanges();
+                    //OrderItems
                     foreach (var item in model.ListItems)
                     {
                         if (item.ItemId != 0)
@@ -174,6 +177,41 @@ namespace ShopNow.Controllers
                         db.OrderItems.Add(orderItem);
                         db.SaveChanges();
                     }
+                    // Payment
+                    var payment = new Payment();
+                    payment.Amount = model.ToPay;
+                    payment.PaymentMode = "Cash On Hand";
+                    payment.CustomerId = customer.Id;
+                    payment.CustomerName = customer.Name;
+                    payment.ShopId = shop.Id;
+                    payment.ShopName = shop.Name;
+                    payment.OriginalAmount = order.TotalPrice;
+                    payment.GSTAmount = model.ToPay;
+                    payment.Currency = "Rupees";
+                    payment.CountryName = null;
+                    payment.PaymentResult = "pending";
+                    payment.Credits = "N/A";
+                    payment.OrderNumber = order.OrderNumber;
+                    payment.PaymentCategoryType = 0;
+                    payment.Credits = "N/A";
+                    payment.CreditType = 2;
+                    payment.ConvenientCharge = model.ConvenientCharge;
+                    payment.PackingCharge = model.PackingCharge;
+                    payment.DeliveryCharge = model.GrossDeliveryCharge;
+                    payment.RatePerOrder = order.RatePerOrder;
+                    payment.RefundStatus = 1;
+                    payment.Status = 0;
+                    payment.CreatedBy = customer.Name;
+                    payment.UpdatedBy = customer.Name;
+                    payment.DateEncoded = DateTime.Now;
+                    payment.DateUpdated = DateTime.Now;
+                    db.Payments.Add(payment);
+                    db.SaveChanges();
+
+                    // Shop Credits Balance
+                    shopCredits.PlatformCredit -= payment.RatePerOrder.Value;
+                    db.Entry(shopCredits).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
 
                     if (order != null)
                     {
@@ -199,15 +237,22 @@ namespace ShopNow.Controllers
         public async Task<JsonResult> GetShopProductSelect2(int shopid, string q = "")
         {
             var model = await db.Products.Where(a => a.ShopId == shopid && a.Status == 0)
-                .Join(db.MasterProducts.Where(a => a.Name.Contains(q)), p => p.MasterProductId, m => m.Id, (p, m) => new { p, m }).Take(500)
+                .Join(db.MasterProducts.Where(a => a.Name.Contains(q)), p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+                .Join(db.Categories, p=> p.p.CategoryId, c=> c.Id,(p,c)=> new { p,c}).Take(500)
                 .Select(i => new
                 {
-                    id = i.p.Id,
-                    text = i.m.Name,
-                    itemId = i.p.ItemId,
-                    price = i.p.Price,
-                    weight = i.m.Weight,
-                    size = i.m.SizeLWH
+                    id = i.p.p.Id,
+                    text = i.p.m.Name,
+                    itemId = i.p.p.ItemId,
+                    price = i.p.p.Price,
+                    weight = i.p.m.Weight,
+                    size = i.p.m.SizeLWH,
+                    brandid = i.p.m.BrandId,
+                    brandname = i.p.m.BrandName,
+                    categoryid = i.p.p.CategoryId,
+                    categoryname = i.c.Name,
+                    imagepath = i.p.m.ImagePath1,
+                    itemid = i.p.p.ItemId
                 }).OrderBy(i => i.text).ToListAsync();
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);

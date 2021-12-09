@@ -68,23 +68,27 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Sub Category I Name</strong></label>
-                                        <select id="SubCategoryId" name="SubCategoryId" class="form-control">
+                                        <input type="text" class="form-control" name="SubCategoryName" id="SubCategoryName" value="@Model.SubCategoryName" readonly />
+                                        <input type="hidden" name="SubCategoryId" id="SubCategoryId" value="@Model.SubCategoryId" />
+                                        @*<select id="SubCategoryId" name="SubCategoryId" class="form-control">
                                             @if (Model.SubCategoryId != 0)
                                             {
-                                                <option value="@Model.SubCategoryId">@Model.SubCategoryName</option>
+                                                <option value="@Model.SubCategoryId" readonly>@Model.SubCategoryName</option>
                                             }
                                         </select>
-                                        <input type="hidden" name="SubCategoryName" id="SubCategoryName" value="@Model.SubCategoryName" />
+                                        <input type="hidden" name="SubCategoryName" id="SubCategoryName" value="@Model.SubCategoryName" />*@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Sub Category II Name</strong></label>
-                                        <select id="NextSubCategoryId" name="NextSubCategoryId" class="form-control">
-                                            @if (Model.NextSubCategoryId != 0)
-                                            {
-                                                <option value="@Model.NextSubCategoryId">@Model.NextSubCategoryName</option>
-                                            }
-                                        </select>
-                                        <input type="hidden" name="NextSubCategoryName" id="NextSubCategoryName" value="@Model.NextSubCategoryName" />
+                                        <input type="text" class="form-control" name="NextSubCategoryName" id="NextSubCategoryName" value="@Model.NextSubCategoryName" readonly />
+                                        <input type="hidden" name="NextSubCategoryId" id="NextSubCategoryId" value="@Model.NextSubCategoryId" />
+                                        @*<select id="NextSubCategoryId" name="NextSubCategoryId" class="form-control">
+                                         @if (Model.NextSubCategoryId != 0)
+                                         {
+                                             <option value="@Model.NextSubCategoryId" readonly>@Model.NextSubCategoryName</option>
+                                          }
+                                          </select>
+                                          <input type="hidden" name="NextSubCategoryName" id="NextSubCategoryName" value="@Model.NextSubCategoryName" />*@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="Price"><strong class="text-secondary">Menu Price</strong></label>
