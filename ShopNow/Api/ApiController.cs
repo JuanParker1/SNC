@@ -908,7 +908,7 @@ namespace ShopNow.Controllers
                 payment.DeliveryCharge = model.GrossDeliveryCharge;
                 payment.PackingCharge = model.PackagingCharge;
                 payment.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
-
+                payment.PaymentModeType = model.PaymentMode == "Online Payment" ? 1 : 2;
 
                 if (model.OrderId != 0)
                 {
@@ -1154,6 +1154,7 @@ namespace ShopNow.Controllers
                     order.DateEncoded = DateTime.Now;
                     order.DateUpdated = DateTime.Now;
                     order.Status = 0;
+                    order.PaymentModeType = model.PaymentMode == "Online Payment" ? 1 : 2;
                     db.Orders.Add(order);
                     db.SaveChanges();
                     foreach (var item in model.ListItems)

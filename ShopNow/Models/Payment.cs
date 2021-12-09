@@ -45,6 +45,7 @@ namespace ShopNow.Models
         public int RefundStatus { get; set; }
         public int PlatformCreditType { get; set; }
         public int DeliveryCreditType { get; set; }
+        public int PaymentModeType { get; set; }
         public int Status { get; set; }
         public string UpdatedBy { get; set; }
         public string CreatedBy { get; set; }
