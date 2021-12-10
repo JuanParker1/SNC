@@ -262,7 +262,7 @@ namespace ShopNow.Controllers
                     brandname = i.p.m.BrandName,
                     categoryid = i.p.p.CategoryId,
                     categoryname = i.c.Name,
-                    imagepath = i.p.m.ImagePath1,
+                    imagepath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + i.p.m.ImagePath1,
                     itemid = i.p.p.ItemId
                 }).OrderBy(i => i.text).ToListAsync();
 
