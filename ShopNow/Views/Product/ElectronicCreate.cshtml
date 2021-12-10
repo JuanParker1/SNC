@@ -74,14 +74,6 @@
                                             <input id="Percentage" type="number" class="form-control" name="Percentage" readonly />
                                         </div>
                                     </div>
-                                    @*<div class="col-md-3">
-                                        <label class="col-form-label" for="Weight"><strong class="text-secondary">Weight</strong></label>
-                                        <input id="weight" type="number" class="form-control" name="weight" step="any" min="0" />
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="col-form-label" for="SizeLWH"><strong class="text-secondary">Size LB</strong></label>
-                                        <input id="SizeLWH" type="text" class="form-control" name="SizeLWH" min="0" />
-                                    </div>*@
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="GoogleTaxonomyCode"><strong class="text-secondary">Google Taxonomy Code</strong></label>
                                         <input id="GoogleTaxonomyCode" type="text" class="form-control" name="GoogleTaxonomyCode" readonly />
@@ -100,12 +92,12 @@
                                         </div>
                                         <input type="number" class="form-control" name="PackingCharge" id="PackingCharge" />
                                     </div>
-                                    <div class="d-flex mt-3">
-                                        <div class="mx-3">
+                                    <div class="col-md-3 d-flex mt-4 form-group">
+                                        <div class="mx-3 mt-2">
                                             <input type="checkbox" id="IsPreorder" name="IsPreorder" value="true">
-                                            <label class="font-weight-bold text-secondary col-form-label" for="IsPreorder"> Is PreOrder</label><br>
+                                            <label class="font-weight-bold text-secondary col-form-label control-label" for="IsPreorder"> Is PreOrder</label><br>
                                         </div>
-                                        <div class="ml-3">
+                                        <div class="ml-3 mt-2">
                                             <select name="PreorderHour" id="PreorderHour" class="form-control d-none">
                                                 <option value="0" selected disabled>Select Hours</option>
                                                 @for (int i = 2; i <= 24; i++)
