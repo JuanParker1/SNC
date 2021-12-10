@@ -21,45 +21,61 @@
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
     <link href="~/fonts/font-awesome/css/font-awesome.css" rel="stylesheet" />
     <link href="~/Scripts/fontawesome-free-5.12.0-web/css/all.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #50E3C2;
+            background-image: radial-gradient(at 47% 33%, hsl(162.00, 77%, 40%) 0, transparent 59%), radial-gradient(at 82% 65%, hsl(133.70, 61%, 41%) 0, transparent 55%);
+            height: 92vh;
+        }
+        .card {
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            background-color: rgba(255, 255, 255, 0.75);
+            border-radius: 12px;
+            border: 1px solid rgba(209, 213, 219, 0.3);
+        }
+    </style>
 </head>
-<body style="background-color:aliceblue;">
+<body>
     <div class="container mt-5">
         <div class="row">
-            <div class="col-md-6 mt-5">
-                <img src="~/Images/undraw_authentication_fsn5.svg" class="img-fluid mt-4" />
-            </div>
-            <div class="col-md-4 offset-md-2 mt-5">
-                    <div class="card mt-5 shadow">
-                        <div class="card-header p-0">
-                            <h3 class="text-center bg-success text-white mb-0 py-3">Admin Login</h3>
-                        </div>
-                        <div class="card-body mt-3">
-                            @using (Html.BeginForm("Index", "Home", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                            {
-                                @Html.AntiForgeryToken()
+            @*<div class="col-md-6 mt-5">
+                <img src="~/Images/welcome.svg" class="img-fluid mt-4" />
+            </div>*@
+            <div class="col-md-4 mx-auto mt-5">
+                <img src="~/Images/welcome.svg" class="img-fluid" />
+                <div class="card mt-5 shadow">
+                    @*<div class="card-header p-0">
+                <h3 class="text-center bg-success text-white mb-0 py-3">Admin Login</h3>
+            </div>*@
+                    <div class="card-body ">
+                        @using (Html.BeginForm("Index", "Home", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
 
-                                <div class="input-group mb-4">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fas fa-phone text-success"></i></span>@*fa-spin*@
-                                    </div>
-                                    <input type="text" class="form-control" placeholder="Enter Phone Number" name="PhoneNumber" id="PhoneNumber">
+                            <h3 class="text-center text-success mb-3 py-3">Admin Login</h3>
+                            <div class="input-group mb-4">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-phone text-success"></i></span>@*fa-spin*@
+                                </div>
+                                <input type="text" class="form-control" placeholder="Enter Phone Number" name="PhoneNumber" id="PhoneNumber">
 
+                            </div>
+                            <div class="input-group mb-4">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-key text-success"></i></span>
                                 </div>
-                                <div class="input-group mb-4">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fas fa-key text-success"></i></span>
-                                    </div>
-                                    <input type="password" class="form-control" placeholder="Enter Password" name="Password" id="Password">
-                                </div>
-                                <div class="form-group">
-                                    <input type="checkbox"> Remember Me
-                                </div>
-                                <div class="form-group text-center">
-                                    <input type="submit" value="Login" class="btn btn-success btn-block login_btn">
-                                </div>
-                            }
-                        </div>
+                                <input type="password" class="form-control" placeholder="Enter Password" name="Password" id="Password">
+                            </div>
+                            <div class="form-group">
+                                <input type="checkbox"> Remember Me
+                            </div>
+                            <div class="form-group text-center">
+                                <input type="submit" value="Login" class="btn btn-success btn-block login_btn">
+                            </div>
+                        }
                     </div>
+                </div>
             </div>
         </div>
     </div>

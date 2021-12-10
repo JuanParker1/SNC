@@ -798,6 +798,7 @@
     <Content Include="Images\undraw_authentication_fsn5.svg" />
     <Content Include="Images\undraw_press_play_bx2d.svg" />
     <Content Include="Images\user.jpg" />
+    <Content Include="Images\welcome.svg" />
     <Content Include="Models\ApplicationDbContext.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>ApplicationDbContext.edmx</DependentUpon>
