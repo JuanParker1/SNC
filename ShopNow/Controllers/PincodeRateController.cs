@@ -78,13 +78,25 @@ namespace ShopNow.Controllers
         public void UpdateShopDeliveryType(int id, int type, int tier, string pincode)
         {
             var shopList = db.Shops.Where(i => i.PinCode == pincode).ToList();
-            shopList.ForEach(i =>
+            if(shopList != null)
             {
-                i.PincodeRateId = id;
-                i.DeliveryTierType = tier;
-                i.DeliveryType = type;
-            });
-            db.SaveChanges();
+                foreach (var item in shopList)
+                {
+                    var shop = db.Shops.FirstOrDefault(i => i.Id == item.Id);
+                    shop.PincodeRateId = id;
+                    shop.DeliveryTierType = tier;
+                    shop.DeliveryType = type;
+                    db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+            }
+            //shopList.ForEach(i =>
+            //{
+            //    i.PincodeRateId = id;
+            //    i.DeliveryTierType = tier;
+            //    i.DeliveryType = type;
+            //});
+            //db.SaveChanges();
         }
 
         [HttpPost]
