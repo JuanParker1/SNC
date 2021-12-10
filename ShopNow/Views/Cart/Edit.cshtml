@@ -306,7 +306,7 @@
             var modalImg = document.getElementById("myImage");
             $(img).click(function () {
                 modal.style.display = "block";
-                modalImg.src = this.src;
+                modalImg.src = this.src.replace("/Small/","/Medium/");
                 if (this.src == "") {
                     $('#myModal').hide();
                 }

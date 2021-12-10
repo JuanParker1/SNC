@@ -6,7 +6,6 @@
 
     <div class="container-fluid mb-5">
         <div class="row">
-            <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
             <input type="hidden" name="PrescriptionId" id="PrescriptionId" value="@Model.PrescriptionId" />
             <input type="hidden" name="ShopId" id="ShopId" value="@Model.ShopId" />
             <input type="hidden" name="CustomerId" id="CustomerId" value="@Model.CustomerId" />
@@ -14,7 +13,8 @@
             <input type="hidden" name="Latitude" id="Latitude" value="@Model.Latitude" />
             <input type="hidden" name="Longitude" id="Longitude" value="@Model.Longitude" />
             <input type="hidden" name="DeliveryAddress" id="DeliveryAddress" value="@Model.DeliveryAddress" />
-            <div class="col-md-12 mt-3">
+            <div class="col-md-12 mt-1">
+                <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
                 <div class="card shadow">
                     <div class="card-body">
                         <div class="row">
@@ -154,7 +154,7 @@
                         </div>
                         <div class="row mt-3">
                             <div class="col-md-2 mx-auto">
-                                <button type="button" class="btn btn-block btn-success mr-3" id="btn-save">Submit</button>
+                                <button type="button" class="btn btn-block btn-success mr-3" id="btn-save">Place Order</button>
                             </div>
                         </div>
                     </div>
@@ -332,12 +332,13 @@
                             Latitude: $('#Latitude').val(),
                             Longitude: $('#Longitude').val(),
                             Distance: $('#Distance').val(),
+                            PrescriptionId: $('#PrescriptionId').val(),
                             ListItems: itemArray,
                         };
                         $.post('/CustomerPrescription/AddToCart', model, function (data) {
                             if (data) {
-                                swal('Success', 'Order Placed successfully', 'success');
-                                window.location.reload();
+                                // swal('Success', 'Order Placed successfully', 'success');
+                                location.href = "List";
                             } else {
                                 timeArray.length = 0;
                                 $('#tbl-items tbody').empty();
