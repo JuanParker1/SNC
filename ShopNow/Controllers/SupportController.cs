@@ -258,6 +258,7 @@ namespace ShopNow.Controllers
                 pay.CorporateID = null;
                 pay.Amount = order.NetTotal;
                 pay.PaymentMode = "Cash On Hand";
+                order.PaymentModeType = 2;
                 pay.Key = null;
                 pay.ReferenceCode = null;
                 pay.CustomerId = order.CustomerId;
@@ -353,6 +354,7 @@ namespace ShopNow.Controllers
                 Payment pay = new Payment();
                 pay.Amount = model.Amount;
                 pay.PaymentMode = "Online Payment";
+                pay.PaymentModeType = 1;
                 pay.Key = "Razor";
                 pay.Status = 0;
                 pay.DateEncoded = order.DateEncoded;

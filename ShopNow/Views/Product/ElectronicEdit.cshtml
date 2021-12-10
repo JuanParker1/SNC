@@ -55,22 +55,13 @@
                                         <input type="text" class="form-control" name="BrandName" id="BrandName" value="@Model.BrandName" readonly />
                                         <input type="hidden" name="BrandId" id="BrandId" value="@Model.BrandId" />
                                     </div>
-
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Category Name</strong></label>
-                                        <input type="text" class="form-control" name="CategoryName" id="CategoryName" value="@Model.CategoryName" readonly />
-                                        <input type="hidden" name="CategoryId" id="CategoryId" value="@Model.CategoryId" />
+                                        <select class="form-control" id="CategoryId" name="CategoryId">
+                                            <option value="@Model.CategoryId">@Model.CategoryName</option>
+                                        </select>
+                                        <input type="hidden" name="CategoryName" id="CategoryName" value="@Model.CategoryName" />
                                     </div>
-                                    @*<div class="col-md-3">
-            <label class="col-form-label"><strong class="text-secondary">Sub Category I Name</strong></label>
-            <input type="text" class="form-control" name="SubCategoryName" id="SubCategoryName" value="@Model.SubCategoryName" readonly />
-            <input type="hidden" name="SubCategoryId" id="SubCategoryId" value="@Model.SubCategoryId" />
-        </div>
-        <div class="col-md-3">
-            <label class="col-form-label"><strong class="text-secondary">Sub Category II Name</strong></label>
-            <input type="text" class="form-control" name="NextSubCategoryName" id="NextSubCategoryName" value="@Model.NextSubCategoryName" readonly />
-            <input type="hidden" name="NextSubCategoryId" id="NextSubCategoryId" value="@Model.NextSubCategoryId" />
-        </div>*@
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="Price"><strong class="text-secondary">Menu Price</strong></label>
                                         <input id="MenuPrice" type="number" class="form-control" name="MenuPrice" min="0" step="any" value="@Model.MenuPrice" />
@@ -89,28 +80,14 @@
                                             <input id="Percentage" type="number" class="form-control" name="Percentage" value="@Model.Percentage" />
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    @*<div class="col-md-3">
                                         <label class="col-form-label" for="Weight"><strong class="text-secondary">Weight</strong></label>
                                         <input id="weight" type="number" class="form-control" name="weight" min="0" step="any" value="@Model.Weight" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="SizeLB"><strong class="text-secondary">Size LB</strong></label>
-                                        <input id="SizeLB" type="text" class="form-control" name="SizeLWH" min="0" value="@Model.SizeLWH" />
-                                    </div>
-                                    @*<div class="col-md-3">
-            <label class="col-form-label" for="MeasurementUnitId"><strong class="text-secondary">Measurement Unit Name</strong></label>
-            <input type="hidden" name="MeasurementUnitId" id="MeasurementUnitId" value="@Model.MeasurementUnitId" />
-            <input type="text" class="form-control" name="MeasurementUnitName" id="MeasurementUnitName" value="@Model.MeasurementUnitName" readonly />
-        </div>
-        <div class="col-md-3">
-            <label class="col-form-label" for="PackageId"><strong class="text-secondary">Package Name</strong></label>
-            <input type="hidden" name="PackageId" id="PackageId" value="@Model.PackageId" />
-            <input type="text" class="form-control" name="PackageName" id="PackageName" value="@Model.PackageName" readonly />
-        </div>
-        <div class="col-md-3">
-            <label class="col-form-label"><strong class="text-secondary">ASIN / EAN</strong></label>
-            <input id="ASIN" type="text" class="form-control" name="ASIN" value="@Model.ASIN" readonly />
-        </div>*@
+                                        <input id="SizeLWH" type="text" class="form-control" name="SizeLWH" min="0" value="@Model.SizeLWH" />
+                                    </div>*@
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="GoogleTaxonomyCode"><strong class="text-secondary">Google Taxonomy Code</strong></label>
                                         <input id="GoogleTaxonomyCode" type="text" class="form-control" name="GoogleTaxonomyCode" value="@Model.GoogleTaxonomyCode" readonly />
@@ -129,10 +106,10 @@
                                         </div>
                                         <input type="number" class="form-control" name="PackingCharge" id="PackingCharge" value="@Model.PackingCharge" />
                                     </div>
-                                    <div class="d-flex mt-3">
+                                    <div class="col-md-3 d-flex mt-3">
                                         <div class="mx-3">
                                             <input type="checkbox" id="IsPreorder" name="IsPreorder" value="true" @if (Model.IsPreorder) { <text> checked </text> }>
-                                            <label class="font-weight-bold text-secondary col-form-label" for="IsPreorder"> Is PreOrder</label><br>
+                                            <label class="font-weight-bold text-secondary control-label" for="IsPreorder"> Is PreOrder</label><br>
                                         </div>
                                         <div class="ml-3">
                                             <select name="PreorderHour" id="PreorderHour" class="form-control d-none">
@@ -156,7 +133,7 @@
                                     </div>
                                     <div class="col-md-12 form-group">
                                         <label class="control-label"><strong class="text-secondary">Long Description</strong></label>
-                                        <textarea class="form-control" id="LongDescription" name="LongDescription" rows="8" cols="50" readonly>@Html.Raw(Model.LongDescription)</textarea>
+                                        <div class="form-control" id="LongDescription" name="LongDescription" rows="8" cols="50" readonly>@Html.Raw(Model.LongDescription)</div>
                                     </div>
                                 </div>
                             </div>
@@ -239,7 +216,21 @@
             $('#IsPreorder').change(function () {
                 showHour();
             });
+
+            $('#CategoryId').select2({
+                placeholder: "Search Category",
+                ajax: {
+                    url: "/Product/GetCategorySelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="CategoryName"]').val(e.params.data.text);
+            });
+
         });
+
          function showHour() {
             if ($('#IsPreorder').is(":checked")) {
                 $("#PreorderHour").removeClass('d-none');

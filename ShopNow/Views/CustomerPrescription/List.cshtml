@@ -55,7 +55,14 @@
                                 </td>
                                 <td>@item.Remarks</td>
                                 <td>@item.DateEncoded.ToString("dd-MM-yyyy hh:mm tt")</td>
-                                <td><a href="/CustomerPrescription/AddToCart?id=@item.Id" class="btn btn-success">Add to Cart</a></td>
+                                <td>@if (item.Status == 0)
+                                {
+                                <a href="/CustomerPrescription/AddToCart?id=@item.Id" class="btn btn-success">Add to Cart</a>
+                                }
+                                else {
+                                <span class="text-success">Order Placed.</span>
+                                }
+                                </td>
                             </tr>
                             }
                         </tbody>
