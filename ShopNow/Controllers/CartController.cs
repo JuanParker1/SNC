@@ -446,7 +446,7 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCCD075")]
-        public ActionResult Details(int id)
+        public ActionResult Details(long id)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -1330,8 +1330,27 @@ namespace ShopNow.Controllers
                 return RedirectToAction("WaitingForPickup");
             else if (redirection == 4)
                 return RedirectToAction("OntheWay");
+            else if (redirection == 5)
+                return RedirectToAction("Details", new { id = id });
             else
                 return RedirectToAction("Delivered");
+        }
+
+        public ActionResult UpdateRefundAmount(long id, double amount, string remark)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+
+            var order = db.Orders.FirstOrDefault(i => i.Id == id);
+          
+            var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == order.OrderNumber);
+            payment.RefundAmount = amount;
+            payment.RefundRemark = remark;
+            payment.UpdatedBy = user.Name;
+            payment.DateUpdated = DateTime.Now;
+            db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+
+            return RedirectToAction("Details", new { id = id });
         }
 
         DeliveryBoy getDBoy(int id)
