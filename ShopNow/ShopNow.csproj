@@ -471,6 +471,9 @@
     <Compile Include="Models\BrandOwner.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CallRecord.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Category.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>

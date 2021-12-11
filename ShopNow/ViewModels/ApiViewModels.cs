@@ -724,4 +724,17 @@ namespace ShopNow.ViewModels
             public TimeSpan? ShopNextOnTime { get; set; }
         }
     }
+
+    public class SaveCallRecordViewModel
+    {
+        public string from { get; set; }
+        public string to { get; set; }
+        public string callduration { get; set; }
+        public string callid { get; set; }
+        public string Status { get; set; }
+        public string recordId { get; set; }
+        public DateTime calldate { get; set; }
+        public int OrderNo { get; set; }
+        public int calltype { get; set; }
+    }
 }

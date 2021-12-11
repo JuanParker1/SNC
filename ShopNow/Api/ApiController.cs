@@ -5609,6 +5609,91 @@ namespace ShopNow.Controllers
             return Json(new { result = list }, JsonRequestBehavior.AllowGet);
         }
 
+        //Calls
+        public JsonResult SetCallActive(int orderno)
+        {
+            var order = db.Orders.FirstOrDefault(i => i.OrderNumber == orderno);
+            if (order != null)
+            {
+                order.IsCallActive = true;
+                db.Entry(order).State = EntityState.Modified;
+                db.SaveChanges();
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            return Json(false, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetCallFromDeliveryBoyorCustomer(string from)
+        {
+            string toNumber = String.Empty;
+            int orderNo = 0;
+
+            var deliveryBoyCallOrder = db.Orders.FirstOrDefault(i => i.DeliveryBoyPhoneNumber == from && (i.Status == 4 || i.Status == 5) && i.IsCallActive == true);
+            if (deliveryBoyCallOrder != null)
+            {
+                orderNo = deliveryBoyCallOrder.OrderNumber;
+                toNumber = deliveryBoyCallOrder.CustomerPhoneNumber;
+            }
+
+            var customerCallOrder = db.Orders.FirstOrDefault(i => i.CustomerPhoneNumber == from && (i.Status == 4 || i.Status == 5) && i.IsCallActive == true);
+            if (customerCallOrder != null)
+            {
+                orderNo = customerCallOrder.OrderNumber;
+                toNumber = customerCallOrder.DeliveryBoyPhoneNumber;
+            }
+
+            return Json(new { to = toNumber, orderNo = orderNo, callType = 1 }, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult GetCallFromShoporCustomer(string from)
+        {
+            string toNumber = String.Empty;
+            int orderNo = 0;
+            var shopCallOrder = db.Orders.FirstOrDefault(i => i.ShopPhoneNumber == from && (i.Status==2 || i.Status == 3 || i.Status==4) && i.IsCallActive == true);
+            if (shopCallOrder != null)
+            {
+                orderNo = shopCallOrder.OrderNumber;
+                toNumber = shopCallOrder.CustomerPhoneNumber;
+            }
+            var customerCallOrder = db.Orders.FirstOrDefault(i => i.CustomerPhoneNumber == from && (i.Status == 2 || i.Status == 3 || i.Status == 4 || i.Status == 8) && i.IsCallActive == true);
+            if (customerCallOrder != null)
+            {
+                orderNo = customerCallOrder.OrderNumber;
+                toNumber = customerCallOrder.ShopPhoneNumber;
+            }
+
+            return Json(new { to = toNumber, orderNo = orderNo, callType = 2 }, JsonRequestBehavior.AllowGet);
+        }
+        [HttpPost]
+        public JsonResult SaveCallRecord(SaveCallRecordViewModel model)
+        {
+            CallRecord callRecord = new CallRecord
+            {
+                CallDate = model.calldate,
+                CallDuration = model.callduration,
+                Caller = model.from,
+                CallId = model.callid,
+                CallType = model.calltype,
+                OrderNumber = model.OrderNo,
+                Receiver = model.to,
+                RecordId = model.recordId,
+                StatusText = model.Status,
+                Status = model.Status == "ANSWER" ? 1 : model.Status == "CANCEL" ? 2 : 3
+            };
+            db.CallRecords.Add(callRecord);
+            db.SaveChanges();
+
+            //Update call active --have to check for status
+            var order = db.Orders.FirstOrDefault(i => i.OrderNumber == model.OrderNo);
+            if (order != null)
+            {
+                order.IsCallActive = false;
+                db.Entry(order).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(model.recordId);
+
+        }
+
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "")
         {
             Helpers.PushNotification.SendbydeviceId(body, title, "", deviceId);
