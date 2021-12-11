@@ -5603,6 +5603,12 @@ namespace ShopNow.Controllers
             return Json(new { list = list }, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetAutoCompleteSearchResult(int customerid,double latitude, double longitude, string keyword)
+        {
+            var list = db.GetAutoCompleteSearch(longitude, latitude, keyword, customerid);
+            return Json(new { result = list }, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "")
         {
             Helpers.PushNotification.SendbydeviceId(body, title, "", deviceId);
