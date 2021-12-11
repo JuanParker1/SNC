@@ -62,4 +62,26 @@ namespace ShopNow.ViewModels
             public double Amount { get; set; }
         }
     }
+
+    public class ShopOrdersReportViewModel
+    {
+        public int ShopId { get; set; }
+        public string ShopName { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public List<ListItem> ListItems { get; set; }
+        public class ListItem
+        {
+            public int SiNo { get; set; }
+            public int ShopId { get; set; }
+            public string ShopName { get; set; }
+            public DateTime OrderDate { get; set; }
+            public int OrderNumber { get; set; }
+            public string CustomerName { get; set; }
+            public double RefundAmount { get; set; }
+            public string RefundRemark { get; set; }
+            public double Price { get; set; }
+            public string PaymentMode { get; set; }
+        }
+    }
 }

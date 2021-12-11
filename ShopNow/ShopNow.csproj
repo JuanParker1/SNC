@@ -3253,6 +3253,7 @@
     <Content Include="Views\Support\OnlinePaymentUpdate.cshtml" />
     <Content Include="Views\Support\Live.cshtml" />
     <Content Include="Views\CustomerPrescription\AddToCart.cshtml" />
+    <Content Include="Views\Sales\ShopOrdersReport.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

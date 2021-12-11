@@ -1,0 +1,108 @@
+﻿@model ShopNow.ViewModels.ShopOrdersReportViewModel
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Monthly Order Report";
+}
+<title>ShopNow | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+
+<div class="container-fluid mb-5">
+    <h5 class="d-print-block d-none text-center">@Model.ShopName</h5>
+    <form method="get" action="/Sales/ShopOrdersReport" class="my-3 d-print-none">
+        <div class="row my-2">
+            <div class="col-md-3">
+                <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+            </div>
+            <div class="col-md-9">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="font-weight-bold">Select Shop</label>
+                        <select id="select-shop" class="form-control" name="ShopId" required>
+                            @if (Model.ShopId != 0)
+                            {
+                                <option value="@Model.ShopId">@Model.ShopName</option>
+                            }
+                        </select>
+                        <input type="hidden" name="ShopName" value="@Model.ShopName" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="font-weight-bold">Start Date</label>
+                        <input id="date-start" type="date" class="form-control" name="StartDate" @if (Model.StartDate != null) { <text> value="@Model.StartDate.Value.ToString("yyyy-MM-dd")" </text> } required />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="font-weight-bold">End Date</label>
+                        <input id="date-end" type="date" class="form-control" name="EndDate" @if (Model.EndDate != null) { <text> value="@Model.EndDate.Value.ToString("yyyy-MM-dd")" </text> } required />
+                    </div>
+                    <div class="col-md-3 mt-2">
+                        <input type="submit" class="btn btn-info mt-4" value="Apply Filter" />
+                        <a href="/Sales/ShopOrdersReport" class="btn btn-warning mt-4">Clear Filter</a>
+                    </div>
+                    <div class="col-md-2 mt-2 pull-right">
+                        <div class="input-group">
+                            <button id="btnPrint" class="btn btn-sm btn-secondary mt-4 mr-2" value="Print"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
+                            <button id="btnExport" class="btn btn-sm btn-secondary mt-4" value="Export To Excel"><i class="fa fa-file-excel-o fa-lg" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="card mt-3 shadow-sm">
+        <div class="card-body">
+            @Html.Grid(Model.ListItems).Columns(columns =>
+{
+columns.Add(c => c.SiNo).Titled("Sl.No").Filterable(false).SetWidth(1);
+columns.Add(c => c.ShopName).Titled("ShopName").Filterable(true).SetWidth(50);
+columns.Add(c => c.CustomerName).Titled("CustomerName").Filterable(true).SetWidth(50);
+columns.Add(c => c.OrderDate).Titled("OrderDate").Filterable(true).Format("{0:dd-MMM-yyyy}").SetWidth(50);
+columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(50);
+columns.Add(c => c.RefundAmount).Titled("RefundAmount").Filterable(true).SetWidth(50);
+columns.Add(c => c.Price).Titled("Amount").Filterable(true).SetWidth(50);
+
+}).Sortable(true)
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <script src="~/Scripts/exporttoexcel/jquery.table2excel.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $('#select-shop').select2({
+                placeholder: "Search Shop",
+                ajax: {
+                    url: "/Product/GetActiveShopSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ShopName"]').val(e.params.data.text);
+                });
+
+            $('#btnPrint').click(function () {
+                window.print();
+            });
+            $("#btnExport").click(function () {
+                $("table").table2excel({
+                    name: "Worksheet Name",
+                    filename: "MonthlyReport-@Model.ShopName",
+                    fileext: ".xls",
+                    exclude_links: true,
+                });
+            });
+
+        });
+    </script>
+
+}
+
+
+
+

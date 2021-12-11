@@ -3,6 +3,7 @@ using ShopNow.Filters;
 using ShopNow.Models;
 using ShopNow.ViewModels;
 using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -69,6 +70,27 @@ namespace ShopNowPay.Controllers
                   }).OrderByDescending(i => i.DateEncoded).ToList();
             }
             return View(model.List);
+        }
+
+        public ActionResult ShopOrdersReport(ShopOrdersReportViewModel model)
+        {
+            model.ListItems = db.Orders.OrderByDescending(i => i.DateEncoded).Where(i => i.Status == 6 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false) && (model.StartDate != null && model.EndDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate)) : false)
+                .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+                .AsEnumerable()
+                .Select((i, index) => new ShopOrdersReportViewModel.ListItem
+                {
+                    SiNo = index + 1,
+                    CustomerName = i.c.CustomerName + " - " + i.c.CustomerPhoneNumber,
+                    OrderDate = i.c.DateEncoded,
+                    OrderNumber = i.c.OrderNumber,
+                    Price = (i.p.Amount - (i.p.RefundAmount ?? 0)),
+                    RefundAmount = i.p.RefundAmount ?? 0,
+                    RefundRemark = i.p.RefundRemark ?? "",
+                    PaymentMode = i.p.PaymentMode,
+                    ShopId = i.c.ShopId,
+                    ShopName = i.c.ShopName
+                }).ToList();
+            return View(model);
         }
 
         protected override void Dispose(bool disposing)
