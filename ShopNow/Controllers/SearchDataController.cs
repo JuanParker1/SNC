@@ -50,6 +50,7 @@ namespace ShopNow.Controllers
                .GroupJoin(db.SearchDatas, k => k.Key?.ToLower(), sd => sd.KeyValue?.ToLower(), (k, sd) => new { k, sd })
               .Select(i => new SearchDataListViewModel.ListItem
               {
+                  Id = i.k.FirstOrDefault().Id,
                   Count = i.k.Max(a => a.ResultCount),
                   Date = i.k.FirstOrDefault().DateEncoded,
                   Key = i.k.Key,
