@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-md-6">
             <h5 class="text-success" style="letter-spacing:1px">CART DETAILS</h5>
-        </div>    
+        </div>
         <div class="col-md-6 text-right">
             <a href="~/Cart/Pending" class="ml-auto" target="_self"><span class="fa fa-bars"></span> New Order List</a>
         </div>
@@ -140,22 +140,28 @@
                                     <td></td>
                                     @if (item.ProductName != null)
                                     {
-                                        <td><a href="~/Product/Details?id=@ShopNow.Helpers.AdminHelpers.ECodeLong(item.ProductId)">@item.ProductName</a></td>}
+                                        <td><a href="~/Product/Details?id=@ShopNow.Helpers.AdminHelpers.ECodeLong(item.ProductId)">@item.ProductName</a></td>
+}
                                     else
                                     {
-                                        <td>N/A</td>}
+                                        <td>N/A</td>
+}
                                     @if (item.BrandName != null)
                                     {
-                                        <td>@item.BrandName</td>}
+                                        <td>@item.BrandName</td>
+}
                                     else
                                     {
-                                        <td>N/A</td>}
+                                        <td>N/A</td>
+}
                                     @if (item.CategoryName != null)
                                     {
-                                        <td>@item.CategoryName</td>}
+                                        <td>@item.CategoryName</td>
+}
                                     else
                                     {
-                                        <td>N/A</td>}
+                                        <td>N/A</td>
+}
                                     <td>
                                         @item.Qty
                                         @*<input type="number" class="form-control col-md-1" name="Qty" id="Qty" value="@item.Qty" min="1" />*@
@@ -176,19 +182,23 @@
 
 <div id="myModal" class="modal fade">
     <div class="modal-dialog">
-        <span class="close" data-dismiss="modal">&times;</span>
-        <a href="~/Home/ImageDenied">
-            <img class="modal-content" id="myImage" />
-        </a>
+        <div class="modal-content">
+            <div class="modal-body">
+                <button class="close text-danger mb-2" data-dismiss="modal">&times;</button>
+               @* <a href="~/Home/ImageDenied">*@
+                    <img class="modal-content img-fluid w-100" style="height:400px;" id="myImage" />
+               @* </a>*@
+            </div>
+        </div>
     </div>
 </div>
 
 <div class="modal fade" id="modal-add-penalty-charge" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-sm">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
                 <form method="get" action="/Cart/AddPenaltyCharge">
-                    <input type="hidden" name="OrderId" value="@Model.Id"/>
+                    <input type="hidden" name="OrderId" value="@Model.Id" />
                     <h5>Add Penalty Charge</h5>
                     <div class="form-group">
                         <label>Amount</label>
@@ -209,7 +219,7 @@
 </div>
 
 <div class="modal fade" id="modal-add-waiting-charge" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-sm">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
                 <form method="get" action="/Cart/AddWaitingCharge">
@@ -234,17 +244,17 @@
 </div>
 
 <div class="modal fade" id="modal-add-cancel-remark" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-sm">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
-                    <h5>Add Cancel Remarks</h5>
-                    <div class="form-group mt-2">
-                        <textarea class="form-control" type="text" name="CancelledRemark" required></textarea>
-                    </div>
-                    <div class="text-right">
-                        <button id="btn-cancel" type="button" class="btn btn-sm btn-success mr-3">Submit</button>
-                        <button class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
-                    </div>
+                <h5>Add Cancel Remarks</h5>
+                <div class="form-group mt-2">
+                    <textarea class="form-control" type="text" name="CancelledRemark" required></textarea>
+                </div>
+                <div class="text-right">
+                    <button id="btn-cancel" type="button" class="btn btn-sm btn-success mr-3">Submit</button>
+                    <button class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
@@ -295,7 +305,7 @@
                             text: "",
                             type: "success"
                         }, function () {
-                                window.location.href = "/Cart/List";
+                            window.location.href = "/Cart/List";
                         });
                     }
                 });
@@ -306,7 +316,7 @@
             var modalImg = document.getElementById("myImage");
             $(img).click(function () {
                 modal.style.display = "block";
-                modalImg.src = this.src.replace("/Small/","/Medium/");
+                modalImg.src = this.src.replace("/Small/", "/Medium/");
                 if (this.src == "") {
                     $('#myModal').hide();
                 }
