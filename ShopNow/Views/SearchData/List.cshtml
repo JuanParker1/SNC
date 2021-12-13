@@ -92,7 +92,7 @@
                        ("<select class='form-control select-masterproduct' multiple></select>")).Titled("Nickname").SetWidth(30);
                    columns.Add().Encoded(false).Sanitized(false)
                 .RenderValueAs(b => new HtmlString
-                       ("<input type='button' class='btn btn-sm btn-success btn-save-keyword' value='Save' />")).Titled("Action").Css("text-center").SetWidth(5);
+                       ("<input type='button' class='btn btn-sm btn-success btn-save-keyword'  data-id=" + b.Id + " value='Save' />")).Titled("Action").Css("text-center").SetWidth(5);
                 }).WithPaging(20).Sortable(true)
                 </div>
             </div>

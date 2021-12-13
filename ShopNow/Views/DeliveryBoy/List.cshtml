@@ -18,7 +18,6 @@
             <a href="~/DeliveryBoy/Create" class="mr-2" target="_self"><span class="fa fa-plus"></span> New Delivery Boy</a>
             @*<a href="~/DeliveryBoy/AssignFranchise" target="_self"><span class="fa fa-tasks"></span> Assign Marketing Agent</a>*@
         </div>
-
         <div class="col-md-12">
             <div class="card shadow mt-3">
                 <div class="card-body">
@@ -34,23 +33,27 @@ columns.Add().Encoded(false).Sanitized(false).RenderValueAs(s => new HtmlString
 ("<label class='switch'> <input type='checkbox' value='" + s.Active + "' Id='Id_" + s.Id + "' class='CheckOnline' data-id='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(10);
 columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
 .RenderValueAs(o => @<div>
-                    <a href="/DeliveryBoy/Edit?Id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
-                    <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg mr-5"></i></a>
-                    <a href="/DeliveryBoy/Clear?Id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info"><i class="fa fa-refresh fa-lg"></i></a>
-                </div>);
-          }).WithPaging(20).Sortable(true)
+    <a href="/DeliveryBoy/Edit?Id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
+    <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg mr-5"></i></a>
+    <a href="/DeliveryBoy/Clear?Id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info"><i class="fa fa-refresh fa-lg"></i></a>
+</div>);
+}).WithPaging(20).Sortable(true)
                 </div>
-                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <div id="myModal" class="modal fade">
     <div class="modal-dialog">
-        <span class="close" data-dismiss="modal">&times;</span>
-        <a href="~/Home/ImageDenied">
-            <img class="modal-content" id="myImage">
-        </a>
+        <div class="modal-content">
+            <div class="modal-body">
+                <button class="close text-danger mb-2" data-dismiss="modal">&times;</button>
+                @*<a href="~/Home/ImageDenied">*@
+                <img class="modal-content img-fluid w-100" style="height:400px;" id="myImage" />
+                @*</a>*@
+            </div>
+        </div>
     </div>
 </div>
 

@@ -4,7 +4,7 @@
 }
 <title>ShopNow | Shop Update</title>
 <style>
-    
+
     #map {
         height: 100%;
         position: inherit;
@@ -36,6 +36,7 @@
         height: 100% !important;
     }
 </style>
+
 <div class="px-3 row col-md-12">
     <div class="col-md-6 row text-center">
         @if (Model.Status == 1 && Model.Verify == false && Model.PhoneNumber != "" && Model.PhoneVerify == false)
@@ -64,16 +65,16 @@
         }
     </div>
     @*@if (Model.Status == 1 && Model.Verify == true )
-    {*@
-        <div class="row text-center">
-            <div class="col-md-6">
-                <button type="button" id="GeneratePassword" class="btn btn-success showPasswordtext">Generate Password</button>
-                <button type="button" class="btn btn-success disablePasswordtext" disabled>Password</button>
-            </div>
-            <div class="col-md-6">
-                <input type="text" class="form-control" id="Password" value="@Model.Password" readonly />
-            </div>
+        {*@
+    <div class="row text-center">
+        <div class="col-md-6">
+            <button type="button" id="GeneratePassword" class="btn btn-success showPasswordtext">Generate Password</button>
+            <button type="button" class="btn btn-success disablePasswordtext" disabled>Password</button>
         </div>
+        <div class="col-md-6">
+            <input type="text" class="form-control" id="Password" value="@Model.Password" readonly />
+        </div>
+    </div>
     @*}*@
     @if (Model.Status == 1 && Model.Verify == false && (Model.PhoneNumber != "" || Model.PhoneNumber != null) && Model.PhoneVerify == false)
     {
@@ -83,6 +84,7 @@
         </div>
     }
 </div>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6">
@@ -112,7 +114,6 @@
                 <input type="hidden" name="ImageAuthoriseBrandPath" id="ImageAuthoriseBrandPath" value="@Model.ImageAuthoriseBrandPath" />
                 <input type="hidden" name="Count" id="Count" value="@Model.Count" />
                 <input type="hidden" name="Status" id="Status" value="@Model.Status" />
-
                 <div class="card mb-4 shadow">
                     <div class="card-body row">
                         <div class="col-md-6">
@@ -177,37 +178,37 @@
                                 </div>
                             </div>
                             @*<div class="form-group row">
-                            <div class="col-md-4 text-md-left">
-                            </div>
-                            <div class="col-md-4">
-                                <small class="control-label col-sm-12" for="StreetName"><i class="text-secondary">Locality</i></small>
-                                <input id="StreetName" type="text" class="form-control mb-2" placeholder="Street Name" name="StreetName" value="@Model.StreetName" readonly />
-                            </div>
-                            <div class="col-md-4">
-                                <small class="control-label col-sm-12" for="DistrictName"><i class="text-secondary">District</i></small>
-                                <input id="DistrictName" type="text" class="form-control" placeholder="District Name" name="DistrictName" value="@Model.DistrictName" readonly />
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-md-4 text-md-left">
-                            </div>
-                            <div class="col-md-4">
-                                <small class="control-label col-sm-12" for="StateName"><i class="text-secondary">State / Province</i></small>
-                                <input id="StateName" type="text" class="form-control mb-2" placeholder="State Name" name="StateName" value="@Model.StateName" readonly />
-                            </div>
-                            <div class="col-md-4">
-                                <small class="control-label col-sm-12" for="CountryName"><i class="text-secondary">Country</i></small>
-                                <input id="CountryName" type="text" class="form-control" placeholder="Country Name" name="CountryName" value="@Model.CountryName" readonly />
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-md-4 text-md-left">
-                            </div>
-                            <div class="col-md-4">
-                                <small class="control-label col-sm-12" for="PinCode"><i class="text-secondary">PIN Code</i></small>
-                                <input id="PinCode" type="text" class="form-control" placeholder="PIN Code" name="PinCode" value="@Model.PinCode" readonly />
-                            </div>
-                        </div>*@
+                                    <div class="col-md-4 text-md-left">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <small class="control-label col-sm-12" for="StreetName"><i class="text-secondary">Locality</i></small>
+                                        <input id="StreetName" type="text" class="form-control mb-2" placeholder="Street Name" name="StreetName" value="@Model.StreetName" readonly />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <small class="control-label col-sm-12" for="DistrictName"><i class="text-secondary">District</i></small>
+                                        <input id="DistrictName" type="text" class="form-control" placeholder="District Name" name="DistrictName" value="@Model.DistrictName" readonly />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-4 text-md-left">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <small class="control-label col-sm-12" for="StateName"><i class="text-secondary">State / Province</i></small>
+                                        <input id="StateName" type="text" class="form-control mb-2" placeholder="State Name" name="StateName" value="@Model.StateName" readonly />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <small class="control-label col-sm-12" for="CountryName"><i class="text-secondary">Country</i></small>
+                                        <input id="CountryName" type="text" class="form-control" placeholder="Country Name" name="CountryName" value="@Model.CountryName" readonly />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-md-4 text-md-left">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <small class="control-label col-sm-12" for="PinCode"><i class="text-secondary">PIN Code</i></small>
+                                        <input id="PinCode" type="text" class="form-control" placeholder="PIN Code" name="PinCode" value="@Model.PinCode" readonly />
+                                    </div>
+                                </div>*@
                             <div class="form-group row">
                                 <div class="col-md-2 mt-2 text-md-left">
                                     <label class="col-form-label"><strong class="text-secondary">Location</strong></label>
@@ -225,21 +226,21 @@
                                 <div class="col-md-4">
                                     <label class="text-secondary font-weight-bold ml-2">Shop Image</label><br />
                                     <div class="img-upload-container">
-                                        <a href="~/Home/ImageDenied">
-                                            <img class="img-container w-100 h-100" id="img-upload" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath" onerror="this.src='/Images/No Photo.png'" />
-                                            <input type="file" id="ShopImage" name="ShopImage" class="d-none" />
-                                            <label for="ShopImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                        </a>
+                                        @*<a href="~/Home/ImageDenied">*@
+                                        <img class="img-container w-100 h-100" id="img-upload" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath" onerror="this.src='/Images/No Photo.png'" />
+                                        <input type="file" id="ShopImage" name="ShopImage" class="d-none" />
+                                        <label for="ShopImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                        @*</a>*@
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <label class="text-secondary font-weight-bold ml-2">Logo Image</label><br />
                                     <div class="img-upload-container">
-                                        <a href="~/Home/ImageDenied">
-                                            <img class="img-container w-100 h-100" id="img-logo" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageLogoPath" onerror="this.src='/Images/No Photo.png'" />
-                                            <input type="file" id="LogoImage" name="LogoImage" class="d-none" />
-                                            <label for="LogoImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                        </a>
+                                        @*<a href="~/Home/ImageDenied">*@
+                                        <img class="img-container w-100 h-100" id="img-logo" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageLogoPath" onerror="this.src='/Images/No Photo.png'" />
+                                        <input type="file" id="LogoImage" name="LogoImage" class="d-none" />
+                                        <label for="LogoImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                        @*</a>*@
                                     </div>
                                 </div>
                             </div>
@@ -325,11 +326,11 @@
                                     </div>
                                     <div class="row AadharDocumentImg ml-3 mt-2">
                                         <div class="img-upload-container">
-                                            <a href="~/Home/ImageDenied">
-                                                <img class="img-container w-100 h-100 mb-2" id="img-aadhar" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAadharPath" onerror="this.src='/Images/No Photo.png'" />
-                                                <input type="file" id="AadharImage" name="AadharImage" class="d-none" />
-                                                <label for="AadharImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            </a>
+                                            @*<a href="~/Home/ImageDenied">*@
+                                            <img class="img-container w-100 h-100 mb-2" id="img-aadhar" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAadharPath" onerror="this.src='/Images/No Photo.png'" />
+                                            <input type="file" id="AadharImage" name="AadharImage" class="d-none" />
+                                            <label for="AadharImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            @*</a>*@
                                         </div>
                                     </div>
                                 </div>
@@ -355,11 +356,11 @@
                                     </div>
                                     <div class="row FssaiImg mt-2">
                                         <div class="img-upload-container mx-auto mb-3">
-                                            <a href="~/Home/ImageDenied">
-                                                <img class="img-container w-100 h-100 mb-2" id="img-fssai" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageFSSAIPath" onerror="this.src='/Images/No Photo.png'" />
-                                                <input type="file" id="FSSAIImage" name="FSSAIImage" class="d-none" />
-                                                <label for="FSSAIImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            </a>
+                                            @*<a href="~/Home/ImageDenied">*@
+                                            <img class="img-container w-100 h-100 mb-2" id="img-fssai" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageFSSAIPath" onerror="this.src='/Images/No Photo.png'" />
+                                            <input type="file" id="FSSAIImage" name="FSSAIImage" class="d-none" />
+                                            <label for="FSSAIImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            @*</a>*@
                                         </div>
                                     </div>
                                     @if (Model.ImageFSSAIPath != null && Model.Verify == false)
@@ -386,7 +387,6 @@
                                     }
                                 </div>
                             </div>
-
                             <div class="card border-primary bg-muted">
                                 <div class="card-body">
                                     <label class="col-md-12 text-center"><strong class="text-secondary">Drug License</strong></label>
@@ -401,11 +401,11 @@
                                     </div>
                                     <div class="row DrugImg">
                                         <div class="img-upload-container mx-auto mb-3">
-                                            <a href="~/Home/ImageDenied">
-                                                <img class="img-container w-100 h-100 mb-2" id="img-drug" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageDrugPath" onerror="this.src='/Images/No Photo.png'" />
-                                                <input type="file" id="DrugImage" name="DrugImage" class="d-none" />
-                                                <label for="DrugImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            </a>
+                                            @*<a href="~/Home/ImageDenied">*@
+                                            <img class="img-container w-100 h-100 mb-2" id="img-drug" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageDrugPath" onerror="this.src='/Images/No Photo.png'" />
+                                            <input type="file" id="DrugImage" name="DrugImage" class="d-none" />
+                                            <label for="DrugImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            @*</a>*@
                                         </div>
                                     </div>
                                     @if (Model.ImageDrugPath != null && Model.Verify == false)
@@ -432,7 +432,6 @@
                                     }
                                 </div>
                             </div>
-
                             <div class="card border-primary  bg-muted">
                                 <div class="card-body">
                                     <label class="col-md-12 text-center"><strong class="text-secondary">Establish License</strong></label>
@@ -447,11 +446,11 @@
                                     </div>
                                     <div class="row EstImg">
                                         <div class="img-upload-container mx-auto mb-3">
-                                            <a href="~/Home/ImageDenied">
-                                                <img class="img-container w-100 h-100 mb-2" id="img-establish" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageEstablishPath" onerror="this.src='/Images/No Photo.png'" />
-                                                <input type="file" id="EstablishImage" name="EstablishImage" class="d-none" />
-                                                <label for="EstablishImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            </a>
+                                            @*<a href="~/Home/ImageDenied">*@
+                                            <img class="img-container w-100 h-100 mb-2" id="img-establish" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageEstablishPath" onerror="this.src='/Images/No Photo.png'" />
+                                            <input type="file" id="EstablishImage" name="EstablishImage" class="d-none" />
+                                            <label for="EstablishImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            @*</a>*@
                                         </div>
                                     </div>
                                     @if (Model.ImageEstablishPath != null && Model.Verify == false)
@@ -494,11 +493,11 @@
                                     </div>
                                     <div class="row OtherImg">
                                         <div class="img-upload-container mx-auto mb-3">
-                                            <a href="~/Home/ImageDenied">
-                                                <img class="img-container w-100 h-100 mb-2" id="img-other" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageOtherLicensePath" onerror="this.src='/Images/No Photo.png'" />
-                                                <input type="file" id="OtherLicenseImage" name="OtherLicenseImage" class="d-none" />
-                                                <label for="OtherLicenseImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            </a>
+                                            @* <a href="~/Home/ImageDenied">*@
+                                            <img class="img-container w-100 h-100 mb-2" id="img-other" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageOtherLicensePath" onerror="this.src='/Images/No Photo.png'" />
+                                            <input type="file" id="OtherLicenseImage" name="OtherLicenseImage" class="d-none" />
+                                            <label for="OtherLicenseImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            @* </a>*@
                                         </div>
                                     </div>
                                     @if (Model.ImageOtherLicensePath != null && Model.Verify == false)
@@ -571,19 +570,19 @@
                                                 <input type="radio" class="ml-3" name="AuthLicense" id="AuthLicensePDF" value="PDF"> <label for="AuthLicensePDF"> PDF</label>
                                             </div>
                                         </div>
-                                            <div class="row ml-3 AuthLicensePdf d-none mt-2 mb-3">
-                                                <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" target="_blank" class="mb-2"> Click here for Pdf view</a>
-                                                <input type="file" id="AuthorisedDistributorPdf" name="AuthorisedDistributorPdf" />
+                                        <div class="row ml-3 AuthLicensePdf d-none mt-2 mb-3">
+                                            <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" target="_blank" class="mb-2"> Click here for Pdf view</a>
+                                            <input type="file" id="AuthorisedDistributorPdf" name="AuthorisedDistributorPdf" />
+                                        </div>
+                                        <div class="row AuthLicenseImg">
+                                            <div class="img-upload-container mx-auto">
+                                                @*<a href="~/Home/ImageDenied">*@
+                                                <img class="img-container w-100 h-100 mb-3" id="img-authorise" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" onerror="this.src='/Images/No Photo.png'" />
+                                                <input type="file" id="AuthorisedDistributorImage" name="AuthorisedDistributorImage" class="d-none" />
+                                                <label for="AuthorisedDistributorImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                @*</a>*@
                                             </div>
-                                            <div class="row AuthLicenseImg">
-                                                <div class="img-upload-container mx-auto">
-                                                    <a href="~/Home/ImageDenied">
-                                                        <img class="img-container w-100 h-100 mb-3" id="img-authorise" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" onerror="this.src='/Images/No Photo.png'" />
-                                                        <input type="file" id="AuthorisedDistributorImage" name="AuthorisedDistributorImage" class="d-none" />
-                                                        <label for="AuthorisedDistributorImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                                    </a>
-                                                </div>
-                                            </div>
+                                        </div>
                                         @if (Model.ImageAuthoriseBrandPath != null && Model.Verify == false)
                                         {
                                             <div class="alert alert-success AuthApprovedlbl font-weight-bold d-none p-2">Approved</div>
@@ -645,11 +644,11 @@
                                     </div>
                                     <div class="row GstinLicenseImg">
                                         <div class="img-upload-container mx-auto mb-3">
-                                            <a href="~/Home/ImageDenied">
-                                                <img class="img-container w-100 h-100 mb-2" id="img-gstin" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageGSTINPath" onerror="this.src='/Images/No Photo.png'" />
-                                                <input type="file" id="GSTINImage" name="GSTINImage" class="d-none" />
-                                                <label for="GSTINImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            </a>
+                                            @* <a href="~/Home/ImageDenied">*@
+                                            <img class="img-container w-100 h-100 mb-2" id="img-gstin" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageGSTINPath" onerror="this.src='/Images/No Photo.png'" />
+                                            <input type="file" id="GSTINImage" name="GSTINImage" class="d-none" />
+                                            <label for="GSTINImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            @* </a>*@
                                         </div>
                                     </div>
                                     @if (Model.ImageGSTINPath != null && Model.Verify == false)
@@ -689,11 +688,11 @@
                                     </div>
                                     <div class="row PanLicenseImg">
                                         <div class="img-upload-container mx-auto mb-3">
-                                            <a href="~/Home/ImageDenied">
-                                                <img class="img-container w-100 h-100 mb-2" id="img-pan" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePanPath" onerror="this.src='/Images/No Photo.png'" />
-                                                <input type="file" id="PanImage" name="PanImage" class="d-none" />
-                                                <label for="PanImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            </a>
+                                            @* <a href="~/Home/ImageDenied">*@
+                                            <img class="img-container w-100 h-100 mb-2" id="img-pan" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePanPath" onerror="this.src='/Images/No Photo.png'" />
+                                            <input type="file" id="PanImage" name="PanImage" class="d-none" />
+                                            <label for="PanImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            @* </a>*@
                                         </div>
                                     </div>
                                     @if (Model.ImagePanPath != null && Model.Verify == false)
@@ -788,11 +787,11 @@
                                         </div>
                                         <div class="row AccountDocumentImg">
                                             <div class="img-upload-container mx-auto mb-3">
-                                                <a href="~/Home/ImageDenied">
-                                                    <img class="img-container w-100 h-100 mb-2" id="img-account" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAccountPath" onerror="this.src='/Images/No Photo.png'" />
-                                                    <input type="file" id="AccountImage" name="AccountImage" class="d-none" />
-                                                    <label for="AccountImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                                </a>
+                                                @*  <a href="~/Home/ImageDenied">*@
+                                                <img class="img-container w-100 h-100 mb-2" id="img-account" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAccountPath" onerror="this.src='/Images/No Photo.png'" />
+                                                <input type="file" id="AccountImage" name="AccountImage" class="d-none" />
+                                                <label for="AccountImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                @*</a>*@
                                             </div>
                                         </div>
                                         @if (Model.ImageAccountPath != null && Model.Verify == false)
@@ -897,9 +896,9 @@
                 <div class="row" id="print-FSSAI">
                     <div class="col-md-6">
                         <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageFSSAIPath" target="_blank" class="ml-3 fssai-pdf"> Click here for Pdf view</a>
-                        <a href="~/Home/ImageDenied">
+                        @*<a href="~/Home/ImageDenied">*@
                             <img class="img-container w-100 h-100 mb-2 fssai-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageFSSAIPath" onerror="this.src='/Images/No Photo.png'" />
-                        </a>
+                        @*</a>*@
                     </div>
                     <div class="col-md-6">
                         <label class="text-left text-secondary font-weight-bold mt-1"><i>License Number</i></label>
@@ -918,6 +917,7 @@
         </div>
     </div>
 </div>
+
 <!--Drug License Model-->
 <div class="modal fade" id="ModalDrug" tabindex="-1" role="dialog" aria-labelledby="ModalDrugLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
@@ -932,9 +932,9 @@
                 <div class="row" id="print-Drug">
                     <div class="col-md-6">
                         <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageDrugPath" target="_blank" class="mb-2 drug-pdf"> Click here for Pdf view</a>
-                        <a href="~/Home/ImageDenied">
+                        @*<a href="~/Home/ImageDenied">*@
                             <img class="img-container w-100 h-100 mb-2 drug-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageDrugPath" onerror="this.src='/Images/No Photo.png'" />
-                        </a>
+                        @*</a>*@
                     </div>
                     <div class="col-md-6">
                         <div class="col-md-12">
@@ -955,6 +955,7 @@
         </div>
     </div>
 </div>
+
 <!--Establish License Model-->
 <div class="modal fade" id="ModalEstablish" tabindex="-1" role="dialog" aria-labelledby="ModalEstablishLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
@@ -969,9 +970,9 @@
                 <div class="row" id="print-Establish">
                     <div class="col-md-6">
                         <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageEstablishPath" target="_blank" class="mb-2 establish-pdf"> Click here for Pdf view</a>
-                        <a href="~/Home/ImageDenied">
+                      @*  <a href="~/Home/ImageDenied">*@
                             <img class="img-container w-100 h-100 mb-2 establish-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageEstablishPath" onerror="this.src='/Images/No Photo.png'" />
-                        </a>
+                       @* </a>*@
                     </div>
                     <div class="col-md-6">
                         <div class="col-md-12">
@@ -992,6 +993,7 @@
         </div>
     </div>
 </div>
+
 <!--Other License Model-->
 <div class="modal fade" id="ModalOther" tabindex="-1" role="dialog" aria-labelledby="ModalOtherLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
@@ -1029,6 +1031,7 @@
         </div>
     </div>
 </div>
+
 <!--GSTIN Model-->
 <div class="modal fade" id="ModalGSTIN" tabindex="-1" role="dialog" aria-labelledby="ModalGSTINLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
@@ -1043,9 +1046,9 @@
                 <div class="row" id="print-GSTIN">
                     <div class="col-md-6">
                         <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageGSTINPath" target="_blank" class="mb-2 gstin-pdf"> Click here for Pdf view</a>
-                        <a href="~/Home/ImageDenied">
+                        @*<a href="~/Home/ImageDenied">*@
                             <img class="img-container w-100 h-100 mb-2 gstin-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageGSTINPath" onerror="this.src='/Images/No Photo.png'" />
-                        </a>
+                       @* </a>*@
                     </div>
                     <div class="col-md-6">
                         <label class="text-left text-secondary font-weight-bold mt-1"><i>GSTIN Number</i></label>
@@ -1064,6 +1067,7 @@
         </div>
     </div>
 </div>
+
 <!--PAN Model-->
 <div class="modal fade" id="ModalPAN" tabindex="-1" role="dialog" aria-labelledby="ModalPANLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
@@ -1078,9 +1082,9 @@
                 <div class="row" id="print-Pan">
                     <div class="col-md-6">
                         <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePanPath" target="_blank" class="mb-2 pan-pdf"> Click here for Pdf view</a>
-                        <a href="~/Home/ImageDenied">
+                        @*<a href="~/Home/ImageDenied">*@
                             <img class="img-container w-100 h-100 mb-2 pan-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePanPath" onerror="this.src='/Images/No Photo.png'" />
-                        </a>
+                        @*</a>*@
                     </div>
                     <div class="col-md-6">
                         <label class="col-md-4 text-left text-secondary font-weight-bold mt-1"><i>Pan Number</i></label>
@@ -1099,6 +1103,7 @@
         </div>
     </div>
 </div>
+
 <!--Account Model-->
 <div class="modal fade" id="ModalAccount" tabindex="-1" role="dialog" aria-labelledby="ModalAccountLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
@@ -1113,9 +1118,9 @@
                 <div class="row" id="print-Account">
                     <div class="col-md-6">
                         <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAccountPath" target="_blank" class="mb-2 pan-pdf"> Click here for Pdf view</a>
-                        <a href="~/Home/ImageDenied">
+                        @*<a href="~/Home/ImageDenied">*@
                             <img class="img-container w-100 h-100 mb-2 pan-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAccountPath" onerror="this.src='/Images/No Photo.png'" />
-                        </a>
+                       @* </a>*@
                     </div>
                     <div class="col-md-6">
                         <label class="col-md-4 text-left text-secondary font-weight-bold mt-1"><i>Bank Name</i></label>
@@ -1140,6 +1145,7 @@
         </div>
     </div>
 </div>
+
 <!--Brand Model-->
 <div class="modal fade" id="ModalBrand" tabindex="-1" role="dialog" aria-labelledby="ModalModalBrandLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
@@ -1154,9 +1160,9 @@
                 <div class="row" id="print-Auth">
                     <div class="col-md-6">
                         <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" target="_blank" class="mb-2 auth-pdf"> Click here for Pdf view</a>
-                        <a href="~/Home/ImageDenied">
+                        @*<a href="~/Home/ImageDenied">*@
                             <img class="img-container w-100 h-100 mb-2 auth-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" onerror="this.src='/Images/No Photo.png'" />
-                        </a>
+                        @*</a>*@
                     </div>
                     <div class="col-md-6">
                         <label class="col-md-4 text-left text-secondary font-weight-bold mt-1"><i>Authorised Brand Name</i></label>
@@ -1175,6 +1181,7 @@
         </div>
     </div>
 </div>
+
 @section Scripts
 {
     <!--Select2-->
@@ -1252,10 +1259,8 @@
                 } else {
                     $("#OTP").attr('disabled', false);
                     $("#OTPNumber").val("");
-
                 }
             });
-
 
             if (password != "") {
                 $("#GeneratePassword").attr('disabled', true);
@@ -1310,7 +1315,6 @@
                 $('#btnAuthApprove').addClass('d-none');
                 $('#btnAuthReject').addClass('d-none');
             }
-
             var strFssai = $("#ImageFSSAIPath").val();
             var strDrug = $("#ImageDrugPath").val();
             var strEstablish = $("#ImageEstablishPath").val();
@@ -1643,15 +1647,6 @@
                 swal("Successfully Approved!", "FSSAI License Approved!", "success");
                 imgcount--;
                 $('#Count').val(imgcount);
-                //if (imgcount == 0) {
-
-                //    $.getJSON("/Shop/VerifyImage?Id=" + Id, function (data) {
-                //        if (data.data == true) {
-
-                //            //$(".generatePassword").removeClass("d-none");
-                //        }
-                //    });
-                //}
             });
             $('#btnFssaiReject').click(function () {
                 $('#FSSIApprove').val("false");
@@ -1672,14 +1667,6 @@
                 swal("Successfully Approved!", "Drug License Approved!", "success");
                 imgcount--;
                 $('#Count').val(imgcount);
-                //if (imgcount == 0) {
-
-                //    $.getJSON("/Shop/VerifyImage?Id=" + Id, function (data) {
-                //        if (data.data == true) {
-                //            //$(".generatePassword").removeClass("d-none");
-                //        }
-                //    });
-                //}
             });
             $('#btnDrugReject').click(function () {
                 $('#DrugApprove').val("false");
@@ -1701,14 +1688,6 @@
                 swal("Successfully Approved!", "Establish License Approved!", "success");
                 imgcount--;
                 $('#Count').val(imgcount);
-                //if (imgcount == 0) {
-
-                //    $.getJSON("/Shop/VerifyImage?Id=" + Id, function (data) {
-                //        if (data.data == true) {
-                //            //$(".generatePassword").removeClass("d-none");
-                //        }
-                //    });
-                //}
             });
             $('#btnEstablishReject').click(function () {
                 $('#EstablishApprove').val("false");
@@ -1941,7 +1920,6 @@
                 } else {
                     if (log) alert(log);
                 }
-
             });
 
             function readAuthoriseURL(input) {
@@ -2083,6 +2061,7 @@
             $("#ShopImage").change(function () {
                 readURL(this);
             });
+
             function readURLLogo(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
@@ -2248,7 +2227,7 @@
                     $('#Name').val(data.result.result.name);
                     $('#PhoneNumber').val(data.result.result.international_phone_number);
                     $('#Website').val(data.result.result.website);
-                    
+
                     var monday = data.result.result.opening_hours.weekday_text[0];
                     var mon = monday.split(" ");
                     var amm = mon[1] + " " + mon[2];
