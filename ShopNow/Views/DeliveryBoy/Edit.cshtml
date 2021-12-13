@@ -111,16 +111,15 @@
                                         <label class="col-md-12 small font-italic">* Upload recent photo</label>
                                         <div class="row">
                                             <div class="img-upload-container mx-auto text-center">
-                                                <a href="~/Home/ImageDenied">
+                                                @*<a href="~/Home/ImageDenied">*@
                                                     <img class="img-container w-100 h-100" id="img-upload" src="@Model.ImagePath" onerror="this.src='/Images/No Photo.png'" />
-                                                </a>
+                                               @* </a>*@
                                                 <input type="file" id="DeliveryBoyImage" name="DeliveryBoyImage" class="d-none" />
                                                 <label for="DeliveryBoyImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="card border-info">
                                     <div class="card-body">
                                         <label class="col-md-12 text-center"><strong class="text-secondary">Resume</strong></label>
@@ -132,7 +131,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="card border-info bg-muted">
                                     <div class="card-body text-center">
                                         <label class="col-md-12 text-center"><strong class="text-secondary">Driving License</strong></label>
@@ -153,9 +151,9 @@
                                         </div>
                                         <div class="row DrivingImg">
                                             <div class="img-upload-container mx-auto">
-                                                <a href="~/Home/ImageDenied">
+                                               @* <a href="~/Home/ImageDenied">*@
                                                     <img class="img-container w-100 h-100" id="img-license" src="@Model.DrivingLicenseImagePath" onerror="this.src='/Images/No Photo.png'" />
-                                                </a>
+                                               @* </a>*@
                                                 <input type="file" id="DrivingLicenseImage" name="DrivingLicenseImage" class="d-none" />
                                                 <label for="DrivingLicenseImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                             </div>
@@ -223,9 +221,9 @@
                                             </div>
                                             <div class="row AccountDocumentImg">
                                                 <div class="img-upload-container mx-auto">
-                                                    <a href="~/Home/ImageDenied">
+                                                    @*<a href="~/Home/ImageDenied">*@
                                                         <img class="img-container w-100 h-100 mb-2" id="img-account" src="@Model.BankPassbookPath" onerror="this.src='/Images/No Photo.png'" />
-                                                    </a>
+                                                    @*</a>*@
                                                     <input type="file" id="BankPassbookImage" name="BankPassbookImage" class="d-none" />
                                                     <label for="BankPassbookImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                                 </div>
@@ -282,9 +280,9 @@
                 <div class="row" id="print-License">
                     <div class="col-md-6">
                         <a href="@Model.DrivingLicenseImagePath" target="_blank" class="ml-3 license-pdf d-none"> Click here for Pdf view</a>
-                        <a href="~/Home/ImageDenied">
+                       @* <a href="~/Home/ImageDenied">*@
                             <img class="img-container w-100 h-100 mb-2 license-img" src="@Model.DrivingLicenseImagePath" onerror="this.src='/Images/No Photo.png'" />
-                        </a>
+                       @* </a>*@
                     </div>
                     <div class="col-md-6">
                         <label class="text-left text-secondary font-weight-bold mt-1"><i>License Number</i></label>
@@ -318,9 +316,9 @@
                 <div class="row" id="print-Account">
                     <div class="col-md-6">
                         <a href="@Model.BankPassbookPath" target="_blank" class="mb-2 account-pdf d-none"> Click here for Pdf view</a>
-                        <a href="~/Home/ImageDenied">
+                       @* <a href="~/Home/ImageDenied">*@
                             <img class="img-container w-100 h-100 mb-2 account-img" src="@Model.BankPassbookPath" onerror="this.src='/Images/No Photo.png'" />
-                        </a>
+                       @* </a>*@
                     </div>
                     <div class="col-md-6">
                         <label class="col-md-4 text-left text-secondary font-weight-bold mt-1"><i>Bank Name</i></label>

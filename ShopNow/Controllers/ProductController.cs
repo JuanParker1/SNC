@@ -143,10 +143,12 @@ namespace ShopNow.Controllers
             prod.ProductTypeName = "Medical";
             prod.CreatedBy = user.Name;
             prod.UpdatedBy = user.Name;
-
             prod.DateEncoded = DateTime.Now;
             prod.DateUpdated = DateTime.Now;
             prod.Status = 0;
+            prod.IsOnline = true;
+            prod.MappedDate = DateTime.Now;
+
             db.Products.Add(prod);
             db.SaveChanges();
             ViewBag.Message = model.MasterProductName + " Saved Successfully!";
@@ -347,12 +349,12 @@ namespace ShopNow.Controllers
             prod.ProductTypeId = 1;
             prod.ProductTypeName = "Dish";
             prod.Status = 0;
-            prod.CreatedBy = user.Name;
-            prod.UpdatedBy = user.Name;
-
+            prod.IsOnline = true;
+            prod.MappedDate = DateTime.Now;
             prod.DateEncoded = DateTime.Now;
             prod.DateUpdated = DateTime.Now;
-            prod.Status = 0;
+            prod.CreatedBy = user.Name;
+            prod.UpdatedBy = user.Name;
             db.Products.Add(prod);
             db.SaveChanges();
 
@@ -597,6 +599,8 @@ namespace ShopNow.Controllers
                 product.ShopCategoryId = shop.ShopCategoryId;
                 product.ShopCategoryName = shop.ShopCategoryName;
             }
+            product.IsOnline = true;
+            product.MappedDate = DateTime.Now;
             product.DateEncoded = DateTime.Now;
             product.DateUpdated = DateTime.Now;
             product.Status = 0;
@@ -773,6 +777,8 @@ namespace ShopNow.Controllers
                 product.ShopCategoryId = shop.ShopCategoryId;
                 product.ShopCategoryName = shop.ShopCategoryName;
             }
+            product.IsOnline = true;
+            product.MappedDate = DateTime.Now;
             product.DateEncoded = DateTime.Now;
             product.DateUpdated = DateTime.Now;
             product.Status = 0;
