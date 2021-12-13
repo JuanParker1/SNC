@@ -41,7 +41,6 @@ namespace ShopNow.Controllers
                 .Select(i => new CustomerPrescriptionWebListViewModel.ListItem
                 {
                     Id = i.cp.Id,
-                    //AudioPath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Audio/" + i.cp.AudioPath,
                     AudioPath = (!string.IsNullOrEmpty(i.cp.AudioPath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Audio/" + i.cp.AudioPath : "",
                     CustomerId = i.cp.CustomerId,
                     CustomerName = i.cp.CustomerName,
