@@ -102,6 +102,7 @@ namespace ShopNow.Models
         public virtual DbSet<CustomerSearchHistory> CustomerSearchHistories { get; set; }
         public virtual DbSet<CallRecord> CallRecords { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<CustomerGiftCard> CustomerGiftCards { get; set; }
     
         [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)

@@ -5700,7 +5700,44 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
             }
             return Json(model.recordId);
+        }
 
+        public ActionResult AddGiftCard(int customerid, string giftcardcode)
+        {
+            var giftCard = db.CustomerGiftCards.FirstOrDefault(i => i.CustomerId == customerid && i.GiftCardCode == giftcardcode.Trim());
+            if (giftCard == null)
+                return Json(new { status = false, message = "Invalid Gift Card" }, JsonRequestBehavior.AllowGet);
+
+            //var giftCard = db.CustomerGiftCards.FirstOrDefault(i => i.CustomerId == customerid && i.GiftCardCode == giftcardcode.Trim() && i.Status == 0 && DbFunctions.TruncateTime(i.ExpiryDate) >= DbFunctions.TruncateTime(DateTime.Now));
+            else if (giftCard.Status == 0 && (giftCard.ExpiryDate.Date >= DateTime.Now.Date))
+            {
+                giftCard.Status = 1;
+                db.Entry(giftCard).State = EntityState.Modified;
+                db.SaveChanges();
+
+                var customer = db.Customers.FirstOrDefault(i => i.Id == customerid);
+                customer.WalletAmount += giftCard.Amount;
+                db.Entry(customer).State = EntityState.Modified;
+                db.SaveChanges();
+
+                //Wallet History for Gift Card
+                var walletHistory = new CustomerWalletHistory
+                {
+                    Amount = giftCard.Amount,
+                    CustomerId = giftCard.CustomerId,
+                    DateEncoded = DateTime.Now,
+                    Description = "Received from gift card",
+                    Type = 1
+                };
+                db.CustomerWalletHistories.Add(walletHistory);
+                db.SaveChanges();
+
+                return Json(new { status = true, message = $"Successfully ₹{giftCard.Amount} Added to Wallet" }, JsonRequestBehavior.AllowGet);
+            }
+            else if (giftCard.Status == 1)
+                return Json(new { status = false, message = "Already Applied!" }, JsonRequestBehavior.AllowGet);
+            else
+                return Json(new { status = false, message = "Gift Card is Expired!" }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "")
