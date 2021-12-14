@@ -35,7 +35,6 @@
             <a href="/Product/MedicalCreate"><span class="fa fa-plus"></span> Medical</a>
         </div>
     </div>
-
     <div class="row">
         <div class="col-md-12">
             <div class="card shadow mt-3">
@@ -46,12 +45,14 @@
                columns.Add(b => b.CategoryName).Titled("Category Name").Filterable(true).SetWidth(15);
                columns.Add(b => b.ShopName).Titled("Shop Name").Filterable(true).SetWidth(25);
                columns.Add(b => b.Percentage).Titled("Discount %").Filterable(true).SetWidth(15);
+               columns.Add().Encoded(false).Sanitized(false)
+                   .RenderValueAs(o => new HtmlString("<label class='switch'> <input type='checkbox' value='" + o.IsOnline + "' Id = Id_" + o.Id + "' class='CheckOnline' data-id='" + o.Id + "'><span class ='slider round'></span></label>")).Titled("IsOnline").SetWidth(5);
                columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
-        .RenderValueAs(o => @<div>
+              .RenderValueAs(o => @<div>
                 <a href="~/Product/MedicalEdit?id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
                 <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-danger btnDelete" redirectPage = 2 ><i class="fa fa-trash fa-lg"></i></a>
-            </div>);
-}).WithPaging(20).Sortable(true)
+              </div>);
+              }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
@@ -79,6 +80,13 @@
                 }
             }).on('select2:select', function (e) {
                 $('input[name="ShopName"]').val(e.params.data.shopname);
+            });
+
+            $('table tbody tr').each(function () {
+                var $this = $(this).find(".CheckOnline");
+                if ($this.val() == 'True') {
+
+                }
             });
 
             $(".btnDelete").click(function () {
