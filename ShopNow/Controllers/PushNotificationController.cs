@@ -31,11 +31,18 @@ namespace ShopNow.Controllers
         }
 
         [HttpPost]
-        public ActionResult SendBulk(string title, string message, string[] district)
+        public ActionResult SendBulk(string title, string message, string[] district, int type)
         {
-            var fcmTokenList = db.Customers.Where(i => !string.IsNullOrEmpty(i.FcmTocken) && i.FcmTocken != "NULL" && district.Contains(i.DistrictName)).Select(i => i.FcmTocken).ToArray();
-            Helpers.PushNotification.SendBulk(message, title, "a.mp3", fcmTokenList);
-
+            if(type == 1)
+            {
+                var fcmTokenList = db.Customers.Where(i => !string.IsNullOrEmpty(i.FcmTocken) && i.FcmTocken != "NULL").Select(i => i.FcmTocken).ToArray();
+                Helpers.PushNotification.SendBulk(message, title, "a.mp3", fcmTokenList);
+            }
+            if (type == 2)
+            {
+                var fcmTokenList = db.Customers.Where(i => !string.IsNullOrEmpty(i.FcmTocken) && i.FcmTocken != "NULL" && district.Contains(i.DistrictName)).Select(i => i.FcmTocken).ToArray();
+                Helpers.PushNotification.SendBulk(message, title, "a.mp3", fcmTokenList);
+            }
             return RedirectToAction("Index");
         }
 

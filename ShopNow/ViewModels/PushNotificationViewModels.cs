@@ -12,6 +12,7 @@ namespace ShopNow.ViewModels
         {
             public int Index { get; set; }
             public int Count { get; set; }
+            public int Type { get; set; }
             public string DistrictName { get; set; }
         }
     }
