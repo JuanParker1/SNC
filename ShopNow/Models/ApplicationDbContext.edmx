@@ -352,6 +352,20 @@
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="CustomerGiftCards">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerId" Type="int" Nullable="false" />
+          <Property Name="CustomerPhoneNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="GiftCardCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="Amount" Type="float" Nullable="false" />
+          <Property Name="ExpiryDate" Type="datetime" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DateEncoded" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="250" />
+        </EntityType>
         <EntityType Name="CustomerPrescription">
           <Key>
             <PropertyRef Name="Id" />
@@ -1680,6 +1694,7 @@
           <EntitySet Name="CustomerAchievements" EntityType="Self.CustomerAchievements" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerAddresses" EntityType="Self.CustomerAddresses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerFavorites" EntityType="Self.CustomerFavorites" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustomerGiftCards" EntityType="Self.CustomerGiftCards" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerPrescription" EntityType="Self.CustomerPrescription" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerPrescriptionImages" EntityType="Self.CustomerPrescriptionImages" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerPrescriptionItem" EntityType="Self.CustomerPrescriptionItem" Schema="dbo" store:Type="Tables" />
@@ -2604,6 +2619,7 @@
             <End Role="Order" EntitySet="Orders" />
             <End Role="OrderItem" EntitySet="OrderItems" />
           </AssociationSet>
+          <EntitySet Name="CustomerGiftCards" EntityType="sncModel.CustomerGiftCard" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3628,6 +3644,20 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="CustomerGiftCard">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="CustomerPhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="GiftCardCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Amount" Type="Double" Nullable="false" />
+          <Property Name="ExpiryDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5298,6 +5328,21 @@
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
                 <ScalarProperty Name="CustomerPhoneNumber" ColumnName="CustomerPhoneNumber" />
                 <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerGiftCards">
+            <EntityTypeMapping TypeName="sncModel.CustomerGiftCard">
+              <MappingFragment StoreEntitySet="CustomerGiftCards">
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="GiftCardCode" ColumnName="GiftCardCode" />
+                <ScalarProperty Name="CustomerPhoneNumber" ColumnName="CustomerPhoneNumber" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

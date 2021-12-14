@@ -66,7 +66,24 @@ namespace ShopNow.Helpers
             // return prefix + hicode + lowcode;
             return prefix + RandomStringUtils.RandomStringUtils.RandomAlphabetic(10);
         }
-        
+
+        private const int _numlength1 = 4;
+        private const int _alplength1 = 4;
+        public static string GenerateGiftCard(string prefix)
+        {
+
+
+            //string code = prefix + Convert.ToInt64(DateTime.Now.ToString("yyMMddHHmmssfff")).ToString("X2").PadLeft(13, '0');
+            string alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            string numeric = "0123456789";
+            string hicode = new string(Enumerable.Repeat(alpha, _alplength1).Select(s => s[_randomizer.Next(s.Length)]).ToArray());
+            string lowcode = new string(Enumerable.Repeat(numeric, _numlength1).Select(s => s[_randomizer.Next(s.Length)]).ToArray());
+
+            prefix = string.IsNullOrEmpty(prefix) ? new string(Enumerable.Repeat(alpha, _alplength1).Select(s => s[_randomizer.Next(3)]).ToArray()) : prefix;
+
+            return prefix + hicode + "-" + lowcode;
+        }
+
         public static string Format(string code)
         {
             code = code.Replace("_", string.Empty);
