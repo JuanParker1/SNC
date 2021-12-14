@@ -475,7 +475,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="SearchKeyword" Type="nvarchar(max)" />
           <Property Name="ResultCount" Type="int" Nullable="false" />
           <Property Name="LinkedMasterProductIds" Type="nvarchar(max)" />
@@ -2598,7 +2598,6 @@
             <End Role="Category" EntitySet="Categories" />
             <End Role="SubCategory" EntitySet="SubCategories" />
           </AssociationSet>
-          <EntitySet Name="CustomerSearchDatas" EntityType="sncModel.CustomerSearchData" />
           <EntitySet Name="CustomerAddresses" EntityType="sncModel.CustomerAddress" />
           <AssociationSet Name="FK_CustomerAddresses_Customers" Association="sncModel.FK_CustomerAddresses_Customers">
             <End Role="Customer" EntitySet="Customers" />
@@ -2620,6 +2619,7 @@
             <End Role="OrderItem" EntitySet="OrderItems" />
           </AssociationSet>
           <EntitySet Name="CustomerGiftCards" EntityType="sncModel.CustomerGiftCard" />
+          <EntitySet Name="CustomerSearchDatas" EntityType="sncModel.CustomerSearchData" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3433,18 +3433,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="CustomerSearchData">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="SearchKeyword" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ResultCount" Type="Int32" Nullable="false" />
-          <Property Name="LinkedMasterProductIds" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="LinkedMasterProductName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-        </EntityType>
         <EntityType Name="CustomerAddress">
           <Key>
             <PropertyRef Name="Id" />
@@ -3657,6 +3645,18 @@
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CreatedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="CustomerSearchData">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SearchKeyword" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ResultCount" Type="Int32" Nullable="false" />
+          <Property Name="LinkedMasterProductIds" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LinkedMasterProductName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -5140,19 +5140,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="CustomerSearchDatas">
-            <EntityTypeMapping TypeName="sncModel.CustomerSearchData">
-              <MappingFragment StoreEntitySet="CustomerSearchData">
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="LinkedMasterProductName" ColumnName="LinkedMasterProductName" />
-                <ScalarProperty Name="LinkedMasterProductIds" ColumnName="LinkedMasterProductIds" />
-                <ScalarProperty Name="ResultCount" ColumnName="ResultCount" />
-                <ScalarProperty Name="SearchKeyword" ColumnName="SearchKeyword" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="CustomerAddresses">
             <EntityTypeMapping TypeName="sncModel.CustomerAddress">
               <MappingFragment StoreEntitySet="CustomerAddresses">
@@ -5344,6 +5331,19 @@
                 <ScalarProperty Name="GiftCardCode" ColumnName="GiftCardCode" />
                 <ScalarProperty Name="CustomerPhoneNumber" ColumnName="CustomerPhoneNumber" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerSearchDatas">
+            <EntityTypeMapping TypeName="sncModel.CustomerSearchData">
+              <MappingFragment StoreEntitySet="CustomerSearchData">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="LinkedMasterProductName" ColumnName="LinkedMasterProductName" />
+                <ScalarProperty Name="LinkedMasterProductIds" ColumnName="LinkedMasterProductIds" />
+                <ScalarProperty Name="ResultCount" ColumnName="ResultCount" />
+                <ScalarProperty Name="SearchKeyword" ColumnName="SearchKeyword" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

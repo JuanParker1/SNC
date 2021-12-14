@@ -14,7 +14,7 @@ namespace ShopNow.ViewModels
         public List<ListItem> ListWithLinkedKeywords { get; set; }
         public class ListItem
         {
-            public int Id { get; set; }
+            public long Id { get; set; }
             public DateTime? Date { get; set; }
             public string Key { get; set; }
             public int? Count { get; set; }
