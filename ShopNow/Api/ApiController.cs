@@ -5603,6 +5603,15 @@ namespace ShopNow.Controllers
             return Json(new { list = list }, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult RemoveCustomerSearchHistory(int id)
+        {
+            var search = db.CustomerSearchHistories.FirstOrDefault(i => i.Id == id);
+            search.Status = 2;
+            db.Entry(search).State = EntityState.Modified;
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult GetAutoCompleteSearchResult(int customerid,double latitude, double longitude, string keyword)
         {
             var list = db.GetAutoCompleteSearch(longitude, latitude, keyword, customerid);

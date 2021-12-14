@@ -57,6 +57,10 @@
                                         <input type="hidden" name="CategoryName" id="CategoryName" />
                                     </div>
                                     <div class="col-md-3">
+                                        <label class="col-form-label" for="GoogleTaxonomyCode"><strong class="text-secondary">Google Taxonomy Code</strong></label>
+                                        <input id="GoogleTaxonomyCode" type="text" class="form-control" name="GoogleTaxonomyCode" readonly />
+                                    </div>
+                                    <div class="col-md-3">
                                         <label class="col-form-label" for="Price"><strong class="text-secondary">Menu Price</strong></label>
                                         <input id="MenuPrice" type="number" class="form-control" name="MenuPrice" step="any" min="0" />
                                     </div>
@@ -69,17 +73,11 @@
                                         <input id="Qty" type="number" class="form-control" name="Qty" min="0" />
                                     </div>
                                     <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label class="control-label" for="Percentage"><strong class="text-secondary">Percentage</strong></label>
-                                            <input id="Percentage" type="number" class="form-control" name="Percentage" readonly />
-                                        </div>
+                                        <label class="col-form-label" for="Percentage"><strong class="text-secondary">Percentage</strong></label>
+                                        <input id="Percentage" type="number" class="form-control" name="Percentage" readonly />
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="col-form-label" for="GoogleTaxonomyCode"><strong class="text-secondary">Google Taxonomy Code</strong></label>
-                                        <input id="GoogleTaxonomyCode" type="text" class="form-control" name="GoogleTaxonomyCode" readonly />
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="control-label" for="PackingType"><strong class="text-secondary">Packing Type</strong></label>
+                                        <label class="col-form-label" for="PackingType"><strong class="text-secondary">Packing Type</strong></label>
                                         <div class="form-check-inline ml-3">
                                             <label class="form-check-label">
                                                 <input type="radio" class="form-check-input" name="PackingType" value="0" checked>Item Qty
@@ -93,9 +91,9 @@
                                         <input type="number" class="form-control" name="PackingCharge" id="PackingCharge" />
                                     </div>
                                     <div class="col-md-3 d-flex mt-4 form-group">
-                                        <div class="mx-3 mt-2">
+                                        <div class="mt-2">
                                             <input type="checkbox" id="IsPreorder" name="IsPreorder" value="true">
-                                            <label class="font-weight-bold text-secondary col-form-label control-label" for="IsPreorder"> Is PreOrder</label><br>
+                                            <label class="font-weight-bold text-secondary col-form-label col-form-label" for="IsPreorder"> Is PreOrder</label><br>
                                         </div>
                                         <div class="ml-3 mt-2">
                                             <select name="PreorderHour" id="PreorderHour" class="form-control d-none">
@@ -118,15 +116,15 @@
                                         <input id="ShortDescription" type="text" class="form-control" name="ShortDescription" min="0" readonly />
                                     </div>
                                     <div class="col-md-12 form-group">
-                                        <label class="control-label"><strong class="text-secondary">Long Description</strong></label>
-                                        <div class="form-control" id="LongDescription"></div>
+                                        <label class="col-form-label"><strong class="text-secondary">Long Description</strong></label>
+                                        <div id="LongDescription"></div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="row">
                                     <div class="col-md-4 form-group">
-                                        <label class="control-label text-secondary font-weight-bold ml-2">Electronic Image1</label>
+                                        <label class="col-form-label text-secondary font-weight-bold">Electronic Image1</label>
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <img class="img-container" id="img-ElectronicLargeImage1" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
@@ -135,7 +133,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 form-group">
-                                        <label class="control-label text-secondary font-weight-bold ml-2">Electronic Image2</label>
+                                        <label class="col-form-label text-secondary font-weight-bold">Electronic Image2</label>
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <img class="img-container" id="img-ElectronicLargeImage2" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
@@ -144,7 +142,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 form-group">
-                                        <label class="control-label text-secondary font-weight-bold ml-2">Electronic Image3</label>
+                                        <label class="col-form-label text-secondary font-weight-bold">Electronic Image3</label>
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <img class="img-container" id="img-ElectronicLargeImage3" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
@@ -153,7 +151,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 form-group">
-                                        <label class="control-label text-secondary font-weight-bold ml-2">Electronic Image4</label>
+                                        <label class="col-form-label text-secondary font-weight-bold">Electronic Image4</label>
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <img class="img-container" id="img-ElectronicLargeImage4" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
@@ -162,7 +160,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4 form-group">
-                                        <label class="control-label text-secondary font-weight-bold ml-2">Electronic Image5</label>
+                                        <label class="col-form-label text-secondary font-weight-bold">Electronic Image5</label>
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <img class="img-container" id="img-ElectronicLargeImage5" src="/Images/No Photo.png" onerror="this.src='/Images/No Photo.png'" style="width:120px;height:120px;" />
@@ -265,14 +263,18 @@
                     dataType: 'json'
                 }
             }).on('select2:select', function (e) {
+                $('#LongDescription').text("");
+                $('select[name="CategoryId"]').find('option').remove();
                 $('input[name="MasterProductName"]').val(e.params.data.text);
                 $('input[name="MasterProductId"]').val(e.params.data.MasterId);
                 $('input[name="Name"]').val(e.params.data.text);
                 $('#BrandId').val(e.params.data.BrandId);
                 $('#BrandName').val(e.params.data.BrandName);
                 $('#ASIN').val(e.params.data.ASIN);
-                $('#CategoryId').val(e.params.data.CategoryId);
-                $('#CategoryName').val(e.params.data.CategoryName);
+                $('select[name="CategoryId"]').append('<option value=' + e.params.data.CategoryId + '>' + e.params.data.CategoryName + '</option>')
+                $('input[name="CategoryName"]').val(e.params.data.CategoryName);
+                //$('#CategoryId').val(e.params.data.CategoryId);
+                //$('#CategoryName').val(e.params.data.CategoryName);
                 $('#GoogleTaxonomyCode').val(e.params.data.GoogleTaxonomyCode);
                 $('#img-ElectronicLargeImage1').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath1);
                 $('#img-ElectronicLargeImage2').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath2);
@@ -288,7 +290,7 @@
                 $('#Weight').val(e.params.data.weight);
                 $('#SizeLWH').val(e.params.data.SizeLWH);
                 $('#ShortDescription').val(e.params.data.ShortDescription);
-                $('#LongDescription').val(e.params.data.LongDescription);
+                $('#LongDescription').append(e.params.data.LongDescription);
                 $('input[name="MeasurementUnitId"]').val(e.params.data.MeasurementUnitId);
                 $('input[name="MeasurementUnitName"]').val(e.params.data.MeasurementUnitName);
                 $('input[name="PackageId"]').val(e.params.data.PackageId);

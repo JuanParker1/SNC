@@ -322,6 +322,7 @@
                     dataType: 'json'
                 }
             }).on('select2:select', function (e) {
+                $('#LongDescription').text("");
                 $('select[name="CategoryId"]').find('option').remove();
                 $('select[name="SubCategoryId"]').find('option').remove();
                 $('select[name="NextSubCategoryId"]').find('option').remove();
