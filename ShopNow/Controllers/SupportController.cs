@@ -78,7 +78,10 @@ namespace ShopNow.Controllers
             model.CustomerPrescriptionCount = db.CustomerPrescriptions.Where(i => i.Status == 0).Count();
             return View(model);
         }
-
+        public ActionResult Signal()
+        {
+            return View();
+        }
         public ActionResult Live()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
