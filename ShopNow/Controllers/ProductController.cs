@@ -286,7 +286,8 @@ namespace ShopNow.Controllers
                 Name = i.p.m.Name,
                 Percentage = i.p.p.Percentage,
                 ShopId = i.p.p.ShopId,
-                ShopName = i.p.p.ShopName
+                ShopName = i.p.p.ShopName,
+                IsOnline = i.p.p.IsOnline
             }).ToList();
             return View(model);
         }

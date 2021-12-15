@@ -49,5 +49,38 @@ namespace ShopNow.Controllers
             db.SaveChanges();
             return RedirectToAction("List");
         }
+
+        [HttpPost]
+        public ActionResult Edit(int Id, int customerId, string customerPhoneNo, double amount, DateTime expirydate)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            string message = "";
+            CustomerGiftCard customerGiftCard = db.CustomerGiftCards.FirstOrDefault(i=>i.Id == Id);
+            if(customerGiftCard != null)
+            {
+                customerGiftCard.CustomerPhoneNumber = customerPhoneNo;
+                customerGiftCard.CustomerId = customerId;
+                customerGiftCard.Amount = amount;
+                customerGiftCard.ExpiryDate = expirydate;
+                db.Entry(customerGiftCard).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+
+                message = customerPhoneNo + " Updated Successfully";
+            }
+            return Json(new { message = message }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult Delete(int id)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var custGiftCard = db.CustomerGiftCards.FirstOrDefault(i => i.Id == id);
+            if (custGiftCard != null)
+            {
+                custGiftCard.Status = 2;
+                db.Entry(custGiftCard).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
     }
 }
