@@ -1625,6 +1625,7 @@
           <Parameter Name="customerid" Type="int" Mode="In" />
         </Function>
         <Function Name="GetCustomerCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetDashBoardDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="GetDEliveryBoyList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="GetKeyname" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="nvarchar">
           <Parameter Name="key" Type="nvarchar" Mode="In" />
@@ -1674,6 +1675,7 @@
           <Parameter Name="to" Type="date" Mode="In" />
           <Parameter Name="shopcode" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="SqlQueryNotificationStoredProcedure_06dd095c_7e3a_4b48_bb37_c632efa15c5e" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" StoreFunctionName="SqlQueryNotificationStoredProcedure-06dd095c-7e3a-4b48-bb37-c632efa15c5e" />
         <EntityContainer Name="sncModelStoreContainer">
           <EntitySet Name="AccessPolicies" EntityType="Self.AccessPolicies" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AchievementProducts" EntityType="Self.AchievementProducts" Schema="dbo" store:Type="Tables" />
@@ -2620,6 +2622,7 @@
           </AssociationSet>
           <EntitySet Name="CustomerGiftCards" EntityType="sncModel.CustomerGiftCard" />
           <EntitySet Name="CustomerSearchDatas" EntityType="sncModel.CustomerSearchData" />
+          <FunctionImport Name="GetDashBoardDetails" ReturnType="Collection(sncModel.GetDashBoardDetails_Result)" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3658,6 +3661,14 @@
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Status" Type="Int32" Nullable="false" />
         </EntityType>
+        <ComplexType Name="GetDashBoardDetails_Result">
+          <Property Type="Int32" Name="NewOrder" Nullable="true" />
+          <Property Type="Int32" Name="Shopacceptance" Nullable="true" />
+          <Property Type="Int32" Name="orderwithoutdeliveryboy" Nullable="true" />
+          <Property Type="Int32" Name="deliveryaccpetance" Nullable="true" />
+          <Property Type="Int32" Name="shoppickup" Nullable="true" />
+          <Property Type="Int32" Name="customerdelivery" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5348,6 +5359,18 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetDashBoardDetails" FunctionName="sncModel.Store.GetDashBoardDetails">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="sncModel.GetDashBoardDetails_Result">
+                <ScalarProperty Name="NewOrder" ColumnName="NewOrder" />
+                <ScalarProperty Name="Shopacceptance" ColumnName="Shopacceptance" />
+                <ScalarProperty Name="orderwithoutdeliveryboy" ColumnName="orderwithoutdeliveryboy" />
+                <ScalarProperty Name="deliveryaccpetance" ColumnName="deliveryaccpetance" />
+                <ScalarProperty Name="shoppickup" ColumnName="shoppickup" />
+                <ScalarProperty Name="customerdelivery" ColumnName="customerdelivery" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
