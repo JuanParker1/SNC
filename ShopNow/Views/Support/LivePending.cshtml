@@ -561,6 +561,537 @@
         </div>
     </div>*@
 
+
+<div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h4 class="mt-1 text-success" style="letter-spacing:1px">Live Order Pending</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                    <a style="text-decoration:none;" href="~/Cart/PendingList">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <div class="icon-big">
+                                        <i class="nc-icon nc-shop text-warning"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="numbers">
+                                        <p class="card-title display-4 font-weight-bold" id="ShopAcceptanceCount"></p>
+                                    </div>
+                                </div>
+                                <p class="col text-dark mb-0">Shop Acceptance</p>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="card-footer">
+                        <hr class="m-1" />
+                        <div class="stats">
+                            <i class="fa fa-clock-o"></i>
+                            Delayed 5 minutes
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                    <a style="text-decoration:none;" href="~/Cart/DeliveryAgentAssignedList">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <div class="icon-big">
+                                        <i class="nc-icon nc-diamond text-success"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="numbers">
+                                        <p class="card-title display-4 font-weight-bold" id="DeliveryAcceptanceCount"></p>
+                                    </div>
+                                </div>
+                                <p class="col text-dark mb-0">Delivery Acceptance</p>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="card-footer">
+                        <hr class="m-1" />
+                        <div class="stats">
+                            <i class="fa fa-clock-o"></i>
+                            Delayed 5 minutes
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                    <a style="text-decoration:none;" href="~/Cart/WaitingForPickupList">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <div class="icon-big">
+                                        <i class="nc-icon nc-bag-16 text-danger"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="numbers">
+                                        <p class="card-title display-4 font-weight-bold" id="ShopPickupCount"></p>
+                                    </div>
+                                </div>
+                                <p class="col text-dark mb-0">Shop Pickup</p>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="card-footer">
+                        <hr class="m-1" />
+                        <div class="stats">
+                            <i class="fa fa-clock-o"></i>
+                            Delayed 15 minutes
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                    <a style="text-decoration:none;" href="~/Cart/OnTheWayList">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <div class="icon-big">
+                                        <i class="nc-icon nc-delivery-fast text-primary"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="numbers">
+                                        <p class="card-title display-4 font-weight-bold" id="CustomerDeliveryCount"></p>
+                                    </div>
+                                </div>
+                                <p class="col text-dark mb-0">Customer Delivery</p>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="card-footer">
+                        <hr class="m-1" />
+                        <div class="stats">
+                            <i class="fa fa-clock-o"></i>
+                            Delayed 15 minutes
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                    <a style="text-decoration:none;" href="~/Support/LiveDeliveryboyAssignment">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-2 col-md-2">
+                                    <div class="icon-big">
+                                        <i class="nc-icon nc-user-run text-warning"></i>
+                                    </div>
+                                </div>
+                                <div class="col-10 col-md-10">
+                                    <div class="numbers">
+                                        <p class="card-title display-4 font-weight-bold" id="OrderswithoutDeliveryboyCount"></p>
+                                    </div>
+                                </div>
+                                <p class="col text-dark mb-0">Orders without Delivery Boy</p>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="card-footer">
+                        <hr class="m-1" />
+                        <div class="stats">
+                            <i class="fa fa-clock-o"></i>
+                            Live - <span class="font-weight-bold text-danger" id="DeliveryBoyLiveCount"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                    <a style="text-decoration:none;" href="~/Customer/List">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <div class="icon-big">
+                                        <i class="nc-icon nc-single-02 text-success"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="numbers">
+                                        <p class="card-title display-4 font-weight-bold">0</p>
+                                    </div>
+                                </div>
+                                <p class="col text-dark mb-0">Customers</p>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="card-footer">
+                        <hr class="m-1" />
+                        <div class="stats">
+                            <i class="fa fa-clock-o"></i>
+                            Live
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                    <a style="text-decoration:none;" href="~/Shop/List">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <div class="icon-big">
+                                        <i class="nc-icon nc-shop text-danger"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="numbers">
+                                        <p class="card-title display-4 font-weight-bold">0</p>
+                                    </div>
+                                </div>
+                                <p class="col text-dark mb-0">Shops</p>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="card-footer">
+                        <hr class="m-1" />
+                        <div class="stats">
+                            <i class="fa fa-clock-o"></i>
+                            Live
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                    <a style="text-decoration:none;" href="~/Cart/Pending">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <div class="icon-big">
+                                        <i class="nc-icon nc-app text-primary"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="numbers">
+                                        <p class="card-title display-4 font-weight-bold" id="OrderCount"></p>
+                                    </div>
+                                </div>
+                                <p class="col text-dark mb-0">Orders</p>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="card-footer">
+                        <hr class="m-1" />
+                        <div class="stats">
+                            <i class="fa fa-clock-o"></i>
+                            Live
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                    <a style="text-decoration:none;" href="~/Refund/Pending">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <div class="icon-big">
+                                        <i class="nc-icon nc-credit-card text-warning"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="numbers">
+                                        <p class="card-title display-4 font-weight-bold" id="RefundCount"></p>
+                                    </div>
+                                </div>
+                                <p class="col text-dark mb-0">Refunds</p>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="card-footer">
+                        <hr class="m-1" />
+                        <div class="stats">
+                            <i class="fa fa-clock-o"></i>
+                            Live
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                    <a style="text-decoration:none;" href="~/Shop/CreditList">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <div class="icon-big">
+                                        <i class="nc-icon nc-money-coins text-success"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="numbers">
+                                        <p class="card-title display-4 font-weight-bold" id="ShopLowCreditCount"></p>
+                                    </div>
+                                </div>
+                                <p class="col text-dark mb-0">Low Shop Credits</p>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="card-footer">
+                        <hr class="m-1" />
+                        <div class="stats">
+                            <i class="fa fa-clock-o"></i>
+                            Live
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                    <a style="text-decoration:none;" href="~/CustomerPrescription/List">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <div class="icon-big">
+                                        <i class="nc-icon nc-paper text-danger"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="numbers">
+                                        <p class="card-title display-4 font-weight-bold" id="CustomerPrescriptionCount"></p>
+                                    </div>
+                                </div>
+                                <p class="col text-dark mb-0"> Prescription</p>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="card-footer">
+                        <hr class="m-1" />
+                        <div class="stats">
+                            <i class="fa fa-clock-o"></i>
+                            Live
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h4 class="mt-1 text-success" style="letter-spacing:1px">Error</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                    <a style="text-decoration:none;" href="~/Support/UnMappedList">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <div class="icon-big">
+                                        <i class="nc-icon nc-simple-remove text-warning"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="numbers">
+                                        <p class="card-title display-4 font-weight-bold" id="UnMappedCount"></p>
+                                    </div>
+                                </div>
+                                <p class="col text-dark mb-0">UnMapped List</p>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <hr class="m-1" />
+                            <div class="stats">
+                                <i class="fa fa-clock-o"></i>
+                                Live
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                    <a style="text-decoration:none;" href="~/Support/OrderMissed">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <div class="icon-big">
+                                        <i class="nc-icon nc-zoom-split text-success"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="numbers">
+                                        <p class="card-title display-4 font-weight-bold" id="OrderMissedCount"></p>
+                                    </div>
+                                </div>
+                                <p class="col text-dark mb-0">Order Missed List</p>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <hr class="m-1" />
+                            <div class="stats">
+                                <i class="fa fa-clock-o"></i>
+                                Live
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                    <a style="text-decoration:none;" href="~/Support/ProductsUnMappedList">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <div class="icon-big">
+                                        <i class="nc-icon nc-simple-remove text-warning"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="numbers">
+                                        <p class="card-title display-4 font-weight-bold" id="ProductUnMappedCount"></p>
+                                    </div>
+                                </div>
+                                <p class="col text-dark mb-0">Products UnMapped List</p>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <hr class="m-1" />
+                            <div class="stats">
+                                <i class="fa fa-clock-o"></i>
+                                Live
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h4 class="mt-1 text-success" style="letter-spacing:1px">Verifications</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                    <a style="text-decoration:none;" href="~/Customer/AadharPending">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <div class="icon-big">
+                                        <i class="nc-icon nc-touch-id text-warning"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="numbers">
+                                        <p class="card-title display-4 font-weight-bold" id="CustomerAadhaarVerifyCount"></p>
+                                    </div>
+                                </div>
+                                <p class="col text-dark mb-0">Customer Aadhaar</p>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <hr class="m-1" />
+                            <div class="stats">
+                                <i class="fa fa-calendar-o"></i>
+                                Verify Aadhar
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                    <a style="text-decoration:none;" href="~/Shop/InActiveList">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <div class="icon-big">
+                                        <i class="nc-icon nc-spaceship text-success"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="numbers">
+                                        <p class="card-title display-4 font-weight-bold" id="ShopOnBoardingVerifyCount"></p>
+                                    </div>
+                                </div>
+                                <p class="col text-dark mb-0">Shop Onboarding</p>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <hr class="m-1" />
+                            <div class="stats">
+                                <i class="fa fa-calendar-o"></i>
+                                Shops to live
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                    <a style="text-decoration:none;" href="~/DeliveryBoy/InactiveList">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <div class="icon-big">
+                                        <i class="nc-icon nc-user-run text-danger"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="numbers">
+                                        <p class="card-title display-4 font-weight-bold" id="DeliveryBoyVerifyCount"></p>
+                                    </div>
+                                </div>
+                                <p class="col text-dark mb-0">Delivery Boy</p>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <hr class="m-1" />
+                            <div class="stats">
+                                <i class="fa fa-calendar-o"></i>
+                                Pending Verification
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                    <a style="text-decoration:none;" href="~/Banner/PendingList">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-5 col-md-4">
+                                    <div class="icon-big">
+                                        <i class="nc-icon nc-album-2 text-primary"></i>
+                                    </div>
+                                </div>
+                                <div class="col-7 col-md-8">
+                                    <div class="numbers">
+                                        <p class="card-title display-4 font-weight-bold" id="BannerPendingCount"></p>
+                                    </div>
+                                </div>
+                                <p class="col text-dark mb-0">Banner</p>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <hr class="m-1" />
+                            <div class="stats">
+                                <i class="fa fa-calendar-o"></i>
+                                Pending Verification
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 @section Scripts
 {
     <script src="/Scripts/jquery.signalR-2.1.1.js"></script>
@@ -607,6 +1138,24 @@
                 type: 'GET',
                 dataType: 'json'
             }).success(function (result) {
+                $("#OrderCount").text(result.NewOrder);
+                $("#OrderswithoutDeliveryboyCount").text(result.orderwithoutdeliveryboy);
+                $("#ShopAcceptanceCount").text(result.Shopaccptence);
+                $("#DeliveryAcceptanceCount").text(result.Deliveryaccept);
+                $("#ShopPickupCount").text(result.shoppickup);
+                $("#CustomerDeliveryCount").text(result.customerdelivery);
+
+                $("#RefundCount").text(result.RefundCount);
+                $("#ShopLowCreditCount").text(result.ShopLowCreditCount);
+                $("#CustomerPrescriptionCount").text(result.CustomerPrescriptionCount);
+                $("#UnMappedCount").text(result.UnMappedCount);
+                $("#OrderMissedCount").text(result.OrderMissedCount);
+                $("#ProductUnMappedCount").text(result.ProductUnMappedCount);
+                $("#CustomerAadhaarVerifyCount").text(result.CustomerAadhaarVerifyCount);
+                $("#ShopOnBoardingVerifyCount").text(result.ShopOnBoardingVerifyCount);
+                $("#DeliveryBoyVerifyCount").text(result.DeliveryBoyVerifyCount);
+                $("#BannerPendingCount").text(result.BannerPendingCount);
+
                 console.log(result);
             }).error(function () {
 

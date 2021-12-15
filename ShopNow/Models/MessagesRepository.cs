@@ -48,12 +48,22 @@ namespace ShopNow.Models
         public Object GetAllMessages()
         {
             int count = 0;
-            var data = new {  NewOrder  = 0, Shopaccptence = "0" ,Deliveryaccept="0",shoppickup="0",customerdelivery="0",orderwithoutdeliveryboy="0"};
+           var datas = new {  NewOrder  = 0, Shopaccptence = 0 ,Deliveryaccept=0,shoppickup=0,customerdelivery=0,orderwithoutdeliveryboy=0,RefundCount=0,
+                ShopLowCreditCount = 0,
+               CustomerPrescriptionCount = 0,
+               UnMappedCount = 0,
+               OrderMissedCount = 0,
+               ProductUnMappedCount = 0,
+               CustomerAadhaarVerifyCount = 0,
+               ShopOnBoardingVerifyCount = 0,
+               DeliveryBoyVerifyCount = 0,
+               BannerPendingCount = 0
+           };
             using (var connection = new SqlConnection(_connString))
             {
                 connection.Open();
                 //using (var command = new SqlCommand(@"SELECT [MessageID], [Message], [EmptyMessage], [Date] FROM [dbo].[Messages]", connection))
-                using (var command = new SqlCommand(@"SELECT top(1) Id FROM [dbo].[Orders] where Status in (2,3,4,5,8)", connection))
+                using (var command = new SqlCommand(@"SELECT  Id FROM [dbo].[Orders] where Status in (2,3,4)", connection))
                 {
                     command.Notification = null;
 
@@ -69,15 +79,26 @@ namespace ShopNow.Models
                         var lst = db.GetDashBoardDetails().ToList();
                         int? NewOrders = lst[0].NewOrder;
                        // data.NewOrder =Convert.ToInt32(lst[0].NewOrder.Value);
-                     //  data =new { NewOrder = lst[0].NewOrder, Shopaccptence = lst[0].Shopacceptance, Deliveryaccept = lst[0].deliveryaccpetance, shoppickup = lst[0].shoppickup, customerdelivery = lst[0].customerdelivery, orderwithoutdeliveryboy = lst[0].orderwithoutdeliveryboy };
-
+                     var  data =new { NewOrder = lst[0].NewOrder, Shopaccptence = lst[0].Shopacceptance, Deliveryaccept = lst[0].deliveryaccpetance, shoppickup = lst[0].shoppickup, customerdelivery = lst[0].customerdelivery, orderwithoutdeliveryboy = lst[0].orderwithoutdeliveryboy ,
+                         RefundCount = 0,
+                         ShopLowCreditCount = 0,
+                         CustomerPrescriptionCount = 0,
+                         UnMappedCount = 0,
+                         OrderMissedCount = 0,
+                         ProductUnMappedCount = 0,
+                         CustomerAadhaarVerifyCount = 0,
+                         ShopOnBoardingVerifyCount = 0,
+                         DeliveryBoyVerifyCount = 0,
+                         BannerPendingCount = 0
+                     };
+                     return data;
 
                     }
                 }
 
             }
-    
-            return data;
+          
+            return datas;
 
         }
 
