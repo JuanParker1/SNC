@@ -14,7 +14,7 @@ namespace ShopNow.Models
     
     public partial class CustomerSearchData
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string SearchKeyword { get; set; }
         public int ResultCount { get; set; }
         public string LinkedMasterProductIds { get; set; }

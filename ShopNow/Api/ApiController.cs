@@ -1240,7 +1240,7 @@ namespace ShopNow.Controllers
                 //accept
                 if (status == 3)
                 {
-                    Helpers.PushNotification.SendbydeviceId("Your order has been accepted by shop.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+                    Helpers.PushNotification.SendbydeviceId($"Your order has been accepted by shop({order.ShopName}).", "ShopNowChat", "a.mp3", fcmToken.ToString());
                 }
 
                 //Refund
@@ -1642,7 +1642,7 @@ namespace ShopNow.Controllers
                 var fcmToken = (from c in db.Customers
                                 where c.Id == order.CustomerId
                                 select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                Helpers.PushNotification.SendbydeviceId("Your order is on the way.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+                Helpers.PushNotification.SendbydeviceId($"Your order is on shop({order.ShopName}) the way.", "ShopNowChat", "a.mp3", fcmToken.ToString());
                 return Json(new { message = "Successfully DelivaryBoy PickUp!" }, JsonRequestBehavior.AllowGet);
             }
             else
@@ -1810,7 +1810,7 @@ namespace ShopNow.Controllers
 
             string fcmtocken = customerDetails.FcmTocken ?? "";
 
-            Helpers.PushNotification.SendbydeviceId("Your order has been delivered.", "ShopNowChat", "a.mp3", fcmtocken.ToString());
+            Helpers.PushNotification.SendbydeviceId($"Your order on shop({order.ShopName}) has been delivered by delivery partner {order.DeliveryBoyName}.", "ShopNowChat", "a.mp3", fcmtocken.ToString());
             return Json(new { message = "Successfully DelivaryBoy Delivered!" }, JsonRequestBehavior.AllowGet);
         }
 
@@ -1854,7 +1854,7 @@ namespace ShopNow.Controllers
                 var fcmTokenCustomer = (from c in db.Customers
                                         where c.Id == order.Id
                                         select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                Helpers.PushNotification.SendbydeviceId("Delivery Boy is Assigned for your Order.", "ShopNowChat", "../../assets/b.mp3", fcmToken.ToString());
+                Helpers.PushNotification.SendbydeviceId($"Delivery Boy ${order.DeliveryBoyName} is Assigned for your Order.", "ShopNowChat", "../../assets/b.mp3", fcmToken.ToString());
 
                 return Json(new { message = "Successfully DelivaryBoy Assign!" }, JsonRequestBehavior.AllowGet);
             }
