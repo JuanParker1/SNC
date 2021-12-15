@@ -58,10 +58,10 @@ namespace ShopNow.ViewModels
 
     public class CustomerGiftCardEditViewModel
     {
-        public int Id { get; set; }
-        public int CustomerId { get; set; }
-        public string CustomerPhoneNumber { get; set; }
-        public double Amount { get; set; }
-        public DateTime ExpiryDate { get; set; }
+        public int EditId { get; set; }
+        public int EditCustomerId { get; set; }
+        public string EditCustomerPhoneNumber { get; set; }
+        public double EditAmount { get; set; }
+        public DateTime EditExpiryDate { get; set; }
     }
 }

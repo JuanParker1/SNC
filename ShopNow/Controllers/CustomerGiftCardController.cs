@@ -51,23 +51,20 @@ namespace ShopNow.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(int Id, int customerId, string customerPhoneNo, double amount, DateTime expirydate)
+        public ActionResult Edit(CustomerGiftCardEditViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-            string message = "";
-            CustomerGiftCard customerGiftCard = db.CustomerGiftCards.FirstOrDefault(i=>i.Id == Id);
+            var customerGiftCard = db.CustomerGiftCards.FirstOrDefault(i=>i.Id == model.EditId);
             if(customerGiftCard != null)
             {
-                customerGiftCard.CustomerPhoneNumber = customerPhoneNo;
-                customerGiftCard.CustomerId = customerId;
-                customerGiftCard.Amount = amount;
-                customerGiftCard.ExpiryDate = expirydate;
+                customerGiftCard.CustomerPhoneNumber = model.EditCustomerPhoneNumber;
+                customerGiftCard.CustomerId = model.EditCustomerId;
+                customerGiftCard.Amount = model.EditAmount;
+                customerGiftCard.ExpiryDate = model.EditExpiryDate;
                 db.Entry(customerGiftCard).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-
-                message = customerPhoneNo + " Updated Successfully";
             }
-            return Json(new { message = message }, JsonRequestBehavior.AllowGet);
+            return RedirectToAction("List");
         }
 
         public JsonResult Delete(int id)
