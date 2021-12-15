@@ -306,7 +306,8 @@ namespace ShopNow.Controllers
                 Name = i.m.Name,
                 Percentage = i.p.Percentage,
                 ShopId = i.p.ShopId,
-                ShopName = i.p.ShopName
+                ShopName = i.p.ShopName,
+                IsOnline = i.p.IsOnline
             }).ToList();
             return View(model);
         }
@@ -556,7 +557,8 @@ namespace ShopNow.Controllers
                 Name = i.m.Name,
                 Percentage = i.p.Percentage,
                 ShopId = i.p.ShopId,
-                ShopName = i.p.ShopName
+                ShopName = i.p.ShopName,
+                IsOnline = i.p.IsOnline
             }).ToList();
             return View(model);
         }
@@ -906,7 +908,8 @@ namespace ShopNow.Controllers
                 Name = i.m.Name,
                 Percentage = i.p.Percentage,
                 ShopId = i.p.ShopId,
-                ShopName = i.p.ShopName
+                ShopName = i.p.ShopName,
+                IsOnline = i.p.IsOnline
             }).ToList();
             return View(model);
         }

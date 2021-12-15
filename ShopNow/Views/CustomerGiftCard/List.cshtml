@@ -68,22 +68,21 @@
         <div class="modal-content">
             <div class="modal-body">
                 <form method="post" action="/CustomerGiftCard/Edit">
-                    <h5>Add Gift Card</h5>
-                    <div class="form-group">
+                    <h5 class="modal-title" id="editModalLabel">Update Gift Card</h5>
+                    <div class="form-group mt-1">
                         <label>Select Customer</label>
-                        <input type="hidden" name="CustomerGiftCardId" id="CustomerGiftCardId" class="form-control" />
-                        <select id="editcustomer" class="form-control" name="CustomerId" required></select>
-                        <input type="hidden" name="CustomerPhoneNumber" id="CustomerPhoneNumber" />
-                        <input type="hidden" id="editCustomerName" name="CustomerName" />
+                        <select id="EditCustomerId" class="form-control" name="EditCustomerId" required></select>
+                        <input type="hidden" name="EditCustomerPhoneNumber" id="EditCustomerPhoneNumber" />
+                        <input type="hidden" name="EditId" id="EditId" class="form-control" />
                         <div id="CustomerName"></div>
                     </div>
                     <div class="form-group">
                         <label>Amount</label>
-                        <input class="form-control" type="number" name="Amount" id="editAmount" required />
+                        <input class="form-control" type="number" name="EditAmount" id="EditAmount" required />
                     </div>
                     <div class="form-group">
                         <label>Expiry date</label>
-                        <input class="form-control" type="date" name="ExpiryDate" id="editExpiryDate" required />
+                        <input class="form-control" type="date" name="EditExpiryDate" id="EditExpiryDate" required />
                     </div>
                     <div class="text-right">
                         <button type="submit" class="btn btn-sm btn-success Edit mr-3">Submit</button>
@@ -119,7 +118,7 @@
                 $('input[name="CustomerPhoneNumber"]').val(e.params.data.phoneNumber);
             });
 
-            $('#editcustomer').select2({
+            $('#EditCustomerId').select2({
                 placeholder: "Select Customer",
                 width: '100%',
                 ajax: {
@@ -128,48 +127,45 @@
                     dataType: 'json'
                 }
             }).on('select2:select', function (e) {
-                $('input[name="CustomerPhoneNumber"]').val(e.params.data.phoneNumber);
+                $('input[name="EditCustomerPhoneNumber"]').val(e.params.data.phoneNumber);
             });
 
             $(".edit-prompt").click(function () {
-                var Id = $(this).attr('data-id');
+                var id = $(this).attr('data-id');
                 var customerId = $(this).attr('data-customerId');
                 var customerPhNo = $(this).attr('data-customerPhonno');
-                var expirydate = $(this).attr('data-Expirydate');
                 var amount = $(this).attr('data-amount');
-                $('#CustomerGiftCardId').val(Id);
-                $('#editAmount').val(amount);
-                $('#editcustomer').append($("<option></option>").attr("value", customerId).text(customerPhNo));
-                $("#editExpiryDate").val(expirydate);
+                var expirydate = $(this).attr('data-Expirydate');
+                $("#EditId").val(id);
+                $("#EditAmount").val(amount);
+                $("#EditCustomerId").append($("<option></option>").attr("value", customerId).text(customerPhNo));
+                $("#EditCustomerPhoneNumber").val(customerPhNo);
+                $("#EditExpiryDate").val(expirydate);
             });
 
-            $(".Edit").click(function () {
-                var id = $("#CustomerGiftCardId").val();
-                var customerid = $("#editcustomer").val();
-                var customerphoneno = $("#CustomerPhoneNumber").val();
-                var Amount = $("#editAmount").val();
-                var expiryDate = $("#editExpiryDate");
-                if (customerphoneno == null || customerphoneno == "") {
-                    swal("CustomerName is empty.", "Please Select CustomerPhoneNumber and CustomerName", "warning");
-                }
-                else if (customerphoneno != null || customerphoneno != "") {
-                    $.getJSON("/CustomerGiftCard/Edit", { Id = id, customerId = customerid, customerPhoneNo =customerphoneno, amount = Amount, expirydate = expiryDate }, function (data) {
-                        if (data.message != null || data.message != "") {
-                            swal({
-                                title: data.message,
-                                text: "",
-                                type: "success"
-                            }, function () {
-                                window.location.reload();
-                            });
-                        }
-                    });
-                }             
-            });
-
-            $("#modal-edit-gidftcard").on("hidden.bs.modal", function () {
-                window.location.reload();
-            });
+            //$(".Edit").click(function () {
+            //    var id = $("#EditId").val();
+            //    var customerid = $("#EditCustomerId").val();
+            //    var customerphoneno = $("#EditCustomerPhoneNumber").val();
+            //    var Amount = $("#EditAmount").val();
+            //    var expiryDate = $("#EditExpiryDate");
+            //    if (customerphoneno == null || customerphoneno == "") {
+            //        swal("CustomerName is empty.", "Please Select CustomerPhoneNumber and CustomerName", "warning");
+            //    }
+            //    else if (customerphoneno != null || customerphoneno != "") {
+            //        $.getJSON("/CustomerGiftCard/Edit", { Id: id, customerId: customerid, customerPhoneNo: customerphoneno, amount: Amount, expirydate : expiryDate }, function (data) {
+            //            if (data.message != null || data.message != "") {
+            //                swal({
+            //                    title: data.message,
+            //                    text: "",
+            //                    type: "success"
+            //                }, function () {
+            //                    window.location.reload();
+            //                });
+            //            }
+            //        });
+            //    }             
+            //});
 
             $(".btnDelete").click(function () {
                 var Id = $(this).attr('data-id');
