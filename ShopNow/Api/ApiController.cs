@@ -3176,6 +3176,8 @@ namespace ShopNow.Controllers
         {
             var customer = db.Customers.Where(i => i.Id == customerId && i.Status == 0).FirstOrDefault();
             CustomerProfileViewModel model = _mapper.Map<Models.Customer, CustomerProfileViewModel>(customer);
+            model.ImagePath = model.ImagePath.Contains("https://s3.ap-south-1.amazonaws.com/") ? model.ImagePath : "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + model.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
+            model.ImageAadharPath = model.ImageAadharPath.Contains("https://s3.ap-south-1.amazonaws.com/") ? model.ImageAadharPath : "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + model.ImageAadharPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
