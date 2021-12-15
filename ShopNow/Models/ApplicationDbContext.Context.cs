@@ -254,5 +254,10 @@ namespace ShopNow.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("GetAutoCompleteSearch", longitudeParameter, latitudeParameter, strParameter, customeridParameter);
         }
+    
+        public virtual ObjectResult<GetDashBoardDetails_Result> GetDashBoardDetails()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetDashBoardDetails_Result>("GetDashBoardDetails");
+        }
     }
 }
