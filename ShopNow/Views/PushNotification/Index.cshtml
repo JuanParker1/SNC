@@ -3,13 +3,9 @@
 @{
     ViewBag.Title = "Push Notification";
 }
-
 <title>ShopNow | @ViewBag.Title</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-
-
-
 <div class="container-fluid">
     <div class="row mt-3 mx-auto">
         <div class="offset-md-1 col-md-6">
@@ -18,14 +14,27 @@
                     <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
                     <form action="/PushNotification/SendBulk" method="post">
                         <div class="form-group">
-                            <label class="col-form-label">Select District</label>
-                            <select id="select-district" class="form-control" name="District" multiple required></select>
+                            <label class="col-form-label">Choose Type</label><br />
+                            <div class="form-check-inline ml-3">
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" name="Type" value="1" /> All Customer
+                                </label>
+                            </div>
+                            <div class="form-check-inline">
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" name="Type" value="2" /> District wise
+                                </label>
+                            </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group divDistrict">
+                            <label class="col-form-label">Select District</label>
+                            <select id="select-district" class="form-control" name="District" multiple></select>
+                        </div>
+                        <div class="form-group divClass">
                             <label class="col-form-label">Title</label>
                             <input type="text" name="Title" class="form-control" placeholder="Enter Title" required />
                         </div>
-                        <div class="form-group">
+                        <div class="form-group divClass">
                             <label class="col-form-label">Message</label>
                             <textarea rows="5" name="Message" class="form-control" placeholder="Enter the notification message here.." spellcheck="true" required></textarea>
                         </div>
@@ -58,6 +67,16 @@
     <!--Select2 End-->
     <script>
         $(document).ready(function () {
+
+            $('[name="Type"]').on('change', function () {
+                let type = parseInt($(this).val());
+                if (type == 1) {
+                    $('.divDistrict').addClass("d-none");
+                }
+                if (type == 2) {
+                    $('.divDistrict').removeClass("d-none");
+                }
+            });
 
             $('#select-district').select2({
                 placeholder: "Search District",

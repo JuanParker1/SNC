@@ -125,12 +125,13 @@ namespace ShopNow.ViewModels
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {
-             public long Id { get; set; }
+            public long Id { get; set; }
             public string Name { get; set; }
             public string CategoryName { get; set; }
             public int ShopId { get; set; }
             public string ShopName { get; set; }
             public double Percentage { get; set; }
+            public bool IsOnline { get; set; }
         }
     }
 
@@ -138,7 +139,6 @@ namespace ShopNow.ViewModels
     {
         public int ShopId { get; set; }
         public string ShopName { get; set; }
-
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {             
@@ -148,6 +148,7 @@ namespace ShopNow.ViewModels
             public int ShopId { get; set; }
             public string ShopName { get; set; }
             public double Percentage { get; set; }
+            public bool IsOnline { get; set; }
         }
     }
 
@@ -164,6 +165,7 @@ namespace ShopNow.ViewModels
             public int ShopId { get; set; }
             public string ShopName { get; set; }
             public double Percentage { get; set; }
+            public bool IsOnline { get; set; }
         }
     }
 
@@ -180,6 +182,7 @@ namespace ShopNow.ViewModels
             public int ShopId { get; set; }
             public string ShopName { get; set; }
             public double Percentage { get; set; }
+            public bool IsOnline { get; set; }
         }
     }
        

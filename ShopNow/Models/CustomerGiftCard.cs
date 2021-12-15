@@ -12,14 +12,16 @@ namespace ShopNow.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class CustomerSearchData
+    public partial class CustomerGiftCard
     {
-        public long Id { get; set; }
-        public string SearchKeyword { get; set; }
-        public int ResultCount { get; set; }
-        public string LinkedMasterProductIds { get; set; }
-        public string LinkedMasterProductName { get; set; }
-        public System.DateTime DateEncoded { get; set; }
+        public int Id { get; set; }
+        public int CustomerId { get; set; }
+        public string CustomerPhoneNumber { get; set; }
+        public string GiftCardCode { get; set; }
+        public double Amount { get; set; }
+        public System.DateTime ExpiryDate { get; set; }
         public int Status { get; set; }
+        public System.DateTime DateEncoded { get; set; }
+        public string CreatedBy { get; set; }
     }
 }
