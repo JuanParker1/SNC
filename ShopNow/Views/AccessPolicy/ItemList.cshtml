@@ -9,7 +9,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6">
-            <h5 class="text-success" style="letter-spacing:1px">ACCESS POLICY LIST</h5>
+            <h4 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h4>
         </div>
         <div class="col-md-6 text-right">
             <a href="~/AccessPolicy/Create" target="_self"><span class="fa fa-plus"></span> New Access Policy</a>
@@ -18,12 +18,12 @@
     <div class="card shadow">
         <div class="card-body">
             @Html.Grid(Model).Columns(columns =>
-            {
-               columns.Add(p => p.PageName).Titled("Name").Filterable(true).SetWidth(20);
-               columns.Add().Titled("Shop Name").RenderValueAs(p => p.ShopName != null ? p.ShopName : "N/A").Filterable(true).SetWidth(10);
-               columns.Add().Titled("Staff Name").RenderValueAs(p => p.StaffName != null ? p.StaffName : "N/A").Filterable(true).SetWidth(10);
-                 columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(10)
-                           .RenderValueAs(o => @<div>
+       {
+       columns.Add(p => p.PageName).Titled("Name").Filterable(true).SetWidth(20);
+       //columns.Add().Titled("Shop Name").RenderValueAs(p => p.ShopName != null ? p.ShopName : "N/A").Filterable(true).SetWidth(10);
+       columns.Add().Titled("Staff Name").RenderValueAs(p => p.StaffName != null ? p.StaffName : "N/A").Filterable(true).SetWidth(10);
+       columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(10)
+                 .RenderValueAs(o => @<div>
                             <a href="/AccessPolicy/Edit?Id=@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
                             <a href="javascript:void(0)" data-id="@o.Id" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
                         </div>);

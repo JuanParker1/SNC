@@ -1675,7 +1675,6 @@
           <Parameter Name="to" Type="date" Mode="In" />
           <Parameter Name="shopcode" Type="nvarchar" Mode="In" />
         </Function>
-        <Function Name="SqlQueryNotificationStoredProcedure_06dd095c_7e3a_4b48_bb37_c632efa15c5e" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" StoreFunctionName="SqlQueryNotificationStoredProcedure-06dd095c-7e3a-4b48-bb37-c632efa15c5e" />
         <EntityContainer Name="sncModelStoreContainer">
           <EntitySet Name="AccessPolicies" EntityType="Self.AccessPolicies" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AchievementProducts" EntityType="Self.AchievementProducts" Schema="dbo" store:Type="Tables" />
@@ -2524,7 +2523,7 @@
           <Parameter Name="key" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetCustomerCount" ReturnType="Collection(Int32)" />
-          <FunctionImport Name="GetDEliveryBoyList" ReturnType="Collection(sncModel.GetDEliveryBoyList_Result)" />
+          <FunctionImport Name="GetDEliveryBoyList" />
           <FunctionImport Name="GetProductListCount" ReturnType="Collection(Int32)">
             <Parameter Name="Longitude" Mode="In" Type="Double" />
             <Parameter Name="Latitude" Mode="In" Type="Double" />
@@ -2608,12 +2607,6 @@
           <EntitySet Name="CustomerReviewReplies" EntityType="sncModel.CustomerReviewReply" />
           <EntitySet Name="Payments" EntityType="sncModel.Payment" />
           <EntitySet Name="CustomerSearchHistories" EntityType="sncModel.CustomerSearchHistory" />
-          <FunctionImport Name="GetAutoCompleteSearch" ReturnType="Collection(String)">
-            <Parameter Name="Longitude" Mode="In" Type="Double" />
-            <Parameter Name="Latitude" Mode="In" Type="Double" />
-            <Parameter Name="str" Mode="In" Type="String" />
-            <Parameter Name="customerid" Mode="In" Type="Int32" />
-          </FunctionImport>
           <EntitySet Name="CallRecords" EntityType="sncModel.CallRecord" />
           <EntitySet Name="Orders" EntityType="sncModel.Order" />
           <AssociationSet Name="FK_OrderItems_Orders" Association="sncModel.FK_OrderItems_Orders">
@@ -2622,15 +2615,14 @@
           </AssociationSet>
           <EntitySet Name="CustomerGiftCards" EntityType="sncModel.CustomerGiftCard" />
           <EntitySet Name="CustomerSearchDatas" EntityType="sncModel.CustomerSearchData" />
+          <FunctionImport Name="GetAutoCompleteSearch" ReturnType="Collection(String)">
+            <Parameter Name="Longitude" Mode="In" Type="Double" />
+            <Parameter Name="Latitude" Mode="In" Type="Double" />
+            <Parameter Name="str" Mode="In" Type="String" />
+            <Parameter Name="customerid" Mode="In" Type="Int32" />
+          </FunctionImport>
           <FunctionImport Name="GetDashBoardDetails" ReturnType="Collection(sncModel.GetDashBoardDetails_Result)" />
         </EntityContainer>
-        <ComplexType Name="GetDEliveryBoyList_Result">
-          <Property Type="Int32" Name="Id" Nullable="false" />
-          <Property Type="String" Name="Name" Nullable="true" />
-          <Property Type="Int32" Name="Active" Nullable="false" />
-          <Property Type="String" Name="PhoneNumber" Nullable="true" />
-          <Property Type="String" Name="ImagePath" Nullable="true" />
-        </ComplexType>
         <ComplexType Name="GetShopname_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
           <Property Type="String" Name="Address" Nullable="true" />
@@ -3668,6 +3660,18 @@
           <Property Type="Int32" Name="deliveryaccpetance" Nullable="true" />
           <Property Type="Int32" Name="shoppickup" Nullable="true" />
           <Property Type="Int32" Name="customerdelivery" Nullable="true" />
+          <Property Type="Int32" Name="RefundCount" Nullable="true" />
+          <Property Type="Int32" Name="ShopLowCreditCount" Nullable="true" />
+          <Property Type="Int32" Name="CustomerPrescriptionCount" Nullable="true" />
+          <Property Type="Int32" Name="UnMappedCount" Nullable="true" />
+          <Property Type="Int32" Name="OrderMissedCount" Nullable="true" />
+          <Property Type="Int32" Name="ProductUnMappedCount" Nullable="true" />
+          <Property Type="Int32" Name="CustomerAadhaarVerifyCount" Nullable="true" />
+          <Property Type="Int32" Name="ShopOnBoardingVerifyCount" Nullable="true" />
+          <Property Type="Int32" Name="DeliveryBoyVerifyCount" Nullable="true" />
+          <Property Type="Int32" Name="BannerPendingCount" Nullable="true" />
+          <Property Type="Int32" Name="CustomerCount" Nullable="true" />
+          <Property Type="Int32" Name="ShopCount" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -4331,15 +4335,6 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GetCustomerCount" FunctionName="sncModel.Store.GetCustomerCount" />
           <FunctionImportMapping FunctionImportName="GetDEliveryBoyList" FunctionName="sncModel.Store.GetDEliveryBoyList">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="sncModel.GetDEliveryBoyList_Result">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Active" ColumnName="Active" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
-              </ComplexTypeMapping>
-            </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GetProductListCount" FunctionName="sncModel.Store.GetProductListCount" />
           <FunctionImportMapping FunctionImportName="GetShopCategoryProductCount" FunctionName="sncModel.Store.GetShopCategoryProductCount" />
@@ -5248,7 +5243,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="GetAutoCompleteSearch" FunctionName="sncModel.Store.GetAutoCompleteSearch" />
           <EntitySetMapping Name="CallRecords">
             <EntityTypeMapping TypeName="sncModel.CallRecord">
               <MappingFragment StoreEntitySet="CallRecords">
@@ -5359,6 +5353,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetAutoCompleteSearch" FunctionName="sncModel.Store.GetAutoCompleteSearch" />
           <FunctionImportMapping FunctionImportName="GetDashBoardDetails" FunctionName="sncModel.Store.GetDashBoardDetails">
             <ResultMapping>
               <ComplexTypeMapping TypeName="sncModel.GetDashBoardDetails_Result">
@@ -5368,6 +5363,18 @@
                 <ScalarProperty Name="deliveryaccpetance" ColumnName="deliveryaccpetance" />
                 <ScalarProperty Name="shoppickup" ColumnName="shoppickup" />
                 <ScalarProperty Name="customerdelivery" ColumnName="customerdelivery" />
+                <ScalarProperty Name="RefundCount" ColumnName="RefundCount" />
+                <ScalarProperty Name="ShopLowCreditCount" ColumnName="ShopLowCreditCount" />
+                <ScalarProperty Name="CustomerPrescriptionCount" ColumnName="CustomerPrescriptionCount" />
+                <ScalarProperty Name="UnMappedCount" ColumnName="UnMappedCount" />
+                <ScalarProperty Name="OrderMissedCount" ColumnName="OrderMissedCount" />
+                <ScalarProperty Name="ProductUnMappedCount" ColumnName="ProductUnMappedCount" />
+                <ScalarProperty Name="CustomerAadhaarVerifyCount" ColumnName="CustomerAadhaarVerifyCount" />
+                <ScalarProperty Name="ShopOnBoardingVerifyCount" ColumnName="ShopOnBoardingVerifyCount" />
+                <ScalarProperty Name="DeliveryBoyVerifyCount" ColumnName="DeliveryBoyVerifyCount" />
+                <ScalarProperty Name="BannerPendingCount" ColumnName="BannerPendingCount" />
+                <ScalarProperty Name="CustomerCount" ColumnName="CustomerCount" />
+                <ScalarProperty Name="ShopCount" ColumnName="ShopCount" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

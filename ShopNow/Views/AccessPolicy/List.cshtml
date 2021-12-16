@@ -26,9 +26,9 @@
                 <button type="button" class="btn btn-info" id="btnFilter">Apply Filter</button>
             </div>
 
-            <div class="col-md-3 text-right mt-2">
+            @*<div class="col-md-3 text-right mt-2">
                 <a href="~/AccessPolicy/Manage" target="_blank" class="text-theme"><span class="fa fa-user"></span> Update Staff Access</a>
-            </div>
+            </div>*@
         </div>
       
         <div class="row">
@@ -41,9 +41,9 @@
                                         <th>No.</th>
                                         <th>Module Name</th>
                                         <th>Page Name</th>
-                                        <th class="text-center">Action
-                                            @*Select All
-                                            <input type="checkbox" id="checkAll" class="form-control Access" style="height:calc(0.7em + 0.75rem + 2px)" />*@
+                                        <th class="text-center">Action <br />
+                                            Select All
+                                            <input type="checkbox" id="checkAll" name="CheckAll" class="form-control Access" style="height:calc(0.7em + 0.75rem + 2px)" />
                                         </th>
                                     </tr>
                                 </thead>
@@ -178,26 +178,26 @@
                 }
             });
 
-            //$("#checkAll").click(function () {
-            //    var customerId = $("#CustomerId").val();
-            //    var customerName = $("#CustomerName").val();
-            //    if ($(this).is(":checked")) {
-            //        $('input:checkbox').each(function () {
-            //            $(".Access").prop('checked', true);
-            //            var IsAccess = true;
-            //            $.getJSON("/AccessPolicy/AddSelectAllSession/", { CustomerId: customerId, CustomerName: customerName, IsAccess: IsAccess, }, function (data) {
-            //            });
-            //        });
-            //    }
-            //    else{
-            //        $('input:checkbox').each(function () {
-            //            $(".Access").prop('checked', false);
-            //            var IsAccess = false;
-            //            $.getJSON("/AccessPolicy/RemoveSelectAllSession/", { IsAccess: IsAccess, CustomerId: customerId, CustomerName: customerName }, function (data) {
-            //            });
-            //        });
-            //    }
-            //});
+            $("#checkAll").click(function () {
+                var customerId = $("#CustomerId").val();
+                var customerName = $("#CustomerName").val();
+                if ($(this).is(":checked")) {
+                    $('input:checkbox').each(function () {
+                        $(".Access").prop('checked', true);
+                    });
+                    var IsAccess = true;
+                    $.getJSON("/AccessPolicy/AddSelectAllSession/", { CustomerId: customerId, CustomerName: customerName, IsAccess: IsAccess, }, function (data) {
+                    });
+                }
+                else{
+                    $('input:checkbox').each(function () {
+                        $(".Access").prop('checked', false);
+                    });
+                    var IsAccess = false;
+                    $.getJSON("/AccessPolicy/RemoveSelectAllSession/", { IsAccess: IsAccess, CustomerId: customerId, CustomerName: customerName }, function (data) {
+                    });
+                }
+            });
 
         });
     </script>

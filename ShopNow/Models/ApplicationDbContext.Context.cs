@@ -119,9 +119,9 @@ namespace ShopNow.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("GetCustomerCount");
         }
     
-        public virtual ObjectResult<GetDEliveryBoyList_Result> GetDEliveryBoyList()
+        public virtual int GetDEliveryBoyList()
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetDEliveryBoyList_Result>("GetDEliveryBoyList");
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GetDEliveryBoyList");
         }
     
         public virtual ObjectResult<Nullable<int>> GetProductListCount(Nullable<double> longitude, Nullable<double> latitude, string str)

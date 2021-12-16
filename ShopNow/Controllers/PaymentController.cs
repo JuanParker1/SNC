@@ -233,40 +233,6 @@ namespace ShopNow.Controllers
             return View(model.List);
         }
 
-        //[AccessPolicy(PageCode = "SHNPAYTDR005")]
-        //public ActionResult TodayDeliveryCreditReport(string shopcode = "")
-        //{
-        //    var user = ((Helpers.Sessions.User)Session["USER"]);
-        //    ViewBag.Name = user.Name;
-        //    var model = new DeliveryCreditReportViewModel();
-        //    var date = DateTime.Now;
-        //    if (shopcode != null)
-        //    {
-        //            model.List = db.Payments.Join(db.TopUps, p => p.CustomerCode, t => t.CustomerCode, (p, t) => new { p, t })
-        //                .Join(db.ShopCharges, j => j.p.OrderNo, sc => sc.OrderNo, (j, sc) => new { j, sc })
-        //                .Where(i => i.sc.CartStatus == 6 && i.j.t.CreditType == 1 && i.j.p.ShopCode == shopcode && i.j.p.DateUpdated.Year == date.Year && i.j.p.DateUpdated.Month == date.Month && i.j.p.DateUpdated.Day == date.Day)
-        //                .AsEnumerable().Select(i => new DeliveryCreditReportViewModel.DeliveryCreditReportList
-        //                {
-        //                    OrderNo = i.j.p.OrderNo,
-        //                    CartStatus = i.sc.CartStatus,
-        //                    DeliveryCharge = i.sc.GrossDeliveryCharge
-        //                }).ToList();
-        //    }
-        //    else
-        //    {
-        //            model.List = db.Payments.Join(db.TopUps, p => p.CustomerCode, t => t.CustomerCode, (p, t) => new { p, t })
-        //                .Join(db.ShopCharges, j => j.p.OrderNo, sc => sc.OrderNo, (j, sc) => new { j, sc })
-        //                .Where(i => i.sc.CartStatus == 6 && i.j.t.CreditType == 1 && i.j.p.DateUpdated.Year == date.Year && i.j.p.DateUpdated.Month == date.Month && i.j.p.DateUpdated.Day == date.Day)
-        //                .AsEnumerable().Select(i => new DeliveryCreditReportViewModel.DeliveryCreditReportList
-        //                {
-        //                    OrderNo = i.j.p.OrderNo,
-        //                    CartStatus = i.sc.CartStatus,
-        //                    DeliveryCharge = i.sc.GrossDeliveryCharge
-        //                }).ToList();
-        //    }
-        //    return View(model.List);
-        //}
-
         [AccessPolicy(PageCode = "SNCPYSP186")]
         public ActionResult ShopPayment(ShopPaymentListViewModel model)
         {

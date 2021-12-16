@@ -13,12 +13,23 @@ namespace ShopNow.Models
     
     public partial class GetDashBoardDetails_Result
     {
-        //   public Nullable<int> NewOrder { get; set; }
-        public int NewOrder { get; set; }
-        public int Shopacceptance { get; set; }
-        public int orderwithoutdeliveryboy { get; set; }
-        public int deliveryaccpetance { get; set; }
-        public int shoppickup { get; set; }
-        public int customerdelivery { get; set; }
+        public Nullable<int> NewOrder { get; set; }
+        public Nullable<int> Shopacceptance { get; set; }
+        public Nullable<int> orderwithoutdeliveryboy { get; set; }
+        public Nullable<int> deliveryaccpetance { get; set; }
+        public Nullable<int> shoppickup { get; set; }
+        public Nullable<int> customerdelivery { get; set; }
+        public Nullable<int> RefundCount { get; set; }
+        public Nullable<int> ShopLowCreditCount { get; set; }
+        public Nullable<int> CustomerPrescriptionCount { get; set; }
+        public Nullable<int> UnMappedCount { get; set; }
+        public Nullable<int> OrderMissedCount { get; set; }
+        public Nullable<int> ProductUnMappedCount { get; set; }
+        public Nullable<int> CustomerAadhaarVerifyCount { get; set; }
+        public Nullable<int> ShopOnBoardingVerifyCount { get; set; }
+        public Nullable<int> DeliveryBoyVerifyCount { get; set; }
+        public Nullable<int> BannerPendingCount { get; set; }
+        public Nullable<int> CustomerCount { get; set; }
+        public Nullable<int> ShopCount { get; set; }
     }
 }

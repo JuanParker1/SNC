@@ -58,6 +58,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
+        [AccessPolicy(PageCode = "SNCCPAC298")]
         public ActionResult AddToCart(int id)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -96,6 +97,7 @@ namespace ShopNow.Controllers
         }
 
         [HttpPost]
+        [AccessPolicy(PageCode = "SNCCPAC298")]
         public ActionResult AddToCart(AddToCartViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
