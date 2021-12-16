@@ -5789,6 +5789,7 @@ namespace ShopNow.Controllers
             public string BrandName { get; set; }
             public string CategoryName { get; set; }
             public string ImagePath { get; set; }
+            public string PaymentMode { get; set; }
         }
 
         public JsonResult SaveOrders()
@@ -5847,6 +5848,15 @@ namespace ShopNow.Controllers
                         WaitingRemark = "",
                         WaitingTime = 0,
                         WalletAmount = 0,
+                        CancelledRemark="",
+                        IsCallActive=false,
+                        IsPreorder=false,
+                        OfferAmount=0,
+                        OfferId=0,
+                        PaymentMode = item.FirstOrDefault().PaymentMode,
+                        PaymentModeType = item.FirstOrDefault().PaymentMode=="Online Payment"?1:0,
+                        PreorderDeliveryDateTime=null,
+                        TipsAmount=0
                     };
 
                     db.Orders.Add(order);
