@@ -31,7 +31,7 @@ namespace ShopNow.Controllers
             _mapper = _mapperConfiguration.CreateMapper();
         }
 
-        //[AccessPolicy(PageCode = "SNCCUL101")]
+        [AccessPolicy(PageCode = "SNCCUL101")]
         public ActionResult List()
         {
             if (Session["USER"] == null)
@@ -73,7 +73,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        //[AccessPolicy(PageCode = "SNCCUD103")]
+        [AccessPolicy(PageCode = "SNCCUD103")]
         public ActionResult Details(string id)
         {
             var dId = AdminHelpers.DCodeInt(id);

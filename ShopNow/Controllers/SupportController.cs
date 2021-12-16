@@ -79,6 +79,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
+        [AccessPolicy(PageCode = "SNCSL304")]
         public ActionResult Live()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -157,6 +158,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
+        [AccessPolicy(PageCode = "SNCSUML299")]
         public ActionResult UnMappedList()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -176,6 +178,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
+        [AccessPolicy(PageCode = "SNCSOM300")]
         public ActionResult OrderMissed()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -196,6 +199,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
+        [AccessPolicy(PageCode = "SNCSCOHPU301")]
         public ActionResult COHPaymentUpdate(int orderno)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -231,6 +235,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AccessPolicy(PageCode = "SNCSCOHPU301")]
         public ActionResult COHPaymentUpdate(OrderMissedListViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -293,6 +298,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("OrderMissed");
         }
 
+        [AccessPolicy(PageCode = "SNCSOPU302")]
         public ActionResult OnlinePaymentUpdate(int orderno)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -328,6 +334,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AccessPolicy(PageCode = "SNCSOPU302")]
         public ActionResult OnlinePaymentUpdate(OrderMissedListViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -419,6 +426,7 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        [AccessPolicy(PageCode = "SNCSPUML303")]
         public ActionResult ProductsUnMappedList(ProductUnMappedList model)
         {
             model.ListItems = db.Products.Where(i => i.MappedDate != null && (i.MasterProductId == 0) && i.Status == 0 && i.ShopId != 0 && (model.ShopId != 0 ? i.ShopId == model.ShopId : true))

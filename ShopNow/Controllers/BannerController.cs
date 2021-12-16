@@ -215,6 +215,7 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
+        [AccessPolicy(PageCode = "SNCBC297")]
         public ActionResult Create()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -224,6 +225,7 @@ namespace ShopNow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AccessPolicy(PageCode = "SNCBC297")]
         public ActionResult Create(BannerCreateViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);

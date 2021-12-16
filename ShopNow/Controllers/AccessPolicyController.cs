@@ -75,10 +75,6 @@ namespace ShopNow.Controllers
                     item.Id = ap.Id;
                     item.PageCode = ap.PageCode;
                     item.PageName = ap.PageName;
-                    //item.ShopId = ap.ShopId;
-                    //item.ShopName = ap.ShopName;
-                    item.StaffId = ap.StaffId;
-                    item.StaffName = ap.StaffName;
                     item.CustomerId = ap.CustomerId;
                     item.CustomerName = ap.CustomerName;
                     item.IsAccess = ap.IsAccess;
@@ -117,8 +113,8 @@ namespace ShopNow.Controllers
                     var access = new AccessPolicy();
                     access.PageCode = s.PageCode;
                     access.PageName = s.PageName;
-                    access.StaffId = model.StaffId;
-                    access.StaffName = model.StaffName;
+                    //access.StaffId = model.StaffId;
+                    //access.StaffName = model.StaffName;
                     access.CustomerId = model.CustomerId;
                     access.CustomerName = model.CustomerName;
                     access.isAccess = true;
@@ -144,7 +140,10 @@ namespace ShopNow.Controllers
                                PageName = i.p.Name,
                                IsAccess = i.a.Any() ? i.a.FirstOrDefault().isAccess : false
                            }).OrderBy(i=>i.PageName).ToList();
-
+            Session["AccessList"] = null;
+            if(model.CustomerId != 0) {
+                return RedirectToAction("List", new{customerid=model.CustomerId});
+            }
             return View(model);
         }
 
@@ -401,13 +400,8 @@ namespace ShopNow.Controllers
             var access = _mapper.Map<AccessPolicyCreateEditViewModel, AccessPolicy>(model);
             access.CreatedBy = user.Name;
             access.UpdatedBy = user.Name;
-            var shop = db.Shops.Where(m => m.Id == model.ShopId).FirstOrDefault();
-            var customer = db.Customers.Where(c => c.Id == shop.CustomerId).FirstOrDefault();
-            if (customer != null)
-            {
-                access.CustomerId = customer.Id;
-                access.CustomerName = customer.Name;
-            }
+            access.CustomerId = user.Id;
+            access.CustomerName = user.Name;
             access.isAccess = true;
             access.Status = 0;
             access.DateEncoded = DateTime.Now;
@@ -439,13 +433,8 @@ namespace ShopNow.Controllers
             access.DateUpdated = DateTime.Now;
             access.UpdatedBy = user.Name;
             access.isAccess = true;
-            var shop = db.Shops.Where(s => s.Id == model.ShopId).FirstOrDefault();
-            var customer = db.Customers.Where(c => c.Id == shop.CustomerId).FirstOrDefault();
-            if (customer != null)
-            {
-                access.CustomerId = customer.Id;
-                access.CustomerName = customer.Name;
-            }
+            access.CustomerId = user.Id;
+            access.CustomerName = user.Name;
             access.DateUpdated = DateTime.Now;
             db.Entry(access).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
@@ -574,28 +563,26 @@ namespace ShopNow.Controllers
             {
                 var List = db.Pages.Where(i => i.Status == 0).Select(i => new AccessPolicyViewModel
                 {
-                    Id = i.Id,
                     PageCode = i.Code,
                     PageName = i.Name,
-                    Status = i.Status
+                    Status = i.Status,
+                    CustomerId = CustomerId,
+                    CustomerName = CustomerName,
+                    IsAccess = true
                 }).ToList();
 
-                foreach (var ap in List)
-                {
-                    if (itemList == null)
-                    {
-                        itemList = new List<AccessPolicyViewModel>();
-                    }
-                    AccessPolicyViewModel item = new AccessPolicyViewModel();
-                    item.Id = ap.Id;
-                    item.PageCode = ap.PageCode;
-                    item.PageName = ap.PageName;
-                    item.CustomerId = CustomerId;
-                    item.CustomerName = CustomerName;
-                    item.IsAccess = true;
-                    itemList.Add(item);
-                }
-                Session["AccessList"] = itemList;
+                //foreach (var ap in List)
+                //{
+                //    AccessPolicyViewModel item = new AccessPolicyViewModel();
+                //    //item.Id = ap.Id;
+                //    item.PageCode = ap.PageCode;
+                //    item.PageName = ap.PageName;
+                //    item.CustomerId = CustomerId;
+                //    item.CustomerName = CustomerName;
+                //    item.IsAccess = true;
+                //    itemList.Add(item);
+                //}
+                Session["AccessList"] = List;
             }
             return Json(new { list = itemList }, JsonRequestBehavior.AllowGet);
         }
