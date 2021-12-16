@@ -1,0 +1,197 @@
+﻿@model ShopNow.ViewModels.CustomerGiftCardListViewModel
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Gift Card List";
+}
+<title>ShopNow | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+<div class="container-fluid">
+    <div class="row mt-3 mx-auto">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+                        <a href="#modal-add-gidftcard" data-target="#modal-add-gidftcard" data-toggle="modal" class="btn btn-success">Add Gift Card</a>
+                    </div>
+                    @Html.Grid(Model.ListItems).Columns(columns =>
+                   {
+                   columns.Add(s => s.CustomerPhoneNumber).Titled("Customer Number").Filterable(true).SetWidth(10);
+                   columns.Add(s => s.GiftCardCode).Titled("Gift Card Code").Filterable(true).SetWidth(10);
+                   columns.Add(s => s.Amount).Titled("Amount").Filterable(true).SetWidth(10);
+                   columns.Add(s => s.ExpiryDate).Titled("Expiry Date").Format("{0:dd-MMM-yyyy}").Filterable(true).SetWidth(10);
+                   columns.Add().Encoded(false).Sanitized(false).RenderValueAs(s => "<span class=" + s.StatusTextColor + ">" + s.StatusText + "</span>").Titled("Status").Filterable(true).SetWidth(10);
+                   columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
+                   .RenderValueAs(o => @<div>
+                     <a href="modal-edit-gidftcard" class="text-info edit-prompt mr-5" data-id=@o.Id data-customerId="@o.CustomerId" data-customerPhonno="@o.CustomerPhoneNumber" data-amount="@o.Amount" data-Expirydate=@o.ExpiryDate.ToString("yyyy-MM-dd") data-target="#modal-edit-gidftcard" data-toggle="modal"><i class="fa fa-edit fa-lg"></i></a>
+                     <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+                        </div>);
+                    }).WithPaging(20).Sortable(true)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-add-gidftcard" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form method="post" action="/CustomerGiftCard/Add">
+                    <h5>Add Gift Card</h5>
+                    <div class="form-group">
+                        <label>Select Customer</label>
+                        <select id="select-customer" class="form-control" name="CustomerId" required></select>
+                        <input type="hidden" name="CustomerPhoneNumber" />
+                    </div>
+                    <div class="form-group">
+                        <label>Amount</label>
+                        <input class="form-control" type="number" name="Amount" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Expiry date</label>
+                        <input class="form-control" type="date" name="ExpiryDate" required />
+                    </div>
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-sm btn-success mr-3">Submit</button>
+                        <button class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-edit-gidftcard" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form method="post" action="/CustomerGiftCard/Edit">
+                    <h5 class="modal-title" id="editModalLabel">Update Gift Card</h5>
+                    <div class="form-group mt-1">
+                        <label>Select Customer</label>
+                        <select id="EditCustomerId" class="form-control" name="EditCustomerId" required></select>
+                        <input type="hidden" name="EditCustomerPhoneNumber" id="EditCustomerPhoneNumber" />
+                        <input type="hidden" name="EditId" id="EditId" class="form-control" />
+                        <div id="CustomerName"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Amount</label>
+                        <input class="form-control" type="number" name="EditAmount" id="EditAmount" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Expiry date</label>
+                        <input class="form-control" type="date" name="EditExpiryDate" id="EditExpiryDate" required />
+                    </div>
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-sm btn-success Edit mr-3">Submit</button>
+                        <button class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <!--Select2-->
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <!--Select2 End-->
+    <script>
+        $(document).ready(function () {
+
+            $('#select-customer').select2({
+                placeholder: "Select Customer",
+                width: '100%',
+                ajax: {
+                    url: "/Customer/GetCustomerPhoneNumberSelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="CustomerPhoneNumber"]').val(e.params.data.phoneNumber);
+            });
+
+            $('#EditCustomerId').select2({
+                placeholder: "Select Customer",
+                width: '100%',
+                ajax: {
+                    url: "/Customer/GetCustomerPhoneNumberSelect2",
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="EditCustomerPhoneNumber"]').val(e.params.data.phoneNumber);
+            });
+
+            $(".edit-prompt").click(function () {
+                var id = $(this).attr('data-id');
+                var customerId = $(this).attr('data-customerId');
+                var customerPhNo = $(this).attr('data-customerPhonno');
+                var amount = $(this).attr('data-amount');
+                var expirydate = $(this).attr('data-Expirydate');
+                $("#EditId").val(id);
+                $("#EditAmount").val(amount);
+                $("#EditCustomerId").append($("<option></option>").attr("value", customerId).text(customerPhNo));
+                $("#EditCustomerPhoneNumber").val(customerPhNo);
+                $("#EditExpiryDate").val(expirydate);
+            });
+
+            //$(".Edit").click(function () {
+            //    var id = $("#EditId").val();
+            //    var customerid = $("#EditCustomerId").val();
+            //    var customerphoneno = $("#EditCustomerPhoneNumber").val();
+            //    var Amount = $("#EditAmount").val();
+            //    var expiryDate = $("#EditExpiryDate");
+            //    if (customerphoneno == null || customerphoneno == "") {
+            //        swal("CustomerName is empty.", "Please Select CustomerPhoneNumber and CustomerName", "warning");
+            //    }
+            //    else if (customerphoneno != null || customerphoneno != "") {
+            //        $.getJSON("/CustomerGiftCard/Edit", { Id: id, customerId: customerid, customerPhoneNo: customerphoneno, amount: Amount, expirydate : expiryDate }, function (data) {
+            //            if (data.message != null || data.message != "") {
+            //                swal({
+            //                    title: data.message,
+            //                    text: "",
+            //                    type: "success"
+            //                }, function () {
+            //                    window.location.reload();
+            //                });
+            //            }
+            //        });
+            //    }             
+            //});
+
+            $(".btnDelete").click(function () {
+                var Id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to delete?",
+                    text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Delete it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/CustomerGiftCard/Delete", { id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
+            });
+
+        });
+    </script>
+}

@@ -1240,7 +1240,7 @@ namespace ShopNow.Controllers
                 //accept
                 if (status == 3)
                 {
-                    Helpers.PushNotification.SendbydeviceId("Your order has been accepted by shop.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+                    Helpers.PushNotification.SendbydeviceId($"Your order has been accepted by shop({order.ShopName}).", "ShopNowChat", "a.mp3", fcmToken.ToString());
                 }
 
                 //Refund
@@ -1642,7 +1642,7 @@ namespace ShopNow.Controllers
                 var fcmToken = (from c in db.Customers
                                 where c.Id == order.CustomerId
                                 select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                Helpers.PushNotification.SendbydeviceId("Your order is on the way.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+                Helpers.PushNotification.SendbydeviceId($"Your order is on shop({order.ShopName}) the way.", "ShopNowChat", "a.mp3", fcmToken.ToString());
                 return Json(new { message = "Successfully DelivaryBoy PickUp!" }, JsonRequestBehavior.AllowGet);
             }
             else
@@ -1810,7 +1810,7 @@ namespace ShopNow.Controllers
 
             string fcmtocken = customerDetails.FcmTocken ?? "";
 
-            Helpers.PushNotification.SendbydeviceId("Your order has been delivered.", "ShopNowChat", "a.mp3", fcmtocken.ToString());
+            Helpers.PushNotification.SendbydeviceId($"Your order on shop({order.ShopName}) has been delivered by delivery partner {order.DeliveryBoyName}.", "ShopNowChat", "a.mp3", fcmtocken.ToString());
             return Json(new { message = "Successfully DelivaryBoy Delivered!" }, JsonRequestBehavior.AllowGet);
         }
 
@@ -1854,7 +1854,7 @@ namespace ShopNow.Controllers
                 var fcmTokenCustomer = (from c in db.Customers
                                         where c.Id == order.Id
                                         select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                Helpers.PushNotification.SendbydeviceId("Delivery Boy is Assigned for your Order.", "ShopNowChat", "../../assets/b.mp3", fcmToken.ToString());
+                Helpers.PushNotification.SendbydeviceId($"Delivery Boy ${order.DeliveryBoyName} is Assigned for your Order.", "ShopNowChat", "../../assets/b.mp3", fcmToken.ToString());
 
                 return Json(new { message = "Successfully DelivaryBoy Assign!" }, JsonRequestBehavior.AllowGet);
             }
@@ -3176,6 +3176,8 @@ namespace ShopNow.Controllers
         {
             var customer = db.Customers.Where(i => i.Id == customerId && i.Status == 0).FirstOrDefault();
             CustomerProfileViewModel model = _mapper.Map<Models.Customer, CustomerProfileViewModel>(customer);
+            model.ImagePath = model.ImagePath.Contains("https://s3.ap-south-1.amazonaws.com/") ? model.ImagePath : "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + model.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
+            model.ImageAadharPath = model.ImageAadharPath.Contains("https://s3.ap-south-1.amazonaws.com/") ? model.ImageAadharPath : "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + model.ImageAadharPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
@@ -5700,7 +5702,44 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
             }
             return Json(model.recordId);
+        }
 
+        public ActionResult AddGiftCard(int customerid, string giftcardcode)
+        {
+            var giftCard = db.CustomerGiftCards.FirstOrDefault(i => i.CustomerId == customerid && i.GiftCardCode == giftcardcode.Trim());
+            if (giftCard == null)
+                return Json(new { status = false, message = "Invalid Gift Card" }, JsonRequestBehavior.AllowGet);
+
+            //var giftCard = db.CustomerGiftCards.FirstOrDefault(i => i.CustomerId == customerid && i.GiftCardCode == giftcardcode.Trim() && i.Status == 0 && DbFunctions.TruncateTime(i.ExpiryDate) >= DbFunctions.TruncateTime(DateTime.Now));
+            else if (giftCard.Status == 0 && (giftCard.ExpiryDate.Date >= DateTime.Now.Date))
+            {
+                giftCard.Status = 1;
+                db.Entry(giftCard).State = EntityState.Modified;
+                db.SaveChanges();
+
+                var customer = db.Customers.FirstOrDefault(i => i.Id == customerid);
+                customer.WalletAmount += giftCard.Amount;
+                db.Entry(customer).State = EntityState.Modified;
+                db.SaveChanges();
+
+                //Wallet History for Gift Card
+                var walletHistory = new CustomerWalletHistory
+                {
+                    Amount = giftCard.Amount,
+                    CustomerId = giftCard.CustomerId,
+                    DateEncoded = DateTime.Now,
+                    Description = "Received from gift card",
+                    Type = 1
+                };
+                db.CustomerWalletHistories.Add(walletHistory);
+                db.SaveChanges();
+
+                return Json(new { status = true, message = $"Successfully ₹{giftCard.Amount} Added to Wallet" }, JsonRequestBehavior.AllowGet);
+            }
+            else if (giftCard.Status == 1)
+                return Json(new { status = false, message = "Already Applied!" }, JsonRequestBehavior.AllowGet);
+            else
+                return Json(new { status = false, message = "Gift Card is Expired!" }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "")
@@ -5750,6 +5789,7 @@ namespace ShopNow.Controllers
             public string BrandName { get; set; }
             public string CategoryName { get; set; }
             public string ImagePath { get; set; }
+            public string PaymentMode { get; set; }
         }
 
         public JsonResult SaveOrders()
@@ -5808,6 +5848,15 @@ namespace ShopNow.Controllers
                         WaitingRemark = "",
                         WaitingTime = 0,
                         WalletAmount = 0,
+                        CancelledRemark="",
+                        IsCallActive=false,
+                        IsPreorder=false,
+                        OfferAmount=0,
+                        OfferId=0,
+                        PaymentMode = item.FirstOrDefault().PaymentMode,
+                        PaymentModeType = item.FirstOrDefault().PaymentMode=="Online Payment"?1:0,
+                        PreorderDeliveryDateTime=null,
+                        TipsAmount=0
                     };
 
                     db.Orders.Add(order);

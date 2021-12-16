@@ -10,13 +10,18 @@
 namespace ShopNow.Models
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class GetDEliveryBoyList_Result
+    public partial class CustomerGiftCard
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public int Active { get; set; }
-        public string PhoneNumber { get; set; }
-        public string ImagePath { get; set; }
+        public int CustomerId { get; set; }
+        public string CustomerPhoneNumber { get; set; }
+        public string GiftCardCode { get; set; }
+        public double Amount { get; set; }
+        public System.DateTime ExpiryDate { get; set; }
+        public int Status { get; set; }
+        public System.DateTime DateEncoded { get; set; }
+        public string CreatedBy { get; set; }
     }
 }

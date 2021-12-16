@@ -647,7 +647,6 @@ namespace ShopNow.Controllers
             var cart = db.Orders.FirstOrDefault(i => i.Id == model.OrderId);
             if (cart != null && model.DeliveryBoyId != 0)
             {
-                var cartList = db.OrderItems.Where(i => i.OrderId == cart.Id).ToList();
                 var delivary = db.DeliveryBoys.FirstOrDefault(i => i.Id == model.DeliveryBoyId);
 
                 cart.DeliveryBoyId = delivary.Id;
@@ -672,7 +671,7 @@ namespace ShopNow.Controllers
                 var fcmTokenCustomer = (from c in db.Customers
                                         where c.Id == cart.CustomerId
                                         select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                Helpers.PushNotification.SendbydeviceId("Delivery Boy is Assigned for your Order.", "ShopNowChat", "../../assets/b.mp3", fcmToken.ToString());
+                Helpers.PushNotification.SendbydeviceId($"Delivery Boy {cart.DeliveryBoyName} is Assigned for your Order.", "ShopNowChat", "../../assets/b.mp3", fcmToken.ToString());
 
                 return RedirectToAction("List");
             }
@@ -914,7 +913,7 @@ namespace ShopNow.Controllers
                 var fcmToken = (from c in db.Customers
                                 where c.Id == order.CustomerId
                                 select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                Helpers.PushNotification.SendbydeviceId("Your order has been accepted by shop.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+                Helpers.PushNotification.SendbydeviceId($"Your order has been accepted by shop({order.ShopName}).", "ShopNowChat", "a.mp3", fcmToken.ToString());
 
                 return Json(new { message = "Order Confirmed!" }, JsonRequestBehavior.AllowGet);
             }
@@ -975,7 +974,7 @@ namespace ShopNow.Controllers
                                 where c.Id == order.CustomerId
                                 select c.FcmTocken ?? "").FirstOrDefault().ToString();
                 //order cancel
-                Helpers.PushNotification.SendbydeviceId("Shop has rejected your order. Kindly contact shop for details or try another order.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+                Helpers.PushNotification.SendbydeviceId($"Shop({order.ShopName}) has rejected your order. Kindly contact shop for details or try another order.", "ShopNowChat", "a.mp3", fcmToken.ToString());
 
                 //Refund notification
                 if (payment.PaymentMode == "Online Payment")
@@ -1072,7 +1071,7 @@ namespace ShopNow.Controllers
             var fcmToken = (from c in db.Customers
                             where c.Id == order.CustomerId
                             select c.FcmTocken ?? "").FirstOrDefault().ToString();
-            Helpers.PushNotification.SendbydeviceId("Your order is on the way.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+            Helpers.PushNotification.SendbydeviceId($"Your order on shop({order.ShopName}) is on the way.", "ShopNowChat", "a.mp3", fcmToken.ToString());
             return RedirectToAction("Edit", "Cart", new { OrderNumber = OrderNumber, id = AdminHelpers.ECodeLong(id) });
         }
 
@@ -1197,7 +1196,7 @@ namespace ShopNow.Controllers
 
             string fcmtocken = customerDetails.FcmTocken ?? "";
 
-            Helpers.PushNotification.SendbydeviceId("Your order has been delivered.", "ShopNowChat", "a.mp3", fcmtocken);
+            Helpers.PushNotification.SendbydeviceId($"Your order on shop({ order.ShopName}) has been delivered by delivery partner { order.DeliveryBoyName}.", "ShopNowChat", "a.mp3", fcmtocken);
             return RedirectToAction("Edit", "Cart", new { OrderNumber = OrderNumber, id = AdminHelpers.ECodeLong(id) });
         }
 

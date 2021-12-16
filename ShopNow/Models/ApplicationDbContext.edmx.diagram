@@ -80,7 +80,6 @@
         <AssociationConnector Association="sncModel.FK_CustomerReview_Customers" />
         <EntityTypeShape EntityType="sncModel.Category" Width="1.5" PointX="30.375" PointY="22" />
         <AssociationConnector Association="sncModel.FK_SubCategories_Categories" />
-        <EntityTypeShape EntityType="sncModel.CustomerSearchData" Width="1.5" PointX="15.375" PointY="14.75" />
         <EntityTypeShape EntityType="sncModel.CustomerAddress" Width="1.5" PointX="11" PointY="43" />
         <AssociationConnector Association="sncModel.FK_CustomerAddresses_Customers" />
         <EntityTypeShape EntityType="sncModel.CustomerReviewReply" Width="1.5" PointX="24.375" PointY="21.75" />
@@ -89,6 +88,8 @@
         <EntityTypeShape EntityType="sncModel.CallRecord" Width="1.5" PointX="13.375" PointY="0.75" />
         <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="28.375" PointY="36.25" />
         <AssociationConnector Association="sncModel.FK_OrderItems_Orders" />
+        <EntityTypeShape EntityType="sncModel.CustomerGiftCard" Width="1.5" PointX="13.375" PointY="4.75" />
+        <EntityTypeShape EntityType="sncModel.CustomerSearchData" Width="1.5" PointX="15.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

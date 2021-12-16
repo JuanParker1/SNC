@@ -95,13 +95,14 @@ namespace ShopNow.Models
         public virtual DbSet<Staff> Staffs { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
-        public virtual DbSet<CustomerSearchData> CustomerSearchDatas { get; set; }
         public virtual DbSet<CustomerAddress> CustomerAddresses { get; set; }
         public virtual DbSet<CustomerReviewReply> CustomerReviewReplies { get; set; }
         public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<CustomerSearchHistory> CustomerSearchHistories { get; set; }
         public virtual DbSet<CallRecord> CallRecords { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<CustomerGiftCard> CustomerGiftCards { get; set; }
+        public virtual DbSet<CustomerSearchData> CustomerSearchDatas { get; set; }
     
         [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)
@@ -118,9 +119,9 @@ namespace ShopNow.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("GetCustomerCount");
         }
     
-        public virtual ObjectResult<GetDEliveryBoyList_Result> GetDEliveryBoyList()
+        public virtual int GetDEliveryBoyList()
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetDEliveryBoyList_Result>("GetDEliveryBoyList");
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GetDEliveryBoyList");
         }
     
         public virtual ObjectResult<Nullable<int>> GetProductListCount(Nullable<double> longitude, Nullable<double> latitude, string str)
@@ -252,6 +253,11 @@ namespace ShopNow.Models
                 new ObjectParameter("customerid", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("GetAutoCompleteSearch", longitudeParameter, latitudeParameter, strParameter, customeridParameter);
+        }
+    
+        public virtual ObjectResult<GetDashBoardDetails_Result> GetDashBoardDetails()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetDashBoardDetails_Result>("GetDashBoardDetails");
         }
     }
 }

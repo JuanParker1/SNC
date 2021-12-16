@@ -329,6 +329,18 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
+        public async Task<JsonResult> GetCustomerPhoneNumberSelect2(string q = "")
+        {
+            var model = await db.Customers.OrderBy(i => i.Name).Where(a => (a.Name.Contains(q) || a.PhoneNumber.Contains(q)) && a.Status == 0 && a.Position != 4).Select(i => new
+            {
+                id = i.Id,
+                text = i.PhoneNumber + " - " + i.Name,
+                phoneNumber = i.PhoneNumber
+            }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
