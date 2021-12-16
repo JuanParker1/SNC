@@ -17,7 +17,7 @@
             <form method="get" action="/Product/FMCGList">
                 <div class="row">
                     <div class="col-md-8">
-                        <select id="select-shop" class="form-control" name="ShopId">
+                        <select id="ShopId" class="form-control" name="ShopId">
                             @if (Model.ShopId != 0)
                             {
                                 <option value="@Model.ShopId">@Model.ShopName</option>
@@ -36,7 +36,6 @@
             <a href="/Product/FMCGCreate"><span class="fa fa-plus"></span> FMCG</a>
         </div>
     </div>
-
     <div class="row">
         <div class="col-md-12">
             <div class="card shadow mt-3">
@@ -47,12 +46,14 @@
                columns.Add(b => b.CategoryName).Titled("Category Name").Filterable(true).SetWidth(15);
                columns.Add(b => b.ShopName).Titled("Shop Name").Filterable(true).SetWidth(20);
                columns.Add(b => b.Percentage).Titled("Discount %").Filterable(true).SetWidth(10);
+               columns.Add().Encoded(false).Sanitized(false)
+               .RenderValueAs(b => new HtmlString("<label class ='switch'> <input type = 'checkbox' value='" + b.IsOnline + "' Id ='Id_" + b.Id + "' class='CheckOnline' data-id='" + b.Id + "'><span class = 'slider round'></span></label>")).Titled("IsOnline").SetWidth(5);
                columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
                .RenderValueAs(o => @<div>
                         <a href="~/Product/FMCGEdit?id=@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-info mr-5"><i class="fa fa-edit fa-lg"></i></a>
                         <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
                     </div>);
-}).WithPaging(20).Sortable(true)
+              }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
@@ -71,7 +72,7 @@
     <script>
         $(document).ready(function () {
 
-            $('#select-shop').select2({
+            $('#ShopId').select2({
                 placeholder: "Search Shop",
                 ajax: {
                     url: "/Product/GetFMCGShopSelect2",
@@ -81,6 +82,24 @@
                 }
             }).on('select2:select', function (e) {
                 $('input[name="ShopName"]').val(e.params.data.text);
+            });
+
+            $('table tbody tr').each(function () {
+                var $this = $(this).find(".CheckOnline");
+                if ($this.val() == 'True')
+                    $this.prop('checked', true);
+                else
+                    $this.prop('checked', false);
+            });
+
+            $('.CheckOnline').on('click', function () {
+                var id = $(this).data('id');
+                if ($(this).is(':checked') == true) {
+                    $.post('/Product/UpdateProductOnline', { Id: id, isOnline: true }, function () { });
+                }
+                else {
+                    $.post('/Product/UpdateProductOnline', { Id: id, isOnline: false }, function () { });
+                }
             });
 
             $(".btnDelete").click(function () {

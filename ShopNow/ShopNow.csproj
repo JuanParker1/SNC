@@ -564,6 +564,9 @@
     <Compile Include="Models\DrugCompoundDetail.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\GetDashBoardDetails_Result.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GetDeliveryBoy.cs" />
     <Compile Include="Models\GetDEliveryBoyList_Result.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
@@ -3280,9 +3283,7 @@
     <Content Include="Views\Sales\ShopOrdersReport.cshtml" />
     <Content Include="Views\Support\Signal.cshtml" />
     <Content Include="Views\Shared\_MessagesList.cshtml" />
-
     <Content Include="Views\CustomerGiftCard\List.cshtml" />
-
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
