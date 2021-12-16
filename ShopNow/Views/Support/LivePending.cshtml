@@ -722,7 +722,7 @@
                                 </div>
                                 <div class="col-7 col-md-8">
                                     <div class="numbers">
-                                        <p class="card-title display-4 font-weight-bold">0</p>
+                                        <p class="card-title display-4 font-weight-bold" id="CustomerCount"></p>
                                     </div>
                                 </div>
                                 <p class="col text-dark mb-0">Customers</p>
@@ -750,7 +750,7 @@
                                 </div>
                                 <div class="col-7 col-md-8">
                                     <div class="numbers">
-                                        <p class="card-title display-4 font-weight-bold">0</p>
+                                        <p class="card-title display-4 font-weight-bold" id="ShopCount"></p>
                                     </div>
                                 </div>
                                 <p class="col text-dark mb-0">Shops</p>
@@ -1111,7 +1111,6 @@
             };
             // Start the connection.
             $.connection.hub.start().done(function () {
-                alert("connection started")
                 getAllMessages();
             }).fail(function (e) {
                 alert(e);
@@ -1155,6 +1154,8 @@
                 $("#ShopOnBoardingVerifyCount").text(result.ShopOnBoardingVerifyCount);
                 $("#DeliveryBoyVerifyCount").text(result.DeliveryBoyVerifyCount);
                 $("#BannerPendingCount").text(result.BannerPendingCount);
+                $("#CustomerCount").text(result.CustomerCount);
+                $("#ShopCount").text(result.ShopCount);
 
                 console.log(result);
             }).error(function () {

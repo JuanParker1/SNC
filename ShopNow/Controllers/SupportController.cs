@@ -59,8 +59,8 @@ namespace ShopNow.Controllers
            // DateTime start = new DateTime(2021, 10, 29);
             model.OrderMissedCount = db.Orders.Where(i => i.Status == 0 && DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(last3Date)).Count();
 
-            model.UnMappedCount = db.Products.Where(i => i.MasterProductId == 0)
-                           .Join(db.OrderItems, p => p.Id, oi => oi.ProductId, (p, oi) => new { p, oi }).GroupBy(i => i.oi.Id).Count();
+            //model.UnMappedCount = db.Products.Where(i => i.MasterProductId == 0)
+            //               .Join(db.OrderItems, p => p.Id, oi => oi.ProductId, (p, oi) => new { p, oi }).GroupBy(i => i.oi.Id).Count();
             model.ProductUnMappedCount = db.Products.Where(i => i.MappedDate != null && (i.MasterProductId == 0) && i.Status == 0 && i.ShopId != 0)
                .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m }).Count();
 

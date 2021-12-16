@@ -63,7 +63,7 @@ namespace ShopNow.Models
             {
                 connection.Open();
                 //using (var command = new SqlCommand(@"SELECT [MessageID], [Message], [EmptyMessage], [Date] FROM [dbo].[Messages]", connection))
-                using (var command = new SqlCommand(@"SELECT  Id FROM [dbo].[Orders] where Status in (2,3,4)", connection))
+                using (var command = new SqlCommand(@"SELECT  Id FROM [dbo].[Orders] where Status in (2,3,4,5,8)", connection))
                 {
                     command.Notification = null;
 
@@ -80,16 +80,18 @@ namespace ShopNow.Models
                         int? NewOrders = lst[0].NewOrder;
                        // data.NewOrder =Convert.ToInt32(lst[0].NewOrder.Value);
                      var  data =new { NewOrder = lst[0].NewOrder, Shopaccptence = lst[0].Shopacceptance, Deliveryaccept = lst[0].deliveryaccpetance, shoppickup = lst[0].shoppickup, customerdelivery = lst[0].customerdelivery, orderwithoutdeliveryboy = lst[0].orderwithoutdeliveryboy ,
-                         RefundCount = 0,
-                         ShopLowCreditCount = 0,
-                         CustomerPrescriptionCount = 0,
-                         UnMappedCount = 0,
-                         OrderMissedCount = 0,
-                         ProductUnMappedCount = 0,
-                         CustomerAadhaarVerifyCount = 0,
-                         ShopOnBoardingVerifyCount = 0,
-                         DeliveryBoyVerifyCount = 0,
-                         BannerPendingCount = 0
+                         RefundCount = lst[0].RefundCount,
+                         ShopLowCreditCount = lst[0].ShopLowCreditCount,
+                         CustomerPrescriptionCount = lst[0].CustomerPrescriptionCount,
+                         UnMappedCount = lst[0].UnMappedCount,
+                         OrderMissedCount = lst[0].OrderMissedCount,
+                         ProductUnMappedCount = lst[0].ProductUnMappedCount,
+                         CustomerAadhaarVerifyCount = lst[0].CustomerAadhaarVerifyCount,
+                         ShopOnBoardingVerifyCount = lst[0].ShopOnBoardingVerifyCount,
+                         DeliveryBoyVerifyCount = lst[0].DeliveryBoyVerifyCount,
+                         BannerPendingCount = lst[0].BannerPendingCount,
+                         CustomerCount= lst[0].CustomerCount,
+                         ShopCount= lst[0].ShopCount
                      };
                      return data;
 
