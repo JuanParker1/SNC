@@ -31,8 +31,8 @@ namespace ShopNow.Models
         public Nullable<int> BrandId { get; set; }
         public string Description { get; set; }
         public int Status { get; set; }
-        public System.DateTime DateEncoded { get; set; }
-        public System.DateTime DateUpdated { get; set; }
+        public Nullable<System.DateTime> DateEncoded { get; set; }
+        public Nullable<System.DateTime> DateUpdated { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
     }

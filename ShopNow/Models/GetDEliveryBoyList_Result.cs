@@ -10,20 +10,13 @@
 namespace ShopNow.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Category
+    public partial class GetDEliveryBoyList_Result
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int OrderNo { get; set; }
-        public int ProductTypeId { get; set; }
-        public string ProductTypeName { get; set; }
+        public int Active { get; set; }
+        public string PhoneNumber { get; set; }
         public string ImagePath { get; set; }
-        public int Status { get; set; }
-        public System.DateTime DateEncoded { get; set; }
-        public System.DateTime DateUpdated { get; set; }
-        public string CreatedBy { get; set; }
-        public string UpdatedBy { get; set; }
     }
 }

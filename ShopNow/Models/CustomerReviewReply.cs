@@ -18,7 +18,7 @@ namespace ShopNow.Models
         public int CustomerReviewId { get; set; }
         public string ReplyText { get; set; }
         public int Status { get; set; }
-        public System.DateTime DateEncoded { get; set; }
         public string CreatedBy { get; set; }
+        public System.DateTime DateEncoded { get; set; }
     }
 }

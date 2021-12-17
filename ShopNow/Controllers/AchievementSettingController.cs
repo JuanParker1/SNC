@@ -57,9 +57,9 @@ namespace ShopNow.Controllers
             return View();
         }
 
-        [AccessPolicy(PageCode = "SNCASC009")]
         [HttpPost]
         [ValidateInput(false)]
+        [AccessPolicy(PageCode = "SNCASC009")]
         public ActionResult Create(AchievementSettingCreateViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -124,9 +124,9 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "SNCASE010")]
         [HttpPost]
         [ValidateInput(false)]
+        [AccessPolicy(PageCode = "SNCASE010")]
         public ActionResult Edit(AchievementSettingEditViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);

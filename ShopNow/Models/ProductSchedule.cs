@@ -18,8 +18,8 @@ namespace ShopNow.Models
         public long ProductId { get; set; }
         public Nullable<System.TimeSpan> OnTime { get; set; }
         public Nullable<System.TimeSpan> OffTime { get; set; }
+        public int Status { get; set; }
         public string UpdatedBy { get; set; }
         public System.DateTime DateTimeUpdated { get; set; }
-        public int Status { get; set; }
     }
 }

@@ -227,7 +227,6 @@ namespace ShopNow.Controllers
                     }
                 }
 
-                List<Page> PageList = new List<Page>();
                 var master = db.Pages.Where(i => i.Status == 0).Select(i => new { Name = i.Name }).ToList();
                 foreach (DataRow row in dt.Rows)
                 {
@@ -236,7 +235,7 @@ namespace ShopNow.Controllers
                         int idx = master.FindIndex(a => a.Name == row[model.Name].ToString().Trim());
                         if (idx <= 0)
                         {
-                            PageList.Add(new Page
+                            db.Pages.Add(new Page
                             {
                                 Name = row[model.Name].ToString().ToUpper(),
                                 Code = row[model.Code].ToString().ToUpper(),
@@ -246,10 +245,10 @@ namespace ShopNow.Controllers
                                 CreatedBy = user.Name,
                                 UpdatedBy = user.Name
                             });
+                            db.SaveChanges();
                         }
                     }
                 }
-                db.BulkInsert(PageList);
             }
             return View();
         }
