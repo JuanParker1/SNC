@@ -1955,6 +1955,17 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
+        public async Task<JsonResult> GetElectronicBrandSelect2(string q = "")
+        {
+            var model = await _db.Brands.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
         // Category Select2
         public async Task<JsonResult> GetDishCategorySelect2(string q = "")
         {
@@ -1981,6 +1992,17 @@ namespace ShopNow.Controllers
         public async Task<JsonResult> GetMedicalCategorySelect2(string q = "")
         {
             var model = await _db.Categories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 3).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<JsonResult> GetElectronicCategorySelect2(string q = "")
+        {
+            var model = await _db.Categories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 4).Select(i => new
             {
                 id = i.Id,
                 text = i.Name
