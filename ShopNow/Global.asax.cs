@@ -20,7 +20,7 @@ namespace ShopNow
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-          // GlobalConfiguration.Configure(WebApiConfig.Register);
+            GlobalConfiguration.Configure(WebApiConfig.Register);
             // WebApiConfig.Register(GlobalConfiguration.Configuration);
             SqlDependency.Start(connString);
 
@@ -30,14 +30,14 @@ namespace ShopNow
             //Stop SQL dependency
             SqlDependency.Stop(connString);
         }
-        //protected void Application_BeginRequest(object sender, EventArgs e)
-        //{
-        //    //SqlDependency.Start(connString);
-        //    if (Request.Headers.AllKeys.Contains("Origin") && HttpContext.Current.Request.HttpMethod == "OPTIONS")
-        //    {
-        //        HttpContext.Current.Response.Flush();
-        //    }
-        //}
+        protected void Application_BeginRequest(object sender, EventArgs e)
+        {
+            //SqlDependency.Start(connString);
+            if (Request.Headers.AllKeys.Contains("Origin") && HttpContext.Current.Request.HttpMethod == "OPTIONS")
+            {
+                HttpContext.Current.Response.Flush();
+            }
+        }
         // void Application_EndRequest(Object sender, EventArgs e)
         //{
         //    //SqlDependency.Stop(connString);
