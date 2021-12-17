@@ -5790,6 +5790,9 @@ namespace ShopNow.Controllers
             public string CategoryName { get; set; }
             public string ImagePath { get; set; }
             public string PaymentMode { get; set; }
+            public int BrandId { get; set; }
+            public int ProductId { get; set; }
+            public int CategoryId { get; set; }
         }
 
         public JsonResult SaveOrders()
@@ -5797,9 +5800,9 @@ namespace ShopNow.Controllers
             using (WebClient myData = new WebClient())
             {
                 myData.Headers.Add("X-ApiKey", "Tx9ANC5RqngpTOM9VJ0JP2+1LbZvo1LI");
-                string getDetails = myData.DownloadString("http://192.168.1.65:98/Api/GetAllCartItems");
+                string getDetails = myData.DownloadString("https://admin.shopnowchat.in/api/GetAllCartItems");
                 var result = JsonConvert.DeserializeObject<List<OldOrder>>(getDetails).OrderBy(i=>i.DateEncoded);
-
+                // var list = JsonConvert.SerializeObject(result.Where(i => i.OrderNumber == 253051825));
                 foreach (var item in result.Where(i => i.OrderNumber == 253051825).GroupBy(i => i.OrderNumber))
                 {
                     var order = new Models.Order
@@ -5869,15 +5872,18 @@ namespace ShopNow.Controllers
                         {
                             var orderItem = new OrderItem
                             {
-                                BrandId = GetBrandId(itemlist.BrandName),
+                                //BrandId = GetBrandId(itemlist.BrandName),
+                                BrandId = itemlist.BrandId,
                                 BrandName = itemlist.BrandName,
-                                CategoryId = GetCategoryId(itemlist.CategoryName),
+                                //CategoryId = GetCategoryId(itemlist.CategoryName),
+                                CategoryId = itemlist.CategoryId,
                                 CategoryName = itemlist.CategoryName,
                                 ImagePath = itemlist.ImagePath,
                                 OrdeNumber = order.OrderNumber,
                                 OrderId = order.Id,
                                 Price = itemlist.TotalPrice,
-                                ProductId = GetProductId(itemlist.ProductName),
+                                //ProductId = GetProductId(itemlist.ProductName),
+                                ProductId = itemlist.ProductId,
                                 ProductName = itemlist.ProductName,
                                 Quantity = itemlist.Qty,
                                 UnitPrice = itemlist.Price,
@@ -5889,10 +5895,9 @@ namespace ShopNow.Controllers
                         }
                     }
                 }
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(true, JsonRequestBehavior.AllowGet);
             }
         }
-
 
         public int GetBrandId(string name)
         {
