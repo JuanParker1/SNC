@@ -1276,7 +1276,7 @@ namespace ShopNow.Controllers
         {
             model.MonthFilter = model.MonthFilter != 0 ? model.MonthFilter : DateTime.Now.Month;
             model.YearFilter = model.YearFilter != 0 ? model.YearFilter : DateTime.Now.Year;
-            model.ListItems = db.Orders.Where(a => a.DateEncoded.Month == model.MonthFilter && a.DateEncoded.Year == model.YearFilter && (a.Status == 6 || a.Status == 7)).GroupBy(i => DbFunctions.TruncateTime(i.DateEncoded))
+            model.ListItems = db.Orders.Where(a => a.DateEncoded.Month == model.MonthFilter && a.DateEncoded.Year == model.YearFilter && (a.Status == 6 || a.Status == 7 || a.Status ==9 || a.Status==10)).GroupBy(i => DbFunctions.TruncateTime(i.DateEncoded))
                 .AsEnumerable()
                 .Select(i => new OrderRatioViewModel.ListItem
                 {

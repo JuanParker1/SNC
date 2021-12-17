@@ -2567,10 +2567,10 @@ namespace ShopNow.Controllers
                      ShopOnline = i.IsOnline,
                      ShopStatus = i.Status
                  }).ToList();
-            var productrCount = db.GetProductListCount(varlongitude, varlatitude, str).ToList();
+           // var productrCount = db.GetProductListCount(varlongitude, varlatitude, str).ToList();
             int count = 0;
-            if (productrCount.Count > 0)
-                count = Convert.ToInt32(productrCount[0]);
+            //if (productrCount.Count > 0)
+            //    count = Convert.ToInt32(productrCount[0]);
             int CurrentPage = page;
             int PageSize = pageSize;
             int TotalCount = count;
@@ -2634,294 +2634,294 @@ namespace ShopNow.Controllers
             public string UpdatedBy { get; set; }
 
         }
-        public JsonResult GetPp(string str = "")
-        {
-            sncEntities context = new sncEntities();
-            List<Products1> updateList = new List<Products1>();
-            List<Products1> creatlisdt = new List<Products1>();
-            Products1 varProduct = new Products1();
-            //varProduct.Id = 0;
+        //public JsonResult GetPp(string str = "")
+        //{
+        //    sncEntities context = new sncEntities();
+        //    List<Products1> updateList = new List<Products1>();
+        //    List<Products1> creatlisdt = new List<Products1>();
+        //    Products1 varProduct = new Products1();
+        //    //varProduct.Id = 0;
 
-            varProduct.MasterProductId = 0;
-            varProduct.ShopId = 212;
-            // varProduct.ShopName = "anna";
-            varProduct.ShopCategoryId = 4;
-            // varProduct.ShopCategoryName = "veg";
-            varProduct.GTIN = "";
-            varProduct.UPC = "";
-            varProduct.GTIN14 = "";
-            varProduct.EAN = "";
-            varProduct.ISBN = "";
-            varProduct.Price = 10;
-            varProduct.Qty = 2;
-            varProduct.ProductTypeName = "ytesg";
-            varProduct.ProductTypeId = 0;
-            varProduct.MinSelectionLimit = 0;
-            varProduct.MaxSelectionLimit = 0;
-            varProduct.Customisation = false;
-            varProduct.MenuPrice = 12;
-            varProduct.IBarU = 5;
-            varProduct.ItemId = 1;
-            varProduct.Percentage = 0;
-            varProduct.DiscountCategoryId = 0;
-            varProduct.DiscountCategoryName = "jhuhu";
-            varProduct.DataEntry = 0;
-            varProduct.AppliesOnline = 1;
-            varProduct.IsOnline = true;
-            varProduct.HoldOnStok = 0;
-            varProduct.PackingType = 0;
-            varProduct.TaxPercentage = 10.2;
-            varProduct.SpecialCostOfDelivery = 0;
-            varProduct.OutletId = Convert.ToInt32(2);
-            varProduct.ItemTimeStamp = "12486365858";
-            varProduct.LoyaltyPoints = 0;
-            varProduct.PackingCharge = 0;
-            varProduct.BrandOwnerMiddlePercentage = 1;
-            varProduct.ShopownnerPrice = 10.2;
-            varProduct.Status = 0;
-            varProduct.DateEncoded = DateTime.Now;
-            varProduct.DateUpdated = DateTime.Now;
-            varProduct.CreatedBy = "serveice";
-            varProduct.UpdatedBy = "serveice";
-            varProduct.Name = "sdfsdfd";
-            creatlisdt.Add(varProduct);
-            db.BulkInsert(creatlisdt);
-            //db.BulkSaveChanges
+        //    varProduct.MasterProductId = 0;
+        //    varProduct.ShopId = 212;
+        //    // varProduct.ShopName = "anna";
+        //    varProduct.ShopCategoryId = 4;
+        //    // varProduct.ShopCategoryName = "veg";
+        //    varProduct.GTIN = "";
+        //    varProduct.UPC = "";
+        //    varProduct.GTIN14 = "";
+        //    varProduct.EAN = "";
+        //    varProduct.ISBN = "";
+        //    varProduct.Price = 10;
+        //    varProduct.Qty = 2;
+        //    varProduct.ProductTypeName = "ytesg";
+        //    varProduct.ProductTypeId = 0;
+        //    varProduct.MinSelectionLimit = 0;
+        //    varProduct.MaxSelectionLimit = 0;
+        //    varProduct.Customisation = false;
+        //    varProduct.MenuPrice = 12;
+        //    varProduct.IBarU = 5;
+        //    varProduct.ItemId = 1;
+        //    varProduct.Percentage = 0;
+        //    varProduct.DiscountCategoryId = 0;
+        //    varProduct.DiscountCategoryName = "jhuhu";
+        //    varProduct.DataEntry = 0;
+        //    varProduct.AppliesOnline = 1;
+        //    varProduct.IsOnline = true;
+        //    varProduct.HoldOnStok = 0;
+        //    varProduct.PackingType = 0;
+        //    varProduct.TaxPercentage = 10.2;
+        //    varProduct.SpecialCostOfDelivery = 0;
+        //    varProduct.OutletId = Convert.ToInt32(2);
+        //    varProduct.ItemTimeStamp = "12486365858";
+        //    varProduct.LoyaltyPoints = 0;
+        //    varProduct.PackingCharge = 0;
+        //    varProduct.BrandOwnerMiddlePercentage = 1;
+        //    varProduct.ShopownnerPrice = 10.2;
+        //    varProduct.Status = 0;
+        //    varProduct.DateEncoded = DateTime.Now;
+        //    varProduct.DateUpdated = DateTime.Now;
+        //    varProduct.CreatedBy = "serveice";
+        //    varProduct.UpdatedBy = "serveice";
+        //    varProduct.Name = "sdfsdfd";
+        //    creatlisdt.Add(varProduct);
+        //    db.BulkInsert(creatlisdt);
+        //    //db.BulkSaveChanges
 
-            return Json(new { Page = "" }, JsonRequestBehavior.AllowGet);
-        }
-        public JsonResult GetP(string str = "")
-        {
+        //    return Json(new { Page = "" }, JsonRequestBehavior.AllowGet);
+        //}
+        //public JsonResult GetP(string str = "")
+        //{
 
-            sncEntities context = new sncEntities();
+        //    sncEntities context = new sncEntities();
 
-            var apiSettings = db.ApiSettings.Where(m => m.Status == 0).ToList();
+        //    var apiSettings = db.ApiSettings.Where(m => m.Status == 0).ToList();
 
-            if (apiSettings.Count > 0)
-            {
-                foreach (var api in apiSettings)
-                {
-                    string s = "";
-                    string Url = api.Url + "items?q=itemTimeStamp>=20210825121004,status==R,outletId==" + api.OutletId + "&limit=200000";
-                    using (WebClient client = new WebClient())
-                    {
-                        client.Headers["X-Auth-Token"] = api.AuthKey; //"62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
+        //    if (apiSettings.Count > 0)
+        //    {
+        //        foreach (var api in apiSettings)
+        //        {
+        //            string s = "";
+        //            string Url = api.Url + "items?q=itemTimeStamp>=20210825121004,status==R,outletId==" + api.OutletId + "&limit=200000";
+        //            using (WebClient client = new WebClient())
+        //            {
+        //                client.Headers["X-Auth-Token"] = api.AuthKey; //"62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
 
-                        s = client.DownloadString(Url);
-                    }
+        //                s = client.DownloadString(Url);
+        //            }
 
-                    var lst = db.Products1.Where(m => m.ShopId == api.ShopId).Select(i => new
-                    {
-                        ItemId = i.ItemId,
-                        Id = i.Id
-                    }).ToList();
-                    List<Products1> updateList = new List<Products1>();
-                    List<Products1> createList = new List<Products1>();
-                    List<DiscountCategories1> createCategoryList = new List<DiscountCategories1>();
-                    DiscountCategories1 dc = new DiscountCategories1();
-                    Products1 varProduct = new Products1();
-                    List<DiscountCategories1> lstDiscount = new List<DiscountCategories1>();
-                    goto GetDiscoutCatecories;
-                GetDiscoutCatecories:
-                    lstDiscount = db.DiscountCategories1.Where(m => m.ShopId == api.ShopId).ToList();
+        //            var lst = db.Products1.Where(m => m.ShopId == api.ShopId).Select(i => new
+        //            {
+        //                ItemId = i.ItemId,
+        //                Id = i.Id
+        //            }).ToList();
+        //            List<Products1> updateList = new List<Products1>();
+        //            List<Products1> createList = new List<Products1>();
+        //            List<DiscountCategories1> createCategoryList = new List<DiscountCategories1>();
+        //            DiscountCategories1 dc = new DiscountCategories1();
+        //            Products1 varProduct = new Products1();
+        //            List<DiscountCategories1> lstDiscount = new List<DiscountCategories1>();
+        //            goto GetDiscoutCatecories;
+        //        GetDiscoutCatecories:
+        //            lstDiscount = db.DiscountCategories1.Where(m => m.ShopId == api.ShopId).ToList();
 
 
 
-                    dynamic config = JsonConvert.DeserializeObject<ExpandoObject>(s, new ExpandoObjectConverter());
-                    foreach (var pro in ((IEnumerable<dynamic>)config.items).Where(t => t.status == "R"))
-                    {
+        //            dynamic config = JsonConvert.DeserializeObject<ExpandoObject>(s, new ExpandoObjectConverter());
+        //            foreach (var pro in ((IEnumerable<dynamic>)config.items).Where(t => t.status == "R"))
+        //            {
 
-                        varProduct.ItemId = Convert.ToInt32(pro.itemId);
-                        varProduct.Name = pro.itemName;
-                        varProduct.IBarU = Convert.ToInt32(pro.iBarU);
-                        varProduct.DateUpdated = DateTime.Now;
-                        varProduct.ShopCategoryId = 4;
-                        varProduct.ShopId = api.ShopId;
+        //                varProduct.ItemId = Convert.ToInt32(pro.itemId);
+        //                varProduct.Name = pro.itemName;
+        //                varProduct.IBarU = Convert.ToInt32(pro.iBarU);
+        //                varProduct.DateUpdated = DateTime.Now;
+        //                varProduct.ShopCategoryId = 4;
+        //                varProduct.ShopId = api.ShopId;
 
-                        varProduct.ProductTypeId = 0;
-                        varProduct.MinSelectionLimit = 0;
-                        varProduct.MaxSelectionLimit = 0;
-                        varProduct.Customisation = false;
-                        varProduct.Percentage = 0;
-                        varProduct.DiscountCategoryId = 0;
-                        varProduct.DataEntry = 0; varProduct.IsOnline = true;
-                        varProduct.HoldOnStok = 0;
-                        varProduct.PackingType = 0;
-                        varProduct.SpecialCostOfDelivery = 0;
-                        varProduct.LoyaltyPoints = 0;
-                        varProduct.PackingCharge = 0;
-                        varProduct.Status = 0;
-                        varProduct.DateEncoded = DateTime.Now;
-                        varProduct.CreatedBy = "service";
-                        varProduct.UpdatedBy = "service";
-                        foreach (var med in pro.stock)
-                        {
-                            varProduct.Qty = Convert.ToInt32(Math.Floor(Convert.ToDecimal(med.stock)));
-                            varProduct.MenuPrice = Convert.ToDouble(med.mrp);
-                            varProduct.Price = Convert.ToDouble(med.salePrice);
-                            varProduct.TaxPercentage = Convert.ToDouble(med.taxPercentage);
-                            varProduct.ItemTimeStamp = Convert.ToString(med.itemTimeStamp);
-                            varProduct.AppliesOnline = Convert.ToInt32(pro.appliesOnline);
-                            varProduct.OutletId = Convert.ToInt32(med.outletId);
-                            if (api.Category == 1)
-                                varProduct.DiscountCategoryName = Convert.ToString(med.Cat1);
-                            else if (api.Category == 2)
-                                varProduct.DiscountCategoryName = Convert.ToString(med.Cat2);
-                            else if (api.Category == 3)
-                                varProduct.DiscountCategoryName = Convert.ToString(med.Cat3);
-                            else if (api.Category == 4)
-                                varProduct.DiscountCategoryName = Convert.ToString(med.Cat4);
-                            else if (api.Category == 5)
-                                varProduct.DiscountCategoryName = Convert.ToString(med.Cat5);
-                            else if (api.Category == 6)
-                                varProduct.DiscountCategoryName = Convert.ToString(med.Cat6);
-                            else if (api.Category == 7)
-                                varProduct.DiscountCategoryName = Convert.ToString(med.Cat7);
-                            else if (api.Category == 8)
-                                varProduct.DiscountCategoryName = Convert.ToString(med.Cat8);
-                            else if (api.Category == 9)
-                                varProduct.DiscountCategoryName = Convert.ToString(med.Cat9);
-                            else if (api.Category == 10)
-                                varProduct.DiscountCategoryName = Convert.ToString(med.Cat10);
+        //                varProduct.ProductTypeId = 0;
+        //                varProduct.MinSelectionLimit = 0;
+        //                varProduct.MaxSelectionLimit = 0;
+        //                varProduct.Customisation = false;
+        //                varProduct.Percentage = 0;
+        //                varProduct.DiscountCategoryId = 0;
+        //                varProduct.DataEntry = 0; varProduct.IsOnline = true;
+        //                varProduct.HoldOnStok = 0;
+        //                varProduct.PackingType = 0;
+        //                varProduct.SpecialCostOfDelivery = 0;
+        //                varProduct.LoyaltyPoints = 0;
+        //                varProduct.PackingCharge = 0;
+        //                varProduct.Status = 0;
+        //                varProduct.DateEncoded = DateTime.Now;
+        //                varProduct.CreatedBy = "service";
+        //                varProduct.UpdatedBy = "service";
+        //                foreach (var med in pro.stock)
+        //                {
+        //                    varProduct.Qty = Convert.ToInt32(Math.Floor(Convert.ToDecimal(med.stock)));
+        //                    varProduct.MenuPrice = Convert.ToDouble(med.mrp);
+        //                    varProduct.Price = Convert.ToDouble(med.salePrice);
+        //                    varProduct.TaxPercentage = Convert.ToDouble(med.taxPercentage);
+        //                    varProduct.ItemTimeStamp = Convert.ToString(med.itemTimeStamp);
+        //                    varProduct.AppliesOnline = Convert.ToInt32(pro.appliesOnline);
+        //                    varProduct.OutletId = Convert.ToInt32(med.outletId);
+        //                    if (api.Category == 1)
+        //                        varProduct.DiscountCategoryName = Convert.ToString(med.Cat1);
+        //                    else if (api.Category == 2)
+        //                        varProduct.DiscountCategoryName = Convert.ToString(med.Cat2);
+        //                    else if (api.Category == 3)
+        //                        varProduct.DiscountCategoryName = Convert.ToString(med.Cat3);
+        //                    else if (api.Category == 4)
+        //                        varProduct.DiscountCategoryName = Convert.ToString(med.Cat4);
+        //                    else if (api.Category == 5)
+        //                        varProduct.DiscountCategoryName = Convert.ToString(med.Cat5);
+        //                    else if (api.Category == 6)
+        //                        varProduct.DiscountCategoryName = Convert.ToString(med.Cat6);
+        //                    else if (api.Category == 7)
+        //                        varProduct.DiscountCategoryName = Convert.ToString(med.Cat7);
+        //                    else if (api.Category == 8)
+        //                        varProduct.DiscountCategoryName = Convert.ToString(med.Cat8);
+        //                    else if (api.Category == 9)
+        //                        varProduct.DiscountCategoryName = Convert.ToString(med.Cat9);
+        //                    else if (api.Category == 10)
+        //                        varProduct.DiscountCategoryName = Convert.ToString(med.Cat10);
 
-                            if (varProduct.DiscountCategoryName != null)
-                                varProduct.DiscountCategoryName = varProduct.DiscountCategoryName.Trim();
-                            else
-                                varProduct.DiscountCategoryName = varProduct.DiscountCategoryName;
+        //                    if (varProduct.DiscountCategoryName != null)
+        //                        varProduct.DiscountCategoryName = varProduct.DiscountCategoryName.Trim();
+        //                    else
+        //                        varProduct.DiscountCategoryName = varProduct.DiscountCategoryName;
 
-                            var catCout = lstDiscount.Where(c => c.ShopId == api.ShopId && c.Name == varProduct.DiscountCategoryName).Count();
-                            if (catCout <= 0)
-                            {
-                                if (varProduct.DiscountCategoryName != null)
-                                    dc.Name = varProduct.DiscountCategoryName.Trim();
-                                else
-                                    dc.Name = varProduct.DiscountCategoryName;
-                                dc.ShopId = api.ShopId;
-                                dc.DateEncoded = DateTime.Now;
-                                dc.DateUpdated = DateTime.Now;
-                                //int catExist = createCategoryList.Where(c => c.Name == dc.Name && c.ShopId == dc.ShopId).Count();
-                                //if (catExist <= 0)
-                                //    createCategoryList.Add(dc);
-                                db.DiscountCategories1.Add(dc);
-                                db.SaveChanges();
-                                varProduct.DiscountCategoryId = dc.Id;
-                                lstDiscount = db.DiscountCategories1.Where(m => m.ShopId == api.ShopId).ToList();
-                            }
-                            else
-                            {
-                                var catId = lstDiscount.Where(c => c.ShopId == api.ShopId && c.Name == varProduct.DiscountCategoryName).Select(c => c.Id).ToList();
-                                varProduct.DiscountCategoryId = Convert.ToInt32(catId[0]);
-                            }
+        //                    var catCout = lstDiscount.Where(c => c.ShopId == api.ShopId && c.Name == varProduct.DiscountCategoryName).Count();
+        //                    if (catCout <= 0)
+        //                    {
+        //                        if (varProduct.DiscountCategoryName != null)
+        //                            dc.Name = varProduct.DiscountCategoryName.Trim();
+        //                        else
+        //                            dc.Name = varProduct.DiscountCategoryName;
+        //                        dc.ShopId = api.ShopId;
+        //                        dc.DateEncoded = DateTime.Now;
+        //                        dc.DateUpdated = DateTime.Now;
+        //                        //int catExist = createCategoryList.Where(c => c.Name == dc.Name && c.ShopId == dc.ShopId).Count();
+        //                        //if (catExist <= 0)
+        //                        //    createCategoryList.Add(dc);
+        //                        db.DiscountCategories1.Add(dc);
+        //                        db.SaveChanges();
+        //                        varProduct.DiscountCategoryId = dc.Id;
+        //                        lstDiscount = db.DiscountCategories1.Where(m => m.ShopId == api.ShopId).ToList();
+        //                    }
+        //                    else
+        //                    {
+        //                        var catId = lstDiscount.Where(c => c.ShopId == api.ShopId && c.Name == varProduct.DiscountCategoryName).Select(c => c.Id).ToList();
+        //                        varProduct.DiscountCategoryId = Convert.ToInt32(catId[0]);
+        //                    }
 
-                        }
-                        int idx = lst.FindIndex(a => a.ItemId == pro.itemId);
-                        if (idx >= 0)
-                        {
+        //                }
+        //                int idx = lst.FindIndex(a => a.ItemId == pro.itemId);
+        //                if (idx >= 0)
+        //                {
 
-                            updateList.Add(new Products1
-                            {
-                                Id = lst[idx].Id,
-                                ProductTypeId = 0,
-                                MinSelectionLimit = 0,
-                                MaxSelectionLimit = 0,
-                                Customisation = false,
-                                Percentage = 0,
-                                DiscountCategoryId = varProduct.DiscountCategoryId,
-                                DataEntry = 0,
-                                IsOnline = true,
-                                HoldOnStok = 0,
-                                PackingType = 0,
-                                SpecialCostOfDelivery = 0,
-                                LoyaltyPoints = 0,
-                                PackingCharge = 0,
-                                Status = 0,
-                                DateEncoded = DateTime.Now,
-                                ItemId = varProduct.ItemId,
-                                Name = varProduct.Name,
-                                IBarU = Convert.ToInt32(pro.iBarU),
-                                ShopCategoryId = 4,
-                                ShopId = api.ShopId,
-                                Qty = varProduct.Qty,
-                                MenuPrice = varProduct.MenuPrice,
-                                Price = varProduct.Price,
-                                TaxPercentage = varProduct.TaxPercentage,
-                                ItemTimeStamp = varProduct.ItemTimeStamp,
-                                AppliesOnline = varProduct.AppliesOnline,
-                                OutletId = varProduct.OutletId,
-                                DateUpdated = DateTime.Now,
-                                DiscountCategoryName = varProduct.DiscountCategoryName
-                            });
-                            //update
-                        }
-                        else
-                        {
-                            long masterid = 0;
-                            long id = 0;
-                            createList.Add(new Products1
-                            {
-                                ProductTypeId = 0,
-                                MinSelectionLimit = 0,
-                                MaxSelectionLimit = 0,
-                                Customisation = false,
-                                Percentage = 0,
-                                DiscountCategoryId = 0,
-                                DataEntry = 0,
-                                IsOnline = true,
-                                HoldOnStok = 0,
-                                PackingType = 0,
-                                SpecialCostOfDelivery = 0,
-                                LoyaltyPoints = 0,
-                                PackingCharge = 0,
-                                Status = 0,
-                                DateEncoded = DateTime.Now,
-                                MasterProductId = masterid,
-                                Id = id,
-                                ItemId = varProduct.ItemId,
-                                Name = varProduct.Name,
-                                IBarU = Convert.ToInt32(pro.iBarU),
-                                ShopCategoryId = 4,
-                                ShopId = api.ShopId,
-                                Qty = varProduct.Qty,
-                                MenuPrice = varProduct.MenuPrice,
-                                Price = varProduct.Price,
-                                TaxPercentage = varProduct.TaxPercentage,
-                                ItemTimeStamp = varProduct.ItemTimeStamp,
-                                AppliesOnline = varProduct.AppliesOnline,
-                                OutletId = varProduct.OutletId,
-                                DateUpdated = DateTime.Now,
-                                DiscountCategoryName = varProduct.DiscountCategoryName
-                            });
-                            //createList.Add(varProduct);
-                        }
+        //                    updateList.Add(new Products1
+        //                    {
+        //                        Id = lst[idx].Id,
+        //                        ProductTypeId = 0,
+        //                        MinSelectionLimit = 0,
+        //                        MaxSelectionLimit = 0,
+        //                        Customisation = false,
+        //                        Percentage = 0,
+        //                        DiscountCategoryId = varProduct.DiscountCategoryId,
+        //                        DataEntry = 0,
+        //                        IsOnline = true,
+        //                        HoldOnStok = 0,
+        //                        PackingType = 0,
+        //                        SpecialCostOfDelivery = 0,
+        //                        LoyaltyPoints = 0,
+        //                        PackingCharge = 0,
+        //                        Status = 0,
+        //                        DateEncoded = DateTime.Now,
+        //                        ItemId = varProduct.ItemId,
+        //                        Name = varProduct.Name,
+        //                        IBarU = Convert.ToInt32(pro.iBarU),
+        //                        ShopCategoryId = 4,
+        //                        ShopId = api.ShopId,
+        //                        Qty = varProduct.Qty,
+        //                        MenuPrice = varProduct.MenuPrice,
+        //                        Price = varProduct.Price,
+        //                        TaxPercentage = varProduct.TaxPercentage,
+        //                        ItemTimeStamp = varProduct.ItemTimeStamp,
+        //                        AppliesOnline = varProduct.AppliesOnline,
+        //                        OutletId = varProduct.OutletId,
+        //                        DateUpdated = DateTime.Now,
+        //                        DiscountCategoryName = varProduct.DiscountCategoryName
+        //                    });
+        //                    //update
+        //                }
+        //                else
+        //                {
+        //                    long masterid = 0;
+        //                    long id = 0;
+        //                    createList.Add(new Products1
+        //                    {
+        //                        ProductTypeId = 0,
+        //                        MinSelectionLimit = 0,
+        //                        MaxSelectionLimit = 0,
+        //                        Customisation = false,
+        //                        Percentage = 0,
+        //                        DiscountCategoryId = 0,
+        //                        DataEntry = 0,
+        //                        IsOnline = true,
+        //                        HoldOnStok = 0,
+        //                        PackingType = 0,
+        //                        SpecialCostOfDelivery = 0,
+        //                        LoyaltyPoints = 0,
+        //                        PackingCharge = 0,
+        //                        Status = 0,
+        //                        DateEncoded = DateTime.Now,
+        //                        MasterProductId = masterid,
+        //                        Id = id,
+        //                        ItemId = varProduct.ItemId,
+        //                        Name = varProduct.Name,
+        //                        IBarU = Convert.ToInt32(pro.iBarU),
+        //                        ShopCategoryId = 4,
+        //                        ShopId = api.ShopId,
+        //                        Qty = varProduct.Qty,
+        //                        MenuPrice = varProduct.MenuPrice,
+        //                        Price = varProduct.Price,
+        //                        TaxPercentage = varProduct.TaxPercentage,
+        //                        ItemTimeStamp = varProduct.ItemTimeStamp,
+        //                        AppliesOnline = varProduct.AppliesOnline,
+        //                        OutletId = varProduct.OutletId,
+        //                        DateUpdated = DateTime.Now,
+        //                        DiscountCategoryName = varProduct.DiscountCategoryName
+        //                    });
+        //                    //createList.Add(varProduct);
+        //                }
 
-                    }
-                    db.BulkInsert(createList);
-                    if (updateList.Count > 0)
-                        db.BulkUpdate(updateList);
-                    //db.Products1.AddRange(createList);
-                    //db.BulkSaveChanges();
-                }
-            }
+        //            }
+        //            db.BulkInsert(createList);
+        //            if (updateList.Count > 0)
+        //                db.BulkUpdate(updateList);
+        //            //db.Products1.AddRange(createList);
+        //            //db.BulkSaveChanges();
+        //        }
+        //    }
 
-            //// DownloadString (encoding specified)
-            //using (WebClient client = new WebClient())
-            //{
-            //    client.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
-            //    // specify encoding
-            //    client.Encoding = System.Text.UTF8Encoding.UTF8;
+        //    //// DownloadString (encoding specified)
+        //    //using (WebClient client = new WebClient())
+        //    //{
+        //    //    client.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
+        //    //    // specify encoding
+        //    //    client.Encoding = System.Text.UTF8Encoding.UTF8;
 
-            //    // output
-            //    Console.WriteLine(client.DownloadString(Url));
-            //}
+        //    //    // output
+        //    //    Console.WriteLine(client.DownloadString(Url));
+        //    //}
 
-            //// DownloadData (encoding specified)
-            //using (WebClient client = new WebClient())
-            //{
-            //    client.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
-            //    Console.WriteLine(System.Text.UTF8Encoding.UTF8.GetString(client.DownloadData(Url)));
-            //}
-            return Json(new { Page = "" }, JsonRequestBehavior.AllowGet);
-        }
+        //    //// DownloadData (encoding specified)
+        //    //using (WebClient client = new WebClient())
+        //    //{
+        //    //    client.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
+        //    //    Console.WriteLine(System.Text.UTF8Encoding.UTF8.GetString(client.DownloadData(Url)));
+        //    //}
+        //    return Json(new { Page = "" }, JsonRequestBehavior.AllowGet);
+        //}
 
         public static double GetStockQty(string code)
         {
@@ -2948,9 +2948,9 @@ namespace ShopNow.Controllers
         {
             //  var shid = db.Shops.Where(s => s.Id == shopId).FirstOrDefault();
             int? count = 0;
-            var total = db.GetShopCategoryProductCount(shopId, CategoryId, str).ToList();
-            if (total.Count > 0)
-                count = total[0];
+            //var total = db.GetShopCategoryProductCount(shopId, CategoryId, str).ToList();
+            //if (total.Count > 0)
+               // count = total[0];
             var skip = page - 1;
             var model = db.GetShopCategoryProducts(shopId, CategoryId, str, skip, pageSize).ToList();
             int CurrentPage = page;
@@ -5614,11 +5614,11 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetAutoCompleteSearchResult(int customerid,double latitude, double longitude, string keyword)
-        {
-            var list = db.GetAutoCompleteSearch(longitude, latitude, keyword, customerid);
-            return Json(new { result = list }, JsonRequestBehavior.AllowGet);
-        }
+        //public JsonResult GetAutoCompleteSearchResult(int customerid,double latitude, double longitude, string keyword)
+        //{
+        //    var list = db.GetAutoCompleteSearch(longitude, latitude, keyword, customerid);
+        //    return Json(new { result = list }, JsonRequestBehavior.AllowGet);
+        //}
 
         //Calls
         public JsonResult SetCallActive(int orderno)
@@ -5775,7 +5775,7 @@ namespace ShopNow.Controllers
             public int ShopPaymentStatus { get; set; }
             public int DeliveryBoyPaymentStatus { get; set; }
             public int DeliveryOrderPaymentStatus { get; set; }
-            public double RatePerOrder { get; set; }
+            public double? RatePerOrder { get; set; }
             public int Status { get; set; }
             public System.DateTime DateEncoded { get; set; }
             public System.DateTime DateUpdated { get; set; }
@@ -5798,7 +5798,7 @@ namespace ShopNow.Controllers
             {
                 myData.Headers.Add("X-ApiKey", "Tx9ANC5RqngpTOM9VJ0JP2+1LbZvo1LI");
                 string getDetails = myData.DownloadString("https://admin.shopnowchat.in/Api/GetAllCartItems");
-                var result = JsonConvert.DeserializeObject<List<OldOrder>>(getDetails);
+                var result = JsonConvert.DeserializeObject<List<OldOrder>>(getDetails).OrderBy(i=>i.DateEncoded);
 
                 foreach (var item in result.GroupBy(i => i.OrderNumber))
                 {
@@ -5832,7 +5832,7 @@ namespace ShopNow.Controllers
                         Packingcharge = item.FirstOrDefault().Packingcharge,
                         PenaltyAmount = 0,
                         PenaltyRemark = null,
-                        RatePerOrder = item.FirstOrDefault().RatePerOrder,
+                        RatePerOrder = item.FirstOrDefault().RatePerOrder ?? 0,
                         ShopDeliveryDiscount = item.FirstOrDefault().ShopDeliveryDiscount,
                         ShopId = item.FirstOrDefault().ShopId,
                         ShopName = item.FirstOrDefault().ShopName,
@@ -5848,15 +5848,16 @@ namespace ShopNow.Controllers
                         WaitingRemark = "",
                         WaitingTime = 0,
                         WalletAmount = 0,
-                        CancelledRemark="",
-                        IsCallActive=false,
-                        IsPreorder=false,
-                        OfferAmount=0,
-                        OfferId=0,
+                        CancelledRemark = "",
+                        IsCallActive = false,
+                        IsPreorder = false,
+                        OfferAmount = 0,
+                        OfferId = 0,
                         PaymentMode = item.FirstOrDefault().PaymentMode,
-                        PaymentModeType = item.FirstOrDefault().PaymentMode=="Online Payment"?1:0,
-                        PreorderDeliveryDateTime=null,
-                        TipsAmount=0
+                        PaymentModeType = item.FirstOrDefault().PaymentMode == "Online Payment" ? 1 : 0,
+                        PreorderDeliveryDateTime = null,
+                        TipsAmount = 0,
+                        ShopAcceptedTime = null
                     };
 
                     db.Orders.Add(order);
@@ -5864,7 +5865,7 @@ namespace ShopNow.Controllers
 
                     if (order != null)
                     {
-                        foreach (var itemlist in result.ToList())
+                        foreach (var itemlist in result.Where(i => i.OrderNumber == order.OrderNumber).ToList())
                         {
                             var orderItem = new OrderItem
                             {
@@ -5888,7 +5889,7 @@ namespace ShopNow.Controllers
                         }
                     }
                 }
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(true, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -5931,7 +5932,10 @@ namespace ShopNow.Controllers
             if (model != null)
             {
                 var product = db.Products.FirstOrDefault(i => i.MasterProductId == model.Id);
-                return product.Id;
+                if (product != null)
+                    return product.Id;
+                else
+                    return 0;
             }
             else
                 return 0;

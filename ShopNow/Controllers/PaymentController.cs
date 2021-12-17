@@ -458,7 +458,7 @@ namespace ShopNow.Controllers
                    ShopName = i.p.p.ShopName,
                    ShopPaymentStatus = i.p.c.ShopPaymentStatus,
                    TransactionFee = i.pd.Any()? i.pd.FirstOrDefault().Fee : 0,
-                   TransactionTax = i.pd.Any() ? i.pd.FirstOrDefault().Fee : 0
+                   TransactionTax = i.pd.Any() ? i.pd.FirstOrDefault().Tax : 0
                }).ToList();
 
             return View(model);
