@@ -5878,7 +5878,7 @@ namespace ShopNow.Controllers
                                 OrderId = order.Id,
                                 Price = itemlist.TotalPrice,
                                 ProductId = GetProductId(itemlist.ProductName),
-                                ProductName = "N'" + itemlist.ProductName,
+                                ProductName = itemlist.ProductName,
                                 Quantity = itemlist.Qty,
                                 UnitPrice = itemlist.Price,
                                 Status = 0
@@ -5889,7 +5889,7 @@ namespace ShopNow.Controllers
                         }
                     }
                 }
-                return Json(result.Where(i => i.OrderNumber == 253051825).ToList(), JsonRequestBehavior.AllowGet);
+                return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
 
