@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="sncEntities.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="sncModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AccessPolicies">
           <Key>
             <PropertyRef Name="Id" />
@@ -102,19 +102,11 @@ warning 6002: The table/view 'snc.dbo.AddOnCategories' does not have a primary k
           <Property Name="CreatedBy" Type="nvarchar(max)" />
           <Property Name="UpdatedBy" Type="nvarchar(max)" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'snc.dbo.Agency' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Agency">
           <Key>
             <PropertyRef Name="Id" />
-            <PropertyRef Name="CustomerId" />
-            <PropertyRef Name="Latitude" />
-            <PropertyRef Name="Longitude" />
-            <PropertyRef Name="Status" />
-            <PropertyRef Name="DateEncoded" />
-            <PropertyRef Name="DateUpdated" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="500" />
           <Property Name="PhoneNumber" Type="nvarchar" MaxLength="50" />
           <Property Name="Email" Type="nvarchar" MaxLength="50" />
@@ -124,7 +116,7 @@ warning 6002: The table/view 'snc.dbo.Agency' does not have a primary key define
           <Property Name="StateName" Type="nvarchar" MaxLength="50" />
           <Property Name="DistrictName" Type="nvarchar" MaxLength="50" />
           <Property Name="StreetName" Type="nvarchar" MaxLength="50" />
-          <Property Name="Address" Type="nchar" MaxLength="10" />
+          <Property Name="Address" Type="nvarchar(max)" />
           <Property Name="PinCode" Type="nvarchar" MaxLength="50" />
           <Property Name="Latitude" Type="float" Nullable="false" />
           <Property Name="Longitude" Type="float" Nullable="false" />
@@ -2091,8 +2083,9 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
         <Function Name="test" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="str" Type="nvarchar" Mode="In" />
         </Function>
-        <EntityContainer Name="sncEntitiesStoreContainer">
+        <EntityContainer Name="sncModelStoreContainer">
           <EntitySet Name="AccessPolicies" EntityType="Self.AccessPolicies" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Agency" EntityType="Self.Agency" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Banners" EntityType="Self.Banners" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerWalletHistory" EntityType="Self.CustomerWalletHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DeliveryCharge" EntityType="Self.DeliveryCharge" Schema="dbo" store:Type="Tables" />
@@ -2145,38 +2138,6 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
     [AddOnCategories].[CreatedBy] AS [CreatedBy], 
     [AddOnCategories].[UpdatedBy] AS [UpdatedBy]
     FROM [dbo].[AddOnCategories] AS [AddOnCategories]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="Agency" EntityType="Self.Agency" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Agency].[Id] AS [Id], 
-    [Agency].[Name] AS [Name], 
-    [Agency].[PhoneNumber] AS [PhoneNumber], 
-    [Agency].[Email] AS [Email], 
-    [Agency].[CustomerId] AS [CustomerId], 
-    [Agency].[ImagePath] AS [ImagePath], 
-    [Agency].[CountryName] AS [CountryName], 
-    [Agency].[StateName] AS [StateName], 
-    [Agency].[DistrictName] AS [DistrictName], 
-    [Agency].[StreetName] AS [StreetName], 
-    [Agency].[Address] AS [Address], 
-    [Agency].[PinCode] AS [PinCode], 
-    [Agency].[Latitude] AS [Latitude], 
-    [Agency].[Longitude] AS [Longitude], 
-    [Agency].[PanNumber] AS [PanNumber], 
-    [Agency].[ImagePanPath] AS [ImagePanPath], 
-    [Agency].[BankName] AS [BankName], 
-    [Agency].[AccountName] AS [AccountName], 
-    [Agency].[AccountNumber] AS [AccountNumber], 
-    [Agency].[IFSCCode] AS [IFSCCode], 
-    [Agency].[SwiftCode] AS [SwiftCode], 
-    [Agency].[BankPassbookPath] AS [BankPassbookPath], 
-    [Agency].[UPIID] AS [UPIID], 
-    [Agency].[Status] AS [Status], 
-    [Agency].[DateEncoded] AS [DateEncoded], 
-    [Agency].[DateUpdated] AS [DateUpdated], 
-    [Agency].[UpdatedBy] AS [UpdatedBy], 
-    [Agency].[CreatedBy] AS [CreatedBy]
-    FROM [dbo].[Agency] AS [Agency]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="ApiSettings" EntityType="Self.ApiSettings" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -3298,10 +3259,11 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
     FROM [dbo].[UserEnquiries] AS [UserEnquiries]</DefiningQuery>
           </EntitySet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="sncEntities" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="sncModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <ComplexType Name="GetTableVAlueString_Result">
           <Property Name="Name" Type="String" MaxLength="600" FixedLength="false" Unicode="true" />
         </ComplexType>
@@ -3325,6 +3287,39 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="Agency">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="ImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CountryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StateName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DistrictName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StreetName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PinCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Latitude" Type="Double" Nullable="false" />
+          <Property Name="Longitude" Type="Double" Nullable="false" />
+          <Property Name="PanNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePanPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BankName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AccountName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AccountNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IFSCCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SwiftCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BankPassbookPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UPIID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Banner">
           <Key>
@@ -3374,6 +3369,30 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="OrderItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderId" Type="Int64" Nullable="false" />
+          <Property Name="OrdeNumber" Type="Int32" Nullable="false" />
+          <Property Name="ProductId" Type="Int64" Nullable="false" />
+          <Property Name="ProductName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BrandId" Type="Int32" Nullable="false" />
+          <Property Name="BrandName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <Property Name="CategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="UnitPrice" Type="Double" Nullable="false" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="OfferId" Type="Int32" />
+          <Property Name="OfferAmount" Type="Double" Nullable="false" />
+          <Property Name="MiddlePrice" Type="Double" Nullable="false" />
+          <Property Name="HasAddon" Type="Boolean" Nullable="false" />
+          <Property Name="AddOnType" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Order">
           <Key>
@@ -3452,6 +3471,14 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="ShopStaff">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShopId" Type="Int32" Nullable="false" />
+          <Property Name="StaffId" Type="Int32" Nullable="false" />
+        </EntityType>
         <EntityType Name="tbl">
           <Key>
             <PropertyRef Name="Id" />
@@ -3528,45 +3555,6 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="Agency">
-          <Key>
-            <PropertyRef Name="Id" />
-            <PropertyRef Name="CustomerId" />
-            <PropertyRef Name="Latitude" />
-            <PropertyRef Name="Longitude" />
-            <PropertyRef Name="Status" />
-            <PropertyRef Name="DateEncoded" />
-            <PropertyRef Name="DateUpdated" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="PhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CustomerId" Type="Int32" Nullable="false" />
-          <Property Name="ImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CountryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="StateName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DistrictName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="StreetName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Address" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="PinCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Latitude" Type="Double" Nullable="false" />
-          <Property Name="Longitude" Type="Double" Nullable="false" />
-          <Property Name="PanNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ImagePanPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="BankName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="AccountName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="AccountNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="IFSCCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="SwiftCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="BankPassbookPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="UPIID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ApiSetting">
           <Key>
@@ -4598,6 +4586,44 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="ProductDishAddOn">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="AddOnCategoryId" />
+            <PropertyRef Name="CrustId" />
+            <PropertyRef Name="Status" />
+            <PropertyRef Name="PortionId" />
+            <PropertyRef Name="MinSelectionLimit" />
+            <PropertyRef Name="MaxSelectionLimit" />
+            <PropertyRef Name="PortionPrice" />
+            <PropertyRef Name="AddOnsPrice" />
+            <PropertyRef Name="CrustPrice" />
+            <PropertyRef Name="AddOnType" />
+            <PropertyRef Name="DateEncoded" />
+            <PropertyRef Name="DateUpdated" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="AddOnItemName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="MasterProductId" Type="Int64" />
+          <Property Name="MasterProductName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AddOnCategoryId" Type="Int32" Nullable="false" />
+          <Property Name="AddOnCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CrustId" Type="Int32" Nullable="false" />
+          <Property Name="CrustName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="PortionId" Type="Int32" Nullable="false" />
+          <Property Name="PortionName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MinSelectionLimit" Type="Int32" Nullable="false" />
+          <Property Name="MaxSelectionLimit" Type="Int32" Nullable="false" />
+          <Property Name="PortionPrice" Type="Double" Nullable="false" />
+          <Property Name="AddOnsPrice" Type="Double" Nullable="false" />
+          <Property Name="CrustPrice" Type="Double" Nullable="false" />
+          <Property Name="AddOnType" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
         <EntityType Name="Product">
           <Key>
             <PropertyRef Name="Id" />
@@ -4819,6 +4845,54 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
           <Property Name="DeliveryCredit" Type="Double" Nullable="false" />
           <Property Name="CustomerId" Type="Int32" Nullable="false" />
           <Property Name="DateUpdated" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="ShopDishAddOn">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="MasterProductId" />
+            <PropertyRef Name="AddOnCategoryId" />
+            <PropertyRef Name="CrustId" />
+            <PropertyRef Name="PortionId" />
+            <PropertyRef Name="MinSelectionLimit" />
+            <PropertyRef Name="MaxSelectionLimit" />
+            <PropertyRef Name="PortionPrice" />
+            <PropertyRef Name="AddOnsPrice" />
+            <PropertyRef Name="CrustPrice" />
+            <PropertyRef Name="AddOnType" />
+            <PropertyRef Name="ProductId" />
+            <PropertyRef Name="ShopId" />
+            <PropertyRef Name="ProductDishAddonId" />
+            <PropertyRef Name="Status" />
+            <PropertyRef Name="DateEncoded" />
+            <PropertyRef Name="DateUpdated" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="AddOnItemName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="MasterProductId" Type="Int64" Nullable="false" />
+          <Property Name="MasterProductName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AddOnCategoryId" Type="Int32" Nullable="false" />
+          <Property Name="AddOnCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CrustId" Type="Int32" Nullable="false" />
+          <Property Name="CrustName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PortionId" Type="Int32" Nullable="false" />
+          <Property Name="PortionName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MinSelectionLimit" Type="Int32" Nullable="false" />
+          <Property Name="MaxSelectionLimit" Type="Int32" Nullable="false" />
+          <Property Name="PortionPrice" Type="Double" Nullable="false" />
+          <Property Name="AddOnsPrice" Type="Double" Nullable="false" />
+          <Property Name="CrustPrice" Type="Double" Nullable="false" />
+          <Property Name="AddOnType" Type="Int32" Nullable="false" />
+          <Property Name="ProductId" Type="Int64" Nullable="false" />
+          <Property Name="ProductName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ShopId" Type="Int32" Nullable="false" />
+          <Property Name="ShopName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="ProductDishAddonId" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ShopMember">
           <Key>
@@ -5048,17 +5122,19 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
         </EntityType>
         <EntityContainer Name="sncEntities1" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AccessPolicies" EntityType="Self.AccessPolicy" />
+          <EntitySet Name="Agencies" EntityType="Self.Agency" />
           <EntitySet Name="Banners" EntityType="Self.Banner" />
           <EntitySet Name="CustomerWalletHistories" EntityType="Self.CustomerWalletHistory" />
           <EntitySet Name="DeliveryCharges" EntityType="Self.DeliveryCharge" />
+          <EntitySet Name="OrderItems" EntityType="Self.OrderItem" />
           <EntitySet Name="Orders" EntityType="Self.Order" />
           <EntitySet Name="Pages" EntityType="Self.Page" />
+          <EntitySet Name="ShopStaffs" EntityType="Self.ShopStaff" />
           <EntitySet Name="tbls" EntityType="Self.tbl" />
           <EntitySet Name="AchievementProducts" EntityType="Self.AchievementProduct" />
           <EntitySet Name="AchievementSettings" EntityType="Self.AchievementSetting" />
           <EntitySet Name="AchievementShops" EntityType="Self.AchievementShop" />
           <EntitySet Name="AddOnCategories" EntityType="Self.AddOnCategory" />
-          <EntitySet Name="Agencies" EntityType="Self.Agency" />
           <EntitySet Name="ApiSettings" EntityType="Self.ApiSetting" />
           <EntitySet Name="AppDetails" EntityType="Self.AppDetail" />
           <EntitySet Name="BillingCharges" EntityType="Self.BillingCharge" />
@@ -5101,6 +5177,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
           <EntitySet Name="PincodeRates" EntityType="Self.PincodeRate" />
           <EntitySet Name="PlatFormCreditRates" EntityType="Self.PlatFormCreditRate" />
           <EntitySet Name="Portions" EntityType="Self.Portion" />
+          <EntitySet Name="ProductDishAddOns" EntityType="Self.ProductDishAddOn" />
           <EntitySet Name="Products" EntityType="Self.Product" />
           <EntitySet Name="ProductSchedules" EntityType="Self.ProductSchedule" />
           <EntitySet Name="ProductSpecificationItems" EntityType="Self.ProductSpecificationItem" />
@@ -5111,6 +5188,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
           <EntitySet Name="SearchDatas" EntityType="Self.SearchData" />
           <EntitySet Name="ShopCategories" EntityType="Self.ShopCategory" />
           <EntitySet Name="ShopCredits" EntityType="Self.ShopCredit" />
+          <EntitySet Name="ShopDishAddOns" EntityType="Self.ShopDishAddOn" />
           <EntitySet Name="ShopMembers" EntityType="Self.ShopMember" />
           <EntitySet Name="Shops" EntityType="Self.Shop" />
           <EntitySet Name="ShopSchedules" EntityType="Self.ShopSchedule" />
@@ -5118,11 +5196,11 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
           <EntitySet Name="Staffs" EntityType="Self.Staff" />
           <EntitySet Name="SubCategories" EntityType="Self.SubCategory" />
           <EntitySet Name="UserEnquiries" EntityType="Self.UserEnquiry" />
-          <FunctionImport Name="GetTableVAlueString" IsComposable="true" ReturnType="Collection(sncEntities.GetTableVAlueString_Result)">
-          <Parameter Name="key" Mode="In" Type="String" />
+          <FunctionImport Name="GetTableVAlueString" IsComposable="true" ReturnType="Collection(sncModel.GetTableVAlueString_Result)">
+            <Parameter Name="key" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="getCategoryListbyShopcode">
-          <Parameter Name="code" Mode="In" Type="String" />
+            <Parameter Name="code" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetCategoryProductsList">
             <Parameter Name="shopCode" Mode="In" Type="String" />
@@ -5132,8 +5210,9 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             <Parameter Name="pageSize" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetCustomerCount" ReturnType="Collection(Int32)" />
-          <FunctionImport Name="GetDEliveryBoyList" ReturnType="Collection(sncEntities.GetDEliveryBoyList_Result)" />
-          <FunctionImport Name="GetProductList" ReturnType="Collection(sncEntities.GetProductList_Result)">
+          <FunctionImport Name="GetDashBoardDetails" ReturnType="Collection(sncModel.GetDashBoardDetails_Result)" />
+          <FunctionImport Name="GetDEliveryBoyList" ReturnType="Collection(sncModel.GetDEliveryBoyList_Result)" />
+          <FunctionImport Name="GetProductList" ReturnType="Collection(sncModel.GetProductList_Result)">
             <Parameter Name="Longitude" Mode="In" Type="Double" />
             <Parameter Name="Latitude" Mode="In" Type="Double" />
             <Parameter Name="str" Mode="In" Type="String" />
@@ -5157,7 +5236,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             <Parameter Name="categoryCode" Mode="In" Type="Int32" />
             <Parameter Name="str" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="GetShopCategoryProducts" ReturnType="Collection(sncEntities.GetShopCategoryProducts_Result)">
+          <FunctionImport Name="GetShopCategoryProducts" ReturnType="Collection(sncModel.GetShopCategoryProducts_Result)">
             <Parameter Name="shopCode" Mode="In" Type="Int32" />
             <Parameter Name="categoryCode" Mode="In" Type="Int32" />
             <Parameter Name="str" Mode="In" Type="String" />
@@ -5171,8 +5250,8 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             <Parameter Name="page" Mode="In" Type="Int32" />
             <Parameter Name="pageSize" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="GetShopname" ReturnType="Collection(sncEntities.GetShopname_Result)">
-          <Parameter Name="shopId" Mode="In" Type="Int32" />
+          <FunctionImport Name="GetShopname" ReturnType="Collection(sncModel.GetShopname_Result)">
+            <Parameter Name="shopId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ReatillerPaymentReport">
             <Parameter Name="from" Mode="In" Type="DateTime" />
@@ -5197,14 +5276,29 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             <Parameter Name="Rowofpage" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="test">
-          <Parameter Name="str" Mode="In" Type="String" />
+            <Parameter Name="str" Mode="In" Type="String" />
           </FunctionImport>
-          <EntitySet Name="OrderItems" EntityType="sncEntities.OrderItem" />
-          <EntitySet Name="ShopStaffs" EntityType="sncEntities.ShopStaff" />
-          <EntitySet Name="ProductDishAddOns" EntityType="sncEntities.ProductDishAddOn" />
-          <EntitySet Name="ShopDishAddOns" EntityType="sncEntities.ShopDishAddOn" />
-          <FunctionImport Name="GetDashBoardDetails" ReturnType="Collection(sncEntities.GetDashBoardDetails_Result)" />
         </EntityContainer>
+        <ComplexType Name="GetDashBoardDetails_Result">
+          <Property Type="Int32" Name="NewOrder" Nullable="true" />
+          <Property Type="Int32" Name="Shopacceptance" Nullable="true" />
+          <Property Type="Int32" Name="orderwithoutdeliveryboy" Nullable="true" />
+          <Property Type="Int32" Name="deliveryaccpetance" Nullable="true" />
+          <Property Type="Int32" Name="shoppickup" Nullable="true" />
+          <Property Type="Int32" Name="customerdelivery" Nullable="true" />
+          <Property Type="Int32" Name="RefundCount" Nullable="true" />
+          <Property Type="Int32" Name="ShopLowCreditCount" Nullable="true" />
+          <Property Type="Int32" Name="CustomerPrescriptionCount" Nullable="true" />
+          <Property Type="Int32" Name="UnMappedCount" Nullable="true" />
+          <Property Type="Int32" Name="OrderMissedCount" Nullable="true" />
+          <Property Type="Int32" Name="ProductUnMappedCount" Nullable="true" />
+          <Property Type="Int32" Name="CustomerAadhaarVerifyCount" Nullable="true" />
+          <Property Type="Int32" Name="ShopOnBoardingVerifyCount" Nullable="true" />
+          <Property Type="Int32" Name="DeliveryBoyVerifyCount" Nullable="true" />
+          <Property Type="Int32" Name="BannerPendingCount" Nullable="true" />
+          <Property Type="Int32" Name="CustomerCount" Nullable="true" />
+          <Property Type="Int32" Name="ShopCount" Nullable="true" />
+        </ComplexType>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
           <Property Type="String" Name="Name" Nullable="true" />
@@ -5265,152 +5359,14 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
           <Property Type="String" Name="PhoneNumber" Nullable="true" />
           <Property Type="Double" Name="Rating" Nullable="false" />
         </ComplexType>
-        <EntityType Name="OrderItem">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OrderId" Type="Int64" Nullable="false" />
-          <Property Name="OrdeNumber" Type="Int32" Nullable="false" />
-          <Property Name="ProductId" Type="Int64" Nullable="false" />
-          <Property Name="ProductName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="BrandId" Type="Int32" Nullable="false" />
-          <Property Name="BrandName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CategoryId" Type="Int32" Nullable="false" />
-          <Property Name="CategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Quantity" Type="Int32" Nullable="false" />
-          <Property Name="UnitPrice" Type="Double" Nullable="false" />
-          <Property Name="Price" Type="Double" Nullable="false" />
-          <Property Name="OfferId" Type="Int32" />
-          <Property Name="OfferAmount" Type="Double" Nullable="false" />
-          <Property Name="MiddlePrice" Type="Double" Nullable="false" />
-          <Property Name="HasAddon" Type="Boolean" Nullable="false" />
-          <Property Name="AddOnType" Type="Int32" Nullable="false" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="ShopStaff">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ShopId" Type="Int32" Nullable="false" />
-          <Property Name="StaffId" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="ProductDishAddOn">
-          <Key>
-            <PropertyRef Name="Id" />
-            <PropertyRef Name="AddOnCategoryId" />
-            <PropertyRef Name="CrustId" />
-            <PropertyRef Name="Status" />
-            <PropertyRef Name="PortionId" />
-            <PropertyRef Name="MinSelectionLimit" />
-            <PropertyRef Name="MaxSelectionLimit" />
-            <PropertyRef Name="PortionPrice" />
-            <PropertyRef Name="AddOnsPrice" />
-            <PropertyRef Name="CrustPrice" />
-            <PropertyRef Name="AddOnType" />
-            <PropertyRef Name="DateEncoded" />
-            <PropertyRef Name="DateUpdated" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="AddOnItemName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="MasterProductId" Type="Int64" />
-          <Property Name="MasterProductName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="AddOnCategoryId" Type="Int32" Nullable="false" />
-          <Property Name="AddOnCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CrustId" Type="Int32" Nullable="false" />
-          <Property Name="CrustName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="PortionId" Type="Int32" Nullable="false" />
-          <Property Name="PortionName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="MinSelectionLimit" Type="Int32" Nullable="false" />
-          <Property Name="MaxSelectionLimit" Type="Int32" Nullable="false" />
-          <Property Name="PortionPrice" Type="Double" Nullable="false" />
-          <Property Name="AddOnsPrice" Type="Double" Nullable="false" />
-          <Property Name="CrustPrice" Type="Double" Nullable="false" />
-          <Property Name="AddOnType" Type="Int32" Nullable="false" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="ShopDishAddOn">
-          <Key>
-            <PropertyRef Name="Id" />
-            <PropertyRef Name="MasterProductId" />
-            <PropertyRef Name="AddOnCategoryId" />
-            <PropertyRef Name="CrustId" />
-            <PropertyRef Name="PortionId" />
-            <PropertyRef Name="MinSelectionLimit" />
-            <PropertyRef Name="MaxSelectionLimit" />
-            <PropertyRef Name="PortionPrice" />
-            <PropertyRef Name="AddOnsPrice" />
-            <PropertyRef Name="CrustPrice" />
-            <PropertyRef Name="AddOnType" />
-            <PropertyRef Name="ProductId" />
-            <PropertyRef Name="ShopId" />
-            <PropertyRef Name="ProductDishAddonId" />
-            <PropertyRef Name="Status" />
-            <PropertyRef Name="DateEncoded" />
-            <PropertyRef Name="DateUpdated" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="AddOnItemName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="MasterProductId" Type="Int64" Nullable="false" />
-          <Property Name="MasterProductName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="AddOnCategoryId" Type="Int32" Nullable="false" />
-          <Property Name="AddOnCategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CrustId" Type="Int32" Nullable="false" />
-          <Property Name="CrustName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PortionId" Type="Int32" Nullable="false" />
-          <Property Name="PortionName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="MinSelectionLimit" Type="Int32" Nullable="false" />
-          <Property Name="MaxSelectionLimit" Type="Int32" Nullable="false" />
-          <Property Name="PortionPrice" Type="Double" Nullable="false" />
-          <Property Name="AddOnsPrice" Type="Double" Nullable="false" />
-          <Property Name="CrustPrice" Type="Double" Nullable="false" />
-          <Property Name="AddOnType" Type="Int32" Nullable="false" />
-          <Property Name="ProductId" Type="Int64" Nullable="false" />
-          <Property Name="ProductName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="ShopId" Type="Int32" Nullable="false" />
-          <Property Name="ShopName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="ProductDishAddonId" Type="Int32" Nullable="false" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <ComplexType Name="GetDashBoardDetails_Result">
-          <Property Type="Int32" Name="NewOrder" Nullable="true" />
-          <Property Type="Int32" Name="Shopacceptance" Nullable="true" />
-          <Property Type="Int32" Name="orderwithoutdeliveryboy" Nullable="true" />
-          <Property Type="Int32" Name="deliveryaccpetance" Nullable="true" />
-          <Property Type="Int32" Name="shoppickup" Nullable="true" />
-          <Property Type="Int32" Name="customerdelivery" Nullable="true" />
-          <Property Type="Int32" Name="RefundCount" Nullable="true" />
-          <Property Type="Int32" Name="ShopLowCreditCount" Nullable="true" />
-          <Property Type="Int32" Name="CustomerPrescriptionCount" Nullable="true" />
-          <Property Type="Int32" Name="UnMappedCount" Nullable="true" />
-          <Property Type="Int32" Name="OrderMissedCount" Nullable="true" />
-          <Property Type="Int32" Name="ProductUnMappedCount" Nullable="true" />
-          <Property Type="Int32" Name="CustomerAadhaarVerifyCount" Nullable="true" />
-          <Property Type="Int32" Name="ShopOnBoardingVerifyCount" Nullable="true" />
-          <Property Type="Int32" Name="DeliveryBoyVerifyCount" Nullable="true" />
-          <Property Type="Int32" Name="BannerPendingCount" Nullable="true" />
-          <Property Type="Int32" Name="CustomerCount" Nullable="true" />
-          <Property Type="Int32" Name="ShopCount" Nullable="true" />
-        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="sncEntitiesStoreContainer" CdmEntityContainer="sncEntities1">
+        <EntityContainerMapping StorageEntityContainer="sncModelStoreContainer" CdmEntityContainer="sncEntities1">
           <EntitySetMapping Name="AccessPolicies">
-            <EntityTypeMapping TypeName="sncEntities.AccessPolicy">
+            <EntityTypeMapping TypeName="sncModel.AccessPolicy">
               <MappingFragment StoreEntitySet="AccessPolicies">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="PageCode" ColumnName="PageCode" />
@@ -5431,8 +5387,42 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Agencies">
+            <EntityTypeMapping TypeName="sncModel.Agency">
+              <MappingFragment StoreEntitySet="Agency">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="StateName" ColumnName="StateName" />
+                <ScalarProperty Name="DistrictName" ColumnName="DistrictName" />
+                <ScalarProperty Name="StreetName" ColumnName="StreetName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="PinCode" ColumnName="PinCode" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="PanNumber" ColumnName="PanNumber" />
+                <ScalarProperty Name="ImagePanPath" ColumnName="ImagePanPath" />
+                <ScalarProperty Name="BankName" ColumnName="BankName" />
+                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+                <ScalarProperty Name="IFSCCode" ColumnName="IFSCCode" />
+                <ScalarProperty Name="SwiftCode" ColumnName="SwiftCode" />
+                <ScalarProperty Name="BankPassbookPath" ColumnName="BankPassbookPath" />
+                <ScalarProperty Name="UPIID" ColumnName="UPIID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Banners">
-            <EntityTypeMapping TypeName="sncEntities.Banner">
+            <EntityTypeMapping TypeName="sncModel.Banner">
               <MappingFragment StoreEntitySet="Banners">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
@@ -5455,7 +5445,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CustomerWalletHistories">
-            <EntityTypeMapping TypeName="sncEntities.CustomerWalletHistory">
+            <EntityTypeMapping TypeName="sncModel.CustomerWalletHistory">
               <MappingFragment StoreEntitySet="CustomerWalletHistory">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
@@ -5467,7 +5457,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="DeliveryCharges">
-            <EntityTypeMapping TypeName="sncEntities.DeliveryCharge">
+            <EntityTypeMapping TypeName="sncModel.DeliveryCharge">
               <MappingFragment StoreEntitySet="DeliveryCharge">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ChargeUpto5Km" ColumnName="ChargeUpto5Km" />
@@ -5483,8 +5473,33 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="OrderItems">
+            <EntityTypeMapping TypeName="sncModel.OrderItem">
+              <MappingFragment StoreEntitySet="OrderItems">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="OrdeNumber" ColumnName="OrdeNumber" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
+                <ScalarProperty Name="BrandName" ColumnName="BrandName" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="OfferId" ColumnName="OfferId" />
+                <ScalarProperty Name="OfferAmount" ColumnName="OfferAmount" />
+                <ScalarProperty Name="MiddlePrice" ColumnName="MiddlePrice" />
+                <ScalarProperty Name="HasAddon" ColumnName="HasAddon" />
+                <ScalarProperty Name="AddOnType" ColumnName="AddOnType" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Orders">
-            <EntityTypeMapping TypeName="sncEntities.Order">
+            <EntityTypeMapping TypeName="sncModel.Order">
               <MappingFragment StoreEntitySet="Orders">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
@@ -5549,7 +5564,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Pages">
-            <EntityTypeMapping TypeName="sncEntities.Page">
+            <EntityTypeMapping TypeName="sncModel.Page">
               <MappingFragment StoreEntitySet="Pages">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
@@ -5562,8 +5577,17 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ShopStaffs">
+            <EntityTypeMapping TypeName="sncModel.ShopStaff">
+              <MappingFragment StoreEntitySet="ShopStaffs">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="StaffId" ColumnName="StaffId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="tbls">
-            <EntityTypeMapping TypeName="sncEntities.tbl">
+            <EntityTypeMapping TypeName="sncModel.tbl">
               <MappingFragment StoreEntitySet="tbl">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -5573,7 +5597,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AchievementProducts">
-            <EntityTypeMapping TypeName="sncEntities.AchievementProduct">
+            <EntityTypeMapping TypeName="sncModel.AchievementProduct">
               <MappingFragment StoreEntitySet="AchievementProducts">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="AchievementId" ColumnName="AchievementId" />
@@ -5582,7 +5606,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AchievementSettings">
-            <EntityTypeMapping TypeName="sncEntities.AchievementSetting">
+            <EntityTypeMapping TypeName="sncModel.AchievementSetting">
               <MappingFragment StoreEntitySet="AchievementSettings">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ShopDistrict" ColumnName="ShopDistrict" />
@@ -5604,7 +5628,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AchievementShops">
-            <EntityTypeMapping TypeName="sncEntities.AchievementShop">
+            <EntityTypeMapping TypeName="sncModel.AchievementShop">
               <MappingFragment StoreEntitySet="AchievementShops">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="AchievementId" ColumnName="AchievementId" />
@@ -5613,7 +5637,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AddOnCategories">
-            <EntityTypeMapping TypeName="sncEntities.AddOnCategory">
+            <EntityTypeMapping TypeName="sncModel.AddOnCategory">
               <MappingFragment StoreEntitySet="AddOnCategories">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -5625,42 +5649,8 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Agencies">
-            <EntityTypeMapping TypeName="sncEntities.Agency">
-              <MappingFragment StoreEntitySet="Agency">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
-                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
-                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
-                <ScalarProperty Name="StateName" ColumnName="StateName" />
-                <ScalarProperty Name="DistrictName" ColumnName="DistrictName" />
-                <ScalarProperty Name="StreetName" ColumnName="StreetName" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="PinCode" ColumnName="PinCode" />
-                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-                <ScalarProperty Name="PanNumber" ColumnName="PanNumber" />
-                <ScalarProperty Name="ImagePanPath" ColumnName="ImagePanPath" />
-                <ScalarProperty Name="BankName" ColumnName="BankName" />
-                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
-                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
-                <ScalarProperty Name="IFSCCode" ColumnName="IFSCCode" />
-                <ScalarProperty Name="SwiftCode" ColumnName="SwiftCode" />
-                <ScalarProperty Name="BankPassbookPath" ColumnName="BankPassbookPath" />
-                <ScalarProperty Name="UPIID" ColumnName="UPIID" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ApiSettings">
-            <EntityTypeMapping TypeName="sncEntities.ApiSetting">
+            <EntityTypeMapping TypeName="sncModel.ApiSetting">
               <MappingFragment StoreEntitySet="ApiSettings">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
@@ -5684,7 +5674,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AppDetails">
-            <EntityTypeMapping TypeName="sncEntities.AppDetail">
+            <EntityTypeMapping TypeName="sncModel.AppDetail">
               <MappingFragment StoreEntitySet="AppDetails">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -5695,7 +5685,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="BillingCharges">
-            <EntityTypeMapping TypeName="sncEntities.BillingCharge">
+            <EntityTypeMapping TypeName="sncModel.BillingCharge">
               <MappingFragment StoreEntitySet="BillingCharge">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
@@ -5712,7 +5702,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Bills">
-            <EntityTypeMapping TypeName="sncEntities.Bill">
+            <EntityTypeMapping TypeName="sncModel.Bill">
               <MappingFragment StoreEntitySet="Bills">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
@@ -5741,7 +5731,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="BrandOwners">
-            <EntityTypeMapping TypeName="sncEntities.BrandOwner">
+            <EntityTypeMapping TypeName="sncModel.BrandOwner">
               <MappingFragment StoreEntitySet="BrandOwners">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
@@ -5780,7 +5770,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Brands">
-            <EntityTypeMapping TypeName="sncEntities.Brand">
+            <EntityTypeMapping TypeName="sncModel.Brand">
               <MappingFragment StoreEntitySet="Brands">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -5793,7 +5783,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CallRecords">
-            <EntityTypeMapping TypeName="sncEntities.CallRecord">
+            <EntityTypeMapping TypeName="sncModel.CallRecord">
               <MappingFragment StoreEntitySet="CallRecords">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Caller" ColumnName="Caller" />
@@ -5810,7 +5800,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Categories">
-            <EntityTypeMapping TypeName="sncEntities.Category">
+            <EntityTypeMapping TypeName="sncModel.Category">
               <MappingFragment StoreEntitySet="Categories">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -5827,7 +5817,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Crusts">
-            <EntityTypeMapping TypeName="sncEntities.Crust">
+            <EntityTypeMapping TypeName="sncModel.Crust">
               <MappingFragment StoreEntitySet="Crusts">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -5840,7 +5830,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CustomerAchievements">
-            <EntityTypeMapping TypeName="sncEntities.CustomerAchievement">
+            <EntityTypeMapping TypeName="sncModel.CustomerAchievement">
               <MappingFragment StoreEntitySet="CustomerAchievements">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="AchievementId" ColumnName="AchievementId" />
@@ -5852,7 +5842,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CustomerAddresses">
-            <EntityTypeMapping TypeName="sncEntities.CustomerAddress">
+            <EntityTypeMapping TypeName="sncModel.CustomerAddress">
               <MappingFragment StoreEntitySet="CustomerAddresses">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -5881,7 +5871,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CustomerFavorites">
-            <EntityTypeMapping TypeName="sncEntities.CustomerFavorite">
+            <EntityTypeMapping TypeName="sncModel.CustomerFavorite">
               <MappingFragment StoreEntitySet="CustomerFavorites">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
@@ -5893,7 +5883,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CustomerGiftCards">
-            <EntityTypeMapping TypeName="sncEntities.CustomerGiftCard">
+            <EntityTypeMapping TypeName="sncModel.CustomerGiftCard">
               <MappingFragment StoreEntitySet="CustomerGiftCards">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
@@ -5908,7 +5898,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CustomerPrescriptions">
-            <EntityTypeMapping TypeName="sncEntities.CustomerPrescription">
+            <EntityTypeMapping TypeName="sncModel.CustomerPrescription">
               <MappingFragment StoreEntitySet="CustomerPrescription">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
@@ -5924,7 +5914,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CustomerPrescriptionImages">
-            <EntityTypeMapping TypeName="sncEntities.CustomerPrescriptionImage">
+            <EntityTypeMapping TypeName="sncModel.CustomerPrescriptionImage">
               <MappingFragment StoreEntitySet="CustomerPrescriptionImages">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="CustomerPrescriptionId" ColumnName="CustomerPrescriptionId" />
@@ -5933,7 +5923,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CustomerPrescriptionItems">
-            <EntityTypeMapping TypeName="sncEntities.CustomerPrescriptionItem">
+            <EntityTypeMapping TypeName="sncModel.CustomerPrescriptionItem">
               <MappingFragment StoreEntitySet="CustomerPrescriptionItem">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="CustomerPrescriptionId" ColumnName="CustomerPrescriptionId" />
@@ -5946,7 +5936,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CustomerReviews">
-            <EntityTypeMapping TypeName="sncEntities.CustomerReview">
+            <EntityTypeMapping TypeName="sncModel.CustomerReview">
               <MappingFragment StoreEntitySet="CustomerReview">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
@@ -5964,7 +5954,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CustomerReviewReplies">
-            <EntityTypeMapping TypeName="sncEntities.CustomerReviewReply">
+            <EntityTypeMapping TypeName="sncModel.CustomerReviewReply">
               <MappingFragment StoreEntitySet="CustomerReviewReply">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="CustomerReviewId" ColumnName="CustomerReviewId" />
@@ -5976,7 +5966,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Customers">
-            <EntityTypeMapping TypeName="sncEntities.Customer">
+            <EntityTypeMapping TypeName="sncModel.Customer">
               <MappingFragment StoreEntitySet="Customers">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -6019,7 +6009,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CustomerSearchDatas">
-            <EntityTypeMapping TypeName="sncEntities.CustomerSearchData">
+            <EntityTypeMapping TypeName="sncModel.CustomerSearchData">
               <MappingFragment StoreEntitySet="CustomerSearchData">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="SearchKeyword" ColumnName="SearchKeyword" />
@@ -6032,7 +6022,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CustomerSearchHistories">
-            <EntityTypeMapping TypeName="sncEntities.CustomerSearchHistory">
+            <EntityTypeMapping TypeName="sncModel.CustomerSearchHistory">
               <MappingFragment StoreEntitySet="CustomerSearchHistory">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
@@ -6045,7 +6035,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="DeliveryBoys">
-            <EntityTypeMapping TypeName="sncEntities.DeliveryBoy">
+            <EntityTypeMapping TypeName="sncModel.DeliveryBoy">
               <MappingFragment StoreEntitySet="DeliveryBoys">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -6084,7 +6074,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="DeliveryBoyShops">
-            <EntityTypeMapping TypeName="sncEntities.DeliveryBoyShop">
+            <EntityTypeMapping TypeName="sncModel.DeliveryBoyShop">
               <MappingFragment StoreEntitySet="DeliveryBoyShops">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
@@ -6104,7 +6094,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="DiscountCategories">
-            <EntityTypeMapping TypeName="sncEntities.DiscountCategory">
+            <EntityTypeMapping TypeName="sncModel.DiscountCategory">
               <MappingFragment StoreEntitySet="DiscountCategories">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -6120,7 +6110,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="DrugCompoundDetails">
-            <EntityTypeMapping TypeName="sncEntities.DrugCompoundDetail">
+            <EntityTypeMapping TypeName="sncModel.DrugCompoundDetail">
               <MappingFragment StoreEntitySet="DrugCompoundDetails">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="AliasName" ColumnName="AliasName" />
@@ -6143,7 +6133,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="KeywordDatas">
-            <EntityTypeMapping TypeName="sncEntities.KeywordData">
+            <EntityTypeMapping TypeName="sncModel.KeywordData">
               <MappingFragment StoreEntitySet="KeywordData">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -6151,7 +6141,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="LocationDetails">
-            <EntityTypeMapping TypeName="sncEntities.LocationDetail">
+            <EntityTypeMapping TypeName="sncModel.LocationDetail">
               <MappingFragment StoreEntitySet="LocationDetails">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="SourceLatitude" ColumnName="SourceLatitude" />
@@ -6164,7 +6154,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="MarketingAgents">
-            <EntityTypeMapping TypeName="sncEntities.MarketingAgent">
+            <EntityTypeMapping TypeName="sncModel.MarketingAgent">
               <MappingFragment StoreEntitySet="MarketingAgents">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -6199,7 +6189,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="MasterProducts">
-            <EntityTypeMapping TypeName="sncEntities.MasterProduct">
+            <EntityTypeMapping TypeName="sncModel.MasterProduct">
               <MappingFragment StoreEntitySet="MasterProducts">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -6248,7 +6238,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="MeasurementUnits">
-            <EntityTypeMapping TypeName="sncEntities.MeasurementUnit">
+            <EntityTypeMapping TypeName="sncModel.MeasurementUnit">
               <MappingFragment StoreEntitySet="MeasurementUnits">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="UnitName" ColumnName="UnitName" />
@@ -6265,7 +6255,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="NextSubCategories">
-            <EntityTypeMapping TypeName="sncEntities.NextSubCategory">
+            <EntityTypeMapping TypeName="sncModel.NextSubCategory">
               <MappingFragment StoreEntitySet="NextSubCategories">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -6283,7 +6273,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="OfferProducts">
-            <EntityTypeMapping TypeName="sncEntities.OfferProduct">
+            <EntityTypeMapping TypeName="sncModel.OfferProduct">
               <MappingFragment StoreEntitySet="OfferProducts">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="OfferId" ColumnName="OfferId" />
@@ -6292,7 +6282,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Offers">
-            <EntityTypeMapping TypeName="sncEntities.Offer">
+            <EntityTypeMapping TypeName="sncModel.Offer">
               <MappingFragment StoreEntitySet="Offers">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -6319,7 +6309,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="OfferShops">
-            <EntityTypeMapping TypeName="sncEntities.OfferShop">
+            <EntityTypeMapping TypeName="sncModel.OfferShop">
               <MappingFragment StoreEntitySet="OfferShops">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="OfferId" ColumnName="OfferId" />
@@ -6328,7 +6318,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="OrderItemAddons">
-            <EntityTypeMapping TypeName="sncEntities.OrderItemAddon">
+            <EntityTypeMapping TypeName="sncModel.OrderItemAddon">
               <MappingFragment StoreEntitySet="OrderItemAddons">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="OrderItemId" ColumnName="OrderItemId" />
@@ -6345,7 +6335,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="OtpVerifications">
-            <EntityTypeMapping TypeName="sncEntities.OtpVerification">
+            <EntityTypeMapping TypeName="sncModel.OtpVerification">
               <MappingFragment StoreEntitySet="OtpVerifications">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
@@ -6365,7 +6355,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Packages">
-            <EntityTypeMapping TypeName="sncEntities.Package">
+            <EntityTypeMapping TypeName="sncModel.Package">
               <MappingFragment StoreEntitySet="Packages">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -6378,7 +6368,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Payments">
-            <EntityTypeMapping TypeName="sncEntities.Payment">
+            <EntityTypeMapping TypeName="sncModel.Payment">
               <MappingFragment StoreEntitySet="Payments">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="CorporateID" ColumnName="CorporateID" />
@@ -6421,7 +6411,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PaymentsDatas">
-            <EntityTypeMapping TypeName="sncEntities.PaymentsData">
+            <EntityTypeMapping TypeName="sncModel.PaymentsData">
               <MappingFragment StoreEntitySet="PaymentsData">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="PaymentId" ColumnName="PaymentId" />
@@ -6440,7 +6430,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PincodeRates">
-            <EntityTypeMapping TypeName="sncEntities.PincodeRate">
+            <EntityTypeMapping TypeName="sncModel.PincodeRate">
               <MappingFragment StoreEntitySet="PincodeRates">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Pincode" ColumnName="Pincode" />
@@ -6454,7 +6444,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PlatFormCreditRates">
-            <EntityTypeMapping TypeName="sncEntities.PlatFormCreditRate">
+            <EntityTypeMapping TypeName="sncModel.PlatFormCreditRate">
               <MappingFragment StoreEntitySet="PlatFormCreditRates">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="RatePerOrder" ColumnName="RatePerOrder" />
@@ -6468,7 +6458,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Portions">
-            <EntityTypeMapping TypeName="sncEntities.Portion">
+            <EntityTypeMapping TypeName="sncModel.Portion">
               <MappingFragment StoreEntitySet="Portions">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -6480,8 +6470,35 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ProductDishAddOns">
+            <EntityTypeMapping TypeName="sncModel.ProductDishAddOn">
+              <MappingFragment StoreEntitySet="ProductDishAddOns">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="AddOnItemName" ColumnName="AddOnItemName" />
+                <ScalarProperty Name="MasterProductId" ColumnName="MasterProductId" />
+                <ScalarProperty Name="MasterProductName" ColumnName="MasterProductName" />
+                <ScalarProperty Name="AddOnCategoryId" ColumnName="AddOnCategoryId" />
+                <ScalarProperty Name="AddOnCategoryName" ColumnName="AddOnCategoryName" />
+                <ScalarProperty Name="CrustId" ColumnName="CrustId" />
+                <ScalarProperty Name="CrustName" ColumnName="CrustName" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="PortionId" ColumnName="PortionId" />
+                <ScalarProperty Name="PortionName" ColumnName="PortionName" />
+                <ScalarProperty Name="MinSelectionLimit" ColumnName="MinSelectionLimit" />
+                <ScalarProperty Name="MaxSelectionLimit" ColumnName="MaxSelectionLimit" />
+                <ScalarProperty Name="PortionPrice" ColumnName="PortionPrice" />
+                <ScalarProperty Name="AddOnsPrice" ColumnName="AddOnsPrice" />
+                <ScalarProperty Name="CrustPrice" ColumnName="CrustPrice" />
+                <ScalarProperty Name="AddOnType" ColumnName="AddOnType" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Products">
-            <EntityTypeMapping TypeName="sncEntities.Product">
+            <EntityTypeMapping TypeName="sncModel.Product">
               <MappingFragment StoreEntitySet="Products">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -6537,7 +6554,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ProductSchedules">
-            <EntityTypeMapping TypeName="sncEntities.ProductSchedule">
+            <EntityTypeMapping TypeName="sncModel.ProductSchedule">
               <MappingFragment StoreEntitySet="ProductSchedules">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ProductId" ColumnName="ProductId" />
@@ -6550,7 +6567,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ProductSpecificationItems">
-            <EntityTypeMapping TypeName="sncEntities.ProductSpecificationItem">
+            <EntityTypeMapping TypeName="sncModel.ProductSpecificationItem">
               <MappingFragment StoreEntitySet="ProductSpecificationItems">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ProductId" ColumnName="ProductId" />
@@ -6571,7 +6588,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ProductSpecifications">
-            <EntityTypeMapping TypeName="sncEntities.ProductSpecification">
+            <EntityTypeMapping TypeName="sncModel.ProductSpecification">
               <MappingFragment StoreEntitySet="ProductSpecifications">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Value" ColumnName="Value" />
@@ -6588,7 +6605,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ProductTypes">
-            <EntityTypeMapping TypeName="sncEntities.ProductType">
+            <EntityTypeMapping TypeName="sncModel.ProductType">
               <MappingFragment StoreEntitySet="ProductType">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -6596,7 +6613,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ReferralSettings">
-            <EntityTypeMapping TypeName="sncEntities.ReferralSetting">
+            <EntityTypeMapping TypeName="sncModel.ReferralSetting">
               <MappingFragment StoreEntitySet="ReferralSettings">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ShopDistrict" ColumnName="ShopDistrict" />
@@ -6609,7 +6626,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="RefundsDatas">
-            <EntityTypeMapping TypeName="sncEntities.RefundsData">
+            <EntityTypeMapping TypeName="sncModel.RefundsData">
               <MappingFragment StoreEntitySet="RefundsData">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="RefundId" ColumnName="RefundId" />
@@ -6623,7 +6640,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="SearchDatas">
-            <EntityTypeMapping TypeName="sncEntities.SearchData">
+            <EntityTypeMapping TypeName="sncModel.SearchData">
               <MappingFragment StoreEntitySet="SearchData">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Source" ColumnName="Source" />
@@ -6632,7 +6649,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ShopCategories">
-            <EntityTypeMapping TypeName="sncEntities.ShopCategory">
+            <EntityTypeMapping TypeName="sncModel.ShopCategory">
               <MappingFragment StoreEntitySet="ShopCategories">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -6645,7 +6662,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ShopCredits">
-            <EntityTypeMapping TypeName="sncEntities.ShopCredit">
+            <EntityTypeMapping TypeName="sncModel.ShopCredit">
               <MappingFragment StoreEntitySet="ShopCredit">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="PlatformCredit" ColumnName="PlatformCredit" />
@@ -6655,8 +6672,41 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ShopDishAddOns">
+            <EntityTypeMapping TypeName="sncModel.ShopDishAddOn">
+              <MappingFragment StoreEntitySet="ShopDishAddOns">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="AddOnItemName" ColumnName="AddOnItemName" />
+                <ScalarProperty Name="MasterProductId" ColumnName="MasterProductId" />
+                <ScalarProperty Name="MasterProductName" ColumnName="MasterProductName" />
+                <ScalarProperty Name="AddOnCategoryId" ColumnName="AddOnCategoryId" />
+                <ScalarProperty Name="AddOnCategoryName" ColumnName="AddOnCategoryName" />
+                <ScalarProperty Name="CrustId" ColumnName="CrustId" />
+                <ScalarProperty Name="CrustName" ColumnName="CrustName" />
+                <ScalarProperty Name="PortionId" ColumnName="PortionId" />
+                <ScalarProperty Name="PortionName" ColumnName="PortionName" />
+                <ScalarProperty Name="MinSelectionLimit" ColumnName="MinSelectionLimit" />
+                <ScalarProperty Name="MaxSelectionLimit" ColumnName="MaxSelectionLimit" />
+                <ScalarProperty Name="PortionPrice" ColumnName="PortionPrice" />
+                <ScalarProperty Name="AddOnsPrice" ColumnName="AddOnsPrice" />
+                <ScalarProperty Name="CrustPrice" ColumnName="CrustPrice" />
+                <ScalarProperty Name="AddOnType" ColumnName="AddOnType" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ProductDishAddonId" ColumnName="ProductDishAddonId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="ShopMembers">
-            <EntityTypeMapping TypeName="sncEntities.ShopMember">
+            <EntityTypeMapping TypeName="sncModel.ShopMember">
               <MappingFragment StoreEntitySet="ShopMembers">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
@@ -6679,7 +6729,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Shops">
-            <EntityTypeMapping TypeName="sncEntities.Shop">
+            <EntityTypeMapping TypeName="sncModel.Shop">
               <MappingFragment StoreEntitySet="Shops">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -6760,7 +6810,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ShopSchedules">
-            <EntityTypeMapping TypeName="sncEntities.ShopSchedule">
+            <EntityTypeMapping TypeName="sncModel.ShopSchedule">
               <MappingFragment StoreEntitySet="ShopSchedules">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
@@ -6773,7 +6823,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Specifications">
-            <EntityTypeMapping TypeName="sncEntities.Specification">
+            <EntityTypeMapping TypeName="sncModel.Specification">
               <MappingFragment StoreEntitySet="Specifications">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -6786,7 +6836,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Staffs">
-            <EntityTypeMapping TypeName="sncEntities.Staff">
+            <EntityTypeMapping TypeName="sncModel.Staff">
               <MappingFragment StoreEntitySet="Staffs">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -6803,7 +6853,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="SubCategories">
-            <EntityTypeMapping TypeName="sncEntities.SubCategory">
+            <EntityTypeMapping TypeName="sncModel.SubCategory">
               <MappingFragment StoreEntitySet="SubCategories">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -6821,7 +6871,7 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="UserEnquiries">
-            <EntityTypeMapping TypeName="sncEntities.UserEnquiry">
+            <EntityTypeMapping TypeName="sncModel.UserEnquiry">
               <MappingFragment StoreEntitySet="UserEnquiries">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
@@ -6840,19 +6890,43 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionName="sncEntities.Store.GetTableVAlueString" FunctionImportName="GetTableVAlueString">
+          <FunctionImportMapping FunctionName="sncModel.Store.GetTableVAlueString" FunctionImportName="GetTableVAlueString">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="sncEntities.GetTableVAlueString_Result">
+              <ComplexTypeMapping TypeName="sncModel.GetTableVAlueString_Result">
                 <ScalarProperty Name="Name" ColumnName="Name" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="getCategoryListbyShopcode" FunctionName="sncEntities.Store.getCategoryListbyShopcode" />
-          <FunctionImportMapping FunctionImportName="GetCategoryProductsList" FunctionName="sncEntities.Store.GetCategoryProductsList" />
-          <FunctionImportMapping FunctionImportName="GetCustomerCount" FunctionName="sncEntities.Store.GetCustomerCount" />
-          <FunctionImportMapping FunctionImportName="GetDEliveryBoyList" FunctionName="sncEntities.Store.GetDEliveryBoyList">
+          <FunctionImportMapping FunctionImportName="getCategoryListbyShopcode" FunctionName="sncModel.Store.getCategoryListbyShopcode" />
+          <FunctionImportMapping FunctionImportName="GetCategoryProductsList" FunctionName="sncModel.Store.GetCategoryProductsList" />
+          <FunctionImportMapping FunctionImportName="GetCustomerCount" FunctionName="sncModel.Store.GetCustomerCount" />
+          <FunctionImportMapping FunctionImportName="GetDashBoardDetails" FunctionName="sncModel.Store.GetDashBoardDetails">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="sncEntities.GetDEliveryBoyList_Result">
+              <ComplexTypeMapping TypeName="sncModel.GetDashBoardDetails_Result">
+                <ScalarProperty Name="NewOrder" ColumnName="NewOrder" />
+                <ScalarProperty Name="Shopacceptance" ColumnName="Shopacceptance" />
+                <ScalarProperty Name="orderwithoutdeliveryboy" ColumnName="orderwithoutdeliveryboy" />
+                <ScalarProperty Name="deliveryaccpetance" ColumnName="deliveryaccpetance" />
+                <ScalarProperty Name="shoppickup" ColumnName="shoppickup" />
+                <ScalarProperty Name="customerdelivery" ColumnName="customerdelivery" />
+                <ScalarProperty Name="RefundCount" ColumnName="RefundCount" />
+                <ScalarProperty Name="ShopLowCreditCount" ColumnName="ShopLowCreditCount" />
+                <ScalarProperty Name="CustomerPrescriptionCount" ColumnName="CustomerPrescriptionCount" />
+                <ScalarProperty Name="UnMappedCount" ColumnName="UnMappedCount" />
+                <ScalarProperty Name="OrderMissedCount" ColumnName="OrderMissedCount" />
+                <ScalarProperty Name="ProductUnMappedCount" ColumnName="ProductUnMappedCount" />
+                <ScalarProperty Name="CustomerAadhaarVerifyCount" ColumnName="CustomerAadhaarVerifyCount" />
+                <ScalarProperty Name="ShopOnBoardingVerifyCount" ColumnName="ShopOnBoardingVerifyCount" />
+                <ScalarProperty Name="DeliveryBoyVerifyCount" ColumnName="DeliveryBoyVerifyCount" />
+                <ScalarProperty Name="BannerPendingCount" ColumnName="BannerPendingCount" />
+                <ScalarProperty Name="CustomerCount" ColumnName="CustomerCount" />
+                <ScalarProperty Name="ShopCount" ColumnName="ShopCount" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetDEliveryBoyList" FunctionName="sncModel.Store.GetDEliveryBoyList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="sncModel.GetDEliveryBoyList_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Active" ColumnName="Active" />
@@ -6861,9 +6935,9 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GetProductList" FunctionName="sncEntities.Store.GetProductList">
+          <FunctionImportMapping FunctionImportName="GetProductList" FunctionName="sncModel.Store.GetProductList">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="sncEntities.GetProductList_Result">
+              <ComplexTypeMapping TypeName="sncModel.GetProductList_Result">
                 <ScalarProperty Name="ProductId" ColumnName="ProductId" />
                 <ScalarProperty Name="ProductName" ColumnName="ProductName" />
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
@@ -6889,12 +6963,12 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GetProductListCount" FunctionName="sncEntities.Store.GetProductListCount" />
-          <FunctionImportMapping FunctionImportName="GetShopCategoryList" FunctionName="sncEntities.Store.GetShopCategoryList" />
-          <FunctionImportMapping FunctionImportName="GetShopCategoryProductCount" FunctionName="sncEntities.Store.GetShopCategoryProductCount" />
-          <FunctionImportMapping FunctionImportName="GetShopCategoryProducts" FunctionName="sncEntities.Store.GetShopCategoryProducts">
+          <FunctionImportMapping FunctionImportName="GetProductListCount" FunctionName="sncModel.Store.GetProductListCount" />
+          <FunctionImportMapping FunctionImportName="GetShopCategoryList" FunctionName="sncModel.Store.GetShopCategoryList" />
+          <FunctionImportMapping FunctionImportName="GetShopCategoryProductCount" FunctionName="sncModel.Store.GetShopCategoryProductCount" />
+          <FunctionImportMapping FunctionImportName="GetShopCategoryProducts" FunctionName="sncModel.Store.GetShopCategoryProducts">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="sncEntities.GetShopCategoryProducts_Result">
+              <ComplexTypeMapping TypeName="sncModel.GetShopCategoryProducts_Result">
                 <ScalarProperty Name="ProductId" ColumnName="ProductId" />
                 <ScalarProperty Name="ProductName" ColumnName="ProductName" />
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
@@ -6917,10 +6991,10 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GetShopCategoryProductsList" FunctionName="sncEntities.Store.GetShopCategoryProductsList" />
-          <FunctionImportMapping FunctionImportName="GetShopname" FunctionName="sncEntities.Store.GetShopname">
+          <FunctionImportMapping FunctionImportName="GetShopCategoryProductsList" FunctionName="sncModel.Store.GetShopCategoryProductsList" />
+          <FunctionImportMapping FunctionImportName="GetShopname" FunctionName="sncModel.Store.GetShopname">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="sncEntities.GetShopname_Result">
+              <ComplexTypeMapping TypeName="sncModel.GetShopname_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="CustomerReview" ColumnName="CustomerReview" />
@@ -6930,129 +7004,11 @@ warning 6002: The table/view 'snc.dbo.UserEnquiries' does not have a primary key
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="ReatillerPaymentReport" FunctionName="sncEntities.Store.ReatillerPaymentReport" />
-          <FunctionImportMapping FunctionImportName="ReatillerPaymentReportAdmin" FunctionName="sncEntities.Store.ReatillerPaymentReportAdmin" />
-          <FunctionImportMapping FunctionImportName="ReatillerPaymentReports" FunctionName="sncEntities.Store.ReatillerPaymentReports" />
-          <FunctionImportMapping FunctionImportName="Sp_TB_SelectMedicineName" FunctionName="sncEntities.Store.Sp_TB_SelectMedicineName" />
-          <FunctionImportMapping FunctionImportName="test" FunctionName="sncEntities.Store.test" />
-          <EntitySetMapping Name="OrderItems">
-            <EntityTypeMapping TypeName="sncEntities.OrderItem">
-              <MappingFragment StoreEntitySet="OrderItems">
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="AddOnType" ColumnName="AddOnType" />
-                <ScalarProperty Name="HasAddon" ColumnName="HasAddon" />
-                <ScalarProperty Name="MiddlePrice" ColumnName="MiddlePrice" />
-                <ScalarProperty Name="OfferAmount" ColumnName="OfferAmount" />
-                <ScalarProperty Name="OfferId" ColumnName="OfferId" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
-                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
-                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
-                <ScalarProperty Name="BrandName" ColumnName="BrandName" />
-                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="OrdeNumber" ColumnName="OrdeNumber" />
-                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ShopStaffs">
-            <EntityTypeMapping TypeName="sncEntities.ShopStaff">
-              <MappingFragment StoreEntitySet="ShopStaffs">
-                <ScalarProperty Name="StaffId" ColumnName="StaffId" />
-                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ProductDishAddOns">
-            <EntityTypeMapping TypeName="sncEntities.ProductDishAddOn">
-              <MappingFragment StoreEntitySet="ProductDishAddOns">
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="AddOnType" ColumnName="AddOnType" />
-                <ScalarProperty Name="CrustPrice" ColumnName="CrustPrice" />
-                <ScalarProperty Name="AddOnsPrice" ColumnName="AddOnsPrice" />
-                <ScalarProperty Name="PortionPrice" ColumnName="PortionPrice" />
-                <ScalarProperty Name="MaxSelectionLimit" ColumnName="MaxSelectionLimit" />
-                <ScalarProperty Name="MinSelectionLimit" ColumnName="MinSelectionLimit" />
-                <ScalarProperty Name="PortionName" ColumnName="PortionName" />
-                <ScalarProperty Name="PortionId" ColumnName="PortionId" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="CrustName" ColumnName="CrustName" />
-                <ScalarProperty Name="CrustId" ColumnName="CrustId" />
-                <ScalarProperty Name="AddOnCategoryName" ColumnName="AddOnCategoryName" />
-                <ScalarProperty Name="AddOnCategoryId" ColumnName="AddOnCategoryId" />
-                <ScalarProperty Name="MasterProductName" ColumnName="MasterProductName" />
-                <ScalarProperty Name="MasterProductId" ColumnName="MasterProductId" />
-                <ScalarProperty Name="AddOnItemName" ColumnName="AddOnItemName" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ShopDishAddOns">
-            <EntityTypeMapping TypeName="sncEntities.ShopDishAddOn">
-              <MappingFragment StoreEntitySet="ShopDishAddOns">
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ProductDishAddonId" ColumnName="ProductDishAddonId" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="ShopName" ColumnName="ShopName" />
-                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="AddOnType" ColumnName="AddOnType" />
-                <ScalarProperty Name="CrustPrice" ColumnName="CrustPrice" />
-                <ScalarProperty Name="AddOnsPrice" ColumnName="AddOnsPrice" />
-                <ScalarProperty Name="PortionPrice" ColumnName="PortionPrice" />
-                <ScalarProperty Name="MaxSelectionLimit" ColumnName="MaxSelectionLimit" />
-                <ScalarProperty Name="MinSelectionLimit" ColumnName="MinSelectionLimit" />
-                <ScalarProperty Name="PortionName" ColumnName="PortionName" />
-                <ScalarProperty Name="PortionId" ColumnName="PortionId" />
-                <ScalarProperty Name="CrustName" ColumnName="CrustName" />
-                <ScalarProperty Name="CrustId" ColumnName="CrustId" />
-                <ScalarProperty Name="AddOnCategoryName" ColumnName="AddOnCategoryName" />
-                <ScalarProperty Name="AddOnCategoryId" ColumnName="AddOnCategoryId" />
-                <ScalarProperty Name="MasterProductName" ColumnName="MasterProductName" />
-                <ScalarProperty Name="MasterProductId" ColumnName="MasterProductId" />
-                <ScalarProperty Name="AddOnItemName" ColumnName="AddOnItemName" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="GetDashBoardDetails" FunctionName="sncEntities.Store.GetDashBoardDetails">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="sncEntities.GetDashBoardDetails_Result">
-                <ScalarProperty Name="NewOrder" ColumnName="NewOrder" />
-                <ScalarProperty Name="Shopacceptance" ColumnName="Shopacceptance" />
-                <ScalarProperty Name="orderwithoutdeliveryboy" ColumnName="orderwithoutdeliveryboy" />
-                <ScalarProperty Name="deliveryaccpetance" ColumnName="deliveryaccpetance" />
-                <ScalarProperty Name="shoppickup" ColumnName="shoppickup" />
-                <ScalarProperty Name="customerdelivery" ColumnName="customerdelivery" />
-                <ScalarProperty Name="RefundCount" ColumnName="RefundCount" />
-                <ScalarProperty Name="ShopLowCreditCount" ColumnName="ShopLowCreditCount" />
-                <ScalarProperty Name="CustomerPrescriptionCount" ColumnName="CustomerPrescriptionCount" />
-                <ScalarProperty Name="UnMappedCount" ColumnName="UnMappedCount" />
-                <ScalarProperty Name="OrderMissedCount" ColumnName="OrderMissedCount" />
-                <ScalarProperty Name="ProductUnMappedCount" ColumnName="ProductUnMappedCount" />
-                <ScalarProperty Name="CustomerAadhaarVerifyCount" ColumnName="CustomerAadhaarVerifyCount" />
-                <ScalarProperty Name="ShopOnBoardingVerifyCount" ColumnName="ShopOnBoardingVerifyCount" />
-                <ScalarProperty Name="DeliveryBoyVerifyCount" ColumnName="DeliveryBoyVerifyCount" />
-                <ScalarProperty Name="BannerPendingCount" ColumnName="BannerPendingCount" />
-                <ScalarProperty Name="CustomerCount" ColumnName="CustomerCount" />
-                <ScalarProperty Name="ShopCount" ColumnName="ShopCount" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ReatillerPaymentReport" FunctionName="sncModel.Store.ReatillerPaymentReport" />
+          <FunctionImportMapping FunctionImportName="ReatillerPaymentReportAdmin" FunctionName="sncModel.Store.ReatillerPaymentReportAdmin" />
+          <FunctionImportMapping FunctionImportName="ReatillerPaymentReports" FunctionName="sncModel.Store.ReatillerPaymentReports" />
+          <FunctionImportMapping FunctionImportName="Sp_TB_SelectMedicineName" FunctionName="sncModel.Store.Sp_TB_SelectMedicineName" />
+          <FunctionImportMapping FunctionImportName="test" FunctionName="sncModel.Store.test" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

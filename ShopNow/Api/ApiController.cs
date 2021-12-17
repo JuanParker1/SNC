@@ -5797,10 +5797,10 @@ namespace ShopNow.Controllers
             using (WebClient myData = new WebClient())
             {
                 myData.Headers.Add("X-ApiKey", "Tx9ANC5RqngpTOM9VJ0JP2+1LbZvo1LI");
-                string getDetails = myData.DownloadString("https://admin.shopnowchat.in/Api/GetAllCartItems");
+                string getDetails = myData.DownloadString("http://192.168.1.65:98/Api/GetAllCartItems");
                 var result = JsonConvert.DeserializeObject<List<OldOrder>>(getDetails).OrderBy(i=>i.DateEncoded);
 
-                foreach (var item in result.GroupBy(i => i.OrderNumber))
+                foreach (var item in result.Where(i => i.OrderNumber == 253051825).GroupBy(i => i.OrderNumber))
                 {
                     var order = new Models.Order
                     {
@@ -5878,7 +5878,7 @@ namespace ShopNow.Controllers
                                 OrderId = order.Id,
                                 Price = itemlist.TotalPrice,
                                 ProductId = GetProductId(itemlist.ProductName),
-                                ProductName = itemlist.ProductName,
+                                ProductName = "N'" + itemlist.ProductName,
                                 Quantity = itemlist.Qty,
                                 UnitPrice = itemlist.Price,
                                 Status = 0
@@ -5889,7 +5889,7 @@ namespace ShopNow.Controllers
                         }
                     }
                 }
-                return Json(true, JsonRequestBehavior.AllowGet);
+                return Json(result.Where(i => i.OrderNumber == 253051825).ToList(), JsonRequestBehavior.AllowGet);
             }
         }
 

@@ -1676,6 +1676,10 @@ namespace ShopNow.Controllers
                   ProductTypeId = i.m.ProductTypeId,
                   ProductTypeName = i.m.ProductTypeName,
                   ImagePath1 = i.m.ImagePath1,
+                  ImagePath2 = i.m.ImagePath2,
+                  ImagePath3 = i.m.ImagePath3,
+                  ImagePath4 = i.m.ImagePath4,
+                  ImagePath5 = i.m.ImagePath5,
                   GoogleTaxonomyCode = i.m.GoogleTaxonomyCode,
                   MasterId = i.m.Id
               }).Take(500).OrderBy(i => i.text).ToListAsync();

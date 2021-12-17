@@ -28,17 +28,19 @@ namespace ShopNow.Models
         }
     
         public virtual DbSet<AccessPolicy> AccessPolicies { get; set; }
+        public virtual DbSet<Agency> Agencies { get; set; }
         public virtual DbSet<Banner> Banners { get; set; }
         public virtual DbSet<CustomerWalletHistory> CustomerWalletHistories { get; set; }
         public virtual DbSet<DeliveryCharge> DeliveryCharges { get; set; }
+        public virtual DbSet<OrderItem> OrderItems { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Page> Pages { get; set; }
+        public virtual DbSet<ShopStaff> ShopStaffs { get; set; }
         public virtual DbSet<tbl> tbls { get; set; }
         public virtual DbSet<AchievementProduct> AchievementProducts { get; set; }
         public virtual DbSet<AchievementSetting> AchievementSettings { get; set; }
         public virtual DbSet<AchievementShop> AchievementShops { get; set; }
         public virtual DbSet<AddOnCategory> AddOnCategories { get; set; }
-        public virtual DbSet<Agency> Agencies { get; set; }
         public virtual DbSet<ApiSetting> ApiSettings { get; set; }
         public virtual DbSet<AppDetail> AppDetails { get; set; }
         public virtual DbSet<BillingCharge> BillingCharges { get; set; }
@@ -81,6 +83,7 @@ namespace ShopNow.Models
         public virtual DbSet<PincodeRate> PincodeRates { get; set; }
         public virtual DbSet<PlatFormCreditRate> PlatFormCreditRates { get; set; }
         public virtual DbSet<Portion> Portions { get; set; }
+        public virtual DbSet<ProductDishAddOn> ProductDishAddOns { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductSchedule> ProductSchedules { get; set; }
         public virtual DbSet<ProductSpecificationItem> ProductSpecificationItems { get; set; }
@@ -91,6 +94,7 @@ namespace ShopNow.Models
         public virtual DbSet<SearchData> SearchDatas { get; set; }
         public virtual DbSet<ShopCategory> ShopCategories { get; set; }
         public virtual DbSet<ShopCredit> ShopCredits { get; set; }
+        public virtual DbSet<ShopDishAddOn> ShopDishAddOns { get; set; }
         public virtual DbSet<ShopMember> ShopMembers { get; set; }
         public virtual DbSet<Shop> Shops { get; set; }
         public virtual DbSet<ShopSchedule> ShopSchedules { get; set; }
@@ -98,10 +102,6 @@ namespace ShopNow.Models
         public virtual DbSet<Staff> Staffs { get; set; }
         public virtual DbSet<SubCategory> SubCategories { get; set; }
         public virtual DbSet<UserEnquiry> UserEnquiries { get; set; }
-        public virtual DbSet<OrderItem> OrderItems { get; set; }
-        public virtual DbSet<ShopStaff> ShopStaffs { get; set; }
-        public virtual DbSet<ProductDishAddOn> ProductDishAddOns { get; set; }
-        public virtual DbSet<ShopDishAddOn> ShopDishAddOns { get; set; }
     
         [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)
@@ -150,6 +150,11 @@ namespace ShopNow.Models
         public virtual ObjectResult<Nullable<int>> GetCustomerCount()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("GetCustomerCount");
+        }
+    
+        public virtual ObjectResult<GetDashBoardDetails_Result> GetDashBoardDetails()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetDashBoardDetails_Result>("GetDashBoardDetails");
         }
     
         public virtual ObjectResult<GetDEliveryBoyList_Result> GetDEliveryBoyList()
@@ -383,11 +388,6 @@ namespace ShopNow.Models
                 new ObjectParameter("str", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("test", strParameter);
-        }
-    
-        public virtual ObjectResult<GetDashBoardDetails_Result> GetDashBoardDetails()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetDashBoardDetails_Result>("GetDashBoardDetails");
         }
     }
 }
