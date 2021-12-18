@@ -1459,7 +1459,23 @@ namespace ShopNow.Controllers
                 .Count();
             return count;
         }
-       
+        //public JsonResult GetLiveOrderCount()
+        //{
+        //    try
+        //    {
+        //        var user = ((Helpers.Sessions.User)Session["USER"]);
+        //        ViewBag.Name = user.Name;
+ 
+        //        string[] shop = db.Shops.Where(i => i.CustomerCode == user.Code && i.Status == 0).Select(S => S.Code).ToArray();
+        //        int count = db.Carts.Where(i => shop.Contains(i.ShopCode) && i.CartStatus == 2 && i.Status == 0).GroupBy(i => i.OrderNo).Count();
+        //        return Json(new { OrderCount = count }, JsonRequestBehavior.AllowGet);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Response.Write(ex.Message);
+        //        return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+        //    }
+        //}
         protected override void Dispose(bool disposing)
         {
             if (disposing)
