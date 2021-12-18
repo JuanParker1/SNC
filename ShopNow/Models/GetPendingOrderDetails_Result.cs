@@ -10,13 +10,18 @@
 namespace ShopNow.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class tbl
+    public partial class GetPendingOrderDetails_Result
     {
-        public int Id { get; set; }
+        public int OrderNumber { get; set; }
         public string Name { get; set; }
-        public double Percentage { get; set; }
+        public double TotalPrice { get; set; }
+        public string DeliveryAddress { get; set; }
+        public string CustomerPhoneNumber { get; set; }
+        public string DateEncoded { get; set; }
+        public long Id { get; set; }
+        public double RefundAmount { get; set; }
+        public string RefundRemark { get; set; }
         public int ShopId { get; set; }
     }
 }

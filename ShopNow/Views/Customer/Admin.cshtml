@@ -22,15 +22,16 @@
                 <div class="card-body">                  
                     @Html.Grid(Model).Columns(columns =>
                {
-               // columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => Html.ActionLink(o.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }).ToHtmlString()).Titled("Name").Filterable(true).SetWidth(10);
-               columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(10);
+                columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => Html.ActionLink(o.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }).ToHtmlString()).Titled("Name").Filterable(true).SetWidth(10);
+               //columns.Add(c => c.Name).Titled("Name").Filterable(true).SetWidth(10);
                columns.Add(c => c.PhoneNumber).Titled("Phone Number").Filterable(true).SetWidth(10);
                columns.Add(c => c.Address).Titled("Address").Filterable(true).SetWidth(30);
                columns.Add(c => c.DistrictName).Titled("District").Filterable(true).SetWidth(10);
                columns.Add(c => c.StateName).Titled("State").Filterable(true).SetWidth(10);
                columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(10)
                .RenderValueAs(c => @<div>
-                    <a href="javascript:void(0)" data-id=@c.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+                    <a data-toggle="modal" data-target="#updateModal" href="updateModal" data-id=@c.Id class="text-info Update"><i class="fa fa-edit fa-lg"></i></a>
+                    <a href="javascript:void(0)" data-id=@c.Id class="text-danger btnDelete ml-3"><i class="fa fa-trash fa-lg"></i></a>
                     </div>);
                   }).WithPaging(20).Sortable(true)
                 </div>
@@ -65,7 +66,32 @@
         </div>
     </div>
 </div>
-
+<div class="modal fade" id="updateModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert alert-info">
+                <h5 class="modal-title" id="updateModalLabel">Update Password</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <label class="control-label text-secondary font-weight-bold" for="Password">New Password</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="password" class="form-control" name="Password" id="Password" />
+                        <input type="hidden" name="PId" id="PId" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="button" id="btnUpdate" value="Update" class="btn btn-success float-right" />
+            </div>
+        </div>
+    </div>
+</div>
 @section Scripts
 {
     <!--Select2-->
@@ -154,6 +180,27 @@
                         }
                     }
                 );
+            });
+
+            $(".Update").on('click', function () {
+                var code = $(this).attr('data-id');
+                $("#PId").val(code);
+            });
+
+            $("#btnUpdate").on('click', function () {
+                var id = $("#PId").val();
+                var password = $("#Password").val();
+                $.getJSON("/Customer/UpdatePassword", { id: id, password: password }, function (data) {
+                    if (data == true) {
+                        swal({
+                            title: "Password Updated successfully!",
+                            text: "",
+                            type: "success"
+                        }, function () {
+                            window.location.reload();
+                        });
+                    }
+                });
             });
 
          });

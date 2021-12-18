@@ -10,16 +10,18 @@
 namespace ShopNow.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class ShopSchedule
+    public partial class GetWaitingOrderDetails_Result
     {
-        public int Id { get; set; }
+        public int OrderNumber { get; set; }
+        public string Name { get; set; }
+        public double TotalPrice { get; set; }
+        public string DeliveryAddress { get; set; }
+        public string DeliveryBoyPhoneNumber { get; set; }
+        public string DateEncoded { get; set; }
+        public long Id { get; set; }
+        public double RefundAmount { get; set; }
+        public string RefundRemark { get; set; }
         public int ShopId { get; set; }
-        public Nullable<System.TimeSpan> OnTime { get; set; }
-        public Nullable<System.TimeSpan> OffTime { get; set; }
-        public string UpdatedBy { get; set; }
-        public System.DateTime DateTimeUpdated { get; set; }
-        public int Status { get; set; }
     }
 }
