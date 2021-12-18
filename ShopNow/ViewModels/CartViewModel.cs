@@ -159,12 +159,15 @@ namespace ShopNow.ViewModels
         public List<TodayList> TodayLists { get; set; }
         public class TodayList
         {
+            public int No { get; set; }
             public long Id { get; set; }
             public int OrderNumber { get; set; }
             public string ShopName { get; set; }
             public string DeliveryAddress { get; set; }
             public string ShopPhoneNumber { get; set; }
             public string DeliveryBoyName { get; set; }
+            public string PaymentMode { get; set; }
+            public double Amount { get; set; }
             public int Status { get; set; }
             public DateTime DateEncoded { get; set; }
             public string OrderStatusText
@@ -201,6 +204,7 @@ namespace ShopNow.ViewModels
         public List<CartPendingList> CartPendingLists { get; set; }
         public class CartPendingList
         {
+            public int No { get; set; }
             public long Id { get; set; }
             public int OrderNumber { get; set; }
             public string ShopName { get; set; }
@@ -218,6 +222,7 @@ namespace ShopNow.ViewModels
         public List<CartPreparedList> CartPreparedLists { get; set; }
         public class CartPreparedList
         {
+            public int No { get; set; }
             public long Id { get; set; }
             public int OrderNumber { get; set; }
             public string ShopName { get; set; }
@@ -236,6 +241,7 @@ namespace ShopNow.ViewModels
         public List<DeliveryAgentAssignedList> DeliveryAgentAssignedLists { get; set; }
         public class DeliveryAgentAssignedList
         {
+            public int No { get; set; }
             public long Id { get; set; }
             public int OrderNumber { get; set; }
             public string ShopName { get; set; }
@@ -252,6 +258,7 @@ namespace ShopNow.ViewModels
         public List<PickupList> PickupLists { get; set; }
         public class PickupList
         {
+            public int No { get; set; }
             public long Id { get; set; }
             public int OrderNumber { get; set; }
             public string ShopName { get; set; }
@@ -269,6 +276,7 @@ namespace ShopNow.ViewModels
         public List<OntheWayList> OntheWayLists { get; set; }
         public class OntheWayList
         {
+            public int No { get; set; }
             public long Id { get; set; }
             public int OrderNumber { get; set; }
             public string ShopName { get; set; }
@@ -305,6 +313,7 @@ namespace ShopNow.ViewModels
         public List<CancelledList> CancelledLists { get; set; }
         public class CancelledList
         {
+            public int No { get; set; }
             public long Id { get; set; }
             public int OrderNumber { get; set; }
             public string ShopName { get; set; }
@@ -324,6 +333,7 @@ namespace ShopNow.ViewModels
         public List<CustomerCancelledList> CustomerCancelledLists { get; set; }
         public class CustomerCancelledList
         {
+            public int No { get; set; }
             public long Id { get; set; }
             public int OrderNumber { get; set; }
             public string ShopName { get; set; }
@@ -343,6 +353,7 @@ namespace ShopNow.ViewModels
         public List<CustomerNotPickupList> CustomerNotPickupLists { get; set; }
         public class CustomerNotPickupList
         {
+            public int No { get; set; }
             public long Id { get; set; }
             public int OrderNumber { get; set; }
             public string ShopName { get; set; }

@@ -74,7 +74,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="modal-add-schedule" tabindex="-1" role="dialog">
+<div class="modal fade" id="modal-add-schedule" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header alert alert-info">
@@ -128,7 +128,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="modal fade" id="modal-add-timimgs" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -238,7 +237,7 @@
             });
 
             $('#select-shop').select2({
-                placeholder: "Select Shop",
+                placeholder: "Search Shop",
                 width: '100%',
                 ajax: {
                     url: "/Cart/GetShopSelect2",
@@ -271,7 +270,6 @@
                     }
                 );
             });
-
 
             $('#btn-addTime').on('click', function () {
                 var onTime = $('[name="OnTime"]').val();

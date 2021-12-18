@@ -52,8 +52,12 @@ namespace ShopNow.Controllers
                 ShopPhoneNumber = i.ShopPhoneNumber,
                 Status = i.Status,
                 DeliveryBoyName = i.DeliveryBoyName ?? "N/A",
+                PaymentMode =i.PaymentMode,
+                Amount = i.TotalPrice,
                 DateEncoded = i.DateEncoded
             }).OrderBy(i => i.Status).OrderByDescending(i => i.DateEncoded).ToList();
+            int counter = 1;
+            model.TodayLists.ForEach(x => x.No = counter++);
             return View(model.TodayLists);
         }
 
@@ -79,8 +83,9 @@ namespace ShopNow.Controllers
                               RefundAmount = i.p.RefundAmount ?? 0,
                               RefundRemark = i.p.RefundRemark ?? "",
                               PaymentMode = i.p.PaymentMode
-
                     }).OrderByDescending(i => i.DateEncoded).ToList();
+            int counter = 1;
+            model.CartPendingLists.ForEach(x => x.No = counter++);
             return View(model.CartPendingLists);
         }
 
@@ -107,6 +112,8 @@ namespace ShopNow.Controllers
                                RefundRemark = i.p.RefundRemark ?? "",
                                PaymentMode = i.p.PaymentMode,
                            }).OrderByDescending(i => i.DateEncoded).ToList();
+            int counter = 1;
+            model.CartPendingLists.ForEach(x => x.No = counter++);
             return View(model.CartPendingLists);
         }
 
@@ -134,6 +141,8 @@ namespace ShopNow.Controllers
                     DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber ?? "Not Assigned",
                     Price = i.p.Amount - (i.p.RefundAmount ?? 0)
                 }).OrderByDescending(i => i.DateEncoded).ToList();
+            int counter = 1;
+            model.CartPreparedLists.ForEach(x => x.No = counter++);
 
             return View(model.CartPreparedLists);
         }
@@ -161,6 +170,8 @@ namespace ShopNow.Controllers
                     PaymentMode = i.p.PaymentMode,
                     DeliveryBoyPhoneNumber = i.c.c.DeliveryBoyPhoneNumber
                 }).OrderByDescending(i => i.DateEncoded).ToList();
+            int counter = 1;
+            model.DeliveryAgentAssignedLists.ForEach(x => x.No = counter++);
             return View(model.DeliveryAgentAssignedLists);
         }
 
@@ -187,6 +198,8 @@ namespace ShopNow.Controllers
                     PaymentMode = i.p.PaymentMode,
                     DeliveryBoyPhoneNumber = i.c.c.DeliveryBoyPhoneNumber
                 }).OrderByDescending(i => i.DateEncoded).ToList();
+            int counter = 1;
+            model.DeliveryAgentAssignedLists.ForEach(x => x.No = counter++);
             return View(model.DeliveryAgentAssignedLists);
         }
 
@@ -214,6 +227,8 @@ namespace ShopNow.Controllers
                      PaymentMode = i.p.PaymentMode,
                      Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
                     }).OrderByDescending(i => i.DateEncoded).ToList();
+            int counter = 1;
+            model.PickupLists.ForEach(x => x.No = counter++);
             return View(model.PickupLists);
         }
 
@@ -241,6 +256,8 @@ namespace ShopNow.Controllers
                     PaymentMode = i.p.PaymentMode,
                     Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
                 }).OrderByDescending(i => i.DateEncoded).ToList();
+            int counter = 1;
+            model.PickupLists.ForEach(x => x.No = counter++);
             return View(model.PickupLists);
         }
 
@@ -265,7 +282,8 @@ namespace ShopNow.Controllers
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
                 }).OrderByDescending(i => i.DateEncoded).ToList();
-            
+            int counter = 1;
+            model.OntheWayLists.ForEach(x => x.No = counter++);
             return View(model.OntheWayLists);
         }
 
@@ -290,7 +308,8 @@ namespace ShopNow.Controllers
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
                 }).OrderByDescending(i => i.DateEncoded).ToList();
-
+            int counter = 1;
+            model.OntheWayLists.ForEach(x => x.No = counter++);
             return View(model.OntheWayLists);
         }
 
@@ -368,7 +387,8 @@ namespace ShopNow.Controllers
                             ShopCancelledTime = i.c.ShopAcceptedTime,
                             ShopCancelPeriod = i.c.ShopAcceptedTime != null ? Math.Round((i.c.ShopAcceptedTime.Value - i.c.DateEncoded).TotalMinutes) : 0
                         }).OrderByDescending(i => i.DateEncoded).ToList();
-
+            int counter = 1;
+            model.CancelledLists.ForEach(x => x.No = counter++);
             return View(model.CancelledLists);
         }
 
@@ -413,6 +433,8 @@ namespace ShopNow.Controllers
                     DateEncoded = i.c.DateEncoded,
                     CustomerCancelledTime = i.c.DateUpdated
                 }).OrderByDescending(i => i.DateEncoded).ToList();
+            int counter = 1;
+            model.CustomerCancelledLists.ForEach(x => x.No = counter++);
             return View(model.CustomerCancelledLists);
         }
 
@@ -442,6 +464,8 @@ namespace ShopNow.Controllers
                     ShopAcceptedTime = i.c.ShopAcceptedTime != null ? Math.Round((i.c.ShopAcceptedTime.Value - i.c.DateEncoded).TotalMinutes) : 0,
 
                 }).OrderByDescending(i => i.DateEncoded).ToList();
+            int counter = 1;
+            model.CustomerNotPickupLists.ForEach(x => x.No = counter++);
             return View(model.CustomerNotPickupLists);
         }
 
@@ -1009,6 +1033,7 @@ namespace ShopNow.Controllers
             db.SaveChanges();
             return RedirectToAction("DeliveryAgentAssigned");
         }
+
         [AccessPolicy(PageCode = "SNCCDA084")]
         public ActionResult DeliveryBoyAccept(int OrderNumber, long id)
         {

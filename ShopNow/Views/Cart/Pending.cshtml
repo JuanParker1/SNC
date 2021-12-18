@@ -25,20 +25,21 @@
             <div class="card shadow mt-3">
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
-    {
-       columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
-       columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
-       columns.Add(c => c.PaymentMode).Titled("PaymentMode").Filterable(true).SetWidth(30);
-       columns.Add(c => c.ShopOwnerPhoneNumber).Titled("PhoneNo").Filterable(true).SetWidth(10);
-       columns.Add(c => c.Price).Titled("Amount").Filterable(true).SetWidth(10);
-       columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(13).Format("{0:dd-MMM-yyyy}");
-       columns.Add().RenderValueAs(c => c.Status == 2 ? "Pending" :"N/A").Titled("Order Status").Filterable(true).SetWidth(12);
-       columns.Add().Encoded(false).Sanitized(false)
-       .RenderValueAs(o => Html.ActionLink("View", "Edit", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-info btn-block",  }).ToHtmlString()
-       + Html.ActionLink("Pickup Slip", "PickupSlip", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-secondary btn-block", }).ToHtmlString()).Titled("Action").SetWidth(15);
-       columns.Add().Encoded(false).Sanitized(false)
-       .RenderValueAs(o => (o.RefundAmount == 0 || o.RefundAmount == null) ? "<a href='#modal-refund' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-refund' class='btn btn-sm btn-primary btn-modal-refund mt-4 btn-block'>Refund</a>" : o.RefundAmount.Value > 0 ? "<span>" + o.RefundAmount + "(" + o.RefundRemark + ")" + "</span>" : "N/A").Titled("Refund").SetWidth(10);
-     }).WithPaging(20).Sortable(true)
+               {
+                   columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(3);
+                   columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
+                   columns.Add(c => c.PaymentMode).Titled("PaymentMode").Filterable(true).SetWidth(30);
+                   columns.Add(c => c.ShopOwnerPhoneNumber).Titled("PhoneNo").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.Price).Titled("Amount").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(13).Format("{0:dd-MMM-yyyy}");
+                   columns.Add().RenderValueAs(c => c.Status == 2 ? "Pending" :"N/A").Titled("Order Status").Filterable(true).SetWidth(12);
+                   columns.Add().Encoded(false).Sanitized(false)
+                   .RenderValueAs(o => Html.ActionLink("View", "Edit", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-info btn-block",  }).ToHtmlString()
+                   + Html.ActionLink("Pickup Slip", "PickupSlip", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-secondary btn-block", }).ToHtmlString()).Titled("Action").SetWidth(15);
+                   columns.Add().Encoded(false).Sanitized(false)
+                   .RenderValueAs(o => (o.RefundAmount == 0 || o.RefundAmount == null) ? "<a href='#modal-refund' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-refund' class='btn btn-sm btn-primary btn-modal-refund mt-4 btn-block'>Refund</a>" : o.RefundAmount.Value > 0 ? "<span>" + o.RefundAmount + "(" + o.RefundRemark + ")" + "</span>" : "N/A").Titled("Refund").SetWidth(10);
+               }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
