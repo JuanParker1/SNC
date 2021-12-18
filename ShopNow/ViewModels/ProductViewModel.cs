@@ -439,8 +439,8 @@ namespace ShopNow.ViewModels
         public int CategoryId { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
-        public int ProductTypeId { get; set; }
-        public string ProductTypeName { get; set; }
+        //public int ProductTypeId { get; set; }
+        //public string ProductTypeName { get; set; }
         public double Price { get; set; }
         public double Length { get; set; }
         public double Width { get; set; }
@@ -458,11 +458,11 @@ namespace ShopNow.ViewModels
         public string MasterProductName { get; set; }
         public int ShopId { get; set; }
         public string ShopName { get; set; }
-        public int ShopCategoryId { get; set; }
-        public string ShopCategoryName { get; set; }
+        //public int ShopCategoryId { get; set; }
+        //public string ShopCategoryName { get; set; }
         public string CategoryName { get; set; }
-        public string SubCategoryName { get; set; }
-        public string NextSubCategoryName { get; set; }
+        //public string SubCategoryName { get; set; }
+        //public string NextSubCategoryName { get; set; }
         public string ImagePath { get; set; }
         public double MenuPrice { get; set; }
         //public Nullable<int> shopid { get; set; }

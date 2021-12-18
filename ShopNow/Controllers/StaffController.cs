@@ -59,29 +59,45 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             var model = new StaffListViewModel();
 
-            model.List = db.Staffs.Where(i => i.Status == 0).Select(i => new StaffListViewModel.StaffList
-              {
-                  Id = i.Id,
-                  ImagePath = i.ImagePath,
-                  Name = i.Name,
-                  PhoneNumber = i.PhoneNumber
-                   // ShopName = string.Join(", ", i.Select(a => a.sh.Name))
-               }).ToList();
+            int[] shop = db.Shops.Where( i=> i.Status == 0).Select(s => s.Id).ToArray();
+            int[] staffshop = db.Staffs.Join(db.ShopStaffs, s => s.Id, ss => ss.StaffId, (s, ss) => new { s, ss }).Select(i => i.ss.ShopId).ToArray();
+           
+            if (shop != null && shop.Length > 0)
+            {
+                model.List = db.Staffs.Where(i => i.Status == 0)
+                 .Join(db.ShopStaffs.Where(i => shop.Contains(i.ShopId)), st => st.Id, ss => ss.StaffId, (st, ss) => new { st, ss })
+                 .Join(db.Shops, st => st.ss.ShopId, sh => sh.Id, (st, sh) => new { st, sh })
+                 .GroupBy(i => i.st.ss.StaffId)
+                 .AsEnumerable()
+                 .Select(i => new StaffListViewModel.StaffList
+                 {
+                     Id = i.FirstOrDefault().st.st.Id,
+                     ImagePath = i.FirstOrDefault().st.st.ImagePath,
+                     Name = i.FirstOrDefault().st.st.Name,
+                     PhoneNumber = i.FirstOrDefault().st.st.PhoneNumber,
+                     ShopName = string.Join(", ", i.Select(a => a.sh.Name))
+                 }).ToList();
+                return View(model.List);
+            }
 
-            //model.List = db.Staffs.Where(i => i.Status == 0)
-            //   .Join(db.ShopStaffs, st => st.Id, ss => ss.StaffId, (st, ss) => new { st, ss })
-            //   .Join(db.Shops, st => st.ss.ShopId, sh => sh.Id, (st, sh) => new { st, sh })
-            //   .GroupBy(i => i.st.ss.StaffId)
-            //   .AsEnumerable()
-            //   .Select(i => new StaffListViewModel.StaffList
-            //   {
-            //       Id = i.FirstOrDefault().st.st.Id,
-            //       ImagePath = i.FirstOrDefault().st.st.ImagePath,
-            //       Name = i.FirstOrDefault().st.st.Name,
-            //       PhoneNumber = i.FirstOrDefault().st.st.PhoneNumber,
-            //      // ShopName = string.Join(", ", i.Select(a => a.sh.Name))
-            //   }).ToList();
-            return View(model.List);
+            if (staffshop != null)
+            {
+                model.List = db.Staffs.Where(i => i.Status == 0)
+                 .Join(db.ShopStaffs.Where(i => staffshop.Contains(i.ShopId)), st => st.Id, ss => ss.StaffId, (st, ss) => new { st, ss })
+                 .Join(db.Shops, st => st.ss.ShopId, sh => sh.Id, (st, sh) => new { st, sh })
+                 .GroupBy(i => i.st.ss.StaffId)
+                 .AsEnumerable()
+                 .Select(i => new StaffListViewModel.StaffList
+                 {
+                     Id = i.FirstOrDefault().st.st.Id,
+                     ImagePath = i.FirstOrDefault().st.st.ImagePath,
+                     Name = i.FirstOrDefault().st.st.Name,
+                     PhoneNumber = i.FirstOrDefault().st.st.PhoneNumber,
+                     ShopName = string.Join(", ", i.Select(a => a.sh.Name))
+                 }).ToList();
+                return View(model.List);
+            }
+            return View();
         }
 
         [AccessPolicy(PageCode = "SNCSFC280")]
