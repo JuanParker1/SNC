@@ -3,9 +3,7 @@
 @{
     ViewBag.Title = "Delivered Order List";
 } 
-
 <title>ShopNow | Delivered Order </title>
-
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 <style>
@@ -37,7 +35,7 @@
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
                {
-                   columns.Add(c => c.No).Titled("Sl.No").Filterable(true).SetWidth(3);
+                   columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(3);
                    columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
                    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
                    columns.Add()
