@@ -3,12 +3,9 @@
 @{
     ViewBag.Title = "Category";
 }
-
 <title>ShopNow | Category List</title>
-
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-
 <div class="container-fluid mb-5">
     <div class="row">
         <div class="col-md-6">
@@ -17,7 +14,6 @@
         <div class="col-md-6 text-right">
             <a data-toggle="modal" data-target="#createModal" href="createModal"><span class="fa fa-plus"></span> New Category</a>
         </div>
-
         <div class="col-md-12">
             <div class="card shadow mt-3">
                 <div class="card-body">
@@ -38,7 +34,7 @@ columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
     </div>
 </div>
 
-<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel">
+<div class="modal fade" id="createModal" role="dialog" aria-labelledby="createModalLabel">
     <div class="modal-dialog" role="document">
         <form action="/Category/Save" method="post" enctype="multipart/form-data">
             <div class="modal-content">
@@ -82,7 +78,7 @@ columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
     </div>
 </div>
 
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel">
+<div class="modal fade" id="editModal" role="dialog" aria-labelledby="editModalLabel">
     <div class="modal-dialog" role="document">
         <form action="/Category/Edit" method="post" enctype="multipart/form-data">
             <div class="modal-content">
@@ -95,7 +91,7 @@ columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
                 <div class="modal-body">
                     <div class="form-group row">
                         <div class="col-md-6">
-                            <input type="hidden"name="Id" id="CategoryId" />
+                            <input type="hidden" name="Id" id="CategoryId" />
                             <label class="col-form-label font-weight-bold text-secondary">Category Name</label>
                             <input type="text" name="editName" id="editName" class="form-control" />
                         </div>
