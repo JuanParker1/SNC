@@ -4,7 +4,6 @@
     ViewBag.Title = "DiscountCategory";
 }
 <title>ShopNow | Discount Category List</title>
-
 @using (Html.BeginForm("List", "DiscountCategory", FormMethod.Post, new { id = "DiscountCategoryForm" }))
 {
     <div class="container-fluid">
@@ -57,7 +56,7 @@
     </div>
 }
 
-<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel">
+<div class="modal fade" id="createModal" role="dialog" aria-labelledby="createModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header alert alert-info">
@@ -93,7 +92,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel">
+<div class="modal fade" id="editModal" role="dialog" aria-labelledby="editModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header alert alert-info">
