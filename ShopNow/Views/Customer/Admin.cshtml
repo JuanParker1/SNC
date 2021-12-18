@@ -190,17 +190,22 @@
             $("#btnUpdate").on('click', function () {
                 var id = $("#PId").val();
                 var password = $("#Password").val();
-                $.getJSON("/Customer/UpdatePassword", { id: id, password: password }, function (data) {
-                    if (data == true) {
-                        swal({
-                            title: "Password Updated successfully!",
-                            text: "",
-                            type: "success"
-                        }, function () {
-                            window.location.reload();
-                        });
-                    }
-                });
+                if (password != null || password == "") {
+                    $.getJSON("/Customer/UpdatePassword", { id: id, password: password }, function (data) {
+                        if (data == true) {
+                            swal({
+                                title: "Password Updated successfully!",
+                                text: "",
+                                type: "success"
+                            }, function () {
+                                window.location.reload();
+                            });
+                        }
+                    });
+                }
+                else {
+                    swal("Password Empty", "Please enter your password!", "warning");
+                }
             });
 
          });
