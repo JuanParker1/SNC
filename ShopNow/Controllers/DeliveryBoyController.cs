@@ -577,6 +577,7 @@ namespace ShopNow.Controllers
             if (customerExist)
             {
                 var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.PhoneNumber == phone);
+                var shop = db.Shops.FirstOrDefault(i => i.OwnerPhoneNumber == phone);
                 if (deliveryBoy != null)
                 {
                     if (deliveryBoy.Status == 0)    // DeliveryBoy already Exist
@@ -594,6 +595,11 @@ namespace ShopNow.Controllers
                         msg = 3;
                         return Json(new { msg, phone = customer.PhoneNumber, name = customer.Name, email = customer.Email }, JsonRequestBehavior.AllowGet);
                     }
+                }
+                else if(shop != null)
+                {
+                    msg = 5;
+                    return Json(msg, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {     // DeliveryBoy Create

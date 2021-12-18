@@ -303,7 +303,22 @@ namespace ShopNow.Controllers
             }
             return Json(false, JsonRequestBehavior.AllowGet);
         }
-               
+
+        public JsonResult UpdatePassword(int id, string password)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var customer = db.Customers.Where(m => m.Id == id).FirstOrDefault();
+            if (customer != null)
+            {
+                customer.Password = password;
+                customer.DateUpdated = DateTime.Now;
+                customer.UpdatedBy = user.Name;
+                db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
         public async Task<JsonResult> GetCustomerSelect2(string q = "")
         {
             var model = await db.Customers.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.Position != 4).Select(i => new

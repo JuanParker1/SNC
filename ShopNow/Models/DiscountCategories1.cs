@@ -12,14 +12,17 @@ namespace ShopNow.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ProductSchedule
+    public partial class DiscountCategories1
     {
         public int Id { get; set; }
-        public long ProductId { get; set; }
-        public Nullable<System.TimeSpan> OnTime { get; set; }
-        public Nullable<System.TimeSpan> OffTime { get; set; }
-        public string UpdatedBy { get; set; }
-        public System.DateTime DateTimeUpdated { get; set; }
+        public string Name { get; set; }
+        public double Percentage { get; set; }
+        public int ShopId { get; set; }
+        public string ShopName { get; set; }
         public int Status { get; set; }
+        public string CreatedBy { get; set; }
+        public string UpdatedBy { get; set; }
+        public System.DateTime DateEncoded { get; set; }
+        public System.DateTime DateUpdated { get; set; }
     }
 }

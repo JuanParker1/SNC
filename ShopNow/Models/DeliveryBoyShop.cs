@@ -28,5 +28,8 @@ namespace ShopNow.Models
         public System.DateTime DateUpdated { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
+    
+        public virtual DeliveryBoyShop DeliveryBoyShops1 { get; set; }
+        public virtual DeliveryBoyShop DeliveryBoyShop1 { get; set; }
     }
 }

@@ -34,6 +34,13 @@ namespace ShopNow.Models
         public string ShopImagePath { get; set; }
         public int Meters { get; set; }
         public Nullable<bool> ShopOnline { get; set; }
+        public Nullable<System.TimeSpan> NextOnTime { get; set; }
         public int ShopStatus { get; set; }
+        public Nullable<bool> IsOffer { get; set; }
+        public double Size { get; set; }
+        public double Weight { get; set; }
+        public bool IsPreorder { get; set; }
+        public int PreorderHour { get; set; }
+        public bool PriscriptionCategory { get; set; }
     }
 }

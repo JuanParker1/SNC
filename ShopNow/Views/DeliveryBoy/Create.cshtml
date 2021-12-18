@@ -255,6 +255,9 @@
                             $("#Name").val(data.name);
                             $("#Email").val(data.email);
                         }
+                        else if (data == 5) {
+                            swal("PhoneNumber already exist!", "Shop Owner PhoneNumber", "warning");
+                        }
                     });
                 }
             });
