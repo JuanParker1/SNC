@@ -27,10 +27,10 @@
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
                {
-                   columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(3);
+                   columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(1);
                    columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
                    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
-                   columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(20);
+                   columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(30);
                    columns.Add(c => c.ShopPhoneNumber).Titled("Shop PhoneNo").Filterable(true).SetWidth(10);
                    columns.Add(c => c.PaymentMode).Titled("PaymentMode").Filterable(true).SetWidth(10);
                    columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(10);

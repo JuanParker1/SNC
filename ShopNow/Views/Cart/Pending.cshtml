@@ -19,14 +19,14 @@
             <input type="button" class="form-control btn btn-sm btn-success" name="Filter" id="Filter" value="Filter" />
         </div>
         <div class="col-md-4 text-right">
-            <a href="~/Cart/Pending" class="ml-auto" target="_self"><span class="fa fa-bars"></span> New Order List</a>
+            <a href="~/Cart/List" class="ml-auto" target="_self"><span class="fa fa-bars"></span> New Order List</a>
         </div>
         <div class="col-md-12">
             <div class="card shadow mt-3">
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
                {
-                   columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(3);
+                   columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(1);
                    columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
                    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
                    columns.Add(c => c.PaymentMode).Titled("PaymentMode").Filterable(true).SetWidth(30);
