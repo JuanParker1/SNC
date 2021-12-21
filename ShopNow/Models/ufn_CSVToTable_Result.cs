@@ -10,16 +10,9 @@
 namespace ShopNow.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class ProductSchedule
+    public partial class ufn_CSVToTable_Result
     {
-        public int Id { get; set; }
-        public long ProductId { get; set; }
-        public Nullable<System.TimeSpan> OnTime { get; set; }
-        public Nullable<System.TimeSpan> OffTime { get; set; }
-        public int Status { get; set; }
-        public string UpdatedBy { get; set; }
-        public System.DateTime DateTimeUpdated { get; set; }
+        public string String { get; set; }
     }
 }

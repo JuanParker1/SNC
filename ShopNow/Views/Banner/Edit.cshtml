@@ -20,8 +20,8 @@
                 <input type="hidden" name="Id" id="Id" value="@Model.Id" />
                 <input type="hidden" name="Status" id="Status" value="@Model.Status" />
                 <input type="hidden" name="Bannerpath" id="Bannerpath" value="@Model.Bannerpath" />
-                <input type="hidden" name="Fromdate" id="Fromdate" value="@Model.FromDate" />
-                <input type="hidden" name="Todate" id="Todate" value="@Model.ToDate" />
+                @*<input type="hidden" name="Fromdate" id="Fromdate" value="@Model.FromDate" />
+                <input type="hidden" name="Todate" id="Todate" value="@Model.ToDate" />*@
                 <div class="card shadow mt-2">
                     <div class="card-body">
                         <div class="row">
@@ -97,9 +97,9 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="input-daterange input-group">
-                                            <input type="text" class="form-control" value="@Model.FromDate.ToString("MM-dd-yyyy")" readonly>
+                                            <input id="Fromdate" type="date" class="form-control" name="FromDate" value="@Model.FromDate.ToString("yyyy-MM-dd")">
                                             <span class="input-group-addon mx-3">to</span>
-                                            <input type="text" class="form-control" value="@Model.ToDate.ToString("MM-dd-yyyy")" readonly>
+                                            <input id="Todate" type="date" class="form-control" name="ToDate" value="@Model.ToDate.ToString("yyyy-MM-dd")" >
                                         </div>
                                     </div>
                                     <div class="col-md-1 text-md-left">
@@ -275,6 +275,7 @@
             } else if (ctype == 4) {
                 $(".ProductBanner").removeClass("d-none");
             }
+            
         });
     
         var _URL = window.URL || window.webkitURL;
@@ -304,6 +305,66 @@
                 };
                 img.src = _URL.createObjectURL(file);
             }
+        });
+
+        //$(function () {
+        //    var dtToday = new Date();
+        //    var month = dtToday.getMonth() + 1;
+        //    var day = dtToday.getDate() + 1;
+        //    var year = dtToday.getFullYear();
+        //    if (month < 10)
+        //        month = '0' + month.toString();
+        //    if (day < 10)
+        //        day = '0' + day.toString();
+        //    var maxDate = year + '-' + month + '-' + day;
+        //    $('#Fromdate').attr('min', maxDate);
+        //});
+       // alert('hi');
+        $('#Fromdate').change(function () {
+           // var fromdate = new Date($(this).val());
+
+            //min date
+            //var month = fromdate.getMonth() + 1;
+            //var day = fromdate.getDate();
+            //var year = fromdate.getFullYear();
+            //if (month < 10)
+            //    month = '0' + month.toString();
+            //if (day < 10)
+            //    day = '0' + day.toString();
+            //var minDate = (year) + '-' + (month) + '-' + (day);
+            //$('#Todate').attr('min', minDate);
+            //$('#Fromdate').val(minDate);
+            //$('#Todate').val(minDate);
+
+            // max date
+            //fromdate.setDate(fromdate.getDate() + 2);
+            //var month1 = fromdate.getMonth() + 1;
+            //var day1 = fromdate.getDate();
+            //var year1 = fromdate.getFullYear();
+            //if (month1 < 10)
+            //    month1 = '0' + month1.toString();
+            //if (day1 < 10)
+            //    day1 = '0' + day1.toString();
+            //var maxDate = year1 + '-' + month1 + '-' + day1;
+            //$('#Todate').attr('max', maxDate);
+
+            // Days Calculation
+
+            var from = new Date($("#Fromdate").val());
+            var to = new Date($("#Todate").val());
+            var diff = new Date(to - from);
+            var days = (diff / 1000 / 60 / 60 / 24) + 1;
+            $('#Days').val(days);
+
+        });
+
+        $('#Todate').change(function () {
+            var from = new Date($("#Fromdate").val());
+            var to = new Date($("#Todate").val());
+            var diff = new Date(to - from);
+            var days = (diff / 1000 / 60 / 60 / 24) + 1;
+            $('#Days').val(days);
+
         });
     });
 </script>
