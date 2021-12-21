@@ -60,7 +60,6 @@ namespace ShopNow.Models
         public virtual DbSet<DeliveryBoyShop> DeliveryBoyShops { get; set; }
         public virtual DbSet<DeliveryCharge> DeliveryCharges { get; set; }
         public virtual DbSet<DiscountCategory> DiscountCategories { get; set; }
-        public virtual DbSet<DiscountCategories1> DiscountCategories1 { get; set; }
         public virtual DbSet<DrugCompoundDetail> DrugCompoundDetails { get; set; }
         public virtual DbSet<KeywordData> KeywordDatas { get; set; }
         public virtual DbSet<LocationDetail> LocationDetails { get; set; }
@@ -84,7 +83,6 @@ namespace ShopNow.Models
         public virtual DbSet<Portion> Portions { get; set; }
         public virtual DbSet<ProductDishAddOn> ProductDishAddOns { get; set; }
         public virtual DbSet<Product> Products { get; set; }
-        public virtual DbSet<Products1> Products1 { get; set; }
         public virtual DbSet<ProductSchedule> ProductSchedules { get; set; }
         public virtual DbSet<ProductSpecificationItem> ProductSpecificationItems { get; set; }
         public virtual DbSet<ProductSpecification> ProductSpecifications { get; set; }
@@ -102,100 +100,79 @@ namespace ShopNow.Models
         public virtual DbSet<Specification> Specifications { get; set; }
         public virtual DbSet<Staff> Staffs { get; set; }
         public virtual DbSet<SubCategory> SubCategories { get; set; }
+        public virtual DbSet<tbl> tbls { get; set; }
         public virtual DbSet<UserEnquiry> UserEnquiries { get; set; }
     
-        [DbFunction("sncEntities1", "GetTableVAlueString")]
+        [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)
         {
             var keyParameter = key != null ?
                 new ObjectParameter("key", key) :
                 new ObjectParameter("key", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<GetTableVAlueString_Result>("[sncEntities1].[GetTableVAlueString](@key)", keyParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<GetTableVAlueString_Result>("[sncEntities].[GetTableVAlueString](@key)", keyParameter);
         }
     
-        public virtual ObjectResult<string> GetAutoCompleteSearch(Nullable<double> longitude, Nullable<double> latitude, string str, Nullable<int> customerid)
+        [DbFunction("sncEntities", "ufn_CSVToTable")]
+        public virtual IQueryable<ufn_CSVToTable_Result> ufn_CSVToTable(string stringInput, string delimiter)
         {
-            var longitudeParameter = longitude.HasValue ?
-                new ObjectParameter("Longitude", longitude) :
-                new ObjectParameter("Longitude", typeof(double));
+            var stringInputParameter = stringInput != null ?
+                new ObjectParameter("StringInput", stringInput) :
+                new ObjectParameter("StringInput", typeof(string));
     
-            var latitudeParameter = latitude.HasValue ?
-                new ObjectParameter("Latitude", latitude) :
-                new ObjectParameter("Latitude", typeof(double));
+            var delimiterParameter = delimiter != null ?
+                new ObjectParameter("Delimiter", delimiter) :
+                new ObjectParameter("Delimiter", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<ufn_CSVToTable_Result>("[sncEntities].[ufn_CSVToTable](@StringInput, @Delimiter)", stringInputParameter, delimiterParameter);
+        }
+    
+        [DbFunction("sncEntities", "ufn_StringTable")]
+        public virtual IQueryable<ufn_StringTable_Result> ufn_StringTable(string stringInput, string delimiter)
+        {
+            var stringInputParameter = stringInput != null ?
+                new ObjectParameter("StringInput", stringInput) :
+                new ObjectParameter("StringInput", typeof(string));
+    
+            var delimiterParameter = delimiter != null ?
+                new ObjectParameter("Delimiter", delimiter) :
+                new ObjectParameter("Delimiter", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<ufn_StringTable_Result>("[sncEntities].[ufn_StringTable](@StringInput, @Delimiter)", stringInputParameter, delimiterParameter);
+        }
+    
+        public virtual int getCategoryListbyShopcode(string code)
+        {
+            var codeParameter = code != null ?
+                new ObjectParameter("code", code) :
+                new ObjectParameter("code", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("getCategoryListbyShopcode", codeParameter);
+        }
+    
+        public virtual int GetCategoryProductsList(string shopCode, string categoryCode, string str, Nullable<int> page, Nullable<int> pageSize)
+        {
+            var shopCodeParameter = shopCode != null ?
+                new ObjectParameter("shopCode", shopCode) :
+                new ObjectParameter("shopCode", typeof(string));
+    
+            var categoryCodeParameter = categoryCode != null ?
+                new ObjectParameter("categoryCode", categoryCode) :
+                new ObjectParameter("categoryCode", typeof(string));
     
             var strParameter = str != null ?
                 new ObjectParameter("str", str) :
                 new ObjectParameter("str", typeof(string));
     
-            var customeridParameter = customerid.HasValue ?
-                new ObjectParameter("customerid", customerid) :
-                new ObjectParameter("customerid", typeof(int));
+            var pageParameter = page.HasValue ?
+                new ObjectParameter("page", page) :
+                new ObjectParameter("page", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("GetAutoCompleteSearch", longitudeParameter, latitudeParameter, strParameter, customeridParameter);
-        }
+            var pageSizeParameter = pageSize.HasValue ?
+                new ObjectParameter("pageSize", pageSize) :
+                new ObjectParameter("pageSize", typeof(int));
     
-        public virtual ObjectResult<string> GetAutoCompleteSearch_1(Nullable<double> longitude, Nullable<double> latitude, string str, Nullable<int> customerid)
-        {
-            var longitudeParameter = longitude.HasValue ?
-                new ObjectParameter("Longitude", longitude) :
-                new ObjectParameter("Longitude", typeof(double));
-    
-            var latitudeParameter = latitude.HasValue ?
-                new ObjectParameter("Latitude", latitude) :
-                new ObjectParameter("Latitude", typeof(double));
-    
-            var strParameter = str != null ?
-                new ObjectParameter("str", str) :
-                new ObjectParameter("str", typeof(string));
-    
-            var customeridParameter = customerid.HasValue ?
-                new ObjectParameter("customerid", customerid) :
-                new ObjectParameter("customerid", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("GetAutoCompleteSearch_1", longitudeParameter, latitudeParameter, strParameter, customeridParameter);
-        }
-    
-        public virtual ObjectResult<string> GetAutoCompleteSearch_before(Nullable<double> longitude, Nullable<double> latitude, string str, Nullable<int> customerid)
-        {
-            var longitudeParameter = longitude.HasValue ?
-                new ObjectParameter("Longitude", longitude) :
-                new ObjectParameter("Longitude", typeof(double));
-    
-            var latitudeParameter = latitude.HasValue ?
-                new ObjectParameter("Latitude", latitude) :
-                new ObjectParameter("Latitude", typeof(double));
-    
-            var strParameter = str != null ?
-                new ObjectParameter("str", str) :
-                new ObjectParameter("str", typeof(string));
-    
-            var customeridParameter = customerid.HasValue ?
-                new ObjectParameter("customerid", customerid) :
-                new ObjectParameter("customerid", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("GetAutoCompleteSearch_before", longitudeParameter, latitudeParameter, strParameter, customeridParameter);
-        }
-    
-        public virtual ObjectResult<string> GetAutoCompleteSearch_old(Nullable<double> longitude, Nullable<double> latitude, string str, Nullable<int> customerid)
-        {
-            var longitudeParameter = longitude.HasValue ?
-                new ObjectParameter("Longitude", longitude) :
-                new ObjectParameter("Longitude", typeof(double));
-    
-            var latitudeParameter = latitude.HasValue ?
-                new ObjectParameter("Latitude", latitude) :
-                new ObjectParameter("Latitude", typeof(double));
-    
-            var strParameter = str != null ?
-                new ObjectParameter("str", str) :
-                new ObjectParameter("str", typeof(string));
-    
-            var customeridParameter = customerid.HasValue ?
-                new ObjectParameter("customerid", customerid) :
-                new ObjectParameter("customerid", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("GetAutoCompleteSearch_old", longitudeParameter, latitudeParameter, strParameter, customeridParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GetCategoryProductsList", shopCodeParameter, categoryCodeParameter, strParameter, pageParameter, pageSizeParameter);
         }
     
         public virtual ObjectResult<Nullable<int>> GetCustomerCount()
@@ -211,19 +188,6 @@ namespace ShopNow.Models
         public virtual ObjectResult<GetDEliveryBoyList_Result> GetDEliveryBoyList()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetDEliveryBoyList_Result>("GetDEliveryBoyList");
-        }
-    
-        public virtual ObjectResult<GetPendingOrderDetails_Result> GetPendingOrderDetails(Nullable<int> shopid, Nullable<int> customerid)
-        {
-            var shopidParameter = shopid.HasValue ?
-                new ObjectParameter("shopid", shopid) :
-                new ObjectParameter("shopid", typeof(int));
-    
-            var customeridParameter = customerid.HasValue ?
-                new ObjectParameter("customerid", customerid) :
-                new ObjectParameter("customerid", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetPendingOrderDetails_Result>("GetPendingOrderDetails", shopidParameter, customeridParameter);
         }
     
         public virtual ObjectResult<GetProductList_Result> GetProductList(Nullable<double> longitude, Nullable<double> latitude, string str, Nullable<int> page, Nullable<int> pagesize)
@@ -251,20 +215,7 @@ namespace ShopNow.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetProductList_Result>("GetProductList", longitudeParameter, latitudeParameter, strParameter, pageParameter, pagesizeParameter);
         }
     
-        public virtual int GetProductListBasedonCategory(Nullable<int> category, string str)
-        {
-            var categoryParameter = category.HasValue ?
-                new ObjectParameter("category", category) :
-                new ObjectParameter("category", typeof(int));
-    
-            var strParameter = str != null ?
-                new ObjectParameter("str", str) :
-                new ObjectParameter("str", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GetProductListBasedonCategory", categoryParameter, strParameter);
-        }
-    
-        public virtual int GetProductListCount(Nullable<double> longitude, Nullable<double> latitude, string str)
+        public virtual ObjectResult<Nullable<int>> GetProductListCount(Nullable<double> longitude, Nullable<double> latitude, string str)
         {
             var longitudeParameter = longitude.HasValue ?
                 new ObjectParameter("Longitude", longitude) :
@@ -278,10 +229,35 @@ namespace ShopNow.Models
                 new ObjectParameter("str", str) :
                 new ObjectParameter("str", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GetProductListCount", longitudeParameter, latitudeParameter, strParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("GetProductListCount", longitudeParameter, latitudeParameter, strParameter);
         }
     
-        public virtual int GetShopCategoryProductCount(Nullable<int> shopCode, Nullable<int> categoryCode, string str)
+        public virtual int GetShopCategoryList(string shop, string categoryCode, string str, Nullable<int> page, Nullable<int> size)
+        {
+            var shopParameter = shop != null ?
+                new ObjectParameter("shop", shop) :
+                new ObjectParameter("shop", typeof(string));
+    
+            var categoryCodeParameter = categoryCode != null ?
+                new ObjectParameter("CategoryCode", categoryCode) :
+                new ObjectParameter("CategoryCode", typeof(string));
+    
+            var strParameter = str != null ?
+                new ObjectParameter("str", str) :
+                new ObjectParameter("str", typeof(string));
+    
+            var pageParameter = page.HasValue ?
+                new ObjectParameter("Page", page) :
+                new ObjectParameter("Page", typeof(int));
+    
+            var sizeParameter = size.HasValue ?
+                new ObjectParameter("Size", size) :
+                new ObjectParameter("Size", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GetShopCategoryList", shopParameter, categoryCodeParameter, strParameter, pageParameter, sizeParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> GetShopCategoryProductCount(Nullable<int> shopCode, Nullable<int> categoryCode, string str)
         {
             var shopCodeParameter = shopCode.HasValue ?
                 new ObjectParameter("shopCode", shopCode) :
@@ -295,10 +271,10 @@ namespace ShopNow.Models
                 new ObjectParameter("str", str) :
                 new ObjectParameter("str", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GetShopCategoryProductCount", shopCodeParameter, categoryCodeParameter, strParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("GetShopCategoryProductCount", shopCodeParameter, categoryCodeParameter, strParameter);
         }
     
-        public virtual ObjectResult<GetShopCategoryProducts_Result> GetShopCategoryProducts(Nullable<int> shopCode, Nullable<int> categoryCode, string str, Nullable<int> page, Nullable<int> pageSize)
+        public virtual ObjectResult<GetShopCategoryProducts_Result> GetShopCategoryProducts(Nullable<int> shopCode, Nullable<int> categoryCode, string str, Nullable<int> page, Nullable<int> pageSize, Nullable<int> customerid)
         {
             var shopCodeParameter = shopCode.HasValue ?
                 new ObjectParameter("shopCode", shopCode) :
@@ -320,7 +296,36 @@ namespace ShopNow.Models
                 new ObjectParameter("pageSize", pageSize) :
                 new ObjectParameter("pageSize", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetShopCategoryProducts_Result>("GetShopCategoryProducts", shopCodeParameter, categoryCodeParameter, strParameter, pageParameter, pageSizeParameter);
+            var customeridParameter = customerid.HasValue ?
+                new ObjectParameter("customerid", customerid) :
+                new ObjectParameter("customerid", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetShopCategoryProducts_Result>("GetShopCategoryProducts", shopCodeParameter, categoryCodeParameter, strParameter, pageParameter, pageSizeParameter, customeridParameter);
+        }
+    
+        public virtual int GetShopCategoryProductsList(string shopCode, string categoryCode, string str, Nullable<int> page, Nullable<int> pageSize)
+        {
+            var shopCodeParameter = shopCode != null ?
+                new ObjectParameter("shopCode", shopCode) :
+                new ObjectParameter("shopCode", typeof(string));
+    
+            var categoryCodeParameter = categoryCode != null ?
+                new ObjectParameter("categoryCode", categoryCode) :
+                new ObjectParameter("categoryCode", typeof(string));
+    
+            var strParameter = str != null ?
+                new ObjectParameter("str", str) :
+                new ObjectParameter("str", typeof(string));
+    
+            var pageParameter = page.HasValue ?
+                new ObjectParameter("page", page) :
+                new ObjectParameter("page", typeof(int));
+    
+            var pageSizeParameter = pageSize.HasValue ?
+                new ObjectParameter("pageSize", pageSize) :
+                new ObjectParameter("pageSize", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GetShopCategoryProductsList", shopCodeParameter, categoryCodeParameter, strParameter, pageParameter, pageSizeParameter);
         }
     
         public virtual ObjectResult<GetShopname_Result> GetShopname(Nullable<int> shopId)
@@ -332,13 +337,25 @@ namespace ShopNow.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetShopname_Result>("GetShopname", shopIdParameter);
         }
     
-        public virtual ObjectResult<GetWaitingOrderDetails_Result> GetWaitingOrderDetails(Nullable<int> customerid)
+        public virtual int ReatillerPaymentReport(Nullable<System.DateTime> from, Nullable<System.DateTime> to, string shopcode, string user)
         {
-            var customeridParameter = customerid.HasValue ?
-                new ObjectParameter("customerid", customerid) :
-                new ObjectParameter("customerid", typeof(int));
+            var fromParameter = from.HasValue ?
+                new ObjectParameter("from", from) :
+                new ObjectParameter("from", typeof(System.DateTime));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetWaitingOrderDetails_Result>("GetWaitingOrderDetails", customeridParameter);
+            var toParameter = to.HasValue ?
+                new ObjectParameter("to", to) :
+                new ObjectParameter("to", typeof(System.DateTime));
+    
+            var shopcodeParameter = shopcode != null ?
+                new ObjectParameter("shopcode", shopcode) :
+                new ObjectParameter("shopcode", typeof(string));
+    
+            var userParameter = user != null ?
+                new ObjectParameter("user", user) :
+                new ObjectParameter("user", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ReatillerPaymentReport", fromParameter, toParameter, shopcodeParameter, userParameter);
         }
     
         public virtual int ReatillerPaymentReportAdmin(Nullable<System.DateTime> from, Nullable<System.DateTime> to, string shopcode)
@@ -358,9 +375,66 @@ namespace ShopNow.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ReatillerPaymentReportAdmin", fromParameter, toParameter, shopcodeParameter);
         }
     
-        public virtual ObjectResult<Nullable<System.Guid>> SqlQueryNotificationStoredProcedure_05cbde48_1a78_4d39_90ff_3e15350b0e61()
+        public virtual int ReatillerPaymentReports(Nullable<System.DateTime> from, Nullable<System.DateTime> to, string shopcode, string user)
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.Guid>>("SqlQueryNotificationStoredProcedure_05cbde48_1a78_4d39_90ff_3e15350b0e61");
+            var fromParameter = from.HasValue ?
+                new ObjectParameter("from", from) :
+                new ObjectParameter("from", typeof(System.DateTime));
+    
+            var toParameter = to.HasValue ?
+                new ObjectParameter("to", to) :
+                new ObjectParameter("to", typeof(System.DateTime));
+    
+            var shopcodeParameter = shopcode != null ?
+                new ObjectParameter("shopcode", shopcode) :
+                new ObjectParameter("shopcode", typeof(string));
+    
+            var userParameter = user != null ?
+                new ObjectParameter("user", user) :
+                new ObjectParameter("user", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ReatillerPaymentReports", fromParameter, toParameter, shopcodeParameter, userParameter);
+        }
+    
+        public virtual int Sp_TB_SelectMedicineName(string search, Nullable<int> pageNumber, Nullable<int> rowofpage)
+        {
+            var searchParameter = search != null ?
+                new ObjectParameter("search", search) :
+                new ObjectParameter("search", typeof(string));
+    
+            var pageNumberParameter = pageNumber.HasValue ?
+                new ObjectParameter("pageNumber", pageNumber) :
+                new ObjectParameter("pageNumber", typeof(int));
+    
+            var rowofpageParameter = rowofpage.HasValue ?
+                new ObjectParameter("Rowofpage", rowofpage) :
+                new ObjectParameter("Rowofpage", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Sp_TB_SelectMedicineName", searchParameter, pageNumberParameter, rowofpageParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<System.Guid>> SqlQueryNotificationStoredProcedure_35889fc1_4b38_49ec_a25f_35bceebcd9f3()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.Guid>>("SqlQueryNotificationStoredProcedure_35889fc1_4b38_49ec_a25f_35bceebcd9f3");
+        }
+    
+        public virtual ObjectResult<Nullable<System.Guid>> SqlQueryNotificationStoredProcedure_413caca6_2c87_4361_9ff7_ee550ffbd0ed()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.Guid>>("SqlQueryNotificationStoredProcedure_413caca6_2c87_4361_9ff7_ee550ffbd0ed");
+        }
+    
+        public virtual ObjectResult<Nullable<System.Guid>> SqlQueryNotificationStoredProcedure_85a2a887_f0ed_4901_b7d8_b32bab1a5e51()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.Guid>>("SqlQueryNotificationStoredProcedure_85a2a887_f0ed_4901_b7d8_b32bab1a5e51");
+        }
+    
+        public virtual int test(string str)
+        {
+            var strParameter = str != null ?
+                new ObjectParameter("str", str) :
+                new ObjectParameter("str", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("test", strParameter);
         }
     }
 }

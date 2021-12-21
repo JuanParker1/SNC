@@ -34,11 +34,12 @@ namespace ShopNow.Models
         public int Itemid { get; set; }
         public bool IsOnline { get; set; }
         public Nullable<System.TimeSpan> NextOnTime { get; set; }
-        public Nullable<bool> IsOffer { get; set; }
         public double Size { get; set; }
         public double Weight { get; set; }
         public bool IsPreorder { get; set; }
         public int PreorderHour { get; set; }
-        public bool PriscriptionCategory { get; set; }
+        public int OfferQuantityLimit { get; set; }
+        public int IsLiked { get; set; }
+        public string LikeText { get; set; }
     }
 }

@@ -2944,15 +2944,15 @@ namespace ShopNow.Controllers
             return 0;
         }
 
-        public JsonResult GetShopCategoryList(int shopId = 0, int CategoryId = 0, string str = "", int page = 1, int pageSize = 20)
+        public JsonResult GetShopCategoryList(int shopId = 0, int CategoryId = 0,int customerId=0, string str = "", int page = 1, int pageSize = 20)
         {
             //  var shid = db.Shops.Where(s => s.Id == shopId).FirstOrDefault();
             int? count = 0;
-            //var total = db.GetShopCategoryProductCount(shopId, CategoryId, str).ToList();
-            //if (total.Count > 0)
-               // count = total[0];
+            var total = db.GetShopCategoryProductCount(shopId, CategoryId, str).ToList();
+            if (total.Count() > 0)
+                count = total[0];
             var skip = page - 1;
-            var model = db.GetShopCategoryProducts(shopId, CategoryId, str, skip, pageSize).ToList();
+            var model = db.GetShopCategoryProducts(shopId, CategoryId, str, skip, pageSize, customerId).ToList();
             int CurrentPage = page;
             int PageSize = pageSize;
             int? TotalCount = count;
