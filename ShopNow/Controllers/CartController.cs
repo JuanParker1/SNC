@@ -351,14 +351,18 @@ namespace ShopNow.Controllers
             model.StartDate = model.StartDate == null ? DateTime.Now : model.StartDate;
 
             model.DeliveredReportLists = db.Orders.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(model.StartDate) && i.Status == 6)
+                .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+                .AsEnumerable()
             .Select(i => new CartReportViewModel.DeliveredReportList
             {
-                Id = i.Id,
-                ShopName = i.ShopName,
-                OrderNumber = i.OrderNumber,
-                DeliveryAddress = i.DeliveryAddress,
-                PhoneNumber = i.CustomerPhoneNumber,
-                DateEncoded = i.DateEncoded
+                Id = i.c.Id,
+                ShopName = i.c.ShopName,
+                OrderNumber = i.c.OrderNumber,
+                DeliveryAddress = i.c.DeliveryAddress,
+                PhoneNumber = i.c.CustomerPhoneNumber,
+                DateEncoded = i.c.DateEncoded,
+                PaymentMode = i.c.PaymentMode,
+                Amount = i.p.Amount - i.p.RefundAmount ?? 0
             }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.DeliveredReportLists.ForEach(x => x.No = counter++);

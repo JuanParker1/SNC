@@ -523,6 +523,8 @@ namespace ShopNow.ViewModels
             public string PhoneNumber { get; set; }
             public string DeliveryAddress { get; set; }
             public System.DateTime DateEncoded { get; set; }
+            public string PaymentMode { get; set; }
+            public double Amount { get; set; }
         }
         public List<CancelledReportList> CancelledReportLists { get; set; }
         public class CancelledReportList

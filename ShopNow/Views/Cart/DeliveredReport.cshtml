@@ -37,10 +37,12 @@
                        columns.Add(c => c.No).Titled("Sl.No").Filterable(true).SetWidth(5);
                        columns.Add(c => c.OrderNumber).Titled("Order Number").Filterable(true).SetWidth(10);
                        columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
+                       columns.Add(c => c.PaymentMode).Titled("Payment Mode").Filterable(true).SetWidth(10);
+                       columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(10);
                        columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(15);
                        columns.Add(c => c.PhoneNumber).Titled("Phone Number").Filterable(true).SetWidth(15);
-                       columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => "<span>Delivered</span>").Titled("Order Status").SetWidth(15);
-                       columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10);
+                       //columns.Add().Encoded(false).Sanitized(false).RenderValueAs(o => "<span>Delivered</span>").Titled("Order Status").SetWidth(15);
+                       columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MM-yyyy hh:mm tt}");
                    }).WithPaging(25).Sortable(true)
                     </div>
                 </div>
