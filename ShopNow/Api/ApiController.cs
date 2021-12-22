@@ -3405,7 +3405,7 @@ namespace ShopNow.Controllers
                      ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                      ShopCategoryId = i.ShopCategoryId,
                      ShopCategoryName = i.ShopCategoryName,
-                     List = GetBannerImageList(i.Id),
+                     List = GetBannerImageList(i.Id,i.Name),
                      Latitude = i.Latitude,
                      Longitude = i.Longitude,
                      Status = i.Status,
@@ -3425,7 +3425,7 @@ namespace ShopNow.Controllers
                     ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                     ShopCategoryId = i.ShopCategoryId,
                     ShopCategoryName = i.ShopCategoryName,
-                    List = GetBannerImageList(i.Id),
+                    List = GetBannerImageList(i.Id, i.Name),
                     Latitude = i.Latitude,
                     Longitude = i.Longitude,
                     Status = i.Status,
@@ -3446,7 +3446,7 @@ namespace ShopNow.Controllers
                     ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                     ShopCategoryId = i.ShopCategoryId,
                     ShopCategoryName = i.ShopCategoryName,
-                    List = GetBannerImageList(i.Id),
+                    List = GetBannerImageList(i.Id, i.Name),
                     Latitude = i.Latitude,
                     Longitude = i.Longitude,
                     Status = i.Status,
@@ -3466,7 +3466,7 @@ namespace ShopNow.Controllers
                     ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                     ShopCategoryId = i.ShopCategoryId,
                     ShopCategoryName = i.ShopCategoryName,
-                    List = GetBannerImageList(i.Id),
+                    List = GetBannerImageList(i.Id, i.Name),
                     Latitude = i.Latitude,
                     Longitude = i.Longitude,
                     Status = i.Status,
@@ -3488,7 +3488,7 @@ namespace ShopNow.Controllers
                     ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                     ShopCategoryId = i.ShopCategoryId,
                     ShopCategoryName = i.ShopCategoryName,
-                    List = GetBannerImageList(i.Id),
+                    List = GetBannerImageList(i.Id, i.Name),
                     Latitude = i.Latitude,
                     Longitude = i.Longitude,
                     Status = i.Status,
@@ -3509,7 +3509,7 @@ namespace ShopNow.Controllers
                     ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                     ShopCategoryId = i.ShopCategoryId,
                     ShopCategoryName = i.ShopCategoryName,
-                    List = GetBannerImageList(i.Id),
+                    List = GetBannerImageList(i.Id, i.Name),
                     Latitude = i.Latitude,
                     Longitude = i.Longitude,
                     Status = i.Status,
@@ -3531,7 +3531,7 @@ namespace ShopNow.Controllers
                     ShopCategoryName = i.ShopCategoryName,
                     Latitude = i.Latitude,
                     Longitude = i.Longitude,
-                    List = GetBannerImageList(i.Id),
+                    List = GetBannerImageList(i.Id, i.Name),
                     Status = i.Status,
                     isOnline = i.IsOnline,
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
@@ -3554,7 +3554,7 @@ namespace ShopNow.Controllers
                     ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                     ShopCategoryId = i.ShopCategoryId,
                     ShopCategoryName = i.ShopCategoryName,
-                    List = GetBannerImageList(i.Id),
+                    List = GetBannerImageList(i.Id, i.Name),
                     Latitude = i.Latitude,
                     Longitude = i.Longitude,
                     Status = i.Status,
@@ -3579,7 +3579,7 @@ namespace ShopNow.Controllers
                     ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                     ShopCategoryId = i.ShopCategoryId,
                     ShopCategoryName = i.ShopCategoryName,
-                    List = GetBannerImageList(i.Id),// db.Banners.Where(j => j.Status == 0 && j.ShopCode == i.Code).ToList(),
+                    List = GetBannerImageList(i.Id, i.Name),// db.Banners.Where(j => j.Status == 0 && j.ShopCode == i.Code).ToList(),
                     Latitude = i.Latitude,
                     Longitude = i.Longitude,
                     Status = i.Status,
@@ -3604,7 +3604,7 @@ namespace ShopNow.Controllers
                     ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                     ShopCategoryId = i.ShopCategoryId,
                     ShopCategoryName = i.ShopCategoryName,
-                    List = GetBannerImageList(i.Id),
+                    List = GetBannerImageList(i.Id, i.Name),
                     Latitude = i.Latitude,
                     Longitude = i.Longitude,
                     Status = i.Status,
@@ -3629,7 +3629,7 @@ namespace ShopNow.Controllers
                     ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                     ShopCategoryId = i.ShopCategoryId,
                     ShopCategoryName = i.ShopCategoryName,
-                    List = GetBannerImageList(i.Id),
+                    List = GetBannerImageList(i.Id, i.Name),
                     Latitude = i.Latitude,
                     Longitude = i.Longitude,
                     Status = i.Status,
@@ -3654,7 +3654,7 @@ namespace ShopNow.Controllers
                     ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                     ShopCategoryId = i.ShopCategoryId,
                     ShopCategoryName = i.ShopCategoryName,
-                    List = GetBannerImageList(i.Id),
+                    List = GetBannerImageList(i.Id, i.Name),
                     Latitude = i.Latitude,
                     Longitude = i.Longitude,
                     Status = i.Status,
@@ -3679,7 +3679,7 @@ namespace ShopNow.Controllers
                     ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                     ShopCategoryId = i.ShopCategoryId,
                     ShopCategoryName = i.ShopCategoryName,
-                    List = GetBannerImageList(i.Id),
+                    List = GetBannerImageList(i.Id, i.Name),
                     Latitude = i.Latitude,
                     Longitude = i.Longitude,
                     Status = i.Status,
@@ -3705,7 +3705,7 @@ namespace ShopNow.Controllers
                     ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
                     ShopCategoryId = i.ShopCategoryId,
                     ShopCategoryName = i.ShopCategoryName,
-                    List = GetBannerImageList(i.Id),
+                    List = GetBannerImageList(i.Id, i.Name),
                     Latitude = i.Latitude,
                     Longitude = i.Longitude,
                     Status = i.Status,
@@ -4166,15 +4166,25 @@ namespace ShopNow.Controllers
             }
         }
 
-        List<BannerImages> GetBannerImageList(int id)
+        List<BannerImages> GetBannerImageList(int id, string name)
         {
             try
             {
                 var d = DateTime.Now.Date.Date;
-                var banners = (from s in db.Banners
-                               where (s.Status == 0 || s.Status == 6) && s.ShopId == id && (DbFunctions.TruncateTime(s.FromDate) <= DbFunctions.TruncateTime(DateTime.Now) && DbFunctions.TruncateTime(s.Todate) >= DbFunctions.TruncateTime(DateTime.Now))
-                               select new BannerImages { Bannerpath = (s.BannerPath != null) ? s.BannerPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "", ShopId = s.ShopId, ProductId = s.MasterProductId }).ToList();
+                //var banners = (from s in db.Banners
+                //               where (s.Status == 0 || s.Status == 6) && s.ShopId == id && (DbFunctions.TruncateTime(s.FromDate) <= DbFunctions.TruncateTime(DateTime.Now) && DbFunctions.TruncateTime(s.Todate) >= DbFunctions.TruncateTime(DateTime.Now))
+                //               select new BannerImages { Bannerpath = (s.BannerPath != null) ? s.BannerPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "", ShopId = s.ShopId, ProductId = s.MasterProductId }).ToList();
 
+                var banners = db.Banners.Where(i => i.Status == 0 && i.ShopId == id && (DbFunctions.TruncateTime(i.FromDate) <= DbFunctions.TruncateTime(DateTime.Now) && DbFunctions.TruncateTime(i.Todate) >= DbFunctions.TruncateTime(DateTime.Now)))
+                .GroupJoin(db.MasterProducts, b => b.MasterProductId, m => m.Id, (b, m) => new { b, m })
+                .Select(i => new BannerImages
+                {
+                    Bannerpath = !(string.IsNullOrEmpty(i.b.BannerPath)) ? i.b.BannerPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "",
+                    ProductId = i.b.MasterProductId,
+                    ProductName = i.m.Any()? i.m.FirstOrDefault().Name :"",
+                    ShopId = i.b.ShopId,
+                    ShopName = name
+                }).ToList();
                 return banners;
             }
             catch (Exception ex)
@@ -5614,11 +5624,11 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        //public JsonResult GetAutoCompleteSearchResult(int customerid,double latitude, double longitude, string keyword)
-        //{
-        //    var list = db.GetAutoCompleteSearch(longitude, latitude, keyword, customerid);
-        //    return Json(new { result = list }, JsonRequestBehavior.AllowGet);
-        //}
+        public JsonResult GetAutoCompleteSearchResult(int customerid,double latitude, double longitude, string keyword)
+        {
+            var list = db.GetAutoCompleteSearch(longitude, latitude, keyword, customerid);
+            return Json(new { result = list }, JsonRequestBehavior.AllowGet);
+        }
 
         //Calls
         public JsonResult SetCallActive(int orderno)
