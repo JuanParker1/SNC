@@ -40,7 +40,7 @@
                             </div>
                             <div class="col-md-3">
                                 <label class="col-form-label">Amount</label>
-                                <input type="number" class="form-control" name="Amount" />
+                                <input type="number" class="form-control" name="Amount" id="Amount" />
                             </div>
                             <div class="col-md-3">
                                 <label class="col-form-label">GST Amount</label>
@@ -53,7 +53,7 @@
                         </div>
                         <div class="row form-group">
                             <div class="col-md-2 text-center">
-                                <input type="submit" class="btn btn-success" value="Add Credits" />
+                                <input type="button" class="btn btn-success" id="Add" value="Add Credits" />
                             </div>
                         </div>
                     </div>
@@ -72,6 +72,7 @@
     <!--Select2 End-->
     <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script src="~/Scripts/ValidateRequiredFields.js"></script>
     <script>
         $(document).ready(function () {
             $('#ShopId').select2({
@@ -85,6 +86,19 @@
             }).on('select2:select', function (e) {
                 $('input[name="ShopName"]').val(e.params.data.text);
             });
+
+            $("#Add").click(function () {
+                var isValidated = false;
+                var requiredArr = [
+                    'ShopName',
+                    'Amount'
+                ];
+                isValidated = ValidateEmptyRequiredFiels(requiredArr);
+                if (isValidated) {
+                    $('#CreateForm').submit();
+                };
+            });
+
         });
     </script>
 }
