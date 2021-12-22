@@ -30,16 +30,13 @@
          columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
          columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
          columns.Add(c => c.PaymentMode).Titled("Payment Mode").Filterable(true).SetWidth(10);
+         columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(10);
          columns.Add(c => c.DeliveryBoyPhoneNumber).Titled("D.Boy Phone").Filterable(true).SetWidth(15);
          columns.Add().RenderValueAs(c => c.Status == 5 ? "On The Way" : "On The Way").Titled("Order Status").Filterable(true).SetWidth(10);
          columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(15).Format("{0:dd-MMM-yyyy}");
-         columns.Add()
-         .Encoded(false)
-         .Sanitized(false)
+         columns.Add().Encoded(false).Sanitized(false)
          .RenderValueAs(o => Html.ActionLink("View", "Edit", new { ordernumber=o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-vsm btn-info mr-1",  }).ToHtmlString()).Titled("Action").SetWidth(10);
-         columns.Add()
-         .Encoded(false)
-         .Sanitized(false)
+         columns.Add().Encoded(false).Sanitized(false)
          .RenderValueAs(o => (o.RefundAmount == 0 || o.RefundAmount == null) ? "<a href='#modal-refund' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-refund' class='btn btn-vsm btn-primary btn-modal-refund'>Refund</a>" : o.RefundAmount.Value > 0 ? "<span>" + o.RefundAmount + "(" + o.RefundRemark + ")" + "</span>" : "N/A").Titled("Refund").SetWidth(10);
      }).WithPaging(20).Sortable(true)
                 </div>

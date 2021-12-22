@@ -125,7 +125,6 @@ namespace ShopNow.Controllers
                 ViewBag.ErrorMessage = model.MasterProductName + " Already Exist";
                 return View();
             }
-
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var prod = _mapper.Map<MedicalCreateViewModel, Product>(model);
             var master = db.MasterProducts.FirstOrDefault(i => i.Id == model.MasterProductId && i.Status == 0);
@@ -148,7 +147,6 @@ namespace ShopNow.Controllers
             prod.Status = 0;
             prod.IsOnline = true;
             prod.MappedDate = DateTime.Now;
-
             db.Products.Add(prod);
             db.SaveChanges();
             ViewBag.Message = model.MasterProductName + " Saved Successfully!";
@@ -159,37 +157,36 @@ namespace ShopNow.Controllers
                 var productcount = db.Products.Where(i => i.ShopId == model.ShopId && i.Status == 0).Count();
                 if (productcount >= 10 && sh.Status == 1)
                 {
-                    Payment payment = new Payment();
-                    payment.CustomerId = sh.CustomerId;
-                    payment.CustomerName = sh.CustomerName;
-                    payment.ShopId = sh.Id;
-                    payment.ShopName = sh.Name;
-                    payment.CountryName = sh.CountryName;
-                    payment.CreatedBy = sh.CustomerName;
-                    payment.UpdatedBy = sh.CustomerName;
-                    payment.GSTINNumber = sh.GSTINNumber;
-                    payment.Credits = "PlatForm Credits";
-                    payment.OriginalAmount = 1000;
-                    payment.Amount = 1000;
-                    payment.PaymentResult = "success";
+                    //Payment payment = new Payment();
+                    //payment.CustomerId = sh.CustomerId;
+                    //payment.CustomerName = sh.CustomerName;
+                    //payment.ShopId = sh.Id;
+                    //payment.ShopName = sh.Name;
+                    //payment.CountryName = sh.CountryName;
+                    //payment.CreatedBy = sh.CustomerName;
+                    //payment.UpdatedBy = sh.CustomerName;
+                    //payment.GSTINNumber = sh.GSTINNumber;
+                    //payment.Credits = "PlatForm Credits";
+                    //payment.OriginalAmount = 1000;
+                    //payment.Amount = 1000;
+                    //payment.PaymentResult = "success";
+                    //payment.DateEncoded = DateTime.Now;
+                    //payment.DateUpdated = DateTime.Now;
+                    //payment.Status = 0;
+                    //payment.PlatformCreditType = 2;
+                    //db.Payments.Add(payment);
+                    //db.SaveChanges();
 
-                    payment.DateEncoded = DateTime.Now;
-                    payment.DateUpdated = DateTime.Now;
-                    payment.Status = 0;
-                    payment.PlatformCreditType = 2;
-                    db.Payments.Add(payment);
-                    db.SaveChanges();
-
-                    // ShopCredit
-                    ShopCredit shopCredit = new ShopCredit
-                    {
-                        CustomerId = sh.CustomerId,
-                        DateUpdated = DateTime.Now,
-                        DeliveryCredit = 0,
-                        PlatformCredit = 1000
-                    };
-                    db.ShopCredits.Add(shopCredit);
-                    db.SaveChanges();
+                    //// ShopCredit
+                    //ShopCredit shopCredit = new ShopCredit
+                    //{
+                    //    CustomerId = sh.CustomerId,
+                    //    DateUpdated = DateTime.Now,
+                    //    DeliveryCredit = 0,
+                    //    PlatformCredit = 1000
+                    //};
+                    //db.ShopCredits.Add(shopCredit);
+                    //db.SaveChanges();
 
                     sh.Status = 0;
                     sh.UpdatedBy = user.Name;
@@ -338,7 +335,6 @@ namespace ShopNow.Controllers
                 ViewBag.ErrorMessage = model.Name + " Already Exist";
                 return View();
             }
-
             var prod = _mapper.Map<FoodCreateViewModel, Product>(model);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             if (model.ShopId != 0)
@@ -387,39 +383,37 @@ namespace ShopNow.Controllers
                 var productcount = db.Products.Where(i => i.ShopId == model.ShopId && i.Status == 0).Count();
                 if (productcount >= 10 && sh.Status == 1)
                 {
-                    Payment payment = new Payment();
-                    payment.CustomerId = sh.CustomerId;
-                    payment.CustomerName = sh.CustomerName;
-                    payment.ShopId = sh.Id;
-                    payment.ShopName = sh.Name;
+                    //Payment payment = new Payment();
+                    //payment.CustomerId = sh.CustomerId;
+                    //payment.CustomerName = sh.CustomerName;
+                    //payment.ShopId = sh.Id;
+                    //payment.ShopName = sh.Name;
+                    //payment.CountryName = sh.CountryName;
+                    //payment.CreatedBy = sh.CustomerName;
+                    //payment.UpdatedBy = sh.CustomerName;
+                    //payment.GSTINNumber = sh.GSTINNumber;
+                    //payment.Credits = "PlatForm Credits";
+                    //payment.OriginalAmount = 1000;
+                    //payment.Amount = 1000;
+                    //payment.GSTAmount = 0;
+                    //payment.CreditType = 0;
+                    //payment.PaymentResult = "success";
+                    //payment.DateEncoded = DateTime.Now;
+                    //payment.DateUpdated = DateTime.Now;
+                    //payment.Status = 0;
+                    //payment.PlatformCreditType = 2;
+                    //db.Payments.Add(payment);
+                    //db.SaveChanges();
 
-                    payment.CountryName = sh.CountryName;
-                    payment.CreatedBy = sh.CustomerName;
-                    payment.UpdatedBy = sh.CustomerName;
-                    payment.GSTINNumber = sh.GSTINNumber;
-                    payment.Credits = "PlatForm Credits";
-                    payment.OriginalAmount = 1000;
-                    payment.Amount = 1000;
-                    payment.GSTAmount = 0;
-                    payment.CreditType = 0;
-                    payment.PaymentResult = "success";
-
-                    payment.DateEncoded = DateTime.Now;
-                    payment.DateUpdated = DateTime.Now;
-                    payment.Status = 0;
-                    payment.PlatformCreditType = 2;
-                    db.Payments.Add(payment);
-                    db.SaveChanges();
-
-                    ShopCredit shopCredit = new ShopCredit
-                    {
-                        CustomerId = sh.CustomerId,
-                        DateUpdated = DateTime.Now,
-                        DeliveryCredit = 0,
-                        PlatformCredit = 1000
-                    };
-                    db.ShopCredits.Add(shopCredit);
-                    db.SaveChanges();
+                    //ShopCredit shopCredit = new ShopCredit
+                    //{
+                    //    CustomerId = sh.CustomerId,
+                    //    DateUpdated = DateTime.Now,
+                    //    DeliveryCredit = 0,
+                    //    PlatformCredit = 1000
+                    //};
+                    //db.ShopCredits.Add(shopCredit);
+                    //db.SaveChanges();
 
                     sh.Status = 0;
                     sh.UpdatedBy = user.Name;
@@ -430,7 +424,6 @@ namespace ShopNow.Controllers
                 }
             }
             ViewBag.Message = model.Name + " Saved Successfully!";
-
             Session["ShopAddOns"] = null;
             return View();
         }
@@ -529,7 +522,6 @@ namespace ShopNow.Controllers
                     db.SaveChanges();
                 }
             }
-
             //check addons Inactive and make customisation false
             var hasShopDishAddons = db.ShopDishAddOns.Any(i => i.ProductId == prod.Id && i.IsActive == true);
             if (!hasShopDishAddons)
@@ -589,7 +581,6 @@ namespace ShopNow.Controllers
                 ViewBag.ErrorMessage = model.Name + " Already Exist";
                 return View();
             }
-
             var user = ((Helpers.Sessions.User)Session["USER"]);
             var product = _mapper.Map<FMCGCreateViewModel, Product>(model);
             product.ProductTypeId = 2;
@@ -618,38 +609,37 @@ namespace ShopNow.Controllers
                 var productcount = db.Products.Where(i => i.ShopId == model.ShopId && i.Status == 0).Count();
                 if (productcount >= 10 && sh.Status == 1)
                 {
-                    Payment payment = new Payment();
-                    payment.CustomerId = sh.CustomerId;
-                    payment.CustomerName = sh.CustomerName;
-                    payment.ShopId = sh.Id;
-                    payment.ShopName = sh.Name;
-                    payment.CountryName = sh.CountryName;
-                    payment.CreatedBy = sh.CustomerName;
-                    payment.UpdatedBy = sh.CustomerName;
-                    payment.GSTINNumber = sh.GSTINNumber;
-                    payment.Credits = "PlatForm Credits";
-                    payment.OriginalAmount = 1000;
-                    payment.Amount = 1000;
-                    payment.GSTAmount = 0;
-                    payment.CreditType = 0;
-                    payment.PaymentResult = "success";
+                    //Payment payment = new Payment();
+                    //payment.CustomerId = sh.CustomerId;
+                    //payment.CustomerName = sh.CustomerName;
+                    //payment.ShopId = sh.Id;
+                    //payment.ShopName = sh.Name;
+                    //payment.CountryName = sh.CountryName;
+                    //payment.CreatedBy = sh.CustomerName;
+                    //payment.UpdatedBy = sh.CustomerName;
+                    //payment.GSTINNumber = sh.GSTINNumber;
+                    //payment.Credits = "PlatForm Credits";
+                    //payment.OriginalAmount = 1000;
+                    //payment.Amount = 1000;
+                    //payment.GSTAmount = 0;
+                    //payment.CreditType = 0;
+                    //payment.PaymentResult = "success";
+                    //payment.DateEncoded = DateTime.Now;
+                    //payment.DateUpdated = DateTime.Now;
+                    //payment.Status = 0;
+                    //db.Payments.Add(payment);
+                    //payment.PlatformCreditType = 2;
+                    //db.SaveChanges();
 
-                    payment.DateEncoded = DateTime.Now;
-                    payment.DateUpdated = DateTime.Now;
-                    payment.Status = 0;
-                    db.Payments.Add(payment);
-                    payment.PlatformCreditType = 2;
-                    db.SaveChanges();
-
-                    ShopCredit shopCredit = new ShopCredit
-                    {
-                        CustomerId = sh.CustomerId,
-                        DateUpdated = DateTime.Now,
-                        DeliveryCredit = 0,
-                        PlatformCredit = 1000
-                    };
-                    db.ShopCredits.Add(shopCredit);
-                    db.SaveChanges();
+                    //ShopCredit shopCredit = new ShopCredit
+                    //{
+                    //    CustomerId = sh.CustomerId,
+                    //    DateUpdated = DateTime.Now,
+                    //    DeliveryCredit = 0,
+                    //    PlatformCredit = 1000
+                    //};
+                    //db.ShopCredits.Add(shopCredit);
+                    //db.SaveChanges();
 
                     sh.Status = 0;
                     sh.UpdatedBy = user.Name;
@@ -794,38 +784,37 @@ namespace ShopNow.Controllers
                 var productcount = db.Products.Where(i => i.ShopId == model.ShopId && i.Status == 0).Count();
                 if (productcount >= 10 && sh.Status == 1)
                 {
-                    Payment payment = new Payment();
-                    payment.CustomerId = sh.CustomerId;
-                    payment.CustomerName = sh.CustomerName;
-                    payment.ShopId = sh.Id;
-                    payment.ShopName = sh.Name;
+                    //Payment payment = new Payment();
+                    //payment.CustomerId = sh.CustomerId;
+                    //payment.CustomerName = sh.CustomerName;
+                    //payment.ShopId = sh.Id;
+                    //payment.ShopName = sh.Name;
+                    //payment.CountryName = sh.CountryName;
+                    //payment.CreatedBy = sh.CustomerName;
+                    //payment.UpdatedBy = sh.CustomerName;
+                    //payment.GSTINNumber = sh.GSTINNumber;
+                    //payment.Credits = "PlatForm Credits";
+                    //payment.OriginalAmount = 1000;
+                    //payment.Amount = 1000;
+                    //payment.GSTAmount = 0;
+                    //payment.CreditType = 0;
+                    //payment.PaymentResult = "success";
+                    //payment.DateEncoded = DateTime.Now;
+                    //payment.DateUpdated = DateTime.Now;
+                    //payment.Status = 0;
+                    //payment.PlatformCreditType = 2;
+                    //db.Payments.Add(payment);
+                    //db.SaveChanges();
 
-                    payment.CountryName = sh.CountryName;
-                    payment.CreatedBy = sh.CustomerName;
-                    payment.UpdatedBy = sh.CustomerName;
-                    payment.GSTINNumber = sh.GSTINNumber;
-                    payment.Credits = "PlatForm Credits";
-                    payment.OriginalAmount = 1000;
-                    payment.Amount = 1000;
-                    payment.GSTAmount = 0;
-                    payment.CreditType = 0;
-                    payment.PaymentResult = "success";
-                    payment.DateEncoded = DateTime.Now;
-                    payment.DateUpdated = DateTime.Now;
-                    payment.Status = 0;
-                    payment.PlatformCreditType = 2;
-                    db.Payments.Add(payment);
-                    db.SaveChanges();
-
-                    ShopCredit shopCredit = new ShopCredit
-                    {
-                        CustomerId = sh.CustomerId,
-                        DateUpdated = DateTime.Now,
-                        DeliveryCredit = 0,
-                        PlatformCredit = 1000
-                    };
-                    db.ShopCredits.Add(shopCredit);
-                    db.SaveChanges();
+                    //ShopCredit shopCredit = new ShopCredit
+                    //{
+                    //    CustomerId = sh.CustomerId,
+                    //    DateUpdated = DateTime.Now,
+                    //    DeliveryCredit = 0,
+                    //    PlatformCredit = 1000
+                    //};
+                    //db.ShopCredits.Add(shopCredit);
+                    //db.SaveChanges();
 
                     sh.Status = 0;
                     sh.UpdatedBy = user.Name;
