@@ -20,19 +20,20 @@
             <div class="card shadow mb-3">
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
-                    {
-                         columns.Add(s => s.Name).Titled("Shop Name").Filterable(true).SetWidth(10);
-                         columns.Add(s => s.OwnerPhoneNumber).Titled("Prop. No.").Filterable(true).SetWidth(15);
-                         columns.Add(s => s.PhoneNumber).RenderValueAs(s => s.PhoneNumber != null ? s.PhoneNumber : s.ManualPhoneNumber).Titled("Shop PhoneNumber").Filterable(true).SetWidth(10);
-                         columns.Add(s => s.ShopCategoryName).RenderValueAs(s => s.ShopCategoryName != null ? s.ShopCategoryName : "N/A").Titled("Shop Type").Filterable(true).SetWidth(10);
-                         columns.Add(b => b.Address).Titled("Address").Filterable(true).SetWidth(40);
-                         //columns.Add(s => s.StateName).Titled("State").Filterable(true).SetWidth(10);
-                         //columns.Add(s => s.DistrictName).Titled("District").Filterable(true).SetWidth(10);
-                         //columns.Add(s => s.PinCode).Titled("PIN Code").Filterable(true).SetWidth(10);
-                         //columns.Add(s => s.DateEncoded).Titled("Date").Filterable(true).SetWidth(10);
-                         columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20)
-                        .RenderValueAs(o => @<div>
-                      <a href="~/Shop/Edit?id=@HttpUtility.UrlEncode(ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id))" class="text-info mr-4"><i class="fa fa-edit fa-2x"></i></a>
+               {
+               columns.Add(s => s.Name).Titled("Shop Name").Filterable(true).SetWidth(10);
+               columns.Add(s => s.OwnerPhoneNumber).Titled("Prop. No.").Filterable(true).SetWidth(15);
+               columns.Add(s => s.PhoneNumber).RenderValueAs(s => s.PhoneNumber != null ? s.PhoneNumber : s.ManualPhoneNumber).Titled("Shop PhoneNumber").Filterable(true).SetWidth(10);
+               columns.Add(s => s.ShopCategoryName).RenderValueAs(s => s.ShopCategoryName != null ? s.ShopCategoryName : "N/A").Titled("Shop Type").Filterable(true).SetWidth(10);
+               columns.Add(b => b.Address).Titled("Address").Filterable(true).SetWidth(40);
+               columns.Add(c => c.PinCode).Titled("PinCode").Filterable(true).SetWidth(5);
+               //columns.Add(s => s.StateName).Titled("State").Filterable(true).SetWidth(10);
+               //columns.Add(s => s.DistrictName).Titled("District").Filterable(true).SetWidth(10);
+               //columns.Add(s => s.PinCode).Titled("PIN Code").Filterable(true).SetWidth(10);
+               //columns.Add(s => s.DateEncoded).Titled("Date").Filterable(true).SetWidth(10);
+               columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(20)
+               .RenderValueAs(o => @<div>
+                      <a href="~/Shop/Edit?id=@HttpUtility.UrlEncode(ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id))" class="text-info mr-3"><i class="fa fa-edit fa-2x"></i></a>
                       <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-2x"></i></a>
                      </div>);
                    }).WithPaging(20).Sortable(true)
