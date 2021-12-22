@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="sncModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="sncModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AccessPolicies">
           <Key>
             <PropertyRef Name="Id" />
@@ -1455,6 +1455,12 @@
           <Property Name="UpdatedBy" Type="nvarchar(max)" />
           <Property Name="CreatedBy" Type="nvarchar(max)" />
         </EntityType>
+        <Function Name="GetAutoCompleteSearch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Longitude" Type="float" Mode="In" />
+          <Parameter Name="Latitude" Type="float" Mode="In" />
+          <Parameter Name="str" Type="nvarchar" Mode="In" />
+          <Parameter Name="customerid" Type="int" Mode="In" />
+        </Function>
         <Function Name="getCategoryListbyShopcode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="code" Type="nvarchar" Mode="In" />
         </Function>
@@ -1548,8 +1554,6 @@
           <Parameter Name="pageNumber" Type="int" Mode="In" />
           <Parameter Name="Rowofpage" Type="int" Mode="In" />
         </Function>
-        <Function Name="SqlQueryNotificationStoredProcedure_35889fc1_4b38_49ec_a25f_35bceebcd9f3" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" StoreFunctionName="SqlQueryNotificationStoredProcedure-35889fc1-4b38-49ec-a25f-35bceebcd9f3" />
-        <Function Name="SqlQueryNotificationStoredProcedure_413caca6_2c87_4361_9ff7_ee550ffbd0ed" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" StoreFunctionName="SqlQueryNotificationStoredProcedure-413caca6-2c87-4361-9ff7-ee550ffbd0ed" />
         <Function Name="SqlQueryNotificationStoredProcedure_85a2a887_f0ed_4901_b7d8_b32bab1a5e51" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" StoreFunctionName="SqlQueryNotificationStoredProcedure-85a2a887-f0ed-4901-b7d8-b32bab1a5e51" />
         <Function Name="test" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="str" Type="nvarchar" Mode="In" />
@@ -1653,8 +1657,7 @@
           <EntitySet Name="tbl" EntityType="Self.tbl" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserEnquiries" EntityType="Self.UserEnquiries" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="sncModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -3117,7 +3120,7 @@
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityContainer Name="sncEntities2" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="sncEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AccessPolicies" EntityType="Self.AccessPolicy" />
           <EntitySet Name="AchievementProducts" EntityType="Self.AchievementProduct" />
           <EntitySet Name="AchievementSettings" EntityType="Self.AchievementSetting" />
@@ -3194,7 +3197,7 @@
           <EntitySet Name="tbls" EntityType="Self.tbl" />
           <EntitySet Name="UserEnquiries" EntityType="Self.UserEnquiry" />
           <FunctionImport Name="GetTableVAlueString" IsComposable="true" ReturnType="Collection(sncModel.GetTableVAlueString_Result)">
-            <Parameter Name="key" Mode="In" Type="String" />
+          <Parameter Name="key" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="ufn_CSVToTable" IsComposable="true" ReturnType="Collection(sncModel.ufn_CSVToTable_Result)">
             <Parameter Name="StringInput" Mode="In" Type="String" />
@@ -3205,7 +3208,7 @@
             <Parameter Name="Delimiter" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="getCategoryListbyShopcode">
-            <Parameter Name="code" Mode="In" Type="String" />
+          <Parameter Name="code" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetCategoryProductsList">
             <Parameter Name="shopCode" Mode="In" Type="String" />
@@ -3257,7 +3260,7 @@
             <Parameter Name="pageSize" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetShopname" ReturnType="Collection(sncModel.GetShopname_Result)">
-            <Parameter Name="shopId" Mode="In" Type="Int32" />
+          <Parameter Name="shopId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="ReatillerPaymentReport">
             <Parameter Name="from" Mode="In" Type="DateTime" />
@@ -3285,7 +3288,13 @@
           <FunctionImport Name="SqlQueryNotificationStoredProcedure_413caca6_2c87_4361_9ff7_ee550ffbd0ed" ReturnType="Collection(Guid)" />
           <FunctionImport Name="SqlQueryNotificationStoredProcedure_85a2a887_f0ed_4901_b7d8_b32bab1a5e51" ReturnType="Collection(Guid)" />
           <FunctionImport Name="test">
+          <Parameter Name="str" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetAutoCompleteSearch" ReturnType="Collection(String)">
+            <Parameter Name="Longitude" Mode="In" Type="Double" />
+            <Parameter Name="Latitude" Mode="In" Type="Double" />
             <Parameter Name="str" Mode="In" Type="String" />
+            <Parameter Name="customerid" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="GetDashBoardDetails_Result">
@@ -3385,7 +3394,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="sncModelStoreContainer" CdmEntityContainer="sncEntities2">
+        <EntityContainerMapping StorageEntityContainer="sncModelStoreContainer" CdmEntityContainer="sncEntities">
           <EntitySetMapping Name="AccessPolicies">
             <EntityTypeMapping TypeName="sncModel.AccessPolicy">
               <MappingFragment StoreEntitySet="AccessPolicies">
@@ -5055,10 +5064,9 @@
           <FunctionImportMapping FunctionImportName="ReatillerPaymentReportAdmin" FunctionName="sncModel.Store.ReatillerPaymentReportAdmin" />
           <FunctionImportMapping FunctionImportName="ReatillerPaymentReports" FunctionName="sncModel.Store.ReatillerPaymentReports" />
           <FunctionImportMapping FunctionImportName="Sp_TB_SelectMedicineName" FunctionName="sncModel.Store.Sp_TB_SelectMedicineName" />
-          <FunctionImportMapping FunctionImportName="SqlQueryNotificationStoredProcedure_35889fc1_4b38_49ec_a25f_35bceebcd9f3" FunctionName="sncModel.Store.SqlQueryNotificationStoredProcedure_35889fc1_4b38_49ec_a25f_35bceebcd9f3" />
-          <FunctionImportMapping FunctionImportName="SqlQueryNotificationStoredProcedure_413caca6_2c87_4361_9ff7_ee550ffbd0ed" FunctionName="sncModel.Store.SqlQueryNotificationStoredProcedure_413caca6_2c87_4361_9ff7_ee550ffbd0ed" />
           <FunctionImportMapping FunctionImportName="SqlQueryNotificationStoredProcedure_85a2a887_f0ed_4901_b7d8_b32bab1a5e51" FunctionName="sncModel.Store.SqlQueryNotificationStoredProcedure_85a2a887_f0ed_4901_b7d8_b32bab1a5e51" />
           <FunctionImportMapping FunctionImportName="test" FunctionName="sncModel.Store.test" />
+          <FunctionImportMapping FunctionImportName="GetAutoCompleteSearch" FunctionName="sncModel.Store.GetAutoCompleteSearch" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
