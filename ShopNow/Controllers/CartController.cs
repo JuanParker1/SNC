@@ -53,7 +53,7 @@ namespace ShopNow.Controllers
                 Status = i.Status,
                 DeliveryBoyName = i.DeliveryBoyName ?? "N/A",
                 PaymentMode =i.PaymentMode,
-                Amount = i.TotalPrice,
+                Amount = i.NetTotal,
                 DateEncoded = i.DateEncoded
             }).OrderBy(i => i.Status).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
