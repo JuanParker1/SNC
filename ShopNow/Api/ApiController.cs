@@ -2935,7 +2935,7 @@ namespace ShopNow.Controllers
                     if (updateList.Count > 0)
                         db.BulkUpdate(updateList);
                     //db.Products1.AddRange(createList);
-                   // db.BulkSaveChanges();
+                    db.BulkSaveChanges();
                 }
             }
 
