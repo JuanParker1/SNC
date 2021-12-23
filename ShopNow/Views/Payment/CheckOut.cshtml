@@ -173,27 +173,26 @@
         $(document).ready(function () {
 
 
-            //var gstnumber = $("#GSTINNumber").val();
-            //var originalamount = $("#OriginalAmount").val();
-            //var res = gstnumber.slice(0, 2);
-            //if (res == '33') {
-            //    var stategst = parseInt(originalamount * (9 / 100));
-            //    $(".SGSTRate").text("9 %");
-            //    $(".CGSTRate").text("9 %");
-            //    $(".SGSTAmount").text(stategst);
-            //    $(".CGSTAmount").text(stategst);
-            //    $(".IGSTRate").text("0");
-            //    $(".IGSTAmount").text("0");
-            //} else {
-            //    var integratedgst = parseInt(originalamount * (18 / 100));
-            //    $(".IGSTRate").text("18 %");
-            //    $(".IGSTAmount").text(integratedgst);
-            //    $(".SGSTRate").text("0");
-            //    $(".CGSTRate").text("0");
-            //    $(".SGSTAmount").text("0");
-            //    $(".CGSTAmount").text("0");
-            //}
-
+            var gstnumber = $("#GSTINNumber").val();
+            var originalamount = $("#OriginalAmount").val();
+            var res = gstnumber.slice(0, 2);
+            if (res == '33') {
+                var stategst = parseInt(originalamount * (9 / 100));
+                $(".SGSTRate").text("9 %");
+                $(".CGSTRate").text("9 %");
+                $(".SGSTAmount").text(stategst);
+                $(".CGSTAmount").text(stategst);
+                $(".IGSTRate").text("0");
+                $(".IGSTAmount").text("0");
+            } else {
+                var integratedgst = parseInt(originalamount * (18 / 100));
+                $(".IGSTRate").text("18 %");
+                $(".IGSTAmount").text(integratedgst);
+                $(".SGSTRate").text("0");
+                $(".CGSTRate").text("0");
+                $(".SGSTAmount").text("0");
+                $(".CGSTAmount").text("0");
+            }
             var amount = $("#Amount").val();
             $(".AmountinWords").text(convertNumberToWords(amount) + "Rupees Only");
 

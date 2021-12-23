@@ -458,8 +458,8 @@ namespace ShopNow.Controllers
             if (shop != null)
             {
                 Payment pay = new Payment();
-                pay.Amount = model.Amount;
-                pay.OriginalAmount = model.Amount - model.GSTAmount;
+                pay.Amount = model.Amount + model.GSTAmount;
+                pay.OriginalAmount = model.Amount;
                 pay.GSTAmount = model.GSTAmount;
                 pay.CreditType = model.CreditType;
                 pay.ReferenceCode = model.ReferenceCode;
@@ -482,11 +482,10 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
 
                 // ShopCredit
-                var sh = db.Shops.FirstOrDefault(i => i.CustomerId == model.CustomerId);
-                var isExist = db.ShopCredits.Any(i => i.CustomerId == sh.CustomerId);
+                var isExist = db.ShopCredits.Any(i => i.CustomerId == shop.CustomerId);
                 if (isExist)
                 {
-                    var sc = db.ShopCredits.FirstOrDefault(i => i.CustomerId == sh.CustomerId);
+                    var sc = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
                     sc.DateUpdated = DateTime.Now;
                     if (model.CreditType == 0)
                         sc.PlatformCredit += pay.OriginalAmount;
@@ -499,7 +498,7 @@ namespace ShopNow.Controllers
                 {
                     ShopCredit shopCredit = new ShopCredit
                     {
-                        CustomerId = sh.CustomerId,
+                        CustomerId = shop.CustomerId,
                         DateUpdated = DateTime.Now,
                         DeliveryCredit = model.CreditType == 1 ? pay.OriginalAmount : 0,
                         PlatformCredit = model.CreditType == 0 ? pay.OriginalAmount : 0,
@@ -537,7 +536,10 @@ namespace ShopNow.Controllers
                 var shop = db.Shops.FirstOrDefault(i => i.Id == pay.ShopId);
                 model.GSTINNumber = pay.GSTINNumber;
                 model.OriginalAmount = pay.OriginalAmount;
-                model.Address = order.DeliveryAddress;
+                if (order != null)
+                {
+                    model.Address = order.DeliveryAddress;
+                }
                 model.Email = shop.Email;
                 model.PhoneNumber = shop.PhoneNumber;
                 model.Amount = pay.Amount;

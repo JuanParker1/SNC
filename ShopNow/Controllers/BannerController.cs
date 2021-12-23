@@ -102,7 +102,8 @@ namespace ShopNow.Controllers
             var model = _mapper.Map<Banner, BannerEditViewModel>(banner);
             model.ShopName = db.Shops.FirstOrDefault(i => i.Id == banner.ShopId)?.Name;
             model.ProductName = db.MasterProducts.FirstOrDefault(i => i.Id == banner.MasterProductId)?.Name;
-            model.OfferQuantityLimit = db.Products.FirstOrDefault(i => i.Id == banner.ProductId).OfferQuantityLimit;
+            if (banner.ProductId != 0)
+                model.OfferQuantityLimit = db.Products.FirstOrDefault(i => i.Id == banner.ProductId).OfferQuantityLimit;
             return View(model);
         }
 
