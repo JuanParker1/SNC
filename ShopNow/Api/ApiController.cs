@@ -5656,7 +5656,7 @@ namespace ShopNow.Controllers
             return Json(false, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetCallFromDeliveryBoyorCustomer(string from)
+        public JsonResult GetCallerDetails(string from)
         {
             string toNumber = String.Empty;
             int orderNo = 0;
@@ -5677,7 +5677,7 @@ namespace ShopNow.Controllers
 
             return Json(new { to = toNumber, orderNo = orderNo, callType = 1 }, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetCallFromShoporCustomer(string from)
+        public JsonResult GetShopCallerDetails(string from)
         {
             string toNumber = String.Empty;
             int orderNo = 0;
@@ -5697,7 +5697,7 @@ namespace ShopNow.Controllers
             return Json(new { to = toNumber, orderNo = orderNo, callType = 2 }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public JsonResult SaveCallRecord(SaveCallRecordViewModel model)
+        public JsonResult PostCallerDetails(SaveCallRecordViewModel model)
         {
             CallRecord callRecord = new CallRecord
             {
