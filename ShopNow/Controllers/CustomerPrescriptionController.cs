@@ -150,6 +150,7 @@ namespace ShopNow.Controllers
                     order.DateEncoded = DateTime.Now;
                     order.DateUpdated = DateTime.Now;
                     order.Status = 0;
+                    order.IsPrescriptionOrder = true;
                     db.Orders.Add(order);
                     db.SaveChanges();
                     //OrderItems
