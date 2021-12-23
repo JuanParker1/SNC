@@ -5274,13 +5274,13 @@ namespace ShopNow.Controllers
                     customerPurchasedQuantity = 0;
                 else
                     customerPurchasedQuantity = customerOders.Sum(i => i.oi.Quantity);
-                if (customerPurchasedQuantity == product.OfferQuantityLimit)
-                    return Json(new { isAvailable = false }, JsonRequestBehavior.AllowGet);
+                if (customerPurchasedQuantity >= product.OfferQuantityLimit)
+                    return Json(new { isAvailable = false,alreadyPurchasedQuantity= customerPurchasedQuantity }, JsonRequestBehavior.AllowGet);
                 else
-                    return Json(new { isAvailable = true }, JsonRequestBehavior.AllowGet);
+                    return Json(new { isAvailable = true, alreadyPurchasedQuantity = customerPurchasedQuantity }, JsonRequestBehavior.AllowGet);
             }
             else
-                return Json(new { isAvailable = true }, JsonRequestBehavior.AllowGet);
+                return Json(new { isAvailable = true, alreadyPurchasedQuantity = customerPurchasedQuantity }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
