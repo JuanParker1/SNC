@@ -5260,12 +5260,20 @@ namespace ShopNow.Controllers
         [HttpGet]
         public JsonResult GetCheckCustomerProductOffer(int customerid, int productid)
         {
+            //bool isAvailable = false;
             var banner = db.Banners.FirstOrDefault(i => i.ProductId == productid && i.Status == 0);
             if (banner != null)
             {
-                bool isAvailable = db.Orders.Where(i => i.CustomerId == customerid && i.Status != 0 && i.Status != 7 && i.Status != 9 && i.Status != 10 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(banner.FromDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(banner.Todate)))
-                    .Join(db.OrderItems.Where(i => i.ProductId == productid), o => o.Id, oi => oi.OrderId, (o, oi) => new { o, oi }).Any();
-                return Json(new { isAvailable = !isAvailable }, JsonRequestBehavior.AllowGet );
+                var product = db.Products.FirstOrDefault(i => i.Id == banner.ProductId);
+                //bool isAvailable = db.Orders.Where(i => i.CustomerId == customerid && i.Status != 0 && i.Status != 7 && i.Status != 9 && i.Status != 10 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(banner.FromDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(banner.Todate)))
+                //    .Join(db.OrderItems.Where(i => i.ProductId == productid), o => o.Id, oi => oi.OrderId, (o, oi) => new { o, oi }).Any();
+
+                int customerPurchasedQuantity = db.Orders.Where(i => i.CustomerId == customerid && i.Status != 0 && i.Status != 7 && i.Status != 9 && i.Status != 10 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(banner.FromDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(banner.Todate)))
+                    .Join(db.OrderItems.Where(i => i.ProductId == productid), o => o.Id, oi => oi.OrderId, (o, oi) => new { o, oi }).Sum(i=>i.oi.Quantity);
+                if (customerPurchasedQuantity == product.OfferQuantityLimit)
+                    return Json(new { isAvailable = false }, JsonRequestBehavior.AllowGet);
+                else
+                    return Json(new { isAvailable = true }, JsonRequestBehavior.AllowGet);
             }
             else
                 return Json(new { isAvailable = true }, JsonRequestBehavior.AllowGet);
