@@ -276,7 +276,7 @@
                     <label class="font-weight-bold text-muted"><u>Order Details:</u></label>
                     <div class="d-flex">
                         <label class="mr-3">Number:</label>
-                        <b>@Model.OrderNumber</b>
+                        <b>@Model.OrderNumber @if (Model.IsPrescriptionOrder == true) { <span>(Prescription)</span>}</b>
                     </div>
                     <div class="d-flex">
                         <label class="mr-3">Date/Time:</label>
@@ -511,7 +511,7 @@
                     <label class="font-weight-bold text-muted mt-3"><u>Amount Details:</u></label>
                     <div class="d-flex justify-content-between">
                         <label class="mr-3">Items Total:</label>
-                        <b>₹@Model.ListItems.Sum(i => i.Price)</b>
+                        <b>₹@Model.ListItems.Sum(i => i.Price).ToString("#,#.00")</b>
                     </div>
                     <div class="d-flex justify-content-between">
                         <label class="mr-3">Packing Charge:</label>
@@ -523,7 +523,7 @@
                     </div>
                     <div class="d-flex justify-content-between">
                         <label class="mr-3">Delivery Charge:</label>
-                        <b>₹@Model.NetDeliveryCharge</b>
+                        <b>₹@Model.NetDeliveryCharge.ToString("#,#.00")</b>
                     </div>
                     <div class="d-flex justify-content-between">
                         <label class="mr-3">Offer Amount:</label>

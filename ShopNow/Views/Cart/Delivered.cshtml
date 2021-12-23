@@ -42,7 +42,7 @@
                  .Encoded(false)
                  .Sanitized(false)
                  .RenderValueAs(o => Html.ActionLink(o.PaymentMode, "Edit", new { ordernumber = o.OrderNumber, id = ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-vsm btn-info btn-block", }).ToHtmlString()).Titled("Payment Mode").SetWidth(10);
-                   columns.Add(c => c.Price).Titled("Amount").Filterable(true).SetWidth(8);
+                   columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(8);
                    columns.Add(c => c.CustomerPhoneNumber).Titled("Cust.Phone No.").Filterable(true).SetWidth(10);
                    columns.Add(c => c.DateEncoded).Titled("Order Time").Filterable(true).SetWidth(10);
                    columns.Add(c => c.DateUpdated).Titled("Delivered Time").Filterable(true).SetWidth(10);

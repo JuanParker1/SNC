@@ -79,7 +79,7 @@ namespace ShopNow.Controllers
                               Status = i.c.Status,
                               DeliveryBoyName = i.c.DeliveryBoyName,
                               DateEncoded = i.c.DateEncoded,
-                              Price = i.c.TotalPrice,
+                              Price = i.c.NetTotal,
                               RefundAmount = i.p.RefundAmount ?? 0,
                               RefundRemark = i.p.RefundRemark ?? "",
                               PaymentMode = i.p.PaymentMode
@@ -107,7 +107,7 @@ namespace ShopNow.Controllers
                                Status = i.c.Status,
                                DeliveryBoyName = i.c.DeliveryBoyName,
                                DateEncoded = i.c.DateEncoded,
-                               Price = i.c.TotalPrice,
+                               Price = i.c.NetTotal,
                                RefundAmount = i.p.RefundAmount ?? 0,
                                RefundRemark = i.p.RefundRemark ?? "",
                                PaymentMode = i.p.PaymentMode,
@@ -196,7 +196,8 @@ namespace ShopNow.Controllers
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
-                    DeliveryBoyPhoneNumber = i.c.c.DeliveryBoyPhoneNumber
+                    DeliveryBoyPhoneNumber = i.c.c.DeliveryBoyPhoneNumber,
+                    Price = i.p.Amount - (i.p.RefundAmount ?? 0)
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.DeliveryAgentAssignedLists.ForEach(x => x.No = counter++);
@@ -277,7 +278,7 @@ namespace ShopNow.Controllers
                     DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
                     Status = i.c.Status,
                     DateEncoded = i.c.DateEncoded,
-                    Price = i.c.TotalPrice,
+                    Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
@@ -303,10 +304,10 @@ namespace ShopNow.Controllers
                     DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
                     Status = i.c.Status,
                     DateEncoded = i.c.DateEncoded,
-                    Price = i.c.TotalPrice,
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
+                    Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.OntheWayLists.ForEach(x => x.No = counter++);
@@ -331,7 +332,7 @@ namespace ShopNow.Controllers
                     Status = i.c.Status,
                     DateEncoded = i.c.DateEncoded,
                     DateUpdated = i.c.DateUpdated,
-                    Price = i.c.TotalPrice,
+                    Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
@@ -386,7 +387,7 @@ namespace ShopNow.Controllers
                             CustomerPhoneNumber = i.c.CustomerPhoneNumber,
                             Status = i.c.Status,
                             PaymentMode = i.p.PaymentMode,
-                            Price = i.c.TotalPrice,
+                            Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
                             DateEncoded = i.c.DateEncoded,
                             ShopCancelledTime = i.c.ShopAcceptedTime,
                             ShopCancelPeriod = i.c.ShopAcceptedTime != null ? Math.Round((i.c.ShopAcceptedTime.Value - i.c.DateEncoded).TotalMinutes) : 0
@@ -432,7 +433,7 @@ namespace ShopNow.Controllers
                     ShopName = i.c.ShopName,
                     CustomerPhoneNumber = i.c.CustomerPhoneNumber,
                     Status = i.c.Status,
-                    Price = i.c.TotalPrice,
+                    Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
                     PaymentMode = i.p.PaymentMode,
                     DateEncoded = i.c.DateEncoded,
                     CustomerCancelledTime = i.c.DateUpdated
@@ -460,7 +461,7 @@ namespace ShopNow.Controllers
                     Status = i.c.Status,
                     DateEncoded = i.c.DateEncoded,
                     DateUpdated = i.c.DateUpdated,
-                    Price = i.c.TotalPrice,
+                    Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,

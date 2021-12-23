@@ -70,6 +70,7 @@ namespace ShopNow.ViewModels
         public string RefundRemark{ get; set; }
         public string PaymentMode{ get; set; }
         public double TipsAmount{ get; set; }
+        public bool IsPrescriptionOrder { get; set; }
 
         public List<ListItem> ListItems { get; set; }
         public class ListItem

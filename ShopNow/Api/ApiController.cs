@@ -3212,8 +3212,8 @@ namespace ShopNow.Controllers
         {
             var customer = db.Customers.Where(i => i.Id == customerId && i.Status == 0).FirstOrDefault();
             CustomerProfileViewModel model = _mapper.Map<Models.Customer, CustomerProfileViewModel>(customer);
-            model.ImagePath = model.ImagePath.Contains("https://s3.ap-south-1.amazonaws.com/") ? model.ImagePath : "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + model.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
-            model.ImageAadharPath = model.ImageAadharPath.Contains("https://s3.ap-south-1.amazonaws.com/") ? model.ImageAadharPath : "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + model.ImageAadharPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23");
+            model.ImagePath = model.ImagePath != null ? model.ImagePath.Contains("https://s3.ap-south-1.amazonaws.com/") ? model.ImagePath : "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + model.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : model.ImagePath;
+            model.ImageAadharPath = model.ImageAadharPath != null ? model.ImageAadharPath.Contains("https://s3.ap-south-1.amazonaws.com/") ? model.ImageAadharPath : "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + model.ImageAadharPath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : model.ImageAadharPath;
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
@@ -5310,13 +5310,13 @@ namespace ShopNow.Controllers
                     customerPurchasedQuantity = 0;
                 else
                     customerPurchasedQuantity = customerOders.Sum(i => i.oi.Quantity);
-                if (customerPurchasedQuantity == product.OfferQuantityLimit)
-                    return Json(new { isAvailable = false }, JsonRequestBehavior.AllowGet);
+                if (customerPurchasedQuantity >= product.OfferQuantityLimit)
+                    return Json(new { isAvailable = false,alreadyPurchasedQuantity= customerPurchasedQuantity }, JsonRequestBehavior.AllowGet);
                 else
-                    return Json(new { isAvailable = true }, JsonRequestBehavior.AllowGet);
+                    return Json(new { isAvailable = true, alreadyPurchasedQuantity = customerPurchasedQuantity }, JsonRequestBehavior.AllowGet);
             }
             else
-                return Json(new { isAvailable = true }, JsonRequestBehavior.AllowGet);
+                return Json(new { isAvailable = true, alreadyPurchasedQuantity = customerPurchasedQuantity }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
@@ -5692,7 +5692,7 @@ namespace ShopNow.Controllers
             return Json(false, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetCallFromDeliveryBoyorCustomer(string from)
+        public JsonResult GetCallerDetails(string from)
         {
             string toNumber = String.Empty;
             int orderNo = 0;
@@ -5713,7 +5713,7 @@ namespace ShopNow.Controllers
 
             return Json(new { to = toNumber, orderNo = orderNo, callType = 1 }, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetCallFromShoporCustomer(string from)
+        public JsonResult GetShopCallerDetails(string from)
         {
             string toNumber = String.Empty;
             int orderNo = 0;
@@ -5733,7 +5733,7 @@ namespace ShopNow.Controllers
             return Json(new { to = toNumber, orderNo = orderNo, callType = 2 }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public JsonResult SaveCallRecord(SaveCallRecordViewModel model)
+        public JsonResult PostCallerDetails(SaveCallRecordViewModel model)
         {
             CallRecord callRecord = new CallRecord
             {
