@@ -26,10 +26,11 @@
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
    {
-       columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(1);
+     //  columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(1);
        columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
        columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
-       columns.Add(c => c.PaymentMode).Titled("PaymentMode").Filterable(true).SetWidth(20);
+       columns.Add(c => c.PaymentMode).Titled("PaymentMode").Filterable(true).SetWidth(10);
+       columns.Add(c => c.Price).Titled("Amoount").Filterable(true).SetWidth(10);
        columns.Add(c => c.DeliveryBoyName).Titled("DeliveryBoy").Filterable(true).SetWidth(10);
        columns.Add(c => c.DeliveryBoyPhoneNumber).Titled("D.Boy Phone").Filterable(true).SetWidth(15);
        columns.Add().RenderValueAs(c => c.Status == 4 ? "Assigned for Delivery" : "Waiting for Pickup").Titled("Order Status").Filterable(true).SetWidth(10);

@@ -93,10 +93,13 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             Product pd = db.Products.FirstOrDefault(i => i.Id == dId);
-            var master = db.MasterProducts.FirstOrDefault(i => i.Id == pd.MasterProductId);
             var model = new ProductDetailsViewModel();
             _mapper.Map(pd, model);
-            model.ImagePath = master.ImagePath1;
+            if (pd.MasterProductId != 0)
+            {
+                var master = db.MasterProducts.FirstOrDefault(i => i.Id == pd.MasterProductId);
+                model.ImagePath = master.ImagePath1;
+            }
             return View(model);
         }
 
