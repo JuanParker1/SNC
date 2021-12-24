@@ -603,7 +603,7 @@
     <link href="~/Content/multiple-image-upload.css" rel="stylesheet" />
     <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRsR3Wpkj_Vofy5FSU0otOx-6k-YFiNBk&libraries=places&callback=initMap"
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCl_9yf43Z6hWLvVvwd68p7WXwq_oYcS_0&libraries=places&callback=initMap"
             async defer></script>
     <script>
         $('#AuthorisedBrandId').select2();
@@ -641,23 +641,30 @@
             $("#btnCustomer").click(function () {
                 var phoneNumber = $("#phoneNumber").val();
                 $.getJSON("/Shop/CustomerCheck", { phoneNumber: phoneNumber }, function (data) {
-                    if (data.data == true) {
-                        $(".divContainer").removeClass("d-none");
-                        $('input[name="CustomerName"]').val(data.CustomerName);
-                        $('input[name="CustomerId"]').val(data.CustomerId);
-                        $("#OwnerPhoneNumber").val(data.PhoneNumber);
-                        $("#AadharName").val(data.AadharName);
-                        $("#AadharNumber").val(data.AadharNumber);
-                        $("#Email").val(data.Email);
-                        $('#img-aadhar').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + data.AadharImage);
-                        //$('#AadharPdf').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + data.AadharPdf);
-                        $("#phoneNumber").prop("readonly", true);
-                        $("#btnCustomer").addClass("d-none");
-                    } else {
+                    if (data.ErrorMsg == true) {
+                        swal("You are a Delivery Boy!", "You can't Register a Shop with this Number!", "warning");
                         $(".divContainer").addClass("d-none");
-                        swal("Notice!", "Please Enter a Valid Customer Phone Number!", "warning");
                         $("#phoneNumber").val("");
                         $("#phoneNumber").focus();
+                    } else {
+                        if (data.data == true) {
+                            $(".divContainer").removeClass("d-none");
+                            $('input[name="CustomerName"]').val(data.CustomerName);
+                            $('input[name="CustomerId"]').val(data.CustomerId);
+                            $("#OwnerPhoneNumber").val(data.PhoneNumber);
+                            $("#AadharName").val(data.AadharName);
+                            $("#AadharNumber").val(data.AadharNumber);
+                            $("#Email").val(data.Email);
+                            $('#img-aadhar').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + data.AadharImage);
+                            //$('#AadharPdf').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + data.AadharPdf);
+                            $("#phoneNumber").prop("readonly", true);
+                            $("#btnCustomer").addClass("d-none");
+                        } else {
+                            $(".divContainer").addClass("d-none");
+                            swal("Notice!", "Please Enter a Valid Customer Phone Number!", "warning");
+                            $("#phoneNumber").val("");
+                            $("#phoneNumber").focus();
+                        }
                     }
                 });
             });

@@ -284,6 +284,7 @@ namespace ShopNow.ViewModels
             public string DeliveryBoyName { get; set; }
             public string DeliveryBoyPhoneNumber { get; set; }
             public string TransactionType { get; set; }
+            public string ShopName { get; set; }
             public double Amount { get; set; }
             public DateTime PaymentDate { get; set; }
             public string AccountName { get; set; }
