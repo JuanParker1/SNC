@@ -78,11 +78,15 @@
     @*}*@
     @if (Model.Status == 1 && Model.Verify == false && (Model.PhoneNumber != "" || Model.PhoneNumber != null) && Model.PhoneVerify == false)
     {
-        <div class="col-md-5 PhoneVerify">
+        <div class="col-md-3 PhoneVerify">
             <h6 class="text-success">Phone Verification</h6>
             <span>CALL from <span class="text-danger">@Model.PhoneNumber</span> TO <span class="text-warning">04448134440</span></span><br /><span>and verify your Phone number</span>
         </div>
     }
+<div class="col-md-2 ml-3">
+    <label class="font-weight-bold text-secondary"> Platform Credit : </label> <span class="fa fa-rupee text-secondary"></span> <span class="text-danger">@Model.PlatformCredit</span>
+    <label class="font-weight-bold text-secondary"> Delivery Credit : </label> <span class="fa fa-rupee text-secondary"></span> <span class="text-danger">@Model.DeliveryCredit</span>
+</div>
 </div>
 
 <div class="container-fluid">

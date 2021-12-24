@@ -475,11 +475,12 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCCD075")]
-        public ActionResult Details(long id)
+        public ActionResult Details(string id)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            Order order = db.Orders.FirstOrDefault(i => i.Id == id);
+            var dId = AdminHelpers.DCodeLong(id);
+            Order order = db.Orders.FirstOrDefault(i => i.Id == dId);
              var model = new CartDetailsViewModel();
             if (order != null)
             {

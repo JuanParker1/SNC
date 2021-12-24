@@ -204,6 +204,8 @@ namespace ShopNow.ViewModels
         public bool PhoneVerify { get; set; }
         public int DeliveryType { get; set; }
         public int DeliveryTierType { get; set; }
+        public double PlatformCredit { get; set; }
+        public double DeliveryCredit { get; set; }
     }
 
     public class ShopListViewModel

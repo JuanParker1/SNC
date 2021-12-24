@@ -304,6 +304,7 @@ namespace ShopNow.Controllers
                 return HttpNotFound();
             var shop = db.Shops.FirstOrDefault(i => i.Id == dId);
             var customer = db.Customers.FirstOrDefault(i => i.Id == shop.CustomerId);
+            var shopcredit = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
             ViewBag.count = db.Products.Where(i => i.ShopId == dId).Count();
             var model = _mapper.Map<Shop, ShopEditViewModel>(shop);
             if (model.Password == null)
@@ -345,7 +346,11 @@ namespace ShopNow.Controllers
             {
                 model.PhoneVerify = false;
             }
-            
+            if (shopcredit != null)
+            {
+                model.PlatformCredit = shopcredit.PlatformCredit;
+                model.DeliveryCredit = shopcredit.DeliveryCredit;
+            }
             return View(model);
         }
 
