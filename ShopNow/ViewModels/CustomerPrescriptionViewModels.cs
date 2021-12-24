@@ -29,6 +29,29 @@ namespace ShopNow.ViewModels
         }
     }
 
+    public class PrescriptionOrderListViewModel
+    {
+        public List<PrescriptionOrderList> PrescriptionOrderLists { get; set; }
+        public class PrescriptionOrderList
+        {
+            public int No { get; set; }
+            public long Id { get; set; }
+            public int OrderNumber { get; set; }
+            public string ShopName { get; set; }
+            public string CustomerPhoneNumber { get; set; }
+            public int Status { get; set; }
+            public DateTime DateEncoded { get; set; }
+            public DateTime DateUpdated { get; set; }
+            public string PaymentMode { get; set; }
+            public double Price { get; set; }
+            public double Amount { get; set; }
+            public double? RefundAmount { get; set; }
+            public string RefundRemark { get; set; }
+            public double ShopAcceptedTime { get; set; }
+            public double OrderPeriod { get; set; }
+        }
+    }
+
     public class PrescriptionItemAddViewModel
     {
         public int PrescriptionId { get; set; }

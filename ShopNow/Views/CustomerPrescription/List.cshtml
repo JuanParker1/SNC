@@ -22,7 +22,12 @@
 </style>
 <div class="container-fluid mb-5">
     <div class="row">
-        <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+        <div class="col-md-4">
+            <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+        </div>
+        <div class="col-md-8 text-right">
+            <a href="~/CustomerPrescription/PrescriptionOrderList" class="ml-auto" target="_blank"><span class="fa fa-bars"></span> Prescription Order List</i></a>
+        </div>
         <div class="col-md-12 mx-auto mt-3">
             <div class="card shadow">
                 <div class="card-body">
@@ -41,53 +46,55 @@
                         <tbody>
                             @foreach (var item in Model.ListItems)
                             {
-                            <tr>
-                                <td>@item.CustomerName</td>
-                                <td>@item.CustomerPhoneNumber</td>
-                                <td>
-                                    @foreach (var im in item.ImagePathLists)
-                                    {
-                                        <img alt="Image" data-toggle="modal" data-target="#myModal" class="img-thumbnail PrescriptionImage p-1" src="@im.ImagePath" onerror="this.src='/Images/No Photo.png'" style="width:45px;height:45px" />
-                                    }
-                                </td>
-                                <td class="m-0 p-0">
-                                    <audio controls="controls" src="@item.AudioPath"></audio>
-                                </td>
-                                <td>@item.Remarks</td>
-                                <td>@item.DateEncoded.ToString("dd-MM-yyyy hh:mm tt")</td>
-                                <td>@if (item.Status == 0)
-                                {
-                                <a href="/CustomerPrescription/AddToCart?id=@item.Id" class="btn btn-success">Add to Cart</a>
-                                }
-                                else {
-                                <span class="text-success">Order Placed.</span>
-                                }
+                                <tr>
+                                    <td>@item.CustomerName</td>
+                                    <td>@item.CustomerPhoneNumber</td>
+                                    <td>
+                                        @foreach (var im in item.ImagePathLists)
+                                        {
+                                            <img alt="Image" data-toggle="modal" data-target="#myModal" class="img-thumbnail PrescriptionImage p-1" src="@im.ImagePath" onerror="this.src='/Images/No Photo.png'" style="width:45px;height:45px" />
+                                        }
+                                    </td>
+                                    <td class="m-0 p-0">
+                                        <audio controls="controls" src="@item.AudioPath"></audio>
+                                    </td>
+                                    <td>@item.Remarks</td>
+                                    <td>@item.DateEncoded.ToString("dd-MM-yyyy hh:mm tt")</td>
+                                    <td>
+                                        @if (item.Status == 0)
+                                        {
+                                            <a href="/CustomerPrescription/AddToCart?id=@item.Id" class="btn btn-success">Add to Cart</a>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-success">Order Placed.</span>
+                                        }
                                 </td>
                             </tr>
-                            }
+                        }
                         </tbody>
                     </table>
                     @*@Html.Grid(Model.ListItems).Columns(columns =>
-        {
-            columns.Add(c => c.CustomerName).Titled("Name").Filterable(false).SetWidth(10);
-            columns.Add(c => c.CustomerPhoneNumber).Titled("Phone No").Filterable(false).SetWidth(10);
-             columns.Add().Encoded(false).Sanitized(false)
-          .RenderValueAs(o => @<div>
-                 @foreach (var im in o.ImagePathLists)
-                                 {
-                                 <img alt="Image" data-toggle="modal" data-target="#myModal" class="img-thumbnail PrescriptionImage p-1" src="@im.ImagePath" onerror="this.src='/Images/No Photo.png'" style="width:50px;height:50px" />
-                                 }
-                </div>).Titled("Image").SetWidth(20);
-            columns.Add().Encoded(false).Sanitized(false)
-          .RenderValueAs(o => @<div>
-                <audio preload="auto" controls="controls" src="@o.AudioPath">
-                 </audio>
-                </div>).Titled("Audio").SetWidth(25);
-            columns.Add(c => c.Remarks).Titled("Remarks").Filterable(false).SetWidth(10);
-            columns.Add(c => c.DateEncoded).Titled("Date").Format("{0:dd-MMM-yyyy}").Filterable(false).SetWidth(10);
-            columns.Add().Encoded(false).Sanitized(false)
-           .RenderValueAs(o => o.Status == 0 ? "<a href='#modal-add' data-id='" + o.Id + "' data-shopid='" + o.ShopId + "' data-toggle='modal' data-target='#modal-add' class='btn btn-sm btn-primary btn-modal-add btn-block'>Add</a>" : "<span class='text-success'>Already Added</span><a href='#modal-added-item-list' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-added-item-list' class='btn-modal-added-item-list ml-2'><u>Check Items</u></a>").Titled("Action").SetWidth(5);
-        }).WithPaging(20).Sortable(true)*@
+                    {
+                        columns.Add(c => c.CustomerName).Titled("Name").Filterable(false).SetWidth(10);
+                        columns.Add(c => c.CustomerPhoneNumber).Titled("Phone No").Filterable(false).SetWidth(10);
+                         columns.Add().Encoded(false).Sanitized(false)
+                      .RenderValueAs(o => @<div>
+                             @foreach (var im in o.ImagePathLists)
+                                             {
+                                             <img alt="Image" data-toggle="modal" data-target="#myModal" class="img-thumbnail PrescriptionImage p-1" src="@im.ImagePath" onerror="this.src='/Images/No Photo.png'" style="width:50px;height:50px" />
+                                             }
+                            </div>).Titled("Image").SetWidth(20);
+                        columns.Add().Encoded(false).Sanitized(false)
+                      .RenderValueAs(o => @<div>
+                            <audio preload="auto" controls="controls" src="@o.AudioPath">
+                             </audio>
+                            </div>).Titled("Audio").SetWidth(25);
+                        columns.Add(c => c.Remarks).Titled("Remarks").Filterable(false).SetWidth(10);
+                        columns.Add(c => c.DateEncoded).Titled("Date").Format("{0:dd-MMM-yyyy}").Filterable(false).SetWidth(10);
+                        columns.Add().Encoded(false).Sanitized(false)
+                       .RenderValueAs(o => o.Status == 0 ? "<a href='#modal-add' data-id='" + o.Id + "' data-shopid='" + o.ShopId + "' data-toggle='modal' data-target='#modal-add' class='btn btn-sm btn-primary btn-modal-add btn-block'>Add</a>" : "<span class='text-success'>Already Added</span><a href='#modal-added-item-list' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-added-item-list' class='btn-modal-added-item-list ml-2'><u>Check Items</u></a>").Titled("Action").SetWidth(5);
+                    }).WithPaging(20).Sortable(true)*@
                 </div>
             </div>
         </div>
