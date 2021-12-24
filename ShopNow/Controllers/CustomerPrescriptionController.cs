@@ -96,6 +96,34 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
+        public ActionResult PrescriptionOrderList()
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var model = new PrescriptionOrderListViewModel();
+            model.PrescriptionOrderLists = db.CustomerPrescriptions.OrderBy(i=>i.Id)
+                .Join(db.Orders.Where(i => (i.IsPrescriptionOrder == true) && i.Status == 6), cp => cp.ShopId, o=>o.ShopId, (cp,o) => new { cp,o})
+               .Join(db.Payments, c => c.o.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
+               .AsEnumerable()
+               .Select(i => new PrescriptionOrderListViewModel.PrescriptionOrderList
+               {
+                   Id = i.c.o.Id,
+                   ShopName = i.c.o.ShopName,
+                   OrderNumber = i.c.o.OrderNumber,
+                   CustomerPhoneNumber = i.c.o.CustomerPhoneNumber,
+                   Status = i.c.o.Status,
+                   DateEncoded = i.c.o.DateEncoded,
+                   DateUpdated = i.c.o.DateUpdated,
+                   Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
+                   RefundAmount = i.p.RefundAmount ?? 0,
+                   RefundRemark = i.p.RefundRemark ?? "",
+                   PaymentMode = i.p.PaymentMode,
+                   OrderPeriod = Math.Round((i.c.o.DateUpdated - i.c.o.DateEncoded).TotalMinutes),
+                   ShopAcceptedTime = i.c.o.ShopAcceptedTime != null ? Math.Round((i.c.o.ShopAcceptedTime.Value - i.c.o.DateEncoded).TotalMinutes) : 0,
+               }).OrderByDescending(i => i.DateEncoded).ToList();          
+            return View(model.PrescriptionOrderLists);
+        }
+
         [HttpPost]
         [AccessPolicy(PageCode = "SNCCPAC298")]
         public ActionResult AddToCart(AddToCartViewModel model)

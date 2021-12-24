@@ -830,7 +830,12 @@ namespace ShopNow.Controllers
             var AadharImage = "";
             int CustomerId = 0;
             var customer = db.Customers.FirstOrDefault(i => i.PhoneNumber == phoneNumber);
-            if (customer != null)
+            var isDeliveryBoyExist = db.Customers.Any(i => i.PhoneNumber == phoneNumber && i.Position == 3);
+            if (isDeliveryBoyExist)
+            {
+                return Json(new { ErrorMsg = isDeliveryBoyExist, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+            }
+            else if (customer != null)
             {
                 code = true;
                 CustomerId = customer.Id;

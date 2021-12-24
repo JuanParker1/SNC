@@ -348,7 +348,8 @@ namespace ShopNow.Controllers
                    EmailBody = "",
                    EmailID = i.d.Email,
                    DeliveryBoyPaymentStatus = i.c.c.DeliveryBoyPaymentStatus,
-                   PaymentMode = i.d.BankName.ToUpper() == "ICICI BANK" ? "FT" : "NEFT"
+                   PaymentMode = i.d.BankName.ToUpper() == "ICICI BANK" ? "FT" : "NEFT",
+                   ShopName = i.c.c.ShopName
                }).ToList();
             return View(model);
         }
