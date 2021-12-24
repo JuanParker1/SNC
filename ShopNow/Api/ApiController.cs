@@ -1423,6 +1423,7 @@ namespace ShopNow.Controllers
                     TotalQuantity = i.o.o.o.o.TotalQuantity,
                     NetTotal = i.o.o.o.o.NetTotal,
                     WalletAmount = i.o.o.o.o.WalletAmount,
+                    TipAmount = i.o.o.o.o.TipsAmount,
                     OrderItemList = i.oi.ToList()
                 }).ToList();
 
@@ -1460,6 +1461,7 @@ namespace ShopNow.Controllers
                    TotalQuantity = i.o.o.o.o.TotalQuantity,
                    NetTotal = i.o.o.o.o.NetTotal,
                    WalletAmount = i.o.o.o.o.WalletAmount,
+                   TipAmount = i.o.o.o.o.TipsAmount,
                    OrderItemList = i.oi.ToList()
                }).ToList();
 
