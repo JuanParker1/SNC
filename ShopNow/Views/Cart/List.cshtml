@@ -36,11 +36,9 @@
                    columns.Add(c => c.ShopPhoneNumber).Titled("Shop PhoneNo").Filterable(true).SetWidth(10);
                    //columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
                    columns.Add(c => c.OrderStatusText).Titled("Order Status").Filterable(true).SetWidth(15);
-                   columns.Add()
-                   .Encoded(false)
-                   .Sanitized(false)
+                   columns.Add().Encoded(false).Sanitized(false)
                    .RenderValueAs(o => Html.ActionLink("View", "Edit", new { OrderNumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-vsm btn-info", @style = "padding: 3px 26px" }).ToHtmlString()+
-                   Html.ActionLink("Details", "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-vsm btn-secondary", @style = "padding: 3px 26px" }).ToHtmlString()).Titled("Action").SetWidth(10);
+                   Html.ActionLink("Details", "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-vsm btn-secondary mt-1", @style = "padding: 3px 20px" }).ToHtmlString()).Titled("Action").SetWidth(10);
                }).WithPaging(20).Sortable(true)
                 </div>
             </div>
@@ -56,8 +54,7 @@
     <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
     <!--Select2 End-->
     <script>
-        $(document).ready(function () {
-            
+        $(document).ready(function () {            
             $('#ShopId').select2({
                 placeholder: "Search Shop",
                 ajax: {
