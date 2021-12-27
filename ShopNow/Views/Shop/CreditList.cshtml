@@ -9,7 +9,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-4">
-            <h5 class="text-success" style="letter-spacing:1px">SHOP CREDITS LIST</h5>
+            <h5 class="text-success" style="letter-spacing:1px">LOW SHOP CREDITS LIST</h5>
         </div>
         <div class="col-md-8 text-right">
             <a href="/Shop/CreditsHistory" class="mr-3"><span class="fa fa-list-ul"></span> Credits History</a>
@@ -20,19 +20,15 @@
             <div class="card shadow mt-3">
                 <div class="card-body">
                     @Html.Grid(Model.ListItems).Columns(columns =>
-      {
+         {
           columns.Add(c => c.ShopName).Titled("Name").Filterable(true).SetWidth(15);
           columns.Add(c => c.ShopOwnerName).Titled("Owner Name").Filterable(true).SetWidth(10);
           columns.Add(c => c.ShopOwnerPhoneNumber).Titled("PhoneNo").Filterable(true).SetWidth(12);
-          columns.Add()
-       .Encoded(false)
-       .Sanitized(false)
+          columns.Add().Encoded(false).Sanitized(false)
            .RenderValueAs(c => "<b class=" + c.PlatformCreditCssColor + ">" + "₹ " + c.PlatformCredit + "</b>").Titled("Platform Credit").SetWidth(10);
-          columns.Add()
-      .Encoded(false)
-      .Sanitized(false)
+          columns.Add().Encoded(false).Sanitized(false)
           .RenderValueAs(c => "<b class=" + c.DeliveryCreditCssColor + ">" + "₹ " + c.DeliveryCredit + "</b>").Titled("Delivery Credit").SetWidth(10);
-      }).WithPaging(20).Sortable(true)
+         }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>

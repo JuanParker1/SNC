@@ -34,13 +34,13 @@
                     <table class="table table-borderless" id="PrescriptionTable">
                         <thead class="bg-light">
                             <tr>
-                                <th>Name</th>
-                                <th>Phone No.</th>
-                                <th>Image(s)</th>
-                                <th>Audio</th>
-                                <th>Remarks</th>
-                                <th>Date</th>
-                                <th>Action</th>
+                                <th class="w-12">Name</th>
+                                <th class="w-12">Phone No.</th>
+                                <th class="w-12">Image(s)</th>
+                                <th class="w-25">Audio</th>
+                                <th class="w-12">Remarks</th>
+                                <th class="w-12">Date</th>
+                                <th class="w-12">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -55,8 +55,8 @@
                                             <img alt="Image" data-toggle="modal" data-target="#myModal" class="img-thumbnail PrescriptionImage p-1" src="@im.ImagePath" onerror="this.src='/Images/No Photo.png'" style="width:45px;height:45px" />
                                         }
                                     </td>
-                                    <td class="m-0 p-0">
-                                        <audio controls="controls" src="@item.AudioPath"></audio>
+                                    <td>
+                                        <audio controls="controls" src="@item.AudioPath" style="width: 250px;"></audio>
                                     </td>
                                     <td>@item.Remarks</td>
                                     <td>@item.DateEncoded.ToString("dd-MM-yyyy hh:mm tt")</td>

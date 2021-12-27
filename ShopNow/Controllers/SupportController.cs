@@ -92,6 +92,8 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             var model = new SupportViewModel();
             
+            DateTime last3Date = DateTime.Now.AddDays(-3);
+
             model.ShopAcceptanceCount = db.Orders.Where(i => i.Status == 2 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5)
                    .AsEnumerable().Count();
 
@@ -132,7 +134,10 @@ namespace ShopNow.Controllers
 
             model.DeliveryBoyLiveCount = db.DeliveryBoys.Where(i => i.Status == 0 && i.isAssign == 0 && i.OnWork == 0 && i.Active == 1).Count();
             model.RefundCount = db.Payments.Where(i => i.RefundAmount != 0 && i.RefundStatus == 1 && i.RefundAmount != null && i.PaymentMode == "Online Payment").Count();
-            model.ShopLowCreditCount = db.ShopCredits.Where(i => i.PlatformCredit <= 200 || i.DeliveryCredit <= 250).Count();
+            model.ShopLowCreditCount =  db.ShopCredits.Where(i => i.PlatformCredit <= 100 || i.DeliveryCredit <= 100)
+                .Join(db.Shops.Where(i => i.IsTrail == false), sc => sc.CustomerId, s => s.CustomerId, (sc, s) => new { sc, s })
+                .Count();
+            model.CustomerPrescriptionCount = db.CustomerPrescriptions.Where(i => i.Status == 0).Count();
             return View(model);
         }
 
@@ -190,7 +195,7 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new OrderMissedListViewModel();
-            model.List = db.Orders.Where(i => i.Status == 0 && DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(DateTime.Now)).OrderByDescending(i => i.DateUpdated)
+            model.List = db.Orders.Where(i => i.Status == 0).OrderByDescending(i => i.DateUpdated)
                 .Select(i => new OrderMissedListViewModel.OrderMissedList
                 {
                     Id = i.Id,

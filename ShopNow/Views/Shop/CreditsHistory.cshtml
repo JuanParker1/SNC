@@ -6,11 +6,17 @@
 <title>ShopNow | @ViewBag.Title</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-
 <div class="container-fluid">
     <div class="row">
+        <div class="col-md-4">
+            <h4 class="text-success"> @ViewBag.Title</h4>
+        </div>
+        <div class="col-md-8 text-right">
+            <a href="~/Shop/CreditList" target="_blank"><span class="fa fa-bars"></span> Low Shop Credits List</a>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-12">
-            <h5 class="text-success"> @ViewBag.Title</h5>
             <div class="card shadow mt-3">
                 <div class="card-body">
                     @Html.Grid(Model.Lists).Columns(columns =>
