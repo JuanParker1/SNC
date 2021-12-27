@@ -120,10 +120,13 @@ namespace ShopNow.Controllers
             if (banner.ProductId != 0)
             {
                 var product = db.Products.FirstOrDefault(i => i.Id == banner.ProductId && i.Status == 0);
-                banner.MasterProductId = product.MasterProductId;
-                product.OfferQuantityLimit = model.OfferQuantityLimit;
-                db.Entry(product).State = EntityState.Modified;
-                db.SaveChanges();
+                if (product != null)
+                {
+                    banner.MasterProductId = product.MasterProductId;
+                    product.OfferQuantityLimit = model.OfferQuantityLimit;
+                    db.Entry(product).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
             }
             try
             {
