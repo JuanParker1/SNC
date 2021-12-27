@@ -103,7 +103,7 @@ namespace ShopNow.ViewModels
             public double CustomerLatitude { get; set; }
             public double CustomerLongitude { get; set; }
             public int OrderNumber { get; set; }
-           // public double Amount { get; set; }
+            // public double Amount { get; set; }
             public string CustomerPhoneNumber { get; set; }
             public string CustomerName { get; set; }
             public string DeliveryAddress { get; set; }
@@ -124,6 +124,7 @@ namespace ShopNow.ViewModels
             public Double? RefundAmount { get; set; }
             public string RefundRemark { get; set; }
             public List<OrderItem> OrderItemList { get; set; }
+            public double TipAmount { get; set; }
            
         }
     }
