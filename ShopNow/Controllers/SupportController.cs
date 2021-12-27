@@ -117,7 +117,7 @@ namespace ShopNow.Controllers
                                       .Join(db.OrderItems, p => p.Id, c => c.ProductId, (p, c) => new { p, c }).AsEnumerable().GroupBy(i => i.c.ProductId).Count();
 
             DateTime start = new DateTime(2021, 10, 29);
-            model.OrderMissedCount = db.Orders.Where(i => i.Status == 0 && DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(start)).Count();
+            model.OrderMissedCount = db.Orders.Where(i => i.Status == 0 /*&& DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(start)*/).Count();
 
             model.UnMappedCount = db.Products.Where(i => i.MasterProductId == 0)
                            .Join(db.OrderItems, p => p.Id, oi => oi.ProductId, (p, oi) => new { p, oi }).GroupBy(i => i.oi.Id).Count();

@@ -106,7 +106,8 @@ namespace ShopNow.Models
                             DeliveryBoyVerifyCount = lst[0].DeliveryBoyVerifyCount,
                             BannerPendingCount = lst[0].BannerPendingCount,
                             CustomerCount = lst[0].CustomerCount,
-                            ShopCount = lst[0].ShopCount
+                            ShopCount = lst[0].ShopCount,
+                            DeliveryBoyLiveCount = lst[0].DeliveryBoyLiveCount
                         };
                         return data;
 

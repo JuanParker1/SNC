@@ -180,11 +180,6 @@ namespace ShopNow.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("GetCustomerCount");
         }
     
-        public virtual ObjectResult<GetDashBoardDetails_Result> GetDashBoardDetails()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetDashBoardDetails_Result>("GetDashBoardDetails");
-        }
-    
         public virtual ObjectResult<GetDEliveryBoyList_Result> GetDEliveryBoyList()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetDEliveryBoyList_Result>("GetDEliveryBoyList");
@@ -456,6 +451,11 @@ namespace ShopNow.Models
                 new ObjectParameter("customerid", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("GetAutoCompleteSearch", longitudeParameter, latitudeParameter, strParameter, customeridParameter);
+        }
+    
+        public virtual ObjectResult<GetDashBoardDetails_Result> GetDashBoardDetails()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetDashBoardDetails_Result>("GetDashBoardDetails");
         }
     }
 }

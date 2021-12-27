@@ -19,6 +19,7 @@ namespace ShopNow.Models
         public Nullable<int> deliveryaccpetance { get; set; }
         public Nullable<int> shoppickup { get; set; }
         public Nullable<int> customerdelivery { get; set; }
+        public Nullable<int> DeliveryBoyLiveCount { get; set; }
         public Nullable<int> RefundCount { get; set; }
         public Nullable<int> ShopLowCreditCount { get; set; }
         public Nullable<int> CustomerPrescriptionCount { get; set; }
