@@ -195,7 +195,7 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new OrderMissedListViewModel();
-            model.List = db.Orders.Where(i => i.Status == 0 && DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(DateTime.Now)).OrderByDescending(i => i.DateUpdated)
+            model.List = db.Orders.Where(i => i.Status == 0).OrderByDescending(i => i.DateUpdated)
                 .Select(i => new OrderMissedListViewModel.OrderMissedList
                 {
                     Id = i.Id,
