@@ -40,7 +40,8 @@ namespace ShopNow.Controllers
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
         //private string apipath= "https://admin.shopnowchat.in/";
-        private string apipath = "http://117.221.69.52:91/";
+        //private string apipath = "http://117.221.69.52:91/";
+        private string apipath = "http://103.78.159.20:91/";
         private const string _prefix = "";
 
         private static string _generateCode(string _prefix)
@@ -2997,10 +2998,10 @@ namespace ShopNow.Controllers
             int TotalPages = (int)Math.Ceiling(count.Value / (double)PageSize);
             var items = model;
             var previous = CurrentPage - 1;
-            var previousurl = apipath + "/Api/GetShopCategoryList?shopId=" + shopId + "&categoryId=" + CategoryId + "&str=" + str + "&page=" + previous;
+            var previousurl = apipath + "/Api/GetShopCategoryList?shopId=" + shopId + "&categoryId=" + CategoryId + "&customerid=" + customerId + "&str=" + str + "&page=" + previous;
             var previousPage = CurrentPage > 1 ? previousurl : "No";
             var current = CurrentPage + 1;
-            var nexturl = apipath + "/Api/GetShopCategoryList?shopId=" + shopId + "&categoryId=" + CategoryId + "&str=" + str + "&page=" + current;
+            var nexturl = apipath + "/Api/GetShopCategoryList?shopId=" + shopId + "&categoryId=" + CategoryId + "&customerid=" + customerId + "&str=" + str + "&page=" + current;
             var nextPage = CurrentPage < TotalPages ? nexturl : "No";
             var paginationMetadata = new
             {

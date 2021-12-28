@@ -75,6 +75,7 @@ namespace ShopNow.ViewModels
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {
+            public long Id { get; set; }
             public string ProductName { get; set; }
             public string BrandName { get; set; }
             public string CategoryName { get; set; }

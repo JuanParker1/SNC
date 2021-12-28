@@ -496,6 +496,7 @@ namespace ShopNow.Controllers
                 model.ListItems = db.OrderItems.Where(i => i.OrderId == order.Id)
                     .Select(i => new CartDetailsViewModel.ListItem
                     {
+                        Id = i.Id,
                         BrandName = i.BrandName,
                         CategoryName = i.CategoryName,
                         ImagePath = i.ImagePath,
@@ -1361,7 +1362,7 @@ namespace ShopNow.Controllers
             else if (redirection == 4)
                 return RedirectToAction("OntheWay");
             else if (redirection == 5)
-                return RedirectToAction("Details", new { id = id });
+                return RedirectToAction("Details", "Cart", new { id = AdminHelpers.ECodeLong(id) });
             else
                 return RedirectToAction("Delivered");
         }
@@ -1380,7 +1381,7 @@ namespace ShopNow.Controllers
             db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
-            return RedirectToAction("Details", new { id = id });
+            return RedirectToAction("Details", "Cart", new { id = AdminHelpers.ECodeLong(id) });
         }
 
         DeliveryBoy getDBoy(int id)
@@ -1489,6 +1490,32 @@ namespace ShopNow.Controllers
                 .Join(db.Shops.Where(i => categoryType != 0 ? i.ShopCategoryId == categoryType : true), o => o.ShopId, s => s.Id, (o, s) => new { o, s })
                 .Count();
             return count;
+        }
+
+        public ActionResult UpdateItem(long orderid,long id, int quantity, double unitprice)
+        {
+            var order = db.Orders.FirstOrDefault(i => i.Id == orderid);
+            var orderItem = db.OrderItems.FirstOrDefault(i => i.Id == id);
+            orderItem.Quantity = quantity;
+            orderItem.UnitPrice = unitprice;
+            orderItem.Price = orderItem.Quantity * orderItem.UnitPrice;
+            db.Entry(orderItem).State = EntityState.Modified;
+            db.SaveChanges();
+
+            var orderItemList = db.OrderItems.Where(i => i.OrderId == orderid).ToList();
+            order.TotalPrice = orderItemList.Sum(i => i.Price);
+            order.TotalQuantity = orderItemList.Sum(i => i.Quantity);
+            order.NetTotal = order.TotalPrice - order.WalletAmount - order.OfferAmount + order.TipsAmount + order.Packingcharge + order.Convinenientcharge + order.DeliveryCharge;
+            db.Entry(order).State = EntityState.Modified;
+            db.SaveChanges();
+
+            var payments = db.Payments.FirstOrDefault(i => i.OrderNumber == order.OrderNumber);
+            payments.OriginalAmount = order.TotalPrice;
+            payments.GSTAmount = order.NetTotal;
+            payments.Amount = order.NetTotal;
+            db.Entry(payments).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Details", "Cart", new { id = AdminHelpers.ECodeLong(orderid) });
         }
         //public JsonResult GetLiveOrderCount()
         //{

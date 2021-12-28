@@ -366,6 +366,7 @@
                                 <th>Qty</th>
                                 <th>Price</th>
                                 <th>Total</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -424,6 +425,7 @@
                                 <td>@item.Quantity</td>
                                 <td>₹@item.UnitPrice</td>
                                 <td>₹@item.Price</td>
+                                <td><a class="btn-item-update" href="#modal-item-update" data-target="#modal-item-update" data-toggle="modal" data-id="@item.Id" data-product="@item.ProductName" data-category="@item.CategoryName" data-quantity="@item.Quantity" data-unitprice="@item.UnitPrice"><i class="fa fa-edit"></i></a></td>
                             </tr>
                             }
                         </tbody>
@@ -511,7 +513,7 @@
                     <label class="font-weight-bold text-muted mt-3"><u>Amount Details:</u></label>
                     <div class="d-flex justify-content-between">
                         <label class="mr-3">Items Total:</label>
-                        <b>₹@Model.ListItems.Sum(i => i.Price).ToString("#,#.00")</b>
+                        <b>₹@Model.ListItems.Sum(i => i.Price).ToString("#,#,0.00")</b>
                     </div>
                     <div class="d-flex justify-content-between">
                         <label class="mr-3">Packing Charge:</label>
@@ -523,7 +525,7 @@
                     </div>
                     <div class="d-flex justify-content-between">
                         <label class="mr-3">Delivery Charge:</label>
-                        <b>₹@Model.NetDeliveryCharge.ToString("#,#.00")</b>
+                        <b>₹@Model.NetDeliveryCharge.ToString("#,#,0.00")</b>
                     </div>
                     <div class="d-flex justify-content-between">
                         <label class="mr-3">Offer Amount:</label>
@@ -684,6 +686,34 @@
     </div>
 </div>
 
+<div class="modal fade" id="modal-item-update" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form method="get" action="/Cart/UpdateItem">
+                    <input type="hidden" name="Id" id="item-id" />
+                    <input type="hidden" name="OrderId" value="@Model.Id" />
+                    <h5>Update Item</h5><hr />
+                    <h6 id="text-product"></h6>
+                    <small id="text-category"></small>
+                    <div class="d-flex form-group mt-3">
+                        <label class="col-form-label mr-3">Quantity:</label>
+                        <input class="form-control w-50" type="number" min="1" name="Quantity" id="input-quantity" />
+                    </div>
+                    <div class="form-group d-flex">
+                        <label class="col-form-label mr-2">Unit Price:</label>
+                        <input class="form-control w-50" type="number" min="1" name="UnitPrice" id="input-unitprice" />
+                    </div>
+                    <div class="text-right">
+                        <button class="btn btn-sm btn-success mr-3">Submit</button>
+                        <button class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @section Scripts
 {
@@ -774,6 +804,14 @@
                 window.location.href = "/Cart/AssignDeliveryBoy?OrderNumber=" + ordernumber;
             });
 
+            $("#tbl-items").on('click','.btn-item-update',function () {
+                $('#item-id').val($(this).data('id'));
+                $('#text-product').text($(this).data('product'));
+                $('#text-category').text($(this).data('category'));
+                $('#input-quantity').val($(this).data('quantity'));
+                $('#input-unitprice').val($(this).data('unitprice'));
+                $('#modal-item-update').modal('show');
+            });
         });
     </script>
 }
