@@ -2440,6 +2440,17 @@ namespace ShopNow.Controllers
                         IsLiked = i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id),
                         LikeText = (i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true && i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() == 1) ? "You Liked" : i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true ? "You & " + (i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() - 1) + " more" : i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() + " like" : ""
                     }).ToList();
+
+                if (!string.IsNullOrEmpty(str))
+                {
+                    CustomerSearchData sData = new CustomerSearchData();
+                    sData.ResultCount = model.ProductLists.Count();
+                    sData.SearchKeyword = str;
+                    sData.DateEncoded = DateTime.Now;
+                    db.CustomerSearchDatas.Add(sData);
+                    db.SaveChanges();
+
+                }
             }
             else if (shop.ShopCategoryId == 2)
             {
@@ -2500,6 +2511,17 @@ namespace ShopNow.Controllers
                         IsLiked = i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id),
                         LikeText = (i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true && i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() == 1) ? "You Liked" : i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true ? "You & " + (i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() - 1) + " more" : i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() + " like" : ""
                     }).ToList();
+
+                if (!string.IsNullOrEmpty(str))
+                {
+                    CustomerSearchData sData = new CustomerSearchData();
+                    sData.ResultCount = model.ProductLists.Count();
+                    sData.SearchKeyword = str;
+                    sData.DateEncoded = DateTime.Now;
+                    db.CustomerSearchDatas.Add(sData);
+                    db.SaveChanges();
+
+                }
             }
             return new JsonResult()
             {
@@ -2570,10 +2592,22 @@ namespace ShopNow.Controllers
                      ShopOnline = i.IsOnline,
                      ShopStatus = i.Status
                  }).ToList();
-           // var productrCount = db.GetProductListCount(varlongitude, varlatitude, str).ToList();
+            var productrCount = db.GetProductListCount(varlongitude, varlatitude, str).ToList();
             int count = 0;
-            //if (productrCount.Count > 0)
-            //    count = Convert.ToInt32(productrCount[0]);
+            if (productrCount.Count > 0)
+                count = Convert.ToInt32(productrCount[0]);
+
+            if (!string.IsNullOrEmpty(str) && page==1)
+            {
+                CustomerSearchData sData = new CustomerSearchData();
+                sData.ResultCount = count;
+                sData.SearchKeyword = str;
+                sData.DateEncoded = DateTime.Now;
+                db.CustomerSearchDatas.Add(sData);
+                db.SaveChanges();
+
+            }
+
             int CurrentPage = page;
             int PageSize = pageSize;
             int TotalCount = count;
@@ -2995,6 +3029,19 @@ namespace ShopNow.Controllers
             int CurrentPage = page;
             int PageSize = pageSize;
             int? TotalCount = count;
+
+
+            if (!string.IsNullOrEmpty(str) && page ==1)
+            {
+                CustomerSearchData sData = new CustomerSearchData();
+                sData.ResultCount = TotalCount ?? 0;
+                sData.SearchKeyword = str;
+                sData.DateEncoded = DateTime.Now;
+                db.CustomerSearchDatas.Add(sData);
+                db.SaveChanges();
+
+            }
+
             int TotalPages = (int)Math.Ceiling(count.Value / (double)PageSize);
             var items = model;
             var previous = CurrentPage - 1;
@@ -5662,8 +5709,24 @@ namespace ShopNow.Controllers
 
         public JsonResult GetCustomerSearchHistory(int customerid)
         {
-            var list = db.CustomerSearchHistories.Where(i => i.Status == 0 && i.CustomerId == customerid).OrderByDescending(i => i.DateEncoded).Take(5).ToList();
+            var list = db.CustomerSearchHistories.Where(i => i.Status == 0 && i.CustomerId == customerid).OrderByDescending(i => i.DateEncoded).Take(10).ToList();
             return Json(new { list = list }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddCustomerSearchHistory(int customerid,int searchid,string serachtext,int type)
+        {
+            var customerSH = new CustomerSearchHistory
+            {
+                CustomerId = customerid,
+                DateEncoded = DateTime.Now,
+                SearchId = searchid,
+                SearchText = serachtext,
+                Status = 0,
+                Type = type // 1- Product, 2-Shop
+            };
+            db.CustomerSearchHistories.Add(customerSH);
+            db.SaveChanges();
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult RemoveCustomerSearchHistory(int id)
