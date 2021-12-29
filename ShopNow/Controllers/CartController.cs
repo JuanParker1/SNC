@@ -1517,6 +1517,37 @@ namespace ShopNow.Controllers
             db.SaveChanges();
             return RedirectToAction("Details", "Cart", new { id = AdminHelpers.ECodeLong(orderid) });
         }
+
+        public ActionResult BatchList(BatchOrderListViewModel model)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+           //var model = new BatchOrderListViewModel();
+           model.ListItems  = db.Orders.Where(i => i.Status == 2 &&(model.ShopId !=0 ? i.ShopId == model.ShopId :true) /*&& SqlFunctions.DateDiff("minute", i.DateEncoded, DateTime.Now) <= 10*/)
+                .AsEnumerable()
+                           .Join(db.Shops, c => c.ShopId, s => s.Id, (c, s) => new { c, s })
+                           .Select(i => new BatchOrderListViewModel.ListItem
+                           {
+                               Id = i.c.Id,
+                               ShopName = i.c.ShopName,
+                               OrderNumber = i.c.OrderNumber,
+                               DeliveryAddress = i.c.DeliveryAddress,
+                               ShopOwnerPhoneNumber = i.c.ShopOwnerPhoneNumber,
+                               Status = i.c.Status,
+                               DeliveryBoyName = i.c.DeliveryBoyName,
+                               DateEncoded = i.c.DateEncoded,
+                               Price = i.c.NetTotal,
+                               PaymentMode = i.c.PaymentMode,
+                               CustomerLatitude = i.c.Latitude,
+                               CustomerLongitude = i.c.Longitude,
+                               ShopLatitude = i.s.Latitude,
+                               ShopLongitude = i.s.Longitude
+                           })
+                           //.Where(i => (3959 * Math.Acos(Math.Cos((double)SqlFunctions.Radians(i.CustomerLatitude)) * Math.Cos((double)SqlFunctions.Radians(i.CustomerLongitude)) * Math.Cos((double)SqlFunctions.Radians(i.ShopLongitude) - (double)SqlFunctions.Radians(i.CustomerLongitude)) + Math.Sin((double)SqlFunctions.Radians(i.CustomerLatitude)) * Math.Sin((double)SqlFunctions.Radians(i.ShopLatitude)))) <= 2.5).AsQueryable()
+                           .Where(i => (double)(GetMeters(i.CustomerLatitude, i.CustomerLongitude, i.ShopLatitude, i.ShopLongitude) / 1000) >= 2.5)
+                           .ToList();
+            return View(model);
+        }
         //public JsonResult GetLiveOrderCount()
         //{
         //    try
