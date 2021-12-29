@@ -22,21 +22,30 @@ namespace ShopNow.Controllers
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            model.ListItems = db.Payments.Where(i => (i.RefundAmount != 0 && i.RefundStatus == 1 &&i.RefundAmount != null) && i.PaymentMode == "Online Payment" &&
+            model.ListItems = db.Payments.Where(i => i.RefundAmount != 0 && i.RefundStatus == 1 && i.PaymentMode == "Online Payment" &&
                (model.OrderDate != null ? DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(model.OrderDate.Value) : true) &&
               (model.ShopId != 0 ? i.ShopId == model.ShopId : true))
-                .Join(db.PaymentsDatas, p => p.OrderNumber, pd => pd.OrderNumber, (p, pd) => new { p, pd })
-                .Join(db.Customers, p => p.p.CustomerId, c => c.Id, (p, c) => new { p, c })
+                //.Join(db.PaymentsDatas, p => p.OrderNumber, pd => pd.OrderNumber, (p, pd) => new { p, pd })
+                .Join(db.Customers, p => p.CustomerId, c => c.Id, (p, c) => new { p, c })
+                //.AsEnumerable()
                 .Select(i => new RefundPendingViewModel.ListItem
                 {
-                    Amount = i.p.p.RefundAmount,
-                    CustomerName = i.p.p.CustomerName,
-                    OrderNo = i.p.p.OrderNumber,
-                    PaymentId = i.p.pd.PaymentId,
-                    Remark = i.p.p.RefundRemark,
+                    Amount = i.p.RefundAmount,
+                    CustomerName = i.p.CustomerName,
+                    OrderNo = i.p.OrderNumber,
+                    PaymentId = i.p.ReferenceCode,
+                    Remark = i.p.RefundRemark,
                     CustomerPhoneNo = i.c.PhoneNumber
                 }).ToList();
             return View(model);
+        }
+
+        public string getCustomerPhoneNumber(int id)
+        {
+            var phoneno = "N/A";
+            if (id != 0)
+                phoneno = db.Customers.Where(i => i.Id == id).FirstOrDefault().PhoneNumber;
+            return phoneno;
         }
 
         [AccessPolicy(PageCode = "SNCRH243")]
