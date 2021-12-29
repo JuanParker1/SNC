@@ -902,4 +902,28 @@ namespace ShopNow.ViewModels
             public string RefundRemark { get; set; }
         }
     }
+
+    public class BatchOrderListViewModel
+    {
+        public int ShopId { get; set; }
+        public string ShopName { get; set; }
+        public List<ListItem> ListItems { get; set; }
+        public class ListItem
+        {
+            public long Id { get; set; }
+            public string ShopName { get; set; }
+            public int OrderNumber { get; set; }
+            public string DeliveryAddress { get; set; }
+            public string ShopOwnerPhoneNumber { get; set; }
+            public int Status { get; set; }
+            public DateTime DateEncoded { get; set; }
+            public string PaymentMode { get; set; }
+            public string DeliveryBoyName { get; set; }
+            public double Price { get; set; }
+            public double CustomerLatitude { get; set; }
+            public double CustomerLongitude { get; set; }
+            public double ShopLatitude { get; set; }
+            public double ShopLongitude { get; set; }
+        }
+    }
 }
