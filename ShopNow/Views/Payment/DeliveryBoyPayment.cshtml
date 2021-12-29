@@ -33,7 +33,8 @@
     columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
     columns.Add(c => c.DeliveryBoyName).Titled("Name").Filterable(true).SetWidth(10);
     columns.Add(c => c.DeliveryBoyPhoneNumber).Titled("Phone No.").Filterable(true).SetWidth(10);
-    columns.Add(c => c.TransactionType).Titled("Trans Type").Filterable(true).SetWidth(10);
+    //columns.Add(c => c.TransactionType).Titled("Trans Type").Filterable(true).SetWidth(10);
+    columns.Add(c => c.COHAmount).Titled("COHAmount").Filterable(true).SetWidth(8);
     columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(8);
     columns.Add(c => c.PaymentDate).Titled("Payment Date").Filterable(true).SetWidth(30).Format("{0:dd-MMM-yyyy}");
     columns.Add(c => c.AccountName).Titled("A/c Name").Filterable(true).SetWidth(10);

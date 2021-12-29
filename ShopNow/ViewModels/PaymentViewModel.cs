@@ -295,6 +295,7 @@ namespace ShopNow.ViewModels
             public int OrderNo { get; set; }
             public int CartStatus { get; set; }
             public int DeliveryBoyPaymentStatus { get; set; }
+            public double COHAmount { get; set; }
 
             //for excel
             public string Identifier { get; set; }
