@@ -8,84 +8,87 @@
         <div class="col-md-4">
             <h5 class="text-success">@ViewBag.Title</h5>
         </div>
-        <div class="col-md-8">
-
+        <div class="col-md-8 text-right">
+            <a href="~/Support/OrderMissed" target="_blank"><span class="fa fa-bars"></span> Order Missed List</a>
         </div>
     </div>
     @using (Html.BeginForm("COHPaymentUpdate", "Support", FormMethod.Post, new { id = "PaymentUpdateForm", autocomplete = "off" }))
     {
         @Html.AntiForgeryToken()
-        <div class="row">
-            <div class="col-md-3">
-                <label class="control-label" for="Amount"><strong class="text-secondary">Amount</strong></label>
-                <div class="form-group">
-                    <input type="number" class="form-control" name="Amount" id="Amount" step="any" />
-                    <input type="hidden" name="OrderNo" id="OrderNo" value="@Model.OrderNumber" />
+        <div class="card shadow">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="control-label" for="Amount"><strong class="text-secondary">Amount</strong></label>
+                        <div class="form-group">
+                            <input type="number" class="form-control" name="Amount" id="Amount" step="any" />
+                            <input type="hidden" name="OrderNo" id="OrderNo" value="@Model.OrderNumber" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label" for="TotalPrice"><strong class="text-secondary">Item List with Rate</strong></label>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="TotalPrice" id="TotalPrice" value="@Model.TotalPrice" readonly />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label" for="TotalCharge"><strong class="text-secondary">Total Charge</strong></label>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="TotalCharge" id="TotalCharge" readonly />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label" for="PackagingCharge"><strong class="text-secondary">Packing Charge</strong></label>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="PackingCharge" id="PackingCharge" value="@Model.PackingCharge" readonly />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label" for="GrossDeliveryCharge"><strong class="text-secondary">Delivery Boy Charge (@Model.Distance Km)</strong></label>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="GrossDeliveryCharge" id="GrossDeliveryCharge" value="@Model.GrossDeliveryCharge" readonly />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label" for="NetDeliveryCharge"><strong class="text-secondary">Customer Delivery Charge</strong></label>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="NetDeliveryCharge" id="NetDeliveryCharge" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label" for="ShopDeliveryDiscount"><strong class="text-secondary">Shop Delivery Discount</strong></label>
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="ShopDeliveryDiscount" id="ShopDeliveryDiscount" readonly />
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <label class="control-label" for="TotalPrice"><strong class="text-secondary">Item List with Rate</strong></label>
-                <div class="form-group">
-                    <input type="text" class="form-control" name="TotalPrice" id="TotalPrice" value="@Model.TotalPrice" readonly />
+                <div class="form-group row">
+                    <div class="col-md-2 mx-auto">
+                        <button type="submit" class="btn btn-block btn-success"><span class="glyphicon glyphicon-file"></span> Save</button>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <label class="control-label" for="TotalCharge"><strong class="text-secondary">Total Charge</strong></label>
-                <div class="form-group">
-                    <input type="text" class="form-control" name="TotalCharge" id="TotalCharge" readonly />
-                </div>
-            </div>
-            <div class="col-md-3">
-                <label class="control-label" for="PackagingCharge"><strong class="text-secondary">Packing Charge</strong></label>
-                <div class="form-group">
-                    <input type="text" class="form-control" name="PackingCharge" id="PackingCharge" value="@Model.PackingCharge" readonly />
-                </div>
-            </div>
-            <div class="col-md-3">
-                <label class="control-label" for="GrossDeliveryCharge"><strong class="text-secondary">Delivery Boy Charge (@Model.Distance Km)</strong></label>
-                <div class="form-group">
-                    <input type="text" class="form-control" name="GrossDeliveryCharge" id="GrossDeliveryCharge" value="@Model.GrossDeliveryCharge" readonly />
-                </div>
-            </div>
-            <div class="col-md-3">
-                <label class="control-label" for="NetDeliveryCharge"><strong class="text-secondary">Customer Delivery Charge</strong></label>
-                <div class="form-group">
-                    <input type="text" class="form-control" name="NetDeliveryCharge" id="NetDeliveryCharge" />
-                </div>
-            </div>
-            <div class="col-md-3">
-                <label class="control-label" for="ShopDeliveryDiscount"><strong class="text-secondary">Shop Delivery Discount</strong></label>
-                <div class="form-group">
-                    <input type="text" class="form-control" name="ShopDeliveryDiscount" id="ShopDeliveryDiscount" readonly />
-                </div>
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="col-md-2 mx-auto">
-                <button type="submit" class="btn btn-block btn-success"><span class="glyphicon glyphicon-file"></span> Save</button>
             </div>
         </div>
     }
 </div>
+
 @section Scripts
 {
     <script>
+        $(document).ready(function () {
+            $('#Amount').on('change keyup', function () {
+                var totalprice = $("#CartTotalPrice").val();
+                var amount = $(this).val();
+                var results = Math.ceil(amount - totalprice);
+                $("#TotalCharge").val(results);
+            });
 
-    $(document).ready(function () {
-        $('#Amount').on('change keyup', function () {
-            var totalprice = $("#CartTotalPrice").val();
-            var amount = $(this).val();
-            var results = Math.ceil(amount - totalprice);
-            $("#TotalCharge").val(results);
+            $('#NetDeliveryCharge').on('change keyup', function () {
+                var gross = $("#GrossDeliveryCharge").val();
+                var net = $(this).val();
+                var results = Math.ceil(gross - net);
+                $("#ShopDeliveryDiscount").val(results);
+            });
         });
-
-        $('#NetDeliveryCharge').on('change keyup', function () {
-            var gross = $("#GrossDeliveryCharge").val();
-            var net = $(this).val();
-            var results = Math.ceil(gross - net);
-            $("#ShopDeliveryDiscount").val(results);
-        });
-
-    });
     </script>
 }
