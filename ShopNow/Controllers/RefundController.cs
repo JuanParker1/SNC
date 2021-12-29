@@ -24,16 +24,17 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             model.ListItems = db.Payments.Where(i => i.RefundAmount != 0 && i.RefundStatus == 0 && i.PaymentMode == "Online Payment" &&
                (model.OrderDate != null ? DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(model.OrderDate.Value) : true) &&
-              (model.ShopId != 0 ? i.ShopId == model.ShopId : true))
-                .Join(db.Orders, p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
+               (model.ShopId != 0 ? i.ShopId == model.ShopId : true))
+                .Join(db.PaymentsDatas, p => p.OrderNumber, pd => pd.OrderNumber, (p, pd) => new { p, pd })
+                .Join(db.Customers, p => p.p.CustomerId, c => c.Id, (p, c) => new { p, c })
                 .Select(i => new RefundPendingViewModel.ListItem
                 {
-                    Amount = i.p.RefundAmount,
-                    CustomerName = i.p.CustomerName,
-                    OrderNo = i.p.OrderNumber,
-                    PaymentId = i.p.ReferenceCode,
-                    Remark = i.p.RefundRemark,
-                    CustomerPhoneNo = i.c.CustomerPhoneNumber
+                    Amount = i.p.p.RefundAmount,
+                    CustomerName = i.p.p.CustomerName,
+                    OrderNo = i.p.p.OrderNumber,
+                    PaymentId = i.p.pd.PaymentId,
+                    Remark = i.p.p.RefundRemark,
+                    CustomerPhoneNo = i.c.PhoneNumber
                 }).ToList();
             return View(model);
         }
