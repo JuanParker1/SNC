@@ -642,9 +642,6 @@
     <Compile Include="Models\Portion.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PreferedText_Result.cs">
-      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Product.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
