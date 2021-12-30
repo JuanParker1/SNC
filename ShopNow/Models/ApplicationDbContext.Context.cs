@@ -432,7 +432,7 @@ namespace ShopNow.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("test", strParameter);
         }
     
-        public virtual ObjectResult<string> GetAutoCompleteSearch(Nullable<double> longitude, Nullable<double> latitude, string str, Nullable<int> customerid)
+        public virtual int GetAutoCompleteSearch(Nullable<double> longitude, Nullable<double> latitude, string str, Nullable<int> customerid)
         {
             var longitudeParameter = longitude.HasValue ?
                 new ObjectParameter("Longitude", longitude) :
@@ -450,7 +450,7 @@ namespace ShopNow.Models
                 new ObjectParameter("customerid", customerid) :
                 new ObjectParameter("customerid", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("GetAutoCompleteSearch", longitudeParameter, latitudeParameter, strParameter, customeridParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GetAutoCompleteSearch", longitudeParameter, latitudeParameter, strParameter, customeridParameter);
         }
     
         public virtual ObjectResult<GetDashBoardDetails_Result> GetDashBoardDetails()

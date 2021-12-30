@@ -27,6 +27,7 @@ using System.Data.Entity.Migrations;
 //using N.EntityFramework.Extensions;
 using Z.EntityFramework.Extensions;
 using System.Data.Entity.SqlServer;
+using System.Configuration;
 
 namespace ShopNow.Controllers
 {
@@ -36,7 +37,7 @@ namespace ShopNow.Controllers
     {
         private sncEntities db = new sncEntities();
 
-
+        readonly string _connString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
         private IMapper _mapper;
         private MapperConfiguration _mapperConfiguration;
         //private string apipath= "https://admin.shopnowchat.in/";
@@ -5743,10 +5744,98 @@ namespace ShopNow.Controllers
 
         public JsonResult GetAutoCompleteSearchResult(int customerid,double latitude, double longitude, string keyword)
         {
-            var list = db.GetAutoCompleteSearch(longitude, latitude, keyword, customerid);
-            return Json(new { result = list }, JsonRequestBehavior.AllowGet);
-        }
+           // var list = db.GetAutoCompleteSearch(longitude, latitude, keyword, customerid);
+            AutoCompleteSearchResult categProd = new AutoCompleteSearchResult();
+            categProd.PreferedText = new List<PreferedText_Result>();
+            categProd.Shop = new List<Shop_Result>();
+            categProd.Products = new List<Product_Result>();
 
+            //using (var dbContext = new sncEntities())
+            //{
+            //    var results = dbContext.GetAutoCompleteSearch(longitude, latitude, keyword, customerid);
+
+            //    //Get first enumerate result set
+            //    categProd.PreferedText.AddRange(results);
+
+            //    //Get second result set
+            //    var products = results.GetNextResult<Product_Result>();
+            //    categProd.Products.AddRange(products);
+
+            //    //Return all result sets
+
+            //}
+            using (var connection = new SqlConnection(_connString))
+            {
+                connection.Open();
+                using (var command = new SqlCommand(@"GetAutoCompleteSearch", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("customerid", customerid);
+                    command.Parameters.AddWithValue("str", keyword);
+                    command.Parameters.AddWithValue("Longitude", longitude);
+                    command.Parameters.AddWithValue("Latitude", latitude);
+                    DataSet dsdocCount = new DataSet();
+                    SqlDataAdapter daDcocount = new SqlDataAdapter();
+                    daDcocount.SelectCommand = command;
+                    daDcocount.Fill(dsdocCount);
+                    if (dsdocCount.Tables.Count > 1)
+                    {
+
+
+
+                        categProd.PreferedText = (from DataRow row in dsdocCount.Tables[0].Rows
+
+                                                  select new PreferedText_Result()
+                                                  {
+                                                      correctword = row["source"].ToString()
+                                                  }).ToList();
+                        categProd.Shop= (from DataRow row in dsdocCount.Tables[1].Rows
+
+                                         select new Shop_Result()
+                                         {
+                                             ID = Convert.ToInt32(row["Id"].ToString()),
+                                             Name = row["Name"].ToString(),
+                                             ImagePath = row["ImagePath"].ToString()
+                                         }).ToList();
+                        categProd.Products = (from DataRow row in dsdocCount.Tables[2].Rows
+
+                                          select new Product_Result()
+                                          {
+                                              ID = Convert.ToInt32(row["Id"].ToString()),
+                                              Name = row["ProductName"].ToString(),
+                                              ImagePath = row["ImagePath"].ToString(),
+                                             
+                                          }).ToList();
+                    }
+                    connection.Close();
+                }
+            }
+                return Json(new { result = categProd }, JsonRequestBehavior.AllowGet);
+        }
+        public class AutoCompleteSearchResult
+        {
+            public List<PreferedText_Result> PreferedText { get; set; }
+            public List<Shop_Result> Shop { get; set; }
+            public List<Product_Result> Products { get; set; }
+        }
+        public partial class PreferedText_Result
+        {
+            public string correctword { get; set; }
+
+        }
+        public partial class Shop_Result
+        {
+            public int ID { get; set; }
+            public string Name { get; set; }
+            public string ImagePath { get; set; }
+        }
+        public partial class Product_Result
+        {
+            public int ID { get; set; }
+            public string Name { get; set; }
+            public string ImagePath { get; set; }
+           // public int count { get; set; }
+        }
         //Calls
         public JsonResult SetCallActive(int orderno)
         {

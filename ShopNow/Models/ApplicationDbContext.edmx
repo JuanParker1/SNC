@@ -3224,11 +3224,12 @@
           <FunctionImport Name="test">
           <Parameter Name="str" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="GetAutoCompleteSearch" ReturnType="Collection(String)">
+          <FunctionImport Name="GetAutoCompleteSearch" >
             <Parameter Name="Longitude" Mode="In" Type="Double" />
             <Parameter Name="Latitude" Mode="In" Type="Double" />
             <Parameter Name="str" Mode="In" Type="String" />
             <Parameter Name="customerid" Mode="In" Type="Int32" />
+     
           </FunctionImport>
           <EntitySet Name="Orders" EntityType="sncModel.Order" />
           <FunctionImport Name="GetDashBoardDetails" ReturnType="Collection(sncModel.GetDashBoardDetails_Result)" />
@@ -3391,6 +3392,7 @@
           <Property Type="Int32" Name="CustomerCount" Nullable="true" />
           <Property Type="Int32" Name="ShopCount" Nullable="true" />
         </ComplexType>
+        <ComplexType Name="PreferedText_Result" />
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
