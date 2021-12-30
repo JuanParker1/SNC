@@ -2,6 +2,8 @@
 @{
     ViewBag.Title = "Batch List";
     var shopList = Model.ListItems.OrderBy(i => i.ShopName).GroupBy(i => i.ShopName).ToList();
+
+
 }
 
 <div class="container-fluid">
