@@ -177,7 +177,7 @@ namespace ShopNow.Controllers
                     order.PaymentModeType = 2;
                     order.DateEncoded = DateTime.Now;
                     order.DateUpdated = DateTime.Now;
-                    order.Status = 0;
+                    order.Status = 2;
                     order.IsPrescriptionOrder = true;
                     db.Orders.Add(order);
                     db.SaveChanges();
