@@ -3392,7 +3392,6 @@
           <Property Type="Int32" Name="CustomerCount" Nullable="true" />
           <Property Type="Int32" Name="ShopCount" Nullable="true" />
         </ComplexType>
-        <ComplexType Name="PreferedText_Result" />
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
