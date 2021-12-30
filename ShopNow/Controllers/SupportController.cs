@@ -227,20 +227,22 @@ namespace ShopNow.Controllers
             var Distance = (((Math.Acos(Math.Sin((shop.Latitude * Math.PI / 180)) * Math.Sin((cart.Latitude * Math.PI / 180)) + Math.Cos((shop.Latitude * Math.PI / 180)) * Math.Cos((cart.Latitude * Math.PI / 180))
                  * Math.Cos(((shop.Longitude - cart.Longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000;
             var deliverybill = db.Bills.Where(i => i.ShopId == cart.ShopId && i.NameOfBill == 0 && i.DeliveryRateSet == 0 && i.Status == 0).FirstOrDefault();
-            if (Distance < 5)
+            if (deliverybill != null)
             {
-                model.GrossDeliveryCharge = deliverybill.DeliveryChargeKM;
+                if (Distance < 5)
+                {
+                    model.GrossDeliveryCharge = deliverybill.DeliveryChargeKM;
+                }
+                else
+                {
+                    var dist = Distance - 5;
+                    var amount = dist * deliverybill.DeliveryChargeOneKM;
+                    model.GrossDeliveryCharge = deliverybill.DeliveryChargeKM + amount;
+                }
+                model.ShopDeliveryDiscount = model.TotalPrice * (deliverybill.DeliveryChargeCustomer / 100);
             }
-            else
-            {
-                var dist = Distance - 5;
-                var amount = dist * deliverybill.DeliveryChargeOneKM;
-                model.GrossDeliveryCharge = deliverybill.DeliveryChargeKM + amount;
-            }
-            model.ShopDeliveryDiscount = model.TotalPrice * (deliverybill.DeliveryChargeCustomer / 100);
             model.NetDeliveryCharge = model.GrossDeliveryCharge - model.ShopDeliveryDiscount;
             model.Distance = Distance.ToString("0.##");
-
             return View(model);
         }
 
