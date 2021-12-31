@@ -3876,10 +3876,10 @@ namespace ShopNow.Controllers
             int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
             var items = model.List.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
             var previous = CurrentPage - 1;
-            var previousurl = "https://admin.shopnowchat.in/Api/GetShopOrderReport?shopId=" + shopId + "&dt=" + dt + "&from=" + from + "&to=" + to + "&page=" + previous;
+            var previousurl = apipath + "Api/GetShopOrderReport?shopId=" + shopId + "&dt=" + dt + "&from=" + from + "&to=" + to + "&page=" + previous;
             var previousPage = CurrentPage > 1 ? previousurl : "No";
             var current = CurrentPage + 1;
-            var nexturl = "https://admin.shopnowchat.in/Api/GetShopOrderReport?shopId=" + shopId + "&dt=" + dt + "&from=" + from + "&to=" + to + "&page=" + current;
+            var nexturl = apipath + "Api/GetShopOrderReport?shopId=" + shopId + "&dt=" + dt + "&from=" + from + "&to=" + to + "&page=" + current;
             var nextPage = CurrentPage < TotalPages ? nexturl : "No";
             var paginationMetadata = new
             {
@@ -3984,10 +3984,10 @@ namespace ShopNow.Controllers
             int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
             var items = model.List.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
             var previous = CurrentPage - 1;
-            var previousurl = "https://admin.shopnowchat.in/Api/GetDelivaryBoyReport?phoneNumber=" + phoneNumber + "&dt=" + dt + "&from=" + from + "&to=" + to + "&page=" + previous;
+            var previousurl = apipath + "Api/GetDelivaryBoyReport?phoneNumber=" + phoneNumber + "&dt=" + dt + "&from=" + from + "&to=" + to + "&page=" + previous;
             var previousPage = CurrentPage > 1 ? previousurl : "No";
             var current = CurrentPage + 1;
-            var nexturl = "https://admin.shopnowchat.in/Api/GetDelivaryBoyReport?phoneNumber=" + phoneNumber + "&dt=" + dt + "&from=" + from + "&to=" + to + "&page=" + current;
+            var nexturl = apipath + "Api/GetDelivaryBoyReport?phoneNumber=" + phoneNumber + "&dt=" + dt + "&from=" + from + "&to=" + to + "&page=" + current;
             var nextPage = CurrentPage < TotalPages ? nexturl : "No";
             var paginationMetadata = new
             {
@@ -4367,10 +4367,10 @@ namespace ShopNow.Controllers
             var items = model.List;
             //var items = model.List.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
             //var previous = CurrentPage - 1;
-            //var previousurl = "https://admin.shopnowchat.in/Api/GetDelivaryBoyReport?startDate=" + startDate + "&endDate=" + endDate + "&phoneNo=" + phoneNo + "&page=" + previous;
+            //var previousurl = apipath + "Api/GetDelivaryBoyReport?startDate=" + startDate + "&endDate=" + endDate + "&phoneNo=" + phoneNo + "&page=" + previous;
             //var previousPage = CurrentPage > 1 ? previousurl : "No";
             //var current = CurrentPage + 1;
-            //var nexturl = "https://admin.shopnowchat.in/Api/GetDelivaryBoyReport?startDate=" + startDate + "&endDate=" + endDate + "&phoneNo=" + phoneNo + "&page=" + current;
+            //var nexturl = apipath + "Api/GetDelivaryBoyReport?startDate=" + startDate + "&endDate=" + endDate + "&phoneNo=" + phoneNo + "&page=" + current;
             //var nextPage = CurrentPage < TotalPages ? nexturl : "No";
             //var paginationMetadata = new
             //{
