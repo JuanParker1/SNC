@@ -68,10 +68,16 @@ namespace ShopNow.Controllers
         public ActionResult Create(OfferCreateViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
+            int isShopOfferCount = 0;
             bool isOfferExist = db.Offers.Any(i => i.OfferCode.Trim() == model.OfferCode.Trim() && i.Status == 0);
-            int isShopOfferCount = db.Offers.Where(i => i.Status == 0 && (i.Type == 1 || i.Type == 3))
-                .Join(db.OfferShops.Where(i => model.ShopIds.Contains(i.ShopId)), o => o.Id, os => os.OfferId, (o, os) => new { o, os })
-                .Count();
+            if (model.OwnerType == 1 || model.OwnerType == 2)
+                isShopOfferCount = db.Offers.Where(i => i.Status == 0 && (i.Type == 1 || i.Type == 3))
+                    .Join(db.OfferShops.Where(i => model.ShopIds.Contains(i.ShopId)), o => o.Id, os => os.OfferId, (o, os) => new { o, os })
+                    .Count();
+            else
+                isShopOfferCount = db.Offers.Where(i => i.Status == 0 && (i.Type == 1 || i.Type == 3))
+                       //.Join(db.OfferShops.Where(i => model.ShopIds.Contains(i.ShopId)), o => o.Id, os => os.OfferId, (o, os) => new { o, os })
+                       .Count();
             if (!isOfferExist)
             {
                 if (isShopOfferCount == 0)
@@ -109,7 +115,7 @@ namespace ShopNow.Controllers
                 }
                 else
                 {
-                    ViewBag.ErrorMessage = "Offer already Exist for the Shop selected!";
+                    ViewBag.ErrorMessage = "Offer already Exist!";
                     return View();
                 }
             }
