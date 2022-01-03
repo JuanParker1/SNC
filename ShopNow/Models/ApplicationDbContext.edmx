@@ -456,7 +456,7 @@
           <Property Name="AgeVerify" Type="bit" Nullable="false" />
           <Property Name="AadharVerify" Type="bit" Nullable="false" />
           <Property Name="DOB" Type="datetime" />
-          <Property Name="FcmTocken" Type="nvarchar" MaxLength="250" />
+          <Property Name="FcmTocken" Type="nvarchar(max)" />
           <Property Name="IpAddress" Type="nvarchar" MaxLength="100" />
           <Property Name="WalletAmount" Type="float" Nullable="false" />
           <Property Name="PenaltyAmount" Type="float" Nullable="false" />
@@ -2093,48 +2093,6 @@
           <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
-        <EntityType Name="Customer">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CountryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="StateName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DistrictName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="StreetName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PinCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Latitude" Type="Double" Nullable="false" />
-          <Property Name="Longitude" Type="Double" Nullable="false" />
-          <Property Name="LandMark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="AddressType" Type="Int32" Nullable="false" />
-          <Property Name="FlatNo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Position" Type="Int32" Nullable="false" />
-          <Property Name="ImageAadharPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="AadharName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="AadharNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="AgeVerify" Type="Boolean" Nullable="false" />
-          <Property Name="AadharVerify" Type="Boolean" Nullable="false" />
-          <Property Name="DOB" Type="DateTime" Precision="3" />
-          <Property Name="FcmTocken" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="IpAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="WalletAmount" Type="Double" Nullable="false" />
-          <Property Name="PenaltyAmount" Type="Double" Nullable="false" />
-          <Property Name="DeliveryWaitingCharge" Type="Double" Nullable="false" />
-          <Property Name="IsReferred" Type="Boolean" />
-          <Property Name="ReferralNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AlternateNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
         <EntityType Name="CustomerSearchData">
           <Key>
             <PropertyRef Name="Id" />
@@ -3082,7 +3040,6 @@
           <EntitySet Name="CustomerPrescriptionItems" EntityType="Self.CustomerPrescriptionItem" />
           <EntitySet Name="CustomerReviews" EntityType="Self.CustomerReview" />
           <EntitySet Name="CustomerReviewReplies" EntityType="Self.CustomerReviewReply" />
-          <EntitySet Name="Customers" EntityType="Self.Customer" />
           <EntitySet Name="CustomerSearchDatas" EntityType="Self.CustomerSearchData" />
           <EntitySet Name="CustomerSearchHistories" EntityType="Self.CustomerSearchHistory" />
           <EntitySet Name="CustomerWalletHistories" EntityType="Self.CustomerWalletHistory" />
@@ -3229,10 +3186,10 @@
             <Parameter Name="Latitude" Mode="In" Type="Double" />
             <Parameter Name="str" Mode="In" Type="String" />
             <Parameter Name="customerid" Mode="In" Type="Int32" />
-     
           </FunctionImport>
           <EntitySet Name="Orders" EntityType="sncModel.Order" />
           <FunctionImport Name="GetDashBoardDetails" ReturnType="Collection(sncModel.GetDashBoardDetails_Result)" />
+          <EntitySet Name="Customers" EntityType="sncModel.Customer" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3392,6 +3349,48 @@
           <Property Type="Int32" Name="CustomerCount" Nullable="true" />
           <Property Type="Int32" Name="ShopCount" Nullable="true" />
         </ComplexType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CountryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="StateName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DistrictName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="StreetName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PinCode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Latitude" Type="Double" Nullable="false" />
+          <Property Name="Longitude" Type="Double" Nullable="false" />
+          <Property Name="LandMark" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AddressType" Type="Int32" Nullable="false" />
+          <Property Name="FlatNo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Position" Type="Int32" Nullable="false" />
+          <Property Name="ImageAadharPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AadharName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AadharNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AgeVerify" Type="Boolean" Nullable="false" />
+          <Property Name="AadharVerify" Type="Boolean" Nullable="false" />
+          <Property Name="DOB" Type="DateTime" Precision="3" />
+          <Property Name="FcmTocken" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IpAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="WalletAmount" Type="Double" Nullable="false" />
+          <Property Name="PenaltyAmount" Type="Double" Nullable="false" />
+          <Property Name="DeliveryWaitingCharge" Type="Double" Nullable="false" />
+          <Property Name="IsReferred" Type="Boolean" />
+          <Property Name="ReferralNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AlternateNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3843,49 +3842,6 @@
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Customers">
-            <EntityTypeMapping TypeName="sncModel.Customer">
-              <MappingFragment StoreEntitySet="Customers">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
-                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
-                <ScalarProperty Name="StateName" ColumnName="StateName" />
-                <ScalarProperty Name="DistrictName" ColumnName="DistrictName" />
-                <ScalarProperty Name="StreetName" ColumnName="StreetName" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="PinCode" ColumnName="PinCode" />
-                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-                <ScalarProperty Name="LandMark" ColumnName="LandMark" />
-                <ScalarProperty Name="AddressType" ColumnName="AddressType" />
-                <ScalarProperty Name="FlatNo" ColumnName="FlatNo" />
-                <ScalarProperty Name="Position" ColumnName="Position" />
-                <ScalarProperty Name="ImageAadharPath" ColumnName="ImageAadharPath" />
-                <ScalarProperty Name="AadharName" ColumnName="AadharName" />
-                <ScalarProperty Name="AadharNumber" ColumnName="AadharNumber" />
-                <ScalarProperty Name="AgeVerify" ColumnName="AgeVerify" />
-                <ScalarProperty Name="AadharVerify" ColumnName="AadharVerify" />
-                <ScalarProperty Name="DOB" ColumnName="DOB" />
-                <ScalarProperty Name="FcmTocken" ColumnName="FcmTocken" />
-                <ScalarProperty Name="IpAddress" ColumnName="IpAddress" />
-                <ScalarProperty Name="WalletAmount" ColumnName="WalletAmount" />
-                <ScalarProperty Name="PenaltyAmount" ColumnName="PenaltyAmount" />
-                <ScalarProperty Name="DeliveryWaitingCharge" ColumnName="DeliveryWaitingCharge" />
-                <ScalarProperty Name="IsReferred" ColumnName="IsReferred" />
-                <ScalarProperty Name="ReferralNumber" ColumnName="ReferralNumber" />
-                <ScalarProperty Name="AlternateNumber" ColumnName="AlternateNumber" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -5071,6 +5027,49 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="sncModel.Customer">
+              <MappingFragment StoreEntitySet="Customers">
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="AlternateNumber" ColumnName="AlternateNumber" />
+                <ScalarProperty Name="ReferralNumber" ColumnName="ReferralNumber" />
+                <ScalarProperty Name="IsReferred" ColumnName="IsReferred" />
+                <ScalarProperty Name="DeliveryWaitingCharge" ColumnName="DeliveryWaitingCharge" />
+                <ScalarProperty Name="PenaltyAmount" ColumnName="PenaltyAmount" />
+                <ScalarProperty Name="WalletAmount" ColumnName="WalletAmount" />
+                <ScalarProperty Name="IpAddress" ColumnName="IpAddress" />
+                <ScalarProperty Name="FcmTocken" ColumnName="FcmTocken" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="AadharVerify" ColumnName="AadharVerify" />
+                <ScalarProperty Name="AgeVerify" ColumnName="AgeVerify" />
+                <ScalarProperty Name="AadharNumber" ColumnName="AadharNumber" />
+                <ScalarProperty Name="AadharName" ColumnName="AadharName" />
+                <ScalarProperty Name="ImageAadharPath" ColumnName="ImageAadharPath" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="FlatNo" ColumnName="FlatNo" />
+                <ScalarProperty Name="AddressType" ColumnName="AddressType" />
+                <ScalarProperty Name="LandMark" ColumnName="LandMark" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="PinCode" ColumnName="PinCode" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="StreetName" ColumnName="StreetName" />
+                <ScalarProperty Name="DistrictName" ColumnName="DistrictName" />
+                <ScalarProperty Name="StateName" ColumnName="StateName" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

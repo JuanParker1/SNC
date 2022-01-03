@@ -3176,7 +3176,7 @@ namespace ShopNow.Controllers
                              CustomerName = i.CustomerName,
                              CustomerRemark = i.CustomerRemark,
                              Rating = i.Rating
-                         }).ToList();
+                         }).OrderByDescending(i => i.Id).ToList();
             int count = model.ReviewlLists.Count();
             int CurrentPage = page;
             int PageSize = pageSize;
