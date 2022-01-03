@@ -99,6 +99,7 @@ namespace ShopNow.Controllers
             {
                 var master = db.MasterProducts.FirstOrDefault(i => i.Id == pd.MasterProductId);
                 model.ImagePath = master.ImagePath1;
+                model.MasterProductName = master.Name;
             }
             return View(model);
         }
