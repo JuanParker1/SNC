@@ -475,11 +475,25 @@ namespace ShopNow.Controllers
                 pay.PaymentResult = "success";
                 pay.Currency = "INR";
                 pay.Credits = model.Amount.ToString();
-                pay.PaymentCategoryType = 1;
+                pay.PaymentCategoryType = 1;            // 0 - User, 1 - Shop
                 pay.CreatedBy = user.Name;
                 pay.UpdatedBy = user.Name;
                 pay.DateEncoded = DateTime.Now;
                 pay.DateUpdated = DateTime.Now;
+                if(model.CreditType == 0)               // PlatformCredit
+                {
+                    if (model.ReferenceCode != null)
+                        pay.PlatformCreditType = 1;     // Purchase
+                    else
+                        pay.PlatformCreditType = 2;     // Free
+                }
+                else if(model.CreditType == 1)          // DeliveryCredit
+                {
+                    if (model.ReferenceCode != null)
+                        pay.DeliveryCreditType = 1;     // Purchase
+                    else
+                        pay.DeliveryCreditType = 2;     // Free
+                }
                 db.Payments.Add(pay);
                 db.SaveChanges();
 
@@ -548,6 +562,7 @@ namespace ShopNow.Controllers
                 model.ReferenceCode = pay.ReferenceCode;
                 model.ShopName = pay.ShopName;
                 model.DateEncoded = pay.DateEncoded;
+                model.CreditType = pay.CreditType;
             }
             return View(model);
         }

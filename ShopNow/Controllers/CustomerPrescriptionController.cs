@@ -101,26 +101,21 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new PrescriptionOrderListViewModel();
-            model.PrescriptionOrderLists = db.CustomerPrescriptions.OrderBy(i=>i.Id)
-                .Join(db.Orders.Where(i => (i.IsPrescriptionOrder == true) && i.Status == 6), cp => cp.ShopId, o=>o.ShopId, (cp,o) => new { cp,o})
-               .Join(db.Payments, c => c.o.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
-               .AsEnumerable()
-               .Select(i => new PrescriptionOrderListViewModel.PrescriptionOrderList
+            model.PrescriptionOrderLists = db.Orders.OrderByDescending(i => i.DateEncoded).Where(i => (i.IsPrescriptionOrder == true) && i.Status == 6)
+                .AsEnumerable()
+               .Select((i,index) => new PrescriptionOrderListViewModel.PrescriptionOrderList
                {
-                   Id = i.c.o.Id,
-                   ShopName = i.c.o.ShopName,
-                   OrderNumber = i.c.o.OrderNumber,
-                   CustomerPhoneNumber = i.c.o.CustomerPhoneNumber,
-                   Status = i.c.o.Status,
-                   DateEncoded = i.c.o.DateEncoded,
-                   DateUpdated = i.c.o.DateUpdated,
-                   Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
-                   RefundAmount = i.p.RefundAmount ?? 0,
-                   RefundRemark = i.p.RefundRemark ?? "",
-                   PaymentMode = i.p.PaymentMode,
-                   OrderPeriod = Math.Round((i.c.o.DateUpdated - i.c.o.DateEncoded).TotalMinutes),
-                   ShopAcceptedTime = i.c.o.ShopAcceptedTime != null ? Math.Round((i.c.o.ShopAcceptedTime.Value - i.c.o.DateEncoded).TotalMinutes) : 0,
-               }).OrderByDescending(i => i.DateEncoded).ToList();          
+                   No = index + 1,
+                   Id = i.Id,
+                   ShopName = i.ShopName,
+                   OrderNumber = i.OrderNumber,
+                   CustomerPhoneNumber = i.CustomerPhoneNumber,
+                   Status = i.Status,
+                   DateEncoded = i.DateEncoded,
+                   DateUpdated = i.DateUpdated,
+                   Amount = i.NetTotal,
+                   PaymentMode = i.PaymentMode
+               }).ToList();          
             return View(model.PrescriptionOrderLists);
         }
 
@@ -327,7 +322,7 @@ namespace ShopNow.Controllers
             {
                 var dist = Distance - 5;
                 var amount = dist * model.DeliveryChargeOneKM;
-                GrossDeliveryCharge = model.DeliveryChargeOneKM + amount;
+                GrossDeliveryCharge = model.DeliveryChargeKM + amount;
             }
             ShopDeliveryDiscount = itemTotal * (model.DeliveryDiscountPercentage / 100);
             if(ShopDeliveryDiscount >= GrossDeliveryCharge)

@@ -273,8 +273,8 @@
                         var conv = $("#ConvenientCharge").val();
                         var net = $("#NetDeliveryCharge").val();
                         var toPay = parseFloat(itemTotal) + parseFloat(pack) + parseFloat(conv) + parseFloat(net);
-                        $(".ToPay").text(toPay);
-                        $("#ToPay").val(toPay);
+                        $(".ToPay").text(toPay.toFixed(2));
+                        $("#ToPay").val(toPay.toFixed(2));
                     });
                 } else
                     swal('Warning', 'All fields are required!', 'warning');
