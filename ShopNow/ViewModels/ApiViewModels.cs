@@ -738,4 +738,10 @@ namespace ShopNow.ViewModels
         public int OrderNo { get; set; }
         public int calltype { get; set; }
     }
+
+    public class SaveFCMTokenViewModel
+    {
+        public int CustomerId { get; set; }
+        public string Token { get; set; }
+    }
 }

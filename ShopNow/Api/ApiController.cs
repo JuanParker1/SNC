@@ -743,20 +743,20 @@ namespace ShopNow.Controllers
         }
 
         [HttpPost]
-        public JsonResult SaveCustomerToken(int CustomerId, string token)
+        public JsonResult SaveCustomerToken(SaveFCMTokenViewModel model)
         {
-            var customer = db.Customers.Where(c => c.Id == CustomerId).FirstOrDefault();
+            var customer = db.Customers.FirstOrDefault(c => c.Id == model.CustomerId);
             try
             {
-                customer.FcmTocken = token;
+                customer.FcmTocken = model.Token;
                 customer.DateUpdated = DateTime.Now;
                 db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                return Json(token = customer.FcmTocken, JsonRequestBehavior.AllowGet);
+                return Json(new { token = customer.FcmTocken }, JsonRequestBehavior.AllowGet);
             }
             catch
             {
-                return Json(token = "", JsonRequestBehavior.AllowGet);
+                return Json(new { token = "" }, JsonRequestBehavior.AllowGet);
             }
         }
 
