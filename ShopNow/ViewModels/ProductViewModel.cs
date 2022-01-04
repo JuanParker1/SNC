@@ -497,6 +497,7 @@ namespace ShopNow.ViewModels
         public double PackingCharge { get; set; }
         public bool IsPreorder { get; set; }
         public int PreorderHour { get; set; }
+        public double ShopPrice { get; set; }
     }
 
     public class FoodEditViewModel
@@ -523,6 +524,7 @@ namespace ShopNow.ViewModels
         public double PackingCharge { get; set; }
         public bool IsPreorder { get; set; }
         public int PreorderHour { get; set; }
+        public double ShopPrice { get; set; }
     }
 
     public class ShopAddOnSessionAddViewModel
