@@ -79,7 +79,6 @@ namespace ShopNow.Models
         public virtual DbSet<PlatFormCreditRate> PlatFormCreditRates { get; set; }
         public virtual DbSet<Portion> Portions { get; set; }
         public virtual DbSet<ProductDishAddOn> ProductDishAddOns { get; set; }
-        public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductSchedule> ProductSchedules { get; set; }
         public virtual DbSet<ProductSpecificationItem> ProductSpecificationItems { get; set; }
         public virtual DbSet<ProductSpecification> ProductSpecifications { get; set; }
@@ -99,9 +98,10 @@ namespace ShopNow.Models
         public virtual DbSet<SubCategory> SubCategories { get; set; }
         public virtual DbSet<tbl> tbls { get; set; }
         public virtual DbSet<UserEnquiry> UserEnquiries { get; set; }
-        public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<OrderItem> OrderItems { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
     
         [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)

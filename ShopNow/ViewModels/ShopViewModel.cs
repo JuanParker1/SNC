@@ -661,6 +661,7 @@ namespace ShopNow.ViewModels
             public string CategoryName { get; set; }
             public string ColorCode { get; set; }
             public double Price { get; set; }
+            public double ShopPrice { get; set; }
             public string ImagePath { get; set; }
             public int Status { get; set; }
             public bool Customisation { get; set; }
