@@ -5457,7 +5457,18 @@ namespace ShopNow.Controllers
                                ShopName = i.p.p.ShopName,
                                //   Distance = Math.Round((((Math.Acos(Math.Sin((i.p.s.Latitude * Math.PI / 180)) * Math.Sin((latitude * Math.PI / 180)) + Math.Cos((i.p.s.Latitude * Math.PI / 180)) * Math.Cos((latitude * Math.PI / 180))
                                //* Math.Cos(((i.p.s.Longitude - longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000, 2)
-                               Distance = Math.Round((double)(GetMeters(latitude, longitude, i.p.s.Latitude, i.p.s.Longitude) / 1000), 2)
+                               Distance = Math.Round((double)(GetMeters(latitude, longitude, i.p.s.Latitude, i.p.s.Longitude) / 1000), 2),
+                               ProductId = i.p.p.Id,
+                               ShopPrice = i.p.p.ShopPrice,
+                               ShopAddress = i.p.s.Address,
+                               ShopCategoryId = i.p.s.ShopCategoryId,
+                               ShopId = i.p.s.Id,
+                               ShopImagePath = ((!string.IsNullOrEmpty(i.p.s.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.s.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                               ShopIsOnline = i.p.s.IsOnline,
+                               ShopLatitude = i.p.s.Latitude,
+                               ShopLongitude = i.p.s.Longitude,
+                               ShopPhoneNumber = i.p.s.PhoneNumber,
+                               ShopStatus = i.p.s.Status
                            }).ToList();
                 //}
             }
@@ -5526,8 +5537,19 @@ namespace ShopNow.Controllers
                            ShopName = i.p.p.p.ShopName,
                                //   Distance = Math.Round((((Math.Acos(Math.Sin((i.p.p.s.Latitude * Math.PI / 180)) * Math.Sin((latitude * Math.PI / 180)) + Math.Cos((i.p.p.s.Latitude * Math.PI / 180)) * Math.Cos((latitude * Math.PI / 180))
                                //* Math.Cos(((i.p.p.s.Longitude - longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000, 2)
-                               Distance = Math.Round((double)(GetMeters(latitude, longitude,i.p.p.s.Latitude, i.p.p.s.Longitude)/1000),2)
-                           }).ToList();
+                               Distance = Math.Round((double)(GetMeters(latitude, longitude,i.p.p.s.Latitude, i.p.p.s.Longitude)/1000),2),
+                           ProductId = i.p.p.p.Id,
+                           ShopPrice = i.p.p.p.ShopPrice,
+                           ShopAddress = i.p.p.s.Address,
+                           ShopCategoryId = i.p.p.s.ShopCategoryId,
+                           ShopId = i.p.p.s.Id,
+                           ShopImagePath = ((!string.IsNullOrEmpty(i.p.p.s.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.s.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                           ShopIsOnline = i.p.p.s.IsOnline,
+                           ShopLatitude = i.p.p.s.Latitude,
+                           ShopLongitude = i.p.p.s.Longitude,
+                           ShopPhoneNumber = i.p.p.s.PhoneNumber,
+                           ShopStatus = i.p.p.s.Status
+                       }).ToList();
             }
             return Json(model, JsonRequestBehavior.AllowGet);
         }

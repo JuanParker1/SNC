@@ -39,8 +39,8 @@
                                 <th class="w-12">Image(s)</th>
                                 <th class="w-25">Audio</th>
                                 <th class="w-12">Remarks</th>
-                                <th class="w-12">Date</th>
-                                <th class="w-12">Action</th>
+                                <th class="w-16">Date</th>
+                                <th class="w-8">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -64,13 +64,14 @@
                                     <td>
                                         @if (item.Status == 0)
                                         {
-                                            <a href="/CustomerPrescription/AddToCart?id=@item.Id" class="btn btn-success">Add to Cart</a>
+                                            <a href="/CustomerPrescription/AddToCart?id=@item.Id" class="btn btn-success btn-block">Add to Cart</a>
+                                            <a href="javascript:void(0)" data-id=@item.Id class="btn btn-danger btnReject mt-2 btn-block">Reject</a>
                                         }
                                         else
                                         {
                                             <span class="text-success">Order Placed.</span>
                                         }
-                                </td>
+                                    </td>
                             </tr>
                         }
                         </tbody>
@@ -280,6 +281,32 @@
                     });
                 });
             });
+
+            $(".btnReject").click(function () {
+                var Id = $(this).attr('data-id');
+                swal({
+                    title: "Are you sure want to Reject?",
+                   // text: "You will not be able to recover this file!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, Reject it!",
+                    cancelButtonText: "No, cancel",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            $.getJSON("/CustomerPrescription/Reject", { Id: Id }, function (data) {
+                                if (data == true) {
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    }
+                );
+            });
+
         });
     </script>
 }
