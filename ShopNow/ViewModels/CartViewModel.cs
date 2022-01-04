@@ -656,6 +656,7 @@ namespace ShopNow.ViewModels
             public double UnitPrice { get; set; }
             public double Price { get; set; }
             public double MRPPrice { get; set; }
+            public double ShopPrice { get; set; }
             public int ItemId { get; set; }
             public bool HasAddon { get; set; }
             public int AddOnType { get; set; }
