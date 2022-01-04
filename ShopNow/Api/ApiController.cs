@@ -5805,7 +5805,8 @@ namespace ShopNow.Controllers
                                               ID = Convert.ToInt32(row["Id"].ToString()),
                                               Name = row["ProductName"].ToString(),
                                               ImagePath = row["ImagePath"].ToString(),
-                                              ShopCategoryId = Convert.ToInt32(row["ShopCategoryId"].ToString())
+                                              ShopCategoryId = Convert.ToInt32(row["ShopCategoryId"].ToString()),
+                                              ShopId = Convert.ToInt32(row["ShopId"].ToString())
                                           }).ToList();
                     }
                     connection.Close();
@@ -5837,6 +5838,7 @@ namespace ShopNow.Controllers
             public string Name { get; set; }
             public string ImagePath { get; set; }
             public int ShopCategoryId { get; set; }
+            public int ShopId { get; set; }
             // public int count { get; set; }
         }
         //Calls
