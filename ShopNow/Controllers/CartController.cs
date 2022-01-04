@@ -1367,7 +1367,7 @@ namespace ShopNow.Controllers
                 return RedirectToAction("Delivered");
         }
 
-        public ActionResult UpdateRefundAmount(long id, double amount, string remark)
+        public ActionResult UpdateRefundAmount(long id, double amount=0, string remark="")
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
 
