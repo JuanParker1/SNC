@@ -596,6 +596,7 @@ namespace ShopNow.ViewModels
     public class ProductDetailsViewModel
     {         
         public string Name { get; set; }
+        public string MasterProductName { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
         public string Specification { get; set; }
