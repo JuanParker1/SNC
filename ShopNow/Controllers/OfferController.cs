@@ -75,7 +75,7 @@ namespace ShopNow.Controllers
                     .Join(db.OfferShops.Where(i => model.ShopIds.Contains(i.ShopId)), o => o.Id, os => os.OfferId, (o, os) => new { o, os })
                     .Count();
             else
-                isShopOfferCount = db.Offers.Where(i => i.Status == 0 && (i.Type == 1 || i.Type == 3))
+                isShopOfferCount = db.Offers.Where(i => i.Status == 0 )//&& (i.Type == 1 || i.Type == 3) && i.OwnerType == 3)
                        //.Join(db.OfferShops.Where(i => model.ShopIds.Contains(i.ShopId)), o => o.Id, os => os.OfferId, (o, os) => new { o, os })
                        .Count();
             if (!isOfferExist)
