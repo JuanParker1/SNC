@@ -5812,7 +5812,11 @@ namespace ShopNow.Controllers
                     connection.Close();
                 }
             }
-                return Json(new { result = categProd }, JsonRequestBehavior.AllowGet);
+               // return Json(new { result = categProd }, JsonRequestBehavior.AllowGet);
+
+            var jResult = Json(new { result = categProd }, JsonRequestBehavior.AllowGet);
+            jResult.MaxJsonLength = int.MaxValue;
+            return jResult;
         }
         public class AutoCompleteSearchResult
         {
