@@ -1,0 +1,33 @@
+﻿@model IEnumerable<ShopNow.ViewModels.OrderOfferReportViewModel.ListItem>
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Order Offer Report";
+}
+<title>ShopNow | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-5">
+            <h5 class="mt-1 text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+        </div>
+        @*<div class="col-md-7 text-right">
+            <a href="~/Offer/List" target="_self"><span class="fa fa-plus"></span> Offer List</a>
+        </div>*@
+    </div>
+    <div class="card shadow mb-2">
+        <div class="card-body">
+            @Html.Grid(Model).Columns(columns =>
+        {
+            columns.Add(c => c.OrderNumber).Titled("Order Number").Filterable(true).SetWidth(10);
+            columns.Add(c => c.OfferName).Titled("Offer Name").Filterable(true).SetWidth(10);
+            columns.Add(c => c.OfferCode).Titled("Offer Code").Filterable(true).SetWidth(10);
+            columns.Add(c => c.PurchasedAmount).Titled("Amount").Filterable(true).SetWidth(10);
+            columns.Add(c => c.OfferPercentage).Titled("Offer Percentage").Filterable(true).SetWidth(10);
+            columns.Add(c => c.OrderDate).Titled("Date").Filterable(true).SetWidth(10);
+            columns.Add(c => c.SNCLossAmount).Titled("SNCLoss Amount").Filterable(true).SetWidth(20);
+            columns.Add(c => c.ShopLossAmount).Titled("ShopLoss Amount").Filterable(true).SetWidth(20);
+            }).WithPaging(20).Sortable(true)
+        </div>
+    </div>
+</div>
