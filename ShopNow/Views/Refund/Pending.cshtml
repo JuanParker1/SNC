@@ -6,7 +6,6 @@
 <title>ShopNow | @ViewBag.Title</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-
 <div class="container-fluid">
     <div class="row mb-3">
         <div class="col-md-3">
@@ -17,7 +16,7 @@
                 <div class="row">
                     <div class="col-md-4"><input id="date-order" type="date" class="form-control" name="OrderDate" @if (Model.OrderDate != null) { <text> value="@Model.OrderDate.Value.ToString("yyyy-MM-dd")" </text> } /></div>
                     <div class="col-md-4">
-                        <select class="form-control" id="select-shop" name="ShopCode">
+                        <select class="form-control" id="select-shop" name="ShopId">
                             @if (!string.IsNullOrEmpty(Model.ShopName))
                             {
                                 <option value="@Model.ShopId">@Model.ShopName</option>
@@ -25,7 +24,9 @@
                         </select>
                         <input type="hidden" name="ShopName" value="@Model.ShopName" />
                     </div>
-                    <input type="submit" class="btn btn-info" value="Apply Filter" />
+                    <div class="col-md-2">
+                        <input type="button" class="form-control btn btn-sm btn-success" name="Filter" id="Filter" value="Filter" />
+                    </div>
                 </div>
             </form>
         </div>
@@ -69,7 +70,12 @@
                 }
             }).on('select2:select', function (e) {
                 $('input[name="ShopName"]').val(e.params.data.text);
-                });
+            });
+
+            $("#Filter").click(function () {
+                var shopId = $("#ShopId").val();
+                window.location.href = "/Refund/Pending" + shopId;
+            });
 
             var errormsg = "@Model.ErrorMessage";
             if (errormsg != "") {

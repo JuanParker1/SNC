@@ -168,7 +168,7 @@
                                     </td>
                                     <td>@item.Price</td>
                                     <td>
-                                        <img src="@item.ImagePath" alt="Image" class="img-thumbnail productImages" data-toggle="modal" data-target="#myModal" width="45" height="60" onerror="this.src='/Images/No Photo.png'" />
+                                        <img src="@item.ImagePath" alt="Image" data-productname="@item.ProductName" class="img-thumbnail productImages" data-toggle="modal" data-target="#myModal" width="45" height="60" onerror="this.src='/Images/No Photo.png'" />
                                     </td>
                                 </tr>
                             }
@@ -183,11 +183,12 @@
 <div id="myModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title showProductName"></h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
             <div class="modal-body">
-                <button class="close text-danger mb-2" data-dismiss="modal">&times;</button>
-               @* <a href="~/Home/ImageDenied">*@
-                    <img class="modal-content img-fluid w-100" style="height:400px;" id="myImage" />
-               @* </a>*@
+                <img class="modal-content img-fluid w-100" style="height:400px;" id="myImage" />
             </div>
         </div>
     </div>
@@ -315,8 +316,10 @@
             var img = document.getElementsByClassName('productImages');
             var modalImg = document.getElementById("myImage");
             $(img).click(function () {
+                var pname = $(this).data('productname');
                 modal.style.display = "block";
                 modalImg.src = this.src.replace("/Small/", "/Medium/");
+                $(".showProductName").text(pname);
                 if (this.src == "") {
                     $('#myModal').hide();
                 }
