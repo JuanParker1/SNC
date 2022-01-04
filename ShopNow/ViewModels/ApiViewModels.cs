@@ -587,7 +587,19 @@ namespace ShopNow.ViewModels
             public string ShopName { get; set; }
             public double MenuPrice { get; set; }
             public double Price { get; set; }
+            public double ShopPrice { get; set; }
             public double DiscountPercentage { get; set; }
+
+            public long ProductId { get; set; }
+            public int ShopId { get; set; }
+            public int ShopCategoryId { get; set; }
+            public string ShopImagePath { get; set; }
+            public string ShopPhoneNumber { get; set; }
+            public bool? ShopIsOnline { get; set; }
+            public string ShopAddress { get; set; }
+            public double ShopLatitude { get; set; }
+            public double ShopLongitude { get; set; }
+            public double ShopStatus { get; set; }
         }
     }
 
@@ -640,7 +652,19 @@ namespace ShopNow.ViewModels
             public string ShopName { get; set; }
             public double MenuPrice { get; set; }
             public double Price { get; set; }
+            public double ShopPrice { get; set; }
             public double DiscountPercentage { get; set; }
+
+            public long ProductId { get; set; }
+            public int ShopId { get; set; }
+            public int ShopCategoryId { get; set; }
+            public string ShopImagePath { get; set; }
+            public string ShopPhoneNumber { get; set; }
+            public bool? ShopIsOnline { get; set; }
+            public string ShopAddress { get; set; }
+            public double ShopLatitude { get; set; }
+            public double ShopLongitude { get; set; }
+            public double ShopStatus { get; set; }
         }
     }
 
