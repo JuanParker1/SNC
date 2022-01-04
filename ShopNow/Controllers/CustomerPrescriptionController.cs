@@ -36,7 +36,7 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             var list = db.CustomerPrescriptions.OrderByDescending(i => i.Id).ToList();
             var model = new CustomerPrescriptionWebListViewModel();
-            model.ListItems = db.CustomerPrescriptions.OrderByDescending(i => i.Id)
+            model.ListItems = db.CustomerPrescriptions.Where(i => i.Status == 0).OrderByDescending(i => i.Id)
                 .GroupJoin(db.CustomerPrescriptionImages, cp => cp.Id, cpi => cpi.CustomerPrescriptionId, (cp, cpi) => new { cp, cpi })
                 .Select(i => new CustomerPrescriptionWebListViewModel.ListItem
                 {
@@ -337,49 +337,61 @@ namespace ShopNow.Controllers
             return Json(new { PackingCharge, ConvenientCharge, GrossDeliveryCharge, ShopDeliveryDiscount, NetDeliveryCharge, Distance }, JsonRequestBehavior.AllowGet);
         }
 
-            //public JsonResult AddPrescriptionItem(PrescriptionItemAddViewModel model)
-            //{
-            //    var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-            //    foreach (var item in model.ListItems)
-            //    {
-            //        var prescriptionItem = new CustomerPrescriptionItem
-            //        {
-            //            CreatedBy = user.Name,
-            //            CustomerPrescriptionId = model.PrescriptionId,
-            //            DateEncoded = DateTime.Now,
-            //            ProductId = item.ProductId,
-            //            Quantity = item.Quantity,
-            //            Status = 0
-            //        };
-            //        db.CustomerPrescriptionItems.Add(prescriptionItem);
-            //        db.SaveChanges();
-            //    }
+        //public JsonResult AddPrescriptionItem(PrescriptionItemAddViewModel model)
+        //{
+        //    var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+        //    foreach (var item in model.ListItems)
+        //    {
+        //        var prescriptionItem = new CustomerPrescriptionItem
+        //        {
+        //            CreatedBy = user.Name,
+        //            CustomerPrescriptionId = model.PrescriptionId,
+        //            DateEncoded = DateTime.Now,
+        //            ProductId = item.ProductId,
+        //            Quantity = item.Quantity,
+        //            Status = 0
+        //        };
+        //        db.CustomerPrescriptionItems.Add(prescriptionItem);
+        //        db.SaveChanges();
+        //    }
 
-            //    var prescription = db.CustomerPrescriptions.FirstOrDefault(i => i.Id == model.PrescriptionId);
-            //    if (prescription != null)
-            //    {
-            //        prescription.Status = 1;
-            //        db.Entry(prescription).State = System.Data.Entity.EntityState.Modified;
-            //        db.SaveChanges();
-            //    }
-            //    return Json(true, JsonRequestBehavior.AllowGet);
-            //}
+        //    var prescription = db.CustomerPrescriptions.FirstOrDefault(i => i.Id == model.PrescriptionId);
+        //    if (prescription != null)
+        //    {
+        //        prescription.Status = 1;
+        //        db.Entry(prescription).State = System.Data.Entity.EntityState.Modified;
+        //        db.SaveChanges();
+        //    }
+        //    return Json(true, JsonRequestBehavior.AllowGet);
+        //}
 
-            //[HttpGet]
-            //public JsonResult GetItemList(int id)
-            //{
-            //    var list = db.CustomerPrescriptionItems.Where(i => i.CustomerPrescriptionId == id)
-            //        .Join(db.Products, cp => cp.ProductId, p => p.Id, (cp, p) => new { cp, p })
-            //        .Join(db.MasterProducts, cp => cp.p.MasterProductId, m => m.Id, (cp, m) => new { cp, m })
-            //        .Select(i => new
-            //        {
-            //            ProductName = i.m.Name,
-            //            Quantity = i.cp.cp.Quantity
-            //        }).ToList();
-            //    return Json(list, JsonRequestBehavior.AllowGet);
-            //}
+        //[HttpGet]
+        //public JsonResult GetItemList(int id)
+        //{
+        //    var list = db.CustomerPrescriptionItems.Where(i => i.CustomerPrescriptionId == id)
+        //        .Join(db.Products, cp => cp.ProductId, p => p.Id, (cp, p) => new { cp, p })
+        //        .Join(db.MasterProducts, cp => cp.p.MasterProductId, m => m.Id, (cp, m) => new { cp, m })
+        //        .Select(i => new
+        //        {
+        //            ProductName = i.m.Name,
+        //            Quantity = i.cp.cp.Quantity
+        //        }).ToList();
+        //    return Json(list, JsonRequestBehavior.AllowGet);
+        //}
 
 
-
+        [AccessPolicy(PageCode = "")]
+        public JsonResult Reject(int Id)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var cp = db.CustomerPrescriptions.Where(b => b.Id == Id).FirstOrDefault();
+            if (cp != null)
+            {
+                cp.Status = 2;
+                db.Entry(cp).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
+    }
     }
