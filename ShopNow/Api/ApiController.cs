@@ -5799,14 +5799,23 @@ namespace ShopNow.Controllers
                                              ShopCategoryId = Convert.ToInt32(row["ShopCategoryId"].ToString())
                                          }).ToList();
                         categProd.Products = (from DataRow row in dsdocCount.Tables[2].Rows
-
-                                          select new Product_Result()
+                                             
+                                              select new Product_Result()
                                           {
                                               ID = Convert.ToInt32(row["Id"].ToString()),
                                               Name = row["ProductName"].ToString(),
                                               ImagePath = row["ImagePath"].ToString(),
                                               ShopCategoryId = Convert.ToInt32(row["ShopCategoryId"].ToString()),
-                                              ShopId = Convert.ToInt32(row["ShopId"].ToString())
+                                              ShopId = Convert.ToInt32(row["ShopId"].ToString()),
+                                              OnlineStatus= Convert.ToBoolean(row["OnlineStatus"].ToString()),
+                                              Rating = RatingCalculation(Convert.ToInt32(row["ShopId"].ToString())),
+                                              ReviewCount = db.CustomerReviews.ToList().Where(c => c.ShopId == Convert.ToInt32(row["ShopId"].ToString())).Count(),
+                                              ShopAddress = row["ShopAddress"].ToString(),
+                                              ShopImagePath = row["ShopImagePath"].ToString(),
+                                              ShopLatitude = Convert.ToDouble(row["ShopLatitude"].ToString()),
+                                              ShopLongitude = Convert.ToDouble(row["ShopLongitude"].ToString()),
+                                              ShopName= row["ShopName"].ToString(),
+                                              Status = Convert.ToInt32(row["Status"].ToString())
                                           }).ToList();
                     }
                     connection.Close();
@@ -5843,6 +5852,15 @@ namespace ShopNow.Controllers
             public string ImagePath { get; set; }
             public int ShopCategoryId { get; set; }
             public int ShopId { get; set; }
+            public string ShopName { get; set; }
+            public string ShopImagePath { get; set; }
+            public string ShopAddress { get; set; }
+            public double ShopLatitude { get; set; }
+            public double ShopLongitude { get; set; }
+            public bool OnlineStatus { get; set; }
+            public int Status { get; set; }
+            public double Rating { get; set; }
+            public double ReviewCount { get; set; }
             // public int count { get; set; }
         }
         //Calls
