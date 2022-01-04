@@ -604,7 +604,7 @@ namespace ShopNow.Controllers
                     SNCLossAmount = i.of.OwnerType == 1? i.o.OfferAmount:0,
                     ShopLossAmount = i.of.OwnerType == 2? i.o.OfferAmount:0
                 }).ToList();
-            return View(model);
+            return View(model.ListItems);
         }
 
         public async Task<JsonResult> GetShopSelect2(string q = "")

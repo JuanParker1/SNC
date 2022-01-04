@@ -3293,6 +3293,7 @@
     <Content Include="Views\CustomerGiftCard\List.cshtml" />
     <Content Include="Views\CustomerPrescription\PrescriptionOrderList.cshtml" />
     <Content Include="Views\Cart\BatchList.cshtml" />
+    <Content Include="Views\Payment\OrderOfferReport.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
