@@ -70,7 +70,6 @@ namespace ShopNow.Models
         public virtual DbSet<Offer> Offers { get; set; }
         public virtual DbSet<OfferShop> OfferShops { get; set; }
         public virtual DbSet<OrderItemAddon> OrderItemAddons { get; set; }
-        public virtual DbSet<OrderItem> OrderItems { get; set; }
         public virtual DbSet<OtpVerification> OtpVerifications { get; set; }
         public virtual DbSet<Package> Packages { get; set; }
         public virtual DbSet<Page> Pages { get; set; }
@@ -102,6 +101,7 @@ namespace ShopNow.Models
         public virtual DbSet<UserEnquiry> UserEnquiries { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
+        public virtual DbSet<OrderItem> OrderItems { get; set; }
     
         [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)

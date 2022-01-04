@@ -27,6 +27,7 @@ namespace ShopNow.Models
         public int Quantity { get; set; }
         public double UnitPrice { get; set; }
         public double Price { get; set; }
+        public double MRPPrice { get; set; }
         public Nullable<int> OfferId { get; set; }
         public double OfferAmount { get; set; }
         public double MiddlePrice { get; set; }

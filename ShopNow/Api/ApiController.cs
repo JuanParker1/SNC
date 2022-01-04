@@ -1163,10 +1163,10 @@ namespace ShopNow.Controllers
                     {
                         if (item.ItemId != 0)
                         {
-                            var productMedicalStock = db.Products.FirstOrDefault(i => i.ItemId == item.ItemId && i.Status == 0);
-                            productMedicalStock.HoldOnStok = Convert.ToInt32(item.Quantity);
-                            productMedicalStock.Qty = productMedicalStock.Qty - Convert.ToInt32(item.Quantity);
-                            db.Entry(productMedicalStock).State = System.Data.Entity.EntityState.Modified;
+                            var product = db.Products.FirstOrDefault(i => i.ItemId == item.ItemId && i.Status == 0);
+                            product.HoldOnStok = Convert.ToInt32(item.Quantity);
+                            product.Qty = product.Qty - Convert.ToInt32(item.Quantity);
+                            db.Entry(product).State = System.Data.Entity.EntityState.Modified;
                             db.SaveChanges();
                         }
                         var orderItem = _mapper.Map<OrderCreateViewModel.ListItem, OrderItem>(item);
@@ -5795,7 +5795,8 @@ namespace ShopNow.Controllers
                                          {
                                              ID = Convert.ToInt32(row["Id"].ToString()),
                                              Name = row["Name"].ToString(),
-                                             ImagePath = row["ImagePath"].ToString()
+                                             ImagePath = row["ImagePath"].ToString(),
+                                             ShopCategoryId = Convert.ToInt32(row["ShopCategoryId"].ToString())
                                          }).ToList();
                         categProd.Products = (from DataRow row in dsdocCount.Tables[2].Rows
 
@@ -5804,7 +5805,7 @@ namespace ShopNow.Controllers
                                               ID = Convert.ToInt32(row["Id"].ToString()),
                                               Name = row["ProductName"].ToString(),
                                               ImagePath = row["ImagePath"].ToString(),
-                                             
+                                              ShopCategoryId = Convert.ToInt32(row["ShopCategoryId"].ToString())
                                           }).ToList();
                     }
                     connection.Close();
@@ -5828,13 +5829,15 @@ namespace ShopNow.Controllers
             public int ID { get; set; }
             public string Name { get; set; }
             public string ImagePath { get; set; }
+            public int ShopCategoryId { get; set; }
         }
         public partial class Product_Result
         {
             public int ID { get; set; }
             public string Name { get; set; }
             public string ImagePath { get; set; }
-           // public int count { get; set; }
+            public int ShopCategoryId { get; set; }
+            // public int count { get; set; }
         }
         //Calls
         public JsonResult SetCallActive(int orderno)
