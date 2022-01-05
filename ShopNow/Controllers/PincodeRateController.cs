@@ -45,7 +45,6 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "")]
         public JsonResult AddUpdate(int id, int type, int tier, string remarks, string pincode)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -100,7 +99,6 @@ namespace ShopNow.Controllers
         }
 
         [HttpPost]
-        [AccessPolicy(PageCode = "")]
         public ActionResult UpdateActive(int id, int status)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
