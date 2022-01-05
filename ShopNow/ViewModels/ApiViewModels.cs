@@ -768,4 +768,25 @@ namespace ShopNow.ViewModels
         public int CustomerId { get; set; }
         public string Token { get; set; }
     }
+
+    public class SaveCustomerDeviceAppInfoViewModel
+    {
+        public int CustomerId { get; set; }
+        public string CustomerPhoneNumber { get; set; }
+        public string AppName { get; set; }
+        public string AppId { get; set; }
+        public string AppBuild { get; set; }
+        public string Version { get; set; }
+        public string PhoneModel { get; set; }
+        public string Platform { get; set; }
+        public string OSVersion { get; set; }
+        public string Manufacturer { get; set; }
+
+    }
+
+    public class SaveOnlinePaymentViewModel
+    {
+        public int OrderNumber { get; set; }
+        public string ReferenceCode { get; set; }
+    }
 }

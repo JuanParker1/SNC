@@ -2,24 +2,21 @@
 @{
     ViewBag.Title = "AccessPolicy Update";
 }
-
 <title>ShopNow | AccessPolicy Update</title>
-
 <div class="container-fluid my-4">
     <div class="row">
         <div class="col-md-4">
             <h5 class="mt-1 text-success" style="letter-spacing:1px">ACCESS POLICY UPDATE</h5>
         </div>
         <div class="col-md-8 text-right">
-            <a href="~/AccessPolicy/ItemList" target="_self"><span class="fa fa-bars"></span>AccessPolicy List</a>
+            <a href="~/AccessPolicy/ItemList" target="_self"><span class="fa fa-bars"></span> AccessPolicy List</a>
         </div>
     </div>
-
     <div class="row">
         <div class="col-md-12 mx-auto">
             @using (Html.BeginForm("Edit", "AccessPolicy", FormMethod.Post, new { id = "AccessPolicyForm" }))
             {
-                <div class="card">
+                <div class="card shadow">
                     <div class="card-body">
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="Id" value="@Model.Id" />
@@ -39,25 +36,25 @@
                                 <input type="hidden" name="PageName" id="PageName" value="@Model.PageName" />
                             </div>
                             @*<div class="col-md-4">
-                                <label class="col-form-label"><strong class="text-secondary">Shop Name</strong></label>
-                                <select name="ShopId" id="ShopId" class="form-control">
-                                    @if (Model.ShopName != null)
-                                    {
-                                        <option value="@Model.ShopId" selected>@Model.ShopName</option>
-                                    }
-                                </select>
-                                <input type="hidden" name="ShopName" id="ShopName" value="@Model.ShopName" />
-                            </div>*@
-                            <div class="col-md-4">
-                                <label class="col-form-label"><strong class="text-secondary">Staff Name</strong></label>
-                                <select name="StaffId" id="StaffId" class="form-control">
-                                    @if (Model.StaffName != null)
-                                    {
-                                        <option value="@Model.StaffId" selected>@Model.StaffName</option>
-                                    }
-                                </select>
-                                <input type="hidden" name="StaffName" id="StaffName" value="@Model.StaffName" />
-                            </div>
+                                    <label class="col-form-label"><strong class="text-secondary">Shop Name</strong></label>
+                                    <select name="ShopId" id="ShopId" class="form-control">
+                                        @if (Model.ShopName != null)
+                                        {
+                                            <option value="@Model.ShopId" selected>@Model.ShopName</option>
+                                        }
+                                    </select>
+                                    <input type="hidden" name="ShopName" id="ShopName" value="@Model.ShopName" />
+                                </div>*@
+                            @*<div class="col-md-4">
+                                    <label class="col-form-label"><strong class="text-secondary">Staff Name</strong></label>
+                                    <select name="StaffId" id="StaffId" class="form-control">
+                                        @if (Model.StaffName != null)
+                                        {
+                                            <option value="@Model.StaffId" selected>@Model.StaffName</option>
+                                        }
+                                    </select>
+                                    <input type="hidden" name="StaffName" id="StaffName" value="@Model.StaffName" />
+                                </div>*@
                             <div class="col-md-4">
                                 <label class="col-form-label"><strong class="text-secondary">Role</strong></label>
                                 <select id="Position" name="Position" class="form-control">
@@ -80,13 +77,13 @@
                                 </select>
                             </div>
                             @*<div class="col-md-3">
-                <label class="col-form-label"><strong class="text-secondary">Access</strong></label>
-                <div class="form-check">
-                    <label class="form-check-label">
-                        <input type="checkbox" class="form-check-input" name="IsAccess" id="IsAccess"> Is Access
-                    </label>
-                </div>
-            </div>*@
+                                    <label class="col-form-label"><strong class="text-secondary">Access</strong></label>
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input type="checkbox" class="form-check-input" name="IsAccess" id="IsAccess"> Is Access
+                                        </label>
+                                    </div>
+                                </div>*@
                         </div>
                         <div class="form-group row">
                             <div class="col-md-2 mx-auto">
@@ -111,10 +108,11 @@
     <script>
         $(document).ready(function () {
 
-         jQuery(document).ready(function ($) {
-             $("#Position").find('option[value="@Model.Position"]').attr('selected', 'selected');
-             $("#Status").find('option[value="@Model.Status"]').attr('selected', 'selected');
-         });
+           jQuery(document).ready(function ($) {
+               $("#Position").find('option[value="@Model.Position"]').attr('selected', 'selected');
+               $("#Status").find('option[value="@Model.Status"]').attr('selected', 'selected');
+           });
+
             @*var access = "@Model.IsAccess";
             if (access == "True") {
                 $('#IsAccess').prop('checked', true);
@@ -128,6 +126,7 @@
                 }
                 $('#IsAccess').val(this.checked);
             });*@
+
             $(document).on('click', '.Save', function () {
                 var isValidate = false;
                 var requiredArr = [
