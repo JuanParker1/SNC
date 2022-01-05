@@ -1067,6 +1067,8 @@ namespace ShopNow.Controllers
                     var order = db.Orders.FirstOrDefault(i => i.OrderNumber == model.OrderNumber);
                     order.PaymentMode = "Online Payment";
                     order.PaymentModeType = 1;
+                    order.TipsAmount = model.TipsAmount;
+                    order.NetTotal += model.TipsAmount;
                     db.Entry(order).State = EntityState.Modified;
                     db.SaveChanges();
 

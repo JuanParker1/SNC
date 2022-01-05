@@ -788,5 +788,6 @@ namespace ShopNow.ViewModels
     {
         public int OrderNumber { get; set; }
         public string ReferenceCode { get; set; }
+        public double TipsAmount { get; set; }
     }
 }
