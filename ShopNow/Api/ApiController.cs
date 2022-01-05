@@ -5824,23 +5824,23 @@ namespace ShopNow.Controllers
                                              ShopCategoryId = Convert.ToInt32(row["ShopCategoryId"].ToString())
                                          }).ToList();
                         categProd.Products = (from DataRow row in dsdocCount.Tables[2].Rows
-                                             
+                                             group row by row["ProductName"].ToString() into g
                                               select new Product_Result()
                                           {
-                                              ID = Convert.ToInt32(row["Id"].ToString()),
-                                              Name = row["ProductName"].ToString(),
-                                              ImagePath = row["ImagePath"].ToString(),
-                                              ShopCategoryId = Convert.ToInt32(row["ShopCategoryId"].ToString()),
-                                              ShopId = Convert.ToInt32(row["ShopId"].ToString()),
-                                              OnlineStatus= Convert.ToBoolean(row["OnlineStatus"].ToString()),
-                                              Rating = RatingCalculation(Convert.ToInt32(row["ShopId"].ToString())),
-                                              ReviewCount = db.CustomerReviews.ToList().Where(c => c.ShopId == Convert.ToInt32(row["ShopId"].ToString())).Count(),
-                                              ShopAddress = row["ShopAddress"].ToString(),
-                                              ShopImagePath = row["ShopImagePath"].ToString(),
-                                              ShopLatitude = Convert.ToDouble(row["ShopLatitude"].ToString()),
-                                              ShopLongitude = Convert.ToDouble(row["ShopLongitude"].ToString()),
-                                              ShopName= row["ShopName"].ToString(),
-                                              Status = Convert.ToInt32(row["Status"].ToString())
+                                              ID = Convert.ToInt32(g.FirstOrDefault()["Id"].ToString()),
+                                              Name = g.FirstOrDefault()["ProductName"].ToString(),
+                                              ImagePath = g.FirstOrDefault()["ImagePath"].ToString(),
+                                              ShopCategoryId = Convert.ToInt32(g.FirstOrDefault()["ShopCategoryId"].ToString()),
+                                              ShopId = Convert.ToInt32(g.FirstOrDefault()["ShopId"].ToString()),
+                                              OnlineStatus= Convert.ToBoolean(g.FirstOrDefault()["OnlineStatus"].ToString()),
+                                              Rating = RatingCalculation(Convert.ToInt32(g.FirstOrDefault()["ShopId"].ToString())),
+                                              ReviewCount = db.CustomerReviews.ToList().Where(c => c.ShopId == Convert.ToInt32(g.FirstOrDefault()["ShopId"].ToString())).Count(),
+                                              ShopAddress = g.FirstOrDefault()["ShopAddress"].ToString(),
+                                              ShopImagePath = g.FirstOrDefault()["ShopImagePath"].ToString(),
+                                              ShopLatitude = Convert.ToDouble(g.FirstOrDefault()["ShopLatitude"].ToString()),
+                                              ShopLongitude = Convert.ToDouble(g.FirstOrDefault()["ShopLongitude"].ToString()),
+                                              ShopName= g.FirstOrDefault()["ShopName"].ToString(),
+                                              Status = Convert.ToInt32(g.FirstOrDefault()["Status"].ToString())
                                           }).ToList();
                     }
                     connection.Close();
