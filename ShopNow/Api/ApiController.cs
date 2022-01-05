@@ -4702,6 +4702,7 @@ namespace ShopNow.Controllers
                      RefundRemark = i.o.p.RefundRemark,
                      PaymentMode = i.o.p.PaymentMode,
                      WalletAmount = i.o.o.WalletAmount,
+                     TipsAmount = i.o.o.TipsAmount,
                      OrderItemLists = i.oi.Select(a => new GetAllOrderListViewModel.OrderList.OrderItemList {
                          AddOnType = a.AddOnType,
                          BrandId = a.BrandId,

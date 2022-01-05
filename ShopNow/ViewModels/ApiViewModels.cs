@@ -37,6 +37,7 @@ namespace ShopNow.ViewModels
             public double PenaltyAmount { get; set; }
             public string PenaltyRemark { get; set; }
             public double WaitingCharge { get; set; }
+            public double TipsAmount { get; set; }
             public string WaitingRemark { get; set; }
             public int Status { get; set; }
             public DateTime DateEncoded { get; set; }
