@@ -783,4 +783,10 @@ namespace ShopNow.ViewModels
         public string Manufacturer { get; set; }
 
     }
+
+    public class SaveOnlinePaymentViewModel
+    {
+        public int OrderNumber { get; set; }
+        public string ReferenceCode { get; set; }
+    }
 }
