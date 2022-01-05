@@ -1058,6 +1058,84 @@ namespace ShopNow.Controllers
         }
 
         [HttpPost]
+        public JsonResult AddOnlinePayment(SaveOnlinePaymentViewModel model)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(model.ReferenceCode) || model.OrderNumber != 0)
+                {
+                    var order = db.Orders.FirstOrDefault(i => i.OrderNumber == model.OrderNumber);
+                    order.PaymentMode = "Online Payment";
+                    order.PaymentModeType = 1;
+                    order.TipsAmount = model.TipsAmount;
+                    order.NetTotal += model.TipsAmount;
+                    db.Entry(order).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == model.OrderNumber);
+                    payment.PaymentMode = "Online Payment";
+                    payment.PaymentModeType = 1;
+                    payment.Key = "Razor";
+                    payment.ReferenceCode = model.ReferenceCode;
+                    db.Entry(payment).State = EntityState.Modified;
+                    db.SaveChanges();
+
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
+                                                      SecurityProtocolType.Tls11 |
+                                                      SecurityProtocolType.Tls12;
+                    string key = BaseClass.razorpaykey;// "rzp_live_PNoamKp52vzWvR";
+                    string secret = BaseClass.razorpaySecretkey;//"yychwOUOsYLsSn3XoNYvD1HY";
+
+                    RazorpayClient client = new RazorpayClient(key, secret);
+                    Razorpay.Api.Payment varpayment = new Razorpay.Api.Payment();
+                    var s = varpayment.Fetch(model.ReferenceCode);
+                    PaymentsData pay = new PaymentsData();
+
+                    pay.OrderNumber = Convert.ToInt32(model.OrderNumber);
+                    pay.PaymentId = model.ReferenceCode;
+
+                    pay.Invoice_Id = s["invoice_id"];
+                    if (s["status"] == "created")
+                        pay.Status = 0;
+                    else if (s["status"] == "authorized")
+                        pay.Status = 1;
+                    else if (s["status"] == "captured")
+                        pay.Status = 2;
+                    else if (s["status"] == "refunded")
+                        pay.Status = 3;
+                    else if (s["status"] == "failed")
+                        pay.Status = 4;
+                    pay.Order_Id = s["order_id"];
+                    if (s["fee"] != null && s["fee"] > 0)
+                        pay.Fee = (decimal)s["fee"] / 100;
+                    else
+                        pay.Fee = s["fee"];
+                    pay.Entity = s["entity"];
+                    pay.Currency = s["currency"];
+                    pay.Method = s["method"];
+                    if (s["tax"] != null && s["tax"] > 0)
+                        pay.Tax = (decimal)s["tax"] / 100;
+                    else
+                        pay.Tax = s["tax"];
+                    if (s["amount"] != null && s["amount"] > 0)
+                        pay.Amount = s["amount"] / 100;
+                    else
+                        pay.Amount = s["amount"];
+                    pay.DateEncoded = DateTime.Now;
+                    db.PaymentsDatas.Add(pay);
+                    db.SaveChanges();
+                    return Json(new { status = false, message = "Successfully Added to Payment!" }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                    return Json(new { status = false, message = "Failed to Add Payment!" }, JsonRequestBehavior.AllowGet);
+            }
+            catch
+            {
+                return Json(new { status = false, message = "Failed to Add Payment!" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
         public JsonResult AddPaymentCreateOrder(razorpayOrderCreate model)
         {
             string Orderid = null;
@@ -4624,6 +4702,7 @@ namespace ShopNow.Controllers
                      RefundRemark = i.o.p.RefundRemark,
                      PaymentMode = i.o.p.PaymentMode,
                      WalletAmount = i.o.o.WalletAmount,
+                     TipsAmount = i.o.o.TipsAmount,
                      OrderItemLists = i.oi.Select(a => new GetAllOrderListViewModel.OrderList.OrderItemList {
                          AddOnType = a.AddOnType,
                          BrandId = a.BrandId,
@@ -5821,7 +5900,14 @@ namespace ShopNow.Controllers
                                              ID = Convert.ToInt32(row["Id"].ToString()),
                                              Name = row["Name"].ToString(),
                                              ImagePath = row["ImagePath"].ToString(),
-                                             ShopCategoryId = Convert.ToInt32(row["ShopCategoryId"].ToString())
+                                             ShopCategoryId = Convert.ToInt32(row["ShopCategoryId"].ToString()),
+                                             OnlineStatus = Convert.ToBoolean(row["OnlineStatus"].ToString()),
+                                             Rating = RatingCalculation(Convert.ToInt32(row["ShopId"].ToString())),
+                                             ReviewCount = db.CustomerReviews.ToList().Where(c => c.ShopId == Convert.ToInt32(row["ShopId"].ToString())).Count(),
+                                             ShopAddress = row["ShopAddress"].ToString(),
+                                             ShopLatitude = Convert.ToDouble(row["ShopLatitude"].ToString()),
+                                             ShopLongitude = Convert.ToDouble(row["ShopLongitude"].ToString()),
+                                             Status = Convert.ToInt32(row["Status"].ToString())
                                          }).ToList();
                         categProd.Products = (from DataRow row in dsdocCount.Tables[2].Rows
                                              group row by row["ProductName"].ToString() into g
@@ -5869,6 +5955,13 @@ namespace ShopNow.Controllers
             public string Name { get; set; }
             public string ImagePath { get; set; }
             public int ShopCategoryId { get; set; }
+            public bool OnlineStatus { get; set; }
+            public string ShopAddress { get; set; }
+            public double ShopLatitude { get; set; }
+            public double ShopLongitude { get; set; }
+            public int Status { get; set; }
+            public double Rating { get; set; }
+            public double ReviewCount { get; set; }
         }
         public partial class Product_Result
         {

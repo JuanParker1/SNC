@@ -37,6 +37,7 @@ namespace ShopNow.ViewModels
             public double PenaltyAmount { get; set; }
             public string PenaltyRemark { get; set; }
             public double WaitingCharge { get; set; }
+            public double TipsAmount { get; set; }
             public string WaitingRemark { get; set; }
             public int Status { get; set; }
             public DateTime DateEncoded { get; set; }
@@ -782,5 +783,12 @@ namespace ShopNow.ViewModels
         public string OSVersion { get; set; }
         public string Manufacturer { get; set; }
 
+    }
+
+    public class SaveOnlinePaymentViewModel
+    {
+        public int OrderNumber { get; set; }
+        public string ReferenceCode { get; set; }
+        public double TipsAmount { get; set; }
     }
 }
