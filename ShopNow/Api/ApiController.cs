@@ -6010,6 +6010,68 @@ namespace ShopNow.Controllers
                 return Json(new { status = false, message = "Gift Card is Expired!" }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public ActionResult SaveUpdateCustomerDeviceAppInfo(SaveCustomerDeviceAppInfoViewModel model)
+        {
+            var customerAppInfo = db.CustomerAppInfoes.FirstOrDefault(i => i.CustomerId == model.CustomerId);
+            if (customerAppInfo == null)
+            {
+                var appInfo = new CustomerAppInfo
+                {
+                    AppBuild = model.AppBuild,
+                    AppId = model.AppId,
+                    AppName = model.AppName,
+                    CustomerId = model.CustomerId,
+                    CustomerPhoneNumber = model.CustomerPhoneNumber,
+                    DateEncoded = DateTime.Now,
+                    DateUpdated = DateTime.Now,
+                    Version = model.Version
+                };
+                db.CustomerAppInfoes.Add(appInfo);
+                db.SaveChanges();
+            }
+            else
+            {
+                customerAppInfo.DateUpdated = DateTime.Now;
+                customerAppInfo.AppBuild = model.AppBuild;
+                customerAppInfo.AppId = model.AppId;
+                customerAppInfo.AppName = model.AppName;
+                customerAppInfo.Version = model.Version;
+                db.Entry(customerAppInfo).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            var customerDeviceInfo = db.CustomerDeviceInfoes.FirstOrDefault(i => i.CustomerId == model.CustomerId);
+            if (customerDeviceInfo == null)
+            {
+                var deviceInfo = new CustomerDeviceInfo
+                {
+                    CustomerId = model.CustomerId,
+                    CustomerPhoneNumber = model.CustomerPhoneNumber,
+                    DateEncoded = DateTime.Now,
+                    DateUpdated = DateTime.Now,
+                    Manufacturer = model.Manufacturer,
+                    OSVersion = model.OSVersion,
+                    PhoneModel = model.PhoneModel,
+                    Platform = model.Platform
+                };
+                db.CustomerDeviceInfoes.Add(deviceInfo);
+                db.SaveChanges();
+            }
+            else
+            {
+                customerDeviceInfo.DateUpdated = DateTime.Now;
+                customerDeviceInfo.Manufacturer = model.Manufacturer;
+                customerDeviceInfo.OSVersion = model.OSVersion;
+                customerDeviceInfo.PhoneModel = model.PhoneModel;
+                customerDeviceInfo.Platform = model.Platform;
+                db.Entry(customerDeviceInfo).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+
+        }
+
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "")
         {
             Helpers.PushNotification.SendbydeviceId(body, title, "", deviceId);

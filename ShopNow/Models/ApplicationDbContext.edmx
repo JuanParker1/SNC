@@ -340,6 +340,34 @@
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
           <Property Name="DateUpdated" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="CustomerAppInfo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerId" Type="int" Nullable="false" />
+          <Property Name="CustomerPhoneNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="AppName" Type="nvarchar" MaxLength="250" />
+          <Property Name="AppId" Type="nvarchar" MaxLength="250" />
+          <Property Name="AppBuild" Type="nvarchar" MaxLength="250" />
+          <Property Name="Version" Type="nvarchar" MaxLength="250" />
+          <Property Name="DateEncoded" Type="datetime" Nullable="false" />
+          <Property Name="DateUpdated" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CustomerDeviceInfo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerId" Type="int" Nullable="false" />
+          <Property Name="CustomerPhoneNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="PhoneModel" Type="nvarchar" MaxLength="250" />
+          <Property Name="Platform" Type="nvarchar" MaxLength="250" />
+          <Property Name="OSVersion" Type="nvarchar" MaxLength="250" />
+          <Property Name="Manufacturer" Type="nvarchar" MaxLength="250" />
+          <Property Name="DateEncoded" Type="datetime" Nullable="false" />
+          <Property Name="DateUpdated" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="CustomerFavorites">
           <Key>
             <PropertyRef Name="Id" />
@@ -1603,6 +1631,8 @@
           <EntitySet Name="Crusts" EntityType="Self.Crusts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerAchievements" EntityType="Self.CustomerAchievements" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerAddresses" EntityType="Self.CustomerAddresses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustomerAppInfo" EntityType="Self.CustomerAppInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustomerDeviceInfo" EntityType="Self.CustomerDeviceInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerFavorites" EntityType="Self.CustomerFavorites" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerGiftCards" EntityType="Self.CustomerGiftCards" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerPrescription" EntityType="Self.CustomerPrescription" Schema="dbo" store:Type="Tables" />
@@ -3115,6 +3145,8 @@
           <EntitySet Name="Products" EntityType="sncModel.Product" />
           <EntitySet Name="OrderItems" EntityType="sncModel.OrderItem" />
           <EntitySet Name="Orders" EntityType="sncModel.Order" />
+          <EntitySet Name="CustomerAppInfoes" EntityType="sncModel.CustomerAppInfo" />
+          <EntitySet Name="CustomerDeviceInfoes" EntityType="sncModel.CustomerDeviceInfo" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3398,6 +3430,34 @@
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CreatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="CustomerAppInfo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="CustomerPhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AppName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="AppId" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="AppBuild" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Version" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="CustomerDeviceInfo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="CustomerPhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneModel" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Platform" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="OSVersion" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Manufacturer" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -5077,6 +5137,36 @@
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
                 <ScalarProperty Name="CustomerPhoneNumber" ColumnName="CustomerPhoneNumber" />
                 <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerAppInfoes">
+            <EntityTypeMapping TypeName="sncModel.CustomerAppInfo">
+              <MappingFragment StoreEntitySet="CustomerAppInfo">
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Version" ColumnName="Version" />
+                <ScalarProperty Name="AppBuild" ColumnName="AppBuild" />
+                <ScalarProperty Name="AppId" ColumnName="AppId" />
+                <ScalarProperty Name="AppName" ColumnName="AppName" />
+                <ScalarProperty Name="CustomerPhoneNumber" ColumnName="CustomerPhoneNumber" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerDeviceInfoes">
+            <EntityTypeMapping TypeName="sncModel.CustomerDeviceInfo">
+              <MappingFragment StoreEntitySet="CustomerDeviceInfo">
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Manufacturer" ColumnName="Manufacturer" />
+                <ScalarProperty Name="OSVersion" ColumnName="OSVersion" />
+                <ScalarProperty Name="Platform" ColumnName="Platform" />
+                <ScalarProperty Name="PhoneModel" ColumnName="PhoneModel" />
+                <ScalarProperty Name="CustomerPhoneNumber" ColumnName="CustomerPhoneNumber" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
