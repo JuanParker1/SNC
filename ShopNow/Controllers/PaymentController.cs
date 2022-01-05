@@ -586,6 +586,27 @@ namespace ShopNow.Controllers
             return View(model.creditLists);
         }
 
+        public ActionResult OrderOfferReport()
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var model = new OrderOfferReportViewModel();
+            model.ListItems = db.Orders.Where(i => i.Status == 6)
+                .Join(db.Offers, o => o.OfferId, of => of.Id, (o, of) => new { o, of })
+                .Select(i => new OrderOfferReportViewModel.ListItem
+                {
+                    OrderNumber = i.o.OrderNumber,
+                    OfferName = i.of.Name,
+                    OfferCode = i.of.OfferCode,
+                    PurchasedAmount = i.o.NetTotal,
+                    OfferPercentage = i.of.Percentage,
+                    OrderDate = i.o.DateEncoded,
+                    SNCLossAmount = i.of.OwnerType == 1? i.o.OfferAmount:0,
+                    ShopLossAmount = i.of.OwnerType == 2? i.o.OfferAmount:0
+                }).ToList();
+            return View(model.ListItems);
+        }
+
         public async Task<JsonResult> GetShopSelect2(string q = "")
         {
             var model = await db.Shops.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new

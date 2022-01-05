@@ -1153,6 +1153,7 @@ namespace ShopNow.Controllers
                     order.TotalPrice = model.ListItems.Sum(i => i.Price);
                     order.TotalProduct = model.ListItems.Count();
                     order.TotalQuantity = model.ListItems.Sum(i => Convert.ToInt32(i.Quantity));
+                    order.TotalShopPrice = model.ListItems.Sum(i => i.ShopPrice);
                     order.DateEncoded = DateTime.Now;
                     order.DateUpdated = DateTime.Now;
                     order.Status = 0;
@@ -2439,7 +2440,8 @@ namespace ShopNow.Controllers
                         PreorderHour = i.p.p.p.PreorderHour,
                         OfferQuantityLimit = i.p.p.p.OfferQuantityLimit,
                         IsLiked = i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id),
-                        LikeText = (i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true && i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() == 1) ? "You Liked" : i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true ? "You & " + (i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() - 1) + " more" : i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() + " like" : ""
+                        LikeText = (i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true && i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() == 1) ? "You Liked" : i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true ? "You & " + (i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() - 1) + " more" : i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() + " like" : "",
+                        ShopPrice = i.p.p.p.ShopPrice
                     }).ToList();
 
                 if (!string.IsNullOrEmpty(str))
@@ -2510,7 +2512,8 @@ namespace ShopNow.Controllers
                         PreorderHour = i.p.p.p.PreorderHour,
                         OfferQuantityLimit = i.p.p.p.OfferQuantityLimit,
                         IsLiked = i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id),
-                        LikeText = (i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true && i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() == 1) ? "You Liked" : i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true ? "You & " + (i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() - 1) + " more" : i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() + " like" : ""
+                        LikeText = (i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true && i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() == 1) ? "You Liked" : i.cf.Any(a => a.CustomerId == customerId && a.IsFavorite == true && a.ProductId == i.p.p.p.Id) == true ? "You & " + (i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() - 1) + " more" : i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() > 0 ? i.cf.Where(a => a.ProductId == i.p.p.p.Id && a.IsFavorite == true).Count() + " like" : "",
+                        ShopPrice = i.p.p.p.ShopPrice
                     }).ToList();
 
                 if (!string.IsNullOrEmpty(str))
@@ -5454,7 +5457,18 @@ namespace ShopNow.Controllers
                                ShopName = i.p.p.ShopName,
                                //   Distance = Math.Round((((Math.Acos(Math.Sin((i.p.s.Latitude * Math.PI / 180)) * Math.Sin((latitude * Math.PI / 180)) + Math.Cos((i.p.s.Latitude * Math.PI / 180)) * Math.Cos((latitude * Math.PI / 180))
                                //* Math.Cos(((i.p.s.Longitude - longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000, 2)
-                               Distance = Math.Round((double)(GetMeters(latitude, longitude, i.p.s.Latitude, i.p.s.Longitude) / 1000), 2)
+                               Distance = Math.Round((double)(GetMeters(latitude, longitude, i.p.s.Latitude, i.p.s.Longitude) / 1000), 2),
+                               ProductId = i.p.p.Id,
+                               ShopPrice = i.p.p.ShopPrice,
+                               ShopAddress = i.p.s.Address,
+                               ShopCategoryId = i.p.s.ShopCategoryId,
+                               ShopId = i.p.s.Id,
+                               ShopImagePath = ((!string.IsNullOrEmpty(i.p.s.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.s.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                               ShopIsOnline = i.p.s.IsOnline,
+                               ShopLatitude = i.p.s.Latitude,
+                               ShopLongitude = i.p.s.Longitude,
+                               ShopPhoneNumber = i.p.s.PhoneNumber,
+                               ShopStatus = i.p.s.Status
                            }).ToList();
                 //}
             }
@@ -5523,8 +5537,19 @@ namespace ShopNow.Controllers
                            ShopName = i.p.p.p.ShopName,
                                //   Distance = Math.Round((((Math.Acos(Math.Sin((i.p.p.s.Latitude * Math.PI / 180)) * Math.Sin((latitude * Math.PI / 180)) + Math.Cos((i.p.p.s.Latitude * Math.PI / 180)) * Math.Cos((latitude * Math.PI / 180))
                                //* Math.Cos(((i.p.p.s.Longitude - longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000, 2)
-                               Distance = Math.Round((double)(GetMeters(latitude, longitude,i.p.p.s.Latitude, i.p.p.s.Longitude)/1000),2)
-                           }).ToList();
+                               Distance = Math.Round((double)(GetMeters(latitude, longitude,i.p.p.s.Latitude, i.p.p.s.Longitude)/1000),2),
+                           ProductId = i.p.p.p.Id,
+                           ShopPrice = i.p.p.p.ShopPrice,
+                           ShopAddress = i.p.p.s.Address,
+                           ShopCategoryId = i.p.p.s.ShopCategoryId,
+                           ShopId = i.p.p.s.Id,
+                           ShopImagePath = ((!string.IsNullOrEmpty(i.p.p.s.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.s.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                           ShopIsOnline = i.p.p.s.IsOnline,
+                           ShopLatitude = i.p.p.s.Latitude,
+                           ShopLongitude = i.p.p.s.Longitude,
+                           ShopPhoneNumber = i.p.p.s.PhoneNumber,
+                           ShopStatus = i.p.p.s.Status
+                       }).ToList();
             }
             return Json(model, JsonRequestBehavior.AllowGet);
         }
@@ -5799,19 +5824,33 @@ namespace ShopNow.Controllers
                                              ShopCategoryId = Convert.ToInt32(row["ShopCategoryId"].ToString())
                                          }).ToList();
                         categProd.Products = (from DataRow row in dsdocCount.Tables[2].Rows
-
-                                          select new Product_Result()
+                                             group row by row["ProductName"].ToString() into g
+                                              select new Product_Result()
                                           {
-                                              ID = Convert.ToInt32(row["Id"].ToString()),
-                                              Name = row["ProductName"].ToString(),
-                                              ImagePath = row["ImagePath"].ToString(),
-                                              ShopCategoryId = Convert.ToInt32(row["ShopCategoryId"].ToString())
+                                              ID = Convert.ToInt32(g.FirstOrDefault()["Id"].ToString()),
+                                              Name = g.FirstOrDefault()["ProductName"].ToString(),
+                                              ImagePath = g.FirstOrDefault()["ImagePath"].ToString(),
+                                              ShopCategoryId = Convert.ToInt32(g.FirstOrDefault()["ShopCategoryId"].ToString()),
+                                              ShopId = Convert.ToInt32(g.FirstOrDefault()["ShopId"].ToString()),
+                                              OnlineStatus= Convert.ToBoolean(g.FirstOrDefault()["OnlineStatus"].ToString()),
+                                              Rating = RatingCalculation(Convert.ToInt32(g.FirstOrDefault()["ShopId"].ToString())),
+                                              ReviewCount = db.CustomerReviews.ToList().Where(c => c.ShopId == Convert.ToInt32(g.FirstOrDefault()["ShopId"].ToString())).Count(),
+                                              ShopAddress = g.FirstOrDefault()["ShopAddress"].ToString(),
+                                              ShopImagePath = g.FirstOrDefault()["ShopImagePath"].ToString(),
+                                              ShopLatitude = Convert.ToDouble(g.FirstOrDefault()["ShopLatitude"].ToString()),
+                                              ShopLongitude = Convert.ToDouble(g.FirstOrDefault()["ShopLongitude"].ToString()),
+                                              ShopName= g.FirstOrDefault()["ShopName"].ToString(),
+                                              Status = Convert.ToInt32(g.FirstOrDefault()["Status"].ToString())
                                           }).ToList();
                     }
                     connection.Close();
                 }
             }
-                return Json(new { result = categProd }, JsonRequestBehavior.AllowGet);
+               // return Json(new { result = categProd }, JsonRequestBehavior.AllowGet);
+
+            var jResult = Json(new { result = categProd }, JsonRequestBehavior.AllowGet);
+            jResult.MaxJsonLength = int.MaxValue;
+            return jResult;
         }
         public class AutoCompleteSearchResult
         {
@@ -5837,6 +5876,16 @@ namespace ShopNow.Controllers
             public string Name { get; set; }
             public string ImagePath { get; set; }
             public int ShopCategoryId { get; set; }
+            public int ShopId { get; set; }
+            public string ShopName { get; set; }
+            public string ShopImagePath { get; set; }
+            public string ShopAddress { get; set; }
+            public double ShopLatitude { get; set; }
+            public double ShopLongitude { get; set; }
+            public bool OnlineStatus { get; set; }
+            public int Status { get; set; }
+            public double Rating { get; set; }
+            public double ReviewCount { get; set; }
             // public int count { get; set; }
         }
         //Calls
@@ -5959,6 +6008,68 @@ namespace ShopNow.Controllers
                 return Json(new { status = false, message = "Already Applied!" }, JsonRequestBehavior.AllowGet);
             else
                 return Json(new { status = false, message = "Gift Card is Expired!" }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult SaveUpdateCustomerDeviceAppInfo(SaveCustomerDeviceAppInfoViewModel model)
+        {
+            var customerAppInfo = db.CustomerAppInfoes.FirstOrDefault(i => i.CustomerId == model.CustomerId);
+            if (customerAppInfo == null)
+            {
+                var appInfo = new CustomerAppInfo
+                {
+                    AppBuild = model.AppBuild,
+                    AppId = model.AppId,
+                    AppName = model.AppName,
+                    CustomerId = model.CustomerId,
+                    CustomerPhoneNumber = model.CustomerPhoneNumber,
+                    DateEncoded = DateTime.Now,
+                    DateUpdated = DateTime.Now,
+                    Version = model.Version
+                };
+                db.CustomerAppInfoes.Add(appInfo);
+                db.SaveChanges();
+            }
+            else
+            {
+                customerAppInfo.DateUpdated = DateTime.Now;
+                customerAppInfo.AppBuild = model.AppBuild;
+                customerAppInfo.AppId = model.AppId;
+                customerAppInfo.AppName = model.AppName;
+                customerAppInfo.Version = model.Version;
+                db.Entry(customerAppInfo).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            var customerDeviceInfo = db.CustomerDeviceInfoes.FirstOrDefault(i => i.CustomerId == model.CustomerId);
+            if (customerDeviceInfo == null)
+            {
+                var deviceInfo = new CustomerDeviceInfo
+                {
+                    CustomerId = model.CustomerId,
+                    CustomerPhoneNumber = model.CustomerPhoneNumber,
+                    DateEncoded = DateTime.Now,
+                    DateUpdated = DateTime.Now,
+                    Manufacturer = model.Manufacturer,
+                    OSVersion = model.OSVersion,
+                    PhoneModel = model.PhoneModel,
+                    Platform = model.Platform
+                };
+                db.CustomerDeviceInfoes.Add(deviceInfo);
+                db.SaveChanges();
+            }
+            else
+            {
+                customerDeviceInfo.DateUpdated = DateTime.Now;
+                customerDeviceInfo.Manufacturer = model.Manufacturer;
+                customerDeviceInfo.OSVersion = model.OSVersion;
+                customerDeviceInfo.PhoneModel = model.PhoneModel;
+                customerDeviceInfo.Platform = model.Platform;
+                db.Entry(customerDeviceInfo).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+
         }
 
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "")

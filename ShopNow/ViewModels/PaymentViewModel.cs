@@ -376,5 +376,22 @@ namespace ShopNow.ViewModels
             }
         }
     }
+
+    public class OrderOfferReportViewModel
+    {
+        public List<ListItem> ListItems { get; set; }
+        public class ListItem
+        {
+            public int OrderNumber { get; set; }
+            public string OfferName { get; set; }
+            public string OfferCode { get; set; }
+            public double PurchasedAmount { get; set; }
+            public double OfferPercentage { get; set; }
+            public DateTime OrderDate { get; set; }
+            public double SNCLossAmount { get; set; }
+            public double ShopLossAmount { get; set; }
+
+        }
+    }
 }
 

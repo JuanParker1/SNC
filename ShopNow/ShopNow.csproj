@@ -516,6 +516,12 @@
     <Compile Include="Models\CustomerAddress.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CustomerAppInfo.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CustomerDeviceInfo.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CustomerFavorite.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
@@ -829,6 +835,7 @@
     <Content Include="fonts\Roboto\LICENSE.txt" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\snoch.jpg" />
     <Content Include="Images\503.png" />
     <Content Include="Images\edit-icon2.png" />
     <Content Include="Images\green-login.jpg" />
@@ -837,6 +844,7 @@
     <Content Include="Images\No Photo.png" />
     <Content Include="Images\ShopNowChat.png" />
     <Content Include="Images\503.png" />
+    <Content Include="Images\transsnowch.png" />
     <Content Include="Images\undraw_authentication_fsn5.svg" />
     <Content Include="Images\undraw_press_play_bx2d.svg" />
     <Content Include="Images\user.jpg" />
@@ -3293,6 +3301,7 @@
     <Content Include="Views\CustomerGiftCard\List.cshtml" />
     <Content Include="Views\CustomerPrescription\PrescriptionOrderList.cshtml" />
     <Content Include="Views\Cart\BatchList.cshtml" />
+    <Content Include="Views\Payment\OrderOfferReport.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

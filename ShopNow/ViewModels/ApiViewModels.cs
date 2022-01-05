@@ -587,7 +587,19 @@ namespace ShopNow.ViewModels
             public string ShopName { get; set; }
             public double MenuPrice { get; set; }
             public double Price { get; set; }
+            public double ShopPrice { get; set; }
             public double DiscountPercentage { get; set; }
+
+            public long ProductId { get; set; }
+            public int ShopId { get; set; }
+            public int ShopCategoryId { get; set; }
+            public string ShopImagePath { get; set; }
+            public string ShopPhoneNumber { get; set; }
+            public bool? ShopIsOnline { get; set; }
+            public string ShopAddress { get; set; }
+            public double ShopLatitude { get; set; }
+            public double ShopLongitude { get; set; }
+            public double ShopStatus { get; set; }
         }
     }
 
@@ -640,7 +652,19 @@ namespace ShopNow.ViewModels
             public string ShopName { get; set; }
             public double MenuPrice { get; set; }
             public double Price { get; set; }
+            public double ShopPrice { get; set; }
             public double DiscountPercentage { get; set; }
+
+            public long ProductId { get; set; }
+            public int ShopId { get; set; }
+            public int ShopCategoryId { get; set; }
+            public string ShopImagePath { get; set; }
+            public string ShopPhoneNumber { get; set; }
+            public bool? ShopIsOnline { get; set; }
+            public string ShopAddress { get; set; }
+            public double ShopLatitude { get; set; }
+            public double ShopLongitude { get; set; }
+            public double ShopStatus { get; set; }
         }
     }
 
@@ -743,5 +767,20 @@ namespace ShopNow.ViewModels
     {
         public int CustomerId { get; set; }
         public string Token { get; set; }
+    }
+
+    public class SaveCustomerDeviceAppInfoViewModel
+    {
+        public int CustomerId { get; set; }
+        public string CustomerPhoneNumber { get; set; }
+        public string AppName { get; set; }
+        public string AppId { get; set; }
+        public string AppBuild { get; set; }
+        public string Version { get; set; }
+        public string PhoneModel { get; set; }
+        public string Platform { get; set; }
+        public string OSVersion { get; set; }
+        public string Manufacturer { get; set; }
+
     }
 }
