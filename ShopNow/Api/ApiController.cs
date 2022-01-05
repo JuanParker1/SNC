@@ -5900,7 +5900,14 @@ namespace ShopNow.Controllers
                                              ID = Convert.ToInt32(row["Id"].ToString()),
                                              Name = row["Name"].ToString(),
                                              ImagePath = row["ImagePath"].ToString(),
-                                             ShopCategoryId = Convert.ToInt32(row["ShopCategoryId"].ToString())
+                                             ShopCategoryId = Convert.ToInt32(row["ShopCategoryId"].ToString()),
+                                             OnlineStatus = Convert.ToBoolean(row["OnlineStatus"].ToString()),
+                                             Rating = RatingCalculation(Convert.ToInt32(row["ShopId"].ToString())),
+                                             ReviewCount = db.CustomerReviews.ToList().Where(c => c.ShopId == Convert.ToInt32(row["ShopId"].ToString())).Count(),
+                                             ShopAddress = row["ShopAddress"].ToString(),
+                                             ShopLatitude = Convert.ToDouble(row["ShopLatitude"].ToString()),
+                                             ShopLongitude = Convert.ToDouble(row["ShopLongitude"].ToString()),
+                                             Status = Convert.ToInt32(row["Status"].ToString())
                                          }).ToList();
                         categProd.Products = (from DataRow row in dsdocCount.Tables[2].Rows
                                              group row by row["ProductName"].ToString() into g
@@ -5948,6 +5955,13 @@ namespace ShopNow.Controllers
             public string Name { get; set; }
             public string ImagePath { get; set; }
             public int ShopCategoryId { get; set; }
+            public bool OnlineStatus { get; set; }
+            public string ShopAddress { get; set; }
+            public double ShopLatitude { get; set; }
+            public double ShopLongitude { get; set; }
+            public int Status { get; set; }
+            public double Rating { get; set; }
+            public double ReviewCount { get; set; }
         }
         public partial class Product_Result
         {
