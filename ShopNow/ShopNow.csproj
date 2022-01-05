@@ -516,6 +516,12 @@
     <Compile Include="Models\CustomerAddress.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CustomerAppInfo.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CustomerDeviceInfo.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\CustomerFavorite.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
