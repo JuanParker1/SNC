@@ -313,8 +313,8 @@
                     var conv = $("#ConvenientCharge").val();
                     var net = $("#NetDeliveryCharge").val();
                     var toPay = parseFloat(itemTotal) + parseFloat(pack) + parseFloat(conv) + parseFloat(net);
-                    $(".ToPay").text(toPay);
-                    $("#ToPay").val(topay);
+                    $(".ToPay").text(toPay.toFixed(2));
+                    $("#ToPay").val(topay.toFixed(2));
                 });
             });
 
