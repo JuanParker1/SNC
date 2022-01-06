@@ -5846,6 +5846,12 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetShopProductSearchResult(int shopid, string keyword)
+        {
+            var list = db.GetShopProductSearch(shopid, keyword).Select(i=>i.ProductName).ToList();
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult GetAutoCompleteSearchResult(int customerid,double latitude, double longitude, string keyword)
         {
            // var list = db.GetAutoCompleteSearch(longitude, latitude, keyword, customerid);
@@ -5868,6 +5874,8 @@ namespace ShopNow.Controllers
             //    //Return all result sets
 
             //}
+
+            var productTakeCount = 3;
             using (var connection = new SqlConnection(_connString))
             {
                 connection.Open();
@@ -5885,7 +5893,10 @@ namespace ShopNow.Controllers
                     if (dsdocCount.Tables.Count > 1)
                     {
 
-
+                        if (dsdocCount.Tables[0].Rows.Count == 0 && dsdocCount.Tables[1].Rows.Count == 0)
+                            productTakeCount = 8;
+                        else if(dsdocCount.Tables[0].Rows.Count == 0 || dsdocCount.Tables[1].Rows.Count == 0)
+                            productTakeCount = 6;
 
                         categProd.PreferedText = (from DataRow row in dsdocCount.Tables[0].Rows
 
@@ -5927,7 +5938,7 @@ namespace ShopNow.Controllers
                                               ShopLongitude = Convert.ToDouble(g.FirstOrDefault()["ShopLongitude"].ToString()),
                                               ShopName= g.FirstOrDefault()["ShopName"].ToString(),
                                               Status = Convert.ToInt32(g.FirstOrDefault()["Status"].ToString())
-                                          }).ToList();
+                                          }).Take(productTakeCount).ToList();
                     }
                     connection.Close();
                 }

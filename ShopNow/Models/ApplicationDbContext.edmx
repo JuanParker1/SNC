@@ -1555,6 +1555,10 @@
         <Function Name="GetShopname" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="shopId" Type="int" Mode="In" />
         </Function>
+        <Function Name="GetShopProductSearch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="shopId" Type="int" Mode="In" />
+          <Parameter Name="str" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="GetTableVAlueString" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="key" Type="nvarchar" Mode="In" />
           <ReturnType>
@@ -3147,6 +3151,10 @@
           <EntitySet Name="Orders" EntityType="sncModel.Order" />
           <EntitySet Name="CustomerAppInfoes" EntityType="sncModel.CustomerAppInfo" />
           <EntitySet Name="CustomerDeviceInfoes" EntityType="sncModel.CustomerDeviceInfo" />
+          <FunctionImport Name="GetShopProductSearch" ReturnType="Collection(sncModel.GetShopProductSearch_Result)">
+            <Parameter Name="shopId" Mode="In" Type="Int32" />
+            <Parameter Name="str" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3459,6 +3467,12 @@
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
+        <ComplexType Name="GetShopProductSearch_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="String" Name="ProductName" Nullable="true" />
+          <Property Type="Int32" Name="adscore" Nullable="false" />
+          <Property Type="String" Name="ImagePath" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -5172,6 +5186,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetShopProductSearch" FunctionName="sncModel.Store.GetShopProductSearch">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="sncModel.GetShopProductSearch_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="adscore" ColumnName="adscore" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
