@@ -337,6 +337,7 @@
                         PrescriptionId: $('#PrescriptionId').val(),
                         ListItems: itemArray,
                     };
+                    $('#btn-save').attr("disabled",true);
                     $.post('/CustomerPrescription/AddToCart', model, function (data) {
                         if (data) {
                             // swal('Success', 'Order Placed successfully', 'success');

@@ -459,5 +459,18 @@ namespace ShopNow.Models
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetDashBoardDetails_Result>("GetDashBoardDetails");
         }
+    
+        public virtual ObjectResult<GetShopProductSearch_Result> GetShopProductSearch(Nullable<int> shopId, string str)
+        {
+            var shopIdParameter = shopId.HasValue ?
+                new ObjectParameter("shopId", shopId) :
+                new ObjectParameter("shopId", typeof(int));
+    
+            var strParameter = str != null ?
+                new ObjectParameter("str", str) :
+                new ObjectParameter("str", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetShopProductSearch_Result>("GetShopProductSearch", shopIdParameter, strParameter);
+        }
     }
 }
