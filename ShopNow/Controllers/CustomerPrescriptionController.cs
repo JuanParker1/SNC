@@ -70,8 +70,9 @@ namespace ShopNow.Controllers
                 _mapper.Map(cp, model);
                 model.PrescriptionId = cp.Id;
                 model.ImagePathLists = db.CustomerPrescriptionImages.Where(i => i.CustomerPrescriptionId == cp.Id)
-                        .Select(i=> new AddToCartViewModel.ImagePathList { 
-                                    ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + i.ImagePath
+                        .Select(i => new AddToCartViewModel.ImagePathList
+                        {
+                            ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + i.ImagePath
                         }).ToList();
                 model.AudioPath = (!string.IsNullOrEmpty(cp.AudioPath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Audio/" + cp.AudioPath : "";
                 var shop = db.Shops.FirstOrDefault(i => i.Id == cp.ShopId);
@@ -83,7 +84,7 @@ namespace ShopNow.Controllers
                     model.ShopAddress = shop.Address;
                 }
                 var customer = db.Customers.FirstOrDefault(i => i.Id == cp.CustomerId);
-                if(customer != null)
+                if (customer != null)
                 {
                     model.CustomerId = customer.Id;
                     model.CustomerName = customer.Name;
@@ -103,7 +104,7 @@ namespace ShopNow.Controllers
             var model = new PrescriptionOrderListViewModel();
             model.PrescriptionOrderLists = db.Orders.OrderByDescending(i => i.DateEncoded).Where(i => (i.IsPrescriptionOrder == true) && i.Status == 6)
                 .AsEnumerable()
-               .Select((i,index) => new PrescriptionOrderListViewModel.PrescriptionOrderList
+               .Select((i, index) => new PrescriptionOrderListViewModel.PrescriptionOrderList
                {
                    No = index + 1,
                    Id = i.Id,
@@ -115,7 +116,7 @@ namespace ShopNow.Controllers
                    DateUpdated = i.DateUpdated,
                    Amount = i.NetTotal,
                    PaymentMode = i.PaymentMode
-               }).ToList();          
+               }).ToList();
             return View(model.PrescriptionOrderLists);
         }
 
@@ -274,7 +275,7 @@ namespace ShopNow.Controllers
         {
             var model = await db.Products.Where(a => a.ShopId == shopid && a.Status == 0)
                 .Join(db.MasterProducts.Where(a => a.Name.Contains(q)), p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
-                .Join(db.Categories, p=> p.p.CategoryId, c=> c.Id,(p,c)=> new { p,c}).Take(500)
+                .Join(db.Categories, p => p.p.CategoryId, c => c.Id, (p, c) => new { p, c }).Take(500)
                 .Select(i => new
                 {
                     id = i.p.p.Id,
@@ -294,7 +295,7 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetShopCharge(int shopid, double itemTotal,int customerid, double totalSize, double totalWeight)
+        public JsonResult GetShopCharge(int shopid, double itemTotal, int customerid, double totalSize, double totalWeight)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             var model = new BillingDeliveryChargeViewModel();
@@ -307,7 +308,7 @@ namespace ShopNow.Controllers
             var ShopDeliveryDiscount = 0.0;
             var NetDeliveryCharge = 0.0;
             var PackingCharge = model.PackingCharge;
-            if(itemTotal < model.ConvenientChargeRange)
+            if (itemTotal < model.ConvenientChargeRange)
             {
                 ConvenientCharge = model.ConvenientCharge;
             }
@@ -325,7 +326,7 @@ namespace ShopNow.Controllers
                 GrossDeliveryCharge = model.DeliveryChargeKM + amount;
             }
             ShopDeliveryDiscount = itemTotal * (model.DeliveryDiscountPercentage / 100);
-            if(ShopDeliveryDiscount >= GrossDeliveryCharge)
+            if (ShopDeliveryDiscount >= GrossDeliveryCharge)
             {
                 ShopDeliveryDiscount = GrossDeliveryCharge;
                 NetDeliveryCharge = 0;
@@ -393,5 +394,6 @@ namespace ShopNow.Controllers
             }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
+
     }
-    }
+}
