@@ -81,11 +81,12 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "SNCSL304")]
+        [AccessPolicy(PageCode = "SNCSSL304")]
         public ActionResult Signal()
         {
             return View();
         }
+
         public ActionResult Live()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);

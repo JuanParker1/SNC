@@ -1517,6 +1517,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("Details", "Cart", new { id = AdminHelpers.ECodeLong(orderid) });
         }
 
+        [AccessPolicy(PageCode = "SNCCBL305")]
         public ActionResult BatchList(BatchOrderListViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -1545,6 +1546,7 @@ namespace ShopNow.Controllers
                            .ToList();
             return View(model);
         }
+
         //public JsonResult GetLiveOrderCount()
         //{
         //    try
@@ -1562,6 +1564,7 @@ namespace ShopNow.Controllers
         //        return Json(new { success = false }, JsonRequestBehavior.AllowGet);
         //    }
         //}
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
