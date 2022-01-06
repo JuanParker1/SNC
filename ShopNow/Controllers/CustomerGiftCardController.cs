@@ -1,4 +1,5 @@
-﻿using ShopNow.Models;
+﻿using ShopNow.Filters;
+using ShopNow.Models;
 using ShopNow.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace ShopNow.Controllers
     {
         private sncEntities db = new sncEntities();
 
+        [AccessPolicy(PageCode = "SNCCGL306")]
         public ActionResult List()
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -31,6 +33,7 @@ namespace ShopNow.Controllers
         }
 
         [HttpPost]
+        [AccessPolicy(PageCode = "SNCCGA307")]
         public ActionResult Add(CustomerGiftCardAddViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -51,6 +54,7 @@ namespace ShopNow.Controllers
         }
 
         [HttpPost]
+        [AccessPolicy(PageCode = "SNCCGE308")]
         public ActionResult Edit(CustomerGiftCardEditViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -67,6 +71,7 @@ namespace ShopNow.Controllers
             return RedirectToAction("List");
         }
 
+        [AccessPolicy(PageCode = "SNCCGD309")]
         public JsonResult Delete(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
