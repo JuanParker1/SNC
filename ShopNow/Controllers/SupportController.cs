@@ -87,6 +87,7 @@ namespace ShopNow.Controllers
             return View();
         }
 
+        [AccessPolicy(PageCode = "SNCSL311")]
         public ActionResult Live()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
