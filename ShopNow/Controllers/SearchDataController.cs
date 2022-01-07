@@ -18,6 +18,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCSDL246")]
         public ActionResult List(SearchDataListViewModel model)
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             //var model = new SearchDataListViewModel();
             model.AllListItems = db.CustomerSearchDatas.Where(i => i.Status == 0 && (model.StartDate != null && model.EndDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate)) : false)
                 .GroupBy(i => i.SearchKeyword)
@@ -67,6 +69,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCSDE247")]
         public ActionResult Entry(string str = "")
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var model = new SearchDataEntryViewModel();
             model.KeywordLists = db.KeywordDatas.ToList().Where(i => str != "" ? i.Name.StartsWith(str) : true)
                 .GroupJoin(db.SearchDatas, k => k.Name, sd => sd.Source, (k, sd) => new { k, sd })
@@ -82,6 +86,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCSDE247")]
         public JsonResult Add(string keyword, string keys)
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             if (!string.IsNullOrEmpty(keyword) && !string.IsNullOrEmpty(keys))
             {
                 var keyList = keys.Split(',').ToList();

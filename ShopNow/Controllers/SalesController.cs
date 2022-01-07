@@ -72,8 +72,11 @@ namespace ShopNowPay.Controllers
             return View(model.List);
         }
 
+        [AccessPolicy(PageCode = "SNCSOR312")]
         public ActionResult ShopOrdersReport(ShopOrdersReportViewModel model)
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             model.ListItems = db.Orders.OrderByDescending(i => i.DateEncoded).Where(i => i.Status == 6 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false) && (model.StartDate != null && model.EndDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate)) : false)
                 .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .AsEnumerable()

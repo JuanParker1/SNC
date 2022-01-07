@@ -952,6 +952,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCPRUS219")]
         public ActionResult UpdateStock(ProductUpdateStockViewModel model)
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             if (model.ItemId != 0 && model.ShopId != 0)
             {
                 var product = db.Products.FirstOrDefault(i => i.ItemId == model.ItemId && i.ShopId == model.ShopId);
@@ -969,6 +971,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCPRUSV220")]
         public ActionResult UpdateStockValue(ProductUpdateStockViewModel model)
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             if (model.ItemId != 0 && model.ShopId != 0)
             {
                 var product = db.Products.FirstOrDefault(i => i.ItemId == model.ItemId && i.ShopId == model.ShopId);
@@ -983,6 +987,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCPRAD221")]
         public ActionResult ApplyDiscount()
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             return View();
         }
 
@@ -990,6 +996,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCPRAD221")]
         public ActionResult ApplyDiscount(ApplyDiscountViewModel model)
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var productsList = db.Products.Where(i => i.ShopId == model.ShopId && i.Status == 0).ToList();
             if (productsList != null)
             {
@@ -1003,6 +1011,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCPRZL222")]
         public ActionResult ZeroPriceList(ProductZeroPriceList model)
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             if (model.ShopId != 0)
                 model.ShopCategoryId = db.Shops.FirstOrDefault(i => i.Id == model.ShopId).ShopCategoryId;
 
@@ -1023,6 +1033,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCPRIL223")]
         public ActionResult InactiveList(ProductInactiveList model)
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             model.ListItems = db.Products.Where(i => i.MasterProductId != 0 && i.Status == 1 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
                 .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
                 .Select(i => new ProductInactiveList.ListItem
