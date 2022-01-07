@@ -6294,7 +6294,8 @@ namespace ShopNow.Controllers
                         PaymentModeType = item.FirstOrDefault().PaymentMode == "Online Payment" ? 1 : 0,
                         PreorderDeliveryDateTime = null,
                         TipsAmount = 0,
-                        ShopAcceptedTime = null
+                        ShopAcceptedTime = null,
+                        TotalShopPrice=0
                     };
 
                     db.Orders.Add(order);
@@ -6321,7 +6322,8 @@ namespace ShopNow.Controllers
                                 ProductName = itemlist.ProductName,
                                 Quantity = itemlist.Qty,
                                 UnitPrice = itemlist.Price,
-                                Status = 0
+                                Status = 0,
+                                ShopPrice=0
                             };
 
                             db.OrderItems.Add(orderItem);
