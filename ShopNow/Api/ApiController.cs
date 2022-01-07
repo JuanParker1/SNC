@@ -6237,7 +6237,7 @@ namespace ShopNow.Controllers
                 string getDetails = myData.DownloadString("https://admin.shopnowchat.in/api/GetAllCartItems");
                 var result = JsonConvert.DeserializeObject<List<OldOrder>>(getDetails).OrderBy(i=>i.DateEncoded);
                 // var list = JsonConvert.SerializeObject(result.Where(i => i.OrderNumber == 253051825));
-                foreach (var item in result.Where(i => i.OrderNumber == 253051825).GroupBy(i => i.OrderNumber))
+                foreach (var item in result.GroupBy(i => i.OrderNumber))
                 {
                     var order = new Models.Order
                     {

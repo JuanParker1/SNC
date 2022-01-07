@@ -274,6 +274,17 @@ namespace ShopNow.Controllers
                 db.Shops.Add(shop);
                 db.SaveChanges();
 
+                //ShopCredit
+                var shopCredit = new ShopCredit
+                {
+                    CustomerId=model.CustomerId,
+                    DateUpdated = DateTime.Now,
+                    DeliveryCredit=0,
+                    PlatformCredit=0
+                };
+                db.ShopCredits.Add(shopCredit);
+                db.SaveChanges();
+
                 return RedirectToAction("InActiveList", "Shop");
             }
             catch (AmazonS3Exception amazonS3Exception)
