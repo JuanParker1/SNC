@@ -117,6 +117,11 @@ namespace ShopNow.Controllers
             _mapper.Map(model, banner);
             banner.UpdatedBy = user.Name;
             banner.DateUpdated = DateTime.Now;
+            if(banner.CreditType == 3)
+            {
+                banner.ProductId = 0;
+                banner.MasterProductId = 0;
+            }
             if (banner.ProductId != 0)
             {
                 var product = db.Products.FirstOrDefault(i => i.Id == banner.ProductId && i.Status == 0);

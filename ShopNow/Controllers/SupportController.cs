@@ -42,7 +42,7 @@ namespace ShopNow.Controllers
                 .Join(db.DeliveryBoys.Where(i => i.isAssign == 1 && i.OnWork == 0), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
                       .AsEnumerable().Count();
 
-            model.ShopPickupCount = db.Orders.Where(i => i.Status == 4 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(last3Date)) && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5)
+            model.ShopPickupCount = db.Orders.Where(i => i.Status == 4 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(last3Date)) && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 15)
                 .Join(db.DeliveryBoys.Where(i => i.isAssign == 1 && i.OnWork == 1), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
                       .AsEnumerable().Count();
 
@@ -87,7 +87,7 @@ namespace ShopNow.Controllers
             return View();
         }
 
-        [AccessPolicy(PageCode = "SNCSL311")]
+       // [AccessPolicy(PageCode = "SNCSL311")]
         public ActionResult Live()
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
@@ -157,7 +157,7 @@ namespace ShopNow.Controllers
                     Name = i.Name
                 }).ToList();
 
-            model.List = db.Orders.Where(i => i.Status == 3 && (shopId != 0 ? i.ShopId == shopId : true))
+            model.List = db.Orders.Where(i => (i.Status == 3 || i.Status == 8) && (shopId != 0 ? i.ShopId == shopId : true))
                .Select(i => new DeliveryBoyAssignViewModel.AssignList
                {
                    Id = i.Id,
