@@ -6237,7 +6237,7 @@ namespace ShopNow.Controllers
                 string getDetails = myData.DownloadString("https://admin.shopnowchat.in/api/GetAllCartItems");
                 var result = JsonConvert.DeserializeObject<List<OldOrder>>(getDetails).OrderBy(i=>i.DateEncoded);
                 // var list = JsonConvert.SerializeObject(result.Where(i => i.OrderNumber == 253051825));
-                foreach (var item in result.Where(i => i.OrderNumber == 253051825).GroupBy(i => i.OrderNumber))
+                foreach (var item in result.GroupBy(i => i.OrderNumber))
                 {
                     var order = new Models.Order
                     {
@@ -6294,7 +6294,8 @@ namespace ShopNow.Controllers
                         PaymentModeType = item.FirstOrDefault().PaymentMode == "Online Payment" ? 1 : 0,
                         PreorderDeliveryDateTime = null,
                         TipsAmount = 0,
-                        ShopAcceptedTime = null
+                        ShopAcceptedTime = null,
+                        TotalShopPrice=0
                     };
 
                     db.Orders.Add(order);
@@ -6321,7 +6322,8 @@ namespace ShopNow.Controllers
                                 ProductName = itemlist.ProductName,
                                 Quantity = itemlist.Qty,
                                 UnitPrice = itemlist.Price,
-                                Status = 0
+                                Status = 0,
+                                ShopPrice=0
                             };
 
                             db.OrderItems.Add(orderItem);

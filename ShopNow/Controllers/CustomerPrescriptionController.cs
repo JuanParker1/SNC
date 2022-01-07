@@ -97,6 +97,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
+        [AccessPolicy(PageCode = "SNCCPPO310")]
         public ActionResult PrescriptionOrderList()
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
@@ -380,8 +381,6 @@ namespace ShopNow.Controllers
         //    return Json(list, JsonRequestBehavior.AllowGet);
         //}
 
-
-        [AccessPolicy(PageCode = "")]
         public JsonResult Reject(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
