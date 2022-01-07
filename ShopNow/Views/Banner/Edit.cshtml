@@ -251,6 +251,18 @@
             }
         }).on('select2:select', function (e) {
             $('input[name="ShopName"]').val(e.params.data.text);
+
+            $('#ProductId').select2({
+                placeholder: "Search Product",
+                ajax: {
+                    url: "/Banner/GetShopProductSelect2?shopid=" + e.params.data.id,
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ProductName"]').val(e.params.data.text);
+            });
         });
 
         var shopId = $("#ShopId").val();
