@@ -268,7 +268,6 @@
             }
         </div>
     </div>
-
     <div class="row">
         <div class="col-md-4">
             <div class="card h-100">
@@ -276,7 +275,8 @@
                     <label class="font-weight-bold text-muted"><u>Order Details:</u></label>
                     <div class="d-flex">
                         <label class="mr-3">Number:</label>
-                        <b>@Model.OrderNumber @if (Model.IsPrescriptionOrder == true) { <span>(Prescription)</span>}</b>
+                        <b>@Model.OrderNumber @if (Model.IsPrescriptionOrder == true)
+                        {<span>(Prescription)</span>}</b>
                     </div>
                     <div class="d-flex">
                         <label class="mr-3">Date/Time:</label>
@@ -302,6 +302,13 @@
                         <div class="d-flex">
                             <label class="mr-3">DeliveryBoy Ph No:</label>
                             <b>@Model.DeliveryBoyPhoneNumber</b>
+                        </div>
+                    }
+                    @if (Model.PrescriptionImagePath != null)
+                    {
+                        <div class="col-md-2">
+                            <label class="font-weight-bold">Prescription Image</label>
+                            <img alt="Image" data-toggle="modal" data-target="#PrescriptionImageModal" class="img-thumbnail PrescriptionImage p-1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" @Model.PrescriptionImagePath onerror="this.src='/Images/No Photo.png'" style="width:45px;height:45px" />                            
                         </div>
                     }
                 </div>
@@ -350,7 +357,6 @@
             </div>
         </div>
     </div>
-
     <div class="row mt-3">
         <div class="col-md-9">
             <div class="card h-100">
@@ -568,11 +574,25 @@
             </div>
         </div>
     </div>
-
 </div>
 <input type="hidden" value="@Model.OrderNumber" id="hidden-ordernumber" />
 <input type="hidden" value="@Model.CustomerId" id="hidden-customerid" />
 <input type="hidden" value="@Model.Status" id="hidden-status" />
+
+<div id="PrescriptionImageModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button class="close text-danger mb-2" data-dismiss="modal">&times;</button>
+                <img class="modal-content img-fluid w-100" style="height:400px;" id="PresImage" />
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-sm btn-secondary print" onclick="window.print()" style="width:60px">Print</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div id="myModal" class="modal fade">
     <div class="modal-dialog">
@@ -781,6 +801,20 @@
                 }
                 else {
                     $('#myModal').modal('show');
+                }
+            });
+
+            var modal1 = document.getElementById('PrescriptionImageModal');
+            var img1 = document.getElementsByClassName('PrescriptionImage');
+            var modalImg1 = document.getElementById("PresImage");
+            $(img1).click(function () {
+                modal1.style.display = "block";
+                 modalImg.src = this.src.replace("/Small/", "/Medium/");
+                if (this.src == "") {
+                    $('#myModal').hide();
+                }
+                else {
+                    $('#myModal').modal1('show');
                 }
             });
 

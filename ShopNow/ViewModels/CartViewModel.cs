@@ -71,6 +71,7 @@ namespace ShopNow.ViewModels
         public string PaymentMode{ get; set; }
         public double TipsAmount{ get; set; }
         public bool IsPrescriptionOrder { get; set; }
+        public string PrescriptionImagePath { get; set; }
 
         public List<ListItem> ListItems { get; set; }
         public class ListItem
