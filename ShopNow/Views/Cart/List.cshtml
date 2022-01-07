@@ -6,6 +6,15 @@
 <title>ShopNow | Order List</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
+<style>
+    .grid-mvc {
+        overflow-x: scroll;
+    }
+
+        .grid-mvc table td1{
+            width: 50%;
+        }
+</style>
 <div class="container-fluid">
     <div class="row my-2">
         <div class="col-md-3">
@@ -27,7 +36,7 @@
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
                {
-                   columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(1);
+                   columns.Add(c => c.No).Titled("Sl.No").SetWidth(0);
                    columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
                    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
                    columns.Add(c => c.PaymentMode).Titled("PaymentMode").Filterable(true).SetWidth(10);
