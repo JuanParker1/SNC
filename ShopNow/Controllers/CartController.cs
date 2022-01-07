@@ -611,6 +611,7 @@ namespace ShopNow.Controllers
                 model.WaitingCharge = cart.WaitingCharge;
                 model.TotalPrice = cart.TotalPrice;
                 model.PaymentMode = cart.PaymentMode;
+                model.PrescriptionImagePath = cart.PrescriptionImagePath;
                 var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == cart.DeliveryBoyId);
                 if (deliveryBoy != null)
                 {

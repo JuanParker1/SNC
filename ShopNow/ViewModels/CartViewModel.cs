@@ -157,6 +157,7 @@ namespace ShopNow.ViewModels
         public double WaitingCharge { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        public string PrescriptionImagePath { get; set; }
 
         public List<TodayList> TodayLists { get; set; }
         public class TodayList
