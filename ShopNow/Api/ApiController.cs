@@ -5370,7 +5370,7 @@ namespace ShopNow.Controllers
             var imagePath = "";
             var image = db.CustomerPrescriptionImages.FirstOrDefault(i => i.CustomerPrescriptionId == id);
             if (image != null)
-                imagePath = ((!string.IsNullOrEmpty(image.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + image.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/notavailable.png")
+                imagePath = ((!string.IsNullOrEmpty(image.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + image.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/notavailable.png");
             return imagePath;
         }
 
