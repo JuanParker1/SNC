@@ -43,10 +43,10 @@
                                 </div>
                                 @if (Model.PrescriptionImagePath != null)
                                 {
-                                <div class="col-md-2">
-                                    <label class="font-weight-bold">Prescription Image</label>
-                                    <img alt="Image" data-toggle="modal" data-target="#PrescriptionImageModal" class="img-thumbnail PrescriptionImage p-1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/@Model.PrescriptionImagePath" onerror="this.src='/Images/No Photo.png'" style="width:45px;height:45px" />
-                                </div>
+                                    <div class="col-md-2">
+                                        <label class="font-weight-bold">Prescription Image</label>
+                                        <img alt="Image" data-toggle="modal" data-target="#PrescriptionImageModal" class="img-thumbnail PrescriptionImage p-1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/@Model.PrescriptionImagePath" onerror="this.src='/Images/No Photo.png'" style="width:45px;height:45px" />
+                                    </div>
                                 }
                             </div>
                         </div>
@@ -148,27 +148,27 @@
                                     @if (item.ProductName != null)
                                     {
                                         <td><a href="~/Product/Details?id=@ShopNow.Helpers.AdminHelpers.ECodeLong(item.ProductId)">@item.ProductName</a></td>
-}
+                                    }
                                     else
                                     {
                                         <td>N/A</td>
-}
+                                    }
                                     @if (item.BrandName != null)
                                     {
                                         <td>@item.BrandName</td>
-}
+                                    }
                                     else
                                     {
                                         <td>N/A</td>
-}
+                                    }
                                     @if (item.CategoryName != null)
                                     {
                                         <td>@item.CategoryName</td>
-}
+                                    }
                                     else
                                     {
                                         <td>N/A</td>
-}
+                                    }
                                     <td>
                                         @item.Qty
                                         @*<input type="number" class="form-control col-md-1" name="Qty" id="Qty" value="@item.Qty" min="1" />*@
@@ -189,9 +189,18 @@
 <div id="PrescriptionImageModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Prescription Image</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
             <div class="modal-body">
-                <button class="close text-danger mb-2" data-dismiss="modal">&times;</button>
-                <img class="modal-content img-fluid w-100" style="height:400px;" id="PresImage" />
+                <div class="row" id="print-Prescription">
+                    <img class="modal-content img-fluid w-100" style="height:400px;" id="PresImage" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary ml-2" id="btnPrint" onclick="printDiv('print-Prescription')">Print</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -282,6 +291,13 @@
     <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
     <script>
+        function printDiv(divName) {
+            var printContents = document.getElementById(divName).innerHTML;
+            w = window.open();
+            w.document.write(printContents);
+            w.print();
+            w.close();
+        }
         function gotomap(lat, lng) {
             window.open('https://www.google.com/maps/place/' + lat + ',' + lng, "_blank");
         }
