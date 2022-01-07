@@ -71,6 +71,7 @@ namespace ShopNow.ViewModels
         public string PaymentMode{ get; set; }
         public double TipsAmount{ get; set; }
         public bool IsPrescriptionOrder { get; set; }
+        public string PrescriptionImagePath { get; set; }
 
         public List<ListItem> ListItems { get; set; }
         public class ListItem
@@ -157,6 +158,7 @@ namespace ShopNow.ViewModels
         public double WaitingCharge { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        public string PrescriptionImagePath { get; set; }
 
         public List<TodayList> TodayLists { get; set; }
         public class TodayList

@@ -611,6 +611,7 @@ namespace ShopNow.Controllers
                 model.WaitingCharge = cart.WaitingCharge;
                 model.TotalPrice = cart.TotalPrice;
                 model.PaymentMode = cart.PaymentMode;
+                model.PrescriptionImagePath = cart.PrescriptionImagePath;
                 var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == cart.DeliveryBoyId);
                 if (deliveryBoy != null)
                 {
@@ -929,6 +930,7 @@ namespace ShopNow.Controllers
         public JsonResult Accept(int OrderNumber)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             if (OrderNumber != 0)
             {
                 var order = db.Orders.FirstOrDefault(i => i.OrderNumber == OrderNumber);
@@ -957,6 +959,7 @@ namespace ShopNow.Controllers
         public JsonResult Cancel(int OrderNumber, int customerId, int? status, string remark)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             if (OrderNumber != 0 && customerId != 0 && status != 0)
             {
                 var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
@@ -1020,7 +1023,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCCUAD083")]
         public ActionResult UnAssignDeliveryBoy(int OrderNumber)
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var order = db.Orders.FirstOrDefault(i => i.OrderNumber == OrderNumber);
             var deliveryboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId);
             deliveryboy.isAssign = 0;
@@ -1043,6 +1047,7 @@ namespace ShopNow.Controllers
         public ActionResult DeliveryBoyAccept(int OrderNumber, long id)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var order = db.Orders.FirstOrDefault(i => i.Id == id);
             var delivaryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId && i.Status == 0);
             delivaryBoy.OnWork = 1;
@@ -1058,7 +1063,7 @@ namespace ShopNow.Controllers
         public ActionResult DeliveryBoyPickup(int OrderNumber, int id)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-
+            ViewBag.Name = user.Name;
             var order = db.Orders.FirstOrDefault(i => i.Id == id);
             order.Status = 5;
             order.UpdatedBy = user.Name;
@@ -1109,6 +1114,7 @@ namespace ShopNow.Controllers
         public ActionResult MarkAsDelivered(int OrderNumber, int id)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var order = db.Orders.FirstOrDefault(i => i.Id == id);
 
             var delivaryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId && i.Status == 0);
@@ -1234,6 +1240,7 @@ namespace ShopNow.Controllers
         public ActionResult CustomerNotPickUp(int OrderNumber, int id)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var order = db.Orders.FirstOrDefault(i => i.Id == id);
 
             var delivaryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId && i.Status == 0);
@@ -1258,6 +1265,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCCAW088")]
         public ActionResult AddWaitingCharge(int orderId, string remark, double amount)
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var order = db.Orders.FirstOrDefault(i => i.Id == orderId);
             if (order != null)
             {
@@ -1282,6 +1291,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCCAP089")]
         public ActionResult AddPenaltyCharge(int orderId, string remark, double amount)
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var order = db.Orders.FirstOrDefault(i => i.Id == orderId);
             if (order != null)
             {
@@ -1304,6 +1315,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCCOR090")]
         public ActionResult OrderRatios(OrderRatioViewModel model)
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             model.MonthFilter = model.MonthFilter != 0 ? model.MonthFilter : DateTime.Now.Month;
             model.YearFilter = model.YearFilter != 0 ? model.YearFilter : DateTime.Now.Year;
             model.ListItems = db.Orders.Where(a => a.DateEncoded.Month == model.MonthFilter && a.DateEncoded.Year == model.YearFilter && (a.Status == 6 || a.Status == 7 || a.Status == 9 || a.Status == 10)).GroupBy(i => DbFunctions.TruncateTime(i.DateEncoded))
@@ -1330,7 +1343,7 @@ namespace ShopNow.Controllers
         public ActionResult AddRefundFromShopOrderProcessing(long id, double amount, string remark, int redirection = 0)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-
+            ViewBag.Name = user.Name;
             var order = db.Orders.FirstOrDefault(i => i.Id == id);
             //Refund
             var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == order.OrderNumber);
@@ -1368,7 +1381,7 @@ namespace ShopNow.Controllers
         public ActionResult UpdateRefundAmount(long id, double amount = 0, string remark = "")
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
-
+            ViewBag.Name = user.Name;
             var order = db.Orders.FirstOrDefault(i => i.Id == id);
 
             var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == order.OrderNumber);
@@ -1403,6 +1416,7 @@ namespace ShopNow.Controllers
         public JsonResult ShopPay(int OrderNumber)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var order = db.Orders.FirstOrDefault(i => i.OrderNumber == OrderNumber && i.ShopPaymentStatus == 0);
             order.ShopPaymentStatus = 1;
             db.Entry(order).State = System.Data.Entity.EntityState.Modified;
@@ -1413,6 +1427,7 @@ namespace ShopNow.Controllers
         public JsonResult ShopNowChatPay(int OrderNumber)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var order = db.Orders.FirstOrDefault(i => i.OrderNumber == OrderNumber && i.DeliveryBoyPaymentStatus == 0);
             order.DeliveryBoyPaymentStatus = 1;
             db.Entry(order).State = System.Data.Entity.EntityState.Modified;
@@ -1433,6 +1448,7 @@ namespace ShopNow.Controllers
         public JsonResult DeliveryBoyReject(int OrderNumber)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             if (OrderNumber != 0)
             {
                 var order = db.Orders.FirstOrDefault(i => i.OrderNumber == OrderNumber);

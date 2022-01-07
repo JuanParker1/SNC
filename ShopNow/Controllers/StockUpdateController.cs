@@ -22,14 +22,16 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCSUSM284")]
         public ActionResult StockMaintenance()
         {
-
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             return View();
         }
 
         [AccessPolicy(PageCode = "SNCSUDM285")]
         public ActionResult DiscountMaintenance()
         {
-
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             return View();
         }
        
@@ -38,6 +40,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCSUU286")]
         public ActionResult Update(FormCollection formCollection, stockmodel model)
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             try
             {
                 var shopmodel = db.Shops.FirstOrDefault(a => a.Id == model.shopid);
@@ -245,6 +249,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCSUUD287")]
         public ActionResult UpdateDiscount(FormCollection formCollection, stockmodel model)
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             try
             {
                 var shopmodel = db.Shops.FirstOrDefault(a => a.Id == model.shopid);
