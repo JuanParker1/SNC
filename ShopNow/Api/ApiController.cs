@@ -2574,7 +2574,7 @@ namespace ShopNow.Controllers
 
                 model.ProductLists = db.Products.Where(i => i.ShopId == shopId && i.Status == 0 && i.Price != 0 && i.MenuPrice != 0)
                     .Join(db.MasterProducts.Where(i => str != "" ? i.Name.ToLower().Contains(str.ToLower()) : true), p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
-                    .Join(db.NextSubCategories.Where(i => categoryId != 0 ? i.Id == categoryId : true), p => p.m.NextSubCategoryId, c => c.Id, (p, c) => new { p, c })
+                    .GroupJoin(db.NextSubCategories.Where(i => categoryId != 0 ? i.Id == categoryId : true), p => p.m.NextSubCategoryId, c => c.Id, (p, c) => new { p, c })
                     .GroupJoin(db.CustomerFavorites, p => p.p.p.Id, cf => cf.ProductId, (p, cf) => new { p, cf })
                     .Select(i => new ShopDetails.ProductList
                     {
@@ -2582,8 +2582,8 @@ namespace ShopNow.Controllers
                         Name = i.p.p.m.Name,
                         ShopId = i.p.p.p.ShopId,
                         ShopName = i.p.p.p.ShopName,
-                        CategoryId = i.p.c.Id,
-                        CategoryName = i.p.c.Name,
+                        CategoryId =i.p.c.Any()? i.p.c.FirstOrDefault().Id:0,
+                        CategoryName = i.p.c.Any()? i.p.c.FirstOrDefault().Name:"Unknown",
                         ColorCode = i.p.p.m.ColorCode,
                         Price = i.p.p.p.MenuPrice,
                         ImagePath = ((!string.IsNullOrEmpty(i.p.p.m.ImagePath1)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.m.ImagePath1.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
@@ -5544,7 +5544,7 @@ namespace ShopNow.Controllers
                     model.SimilarProductsListItems = db.Shops.SqlQuery(query, new SqlParameter("latitude", latitude), new SqlParameter("longitude", longitude))
                        .Join(db.Products.Where(i => i.MasterProductId == product.MasterProductId), s => s.Id, p => p.ShopId, (s, p) => new { s, p })
                            .Join(db.MasterProducts, p => p.p.MasterProductId, m => m.Id, (p, m) => new { p, m })
-                           .AsEnumerable()
+                           //.AsEnumerable()
                            .Select(i => new ProductDetailsApiViewModel.SimilarProductsListItem
                            {
                                DiscountPercentage = i.p.p.Percentage,
@@ -5554,7 +5554,7 @@ namespace ShopNow.Controllers
                                ShopName = i.p.p.ShopName,
                                //   Distance = Math.Round((((Math.Acos(Math.Sin((i.p.s.Latitude * Math.PI / 180)) * Math.Sin((latitude * Math.PI / 180)) + Math.Cos((i.p.s.Latitude * Math.PI / 180)) * Math.Cos((latitude * Math.PI / 180))
                                //* Math.Cos(((i.p.s.Longitude - longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000, 2)
-                               Distance = Math.Round((double)(GetMeters(latitude, longitude, i.p.s.Latitude, i.p.s.Longitude) / 1000), 2),
+                               //Distance = Math.Round((double)(GetMeters(latitude, longitude, i.p.s.Latitude, i.p.s.Longitude) / 1000), 2),
                                ProductId = i.p.p.Id,
                                ShopPrice = i.p.p.ShopPrice,
                                ShopAddress = i.p.s.Address,
