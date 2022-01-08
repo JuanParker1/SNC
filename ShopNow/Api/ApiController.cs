@@ -965,7 +965,7 @@ namespace ShopNow.Controllers
                     var s = varpayment.Fetch(model.ReferenceCode);
                     PaymentsData pay = new PaymentsData();
 
-                    pay.OrderNumber = Convert.ToInt32(model.OrderNumber);
+                    pay.OrderNumber = model.OrderNumber;
                     pay.PaymentId = model.ReferenceCode;
 
                     pay.Invoice_Id = s["invoice_id"];
@@ -1099,7 +1099,7 @@ namespace ShopNow.Controllers
                     var s = varpayment.Fetch(model.ReferenceCode);
                     PaymentsData pay = new PaymentsData();
 
-                    pay.OrderNumber = Convert.ToInt32(model.OrderNumber);
+                    pay.OrderNumber = model.OrderNumber;
                     pay.PaymentId = model.ReferenceCode;
 
                     pay.Invoice_Id = s["invoice_id"];
