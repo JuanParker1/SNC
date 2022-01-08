@@ -5357,11 +5357,21 @@ namespace ShopNow.Controllers
                     AudioPath = (!string.IsNullOrEmpty(i.AudioPath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Audio/" + i.AudioPath : "",
                     DateEncoded = i.DateEncoded,
                     Id = i.Id,
-                    ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/notavailable.png"),
+                    //ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/notavailable.png"),
+                    ImagePath = GetFirstImage(i.Id),
                     Remarks = i.Remarks,
                     Status = i.Status
                 }).ToList();
             return Json(new { list = model.ListItems }, JsonRequestBehavior.AllowGet);
+        }
+
+        public string GetFirstImage(int id)
+        {
+            var imagePath = "";
+            var image = db.CustomerPrescriptionImages.FirstOrDefault(i => i.CustomerPrescriptionId == id);
+            if (image != null)
+                imagePath = ((!string.IsNullOrEmpty(image.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + image.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/notavailable.png");
+            return imagePath;
         }
 
         [HttpGet]
@@ -5601,34 +5611,64 @@ namespace ShopNow.Controllers
                 string query = "SELECT * " +
                                    " FROM Shops where(3959 * acos(cos(radians(@latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@longitude)) + sin(radians(@latitude)) * sin(radians(Latitude)))) < 16 and ShopCategoryId =" + shop.ShopCategoryId + " and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
                                    " order by IsOnline desc,Adscore desc,Rating desc";
-
-                model.SimilarProductsListItems = db.Shops.SqlQuery(query, new SqlParameter("latitude", latitude), new SqlParameter("longitude", longitude))
-                   .Join(db.Products.Where(i => i.MasterProductId == product.MasterProductId), s => s.Id, p => p.ShopId, (s, p) => new { s, p })
-                       .Join(db.MasterProducts, p => p.p.MasterProductId, m => m.Id, (p, m) => new { p, m })
-                       .Join(db.DiscountCategories, p => p.p.p.DiscountCategoryId, dc => dc.Id, (p, dc) => new { p, dc })
-                       .AsEnumerable()
-                       .Select(i => new MedicalProductDetailsApiViewModel.SimilarProductsListItem
-                       {
-                           DiscountPercentage = i.dc.Percentage,
-                           MenuPrice = i.p.p.p.MenuPrice,
-                           Name = i.p.m.Name,
-                           Price = i.p.p.p.Price,
-                           ShopName = i.p.p.p.ShopName,
-                               //   Distance = Math.Round((((Math.Acos(Math.Sin((i.p.p.s.Latitude * Math.PI / 180)) * Math.Sin((latitude * Math.PI / 180)) + Math.Cos((i.p.p.s.Latitude * Math.PI / 180)) * Math.Cos((latitude * Math.PI / 180))
-                               //* Math.Cos(((i.p.p.s.Longitude - longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000, 2)
-                               Distance = Math.Round((double)(GetMeters(latitude, longitude,i.p.p.s.Latitude, i.p.p.s.Longitude)/1000),2),
-                           ProductId = i.p.p.p.Id,
-                           ShopPrice = i.p.p.p.ShopPrice,
-                           ShopAddress = i.p.p.s.Address,
-                           ShopCategoryId = i.p.p.s.ShopCategoryId,
-                           ShopId = i.p.p.s.Id,
-                           ShopImagePath = ((!string.IsNullOrEmpty(i.p.p.s.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.s.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
-                           ShopIsOnline = i.p.p.s.IsOnline,
-                           ShopLatitude = i.p.p.s.Latitude,
-                           ShopLongitude = i.p.p.s.Longitude,
-                           ShopPhoneNumber = i.p.p.s.PhoneNumber,
-                           ShopStatus = i.p.p.s.Status
-                       }).ToList();
+                if (shop.Id == 347)
+                {
+                    model.SimilarProductsListItems = db.Shops.SqlQuery(query, new SqlParameter("latitude", latitude), new SqlParameter("longitude", longitude))
+                                      .Join(db.Products.Where(i => i.MasterProductId == product.MasterProductId), s => s.Id, p => p.ShopId, (s, p) => new { s, p })
+                                          .Join(db.MasterProducts, p => p.p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+                                          .AsEnumerable()
+                                          .Select(i => new MedicalProductDetailsApiViewModel.SimilarProductsListItem
+                                          {
+                                              DiscountPercentage = i.p.p.Percentage,
+                                              MenuPrice = i.p.p.MenuPrice,
+                                              Name = i.m.Name,
+                                              Price = i.p.p.Price,
+                                              ShopName = i.p.p.ShopName,
+                           Distance = Math.Round((double)(GetMeters(latitude, longitude, i.p.s.Latitude, i.p.s.Longitude) / 1000), 2),
+                                              ProductId = i.p.p.Id,
+                                              ShopPrice = i.p.p.ShopPrice,
+                                              ShopAddress = i.p.s.Address,
+                                              ShopCategoryId = i.p.s.ShopCategoryId,
+                                              ShopId = i.p.s.Id,
+                                              ShopImagePath = ((!string.IsNullOrEmpty(i.p.s.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.s.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                                              ShopIsOnline = i.p.s.IsOnline,
+                                              ShopLatitude = i.p.s.Latitude,
+                                              ShopLongitude = i.p.s.Longitude,
+                                              ShopPhoneNumber = i.p.s.PhoneNumber,
+                                              ShopStatus = i.p.s.Status
+                                          }).ToList();
+                }
+                else
+                {
+                    model.SimilarProductsListItems = db.Shops.SqlQuery(query, new SqlParameter("latitude", latitude), new SqlParameter("longitude", longitude))
+                  .Join(db.Products.Where(i => i.MasterProductId == product.MasterProductId), s => s.Id, p => p.ShopId, (s, p) => new { s, p })
+                      .Join(db.MasterProducts, p => p.p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+                      .Join(db.DiscountCategories, p => p.p.p.DiscountCategoryId, dc => dc.Id, (p, dc) => new { p, dc })
+                      .AsEnumerable()
+                      .Select(i => new MedicalProductDetailsApiViewModel.SimilarProductsListItem
+                      {
+                          DiscountPercentage = i.dc.Percentage,
+                          MenuPrice = i.p.p.p.MenuPrice,
+                          Name = i.p.m.Name,
+                          Price = i.p.p.p.Price,
+                          ShopName = i.p.p.p.ShopName,
+                           //   Distance = Math.Round((((Math.Acos(Math.Sin((i.p.p.s.Latitude * Math.PI / 180)) * Math.Sin((latitude * Math.PI / 180)) + Math.Cos((i.p.p.s.Latitude * Math.PI / 180)) * Math.Cos((latitude * Math.PI / 180))
+                           //* Math.Cos(((i.p.p.s.Longitude - longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000, 2)
+                           Distance = Math.Round((double)(GetMeters(latitude, longitude, i.p.p.s.Latitude, i.p.p.s.Longitude) / 1000), 2),
+                          ProductId = i.p.p.p.Id,
+                          ShopPrice = i.p.p.p.ShopPrice,
+                          ShopAddress = i.p.p.s.Address,
+                          ShopCategoryId = i.p.p.s.ShopCategoryId,
+                          ShopId = i.p.p.s.Id,
+                          ShopImagePath = ((!string.IsNullOrEmpty(i.p.p.s.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.p.p.s.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/noimageres.svg"),
+                          ShopIsOnline = i.p.p.s.IsOnline,
+                          ShopLatitude = i.p.p.s.Latitude,
+                          ShopLongitude = i.p.p.s.Longitude,
+                          ShopPhoneNumber = i.p.p.s.PhoneNumber,
+                          ShopStatus = i.p.p.s.Status
+                      }).ToList();
+                }
+               
             }
             return Json(model, JsonRequestBehavior.AllowGet);
         }
@@ -6234,7 +6274,7 @@ namespace ShopNow.Controllers
             using (WebClient myData = new WebClient())
             {
                 myData.Headers.Add("X-ApiKey", "Tx9ANC5RqngpTOM9VJ0JP2+1LbZvo1LI");
-                string getDetails = myData.DownloadString("https://admin.shopnowchat.in/api/GetAllCartItems");
+                string getDetails = myData.DownloadString("http://localhost:45679/api/GetAllCartItems");
                 var result = JsonConvert.DeserializeObject<List<OldOrder>>(getDetails).OrderBy(i=>i.DateEncoded);
                 // var list = JsonConvert.SerializeObject(result.Where(i => i.OrderNumber == 253051825));
                 foreach (var item in result.GroupBy(i => i.OrderNumber))

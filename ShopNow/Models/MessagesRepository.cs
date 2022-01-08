@@ -56,16 +56,16 @@ namespace ShopNow.Models
                 shoppickup = 0,
                 customerdelivery = 0,
                 orderwithoutdeliveryboy = 0,
-                RefundCount = 0,
+                //RefundCount = 0,
                 ShopLowCreditCount = 0,
-                CustomerPrescriptionCount = 0,
-                UnMappedCount = 0,
-                OrderMissedCount = 0,
-                ProductUnMappedCount = 0,
-                CustomerAadhaarVerifyCount = 0,
-                ShopOnBoardingVerifyCount = 0,
-                DeliveryBoyVerifyCount = 0,
-                BannerPendingCount = 0
+                //CustomerPrescriptionCount = 0,
+                //UnMappedCount = 0,
+                //OrderMissedCount = 0,
+                //ProductUnMappedCount = 0,
+                //CustomerAadhaarVerifyCount = 0,
+                //ShopOnBoardingVerifyCount = 0,
+                //DeliveryBoyVerifyCount = 0,
+                //BannerPendingCount = 0
             };
             using (var connection = new SqlConnection(_connString))
             {
