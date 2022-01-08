@@ -6,7 +6,6 @@
 <title>ShopNow | @ViewBag.Title</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-
 <div class="container-fluid">
     <form method="get" action="/Product/InactiveList" class="my-3">
         <div class="row my-2">
@@ -16,7 +15,7 @@
             <div class="col-md-8">
                 <div class="row">
                     <div class="col-md-4">
-                        <select id="select-shop" class="form-control" name="ShopCode">
+                        <select id="select-shop" class="form-control" name="ShopId">
                             @if (Model.ShopId != 0)
                             {
                                 <option value="@Model.ShopId">@Model.ShopName</option>
@@ -32,7 +31,6 @@
             </div>
         </div>
     </form>
-
     <div class="card shadow">
         <div class="card-body">
             @Html.Grid(Model.ListItems).Columns(columns =>
@@ -51,6 +49,7 @@
         </div>
     </div>
 </div>
+
 @section Scripts
 {
     <script src="~/Scripts/select2/js/select2.js"></script>
@@ -87,6 +86,5 @@
 
         });
     </script>
-
 }
 
