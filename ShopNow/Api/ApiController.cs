@@ -3589,7 +3589,7 @@ namespace ShopNow.Controllers
                      ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
                      Address = i.Address,
                      NextOnTime = i.NextOnTime,
-                     OfferPercentage = db.Products.Where(b => b.ShopId == i.Id).Max(b => b.Percentage)
+                     OfferPercentage = db.Products.Where(b => b.ShopId == i.Id && b.Status==0).Max(b => b.Percentage)
                  }).ToList();
                 model.SuperMarketList = db.Shops.SqlQuery(querySuperMarketList,
                 new SqlParameter("Latitude", Latitude),
@@ -3610,7 +3610,7 @@ namespace ShopNow.Controllers
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
                     Address = i.Address,
                     NextOnTime = i.NextOnTime,
-                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id).Max(b => b.Percentage)
+                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id && b.Status == 0).Max(b => b.Percentage)
                 }).ToList();
                 model.GroceriesList = db.Shops.SqlQuery(queryGroceriesList,
                 new SqlParameter("Latitude", Latitude),
@@ -3631,7 +3631,7 @@ namespace ShopNow.Controllers
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
                     Address = i.Address,
                     NextOnTime = i.NextOnTime,
-                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id).Max(b => b.Percentage)
+                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id && b.Status == 0).Max(b => b.Percentage)
                 }).ToList();
                 model.HealthList = db.Shops.SqlQuery(queryHealthList,
                 new SqlParameter("Latitude", Latitude),
@@ -3652,7 +3652,7 @@ namespace ShopNow.Controllers
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
                     Address = i.Address,
                     NextOnTime = i.NextOnTime,
-                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id).Max(b => b.Percentage)
+                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id && b.Status == 0).Max(b => b.Percentage)
                 }).ToList();
 
                 model.ElectronicsList = db.Shops.SqlQuery(queryElectronicsList,
@@ -3674,7 +3674,7 @@ namespace ShopNow.Controllers
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
                     Address = i.Address,
                     NextOnTime = i.NextOnTime,
-                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id).Max(b => b.Percentage)
+                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id && b.Status == 0).Max(b => b.Percentage)
                 }).ToList();
                 model.ServicesList = db.Shops.SqlQuery(qServicesList,
                 new SqlParameter("Latitude", Latitude),
@@ -3695,7 +3695,7 @@ namespace ShopNow.Controllers
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
                     Address = i.Address,
                     NextOnTime = i.NextOnTime,
-                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id).Max(b => b.Percentage)
+                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id && b.Status == 0).Max(b => b.Percentage)
                 }).ToList();
                 model.OtherList = db.Shops.SqlQuery(queryOtherList,
                 new SqlParameter("Latitude", Latitude),
@@ -3716,7 +3716,7 @@ namespace ShopNow.Controllers
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
                     Address = i.Address,
                     NextOnTime = i.NextOnTime,
-                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id).Max(b => b.Percentage)
+                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id && b.Status == 0).Max(b => b.Percentage)
                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3741,7 +3741,7 @@ namespace ShopNow.Controllers
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
                     Address = i.Address,
                     NextOnTime = i.NextOnTime,
-                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id).Max(b => b.Percentage)
+                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id && b.Status == 0).Max(b => b.Percentage)
                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3766,7 +3766,7 @@ namespace ShopNow.Controllers
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
                     Address = i.Address,
                     NextOnTime = i.NextOnTime,
-                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id).Max(b => b.Percentage)
+                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id && b.Status == 0).Max(b => b.Percentage)
                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3791,7 +3791,7 @@ namespace ShopNow.Controllers
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
                     Address = i.Address,
                     NextOnTime = i.NextOnTime,
-                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id).Max(b => b.Percentage)
+                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id && b.Status == 0).Max(b => b.Percentage)
                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3816,7 +3816,7 @@ namespace ShopNow.Controllers
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
                     Address = i.Address,
                     NextOnTime = i.NextOnTime,
-                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id).Max(b => b.Percentage)
+                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id && b.Status == 0).Max(b => b.Percentage)
                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3841,7 +3841,7 @@ namespace ShopNow.Controllers
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
                     Address = i.Address,
                     NextOnTime = i.NextOnTime,
-                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id).Max(b => b.Percentage)
+                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id && b.Status == 0).Max(b => b.Percentage)
                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3864,7 +3864,7 @@ namespace ShopNow.Controllers
                     Status = i.Status,
                     isOnline = i.IsOnline,
                     NextOnTime = i.NextOnTime,
-                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id).Max(b => b.Percentage)
+                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id && b.Status == 0).Max(b => b.Percentage)
                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -3892,7 +3892,7 @@ namespace ShopNow.Controllers
                     ReviewCount = db.CustomerReviews.Where(c => c.ShopId == i.Id).Count(),
                     Address = i.Address,
                     NextOnTime = i.NextOnTime,
-                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id).Max(b => b.Percentage)
+                    OfferPercentage = db.Products.Where(b => b.ShopId == i.Id && b.Status == 0).Max(b => b.Percentage)
                 }).ToList();
                 return Json(model, JsonRequestBehavior.AllowGet);
             }
@@ -5359,7 +5359,7 @@ namespace ShopNow.Controllers
         public JsonResult GetPrescriptionList(int customerid)
         {
             var model = new CustomerPrescriptionListViewModel();
-            model.ListItems = db.CustomerPrescriptions.Where(i => i.CustomerId == customerid)
+            model.ListItems = db.CustomerPrescriptions.Where(i => i.CustomerId == customerid && i.Status !=2)
                 .AsEnumerable()
                 .Select(i => new CustomerPrescriptionListViewModel.ListItem
                 {
@@ -5544,8 +5544,8 @@ namespace ShopNow.Controllers
                 //{
                     model.SimilarProductsListItems = db.Shops.SqlQuery(query, new SqlParameter("latitude", latitude), new SqlParameter("longitude", longitude))
                        .Join(db.Products.Where(i => i.MasterProductId == product.MasterProductId && i.Status ==0), s => s.Id, p => p.ShopId, (s, p) => new { s, p })
-                           .Join(db.MasterProducts, p => p.p.MasterProductId, m => m.Id, (p, m) => new { p, m })
-                           //.AsEnumerable()
+                           .Join(db.MasterProducts.Where(i=>i.Id==product.MasterProductId), p => p.p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+                           .AsEnumerable()
                            .Select(i => new ProductDetailsApiViewModel.SimilarProductsListItem
                            {
                                DiscountPercentage = i.p.p.Percentage,
@@ -5555,7 +5555,7 @@ namespace ShopNow.Controllers
                                ShopName = i.p.p.ShopName,
                                //   Distance = Math.Round((((Math.Acos(Math.Sin((i.p.s.Latitude * Math.PI / 180)) * Math.Sin((latitude * Math.PI / 180)) + Math.Cos((i.p.s.Latitude * Math.PI / 180)) * Math.Cos((latitude * Math.PI / 180))
                                //* Math.Cos(((i.p.s.Longitude - longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000, 2)
-                               //Distance = Math.Round((double)(GetMeters(latitude, longitude, i.p.s.Latitude, i.p.s.Longitude) / 1000), 2),
+                               Distance = Math.Round((double)(GetMeters(latitude, longitude, i.p.s.Latitude, i.p.s.Longitude) / 1000), 2),
                                ProductId = i.p.p.Id,
                                ShopPrice = i.p.p.ShopPrice,
                                ShopAddress = i.p.s.Address,
@@ -5624,7 +5624,7 @@ namespace ShopNow.Controllers
                 {
                     model.SimilarProductsListItems = db.Shops.SqlQuery(query, new SqlParameter("latitude", latitude), new SqlParameter("longitude", longitude))
                                       .Join(db.Products.Where(i => i.MasterProductId == product.MasterProductId && i.Status == 0), s => s.Id, p => p.ShopId, (s, p) => new { s, p })
-                                          .Join(db.MasterProducts, p => p.p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+                                          .Join(db.MasterProducts.Where(i => i.Id == product.MasterProductId), p => p.p.MasterProductId, m => m.Id, (p, m) => new { p, m })
                                           .AsEnumerable()
                                           .Select(i => new MedicalProductDetailsApiViewModel.SimilarProductsListItem
                                           {
@@ -6455,6 +6455,54 @@ namespace ShopNow.Controllers
             }
 
             return Json(true);
+        }
+
+        public JsonResult AddPaymentData(string code,int ordernumber)
+        {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
+                                                     SecurityProtocolType.Tls11 |
+                                                     SecurityProtocolType.Tls12;
+            string key = BaseClass.razorpaykey;// "rzp_live_PNoamKp52vzWvR";
+            string secret = BaseClass.razorpaySecretkey;//"yychwOUOsYLsSn3XoNYvD1HY";
+
+            RazorpayClient client = new RazorpayClient(key, secret);
+            Razorpay.Api.Payment varpayment = new Razorpay.Api.Payment();
+            var s = varpayment.Fetch(code);
+            PaymentsData pay = new PaymentsData();
+            pay.OrderNumber = ordernumber;
+            pay.PaymentId = code;
+
+            pay.Invoice_Id = s["invoice_id"];
+            if (s["status"] == "created")
+                pay.Status = 0;
+            else if (s["status"] == "authorized")
+                pay.Status = 1;
+            else if (s["status"] == "captured")
+                pay.Status = 2;
+            else if (s["status"] == "refunded")
+                pay.Status = 3;
+            else if (s["status"] == "failed")
+                pay.Status = 4;
+            pay.Order_Id = s["order_id"];
+            if (s["fee"] != null && s["fee"] > 0)
+                pay.Fee = (decimal)s["fee"] / 100;
+            else
+                pay.Fee = s["fee"];
+            pay.Entity = s["entity"];
+            pay.Currency = s["currency"];
+            pay.Method = s["method"];
+            if (s["tax"] != null && s["tax"] > 0)
+                pay.Tax = (decimal)s["tax"] / 100;
+            else
+                pay.Tax = s["tax"];
+            if (s["amount"] != null && s["amount"] > 0)
+                pay.Amount = s["amount"] / 100;
+            else
+                pay.Amount = s["amount"];
+            pay.DateEncoded = DateTime.Now;
+            db.PaymentsDatas.Add(pay);
+            db.SaveChanges();
+            return Json(true,JsonRequestBehavior.AllowGet);
         }
     }
 }
