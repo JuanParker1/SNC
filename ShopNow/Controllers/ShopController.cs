@@ -275,15 +275,19 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
 
                 //ShopCredit
-                var shopCredit = new ShopCredit
+                var sc = db.ShopCredits.FirstOrDefault(i => i.CustomerId == model.CustomerId);
+                if (sc == null)
                 {
-                    CustomerId=model.CustomerId,
-                    DateUpdated = DateTime.Now,
-                    DeliveryCredit=0,
-                    PlatformCredit=0
-                };
-                db.ShopCredits.Add(shopCredit);
-                db.SaveChanges();
+                    var shopCredit = new ShopCredit
+                    {
+                        CustomerId = model.CustomerId,
+                        DateUpdated = DateTime.Now,
+                        DeliveryCredit = 0,
+                        PlatformCredit = 0
+                    };
+                    db.ShopCredits.Add(shopCredit);
+                    db.SaveChanges();
+                }
 
                 return RedirectToAction("InActiveList", "Shop");
             }
