@@ -24,7 +24,7 @@
                    columns.Add().Encoded(false).Sanitized(false).RenderValueAs(s => "<span class=" + s.StatusTextColor + ">" + s.StatusText + "</span>").Titled("Status").Filterable(true).SetWidth(10);
                    columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
                    .RenderValueAs(o => @<div>
-                     <a href="modal-edit-gidftcard" class="text-info edit-prompt mr-5" data-id=@o.Id data-customerId="@o.CustomerId" data-customerPhonno="@o.CustomerPhoneNumber" data-amount="@o.Amount" data-Expirydate=@o.ExpiryDate.ToString("yyyy-MM-dd") data-target="#modal-edit-gidftcard" data-toggle="modal"><i class="fa fa-edit fa-lg"></i></a>
+                     @*<a href="modal-edit-gidftcard" class="text-info edit-prompt mr-5" data-id=@o.Id data-customerId="@o.CustomerId" data-customerPhonno="@o.CustomerPhoneNumber" data-amount="@o.Amount" data-Expirydate=@o.ExpiryDate.ToString("yyyy-MM-dd") data-target="#modal-edit-gidftcard" data-toggle="modal"><i class="fa fa-edit fa-lg"></i></a>*@
                      <a href="javascript:void(0)" data-id=@o.Id class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
                         </div>);
                     }).WithPaging(20).Sortable(true)
@@ -42,8 +42,12 @@
                     <h5>Add Gift Card</h5>
                     <div class="form-group">
                         <label>Select Customer</label>
-                        <select id="select-customer" class="form-control" name="CustomerId" required></select>
-                        <input type="hidden" name="CustomerPhoneNumber" />
+                        <select id="select-customer" class="form-control" name="CustomerId"></select>
+                        <input type="hidden" name="CustomerPhoneNumber" id="hidden-custphonenumber" />
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number (Not a customer)</label>
+                        <input type="text" class="form-control" name="NotCustomerPhoneNumber" />
                     </div>
                     <div class="form-group">
                         <label>Amount</label>
@@ -52,6 +56,10 @@
                     <div class="form-group">
                         <label>Expiry date</label>
                         <input class="form-control" type="date" name="ExpiryDate" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Channel Partner Number</label>
+                        <input type="text" class="form-control" name="ChannelPartnerNumber" />
                     </div>
                     <div class="text-right">
                         <button type="submit" class="btn btn-sm btn-success mr-3">Submit</button>
@@ -115,7 +123,7 @@
                     dataType: 'json'
                 }
             }).on('select2:select', function (e) {
-                $('input[name="CustomerPhoneNumber"]').val(e.params.data.phoneNumber);
+                $('#hidden-custphonenumber').val(e.params.data.phoneNumber);
             });
 
             $('#EditCustomerId').select2({

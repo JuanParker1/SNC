@@ -42,7 +42,8 @@ namespace ShopNow.Controllers
                 Amount = model.Amount,
                 CreatedBy = user.Name,
                 CustomerId = model.CustomerId,
-                CustomerPhoneNumber = model.CustomerPhoneNumber,
+                CustomerPhoneNumber = string.IsNullOrEmpty(model.CustomerPhoneNumber) ? model.NotCustomerPhoneNumber : model.CustomerPhoneNumber,
+                ChannelPartnerNumber = model.ChannelPartnerNumber,
                 DateEncoded = DateTime.Now,
                 GiftCardCode = Helpers.DRC.GenerateGiftCard("SNC-"),
                 ExpiryDate = model.ExpiryDate,
@@ -50,6 +51,22 @@ namespace ShopNow.Controllers
             };
             db.CustomerGiftCards.Add(giftCard);
             db.SaveChanges();
+
+            //var customer = db.Customers.FirstOrDefault(i => i.PhoneNumber == model.CustomerPhoneNumber);
+            //string msg = "";
+            //if (!string.IsNullOrEmpty(customer.Name) || customer.Name.ToLower() != "null")
+            //    msg = $"Hi Dear {customer.Name}, your Snowch Gift Card details, Code: {giftCard.GiftCardCode} only for your phone number {giftCard.CustomerPhoneNumber}, Expiry date : {giftCard.ExpiryDate.ToString("dd-MMM-yyyy")}, Amount: INR{giftCard.Amount}. T&C apply install now. <a href='http://playstore.snowch.in'>http://playstore.snowch.in</a> Thankyou - Joyra";
+            //else
+            //    msg = $"Hi Dear, your Snowch Gift Card details, Code: {giftCard.GiftCardCode} only for your phone number {giftCard.CustomerPhoneNumber}, Expiry date : {giftCard.ExpiryDate.ToString("dd-MMM-yyyy")}, Amount: INR{giftCard.Amount}. T&C apply install now. <a href='http://playstore.snowch.in'>http://playstore.snowch.in</a> Thankyou - Joyra";
+
+            ////Send exotel Message
+            ////Customer
+            //string from = "04448134440";
+            //SendSMS.execute(from, model.CustomerPhoneNumber, msg);
+            ////Channel Partner
+            //if (!string.IsNullOrEmpty(giftCard.ChannelPartnerNumber))
+            //    SendSMS.execute(from, model.ChannelPartnerNumber, msg);
+
             return RedirectToAction("List");
         }
 

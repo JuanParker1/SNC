@@ -52,8 +52,10 @@ namespace ShopNow.ViewModels
     {
         public int CustomerId { get; set; }
         public string CustomerPhoneNumber { get; set; }
+        public string ChannelPartnerNumber { get; set; }
         public double Amount { get; set; }
         public DateTime ExpiryDate { get; set; }
+        public string NotCustomerPhoneNumber { get; set; }
     }
 
     public class CustomerGiftCardEditViewModel
@@ -61,6 +63,7 @@ namespace ShopNow.ViewModels
         public int EditId { get; set; }
         public int EditCustomerId { get; set; }
         public string EditCustomerPhoneNumber { get; set; }
+        public string EditPartnerNumber { get; set; }
         public double EditAmount { get; set; }
         public DateTime EditExpiryDate { get; set; }
     }

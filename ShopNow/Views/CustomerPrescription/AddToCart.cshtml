@@ -393,7 +393,7 @@
             var modalImg = document.getElementById("PresImage");
             $(img).click(function () {
                 modal.style.display = "block";
-                modalImg.src = this.src;
+                modalImg.src = this.src.replace("/Small/", "/Large/");
                 if (this.src == "") {
                     $('#myModal').hide();
                 }
