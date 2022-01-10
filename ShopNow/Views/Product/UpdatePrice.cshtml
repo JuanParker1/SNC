@@ -1,0 +1,67 @@
+﻿@model ShopNow.ViewModels.UpdatePriceViewModel
+
+@{
+    ViewBag.Title = "Update Price";
+}
+<title>ShopNow | @ViewBag.Title</title>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 mx-auto mt-3">
+            <h4 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h4>
+            <div class="card shadow">
+                <div class="card-body">
+                    <form action="/Product/UpdatePrice" method="post">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="col-form-label">Select Shop</label>
+                                    <select id="select-shop" class="form-control" name="ShopId" required></select>
+                                    <input type="hidden" name="ShopName" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group mr-3">
+                                    <label class="col-form-label">Percentage</label>
+                                    <input type="number" name="Percentage" class="form-control" required/>
+                                </div>
+                            </div>
+                            <div class="col-md-2 mt-2"><input type="submit" class="btn btn-info mt-4 btn-block" value="Update" /></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/select2/js/select2.js"></script>
+    <link href="~/Scripts/select2/css/select2.css" rel="stylesheet" />
+    <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+             var msg = "@ViewBag.Message";
+            if (msg != "") {
+                swal("Success!", msg, "success")
+            }
+
+
+            $('#select-shop').select2({
+                placeholder: "Search Shop",
+                ajax: {
+                    url: "/Product/GetActiveShopSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            }).on('select2:select', function (e) {
+                $('input[name="ShopName"]').val(e.params.data.text);
+            });
+
+        });
+    </script>
+}
