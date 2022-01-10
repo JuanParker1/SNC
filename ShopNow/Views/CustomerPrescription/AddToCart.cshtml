@@ -61,6 +61,7 @@
                                 <input type="hidden" name="ProductName" />
                                 <input type="hidden" name="ItemId" />
                                 <input type="hidden" name="Price" />
+                                <input type="hidden" name="MRPPrice" />
                                 <input type="hidden" name="Weight" />
                                 <input type="hidden" name="SizeLWH" />
                                 <input type="hidden" name="BrandId" />
@@ -169,10 +170,22 @@
 
 <div id="myModal" class="modal fade">
     <div class="modal-dialog">
-        <span class="close" data-dismiss="modal">&times;</span>
-        @*<a href="~/Home/ImageDenied">*@
-        <img class="modal-content" id="myImage">
-        @*</a>*@
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Prescription Image</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row" id="print-Prescription">
+                    <img class="modal-content img-fluid w-100" style="height:400px;" id="PresImage" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary ml-2" id="btnPrint" onclick="printDiv('print-Prescription')">Print</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+        
     </div>
 </div>
 
@@ -186,6 +199,13 @@
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
     <!--Select2 End-->
     <script>
+        function printDiv(divName) {
+            var printContents = document.getElementById(divName).innerHTML;
+            w = window.open();
+            w.document.write(printContents);
+            w.print();
+            w.close();
+        }
         $(document).ready(function () {
             var id = $("#Id").val();
             var shopid = $("#ShopId").val();
@@ -202,6 +222,7 @@
                 $('input[name="ProductName"]').val(e.params.data.text);
                 $('input[name="ItemId"]').val(e.params.data.itemId);
                 $('input[name="Price"]').val(e.params.data.price);
+                $('input[name="MRPPrice"]').val(e.params.data.mrpprice);
                 $('input[name="Weight"]').val(e.params.data.weight);
                 $('input[name="SizeLWH"]').val(e.params.data.size);
                 $('input[name="BrandId"]').val(e.params.data.brandid);
@@ -209,75 +230,90 @@
                 $('input[name="CategoryId"]').val(e.params.data.categoryid);
                 $('input[name="CategoryName"]').val(e.params.data.categoryname);
                 $('input[name="ImagePath"]').val(e.params.data.imagepath);
+                $('input[name="Quantity"]').attr({ "max": e.params.data.quantity});
             });
-
+            $('input[type=number]').on('keypress keyup', function () {
+                var value = parseFloat($(this).attr('max'));
+                var maximum = $('input[name = "Quantity"]').val();
+                if (value < maximum) {
+                    swal("Warning!", "Only " + value + " stock available", "");
+                }
+            });
             var itemTotal = 0;
             var totalWeight = 0;
             var totalSize = 0;
             var itemArray = [];
             $('#btn-addtolist').on('click', function () {
-                var productId = $('[name="ProductId"]').val();
-                var productName = $('[name="ProductName"]').val();
-                var itemid = $('[name="ItemId"]').val();
-                var qty = $('[name="Quantity"]').val();
-                var price = $('[name="Price"]').val();
-                var weight = $('[name="Weight"]').val();
-                var size = $('[name="SizeLWH"]').val();
-                var brandId = $('[name="BrandId"]').val();
-                var brandName = $('[name="BrandName"]').val();
-                var categoryId = $('[name="CategoryId"]').val();
-                var categoryName = $('[name="CategoryName"]').val();
-                var imagePath = $('[name="ImagePath"]').val();
-                if (productId && qty) {
-                    var total = Math.round(price * qty).toFixed(2);
-                    var item = {
-                        ItemId: itemid,
-                        ProductId: productId,
-                        ProductName: productName,
-                        BrandId: brandId,
-                        BrandName: brandName,
-                        CategoryId: categoryId,
-                        CategoryName: categoryName,
-                        ImagePath: imagePath,
-                        Quantity: qty,
-                        UnitPrice: price,
-                        Price: total,
-                    };
-                    itemArray.push(item);
-                    var $tr = '<tr><td>' + productName + '</td><td>' + price + '</td><td>' + qty + '</td><td>' + total + '</td><td><a class="btn btn-sm btn-danger removeProduct" data-amount=' + total + ' data-id=' + id + 'data-weight=' + weight + 'data-size=' + size + '> Remove</a></td ></tr > ';
-                    $('#tbl-items tbody').append($tr);
-                    $('#div-items').removeClass('d-none');
-                    $('[name="ProductId"]').val('').trigger('change');
-                    $('[name="Quantity"]').val('');
-                    //$('[name="Price"]').val('');
+                var value = parseFloat($('input[type=number]').attr('max'));
+                var maximum = parseFloat($('input[name = "Quantity"]').val());
+                if (value < maximum) {
+                    swal("Warning!", "Only " + value + " stock available", "");
+                } else {
+                    var productId = $('[name="ProductId"]').val();
+                    var productName = $('[name="ProductName"]').val();
+                    var itemid = $('[name="ItemId"]').val();
+                    var qty = $('[name="Quantity"]').val();
+                    var price = $('[name="Price"]').val();
+                    var mrpprice = $('[name="MRPPrice"]').val();
+                    var weight = $('[name="Weight"]').val();
+                    var size = $('[name="SizeLWH"]').val();
+                    var brandId = $('[name="BrandId"]').val();
+                    var brandName = $('[name="BrandName"]').val();
+                    var categoryId = $('[name="CategoryId"]').val();
+                    var categoryName = $('[name="CategoryName"]').val();
+                    var imagePath = $('[name="ImagePath"]').val();
+                    if (productId && qty) {
+                        var total = Math.round(price * qty).toFixed(2);
+                        var item = {
+                            ItemId: itemid,
+                            ProductId: productId,
+                            ProductName: productName,
+                            BrandId: brandId,
+                            BrandName: brandName,
+                            CategoryId: categoryId,
+                            CategoryName: categoryName,
+                            ImagePath: imagePath,
+                            Quantity: qty,
+                            UnitPrice: price,
+                            Price: total,
+                            MRPPrice: mrpprice,
+                        };
+                        itemArray.push(item);
+                        var $tr = '<tr><td>' + productName + '</td><td>' + price + '</td><td>' + qty + '</td><td>' + total + '</td><td><a class="btn btn-sm btn-danger removeProduct" data-amount=' + total + ' data-id=' + id + 'data-weight=' + weight + 'data-size=' + size + '> Remove</a></td ></tr > ';
+                        $('#tbl-items tbody').append($tr);
+                        $('#div-items').removeClass('d-none');
+                        $('[name="ProductId"]').val('').trigger('change');
+                        $('[name="Quantity"]').val('');
+                        //$('[name="Price"]').val('');
 
-                    itemTotal += parseFloat(total);
-                    totalWeight += parseFloat(weight);
-                    totalSize += parseFloat(size);
+                        itemTotal += parseFloat(total);
+                        totalWeight += parseFloat(weight);
+                        totalSize += parseFloat(size);
 
-                    $(".ItemTotal").text(itemTotal);
-                    $.getJSON("/CustomerPrescription/GetShopCharge", { shopid: shopid, itemTotal: itemTotal, customerid: customerid, totalSize: totalSize, totalWeight: totalWeight }, function (data) {
-                        $("#PackingCharge").val(data.PackingCharge);
-                        $(".PackingCharge").text(data.PackingCharge);
-                        $("#ConvenientCharge").val(data.ConvenientCharge);
-                        $(".ConvenientCharge").text(data.ConvenientCharge);
-                        $("#GrossDeliveryCharge").val(data.GrossDeliveryCharge);
-                        $(".GrossDeliveryCharge").text(data.GrossDeliveryCharge.toFixed(2));
-                        $(".Distance").text(' (' + data.Distance.toFixed(2) + 'Km)');
-                        $("#Distance").val(data.Distance);
-                        $("#ShopDeliveryDiscount").val(data.ShopDeliveryDiscount);
-                        $(".ShopDeliveryDiscount").text(data.ShopDeliveryDiscount.toFixed(2));
-                        $("#NetDeliveryCharge").val(data.NetDeliveryCharge);
-                        $(".NetDeliveryCharge").text(data.NetDeliveryCharge.toFixed(2));
-                        var pack = $("#PackingCharge").val();
-                        var conv = $("#ConvenientCharge").val();
-                        var net = $("#NetDeliveryCharge").val();
-                        var toPay = parseFloat(itemTotal) + parseFloat(pack) + parseFloat(conv) + parseFloat(net);
-                        $(".ToPay").text(toPay.toFixed(2));
-                        $("#ToPay").val(toPay.toFixed(2));
-                    });
-                } else
-                    swal('Warning', 'All fields are required!', 'warning');
+                        $(".ItemTotal").text(itemTotal);
+                        $.getJSON("/CustomerPrescription/GetShopCharge", { shopid: shopid, itemTotal: itemTotal, customerid: customerid, totalSize: totalSize, totalWeight: totalWeight }, function (data) {
+                            $("#PackingCharge").val(data.PackingCharge);
+                            $(".PackingCharge").text(data.PackingCharge);
+                            $("#ConvenientCharge").val(data.ConvenientCharge);
+                            $(".ConvenientCharge").text(data.ConvenientCharge);
+                            $("#GrossDeliveryCharge").val(data.GrossDeliveryCharge);
+                            $(".GrossDeliveryCharge").text(data.GrossDeliveryCharge.toFixed(2));
+                            $(".Distance").text(' (' + data.Distance.toFixed(2) + 'Km)');
+                            $("#Distance").val(data.Distance);
+                            $("#ShopDeliveryDiscount").val(data.ShopDeliveryDiscount);
+                            $(".ShopDeliveryDiscount").text(data.ShopDeliveryDiscount.toFixed(2));
+                            $("#NetDeliveryCharge").val(data.NetDeliveryCharge);
+                            $(".NetDeliveryCharge").text(data.NetDeliveryCharge.toFixed(2));
+                            var pack = $("#PackingCharge").val();
+                            var conv = $("#ConvenientCharge").val();
+                            var net = $("#NetDeliveryCharge").val();
+                            var toPay = parseFloat(itemTotal) + parseFloat(pack) + parseFloat(conv) + parseFloat(net);
+                            $(".ToPay").text(toPay.toFixed(0));
+                            $("#ToPay").val(toPay.toFixed(0));
+                        });
+                    } else
+                        swal('Warning', 'All fields are required!', 'warning');
+                }
             });
 
             $(document).on('click', '.removeProduct', function () {
@@ -313,8 +349,8 @@
                     var conv = $("#ConvenientCharge").val();
                     var net = $("#NetDeliveryCharge").val();
                     var toPay = parseFloat(itemTotal) + parseFloat(pack) + parseFloat(conv) + parseFloat(net);
-                    $(".ToPay").text(toPay.toFixed(2));
-                    $("#ToPay").val(topay.toFixed(2));
+                    $(".ToPay").text(toPay.toFixed(0));
+                    $("#ToPay").val(topay.toFixed(0));
                 });
             });
 
@@ -354,10 +390,10 @@
 
             var modal = document.getElementById('myModal');
             var img = document.getElementsByClassName('PrescriptionImage');
-            var modalImg = document.getElementById("myImage");
+            var modalImg = document.getElementById("PresImage");
             $(img).click(function () {
                 modal.style.display = "block";
-                modalImg.src = this.src;
+                modalImg.src = this.src.replace("/Small/", "/Large/");
                 if (this.src == "") {
                     $('#myModal').hide();
                 }

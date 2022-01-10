@@ -54,6 +54,7 @@
                         if (data) {
                             swal('Success!', 'Save Successfully', 'success');
                             tr.find('.input-keys').val('');
+                            window.location.reload();
                         }
                         else
                             swal('Warning!', 'Something went wrong, try again later!', 'warning');

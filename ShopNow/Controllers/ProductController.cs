@@ -448,6 +448,7 @@ namespace ShopNow.Controllers
                 model.MasterProductName = masterProduct.Name;
                 model.CategoryId = product.CategoryId;
                 model.GoogleTaxonomyCode = masterProduct.GoogleTaxonomyCode;
+                model.ColorCode = masterProduct.ColorCode;
                 var categoryName = db.Categories.FirstOrDefault(i => i.Id == product.CategoryId);
                 if (categoryName != null)
                     model.CategoryName = categoryName.Name;

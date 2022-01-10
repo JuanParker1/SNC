@@ -52,7 +52,7 @@ namespace ShopNow.Controllers
                     Status = i.cp.Status,
                     ImagePathLists = i.cpi.Select(a => new CustomerPrescriptionWebListViewModel.ListItem.ImagePathList
                     {
-                        ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + a.ImagePath
+                        ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + a.ImagePath
                     }).ToList()
                 }).ToList();
             return View(model);
@@ -72,7 +72,7 @@ namespace ShopNow.Controllers
                 model.ImagePathLists = db.CustomerPrescriptionImages.Where(i => i.CustomerPrescriptionId == cp.Id)
                         .Select(i => new AddToCartViewModel.ImagePathList
                         {
-                            ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + i.ImagePath
+                            ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath
                         }).ToList();
                 model.AudioPath = (!string.IsNullOrEmpty(cp.AudioPath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Audio/" + cp.AudioPath : "";
                 var shop = db.Shops.FirstOrDefault(i => i.Id == cp.ShopId);
@@ -203,6 +203,7 @@ namespace ShopNow.Controllers
                         orderItem.Quantity = item.Quantity;
                         orderItem.UnitPrice = item.UnitPrice;
                         orderItem.Price = item.Price;
+                        orderItem.MRPPrice = item.MRPPrice;
                         db.OrderItems.Add(orderItem);
                         db.SaveChanges();
                     }
@@ -290,7 +291,9 @@ namespace ShopNow.Controllers
                     categoryid = i.p.p.CategoryId,
                     categoryname = i.c.Name,
                     imagepath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + i.p.m.ImagePath1,
-                    itemid = i.p.p.ItemId
+                    itemid = i.p.p.ItemId,
+                    quantity = i.p.p.Qty,
+                    mrpprice = i.p.p.MenuPrice
                 }).OrderBy(i => i.text).ToListAsync();
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
