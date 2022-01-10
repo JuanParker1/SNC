@@ -38,9 +38,7 @@
                columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(1);
                columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
                columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
-               columns.Add()
-             .Encoded(false)
-             .Sanitized(false)
+               columns.Add().Encoded(false).Sanitized(false)
              .RenderValueAs(o => Html.ActionLink(o.PaymentMode, "Edit", new { ordernumber = o.OrderNumber, id = ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-info btn-block", }).ToHtmlString()).Titled("Payment Mode").SetWidth(15);
                columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(8);
                columns.Add(c => c.CustomerPhoneNumber).Titled("Cust.Phone No.").Filterable(true).SetWidth(10);
@@ -48,11 +46,9 @@
                columns.Add(c => c.DateUpdated).Titled("Delivered Time").Filterable(true).SetWidth(10);
                columns.Add(c => c.ShopAcceptedTime).Titled("Shop Accept").Filterable(true).SetWidth(88);
                columns.Add(c => c.OrderPeriod).Titled("Order Period").Filterable(true).SetWidth(8);
-               columns.Add()
-               .Encoded(false)
-               .Sanitized(false)
+               columns.Add().Encoded(false).Sanitized(false)
                .RenderValueAs(o => ((o.RefundAmount == 0 || o.RefundAmount == null) ? "<a href='#modal-refund' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-refund' class='btn btn-sm btn-primary btn-modal-refund mt-2'>Refund</a>" : o.RefundAmount.Value > 0 ? "<span>" + o.RefundAmount + "(" + o.RefundRemark + ")" + "</span>" : "N/A") +
-               ("<a href='Cart/Details?id='"+@ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id)+"' class='btn btn-sm btn-secondary mt-1' style='padding:3px 20px'>")).Titled("Action").SetWidth(30);
+               ("<a href='Details?id='" + @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) + "' ' class='btn btn-sm btn-secondary mt-1'>Details</a>")).Titled("Action").SetWidth(30);
                     }).WithPaging(10).Sortable(true)
                 </div>
             </div>
