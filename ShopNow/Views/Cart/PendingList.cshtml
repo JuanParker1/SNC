@@ -32,7 +32,7 @@
                    columns.Add(c => c.PaymentMode).Titled("PaymentMode").Filterable(true).SetWidth(28);
                    columns.Add(c => c.Price).Titled("Amount").Filterable(true).SetWidth(5);
                    columns.Add(c => c.ShopOwnerPhoneNumber).Titled("ShopOwnerPh.No").Filterable(true).SetWidth(30);
-                   columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(13).Format("{0:dd-MMM-yyyy}");
+                   columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(13).Format("{0:dd-MMM-yyyy hh:mm tt}");
                   // columns.Add().RenderValueAs(c => c.Status == 2 ? "Pending" : "N/A").Titled("Order Status").Filterable(true).SetWidth(12);
                    columns.Add().Encoded(false).Sanitized(false)
                    .RenderValueAs(o => Html.ActionLink("View", "Edit", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-info btn-block", }).ToHtmlString()

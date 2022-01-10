@@ -178,13 +178,24 @@
 <div id="myModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Prescription Image</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
             <div class="modal-body">
-                <button class="close text-danger mb-2" data-dismiss="modal">&times;</button>
-                <img class="modal-content img-fluid w-100" style="height:400px;" id="myImage" />
+                <div class="row" id="print-Prescription">
+                    <img class="modal-content img-fluid w-100"  style="height:400px;" id="PresImage" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary ml-2" id="btnPrint" onclick="printDiv('print-Prescription')">Print</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
         </div>
+
     </div>
 </div>
+
 @section Scripts
 {
     <!--Select2-->
@@ -195,13 +206,20 @@
     <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
     <!--Select2 End-->
     <script>
+        function printDiv(divName) {
+            var printContents = document.getElementById(divName).innerHTML;
+            w = window.open();
+            w.document.write(printContents);
+            w.print();
+            w.close();
+        }
         $(document).ready(function () {
             var modal = document.getElementById('myModal');
             var img = document.getElementsByClassName('PrescriptionImage');
-            var modalImg = document.getElementById("myImage");
+            var modalImg = document.getElementById("PresImage");
             $(img).click(function () {
                 modal.style.display = "block";
-                modalImg.src = this.src;
+                modalImg.src = this.src.replace("/Small/", "/Large/");
                 if (this.src == "") {
                     $('#myModal').hide();
                 }
