@@ -679,6 +679,13 @@ namespace ShopNow.ViewModels
        public int Percentage { get; set; }
     }
 
+    public class UpdatePriceViewModel
+    {
+        public int ShopId { get; set; }
+        public string ShopName { get; set; }
+        public int Percentage { get; set; }
+    }
+
     public class ProductZeroPriceList
     {
         public int ShopId { get; set; }

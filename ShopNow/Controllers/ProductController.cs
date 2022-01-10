@@ -1741,6 +1741,40 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult UpdatePrice()
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            return View();
+        }
+
+        [HttpPost]
+        [AccessPolicy(PageCode = "SNCPRAD221")]
+        public ActionResult UpdatePrice(UpdatePriceViewModel model)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var productsList = db.Products.Where(i => i.ShopId == model.ShopId && i.Status == 0).ToList();
+            if (model.Percentage != 0)
+            {
+                if (productsList != null)
+                {
+                    productsList.ForEach(i => { i.Price = Math.Round(i.Price + (i.ShopPrice * model.Percentage) / 100, 0); i.MenuPrice = Math.Round(i.MenuPrice + (i.ShopPrice * model.Percentage) / 100, 0); });
+                    db.SaveChanges();
+                }
+            }
+            else
+            {
+                if (productsList != null)
+                {
+                    productsList.ForEach(i => { i.ShopPrice = Math.Round(i.ShopPrice - (i.ShopPrice * i.Percentage) / 100, 0); i.MenuPrice = i.ShopPrice; });
+                    db.SaveChanges();
+                }
+            }
+            ViewBag.Message = "Successfully Updated!";
+            return View();
+        }
+
         public async Task<JsonResult> GetMedicalDiscountCategorySelect2(string q = "",int shopid=0)
         {
             var model = await db.DiscountCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.ShopId==shopid)
