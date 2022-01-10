@@ -77,16 +77,26 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCSL253")]
-        public ActionResult List(string district = "")
+        public ActionResult List(int shop = 0)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var List = (from s in db.Shops
-                        where (district != "" ? s.DistrictName == district : true) && (s.Status == 0 || s.Status == 6)
+                        where (shop != 0 ? s.Id == shop : true) && (s.Status == 0 || s.Status == 6)
                         select s).OrderBy(s => s.Name).ToList();
-            ViewBag.District = district;
             return View(List);
         }
+
+        //public ActionResult List(string district = "")
+        //{
+        //    var user = ((Helpers.Sessions.User)Session["USER"]);
+        //    ViewBag.Name = user.Name;
+        //    var List = (from s in db.Shops
+        //                where (district != "" ? s.DistrictName == district : true) && (s.Status == 0 || s.Status == 6)
+        //                select s).OrderBy(s => s.Name).ToList();
+        //    ViewBag.District = district;
+        //    return View(List);
+        //}
 
         [AccessPolicy(PageCode = "SNCSIL254")]
         public ActionResult InactiveList()
@@ -882,6 +892,17 @@ namespace ShopNow.Controllers
         public async Task<JsonResult> GetListSelect2(string q = "")
         {
             var model = await db.Shops.Where(a => a.Name.Contains(q)).OrderBy(i => i.Name).Select(i => new
+            {
+                id = i.Id,
+                text = i.Name
+            }).ToListAsync();
+
+            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<JsonResult> GetShopListSelect2(string q = "")
+        {
+            var model = await db.Shops.Where(a => a.Name.Contains(q) && (a.Status == 0 || a.Status == 6)).OrderBy(i => i.Name).Select(i => new
             {
                 id = i.Id,
                 text = i.Name
