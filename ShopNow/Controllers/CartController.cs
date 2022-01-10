@@ -43,18 +43,19 @@ namespace ShopNow.Controllers
             var dt = DateTime.Now;
             var model = new CartListViewModel();
             model.TodayLists = db.Orders.Where(i => /*(DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(dt))*/ i.Status != 6 && i.Status != 7 && i.Status != 9 && i.Status != 10 && i.Status != 0 && i.Status != -1 && (shopId != 0 ? i.ShopId == shopId : true))
+                .Join(db.Payments, c=> c.OrderNumber, p=> p.OrderNumber,(c,p)=> new { c, p })
             .Select(i => new CartListViewModel.TodayList
             {
-                Id = i.Id,
-                ShopName = i.ShopName,
-                OrderNumber = i.OrderNumber,
-                DeliveryAddress = i.DeliveryAddress,
-                ShopPhoneNumber = i.ShopPhoneNumber,
-                Status = i.Status,
-                DeliveryBoyName = i.DeliveryBoyName ?? "N/A",
-                PaymentMode = i.PaymentMode,
-                Amount = i.NetTotal,
-                DateEncoded = i.DateEncoded
+                Id = i.c.Id,
+                ShopName = i.c.ShopName,
+                OrderNumber = i.c.OrderNumber,
+                DeliveryAddress = i.c.DeliveryAddress,
+                ShopPhoneNumber = i.c.ShopPhoneNumber,
+                Status = i.c.Status,
+                DeliveryBoyName = i.c.DeliveryBoyName ?? "N/A",
+                PaymentMode = i.c.PaymentMode,
+                Amount = i.p.Amount - (i.p.RefundAmount?? 0),
+                DateEncoded = i.c.DateEncoded
             }).OrderBy(i => i.Status).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.TodayLists.ForEach(x => x.No = counter++);

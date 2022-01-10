@@ -349,7 +349,7 @@
             var modalImg1 = document.getElementById("PresImage");
             $(img1).click(function () {
                 modal1.style.display = "block";
-                modalImg1.src = this.src.replace("/Small/", "/Medium/");
+                modalImg1.src = this.src.replace("/Small/", "/Large/");
                 if (this.src == "") {
                     $('#PrescriptionImageModal').hide();
                 }
@@ -364,7 +364,7 @@
             $(img).click(function () {
                 var pname = $(this).data('productname');
                 modal.style.display = "block";
-                modalImg.src = this.src.replace("/Small/", "/Medium/");
+                modalImg.src = this.src.replace("/Small/", "/Large/");
                 $(".showProductName").text(pname);
                 if (this.src == "") {
                     $('#myModal').hide();

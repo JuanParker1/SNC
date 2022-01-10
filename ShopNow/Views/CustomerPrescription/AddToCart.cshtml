@@ -185,7 +185,6 @@
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
         </div>
-        
     </div>
 </div>
 
@@ -232,9 +231,9 @@
                 $('input[name="ImagePath"]').val(e.params.data.imagepath);
                 $('input[name="Quantity"]').attr({ "max": e.params.data.quantity});
             });
-            $('input[type=number]').on('keypress keyup', function () {
+            $('input[name="Quantity"]').on('keypress keyup', function () {
                 var value = parseFloat($(this).attr('max'));
-                var maximum = $('input[name = "Quantity"]').val();
+                var maximum = parseFloat($('input[name = "Quantity"]').val());
                 if (value < maximum) {
                     swal("Warning!", "Only " + value + " stock available", "");
                 }
@@ -244,7 +243,7 @@
             var totalSize = 0;
             var itemArray = [];
             $('#btn-addtolist').on('click', function () {
-                var value = parseFloat($('input[type=number]').attr('max'));
+                var value = parseFloat($('input[name="Quantity"]').attr('max'));
                 var maximum = parseFloat($('input[name = "Quantity"]').val());
                 if (value < maximum) {
                     swal("Warning!", "Only " + value + " stock available", "");

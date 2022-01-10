@@ -17,6 +17,7 @@ namespace ShopNow.Models
         public int Id { get; set; }
         public int CustomerId { get; set; }
         public string CustomerPhoneNumber { get; set; }
+        public string ChannelPartnerNumber { get; set; }
         public string GiftCardCode { get; set; }
         public double Amount { get; set; }
         public System.DateTime ExpiryDate { get; set; }
