@@ -5544,8 +5544,8 @@ namespace ShopNow.Controllers
                 //{
                     model.SimilarProductsListItems = db.Shops.SqlQuery(query, new SqlParameter("latitude", latitude), new SqlParameter("longitude", longitude))
                        .Join(db.Products.Where(i => i.MasterProductId == product.MasterProductId && i.Status ==0), s => s.Id, p => p.ShopId, (s, p) => new { s, p })
-                           .Join(db.MasterProducts, p => p.p.MasterProductId, m => m.Id, (p, m) => new { p, m })
-                           //.AsEnumerable()
+                           .Join(db.MasterProducts.Where(i=>i.Id==product.MasterProductId), p => p.p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+                           .AsEnumerable()
                            .Select(i => new ProductDetailsApiViewModel.SimilarProductsListItem
                            {
                                DiscountPercentage = i.p.p.Percentage,
@@ -5555,7 +5555,7 @@ namespace ShopNow.Controllers
                                ShopName = i.p.p.ShopName,
                                //   Distance = Math.Round((((Math.Acos(Math.Sin((i.p.s.Latitude * Math.PI / 180)) * Math.Sin((latitude * Math.PI / 180)) + Math.Cos((i.p.s.Latitude * Math.PI / 180)) * Math.Cos((latitude * Math.PI / 180))
                                //* Math.Cos(((i.p.s.Longitude - longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000, 2)
-                               //Distance = Math.Round((double)(GetMeters(latitude, longitude, i.p.s.Latitude, i.p.s.Longitude) / 1000), 2),
+                               Distance = Math.Round((double)(GetMeters(latitude, longitude, i.p.s.Latitude, i.p.s.Longitude) / 1000), 2),
                                ProductId = i.p.p.Id,
                                ShopPrice = i.p.p.ShopPrice,
                                ShopAddress = i.p.s.Address,
@@ -5624,7 +5624,7 @@ namespace ShopNow.Controllers
                 {
                     model.SimilarProductsListItems = db.Shops.SqlQuery(query, new SqlParameter("latitude", latitude), new SqlParameter("longitude", longitude))
                                       .Join(db.Products.Where(i => i.MasterProductId == product.MasterProductId && i.Status == 0), s => s.Id, p => p.ShopId, (s, p) => new { s, p })
-                                          .Join(db.MasterProducts, p => p.p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+                                          .Join(db.MasterProducts.Where(i => i.Id == product.MasterProductId), p => p.p.MasterProductId, m => m.Id, (p, m) => new { p, m })
                                           .AsEnumerable()
                                           .Select(i => new MedicalProductDetailsApiViewModel.SimilarProductsListItem
                                           {
