@@ -6456,5 +6456,53 @@ namespace ShopNow.Controllers
 
             return Json(true);
         }
+
+        public JsonResult AddPaymentData(string code,int ordernumber)
+        {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
+                                                     SecurityProtocolType.Tls11 |
+                                                     SecurityProtocolType.Tls12;
+            string key = BaseClass.razorpaykey;// "rzp_live_PNoamKp52vzWvR";
+            string secret = BaseClass.razorpaySecretkey;//"yychwOUOsYLsSn3XoNYvD1HY";
+
+            RazorpayClient client = new RazorpayClient(key, secret);
+            Razorpay.Api.Payment varpayment = new Razorpay.Api.Payment();
+            var s = varpayment.Fetch(code);
+            PaymentsData pay = new PaymentsData();
+            pay.OrderNumber = ordernumber;
+            pay.PaymentId = code;
+
+            pay.Invoice_Id = s["invoice_id"];
+            if (s["status"] == "created")
+                pay.Status = 0;
+            else if (s["status"] == "authorized")
+                pay.Status = 1;
+            else if (s["status"] == "captured")
+                pay.Status = 2;
+            else if (s["status"] == "refunded")
+                pay.Status = 3;
+            else if (s["status"] == "failed")
+                pay.Status = 4;
+            pay.Order_Id = s["order_id"];
+            if (s["fee"] != null && s["fee"] > 0)
+                pay.Fee = (decimal)s["fee"] / 100;
+            else
+                pay.Fee = s["fee"];
+            pay.Entity = s["entity"];
+            pay.Currency = s["currency"];
+            pay.Method = s["method"];
+            if (s["tax"] != null && s["tax"] > 0)
+                pay.Tax = (decimal)s["tax"] / 100;
+            else
+                pay.Tax = s["tax"];
+            if (s["amount"] != null && s["amount"] > 0)
+                pay.Amount = s["amount"] / 100;
+            else
+                pay.Amount = s["amount"];
+            pay.DateEncoded = DateTime.Now;
+            db.PaymentsDatas.Add(pay);
+            db.SaveChanges();
+            return Json(true,JsonRequestBehavior.AllowGet);
+        }
     }
 }
