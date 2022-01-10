@@ -5360,6 +5360,7 @@ namespace ShopNow.Controllers
         {
             var model = new CustomerPrescriptionListViewModel();
             model.ListItems = db.CustomerPrescriptions.Where(i => i.CustomerId == customerid)
+                .AsEnumerable()
                 .Select(i => new CustomerPrescriptionListViewModel.ListItem
                 {
                     AudioPath = (!string.IsNullOrEmpty(i.AudioPath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Audio/" + i.AudioPath : "",
