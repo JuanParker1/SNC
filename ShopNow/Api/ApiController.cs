@@ -5542,7 +5542,7 @@ namespace ShopNow.Controllers
                 //else
                 //{
                     model.SimilarProductsListItems = db.Shops.SqlQuery(query, new SqlParameter("latitude", latitude), new SqlParameter("longitude", longitude))
-                       .Join(db.Products.Where(i => i.MasterProductId == product.MasterProductId), s => s.Id, p => p.ShopId, (s, p) => new { s, p })
+                       .Join(db.Products.Where(i => i.MasterProductId == product.MasterProductId && i.Status ==0), s => s.Id, p => p.ShopId, (s, p) => new { s, p })
                            .Join(db.MasterProducts, p => p.p.MasterProductId, m => m.Id, (p, m) => new { p, m })
                            //.AsEnumerable()
                            .Select(i => new ProductDetailsApiViewModel.SimilarProductsListItem
@@ -5622,7 +5622,7 @@ namespace ShopNow.Controllers
                 if (shop.Id == 347)
                 {
                     model.SimilarProductsListItems = db.Shops.SqlQuery(query, new SqlParameter("latitude", latitude), new SqlParameter("longitude", longitude))
-                                      .Join(db.Products.Where(i => i.MasterProductId == product.MasterProductId), s => s.Id, p => p.ShopId, (s, p) => new { s, p })
+                                      .Join(db.Products.Where(i => i.MasterProductId == product.MasterProductId && i.Status == 0), s => s.Id, p => p.ShopId, (s, p) => new { s, p })
                                           .Join(db.MasterProducts, p => p.p.MasterProductId, m => m.Id, (p, m) => new { p, m })
                                           .AsEnumerable()
                                           .Select(i => new MedicalProductDetailsApiViewModel.SimilarProductsListItem
