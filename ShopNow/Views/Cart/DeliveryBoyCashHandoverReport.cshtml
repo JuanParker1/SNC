@@ -162,7 +162,7 @@
             $('.btnPayNow').click(function () {
                 var ordernumber = $(this).attr('data-ordernumber');
                 var thisRow = $(this).closest("tr");
-                $.getJSON("/Cart/ShopNowChatPay/?ordernumber=" + ordernumber, function (data) {
+                $.getJSON("/Cart/ShopNowChatPay/?OrderNumber=" + ordernumber, function (data) {
                     if (data == true) {
                         window.location.reload();
                         var count = $('#DeliveryBoy-list tr').length;

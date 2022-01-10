@@ -108,15 +108,15 @@
 
         $(document).ready(function () {
             $('#Amount').on('change keyup', function () {
-                var totalprice = $("#CartTotalPrice").val();
-                var amount = $(this).val();
+                var totalprice = parseFloat($("#TotalPrice").val());
+                var amount = parseFloat($(this).val());
                 var results = Math.ceil(amount - totalprice);
                 $("#TotalCharge").val(results);
             });
 
             $('#NetDeliveryCharge').on('change keyup', function () {
-                var gross = $("#GrossDeliveryCharge").val();
-                var net = $(this).val();
+                var gross = parseFloat($("#GrossDeliveryCharge").val());
+                var net = parseFloat($(this).val());
                 var results = Math.ceil(gross - net);
                 $("#ShopDeliveryDiscount").val(results);
             });

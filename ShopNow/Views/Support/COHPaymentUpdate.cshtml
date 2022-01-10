@@ -77,7 +77,7 @@
     <script>
         $(document).ready(function () {
             $('#Amount').on('change keyup', function () {
-                var totalprice = $("#CartTotalPrice").val();
+                var totalprice = $("#TotalPrice").val();
                 var amount = $(this).val();
                 var results = Math.ceil(amount - totalprice);
                 $("#TotalCharge").val(results);
