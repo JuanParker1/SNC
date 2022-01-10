@@ -138,6 +138,7 @@ namespace ShopNow.Controllers
             var customer = db.Customers.FirstOrDefault(i => i.Id == user.Id);
             var shop = _mapper.Map<ShopRegisterViewModel, Shop>(model);
             shop.Status = 1;
+            shop.IsOnline = false;
             shop.CreatedBy = user.Name;
             shop.UpdatedBy = user.Name;
             shop.DateEncoded = DateTime.Now;
