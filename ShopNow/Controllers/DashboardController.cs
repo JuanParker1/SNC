@@ -21,7 +21,7 @@ namespace ShopNow.Controllers
             ViewBag.Delivery = _db.DeliveryBoys.Where(i => i.Status == 0).Count();
             ViewBag.Order = _db.Orders.Where(i => i.Status == 0 && i.OrderNumber != 0 && i.Status != 7 && i.Status != 6 && i.Status !=9 && i.Status !=10).Count();
             var model = new DashboardIndexViewModel();
-            var orders = _db.Orders.Where(i => i.DateEncoded.Year == DateTime.Now.Year).ToList();
+            var orders = _db.Orders.Where(i => i.DateEncoded.Year == DateTime.Now.Year && i.Status == 6).ToList();
             model.OrderJanCount = orders.Where(i => i.DateEncoded.Month == 1).Count();
             model.OrderFebCount = orders.Where(i => i.DateEncoded.Month == 2).Count();
             model.OrderMarCount = orders.Where(i => i.DateEncoded.Month == 3).Count();

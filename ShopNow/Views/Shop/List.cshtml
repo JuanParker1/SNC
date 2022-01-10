@@ -26,15 +26,19 @@
                     <form method="get" action="/Shop/List">
                         <div class="row mb-3">
                             <div class="col-md-4">
-                                <select id="select-district" class="form-control" name="District">
-                                    @if (ViewBag.District != "")
-                                    {
-                                        <option value="@ViewBag.District">@ViewBag.District</option>
-                                    }
-                                </select>
+                                @*<select id="select-shop" class="form-control" name="Id">
+                                        @if (ViewBag.ShopId != "")
+                                        {
+                                            <option value="@ViewBag.ShopId">@ViewBag.ShopName</option>
+                                        }
+                                    </select>
+                                    <input type="hidden" name="Name" />*@
+                                <select name="Id" id="Id" class="form-control"></select>
+                                <input type="hidden" name="Name" id="Name" />
                             </div>
                             <div class="col-md-4">
-                                <input type="submit" class="btn btn-info mr-3" value="Filter" />
+                                @*<input type="submit" class="btn btn-info mr-3" value="Filter" />*@
+                                <input type="button" class="btn btn-info mr-3" name="Filter" id="Filter" value="Filter" />
                                 <a href="/Shop/List" class="btn btn-warning">Clear</a>
                             </div>
                         </div>
@@ -48,18 +52,18 @@
                columns.Add(c => c.Address).Titled("Address").Filterable(true).SetWidth(40);
                columns.Add(c => c.PinCode).Titled("PinCode").Filterable(true).SetWidth(5);
                columns.Add().Encoded(false).Sanitized(false).RenderValueAs(cs => cs.Status == 6 ?
-                Html.ActionLink("Activate", "Active", new { Id = cs.Id }, new { @class = "btn btn-success btn-vsm mb-1", @style = "padding: 3px 14px" }).ToHtmlString():
-                Html.ActionLink("InActive", "InActiveLowBalance", new { Id =cs.Id }, new { @class = "btn btn-secondary btn-vsm mb-1", @style = "padding: 3px 14px" }).ToHtmlString()).Titled("Status").SetWidth(8);
+                Html.ActionLink("Activate", "Active", new { Id = cs.Id }, new { @class = "btn btn-success btn-vsm mb-1", @style = "padding: 3px 14px" }).ToHtmlString() :
+                Html.ActionLink("InActive", "InActiveLowBalance", new { Id = cs.Id }, new { @class = "btn btn-secondary btn-vsm mb-1", @style = "padding: 3px 14px" }).ToHtmlString()).Titled("Status").SetWidth(8);
                columns.Add().Encoded(false).Sanitized(false)
                 .RenderValueAs(s => new HtmlString("<label class='switch'> <input type='checkbox' value='" + s.IsOnline + "' Id='Id_" + s.Id + "' class='CheckOnline' data-id='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(8);
                columns.Add().Encoded(false).Sanitized(false)
- .RenderValueAs(s => new HtmlString("<label class='switch'> <input type='checkbox' value='" + s.IsTrail + "' Id='Id_" + s.Id + "' class='check-trail' data-id='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsTrail").SetWidth(8);
+              .RenderValueAs(s => new HtmlString("<label class='switch'> <input type='checkbox' value='" + s.IsTrail + "' Id='Id_" + s.Id + "' class='check-trail' data-id='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsTrail").SetWidth(8);
                columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(5)
                 .RenderValueAs(o => @<div>
-                            <a href="~/Shop/Edit?id=@HttpUtility.UrlEncode(ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id))" class="text-info mr-4"><i class="fa fa-edit fa-2x"></i></a>
-                            <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-2x"></i></a>
-                        </div>);
-            }).WithPaging(20).Sortable(true)
+                        <a href="~/Shop/Edit?id=@HttpUtility.UrlEncode(ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id))" class="text-info mr-4"><i class="fa fa-edit fa-2x"></i></a>
+                        <a href="javascript:void(0)" data-id="@ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)" class="text-danger btnDelete"><i class="fa fa-trash fa-2x"></i></a>
+                    </div>);
+  }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
@@ -157,14 +161,33 @@
                 );
             });
 
-            $('#select-district').select2({
-                placeholder: "Search District",
-                width: '100%',
+            //$('#select-shop').select2({
+            //    placeholder: "Search Shop Name",
+            //    width: '100%',
+            //    ajax: {
+            //        url: "/Shop/GetShopListSelect2",
+            //        delay: 250,
+            //        dataType: 'json'
+            //    }
+            //}).on('select2:select', function (e) {
+            //    $('input[name="Name"]').val(e.params.data.text);
+            //});
+
+            $('#Id').select2({
+                placeholder: "Search Shop Name",
                 ajax: {
-                    url: "/Shop/GetDistrictSelect2",
+                    url: "/Shop/GetShopListSelect2",
+                    width: '100%',
                     delay: 250,
                     dataType: 'json'
                 }
+            }).on('select2:select', function (e) {
+                $('input[name="Name"]').val(e.params.data.text);
+            });
+
+            $("#Filter").click(function () {
+                var shopId = $("#Id").val();
+                window.location.href = "/Shop/List/?shop=" + shopId;
             });
 
         });

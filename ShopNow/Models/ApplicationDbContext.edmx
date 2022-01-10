@@ -386,6 +386,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CustomerId" Type="int" Nullable="false" />
           <Property Name="CustomerPhoneNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="ChannelPartnerNumber" Type="nvarchar" MaxLength="50" />
           <Property Name="GiftCardCode" Type="nvarchar" MaxLength="50" />
           <Property Name="Amount" Type="float" Nullable="false" />
           <Property Name="ExpiryDate" Type="datetime" Nullable="false" />
@@ -764,7 +765,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="nvarchar(max)" />
           <Property Name="SubCategoryId" Type="int" Nullable="false" />
           <Property Name="SubCategoryName" Type="nvarchar(max)" />
@@ -1265,7 +1266,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="AddOnItemName" Type="nvarchar" MaxLength="100" />
           <Property Name="MasterProductId" Type="bigint" Nullable="false" />
           <Property Name="MasterProductName" Type="nvarchar" MaxLength="200" />
@@ -1494,16 +1495,6 @@
           <Parameter Name="str" Type="nvarchar" Mode="In" />
           <Parameter Name="customerid" Type="int" Mode="In" />
         </Function>
-        <Function Name="getCategoryListbyShopcode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="code" Type="nvarchar" Mode="In" />
-        </Function>
-        <Function Name="GetCategoryProductsList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="shopCode" Type="varchar" Mode="In" />
-          <Parameter Name="categoryCode" Type="varchar" Mode="In" />
-          <Parameter Name="str" Type="varchar" Mode="In" />
-          <Parameter Name="page" Type="int" Mode="In" />
-          <Parameter Name="pageSize" Type="int" Mode="In" />
-        </Function>
         <Function Name="GetCustomerCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="GetDashBoardDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="GetDEliveryBoyList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
@@ -1525,13 +1516,6 @@
           <Parameter Name="Latitude" Type="float" Mode="In" />
           <Parameter Name="str" Type="nvarchar" Mode="In" />
         </Function>
-        <Function Name="GetShopCategoryList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="shop" Type="nvarchar" Mode="In" />
-          <Parameter Name="CategoryCode" Type="nvarchar" Mode="In" />
-          <Parameter Name="str" Type="nvarchar" Mode="In" />
-          <Parameter Name="Page" Type="int" Mode="In" />
-          <Parameter Name="Size" Type="int" Mode="In" />
-        </Function>
         <Function Name="GetShopCategoryProductCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="shopCode" Type="int" Mode="In" />
           <Parameter Name="categoryCode" Type="int" Mode="In" />
@@ -1545,19 +1529,8 @@
           <Parameter Name="pageSize" Type="int" Mode="In" />
           <Parameter Name="customerid" Type="int" Mode="In" />
         </Function>
-        <Function Name="GetShopCategoryProductsList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="shopCode" Type="varchar" Mode="In" />
-          <Parameter Name="categoryCode" Type="varchar" Mode="In" />
-          <Parameter Name="str" Type="varchar" Mode="In" />
-          <Parameter Name="page" Type="int" Mode="In" />
-          <Parameter Name="pageSize" Type="int" Mode="In" />
-        </Function>
         <Function Name="GetShopname" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="shopId" Type="int" Mode="In" />
-        </Function>
-        <Function Name="GetShopProductSearch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="shopId" Type="int" Mode="In" />
-          <Parameter Name="str" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="GetTableVAlueString" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="key" Type="nvarchar" Mode="In" />
@@ -1569,30 +1542,10 @@
             </CollectionType>
           </ReturnType>
         </Function>
-        <Function Name="ReatillerPaymentReport" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="from" Type="date" Mode="In" />
-          <Parameter Name="to" Type="date" Mode="In" />
-          <Parameter Name="shopcode" Type="nvarchar" Mode="In" />
-          <Parameter Name="user" Type="nvarchar" Mode="In" />
-        </Function>
         <Function Name="ReatillerPaymentReportAdmin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="from" Type="date" Mode="In" />
           <Parameter Name="to" Type="date" Mode="In" />
           <Parameter Name="shopcode" Type="nvarchar" Mode="In" />
-        </Function>
-        <Function Name="ReatillerPaymentReports" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="from" Type="date" Mode="In" />
-          <Parameter Name="to" Type="date" Mode="In" />
-          <Parameter Name="shopcode" Type="nvarchar" Mode="In" />
-          <Parameter Name="user" Type="nvarchar" Mode="In" />
-        </Function>
-        <Function Name="Sp_TB_SelectMedicineName" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="search" Type="varchar" Mode="In" />
-          <Parameter Name="pageNumber" Type="int" Mode="In" />
-          <Parameter Name="Rowofpage" Type="int" Mode="In" />
-        </Function>
-        <Function Name="test" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="str" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="ufn_CSVToTable" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="StringInput" Type="varchar" Mode="In" />
@@ -2053,20 +2006,6 @@
           <Property Name="IsFavorite" Type="Boolean" Nullable="false" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
-        <EntityType Name="CustomerGiftCard">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CustomerId" Type="Int32" Nullable="false" />
-          <Property Name="CustomerPhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="GiftCardCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Amount" Type="Double" Nullable="false" />
-          <Property Name="ExpiryDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="CreatedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="CustomerPrescription">
           <Key>
@@ -2993,7 +2932,6 @@
           <EntitySet Name="CustomerAchievements" EntityType="Self.CustomerAchievement" />
           <EntitySet Name="CustomerAddresses" EntityType="Self.CustomerAddress" />
           <EntitySet Name="CustomerFavorites" EntityType="Self.CustomerFavorite" />
-          <EntitySet Name="CustomerGiftCards" EntityType="Self.CustomerGiftCard" />
           <EntitySet Name="CustomerPrescriptions" EntityType="Self.CustomerPrescription" />
           <EntitySet Name="CustomerPrescriptionImages" EntityType="Self.CustomerPrescriptionImage" />
           <EntitySet Name="CustomerPrescriptionItems" EntityType="Self.CustomerPrescriptionItem" />
@@ -3155,6 +3093,7 @@
             <Parameter Name="shopId" Mode="In" Type="Int32" />
             <Parameter Name="str" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="CustomerGiftCards" EntityType="sncModel.CustomerGiftCard" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3473,6 +3412,21 @@
           <Property Type="Int32" Name="adscore" Nullable="false" />
           <Property Type="String" Name="ImagePath" Nullable="true" />
         </ComplexType>
+        <EntityType Name="CustomerGiftCard">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="CustomerPhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ChannelPartnerNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="GiftCardCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Amount" Type="Double" Nullable="false" />
+          <Property Name="ExpiryDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -3841,21 +3795,6 @@
                 <ScalarProperty Name="IsFavorite" ColumnName="IsFavorite" />
                 <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
                 <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CustomerGiftCards">
-            <EntityTypeMapping TypeName="sncModel.CustomerGiftCard">
-              <MappingFragment StoreEntitySet="CustomerGiftCards">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
-                <ScalarProperty Name="CustomerPhoneNumber" ColumnName="CustomerPhoneNumber" />
-                <ScalarProperty Name="GiftCardCode" ColumnName="GiftCardCode" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -4836,8 +4775,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="getCategoryListbyShopcode" FunctionName="sncModel.Store.getCategoryListbyShopcode" />
-          <FunctionImportMapping FunctionImportName="GetCategoryProductsList" FunctionName="sncModel.Store.GetCategoryProductsList" />
           <FunctionImportMapping FunctionImportName="GetCustomerCount" FunctionName="sncModel.Store.GetCustomerCount" />
           <FunctionImportMapping FunctionImportName="GetDEliveryBoyList" FunctionName="sncModel.Store.GetDEliveryBoyList">
             <ResultMapping>
@@ -4882,7 +4819,6 @@
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GetProductListCount" FunctionName="sncModel.Store.GetProductListCount" />
-          <FunctionImportMapping FunctionImportName="GetShopCategoryList" FunctionName="sncModel.Store.GetShopCategoryList" />
           <FunctionImportMapping FunctionImportName="GetShopCategoryProductCount" FunctionName="sncModel.Store.GetShopCategoryProductCount" />
           <FunctionImportMapping FunctionImportName="GetShopCategoryProducts" FunctionName="sncModel.Store.GetShopCategoryProducts">
             <ResultMapping>
@@ -4918,7 +4854,6 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="GetShopCategoryProductsList" FunctionName="sncModel.Store.GetShopCategoryProductsList" />
           <FunctionImportMapping FunctionImportName="GetShopname" FunctionName="sncModel.Store.GetShopname">
             <ResultMapping>
               <ComplexTypeMapping TypeName="sncModel.GetShopname_Result">
@@ -4931,11 +4866,7 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="ReatillerPaymentReport" FunctionName="sncModel.Store.ReatillerPaymentReport" />
           <FunctionImportMapping FunctionImportName="ReatillerPaymentReportAdmin" FunctionName="sncModel.Store.ReatillerPaymentReportAdmin" />
-          <FunctionImportMapping FunctionImportName="ReatillerPaymentReports" FunctionName="sncModel.Store.ReatillerPaymentReports" />
-          <FunctionImportMapping FunctionImportName="Sp_TB_SelectMedicineName" FunctionName="sncModel.Store.Sp_TB_SelectMedicineName" />
-          <FunctionImportMapping FunctionImportName="test" FunctionName="sncModel.Store.test" />
           <FunctionImportMapping FunctionImportName="GetAutoCompleteSearch" FunctionName="sncModel.Store.GetAutoCompleteSearch" />
           <FunctionImportMapping FunctionImportName="GetDashBoardDetails" FunctionName="sncModel.Store.GetDashBoardDetails">
             <ResultMapping>
@@ -5186,16 +5117,22 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="GetShopProductSearch" FunctionName="sncModel.Store.GetShopProductSearch">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="sncModel.GetShopProductSearch_Result">
+          <EntitySetMapping Name="CustomerGiftCards">
+            <EntityTypeMapping TypeName="sncModel.CustomerGiftCard">
+              <MappingFragment StoreEntitySet="CustomerGiftCards">
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ExpiryDate" ColumnName="ExpiryDate" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="GiftCardCode" ColumnName="GiftCardCode" />
+                <ScalarProperty Name="ChannelPartnerNumber" ColumnName="ChannelPartnerNumber" />
+                <ScalarProperty Name="CustomerPhoneNumber" ColumnName="CustomerPhoneNumber" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="adscore" ColumnName="adscore" />
-                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
