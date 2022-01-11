@@ -876,29 +876,38 @@ namespace ShopNow.Controllers
         {
             try
             {
-                double stock = 0;
-                StringBuilder sb = new StringBuilder();
-                using (WebClient myData = new WebClient())
+                if (model.ListItems.FirstOrDefault().OutletId > 0)
                 {
-                    myData.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
-                    myData.Headers[HttpRequestHeader.Accept] = "application/json";
-                    myData.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-                    foreach (var item in model.ListItems)
+                    double stock = 0;
+                    StringBuilder sb = new StringBuilder();
+                    using (WebClient myData = new WebClient())
                     {
-                        stock = Math.Floor(GetStockQty(item.ItemId.ToString()));
-                        if (stock < item.Quantity)
+                        myData.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
+                        myData.Headers[HttpRequestHeader.Accept] = "application/json";
+                        myData.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+                        foreach (var item in model.ListItems)
                         {
-                            if (stock != 0)
-                                sb.Append($"{item.ProductName} has only {stock} available now. <br/>");
-                            else
-                                sb.Append($"{item.ProductName} has no stock available now. <br/>");
+
+                            // stock =Math.Floor(GetStockQty(item.ItemId.ToString(),item.ouletid));
+                            stock = Math.Floor(GetStockQty(item.ItemId.ToString(), item.OutletId));
+                            if (stock < item.Quantity)
+                            {
+                                if (stock != 0)
+                                    sb.Append($"{item.ProductName} has only {stock} available now. <br/>");
+                                else
+                                    sb.Append($"{item.ProductName} has no stock available now. <br/>");
+                            }
+
                         }
                     }
+                    return Json(new { message = sb.ToString() });
                 }
-                return Json(new { message = sb.ToString() });
+                else
+                    return Json(new { message = "" });
             }
             catch (Exception ex)
             {
+
                 return Json(new { message = ex.Message });
             }
         }
@@ -3086,21 +3095,28 @@ namespace ShopNow.Controllers
             return Json(new { Page = "" }, JsonRequestBehavior.AllowGet);
         }
 
-        public static double GetStockQty(string code)
+        public static double GetStockQty(string code, int outletid)
         {
 
             using (WebClient myData = new WebClient())
             {
+
                 myData.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
                 myData.Headers[HttpRequestHeader.Accept] = "application/json";
                 myData.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-                string getList = myData.DownloadString("http://joyrahq.gofrugal.com/RayMedi_HQ/api/v1/items?q=status==R,outletId==2,itemId==" + code);
+                string getList = "";
+                if (outletid == 0)
+                    getList = myData.DownloadString("http://joyrahq.gofrugal.com/RayMedi_HQ/api/v1/items?q=status==R,outletId==2,itemId==" + code);
+                else
+                    getList = myData.DownloadString("http://joyrahq.gofrugal.com/RayMedi_HQ/api/v1/items?q=status==R,outletId==" + outletid + ",itemId==" + code);
+
                 var result = JsonConvert.DeserializeObject<RootObject>(getList);
                 foreach (var pro in result.items)
                 {
                     foreach (var med in pro.stock)
                     {
                         return Convert.ToDouble(med.stock);
+
                     }
                 }
             }
@@ -5298,7 +5314,7 @@ namespace ShopNow.Controllers
                 else
                     return Json(new { isOnlinePayment = false }, JsonRequestBehavior.AllowGet);
             }
-            return Json(new { isOnlinePayment = true }, JsonRequestBehavior.AllowGet);
+            return Json(new { isOnlinePayment = false }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult UpdateCustomerDistrict(int customerId, string district)
