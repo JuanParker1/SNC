@@ -310,7 +310,7 @@
                     {
                         <label>Prescription Image</label><br />
                         <div class="d-flex">
-                            <img alt="Image" data-toggle="modal" data-target="#PrescriptionImageModal" class="img-thumbnail PrescriptionImage p-1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.PrescriptionImagePath" onerror="this.src='/Images/No Photo.png'" style="width:45px;height:45px" />
+                            <img alt="Image" data-toggle="modal" data-target="#PrescriptionImageModal" class="img-thumbnail PrescriptionImage p-1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/@Model.PrescriptionImagePath" onerror="this.src='/Images/No Photo.png'" style="width:45px;height:45px" />
                         </div>
                     }
                 </div>
@@ -809,7 +809,7 @@
             var modalImg = document.getElementById("myImage");
             $(img).click(function () {
                 modal.style.display = "block";
-                modalImg.src = this.src.replace("/Small/","/Medium/");
+                modalImg.src = this.src.replace("/Small/","/Large/");
                 if (this.src == "") {
                     $('#myModal').hide();
                 }
@@ -823,26 +823,12 @@
             var modalImg1 = document.getElementById("PresImage");
             $(img1).click(function () {
                 modal1.style.display = "block";
-                modalImg1.src = this.src.replace("/Small/", "/Medium/");
+                modalImg1.src = this.src.replace("/Small/", "/Large/");
                 if (this.src == "") {
                     $('#PrescriptionImageModal').hide();
                 }
                 else {
                     $('#PrescriptionImageModal').modal1('show');
-                }
-            });
-
-            var modal1 = document.getElementById('PrescriptionImageModal');
-            var img1 = document.getElementsByClassName('PrescriptionImage');
-            var modalImg1 = document.getElementById("PresImage");
-            $(img1).click(function () {
-                modal1.style.display = "block";
-                 modalImg.src = this.src.replace("/Small/", "/Medium/");
-                if (this.src == "") {
-                    $('#myModal').hide();
-                }
-                else {
-                    $('#myModal').modal1('show');
                 }
             });
 
