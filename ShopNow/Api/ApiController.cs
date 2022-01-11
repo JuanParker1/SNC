@@ -5311,11 +5311,11 @@ namespace ShopNow.Controllers
             {
                 int orderCountAfterLC = db.Orders.Where(i => i.CustomerId == customerId && i.Status == 6 && (i.DateEncoded > lastCancelledOrder.DateEncoded)).Count();
                 if (orderCountAfterLC < 5)
-                    return Json(new { isOnlinePayment = true }, JsonRequestBehavior.AllowGet);
-                else
                     return Json(new { isOnlinePayment = false }, JsonRequestBehavior.AllowGet);
+                else
+                    return Json(new { isOnlinePayment = true }, JsonRequestBehavior.AllowGet);
             }
-            return Json(new { isOnlinePayment = false }, JsonRequestBehavior.AllowGet);
+            return Json(new { isOnlinePayment = true }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult UpdateCustomerDistrict(int customerId, string district)
