@@ -4043,7 +4043,7 @@ namespace ShopNow.Controllers
             {
                 DateTime from1 = DateTime.Parse(from);
                 DateTime to1 = DateTime.Parse(to);
-                model.List = db.Orders.Where(i => i.Status == 6 && ((DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(from1)) &&
+                model.List = db.Orders.Where(i => i.Status == 6 && i.DeliveryBoyPhoneNumber == phoneNumber && ((DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(from1)) &&
             (DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(to1))))
                             .Join(db.Shops, scc => scc.ShopId, s => s.Id, (scc, s) => new { scc, s })
                    .Select(i => new DelivaryBoyReportViewModel.CartList
