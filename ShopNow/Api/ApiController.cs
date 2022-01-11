@@ -4043,7 +4043,7 @@ namespace ShopNow.Controllers
             {
                 DateTime from1 = DateTime.Parse(from);
                 DateTime to1 = DateTime.Parse(to);
-                model.List = db.Orders.Where(i => i.Status == 6 && ((DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(from1)) &&
+                model.List = db.Orders.Where(i => i.Status == 6 && i.DeliveryBoyPhoneNumber == phoneNumber && ((DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(from1)) &&
             (DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(to1))))
                             .Join(db.Shops, scc => scc.ShopId, s => s.Id, (scc, s) => new { scc, s })
                    .Select(i => new DelivaryBoyReportViewModel.CartList
@@ -5311,11 +5311,11 @@ namespace ShopNow.Controllers
             {
                 int orderCountAfterLC = db.Orders.Where(i => i.CustomerId == customerId && i.Status == 6 && (i.DateEncoded > lastCancelledOrder.DateEncoded)).Count();
                 if (orderCountAfterLC < 5)
-                    return Json(new { isOnlinePayment = true }, JsonRequestBehavior.AllowGet);
-                else
                     return Json(new { isOnlinePayment = false }, JsonRequestBehavior.AllowGet);
+                else
+                    return Json(new { isOnlinePayment = true }, JsonRequestBehavior.AllowGet);
             }
-            return Json(new { isOnlinePayment = false }, JsonRequestBehavior.AllowGet);
+            return Json(new { isOnlinePayment = true }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult UpdateCustomerDistrict(int customerId, string district)
