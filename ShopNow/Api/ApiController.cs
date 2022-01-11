@@ -876,29 +876,38 @@ namespace ShopNow.Controllers
         {
             try
             {
-                double stock = 0;
-                StringBuilder sb = new StringBuilder();
-                using (WebClient myData = new WebClient())
+                if (model.ListItems.FirstOrDefault().OutletId > 0)
                 {
-                    myData.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
-                    myData.Headers[HttpRequestHeader.Accept] = "application/json";
-                    myData.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-                    foreach (var item in model.ListItems)
+                    double stock = 0;
+                    StringBuilder sb = new StringBuilder();
+                    using (WebClient myData = new WebClient())
                     {
-                        stock = Math.Floor(GetStockQty(item.ItemId.ToString()));
-                        if (stock < item.Quantity)
+                        myData.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
+                        myData.Headers[HttpRequestHeader.Accept] = "application/json";
+                        myData.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+                        foreach (var item in model.ListItems)
                         {
-                            if (stock != 0)
-                                sb.Append($"{item.ProductName} has only {stock} available now. <br/>");
-                            else
-                                sb.Append($"{item.ProductName} has no stock available now. <br/>");
+
+                            // stock =Math.Floor(GetStockQty(item.ItemId.ToString(),item.ouletid));
+                            stock = Math.Floor(GetStockQty(item.ItemId.ToString(), item.OutletId));
+                            if (stock < item.Quantity)
+                            {
+                                if (stock != 0)
+                                    sb.Append($"{item.ProductName} has only {stock} available now. <br/>");
+                                else
+                                    sb.Append($"{item.ProductName} has no stock available now. <br/>");
+                            }
+
                         }
                     }
+                    return Json(new { message = sb.ToString() });
                 }
-                return Json(new { message = sb.ToString() });
+                else
+                    return Json(new { message = "" });
             }
             catch (Exception ex)
             {
+
                 return Json(new { message = ex.Message });
             }
         }
@@ -1485,8 +1494,8 @@ namespace ShopNow.Controllers
                 .GroupJoin(db.OrderItems, o => o.o.o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
                 .Select(i => new TodayDeliveryListViewModel.OrderList
                 {
-                    CustomerLatitude = 0,
-                    CustomerLongitude = 0,
+                    CustomerLatitude = i.o.o.o.o.Latitude,
+                    CustomerLongitude = i.o.o.o.o.Longitude,
                     CustomerName = i.o.o.o.o.CustomerName,
                     CustomerPhoneNumber = i.o.o.o.o.CustomerPhoneNumber,
                     DateEncoded = i.o.o.o.o.DateEncoded,
@@ -1513,7 +1522,8 @@ namespace ShopNow.Controllers
                     NetTotal = i.o.o.o.o.NetTotal,
                     WalletAmount = i.o.o.o.o.WalletAmount,
                     TipAmount = i.o.o.o.o.TipsAmount,
-                    OrderItemList = i.oi.ToList()
+                    OrderItemList = i.oi.ToList(),
+                    
                 }).ToList();
 
             model.OtherList = db.Orders.Where(i => (i.Status == 4 || i.Status == 5) && i.DeliveryBoyPhoneNumber == phoneNumber  /*&& DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(DateTime.Now)*/)
@@ -1523,8 +1533,8 @@ namespace ShopNow.Controllers
                .GroupJoin(db.OrderItems, o => o.o.o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
                .Select(i => new TodayDeliveryListViewModel.OrderList
                {
-                   CustomerLatitude = 0,
-                   CustomerLongitude = 0,
+                   CustomerLatitude = i.o.o.o.o.Latitude,
+                   CustomerLongitude = i.o.o.o.o.Longitude,
                    CustomerName = i.o.o.o.o.CustomerName,
                    CustomerPhoneNumber = i.o.o.o.o.CustomerPhoneNumber,
                    DateEncoded = i.o.o.o.o.DateEncoded,
@@ -3086,21 +3096,28 @@ namespace ShopNow.Controllers
             return Json(new { Page = "" }, JsonRequestBehavior.AllowGet);
         }
 
-        public static double GetStockQty(string code)
+        public static double GetStockQty(string code, int outletid)
         {
 
             using (WebClient myData = new WebClient())
             {
+
                 myData.Headers["X-Auth-Token"] = "62AA1F4C9180EEE6E27B00D2F4F79E5FB89C18D693C2943EA171D54AC7BD4302BE3D88E679706F8C";
                 myData.Headers[HttpRequestHeader.Accept] = "application/json";
                 myData.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-                string getList = myData.DownloadString("http://joyrahq.gofrugal.com/RayMedi_HQ/api/v1/items?q=status==R,outletId==2,itemId==" + code);
+                string getList = "";
+                if (outletid == 0)
+                    getList = myData.DownloadString("http://joyrahq.gofrugal.com/RayMedi_HQ/api/v1/items?q=status==R,outletId==2,itemId==" + code);
+                else
+                    getList = myData.DownloadString("http://joyrahq.gofrugal.com/RayMedi_HQ/api/v1/items?q=status==R,outletId==" + outletid + ",itemId==" + code);
+
                 var result = JsonConvert.DeserializeObject<RootObject>(getList);
                 foreach (var pro in result.items)
                 {
                     foreach (var med in pro.stock)
                     {
                         return Convert.ToDouble(med.stock);
+
                     }
                 }
             }
@@ -4027,7 +4044,7 @@ namespace ShopNow.Controllers
             {
                 DateTime from1 = DateTime.Parse(from);
                 DateTime to1 = DateTime.Parse(to);
-                model.List = db.Orders.Where(i => i.Status == 6 && ((DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(from1)) &&
+                model.List = db.Orders.Where(i => i.Status == 6 && i.DeliveryBoyPhoneNumber == phoneNumber && ((DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(from1)) &&
             (DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(to1))))
                             .Join(db.Shops, scc => scc.ShopId, s => s.Id, (scc, s) => new { scc, s })
                    .Select(i => new DelivaryBoyReportViewModel.CartList
@@ -4728,6 +4745,7 @@ namespace ShopNow.Controllers
                          UnitPrice = a.UnitPrice,
                          ShopId = i.o.o.ShopId,
                          ShopName = i.o.o.ShopName,
+                         OutletId = db.Products.FirstOrDefault(b=>b.Id == a.ProductId).OutletId,
                          //OfferQuantityLimit = db.Products.FirstOrDefault(b=>b.Id == a.ProductId).OfferQuantityLimit,
                          OrderItemAddonLists = db.OrderItemAddons.Where(b => b.OrderItemId == a.Id).Select(b => new GetAllOrderListViewModel.OrderList.OrderItemList.OrderItemAddonList {
                              AddonName = b.AddonName,
@@ -5294,9 +5312,9 @@ namespace ShopNow.Controllers
             {
                 int orderCountAfterLC = db.Orders.Where(i => i.CustomerId == customerId && i.Status == 6 && (i.DateEncoded > lastCancelledOrder.DateEncoded)).Count();
                 if (orderCountAfterLC < 5)
-                    return Json(new { isOnlinePayment = true }, JsonRequestBehavior.AllowGet);
-                else
                     return Json(new { isOnlinePayment = false }, JsonRequestBehavior.AllowGet);
+                else
+                    return Json(new { isOnlinePayment = true }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { isOnlinePayment = true }, JsonRequestBehavior.AllowGet);
         }

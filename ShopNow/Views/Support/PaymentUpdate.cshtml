@@ -1,0 +1,151 @@
+﻿@model ShopNow.ViewModels.OrderMissedListViewModel
+@{
+    ViewBag.Title = "Payment Update";
+}
+
+<title>ShopNow | @ViewBag.Title</title>
+<div class="container-fluid">
+    <div class="row my-2">
+        <div class="col-md-4">
+            <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+        </div>
+        <div class="col-md-8">
+
+        </div>
+    </div>
+    @using (Html.BeginForm("PaymentUpdate", "Support", FormMethod.Post, new { id = "PaymentUpdateForm", autocomplete = "off" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-md-2">
+                <label class="font-weight-bold text-secondary">Payment Type</label>
+            </div>
+            <div class="col-md-3">
+                <select name="PaymentType" id="PaymentType" class="form-control">
+                    <option value="0">Select Payment</option>
+                    <option value="1">Online Payment</option>
+                    <option value="2">Cash On Hand</option>
+                </select>
+            </div>
+        </div>
+        <div class="payment d-none">
+            <div class="row online d-none">
+                <div class="col-md-3">
+                    <label class="control-label" for="PaymentId"><strong class="text-secondary">Payment Id</strong></label>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="PaymentId" id="PaymentId" />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="control-label" for="Order_Id"><strong class="text-secondary">Order Id</strong></label>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="Order_Id" id="Order_Id" />
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="control-label" for="Method"><strong class="text-secondary">Payment Method</strong></label>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="Method" id="Method" />
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="control-label" for="Fee"><strong class="text-secondary">RazorPay Fees</strong></label>
+                    <div class="form-group">
+                        <input type="number" class="form-control" name="Fee" id="Fee" step="any" />
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="control-label" for="Tax"><strong class="text-secondary">RazorPay Tax</strong></label>
+                    <div class="form-group">
+                        <input type="number" class="form-control" name="Tax" id="Tax" step="any" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="control-label" for="Amount"><strong class="text-secondary">Amount</strong></label>
+                    <div class="form-group">
+                        <input type="number" class="form-control" name="Amount" id="Amount" step="any" />
+                        <input type="hidden" name="OrderNumber" id="OrderNumber" value="@Model.OrderNumber" />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="control-label" for="TotalPrice"><strong class="text-secondary">Item List with Rate</strong></label>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="TotalPrice" id="TotalPrice" value="@Model.TotalPrice" readonly />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="control-label" for="TotalCharge"><strong class="text-secondary">Total Charge</strong></label>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="TotalCharge" id="TotalCharge" readonly />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="control-label" for="PackingCharge"><strong class="text-secondary">Packing Charge</strong></label>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="PackingCharge" id="PackingCharge" value="@Model.PackingCharge" readonly />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="control-label" for="DeliveryCharge"><strong class="text-secondary">Delivery Charge (@Model.Distance Km)</strong></label>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="DeliveryCharge" id="DeliveryCharge" value="@Model.DeliveryCharge" readonly />
+                        <input type="hidden" name="Distance" id="Distance" value="@Model.Distance" />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="control-label" for="NetDeliveryCharge"><strong class="text-secondary">Net Delivery Charge</strong></label>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="NetDeliveryCharge" id="NetDeliveryCharge" />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label class="control-label" for="ShopDeliveryDiscount"><strong class="text-secondary">Shop Delivery Discount</strong></label>
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="ShopDeliveryDiscount" id="ShopDeliveryDiscount" readonly />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row payment d-none">
+            <div class="col-md-2 mx-auto">
+                <button type="submit" class="btn btn-block btn-success"><span class="glyphicon glyphicon-file"></span> Save</button>
+            </div>
+        </div>
+    }
+</div>
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('#Amount').on('change keyup', function () {
+                var totalprice = $("#TotalPrice").val();
+                var amount = $(this).val();
+                var results = Math.ceil(amount - totalprice);
+                $("#TotalCharge").val(results);
+            });
+
+            $('#NetDeliveryCharge').on('change keyup', function () {
+                var gross = $("#DeliveryCharge").val();
+                var net = $(this).val();
+                var results = Math.ceil(gross - net);
+                $("#ShopDeliveryDiscount").val(results);
+            });
+
+            $("#PaymentType").change(function () {
+                var payment = $(this).val();
+                if (payment == '1') {
+                    $(".payment").removeClass("d-none");
+                    $(".online").removeClass("d-none");
+                }
+                if (payment == '2') {
+                    $(".payment").removeClass("d-none");
+                    $(".online").addClass("d-none");
+                }
+            });
+
+        });
+    </script>
+}
+

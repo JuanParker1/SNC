@@ -71,6 +71,7 @@ namespace ShopNow.ViewModels
                 public bool HasAddon { get; set; }
                 public int AddOnType { get; set; }
                 public int OfferQuantityLimit { get; set; }
+                public int OutletId { get; set; }
 
                 public List<OrderItemAddonList> OrderItemAddonLists { get; set; }
                 public class OrderItemAddonList
@@ -641,6 +642,7 @@ namespace ShopNow.ViewModels
         public int OfferQuantityLimit { get; set; }
         public int Quantity { get; set; }
         public int Itemid { get; set; }
+        public int OutletId { get; set; }
         public bool PriscriptionCategory { get; set; }
         public bool? ShopIsOnline { get; set; }
         public TimeSpan? ShopNextOnTime { get; set; }

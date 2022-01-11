@@ -3306,6 +3306,7 @@
     <Content Include="Views\Cart\BatchList.cshtml" />
     <Content Include="Views\Payment\OrderOfferReport.cshtml" />
     <Content Include="Views\Product\UpdatePrice.cshtml" />
+    <Content Include="Views\Support\PaymentUpdate.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

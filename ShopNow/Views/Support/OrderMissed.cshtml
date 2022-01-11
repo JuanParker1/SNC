@@ -45,14 +45,7 @@
                                             <td>@item.TotalPrice</td>
                                             <td class="text-nowrap">@item.DateEncoded</td>
                                             <td>
-                                                @if (item.PaymentMode == "Cash On Hand")
-                                                {
-                                                    <a href="~/Support/COHPaymentUpdate?orderno=@item.OrderNumber" class="btn btn-sm btn-info">Payment Update</a>
-                                                }
-                                                else if (item.PaymentMode == "Online Payment")
-                                                {
-                                                    <a href="~/Support/OnlinePaymentUpdate?orderno=@item.OrderNumber" class="btn btn-sm btn-info">PaymentUpdate</a>
-                                                }
+                                                <a href="~/Support/PaymentUpdate?orderno=@item.OrderNumber" class="btn btn-sm btn-info">PaymentUpdate</a>
                                                 <a href="javascript:void(0)" data-id="@item.OrderNumber" class="btn btn-sm btn-danger btnReject"> Reject</a>
                                             </td>
                                         </tr>
