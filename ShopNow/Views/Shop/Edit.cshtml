@@ -4,7 +4,6 @@
 }
 <title>ShopNow | Shop Update</title>
 <style>
-
     #map {
         height: 100%;
         position: inherit;
@@ -36,7 +35,6 @@
         height: 100% !important;
     }
 </style>
-
 <div class="px-3 row col-md-12">
     <div class="col-md-6 row text-center">
         @if (Model.Status == 1 && Model.Verify == false && Model.PhoneNumber != "" && Model.PhoneVerify == false)
@@ -83,12 +81,11 @@
             <span>CALL from <span class="text-danger">@Model.PhoneNumber</span> TO <span class="text-warning">04448134440</span></span><br /><span>and verify your Phone number</span>
         </div>
     }
-<div class="col-md-2 ml-3">
-    <label class="font-weight-bold text-secondary"> Platform Credit : </label> <span class="fa fa-rupee text-secondary"></span> <span class="text-danger">@Model.PlatformCredit</span>
-    <label class="font-weight-bold text-secondary"> Delivery Credit : </label> <span class="fa fa-rupee text-secondary"></span> <span class="text-danger">@Model.DeliveryCredit</span>
+    <div class="col-md-2 ml-3">
+        <label class="font-weight-bold text-secondary"> Platform Credit : </label> <span class="fa fa-rupee text-secondary"></span> <span class="text-danger">@Model.PlatformCredit</span>
+        <label class="font-weight-bold text-secondary"> Delivery Credit : </label> <span class="fa fa-rupee text-secondary"></span> <span class="text-danger">@Model.DeliveryCredit</span>
+    </div>
 </div>
-</div>
-
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6">
@@ -118,7 +115,7 @@
                 <input type="hidden" name="ImageAuthoriseBrandPath" id="ImageAuthoriseBrandPath" value="@Model.ImageAuthoriseBrandPath" />
                 <input type="hidden" name="Count" id="Count" value="@Model.Count" />
                 <input type="hidden" name="Status" id="Status" value="@Model.Status" />
-                <input type="hidden" name="IsOnline"  value="@Model.IsOnline" />
+                <input type="hidden" name="IsOnline" value="@Model.IsOnline" />
                 <div class="card mb-4 shadow">
                     <div class="card-body row">
                         <div class="col-md-6">
@@ -182,38 +179,6 @@
                                     <textarea class="form-control" name="Address" id="Address" style="resize: none;" readonly>@Model.Address</textarea>
                                 </div>
                             </div>
-                            @*<div class="form-group row">
-                            <div class="col-md-4 text-md-left">
-                            </div>
-                            <div class="col-md-4">
-                                <small class="control-label col-sm-12" for="StreetName"><i class="text-secondary">Locality</i></small>
-                                <input id="StreetName" type="text" class="form-control mb-2" placeholder="Street Name" name="StreetName" value="@Model.StreetName" readonly />
-                            </div>
-                            <div class="col-md-4">
-                                <small class="control-label col-sm-12" for="DistrictName"><i class="text-secondary">District</i></small>
-                                <input id="DistrictName" type="text" class="form-control" placeholder="District Name" name="DistrictName" value="@Model.DistrictName" readonly />
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-md-4 text-md-left">
-                            </div>
-                            <div class="col-md-4">
-                                <small class="control-label col-sm-12" for="StateName"><i class="text-secondary">State / Province</i></small>
-                                <input id="StateName" type="text" class="form-control mb-2" placeholder="State Name" name="StateName" value="@Model.StateName" readonly />
-                            </div>
-                            <div class="col-md-4">
-                                <small class="control-label col-sm-12" for="CountryName"><i class="text-secondary">Country</i></small>
-                                <input id="CountryName" type="text" class="form-control" placeholder="Country Name" name="CountryName" value="@Model.CountryName" readonly />
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-md-4 text-md-left">
-                            </div>
-                            <div class="col-md-4">
-                                <small class="control-label col-sm-12" for="PinCode"><i class="text-secondary">PIN Code</i></small>
-                                <input id="PinCode" type="text" class="form-control" placeholder="PIN Code" name="PinCode" value="@Model.PinCode" readonly />
-                            </div>
-                        </div>*@
                             <div class="form-group row">
                                 <div class="col-md-2 mt-2 text-md-left">
                                     <label class="col-form-label"><strong class="text-secondary">Location</strong></label>
@@ -227,6 +192,32 @@
                                     <input id="Longitude" type="text" class="form-control" placeholder="Longitude" name="Longitude" value="@Model.Longitude" readonly />
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <small class="control-label col-sm-12" for="StreetName"><i class="text-secondary">Locality</i></small>
+                                    <input id="StreetName" type="text" class="form-control" placeholder="Street Name" name="StreetName" value="@Model.StreetName" />
+                                </div>
+                                <div class="col-md-4">
+                                    <small class="control-label col-sm-12" for="DistrictName"><i class="text-secondary">District</i></small>
+                                    <input id="DistrictName" type="text" class="form-control" placeholder="District Name" name="DistrictName" value="@Model.DistrictName" />
+                                </div>
+                                <div class="col-md-4">
+                                    <small class="control-label col-sm-12" for="StateName"><i class="text-secondary">State / Province</i></small>
+                                    <input id="StateName" type="text" class="form-control" placeholder="State Name" name="StateName" value="@Model.StateName" />
+                                </div>
+                                <div class="col-md-4">
+                                    <small class="control-label col-sm-12" for="CountryName"><i class="text-secondary">Country</i></small>
+                                    <input id="CountryName" type="text" class="form-control" placeholder="Country Name" name="CountryName" value="@Model.CountryName" />
+                                </div>
+                                <div class="col-md-4">
+                                    <small class="control-label col-sm-12" for="PinCode"><i class="text-secondary">PIN Code</i></small>
+                                    <input id="PinCode" type="text" class="form-control" placeholder="PIN Code" name="PinCode" value="@Model.PinCode" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
                             <div class="form-group row">
                                 <div class="col-md-4">
                                     <label class="text-secondary font-weight-bold ml-2">Shop Image</label><br />
@@ -251,30 +242,28 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="row">
-                                <div class="col-md-12 form-group row">
-                                    <div class="col-md-5 text-md-left">
-                                        <label class="col-form-label"><strong class="text-secondary">Google Rating</strong></label>
-                                    </div>
-                                    <div class="col-md-7">
-                                        <input id="Rating" type="text" class="form-control" placeholder="Rating" name="Rating" value="@Model.Rating" readonly />
-                                    </div>
+                            <div class="col-md-12 form-group row">
+                                <div class="col-md-5 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Google Rating</strong></label>
                                 </div>
-                                <div class="col-md-12 form-group row">
-                                    <div class="col-md-5 text-md-left">
-                                        <label class="col-form-label"><strong class="text-secondary">Google Review</strong></label>
-                                    </div>
-                                    <div class="col-md-7">
-                                        <input id="CustomerReview" type="text" class="form-control" placeholder="Customer Review" name="CustomerReview" value="@Model.CustomerReview" readonly />
-                                    </div>
+                                <div class="col-md-7">
+                                    <input id="Rating" type="text" class="form-control" placeholder="Rating" name="Rating" value="@Model.Rating" readonly />
                                 </div>
-                                <div class="col-md-12 form-group row">
-                                    <div class="col-md-5 text-md-left">
-                                        <label class="col-form-label text-secondary font-weight-bold">Adscore</label>
-                                    </div>
-                                    <div class="col-md-7">
-                                        <input id="Adscore" type="number" min="1" value="@Model.Adscore" class="form-control" name="Adscore" />
-                                    </div>
+                            </div>
+                            <div class="col-md-12 form-group row">
+                                <div class="col-md-5 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Google Review</strong></label>
+                                </div>
+                                <div class="col-md-7">
+                                    <input id="CustomerReview" type="text" class="form-control" placeholder="Customer Review" name="CustomerReview" value="@Model.CustomerReview" readonly />
+                                </div>
+                            </div>
+                            <div class="col-md-12 form-group row">
+                                <div class="col-md-5 text-md-left">
+                                    <label class="col-form-label text-secondary font-weight-bold">Adscore</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <input id="Adscore" type="number" min="1" value="@Model.Adscore" class="form-control" name="Adscore" />
                                 </div>
                             </div>
                         </div>
@@ -902,7 +891,7 @@
                     <div class="col-md-6">
                         <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageFSSAIPath" target="_blank" class="ml-3 fssai-pdf"> Click here for Pdf view</a>
                         @*<a href="~/Home/ImageDenied">*@
-                            <img class="img-container w-100 h-100 mb-2 fssai-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageFSSAIPath" onerror="this.src='/Images/No Photo.png'" />
+                        <img class="img-container w-100 h-100 mb-2 fssai-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageFSSAIPath" onerror="this.src='/Images/No Photo.png'" />
                         @*</a>*@
                     </div>
                     <div class="col-md-6">
@@ -938,7 +927,7 @@
                     <div class="col-md-6">
                         <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageDrugPath" target="_blank" class="mb-2 drug-pdf"> Click here for Pdf view</a>
                         @*<a href="~/Home/ImageDenied">*@
-                            <img class="img-container w-100 h-100 mb-2 drug-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageDrugPath" onerror="this.src='/Images/No Photo.png'" />
+                        <img class="img-container w-100 h-100 mb-2 drug-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageDrugPath" onerror="this.src='/Images/No Photo.png'" />
                         @*</a>*@
                     </div>
                     <div class="col-md-6">
@@ -975,9 +964,9 @@
                 <div class="row" id="print-Establish">
                     <div class="col-md-6">
                         <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageEstablishPath" target="_blank" class="mb-2 establish-pdf"> Click here for Pdf view</a>
-                      @*  <a href="~/Home/ImageDenied">*@
-                            <img class="img-container w-100 h-100 mb-2 establish-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageEstablishPath" onerror="this.src='/Images/No Photo.png'" />
-                       @* </a>*@
+                        @*  <a href="~/Home/ImageDenied">*@
+                        <img class="img-container w-100 h-100 mb-2 establish-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageEstablishPath" onerror="this.src='/Images/No Photo.png'" />
+                        @* </a>*@
                     </div>
                     <div class="col-md-6">
                         <div class="col-md-12">
@@ -1052,8 +1041,8 @@
                     <div class="col-md-6">
                         <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageGSTINPath" target="_blank" class="mb-2 gstin-pdf"> Click here for Pdf view</a>
                         @*<a href="~/Home/ImageDenied">*@
-                            <img class="img-container w-100 h-100 mb-2 gstin-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageGSTINPath" onerror="this.src='/Images/No Photo.png'" />
-                       @* </a>*@
+                        <img class="img-container w-100 h-100 mb-2 gstin-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageGSTINPath" onerror="this.src='/Images/No Photo.png'" />
+                        @* </a>*@
                     </div>
                     <div class="col-md-6">
                         <label class="text-left text-secondary font-weight-bold mt-1"><i>GSTIN Number</i></label>
@@ -1088,7 +1077,7 @@
                     <div class="col-md-6">
                         <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePanPath" target="_blank" class="mb-2 pan-pdf"> Click here for Pdf view</a>
                         @*<a href="~/Home/ImageDenied">*@
-                            <img class="img-container w-100 h-100 mb-2 pan-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePanPath" onerror="this.src='/Images/No Photo.png'" />
+                        <img class="img-container w-100 h-100 mb-2 pan-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePanPath" onerror="this.src='/Images/No Photo.png'" />
                         @*</a>*@
                     </div>
                     <div class="col-md-6">
@@ -1124,8 +1113,8 @@
                     <div class="col-md-6">
                         <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAccountPath" target="_blank" class="mb-2 pan-pdf"> Click here for Pdf view</a>
                         @*<a href="~/Home/ImageDenied">*@
-                            <img class="img-container w-100 h-100 mb-2 pan-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAccountPath" onerror="this.src='/Images/No Photo.png'" />
-                       @* </a>*@
+                        <img class="img-container w-100 h-100 mb-2 pan-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAccountPath" onerror="this.src='/Images/No Photo.png'" />
+                        @* </a>*@
                     </div>
                     <div class="col-md-6">
                         <label class="col-md-4 text-left text-secondary font-weight-bold mt-1"><i>Bank Name</i></label>
@@ -1166,7 +1155,7 @@
                     <div class="col-md-6">
                         <a href="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" target="_blank" class="mb-2 auth-pdf"> Click here for Pdf view</a>
                         @*<a href="~/Home/ImageDenied">*@
-                            <img class="img-container w-100 h-100 mb-2 auth-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" onerror="this.src='/Images/No Photo.png'" />
+                        <img class="img-container w-100 h-100 mb-2 auth-img" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImageAuthoriseBrandPath" onerror="this.src='/Images/No Photo.png'" />
                         @*</a>*@
                     </div>
                     <div class="col-md-6">
@@ -1663,6 +1652,7 @@
                 $("#btnFssaiReject").hide();
                 $("#btnFssaiApprove").hide();
             });
+
             $("#btnDrugApprove").click(function () {
                 $('#DrugApprove').val("true");
                 $('.DrugApprovedlbl').removeClass("d-none");
@@ -1867,6 +1857,7 @@
             //        }
             //    });
             //});
+
             $(function () {
                 var $radios = $('input:radio[name=distributorCheck]');
                 if ($radios.is(':checked') === true) {
@@ -1938,7 +1929,6 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
             $("#AuthorisedDistributorImage").change(function () {
                 readAuthoriseURL(this);
             });
@@ -1954,10 +1944,10 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
             $("#OtherLicenseImage").change(function () {
                 readOtherLicenseURL(this);
             });
+
             function readEstablishURL(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
@@ -1969,10 +1959,10 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
             $("#EstablishImage").change(function () {
                 readEstablishURL(this);
             });
+
             function readDrugURL(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
@@ -1984,10 +1974,10 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
             $("#DrugImage").change(function () {
                 readDrugURL(this);
             });
+
             function readFssaiURL(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
@@ -1999,7 +1989,6 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
             $("#FSSAIImage").change(function () {
                 readFssaiURL(this);
             });
@@ -2015,7 +2004,6 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
             $("#PanImage").change(function () {
                 readURLPan(this);
             });
@@ -2031,7 +2019,6 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
             $("#GSTINImage").change(function () {
                 readURLGstin(this);
             });
@@ -2047,10 +2034,10 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
             $("#AccountImage").change(function () {
                 readURLAccount(this);
             });
+
             function readURL(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
@@ -2062,7 +2049,6 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
             $("#ShopImage").change(function () {
                 readURL(this);
             });
@@ -2078,7 +2064,6 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
             $("#LogoImage").change(function () {
                 readURLLogo(this);
             });
@@ -2094,7 +2079,6 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
             $("#BannerImage").change(function () {
                 readURLBanner(this);
             });
@@ -2110,7 +2094,6 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
             $("#LicenseImage").change(function () {
                 readURLLicence(this);
             });
@@ -2126,14 +2109,12 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
             $("#AadharImage").change(function () {
                 readURLLicence(this);
             });
-
         });
 
-    var map, infoWindow, markers = [];
+        var map, infoWindow, markers = [];
         function initMap() {
 
             var latitude = parseFloat($('#Latitude').val());
@@ -2285,7 +2266,7 @@
 
          $(document).ready(function ($) {
             $("input:radio[value='@Model.Type'][name='Type']").prop('checked', true);
-        });
+         });
 
     </script>
 }

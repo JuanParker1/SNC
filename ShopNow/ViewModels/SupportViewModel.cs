@@ -152,10 +152,15 @@ namespace ShopNow.ViewModels
     }
     public class OrderMissedListViewModel
     {
+        // Order
+        public int PaymentType { get; set; }
         public double TotalPrice { get; set; }
         public int OrderNumber { get; set; }
         public string ShopName { get; set; }
         public string Distance { get; set; }
+        public double DeliveryCharge { get; set; }
+        public double ShopDeliveryDiscount { get; set; }
+        public double NetDeliveryCharge { get; set; }
 
         // Payment
         public double Amount { get; set; }
@@ -169,11 +174,7 @@ namespace ShopNow.ViewModels
         public string Method { get; set; }
         public Nullable<decimal> Fee { get; set; }
         public Nullable<decimal> Tax { get; set; }
-
-        // ShopCharge
-        public double GrossDeliveryCharge { get; set; }
-        public double ShopDeliveryDiscount { get; set; }
-        public double NetDeliveryCharge { get; set; }
+       
 
         public List<OrderMissedList> List { get; set; }
         public class OrderMissedList
