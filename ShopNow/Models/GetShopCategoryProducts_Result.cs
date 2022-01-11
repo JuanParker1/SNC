@@ -41,5 +41,6 @@ namespace ShopNow.Models
         public int OfferQuantityLimit { get; set; }
         public int IsLiked { get; set; }
         public string LikeText { get; set; }
+        public int OutletId { get; set; }
     }
 }

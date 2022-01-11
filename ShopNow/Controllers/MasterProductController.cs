@@ -899,33 +899,33 @@ namespace ShopNow.Controllers
             try
             {
                 long ticks = DateTime.Now.Ticks;
-                if (model.DrugCompoundDetailIds != null)
-                {
-                    master.DrugCompoundDetailIds = String.Join(",", model.DrugCompoundDetailIds);
-                    StringBuilder sb = new StringBuilder();
-                    foreach (var s in model.DrugCompoundDetailIds)
-                    {
-                        var sid = Convert.ToInt32(s);
-                        var dcd = _db.DrugCompoundDetails.FirstOrDefault(i => i.Id == sid && i.Status == 0);
-                        sb.Append(dcd.AliasName);
-                        sb.Append(",");
-                    }
-                    if (sb.Length >= 1)
-                    {
-                        model.DrugCompoundDetailName = sb.ToString().Remove(sb.Length - 1);
-                        master.DrugCompoundDetailName = model.DrugCompoundDetailName;
-                    }
-                    else
-                    {
-                        model.DrugCompoundDetailName = sb.ToString();
-                        master.DrugCompoundDetailName = model.DrugCompoundDetailName;
-                    }
-                }
-                else
-                {
-                    master.DrugCompoundDetailIds = string.Empty;
-                    master.DrugCompoundDetailName = string.Empty;
-                }
+                //if (model.DrugCompoundDetailIds != null)
+                //{
+                //    master.DrugCompoundDetailIds = String.Join(",", model.DrugCompoundDetailIds);
+                //    StringBuilder sb = new StringBuilder();
+                //    foreach (var s in model.DrugCompoundDetailIds)
+                //    {
+                //        var sid = Convert.ToInt32(s);
+                //        var dcd = _db.DrugCompoundDetails.FirstOrDefault(i => i.Id == sid && i.Status == 0);
+                //        sb.Append(dcd.AliasName);
+                //        sb.Append(",");
+                //    }
+                //    if (sb.Length >= 1)
+                //    {
+                //        model.DrugCompoundDetailName = sb.ToString().Remove(sb.Length - 1);
+                //        master.DrugCompoundDetailName = model.DrugCompoundDetailName;
+                //    }
+                //    else
+                //    {
+                //        model.DrugCompoundDetailName = sb.ToString();
+                //        master.DrugCompoundDetailName = model.DrugCompoundDetailName;
+                //    }
+                //}
+                //else
+                //{
+                //    master.DrugCompoundDetailIds = string.Empty;
+                //    master.DrugCompoundDetailName = string.Empty;
+                //}
 
                 //MedicalImage1
                 if (model.MedicalImage1 != null)
