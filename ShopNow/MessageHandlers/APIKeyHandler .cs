@@ -16,6 +16,7 @@ namespace ShopNow.MessageHandlers
         private const string Key = "AdminShopNowChatIn123";
         private const string Key1 = "AdminShopNow123";
         private const string Key2 = "AdminShopNowPay123";
+        private const string Key3 = "astechCall";
         public string ApiKey { get; set; }
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -34,6 +35,10 @@ namespace ShopNow.MessageHandlers
                         return;
                     }
                     else if (Key2 == id)
+                    {
+                        return;
+                    }
+                    else if (Key3 == id)
                     {
                         return;
                     }
