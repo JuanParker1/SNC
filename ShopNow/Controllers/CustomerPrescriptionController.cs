@@ -273,27 +273,29 @@ namespace ShopNow.Controllers
             return View();
         }
 
-        public async Task<JsonResult> GetShopProductSelect2(int shopid, string q = "")
+        public async Task<JsonResult> GetShopProductSelect2(int shopid, string q = "dolo")
         {
             var model = await db.Products.Where(a => a.ShopId == shopid && a.Status == 0)
                 .Join(db.MasterProducts.Where(a => a.Name.Contains(q)), p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
-                .Join(db.Categories, p => p.p.CategoryId, c => c.Id, (p, c) => new { p, c }).Take(500)
+                .Join(db.Categories, p => p.p.CategoryId, c => c.Id, (p, c) => new { p, c })
+                .Join(db.DiscountCategories, p => p.p.p.DiscountCategoryName, dc => dc.Name, (p, dc) => new { p, dc })
+                .Take(500)
                 .Select(i => new
                 {
-                    id = i.p.p.Id,
-                    text = i.p.m.Name,
-                    itemId = i.p.p.ItemId,
-                    price = i.p.p.Price,
-                    weight = i.p.m.Weight,
-                    size = i.p.m.SizeLWH,
-                    brandid = i.p.m.BrandId,
-                    brandname = i.p.m.BrandName,
-                    categoryid = i.p.p.CategoryId,
-                    categoryname = i.c.Name,
-                    imagepath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + i.p.m.ImagePath1,
-                    itemid = i.p.p.ItemId,
-                    quantity = i.p.p.Qty,
-                    mrpprice = i.p.p.MenuPrice
+                    id = i.p.p.p.Id,
+                    text = i.p.p.m.Name,
+                    price = i.p.p.p.Price,
+                    weight = i.p.p.m.Weight,
+                    size = i.p.p.m.SizeLWH,
+                    brandid = i.p.p.m.BrandId,
+                    brandname = i.p.p.m.BrandName,
+                    categoryid = i.p.p.p.CategoryId,
+                    categoryname = i.p.c.Name,
+                    imagepath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/" + i.p.p.m.ImagePath1,
+                    itemid = i.p.p.p.ItemId,
+                    quantity = i.p.p.p.Qty,
+                    mrpprice = i.p.p.p.MenuPrice,
+                    percentage = i.dc.Percentage
                 }).OrderBy(i => i.text).ToListAsync();
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);

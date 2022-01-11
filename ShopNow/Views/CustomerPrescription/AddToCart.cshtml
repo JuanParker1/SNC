@@ -69,6 +69,7 @@
                                 <input type="hidden" name="CategoryId" />
                                 <input type="hidden" name="CategoryName" />
                                 <input type="hidden" name="ImagePath" />
+                                <input type="hidden" name="Percentage" />
                             </div>
                         </div>
                         <div class="col-md-2">
@@ -230,7 +231,8 @@
                 $('input[name="CategoryId"]').val(e.params.data.categoryid);
                 $('input[name="CategoryName"]').val(e.params.data.categoryname);
                 $('input[name="ImagePath"]').val(e.params.data.imagepath);
-                $('input[name="Quantity"]').attr({ "max": e.params.data.quantity});
+                $('input[name="Quantity"]').attr({ "max": e.params.data.quantity });
+                $('input[name="Percentage"]').val(e.params.data.percentage);
             });
             $('input[type=number]').on('keypress keyup', function () {
                 var value = parseFloat($(this).attr('max'));
@@ -262,6 +264,8 @@
                     var categoryId = $('[name="CategoryId"]').val();
                     var categoryName = $('[name="CategoryName"]').val();
                     var imagePath = $('[name="ImagePath"]').val();
+                    var percentage = $('[name="Percentage"]').val();
+                    price = Math.round((price - (price * percentage)) / 100);
                     if (productId && qty) {
                         var total = Math.round(price * qty).toFixed(2);
                         var item = {
