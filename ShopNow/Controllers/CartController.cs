@@ -610,7 +610,7 @@ namespace ShopNow.Controllers
                 model.DateEncoded = cart.DateEncoded;
                 model.PenaltyAmount = cart.PenaltyAmount;
                 model.WaitingCharge = cart.WaitingCharge;
-                model.TotalPrice = cart.TotalPrice;
+                model.TotalPrice = cart.NetTotal;
                 model.PaymentMode = cart.PaymentMode;
                 model.PrescriptionImagePath = cart.PrescriptionImagePath;
                 var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == cart.DeliveryBoyId);
@@ -1394,6 +1394,43 @@ namespace ShopNow.Controllers
             db.SaveChanges();
 
             return RedirectToAction("Details", "Cart", new { id = AdminHelpers.ECodeLong(id) });
+        }
+
+        public ActionResult UpdatePaymentMode(int OrderNo, int PaymentType)
+        {
+            var cart = db.Orders.FirstOrDefault(i => i.OrderNumber == OrderNo);
+            var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == OrderNo);
+            if (PaymentType == 1) {
+                if (cart != null)
+                {
+                    cart.PaymentMode = "Online Payment";
+                    cart.PaymentModeType = 1;
+                }
+                if (payment != null)
+                {
+                    payment.PaymentMode = "Online Payment";
+                    payment.PaymentModeType = 1;
+                }
+            }
+            else if(PaymentType == 2)
+            {
+                if (cart != null)
+                {
+                    cart.PaymentMode = "Cash On Hand";
+                    cart.PaymentModeType = 2;
+                }
+                if (payment != null)
+                {
+                    payment.PaymentMode = "Cash On Hand";
+                    payment.PaymentModeType = 2;
+                }
+            }
+            db.Entry(cart).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+
+            return RedirectToAction("List");
         }
 
         DeliveryBoy getDBoy(int id)

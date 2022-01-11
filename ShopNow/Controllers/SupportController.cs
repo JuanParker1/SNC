@@ -212,8 +212,7 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
-        [AccessPolicy(PageCode = "SNCSCOHPU301")]
-        public ActionResult COHPaymentUpdate(int orderno)
+        public ActionResult PaymentUpdate(int orderno)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -223,136 +222,45 @@ namespace ShopNow.Controllers
             model.OrderNumber = cart.OrderNumber;
             model.Amount = cart.NetTotal;
             model.TotalPrice = cart.TotalPrice;
-            model.PackingCharge = db.Bills.Where(i => i.ShopId == cart.ShopId && i.NameOfBill == 1 && i.Status == 0).Select(i => i.PackingCharge).FirstOrDefault();
+            var billingCharge = db.BillingCharges.FirstOrDefault(i => i.ShopId == cart.ShopId && i.Status == 0);
+            model.PackingCharge = billingCharge.PackingCharge; //db.Bills.Where(i => i.ShopId == cart.ShopId && i.Status == 0).Select(i => i.PackingCharge).FirstOrDefault();
 
             // Gross Delivery Charge
+
             var Distance = (((Math.Acos(Math.Sin((shop.Latitude * Math.PI / 180)) * Math.Sin((cart.Latitude * Math.PI / 180)) + Math.Cos((shop.Latitude * Math.PI / 180)) * Math.Cos((cart.Latitude * Math.PI / 180))
                  * Math.Cos(((shop.Longitude - cart.Longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000;
-            var deliverybill = db.Bills.Where(i => i.ShopId == cart.ShopId && i.NameOfBill == 0 && i.DeliveryRateSet == 0 && i.Status == 0).FirstOrDefault();
+            var deliverybill = db.DeliveryCharges.FirstOrDefault(i => i.Type == shop.DeliveryType && i.TireType == shop.DeliveryTierType && i.Status == 0);
+
             if (deliverybill != null)
             {
                 if (Distance < 5)
                 {
-                    model.GrossDeliveryCharge = deliverybill.DeliveryChargeKM;
+                    model.DeliveryCharge = deliverybill.ChargeUpto5Km;
                 }
                 else
                 {
                     var dist = Distance - 5;
-                    var amount = dist * deliverybill.DeliveryChargeOneKM;
-                    model.GrossDeliveryCharge = deliverybill.DeliveryChargeKM + amount;
+                    var amount = dist * deliverybill.ChargePerKm;
+                    model.DeliveryCharge = deliverybill.ChargeUpto5Km + amount;
                 }
-                model.ShopDeliveryDiscount = model.TotalPrice * (deliverybill.DeliveryChargeCustomer / 100);
+                model.ShopDeliveryDiscount = model.TotalPrice * (billingCharge.DeliveryDiscountPercentage / 100);
             }
-            model.NetDeliveryCharge = model.GrossDeliveryCharge - model.ShopDeliveryDiscount;
+            if (model.ShopDeliveryDiscount > model.DeliveryCharge)
+            {
+                model.NetDeliveryCharge = 0;
+                model.ShopDeliveryDiscount = model.DeliveryCharge;
+            }
+            else
+            {
+                model.NetDeliveryCharge = model.DeliveryCharge - model.ShopDeliveryDiscount;
+            }
             model.Distance = Distance.ToString("0.##");
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SNCSCOHPU301")]
-        public ActionResult COHPaymentUpdate(OrderMissedListViewModel model)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            var order = db.Orders.FirstOrDefault(i => i.OrderNumber == model.OrderNumber);
-            var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == model.OrderNumber);
-            var perOrderAmount = db.PlatFormCreditRates.Where(s => s.Status == 0).FirstOrDefault();
-
-            if (order != null)
-            {
-                order.Status = 2;
-                order.UpdatedBy = user.Name;
-                order.DateUpdated = DateTime.Now;
-                order.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
-                order.NetDeliveryCharge = model.NetDeliveryCharge;
-                order.DeliveryCharge = model.GrossDeliveryCharge;
-                order.ShopDeliveryDiscount = model.ShopDeliveryDiscount;
-                order.Packingcharge = model.PackingCharge;
-                order.NetTotal = model.Amount;
-                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-            }
-            if (payment == null)
-            {
-                Payment pay = new Payment();
-                pay.CorporateID = null;
-                pay.Amount = order.NetTotal;
-                pay.PaymentMode = "Cash On Hand";
-                order.PaymentModeType = 2;
-                pay.Key = null;
-                pay.ReferenceCode = null;
-                pay.CustomerId = order.CustomerId;
-                pay.CustomerName = order.CustomerName;
-                pay.ShopId = order.ShopId;
-                pay.ShopName = order.ShopName;
-                pay.GSTINNumber = null;
-                pay.OriginalAmount = order.TotalPrice;
-                pay.GSTAmount = order.NetTotal;
-                pay.Currency = "Rupees";
-                pay.CountryName = null;
-                pay.PaymentResult = "pending";
-                pay.Credits = "N/A";
-                pay.OrderNumber = order.OrderNumber;
-                pay.PaymentCategoryType = 0;
-                pay.CreditType = 2;
-                pay.ConvenientCharge = order.Convinenientcharge;
-                pay.PackingCharge = order.Packingcharge;
-                pay.DeliveryCharge = order.DeliveryCharge;
-                pay.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
-                pay.RefundStatus = 1;
-                pay.Status = 0;
-                pay.UpdatedBy = order.UpdatedBy;
-                pay.CreatedBy = order.CreatedBy;
-                pay.DateEncoded = order.DateEncoded;
-                pay.DateUpdated = order.DateUpdated;
-                db.Payments.Add(pay);
-                db.SaveChanges();
-            }
-            
-            return RedirectToAction("OrderMissed");
-        }
-
-        [AccessPolicy(PageCode = "SNCSOPU302")]
-        public ActionResult OnlinePaymentUpdate(int orderno)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            var cart = db.Orders.FirstOrDefault(i => i.OrderNumber == orderno);
-            var shop = db.Shops.FirstOrDefault(i => i.Id == cart.ShopId && i.Status == 0);
-            var model = new OrderMissedListViewModel();
-            model.OrderNumber = cart.OrderNumber;
-            model.Amount = cart.NetTotal;
-            model.TotalPrice = cart.TotalPrice;
-            model.PackingCharge = db.Bills.Where(i => i.ShopId == cart.ShopId && i.NameOfBill == 1 && i.Status == 0).Select(i => i.PackingCharge).FirstOrDefault();
-
-            // Gross Delivery Charge
-            var Distance = (((Math.Acos(Math.Sin((shop.Latitude * Math.PI / 180)) * Math.Sin((cart.Latitude * Math.PI / 180)) + Math.Cos((shop.Latitude * Math.PI / 180)) * Math.Cos((cart.Latitude * Math.PI / 180))
-                 * Math.Cos(((shop.Longitude - cart.Longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000;
-            var deliverybill = db.Bills.Where(i => i.ShopId == cart.ShopId && i.NameOfBill == 0 && i.DeliveryRateSet == 0 && i.Status == 0).FirstOrDefault();
-            if (deliverybill != null)
-            {
-                if (Distance < 5)
-                {
-                    model.GrossDeliveryCharge = deliverybill.DeliveryChargeKM;
-                }
-                else
-                {
-                    var dist = Distance - 5;
-                    var amount = dist * deliverybill.DeliveryChargeOneKM;
-                    model.GrossDeliveryCharge = deliverybill.DeliveryChargeKM + amount;
-                }
-                model.ShopDeliveryDiscount = model.TotalPrice * (deliverybill.DeliveryChargeCustomer / 100);
-            }
-            model.NetDeliveryCharge = model.GrossDeliveryCharge - model.ShopDeliveryDiscount;
-            model.Distance = Distance.ToString("0.##");
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [AccessPolicy(PageCode = "SNCSOPU302")]
-        public ActionResult OnlinePaymentUpdate(OrderMissedListViewModel model)
+        public ActionResult PaymentUpdate(OrderMissedListViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -365,66 +273,321 @@ namespace ShopNow.Controllers
                 order.Status = 2;
                 order.UpdatedBy = user.Name;
                 order.DateUpdated = DateTime.Now;
-                order.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
+                order.RatePerOrder = perOrderAmount.RatePerOrder;
                 order.NetDeliveryCharge = model.NetDeliveryCharge;
-                order.DeliveryCharge = model.GrossDeliveryCharge;
+                order.DeliveryCharge = model.DeliveryCharge;
                 order.ShopDeliveryDiscount = model.ShopDeliveryDiscount;
                 order.Packingcharge = model.PackingCharge;
                 order.NetTotal = model.Amount;
                 db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
-            if (payment == null)
+            if (model.PaymentType == 1)
             {
-                Payment pay = new Payment();
-                pay.Amount = model.Amount;
-                pay.PaymentMode = "Online Payment";
-                pay.PaymentModeType = 1;
-                pay.Key = "Razor";
-                pay.Status = 0;
-                pay.DateEncoded = order.DateEncoded;
-                pay.DateUpdated = order.DateUpdated;
-                pay.ReferenceCode = model.PaymentId;
-                pay.CustomerId = order.CustomerId;
-                pay.CustomerName = order.CustomerName;
-                pay.ShopId = order.ShopId;
-                pay.ShopName = order.ShopName;
-                pay.OriginalAmount = order.TotalPrice;
-                pay.GSTAmount = model.Amount;
-                pay.Currency = "Rupees";
-                pay.PaymentResult = "success";
-                pay.Credits = "N/A";
-                pay.UpdatedBy = order.UpdatedBy;
-                pay.CreatedBy = order.CreatedBy;
-                pay.OrderNumber = order.OrderNumber;
-                pay.PaymentCategoryType = 0;
-                pay.CreditType = 2;
-                pay.PackingCharge = model.PackingCharge;
-                pay.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
-                pay.RefundStatus = 1;
-                db.Payments.Add(pay);
-                db.SaveChanges();
+                if (payment == null)
+                {
+                    Payment pay = new Payment();
+                    pay.CorporateID = null;
+                    pay.Amount = order.NetTotal;
+                    pay.PaymentMode = "Cash On Hand";
+                    order.PaymentModeType = 2;
+                    pay.Key = null;
+                    pay.ReferenceCode = null;
+                    pay.CustomerId = order.CustomerId;
+                    pay.CustomerName = order.CustomerName;
+                    pay.ShopId = order.ShopId;
+                    pay.ShopName = order.ShopName;
+                    pay.GSTINNumber = null;
+                    pay.OriginalAmount = order.TotalPrice;
+                    pay.GSTAmount = order.NetTotal;
+                    pay.Currency = "Rupees";
+                    pay.CountryName = null;
+                    pay.PaymentResult = "pending";
+                    pay.Credits = "N/A";
+                    pay.OrderNumber = order.OrderNumber;
+                    pay.PaymentCategoryType = 0;
+                    pay.CreditType = 2;
+                    pay.ConvenientCharge = order.Convinenientcharge;
+                    pay.PackingCharge = order.Packingcharge;
+                    pay.DeliveryCharge = order.DeliveryCharge;
+                    pay.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
+                    pay.RefundStatus = 1;
+                    pay.Status = 0;
+                    pay.UpdatedBy = order.UpdatedBy;
+                    pay.CreatedBy = order.CreatedBy;
+                    pay.DateEncoded = order.DateEncoded;
+                    pay.DateUpdated = order.DateUpdated;
+                    db.Payments.Add(pay);
+                    db.SaveChanges();
+                }
             }
-            if (paymentData == null)
+            else if (model.PaymentType == 2)
             {
-                PaymentsData pd = new PaymentsData();
-                pd.PaymentId = model.PaymentId;
-                pd.OrderNumber = Convert.ToInt32(model.OrderNumber);
-                pd.Entity = "payment";
-                pd.Amount = Convert.ToDecimal(model.Amount);
-                pd.Currency = "INR";
-                pd.Status = 2;
-                pd.Order_Id = model.Order_Id;
-                pd.Method = model.Method;
-                pd.Fee = model.Fee;
-                pd.Tax = model.Tax;
-                pd.DateEncoded = DateTime.Now;
-                db.PaymentsDatas.Add(pd);
-                db.SaveChanges();
+                if (payment == null)
+                {
+                    Payment pay = new Payment();
+                    pay.Amount = model.Amount;
+                    pay.PaymentMode = "Online Payment";
+                    pay.PaymentModeType = 1;
+                    pay.Key = "Razor";
+                    pay.Status = 0;
+                    pay.DateEncoded = order.DateEncoded;
+                    pay.DateUpdated = order.DateUpdated;
+                    pay.ReferenceCode = model.PaymentId;
+                    pay.CustomerId = order.CustomerId;
+                    pay.CustomerName = order.CustomerName;
+                    pay.ShopId = order.ShopId;
+                    pay.ShopName = order.ShopName;
+                    pay.OriginalAmount = order.TotalPrice;
+                    pay.GSTAmount = model.Amount;
+                    pay.Currency = "Rupees";
+                    pay.PaymentResult = "success";
+                    pay.Credits = "N/A";
+                    pay.UpdatedBy = order.UpdatedBy;
+                    pay.CreatedBy = order.CreatedBy;
+                    pay.OrderNumber = order.OrderNumber;
+                    pay.PaymentCategoryType = 0;
+                    pay.CreditType = 2;
+                    pay.PackingCharge = model.PackingCharge;
+                    pay.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
+                    pay.RefundStatus = 1;
+                    db.Payments.Add(pay);
+                    db.SaveChanges();
+                }
+                if (paymentData == null)
+                {
+                    PaymentsData pd = new PaymentsData();
+                    pd.PaymentId = model.PaymentId;
+                    pd.OrderNumber = Convert.ToInt32(model.OrderNumber);
+                    pd.Entity = "payment";
+                    pd.Amount = Convert.ToDecimal(model.Amount);
+                    pd.Currency = "INR";
+                    pd.Status = 2;
+                    pd.Order_Id = model.Order_Id;
+                    pd.Method = model.Method;
+                    pd.Fee = model.Fee;
+                    pd.Tax = model.Tax;
+                    pd.DateEncoded = DateTime.Now;
+                    db.PaymentsDatas.Add(pd);
+                    db.SaveChanges();
+                }
             }
-
             return RedirectToAction("OrderMissed");
         }
+
+        //[AccessPolicy(PageCode = "SNCSCOHPU301")]
+        //public ActionResult COHPaymentUpdate(int orderno)
+        //{
+        //    var user = ((Helpers.Sessions.User)Session["USER"]);
+        //    ViewBag.Name = user.Name;
+        //    var cart = db.Orders.FirstOrDefault(i => i.OrderNumber == orderno);
+        //    var shop = db.Shops.FirstOrDefault(i => i.Id == cart.ShopId && i.Status == 0);
+        //    var model = new OrderMissedListViewModel();
+        //    model.OrderNumber = cart.OrderNumber;
+        //    model.Amount = cart.NetTotal;
+        //    model.TotalPrice = cart.TotalPrice;
+        //    model.PackingCharge = db.Bills.Where(i => i.ShopId == cart.ShopId && i.NameOfBill == 1 && i.Status == 0).Select(i => i.PackingCharge).FirstOrDefault();
+
+        //    // Gross Delivery Charge
+        //    var Distance = (((Math.Acos(Math.Sin((shop.Latitude * Math.PI / 180)) * Math.Sin((cart.Latitude * Math.PI / 180)) + Math.Cos((shop.Latitude * Math.PI / 180)) * Math.Cos((cart.Latitude * Math.PI / 180))
+        //         * Math.Cos(((shop.Longitude - cart.Longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000;
+        //    var deliverybill = db.Bills.Where(i => i.ShopId == cart.ShopId && i.NameOfBill == 0 && i.DeliveryRateSet == 0 && i.Status == 0).FirstOrDefault();
+        //    if (deliverybill != null)
+        //    {
+        //        if (Distance < 5)
+        //        {
+        //            model.GrossDeliveryCharge = deliverybill.DeliveryChargeKM;
+        //        }
+        //        else
+        //        {
+        //            var dist = Distance - 5;
+        //            var amount = dist * deliverybill.DeliveryChargeOneKM;
+        //            model.GrossDeliveryCharge = deliverybill.DeliveryChargeKM + amount;
+        //        }
+        //        model.ShopDeliveryDiscount = model.TotalPrice * (deliverybill.DeliveryChargeCustomer / 100);
+        //    }
+        //    model.NetDeliveryCharge = model.GrossDeliveryCharge - model.ShopDeliveryDiscount;
+        //    model.Distance = Distance.ToString("0.##");
+        //    return View(model);
+        //}
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //[AccessPolicy(PageCode = "SNCSCOHPU301")]
+        //public ActionResult COHPaymentUpdate(OrderMissedListViewModel model)
+        //{
+        //    var user = ((Helpers.Sessions.User)Session["USER"]);
+        //    ViewBag.Name = user.Name;
+        //    var order = db.Orders.FirstOrDefault(i => i.OrderNumber == model.OrderNumber);
+        //    var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == model.OrderNumber);
+        //    var perOrderAmount = db.PlatFormCreditRates.Where(s => s.Status == 0).FirstOrDefault();
+
+        //    if (order != null)
+        //    {
+        //        order.Status = 2;
+        //        order.UpdatedBy = user.Name;
+        //        order.DateUpdated = DateTime.Now;
+        //        order.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
+        //        order.NetDeliveryCharge = model.NetDeliveryCharge;
+        //        order.DeliveryCharge = model.GrossDeliveryCharge;
+        //        order.ShopDeliveryDiscount = model.ShopDeliveryDiscount;
+        //        order.Packingcharge = model.PackingCharge;
+        //        order.NetTotal = model.Amount;
+        //        db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+        //        db.SaveChanges();
+        //    }
+        //    if (payment == null)
+        //    {
+        //        Payment pay = new Payment();
+        //        pay.CorporateID = null;
+        //        pay.Amount = order.NetTotal;
+        //        pay.PaymentMode = "Cash On Hand";
+        //        order.PaymentModeType = 2;
+        //        pay.Key = null;
+        //        pay.ReferenceCode = null;
+        //        pay.CustomerId = order.CustomerId;
+        //        pay.CustomerName = order.CustomerName;
+        //        pay.ShopId = order.ShopId;
+        //        pay.ShopName = order.ShopName;
+        //        pay.GSTINNumber = null;
+        //        pay.OriginalAmount = order.TotalPrice;
+        //        pay.GSTAmount = order.NetTotal;
+        //        pay.Currency = "Rupees";
+        //        pay.CountryName = null;
+        //        pay.PaymentResult = "pending";
+        //        pay.Credits = "N/A";
+        //        pay.OrderNumber = order.OrderNumber;
+        //        pay.PaymentCategoryType = 0;
+        //        pay.CreditType = 2;
+        //        pay.ConvenientCharge = order.Convinenientcharge;
+        //        pay.PackingCharge = order.Packingcharge;
+        //        pay.DeliveryCharge = order.DeliveryCharge;
+        //        pay.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
+        //        pay.RefundStatus = 1;
+        //        pay.Status = 0;
+        //        pay.UpdatedBy = order.UpdatedBy;
+        //        pay.CreatedBy = order.CreatedBy;
+        //        pay.DateEncoded = order.DateEncoded;
+        //        pay.DateUpdated = order.DateUpdated;
+        //        db.Payments.Add(pay);
+        //        db.SaveChanges();
+        //    }
+            
+        //    return RedirectToAction("OrderMissed");
+        //}
+
+        //[AccessPolicy(PageCode = "SNCSOPU302")]
+        //public ActionResult OnlinePaymentUpdate(int orderno)
+        //{
+        //    var user = ((Helpers.Sessions.User)Session["USER"]);
+        //    ViewBag.Name = user.Name;
+        //    var cart = db.Orders.FirstOrDefault(i => i.OrderNumber == orderno);
+        //    var shop = db.Shops.FirstOrDefault(i => i.Id == cart.ShopId && i.Status == 0);
+        //    var model = new OrderMissedListViewModel();
+        //    model.OrderNumber = cart.OrderNumber;
+        //    model.Amount = cart.NetTotal;
+        //    model.TotalPrice = cart.TotalPrice;
+        //    model.PackingCharge = db.Bills.Where(i => i.ShopId == cart.ShopId && i.NameOfBill == 1 && i.Status == 0).Select(i => i.PackingCharge).FirstOrDefault();
+
+        //    // Gross Delivery Charge
+        //    var Distance = (((Math.Acos(Math.Sin((shop.Latitude * Math.PI / 180)) * Math.Sin((cart.Latitude * Math.PI / 180)) + Math.Cos((shop.Latitude * Math.PI / 180)) * Math.Cos((cart.Latitude * Math.PI / 180))
+        //         * Math.Cos(((shop.Longitude - cart.Longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000;
+        //    var deliverybill = db.Bills.Where(i => i.ShopId == cart.ShopId && i.NameOfBill == 0 && i.DeliveryRateSet == 0 && i.Status == 0).FirstOrDefault();
+        //    if (deliverybill != null)
+        //    {
+        //        if (Distance < 5)
+        //        {
+        //            model.GrossDeliveryCharge = deliverybill.DeliveryChargeKM;
+        //        }
+        //        else
+        //        {
+        //            var dist = Distance - 5;
+        //            var amount = dist * deliverybill.DeliveryChargeOneKM;
+        //            model.GrossDeliveryCharge = deliverybill.DeliveryChargeKM + amount;
+        //        }
+        //        model.ShopDeliveryDiscount = model.TotalPrice * (deliverybill.DeliveryChargeCustomer / 100);
+        //    }
+        //    model.NetDeliveryCharge = model.GrossDeliveryCharge - model.ShopDeliveryDiscount;
+        //    model.Distance = Distance.ToString("0.##");
+        //    return View(model);
+        //}
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //[AccessPolicy(PageCode = "SNCSOPU302")]
+        //public ActionResult OnlinePaymentUpdate(OrderMissedListViewModel model)
+        //{
+        //    var user = ((Helpers.Sessions.User)Session["USER"]);
+        //    ViewBag.Name = user.Name;
+        //    var order = db.Orders.FirstOrDefault(i => i.OrderNumber == model.OrderNumber);
+        //    var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == model.OrderNumber);
+        //    var paymentData = db.PaymentsDatas.FirstOrDefault(i => i.OrderNumber == model.OrderNumber);
+        //    var perOrderAmount = db.PlatFormCreditRates.Where(s => s.Status == 0).FirstOrDefault();
+        //    if (order != null)
+        //    {
+        //        order.Status = 2;
+        //        order.UpdatedBy = user.Name;
+        //        order.DateUpdated = DateTime.Now;
+        //        order.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
+        //        order.NetDeliveryCharge = model.NetDeliveryCharge;
+        //        order.DeliveryCharge = model.GrossDeliveryCharge;
+        //        order.ShopDeliveryDiscount = model.ShopDeliveryDiscount;
+        //        order.Packingcharge = model.PackingCharge;
+        //        order.NetTotal = model.Amount;
+        //        db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+        //        db.SaveChanges();
+        //    }
+        //    if (payment == null)
+        //    {
+        //        Payment pay = new Payment();
+        //        pay.Amount = model.Amount;
+        //        pay.PaymentMode = "Online Payment";
+        //        pay.PaymentModeType = 1;
+        //        pay.Key = "Razor";
+        //        pay.Status = 0;
+        //        pay.DateEncoded = order.DateEncoded;
+        //        pay.DateUpdated = order.DateUpdated;
+        //        pay.ReferenceCode = model.PaymentId;
+        //        pay.CustomerId = order.CustomerId;
+        //        pay.CustomerName = order.CustomerName;
+        //        pay.ShopId = order.ShopId;
+        //        pay.ShopName = order.ShopName;
+        //        pay.OriginalAmount = order.TotalPrice;
+        //        pay.GSTAmount = model.Amount;
+        //        pay.Currency = "Rupees";
+        //        pay.PaymentResult = "success";
+        //        pay.Credits = "N/A";
+        //        pay.UpdatedBy = order.UpdatedBy;
+        //        pay.CreatedBy = order.CreatedBy;
+        //        pay.OrderNumber = order.OrderNumber;
+        //        pay.PaymentCategoryType = 0;
+        //        pay.CreditType = 2;
+        //        pay.PackingCharge = model.PackingCharge;
+        //        pay.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
+        //        pay.RefundStatus = 1;
+        //        db.Payments.Add(pay);
+        //        db.SaveChanges();
+        //    }
+        //    if (paymentData == null)
+        //    {
+        //        PaymentsData pd = new PaymentsData();
+        //        pd.PaymentId = model.PaymentId;
+        //        pd.OrderNumber = Convert.ToInt32(model.OrderNumber);
+        //        pd.Entity = "payment";
+        //        pd.Amount = Convert.ToDecimal(model.Amount);
+        //        pd.Currency = "INR";
+        //        pd.Status = 2;
+        //        pd.Order_Id = model.Order_Id;
+        //        pd.Method = model.Method;
+        //        pd.Fee = model.Fee;
+        //        pd.Tax = model.Tax;
+        //        pd.DateEncoded = DateTime.Now;
+        //        db.PaymentsDatas.Add(pd);
+        //        db.SaveChanges();
+        //    }
+
+        //    return RedirectToAction("OrderMissed");
+        //}
        
         public JsonResult RejectUpdate(int orderno)
         {
