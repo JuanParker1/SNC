@@ -1759,7 +1759,7 @@ namespace ShopNow.Controllers
             {
                 if (productsList != null)
                 {
-                    productsList.ForEach(i => { i.Price = Math.Round(i.Price + (i.ShopPrice * model.Percentage) / 100,0); i.MenuPrice = Math.Round(i.MenuPrice + (i.ShopPrice * model.Percentage) / 100, 0); });
+                    productsList.ForEach(i => { i.Price = Math.Round(i.Price + (i.ShopPrice * model.Percentage) / 100, MidpointRounding.AwayFromZero); i.MenuPrice = Math.Round(i.MenuPrice + (i.ShopPrice * model.Percentage) / 100, MidpointRounding.AwayFromZero); });
                     db.SaveChanges();
                 }
             }
@@ -1767,7 +1767,7 @@ namespace ShopNow.Controllers
             {
                 if (productsList != null)
                 {
-                    productsList.ForEach(i => { i.Price = Math.Round(i.ShopPrice - (i.ShopPrice * i.Percentage) / 100, 0); i.MenuPrice = i.ShopPrice; });
+                    productsList.ForEach(i => { i.Price = Math.Round(i.ShopPrice - (i.ShopPrice * i.Percentage) / 100, MidpointRounding.AwayFromZero); i.MenuPrice = i.ShopPrice; });
                     db.SaveChanges();
                 }
             }
