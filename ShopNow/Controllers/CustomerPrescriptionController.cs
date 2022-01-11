@@ -273,7 +273,7 @@ namespace ShopNow.Controllers
             return View();
         }
 
-        public async Task<JsonResult> GetShopProductSelect2(int shopid, string q = "dolo")
+        public async Task<JsonResult> GetShopProductSelect2(int shopid, string q = "")
         {
             var model = await db.Products.Where(a => a.ShopId == shopid && a.Status == 0)
                 .Join(db.MasterProducts.Where(a => a.Name.Contains(q)), p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
