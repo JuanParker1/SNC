@@ -4744,6 +4744,7 @@ namespace ShopNow.Controllers
                          UnitPrice = a.UnitPrice,
                          ShopId = i.o.o.ShopId,
                          ShopName = i.o.o.ShopName,
+                         OutletId = db.Products.FirstOrDefault(b=>b.Id == a.ProductId).OutletId,
                          //OfferQuantityLimit = db.Products.FirstOrDefault(b=>b.Id == a.ProductId).OfferQuantityLimit,
                          OrderItemAddonLists = db.OrderItemAddons.Where(b => b.OrderItemId == a.Id).Select(b => new GetAllOrderListViewModel.OrderList.OrderItemList.OrderItemAddonList {
                              AddonName = b.AddonName,
