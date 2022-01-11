@@ -76,27 +76,27 @@ namespace ShopNow.Controllers
             _mapper = _mapperConfiguration.CreateMapper();
         }
 
-        [AccessPolicy(PageCode = "SNCSL253")]
-        public ActionResult List(int shop = 0)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            var List = (from s in db.Shops
-                        where (shop != 0 ? s.Id == shop : true) && (s.Status == 0 || s.Status == 6)
-                        select s).OrderBy(s => s.Name).ToList();
-            return View(List);
-        }
-
-        //public ActionResult List(string district = "")
+        //public ActionResult List(int shop = 0)
         //{
         //    var user = ((Helpers.Sessions.User)Session["USER"]);
         //    ViewBag.Name = user.Name;
         //    var List = (from s in db.Shops
-        //                where (district != "" ? s.DistrictName == district : true) && (s.Status == 0 || s.Status == 6)
+        //                where (shop != 0 ? s.Id == shop : true) && (s.Status == 0 || s.Status == 6)
         //                select s).OrderBy(s => s.Name).ToList();
-        //    ViewBag.District = district;
         //    return View(List);
         //}
+
+        [AccessPolicy(PageCode = "SNCSL253")]
+        public ActionResult List(string district = "")
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var List = (from s in db.Shops
+                        where (district != "" ? s.DistrictName == district : true) && (s.Status == 0 || s.Status == 6)
+                        select s).OrderBy(s => s.Name).ToList();
+            ViewBag.District = district;
+            return View(List);
+        }
 
         [AccessPolicy(PageCode = "SNCSIL254")]
         public ActionResult InactiveList()
@@ -114,7 +114,7 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var customer = db.Customers.Any(i => i.Id == user.Id);
-            if(customer != false)
+            if (customer != false)
             {
                 ViewBag.Name = user.Name;
             }
@@ -299,7 +299,6 @@ namespace ShopNow.Controllers
                     db.ShopCredits.Add(shopCredit);
                     db.SaveChanges();
                 }
-
                 return RedirectToAction("InActiveList", "Shop");
             }
             catch (AmazonS3Exception amazonS3Exception)
@@ -385,6 +384,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCSE256")]
         public ActionResult Edit(ShopEditViewModel model)
         {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var shop = db.Shops.FirstOrDefault(i => i.Id == model.Id);
             shop.DateUpdated = DateTime.Now;
             _mapper.Map(model, shop);
@@ -530,6 +531,7 @@ namespace ShopNow.Controllers
                 //Delivery charge Assign
                 shop.DeliveryType = model.DeliveryType;
                 shop.DeliveryTierType = model.DeliveryTierType;
+                shop.UpdatedBy = user.Name;
 
                 db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
@@ -557,9 +559,9 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCSDT257")]
         public ActionResult Details(string Id)
         {
-            var dId = AdminHelpers.DCodeInt(Id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
+            var dId = AdminHelpers.DCodeInt(Id);
             Shop sh = db.Shops.FirstOrDefault(i => i.Id == dId);
             var model = new ShopEditViewModel();
             _mapper.Map(sh, model);
@@ -569,8 +571,9 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCSD258")]
         public JsonResult Delete(string id)
         {
-            var dId = AdminHelpers.DCodeInt(id);
             var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var dId = AdminHelpers.DCodeInt(id);
             var shop = db.Shops.FirstOrDefault(i => i.Id == dId);
             if (shop != null)
             {
@@ -629,6 +632,7 @@ namespace ShopNow.Controllers
         public ActionResult InActive(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var shop = db.Shops.FirstOrDefault(i => i.Id == Id);
             shop.Status = 1;
             shop.DateUpdated = DateTime.Now;
@@ -642,6 +646,7 @@ namespace ShopNow.Controllers
         public ActionResult InActiveLowBalance(int Id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var shop = db.Shops.FirstOrDefault(i => i.Id == Id);
             shop.Status = 6;
             shop.DateUpdated = DateTime.Now;
@@ -655,6 +660,7 @@ namespace ShopNow.Controllers
         public ActionResult Active(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var shop = db.Shops.FirstOrDefault(i => i.Id == id);
             shop.Status = 0;
             shop.DateUpdated = DateTime.Now;
@@ -668,6 +674,7 @@ namespace ShopNow.Controllers
         public ActionResult Activate(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var shop = db.Shops.FirstOrDefault(i => i.Id == id);
             shop.Status = 0;
             shop.DateUpdated = DateTime.Now;
@@ -680,6 +687,7 @@ namespace ShopNow.Controllers
         public ActionResult UpdateShopOnline(int Id, bool isOnline)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var shop = db.Shops.Where(i => i.Id == Id && i.Status == 0).FirstOrDefault();
             shop.IsOnline = isOnline;
             db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
@@ -690,6 +698,7 @@ namespace ShopNow.Controllers
         public ActionResult UpdateShopTrail(int Id, bool isTrail)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var shop = db.Shops.Where(i => i.Id == Id).FirstOrDefault();
             shop.IsTrail = isTrail;
             db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
@@ -701,6 +710,7 @@ namespace ShopNow.Controllers
         public JsonResult GenerateOTP(string MobileNo, int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var model = new OtpViewModel();
             var customer = db.Customers.FirstOrDefault(i => i.PhoneNumber == MobileNo);
             var shop = db.Shops.FirstOrDefault(i => i.Id == id);
@@ -726,13 +736,13 @@ namespace ShopNow.Controllers
             {
                 model.ErrorMessage = "Invalid Mobile Number! You are not a Customer. Please Register in APP";
             }
-
             return Json(new { data = models.Otp, models.Verify, model.ErrorMessage, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult OTPGenerate(string MobileNo, int Customerid)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var model = new OtpViewModel();
             var customer = db.Customers.FirstOrDefault(i => i.Id == Customerid);
             var models = _mapper.Map<OtpViewModel, OtpVerification>(model);
@@ -759,7 +769,6 @@ namespace ShopNow.Controllers
                 models.DateUpdated = DateTime.Now;
                 db.OtpVerifications.Add(models);
                 db.SaveChanges();
-
             }
             return Json(new { data = models.Otp, models.Verify, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
@@ -767,6 +776,7 @@ namespace ShopNow.Controllers
         public JsonResult OTPVerify(string Otp)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var otpverification = db.OtpVerifications.FirstOrDefault(i => i.Otp == Otp);
             var data = false;
             if (otpverification != null)
@@ -778,13 +788,13 @@ namespace ShopNow.Controllers
                 db.Entry(otpverification).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
-
             return Json(new { data, otp = Otp, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GeneratePassword(int id)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             SmtpClient client = new SmtpClient();
             var customer = db.Customers.FirstOrDefault(i => i.Id == id);
             customer.Password = _generatedPassword;
@@ -833,13 +843,13 @@ namespace ShopNow.Controllers
                     }
                 }
             }
-
             return Json(new { Verify, otp, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult VerifyImage(int code)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var shop = db.Shops.FirstOrDefault(i => i.Id == code);
             shop.Verify = true;
             shop.DateUpdated = DateTime.Now;
@@ -877,7 +887,6 @@ namespace ShopNow.Controllers
                 Email = customer.Email;
                 AadharImage = customer.ImagePath;
             }
-
             return Json(new { data = code, CustomerId, CustomerName, PhoneNumber, AadharName, AadharNumber, Email, AadharImage, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
@@ -889,7 +898,6 @@ namespace ShopNow.Controllers
                 var result = JsonConvert.DeserializeObject<Results>(getDetails);
                 return Json(new { result, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
             }
-
         }
 
         // Select2
@@ -904,16 +912,16 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        public async Task<JsonResult> GetShopListSelect2(string q = "")
-        {
-            var model = await db.Shops.Where(a => a.Name.Contains(q) && (a.Status == 0 || a.Status == 6)).OrderBy(i => i.Name).Select(i => new
-            {
-                id = i.Id,
-                text = i.Name
-            }).ToListAsync();
+        //public async Task<JsonResult> GetShopListSelect2(string q = "")
+        //{
+        //    var model = await db.Shops.Where(a => a.Name.Contains(q) && (a.Status == 0 || a.Status == 6)).OrderBy(i => i.Name).Select(i => new
+        //    {
+        //        id = i.Id,
+        //        text = i.Name
+        //    }).ToListAsync();
 
-            return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
+        //}
 
         public async Task<JsonResult> GetActiveListSelect2(string q = "")
         {
@@ -961,14 +969,11 @@ namespace ShopNow.Controllers
 
         public async Task<JsonResult> GetDistrictSelect2(string q = "")
         {
-            var model = await db.Shops
-                .Where(a => a.DistrictName.Contains(q) && a.Status == 0)
-                .GroupBy(i => i.DistrictName)
-                .Select(i => new
-                {
-                    id = i.Key,
-                    text = i.Key
-                }).OrderBy(i => i.text).ToListAsync();
+            var model = await db.Shops.Where(a => a.DistrictName.Contains(q) && a.Status == 0).GroupBy(i => i.DistrictName).Select(i => new
+            {
+                id = i.Key,
+                text = i.Key
+            }).OrderBy(i => i.text).ToListAsync();
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
@@ -992,7 +997,5 @@ namespace ShopNow.Controllers
             }
             base.Dispose(disposing);
         }
-
     }
-
 }

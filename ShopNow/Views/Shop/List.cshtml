@@ -26,19 +26,15 @@
                     <form method="get" action="/Shop/List">
                         <div class="row mb-3">
                             <div class="col-md-4">
-                                @*<select id="select-shop" class="form-control" name="Id">
-                                        @if (ViewBag.ShopId != "")
-                                        {
-                                            <option value="@ViewBag.ShopId">@ViewBag.ShopName</option>
-                                        }
-                                    </select>
-                                    <input type="hidden" name="Name" />*@
-                                <select name="Id" id="Id" class="form-control"></select>
-                                <input type="hidden" name="Name" id="Name" />
+                                <select id="select-district" class="form-control" name="District">
+                                    @if (ViewBag.District != "")
+                                    {
+                                        <option value="@ViewBag.District">@ViewBag.District</option>
+                                    }
+                                </select>
                             </div>
                             <div class="col-md-4">
-                                @*<input type="submit" class="btn btn-info mr-3" value="Filter" />*@
-                                <input type="button" class="btn btn-info mr-3" name="Filter" id="Filter" value="Filter" />
+                                <input type="submit" class="btn btn-info mr-3" value="Filter" />
                                 <a href="/Shop/List" class="btn btn-warning">Clear</a>
                             </div>
                         </div>
@@ -161,11 +157,21 @@
                 );
             });
 
-            //$('#select-shop').select2({
+            $('#select-district').select2({
+                placeholder: "Search District Name",
+                ajax: {
+                    url: "/Shop/GetDistrictSelect2",
+                    width: '100%',
+                    delay: 250,
+                    dataType: 'json'
+                }
+            });
+
+            //$('#Id').select2({
             //    placeholder: "Search Shop Name",
-            //    width: '100%',
             //    ajax: {
             //        url: "/Shop/GetShopListSelect2",
+            //        width: '100%',
             //        delay: 250,
             //        dataType: 'json'
             //    }
@@ -173,22 +179,10 @@
             //    $('input[name="Name"]').val(e.params.data.text);
             //});
 
-            $('#Id').select2({
-                placeholder: "Search Shop Name",
-                ajax: {
-                    url: "/Shop/GetShopListSelect2",
-                    width: '100%',
-                    delay: 250,
-                    dataType: 'json'
-                }
-            }).on('select2:select', function (e) {
-                $('input[name="Name"]').val(e.params.data.text);
-            });
-
-            $("#Filter").click(function () {
-                var shopId = $("#Id").val();
-                window.location.href = "/Shop/List/?shop=" + shopId;
-            });
+            //$("#Filter").click(function () {
+            //    var shopId = $("#Id").val();
+            //    window.location.href = "/Shop/List/?shop=" + shopId;
+            //});
 
         });
     </script>
