@@ -89,7 +89,9 @@
                                 <thead class="bg-light">
                                     <tr>
                                         <th>Product</th>
-                                        <th>Price</th>
+                                        <th>MRP</th>
+                                        <th>Discount</th>
+                                        <th>Unit Price</th>
                                         <th>Quantity</th>
                                         <th>Total</th>
                                         <th>Action</th>
@@ -264,9 +266,10 @@
                     var categoryName = $('[name="CategoryName"]').val();
                     var imagePath = $('[name="ImagePath"]').val();
                     var percentage = $('[name="Percentage"]').val();
-                    price = Math.round((price - (price * percentage)) / 100);
+                    var pamount = parseFloat(price * percentage / 100);
+                    price = parseFloat(price - pamount).toFixed(2);
                     if (productId && qty) {
-                        var total = Math.round(price * qty).toFixed(2);
+                        var total = parseFloat(price * qty).toFixed(2);
                         var item = {
                             ItemId: itemid,
                             ProductId: productId,
@@ -282,7 +285,7 @@
                             MRPPrice: mrpprice,
                         };
                         itemArray.push(item);
-                        var $tr = '<tr><td>' + productName + '</td><td>' + price + '</td><td>' + qty + '</td><td>' + total + '</td><td><a class="btn btn-sm btn-danger removeProduct" data-amount=' + total + ' data-id=' + id + 'data-weight=' + weight + 'data-size=' + size + '> Remove</a></td ></tr > ';
+                        var $tr = '<tr><td>' + productName + '</td><td>' + mrpprice + '</td><td>'+percentage+'%</td><td>' + price + '</td><td>' + qty + '</td><td>' + total + '</td><td><a class="btn btn-sm btn-danger removeProduct" data-amount=' + total + ' data-id=' + id + 'data-weight=' + weight + 'data-size=' + size + '> Remove</a></td ></tr > ';
                         $('#tbl-items tbody').append($tr);
                         $('#div-items').removeClass('d-none');
                         $('[name="ProductId"]').val('').trigger('change');
@@ -353,7 +356,7 @@
                     var net = $("#NetDeliveryCharge").val();
                     var toPay = parseFloat(itemTotal) + parseFloat(pack) + parseFloat(conv) + parseFloat(net);
                     $(".ToPay").text(toPay.toFixed(0));
-                    $("#ToPay").val(topay.toFixed(0));
+                    $("#ToPay").val(toPay.toFixed(0));
                 });
             });
 
