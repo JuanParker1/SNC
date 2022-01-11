@@ -1494,8 +1494,8 @@ namespace ShopNow.Controllers
                 .GroupJoin(db.OrderItems, o => o.o.o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
                 .Select(i => new TodayDeliveryListViewModel.OrderList
                 {
-                    CustomerLatitude = 0,
-                    CustomerLongitude = 0,
+                    CustomerLatitude = i.o.o.o.o.Latitude,
+                    CustomerLongitude = i.o.o.o.o.Longitude,
                     CustomerName = i.o.o.o.o.CustomerName,
                     CustomerPhoneNumber = i.o.o.o.o.CustomerPhoneNumber,
                     DateEncoded = i.o.o.o.o.DateEncoded,
@@ -1522,7 +1522,8 @@ namespace ShopNow.Controllers
                     NetTotal = i.o.o.o.o.NetTotal,
                     WalletAmount = i.o.o.o.o.WalletAmount,
                     TipAmount = i.o.o.o.o.TipsAmount,
-                    OrderItemList = i.oi.ToList()
+                    OrderItemList = i.oi.ToList(),
+                    
                 }).ToList();
 
             model.OtherList = db.Orders.Where(i => (i.Status == 4 || i.Status == 5) && i.DeliveryBoyPhoneNumber == phoneNumber  /*&& DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(DateTime.Now)*/)
@@ -1532,8 +1533,8 @@ namespace ShopNow.Controllers
                .GroupJoin(db.OrderItems, o => o.o.o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
                .Select(i => new TodayDeliveryListViewModel.OrderList
                {
-                   CustomerLatitude = 0,
-                   CustomerLongitude = 0,
+                   CustomerLatitude = i.o.o.o.o.Latitude,
+                   CustomerLongitude = i.o.o.o.o.Longitude,
                    CustomerName = i.o.o.o.o.CustomerName,
                    CustomerPhoneNumber = i.o.o.o.o.CustomerPhoneNumber,
                    DateEncoded = i.o.o.o.o.DateEncoded,
