@@ -2375,5 +2375,20 @@ namespace ShopNow.Controllers
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult UnMap(int Id)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var product = _db.Products.FirstOrDefault(i => i.Id == Id);
+            if (product != null)
+            {
+                product.MasterProductId = 0;
+                product.DateUpdated = DateTime.Now;
+                product.UpdatedBy = user.Name;
+                _db.Entry(product).State = System.Data.Entity.EntityState.Modified;
+                _db.SaveChanges();
+            }
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
     }
 }

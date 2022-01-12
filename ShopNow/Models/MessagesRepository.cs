@@ -71,7 +71,7 @@ namespace ShopNow.Models
             {
                 connection.Open();
                 //using (var command = new SqlCommand(@"SELECT [MessageID], [Message], [EmptyMessage], [Date] FROM [dbo].[Messages]", connection))
-                using (var command = new SqlCommand(@"SELECT  Id FROM [dbo].[Orders] where Status in (2,3,4,5,8)", connection))
+                using (var command = new SqlCommand(@"SELECT  Id FROM [dbo].[Orders] where Status in (2,3,4,5,6,7,8)", connection))
                 {
                     command.Notification = null;
 
