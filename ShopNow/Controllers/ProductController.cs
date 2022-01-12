@@ -65,7 +65,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCPRL203")]
         public ActionResult List(ProductItemListViewModel model)
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             model.ListItems = db.Products.Where(i => i.Status == 0 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
                 .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
@@ -89,9 +89,9 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCPRD204")]
         public ActionResult Details(string id)
         {
-            var dId = AdminHelpers.DCodeLong(id);
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
+            var dId = AdminHelpers.DCodeLong(id);
             Product pd = db.Products.FirstOrDefault(i => i.Id == dId);
             var model = new ProductDetailsViewModel();
             _mapper.Map(pd, model);
@@ -107,7 +107,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCPRMC205")]
         public ActionResult MedicalCreate()
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var shop = db.Shops.Any(i => i.Id == user.Id);
             if (shop != false)
@@ -123,13 +123,14 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCPRMC205")]
         public ActionResult MedicalCreate(MedicalCreateViewModel model)
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var isExist = db.Products.Any(i => i.MasterProductId == model.MasterProductId && i.Status == 0 && i.ProductTypeId == 3 && i.ShopId == model.ShopId);
             if (isExist)
             {
                 ViewBag.ErrorMessage = model.MasterProductName + " Already Exist";
                 return View();
             }
-            var user = ((Helpers.Sessions.User)Session["USER"]);
             var prod = _mapper.Map<MedicalCreateViewModel, Product>(model);
             var master = db.MasterProducts.FirstOrDefault(i => i.Id == model.MasterProductId && i.Status == 0);
             if (master != null)
@@ -206,9 +207,9 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCPRME206")]
         public ActionResult MedicalEdit(string id)
         {
-            var dCode = AdminHelpers.DCodeLong(id);
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
+            var dCode = AdminHelpers.DCodeLong(id);
             if (string.IsNullOrEmpty(dCode.ToString()))
                 return HttpNotFound();
             var product = db.Products.FirstOrDefault(i => i.Id == dCode);
@@ -257,7 +258,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCPRME206")]
         public ActionResult MedicalEdit(MedicalEditViewModel model)
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var prod = db.Products.FirstOrDefault(i => i.Id == model.Id);
             _mapper.Map(model, prod);
             if (model.IsPreorder == false)
@@ -275,11 +277,11 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCPRML207")]
         public ActionResult MedicalList(MedicalListViewModel model)
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             model.ListItems = db.Products.Where(i => i.Status == 0 && i.ProductTypeId == 3 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
               .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
-              .Join(db.Categories, p=> p.p.CategoryId, c=>c.Id, (p,c) => new { p,c})
+              .Join(db.Categories, p => p.p.CategoryId, c => c.Id, (p, c) => new { p, c })
             .Select(i => new MedicalListViewModel.ListItem
             {
                 CategoryName = i.c.Name,
@@ -296,7 +298,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCPRDL208")]
         public ActionResult FoodList(FoodListViewModel model)
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             model.ListItems = db.Products.Where(i => i.Status == 0 && i.ProductTypeId == 1 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
              .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
@@ -316,7 +318,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCPRDC209")]
         public ActionResult FoodCreate()
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var shop = db.Shops.Any(i => i.Id == user.Id);
             if (shop != false)
@@ -333,6 +335,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCPRDC209")]
         public ActionResult FoodCreate(FoodCreateViewModel model)
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var isExist = db.Products.Any(i => i.MasterProductId == model.MasterProductId && i.Status == 0 && i.ProductTypeId == 1 && i.ShopId == model.ShopId);
             if (isExist)
             {
@@ -340,7 +344,6 @@ namespace ShopNow.Controllers
                 return View();
             }
             var prod = _mapper.Map<FoodCreateViewModel, Product>(model);
-            var user = ((Helpers.Sessions.User)Session["USER"]);
             if (model.ShopId != 0)
             {
                 var sh = db.Shops.FirstOrDefault(i => i.Id == model.ShopId);
@@ -435,11 +438,11 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCPRDE210")]
         public ActionResult FoodEdit(string id)
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var dCode = AdminHelpers.DCodeLong(id);
             if (dCode == 0)
                 return HttpNotFound();
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
             var product = db.Products.FirstOrDefault(i => i.Id == dCode);
             var model = _mapper.Map<Product, FoodEditViewModel>(product);
             var masterProduct = db.MasterProducts.FirstOrDefault(i => i.Id == model.MasterProductId);
@@ -466,7 +469,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCPRDE210")]
         public ActionResult FoodEdit(FoodEditViewModel model)
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             // var shop = db.Shops.Any(i => i.Id == user.Id);
             var prod = db.Products.FirstOrDefault(i => i.Id == model.Id);
             _mapper.Map(model, prod);
@@ -543,7 +547,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCPRFL211")]
         public ActionResult FMCGList(FMCGListViewModel model)
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             model.ListItems = db.Products.Where(i => i.Status == 0 && i.ProductTypeId == 2 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
                 .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
@@ -564,7 +568,7 @@ namespace ShopNow.Controllers
         public ActionResult FMCGCreate()
         {
             // Session["DefaultFMCG"] = new List<FMCGCreateEditViewModel>();
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var shop = db.Shops.Any(i => i.Id == user.Id);
             if (shop != false)
@@ -579,6 +583,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCPRFC212")]
         public ActionResult FMCGCreate(FMCGCreateViewModel model)
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             //Return to View if product already exist
             var isExist = db.Products.Any(i => i.MasterProductId == model.MasterProductId && i.Status == 0 && i.ProductTypeId == 2 && i.ShopId == model.ShopId);
             if (isExist)
@@ -586,7 +592,6 @@ namespace ShopNow.Controllers
                 ViewBag.ErrorMessage = model.Name + " Already Exist";
                 return View();
             }
-            var user = ((Helpers.Sessions.User)Session["USER"]);
             var product = _mapper.Map<FMCGCreateViewModel, Product>(model);
             product.ProductTypeId = 2;
             product.ProductTypeName = "FMCG";
@@ -660,9 +665,9 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCPRFE213")]
         public ActionResult FMCGEdit(string id)
         {
-            var dCode = AdminHelpers.DCodeLong(id);
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
+            var dCode = AdminHelpers.DCodeLong(id);
             if (string.IsNullOrEmpty(dCode.ToString()))
                 return HttpNotFound();
             var product = db.Products.FirstOrDefault(i => i.Id == dCode);
@@ -717,10 +722,11 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCPRFE213")]
         public ActionResult FMCGEdit(FMCGEditViewModel model)
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var prod = db.Products.FirstOrDefault(i => i.Id == model.Id);
             _mapper.Map(model, prod);
-            if(model.IsPreorder == false)
+            if (model.IsPreorder == false)
             {
                 model.PreorderHour = 0;
             }
@@ -739,7 +745,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCPREC214")]
         public ActionResult ElectronicCreate()
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var shop = db.Shops.Any(i => i.Id == user.Id);
             if (shop != false)
@@ -754,6 +760,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCPREC214")]
         public ActionResult ElectronicCreate(ElectronicCreateEditViewModel model)
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             //Return to View if product already exist
             var name = db.Products.Any(i => i.MasterProductId == model.MasterProductId && i.Status == 0 && i.ProductTypeId == 4 && i.ShopId == model.ShopId);
             if (name)
@@ -761,7 +769,6 @@ namespace ShopNow.Controllers
                 ViewBag.ErrorMessage = model.Name + " Already Exist";
                 return View();
             }
-            var user = ((Helpers.Sessions.User)Session["USER"]);
             var product = _mapper.Map<ElectronicCreateEditViewModel, Product>(model);
             product.CreatedBy = user.Name;
             product.UpdatedBy = user.Name;
@@ -835,13 +842,13 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCPREE215")]
         public ActionResult ElectronicEdit(string id)
         {
-            var dId = AdminHelpers.DCodeLong(id);
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
+            var dId = AdminHelpers.DCodeLong(id);
             if (string.IsNullOrEmpty(dId.ToString()))
                 return HttpNotFound();
             var product = db.Products.FirstOrDefault(i => i.Id == dId);
-            var model = _mapper.Map<Product,ElectronicCreateEditViewModel>(product);
+            var model = _mapper.Map<Product, ElectronicCreateEditViewModel>(product);
             var master = db.MasterProducts.FirstOrDefault(i => i.Id == product.MasterProductId);
             if (master != null)
             {
@@ -872,7 +879,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCPREE215")]
         public ActionResult ElectronicEdit(ElectronicCreateEditViewModel model)
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var prod = db.Products.FirstOrDefault(i => i.Id == model.Id);
             _mapper.Map(model, prod);
             if (model.IsPreorder == false)
@@ -891,7 +899,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCPREL216")]
         public ActionResult ElectronicList(ElectronicListViewModel model)
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             model.ListItems = db.Products.Where(i => i.Status == 0 && i.ProductTypeId == 4 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
                 .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
@@ -911,6 +919,8 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCPRD217")]
         public JsonResult Delete(string id)
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var dId = AdminHelpers.DCodeInt(id);
             var product = db.Products.FirstOrDefault(i => i.Id == dId);
             if (product != null)
@@ -927,7 +937,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCPRSM218")]
         public ActionResult ShopItemMapping(int originalShopId, int newShopId, string newShopName)
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new ProductMappingViewModel();
             model.Lists = db.Products.Where(i => i.ShopId == originalShopId && i.Status == 0).ToList().AsQueryable().ProjectTo<ProductMappingViewModel.List>(_mapperConfiguration).ToList();// Product.GetListItem(originalShopId).AsQueryable().ProjectTo<ProductMappingViewModel.List>(_mapperConfiguration).ToList();
@@ -1052,7 +1062,8 @@ namespace ShopNow.Controllers
 
         public ActionResult UpdateProductOnline(int Id, bool isOnline)
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             var product = db.Products.Where(i => i.Id == Id).FirstOrDefault();
             if (product != null)
             {
@@ -1327,7 +1338,7 @@ namespace ShopNow.Controllers
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
-        
+
         public async Task<JsonResult> GetAddonCategorySelect2(string q = "")
         {
             var model = await db.AddOnCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0).Select(i => new
@@ -1338,7 +1349,7 @@ namespace ShopNow.Controllers
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
-       
+
         public async Task<JsonResult> GetDishSelect2(string q = "")
         {
             var model = await db.MasterProducts.Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 1)
@@ -1445,7 +1456,7 @@ namespace ShopNow.Controllers
         public async Task<JsonResult> GetMedicalSelect2(string q = "")
         {
             var model = await db.MasterProducts.Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 3)
-                .Join(db.Categories,m=> m.CategoryId, c=> c.Id, (m,c) =>new { m,c})
+                .Join(db.Categories, m => m.CategoryId, c => c.Id, (m, c) => new { m, c })
                 .Select(i => new
                 {
                     id = i.m.Id,
@@ -1716,13 +1727,13 @@ namespace ShopNow.Controllers
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult UpdatePriceAndQuantityAndDiscount(long id, double mrp, double price, int qty,int discatid=0, string discatname = "")
+        public JsonResult UpdatePriceAndQuantityAndDiscount(long id, double mrp, double price, int qty, int discatid = 0, string discatname = "")
         {
             var product = db.Products.FirstOrDefault(i => i.Id == id);
             product.MenuPrice = mrp;
             product.Price = price;
             product.Qty = qty;
-            if (discatid!=0 && !(string.IsNullOrEmpty(discatname)))
+            if (discatid != 0 && !(string.IsNullOrEmpty(discatname)))
             {
                 product.DiscountCategoryId = discatid;
                 product.DiscountCategoryName = discatname;
@@ -1775,9 +1786,9 @@ namespace ShopNow.Controllers
             return View();
         }
 
-        public async Task<JsonResult> GetMedicalDiscountCategorySelect2(string q = "",int shopid=0)
+        public async Task<JsonResult> GetMedicalDiscountCategorySelect2(string q = "", int shopid = 0)
         {
-            var model = await db.DiscountCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.ShopId==shopid)
+            var model = await db.DiscountCategories.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.ShopId == shopid)
                 .Select(i => new
                 {
                     id = i.Id,
@@ -1795,6 +1806,5 @@ namespace ShopNow.Controllers
             }
             base.Dispose(disposing);
         }
-
     }
 }
