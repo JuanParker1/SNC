@@ -960,7 +960,7 @@ namespace ShopNow.Controllers
 
                     payment.OrderNumber = order.OrderNumber;
                 }
-
+                Helpers.LogFile.WriteToFile(model.PaymentMode+" "+ Convert.ToString(model.OrderId.ToString()));
                 if (model.PaymentMode == "Online Payment")
                 {
                     ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
@@ -968,10 +968,12 @@ namespace ShopNow.Controllers
                                                SecurityProtocolType.Tls12;
                     string key = BaseClass.razorpaykey;// "rzp_live_PNoamKp52vzWvR";
                     string secret = BaseClass.razorpaySecretkey;//"yychwOUOsYLsSn3XoNYvD1HY";
-
+                    Helpers.LogFile.WriteToFile(key + " " + Convert.ToString(model.OrderId.ToString()));
+                    Helpers.LogFile.WriteToFile("reference code" + " " + Convert.ToString(model.ReferenceCode.ToString()));
                     RazorpayClient client = new RazorpayClient(key, secret);
                     Razorpay.Api.Payment varpayment = new Razorpay.Api.Payment();
                     var s = varpayment.Fetch(model.ReferenceCode);
+                    Helpers.LogFile.WriteToFile("s" + " " + Convert.ToString(s["invoice_id"]));
                     PaymentsData pay = new PaymentsData();
 
                     pay.OrderNumber = model.OrderNumber;
