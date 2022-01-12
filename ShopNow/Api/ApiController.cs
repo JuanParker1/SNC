@@ -960,7 +960,7 @@ namespace ShopNow.Controllers
 
                     payment.OrderNumber = order.OrderNumber;
                 }
-
+                Helpers.LogFile.WriteToFile(model.PaymentMode);
                 if (model.PaymentMode == "Online Payment")
                 {
                     ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
@@ -968,10 +968,12 @@ namespace ShopNow.Controllers
                                                SecurityProtocolType.Tls12;
                     string key = BaseClass.razorpaykey;// "rzp_live_PNoamKp52vzWvR";
                     string secret = BaseClass.razorpaySecretkey;//"yychwOUOsYLsSn3XoNYvD1HY";
-
+                    Helpers.LogFile.WriteToFile(key);
+                    Helpers.LogFile.WriteToFile("reference code" + " " + model.ReferenceCode);
                     RazorpayClient client = new RazorpayClient(key, secret);
                     Razorpay.Api.Payment varpayment = new Razorpay.Api.Payment();
                     var s = varpayment.Fetch(model.ReferenceCode);
+                   Helpers.LogFile.WriteToFile("s" + " " + s["invoice_id"]);
                     PaymentsData pay = new PaymentsData();
 
                     pay.OrderNumber = model.OrderNumber;
@@ -1004,6 +1006,8 @@ namespace ShopNow.Controllers
                         pay.Amount = s["amount"] / 100;
                     else
                         pay.Amount = s["amount"];
+
+                    pay.Fee -= pay.Tax; //Total fee minu tax
                     pay.DateEncoded = DateTime.Now;
                     db.PaymentsDatas.Add(pay);
                     db.SaveChanges();
@@ -1705,6 +1709,7 @@ namespace ShopNow.Controllers
             {
                 var customer = db.Customers.FirstOrDefault(i => i.Id == customerId); //This is delivery boy
                 var order = db.Orders.FirstOrDefault(i => i.OrderNumber == orderNo);
+                string notificationMessage = $"Your order on shop({order.ShopName}) is on the way.";
                 order.Status = 5;
                 order.UpdatedBy = customer.Name;
                 order.DateUpdated = DateTime.Now;
@@ -1739,11 +1744,12 @@ namespace ShopNow.Controllers
                     models.DateUpdated = DateTime.Now;
                     db.OtpVerifications.Add(models);
                     db.SaveChanges();
+                    notificationMessage = $"Your order on shop({order.ShopName}) is on the way. Please share the delivery code { models.Otp} with the delivery partner {customer.Name} for verification.";
                 }
                 var fcmToken = (from c in db.Customers
                                 where c.Id == order.CustomerId
                                 select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                Helpers.PushNotification.SendbydeviceId($"Your order is on shop({order.ShopName}) the way.", "Snowch", "a.mp3", fcmToken.ToString());
+                Helpers.PushNotification.SendbydeviceId(notificationMessage, "Snowch", "a.mp3", fcmToken.ToString());
                 return Json(new { message = "Successfully DelivaryBoy PickUp!" }, JsonRequestBehavior.AllowGet);
             }
             else

@@ -350,7 +350,9 @@ namespace ShopNow.Controllers
                    DeliveryBoyPaymentStatus = i.c.c.DeliveryBoyPaymentStatus,
                    PaymentMode = i.d.BankName.ToUpper() == "ICICI BANK" ? "FT" : "NEFT",
                    ShopName = i.c.c.ShopName,
-                   COHAmount = (i.c.c.PaymentModeType == 2 && i.c.c.DeliveryBoyPaymentStatus == 0) ? i.c.p.Amount : 0
+                   COHAmount = (i.c.c.PaymentModeType == 2 && i.c.c.DeliveryBoyPaymentStatus == 0) ? i.c.p.Amount : 0,
+                   TipsAmount = i.c.c.TipsAmount,
+                   TotalDeliveryBoyAmount = i.c.c.DeliveryCharge + i.c.c.TipsAmount
                }).ToList();
             return View(model);
         }

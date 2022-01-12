@@ -184,7 +184,7 @@
             </div>
             <div class="modal-body">
                 <div class="row" id="print-Prescription">
-                    <img class="modal-content img-fluid w-100"  style="height:400px;" id="PresImage" />
+                    <img class="modal-content img-fluid w-100"  id="PresImage" />
                 </div>
             </div>
             <div class="modal-footer">
@@ -208,6 +208,8 @@
     <script>
         function printDiv(divName) {
             var printContents = document.getElementById(divName).innerHTML;
+            $('#PresImage').css('width', '100%');
+            $('#PresImage').css('height', '800px');
             w = window.open();
             w.document.write(printContents);
             w.print();
