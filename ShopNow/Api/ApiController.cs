@@ -6481,7 +6481,7 @@ namespace ShopNow.Controllers
             return Json(true);
         }
 
-        public JsonResult AddPaymentData(string code,int ordernumber)
+        public JsonResult AddPaymentData(string code,int ordernumber) 
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
                                                      SecurityProtocolType.Tls11 |

@@ -388,7 +388,8 @@ namespace ShopNow.Controllers
                             CustomerPhoneNumber = i.c.CustomerPhoneNumber,
                             Status = i.c.Status,
                             PaymentMode = i.p.PaymentMode,
-                            Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
+                            //Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
+                            Amount = i.p.Amount,
                             DateEncoded = i.c.DateEncoded,
                             ShopCancelledTime = i.c.ShopAcceptedTime,
                             ShopCancelPeriod = i.c.ShopAcceptedTime != null ? Math.Round((i.c.ShopAcceptedTime.Value - i.c.DateEncoded).TotalMinutes) : 0
