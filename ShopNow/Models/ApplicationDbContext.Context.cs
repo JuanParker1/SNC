@@ -46,7 +46,6 @@ namespace ShopNow.Models
         public virtual DbSet<CustomerAchievement> CustomerAchievements { get; set; }
         public virtual DbSet<CustomerAddress> CustomerAddresses { get; set; }
         public virtual DbSet<CustomerFavorite> CustomerFavorites { get; set; }
-        public virtual DbSet<CustomerPrescription> CustomerPrescriptions { get; set; }
         public virtual DbSet<CustomerPrescriptionImage> CustomerPrescriptionImages { get; set; }
         public virtual DbSet<CustomerPrescriptionItem> CustomerPrescriptionItems { get; set; }
         public virtual DbSet<CustomerReview> CustomerReviews { get; set; }
@@ -100,10 +99,11 @@ namespace ShopNow.Models
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<OrderItem> OrderItems { get; set; }
-        public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<CustomerAppInfo> CustomerAppInfoes { get; set; }
         public virtual DbSet<CustomerDeviceInfo> CustomerDeviceInfoes { get; set; }
         public virtual DbSet<CustomerGiftCard> CustomerGiftCards { get; set; }
+        public virtual DbSet<CustomerPrescription> CustomerPrescriptions { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
     
         [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)

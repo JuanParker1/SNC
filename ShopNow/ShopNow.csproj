@@ -435,6 +435,7 @@
     <Compile Include="Helpers\AdminHelpers.cs" />
     <Compile Include="Helpers\CallHelpers.cs" />
     <Compile Include="Helpers\CommonHelpers.cs" />
+    <Compile Include="Helpers\LogFile.cs" />
     <Compile Include="Helpers\PushNotification.cs" />
     <Compile Include="Helpers\SmsHelpers.cs" />
     <Compile Include="Helpers\ActionFilter.cs" />

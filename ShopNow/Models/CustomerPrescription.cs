@@ -22,6 +22,9 @@ namespace ShopNow.Models
         public string ImagePath { get; set; }
         public string AudioPath { get; set; }
         public string Remarks { get; set; }
+        public string DeliveryAddress { get; set; }
+        public Nullable<double> Latitude { get; set; }
+        public Nullable<double> Longitude { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
     }
