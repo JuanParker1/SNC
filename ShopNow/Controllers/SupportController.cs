@@ -96,18 +96,18 @@ namespace ShopNow.Controllers
             
             DateTime last3Date = DateTime.Now.AddDays(-3);
 
-            model.ShopAcceptanceCount = db.Orders.Where(i => i.Status == 2 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5)
+            model.ShopAcceptanceCount = db.Orders.Where(i => i.Status == 2 /*&& SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5*/)
                    .AsEnumerable().Count();
 
-            model.DeliveryAcceptanceCount = db.Orders.Where(i => i.Status == 4 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5)
+            model.DeliveryAcceptanceCount = db.Orders.Where(i => i.Status == 4 /*&& SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5*/)
                 .Join(db.DeliveryBoys.Where(i => i.isAssign == 1 && i.OnWork == 0), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
                       .AsEnumerable().Count();
 
-            model.ShopPickupCount = db.Orders.Where(i => i.Status == 4 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5)
+            model.ShopPickupCount = db.Orders.Where(i => i.Status == 4 /*&& SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 5*/)
                 .Join(db.DeliveryBoys.Where(i => i.isAssign == 1 && i.OnWork == 1), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
                       .AsEnumerable().Count();
 
-            model.CustomerDeliveryCount = db.Orders.Where(i => i.Status == 5 && SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 15)
+            model.CustomerDeliveryCount = db.Orders.Where(i => i.Status == 5 /*&& SqlFunctions.DateDiff("minute", i.DateUpdated, DateTime.Now) >= 15*/)
                     .AsEnumerable().Count();
 
             model.OrderswithoutDeliveryboyCount = db.Orders.Where(i => i.Status == 3)
