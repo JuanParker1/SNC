@@ -1705,6 +1705,7 @@ namespace ShopNow.Controllers
             {
                 var customer = db.Customers.FirstOrDefault(i => i.Id == customerId); //This is delivery boy
                 var order = db.Orders.FirstOrDefault(i => i.OrderNumber == orderNo);
+                string notificationMessage = $"Your order on shop({order.ShopName}) is on the way.";
                 order.Status = 5;
                 order.UpdatedBy = customer.Name;
                 order.DateUpdated = DateTime.Now;
@@ -1739,11 +1740,12 @@ namespace ShopNow.Controllers
                     models.DateUpdated = DateTime.Now;
                     db.OtpVerifications.Add(models);
                     db.SaveChanges();
+                    notificationMessage = $"Your order on shop({order.ShopName}) is on the way. Please share the delivery code { models.Otp} with the delivery partner {customer.Name} for verification.";
                 }
                 var fcmToken = (from c in db.Customers
                                 where c.Id == order.CustomerId
                                 select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                Helpers.PushNotification.SendbydeviceId($"Your order is on shop({order.ShopName}) the way.", "Snowch", "a.mp3", fcmToken.ToString());
+                Helpers.PushNotification.SendbydeviceId(notificationMessage, "Snowch", "a.mp3", fcmToken.ToString());
                 return Json(new { message = "Successfully DelivaryBoy PickUp!" }, JsonRequestBehavior.AllowGet);
             }
             else

@@ -1073,7 +1073,7 @@ namespace ShopNow.Controllers
             order.DateUpdated = DateTime.Now;
             db.Entry(order).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
-
+            string notificationMessage = $"Your order on shop({order.ShopName}) is on the way.";
             var orderItemList = db.OrderItems.Where(i => i.OrderId == order.Id).ToList();
             foreach (var item in orderItemList)
             {
@@ -1104,11 +1104,12 @@ namespace ShopNow.Controllers
                 otpVerification.DateUpdated = DateTime.Now;
                 db.OtpVerifications.Add(otpVerification);
                 db.SaveChanges();
+                notificationMessage = $"Your order on shop({order.ShopName}) is on the way. Please share the delivery code { otpVerification.Otp} with the delivery partner {order.DeliveryBoyName} for verification.";
             }
             var fcmToken = (from c in db.Customers
                             where c.Id == order.CustomerId
                             select c.FcmTocken ?? "").FirstOrDefault().ToString();
-            Helpers.PushNotification.SendbydeviceId($"Your order on shop({order.ShopName}) is on the way.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+            Helpers.PushNotification.SendbydeviceId(notificationMessage, "ShopNowChat", "a.mp3", fcmToken.ToString());
             return RedirectToAction("Edit", "Cart", new { OrderNumber = OrderNumber, id = AdminHelpers.ECodeLong(id) });
         }
 
