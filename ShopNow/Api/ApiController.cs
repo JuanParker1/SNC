@@ -1004,6 +1004,8 @@ namespace ShopNow.Controllers
                         pay.Amount = s["amount"] / 100;
                     else
                         pay.Amount = s["amount"];
+
+                    pay.Fee -= pay.Tax; //Total fee minu tax
                     pay.DateEncoded = DateTime.Now;
                     db.PaymentsDatas.Add(pay);
                     db.SaveChanges();
