@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="87d1f67be8464633a37b659f43521835" Name="Diagram1" ZoomLevel="74">
+      <Diagram DiagramId="87d1f67be8464633a37b659f43521835" Name="Diagram1" ZoomLevel="73">
         <EntityTypeShape EntityType="sncModel.AccessPolicy" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.AchievementProduct" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.AchievementSetting" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
@@ -24,7 +24,6 @@
         <EntityTypeShape EntityType="sncModel.CustomerAchievement" Width="1.5" PointX="12.75" PointY="8.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.CustomerAddress" Width="1.5" PointX="12.75" PointY="11.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.CustomerFavorite" Width="1.5" PointX="6.75" PointY="13.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.CustomerPrescription" Width="1.5" PointX="14.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.CustomerPrescriptionImage" Width="1.5" PointX="0.75" PointY="14.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.CustomerPrescriptionItem" Width="1.5" PointX="14.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.CustomerReview" Width="1.5" PointX="14.75" PointY="8.75" IsExpanded="true" />
@@ -78,10 +77,11 @@
         <EntityTypeShape EntityType="sncModel.Customer" Width="1.5" PointX="15.375" PointY="28.75" />
         <EntityTypeShape EntityType="sncModel.Product" Width="1.5" PointX="25.375" PointY="28.75" />
         <EntityTypeShape EntityType="sncModel.OrderItem" Width="1.5" PointX="27.75" PointY="28.75" />
-        <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="0.75" PointY="29.75" />
         <EntityTypeShape EntityType="sncModel.CustomerAppInfo" Width="1.5" PointX="3.375" PointY="29.75" />
         <EntityTypeShape EntityType="sncModel.CustomerDeviceInfo" Width="1.5" PointX="29.375" PointY="21.75" />
         <EntityTypeShape EntityType="sncModel.CustomerGiftCard" Width="1.5" PointX="9.375" PointY="13.75" />
+        <EntityTypeShape EntityType="sncModel.CustomerPrescription" Width="1.5" PointX="0.75" PointY="29.75" />
+        <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="21.75" PointY="30.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

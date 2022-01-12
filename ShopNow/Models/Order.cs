@@ -70,6 +70,7 @@ namespace ShopNow.Models
         public int PaymentModeType { get; set; }
         public Nullable<bool> IsCallActive { get; set; }
         public bool IsPrescriptionOrder { get; set; }
+        public int CustomerPrescriptionId { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }

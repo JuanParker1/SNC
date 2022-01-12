@@ -475,6 +475,9 @@ namespace ShopNow.ViewModels
         public string AudioPath { get; set; }
         public string Remarks { get; set; }
         public int ShopId { get; set; }
+        public string DeliveryAddress { get; set; }
+        public Nullable<double> Latitude { get; set; }
+        public Nullable<double> Longitude { get; set; }
 
         public List<ImageListItem> ImageListItems { get; set; }
         public class ImageListItem
