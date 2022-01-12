@@ -35,6 +35,7 @@
     columns.Add(c => c.DeliveryBoyPhoneNumber).Titled("Phone No.").Filterable(true).SetWidth(10);
     //columns.Add(c => c.TransactionType).Titled("Trans Type").Filterable(true).SetWidth(10);
     columns.Add(c => c.COHAmount).Titled("COHAmount").Filterable(true).SetWidth(8);
+    columns.Add(c => c.TipsAmount).Titled("TipsAmount").Filterable(true).SetWidth(8);
     columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(8);
     columns.Add(c => c.PaymentDate).Titled("Payment Date").Filterable(true).SetWidth(30).Format("{0:dd-MMM-yyyy}");
     columns.Add(c => c.AccountName).Titled("A/c Name").Filterable(true).SetWidth(10);
@@ -76,22 +77,23 @@
     <tbody>
         @foreach (var item in Model.ListItems.GroupBy(i => i.DeliveryBoyId))
         {
-            <tr>
-                <td>PAB_VENDOR</td>
-                <td>@item.FirstOrDefault().PaymentMode</td>
-                <td type="string">609505027294</td>
-                <td>
-                    @if (!string.IsNullOrEmpty(item.FirstOrDefault().AccountName))
-                    {<span>@item.FirstOrDefault().AccountName.ToUpper()</span>}
-                else
-                { <span></span>}
+        <tr>
+            <td>PAB_VENDOR</td>
+            <td>@item.FirstOrDefault().PaymentMode</td>
+            <td type="string">609505027294</td>
+            <td>
+                @if (!string.IsNullOrEmpty(item.FirstOrDefault().AccountName))
+                {<span>@item.FirstOrDefault().AccountName.ToUpper()</span>}
+            else
+            { <span></span>}
             </td>
 
             <td type="string">@item.FirstOrDefault().AccountNumber</td>
 
             <td>@item.FirstOrDefault().IfscCode</td>
 
-            <td>@item.Sum(i => i.Amount)</td>
+            @*<td>@item.Sum(i => i.Amount)</td>*@
+            <td>@item.Sum(i => i.TotalDeliveryBoyAmount)</td>
 
             <td></td>
 

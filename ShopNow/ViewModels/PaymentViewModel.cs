@@ -286,6 +286,7 @@ namespace ShopNow.ViewModels
             public string TransactionType { get; set; }
             public string ShopName { get; set; }
             public double Amount { get; set; }
+            public double TipsAmount { get; set; }
             public DateTime PaymentDate { get; set; }
             public string AccountName { get; set; }
             public string AccountNumber { get; set; }
@@ -296,6 +297,7 @@ namespace ShopNow.ViewModels
             public int CartStatus { get; set; }
             public int DeliveryBoyPaymentStatus { get; set; }
             public double COHAmount { get; set; }
+            public double TotalDeliveryBoyAmount { get; set; }
 
             //for excel
             public string Identifier { get; set; }
