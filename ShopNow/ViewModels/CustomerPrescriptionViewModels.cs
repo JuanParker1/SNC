@@ -96,8 +96,8 @@ namespace ShopNow.ViewModels
         public double NetDeliveryCharge { get; set; }
         public double ConvenientCharge { get; set; }
         public double PackingCharge { get; set; }
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
+        public Nullable<double> Latitude { get; set; }
+        public Nullable<double> Longitude { get; set; }
         public double Distance { get; set; }
 
         public List<ListItem> ListItems { get; set; }
