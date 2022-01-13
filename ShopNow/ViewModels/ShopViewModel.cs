@@ -187,7 +187,6 @@ namespace ShopNow.ViewModels
         public int MarketingAgentId { get; set; }
         public string MarketingAgentName { get; set; }
         public int Adscore { get; set; }
-        public Nullable<bool> IsOnline { get; set; }
         public string GooglePlaceId { get; set; }
         public int Status { get; set; }
         public string Password { get; set; }
