@@ -6537,5 +6537,11 @@ namespace ShopNow.Controllers
             db.SaveChanges();
             return Json(true,JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult CheckLog()
+        {
+            Helpers.LogFile.WriteToFile("Logged Successfully");
+            return Json(true);
+        }
     }
 }
