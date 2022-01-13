@@ -71,24 +71,29 @@
                                         <input type="text" class="form-control" name="SubCategoryName" id="SubCategoryName" value="@Model.SubCategoryName" readonly />
                                         <input type="hidden" name="SubCategoryId" id="SubCategoryId" value="@Model.SubCategoryId" />
                                         @*<select id="SubCategoryId" name="SubCategoryId" class="form-control">
-                                            @if (Model.SubCategoryId != 0)
-                                            {
-                                                <option value="@Model.SubCategoryId" readonly>@Model.SubCategoryName</option>
-                                            }
-                                        </select>
-                                        <input type="hidden" name="SubCategoryName" id="SubCategoryName" value="@Model.SubCategoryName" />*@
+                                                @if (Model.SubCategoryId != 0)
+                                                {
+                                                    <option value="@Model.SubCategoryId" readonly>@Model.SubCategoryName</option>
+                                                }
+                                            </select>
+                                            <input type="hidden" name="SubCategoryName" id="SubCategoryName" value="@Model.SubCategoryName" />*@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Sub Category II Name</strong></label>
                                         <input type="text" class="form-control" name="NextSubCategoryName" id="NextSubCategoryName" value="@Model.NextSubCategoryName" readonly />
                                         <input type="hidden" name="NextSubCategoryId" id="NextSubCategoryId" value="@Model.NextSubCategoryId" />
                                         @*<select id="NextSubCategoryId" name="NextSubCategoryId" class="form-control">
-                                         @if (Model.NextSubCategoryId != 0)
-                                         {
-                                             <option value="@Model.NextSubCategoryId" readonly>@Model.NextSubCategoryName</option>
-                                          }
-                                          </select>
-                                          <input type="hidden" name="NextSubCategoryName" id="NextSubCategoryName" value="@Model.NextSubCategoryName" />*@
+                                            @if (Model.NextSubCategoryId != 0)
+                                            {
+                                                <option value="@Model.NextSubCategoryId" readonly>@Model.NextSubCategoryName</option>
+                                             }
+                                             </select>
+                                             <input type="hidden" name="NextSubCategoryName" id="NextSubCategoryName" value="@Model.NextSubCategoryName" />*@
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="col-form-label" for="MeasurementUnitCode"><strong class="text-secondary">Measurement Unit Name</strong></label>
+                                        <input type="hidden" name="MeasurementUnitId" id="MeasurementUnitId" value="@Model.MeasurementUnitId" />
+                                        <input type="text" class="form-control" name="MeasurementUnitName" id="MeasurementUnitName" value="@Model.MeasurementUnitName" readonly />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label" for="Price"><strong class="text-secondary">Menu Price</strong></label>
@@ -98,11 +103,15 @@
                                         <label class="col-form-label" for="Price"><strong class="text-secondary">Selling Price</strong></label>
                                         <input id="Price" type="number" class="form-control" name="Price" min="1" step="any" value="@Model.Price" required />
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <label class="col-form-label" for="Qty"><strong class="text-secondary">Quantity</strong></label>
                                         <input id="Qty" type="number" class="form-control" name="Qty" min="0" value="@Model.Qty" />
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
+                                        <label class="col-form-label" for="ShopPrice"><strong class="text-secondary">Shop Price</strong></label>
+                                        <input id="ShopPrice" type="number" class="form-control" name="ShopPrice" min="1" step="any" value="@Model.ShopPrice" />
+                                    </div>
+                                    <div class="col-md-2">
                                         <div class="form-group">
                                             <label class="col-form-label" for="Percentage"><strong class="text-secondary">Percentage</strong></label>
                                             <input id="Percentage" type="number" class="form-control" name="Percentage" value="@Model.Percentage" />
@@ -117,12 +126,7 @@
                                         <input id="SizeLBH" type="text" class="form-control" name="SizeLBH" min="0" value="@Model.SizeLBH" readonly />
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="col-form-label" for="MeasurementUnitCode"><strong class="text-secondary">Measurement Unit Name</strong></label>
-                                        <input type="hidden" name="MeasurementUnitId" id="MeasurementUnitId" value="@Model.MeasurementUnitId" />
-                                        <input type="text" class="form-control" name="MeasurementUnitName" id="MeasurementUnitName" value="@Model.MeasurementUnitName" readonly />
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="col-form-label" for="PackageCode"><strong class="text-secondary">Package Name</strong></label>
+                                        <label class="col-form-label" for="PackageId"><strong class="text-secondary">Package Name</strong></label>
                                         <input type="hidden" name="PackageId" id="PackageId" value="@Model.PackageId" />
                                         <input type="text" class="form-control" name="PackageName" id="PackageName" value="@Model.PackageName" readonly />
                                     </div>

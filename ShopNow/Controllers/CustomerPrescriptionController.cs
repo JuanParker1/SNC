@@ -69,6 +69,9 @@ namespace ShopNow.Controllers
             {
                 _mapper.Map(cp, model);
                 model.PrescriptionId = cp.Id;
+                model.DeliveryAddress = cp.DeliveryAddress;
+                model.Latitude = cp.Latitude;
+                model.Longitude = cp.Longitude;
                 model.ImagePathLists = db.CustomerPrescriptionImages.Where(i => i.CustomerPrescriptionId == cp.Id)
                         .Select(i => new AddToCartViewModel.ImagePathList
                         {
@@ -88,10 +91,10 @@ namespace ShopNow.Controllers
                 {
                     model.CustomerId = customer.Id;
                     model.CustomerName = customer.Name;
-                    model.DeliveryAddress = customer.Address;
+                    //model.DeliveryAddress = customer.Address;
                     model.CustomerPhoneNumber = customer.PhoneNumber;
-                    model.Latitude = customer.Latitude;
-                    model.Longitude = customer.Longitude;
+                   // model.Latitude = customer.Latitude;
+                   // model.Longitude = customer.Longitude;
                 }
             }
             return View(model);
@@ -166,8 +169,8 @@ namespace ShopNow.Controllers
                     order.NetDeliveryCharge = model.NetDeliveryCharge;
                     order.Convinenientcharge = model.ConvenientCharge;
                     order.Packingcharge = model.PackingCharge;
-                    order.Latitude = model.Latitude;
-                    order.Longitude = model.Longitude;
+                    order.Latitude = model.Latitude ?? 0;
+                    order.Longitude = model.Longitude ?? 0;
                     order.Distance = model.Distance;
                     order.RatePerOrder = db.PlatFormCreditRates.FirstOrDefault(i => i.Status == 0).RatePerOrder;
                     order.PaymentMode = "Cash On Hand";
@@ -176,6 +179,7 @@ namespace ShopNow.Controllers
                     order.DateUpdated = DateTime.Now;
                     order.Status = 2;
                     order.IsPrescriptionOrder = true;
+                    order.CustomerPrescriptionId = model.PrescriptionId; 
                     db.Orders.Add(order);
                     db.SaveChanges();
                     //OrderItems
