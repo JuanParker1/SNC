@@ -73,7 +73,9 @@ namespace ShopNow.Controllers
             model.CustomerCount = db.CustomerAddresses.GroupBy(a => a.CustomerId).Count();
 
             model.DeliveryBoyLiveCount = db.DeliveryBoys.Where(i => i.Status == 0 && i.isAssign == 0 && i.OnWork == 0 && i.Active == 1).Count();
-            model.RefundCount = db.Payments.Where(i => i.RefundAmount != 0 && i.RefundStatus == 1 && i.RefundAmount != null && i.PaymentMode == "Online Payment").Count();
+            model.RefundCount = db.Payments.Where(i => i.RefundAmount != 0 && i.RefundStatus == 1 && i.RefundAmount != null && i.PaymentMode == "Online Payment")
+                .Join(db.PaymentsDatas, p=>p.OrderNumber,pd=>pd.OrderNumber,(p,pd)=>new { p,pd})
+                .Count();
             model.ShopLowCreditCount = db.ShopCredits.Where(i => i.PlatformCredit <= 100 || i.DeliveryCredit <= 100)
                 .Join(db.Shops.Where(i => i.IsTrail == false), sc => sc.CustomerId, s => s.CustomerId, (sc, s) => new { sc, s })
                 .Count();
