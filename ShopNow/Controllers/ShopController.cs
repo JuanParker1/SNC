@@ -593,7 +593,7 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             var model = new ShopCreditViewModel();
             model.ListItems = db.ShopCredits.Where(i => i.PlatformCredit <= 100 || i.DeliveryCredit <= 100) //Low credits
-                .Join(db.Shops.Where(i => i.IsTrail == false), sc => sc.CustomerId, s => s.CustomerId, (sc, s) => new { sc, s })
+                .Join(db.Shops.Where(i => i.IsTrail == false && i.Status == 0), sc => sc.CustomerId, s => s.CustomerId, (sc, s) => new { sc, s })
                 .Select(i => new ShopCreditViewModel.ListItem
                 {
                     DeliveryCredit = i.sc.DeliveryCredit,
