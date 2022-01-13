@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Razorpay.Api;
+using ShopNow.Base;
 using ShopNow.Filters;
 using ShopNow.Helpers;
 using ShopNow.Models;
@@ -7,6 +9,7 @@ using System;
 using System.Data.Entity;
 using System.Data.Entity.SqlServer;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
@@ -29,8 +32,8 @@ namespace ShopNow.Controllers
         {
             _mapperConfiguration = new MapperConfiguration(config =>
             {
-                config.CreateMap<Order, CartListViewModel.CartList>();
-                config.CreateMap<Order, CartDetailsViewModel>();
+                config.CreateMap<Models.Order, CartListViewModel.CartList>();
+                config.CreateMap<Models.Order, CartDetailsViewModel>();
             });
             _mapper = _mapperConfiguration.CreateMapper();
         }
@@ -482,7 +485,7 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var dId = AdminHelpers.DCodeLong(id);
-            Order order = db.Orders.FirstOrDefault(i => i.Id == dId);
+            Models.Order order = db.Orders.FirstOrDefault(i => i.Id == dId);
             var model = new CartDetailsViewModel();
             if (order != null)
             {
@@ -949,6 +952,14 @@ namespace ShopNow.Controllers
                                 select c.FcmTocken ?? "").FirstOrDefault().ToString();
                 Helpers.PushNotification.SendbydeviceId($"Your order has been accepted by shop({order.ShopName}).", "ShopNowChat", "a.mp3", fcmToken.ToString());
 
+                //AddPaymentData
+                if (order.PaymentModeType == 1)
+                {
+                    var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == order.OrderNumber);
+                    if (payment != null)
+                        AddPaymentData(payment.ReferenceCode, order.OrderNumber);
+                }
+
                 return Json(new { message = "Order Confirmed!" }, JsonRequestBehavior.AllowGet);
             }
             else
@@ -1017,6 +1028,13 @@ namespace ShopNow.Controllers
                 if (payment.PaymentMode == "Online Payment")
                     Helpers.PushNotification.SendbydeviceId($"Your refund of amount {payment.Amount} for order no {payment.OrderNumber} is for {payment.RefundRemark} initiated and you will get credited with in 7 working days.", "ShopNowChat", "a.mp3", fcmToken.ToString());
 
+
+                //AddPaymentData
+                if (order.PaymentModeType == 1)
+                {
+                    if (payment != null)
+                        AddPaymentData(payment.ReferenceCode, order.OrderNumber);
+                }
                 return Json(new { message = "Order Cancelled!" }, JsonRequestBehavior.AllowGet);
             }
             else
@@ -1604,6 +1622,59 @@ namespace ShopNow.Controllers
                             .Where(i => (double)(GetMeters(i.CustomerLatitude, i.CustomerLongitude, i.ShopLatitude, i.ShopLongitude) / 1000) <= 4)
                             .ToList();
             return View(model);
+        }
+
+        public void AddPaymentData(string code, int ordernumber)
+        {
+            if (!string.IsNullOrEmpty(code) && ordernumber != 0)
+            {
+                if (!db.PaymentsDatas.Any(i => i.PaymentId == code))
+                {
+                    ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls |
+                                                             SecurityProtocolType.Tls11 |
+                                                             SecurityProtocolType.Tls12;
+                    string key = BaseClass.razorpaykey;// "rzp_live_PNoamKp52vzWvR";
+                    string secret = BaseClass.razorpaySecretkey;//"yychwOUOsYLsSn3XoNYvD1HY";
+
+                    RazorpayClient client = new RazorpayClient(key, secret);
+                    Razorpay.Api.Payment varpayment = new Razorpay.Api.Payment();
+                    var s = varpayment.Fetch(code);
+                    PaymentsData pay = new PaymentsData();
+                    pay.OrderNumber = ordernumber;
+                    pay.PaymentId = code;
+
+                    pay.Invoice_Id = s["invoice_id"];
+                    if (s["status"] == "created")
+                        pay.Status = 0;
+                    else if (s["status"] == "authorized")
+                        pay.Status = 1;
+                    else if (s["status"] == "captured")
+                        pay.Status = 2;
+                    else if (s["status"] == "refunded")
+                        pay.Status = 3;
+                    else if (s["status"] == "failed")
+                        pay.Status = 4;
+                    pay.Order_Id = s["order_id"];
+                    if (s["fee"] != null && s["fee"] > 0)
+                        pay.Fee = (decimal)s["fee"] / 100;
+                    else
+                        pay.Fee = s["fee"];
+                    pay.Entity = s["entity"];
+                    pay.Currency = s["currency"];
+                    pay.Method = s["method"];
+                    if (s["tax"] != null && s["tax"] > 0)
+                        pay.Tax = (decimal)s["tax"] / 100;
+                    else
+                        pay.Tax = s["tax"];
+                    if (s["amount"] != null && s["amount"] > 0)
+                        pay.Amount = s["amount"] / 100;
+                    else
+                        pay.Amount = s["amount"];
+                    pay.DateEncoded = DateTime.Now;
+                    db.PaymentsDatas.Add(pay);
+                    db.SaveChanges();
+                }
+            }
         }
 
         //public JsonResult GetLiveOrderCount()
