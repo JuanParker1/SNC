@@ -4,12 +4,23 @@
     .dropdown-menu {
         z-index: 999999 !important;
     }
+    .title-text {
+        text-decoration: none;
+        color: white;
+        font-weight: bold;
+        font-size: 20px;
+        text-shadow: 4px 4px 2px rgba(0,0,0,0.71);
+    }
+        .title-text:hover {
+        text-decoration:none;
+        color:white;
+        }
 </style>
 <div class="preloader-it">
     <div class="loader-pendulums"></div>
 </div>
 <nav class="navbar navbar-expand-lg navbar-dark bg-success">
-    <a href="~/Dashboard/Index"><img class="rounded ml-2" src="~/Images/snoch.jpg" style="width:50px;height:50px" /></a>
+    <a href="~/Dashboard/Index" class="title-text">@*<img class="rounded ml-2" src="~/Images/snoch.jpg" style="width:50px;height:50px" />*@ SNOWCH</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
