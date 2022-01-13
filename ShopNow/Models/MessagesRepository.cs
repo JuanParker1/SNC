@@ -56,7 +56,7 @@ namespace ShopNow.Models
                 shoppickup = 0,
                 customerdelivery = 0,
                 orderwithoutdeliveryboy = 0,
-                RefundCount = 0,
+                //RefundCount = 0,
                 ShopLowCreditCount = 0,
                 //CustomerPrescriptionCount = 0,
                 //UnMappedCount = 0,
