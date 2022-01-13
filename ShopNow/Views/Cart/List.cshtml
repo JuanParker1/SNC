@@ -39,10 +39,11 @@
                    columns.Add(c => c.No).Titled("Sl.No").SetWidth(0);
                    columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
                    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
-                   columns.Add(c => c.PaymentMode).Titled("PaymentMode").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.ShopPhoneNumber).Titled("Shop PhoneNo").Filterable(true).SetWidth(25);
+                   columns.Add(c => c.PaymentMode).Titled("PaymentMode").Filterable(true).SetWidth(25);
                    columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(10);
                    columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(30);
-                   columns.Add(c => c.ShopPhoneNumber).Titled("Shop PhoneNo").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.CustomerPhoneNumber).Titled("Cust.PhoneNo").Filterable(true).SetWidth(25);
                    //columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
                    columns.Add(c => c.OrderStatusText).Titled("Order Status").Filterable(true).SetWidth(15);
                    columns.Add().Encoded(false).Sanitized(false)

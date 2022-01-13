@@ -172,6 +172,7 @@ namespace ShopNow.ViewModels
             public string DeliveryBoyName { get; set; }
             public string PaymentMode { get; set; }
             public double Amount { get; set; }
+            public string CustomerPhoneNumber { get; set; }
             public int Status { get; set; }
             public DateTime DateEncoded { get; set; }
             public string OrderStatusText
