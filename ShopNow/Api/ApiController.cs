@@ -5590,7 +5590,8 @@ namespace ShopNow.Controllers
                                ShopLatitude = i.p.s.Latitude,
                                ShopLongitude = i.p.s.Longitude,
                                ShopPhoneNumber = i.p.s.PhoneNumber,
-                               ShopStatus = i.p.s.Status
+                               ShopStatus = i.p.s.Status,
+                               ShopNextOnTime = i.p.s.NextOnTime
                            }).ToList();
                 //}
             }
@@ -5668,7 +5669,8 @@ namespace ShopNow.Controllers
                                               ShopLatitude = i.p.s.Latitude,
                                               ShopLongitude = i.p.s.Longitude,
                                               ShopPhoneNumber = i.p.s.PhoneNumber,
-                                              ShopStatus = i.p.s.Status
+                                              ShopStatus = i.p.s.Status,
+                                              ShopNextOnTime = i.p.s.NextOnTime
                                           }).ToList();
                 }
                 else
@@ -5698,7 +5700,8 @@ namespace ShopNow.Controllers
                           ShopLatitude = i.p.p.s.Latitude,
                           ShopLongitude = i.p.p.s.Longitude,
                           ShopPhoneNumber = i.p.p.s.PhoneNumber,
-                          ShopStatus = i.p.p.s.Status
+                          ShopStatus = i.p.p.s.Status,
+                          ShopNextOnTime = i.p.p.s.NextOnTime
                       }).ToList();
                 }
                

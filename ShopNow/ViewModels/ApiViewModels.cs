@@ -574,8 +574,8 @@ namespace ShopNow.ViewModels
         public string ImagePath5 { get; set; }
         public int Status { get; set; }
         public bool Customisation { get; set; }
-        public bool IsOnline { get; set; }
-        public TimeSpan? NextOnTime { get; set; }
+        //public bool IsOnline { get; set; }
+        //public TimeSpan? NextOnTime { get; set; }
         public double Size { get; set; }
         public double Weight { get; set; }
         public bool IsPreorder { get; set; }
@@ -605,6 +605,7 @@ namespace ShopNow.ViewModels
             public double ShopLatitude { get; set; }
             public double ShopLongitude { get; set; }
             public double ShopStatus { get; set; }
+            public TimeSpan? ShopNextOnTime { get; set; }
         }
     }
 
@@ -636,8 +637,8 @@ namespace ShopNow.ViewModels
         public string ImagePath5 { get; set; }
         public int Status { get; set; }
         public bool Customisation { get; set; }
-        public bool IsOnline { get; set; }
-        public TimeSpan? NextOnTime { get; set; }
+        //public bool IsOnline { get; set; }
+        //public TimeSpan? NextOnTime { get; set; }
         public double Size { get; set; }
         public double Weight { get; set; }
         public bool IsPreorder { get; set; }
@@ -667,6 +668,7 @@ namespace ShopNow.ViewModels
             public string ShopImagePath { get; set; }
             public string ShopPhoneNumber { get; set; }
             public bool? ShopIsOnline { get; set; }
+            public TimeSpan? ShopNextOnTime { get; set; }
             public string ShopAddress { get; set; }
             public double ShopLatitude { get; set; }
             public double ShopLongitude { get; set; }
