@@ -282,7 +282,7 @@ namespace ShopNow.Controllers
                 db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
-            if (model.PaymentType == 1)
+            if (model.PaymentType == 2)
             {
                 if (payment == null)
                 {
@@ -321,7 +321,7 @@ namespace ShopNow.Controllers
                     db.SaveChanges();
                 }
             }
-            else if (model.PaymentType == 2)
+            else if (model.PaymentType == 1)
             {
                 if (payment == null)
                 {
