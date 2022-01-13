@@ -49,7 +49,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCRSC239")]
         public ActionResult Create(ReferralSettingCreateViewModel model)
         {
-            var isExist = db.ReferralSettings.Any(i => i.ShopDistrict == model.ShopDistrict);
+            var isExist = db.ReferralSettings.Any(i => i.ShopDistrict == model.ShopDistrict && i.Status==0);
             if (!isExist)
             {
                 var referralSetting = _mapper.Map<ReferralSettingCreateViewModel, ReferralSetting>(model);

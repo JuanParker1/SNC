@@ -974,19 +974,6 @@ namespace ShopNow.Controllers
                 db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
-                var orderItemList = db.OrderItems.Where(i => i.OrderId == order.Id);
-                var product = new Product();
-                foreach (var item in orderItemList)
-                {
-                    //Product Stock Update
-                    product = db.Products.FirstOrDefault(i => i.Id == item.ProductId && i.ProductTypeId == 3);
-                    if (product != null)
-                    {
-                        product.HoldOnStok -= Convert.ToInt32(item.Quantity);
-                    }
-                }
-                db.Entry(product).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
                 //Refund
                 var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == order.OrderNumber);
                 payment.RefundAmount = payment.Amount;
@@ -995,6 +982,22 @@ namespace ShopNow.Controllers
                 payment.DateUpdated = DateTime.Now;
                 db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
+
+                var orderItemList = db.OrderItems.Where(i => i.OrderId == order.Id);
+                if (orderItemList != null)
+                {
+                    foreach (var item in orderItemList)
+                    {
+                        //Product Stock Update
+                        var product = db.Products.FirstOrDefault(i => i.Id == item.ProductId && i.ProductTypeId == 3);
+                        if (product != null)
+                        {
+                            product.HoldOnStok -= Convert.ToInt32(item.Quantity);
+                            db.Entry(product).State = System.Data.Entity.EntityState.Modified;
+                            db.SaveChanges();
+                        }
+                    }
+                }
 
                 //Add Wallet Amount to customer
                 if (order.WalletAmount != 0)
