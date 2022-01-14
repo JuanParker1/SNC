@@ -839,6 +839,7 @@
     <Content Include="fonts\Roboto\LICENSE.txt" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\snoch-crop.png" />
     <Content Include="Images\snoch.jpg" />
     <Content Include="Images\503.png" />
     <Content Include="Images\edit-icon2.png" />

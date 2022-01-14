@@ -1387,6 +1387,13 @@ namespace ShopNow.Controllers
             else
                 Helpers.PushNotification.SendbydeviceId($"Your order is reduced with {payment.RefundAmount} amount for {payment.RefundRemark}", "ShopNowChat", "a.mp3", fcmToken.ToString());
 
+            //AddPaymentData
+            if (order.PaymentModeType == 1)
+            {
+                if (payment != null)
+                    AddPaymentData(payment.ReferenceCode, order.OrderNumber);
+            }
+
             if (redirection == 0)
                 return RedirectToAction("Pending");
             else if (redirection == 1)
