@@ -798,4 +798,52 @@ namespace ShopNow.ViewModels
         public string ReferenceCode { get; set; }
         public double TipsAmount { get; set; }
     }
+
+
+    public class AutoCompleteAllSearchResult
+    {
+        public List<AllPreferedText_Result> PreferedText { get; set; }
+        public List<AllShop_Result> Shop { get; set; }
+        public List<AllProduct_Result> Products { get; set; }
+
+        public partial class AllPreferedText_Result
+        {
+            public string correctword { get; set; }
+
+        }
+        public partial class AllShop_Result
+        {
+            public int ID { get; set; }
+            public string Name { get; set; }
+            public string ImagePath { get; set; }
+            public int ShopCategoryId { get; set; }
+            public bool OnlineStatus { get; set; }
+            public string ShopAddress { get; set; }
+            public string StreetName { get; set; }
+            public double ShopLatitude { get; set; }
+            public double ShopLongitude { get; set; }
+            public int Status { get; set; }
+            public double Rating { get; set; }
+            public double ReviewCount { get; set; }
+        }
+        public partial class AllProduct_Result
+        {
+            public int ID { get; set; }
+            public string Name { get; set; }
+            public string ImagePath { get; set; }
+            public int ShopCategoryId { get; set; }
+            public int ShopId { get; set; }
+            public string ShopName { get; set; }
+            public string ShopImagePath { get; set; }
+            public string ShopAddress { get; set; }
+            public double ShopLatitude { get; set; }
+            public double ShopLongitude { get; set; }
+            public bool OnlineStatus { get; set; }
+            public int Status { get; set; }
+            public double Rating { get; set; }
+            public double ReviewCount { get; set; }
+            // public int count { get; set; }
+        }
+    }
+    
 }

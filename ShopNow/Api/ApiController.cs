@@ -1142,6 +1142,8 @@ namespace ShopNow.Controllers
                         pay.Amount = s["amount"] / 100;
                     else
                         pay.Amount = s["amount"];
+
+                    pay.Fee -= pay.Tax; //Total fee minu tax
                     pay.DateEncoded = DateTime.Now;
                     db.PaymentsDatas.Add(pay);
                     db.SaveChanges();
@@ -6068,6 +6070,83 @@ namespace ShopNow.Controllers
             public double ReviewCount { get; set; }
             // public int count { get; set; }
         }
+
+        public JsonResult GetAllSearchResult(int customerid, double latitude, double longitude, string keyword)
+        {
+            AutoCompleteAllSearchResult searchResult = new AutoCompleteAllSearchResult();
+            searchResult.PreferedText = new List<AutoCompleteAllSearchResult.AllPreferedText_Result>();
+            searchResult.Shop = new List<AutoCompleteAllSearchResult.AllShop_Result>();
+            searchResult.Products = new List<AutoCompleteAllSearchResult.AllProduct_Result>();
+
+            
+            using (var connection = new SqlConnection(_connString))
+            {
+                connection.Open();
+                using (var command = new SqlCommand(@"GetAllSearchResult", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("customerid", customerid);
+                    command.Parameters.AddWithValue("str", keyword.Trim());
+                    command.Parameters.AddWithValue("Longitude", longitude);
+                    command.Parameters.AddWithValue("Latitude", latitude);
+                    DataSet dataset = new DataSet();
+                    SqlDataAdapter sqlDataAdapter = new SqlDataAdapter();
+                    sqlDataAdapter.SelectCommand = command;
+                    sqlDataAdapter.Fill(dataset);
+                    if (dataset.Tables.Count > 1)
+                    {
+                        searchResult.PreferedText = (from DataRow row in dataset.Tables[0].Rows
+
+                                                  select new AutoCompleteAllSearchResult.AllPreferedText_Result()
+                                                  {
+                                                      correctword = row["source"].ToString()
+                                                  }).ToList();
+                        searchResult.Shop = (from DataRow row in dataset.Tables[1].Rows
+
+                                          select new AutoCompleteAllSearchResult.AllShop_Result()
+                                          {
+                                              ID = Convert.ToInt32(row["Id"].ToString()),
+                                              Name = row["Name"].ToString(),
+                                              ImagePath = row["ImagePath"].ToString(),
+                                              ShopCategoryId = Convert.ToInt32(row["ShopCategoryId"].ToString()),
+                                              OnlineStatus = Convert.ToBoolean(row["OnlineStatus"].ToString()),
+                                              Rating = RatingCalculation(Convert.ToInt32(row["ShopId"].ToString())),
+                                              ReviewCount = db.CustomerReviews.ToList().Where(c => c.ShopId == Convert.ToInt32(row["ShopId"].ToString())).Count(),
+                                              ShopAddress = row["ShopAddress"].ToString(),
+                                              ShopLatitude = Convert.ToDouble(row["ShopLatitude"].ToString()),
+                                              ShopLongitude = Convert.ToDouble(row["ShopLongitude"].ToString()),
+                                              Status = Convert.ToInt32(row["Status"].ToString()),
+                                              StreetName = row["StreetName"].ToString()
+                                          }).ToList();
+                        searchResult.Products = (from DataRow row in dataset.Tables[2].Rows
+                                              group row by row["ProductName"].ToString() into g
+                                              select new AutoCompleteAllSearchResult.AllProduct_Result()
+                                              {
+                                                  ID = Convert.ToInt32(g.FirstOrDefault()["Id"].ToString()),
+                                                  Name = g.FirstOrDefault()["ProductName"].ToString(),
+                                                  ImagePath = g.FirstOrDefault()["ImagePath"].ToString(),
+                                                  ShopCategoryId = Convert.ToInt32(g.FirstOrDefault()["ShopCategoryId"].ToString()),
+                                                  ShopId = Convert.ToInt32(g.FirstOrDefault()["ShopId"].ToString()),
+                                                  OnlineStatus = Convert.ToBoolean(g.FirstOrDefault()["OnlineStatus"].ToString()),
+                                                  Rating = RatingCalculation(Convert.ToInt32(g.FirstOrDefault()["ShopId"].ToString())),
+                                                  ReviewCount = db.CustomerReviews.ToList().Where(c => c.ShopId == Convert.ToInt32(g.FirstOrDefault()["ShopId"].ToString())).Count(),
+                                                  ShopAddress = g.FirstOrDefault()["ShopAddress"].ToString(),
+                                                  ShopImagePath = g.FirstOrDefault()["ShopImagePath"].ToString(),
+                                                  ShopLatitude = Convert.ToDouble(g.FirstOrDefault()["ShopLatitude"].ToString()),
+                                                  ShopLongitude = Convert.ToDouble(g.FirstOrDefault()["ShopLongitude"].ToString()),
+                                                  ShopName = g.FirstOrDefault()["ShopName"].ToString(),
+                                                  Status = Convert.ToInt32(g.FirstOrDefault()["Status"].ToString())
+                                              }).ToList();
+                    }
+                    connection.Close();
+                }
+            }
+            // return Json(new { result = categProd }, JsonRequestBehavior.AllowGet);
+
+            var jResult = Json(new { result = searchResult }, JsonRequestBehavior.AllowGet);
+            jResult.MaxJsonLength = int.MaxValue;
+            return jResult;
+        }
         //Calls
         public JsonResult SetCallActive(int orderno)
         {
@@ -6532,6 +6611,8 @@ namespace ShopNow.Controllers
                 pay.Amount = s["amount"] / 100;
             else
                 pay.Amount = s["amount"];
+
+            pay.Fee -= pay.Tax; //Total fee minu tax
             pay.DateEncoded = DateTime.Now;
             db.PaymentsDatas.Add(pay);
             db.SaveChanges();
