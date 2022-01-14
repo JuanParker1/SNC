@@ -1424,6 +1424,14 @@ namespace ShopNow.Controllers
             db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
+            //AddPaymentData
+            if (order.PaymentModeType == 1)
+            {
+                if (payment != null)
+                    AddPaymentData(payment.ReferenceCode, order.OrderNumber);
+            }
+
+
             return RedirectToAction("Details", "Cart", new { id = AdminHelpers.ECodeLong(id) });
         }
 
