@@ -1597,7 +1597,7 @@ namespace ShopNow.Controllers
             var orderItemList = db.OrderItems.Where(i => i.OrderId == orderid).ToList();
             order.TotalPrice = orderItemList.Sum(i => i.Price);
             order.TotalQuantity = orderItemList.Sum(i => i.Quantity);
-            order.NetTotal = order.TotalPrice + order.TipsAmount + order.Packingcharge + order.Convinenientcharge + order.NetDeliveryCharge - (order.WalletAmount - order.OfferAmount);
+            order.NetTotal = Math.Round(order.TotalPrice + order.TipsAmount + order.Packingcharge + order.Convinenientcharge + order.NetDeliveryCharge - (order.WalletAmount - order.OfferAmount), MidpointRounding.AwayFromZero);
             db.Entry(order).State = EntityState.Modified;
             db.SaveChanges();
 

@@ -1256,7 +1256,7 @@ namespace ShopNow.Controllers
                     order.TotalPrice = model.ListItems.Sum(i => i.Price);
                     order.TotalProduct = model.ListItems.Count();
                     order.TotalQuantity = model.ListItems.Sum(i => Convert.ToInt32(i.Quantity));
-                    order.TotalShopPrice = model.ListItems.Sum(i => i.ShopPrice);
+                    //order.TotalShopPrice = model.ListItems.Sum(i => i.ShopPrice);
                     order.DateEncoded = DateTime.Now;
                     order.DateUpdated = DateTime.Now;
                     order.Status = 0;
@@ -1280,6 +1280,9 @@ namespace ShopNow.Controllers
                         db.OrderItems.Add(orderItem);
                         db.SaveChanges();
 
+                        //update totalShopPrice
+                        order.TotalShopPrice += (orderItem.Quantity * orderItem.ShopPrice);
+
                         if (item.AddOnListItems != null)
                         {
                             foreach (var addon in item.AddOnListItems)
@@ -1295,6 +1298,10 @@ namespace ShopNow.Controllers
                             }
                         }
                     }
+
+                  
+                    db.Entry(order).State = EntityState.Modified;
+                    db.SaveChanges();
 
                     if (order != null)
                     {
