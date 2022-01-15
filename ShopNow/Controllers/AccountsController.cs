@@ -20,30 +20,31 @@ namespace ShopNow.Controllers
             //var user = ((Helpers.Sessions.User)Session["USER"]);
             //ViewBag.Name = user.Name;
             var model = new AccountsBillWiseReportViewModel();
-            model.ListItems = db.Orders.Where(i=>i.Status==6 && i.DateEncoded.Month == DateTime.Now.Month && i.DateEncoded.Year == DateTime.Now.Year)
-                .Join(db.Payments,o=>o.OrderNumber,p=>p.OrderNumber,(o,p)=>new { o,p})
-                .Join(db.Shops,o=>o.o.ShopId,s=>s.Id,(o,s)=>new { o,s})
-                .Select((i,index) => new AccountsBillWiseReportViewModel.ListItem
+            model.ListItems = db.Orders.Where(i => i.Status == 6 && i.DateEncoded.Month == DateTime.Now.Month && i.DateEncoded.Year == DateTime.Now.Year)
+                .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
+                .Join(db.Shops, o => o.o.ShopId, s => s.Id, (o, s) => new { o, s })
+                .AsEnumerable()
+                .Select((i, index) => new AccountsBillWiseReportViewModel.ListItem
                 {
-                    SNo = index +1,
+                    SNo = index + 1,
                     Date = i.o.o.DateEncoded,
                     OrderNumber = i.o.o.OrderNumber,
                     ShopName = i.o.o.ShopName,
                     GSTNumber = i.s.GSTINNumber,
-                    MenuPrice = i.o.o.TotalMRPPrice,
+                    MenuPrice = i.o.o.TotalMRPPrice, //check
                     ShopBillAmount = i.o.o.TotalPrice,
-                    PriceDifference = i.o.o.TotalMRPPrice - i.o.o.TotalPrice,
+                    PriceDifference = i.o.o.TotalMRPPrice - i.o.o.TotalPrice, //check
                     CustomerPaidAmount = i.o.p.Amount,
-                    RefundAmount = i.o.p.RefundAmount ??0,
-                    FinalAmount = i.o.p.Amount - i.o.p.RefundAmount??0,
+                    RefundAmount = i.o.p.RefundAmount ?? 0,
+                    FinalAmount = i.o.p.Amount - (i.o.p.RefundAmount ?? 0),
                     DeliveryAmountFromCustomer = i.o.o.NetDeliveryCharge,
                     DeliveryDiscount = i.o.o.ShopDeliveryDiscount,
                     TotalDeliveryCharge = i.o.o.DeliveryCharge,
-                    DeliveryChargePaidToDeliveryBoy = 20,
-                    DeliveryChargeProfit = i.o.o.DeliveryCharge - 20,
-                    AmountProfit = i.o.o.TotalMRPPrice - i.o.o.TotalPrice
+                    DeliveryChargePaidToDeliveryBoy = i.o.o.DeliveryCharge == 35 ? 20 : 20 + (i.o.o.DeliveryCharge - 20),
+                    DeliveryChargeProfit = i.o.o.DeliveryCharge - 20, //check
+                    AmountProfit = i.o.o.TotalMRPPrice - i.o.o.TotalPrice //check
                 }).ToList();
-            return View(model.ListItems);
+            return View(model);
         }
     }
 }

@@ -7,9 +7,13 @@
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 <style>
-    .dis-none {
-        display: none;
+    .grid-mvc {
+        overflow-x: scroll;
     }
+
+        .grid-mvc table {
+            width: auto;
+        }
 </style>
 <div class="container-fluid">
     <div class="row mb-3">
@@ -35,16 +39,23 @@
                 <div class="card-body">
                     @Html.Grid(Model.ListItems).Columns(columns =>
                {
-                   columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(1);
-                   //columns.Add(c => c.ShopOwnerPhoneNumber).Titled("Phone No.").Filterable(true).SetWidth(9);
-                   //columns.Add(c => c.TransactionType).Titled("Trans Type").Filterable(true).SetWidth(10);
-                   //columns.Add(c => c.FinalAmount).Titled("Amount").Filterable(true).SetWidth(4);
-                   //columns.Add(c => c.PaymentDate).Titled("Payment Date").Filterable(true).SetWidth(30).Format("{0:dd-MMM-yyyy}");
-                   //columns.Add(c => c.AccountName).Titled("Account Name").Filterable(true).SetWidth(30);
-                   //columns.Add(c => c.AccountNumber).Titled("Account No.").Filterable(true).SetWidth(10);
-                   //columns.Add(c => c.PaymentId).Titled("Payment Id").Filterable(true).SetWidth(10);
-                   //columns.Add(c => c.IfscCode).Titled("IFSC Code").Filterable(true).SetWidth(8);
-                   //columns.Add(c => c.AccountType).Titled("Account Type").Filterable(true).SetWidth(30);
+                   columns.Add(c => c.SNo).Titled("SNo").Filterable(true).SetWidth(1);
+                   columns.Add(c => c.Date).Titled("Order Date").Filterable(true).SetWidth(20).Format("{0:dd-MMM-yyyy}");
+                   columns.Add(c => c.OrderNumber).Titled("Order Number").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(4);
+                   columns.Add(c => c.GSTNumber).Titled("GST Number").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.MenuPrice).Titled("Menu Price").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.ShopBillAmount).Titled("Shop BillAmount").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.PriceDifference).Titled("Price Difference").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.CustomerPaidAmount).Titled("Customer PaidAmount").Filterable(true).SetWidth(8);
+                   columns.Add(c => c.RefundAmount).Titled("Refund Amount").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.FinalAmount).Titled("Final Amount").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.DeliveryAmountFromCustomer).Titled("DeliveryAmount From Customer").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.DeliveryDiscount).Titled("Delivery Discount").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.TotalDeliveryCharge).Titled("Total DeliveryCharge").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.DeliveryChargePaidToDeliveryBoy).Titled("DeliveryCharge PaidTo DeliveryBoy").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.DeliveryChargeProfit).Titled("DeliveryCharge Profit").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.AmountProfit).Titled("Trade Profit").Filterable(true).SetWidth(10);
                }).WithPaging(20).Sortable(true)
                 </div>
             </div>
@@ -57,12 +68,12 @@
     <script src="/Scripts/exporttoexcel/Table2ExcelNew.js"></script>
     <script>
         $(document).ready(function () {
-            var selectedDate = $('#date-earning').val();
-            $('#date').val(selectedDate);
+            //var selectedDate = $('#date-earning').val();
+            //$('#date').val(selectedDate);
 
-            $('#date-earning').on('change', function () {
-                $('#date').val($(this).val());
-            });
+            //$('#date-earning').on('change', function () {
+            //    $('#date').val($(this).val());
+            //});
 
 
             $("#btnExport").on('click', function () {
