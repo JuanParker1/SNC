@@ -81,7 +81,7 @@
         <EntityTypeShape EntityType="sncModel.CustomerDeviceInfo" Width="1.5" PointX="29.375" PointY="21.75" />
         <EntityTypeShape EntityType="sncModel.CustomerGiftCard" Width="1.5" PointX="9.375" PointY="13.75" />
         <EntityTypeShape EntityType="sncModel.CustomerPrescription" Width="1.5" PointX="0.75" PointY="29.75" />
-        <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="21.75" PointY="30.75" />
+        <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="21.375" PointY="30.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
