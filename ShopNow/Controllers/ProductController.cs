@@ -1568,7 +1568,7 @@ namespace ShopNow.Controllers
             var model = await db.MasterProducts.OrderBy(i => i.Name).Where(a => a.Name.Contains(q) && a.Status == 0 && a.ProductTypeId == 2)
                 .Join(db.Categories, m => m.CategoryId, c => c.Id, (m, c) => new { m, c })
                 .Join(db.SubCategories, m => m.m.SubCategoryId, sc => sc.Id, (m, sc) => new { m, sc })
-                .Join(db.NextSubCategories, m => m.m.m.NextSubCategoryId, nsc => nsc.Id, (m, nsc) => new { m, nsc })
+                .GroupJoin(db.NextSubCategories, m => m.m.m.NextSubCategoryId, nsc => nsc.Id, (m, nsc) => new { m, nsc })
                 .Select(i => new
                 {
                     id = i.m.m.m.Id,
@@ -1578,7 +1578,7 @@ namespace ShopNow.Controllers
                     SubCategoryId = i.m.m.m.SubCategoryId,
                     SubCategoryName = i.m.sc.Name,
                     NextSubCategoryId = i.m.m.m.NextSubCategoryId,
-                    NextSubCategoryName = i.nsc.Name,
+                    NextSubCategoryName = i.nsc.Any() ? i.nsc.FirstOrDefault().Name : "NA",
                     BrandId = i.m.m.m.BrandId,
                     BrandName = i.m.m.m.BrandName,
                     ShortDescription = i.m.m.m.ShortDescription,

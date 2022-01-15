@@ -190,6 +190,7 @@ namespace ShopNow.ViewModels
     {
         public int OrderId { get; set; }
         public int OrderNumber { get; set; }
+        public int OrderNo { get; set; }
         public string CorporateID { get; set; }
         public string ReferenceCode { get; set; }
         public int CustomerId { get; set; }

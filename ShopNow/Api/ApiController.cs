@@ -928,7 +928,7 @@ namespace ShopNow.Controllers
                 payment.PackingCharge = model.PackagingCharge;
                 payment.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
                 payment.PaymentModeType = model.PaymentMode == "Online Payment" ? 1 : 2;
-
+                payment.OrderNumber = model.OrderNo;
                 if (model.OrderId != 0)
                 {
                     var order = db.Orders.FirstOrDefault(i => i.Id == model.OrderId);
