@@ -77,7 +77,7 @@ namespace ShopNow.Controllers
                 .Join(db.PaymentsDatas, p=>p.OrderNumber,pd=>pd.OrderNumber,(p,pd)=>new { p,pd})
                 .Count();
             model.ShopLowCreditCount = db.ShopCredits.Where(i => i.PlatformCredit <= 100 || i.DeliveryCredit <= 100)
-                .Join(db.Shops.Where(i => i.IsTrail == false), sc => sc.CustomerId, s => s.CustomerId, (sc, s) => new { sc, s })
+                .Join(db.Shops.Where(i => i.IsTrail == false && i.Status==0), sc => sc.CustomerId, s => s.CustomerId, (sc, s) => new { sc, s })
                 .Count();
             model.CustomerPrescriptionCount = db.CustomerPrescriptions.Where(i => i.Status == 0).Count();
             return View(model);
