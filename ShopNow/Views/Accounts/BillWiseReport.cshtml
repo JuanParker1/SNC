@@ -1,0 +1,81 @@
+﻿@model ShopNow.ViewModels.AccountsBillWiseReportViewModel
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Bill Wise Report";
+}
+<title>ShopNow | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+<style>
+    .dis-none {
+        display: none;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <h5 class="mt-1 text-uppercase text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+        </div>
+        @*<div class="col-md-6">
+            <form method="get" action="/Payment/ShopPayment">
+                <div class="row">
+                    <div class="col-md-4"><input id="date-earning" type="date" class="form-control" name="EarningDate" value="@Model.EarningDate.Value.ToString("yyyy-MM-dd")" /></div>
+                    <input type="submit" class="btn btn-info" value="Apply Filter" />
+                </div>
+            </form>
+        </div>
+        @if (Model.ListItems.Count != 0)
+        {
+            <div class="col-md-3 text-right">
+                <input type="button" id="btnExport" class="btn btn-vsm btn-secondary" value="Export To Excel" />
+            </div>
+        }*@
+        <div class="col-md-12">
+            <div class="card shadow mt-3">
+                <div class="card-body">
+                    @Html.Grid(Model.ListItems).Columns(columns =>
+               {
+                   columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(1);
+                   //columns.Add(c => c.ShopOwnerPhoneNumber).Titled("Phone No.").Filterable(true).SetWidth(9);
+                   //columns.Add(c => c.TransactionType).Titled("Trans Type").Filterable(true).SetWidth(10);
+                   //columns.Add(c => c.FinalAmount).Titled("Amount").Filterable(true).SetWidth(4);
+                   //columns.Add(c => c.PaymentDate).Titled("Payment Date").Filterable(true).SetWidth(30).Format("{0:dd-MMM-yyyy}");
+                   //columns.Add(c => c.AccountName).Titled("Account Name").Filterable(true).SetWidth(30);
+                   //columns.Add(c => c.AccountNumber).Titled("Account No.").Filterable(true).SetWidth(10);
+                   //columns.Add(c => c.PaymentId).Titled("Payment Id").Filterable(true).SetWidth(10);
+                   //columns.Add(c => c.IfscCode).Titled("IFSC Code").Filterable(true).SetWidth(8);
+                   //columns.Add(c => c.AccountType).Titled("Account Type").Filterable(true).SetWidth(30);
+               }).WithPaging(20).Sortable(true)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="/Scripts/exporttoexcel/Table2ExcelNew.js"></script>
+    <script>
+        $(document).ready(function () {
+            var selectedDate = $('#date-earning').val();
+            $('#date').val(selectedDate);
+
+            $('#date-earning').on('change', function () {
+                $('#date').val($(this).val());
+            });
+
+
+            $("#btnExport").on('click', function () {
+                $(function () {
+                    Table2Excel.extend((cell, cellText) => {
+                        return $(cell).attr('type') == 'string' ? { t: 's', v: cellText } : { t: 'n', v: cellText };
+                    });
+                    var table2excel = new Table2Excel({
+                        defaultFileName: "ShopPayment",
+                    });
+                    table2excel.export($("#table-excel"));
+                });
+            });
+        });
+    </script>
+}

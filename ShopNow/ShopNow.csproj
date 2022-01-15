@@ -372,6 +372,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Base\BaseClass.cs" />
     <Compile Include="Controllers\AccessPolicyController.cs" />
+    <Compile Include="Controllers\AccountsController.cs" />
     <Compile Include="Controllers\AchievementSettingController.cs" />
     <Compile Include="Controllers\AddOnCategoryController.cs" />
     <Compile Include="Controllers\AgencyController.cs" />
@@ -735,6 +736,7 @@
     </Compile>
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\AccessPolicyViewModel.cs" />
+    <Compile Include="ViewModels\AccountsViewModel.cs" />
     <Compile Include="ViewModels\AchievementSettingViewModels.cs" />
     <Compile Include="ViewModels\AddOnCategoryViewModel.cs" />
     <Compile Include="ViewModels\AgencyViewModel.cs" />
@@ -3309,6 +3311,7 @@
     <Content Include="Views\Payment\OrderOfferReport.cshtml" />
     <Content Include="Views\Product\UpdatePrice.cshtml" />
     <Content Include="Views\Support\PaymentUpdate.cshtml" />
+    <Content Include="Views\Accounts\BillWiseReport.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
