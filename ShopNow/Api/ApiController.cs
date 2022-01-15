@@ -976,7 +976,7 @@ namespace ShopNow.Controllers
                   // Helpers.LogFile.WriteToFile("s" + " " + s["invoice_id"]);
                     PaymentsData pay = new PaymentsData();
 
-                    pay.OrderNumber = model.OrderNumber;
+                    pay.OrderNumber = payment.OrderNumber;
                     pay.PaymentId = model.ReferenceCode;
 
                     pay.Invoice_Id = s["invoice_id"];
