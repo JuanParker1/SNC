@@ -937,6 +937,8 @@ namespace ShopNow.Controllers
                     order.RatePerOrder = Convert.ToDouble(perOrderAmount.RatePerOrder);
                     order.DateUpdated = DateTime.Now;
                     //
+                    payment.OrderNumber = order.OrderNumber;
+
                     order.NetDeliveryCharge = model.NetDeliveryCharge;
                     order.DeliveryCharge = model.GrossDeliveryCharge;
                     order.ShopDeliveryDiscount = model.ShopDeliveryDiscount;
