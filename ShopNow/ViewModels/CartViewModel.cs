@@ -159,6 +159,9 @@ namespace ShopNow.ViewModels
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public string PrescriptionImagePath { get; set; }
+        public double Amount { get; set; }
+        public double? RefundAmount { get; set; }
+        public string RefundRemark { get; set; }
 
         public List<TodayList> TodayLists { get; set; }
         public class TodayList
@@ -175,6 +178,8 @@ namespace ShopNow.ViewModels
             public string CustomerPhoneNumber { get; set; }
             public int Status { get; set; }
             public DateTime DateEncoded { get; set; }
+            public double? RefundAmount { get; set; }
+            public string RefundRemark { get; set; }
             public string OrderStatusText
             {
                 get

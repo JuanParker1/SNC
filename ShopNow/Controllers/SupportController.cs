@@ -128,7 +128,6 @@ namespace ShopNow.Controllers
             model.ProductUnMappedCount = db.Products.Where(i => i.MappedDate != null && (i.MasterProductId == 0) && i.Status == 0 && i.ShopId != 0)
                .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m }).Count();
 
-
             model.CustomerAadhaarVerifyCount = db.Customers.Where(i => i.AadharVerify == false && i.Status == 0 && i.ImageAadharPath != null && i.ImageAadharPath != "Rejected" && i.ImageAadharPath != "NULL").Count();
             model.ShopOnBoardingVerifyCount = db.Shops.Where(i => i.Status == 1).Count();
             model.DeliveryBoyVerifyCount = db.DeliveryBoys.Where(i => i.Status == 1).Count();
@@ -139,7 +138,7 @@ namespace ShopNow.Controllers
             model.DeliveryBoyLiveCount = db.DeliveryBoys.Where(i => i.Status == 0 && i.isAssign == 0 && i.OnWork == 0 && i.Active == 1).Count();
             model.RefundCount = db.Payments.Where(i => i.RefundAmount != 0 && i.RefundStatus == 1 && i.RefundAmount != null && i.PaymentMode == "Online Payment").Count();
             model.ShopLowCreditCount =  db.ShopCredits.Where(i => i.PlatformCredit <= 100 || i.DeliveryCredit <= 100)
-                .Join(db.Shops.Where(i => i.IsTrail == false), sc => sc.CustomerId, s => s.CustomerId, (sc, s) => new { sc, s })
+                .Join(db.Shops.Where(i => i.IsTrail == false && i.Status == 0), sc => sc.CustomerId, s => s.CustomerId, (sc, s) => new { sc, s })
                 .Count();
             model.CustomerPrescriptionCount = db.CustomerPrescriptions.Where(i => i.Status == 0).Count();
             return View(model);

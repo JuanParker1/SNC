@@ -59,6 +59,8 @@ namespace ShopNow.Controllers
                 PaymentMode = i.c.PaymentMode,
                 Amount = i.p.Amount - (i.p.RefundAmount?? 0),
                 CustomerPhoneNumber = i.c.CustomerPhoneNumber,
+                RefundAmount = i.p.RefundAmount ?? 0,
+                RefundRemark = i.p.RefundRemark ?? "",
                 DateEncoded = i.c.DateEncoded
             }).OrderBy(i => i.Status).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
@@ -352,7 +354,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCCDR070")]
         public ActionResult DeliveredReport(CartReportViewModel model)
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             model.StartDate = model.StartDate == null ? DateTime.Now : model.StartDate;
 
@@ -406,7 +408,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCCCR072")]
         public ActionResult CancelledReport(CartReportViewModel model)
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             model.StartDate = model.StartDate == null ? DateTime.Now : model.StartDate;
 
@@ -537,9 +539,9 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCCPS076")]
         public ActionResult PickupSlip(int OrderNumber, string id)
         {
-            var dInt = AdminHelpers.DCodeLong(id);
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
+            var dInt = AdminHelpers.DCodeLong(id);
             if (string.IsNullOrEmpty(dInt.ToString()))
                 return HttpNotFound();
             var cart = db.Orders.FirstOrDefault(i => i.Id == dInt);
@@ -594,9 +596,9 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCCE077")]
         public ActionResult Edit(int OrderNumber, string id)
         {
-            var dInt = AdminHelpers.DCodeLong(id);
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
+            var dInt = AdminHelpers.DCodeLong(id);
             var cart = db.Orders.FirstOrDefault(i => i.Id == dInt);
             var model = new CartListViewModel();
             if (cart != null)
@@ -626,6 +628,12 @@ namespace ShopNow.Controllers
                 }
                 model.Latitude = cart.Latitude;
                 model.Longitude = cart.Longitude;
+                //var refundamount = db.Payments.FirstOrDefault(i => i.RefundAmount == model.RefundAmount);
+                //if(refundamount != null)
+                //{
+                //    model.Amount = refundamount.Amount - (refundamount.RefundAmount ?? 0);
+                //    model.RefundRemark = refundamount.RefundRemark ?? "";
+                //}
             }
             model.List = db.OrderItems.Where(i => i.OrdeNumber == OrderNumber && i.Status == 0).Select(i => new CartListViewModel.CartList
             {
@@ -648,7 +656,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCCAD078")]
         public ActionResult AssignDeliveryBoy(int OrderNumber)
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var order = db.Orders.Where(i => i.OrderNumber == OrderNumber).FirstOrDefault();
             var shop = db.Shops.FirstOrDefault(i => i.Id == order.ShopId);
@@ -680,7 +688,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCCAD078")]
         public ActionResult AssignDeliveryBoy(CartAssignDeliveryBoyViewModel model)
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var cart = db.Orders.FirstOrDefault(i => i.Id == model.OrderId);
             if (cart != null && model.DeliveryBoyId != 0)
@@ -722,7 +730,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCCDHR079")]
         public ActionResult DeliveryBoyCashHandoverReport(DateTime? StartDate, DateTime? EndDate, int deliveryboyId = 0)
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new CartReportViewModel();
 
