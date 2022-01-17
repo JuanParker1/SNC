@@ -55,12 +55,12 @@ namespace ShopNow.Controllers
             model.OrderCount = db.Orders.Where(i => i.Status != 7 && i.Status != 6 && i.Status != 0 && i.Status != -1 && i.Status != 9 && i.Status != 10 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(last3Date))).Count();
 
             model.UnMappedCount = db.Products.Where(i => i.MasterProductId == 0)
-                                      .Join(db.OrderItems, p => p.Id, c => c.ProductId, (p, c) => new { p, c }).AsEnumerable().GroupBy(i => i.c.ProductId).Count();
+                                      .Join(db.OrderItems, p => p.Id, c => c.ProductId, (p, c) => new { p, c }).AsEnumerable().GroupBy(i => i.c.Id).Count();
            // DateTime start = new DateTime(2021, 10, 29);
             model.OrderMissedCount = db.Orders.Where(i => i.Status == 0 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(last3Date)).Count();
 
             model.UnMappedCount = db.Products.Where(i => i.MasterProductId == 0)
-                           .Join(db.OrderItems, p => p.Id, oi => oi.ProductId, (p, oi) => new { p, oi }).GroupBy(i => i.oi.Id).Count();
+                           .Join(db.OrderItems, p => p.Id, oi => oi.ProductId, (p, oi) => new { p, oi }).GroupBy(i => i.p.Id).Count();
             model.ProductUnMappedCount = db.Products.Where(i => i.MappedDate != null && (i.MasterProductId == 0) && i.Status == 0 && i.ShopId != 0)
                .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m }).Count();
 
@@ -181,7 +181,8 @@ namespace ShopNow.Controllers
             var model = new UnMappedListViewModel();
             model.List = db.Products.Where(i => i.MasterProductId == 0)
                            .Join(db.OrderItems, p => p.Id, oi => oi.ProductId, (p, oi) => new { p, oi })
-                           .OrderByDescending(i => i.p.DateUpdated).AsEnumerable().GroupBy(i => i.oi.Id)
+                           .OrderByDescending(i => i.p.DateUpdated).AsEnumerable().GroupBy(i => i.p.Id)
+                           //.GroupBy()
                            .Select((i, index) => new UnMappedListViewModel.UnMappedList
                            {
                                SlNo = index + 1,
