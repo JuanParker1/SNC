@@ -1282,6 +1282,7 @@ namespace ShopNow.Controllers
 
                         //update totalShopPrice
                         order.TotalShopPrice += (orderItem.Quantity * orderItem.ShopPrice);
+                        order.TotalMRPPrice += (orderItem.Quantity * orderItem.MRPPrice);
 
                         if (item.AddOnListItems != null)
                         {

@@ -370,7 +370,7 @@ namespace ShopNow.Controllers
                 PhoneNumber = i.c.CustomerPhoneNumber,
                 DateEncoded = i.c.DateEncoded,
                 PaymentMode = i.c.PaymentMode,
-                Amount = i.p.Amount - i.p.RefundAmount ?? 0
+                Amount = i.p.Amount - (i.p.RefundAmount == null ? 0 : i.p.RefundAmount) ?? 0
             }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.DeliveredReportLists.ForEach(x => x.No = counter++);

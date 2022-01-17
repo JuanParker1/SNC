@@ -870,6 +870,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderNumber" Type="int" Nullable="false" />
           <Property Name="CustomerId" Type="int" Nullable="false" />
           <Property Name="CustomerName" Type="varchar" MaxLength="100" />
           <Property Name="CustomerPhoneNumber" Type="varchar" MaxLength="50" />
@@ -883,7 +884,6 @@
           <Property Name="TotalPrice" Type="float" Nullable="false" />
           <Property Name="WalletAmount" Type="float" Nullable="false" />
           <Property Name="NetTotal" Type="float" Nullable="false" />
-          <Property Name="OrderNumber" Type="int" Nullable="false" />
           <Property Name="DeliveryBoyId" Type="int" Nullable="false" />
           <Property Name="DeliveryBoyName" Type="nvarchar" MaxLength="50" />
           <Property Name="DeliveryBoyPhoneNumber" Type="nvarchar" MaxLength="20" />
@@ -922,6 +922,7 @@
           <Property Name="PaymentMode" Type="nvarchar" MaxLength="100" />
           <Property Name="TipsAmount" Type="float" Nullable="false" />
           <Property Name="TotalShopPrice" Type="float" Nullable="false" />
+          <Property Name="TotalMRPPrice" Type="float" Nullable="false" />
           <Property Name="PaymentModeType" Type="int" Nullable="false" />
           <Property Name="IsCallActive" Type="bit" />
           <Property Name="IsPrescriptionOrder" Type="bit" Nullable="false" />
@@ -3088,13 +3089,13 @@
             <Parameter Name="customerid" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="CustomerPrescriptions" EntityType="sncModel.CustomerPrescription" />
-          <EntitySet Name="Orders" EntityType="sncModel.Order" />
           <FunctionImport Name="GetAllSearchResult" ReturnType="Collection(String)">
             <Parameter Name="Longitude" Mode="In" Type="Double" />
             <Parameter Name="Latitude" Mode="In" Type="Double" />
             <Parameter Name="str" Mode="In" Type="String" />
             <Parameter Name="customerid" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="Orders" EntityType="sncModel.Order" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3386,6 +3387,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderNumber" Type="Int32" Nullable="false" />
           <Property Name="CustomerId" Type="Int32" Nullable="false" />
           <Property Name="CustomerName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="CustomerPhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -3399,7 +3401,6 @@
           <Property Name="TotalPrice" Type="Double" Nullable="false" />
           <Property Name="WalletAmount" Type="Double" Nullable="false" />
           <Property Name="NetTotal" Type="Double" Nullable="false" />
-          <Property Name="OrderNumber" Type="Int32" Nullable="false" />
           <Property Name="DeliveryBoyId" Type="Int32" Nullable="false" />
           <Property Name="DeliveryBoyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DeliveryBoyPhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
@@ -3438,6 +3439,7 @@
           <Property Name="PaymentMode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="TipsAmount" Type="Double" Nullable="false" />
           <Property Name="TotalShopPrice" Type="Double" Nullable="false" />
+          <Property Name="TotalMRPPrice" Type="Double" Nullable="false" />
           <Property Name="PaymentModeType" Type="Int32" Nullable="false" />
           <Property Name="IsCallActive" Type="Boolean" />
           <Property Name="IsPrescriptionOrder" Type="Boolean" Nullable="false" />
@@ -5091,6 +5093,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetAllSearchResult" FunctionName="sncModel.Store.GetAllSearchResult" />
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="sncModel.Order">
               <MappingFragment StoreEntitySet="Orders">
@@ -5103,6 +5106,7 @@
                 <ScalarProperty Name="IsPrescriptionOrder" ColumnName="IsPrescriptionOrder" />
                 <ScalarProperty Name="IsCallActive" ColumnName="IsCallActive" />
                 <ScalarProperty Name="PaymentModeType" ColumnName="PaymentModeType" />
+                <ScalarProperty Name="TotalMRPPrice" ColumnName="TotalMRPPrice" />
                 <ScalarProperty Name="TotalShopPrice" ColumnName="TotalShopPrice" />
                 <ScalarProperty Name="TipsAmount" ColumnName="TipsAmount" />
                 <ScalarProperty Name="PaymentMode" ColumnName="PaymentMode" />
@@ -5141,7 +5145,6 @@
                 <ScalarProperty Name="DeliveryBoyPhoneNumber" ColumnName="DeliveryBoyPhoneNumber" />
                 <ScalarProperty Name="DeliveryBoyName" ColumnName="DeliveryBoyName" />
                 <ScalarProperty Name="DeliveryBoyId" ColumnName="DeliveryBoyId" />
-                <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
                 <ScalarProperty Name="NetTotal" ColumnName="NetTotal" />
                 <ScalarProperty Name="WalletAmount" ColumnName="WalletAmount" />
                 <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
@@ -5155,11 +5158,11 @@
                 <ScalarProperty Name="CustomerPhoneNumber" ColumnName="CustomerPhoneNumber" />
                 <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="GetAllSearchResult" FunctionName="sncModel.Store.GetAllSearchResult" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

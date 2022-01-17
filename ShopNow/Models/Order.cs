@@ -15,6 +15,7 @@ namespace ShopNow.Models
     public partial class Order
     {
         public long Id { get; set; }
+        public int OrderNumber { get; set; }
         public int CustomerId { get; set; }
         public string CustomerName { get; set; }
         public string CustomerPhoneNumber { get; set; }
@@ -28,7 +29,6 @@ namespace ShopNow.Models
         public double TotalPrice { get; set; }
         public double WalletAmount { get; set; }
         public double NetTotal { get; set; }
-        public int OrderNumber { get; set; }
         public int DeliveryBoyId { get; set; }
         public string DeliveryBoyName { get; set; }
         public string DeliveryBoyPhoneNumber { get; set; }
@@ -67,6 +67,7 @@ namespace ShopNow.Models
         public string PaymentMode { get; set; }
         public double TipsAmount { get; set; }
         public double TotalShopPrice { get; set; }
+        public double TotalMRPPrice { get; set; }
         public int PaymentModeType { get; set; }
         public Nullable<bool> IsCallActive { get; set; }
         public bool IsPrescriptionOrder { get; set; }
