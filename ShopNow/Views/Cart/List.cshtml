@@ -11,7 +11,7 @@
         overflow-x: scroll;
     }
 
-        .grid-mvc table td1{
+        .grid-mvc table td1 {
             width: 50%;
         }
 </style>
@@ -47,10 +47,38 @@
                    //columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
                    columns.Add(c => c.OrderStatusText).Titled("Order Status").Filterable(true).SetWidth(15);
                    columns.Add().Encoded(false).Sanitized(false)
-                   .RenderValueAs(o => Html.ActionLink("View", "Edit", new { OrderNumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-vsm btn-info", @style = "padding: 3px 26px" }).ToHtmlString()+
-                   Html.ActionLink("Details", "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-vsm btn-secondary mt-1", @style = "padding: 3px 20px" }).ToHtmlString()).Titled("Action").SetWidth(10);
+                   .RenderValueAs(o => Html.ActionLink("View", "Edit", new { OrderNumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-vsm btn-info", @style = "padding: 3px 26px" }).ToHtmlString() +
+                   Html.ActionLink("Details", "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-vsm btn-secondary mt-1", @style = "padding: 3px 20px" }).ToHtmlString()).Titled("Action").SetWidth(5);
+                   columns.Add().Encoded(false).Sanitized(false)
+                .RenderValueAs(o => (o.RefundAmount == 0 || o.RefundAmount == null) ? "<a href='#modal-refund' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-refund' class='btn btn-sm btn-primary btn-modal-refund btn-block mt-3'>Refund</a>" : o.RefundAmount.Value > 0 ? "<span>" + o.RefundAmount + "(" + o.RefundRemark + ")" + "</span>" : "N/A").Titled("Refund").SetWidth(5);
                }).WithPaging(20).Sortable(true)
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-refund" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form method="get" action="/Cart/AddRefundFromShopOrderProcessing">
+                    <input type="hidden" name="Id" />
+                    <input type="hidden" name="Redirection" value="4" />
+                    <h5>Initiate Refund</h5>
+                    <div class="form-group">
+                        <label>Amount</label>
+                        <input class="form-control" type="number" name="Amount" required />
+                    </div>
+                    <div class="form-group">
+                        <label>Remarks</label>
+                        <input class="form-control" type="text" name="Remark" required />
+                    </div>
+                    <div class="text-right">
+                        <button class="btn btn-sm btn-success mr-3">Submit</button>
+                        <button class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -64,7 +92,7 @@
     <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
     <!--Select2 End-->
     <script>
-        $(document).ready(function () {            
+        $(document).ready(function () {
             $('#ShopId').select2({
                 placeholder: "Search Shop",
                 ajax: {
@@ -81,6 +109,13 @@
                 var shopId = $("#ShopId").val();
                 window.location.href = "/Cart/List/?shopid=" + shopId;
             });
+
+            $(".btn-modal-refund").click(function () {
+                var id = $(this).data('id');
+                $('[name="Id"]').val(id);
+                $('#modal-refund').modal('show');
+            });
+
         });
     </script>
 }

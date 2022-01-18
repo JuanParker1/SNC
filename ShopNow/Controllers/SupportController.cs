@@ -28,7 +28,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCSLP292")]
         public ActionResult LivePending()
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new SupportViewModel();
 
@@ -54,8 +54,8 @@ namespace ShopNow.Controllers
 
             model.OrderCount = db.Orders.Where(i => i.Status != 7 && i.Status != 6 && i.Status != 0 && i.Status != -1 && i.Status != 9 && i.Status != 10 && (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(last3Date))).Count();
 
-            model.UnMappedCount = db.Products.Where(i => i.MasterProductId == 0)
-                                      .Join(db.OrderItems, p => p.Id, c => c.ProductId, (p, c) => new { p, c }).AsEnumerable().GroupBy(i => i.c.Id).Count();
+            //model.UnMappedCount = db.Products.Where(i => i.MasterProductId == 0)
+            //                          .Join(db.OrderItems, p => p.Id, c => c.ProductId, (p, c) => new { p, c }).AsEnumerable().GroupBy(i => i.c.Id).Count();
            // DateTime start = new DateTime(2021, 10, 29);
             model.OrderMissedCount = db.Orders.Where(i => i.Status == 0 && DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(last3Date)).Count();
 
@@ -63,7 +63,6 @@ namespace ShopNow.Controllers
                            .Join(db.OrderItems, p => p.Id, oi => oi.ProductId, (p, oi) => new { p, oi }).GroupBy(i => i.p.Id).Count();
             model.ProductUnMappedCount = db.Products.Where(i => i.MappedDate != null && (i.MasterProductId == 0) && i.Status == 0 && i.ShopId != 0)
                .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m }).Count();
-
 
             model.CustomerAadhaarVerifyCount = db.Customers.Where(i => i.AadharVerify == false && i.Status == 0 && i.ImageAadharPath != null && i.ImageAadharPath != "Rejected" && i.ImageAadharPath != "NULL").Count();
             model.ShopOnBoardingVerifyCount = db.Shops.Where(i => i.Status == 1).Count();
@@ -77,7 +76,7 @@ namespace ShopNow.Controllers
                 .Join(db.PaymentsDatas, p=>p.OrderNumber,pd=>pd.OrderNumber,(p,pd)=>new { p,pd})
                 .Count();
             model.ShopLowCreditCount = db.ShopCredits.Where(i => i.PlatformCredit <= 100 || i.DeliveryCredit <= 100)
-                .Join(db.Shops.Where(i => i.IsTrail == false && i.Status==0), sc => sc.CustomerId, s => s.CustomerId, (sc, s) => new { sc, s })
+                .Join(db.Shops.Where(i => i.IsTrail == false && i.Status == 0), sc => sc.CustomerId, s => s.CustomerId, (sc, s) => new { sc, s })
                 .Count();
             model.CustomerPrescriptionCount = db.CustomerPrescriptions.Where(i => i.Status == 0).Count();
             return View(model);
@@ -86,13 +85,15 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCSSL304")]
         public ActionResult Signal()
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
             return View();
         }
 
         [AccessPolicy(PageCode = "SNCSL311")]
         public ActionResult Live()
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new SupportViewModel();
             
@@ -128,7 +129,6 @@ namespace ShopNow.Controllers
             model.ProductUnMappedCount = db.Products.Where(i => i.MappedDate != null && (i.MasterProductId == 0) && i.Status == 0 && i.ShopId != 0)
                .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m }).Count();
 
-
             model.CustomerAadhaarVerifyCount = db.Customers.Where(i => i.AadharVerify == false && i.Status == 0 && i.ImageAadharPath != null && i.ImageAadharPath != "Rejected" && i.ImageAadharPath != "NULL").Count();
             model.ShopOnBoardingVerifyCount = db.Shops.Where(i => i.Status == 1).Count();
             model.DeliveryBoyVerifyCount = db.DeliveryBoys.Where(i => i.Status == 1).Count();
@@ -139,7 +139,7 @@ namespace ShopNow.Controllers
             model.DeliveryBoyLiveCount = db.DeliveryBoys.Where(i => i.Status == 0 && i.isAssign == 0 && i.OnWork == 0 && i.Active == 1).Count();
             model.RefundCount = db.Payments.Where(i => i.RefundAmount != 0 && i.RefundStatus == 1 && i.RefundAmount != null && i.PaymentMode == "Online Payment").Count();
             model.ShopLowCreditCount =  db.ShopCredits.Where(i => i.PlatformCredit <= 100 || i.DeliveryCredit <= 100)
-                .Join(db.Shops.Where(i => i.IsTrail == false), sc => sc.CustomerId, s => s.CustomerId, (sc, s) => new { sc, s })
+                .Join(db.Shops.Where(i => i.IsTrail == false && i.Status == 0), sc => sc.CustomerId, s => s.CustomerId, (sc, s) => new { sc, s })
                 .Count();
             model.CustomerPrescriptionCount = db.CustomerPrescriptions.Where(i => i.Status == 0).Count();
             return View(model);
@@ -148,7 +148,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCSLDA293")]
         public ActionResult LiveDeliveryboyAssignment(int shopId = 0)
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new DeliveryBoyAssignViewModel();
 
@@ -176,7 +176,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCSUML299")]
         public ActionResult UnMappedList()
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new UnMappedListViewModel();
             model.List = db.Products.Where(i => i.MasterProductId == 0)
@@ -197,7 +197,7 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCSOM300")]
         public ActionResult OrderMissed()
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new OrderMissedListViewModel();
             model.List = db.Orders.Where(i => i.Status == 0).OrderByDescending(i => i.DateUpdated)
@@ -215,9 +215,40 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
+        [AccessPolicy(PageCode = "SNCSPUML303")]
+        public ActionResult ProductsUnMappedList(ProductUnMappedList model)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            model.ListItems = db.Products.Where(i => i.MappedDate != null && (i.MasterProductId == 0) && i.Status == 0 && i.ShopId != 0 && (model.ShopId != 0 ? i.ShopId == model.ShopId : true))
+               .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+               .Select(i => new ProductUnMappedList.ListItem
+               {
+                   MappedDate = i.p.MappedDate,
+                   Id = i.p.Id,
+                   MenuPrice = i.p.MenuPrice,
+                   Name = i.m.Name,
+                   Quantity = i.p.Qty,
+                   SellingPrice = i.p.Price,
+                   ItemId = i.p.ItemId,
+                   ShopId = i.p.ShopId,
+                   ShopName = i.p.ShopName,
+                   Status = i.p.Status
+               }).ToList();
+            model.CountListItems = model.ListItems
+                .GroupBy(i => i.ShopId)
+                .Select(i => new ProductUnMappedList.CountListItem
+                {
+                    Count = i.Count(),
+                    ShopName = i.FirstOrDefault().ShopName,
+                    ShopId = i.Key
+                }).ToList();
+            return View(model);
+        }
+
         public ActionResult PaymentUpdate(int orderno)
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var cart = db.Orders.FirstOrDefault(i => i.OrderNumber == orderno);
             var shop = db.Shops.FirstOrDefault(i => i.Id == cart.ShopId && i.Status == 0);
@@ -265,7 +296,7 @@ namespace ShopNow.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult PaymentUpdate(OrderMissedListViewModel model)
         {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var order = db.Orders.FirstOrDefault(i => i.OrderNumber == model.OrderNumber);
             var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == model.OrderNumber);
@@ -378,6 +409,23 @@ namespace ShopNow.Controllers
             return RedirectToAction("OrderMissed");
         }
 
+        public JsonResult RejectUpdate(int orderno)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var cart = db.Orders.Where(i => i.OrderNumber == orderno).FirstOrDefault();
+            if (cart != null)
+            {
+                cart.Status = -1;
+                cart.UpdatedBy = user.Name;
+                cart.DateUpdated = DateTime.Now;
+                db.Entry(cart).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
         //[AccessPolicy(PageCode = "SNCSCOHPU301")]
         //public ActionResult COHPaymentUpdate(int orderno)
         //{
@@ -475,7 +523,7 @@ namespace ShopNow.Controllers
         //        db.Payments.Add(pay);
         //        db.SaveChanges();
         //    }
-            
+
         //    return RedirectToAction("OrderMissed");
         //}
 
@@ -591,52 +639,6 @@ namespace ShopNow.Controllers
 
         //    return RedirectToAction("OrderMissed");
         //}
-       
-        public JsonResult RejectUpdate(int orderno)
-        {
-            var user = ((Helpers.Sessions.User)Session["USER"]);
-            ViewBag.Name = user.Name;
-            var cart = db.Orders.Where(i => i.OrderNumber == orderno).FirstOrDefault();
-            if (cart != null)
-            {
-                cart.Status = -1;
-                cart.UpdatedBy = user.Name;
-                cart.DateUpdated = DateTime.Now;
-                db.Entry(cart).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-            }
-                
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
-
-        [AccessPolicy(PageCode = "SNCSPUML303")]
-        public ActionResult ProductsUnMappedList(ProductUnMappedList model)
-        {
-            model.ListItems = db.Products.Where(i => i.MappedDate != null && (i.MasterProductId == 0) && i.Status == 0 && i.ShopId != 0 && (model.ShopId != 0 ? i.ShopId == model.ShopId : true))
-               .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
-               .Select(i => new ProductUnMappedList.ListItem
-               {
-                   MappedDate = i.p.MappedDate,
-                   Id = i.p.Id,
-                   MenuPrice = i.p.MenuPrice,
-                   Name = i.m.Name,
-                   Quantity = i.p.Qty,
-                   SellingPrice = i.p.Price,
-                   ItemId = i.p.ItemId,
-                   ShopId = i.p.ShopId,
-                   ShopName = i.p.ShopName,
-                   Status = i.p.Status
-               }).ToList();
-            model.CountListItems = model.ListItems
-                .GroupBy(i => i.ShopId)
-                .Select(i => new ProductUnMappedList.CountListItem
-                {
-                    Count = i.Count(),
-                    ShopName = i.FirstOrDefault().ShopName,
-                    ShopId = i.Key
-                }).ToList();
-            return View(model);
-        }
 
         protected override void Dispose(bool disposing)
         {
