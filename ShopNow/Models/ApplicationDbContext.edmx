@@ -923,6 +923,7 @@
           <Property Name="TipsAmount" Type="float" Nullable="false" />
           <Property Name="TotalShopPrice" Type="float" Nullable="false" />
           <Property Name="TotalMRPPrice" Type="float" Nullable="false" />
+          <Property Name="ActualShopPayment" Type="float" Nullable="false" />
           <Property Name="PaymentModeType" Type="int" Nullable="false" />
           <Property Name="IsCallActive" Type="bit" />
           <Property Name="IsPrescriptionOrder" Type="bit" Nullable="false" />
@@ -1271,7 +1272,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="AddOnItemName" Type="nvarchar" MaxLength="100" />
           <Property Name="MasterProductId" Type="bigint" Nullable="false" />
           <Property Name="MasterProductName" Type="nvarchar" MaxLength="200" />
@@ -1495,6 +1496,14 @@
           <Property Name="CreatedBy" Type="nvarchar(max)" />
         </EntityType>
         <Function Name="GetAllSearchResult" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Longitude" Type="float" Mode="In" />
+          <Parameter Name="Latitude" Type="float" Mode="In" />
+          <Parameter Name="str" Type="nvarchar" Mode="In" />
+          <Parameter Name="customerid" Type="int" Mode="In" />
+          <Parameter Name="page" Type="int" Mode="In" />
+          <Parameter Name="pageSize" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetAllSearchResultCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Longitude" Type="float" Mode="In" />
           <Parameter Name="Latitude" Type="float" Mode="In" />
           <Parameter Name="str" Type="nvarchar" Mode="In" />
@@ -3089,13 +3098,21 @@
             <Parameter Name="customerid" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="CustomerPrescriptions" EntityType="sncModel.CustomerPrescription" />
+          <EntitySet Name="Orders" EntityType="sncModel.Order" />
           <FunctionImport Name="GetAllSearchResult" ReturnType="Collection(String)">
             <Parameter Name="Longitude" Mode="In" Type="Double" />
             <Parameter Name="Latitude" Mode="In" Type="Double" />
             <Parameter Name="str" Mode="In" Type="String" />
             <Parameter Name="customerid" Mode="In" Type="Int32" />
+            <Parameter Name="page" Mode="In" Type="Int32" />
+            <Parameter Name="pageSize" Mode="In" Type="Int32" />
           </FunctionImport>
-          <EntitySet Name="Orders" EntityType="sncModel.Order" />
+          <FunctionImport Name="GetAllSearchResultCount" ReturnType="Collection(Int32)">
+            <Parameter Name="Longitude" Mode="In" Type="Double" />
+            <Parameter Name="Latitude" Mode="In" Type="Double" />
+            <Parameter Name="str" Mode="In" Type="String" />
+            <Parameter Name="customerid" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3440,6 +3457,7 @@
           <Property Name="TipsAmount" Type="Double" Nullable="false" />
           <Property Name="TotalShopPrice" Type="Double" Nullable="false" />
           <Property Name="TotalMRPPrice" Type="Double" Nullable="false" />
+          <Property Name="ActualShopPayment" Type="Double" Nullable="false" />
           <Property Name="PaymentModeType" Type="Int32" Nullable="false" />
           <Property Name="IsCallActive" Type="Boolean" />
           <Property Name="IsPrescriptionOrder" Type="Boolean" Nullable="false" />
@@ -5093,7 +5111,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="GetAllSearchResult" FunctionName="sncModel.Store.GetAllSearchResult" />
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="sncModel.Order">
               <MappingFragment StoreEntitySet="Orders">
@@ -5106,6 +5123,7 @@
                 <ScalarProperty Name="IsPrescriptionOrder" ColumnName="IsPrescriptionOrder" />
                 <ScalarProperty Name="IsCallActive" ColumnName="IsCallActive" />
                 <ScalarProperty Name="PaymentModeType" ColumnName="PaymentModeType" />
+                <ScalarProperty Name="ActualShopPayment" ColumnName="ActualShopPayment" />
                 <ScalarProperty Name="TotalMRPPrice" ColumnName="TotalMRPPrice" />
                 <ScalarProperty Name="TotalShopPrice" ColumnName="TotalShopPrice" />
                 <ScalarProperty Name="TipsAmount" ColumnName="TipsAmount" />
@@ -5163,6 +5181,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetAllSearchResult" FunctionName="sncModel.Store.GetAllSearchResult" />
+          <FunctionImportMapping FunctionImportName="GetAllSearchResultCount" FunctionName="sncModel.Store.GetAllSearchResultCount" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

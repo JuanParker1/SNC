@@ -31,9 +31,9 @@ namespace ShopNow.Controllers
                     OrderNumber = i.o.o.OrderNumber,
                     ShopName = i.o.o.ShopName,
                     GSTNumber = i.s.GSTINNumber,
-                    MenuPrice = i.o.o.TotalMRPPrice, //check
+                    MenuPrice = i.o.o.ActualShopPayment,
                     ShopBillAmount = i.o.o.TotalPrice,
-                    PriceDifference = i.o.o.TotalMRPPrice - i.o.o.TotalPrice, //check
+                    PriceDifference = i.o.o.ActualShopPayment != 0 ? i.o.o.TotalPrice - i.o.o.ActualShopPayment : 0,
                     CustomerPaidAmount = i.o.p.Amount,
                     RefundAmount = i.o.p.RefundAmount ?? 0,
                     FinalAmount = i.o.p.Amount - (i.o.p.RefundAmount ?? 0),
@@ -41,8 +41,8 @@ namespace ShopNow.Controllers
                     DeliveryDiscount = i.o.o.ShopDeliveryDiscount,
                     TotalDeliveryCharge = i.o.o.DeliveryCharge,
                     DeliveryChargePaidToDeliveryBoy = i.o.o.DeliveryCharge == 35 ? 20 : 20 + (i.o.o.DeliveryCharge - 20),
-                    DeliveryChargeProfit = i.o.o.DeliveryCharge - 20, //check
-                    AmountProfit = i.o.o.TotalMRPPrice - i.o.o.TotalPrice //check
+                    DeliveryChargeProfit = 15,
+                    AmountProfit = i.o.o.ActualShopPayment != 0 ? i.o.o.TotalPrice - i.o.o.ActualShopPayment : 0
                 }).ToList();
             return View(model);
         }

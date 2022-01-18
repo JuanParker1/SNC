@@ -1480,6 +1480,18 @@ namespace ShopNow.Controllers
             return RedirectToAction("List");
         }
 
+        public ActionResult UpdateShopPayment(long id, double amount = 0)
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var order = db.Orders.FirstOrDefault(i => i.Id == id);
+            order.ActualShopPayment = amount;
+            db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+            
+            return RedirectToAction("Details", "Cart", new { id = AdminHelpers.ECodeLong(id) });
+        }
+
         DeliveryBoy getDBoy(int id)
         {
             var deliveryBoy = db.DeliveryBoys.Where(d => d.Id == id).FirstOrDefault();
