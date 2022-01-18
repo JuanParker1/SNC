@@ -200,7 +200,7 @@
                             {
                                 <p>@Model.OrderReadyTime.Value.ToString("dd-MMM-yyyy hh:mm tt")</p>
                             }
-                            else if(Model.OrderPickupTime != null)
+                            else if (Model.OrderPickupTime != null)
                             {
                                 <p>@Model.OrderPickupTime.Value.ToString("dd-MMM-yyyy hh:mm tt")</p>
                             }
@@ -277,7 +277,7 @@
                         <label class="mr-3">Number:</label>
                         <b>
                             @Model.OrderNumber @if (Model.IsPrescriptionOrder == true)
-                        {<span>(Prescription)</span>}
+                            {<span>(Prescription)</span>}
                         </b>
                     </div>
                     <div class="d-flex">
@@ -381,61 +381,61 @@
                         <tbody>
                             @foreach (var item in Model.ListItems)
                             {
-                            <tr>
-                                <td></td>
-                                <td><img src="@item.ImagePath" alt="Image" class="img-fluid productImages" data-toggle="modal" data-target="#myModal" style="width:50px;height:50px;" onerror="this.src='/Images/No Photo.png'" /></td>
-                                <td>
-                                    <b>@item.ProductName </b><br />
-                                    @if (item.HasAddon == true)
-                                    {
-                                        foreach (var addon in item.AddonListItems)
+                                <tr>
+                                    <td></td>
+                                    <td><img src="@item.ImagePath" alt="Image" class="img-fluid productImages" data-toggle="modal" data-target="#myModal" style="width:50px;height:50px;" onerror="this.src='/Images/No Photo.png'" /></td>
+                                    <td>
+                                        <b>@item.ProductName </b><br />
+                                        @if (item.HasAddon == true)
                                         {
-                                            if (item.AddonType == 1)
+                                            foreach (var addon in item.AddonListItems)
                                             {
-                                                if (item.UnitPrice == addon.PortionPrice)
+                                                if (item.AddonType == 1)
                                                 {
-                                                    <span>@addon.PortionName - @addon.PortionPrice</span><br />
+                                                    if (item.UnitPrice == addon.PortionPrice)
+                                                    {
+                                                        <span>@addon.PortionName - @addon.PortionPrice</span><br />
+                                                    }
                                                 }
-                                            }
-                                            else if (item.AddonType == 2)
-                                            {
-                                                <span>@addon.AddonName - @addon.AddonPrice</span><br />
-                                            }
-                                            else if (item.AddonType == 3)
-                                            {
-                                                if (addon.AddonPrice == 0)
-                                                {
-                                                    <span>@addon.PortionName - @addon.PortionPrice</span><br />
-                                                }
-                                                else
+                                                else if (item.AddonType == 2)
                                                 {
                                                     <span>@addon.AddonName - @addon.AddonPrice</span><br />
                                                 }
-                                            }
-                                            else if (item.AddonType == 4)
-                                            {
-                                                if (addon.AddonPrice == 0 && addon.PortionPrice == 0)
+                                                else if (item.AddonType == 3)
                                                 {
-                                                    <span>@addon.CrustName</span><br />
+                                                    if (addon.AddonPrice == 0)
+                                                    {
+                                                        <span>@addon.PortionName - @addon.PortionPrice</span><br />
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>@addon.AddonName - @addon.AddonPrice</span><br />
+                                                    }
                                                 }
-                                                else if (addon.PortionPrice != 0)
+                                                else if (item.AddonType == 4)
                                                 {
-                                                    <span>@addon.PortionName - @addon.PortionPrice</span><br />
-                                                }
-                                                else
-                                                {
-                                                    <span>@addon.AddonName - @addon.AddonPrice</span><br />
+                                                    if (addon.AddonPrice == 0 && addon.PortionPrice == 0)
+                                                    {
+                                                        <span>@addon.CrustName</span><br />
+                                                    }
+                                                    else if (addon.PortionPrice != 0)
+                                                    {
+                                                        <span>@addon.PortionName - @addon.PortionPrice</span><br />
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>@addon.AddonName - @addon.AddonPrice</span><br />
+                                                    }
                                                 }
                                             }
                                         }
-                                    }
-                                </td>
-                                <td>@item.CategoryName</td>
-                                <td>@item.Quantity</td>
-                                <td>₹@item.UnitPrice</td>
-                                <td>₹@item.Price</td>
-                                <td><a class="btn-item-update" href="#modal-item-update" data-target="#modal-item-update" data-toggle="modal" data-id="@item.Id" data-product="@item.ProductName" data-category="@item.CategoryName" data-quantity="@item.Quantity" data-unitprice="@item.UnitPrice"><i class="fa fa-edit"></i></a></td>
-                            </tr>
+                                    </td>
+                                    <td>@item.CategoryName</td>
+                                    <td>@item.Quantity</td>
+                                    <td>₹@item.UnitPrice</td>
+                                    <td>₹@item.Price</td>
+                                    <td><a class="btn-item-update" href="#modal-item-update" data-target="#modal-item-update" data-toggle="modal" data-id="@item.Id" data-product="@item.ProductName" data-category="@item.CategoryName" data-quantity="@item.Quantity" data-unitprice="@item.UnitPrice"><i class="fa fa-edit"></i></a></td>
+                                </tr>
                             }
                         </tbody>
                         <tfoot>
@@ -573,6 +573,14 @@
                         <label class="mr-3">Total Paid:</label>
                         <b>₹@Math.Abs(Model.NetTotal - (Model.RefundAmount ?? 0))</b>
                     </div>
+                    <hr />
+                    <div class="d-flex justify-content-between">
+                        <label class="mr-1">
+                            Shop Payment:
+                            <a href="#modal-actualShopPayment-update" data-target="#modal-actualShopPayment-update" data-toggle="modal"><i class="fa fa-edit"></i></a>
+                        </label>
+                        <b>₹@Model.ActualShopPayment</b>
+                    </div>
                 </div>
             </div>
         </div>
@@ -608,8 +616,8 @@
             <div class="modal-body">
                 <button class="close text-danger mb-2" data-dismiss="modal">&times;</button>
                 @*<a href="~/Home/ImageDenied">*@
-                    <img class="modal-content img-fluid w-100" style="height:400px;" id="myImage" />
-               @* </a>*@
+                <img class="modal-content img-fluid w-100" style="height:400px;" id="myImage" />
+                @* </a>*@
             </div>
         </div>
     </div>
@@ -670,7 +678,7 @@
         <div class="modal-content">
             <div class="modal-body">
                 <form method="get" action="/Cart/AddRefundFromShopOrderProcessing">
-                    <input type="hidden" name="Id" value="@Model.Id"/>
+                    <input type="hidden" name="Id" value="@Model.Id" />
                     <input type="hidden" name="Redirection" value="5" />
                     <h5>Add Refund</h5>
                     <div class="form-group">
@@ -725,7 +733,7 @@
                     <input type="hidden" name="OrderId" value="@Model.Id" />
                     <h5>Update Item</h5><hr />
                     <h6 id="text-product" class="font-weight-bold"></h6>
-                   <label>Category:</label> <small id="text-category" class="font-weight-bold"></small>
+                    <label>Category:</label> <small id="text-category" class="font-weight-bold"></small>
                     <div class="d-flex form-group mt-3">
                         <label class="col-form-label mr-3">Quantity:</label>
                         <input class="form-control w-50" type="number" min="1" name="Quantity" id="input-quantity" />
@@ -760,6 +768,27 @@
                             </select>
                             <input type="hidden" name="OrderNo" id="OrderNo" />
                         </div>
+                    </div>
+                    <div class="text-right">
+                        <button class="btn btn-sm btn-success mr-3">Submit</button>
+                        <button class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal-actualShopPayment-update" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form method="get" action="/Cart/UpdateShopPayment">
+                    <input type="hidden" name="Id" value="@Model.Id" />
+                    <h5>Update Shop Payment</h5>
+                    <div class="form-group">
+                        <label>Amount</label>
+                        <input class="form-control" type="number" name="Amount" value="@Model.ActualShopPayment" />
                     </div>
                     <div class="text-right">
                         <button class="btn btn-sm btn-success mr-3">Submit</button>
@@ -836,7 +865,7 @@
             var modalImg = document.getElementById("myImage");
             $(img).click(function () {
                 modal.style.display = "block";
-                modalImg.src = this.src.replace("/Small/","/Large/");
+                modalImg.src = this.src.replace("/Small/", "/Large/");
                 if (this.src == "") {
                     $('#myModal').hide();
                 }
@@ -881,7 +910,7 @@
                 window.location.href = "/Cart/AssignDeliveryBoy?OrderNumber=" + ordernumber;
             });
 
-            $("#tbl-items").on('click','.btn-item-update',function () {
+            $("#tbl-items").on('click', '.btn-item-update', function () {
                 $('#item-id').val($(this).data('id'));
                 $('#text-product').text($(this).data('product'));
                 $('#text-category').text($(this).data('category'));
