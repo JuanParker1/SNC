@@ -317,12 +317,12 @@
                     $.each(data, function (index, item) {
                         var tableData = '<tr class="d-none type_' + item.AddOnType + '" data-id=' + item.Id + '> \
                                     <td>' + item.PortionName + '</td> \
-                                    <td><input class="textbox-sm portion-price" type="number" value=' + item.PortionPrice + '></td> \
+                                    <td><input class="textbox-sm portion-price" type="number" step="any" value=' + item.PortionPrice + '></td> \
                                     <td>' + item.AddOnCategoryName + '</td> \
                                     <td>' + item.AddOnItemName + '</td> \
-                                    <td><input class="textbox-sm addon-price" type="number" value=' + item.AddOnsPrice + '></td>\
+                                    <td><input class="textbox-sm addon-price" type="number" step="any" value=' + item.AddOnsPrice + '></td>\
                                     <td>' + item.CrustName + '</td>\
-                                    <td><input class="textbox-sm crust-price" type="number" value=' + item.CrustPrice + '></td>\
+                                    <td><input class="textbox-sm crust-price" type="number" step="any" value=' + item.CrustPrice + '></td>\
                                     <td>' + item.MinSelectionLimit + '</td>\
                                     <td>' + item.MaxSelectionLimit + '</td>\
                                     <td><input type="checkbox" class="chk-select chk_'+ item.AddOnType + '" value="true" name="IsActive" data-id=' + item.Id + '></td>\
@@ -339,12 +339,12 @@
                         if (item.IsActive == false) {
                             var tableData = '<tr class="d-none type_' + item.AddOnType + '" data-id=' + item.Id + '> \
                                     <td>' + item.PortionName + '</td> \
-                                    <td><input class="textbox-sm portion-price" type="number" value=' + item.PortionPrice + '></td> \
+                                    <td><input class="textbox-sm portion-price" type="number" step="any" value=' + item.PortionPrice + '></td> \
                                     <td>' + item.AddOnCategoryName + '</td> \
                                     <td>' + item.AddOnItemName + '</td> \
-                                    <td><input class="textbox-sm addon-price" type="number" value=' + item.AddOnsPrice + '></td>\
+                                    <td><input class="textbox-sm addon-price" type="number" step="any" value=' + item.AddOnsPrice + '></td>\
                                     <td>' + item.CrustName + '</td>\
-                                    <td><input class="textbox-sm crust-price" type="number" value=' + item.CrustPrice + '></td>\
+                                    <td><input class="textbox-sm crust-price" type="number" step="any" value=' + item.CrustPrice + '></td>\
                                     <td>' + item.MinSelectionLimit + '</td>\
                                     <td>' + item.MaxSelectionLimit + '</td>\
                                     <td><input type="checkbox" class="chk-select chk_' + item.AddOnType + '" value="true" name="IsActive" data-id=' + item.Id + '></td>\
@@ -353,12 +353,12 @@
                         } else {
                             var tableData = '<tr class="d-none type_' + item.AddOnType + '" data-id=' + item.Id + '> \
                                     <td>' + item.PortionName + '</td> \
-                                    <td><input class="textbox-sm portion-price" type="number" value=' + item.PortionPrice + '></td> \
+                                    <td><input class="textbox-sm portion-price" type="number" step="any" value=' + item.PortionPrice + '></td> \
                                     <td>' + item.AddOnCategoryName + '</td> \
                                     <td>' + item.AddOnItemName + '</td> \
-                                    <td><input class="textbox-sm addon-price" type="number" value=' + item.AddOnsPrice + '></td>\
+                                    <td><input class="textbox-sm addon-price" type="number" step="any" value=' + item.AddOnsPrice + '></td>\
                                     <td>' + item.CrustName + '</td>\
-                                    <td><input class="textbox-sm crust-price" type="number" value=' + item.CrustPrice + '></td>\
+                                    <td><input class="textbox-sm crust-price" type="number" step="any" value=' + item.CrustPrice + '></td>\
                                     <td>' + item.MinSelectionLimit + '</td>\
                                     <td>' + item.MaxSelectionLimit + '</td>\
                                     <td><input type="checkbox" class="chk-select chk_' + item.AddOnType + '" value="true" name="IsActive" data-id=' + item.Id + ' data-type="Shop" checked ></td>\
