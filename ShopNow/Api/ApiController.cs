@@ -6081,7 +6081,7 @@ namespace ShopNow.Controllers
             // public int count { get; set; }
         }
 
-        public JsonResult GetAllSearchResult(int customerid, double latitude, double longitude, string keyword, int page = 1, int pageSize = 20)
+        public JsonResult GetAllSearchResult(int customerid, double latitude, double longitude, string keyword, int page = 1, int pageSize = 30)
         {
             AutoCompleteAllSearchResult searchResult = new AutoCompleteAllSearchResult();
             searchResult.PreferedText = new List<AutoCompleteAllSearchResult.AllPreferedText_Result>();
@@ -6151,7 +6151,7 @@ namespace ShopNow.Controllers
                                                      Status = Convert.ToInt32(g.FirstOrDefault()["Status"].ToString()),
                                                      ShopCount = g.Count(),
                                                      StartPrice = g.Min(r => r.Field<double>("Price"))
-                                                 }).AsEnumerable().ToList();
+                                                 }).ToList();
 
                         //if (!string.IsNullOrEmpty(keyword) && page == 1)
                         //{
