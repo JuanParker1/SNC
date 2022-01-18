@@ -3099,6 +3099,12 @@
           </FunctionImport>
           <EntitySet Name="CustomerPrescriptions" EntityType="sncModel.CustomerPrescription" />
           <EntitySet Name="Orders" EntityType="sncModel.Order" />
+          <FunctionImport Name="GetAllSearchResultCount" ReturnType="Collection(Int32)">
+            <Parameter Name="Longitude" Mode="In" Type="Double" />
+            <Parameter Name="Latitude" Mode="In" Type="Double" />
+            <Parameter Name="str" Mode="In" Type="String" />
+            <Parameter Name="customerid" Mode="In" Type="Int32" />
+          </FunctionImport>
           <FunctionImport Name="GetAllSearchResult" ReturnType="Collection(String)">
             <Parameter Name="Longitude" Mode="In" Type="Double" />
             <Parameter Name="Latitude" Mode="In" Type="Double" />
@@ -3106,12 +3112,6 @@
             <Parameter Name="customerid" Mode="In" Type="Int32" />
             <Parameter Name="page" Mode="In" Type="Int32" />
             <Parameter Name="pageSize" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="GetAllSearchResultCount" ReturnType="Collection(Int32)">
-            <Parameter Name="Longitude" Mode="In" Type="Double" />
-            <Parameter Name="Latitude" Mode="In" Type="Double" />
-            <Parameter Name="str" Mode="In" Type="String" />
-            <Parameter Name="customerid" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
@@ -5181,8 +5181,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="GetAllSearchResult" FunctionName="sncModel.Store.GetAllSearchResult" />
           <FunctionImportMapping FunctionImportName="GetAllSearchResultCount" FunctionName="sncModel.Store.GetAllSearchResultCount" />
+          <FunctionImportMapping FunctionImportName="GetAllSearchResult" FunctionName="sncModel.Store.GetAllSearchResult" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

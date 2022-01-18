@@ -7,6 +7,8 @@ namespace ShopNow.ViewModels
 {
     public class AccountsBillWiseReportViewModel
     {
+        public int MonthFilter { get; set; }
+        public int YearFilter { get; set; }
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {

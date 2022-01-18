@@ -6148,8 +6148,10 @@ namespace ShopNow.Controllers
                                                      ShopLatitude = Convert.ToDouble(g.FirstOrDefault()["ShopLatitude"].ToString()),
                                                      ShopLongitude = Convert.ToDouble(g.FirstOrDefault()["ShopLongitude"].ToString()),
                                                      ShopName = g.FirstOrDefault()["ShopName"].ToString(),
-                                                     Status = Convert.ToInt32(g.FirstOrDefault()["Status"].ToString())
-                                                 }).ToList();
+                                                     Status = Convert.ToInt32(g.FirstOrDefault()["Status"].ToString()),
+                                                     ShopCount = g.Count(),
+                                                     StartPrice = g.Min(r => r.Field<double>("Price"))
+                                                 }).AsEnumerable().ToList();
 
                         //if (!string.IsNullOrEmpty(keyword) && page == 1)
                         //{

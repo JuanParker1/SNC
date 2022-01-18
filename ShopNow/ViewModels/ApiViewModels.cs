@@ -842,7 +842,8 @@ namespace ShopNow.ViewModels
             public int Status { get; set; }
             public double Rating { get; set; }
             public double ReviewCount { get; set; }
-            // public int count { get; set; }
+             public int ShopCount { get; set; }
+             public double StartPrice { get; set; }
         }
     }
     

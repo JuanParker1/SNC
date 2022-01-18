@@ -37,6 +37,39 @@
         <div class="col-md-12">
             <div class="card shadow mt-3">
                 <div class="card-body">
+                    <form method="get" action="/Accounts/BillWiseReport">
+                        <div class="row mb-3">
+                            <div class="col-md-2">
+                                <select id="select-month-filter" class="form-control" name="MonthFilter">
+                                    <option value="1">January</option>
+                                    <option value="2">February</option>
+                                    <option value="3">March</option>
+                                    <option value="4">April</option>
+                                    <option value="5">May</option>
+                                    <option value="6">June</option>
+                                    <option value="7">July</option>
+                                    <option value="8">August</option>
+                                    <option value="9">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <select id="select-year-filter" class="form-control" name="YearFilter">
+                                    @for (int year = 2020; year <= DateTime.Now.Year; year++)
+                                    {
+                                        <option value="@year">@year</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="submit" class="btn btn-info mr-3" value="Filter" />
+                                <a href="/Accounts/BillWiseReport" class="btn btn-warning">Clear</a>
+                            </div>
+                        </div>
+                    </form>
+
                     @Html.Grid(Model.ListItems).Columns(columns =>
                {
                    columns.Add(c => c.SNo).Titled("SNo").Filterable(true).SetWidth(1);
@@ -44,18 +77,18 @@
                    columns.Add(c => c.OrderNumber).Titled("Order Number").Filterable(true).SetWidth(10);
                    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(4);
                    columns.Add(c => c.GSTNumber).Titled("GST Number").Filterable(true).SetWidth(10);
-                   columns.Add(c => c.MenuPrice).Titled("Menu Price").Filterable(true).SetWidth(10);
-                   columns.Add(c => c.ShopBillAmount).Titled("Shop BillAmount").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.MenuPrice).Titled("Menu Price").Filterable(true).SetWidth(10).Format("{0:#,##}");
+                   columns.Add(c => c.ShopBillAmount).Titled("Shop BillAmount").Filterable(true).SetWidth(10).Format("{0:#,##}");
                    columns.Add(c => c.PriceDifference).Titled("Price Difference").Filterable(true).SetWidth(10);
-                   columns.Add(c => c.CustomerPaidAmount).Titled("Customer PaidAmount").Filterable(true).SetWidth(8);
+                   columns.Add(c => c.CustomerPaidAmount).Titled("Customer PaidAmount").Filterable(true).SetWidth(8).Format("{0:#,##}");
                    columns.Add(c => c.RefundAmount).Titled("Refund Amount").Filterable(true).SetWidth(10);
-                   columns.Add(c => c.FinalAmount).Titled("Final Amount").Filterable(true).SetWidth(10);
-                   columns.Add(c => c.DeliveryAmountFromCustomer).Titled("DeliveryAmount From Customer").Filterable(true).SetWidth(10);
-                   columns.Add(c => c.DeliveryDiscount).Titled("Delivery Discount").Filterable(true).SetWidth(10);
-                   columns.Add(c => c.TotalDeliveryCharge).Titled("Total DeliveryCharge").Filterable(true).SetWidth(10);
-                   columns.Add(c => c.DeliveryChargePaidToDeliveryBoy).Titled("DeliveryCharge PaidTo DeliveryBoy").Filterable(true).SetWidth(10);
-                   columns.Add(c => c.DeliveryChargeProfit).Titled("DeliveryCharge Profit").Filterable(true).SetWidth(10);
-                   columns.Add(c => c.AmountProfit).Titled("Trade Profit").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.FinalAmount).Titled("Final Amount").Filterable(true).SetWidth(10).Format("{0:#,##}");
+                   columns.Add(c => c.DeliveryAmountFromCustomer).Titled("DeliveryAmount From Customer").Filterable(true).SetWidth(10).Format("{0:#,##.00}");
+                   columns.Add(c => c.DeliveryDiscount).Titled("Delivery Discount").Filterable(true).SetWidth(10).Format("{0:#,##.00}");
+                   columns.Add(c => c.TotalDeliveryCharge).Titled("Total DeliveryCharge").Filterable(true).SetWidth(10).Format("{0:#,##.00}");
+                   columns.Add(c => c.DeliveryChargePaidToDeliveryBoy).Titled("DeliveryCharge PaidTo DeliveryBoy").Filterable(true).SetWidth(10).Format("{0:#,##}");
+                   columns.Add(c => c.DeliveryChargeProfit).Titled("DeliveryCharge Profit").Filterable(true).SetWidth(10).Format("{0:#,##}");
+                   columns.Add(c => c.AmountProfit).Titled("Trade Profit").Filterable(true).SetWidth(10).Format("{0:#,##}");
                }).WithPaging(20).Sortable(true)
                 </div>
             </div>
@@ -75,7 +108,8 @@
             //    $('#date').val($(this).val());
             //});
 
-
+          $('select[name="MonthFilter"] option[value=@Model.MonthFilter]').prop('selected', true);
+            $('select[name="YearFilter"] option[value=@Model.YearFilter]').prop('selected', true);
             $("#btnExport").on('click', function () {
                 $(function () {
                     Table2Excel.extend((cell, cellText) => {

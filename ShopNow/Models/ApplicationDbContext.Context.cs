@@ -473,6 +473,27 @@ namespace ShopNow.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetShopCategoryProducts_Result>("GetShopCategoryProducts", shopCodeParameter, categoryCodeParameter, strParameter, pageParameter, pageSizeParameter, customeridParameter);
         }
     
+        public virtual ObjectResult<Nullable<int>> GetAllSearchResultCount(Nullable<double> longitude, Nullable<double> latitude, string str, Nullable<int> customerid)
+        {
+            var longitudeParameter = longitude.HasValue ?
+                new ObjectParameter("Longitude", longitude) :
+                new ObjectParameter("Longitude", typeof(double));
+    
+            var latitudeParameter = latitude.HasValue ?
+                new ObjectParameter("Latitude", latitude) :
+                new ObjectParameter("Latitude", typeof(double));
+    
+            var strParameter = str != null ?
+                new ObjectParameter("str", str) :
+                new ObjectParameter("str", typeof(string));
+    
+            var customeridParameter = customerid.HasValue ?
+                new ObjectParameter("customerid", customerid) :
+                new ObjectParameter("customerid", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("GetAllSearchResultCount", longitudeParameter, latitudeParameter, strParameter, customeridParameter);
+        }
+    
         public virtual ObjectResult<string> GetAllSearchResult(Nullable<double> longitude, Nullable<double> latitude, string str, Nullable<int> customerid, Nullable<int> page, Nullable<int> pageSize)
         {
             var longitudeParameter = longitude.HasValue ?
@@ -500,27 +521,6 @@ namespace ShopNow.Models
                 new ObjectParameter("pageSize", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("GetAllSearchResult", longitudeParameter, latitudeParameter, strParameter, customeridParameter, pageParameter, pageSizeParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<int>> GetAllSearchResultCount(Nullable<double> longitude, Nullable<double> latitude, string str, Nullable<int> customerid)
-        {
-            var longitudeParameter = longitude.HasValue ?
-                new ObjectParameter("Longitude", longitude) :
-                new ObjectParameter("Longitude", typeof(double));
-    
-            var latitudeParameter = latitude.HasValue ?
-                new ObjectParameter("Latitude", latitude) :
-                new ObjectParameter("Latitude", typeof(double));
-    
-            var strParameter = str != null ?
-                new ObjectParameter("str", str) :
-                new ObjectParameter("str", typeof(string));
-    
-            var customeridParameter = customerid.HasValue ?
-                new ObjectParameter("customerid", customerid) :
-                new ObjectParameter("customerid", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("GetAllSearchResultCount", longitudeParameter, latitudeParameter, strParameter, customeridParameter);
         }
     }
 }

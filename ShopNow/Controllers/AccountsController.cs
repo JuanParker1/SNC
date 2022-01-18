@@ -15,35 +15,38 @@ namespace ShopNow.Controllers
         private sncEntities db = new sncEntities();
 
         [AccessPolicy(PageCode = "")]
-        public ActionResult BillWiseReport()
+        public ActionResult BillWiseReport(AccountsBillWiseReportViewModel model)
         {
-            //var user = ((Helpers.Sessions.User)Session["USER"]);
-            //ViewBag.Name = user.Name;
-            var model = new AccountsBillWiseReportViewModel();
-            model.ListItems = db.Orders.Where(i => i.Status == 6 && i.DateEncoded.Month == DateTime.Now.Month && i.DateEncoded.Year == DateTime.Now.Year)
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            model.MonthFilter = model.MonthFilter != 0 ? model.MonthFilter : DateTime.Now.Month;
+            model.YearFilter = model.YearFilter != 0 ? model.YearFilter : DateTime.Now.Year;
+            model.ListItems = db.Orders.Where(i => i.Status == 6 && i.DateEncoded.Month == model.MonthFilter && i.DateEncoded.Year == model.YearFilter)
                 .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
                 .Join(db.Shops, o => o.o.ShopId, s => s.Id, (o, s) => new { o, s })
                 .AsEnumerable()
-                .Select((i, index) => new AccountsBillWiseReportViewModel.ListItem
+                .Select(i => new AccountsBillWiseReportViewModel.ListItem
                 {
-                    SNo = index + 1,
                     Date = i.o.o.DateEncoded,
                     OrderNumber = i.o.o.OrderNumber,
                     ShopName = i.o.o.ShopName,
                     GSTNumber = i.s.GSTINNumber,
                     MenuPrice = i.o.o.ActualShopPayment,
-                    ShopBillAmount = i.o.o.TotalPrice,
-                    PriceDifference = i.o.o.ActualShopPayment != 0 ? i.o.o.TotalPrice - i.o.o.ActualShopPayment : 0,
+                    ShopBillAmount = Math.Round(i.o.o.TotalPrice, MidpointRounding.AwayFromZero),
+                    PriceDifference = i.o.o.ActualShopPayment != 0 ? Math.Round(i.o.o.TotalPrice - i.o.o.ActualShopPayment,MidpointRounding.AwayFromZero) : 0,
                     CustomerPaidAmount = i.o.p.Amount,
                     RefundAmount = i.o.p.RefundAmount ?? 0,
                     FinalAmount = i.o.p.Amount - (i.o.p.RefundAmount ?? 0),
                     DeliveryAmountFromCustomer = i.o.o.NetDeliveryCharge,
                     DeliveryDiscount = i.o.o.ShopDeliveryDiscount,
                     TotalDeliveryCharge = i.o.o.DeliveryCharge,
-                    DeliveryChargePaidToDeliveryBoy = i.o.o.DeliveryCharge == 35 ? 20 : 20 + (i.o.o.DeliveryCharge - 20),
+                    DeliveryChargePaidToDeliveryBoy = i.o.o.DeliveryCharge == 35 ? 20 : 20 + (i.o.o.DeliveryCharge - 35),
                     DeliveryChargeProfit = 15,
-                    AmountProfit = i.o.o.ActualShopPayment != 0 ? i.o.o.TotalPrice - i.o.o.ActualShopPayment : 0
-                }).ToList();
+                    AmountProfit = i.o.o.ActualShopPayment != 0 ? Math.Round(i.o.o.TotalPrice - i.o.o.ActualShopPayment, MidpointRounding.AwayFromZero) : 0
+                }).OrderBy(i => i.Date).ToList();
+
+            int counter = 1;
+            model.ListItems.ForEach(x => x.SNo = counter++);
             return View(model);
         }
     }
