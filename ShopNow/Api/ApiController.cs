@@ -6081,14 +6081,15 @@ namespace ShopNow.Controllers
             // public int count { get; set; }
         }
 
-        public JsonResult GetAllSearchResult(int customerid, double latitude, double longitude, string keyword)
+        public JsonResult GetAllSearchResult(int customerid, double latitude, double longitude, string keyword, int page = 1, int pageSize = 20)
         {
             AutoCompleteAllSearchResult searchResult = new AutoCompleteAllSearchResult();
             searchResult.PreferedText = new List<AutoCompleteAllSearchResult.AllPreferedText_Result>();
             searchResult.Shop = new List<AutoCompleteAllSearchResult.AllShop_Result>();
             searchResult.Products = new List<AutoCompleteAllSearchResult.AllProduct_Result>();
-
             
+            int productCount = db.GetAllSearchResultCount(longitude, latitude, keyword, customerid).Count();
+
             using (var connection = new SqlConnection(_connString))
             {
                 connection.Open();
@@ -6099,6 +6100,8 @@ namespace ShopNow.Controllers
                     command.Parameters.AddWithValue("str", keyword.Trim());
                     command.Parameters.AddWithValue("Longitude", longitude);
                     command.Parameters.AddWithValue("Latitude", latitude);
+                    command.Parameters.AddWithValue("page", page);
+                    command.Parameters.AddWithValue("pageSize", pageSize);
                     DataSet dataset = new DataSet();
                     SqlDataAdapter sqlDataAdapter = new SqlDataAdapter();
                     sqlDataAdapter.SelectCommand = command;
@@ -6107,55 +6110,94 @@ namespace ShopNow.Controllers
                     {
                         searchResult.PreferedText = (from DataRow row in dataset.Tables[0].Rows
 
-                                                  select new AutoCompleteAllSearchResult.AllPreferedText_Result()
-                                                  {
-                                                      correctword = row["source"].ToString()
-                                                  }).ToList();
+                                                     select new AutoCompleteAllSearchResult.AllPreferedText_Result()
+                                                     {
+                                                         correctword = row["source"].ToString()
+                                                     }).ToList();
                         searchResult.Shop = (from DataRow row in dataset.Tables[1].Rows
 
-                                          select new AutoCompleteAllSearchResult.AllShop_Result()
-                                          {
-                                              ID = Convert.ToInt32(row["Id"].ToString()),
-                                              Name = row["Name"].ToString(),
-                                              ImagePath = row["ImagePath"].ToString(),
-                                              ShopCategoryId = Convert.ToInt32(row["ShopCategoryId"].ToString()),
-                                              OnlineStatus = Convert.ToBoolean(row["OnlineStatus"].ToString()),
-                                              Rating = RatingCalculation(Convert.ToInt32(row["ShopId"].ToString())),
-                                              ReviewCount = db.CustomerReviews.ToList().Where(c => c.ShopId == Convert.ToInt32(row["ShopId"].ToString())).Count(),
-                                              ShopAddress = row["ShopAddress"].ToString(),
-                                              ShopLatitude = Convert.ToDouble(row["ShopLatitude"].ToString()),
-                                              ShopLongitude = Convert.ToDouble(row["ShopLongitude"].ToString()),
-                                              Status = Convert.ToInt32(row["Status"].ToString()),
-                                              StreetName = row["StreetName"].ToString()
-                                          }).ToList();
+                                             select new AutoCompleteAllSearchResult.AllShop_Result()
+                                             {
+                                                 ID = Convert.ToInt32(row["Id"].ToString()),
+                                                 Name = row["Name"].ToString(),
+                                                 ImagePath = row["ImagePath"].ToString(),
+                                                 ShopCategoryId = Convert.ToInt32(row["ShopCategoryId"].ToString()),
+                                                 OnlineStatus = Convert.ToBoolean(row["OnlineStatus"].ToString()),
+                                                 Rating = RatingCalculation(Convert.ToInt32(row["ShopId"].ToString())),
+                                                 ReviewCount = db.CustomerReviews.ToList().Where(c => c.ShopId == Convert.ToInt32(row["ShopId"].ToString())).Count(),
+                                                 ShopAddress = row["ShopAddress"].ToString(),
+                                                 ShopLatitude = Convert.ToDouble(row["ShopLatitude"].ToString()),
+                                                 ShopLongitude = Convert.ToDouble(row["ShopLongitude"].ToString()),
+                                                 Status = Convert.ToInt32(row["Status"].ToString()),
+                                                 StreetName = row["StreetName"].ToString()
+                                             }).ToList();
                         searchResult.Products = (from DataRow row in dataset.Tables[2].Rows
-                                              group row by row["ProductName"].ToString() into g
-                                              select new AutoCompleteAllSearchResult.AllProduct_Result()
-                                              {
-                                                  ID = Convert.ToInt32(g.FirstOrDefault()["Id"].ToString()),
-                                                  Name = g.FirstOrDefault()["ProductName"].ToString(),
-                                                  ImagePath = g.FirstOrDefault()["ImagePath"].ToString(),
-                                                  ShopCategoryId = Convert.ToInt32(g.FirstOrDefault()["ShopCategoryId"].ToString()),
-                                                  ShopId = Convert.ToInt32(g.FirstOrDefault()["ShopId"].ToString()),
-                                                  OnlineStatus = Convert.ToBoolean(g.FirstOrDefault()["OnlineStatus"].ToString()),
-                                                  Rating = RatingCalculation(Convert.ToInt32(g.FirstOrDefault()["ShopId"].ToString())),
-                                                  ReviewCount = db.CustomerReviews.ToList().Where(c => c.ShopId == Convert.ToInt32(g.FirstOrDefault()["ShopId"].ToString())).Count(),
-                                                  ShopAddress = g.FirstOrDefault()["ShopAddress"].ToString(),
-                                                  ShopImagePath = g.FirstOrDefault()["ShopImagePath"].ToString(),
-                                                  ShopLatitude = Convert.ToDouble(g.FirstOrDefault()["ShopLatitude"].ToString()),
-                                                  ShopLongitude = Convert.ToDouble(g.FirstOrDefault()["ShopLongitude"].ToString()),
-                                                  ShopName = g.FirstOrDefault()["ShopName"].ToString(),
-                                                  Status = Convert.ToInt32(g.FirstOrDefault()["Status"].ToString())
-                                              }).ToList();
+                                                 group row by row["ProductName"].ToString() into g
+                                                 select new AutoCompleteAllSearchResult.AllProduct_Result()
+                                                 {
+                                                     ID = Convert.ToInt32(g.FirstOrDefault()["Id"].ToString()),
+                                                     Name = g.FirstOrDefault()["ProductName"].ToString(),
+                                                     ImagePath = g.FirstOrDefault()["ImagePath"].ToString(),
+                                                     ShopCategoryId = Convert.ToInt32(g.FirstOrDefault()["ShopCategoryId"].ToString()),
+                                                     ShopId = Convert.ToInt32(g.FirstOrDefault()["ShopId"].ToString()),
+                                                     OnlineStatus = Convert.ToBoolean(g.FirstOrDefault()["OnlineStatus"].ToString()),
+                                                     Rating = RatingCalculation(Convert.ToInt32(g.FirstOrDefault()["ShopId"].ToString())),
+                                                     ReviewCount = db.CustomerReviews.ToList().Where(c => c.ShopId == Convert.ToInt32(g.FirstOrDefault()["ShopId"].ToString())).Count(),
+                                                     ShopAddress = g.FirstOrDefault()["ShopAddress"].ToString(),
+                                                     ShopImagePath = g.FirstOrDefault()["ShopImagePath"].ToString(),
+                                                     ShopLatitude = Convert.ToDouble(g.FirstOrDefault()["ShopLatitude"].ToString()),
+                                                     ShopLongitude = Convert.ToDouble(g.FirstOrDefault()["ShopLongitude"].ToString()),
+                                                     ShopName = g.FirstOrDefault()["ShopName"].ToString(),
+                                                     Status = Convert.ToInt32(g.FirstOrDefault()["Status"].ToString())
+                                                 }).ToList();
+
+                        //if (!string.IsNullOrEmpty(keyword) && page == 1)
+                        //{
+                        //    CustomerSearchData sData = new CustomerSearchData();
+                        //    sData.ResultCount = searchResult.Products.Count();
+                        //    sData.SearchKeyword = keyword;
+                        //    sData.DateEncoded = DateTime.Now;
+                        //    db.CustomerSearchDatas.Add(sData);
+                        //    db.SaveChanges();
+
+                        //}
+
+                        int CurrentPage = page;
+                        int PageSize = pageSize;
+                        int? TotalCount = productCount + searchResult.Shop.Count();
+
+
+                        int TotalPages = (int)Math.Ceiling((TotalCount ?? 0) / (double)PageSize);
+                        var items = searchResult;
+                        var previous = CurrentPage - 1;
+                        var previousurl = apipath + "/Api/GetAllSearchResult?customerid=" + customerid + "&latitude=" + latitude + "&longitude=" + longitude + "&keyword=" + keyword + "&page=" + previous;
+                        var previousPage = CurrentPage > 1 ? previousurl : "No";
+                        var current = CurrentPage + 1;
+                        var nexturl = apipath + "/Api/GetAllSearchResult?customerid=" + customerid + "&latitude=" + latitude + "&longitude=" + longitude + "&keyword=" + keyword + "&page=" + current;
+                        var nextPage = CurrentPage < TotalPages ? nexturl : "No";
+                        var paginationMetadata = new
+                        {
+                            totalCount = TotalCount,
+                            pageSize = PageSize,
+                            currentPage = CurrentPage,
+                            totalPages = TotalPages,
+                            previousPage,
+                            nextPage
+                        };
+
+                        return Json(new { Page = paginationMetadata, items }, JsonRequestBehavior.AllowGet);
                     }
                     connection.Close();
+
+
                 }
             }
             // return Json(new { result = categProd }, JsonRequestBehavior.AllowGet);
 
-            var jResult = Json(new { result = searchResult }, JsonRequestBehavior.AllowGet);
-            jResult.MaxJsonLength = int.MaxValue;
-            return jResult;
+            //var jResult = Json(new { result = searchResult }, JsonRequestBehavior.AllowGet);
+            //jResult.MaxJsonLength = int.MaxValue;
+            //return jResult;
+            return Json("", JsonRequestBehavior.AllowGet);
         }
         //Calls
         public JsonResult SetCallActive(int orderno)

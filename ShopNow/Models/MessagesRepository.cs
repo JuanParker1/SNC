@@ -113,7 +113,7 @@ namespace ShopNow.Models
 
                     }
                 }
-
+                connection.Close();
             }
 
             return datas;

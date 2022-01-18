@@ -68,6 +68,7 @@ namespace ShopNow.Models
         public double TipsAmount { get; set; }
         public double TotalShopPrice { get; set; }
         public double TotalMRPPrice { get; set; }
+        public double ActualShopPayment { get; set; }
         public int PaymentModeType { get; set; }
         public Nullable<bool> IsCallActive { get; set; }
         public bool IsPrescriptionOrder { get; set; }
