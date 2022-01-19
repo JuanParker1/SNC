@@ -72,7 +72,7 @@ namespace ShopNow.ViewModels
         public double TipsAmount{ get; set; }
         public bool IsPrescriptionOrder { get; set; }
         public string PrescriptionImagePath { get; set; }
-        public double ActualShopPayment { get; set; }
+        public double TotalShopPrice { get; set; }
 
         public List<ListItem> ListItems { get; set; }
         public class ListItem

@@ -1365,7 +1365,7 @@ namespace ShopNow.Controllers
                     MedicalTotal = i.Join(db.Shops.Where(a => a.ShopCategoryId == 4), o => o.ShopId, s => s.Id, (o, s) => new { o, s }).Count(),
                     ResNewOrder = GetNewOrderCount(i.Key.Value, 1),
                     VegNewOrder = GetNewOrderCount(i.Key.Value, 2),
-                    MedicalNewOrder = GetNewOrderCount(i.Key.Value, 3),
+                    MedicalNewOrder = GetNewOrderCount(i.Key.Value, 4),
                     ResCancelOrder = i.Where(a => a.Status == 7).Join(db.Shops.Where(a => a.ShopCategoryId == 1), o => o.ShopId, s => s.Id, (o, s) => new { o, s }).Count(),
                     VegCancelOrder = i.Where(a => a.Status == 7).Join(db.Shops.Where(a => a.ShopCategoryId == 2), o => o.ShopId, s => s.Id, (o, s) => new { o, s }).Count(),
                     MedicalCancelOrder = i.Where(a => a.Status == 7).Join(db.Shops.Where(a => a.ShopCategoryId == 4), o => o.ShopId, s => s.Id, (o, s) => new { o, s }).Count()
@@ -1485,7 +1485,7 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var order = db.Orders.FirstOrDefault(i => i.Id == id);
-            order.ActualShopPayment = amount;
+            order.TotalShopPrice = amount;
             db.Entry(order).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
             

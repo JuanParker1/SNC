@@ -579,7 +579,11 @@
                             Shop Payment:
                             <a href="#modal-actualShopPayment-update" data-target="#modal-actualShopPayment-update" data-toggle="modal"><i class="fa fa-edit"></i></a>
                         </label>
-                        <b>₹@Model.ActualShopPayment</b>
+                        <b>₹@Model.TotalShopPrice</b>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <label class="mr-3">Price Difference:</label>
+                        <b>₹@(Model.TotalPrice - (Model.TotalShopPrice == 0? Model.TotalPrice : Model.TotalShopPrice))</b>
                     </div>
                 </div>
             </div>
@@ -788,7 +792,7 @@
                     <h5>Update Shop Payment</h5>
                     <div class="form-group">
                         <label>Amount</label>
-                        <input class="form-control" type="number" name="Amount" value="@Model.ActualShopPayment" />
+                        <input class="form-control" type="number" name="Amount" value="@Model.TotalShopPrice" />
                     </div>
                     <div class="text-right">
                         <button class="btn btn-sm btn-success mr-3">Submit</button>
