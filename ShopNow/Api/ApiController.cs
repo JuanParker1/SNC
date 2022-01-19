@@ -5587,7 +5587,7 @@ namespace ShopNow.Controllers
                                DiscountPercentage = i.p.p.Percentage,
                                MenuPrice = i.p.p.MenuPrice,
                                Name = i.m.Name,
-                               Price = i.p.p.Price,
+                               Price = i.p.p.MenuPrice,
                                ShopName = i.p.p.ShopName,
                                //   Distance = Math.Round((((Math.Acos(Math.Sin((i.p.s.Latitude * Math.PI / 180)) * Math.Sin((latitude * Math.PI / 180)) + Math.Cos((i.p.s.Latitude * Math.PI / 180)) * Math.Cos((latitude * Math.PI / 180))
                                //* Math.Cos(((i.p.s.Longitude - longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000, 2)
