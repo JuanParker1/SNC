@@ -285,7 +285,7 @@ namespace ShopNow.Controllers
                   //FinalAmount = i.FirstOrDefault().p.c.TotalShopPrice !=0 ? i.FirstOrDefault().p.p.p.Amount - Math.Abs(i.FirstOrDefault().p.c.TotalPrice - i.FirstOrDefault().p.c.TotalShopPrice) - (i.FirstOrDefault().p.p.p.RefundAmount ?? 0) - (Convert.ToDouble(i.FirstOrDefault().pd.Any() ? (i.FirstOrDefault().pd.FirstOrDefault().Fee ?? 0) : 0)) - (Convert.ToDouble(i.FirstOrDefault().pd.Any() ? (i.FirstOrDefault().pd.FirstOrDefault().Tax ?? 0) : 0)): i.FirstOrDefault().p.p.p.Amount - (i.FirstOrDefault().p.p.p.RefundAmount ?? 0) - (Convert.ToDouble(i.FirstOrDefault().pd.Any() ? (i.FirstOrDefault().pd.FirstOrDefault().Fee ?? 0) : 0)) - (Convert.ToDouble(i.FirstOrDefault().pd.Any() ? (i.FirstOrDefault().pd.FirstOrDefault().Tax ?? 0) : 0)),
                   IfscCode = i.FirstOrDefault().p.p.s.IFSCCode,
                   PaymentDate = i.FirstOrDefault().p.p.p.DateEncoded,
-                  PaymentId = "JOY" + i.FirstOrDefault().p.p.p.OrderNumber,
+                  PaymentId = "JOY" + i.FirstOrDefault().p.p.p.OrderNumber.ToString(),
                   ShopName = i.FirstOrDefault().p.p.p.ShopName,
                   ShopId = i.FirstOrDefault().p.p.p.ShopId ?? 0,
                   ShopOwnerPhoneNumber = i.FirstOrDefault().p.p.s.OwnerPhoneNumber,
@@ -297,7 +297,7 @@ namespace ShopNow.Controllers
                   EmailID = i.FirstOrDefault().p.p.s.Email,
                   ReceiverIFSC = i.FirstOrDefault().p.p.s.IFSCCode,
                   Remarks = "",
-                  PhoneNo = i.FirstOrDefault().p.p.s.OwnerPhoneNumber,
+                  PhoneNo = i.FirstOrDefault().p.p.s.OwnerPhoneNumber.ToString(),
                   CartStatus = i.FirstOrDefault().p.c.Status,
                   ShopPaymentStatus = i.FirstOrDefault().p.c.ShopPaymentStatus,
                   PaymentMode = i.FirstOrDefault().p.p.s.BankName.ToUpper() == "ICICI BANK" ? "FT" : "NEFT"
