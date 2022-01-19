@@ -340,7 +340,7 @@ namespace ShopNow.Controllers
                    Amount = i.c.c.DeliveryCharge,
                    IfscCode = i.d.IFSCCode,
                    PaymentDate = i.c.p.DateEncoded,
-                   PaymentId = "JOY" + i.c.p.OrderNumber,
+                   PaymentId = "JOY" + i.c.p.OrderNumber.ToString(),
                    DeliveryBoyId = i.d.Id,
                    DeliveryBoyName = i.d.Name,
                    DeliveryBoyPhoneNumber = i.d.PhoneNumber,

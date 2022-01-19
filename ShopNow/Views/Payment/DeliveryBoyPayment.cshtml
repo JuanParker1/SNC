@@ -33,7 +33,6 @@
     columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
     columns.Add(c => c.DeliveryBoyName).Titled("Name").Filterable(true).SetWidth(10);
     columns.Add(c => c.DeliveryBoyPhoneNumber).Titled("Phone No.").Filterable(true).SetWidth(10);
-    //columns.Add(c => c.TransactionType).Titled("Trans Type").Filterable(true).SetWidth(10);
     columns.Add(c => c.COHAmount).Titled("COHAmount").Filterable(true).SetWidth(8);
     columns.Add(c => c.TipsAmount).Titled("TipsAmount").Filterable(true).SetWidth(8);
     columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(8);
@@ -92,7 +91,6 @@
 
             <td>@item.FirstOrDefault().IfscCode</td>
 
-            @*<td>@item.Sum(i => i.Amount)</td>*@
             <td>@item.Sum(i => i.TotalDeliveryBoyAmount)</td>
 
             <td></td>
