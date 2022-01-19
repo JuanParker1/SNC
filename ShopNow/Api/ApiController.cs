@@ -6173,10 +6173,10 @@ namespace ShopNow.Controllers
                         int TotalPages = (int)Math.Ceiling((TotalCount ?? 0) / (double)PageSize);
                         var items = searchResult;
                         var previous = CurrentPage - 1;
-                        var previousurl = apipath + "/Api/GetAllSearchResult?customerid=" + customerid + "&latitude=" + latitude + "&longitude=" + longitude + "&keyword=" + keyword + "&page=" + previous;
+                        var previousurl = apipath + "Api/GetAllSearchResult?customerid=" + customerid + "&latitude=" + latitude + "&longitude=" + longitude + "&keyword=" + keyword + "&page=" + previous;
                         var previousPage = CurrentPage > 1 ? previousurl : "No";
                         var current = CurrentPage + 1;
-                        var nexturl = apipath + "/Api/GetAllSearchResult?customerid=" + customerid + "&latitude=" + latitude + "&longitude=" + longitude + "&keyword=" + keyword + "&page=" + current;
+                        var nexturl = apipath + "Api/GetAllSearchResult?customerid=" + customerid + "&latitude=" + latitude + "&longitude=" + longitude + "&keyword=" + keyword + "&page=" + current;
                         var nextPage = CurrentPage < TotalPages ? nexturl : "No";
                         var paginationMetadata = new
                         {
