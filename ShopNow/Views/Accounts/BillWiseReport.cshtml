@@ -16,24 +16,15 @@
         }
 </style>
 <div class="container-fluid">
-    <div class="row mb-3">
-        <div class="col-md-3">
-            <h5 class="mt-1 text-uppercase text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
-        </div>
-        @*<div class="col-md-6">
-            <form method="get" action="/Payment/ShopPayment">
-                <div class="row">
-                    <div class="col-md-4"><input id="date-earning" type="date" class="form-control" name="EarningDate" value="@Model.EarningDate.Value.ToString("yyyy-MM-dd")" /></div>
-                    <input type="submit" class="btn btn-info" value="Apply Filter" />
-                </div>
-            </form>
-        </div>
+    <div class="d-flex justify-content-between">
+        <h5 class="mt-1 text-uppercase text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
         @if (Model.ListItems.Count != 0)
         {
-            <div class="col-md-3 text-right">
-                <input type="button" id="btnExport" class="btn btn-vsm btn-secondary" value="Export To Excel" />
-            </div>
-        }*@
+            <input type="button" id="btnExport" class="btn btn-vsm btn-secondary" value="Export To Excel" />
+        }
+    </div>
+    <div class="row">
+
         <div class="col-md-12">
             <div class="card shadow mt-3">
                 <div class="card-body">
@@ -89,7 +80,7 @@
                    columns.Add(c => c.DeliveryChargePaidToDeliveryBoy).Titled("DeliveryCharge PaidTo DeliveryBoy").Filterable(true).SetWidth(10).Format("{0:#,##}");
                    columns.Add(c => c.DeliveryChargeProfit).Titled("DeliveryCharge Profit").Filterable(true).SetWidth(10).Format("{0:#,##}");
                    columns.Add(c => c.AmountProfit).Titled("Trade Profit").Filterable(true).SetWidth(10);
-               }).WithPaging(20).Sortable(true)
+               }).Sortable(true)
                 </div>
             </div>
         </div>
@@ -98,27 +89,19 @@
 
 @section Scripts
 {
-    <script src="/Scripts/exporttoexcel/Table2ExcelNew.js"></script>
+<script src="~/Scripts/exporttoexcel/jquery.table2excel.js"></script>
     <script>
         $(document).ready(function () {
-            //var selectedDate = $('#date-earning').val();
-            //$('#date').val(selectedDate);
-
-            //$('#date-earning').on('change', function () {
-            //    $('#date').val($(this).val());
-            //});
-
+            
           $('select[name="MonthFilter"] option[value=@Model.MonthFilter]').prop('selected', true);
             $('select[name="YearFilter"] option[value=@Model.YearFilter]').prop('selected', true);
-            $("#btnExport").on('click', function () {
-                $(function () {
-                    Table2Excel.extend((cell, cellText) => {
-                        return $(cell).attr('type') == 'string' ? { t: 's', v: cellText } : { t: 'n', v: cellText };
-                    });
-                    var table2excel = new Table2Excel({
-                        defaultFileName: "ShopPayment",
-                    });
-                    table2excel.export($("#table-excel"));
+
+            $("#btnExport").click(function () {
+                $("table").table2excel({
+                    name: "Worksheet Name",
+                    filename: "BillWiseReport",
+                    fileext: ".xls",
+                    exclude_links: true,
                 });
             });
         });
