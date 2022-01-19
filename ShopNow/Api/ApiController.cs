@@ -6150,7 +6150,8 @@ namespace ShopNow.Controllers
                                                      ShopName = g.FirstOrDefault()["ShopName"].ToString(),
                                                      Status = Convert.ToInt32(g.FirstOrDefault()["Status"].ToString()),
                                                      ShopCount = g.Count(),
-                                                     StartPrice = g.Min(r => r.Field<double>("Price"))
+                                                     StartPrice = g.Min(r => r.Field<double>("Price")),
+                                                     ColorCode = g.FirstOrDefault()["ColorCode"].ToString()
                                                  }).ToList();
 
                         //if (!string.IsNullOrEmpty(keyword) && page == 1)
