@@ -5535,6 +5535,7 @@ namespace ShopNow.Controllers
                 model.ShopCategoryName = shop.ShopCategoryName;
                 model.ShopIsOnline = shop.IsOnline;
                 model.ShopNextOnTime = shop.NextOnTime;
+                model.Price = product.MenuPrice;
                 var masterProduct = db.MasterProducts.FirstOrDefault(i => i.Id == product.MasterProductId);
                 if (masterProduct != null)
                 {
