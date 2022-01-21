@@ -49,7 +49,7 @@
                columns.Add(c => c.CategoryName).Titled("Category Name").Filterable(true).SetWidth(12);/*.RenderValueAs(c=> c.CategoryName == null ? "N/A" : c.CategoryName);*/
                columns.Add(c => c.BrandName).Titled("Brand Name").Filterable(true).SetWidth(18);/*.RenderValueAs(c => c.BrandName == null ? "N/A" : c.BrandName);*/
                columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
-               columns.Add(c => c.DiscountCategoryPercentage).Titled("Discount %").Filterable(true).SetWidth(10);
+               columns.Add(c => c.Percentage).Titled("Discount %").Filterable(true).SetWidth(10);
                columns.Add().Encoded(false).Sanitized(false)
                   .RenderValueAs(s => new HtmlString("<label class='switch'> <input type='checkbox' value='" + s.IsOnline + "' Id='Id_" + s.Id + "' class='CheckOnline' data-id='" + s.Id + "'><span class='slider round'></span></label>")).Titled("IsOnline").SetWidth(5);
                columns.Add().Encoded(false).Sanitized(false).Titled("Action").SetWidth(10)

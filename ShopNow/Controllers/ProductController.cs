@@ -80,6 +80,7 @@ namespace ShopNow.Controllers
                     Name = i.p.m.Name,
                     ShopId = i.p.p.ShopId,
                     ShopName = i.p.p.ShopName,
+                    Percentage = i.p.p.Percentage,
                     IsOnline = i.p.p.IsOnline
                 }).ToList();
 
@@ -282,15 +283,16 @@ namespace ShopNow.Controllers
             model.ListItems = db.Products.Where(i => i.Status == 0 && i.ProductTypeId == 3 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
               .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
               .Join(db.Categories, p => p.p.CategoryId, c => c.Id, (p, c) => new { p, c })
+              .Join(db.DiscountCategories, p => p.p.p.DiscountCategoryId, dc => dc.Id, (p, dc) => new { p, dc })
             .Select(i => new MedicalListViewModel.ListItem
             {
-                CategoryName = i.c.Name,
-                Id = i.p.p.Id,
-                Name = i.p.m.Name,
-                Percentage = i.p.p.Percentage,
-                ShopId = i.p.p.ShopId,
-                ShopName = i.p.p.ShopName,
-                IsOnline = i.p.p.IsOnline
+                CategoryName = i.p.c.Name,
+                Id = i.p.p.p.Id,
+                Name = i.p.p.m.Name,
+                Percentage = i.dc.Percentage,
+                ShopId = i.p.p.p.ShopId,
+                ShopName = i.p.p.p.ShopName,
+                IsOnline = i.p.p.p.IsOnline
             }).ToList();
             return View(model);
         }
@@ -551,15 +553,17 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             model.ListItems = db.Products.Where(i => i.Status == 0 && i.ProductTypeId == 2 && (model.ShopId != 0 ? i.ShopId == model.ShopId : false))
                 .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+                .Join(db.Categories, p => p.p.CategoryId, c => c.Id, (p, c) => new { p, c })
+                .Join(db.DiscountCategories, p => p.p.p.DiscountCategoryId, dc => dc.Id, (p, dc) => new { p, dc })
             .Select(i => new FMCGListViewModel.ListItem
             {
-                CategoryName = db.Categories.FirstOrDefault(j => j.Id == i.p.CategoryId).Name,
-                Id = i.p.Id,
-                Name = i.m.Name,
-                Percentage = i.p.Percentage,
-                ShopId = i.p.ShopId,
-                ShopName = i.p.ShopName,
-                IsOnline = i.p.IsOnline
+                CategoryName = i.p.c.Name,
+                Id = i.p.p.p.Id,
+                Name = i.p.p.m.Name,
+                Percentage = i.dc.Percentage,
+                ShopId = i.p.p.p.ShopId,
+                ShopName = i.p.p.p.ShopName,
+                IsOnline = i.p.p.p.IsOnline
             }).ToList();
             return View(model);
         }
@@ -714,6 +718,7 @@ namespace ShopNow.Controllers
                 model.SizeLBH = masterProduct.SizeLWH;
                 model.ASIN = masterProduct.ASIN;
             }
+            model.DiscountCategoryPercentage = db.DiscountCategories.FirstOrDefault(i => i.Id == product.DiscountCategoryId)?.Percentage;
             return View(model);
         }
 
