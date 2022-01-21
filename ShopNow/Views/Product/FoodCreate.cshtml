@@ -334,7 +334,8 @@
                 ];
                 var isValidated = ValidateEmptyRequiredFiels(requiredArr);
                 if (isValidated) {
-                    $(ProductForm).submit();
+                    $('#ProductForm').submit();
+                    $(".Save").prop("disabled", true);
                 }
                 //var shopid = $("#ShopId").val();
                 //if (shopid != null) {
