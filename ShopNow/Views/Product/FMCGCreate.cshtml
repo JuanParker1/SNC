@@ -412,6 +412,7 @@
                 isValidated = ValidateEmptyRequiredFiels(requiredArr);
                 if (isValidated) {
                     $('#FMCGCreateForm').submit();
+                    $(".Save").prop("disabled", true);
                 };
                 //var shopid = $("#ShopId").val();
                 //if (shopid != null) {
