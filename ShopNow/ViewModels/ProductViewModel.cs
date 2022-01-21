@@ -21,7 +21,7 @@ namespace ShopNow.ViewModels
             public string BrandName { get; set; }
             public int ShopId { get; set; }
             public string ShopName { get; set; }
-            public double DiscountCategoryPercentage { get; set; }
+            public double Percentage { get; set; }
             public bool IsOnline { get; set; }
         }
     }
@@ -424,6 +424,11 @@ namespace ShopNow.ViewModels
         public bool IsPreorder { get; set; }
         public int PreorderHour { get; set; }
         public double ShopPrice { get; set; }
+
+        public int DiscountCategoryId { get; set; }
+        public string DiscountCategoryName { get; set; }
+        public double? DiscountCategoryPercentage { get; set; }
+
     }
 
     public class FMCGEditViewModel : FMCGCreateViewModel
