@@ -48,6 +48,7 @@ namespace ShopNow.ViewModels
             public int Onwork { get; set; }
             public bool? IsPreorder { get; set; }
             public DateTime? PreorderDeliveryDateTime { get; set; }
+            public string Otp { get; set; }
             public List<OrderItemList> OrderItemLists { get; set; }
             public class OrderItemList
             {

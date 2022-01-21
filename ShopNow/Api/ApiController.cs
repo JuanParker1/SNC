@@ -4711,6 +4711,7 @@ namespace ShopNow.Controllers
             model.OrderLists = db.Orders.Where(i => i.CustomerId == customerId && (type == 1 ? (i.Status >= 2 && i.Status <= 5) || i.Status == 8 : (i.Status == 6 || i.Status == 7 || i.Status == 9 || i.Status == 10)))
                  .Join(db.Payments, o => o.OrderNumber, p => p.OrderNumber, (o, p) => new { o, p })
                  .GroupJoin(db.OrderItems, o => o.o.Id, oi => oi.OrderId, (o, oi) => new { o, oi })
+                 //.AsEnumerable()
                  .Select(i => new GetAllOrderListViewModel.OrderList
                  {
                      Convinenientcharge = i.o.o.Convinenientcharge,
@@ -4746,6 +4747,8 @@ namespace ShopNow.Controllers
                      PaymentMode = i.o.p.PaymentMode,
                      WalletAmount = i.o.o.WalletAmount,
                      TipsAmount = i.o.o.TipsAmount,
+                     //Otp = GetOtp(i.o.o.OrderNumber),
+                     Otp = db.OtpVerifications.FirstOrDefault(a=>a.OrderNo == i.o.o.OrderNumber).Otp,
                      OrderItemLists = i.oi.Select(a => new GetAllOrderListViewModel.OrderList.OrderItemList {
                          AddOnType = a.AddOnType,
                          BrandId = a.BrandId,
@@ -5552,6 +5555,7 @@ namespace ShopNow.Controllers
                     model.BrandName = masterProduct.BrandName;
                     model.Size = masterProduct.SizeLWH;
                     model.Weight = masterProduct.Weight;
+                    model.Name = masterProduct.Name;
                 }
 
 

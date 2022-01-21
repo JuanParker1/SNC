@@ -334,7 +334,7 @@ namespace ShopNow.Controllers
                .Join(db.DeliveryBoys, c => c.c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
                .Select(i => new DeliveryBoyPaymentListViewModel.ListItem
                {
-                   AccountName = i.d.AccountName,
+                   AccountName = i.d.AccountName.Trim(),
                    AccountNumber = i.d.AccountNumber,
                    AccountType = "SA",
                    Amount = i.c.c.DeliveryCharge,
@@ -342,7 +342,7 @@ namespace ShopNow.Controllers
                    PaymentDate = i.c.p.DateEncoded,
                    PaymentId = "JOY" + i.c.p.OrderNumber.ToString(),
                    DeliveryBoyId = i.d.Id,
-                   DeliveryBoyName = i.d.Name,
+                   DeliveryBoyName = i.d.Name.ToString().Trim(),
                    DeliveryBoyPhoneNumber = i.d.PhoneNumber,
                    TransactionType = i.c.p.PaymentMode,
                    OrderNo = i.c.p.OrderNumber,
