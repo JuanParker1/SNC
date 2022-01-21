@@ -87,7 +87,7 @@
             <td>@item.FirstOrDefault().AccountName.ToUpper()</td>
             <td type="string">@item.FirstOrDefault().AccountNumber</td>
             <td>@item.FirstOrDefault().IfscCode</td>
-            <td>@item.Sum(i => i.FinalAmount)</td>
+            <td>@item.Sum(i => i.FinalAmount).ToString("0.00")</td>
             <td></td>
             <td></td>
             <td></td>
@@ -128,7 +128,11 @@
             $('#date-earning').on('change', function () {
                 $('#date').val($(this).val());
             });
+            $('#table-excel tr').each(function (index, tr) {
 
+                $(this).find("td").eq(3).html($(this).find("td").eq(3).html().trim());
+                $(this).find("td").eq(11).html($(this).find("td").eq(11).html().trim());
+            });
 
             $("#btnExport").on('click', function () {
                 $(function () {
