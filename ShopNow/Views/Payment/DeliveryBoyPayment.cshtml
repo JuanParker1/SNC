@@ -3,6 +3,23 @@
 @{
     ViewBag.Title = "Deliveryboy Payment";
 }
+<style>
+    td.two-decimals {
+        mso-number-format: "0\.00"
+    }
+
+    td.thousands-separator {
+        mso-number-format: "\#\,\#\#0\.000"
+    }
+
+    td.fractions {
+        mso-number-format: "#\ ???/???"
+    }
+
+    td.negative-red {
+        mso-number-format: "#,##0.00_ ;[Red]-#,##0.00\ "
+    }
+</style>
 <title>ShopNow | @ViewBag.Title</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
@@ -46,7 +63,7 @@
                 </div>
             </div>
         </div>
-    </div> 
+    </div>
 </div>
 <table id="table-excel" class="d-none">
     <thead>
@@ -76,51 +93,51 @@
     <tbody>
         @foreach (var item in Model.ListItems.GroupBy(i => i.DeliveryBoyId))
         {
-        <tr>
-            <td>PAB_VENDOR</td>
-            <td>@item.FirstOrDefault().PaymentMode</td>
-            <td type="string">609505027294</td>
-            <td>
-                @if (!string.IsNullOrEmpty(item.FirstOrDefault().AccountName))
-                {<span>@item.FirstOrDefault().AccountName.ToUpper()</span>}
-            else
-            { <span></span>}
-            </td>
+            <tr>
+                <td>PAB_VENDOR</td>
+                <td>@item.FirstOrDefault().PaymentMode</td>
+                <td type="string">609505027294</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.FirstOrDefault().AccountName))
+                    {@item.FirstOrDefault().AccountName}
+                else
+                { }
+                </td>
 
-            <td type="string">@item.FirstOrDefault().AccountNumber</td>
+                <td type="string">@item.FirstOrDefault().AccountNumber</td>
 
-            <td>@item.FirstOrDefault().IfscCode</td>
+                <td>@item.FirstOrDefault().IfscCode</td>
 
-            <td>@item.Sum(i => i.TotalDeliveryBoyAmount)</td>
+                <td class="two-decimals">@item.Sum(i => i.TotalDeliveryBoyAmount).ToString("0.00")</td>
 
-            <td></td>
+                <td></td>
 
-            <td></td>
+                <td></td>
 
-            <td></td>
+                <td></td>
 
-            <td></td>
+                <td></td>
 
-            <td></td>
+                <td></td>
 
-            <td>@DateTime.Now.ToString("dd-MM-yyyy")</td>
+                <td>@DateTime.Now.ToString("dd-MM-yyyy")</td>
 
-            <td></td>
+                <td></td>
 
-            <td></td>
+                <td></td>
 
-            <td></td>
+                <td></td>
 
-            <td></td>
+                <td></td>
 
-            <td></td>
+                <td></td>
 
-            <td></td>
+                <td></td>
 
-            <td></td>
+                <td></td>
 
-        </tr>
-    }
+            </tr>
+        }
     </tbody>
 </table>
 
@@ -143,6 +160,10 @@
 
         $('#date-earning').on('change', function () {
             $('#date').val($(this).val());
+        });
+        $('#table-excel tr').each(function (index, tr) {
+
+            $(this).find("td").eq(3).html($(this).find("td").eq(3).html().trim());
         });
         $("#btnExport").on('click', function () {
             $(function () {
