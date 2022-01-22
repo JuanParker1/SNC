@@ -14,6 +14,13 @@
         .grid-mvc table {
             width: auto;
         }
+
+    #scroll {
+        display: inline-block;
+        position: relative;
+        height: 90px;
+        overflow-y: scroll;
+    }
 </style>
 <div class="container-fluid">
     <div class="row my-2">
@@ -47,8 +54,8 @@
                    columns.Add(c => c.ShopAcceptedTime).Titled("Shop Accept").Filterable(true).SetWidth(88);
                    columns.Add(c => c.OrderPeriod).Titled("Order Period").Filterable(true).SetWidth(8);
                    columns.Add().Encoded(false).Sanitized(false)
-                   .RenderValueAs(o => ((o.RefundAmount == 0 || o.RefundAmount == null) ? "<a href='#modal-refund' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-refund' class='btn btn-sm btn-primary btn-modal-refund mt-2'>Refund</a>" : o.RefundAmount.Value > 0 ? "<span>" + o.RefundAmount + "(" + o.RefundRemark + ")" + "</span>" : "N/A") +
-                  Html.ActionLink("Details", "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-secondary mt-1", @style = "padding: 3px 10px" }).ToHtmlString()).Titled("Action").SetWidth(10);
+                   .RenderValueAs(o => ((o.RefundAmount == 0 || o.RefundAmount == null) ? "<a href='#modal-refund' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-refund' class='btn btn-sm btn-primary btn-block btn-modal-refund mt-2'>Refund</a>" : o.RefundAmount.Value > 0 ? "<span id = 'scroll'>" + o.RefundAmount + "(" + o.RefundRemark + ")" + "</span>" : "N/A") +
+                  Html.ActionLink("Details", "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-secondary btn-block mt-1", @style = "padding: 3px 10px" }).ToHtmlString()).Titled("Action").SetWidth(10);
                }).WithPaging(10).Sortable(true)
                 </div>
             </div>
