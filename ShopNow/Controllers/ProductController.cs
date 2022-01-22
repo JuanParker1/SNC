@@ -966,21 +966,11 @@ namespace ShopNow.Controllers
 
         [HttpGet]
         [AccessPolicy(PageCode = "SNCPRUS219")]
-        public ActionResult UpdateStock(ProductUpdateStockViewModel model)
+        public ActionResult UpdateStock()
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            if (model.ItemId != 0 && model.ShopId != 0)
-            {
-                var product = db.Products.FirstOrDefault(i => i.ItemId == model.ItemId && i.ShopId == model.ShopId);
-                if (product != null)
-                {
-                    model.ProductName = product.Name;
-                    model.ItemId = product.ItemId;
-                    model.Qty = product.Qty;
-                }
-            }
-            return View(model);
+            return View();
         }
 
         [HttpPost]
@@ -989,14 +979,21 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            if (model.ItemId != 0 && model.ShopId != 0)
+            if (model.ShopId != 0)
             {
-                var product = db.Products.FirstOrDefault(i => i.ItemId == model.ItemId && i.ShopId == model.ShopId);
-                product.Qty = model.Qty;
-                db.Entry(product).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
+                var productList = db.Products.Where(i => i.ShopId == model.ShopId && i.Status == 0).ToList();
+                if (productList != null)
+                {
+                    foreach(var item in productList)
+                    {
+                        var product = db.Products.FirstOrDefault(i => i.Id == item.Id);
+                        product.Qty = model.Qty;
+                        db.Entry(product).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
             }
-            return RedirectToAction("UpdateStock");
+            return View();
         }
 
         [HttpGet]
