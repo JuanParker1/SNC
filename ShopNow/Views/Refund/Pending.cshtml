@@ -7,8 +7,8 @@
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
 <div class="container-fluid">
-    <div class="row mb-3">
-        <div class="col-md-3">
+    <div class="row mb-1">
+        <div class="col-md-4">
             <h5 class="mt-1 text-uppercase text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
         </div>
         <div class="col-md-6">
@@ -30,26 +30,31 @@
                 </div>
             </form>
         </div>
+        <div class="col-md-2 text-right">
+            <a href="~/Refund/History" target="_blank"><i class="fa fa-bars"></i> Refund History</a>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-12">
             <div class="card shadow mt-3">
                 <div class="card-body">
                     @Html.Grid(Model.ListItems).Columns(columns =>
-{
-    columns.Add(c => c.PaymentId).Titled("Payment Id").Filterable(true).SetWidth(10);
-    columns.Add(c => c.OrderNo).Titled("Order No").Filterable(true).SetWidth(10);
-    columns.Add(c => c.CustomerPhoneNo).Titled("Customer PhoneNo").Filterable(true).SetWidth(10);
-    columns.Add(c => c.Amount).Titled("Refund Amount").Filterable(true).SetWidth(10);
-    columns.Add(c => c.Remark).Titled("Remark").Filterable(true).SetWidth(10);
-    columns.Add()
-   .Encoded(false)
-   .Sanitized(false)
-   .RenderValueAs(o => Html.ActionLink("Refund", "SendRefund", new { paymentId = o.PaymentId,amount=o.Amount,orderNo = o.OrderNo }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()).Titled("Action").SetWidth(15);
-}).WithPaging(20).Sortable(true)
+                    {
+                        columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
+                        columns.Add(c => c.PaymentId).Titled("Payment Id").Filterable(true).SetWidth(10);
+                        columns.Add(c => c.OrderNo).Titled("Order No").Filterable(true).SetWidth(10);
+                        columns.Add(c => c.CustomerPhoneNo).Titled("Customer PhoneNo").Filterable(true).SetWidth(10);
+                        columns.Add(c => c.Amount).Titled("Refund Amount").Filterable(true).SetWidth(10);
+                        columns.Add(c => c.Remark).Titled("Remark").Filterable(true).SetWidth(10);
+                        columns.Add().Encoded(false).Sanitized(false)
+                       .RenderValueAs(o => Html.ActionLink("Refund", "SendRefund", new { paymentId = o.PaymentId, amount = o.Amount, orderNo = o.OrderNo }, new { @class = "btn btn-vsm btn-warning mr-1", @style = "padding: 3px 26px" }).ToHtmlString()).Titled("Action").SetWidth(15);
+                    }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 @section Scripts
 {
     <!--Select2-->

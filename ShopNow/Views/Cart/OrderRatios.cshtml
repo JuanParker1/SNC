@@ -2,10 +2,15 @@
 @{
     ViewBag.Title = "Order Ratios";
 }
-
 <title>ShopNow | @ViewBag.Title</title>
 <link href="~/Content/switch.css" rel="stylesheet" />
-
+<style>
+    table.floatThead-table {
+        border-top: none;
+        border-bottom: none;
+        background-color: #FFF;
+    }
+</style>
 <div class="container-fluid mb-3">
     <div class="row">
         <div class="col-md-12 mx-auto">
@@ -15,40 +20,40 @@
             <div class="card shadow">
                 <div class="card-body">
                     <form method="get" action="/Cart/OrderRatios">
-                            <div class="row mb-3">
-                                <div class="col-md-2">
-                                    <select id="select-month-filter" class="form-control" name="MonthFilter">
-                                        <option value="1">January</option>
-                                        <option value="2">February</option>
-                                        <option value="3">March</option>
-                                        <option value="4">April</option>
-                                        <option value="5">May</option>
-                                        <option value="6">June</option>
-                                        <option value="7">July</option>
-                                        <option value="8">August</option>
-                                        <option value="9">September</option>
-                                        <option value="10">October</option>
-                                        <option value="11">November</option>
-                                        <option value="12">December</option>
-                                    </select>
-                                    <input type="hidden" name="MonthFilterName" />
-                                </div>
-                                <div class="col-md-2">
-                                    <select id="select-year-filter" class="form-control" name="YearFilter">
-                                        @for (int year = 2020; year <= DateTime.Now.Year; year++)
-                                        {
-                                            <option value="@year">@year</option>
-                                        }
-                                    </select>
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="submit" class="btn btn-info mr-3" value="Filter" />
-                                    <a href="/Cart/OrderRatios" class="btn btn-warning">Clear</a>
-                                </div>
+                        <div class="row mb-3">
+                            <div class="col-md-2">
+                                <select id="select-month-filter" class="form-control" name="MonthFilter">
+                                    <option value="1">January</option>
+                                    <option value="2">February</option>
+                                    <option value="3">March</option>
+                                    <option value="4">April</option>
+                                    <option value="5">May</option>
+                                    <option value="6">June</option>
+                                    <option value="7">July</option>
+                                    <option value="8">August</option>
+                                    <option value="9">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select>
+                                <input type="hidden" name="MonthFilterName" />
                             </div>
-                        </form>
+                            <div class="col-md-2">
+                                <select id="select-year-filter" class="form-control" name="YearFilter">
+                                    @for (int year = 2020; year <= DateTime.Now.Year; year++)
+                                    {
+                                        <option value="@year">@year</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="submit" class="btn btn-info mr-3" value="Filter" />
+                                <a href="/Cart/OrderRatios" class="btn btn-warning">Clear</a>
+                            </div>
+                        </div>
+                    </form>
                     <div class="table-responsive">
-                        <table class="table table-bordered" id="tbl-order-ratio">
+                        <table class="table table-bordered sticky-table-header" id="tbl-order-ratio">
                             <thead class="bg-light">
                                 <tr>
                                     <th class="text-nowrap">Date</th>
@@ -77,65 +82,65 @@
                             <tbody>
                                 @foreach (var item in Model.ListItems)
                                 {
-                                <tr>
-                                    <td class="text-nowrap">@item.Date</td>
-                                    <td>@item.TotalOrder</td>
-                                    <td>@item.CancelOrder</td>
-                                    <td>@item.NewOrder</td>
-                                    <td>@Math.Abs(item.TotalOrder - item.NewOrder - item.CancelOrder)</td>
-                                    <td>
-                                        @if (Math.Abs(item.TotalOrder - item.NewOrder - item.CancelOrder) != 0)
-                                        {
-                                            <span>@(Math.Round(Math.Abs((double)(item.TotalOrder - item.NewOrder - item.CancelOrder) / item.TotalOrder) * 100, 2))</span>
-                                        }
-                                        else
-                                        {
-                                            <span>0</span>
-                                        }
-                                    </td>
-                                    <td>@item.VegTotal</td>
-                                    <td>@item.VegCancelOrder</td>
-                                    <td>@item.VegNewOrder</td>
-                                    <td>@Math.Abs(item.VegTotal - item.VegNewOrder - item.VegCancelOrder)</td>
-                                    <td>
-                                        @if (Math.Abs(item.VegTotal - item.VegNewOrder - item.VegCancelOrder) != 0)
-                                        {
-                                            <span>@(Math.Round(Math.Abs((double)(item.VegTotal - item.VegNewOrder - item.VegCancelOrder) / item.VegTotal) * 100, 2))</span>
-                                        }
-                                        else
-                                        {
-                                            <span>0</span>
-                                        }
-                                    </td>
-                                    <td>@item.ResTotal</td>
-                                    <td>@item.ResCancelOrder</td>
-                                    <td>@item.ResNewOrder</td>
-                                    <td>@Math.Abs(item.ResTotal - item.ResNewOrder -item.ResCancelOrder)</td>
-                                    <td>
-                                        @if (Math.Abs(item.ResTotal - item.ResNewOrder - item.ResCancelOrder) != 0)
-                                        {
-                                            <span>@(Math.Round(Math.Abs((double)(item.ResTotal - item.ResNewOrder - item.ResCancelOrder) / item.ResTotal) * 100, 2))</span>
-                                        }
-                                        else
-                                        {
-                                            <span>0</span>
-                                        }
-                                    </td>
-                                    <td>@item.MedicalTotal</td>
-                                    <td>@item.MedicalCancelOrder</td>
-                                    <td>@item.MedicalNewOrder</td>
-                                    <td>@Math.Abs(item.MedicalTotal - item.MedicalNewOrder-item.MedicalCancelOrder)</td>
-                                    <td>
-                                        @if (Math.Abs(item.MedicalTotal - item.MedicalNewOrder - item.MedicalCancelOrder) != 0)
-                                        {
-                                            <span>@(Math.Round(Math.Abs((double)(item.MedicalTotal - item.MedicalNewOrder - item.MedicalCancelOrder) / item.MedicalTotal) * 100, 2))</span>
-                                        }
-                                        else
-                                        {
-                                            <span>0</span>
-                                        }
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td class="text-nowrap">@item.Date</td>
+                                        <td>@item.TotalOrder</td>
+                                        <td>@item.CancelOrder</td>
+                                        <td>@item.NewOrder</td>
+                                        <td>@Math.Abs(item.TotalOrder - item.NewOrder - item.CancelOrder)</td>
+                                        <td>
+                                            @if (Math.Abs(item.TotalOrder - item.NewOrder - item.CancelOrder) != 0)
+                                            {
+                                                <span>@(Math.Round(Math.Abs((double)(item.TotalOrder - item.NewOrder - item.CancelOrder) / item.TotalOrder) * 100, 2))</span>
+                                            }
+                                            else
+                                            {
+                                                <span>0</span>
+                                            }
+                                        </td>
+                                        <td>@item.VegTotal</td>
+                                        <td>@item.VegCancelOrder</td>
+                                        <td>@item.VegNewOrder</td>
+                                        <td>@Math.Abs(item.VegTotal - item.VegNewOrder - item.VegCancelOrder)</td>
+                                        <td>
+                                            @if (Math.Abs(item.VegTotal - item.VegNewOrder - item.VegCancelOrder) != 0)
+                                            {
+                                                <span>@(Math.Round(Math.Abs((double)(item.VegTotal - item.VegNewOrder - item.VegCancelOrder) / item.VegTotal) * 100, 2))</span>
+                                            }
+                                            else
+                                            {
+                                                <span>0</span>
+                                            }
+                                        </td>
+                                        <td>@item.ResTotal</td>
+                                        <td>@item.ResCancelOrder</td>
+                                        <td>@item.ResNewOrder</td>
+                                        <td>@Math.Abs(item.ResTotal - item.ResNewOrder - item.ResCancelOrder)</td>
+                                        <td>
+                                            @if (Math.Abs(item.ResTotal - item.ResNewOrder - item.ResCancelOrder) != 0)
+                                            {
+                                                <span>@(Math.Round(Math.Abs((double)(item.ResTotal - item.ResNewOrder - item.ResCancelOrder) / item.ResTotal) * 100, 2))</span>
+                                            }
+                                            else
+                                            {
+                                                <span>0</span>
+                                            }
+                                        </td>
+                                        <td>@item.MedicalTotal</td>
+                                        <td>@item.MedicalCancelOrder</td>
+                                        <td>@item.MedicalNewOrder</td>
+                                        <td>@Math.Abs(item.MedicalTotal - item.MedicalNewOrder - item.MedicalCancelOrder)</td>
+                                        <td>
+                                            @if (Math.Abs(item.MedicalTotal - item.MedicalNewOrder - item.MedicalCancelOrder) != 0)
+                                            {
+                                                <span>@(Math.Round(Math.Abs((double)(item.MedicalTotal - item.MedicalNewOrder - item.MedicalCancelOrder) / item.MedicalTotal) * 100, 2))</span>
+                                            }
+                                            else
+                                            {
+                                                <span>0</span>
+                                            }
+                                        </td>
+                                    </tr>
                                 }
                             </tbody>
                             <tfoot>
@@ -207,7 +212,6 @@
     </div>
 </div>
 
-
 @section Scripts
 {
     <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
@@ -220,6 +224,8 @@
             $('select[name="MonthFilter"] option[value=@Model.MonthFilter]').prop('selected', true);
             $('select[name="YearFilter"] option[value=@Model.YearFilter]').prop('selected', true);
 
+            var $table = $(".sticky-table-header");
+            $table.floatThead();
         });
     </script>
 }
