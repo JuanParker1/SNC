@@ -312,7 +312,7 @@
                 $('input[name="CategoryName"]').val(e.params.data.text);
             });
 
-            $.getJSON('/Product/GetProductDishAddOnsFoodEdit', { masterProductId: @Model.MasterProductId  }, function (data) {
+            $.getJSON('/Product/GetProductDishAddOnsFoodEdit', { masterProductId: @Model.MasterProductId,shopid:@Model.ShopId  }, function (data) {
                 if (data != "") {
                     $.each(data, function (index, item) {
                         var tableData = '<tr class="d-none type_' + item.AddOnType + '" data-id=' + item.Id + '> \
@@ -423,6 +423,7 @@
                         addonDisableCheckbox();
                         let data = {
                             Id: $(this).data('id'),
+                            ProductId: @Model.Id,
                             PortionPrice: parseFloat($tr.find('.portion-price').val()),
                             AddOnsPrice: parseFloat($tr.find('.addon-price').val()),
                             CrustPrice: parseFloat($tr.find('.crust-price').val()),
@@ -439,6 +440,7 @@
                         addonDisableCheckbox();
                         let data = {
                             Id: $(this).data('id'),
+                            ProductId: @Model.Id,
                             PortionPrice: parseFloat($tr.find('.portion-price').val()),
                             AddOnsPrice: parseFloat($tr.find('.addon-price').val()),
                             CrustPrice: parseFloat($tr.find('.crust-price').val()),
@@ -449,6 +451,7 @@
                         addonDisableCheckbox();
                         let data = {
                             Id: $(this).data('id'),
+                            ProductId: @Model.Id,
                             PortionPrice: parseFloat($tr.find('.portion-price').val()),
                             AddOnsPrice: parseFloat($tr.find('.addon-price').val()),
                             CrustPrice: parseFloat($tr.find('.crust-price').val()),

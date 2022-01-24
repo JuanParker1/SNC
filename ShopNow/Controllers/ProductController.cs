@@ -493,7 +493,7 @@ namespace ShopNow.Controllers
                 {
                     foreach (var item in shopAddOns)
                     {
-                        var shopDishAddon = db.ShopDishAddOns.FirstOrDefault(i => i.Id == item.Id);
+                        var shopDishAddon = db.ShopDishAddOns.FirstOrDefault(i => i.Id == item.Id && i.ProductId == item.ProductId);
                         if (shopDishAddon != null)
                         {
                             shopDishAddon.AddOnsPrice = item.AddOnsPrice;
@@ -1141,7 +1141,8 @@ namespace ShopNow.Controllers
                     Id = model.Id,
                     CrustPrice = model.CrustPrice,
                     PortionPrice = model.PortionPrice,
-                    IsActive = model.IsActive
+                    IsActive = model.IsActive,
+                    ProductId = model.ProductId
                 };
                 shopAddOns.Add(addOn);
             }
@@ -1160,11 +1161,11 @@ namespace ShopNow.Controllers
         }
 
         //get product Addons which are not added in Shop Addons
-        public JsonResult GetProductDishAddOnsFoodEdit(int masterProductId)
+        public JsonResult GetProductDishAddOnsFoodEdit(int masterProductId,int shopid)
         {
             db.Configuration.ProxyCreationEnabled = false;
             var list = (from p in db.ProductDishAddOns
-                        where (p.MasterProductId == masterProductId && p.Status == 0) && !db.ShopDishAddOns.Any(i => i.ProductDishAddonId == p.Id)
+                        where (p.MasterProductId == masterProductId && p.Status == 0) && !db.ShopDishAddOns.Any(i => i.ProductDishAddonId == p.Id && i.ShopId == shopid)
                         select p).ToList();
             return Json(list, JsonRequestBehavior.AllowGet);
         }
