@@ -915,7 +915,8 @@ namespace ShopNow.Controllers
         [HttpPost]
         public JsonResult AddPayment(PaymentCreateApiViewModel model)
         {
-            var payment = _mapper.Map<PaymentCreateApiViewModel, Models.Payment>(model);
+            
+                var payment = _mapper.Map<PaymentCreateApiViewModel, Models.Payment>(model);
             var perOrderAmount = db.PlatFormCreditRates.Where(s => s.Status == 0).FirstOrDefault();
             var customer = db.Customers.FirstOrDefault(i => i.Id == model.CustomerId);
 
@@ -1031,8 +1032,11 @@ namespace ShopNow.Controllers
                 payment.DateUpdated = DateTime.Now;
                 payment.Status = 0;
                 payment.RefundStatus = 1;
-                db.Payments.Add(payment);
-                db.SaveChanges();
+                if (!db.Payments.Any(i => i.OrderNumber == payment.OrderNumber))
+                {
+                    db.Payments.Add(payment);
+                    db.SaveChanges();
+                }
 
                 if (payment.Id != 0)
                 {
@@ -1078,6 +1082,7 @@ namespace ShopNow.Controllers
             }
             else
                 return Json(new { message = "Failed to Add Payment !" });
+
         }
 
         [HttpPost]
@@ -5062,7 +5067,7 @@ namespace ShopNow.Controllers
                        ImagePath = i.p.p.oi.ImagePath,
                        ProductId = i.p.p.p.Id,
                        ProductName = i.p.m.Name,
-                       Qty = i.p.p.oi.Quantity,
+                       Qty = i.p.p.oi.Quantity == 0?1:i.p.p.oi.Quantity,
                        Price = i.p.p.p.Price,
                        Status = i.p.p.p.Status,
                        IsProductOnline = i.p.p.p.IsOnline,
@@ -5101,7 +5106,7 @@ namespace ShopNow.Controllers
                         Name = i.m.Name,
                         ShopId = i.p.p.ShopId,
                         ShopName = i.p.p.ShopName,
-                        Quantity = i.p.oi.Quantity,
+                        Quantity = i.p.oi.Quantity == 0 ? 1 : i.p.oi.Quantity,
                         Price = i.p.oi.Price,
                         ColorCode = i.m.ColorCode,
                         Customisation = i.p.p.Customisation,
