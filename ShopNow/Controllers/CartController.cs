@@ -663,7 +663,7 @@ namespace ShopNow.Controllers
             var model = new CartAssignDeliveryBoyViewModel();
             model.OrderId = order.Id;
             DateTime date = DateTime.Now;
-
+            
             var amount = (from i in db.Orders
                           where i.OrderNumber == OrderNumber && i.Status == 6 && i.DateUpdated.Year == date.Year && i.DateUpdated.Month == date.Month && i.DateUpdated.Day == date.Day
                           select (Double?)i.DeliveryCharge).Sum() ?? 0;
@@ -693,23 +693,25 @@ namespace ShopNow.Controllers
             var cart = db.Orders.FirstOrDefault(i => i.Id == model.OrderId);
             if (cart != null && model.DeliveryBoyId != 0)
             {
-                var delivary = db.DeliveryBoys.FirstOrDefault(i => i.Id == model.DeliveryBoyId);
+                var delivery = db.DeliveryBoys.FirstOrDefault(i => i.Id == model.DeliveryBoyId);
 
-                cart.DeliveryBoyId = delivary.Id;
-                cart.DeliveryBoyName = delivary.Name;
-                cart.DeliveryBoyPhoneNumber = delivary.PhoneNumber;
+                cart.DeliveryBoyId = delivery.Id;
+                cart.DeliveryBoyName = delivery.Name;
+                cart.DeliveryBoyPhoneNumber = delivery.PhoneNumber;
                 cart.Status = 4;
                 cart.DateUpdated = DateTime.Now;
+                cart.UpdatedBy = user.Name;
                 db.Entry(cart).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
-                delivary.isAssign = 1;
-                delivary.DateUpdated = DateTime.Now;
-                db.Entry(delivary).State = System.Data.Entity.EntityState.Modified;
+                delivery.isAssign = 1;
+                delivery.DateUpdated = DateTime.Now;
+                delivery.UpdatedBy = user.Name;
+                db.Entry(delivery).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
                 var fcmToken = (from c in db.Customers
-                                where c.Id == delivary.CustomerId
+                                where c.Id == delivery.CustomerId
                                 select c.FcmTocken ?? "").FirstOrDefault().ToString();
                 Helpers.PushNotification.SendbydeviceId("You have received new order. Accept Soon", "ShopNowChat", "a.mp3", fcmToken.ToString());
 
@@ -1081,13 +1083,15 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var order = db.Orders.FirstOrDefault(i => i.Id == id);
-            var delivaryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId && i.Status == 0);
-            delivaryBoy.OnWork = 1;
-            delivaryBoy.UpdatedBy = user.Name;
-            delivaryBoy.DateUpdated = DateTime.Now;
-            db.Entry(delivaryBoy).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
-
+            if (order != null)
+            {
+                var delivaryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId && i.Status == 0);
+                delivaryBoy.OnWork = 1;
+                delivaryBoy.UpdatedBy = user.Name;
+                delivaryBoy.DateUpdated = DateTime.Now;
+                db.Entry(delivaryBoy).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
             return RedirectToAction("Edit", "Cart", new { OrderNumber = OrderNumber, id = AdminHelpers.ECodeLong(id) });
         }
 
@@ -1150,13 +1154,14 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             var order = db.Orders.FirstOrDefault(i => i.Id == id);
 
-            var delivaryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId && i.Status == 0);
-            if (delivaryBoy != null)
+            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId && i.Status == 0);
+            if (deliveryBoy != null)
             {
-                delivaryBoy.OnWork = 0;
-                delivaryBoy.isAssign = 0;
-                delivaryBoy.DateUpdated = DateTime.Now;
-                db.Entry(delivaryBoy).State = System.Data.Entity.EntityState.Modified;
+                deliveryBoy.OnWork = 0;
+                deliveryBoy.isAssign = 0;
+                deliveryBoy.UpdatedBy = user.Name;
+                deliveryBoy.DateUpdated = DateTime.Now;
+                db.Entry(deliveryBoy).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
 
@@ -1276,13 +1281,14 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             var order = db.Orders.FirstOrDefault(i => i.Id == id);
 
-            var delivaryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId && i.Status == 0);
-            if (delivaryBoy != null)
+            var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId && i.Status == 0);
+            if (deliveryBoy != null)
             {
-                delivaryBoy.OnWork = 0;
-                delivaryBoy.isAssign = 0;
-                delivaryBoy.DateUpdated = DateTime.Now;
-                db.Entry(delivaryBoy).State = System.Data.Entity.EntityState.Modified;
+                deliveryBoy.OnWork = 0;
+                deliveryBoy.isAssign = 0;
+                deliveryBoy.UpdatedBy = user.Name;
+                deliveryBoy.DateUpdated = DateTime.Now;
+                db.Entry(deliveryBoy).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
 
@@ -1307,6 +1313,8 @@ namespace ShopNow.Controllers
                 order.WaitingRemark = remark;
                 if (order.DeliveryLocationReachTime != null && order.DeliveredTime != null)
                     order.WaitingTime = (order.DeliveryLocationReachTime.Value - order.DeliveredTime.Value).Minutes;
+                order.DateUpdated = DateTime.Now;
+                order.UpdatedBy = user.Name;
                 db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
@@ -1314,6 +1322,8 @@ namespace ShopNow.Controllers
                 if (customer != null)
                 {
                     customer.DeliveryWaitingCharge += amount;
+                    customer.DateUpdated = DateTime.Now;
+                    customer.UpdatedBy = user.Name;
                     db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }
@@ -1331,6 +1341,8 @@ namespace ShopNow.Controllers
             {
                 order.PenaltyAmount = amount;
                 order.PenaltyRemark = remark;
+                order.UpdatedBy = user.Name;
+                order.DateUpdated = DateTime.Now;
                 db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
@@ -1338,6 +1350,8 @@ namespace ShopNow.Controllers
                 if (customer != null)
                 {
                     customer.PenaltyAmount += amount;
+                    customer.DateUpdated = DateTime.Now;
+                    customer.UpdatedBy = user.Name;
                     db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }
