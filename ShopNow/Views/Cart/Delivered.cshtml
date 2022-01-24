@@ -46,7 +46,7 @@
                    columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
                    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
                    columns.Add().Encoded(false).Sanitized(false)
-                 .RenderValueAs(o => Html.ActionLink(o.PaymentMode, "Edit", new { ordernumber = o.OrderNumber, id = ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-info btn-block", }).ToHtmlString()).Titled("Payment Mode").SetWidth(15);
+                 .RenderValueAs(o => Html.ActionLink(o.PaymentMode, "Edit", new { OrderNumber = o.OrderNumber, id = ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-info btn-block", }).ToHtmlString()).Titled("Payment Mode").SetWidth(15);
                    columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(8);
                    columns.Add(c => c.CustomerPhoneNumber).Titled("Cust.Phone No.").Filterable(true).SetWidth(10);
                    columns.Add(c => c.DateEncoded).Titled("Order Time").Filterable(true).SetWidth(10);
@@ -113,7 +113,7 @@
 
             $("#Filter").click(function () {
                 var shopId = $("#ShopId").val();
-                window.location.href = "/Cart/Delivered/?shopId=" + shopId;
+                window.location.href = "/Cart/Delivered?shopId=" + shopId;
             });
             $(".btn-modal-refund").click(function () {
                 var id = $(this).data('id');

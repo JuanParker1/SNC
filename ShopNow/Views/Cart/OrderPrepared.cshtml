@@ -36,8 +36,8 @@
                    columns.Add()
                    .Encoded(false)
                    .Sanitized(false)
-                   .RenderValueAs(o => Html.ActionLink("View", "Edit", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-info btn-block" }).ToHtmlString()
-                   + Html.ActionLink("Pickup Slip", "PickupSlip", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-secondary btn-block" }).ToHtmlString()).Titled("Action").SetWidth(15);
+                   .RenderValueAs(o => Html.ActionLink("View", "Edit", new { OrderNumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-info btn-block" }).ToHtmlString()
+                   + Html.ActionLink("Pickup Slip", "PickupSlip", new { OrderNumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-secondary btn-block" }).ToHtmlString()).Titled("Action").SetWidth(15);
                    columns.Add()
                    .Encoded(false)
                    .Sanitized(false)
@@ -100,7 +100,7 @@
 
             $("#Filter").click(function () {
                 var shopId = $("#ShopId").val();
-                window.location.href = "/Cart/OrderPrepared/?shopId=" + shopId;
+                window.location.href = "/Cart/OrderPrepared?shopId=" + shopId;
             });
 
             $(".btn-modal-refund").click(function () {

@@ -159,7 +159,7 @@
                 window.location.href = "/Cart/DeliveryBoyCashHandoverReport/deliveryboyId=" + deliveryboyId;
             });
 
-            $('.btnPayNow').click(function () {
+            $(".btnPayNow").click(function () {
                 var ordernumber = parseInt($(this).attr('data-ordernumber'));
                 var thisRow = $(this).closest("tr");
                 $.getJSON("/Cart/ShopNowChatPay/OrderNumber=" + ordernumber, function (data) {
