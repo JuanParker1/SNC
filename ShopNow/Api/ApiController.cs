@@ -6166,16 +6166,16 @@ namespace ShopNow.Controllers
                                                      ColorCode = g.FirstOrDefault()["ColorCode"].ToString()
                                                  }).ToList();
 
-                        //if (!string.IsNullOrEmpty(keyword) && page == 1)
-                        //{
-                        //    CustomerSearchData sData = new CustomerSearchData();
-                        //    sData.ResultCount = searchResult.Products.Count();
-                        //    sData.SearchKeyword = keyword;
-                        //    sData.DateEncoded = DateTime.Now;
-                        //    db.CustomerSearchDatas.Add(sData);
-                        //    db.SaveChanges();
+                        if (!string.IsNullOrEmpty(keyword) && page == 1)
+                        {
+                            CustomerSearchData sData = new CustomerSearchData();
+                            sData.ResultCount = searchResult.Products.Count();
+                            sData.SearchKeyword = keyword;
+                            sData.DateEncoded = DateTime.Now;
+                            db.CustomerSearchDatas.Add(sData);
+                            db.SaveChanges();
 
-                        //}
+                        }
 
                         int CurrentPage = page;
                         int PageSize = pageSize;
