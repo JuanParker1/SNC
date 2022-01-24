@@ -276,7 +276,8 @@
                     <div class="d-flex">
                         <label class="mr-3">Number:</label>
                         <b>
-                            @Model.OrderNumber @if (Model.IsPrescriptionOrder == true)
+                            @Model.OrderNumber
+                            @if (Model.IsPrescriptionOrder == true)
                             {<span>(Prescription)</span>}
                         </b>
                     </div>
@@ -364,6 +365,15 @@
         <div class="col-md-9">
             <div class="card h-100">
                 <div class="card-body">
+                    @if (!string.IsNullOrEmpty(Model.Remarks))
+                    {
+                        <div class="d-flex">
+                            <label class="mr-3">Remarks:</label>
+                            <b>@Model.Remarks</b>
+                        </div>
+                        <hr />
+                    }
+
                     <label class="font-weight-bold text-muted"><u>Order Items:</u></label>
                     <table class="table table-borderless table-striped" id="tbl-items">
                         <thead>
@@ -513,7 +523,7 @@
                             <h5 class="font-weight-bold text-danger text-center mb-3">Order Cancelled By Customer</h5>
                             break;
                         case 10:
-                            <h5 class="font-weight-bold text-danger text-center mb-3">Customer Not Responed</h5>
+                            <h5 class="font-weight-bold text-danger text-center mb-3">Customer Not Responed/Picked Up</h5>
                             if (Model.PenaltyAmount <= 0)
                             {
                                 <a href="#modal-add-penalty-charge" data-target="#modal-add-penalty-charge" data-toggle="modal" class="btn btn-sm btn-block btn-info text-white mb-3">Add Penalty</a>
@@ -583,7 +593,7 @@
                     </div>
                     <div class="d-flex justify-content-between">
                         <label class="mr-3">Price Difference:</label>
-                        <b>₹@(Model.TotalPrice - (Model.TotalShopPrice == 0? Model.TotalPrice : Model.TotalShopPrice))</b>
+                        <b>₹@(Model.TotalPrice - (Model.TotalShopPrice == 0 ? Model.TotalPrice : Model.TotalShopPrice))</b>
                     </div>
                 </div>
             </div>
