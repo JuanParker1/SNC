@@ -12,7 +12,6 @@ using System.Web.Mvc;
 
 namespace ShopNow.Controllers
 {
-
     public class RefundController : Controller
     {
         private sncEntities db = new sncEntities();
@@ -29,6 +28,7 @@ namespace ShopNow.Controllers
                 .Join(db.Customers, p => p.p.CustomerId, c => c.Id, (p, c) => new { p, c })
                 .Select(i => new RefundPendingViewModel.ListItem
                 {
+                    ShopName = i.p.p.ShopName,
                     Amount = i.p.p.RefundAmount,
                     CustomerName = i.p.p.CustomerName,
                     OrderNo = i.p.p.OrderNumber,
@@ -119,6 +119,5 @@ namespace ShopNow.Controllers
 
             return RedirectToAction("History", "Refund");
         }
-
     }
 }
