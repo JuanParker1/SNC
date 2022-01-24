@@ -286,7 +286,7 @@
                     </div>
                     <div class="d-flex">
                         <label class="mr-3">Total Amount:</label>
-                        <b>₹@Model.NetTotal - (@Model.PaymentMode)</b>
+                        <b>₹@Math.Abs(Model.NetTotal - (Model.RefundAmount ?? 0)) - (@Model.PaymentMode)</b>
                         <a class="ml-2" id="btn-paymentmode-update" href="#modal-paymentmode-update" data-target="#modal-paymentmode-update" data-toggle="modal" data-id="@Model.OrderNumber"><i class="fa fa-edit"></i></a>
                     </div>
                     @if (Model.IsPreorder == true)
