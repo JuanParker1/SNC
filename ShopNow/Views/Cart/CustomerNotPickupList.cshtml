@@ -36,7 +36,7 @@
                   // columns.Add(c => c.ShopCancelledTime).Titled("Cancelled Time").Filterable(true).SetWidth(10);
                   // columns.Add(c => c.ShopCancelPeriod).Titled("Shop Cancel Period").Filterable(true).SetWidth(15);
                    columns.Add().Encoded(false).Sanitized(false)
-                  .RenderValueAs(o => Html.ActionLink("View", "Edit", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-info btn-block mt-2", }).ToHtmlString()).Titled("Action").SetWidth(10);
+                  .RenderValueAs(o => Html.ActionLink("View", "Details", new { OrderNumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-info btn-block mt-2", }).ToHtmlString()).Titled("Action").SetWidth(10);
                }).WithPaging(20).Sortable(true)
                 </div>
             </div>
@@ -67,7 +67,7 @@
 
             $("#Filter").click(function () {
                 var shopId = $("#ShopId").val();
-                window.location.href = "/Cart/CustomerNotPickupList/?shopId=" + shopId;
+                window.location.href = "/Cart/CustomerNotPickupList?shopId=" + shopId;
             });
         });
     </script>

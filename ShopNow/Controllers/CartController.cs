@@ -1425,6 +1425,7 @@ namespace ShopNow.Controllers
             var order = db.Orders.FirstOrDefault(i => i.Id == id);
 
             var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == order.OrderNumber);
+            if(payment != null)
             payment.RefundAmount = amount;
             payment.RefundRemark = remark;
             payment.UpdatedBy = user.Name;
@@ -1445,6 +1446,7 @@ namespace ShopNow.Controllers
 
         public ActionResult UpdatePaymentMode(int OrderNo, int PaymentType)
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             var cart = db.Orders.FirstOrDefault(i => i.OrderNumber == OrderNo);
             var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == OrderNo);
             if (PaymentType == 1) {
@@ -1472,6 +1474,10 @@ namespace ShopNow.Controllers
                     payment.PaymentModeType = 2;
                 }
             }
+            cart.UpdatedBy = user.Name;
+            cart.DateUpdated = DateTime.Now;
+            payment.UpdatedBy = user.Name;
+            payment.DateUpdated = DateTime.Now;
             db.Entry(cart).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
             db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
@@ -1485,10 +1491,14 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var order = db.Orders.FirstOrDefault(i => i.Id == id);
-            order.TotalShopPrice = amount;
-            db.Entry(order).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
-            
+            if (order != null)
+            {
+                order.TotalShopPrice = amount;
+                order.UpdatedBy = user.Name;
+                order.DateUpdated = DateTime.Now;
+                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
             return RedirectToAction("Details", "Cart", new { id = AdminHelpers.ECodeLong(id) });
         }
 
@@ -1518,6 +1528,8 @@ namespace ShopNow.Controllers
             if (order != null)
             {
                 order.ShopPaymentStatus = 1;
+                order.UpdatedBy = user.Name;
+                order.DateUpdated = DateTime.Now;
                 db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
@@ -1532,6 +1544,8 @@ namespace ShopNow.Controllers
             if (order != null)
             {
                 order.DeliveryOrderPaymentStatus = 1;
+                order.UpdatedBy = user.Name;
+                order.DateUpdated = DateTime.Now;
                 db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
@@ -1545,6 +1559,8 @@ namespace ShopNow.Controllers
             if (order != null)
             {
                 order.DeliveryBoyPaymentStatus = 1;
+                order.UpdatedBy = user.Name;
+                order.DateUpdated = DateTime.Now;
                 db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
@@ -1562,12 +1578,15 @@ namespace ShopNow.Controllers
                 order.DeliveryBoyName = null;
                 order.DeliveryBoyPhoneNumber = null;
                 order.Status = 3;
+                order.UpdatedBy = user.Name;
+                order.DateUpdated = DateTime.Now;
                 db.Entry(order).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
                 var dboy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId);
                 dboy.isAssign = 0;
                 dboy.OnWork = 0;
+                dboy.UpdatedBy = user.Name;
                 dboy.DateUpdated = DateTime.Now;
                 db.Entry(dboy).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
@@ -1615,6 +1634,7 @@ namespace ShopNow.Controllers
 
         public ActionResult UpdateItem(long orderid, long id, int quantity, double unitprice)
         {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             var order = db.Orders.FirstOrDefault(i => i.Id == orderid);
             var orderItem = db.OrderItems.FirstOrDefault(i => i.Id == id);
             orderItem.Quantity = quantity;
@@ -1627,6 +1647,8 @@ namespace ShopNow.Controllers
             order.TotalPrice = orderItemList.Sum(i => i.Price);
             order.TotalQuantity = orderItemList.Sum(i => i.Quantity);
             order.NetTotal = Math.Round(order.TotalPrice + order.TipsAmount + order.Packingcharge + order.Convinenientcharge + order.NetDeliveryCharge - (order.WalletAmount - order.OfferAmount), MidpointRounding.AwayFromZero);
+            order.UpdatedBy = user.Name;
+            order.DateUpdated = DateTime.Now;
             db.Entry(order).State = EntityState.Modified;
             db.SaveChanges();
 
@@ -1634,6 +1656,8 @@ namespace ShopNow.Controllers
             payments.OriginalAmount = order.TotalPrice;
             payments.GSTAmount = order.NetTotal;
             payments.Amount = order.NetTotal;
+            payments.UpdatedBy = user.Name;
+            payments.DateUpdated = DateTime.Now;
             db.Entry(payments).State = EntityState.Modified;
             db.SaveChanges();
             return RedirectToAction("Details", "Cart", new { id = AdminHelpers.ECodeLong(orderid) });

@@ -35,8 +35,8 @@
                    columns.Add().RenderValueAs(c => c.Status == 5 ? "On The Way" : "On The Way").Titled("Order Status").Filterable(true).SetWidth(10);
                    columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(15).Format("{0:dd-MMM-yyyy}");
                    columns.Add().Encoded(false).Sanitized(false)
-                   .RenderValueAs(o => Html.ActionLink("View", "Edit", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-info btn-block mr-1" }).ToHtmlString()
-                   + Html.ActionLink("UnAssigned", "UnAssignedDeliveryBoy", new { ordernumber = o.OrderNumber, id= ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-danger btn-block mt-2"}).ToHtmlString()).Titled("Action").SetWidth(10);
+                   .RenderValueAs(o => Html.ActionLink("View", "Edit", new { OrderNumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-info btn-block mr-1" }).ToHtmlString()
+                   + Html.ActionLink("UnAssigned", "UnAssignedDeliveryBoy", new { OrderNumber = o.OrderNumber, id= ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-danger btn-block mt-2"}).ToHtmlString()).Titled("Action").SetWidth(10);
                    columns.Add().Encoded(false).Sanitized(false)
                    .RenderValueAs(o => (o.RefundAmount == 0 || o.RefundAmount == null) ? "<a href='#modal-refund' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-refund' class='btn btn-sm btn-block btn-primary btn-modal-refund mt-3'>Refund</a>" : o.RefundAmount.Value > 0 ? "<span>" + o.RefundAmount + "(" + o.RefundRemark + ")" + "</span>" : "N/A").Titled("Refund").SetWidth(10);
                }).WithPaging(20).Sortable(true)
@@ -96,7 +96,7 @@
 
             $("#Filter").click(function () {
                 var shopId = $("#ShopId").val();
-                window.location.href = "/Cart/OntheWay/?shopId=" + shopId;
+                window.location.href = "/Cart/OntheWay?shopId=" + shopId;
             });
 
             $(".btn-modal-refund").click(function () {
