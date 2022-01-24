@@ -423,6 +423,7 @@
                         addonDisableCheckbox();
                         let data = {
                             Id: $(this).data('id'),
+                            ProductId: @Model.Id,
                             PortionPrice: parseFloat($tr.find('.portion-price').val()),
                             AddOnsPrice: parseFloat($tr.find('.addon-price').val()),
                             CrustPrice: parseFloat($tr.find('.crust-price').val()),
@@ -439,6 +440,7 @@
                         addonDisableCheckbox();
                         let data = {
                             Id: $(this).data('id'),
+                            ProductId: @Model.Id,
                             PortionPrice: parseFloat($tr.find('.portion-price').val()),
                             AddOnsPrice: parseFloat($tr.find('.addon-price').val()),
                             CrustPrice: parseFloat($tr.find('.crust-price').val()),
@@ -449,6 +451,7 @@
                         addonDisableCheckbox();
                         let data = {
                             Id: $(this).data('id'),
+                            ProductId: @Model.Id,
                             PortionPrice: parseFloat($tr.find('.portion-price').val()),
                             AddOnsPrice: parseFloat($tr.find('.addon-price').val()),
                             CrustPrice: parseFloat($tr.find('.crust-price').val()),

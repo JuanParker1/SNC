@@ -156,13 +156,13 @@
 
             $("#Filter").click(function () {
                 var deliveryboyId = $("#DeliveryBoyId").val();
-                window.location.href = "/Cart/DeliveryBoyCashHandoverReport/?deliveryboyId=" + deliveryboyId;
+                window.location.href = "/Cart/DeliveryBoyCashHandoverReport/deliveryboyId=" + deliveryboyId;
             });
 
             $('.btnPayNow').click(function () {
-                var ordernumber = $(this).attr('data-ordernumber');
+                var ordernumber = parseInt($(this).attr('data-ordernumber'));
                 var thisRow = $(this).closest("tr");
-                $.getJSON("/Cart/ShopNowChatPay/?OrderNumber=" + ordernumber, function (data) {
+                $.getJSON("/Cart/ShopNowChatPay/OrderNumber=" + ordernumber, function (data) {
                     if (data == true) {
                         window.location.reload();
                         var count = $('#DeliveryBoy-list tr').length;

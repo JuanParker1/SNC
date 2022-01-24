@@ -1515,9 +1515,12 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var order = db.Orders.FirstOrDefault(i => i.OrderNumber == OrderNumber && i.ShopPaymentStatus == 0);
-            order.ShopPaymentStatus = 1;
-            db.Entry(order).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
+            if (order != null)
+            {
+                order.ShopPaymentStatus = 1;
+                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
@@ -1526,9 +1529,12 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var order = db.Orders.FirstOrDefault(i => i.OrderNumber == OrderNumber && i.DeliveryOrderPaymentStatus == 0);
-            order.DeliveryOrderPaymentStatus = 1;
-            db.Entry(order).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
+            if (order != null)
+            {
+                order.DeliveryOrderPaymentStatus = 1;
+                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
@@ -1536,9 +1542,12 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             var order = db.Orders.FirstOrDefault(i => i.OrderNumber == OrderNumber && i.DeliveryBoyPaymentStatus == 0);
-            order.DeliveryBoyPaymentStatus = 1;
-            db.Entry(order).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
+            if (order != null)
+            {
+                order.DeliveryBoyPaymentStatus = 1;
+                db.Entry(order).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
