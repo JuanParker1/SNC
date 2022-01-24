@@ -5,22 +5,28 @@
 <title>ShopNow | @ViewBag.Title</title>
 <link href="~/Content/switch.css" rel="stylesheet" />
 <style>
-    table.floatThead-table {
-        border-top: none;
-        border-bottom: none;
-        background-color: #FFF;
+    .tableFixHead {
+        overflow: auto;
+        height: 450px;
     }
+
+        .tableFixHead thead th {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            background: #eee;
+        }
 </style>
-<div class="container-fluid mb-3">
+<div class="container-fluid">
     <div class="row">
         <div class="col-md-12 mx-auto">
-            <div class="d-flex justify-content-between my-3">
-                <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+            <div class="d-flex justify-content-between my-1">
+                <h5 class="text-success text-uppercase" style="letter-spacing:1px;">@ViewBag.Title</h5>
             </div>
             <div class="card shadow">
                 <div class="card-body">
                     <form method="get" action="/Cart/OrderRatios">
-                        <div class="row mb-3">
+                        <div class="row">
                             <div class="col-md-2">
                                 <select id="select-month-filter" class="form-control" name="MonthFilter">
                                     <option value="1">January</option>
@@ -52,8 +58,8 @@
                             </div>
                         </div>
                     </form>
-                    <div class="table-responsive">
-                        <table class="table table-bordered sticky-table-header" id="tbl-order-ratio">
+                    <div class="table-responsive tableFixHead">
+                        <table class="table table-bordered" id="tbl-order-ratio">
                             <thead class="bg-light">
                                 <tr>
                                     <th class="text-nowrap">Date</th>
@@ -221,11 +227,10 @@
     <link href="~/Content/select2/select2.custom.css" rel="stylesheet" />
     <script>
         $(document).ready(function () {
+
             $('select[name="MonthFilter"] option[value=@Model.MonthFilter]').prop('selected', true);
             $('select[name="YearFilter"] option[value=@Model.YearFilter]').prop('selected', true);
 
-            var $table = $(".sticky-table-header");
-            $table.floatThead();
         });
     </script>
 }
