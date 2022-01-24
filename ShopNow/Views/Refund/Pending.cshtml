@@ -25,7 +25,10 @@
                         <input type="hidden" name="ShopName" value="@Model.ShopName" />
                     </div>
                     <div class="col-md-2">
-                        <input type="button" class="form-control btn btn-sm btn-success" name="Filter" id="Filter" value="Filter" />
+                        <input type="submit" class="form-control btn btn-sm btn-success" name="Filter" id="Filter" value="Filter" />
+                    </div>
+                    <div class="col-md-2">
+                        <input type="button" class="form-control btn btn-sm btn-secondary" name="Clear" id="Clear" value="Clear" />
                     </div>
                 </div>
             </form>
@@ -77,11 +80,9 @@
                 $('input[name="ShopName"]').val(e.params.data.text);
             });
 
-            $("#Filter").click(function () {
-                var shopId = $("#ShopId").val();
-                window.location.href = "/Refund/Pending" + shopId;
+            $("#Clear").click(function () {
+                window.location.href = "/Refund/Pending";
             });
-
             var errormsg = "@Model.ErrorMessage";
             if (errormsg != "") {
                 swal("Notice!", errormsg, "warning")

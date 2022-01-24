@@ -36,8 +36,15 @@
                             <input type="text" class="form-control" name="CustomerPhoneNo" value="@Model.CustomerPhoneNo" />
                         </div>
                     </div>
-                    <div class="mt-1">
-                        <input type="submit" class="btn btn-info h-50 mt-4" value="Apply Filter" />
+                    <div class="col-md-2 mt-2">
+                        <div class="form-group mt-4">
+                            <input type="submit" class="form-control btn btn-sm btn-info" value="Apply Filter" />
+                        </div>
+                    </div>
+                    <div class="col-md-1 mt-2">
+                        <div class="form-group mt-4">
+                            <input type="button" class="form-control btn btn-sm btn-secondary" name="Clear" id="Clear" value="Clear" />
+                        </div>
                     </div>
                 </div>
             </form>
@@ -62,3 +69,15 @@
         </div>
     </div>
 </div>
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#Clear").click(function () {
+                window.location.href = "/Refund/History";
+            });
+
+        });
+    </script>
+}
