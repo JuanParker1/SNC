@@ -312,7 +312,7 @@
                 $('input[name="CategoryName"]').val(e.params.data.text);
             });
 
-            $.getJSON('/Product/GetProductDishAddOnsFoodEdit', { masterProductId: @Model.MasterProductId,shopid:@Model.ShopId  }, function (data) {
+            $.getJSON('/Product/GetProductDishAddOnsFoodEdit', { masterProductId: @Model.MasterProductId, shopid:@Model.ShopId, productId:@Model.Id }, function (data) {
                 if (data != "") {
                     $.each(data, function (index, item) {
                         var tableData = '<tr class="d-none type_' + item.AddOnType + '" data-id=' + item.Id + '> \
