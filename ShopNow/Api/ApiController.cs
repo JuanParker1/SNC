@@ -1238,9 +1238,12 @@ namespace ShopNow.Controllers
                         order.CustomerPhoneNumber = customer.PhoneNumber;
 
                         //Store Referral Number
-                        customer.ReferralNumber = model.ReferralNumber;
-                        db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
-                        db.SaveChanges();
+                        if (!string.IsNullOrEmpty(model.ReferralNumber))
+                        {
+                            customer.ReferralNumber = model.ReferralNumber;
+                            db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                            db.SaveChanges();
+                        }
                     }
                     //if (model.ReferralNumber == string.Empty)
                     // {
