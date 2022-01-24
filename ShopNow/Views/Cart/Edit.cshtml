@@ -133,7 +133,7 @@
                             <tr>
                                 <th class="font-weight-bold">No.</th>
                                 <th class="font-weight-bold">Product Name</th>
-                                <th class="font-weight-bold">Brand Name</th>
+                                @*<th class="font-weight-bold">Brand Name</th>*@
                                 <th class="font-weight-bold">Category Name</th>
                                 <th class="font-weight-bold">Qty</th>
                                 <th class="font-weight-bold">Price</th>
@@ -153,14 +153,14 @@
                                     {
                                         <td>N/A</td>
                                     }
-                                    @if (item.BrandName != null)
+                                    @*@if (item.BrandName != null)
                                     {
                                         <td>@item.BrandName</td>
                                     }
                                     else
                                     {
                                         <td>N/A</td>
-                                    }
+                                    }*@
                                     @if (item.CategoryName != null)
                                     {
                                         <td>@item.CategoryName</td>
