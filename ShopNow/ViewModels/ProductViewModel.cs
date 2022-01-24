@@ -544,6 +544,7 @@ namespace ShopNow.ViewModels
     public class ShopAddOnSessionEditViewModel
     {
         public long Id { get; set; }
+        public long ProductId { get; set; }
         public double PortionPrice { get; set; }
         public double AddOnsPrice { get; set; }
         public double CrustPrice { get; set; }

@@ -493,7 +493,7 @@ namespace ShopNow.Controllers
                 {
                     foreach (var item in shopAddOns)
                     {
-                        var shopDishAddon = db.ShopDishAddOns.FirstOrDefault(i => i.Id == item.Id);
+                        var shopDishAddon = db.ShopDishAddOns.FirstOrDefault(i => i.Id == item.Id && i.ProductId == item.ProductId);
                         if (shopDishAddon != null)
                         {
                             shopDishAddon.AddOnsPrice = item.AddOnsPrice;
@@ -1141,7 +1141,8 @@ namespace ShopNow.Controllers
                     Id = model.Id,
                     CrustPrice = model.CrustPrice,
                     PortionPrice = model.PortionPrice,
-                    IsActive = model.IsActive
+                    IsActive = model.IsActive,
+                    ProductId = model.ProductId
                 };
                 shopAddOns.Add(addOn);
             }
