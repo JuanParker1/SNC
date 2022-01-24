@@ -1161,11 +1161,11 @@ namespace ShopNow.Controllers
         }
 
         //get product Addons which are not added in Shop Addons
-        public JsonResult GetProductDishAddOnsFoodEdit(int masterProductId,int shopid)
+        public JsonResult GetProductDishAddOnsFoodEdit(int masterProductId,int shopid,int productId)
         {
             db.Configuration.ProxyCreationEnabled = false;
             var list = (from p in db.ProductDishAddOns
-                        where (p.MasterProductId == masterProductId && p.Status == 0) && !db.ShopDishAddOns.Any(i => i.ProductDishAddonId == p.Id && i.ShopId == shopid)
+                        where (p.MasterProductId == masterProductId && p.Status == 0) && !db.ShopDishAddOns.Any(i => i.ProductDishAddonId == p.Id && i.ShopId == shopid && i.ProductId == productId)
                         select p).ToList();
             return Json(list, JsonRequestBehavior.AllowGet);
         }
