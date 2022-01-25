@@ -988,7 +988,7 @@ namespace ShopNow.Controllers
             {
                 var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
                 var order = db.Orders.FirstOrDefault(i => i.OrderNumber == OrderNumber);
-                order.Status = 7;
+                order.Status = status??0;
                 order.CancelledRemark = remark;
                 order.UpdatedBy = user.Name;
                 order.DateUpdated = DateTime.Now;
@@ -998,8 +998,16 @@ namespace ShopNow.Controllers
 
                 //Refund
                 var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == order.OrderNumber);
-                payment.RefundAmount = payment.Amount;
-                payment.RefundRemark = "Your order has been cancelled by shop.";
+                if (status == 7)
+                {
+                    payment.RefundRemark = "Your order has been cancelled by shop.";
+                    payment.RefundAmount = payment.Amount;
+                }
+                if (status == 10)
+                {
+                    payment.RefundRemark = "Customer Not Pickedup the Order.";
+                    payment.RefundAmount = 0;
+                }
                 payment.UpdatedBy = customer.Name;
                 payment.DateUpdated = DateTime.Now;
                 db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
@@ -1036,7 +1044,7 @@ namespace ShopNow.Controllers
                 Helpers.PushNotification.SendbydeviceId($"Shop({order.ShopName}) has rejected your order. Kindly contact shop for details or try another order.", "ShopNowChat", "a.mp3", fcmToken.ToString());
 
                 //Refund notification
-                if (payment.PaymentMode == "Online Payment")
+                if (payment.PaymentMode == "Online Payment" && status == 7)
                     Helpers.PushNotification.SendbydeviceId($"Your refund of amount {payment.Amount} for order no {payment.OrderNumber} is for {payment.RefundRemark} initiated and you will get credited with in 7 working days.", "ShopNowChat", "a.mp3", fcmToken.ToString());
 
 
