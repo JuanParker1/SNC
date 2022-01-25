@@ -984,13 +984,15 @@ namespace ShopNow.Controllers
                 var productList = db.Products.Where(i => i.ShopId == model.ShopId && i.Status == 0).ToList();
                 if (productList != null)
                 {
-                    foreach(var item in productList)
-                    {
-                        var product = db.Products.FirstOrDefault(i => i.Id == item.Id);
-                        product.Qty = model.Qty;
-                        db.Entry(product).State = System.Data.Entity.EntityState.Modified;
-                        db.SaveChanges();
-                    }
+                    productList.ForEach(i => i.Qty = model.Qty);
+                    db.SaveChanges();
+                    //foreach(var item in productList)
+                    //{
+                    //    var product = db.Products.FirstOrDefault(i => i.Id == item.Id);
+                    //    product.Qty = model.Qty;
+                    //    db.Entry(product).State = System.Data.Entity.EntityState.Modified;
+                    //    db.SaveChanges();
+                    //}
                 }
             }
             return View();
