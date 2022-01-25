@@ -848,5 +848,18 @@ namespace ShopNow.ViewModels
             public string ColorCode { get; set; }
         }
     }
+
+    public class SuperMarketCategoryList
+    {
+        public List<ListItem> TrendingList { get; set; }
+        public List<ListItem> AllList { get; set; }
+        public class ListItem
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public string ImagePath { get; set; }
+            public int OrderNo { get; set; }
+        }
+    }
     
 }
