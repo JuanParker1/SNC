@@ -444,7 +444,10 @@
                                     <td>@item.Quantity</td>
                                     <td>₹@item.UnitPrice</td>
                                     <td>₹@item.Price</td>
-                                    <td><a class="btn-item-update" href="#modal-item-update" data-target="#modal-item-update" data-toggle="modal" data-id="@item.Id" data-product="@item.ProductName" data-category="@item.CategoryName" data-quantity="@item.Quantity" data-unitprice="@item.UnitPrice"><i class="fa fa-edit"></i></a></td>
+                                    <td><a class="btn-item-update" href="#modal-item-update" data-target="#modal-item-update" data-toggle="modal" data-id="@item.Id" data-product="@item.ProductName" data-category="@item.CategoryName" data-quantity="@item.Quantity" data-unitprice="@item.UnitPrice" data-remark="@item.UpdateRemarks"><i class="fa fa-edit"></i></a>
+                                  @if (!string.IsNullOrEmpty(item.UpdateRemarks))
+                                  {   <i class="fa fa-info-circle ml-3 text-danger" data-html="true" data-toggle="tooltip" title="<p class='mb-0'>@item.UpdateRemarks</p><small>@item.UpdatedBy (@item.UpdatedTime.Value.ToString("dd-MMM-yyyy HH:mm tt"))</small>"></i>}
+                                    </td>
                                 </tr>
                             }
                         </tbody>
@@ -756,6 +759,10 @@
                         <label class="col-form-label mr-2">Unit Price:</label>
                         <input class="form-control w-50" type="number" min="1" step="any" name="UnitPrice" id="input-unitprice" />
                     </div>
+                    <div class="form-group">
+                        <label class="col-form-label">Remarks:</label>
+                        <textarea class="form-control" name="Remarks" id="input-remark" required></textarea>
+                    </div>
                     <div class="text-right">
                         <button class="btn btn-sm btn-success mr-3">Submit</button>
                         <button class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
@@ -930,6 +937,7 @@
                 $('#text-category').text($(this).data('category'));
                 $('#input-quantity').val($(this).data('quantity'));
                 $('#input-unitprice').val($(this).data('unitprice'));
+                $('#input-remark').val($(this).data('remark'));
                 $('#modal-item-update').modal('show');
             });
 

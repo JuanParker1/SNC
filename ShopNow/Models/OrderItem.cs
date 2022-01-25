@@ -35,5 +35,8 @@ namespace ShopNow.Models
         public bool HasAddon { get; set; }
         public int AddOnType { get; set; }
         public int Status { get; set; }
+        public string UpdateRemarks { get; set; }
+        public string UpdatedBy { get; set; }
+        public Nullable<System.DateTime> UpdatedTime { get; set; }
     }
 }
