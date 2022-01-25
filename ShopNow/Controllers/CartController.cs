@@ -848,7 +848,7 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
            // var model = new CartReportViewModel();
 
-            model.DeliveryBoyPaymentStatusLists = db.Orders.
+            model.DeliveryBoyPaymentStatusLists = db.Orders
                    .Where(i => i.Status == 6 && ((model.StartDate != null && model.EndDate != null) ? DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate) : true) && (model.DeliveryBoyId != 0 ? i.DeliveryBoyId == model.DeliveryBoyId : true))
                        .Select(i => new CartReportViewModel.DeliveryBoyPaymentStatusList
                        {
