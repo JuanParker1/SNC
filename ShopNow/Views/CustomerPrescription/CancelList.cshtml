@@ -1,7 +1,7 @@
 ﻿@model ShopNow.ViewModels.CustomerPrescriptionWebListViewModel
 @using GridMvc.Html
 @{
-    ViewBag.Title = "Customer Prescription List";
+    ViewBag.Title = "Customer Prescription Cancel List";
 }
 <title>ShopNow | @ViewBag.Title</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
@@ -26,8 +26,7 @@
             <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
         </div>
         <div class="col-md-8 text-right">
-            <a href="~/CustomerPrescription/PrescriptionOrderList" class="ml-auto" target="_self"><span class="fa fa-bars"></span> Prescription Order List</a>
-            <a href="~/CustomerPrescription/CancelList" class="ml-3" target="_self"><span class="fa fa-bars"></span> Prescription Cancel List</a>
+            <a href="~/CustomerPrescription/List" class="ml-auto" target="_self"><span class="fa fa-bars"></span> Prescription List</a>
         </div>
         <div class="col-md-12 mx-auto mt-3">
             <div class="card shadow">
@@ -41,13 +40,13 @@
                                 <th class="w-25">Audio</th>
                                 <th class="w-12">Remarks</th>
                                 <th class="w-16">Date</th>
-                                <th class="w-8">Action</th>
+                                @*<th class="w-8">Action</th>*@
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var item in Model.ListItems)
                             {
-                                
+
                                 <tr>
                                     <td>@item.CustomerName</td>
                                     <td>@item.CustomerPhoneNumber</td>
@@ -62,43 +61,42 @@
                                     </td>
                                     <td>@item.Remarks</td>
                                     <td>@item.DateEncoded.ToString("dd-MM-yyyy hh:mm tt")</td>
-                                    <td>
+                                    @*<td>
                                         @if (item.Status == 0)
                                         {
                                             <a href="/CustomerPrescription/AddToCart?id=@item.Id" class="btn btn-sm btn-success btn-block">Add to Cart</a>
-                                            @*<a href="javascript:void(0)" data-id=@item.Id class="btn btn-sm btn-danger btnReject mt-2 btn-block">Cancel</a>*@
                                             <a href="#modal-cancel" data-target="#modal-cancel" data-toggle="modal" data-id="@item.Id" class="btn btn-sm btn-danger btn-block btnCancel">Cancel</a>
                                         }
                                         else
                                         {
                                             <span class="text-success">Order Placed.</span>
                                         }
-                                    </td>
-                            </tr>
-                        }
+                                    </td>*@
+                                </tr>
+                            }
                         </tbody>
                     </table>
                     @*@Html.Grid(Model.ListItems).Columns(columns =>
-                    {
-                        columns.Add(c => c.CustomerName).Titled("Name").Filterable(false).SetWidth(10);
-                        columns.Add(c => c.CustomerPhoneNumber).Titled("Phone No").Filterable(false).SetWidth(10);
-                         columns.Add().Encoded(false).Sanitized(false)
-                      .RenderValueAs(o => @<div>
-                             @foreach (var im in o.ImagePathLists)
-                                             {
-                                             <img alt="Image" data-toggle="modal" data-target="#myModal" class="img-thumbnail PrescriptionImage p-1" src="@im.ImagePath" onerror="this.src='/Images/No Photo.png'" style="width:50px;height:50px" />
-                                             }
-                            </div>).Titled("Image").SetWidth(20);
-                        columns.Add().Encoded(false).Sanitized(false)
-                      .RenderValueAs(o => @<div>
-                            <audio preload="auto" controls="controls" src="@o.AudioPath">
-                             </audio>
-                            </div>).Titled("Audio").SetWidth(25);
-                        columns.Add(c => c.Remarks).Titled("Remarks").Filterable(false).SetWidth(10);
-                        columns.Add(c => c.DateEncoded).Titled("Date").Format("{0:dd-MMM-yyyy}").Filterable(false).SetWidth(10);
-                        columns.Add().Encoded(false).Sanitized(false)
-                       .RenderValueAs(o => o.Status == 0 ? "<a href='#modal-add' data-id='" + o.Id + "' data-shopid='" + o.ShopId + "' data-toggle='modal' data-target='#modal-add' class='btn btn-sm btn-primary btn-modal-add btn-block'>Add</a>" : "<span class='text-success'>Already Added</span><a href='#modal-added-item-list' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-added-item-list' class='btn-modal-added-item-list ml-2'><u>Check Items</u></a>").Titled("Action").SetWidth(5);
-                    }).WithPaging(20).Sortable(true)*@
+                        {
+                            columns.Add(c => c.CustomerName).Titled("Name").Filterable(false).SetWidth(10);
+                            columns.Add(c => c.CustomerPhoneNumber).Titled("Phone No").Filterable(false).SetWidth(10);
+                             columns.Add().Encoded(false).Sanitized(false)
+                          .RenderValueAs(o => @<div>
+                                 @foreach (var im in o.ImagePathLists)
+                                                 {
+                                                 <img alt="Image" data-toggle="modal" data-target="#myModal" class="img-thumbnail PrescriptionImage p-1" src="@im.ImagePath" onerror="this.src='/Images/No Photo.png'" style="width:50px;height:50px" />
+                                                 }
+                                </div>).Titled("Image").SetWidth(20);
+                            columns.Add().Encoded(false).Sanitized(false)
+                          .RenderValueAs(o => @<div>
+                                <audio preload="auto" controls="controls" src="@o.AudioPath">
+                                 </audio>
+                                </div>).Titled("Audio").SetWidth(25);
+                            columns.Add(c => c.Remarks).Titled("Remarks").Filterable(false).SetWidth(10);
+                            columns.Add(c => c.DateEncoded).Titled("Date").Format("{0:dd-MMM-yyyy}").Filterable(false).SetWidth(10);
+                            columns.Add().Encoded(false).Sanitized(false)
+                           .RenderValueAs(o => o.Status == 0 ? "<a href='#modal-add' data-id='" + o.Id + "' data-shopid='" + o.ShopId + "' data-toggle='modal' data-target='#modal-add' class='btn btn-sm btn-primary btn-modal-add btn-block'>Add</a>" : "<span class='text-success'>Already Added</span><a href='#modal-added-item-list' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-added-item-list' class='btn-modal-added-item-list ml-2'><u>Check Items</u></a>").Titled("Action").SetWidth(5);
+                        }).WithPaging(20).Sortable(true)*@
                 </div>
             </div>
         </div>
@@ -106,76 +104,76 @@
 </div>
 
 @*<div class="modal fade" id="modal-add" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-body">
-                <input type="hidden" name="PrescriptionId" />
-                <input type="hidden" name="ShopId" />
-                <h5>Add Prescription Item</h5>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Select Product</label>
-                            <select class="form-control" name="ProductId" id="select-product"></select>
-                            <input type="hidden" name="ProductName" />
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <input type="hidden" name="PrescriptionId" />
+                    <input type="hidden" name="ShopId" />
+                    <h5>Add Prescription Item</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Select Product</label>
+                                <select class="form-control" name="ProductId" id="select-product"></select>
+                                <input type="hidden" name="ProductName" />
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Quantity</label>
+                                <input class="form-control" type="number" name="Quantity" />
+                            </div>
+                        </div>
+                        <div class="col-md-4 mt-2">
+                            <input type="button" value="Add To List" class="btn btn-primary btn-sm h-50 mt-4" id="btn-addtolist" />
                         </div>
                     </div>
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label>Quantity</label>
-                            <input class="form-control" type="number" name="Quantity" />
+                    <div class="row d-none" id="div-items">
+                        <div class="col-md-12">
+                            <h6>Item List</h6>
+                            <table class="table table-bordered table-sm table-striped" id="tbl-items">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th class="w-75">Product</th>
+                                        <th class="w-25">Quantity</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
                         </div>
                     </div>
-                    <div class="col-md-4 mt-2">
-                        <input type="button" value="Add To List" class="btn btn-primary btn-sm h-50 mt-4" id="btn-addtolist" />
+                    <hr />
+                    <div class="text-right">
+                        <button class="btn btn-success mr-3" id="btn-save-prescription">Submit</button>
+                        <button class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
                     </div>
-                </div>
-                <div class="row d-none" id="div-items">
-                    <div class="col-md-12">
-                        <h6>Item List</h6>
-                        <table class="table table-bordered table-sm table-striped" id="tbl-items">
-                            <thead class="bg-light">
-                                <tr>
-                                    <th class="w-75">Product</th>
-                                    <th class="w-25">Quantity</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
-                <hr />
-                <div class="text-right">
-                    <button class="btn btn-success mr-3" id="btn-save-prescription">Submit</button>
-                    <button class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="modal fade" id="modal-added-item-list" tabindex="-1" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <h5 class="mb-3">Prescription Item List</h5>
-                <div class="row">
-                    <div class="col-md-12">
-                        <table class="table table-bordered table-sm table-striped" id="tbl-added-items">
-                            <thead class="bg-light text-center">
-                                <tr>
-                                    <th class="w-75">Product</th>
-                                    <th class="w-25">Quantity</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+    <div class="modal fade" id="modal-added-item-list" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h5 class="mb-3">Prescription Item List</h5>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-bordered table-sm table-striped" id="tbl-added-items">
+                                <thead class="bg-light text-center">
+                                    <tr>
+                                        <th class="w-75">Product</th>
+                                        <th class="w-25">Quantity</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>*@
+    </div>*@
 
 <div id="myModal" class="modal fade">
     <div class="modal-dialog">
@@ -186,7 +184,7 @@
             </div>
             <div class="modal-body">
                 <div class="row" id="print-Prescription">
-                    <img class="modal-content img-fluid w-100"  id="PresImage" />
+                    <img class="modal-content img-fluid w-100" id="PresImage" />
                 </div>
             </div>
             <div class="modal-footer">
@@ -207,7 +205,7 @@
                     <h5>Cancel Reason</h5>
                     <div class="form-group">
                         <label>Remarks</label>
-                        <textarea class="form-control" name="CancelRemarks" required></textarea>
+                        <input class="form-control" type="text" name="CancelRemarks" required />
                     </div>
                     <div class="text-right">
                         <button type="submit" class="btn btn-sm btn-success mr-3">Submit</button>

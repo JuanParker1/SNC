@@ -18,8 +18,13 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <select name="DeliveryBoyId" id="DeliveryBoyId" class="form-control"></select>
-                    <input type="hidden" name="DeliveryBoyName" id="DeliveryBoyName" />
+                    <select name="DeliveryBoyId" id="DeliveryBoyId" class="form-control">
+                        @if (Model.DeliveryBoyId != 0)
+                        {
+                            <option value="@Model.DeliveryBoyId">@Model.DeliveryBoyName</option>
+                        }
+                    </select>
+                    <input type="hidden" name="DeliveryBoyName" id="DeliveryBoyName" value="@Model.DeliveryBoyName" />
                 </div>
                 <div class="col-md-4 text-right">
                     <button id="btnPrint" class="btn btn-sm btn-secondary mr-2" value="Print"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
@@ -30,11 +35,9 @@
                 <div class="col-md-3"></div>
                 <div class="col-md-5">
                     <div class="input-daterange input-group">
-                        <input type="date" class="form-control well well-sm" placeholder="From Date" id="datepicker" name="startDate">
+                        <input type="date" class="form-control well well-sm" placeholder="From Date" id="datepicker" name="StartDate" value="@Model.StartDate.Value.ToString("yyyy-MM-dd")">
                         <span class="input-group-addon mx-3">to</span>
-                        <input type="date" class="form-control" placeholder="To Date" id="datepicker1" name="endDate">
-                        <input type="hidden" id="StartDate" value="@Model.StartingDate" />
-                        <input type="hidden" id="EndDate" value="@Model.EndingDate" />
+                        <input type="date" class="form-control" placeholder="To Date" id="datepicker1" name="EndDate" value="@Model.EndDate.Value.ToString("yyyy-MM-dd")">
                     </div>
                 </div>
                 <div class="col-md-1">
@@ -154,10 +157,10 @@
                 $('input[name="DeliveryBoyName"]').val(e.params.data.text);
             });
 
-            $("#Filter").click(function () {
-                var deliveryboyId = $("#DeliveryBoyId").val();
-                window.location.href = "/Cart/DeliveryBoyCashHandoverReport?deliveryboyId=" + deliveryboyId;
-            });
+            //$("#Filter").click(function () {
+            //    var deliveryboyId = $("#DeliveryBoyId").val();
+            //    window.location.href = "/Cart/DeliveryBoyCashHandoverReport?deliveryboyId=" + deliveryboyId;
+            //});
 
             $('#DeliveryBoy-list').on('click','.btnPayNow',function () {
                 var ordernumber = parseInt($(this).attr('data-ordernumber'));

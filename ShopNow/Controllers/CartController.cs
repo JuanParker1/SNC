@@ -514,6 +514,9 @@ namespace ShopNow.Controllers
                         UnitPrice = i.UnitPrice,
                         AddonType = i.AddOnType,
                         HasAddon = i.HasAddon,
+                        UpdatedBy = i.UpdatedBy,
+                        UpdatedTime = i.UpdatedTime,
+                        UpdateRemarks = i.UpdateRemarks,
                         AddonListItems = db.OrderItemAddons.Where(a => a.OrderItemId == i.Id)
                         .Select(a => new CartDetailsViewModel.ListItem.AddonListItem
                         {
@@ -730,14 +733,15 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCCDHR079")]
-        public ActionResult DeliveryBoyCashHandoverReport(DateTime? StartDate, DateTime? EndDate, int deliveryboyId = 0)
+       // public ActionResult DeliveryBoyCashHandoverReport(DateTime? StartDate, DateTime? EndDate, int deliveryboyId = 0)
+        public ActionResult DeliveryBoyCashHandoverReport(CartReportViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var model = new CartReportViewModel();
+           // var model = new CartReportViewModel();
 
-            model.List = db.Payments.Where(i => i.Status == 0 && i.PaymentMode == "Cash On Hand" && ((StartDate != null && EndDate != null) ? DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(EndDate) : true))
-                .Join(db.Orders.Where(i => i.Status == 6 && (deliveryboyId != 0 ? i.DeliveryBoyId == deliveryboyId : true)), p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
+            model.List = db.Payments.Where(i => i.Status == 0 && i.PaymentMode == "Cash On Hand" && ((model.StartDate != null && model.EndDate != null) ? DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate) : true))
+                .Join(db.Orders.Where(i => i.Status == 6 && (model.DeliveryBoyId != 0 ? i.DeliveryBoyId == model.DeliveryBoyId : true)), p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
                    .Select(i => new CartReportViewModel.CartReportList
                    {
                        Id = i.c.Id,
@@ -1654,7 +1658,7 @@ namespace ShopNow.Controllers
             return count;
         }
 
-        public ActionResult UpdateItem(long orderid, long id, int quantity, double unitprice)
+        public ActionResult UpdateItem(long orderid, long id, int quantity, double unitprice,string remarks)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             var order = db.Orders.FirstOrDefault(i => i.Id == orderid);
@@ -1662,6 +1666,9 @@ namespace ShopNow.Controllers
             orderItem.Quantity = quantity;
             orderItem.UnitPrice = unitprice;
             orderItem.Price = quantity * unitprice;
+            orderItem.UpdatedBy = user.Name;
+            orderItem.UpdatedTime = DateTime.Now;
+            orderItem.UpdateRemarks = remarks;
             db.Entry(orderItem).State = EntityState.Modified;
             db.SaveChanges();
 
