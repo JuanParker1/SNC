@@ -100,7 +100,7 @@
                             else if (Model.Status == 5)
                             {
                                 <span class="text-success">On the Way to Delivery</span>
-                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-add-cancel-remark">Cancel</button>
+                                <button type="button" class="btn btn-danger mt-2" data-toggle="modal" data-target="#modal-add-cancel-remark">Cancel</button>
                                 <a href="/Cart/MarkAsDelivered?OrderNumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-info mt-2">Mark as Delivered</a>
                                 <a href="/Cart/CustomerNotPickUp?OrderNumber=@Model.OrderNumber&id=@Model.Id" class="btn btn-info mt-2">Customer Not Pickup</a>
                             }
