@@ -1763,7 +1763,6 @@ namespace ShopNow.Controllers
         }
 
         [HttpPost]
-        [AccessPolicy(PageCode = "SNCPRAD221")]
         public ActionResult UpdatePrice(UpdatePriceViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
