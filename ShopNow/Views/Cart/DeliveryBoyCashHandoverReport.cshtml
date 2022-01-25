@@ -19,7 +19,7 @@
                 </div>
                 <div class="col-md-3">
                     <select name="DeliveryBoyId" id="DeliveryBoyId" class="form-control">
-                        @if (Model.DeliveryBoyId == 0)
+                        @if (Model.DeliveryBoyId != 0)
                         {
                             <option value="@Model.DeliveryBoyId">@Model.DeliveryBoyName</option>
                         }
