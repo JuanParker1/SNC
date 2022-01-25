@@ -514,6 +514,9 @@ namespace ShopNow.Controllers
                         UnitPrice = i.UnitPrice,
                         AddonType = i.AddOnType,
                         HasAddon = i.HasAddon,
+                        UpdatedBy = i.UpdatedBy,
+                        UpdatedTime = i.UpdatedTime,
+                        UpdateRemarks = i.UpdateRemarks,
                         AddonListItems = db.OrderItemAddons.Where(a => a.OrderItemId == i.Id)
                         .Select(a => new CartDetailsViewModel.ListItem.AddonListItem
                         {
@@ -1647,7 +1650,7 @@ namespace ShopNow.Controllers
             return count;
         }
 
-        public ActionResult UpdateItem(long orderid, long id, int quantity, double unitprice)
+        public ActionResult UpdateItem(long orderid, long id, int quantity, double unitprice,string remarks)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             var order = db.Orders.FirstOrDefault(i => i.Id == orderid);
@@ -1655,6 +1658,9 @@ namespace ShopNow.Controllers
             orderItem.Quantity = quantity;
             orderItem.UnitPrice = unitprice;
             orderItem.Price = quantity * unitprice;
+            orderItem.UpdatedBy = user.Name;
+            orderItem.UpdatedTime = DateTime.Now;
+            orderItem.UpdateRemarks = remarks;
             db.Entry(orderItem).State = EntityState.Modified;
             db.SaveChanges();
 

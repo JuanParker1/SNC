@@ -865,6 +865,9 @@
           <Property Name="HasAddon" Type="bit" Nullable="false" />
           <Property Name="AddOnType" Type="int" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="UpdateRemarks" Type="nvarchar(max)" />
+          <Property Name="UpdatedBy" Type="nvarchar" MaxLength="100" />
+          <Property Name="UpdatedTime" Type="datetime" />
         </EntityType>
         <EntityType Name="Orders">
           <Key>
@@ -1552,6 +1555,10 @@
         </Function>
         <Function Name="GetShopname" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="shopId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetShopProductSearch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="shopId" Type="int" Mode="In" />
+          <Parameter Name="str" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="GetTableVAlueString" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="key" Type="nvarchar" Mode="In" />
@@ -3082,13 +3089,8 @@
           <FunctionImport Name="GetDashBoardDetails" ReturnType="Collection(sncModel.GetDashBoardDetails_Result)" />
           <EntitySet Name="Customers" EntityType="sncModel.Customer" />
           <EntitySet Name="Products" EntityType="sncModel.Product" />
-          <EntitySet Name="OrderItems" EntityType="sncModel.OrderItem" />
           <EntitySet Name="CustomerAppInfoes" EntityType="sncModel.CustomerAppInfo" />
           <EntitySet Name="CustomerDeviceInfoes" EntityType="sncModel.CustomerDeviceInfo" />
-          <FunctionImport Name="GetShopProductSearch" ReturnType="Collection(sncModel.GetShopProductSearch_Result)">
-            <Parameter Name="shopId" Mode="In" Type="Int32" />
-            <Parameter Name="str" Mode="In" Type="String" />
-          </FunctionImport>
           <EntitySet Name="CustomerGiftCards" EntityType="sncModel.CustomerGiftCard" />
           <FunctionImport Name="GetShopCategoryProducts" ReturnType="Collection(sncModel.GetShopCategoryProducts_Result)">
             <Parameter Name="shopCode" Mode="In" Type="Int32" />
@@ -3114,6 +3116,11 @@
             <Parameter Name="pageSize" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="CustomerPrescriptions" EntityType="sncModel.CustomerPrescription" />
+          <FunctionImport Name="GetShopProductSearch" ReturnType="Collection(sncModel.GetShopProductSearch_Result)">
+            <Parameter Name="shopId" Mode="In" Type="Int32" />
+            <Parameter Name="str" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="OrderItems" EntityType="sncModel.OrderItem" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3276,32 +3283,6 @@
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="OrderItem">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OrderId" Type="Int64" Nullable="false" />
-          <Property Name="OrdeNumber" Type="Int32" Nullable="false" />
-          <Property Name="ProductId" Type="Int64" Nullable="false" />
-          <Property Name="ProductName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="BrandId" Type="Int32" Nullable="false" />
-          <Property Name="BrandName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CategoryId" Type="Int32" Nullable="false" />
-          <Property Name="CategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Quantity" Type="Int32" Nullable="false" />
-          <Property Name="UnitPrice" Type="Double" Nullable="false" />
-          <Property Name="Price" Type="Double" Nullable="false" />
-          <Property Name="MRPPrice" Type="Double" Nullable="false" />
-          <Property Name="ShopPrice" Type="Double" Nullable="false" />
-          <Property Name="OfferId" Type="Int32" />
-          <Property Name="OfferAmount" Type="Double" Nullable="false" />
-          <Property Name="MiddlePrice" Type="Double" Nullable="false" />
-          <Property Name="HasAddon" Type="Boolean" Nullable="false" />
-          <Property Name="AddOnType" Type="Int32" Nullable="false" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-        </EntityType>
         <EntityType Name="CustomerAppInfo">
           <Key>
             <PropertyRef Name="Id" />
@@ -3330,12 +3311,6 @@
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
-        <ComplexType Name="GetShopProductSearch_Result">
-          <Property Type="Int64" Name="Id" Nullable="false" />
-          <Property Type="String" Name="ProductName" Nullable="true" />
-          <Property Type="Int32" Name="adscore" Nullable="false" />
-          <Property Type="String" Name="ImagePath" Nullable="true" />
-        </ComplexType>
         <EntityType Name="CustomerGiftCard">
           <Key>
             <PropertyRef Name="Id" />
@@ -3469,6 +3444,41 @@
           <Property Name="CancelRemarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <ComplexType Name="GetShopProductSearch_Result">
+          <Property Type="Int64" Name="Id" Nullable="false" />
+          <Property Type="String" Name="ProductName" Nullable="true" />
+          <Property Type="Int32" Name="adscore" Nullable="false" />
+          <Property Type="String" Name="ImagePath" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="OrderItem">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderId" Type="Int64" Nullable="false" />
+          <Property Name="OrdeNumber" Type="Int32" Nullable="false" />
+          <Property Name="ProductId" Type="Int64" Nullable="false" />
+          <Property Name="ProductName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BrandId" Type="Int32" Nullable="false" />
+          <Property Name="BrandName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <Property Name="CategoryName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="UnitPrice" Type="Double" Nullable="false" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="MRPPrice" Type="Double" Nullable="false" />
+          <Property Name="ShopPrice" Type="Double" Nullable="false" />
+          <Property Name="OfferId" Type="Int32" />
+          <Property Name="OfferAmount" Type="Double" Nullable="false" />
+          <Property Name="MiddlePrice" Type="Double" Nullable="false" />
+          <Property Name="HasAddon" Type="Boolean" Nullable="false" />
+          <Property Name="AddOnType" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="UpdateRemarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedTime" Type="DateTime" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -4986,33 +4996,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="OrderItems">
-            <EntityTypeMapping TypeName="sncModel.OrderItem">
-              <MappingFragment StoreEntitySet="OrderItems">
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="AddOnType" ColumnName="AddOnType" />
-                <ScalarProperty Name="HasAddon" ColumnName="HasAddon" />
-                <ScalarProperty Name="MiddlePrice" ColumnName="MiddlePrice" />
-                <ScalarProperty Name="OfferAmount" ColumnName="OfferAmount" />
-                <ScalarProperty Name="OfferId" ColumnName="OfferId" />
-                <ScalarProperty Name="ShopPrice" ColumnName="ShopPrice" />
-                <ScalarProperty Name="MRPPrice" ColumnName="MRPPrice" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
-                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
-                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
-                <ScalarProperty Name="BrandName" ColumnName="BrandName" />
-                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="OrdeNumber" ColumnName="OrdeNumber" />
-                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="CustomerAppInfoes">
             <EntityTypeMapping TypeName="sncModel.CustomerAppInfo">
               <MappingFragment StoreEntitySet="CustomerAppInfo">
@@ -5182,6 +5165,46 @@
                 <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetShopProductSearch" FunctionName="sncModel.Store.GetShopProductSearch">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="sncModel.GetShopProductSearch_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="adscore" ColumnName="adscore" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="OrderItems">
+            <EntityTypeMapping TypeName="sncModel.OrderItem">
+              <MappingFragment StoreEntitySet="OrderItems">
+                <ScalarProperty Name="UpdatedTime" ColumnName="UpdatedTime" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="UpdateRemarks" ColumnName="UpdateRemarks" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="AddOnType" ColumnName="AddOnType" />
+                <ScalarProperty Name="HasAddon" ColumnName="HasAddon" />
+                <ScalarProperty Name="MiddlePrice" ColumnName="MiddlePrice" />
+                <ScalarProperty Name="OfferAmount" ColumnName="OfferAmount" />
+                <ScalarProperty Name="OfferId" ColumnName="OfferId" />
+                <ScalarProperty Name="ShopPrice" ColumnName="ShopPrice" />
+                <ScalarProperty Name="MRPPrice" ColumnName="MRPPrice" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ImagePath" ColumnName="ImagePath" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="BrandName" ColumnName="BrandName" />
+                <ScalarProperty Name="BrandId" ColumnName="BrandId" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="OrdeNumber" ColumnName="OrdeNumber" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

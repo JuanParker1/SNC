@@ -87,6 +87,9 @@ namespace ShopNow.ViewModels
             public double Price { get; set; }
             public int AddonType { get; set; }
             public bool HasAddon { get; set; }
+            public string UpdateRemarks { get; set; }
+            public string UpdatedBy { get; set; }
+            public DateTime? UpdatedTime { get; set; }
 
             public List<AddonListItem> AddonListItems { get; set; }
             public class AddonListItem

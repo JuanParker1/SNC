@@ -2488,7 +2488,7 @@ namespace ShopNow.Controllers
                     .Select(i => new ShopDetails.CategoryList
                     {
                         Id = i.Id,
-                        ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/1.5-cm-X-1.5-cm.png"),
+                        ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/notavailable.png"),
                         Name = i.Name,
                         OrderNo = i.OrderNo
                     }).ToList<ShopDetails.CategoryList>();
@@ -2501,11 +2501,11 @@ namespace ShopNow.Controllers
                     OrderNo = i.OrderNo
                 }).ToList();
             }
-            else
+            else if(shop.ShopCategoryId != 3) //not shop category for supermarkets
             {
                 model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryId as Id, c.Name as Name from Products p join Categories c on c.Id = p.CategoryId where ShopId ={shopId}  and c.Status = 0 and CategoryId !=0 and c.Name is not null group by CategoryId,c.Name order by Name").ToList<ShopDetails.CategoryList>();
             }
-            if (shop.ShopCategoryId == 1)
+            if (shop.ShopCategoryId == 1 || shop.ShopCategoryId == 3)
             {
                 //model.ProductLists = (from pl in db.Products
                 //                      join m in db.MasterProducts on pl.MasterProductId equals m.Id

@@ -98,12 +98,12 @@ namespace ShopNow.Models
         public virtual DbSet<UserEnquiry> UserEnquiries { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<Product> Products { get; set; }
-        public virtual DbSet<OrderItem> OrderItems { get; set; }
         public virtual DbSet<CustomerAppInfo> CustomerAppInfoes { get; set; }
         public virtual DbSet<CustomerDeviceInfo> CustomerDeviceInfoes { get; set; }
         public virtual DbSet<CustomerGiftCard> CustomerGiftCards { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<CustomerPrescription> CustomerPrescriptions { get; set; }
+        public virtual DbSet<OrderItem> OrderItems { get; set; }
     
         [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)
@@ -431,19 +431,6 @@ namespace ShopNow.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetDashBoardDetails_Result>("GetDashBoardDetails");
         }
     
-        public virtual ObjectResult<GetShopProductSearch_Result> GetShopProductSearch(Nullable<int> shopId, string str)
-        {
-            var shopIdParameter = shopId.HasValue ?
-                new ObjectParameter("shopId", shopId) :
-                new ObjectParameter("shopId", typeof(int));
-    
-            var strParameter = str != null ?
-                new ObjectParameter("str", str) :
-                new ObjectParameter("str", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetShopProductSearch_Result>("GetShopProductSearch", shopIdParameter, strParameter);
-        }
-    
         public virtual ObjectResult<GetShopCategoryProducts_Result> GetShopCategoryProducts(Nullable<int> shopCode, Nullable<int> categoryCode, string str, Nullable<int> page, Nullable<int> pageSize, Nullable<int> customerid)
         {
             var shopCodeParameter = shopCode.HasValue ?
@@ -521,6 +508,19 @@ namespace ShopNow.Models
                 new ObjectParameter("pageSize", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("GetAllSearchResult", longitudeParameter, latitudeParameter, strParameter, customeridParameter, pageParameter, pageSizeParameter);
+        }
+    
+        public virtual ObjectResult<GetShopProductSearch_Result> GetShopProductSearch(Nullable<int> shopId, string str)
+        {
+            var shopIdParameter = shopId.HasValue ?
+                new ObjectParameter("shopId", shopId) :
+                new ObjectParameter("shopId", typeof(int));
+    
+            var strParameter = str != null ?
+                new ObjectParameter("str", str) :
+                new ObjectParameter("str", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetShopProductSearch_Result>("GetShopProductSearch", shopIdParameter, strParameter);
         }
     }
 }
