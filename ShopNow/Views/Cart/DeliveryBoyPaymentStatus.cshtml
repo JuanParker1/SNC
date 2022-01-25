@@ -16,26 +16,22 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <select name="DeliveryBoyId" id="DeliveryBoyId" class="form-control"></select>
-                    <input type="hidden" name="DeliveryBoyName" id="DeliveryBoyName" />
+                    <select name="DeliveryBoyId" id="DeliveryBoyId" class="form-control">
+                        @if (Model.DeliveryBoyId != 0)
+                        {
+                            <option value="@Model.DeliveryBoyId">@Model.DeliveryBoyName</option>
+                        }
+                    </select>
+                    <input type="hidden" name="DeliveryBoyName" id="DeliveryBoyName" value="@Model.DeliveryBoyName" />
                 </div>
-                <div class="col-md-3"></div>
-                <div class="col-md-1 text-right">
-                    <div class="input-group">
-                        <button id="btnPrint" class="btn btn-sm btn-secondary mr-2" value="Print"><i class="fa fa-print fa-lg" aria-hidden="true"></i></button>
-                        <button id="btnExport" class="btn btn-sm btn-secondary" value="Export To Excel"><i class="fa fa-file-excel-o fa-lg" aria-hidden="true"></i></button>
-                    </div>
-                </div>
-            </div>
+            </div> 
             <div class="row form-group">
                 <div class="col-md-3"></div>
                 <div class="col-md-5">
                     <div class="input-daterange input-group">
-                        <input type="date" class="form-control" placeholder="From Date" id="datepicker" name="startDate">
+                        <input type="date" class="form-control well well-sm" placeholder="From Date" id="datepicker" name="StartDate" @if (Model.StartDate != null) { <text> value="@Model.StartDate.Value.ToString("yyyy-MM-dd")" </text> }>
                         <span class="input-group-addon mx-3">to</span>
-                        <input type="date" class="form-control" placeholder="To Date" id="datepicker1" name="endDate">
-                        <input type="hidden" id="StartDate" value="@Model.StartingDate" />
-                        <input type="hidden" id="EndDate" value="@Model.EndingDate" />
+                        <input type="date" class="form-control" placeholder="To Date" id="datepicker1" name="EndDate" @if (Model.EndDate != null) { <text> value="@Model.EndDate.Value.ToString("yyyy-MM-dd")" </text> }>
                     </div>
                 </div>
                 <div class="col-md-1">
@@ -89,6 +85,7 @@
         </div>
     </div>
 }
+
 @section Scripts
 {
     <!--Select2-->
@@ -154,10 +151,10 @@
                 $('input[name="DeliveryBoyName"]').val(e.params.data.text);
             });
 
-            $("#Filter").click(function () {
-                var DeliveryBoyId = $("#DeliveryBoyId").val();
-                window.location.href = "/Cart/DeliveryBoyPaymentStatus/?DeliveryBoyId=" + DeliveryBoyId;
-            });
+            //$("#Filter").click(function () {
+            //    var DeliveryBoyId = $("#DeliveryBoyId").val();
+            //    window.location.href = "/Cart/DeliveryBoyPaymentStatus?DeliveryBoyId=" + DeliveryBoyId;
+            //});
 
             $('.btnPayNow').click(function () {
                 var ordernumber = $(this).attr('data-orderno');

@@ -842,14 +842,14 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCCDPS080")]
-        public ActionResult DeliveryBoyPaymentStatus(DateTime? StartDate, DateTime? EndDate, int DeliveryBoyId = 0)
+        public ActionResult DeliveryBoyPaymentStatus(CartReportViewModel model)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var model = new CartReportViewModel();
+           // var model = new CartReportViewModel();
 
             model.DeliveryBoyPaymentStatusLists = db.Orders
-                   .Where(i => i.Status == 6 && ((StartDate != null && EndDate != null) ? DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(EndDate) : true) && (DeliveryBoyId != 0 ? i.DeliveryBoyId == DeliveryBoyId : true))
+                   .Where(i => i.Status == 6 && ((model.StartDate != null && model.EndDate != null) ? DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate) : true) && (model.DeliveryBoyId != 0 ? i.DeliveryBoyId == model.DeliveryBoyId : true))
                        .Select(i => new CartReportViewModel.DeliveryBoyPaymentStatusList
                        {
                            Id = i.Id,
