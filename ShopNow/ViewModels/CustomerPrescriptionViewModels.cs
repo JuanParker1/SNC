@@ -120,5 +120,6 @@ namespace ShopNow.ViewModels
     public class CustomerPrescriptionCancelViewModel
     {
         public int Id { get; set; }
+        public string CancelRemarks { get; set; }
     }
 }

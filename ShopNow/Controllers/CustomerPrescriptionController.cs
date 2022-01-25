@@ -58,6 +58,34 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
+        public ActionResult CancelList()
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            var list = db.CustomerPrescriptions.OrderByDescending(i => i.Id).ToList();
+            var model = new CustomerPrescriptionWebListViewModel();
+            model.ListItems = db.CustomerPrescriptions.Where(i => i.Status == 2).OrderByDescending(i => i.Id)
+                .GroupJoin(db.CustomerPrescriptionImages, cp => cp.Id, cpi => cpi.CustomerPrescriptionId, (cp, cpi) => new { cp, cpi })
+                .Select(i => new CustomerPrescriptionWebListViewModel.ListItem
+                {
+                    Id = i.cp.Id,
+                    AudioPath = (!string.IsNullOrEmpty(i.cp.AudioPath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Audio/" + i.cp.AudioPath : "",
+                    CustomerId = i.cp.CustomerId,
+                    CustomerName = i.cp.CustomerName,
+                    CustomerPhoneNumber = i.cp.CustomerPhoneNumber,
+                    ImagePath = i.cp.ImagePath,
+                    Remarks = i.cp.Remarks,
+                    ShopId = i.cp.ShopId,
+                    DateEncoded = i.cp.DateEncoded,
+                    Status = i.cp.Status,
+                    ImagePathLists = i.cpi.Select(a => new CustomerPrescriptionWebListViewModel.ListItem.ImagePathList
+                    {
+                        ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + a.ImagePath
+                    }).ToList()
+                }).ToList();
+            return View(model);
+        }
+
         [AccessPolicy(PageCode = "SNCCPAC298")]
         public ActionResult AddToCart(int id)
         {
@@ -405,7 +433,16 @@ namespace ShopNow.Controllers
 
         public ActionResult Cancel(CustomerPrescriptionCancelViewModel model)
         {
-            return RedirectToAction("CancelList");
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            var cp = db.CustomerPrescriptions.Where(b => b.Id == model.Id).FirstOrDefault();
+            if (cp != null)
+            {
+                cp.Status = 2;
+                cp.CancelRemarks = model.CancelRemarks;
+                db.Entry(cp).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return RedirectToAction("List");
         }
 
     }
