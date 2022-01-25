@@ -403,5 +403,10 @@ namespace ShopNow.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult Cancel(CustomerPrescriptionCancelViewModel model)
+        {
+            return RedirectToAction("CancelList");
+        }
+
     }
 }

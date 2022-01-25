@@ -476,12 +476,15 @@ namespace ShopNow.ViewModels
     public class CartReportViewModel
     {
         public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public string StartingDate { get; set; }
         public string EndingDate { get; set; }
         public int ShopId { get; set; }
         public string ShopName { get; set; }
         public int YearFilter { get; set; }
         public int StartMonthFilter { get; set; }
+        public int DeliveryBoyId { get; set; }
+        public string DeliveryBoyName { get; set; }
         public List<CartReportList> List { get; set; }
         public class CartReportList
         {

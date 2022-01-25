@@ -117,4 +117,8 @@ namespace ShopNow.ViewModels
             public double MRPPrice { get; set; }
         }
     }
+    public class CustomerPrescriptionCancelViewModel
+    {
+        public int Id { get; set; }
+    }
 }
