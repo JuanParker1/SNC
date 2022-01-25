@@ -25,6 +25,7 @@ namespace ShopNow.Models
         public string DeliveryAddress { get; set; }
         public Nullable<double> Latitude { get; set; }
         public Nullable<double> Longitude { get; set; }
+        public string CancelRemarks { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
     }

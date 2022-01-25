@@ -6407,6 +6407,31 @@ namespace ShopNow.Controllers
 
         }
 
+        public JsonResult GetSuperMarketCategoryList(int shopid)
+        {
+            var model = new SuperMarketCategoryList();
+            model.AllList = db.Products.Where(i => i.ShopId == shopid)
+                .Join(db.Categories, p => p.CategoryId, c => c.Id, (p, c) => new { p, c })
+                .GroupBy(i => i.p.CategoryId)
+                .Select(i => new SuperMarketCategoryList.ListItem
+                {
+                    Id = i.FirstOrDefault().c.Id,
+                    Name = i.FirstOrDefault().c.Name,
+                    ImagePath = ((!string.IsNullOrEmpty(i.FirstOrDefault().c.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.FirstOrDefault().c.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/notavailable.png"),
+                    OrderNo = i.FirstOrDefault().c.OrderNo
+                }).OrderBy(i=>i.Name).ToList();
+
+            model.TrendingList = model.AllList.Where(i => i.OrderNo != 0).OrderBy(i => i.OrderNo).Take(8)
+                .Select(i => new SuperMarketCategoryList.ListItem
+                {
+                    Id = i.Id,
+                    Name = i.Name,
+                    ImagePath = ((!string.IsNullOrEmpty(i.ImagePath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath.Replace("%", "%25").Replace("% ", "%25").Replace("+", "%2B").Replace(" + ", "+%2B+").Replace("+ ", "%2B+").Replace(" ", "+").Replace("#", "%23") : "../../assets/images/notavailable.png"),
+                    OrderNo = i.OrderNo
+                }).ToList();
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "")
         {
             Helpers.PushNotification.SendbydeviceId(body, title, "", deviceId);
