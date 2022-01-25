@@ -2481,7 +2481,7 @@ namespace ShopNow.Controllers
             else
                 reviewCount = 0;
             model.CustomerReview = reviewCount;
-            
+
             if (shop.ShopCategoryId == 4)
             {
                 model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryId as Id, c.Name as Name,c.ImagePath,c.OrderNo from Products p join Categories c on c.Id = p.CategoryId where ShopId ={shopId}  and c.Status = 0 and CategoryId !=0 and c.Name is not null group by CategoryId,c.Name,c.ImagePath,c.OrderNo order by Name")
@@ -2493,7 +2493,7 @@ namespace ShopNow.Controllers
                         OrderNo = i.OrderNo
                     }).ToList<ShopDetails.CategoryList>();
 
-                model.TrendingCategoryLists = model.CategoryLists.Where(i=>i.OrderNo !=0).OrderBy(i => i.OrderNo).Take(8).Select(i => new ShopDetails.CategoryList
+                model.TrendingCategoryLists = model.CategoryLists.Where(i => i.OrderNo != 0).OrderBy(i => i.OrderNo).Take(8).Select(i => new ShopDetails.CategoryList
                 {
                     Id = i.Id,
                     ImagePath = i.ImagePath,
@@ -2501,7 +2501,21 @@ namespace ShopNow.Controllers
                     OrderNo = i.OrderNo
                 }).ToList();
             }
-            else if(shop.ShopCategoryId != 3) //not shop category for supermarkets
+            else if (shop.ShopCategoryId == 2) // For Meat & Veg Send Next Sub Category Values
+            {
+                model.CategoryLists = db.Products.Where(i => i.ShopId == shopId && i.Status==0 && (i.MenuPrice !=0 || i.Price !=0))
+                    .Join(db.MasterProducts, p => p.MasterProductId, m => m.Id, (p, m) => new { p, m })
+                    .GroupJoin(db.NextSubCategories, p => p.m.NextSubCategoryId, nsc => nsc.Id, (p, nsc) => new { p, nsc })
+                    .GroupBy(i => i.p.m.NextSubCategoryId)
+                    .Select(i => new ShopDetails.CategoryList
+                    {
+                        Id = i.FirstOrDefault().p.m.NextSubCategoryId,
+                        ImagePath= "../../assets/images/notavailable.png",
+                        Name = i.FirstOrDefault().nsc.Any()? i.FirstOrDefault().nsc.FirstOrDefault().Name: "Not Sub Categorized",
+                        OrderNo = 0
+                    }).OrderBy(i=>i.Name).ToList();
+            }
+            else if (shop.ShopCategoryId != 3) //not shop category for supermarkets
             {
                 model.CategoryLists = db.Database.SqlQuery<ShopDetails.CategoryList>($"select distinct CategoryId as Id, c.Name as Name from Products p join Categories c on c.Id = p.CategoryId where ShopId ={shopId}  and c.Status = 0 and CategoryId !=0 and c.Name is not null group by CategoryId,c.Name order by Name").ToList<ShopDetails.CategoryList>();
             }
