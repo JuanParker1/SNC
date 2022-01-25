@@ -733,14 +733,15 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCCDHR079")]
-        public ActionResult DeliveryBoyCashHandoverReport(DateTime? StartDate, DateTime? EndDate, int deliveryboyId = 0)
+       // public ActionResult DeliveryBoyCashHandoverReport(DateTime? StartDate, DateTime? EndDate, int deliveryboyId = 0)
+        public ActionResult DeliveryBoyCashHandoverReport(CartReportViewModel model)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            var model = new CartReportViewModel();
+           // var model = new CartReportViewModel();
 
-            model.List = db.Payments.Where(i => i.Status == 0 && i.PaymentMode == "Cash On Hand" && ((StartDate != null && EndDate != null) ? DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(EndDate) : true))
-                .Join(db.Orders.Where(i => i.Status == 6 && (deliveryboyId != 0 ? i.DeliveryBoyId == deliveryboyId : true)), p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
+            model.List = db.Payments.Where(i => i.Status == 0 && i.PaymentMode == "Cash On Hand" && ((model.StartDate != null && model.EndDate != null) ? DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate) : true))
+                .Join(db.Orders.Where(i => i.Status == 6 && (model.DeliveryBoyId != 0 ? i.DeliveryBoyId == model.DeliveryBoyId : true)), p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
                    .Select(i => new CartReportViewModel.CartReportList
                    {
                        Id = i.c.Id,

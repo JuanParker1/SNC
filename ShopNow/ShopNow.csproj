@@ -3312,6 +3312,7 @@
     <Content Include="Views\Product\UpdatePrice.cshtml" />
     <Content Include="Views\Support\PaymentUpdate.cshtml" />
     <Content Include="Views\Accounts\BillWiseReport.cshtml" />
+    <Content Include="Views\CustomerPrescription\CancelList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
