@@ -323,6 +323,7 @@ namespace ShopNow.ViewModels
             public int Status { get; set; }
             public DateTime DateEncoded { get; set; }
             public DateTime DateUpdated { get; set; }
+            public DateTime? DeliveredTime { get; set; }
             public string PaymentMode { get; set; }
             public double Price { get; set; }
             public double Amount { get; set; }
