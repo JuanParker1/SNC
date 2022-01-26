@@ -995,7 +995,7 @@ namespace ShopNow.Controllers
                     //}
                 }
             }
-            return View();
+            return RedirectToAction("UpdateStock");
         }
 
         [HttpGet]
