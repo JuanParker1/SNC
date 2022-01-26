@@ -89,7 +89,6 @@ namespace ShopNow.Models
         public virtual DbSet<ShopDishAddOn> ShopDishAddOns { get; set; }
         public virtual DbSet<ShopMember> ShopMembers { get; set; }
         public virtual DbSet<Shop> Shops { get; set; }
-        public virtual DbSet<ShopSchedule> ShopSchedules { get; set; }
         public virtual DbSet<ShopStaff> ShopStaffs { get; set; }
         public virtual DbSet<Specification> Specifications { get; set; }
         public virtual DbSet<Staff> Staffs { get; set; }
@@ -104,6 +103,7 @@ namespace ShopNow.Models
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<CustomerPrescription> CustomerPrescriptions { get; set; }
         public virtual DbSet<OrderItem> OrderItems { get; set; }
+        public virtual DbSet<ShopSchedule> ShopSchedules { get; set; }
     
         [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)

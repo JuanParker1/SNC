@@ -132,8 +132,12 @@ namespace ShopNow.Controllers
                         db.SaveChanges();
                     }
                 }
-                //return Json(false, JsonRequestBehavior.AllowGet);
+
             }
+
+            var productList = db.Products.Where(i => model.ProductId.Contains(i.Id)).ToList();
+            productList.ForEach(i => i.HasSchedule = true);
+            db.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 

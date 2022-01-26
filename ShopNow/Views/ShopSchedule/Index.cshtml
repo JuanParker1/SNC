@@ -36,6 +36,7 @@
                         <thead class="bg-light">
                             <tr>
                                 <th>Shop Name</th>
+                                <th>Leave Days</th>
                                 <th>Schedule Time(s)</th>
                                 <th>On/Off</th>
                                 <th>Action</th>
@@ -44,27 +45,40 @@
                         <tbody>
                             @foreach (var item in Model.ListItems)
                             {
-                                <tr>
-                                    <td>@item.ShopName</td>
-                                    <td>
-                                        @foreach (var time in item.TimeListItems)
-                                        {
+                            <tr>
+                                <td>@item.ShopName</td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.LeaveDays))
+                                    {
+                                    <div class="d-flex">
+                                        <span>@item.LeaveDays</span>
+                                        <a href="#modal-add-leavedays" data-target="#modal-add-leavedays" data-toggle="modal" data-shopid="@item.ShopId" data-leavedays="@item.LeaveDays" class="text-info mx-4 btn-edit-leavedays"><i class="fa fa-edit fa-lg"></i></a>
+                                        <a href="/ShopSchedule/RemoveLeaveDays?shopid=@ShopNow.Helpers.AdminHelpers.ECodeInt(item.ShopId)" class="text-danger"><i class="fa fa-close fa-lg"></i></a>
+                                    </div>
+                                    }
+                                    else
+                                    {
+                                    <a href="#modal-add-leavedays" data-target="#modal-add-leavedays" data-toggle="modal" data-shopid="@item.ShopId" class="btn btn-sm btn-outline-info btn-add-leavedays">Add Leave Days</a>
+                                    }</td>
+                                <td>
+                                    @foreach (var time in item.TimeListItems)
+                                    {
                                         <div class="d-flex">
                                             <span class="text-nowrap">@DateTime.Today.Add(time.OnTime.Value).ToString("hh:mm tt") - @DateTime.Today.Add(time.OffTime.Value).ToString("hh:mm tt")</span>
                                             <a href="#modal-update-timimgs" data-target="#modal-update-timimgs" data-toggle="modal" data-id="@time.Id" data-ontime="@time.OnTime" data-offtime="@time.OffTime" class="text-info mx-4 btn-edit-timing"><i class="fa fa-edit fa-lg"></i></a>
                                             <a href="/ShopSchedule/DeleteTiming?id=@ShopNow.Helpers.AdminHelpers.ECodeInt(time.Id)" class="text-danger"><i class="fa fa-close fa-lg"></i></a>
                                         </div>
-                                            
-                                        }
-                                    </td>
-                                    <td>
-                                        <label class="switch"><input type="checkbox" class='check-schedule' data-value="@item.HasSchedule" data-shopid="@item.ShopId"><span class='slider round'></span></label>
-                                    </td>
-                                    <td>
-                                        <a href="#modal-add-timimgs" data-target="#modal-add-timimgs" data-toggle="modal" data-shopid="@item.ShopId" class="text-info mr-4 btn-add-timing"><i class="fa fa-plus fa-lg"></i></a>
-                                        <a href="javascript:void(0)" data-shopid="@ShopNow.Helpers.AdminHelpers.ECodeInt(item.ShopId)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
-                                    </td>
-                                </tr>
+
+                                    }
+                                </td>
+                                <td>
+                                    <label class="switch"><input type="checkbox" class='check-schedule' data-value="@item.HasSchedule" data-shopid="@item.ShopId"><span class='slider round'></span></label>
+                                </td>
+                                <td>
+                                    <a href="#modal-add-timimgs" data-target="#modal-add-timimgs" data-toggle="modal" data-shopid="@item.ShopId" class="text-info mr-4 btn-add-timing"><i class="fa fa-plus fa-lg"></i></a>
+                                    <a href="javascript:void(0)" data-shopid="@ShopNow.Helpers.AdminHelpers.ECodeInt(item.ShopId)" class="text-danger btnDelete"><i class="fa fa-trash fa-lg"></i></a>
+                                </td>
+                            </tr>
                             }
                         </tbody>
                     </table>
@@ -87,6 +101,18 @@
                 <div class="form-group">
                     <label class="col-form-label font-weight-bold text-muted">Select Shop</label>
                     <select id="select-shop" class="form-control" name="ShopId"></select>
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label font-weight-bold text-muted">Select Leave Days</label>
+                    <select id="select-leavedays" class="form-control" name="LeaveDays" multiple>
+                        <option value="Monday">Monday</option>
+                        <option value="Tuesday">Tuesday</option>
+                        <option value="Wednesday">Wednesday</option>
+                        <option value="Thursday">Thursday</option>
+                        <option value="Firday">Firday</option>
+                        <option value="Saturday">Saturday</option>
+                        <option value="Sunday">Sunday</option>
+                    </select>
                 </div>
                 <hr />
                 <div class="row">
@@ -195,6 +221,38 @@
     </div>
 </div>
 
+<div class="modal fade" id="modal-add-leavedays" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert alert-info">
+                <h5 class="modal-title">Add/Update Leave Days</h5>
+                <button type="button" class="btnClose close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/ShopSchedule/AddUpdateLeaveDays" method="post">
+                    <input type="hidden" name="ShopId" />
+                    <div class="form-group">
+                        <label class="col-form-label font-weight-bold text-muted">Select Leave Days</label>
+                        <select id="add-select-leavedays" class="form-control" name="LeaveDays" multiple>
+                            <option value="Monday">Monday</option>
+                            <option value="Tuesday">Tuesday</option>
+                            <option value="Wednesday">Wednesday</option>
+                            <option value="Thursday">Thursday</option>
+                            <option value="Firday">Firday</option>
+                            <option value="Saturday">Saturday</option>
+                            <option value="Sunday">Sunday</option>
+                        </select>
+                    </div>
+                    <hr />
+                    <div class="mx-auto col-8 mt-3"> <input type="submit" value="Submit" class="btn btn-success btn-block" /></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts
 {
     <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
@@ -205,6 +263,11 @@
     <script>
         $(document).ready(function () {
             var timeArray = [];
+
+            $('[name="LeaveDays"]').select2({
+                placeholder: "Search Days",
+                width: '100%'
+            });
 
             $('table tbody tr').each(function () {
                 var $this = $(this).find(".check-schedule");
@@ -294,7 +357,8 @@
                     if (timeArray.length > 0) {
                         var model = {
                             shopId: $('#select-shop').val(),
-                            timeListItems: timeArray
+                            timeListItems: timeArray,
+                            leaveDays: $('#select-leavedays').val()
                         }
                         $.post('/ShopSchedule/Add', model, function (data) {
                             if (data) {
@@ -324,7 +388,18 @@
             $("#tbl-shop-schedules").on('click', '.btn-add-timing', function () {
                 $('[name="ShopId"]').val($(this).attr('data-shopid'));
             });
-            
+
+            $("#tbl-shop-schedules").on('click', '.btn-add-leavedays', function () {
+                $('[name="ShopId"]').val($(this).attr('data-shopid'));
+            });
+
+            $("#tbl-shop-schedules").on('click', '.btn-edit-leavedays', function () {
+                $('[name="ShopId"]').val($(this).attr('data-shopid'));
+                var days_array = $(this).attr('data-leavedays').split(',');
+                $.each(days_array, function (i) {
+                    $("select[name='LeaveDays'] option[value='" + days_array[i] + "']").prop("selected", true).trigger('change');
+                });
+            });
         });
     </script>
 }

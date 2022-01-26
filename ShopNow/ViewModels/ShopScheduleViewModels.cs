@@ -16,6 +16,7 @@ namespace ShopNow.ViewModels
             public int ShopId { get; set; }
             public string ShopName { get; set; }
             public bool HasSchedule { get; set; }
+            public string LeaveDays { get; set; }
 
             public List<TimeListItem> TimeListItems { get; set; }
             public class TimeListItem
@@ -30,6 +31,7 @@ namespace ShopNow.ViewModels
     public class ShopScheduleAddViewModel
     {
         public int ShopId { get; set; }
+        public string[] LeaveDays { get; set; }
         public List<TimeListItem> TimeListItems { get; set; }
         public class TimeListItem
         {

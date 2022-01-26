@@ -690,6 +690,7 @@ namespace ShopNow.ViewModels
         public int ShopId { get; set; }
         public string ShopName { get; set; }
         public int Percentage { get; set; }
+        public int Type { get; set; }
     }
 
     public class ProductZeroPriceList
