@@ -73,7 +73,11 @@ namespace ShopNow.ViewModels
         public bool IsPrescriptionOrder { get; set; }
         public string PrescriptionImagePath { get; set; }
         public double TotalShopPrice { get; set; }
-
+        public List<ImagePathList> ImagePathLists { get; set; }
+        public class ImagePathList
+        {
+            public string ImagePath { get; set; }
+        }
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {
@@ -166,7 +170,11 @@ namespace ShopNow.ViewModels
         public double Amount { get; set; }
         public double? RefundAmount { get; set; }
         public string RefundRemark { get; set; }
-
+        public List<ImagePathList> ImagePathLists { get; set; }
+        public class ImagePathList
+        {
+            public string ImagePath { get; set; }
+        }
         public List<TodayList> TodayLists { get; set; }
         public class TodayList
         {

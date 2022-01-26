@@ -1414,6 +1414,7 @@
           <Property Name="ShopId" Type="int" Nullable="false" />
           <Property Name="OnTime" Type="time" Precision="7" />
           <Property Name="OffTime" Type="time" Precision="7" />
+          <Property Name="LeaveDays" Type="nvarchar" MaxLength="150" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="UpdatedBy" Type="nvarchar" MaxLength="50" />
           <Property Name="DateTimeUpdated" Type="datetime" Nullable="false" />
@@ -2832,18 +2833,6 @@
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="ShopSchedule">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ShopId" Type="Int32" Nullable="false" />
-          <Property Name="OnTime" Type="Time" Precision="7" />
-          <Property Name="OffTime" Type="Time" Precision="7" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="UpdatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DateTimeUpdated" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
         <EntityType Name="ShopStaff">
           <Key>
             <PropertyRef Name="Id" />
@@ -2988,7 +2977,6 @@
           <EntitySet Name="ShopDishAddOns" EntityType="Self.ShopDishAddOn" />
           <EntitySet Name="ShopMembers" EntityType="Self.ShopMember" />
           <EntitySet Name="Shops" EntityType="Self.Shop" />
-          <EntitySet Name="ShopSchedules" EntityType="Self.ShopSchedule" />
           <EntitySet Name="ShopStaffs" EntityType="Self.ShopStaff" />
           <EntitySet Name="Specifications" EntityType="Self.Specification" />
           <EntitySet Name="Staffs" EntityType="Self.Staff" />
@@ -3121,6 +3109,7 @@
             <Parameter Name="str" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="OrderItems" EntityType="sncModel.OrderItem" />
+          <EntitySet Name="ShopSchedules" EntityType="sncModel.ShopSchedule" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3479,6 +3468,19 @@
           <Property Name="UpdateRemarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="ShopSchedule">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShopId" Type="Int32" Nullable="false" />
+          <Property Name="OnTime" Type="Time" Precision="7" />
+          <Property Name="OffTime" Type="Time" Precision="7" />
+          <Property Name="LeaveDays" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DateTimeUpdated" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -4691,19 +4693,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ShopSchedules">
-            <EntityTypeMapping TypeName="sncModel.ShopSchedule">
-              <MappingFragment StoreEntitySet="ShopSchedules">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
-                <ScalarProperty Name="OnTime" ColumnName="OnTime" />
-                <ScalarProperty Name="OffTime" ColumnName="OffTime" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-                <ScalarProperty Name="DateTimeUpdated" ColumnName="DateTimeUpdated" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ShopStaffs">
             <EntityTypeMapping TypeName="sncModel.ShopStaff">
               <MappingFragment StoreEntitySet="ShopStaffs">
@@ -5205,6 +5194,20 @@
                 <ScalarProperty Name="ProductId" ColumnName="ProductId" />
                 <ScalarProperty Name="OrdeNumber" ColumnName="OrdeNumber" />
                 <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ShopSchedules">
+            <EntityTypeMapping TypeName="sncModel.ShopSchedule">
+              <MappingFragment StoreEntitySet="ShopSchedules">
+                <ScalarProperty Name="DateTimeUpdated" ColumnName="DateTimeUpdated" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="LeaveDays" ColumnName="LeaveDays" />
+                <ScalarProperty Name="OffTime" ColumnName="OffTime" />
+                <ScalarProperty Name="OnTime" ColumnName="OnTime" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

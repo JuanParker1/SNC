@@ -494,6 +494,11 @@ namespace ShopNow.Controllers
             {
                 var shop = db.Shops.FirstOrDefault(i => i.Id == order.ShopId);
                 _mapper.Map(order, model);
+                model.ImagePathLists = db.CustomerPrescriptionImages.Where(i => i.CustomerPrescriptionId == order.CustomerPrescriptionId)
+                      .Select(i => new CartDetailsViewModel.ImagePathList
+                      {
+                          ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath
+                      }).ToList();
                 model.ShopAddress = shop.Address;
                 var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == order.DeliveryBoyId);
                 if (deliveryBoy != null)
@@ -623,6 +628,11 @@ namespace ShopNow.Controllers
                 model.TotalPrice = cart.NetTotal;
                 model.PaymentMode = cart.PaymentMode;
                 model.PrescriptionImagePath = cart.PrescriptionImagePath;
+                model.ImagePathLists = db.CustomerPrescriptionImages.Where(i => i.CustomerPrescriptionId == cart.CustomerPrescriptionId)
+                       .Select(i => new CartListViewModel.ImagePathList
+                       {
+                           ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + i.ImagePath
+                       }).ToList();
                 var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == cart.DeliveryBoyId);
                 if (deliveryBoy != null)
                 {
