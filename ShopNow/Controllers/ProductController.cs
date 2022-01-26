@@ -1770,20 +1770,34 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var productsList = db.Products.Where(i => i.ShopId == model.ShopId && i.Status == 0).ToList();
-            if (model.Percentage != 0)
+            if (model.Type == 1) // Increase Price and Menu Price with respect to Shop Price
             {
-                if (productsList != null)
+                if (model.Percentage != 0)
                 {
-                    productsList.ForEach(i => { i.Price = Math.Round(i.Price + (i.ShopPrice * model.Percentage) / 100, MidpointRounding.AwayFromZero); i.MenuPrice = Math.Round(i.MenuPrice + (i.ShopPrice * model.Percentage) / 100, MidpointRounding.AwayFromZero); });
-                    db.SaveChanges();
+                    if (productsList != null)
+                    {
+                        productsList.ForEach(i => { i.Price = Math.Round(i.Price + (i.ShopPrice * model.Percentage) / 100, MidpointRounding.AwayFromZero); i.MenuPrice = Math.Round(i.MenuPrice + (i.ShopPrice * model.Percentage) / 100, MidpointRounding.AwayFromZero); });
+                        db.SaveChanges();
+                    }
+                }
+                else
+                {
+                    if (productsList != null)
+                    {
+                        productsList.ForEach(i => { i.Price = Math.Round(i.ShopPrice - (i.ShopPrice * i.Percentage) / 100, MidpointRounding.AwayFromZero); i.MenuPrice = i.ShopPrice; });
+                        db.SaveChanges();
+                    }
                 }
             }
-            else
+            else //Increase all price
             {
-                if (productsList != null)
+                if (model.Percentage != 0)
                 {
-                    productsList.ForEach(i => { i.Price = Math.Round(i.ShopPrice - (i.ShopPrice * i.Percentage) / 100, MidpointRounding.AwayFromZero); i.MenuPrice = i.ShopPrice; });
-                    db.SaveChanges();
+                    if (productsList != null)
+                    {
+                        productsList.ForEach(i => { i.ShopPrice = Math.Round(i.ShopPrice + (i.ShopPrice * model.Percentage) / 100, MidpointRounding.AwayFromZero); i.Price = Math.Round(i.Price + (i.Price * model.Percentage) / 100, MidpointRounding.AwayFromZero); i.MenuPrice = Math.Round(i.MenuPrice + (i.MenuPrice * model.Percentage) / 100, MidpointRounding.AwayFromZero); });
+                        db.SaveChanges();
+                    }
                 }
             }
             ViewBag.Message = "Successfully Updated!";

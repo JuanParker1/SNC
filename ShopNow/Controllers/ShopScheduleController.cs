@@ -27,6 +27,7 @@ namespace ShopNow.Controllers
                 HasSchedule = i.FirstOrDefault().s.HasSchedule ?? false,
                 ShopId = i.Key,
                 ShopName = i.FirstOrDefault().s.Name,
+                LeaveDays = i.FirstOrDefault().sc.LeaveDays,
                 TimeListItems = i.Where(a => a.sc.Status == 0).Select(a => new ShopScheduleIndexViewModel.ListItem.TimeListItem
                 {
                     Id = a.sc.Id,
@@ -53,10 +54,11 @@ namespace ShopNow.Controllers
         [AccessPolicy(PageCode = "SNCSHUS269")]
         public JsonResult UpdateSchedule(int shopid, bool hasSchedule)
         {
-            var shop = db.Shops.FirstOrDefault(i => i.Id == shopid && i.Status == 0);
-            shop.HasSchedule = hasSchedule;
-            db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
+            //var shop = db.Shops.FirstOrDefault(i => i.Id == shopid && i.Status == 0);
+            //shop.HasSchedule = hasSchedule;
+            //db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
+            //db.SaveChanges();
+            UpdateShopSchedule(shopid, hasSchedule);
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
@@ -71,7 +73,8 @@ namespace ShopNow.Controllers
                 OnTime = onTime,
                 ShopId = shopid,
                 Status = 0,
-                UpdatedBy = user.Name
+                UpdatedBy = user.Name,
+                LeaveDays = db.ShopSchedules.FirstOrDefault(i=>i.ShopId == shopid).LeaveDays
             };
             db.ShopSchedules.Add(shopSchedule);
             db.SaveChanges();
@@ -121,16 +124,49 @@ namespace ShopNow.Controllers
                         OnTime = item.OnTime,
                         ShopId = model.ShopId,
                         Status = 0,
-                        UpdatedBy = user.Name
-                    };
+                        UpdatedBy = user.Name,
+                        LeaveDays = string.Join(",", model.LeaveDays)
+                };
                     db.ShopSchedules.Add(shopSchedule);
                     db.SaveChanges();
                 }
+
+                UpdateShopSchedule(model.ShopId, true);
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
             return Json(false, JsonRequestBehavior.AllowGet);
 
         }
 
+        public void UpdateShopSchedule(int shopid,bool hasSchedule)
+        {
+            var shop = db.Shops.FirstOrDefault(i => i.Id == shopid && i.Status == 0);
+            shop.HasSchedule = hasSchedule;
+            db.Entry(shop).State = System.Data.Entity.EntityState.Modified;
+            db.SaveChanges();
+        }
+
+        public ActionResult RemoveLeaveDays(string shopId)
+        {
+            int dId = AdminHelpers.DCodeInt(shopId);
+            var shopSchedule = db.ShopSchedules.Where(i => i.ShopId == dId && i.Status==0).ToList();
+            if (shopSchedule.Count() > 0)
+            {
+                shopSchedule.ForEach(i => i.LeaveDays = string.Empty);
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult AddUpdateLeaveDays(int shopId,string[] LeaveDays)
+        {
+            var shopSchedule = db.ShopSchedules.Where(i => i.ShopId == shopId && i.Status == 0).ToList();
+            if (shopSchedule.Count() > 0)
+            {
+                shopSchedule.ForEach(i => i.LeaveDays = string.Join(",", LeaveDays));
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }
     }
 }
