@@ -338,7 +338,7 @@ namespace ShopNow.Controllers
                     CustomerPhoneNumber = i.c.CustomerPhoneNumber,
                     Status = i.c.Status,
                     DateEncoded = i.c.DateEncoded,
-                    DateUpdated = i.c.DateUpdated,
+                    DeliveredTime = i.c.DeliveredTime == null ? i.c.DateUpdated : i.c.DeliveredTime,
                     Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
