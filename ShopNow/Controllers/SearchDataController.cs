@@ -21,6 +21,9 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             //var model = new SearchDataListViewModel();
+            model.EndDate = model.EndDate == null ? DateTime.Now : model.EndDate;
+            model.StartDate = model.StartDate == null ? DateTime.Now : model.StartDate;
+
             model.AllListItems = db.CustomerSearchDatas.Where(i => i.Status == 0 && (model.StartDate != null && model.EndDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate)) : false)
                 .GroupBy(i => i.SearchKeyword)
                 .Select(i => new SearchDataListViewModel.ListItem
@@ -46,7 +49,7 @@ namespace ShopNow.Controllers
                 }).Where(i => string.IsNullOrEmpty(i.OldCommonWord) && i.IsLinked != true).OrderByDescending(i => i.Date).ToList();
 
             model.ListWithLinkedKeywords = db.CustomerSearchDatas
-              .Where(i => i.Status==0  && ((model.StartDate != null && model.EndDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate)) : true))
+              .Where(i => i.Status == 0 && ((model.StartDate != null && model.EndDate != null) ? (DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate)) : false))
               .AsEnumerable()
                .GroupBy(i => i.SearchKeyword, StringComparer.InvariantCultureIgnoreCase).Where(i => i.Sum(a => a.ResultCount) == 0)
                .GroupJoin(db.SearchDatas, k => k.Key?.ToLower(), sd => sd.KeyValue?.ToLower(), (k, sd) => new { k, sd })
