@@ -146,7 +146,8 @@
                             tr.find('.select-source').val('').trigger('change');
                             tr.find('.select-masterproduct').val('').trigger('change');
                             tr.find('.input-keyword').val('');
-                            window.location.reload();
+                            tr.remove();
+                           // window.location.reload();
                         }
                         else
                             swal('Warning!', 'Select Correct word or Nickname!', 'warning');

@@ -4072,7 +4072,7 @@ namespace ShopNow.Controllers
                    {
                        OrderNumber = i.scc.OrderNumber,
                        CartStatus = i.scc.Status,
-                       GrossDeliveryCharge = i.scc.DeliveryCharge,
+                       GrossDeliveryCharge = (i.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.DeliveryCharge - 35)) + i.scc.TipsAmount,
                        CustomerLatitude = i.scc.Latitude,
                        CustomerLongitude = i.scc.Longitude,
                        ShopLatitude = i.s.Latitude,
@@ -4095,7 +4095,7 @@ namespace ShopNow.Controllers
                    {
                        OrderNumber = i.scc.OrderNumber,
                        CartStatus = i.scc.Status,
-                       GrossDeliveryCharge = i.scc.DeliveryCharge,
+                       GrossDeliveryCharge = (i.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.DeliveryCharge - 35)) + i.scc.TipsAmount,
                        CustomerLatitude = i.scc.Latitude,
                        CustomerLongitude = i.scc.Longitude,
                        ShopLatitude = i.s.Latitude,
@@ -4115,7 +4115,7 @@ namespace ShopNow.Controllers
                    {
                        OrderNumber = i.scc.OrderNumber,
                        CartStatus = i.scc.Status,
-                       GrossDeliveryCharge = i.scc.DeliveryCharge,
+                       GrossDeliveryCharge = (i.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.DeliveryCharge - 35)) + i.scc.TipsAmount,
                        CustomerLatitude = i.scc.Latitude,
                        CustomerLongitude = i.scc.Longitude,
                        ShopLatitude = i.s.Latitude,
