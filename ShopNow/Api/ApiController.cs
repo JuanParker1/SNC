@@ -711,7 +711,7 @@ namespace ShopNow.Controllers
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult GetBillAndDeliveryCharge(int shopId, double totalSize = 0, double totalWeight = 0)
+        public JsonResult GetBillAndDeliveryCharge(int shopId, double totalSize = 0, double totalWeight = 0/*,int customerid=0*/)
         {
             var model = new BillingDeliveryChargeViewModel();
             var shop = db.Shops.FirstOrDefault(i => i.Id == shopId);
@@ -747,6 +747,10 @@ namespace ShopNow.Controllers
                 if (platformCreditRate != null)
                     model.ConvenientCharge = platformCreditRate.RatePerOrder;
             }
+
+            //var customer = db.Customers.FirstOrDefault(i => i.Id == customerid);
+            //if (customer != null)
+            //    model.CancellationCharges = customer.PenaltyAmount;
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
