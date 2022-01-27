@@ -193,11 +193,11 @@ namespace ShopNow.Controllers
             return addr[addr.Length - 1].ToString();
 
         }
-        public JsonResult GetChanges()
-        {
-             MessagesRepository _messageRepository = new MessagesRepository();
-            return Json(_messageRepository.GetAllMessages(), JsonRequestBehavior.AllowGet);
-           // return PartialView("_MessagesList", _messageRepository.GetAllMessages());
-        }
+        //public JsonResult GetChanges()
+        //{
+        //     MessagesRepository _messageRepository = new MessagesRepository();
+        //    return Json(_messageRepository.GetAllMessages(), JsonRequestBehavior.AllowGet);
+        //   // return PartialView("_MessagesList", _messageRepository.GetAllMessages());
+        //}
     }
 }
