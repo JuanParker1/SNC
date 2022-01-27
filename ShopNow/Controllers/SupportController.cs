@@ -174,15 +174,15 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCSUML299")]
-        public ActionResult UnMappedList()
+        public ActionResult UnMappedList(int shopId = 0)
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new UnMappedListViewModel();
-            model.List = db.Products.Where(i => i.MasterProductId == 0)
+            model.List = db.Products.Where(i => i.MasterProductId == 0 && (shopId != 0 ? i.ShopId == shopId : true))
                            .Join(db.OrderItems, p => p.Id, oi => oi.ProductId, (p, oi) => new { p, oi })
-                           .OrderByDescending(i => i.p.DateUpdated).AsEnumerable().GroupBy(i => i.p.Id)
-                           //.GroupBy()
+                           .OrderByDescending(i => i.p.DateUpdated)
+                           .AsEnumerable().GroupBy(i => i.p.Id)
                            .Select((i, index) => new UnMappedListViewModel.UnMappedList
                            {
                                SlNo = index + 1,
