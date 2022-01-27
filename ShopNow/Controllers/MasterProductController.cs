@@ -1295,6 +1295,11 @@ namespace ShopNow.Controllers
                 //ElectronicImage1
                 if (model.ElectronicImage1 != null)
                 {
+                    // Delete Old File
+                    if(model.ImagePath1 != null)
+                    {
+                        uc.DeleteFiles(model.ImagePath1,accesskey,secretkey);
+                    }
                     uc.UploadFiles(model.ElectronicImage1.InputStream, prod.Id + "_" + model.ElectronicImage1.FileName, accesskey, secretkey, "image");
                     prod.ImagePath1 = prod.Id + "_" + model.ElectronicImage1.FileName.Replace(" ", "");
                 }
