@@ -4492,17 +4492,15 @@ namespace ShopNow.Controllers
 
         public JsonResult GetDeliveryBoyPayout(DateTime startDate, DateTime endDate, string phoneNo, int page = 1, int pageSize = 5)
         {
-            //DelivaryBoyPayoutReportViewModel
             var model = new DelivaryBoyPayoutReportViewModel();
             model.List = db.Orders.Where(i => i.Status == 6 && i.DeliveryBoyPhoneNumber == phoneNo && ((DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(startDate)) && (DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(endDate))))
-            //.Join(db.DeliveryBoys.Where(i => i.PhoneNumber == phoneNo), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
-            .GroupBy(i => DbFunctions.TruncateTime(i.DateEncoded))
+            .Join(db.DeliveryBoys.Where(i => i.PhoneNumber == phoneNo), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
+            .GroupBy(i => DbFunctions.TruncateTime(i.c.DateEncoded))
             .AsEnumerable()
             .Select(i => new DelivaryBoyPayoutReportViewModel.PayoutOut
             {
-                //Date = i.Any() ? i.FirstOrDefault().DateEncoded.ToString("dd-MMM-yyyy HH:ss") : "",
-                Date = i.FirstOrDefault().DateEncoded,
-                TotalAmount = i.Sum(a => a.DeliveryCharge),
+                Date = i.FirstOrDefault().c.DateEncoded,
+                TotalAmount = i.FirstOrDefault().d.WorkType == 1 ? i.Sum(a => (a.c.DeliveryCharge == 35 ? 20 : 20 + (a.c.DeliveryCharge - 35))) + i.Sum(a=>a.c.TipsAmount) : i.Sum(a => a.c.DeliveryCharge) + i.Sum(a => a.c.TipsAmount),
                 PaidAmount = GetPaidAmount(i.Key.Value, phoneNo),
             }).OrderByDescending(j => j.Date).ToList();
             int count = model.List.Count();
@@ -4511,24 +4509,7 @@ namespace ShopNow.Controllers
             int TotalCount = count;
             int TotalPages = (int)Math.Ceiling(count / (double)PageSize);
             var items = model.List;
-            //var items = model.List.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
-            //var previous = CurrentPage - 1;
-            //var previousurl = apipath + "Api/GetDelivaryBoyReport?startDate=" + startDate + "&endDate=" + endDate + "&phoneNo=" + phoneNo + "&page=" + previous;
-            //var previousPage = CurrentPage > 1 ? previousurl : "No";
-            //var current = CurrentPage + 1;
-            //var nexturl = apipath + "Api/GetDelivaryBoyReport?startDate=" + startDate + "&endDate=" + endDate + "&phoneNo=" + phoneNo + "&page=" + current;
-            //var nextPage = CurrentPage < TotalPages ? nexturl : "No";
-            //var paginationMetadata = new
-            //{
-            //    totalCount = TotalCount,
-            //    pageSize = PageSize,
-            //    currentPage = CurrentPage,
-            //    totalPages = TotalPages,
-            //    previousPage,
-            //    nextPage
-            //};
             return Json(new { items }, JsonRequestBehavior.AllowGet);
-            // return Json(list, JsonRequestBehavior.AllowGet);
         }
 
         public double GetPaidAmount(DateTime dateEncoded, string phoneNo)
@@ -4538,7 +4519,7 @@ namespace ShopNow.Controllers
            .GroupBy(i => DbFunctions.TruncateTime(dateEncoded))
            .Select(i => new
            {
-               amount = i.Any() ? i.Sum(a => a.c.DeliveryCharge) : 0
+               amount = i.Any() ? i.Sum(a => (a.c.DeliveryCharge == 35 ? 20 : 20 + (a.c.DeliveryCharge - 35))) + i.Sum(a => a.c.TipsAmount) : 0
            }).FirstOrDefault();
             if (list != null)
                 return Convert.ToDouble(list.amount);
