@@ -99,6 +99,22 @@ namespace ShopNow.Helpers
 
         }
 
+        public void DeleteFiles(string filename, string key, string secretkey)
+        {
+            var amazonClient = new AmazonS3Client(key, secretkey);
+            for (int i = 0; i <= 2; i++)
+            {
+                string bucketName = "";
+                if (i == 0)
+                    bucketName = "shopnowchat.com/Small";
+                else if(i==1)
+                    bucketName = "shopnowchat.com/Medium";
+                else
+                    bucketName = "shopnowchat.com/Large";
+                var deleteObjectRequest = new DeleteObjectRequest { BucketName = bucketName, Key = filename };
+                amazonClient.DeleteObject(deleteObjectRequest);
+            }
+        }
         public void UploadMediumFile(Stream imgstream, string name, string key, string secretkey, string type)
         {
             var bucketRegion = Amazon.RegionEndpoint.APSouth1;   // Your bucket region

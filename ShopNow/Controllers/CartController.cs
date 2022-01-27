@@ -860,17 +860,18 @@ namespace ShopNow.Controllers
 
             model.DeliveryBoyPaymentStatusLists = db.Orders
                    .Where(i => i.Status == 6 && ((model.StartDate != null && model.EndDate != null) ? DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate) : true) && (model.DeliveryBoyId != 0 ? i.DeliveryBoyId == model.DeliveryBoyId : true))
+                   .Join(db.DeliveryBoys, o=> o.DeliveryBoyId, d=> d.Id,(o,d)=> new{ o,d})
                        .Select(i => new CartReportViewModel.DeliveryBoyPaymentStatusList
                        {
-                           Id = i.Id,
-                           DateEncoded = i.DateEncoded,
-                           OrderNumber = i.OrderNumber,
-                           DeliveryBoyId = i.DeliveryBoyId,
-                           DeliveryBoyName = i.DeliveryBoyName,
-                           DeliveryBoyPhoneNumber = i.DeliveryBoyPhoneNumber,
-                           DeliveryCharge = i.DeliveryCharge,
-                           DeliveryBoyPaymentStatus = i.DeliveryBoyPaymentStatus,
-                           Distance = i.Distance
+                           Id = i.o.Id,
+                           DateEncoded = i.o.DateEncoded,
+                           OrderNumber = i.o.OrderNumber,
+                           DeliveryBoyId = i.o.DeliveryBoyId,
+                           DeliveryBoyName = i.o.DeliveryBoyName,
+                           DeliveryBoyPhoneNumber = i.o.DeliveryBoyPhoneNumber,
+                           DeliveryCharge = i.d.WorkType == 1 ? (i.o.DeliveryCharge == 35 ? 20 + i.o.TipsAmount : 20 + (i.o.DeliveryCharge - 35) + i.o.TipsAmount) : i.o.DeliveryCharge + i.o.TipsAmount,
+                           DeliveryBoyPaymentStatus = i.o.DeliveryBoyPaymentStatus,
+                           Distance = i.o.Distance
                        }).OrderByDescending(i => i.DateEncoded).ToList();
 
             //if (DeliveryBoyId != 0)
