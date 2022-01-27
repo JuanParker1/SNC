@@ -117,7 +117,7 @@ namespace ShopNow.Controllers
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
 
-            if (masterIds != null)
+            if (masterIds != null && !masterIds.Contains(0))
             {
                 foreach (var masterId in masterIds)
                 {
