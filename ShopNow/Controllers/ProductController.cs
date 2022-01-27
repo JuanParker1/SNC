@@ -82,7 +82,7 @@ namespace ShopNow.Controllers
                     ShopName = i.p.p.ShopName,
                     Percentage = i.p.p.Percentage,
                     IsOnline = i.p.p.IsOnline
-                }).ToList();
+                }).OrderBy(i=>i.Name).ToList();
 
             return View(model);
         }
@@ -995,7 +995,7 @@ namespace ShopNow.Controllers
                     //}
                 }
             }
-            return View();
+            return RedirectToAction("UpdateStock");
         }
 
         [HttpGet]

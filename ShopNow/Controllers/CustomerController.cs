@@ -98,6 +98,7 @@ namespace ShopNow.Controllers
             model.CancelOrderCount = model.OrderListItems.Where(i => i.Status != 6).Count();
             model.DeliveredOrderCount = model.OrderListItems.Where(i => i.Status == 6).Count();
             model.LastPurchaseDate = model.OrderListItems.Count() > 0 ? model.OrderListItems.OrderByDescending(i => i.DateEncoded).FirstOrDefault().DateEncoded : model.LastPurchaseDate;
+            model.AppVersion = db.CustomerAppInfoes.FirstOrDefault(i => i.CustomerId == customer.Id)?.Version ?? "N/A";
             return View(model);
         }
 

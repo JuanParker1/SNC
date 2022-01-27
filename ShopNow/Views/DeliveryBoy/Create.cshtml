@@ -37,19 +37,27 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Delivery Boy Name</strong></label>
                                         <div class="DeliverBoyName">
                                             <input id="Name" type="text" class="form-control" name="Name" maxlength="100" oninput="this.value=this.value.replace(/[^a-zA-Z ]/g, '');" />
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Mobile Number</strong></label>
                                         <input type="text" class="form-control" name="PhoneNumber" id="PhoneNumber" readonly />
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Email</strong></label>
                                         <input type="email" class="form-control" name="Email" id="Email" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="col-form-label"><strong class="text-secondary">Work Type</strong></label>
+                                        <select class="form-control" name="WorkType" id="WorkType">
+                                            <option value="">Select Work Type</option>
+                                            <option value="1">Permanent</option>
+                                            <option value="2">Temporary</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
