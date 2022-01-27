@@ -12,7 +12,7 @@ namespace ShopNow
 {
     public class MvcApplication : System.Web.HttpApplication
     {
-        string connString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        //string connString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
         protected void Application_Start()
         {
             
@@ -22,13 +22,13 @@ namespace ShopNow
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             GlobalConfiguration.Configure(WebApiConfig.Register);
             // WebApiConfig.Register(GlobalConfiguration.Configuration);
-            SqlDependency.Start(connString);
+            //SqlDependency.Start(connString);
 
         }
         protected void Application_End()
         {
             //Stop SQL dependency
-            SqlDependency.Stop(connString);
+            //SqlDependency.Stop(connString);
         }
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
