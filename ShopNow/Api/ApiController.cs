@@ -6446,6 +6446,19 @@ namespace ShopNow.Controllers
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
+        public JsonResult GetCustomerAppVersion(int customerid)
+        {
+            string appVersion = "0";
+            string customerVersion = "0";
+            var appDetails = db.AppDetails.FirstOrDefault(i => i.Status == 0);
+            if (appDetails != null)
+                appVersion = appDetails.Version;
+            var customerAppdetails = db.CustomerAppInfoes.FirstOrDefault(i => i.CustomerId == customerid);
+            if (customerAppdetails != null)
+                customerVersion = customerAppdetails.Version;
+            return Json(new { appVersion = appVersion, customerVersion = customerVersion }, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult SendTestNotification(string deviceId = "", string title = "", string body = "")
         {
             Helpers.PushNotification.SendbydeviceId(body, title, "", deviceId);

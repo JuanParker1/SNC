@@ -42,6 +42,7 @@ namespace ShopNow.Models
         public int OnWork { get; set; }
         public int isAssign { get; set; }
         public int Active { get; set; }
+        public int WorkType { get; set; }
         public int Status { get; set; }
         public string CreatedBy { get; set; }
         public string UpdatedBy { get; set; }
