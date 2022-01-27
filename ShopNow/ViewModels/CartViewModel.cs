@@ -573,7 +573,7 @@ namespace ShopNow.ViewModels
             public string DeliveryBoyPhoneNumber { get; set; }
             public double DeliveryCharge { get; set; }
             public int DeliveryBoyPaymentStatus { get; set; }
-            public Nullable<double> Distance { get; set; }
+            public double Distance { get; set; }
         }
 
 

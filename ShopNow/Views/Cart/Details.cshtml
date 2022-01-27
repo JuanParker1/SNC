@@ -127,7 +127,6 @@
         content: "\f00c"
     }
 
-
     @@media screen and (max-width: 992px) {
         .icon-content {
             width: 50%
@@ -288,7 +287,7 @@
                     <div class="d-flex">
                         <label class="mr-3">Total Amount:</label>
                         <b>₹@Math.Abs(Model.NetTotal - (Model.RefundAmount ?? 0)) - (@Model.PaymentMode)</b>
-                        <a class="ml-2" id="btn-paymentmode-update" href="#modal-paymentmode-update" data-target="#modal-paymentmode-update" data-toggle="modal" data-id="@Model.OrderNumber"><i class="fa fa-edit"></i></a>
+                        @*<a class="ml-2" id="btn-paymentmode-update" href="#modal-paymentmode-update" data-target="#modal-paymentmode-update" data-toggle="modal" data-id="@Model.OrderNumber"><i class="fa fa-edit"></i></a>*@
                     </div>
                     @if (Model.IsPreorder == true)
                     {
@@ -783,7 +782,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="modal-paymentmode-update" tabindex="-1" role="dialog">
+@*<div class="modal fade" id="modal-paymentmode-update" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-body">
@@ -808,7 +807,7 @@
             </div>
         </div>
     </div>
-</div>
+</div>*@
 
 <div class="modal fade" id="modal-actualShopPayment-update" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-sm">
@@ -951,10 +950,10 @@
                 $('#modal-item-update').modal('show');
             });
 
-            $("#btn-paymentmode-update").on('click', function () {
-                $('#OrderNo').val($(this).data('id'));
-                $('#modal-paymentmode-update').modal('show');
-            });
+            //$("#btn-paymentmode-update").on('click', function () {
+            //    $('#OrderNo').val($(this).data('id'));
+            //    $('#modal-paymentmode-update').modal('show');
+            //});
         });
     </script>
 }
