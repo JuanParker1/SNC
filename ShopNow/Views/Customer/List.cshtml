@@ -24,7 +24,7 @@
                        columns.Add(b => b.PhoneNumber).Titled("Phone No").Filterable(true).SetWidth(10);
                        columns.Add(b => b.Address).Titled("Address").Filterable(true).SetWidth(20);
                        columns.Add(b => b.DistrictName).Titled("District Name").Filterable(true).SetWidth(10);
-                       columns.Add(b => b.StateName).Titled("State Name").Filterable(true).SetWidth(10);
+                       columns.Add(b => b.AppInfo).Titled("App Info").Filterable(true).SetWidth(10);
                        columns.Add(b => b.DateEncoded).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MM-yyyy hh:mm tt}");
                        columns.Add().Encoded(false).Sanitized(false).Titled("Action").Filterable(false).SetWidth(10)
                       .RenderValueAs(o => @<div>
