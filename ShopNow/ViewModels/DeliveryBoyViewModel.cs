@@ -29,6 +29,7 @@ namespace ShopNow.ViewModels
         public string AccountName { get; set; }
         public string AccountNumber { get; set; }
         public string IFSCCode { get; set; }
+        public int WorkType { get; set; }
     }
     public class DeliveryBoyEditViewModel
     {
@@ -64,6 +65,7 @@ namespace ShopNow.ViewModels
         public bool LicenseApprove { get; set; }
         public bool AccountApprove { get; set; }
         public int Status { get; set; }
+        public int WorkType { get; set; }
 
     }
     public class DeliveryBoyListViewModel
