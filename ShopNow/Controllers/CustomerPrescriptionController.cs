@@ -38,19 +38,21 @@ namespace ShopNow.Controllers
             var model = new CustomerPrescriptionWebListViewModel();
             model.ListItems = db.CustomerPrescriptions.Where(i => i.Status == 0).OrderByDescending(i => i.Id)
                 .GroupJoin(db.CustomerPrescriptionImages, cp => cp.Id, cpi => cpi.CustomerPrescriptionId, (cp, cpi) => new { cp, cpi })
+                .Join(db.Shops, cp => cp.cp.ShopId, s => s.Id, (cp, s) => new { cp, s })
                 .Select(i => new CustomerPrescriptionWebListViewModel.ListItem
                 {
-                    Id = i.cp.Id,
-                    AudioPath = (!string.IsNullOrEmpty(i.cp.AudioPath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Audio/" + i.cp.AudioPath : "",
-                    CustomerId = i.cp.CustomerId,
-                    CustomerName = i.cp.CustomerName,
-                    CustomerPhoneNumber = i.cp.CustomerPhoneNumber,
-                    ImagePath = i.cp.ImagePath,
-                    Remarks = i.cp.Remarks,
-                    ShopId = i.cp.ShopId,
-                    DateEncoded = i.cp.DateEncoded,
-                    Status = i.cp.Status,
-                    ImagePathLists = i.cpi.Select(a => new CustomerPrescriptionWebListViewModel.ListItem.ImagePathList
+                    Id = i.cp.cp.Id,
+                    AudioPath = (!string.IsNullOrEmpty(i.cp.cp.AudioPath)) ? "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Audio/" + i.cp.cp.AudioPath : "",
+                    CustomerId = i.cp.cp.CustomerId,
+                    CustomerName = i.cp.cp.CustomerName,
+                    CustomerPhoneNumber = i.cp.cp.CustomerPhoneNumber,
+                    ImagePath = i.cp.cp.ImagePath,
+                    Remarks = i.cp.cp.Remarks,
+                    ShopId = i.cp.cp.ShopId,
+                    ShopName = i.s.Name,
+                    DateEncoded = i.cp.cp.DateEncoded,
+                    Status = i.cp.cp.Status,
+                    ImagePathLists = i.cp.cpi.Select(a => new CustomerPrescriptionWebListViewModel.ListItem.ImagePathList
                     {
                         ImagePath = "https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/" + a.ImagePath
                     }).ToList()
