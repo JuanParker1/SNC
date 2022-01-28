@@ -209,7 +209,6 @@
             w.close();
         }
         $(document).ready(function () {
-            var id = $("#Id").val();
             var shopid = $("#ShopId").val();
             var customerid = $("#CustomerId").val();
             $('#select-product').select2({
@@ -222,7 +221,7 @@
                 }
             }).on('select2:select', function (e) {
                 $('input[name="ProductName"]').val(e.params.data.text);
-                $('input[name="ItemId"]').val(e.params.data.itemId);
+                $('input[name="ItemId"]').val(e.params.data.itemid);
                 $('input[name="Price"]').val(e.params.data.price);
                 $('input[name="MRPPrice"]').val(e.params.data.mrpprice);
                 $('input[name="Weight"]').val(e.params.data.weight);
@@ -287,7 +286,7 @@
                             RowIndex: rowindex
                         };
                         itemArray.push(item);
-                        var $tr = '<tr><td>' + productName + '</td><td>' + mrpprice + '</td><td>' + percentage + '%</td><td>' + price + '</td><td>' + qty + '</td><td>' + total + '</td><td><a class="btn btn-sm btn-danger removeProduct" data-amount="' + total + '" data-rowindex="' + rowindex + '" data-id="' + productId + '" data-weight="' + weight + '" data-size="' + size + '"> Remove</a></td ></tr>';
+                        var $tr = '<tr><td>' + productName + '</td><td>' + mrpprice + '</td><td>' + percentage + '%</td><td>' + price + '</td><td>' + qty + '</td><td>' + total + '</td><td><a class="btn btn-sm btn-danger removeProduct" data-amount="' + total + '" data-rowindex="' + rowindex + '" data-weight="' + weight + '" data-size="' + size + '"> Remove</a></td ></tr>';
                         $('#tbl-items tbody').append($tr);
                         $('#div-items').removeClass('d-none');
                         $('[name="ProductId"]').val('').trigger('change');
@@ -325,7 +324,6 @@
             });
 
             $(document).on('click', '.removeProduct', function () {
-                var id = $(this).data('id');
                 var rowindex = $(this).data('rowindex');
                 isItemInArray(rowindex);
                 var itemAmount = $(this).data('amount');
