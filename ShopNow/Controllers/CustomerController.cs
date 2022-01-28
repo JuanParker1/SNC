@@ -41,17 +41,19 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new CustomerListViewModel();
-            model.List = db.Customers.OrderByDescending(i => i.DateEncoded).Where(i => i.Status == 0).AsEnumerable().Select((i, index) => new CustomerListViewModel.CustomerList
-            {
-                No = index + 1,
-                Id = i.Id,
-                Name = i.Name,
-                PhoneNumber = i.PhoneNumber,
-                Address = i.Address,
-                DistrictName = i.DistrictName,
-                StateName = i.StateName,
-                DateEncoded = i.DateEncoded
-            }).ToList();
+            model.List = db.Customers.OrderByDescending(i => i.DateEncoded).Where(i => i.Status == 0)
+                .GroupJoin(db.CustomerAppInfoes, c => c.Id, ca => ca.CustomerId, (c, ca) => new { c, ca })
+                .AsEnumerable().Select((i, index) => new CustomerListViewModel.CustomerList
+                {
+                    No = index + 1,
+                    Id = i.c.Id,
+                    Name = i.c.Name,
+                    PhoneNumber = i.c.PhoneNumber,
+                    Address = i.c.Address,
+                    DistrictName = i.c.DistrictName,
+                    DateEncoded = i.c.DateEncoded,
+                    AppInfo = i.ca.FirstOrDefault()?.Version??"N/A"
+                }).ToList();
             return View(model.List);
         }
 

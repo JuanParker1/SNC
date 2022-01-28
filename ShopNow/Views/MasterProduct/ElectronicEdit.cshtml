@@ -70,35 +70,53 @@
                             <div class="col-md-12">
                                 <div class="row">
                                     <div class="col-md-2">
-                                        <label class="control-label ml-2"><strong class="text-secondary">Product Image1</strong></label>
-                                        <div class="img-upload-container ml-2">
-                                            @if (Model.ImagePath1 != null)
-                                            {
-                                                    <img id='img-ElectronicImage1' class="img-container w-100 h-100" width="100" height="100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath1" onerror="this.src='/Images/No Photo.png'" />
-                                            }
-                                            else
-                                            {
-                                                    <img id='img-ElectronicImage1' class="img-container w-100 h-100" width="100" height="100" />
-                                            }
-                                            <input type="file" id="ElectronicImage1" name="ElectronicImage1" class="d-none" />
-                                            <label for="ElectronicImage1" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePath1" id="ImagePath1" value="@Model.ImagePath1" />
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label class="control-label ml-2"><strong class="text-secondary">Product Image1</strong></label>
+                                                <div class="img-upload-container ml-2">
+                                                    @if (Model.ImagePath1 != null)
+                                                    {
+                                                        <img id='img-ElectronicImage1' class="img-container w-100 h-100" width="100" height="100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath1" onerror="this.src='/Images/No Photo.png'" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img id='img-ElectronicImage1' class="img-container w-100 h-100" width="100" height="100" />
+                                                    }
+                                                    <input type="file" id="ElectronicImage1" name="ElectronicImage1" class="d-none" />
+                                                    <label for="ElectronicImage1" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                    <input type="hidden" name="ImagePath1" id="ImagePath1" value="@Model.ImagePath1" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 ml-4">
+                                                <input type="button" class="btn btn-sm btn-danger d-none" id="btnRemove1" value="Remove" />
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
-                                        <label class="control-label ml-2"><strong class="text-secondary">Product Image2</strong></label>
-                                        <div class="img-upload-container ml-2">
-                                            @if (Model.ImagePath2 != null)
-                                            {
-                                                    <img id='img-ElectronicImage2' class="img-container w-100 h-100" width="100" height="100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath2" onerror="this.src='/Images/No Photo.png'" />
-                                            }
-                                            else
-                                            {
-                                                    <img id='img-ElectronicImage2' class="img-container w-100 h-100" width="100" height="100" />
-                                            }
-                                            <input type="file" id="ElectronicImage2" name="ElectronicImage2" class="d-none" />
-                                            <label for="ElectronicImage2" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            <input type="hidden" name="ImagePath2" id="ImagePath2" value="@Model.ImagePath2" />
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label class="control-label ml-2"><strong class="text-secondary">Product Image2</strong></label>
+                                                <div class="img-upload-container ml-2">
+                                                    @if (Model.ImagePath2 != null)
+                                                    {
+                                                        <img id='img-ElectronicImage2' class="img-container w-100 h-100" width="100" height="100" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/@Model.ImagePath2" onerror="this.src='/Images/No Photo.png'" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <img id='img-ElectronicImage2' class="img-container w-100 h-100" width="100" height="100" />
+                                                    }
+                                                    <input type="file" id="ElectronicImage2" name="ElectronicImage2" class="d-none" />
+                                                    <label for="ElectronicImage2" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                    <input type="hidden" name="ImagePath2" id="ImagePath2" value="@Model.ImagePath2" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 ml-4">
+                                                <input type="button" class="btn btn-sm btn-danger d-none" id="btnRemove2" value="Remove" />
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
@@ -236,9 +254,13 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
             $("#ElectronicImage1").change(function () {
                 readURLProduct1(this);
+                $("#btnRemove1").removeClass("d-none");
+            });
+            $('#btnRemove1').on('click', function () {
+                $('#img-ElectronicImage1').attr('src', '');
+                $(this).addClass("d-none");
             });
 
             function readURLProduct2(input) {
@@ -250,9 +272,13 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
             $("#ElectronicImage2").change(function () {
                 readURLProduct2(this);
+                $("#btnRemove2").removeClass("d-none");
+            });
+            $('#btnRemove2').on('click', function () {
+                $('#img-ElectronicImage2').attr('src', '');
+                $(this).addClass("d-none");
             });
 
             function readURLProduct3(input) {

@@ -18,6 +18,7 @@ namespace ShopNow.ViewModels
             public string StateName { get; set; }
             public string DistrictName { get; set; }
             public string Address { get; set; }
+            public string AppInfo { get; set; }
             public DateTime DateEncoded { get; set; }
 
         }
