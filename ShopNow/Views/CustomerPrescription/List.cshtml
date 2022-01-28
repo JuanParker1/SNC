@@ -35,6 +35,7 @@
                     <table class="table table-borderless" id="PrescriptionTable">
                         <thead class="bg-light">
                             <tr>
+                                <th class="w-16">Shop Name</th>
                                 <th class="w-12">Name</th>
                                 <th class="w-12">Phone No.</th>
                                 <th class="w-12">Image(s)</th>
@@ -47,8 +48,9 @@
                         <tbody>
                             @foreach (var item in Model.ListItems)
                             {
-                                
+
                                 <tr>
+                                    <td>@item.ShopName</td>
                                     <td>@item.CustomerName</td>
                                     <td>@item.CustomerPhoneNumber</td>
                                     <td>
@@ -74,8 +76,8 @@
                                             <span class="text-success">Order Placed.</span>
                                         }
                                     </td>
-                            </tr>
-                        }
+                                </tr>
+                            }
                         </tbody>
                     </table>
                     @*@Html.Grid(Model.ListItems).Columns(columns =>
