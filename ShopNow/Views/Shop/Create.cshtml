@@ -66,7 +66,7 @@
                                     <label class="col-form-label"><strong class="text-secondary">Mobile Number</strong></label>
                                 </div>
                                 <div class="col-md-8">
-                                    <input id="PhoneNumber" type="text" class="form-control" name="PhoneNumber" maxlength="10"  oninput="this.value=this.value.replace(/[^0-9]/g,'');" />
+                                    <input id="PhoneNumber" type="text" class="form-control" name="PhoneNumber" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'');" />
                                 </div>
                             </div>
                             <div class="form-group row manualmobile">
@@ -84,32 +84,32 @@
                                     <a href="#"><i class="fa fa-check fa-2x text-success"></i></a>
                                 </div>
                             </div>
-                                <div class="form-group row">
-                                    <div class="col-md-4 text-md-left">
-                                        <label class="col-form-label"><strong class="text-secondary">Official Email</strong></label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input id="OfficialEmail" type="text" class="form-control" name="OfficialEmail" />
-                                    </div>
+                            <div class="form-group row">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Official Email</strong></label>
                                 </div>
-                                <div class="form-group row">
-                                    <div class="col-md-4 text-md-left">
-                                        <label class="col-form-label"><strong class="text-secondary">Website</strong></label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input id="Website" type="text" class="form-control" name="Website" />
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-md-4 text-md-left">
-                                        <label class="col-form-label"><strong class="text-secondary">Shop Type</strong></label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <select id="ShopCategoryId" name="ShopCategoryId" class="form-control" style="width:100%;" required></select>
-                                        <input type="hidden" name="ShopCategoryName" id="ShopCategoryName" />
-                                    </div>
+                                <div class="col-md-8">
+                                    <input id="OfficialEmail" type="text" class="form-control" name="OfficialEmail" />
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Website</strong></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input id="Website" type="text" class="form-control" name="Website" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-4 text-md-left">
+                                    <label class="col-form-label"><strong class="text-secondary">Shop Type</strong></label>
+                                </div>
+                                <div class="col-md-8">
+                                    <select id="ShopCategoryId" name="ShopCategoryId" class="form-control" style="width:100%;" required></select>
+                                    <input type="hidden" name="ShopCategoryName" id="ShopCategoryName" />
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-md-6">
                             <div class="form-group row">
                                 <div class="col-md-4 text-md-left">
@@ -235,7 +235,7 @@
                                             <label class="col-form-label"><strong class="text-secondary">Aadhar Number</strong></label>
                                         </div>
                                         <div class="col-md-8">
-                                            <input id="AadharNumber" type="text" maxlength="12"  class="form-control" name="AadharNumber" oninput="this.value=this.value.replace(/[^0-9]/g,'');" />
+                                            <input id="AadharNumber" type="text" maxlength="12" class="form-control" name="AadharNumber" oninput="this.value=this.value.replace(/[^0-9]/g,'');" />
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -400,8 +400,6 @@
                         </div>
                     </div>
                 </div>
-
-
                 <div class="card mb-4 shadow">
                     <div class="col-md-12">
                         <div class="form-group row">
@@ -566,6 +564,52 @@
                                             <input type="file" id="AccountImage" name="AccountImage" class="d-none" />
                                             <label for="AccountImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4 shadow">
+                    <h5 class="text-success ml-2 mt-2">Delivery Charge Assign</h5>
+                    <div class="row mb-3 ml-3">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label class="col-form-label text-secondary font-weight-bold">Delivery Mode</label>
+                                </div>
+                                <div class="col-md-6 mt-2">
+                                    <div class="form-check-inline mr-3">
+                                        <label class="form-check-label">
+                                            <input type="radio" class="form-check-input" name="DeliveryType" value="0" checked> General
+                                        </label>
+                                    </div>
+                                    <div class="form-check-inline">
+                                        <label class="form-check-label">
+                                            <input type="radio" class="form-check-input" name="DeliveryType" value="1"> Special
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-2">
+                                    <label class="col-form-label text-secondary font-weight-bold">Delivery Charge Type</label>
+                                </div>
+                                <div class="col-md-8 mt-2">
+                                    <div class="form-check-inline mr-3">
+                                        <label class="form-check-label">
+                                            <input type="radio" class="form-check-input" name="DeliveryTierType" value="1" checked> 1<sup>st</sup> Tier
+                                        </label>
+                                    </div>
+                                    <div class="form-check-inline">
+                                        <label class="form-check-label">
+                                            <input type="radio" class="form-check-input" name="DeliveryTierType" value="2"> 2<sup>nd</sup> Tier
+                                        </label>
+                                    </div>
+                                    <div class="form-check-inline">
+                                        <label class="form-check-label">
+                                            <input type="radio" class="form-check-input" name="DeliveryTierType" value="3"> 3<sup>rd</sup> Tier
+                                        </label>
                                     </div>
                                 </div>
                             </div>
@@ -903,7 +947,7 @@
                 var adharNumber = $("#AadharNumber").val();
                 var adharImage = $("#AadharImage").val();
                 var adharPdf = $("#AadharPdf").val();
-                var shoptype = $("#ShopCategoryId").val();
+                var shoptype = $("#ShopCategoryId").val();                
                 if (shoptype == null || shoptype == "") {
                     swal("Notice!", "Please Select Shop Type!", "warning");
                 } else if (adharName != "" && adharNumber != "" && (adharImage != "" || adharPdf != "")) {
@@ -944,6 +988,7 @@
                 }
             });
 
+         
             function readAuthoriseURL(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
@@ -1370,7 +1415,5 @@
                 'Error: Your browser doesn\'t support geolocation.');
             infoWindow.open(map);
         }
-  
-
     </script>
 }
