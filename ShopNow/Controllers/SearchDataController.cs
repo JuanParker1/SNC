@@ -169,8 +169,11 @@ namespace ShopNow.Controllers
                             KeyValue = searchWord.Trim(),
                             Source = source
                         };
-                        db.SearchDatas.Add(searchData);
-                        db.SaveChanges();
+                        if (!string.IsNullOrEmpty(searchData.KeyValue) && !string.IsNullOrEmpty(searchData.Source))
+                        {
+                            db.SearchDatas.Add(searchData);
+                            db.SaveChanges();
+                        }
                     }
 
 
