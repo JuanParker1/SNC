@@ -97,6 +97,8 @@ namespace ShopNow.ViewModels
         public Nullable<bool> IsOnline { get; set; }
         public string GooglePlaceId { get; set; }
         public int Count { get; set; }
+        public int DeliveryType { get; set; }
+        public int DeliveryTierType { get; set; }
     }
 
     public class ShopEditViewModel
