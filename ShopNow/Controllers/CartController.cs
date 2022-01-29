@@ -1743,33 +1743,61 @@ namespace ShopNow.Controllers
 
         public JsonResult GetDeliveryLocations()
         {
-            var joyraLocation = db.Shops.Where(i => i.Id == 123)
-                .Select(i => new 
-                {
-                    Latitude = i.Latitude,
-                    Longitude = i.Longitude,
-                    Address = i.Name
-                }).ToList();
-           var deliverylocationlist = db.Orders
-                .Where(i => i.Status == 2 || i.Status == 3)
-                .AsEnumerable()
-                .Select(i => new 
-                {
-                    Latitude = i.Latitude,
-                    Longitude = i.Longitude,
-                    Address = i.DeliveryAddress + i.DateEncoded.ToString("hh:mm tt")
-                }).ToList();
-
-            var shopLocationList = db.Orders
-                .Where(i => i.Status == 2 || i.Status == 3)
+            var ordersList = db.Orders.Where(i => i.Status == 2 || i.Status == 3 || i.Status==4 || i.Status==5)
                 .Join(db.Shops, o => o.ShopId, s => s.Id, (o, s) => new { o, s })
+                .AsEnumerable()
                 .Select(i => new
                 {
-                    Latitude = i.s.Latitude,
-                    Longitude = i.s.Longitude,
-                    Address = i.s.Name + "-" + i.s.Address
+                    ShopLatitude = i.s.Latitude,
+                    ShopLongitude = i.s.Longitude,
+                    CustomerLatitude = i.o.Latitude,
+                    CustomerLongitude = i.o.Longitude,
+                    CustomerAddress = i.o.DeliveryAddress + " - " + i.o.DateEncoded.ToString("hh:mm tt"),
+                    ShopAddress = i.s.Address,
+                    ShopName = i.s.Name,
+                    OrderNumber = i.o.OrderNumber
                 }).ToList();
-            return Json(new { joyralocation = joyraLocation,deliverylocation=deliverylocationlist,shopLocation=shopLocationList}, JsonRequestBehavior.AllowGet);
+
+            return Json(ordersList, JsonRequestBehavior.AllowGet);
+
+
+            //var joyraLocation = db.Shops.Where(i => i.Id == 123)
+            //    .Select(i => new 
+            //    {
+            //        Latitude = i.Latitude,
+            //        Longitude = i.Longitude,
+            //        Address = i.Name
+            //    }).ToList();
+
+            //var deliverylocationlist = db.Orders.Where(i => i.Status == 2 || i.Status == 3)
+            //     .AsEnumerable()
+            //     .Select(i => new 
+            //     {
+            //         Latitude = i.Latitude,
+            //         Longitude = i.Longitude,
+            //         Address = i.DeliveryAddress + " - "+ i.DateEncoded.ToString("hh:mm tt")
+            //     }).ToList();
+
+            // var shopLocationList = db.Orders.Where(i => i.Status == 2 || i.Status == 3)
+            //     .Join(db.Shops, o => o.ShopId, s => s.Id, (o, s) => new { o, s })
+            //     .Select(i => new
+            //     {
+            //         Latitude = i.s.Latitude,
+            //         Longitude = i.s.Longitude,
+            //         Address = i.s.Name + "-" + i.s.Address
+            //     }).ToList();
+
+            // var locationList = db.Orders.Where(i => i.Status == 2 || i.Status == 3)
+            //     .Join(db.Shops, o => o.ShopId, s => s.Id, (o, s) => new { o, s })
+            //     .Select(i => new
+            //     {
+            //         ShopLatitude = i.s.Latitude,
+            //         ShopLongitude = i.s.Longitude,
+            //         CustomerLatitude = i.o.Latitude,
+            //         CustomerLongitude = i.o.Longitude
+            //     }).ToList();
+
+            // return Json(new { joyralocation = joyraLocation,deliverylocation=deliverylocationlist,shopLocation=shopLocationList,locationlist = locationList }, JsonRequestBehavior.AllowGet);
         }
 
         //public void AddPaymentData(string code, int ordernumber)
