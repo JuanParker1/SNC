@@ -1,0 +1,111 @@
+﻿@{
+    ViewBag.Title = "Delivery Locations";
+}
+<title>ShopNow | Delivery Locations</title>
+
+<div class="container-fluid">
+    <div class="row my-2">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+                    <div id="map" style="width: 100%; height: 80vh;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
+{
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCl_9yf43Z6hWLvVvwd68p7WXwq_oYcS_0&callback=initMap"
+            async defer></script>
+    <script>
+        $(document).ready(function () {
+            initMap();
+        });
+        function initMap() {
+
+            //var locations = [
+            //    ['APN PLAZA', 8.175035899567678, 77.43207511253986],
+            //    ['963258741', 8.188073014913915, 77.42061712742539],
+            //    ['Panvel - Kochi - Kanyakumari Hwy, Parvathipuram, Nagercoil, Tamil Nadu 629003', 8.190922040134396, 77.39887842599839],
+            //    ['Mylaudy', 8.155482623928483, 77.50249381926562],
+            //    ['21-90/1, Beno Bhavan, Koil Vilai, 629501', 8.13101640273299, 77.43132933949155]
+            //];
+
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 13,
+                center: new google.maps.LatLng(8.1815656, 77.4271709),
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                //styles: [{ "stylers": [{ "visibility": "off" }] }, { "featureType": "road", "stylers": [{ "visibility": "on" }, { "color": "#ffffff" }] }, { "featureType": "road.arterial", "stylers": [{ "visibility": "on" }, { "color": "#fee379" }] }, { "featureType": "road.highway", "stylers": [{ "visibility": "on" }, { "color": "#fee379" }] }, { "featureType": "landscape", "stylers": [{ "visibility": "on" }, { "color": "#f3f4f4" }] }, { "featureType": "water", "stylers": [{ "visibility": "on" }, { "color": "#7fc8ed" }] }, {}, { "featureType": "road", "elementType": "labels", "stylers": [{ "visibility": "off" }] }, { "featureType": "poi.park", "elementType": "geometry.fill", "stylers": [{ "visibility": "on" }, { "color": "#83cead" }] }, { "elementType": "labels", "stylers": [{ "visibility": "off" }] }, { "featureType": "landscape.man_made", "elementType": "geometry", "stylers": [{ "weight": 0.9 }, { "visibility": "off" }] }]
+            });
+
+            var infowindow = new google.maps.InfoWindow();
+
+            var marker, i;
+
+            //for (i = 0; i < locations.length; i++) {
+            //    marker = new google.maps.Marker({
+            //        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+            //        map: map
+            //    });
+
+            //    google.maps.event.addListener(marker, 'click', (function (marker, i) {
+            //        return function () {
+            //            infowindow.setContent(locations[i][0]);
+            //            infowindow.open(map, marker);
+            //        }
+            //    })(marker, i));
+            //}
+
+            $.getJSON('/Cart/GetDeliveryLocations', function (data) {
+
+                //Joyra
+                $.each(data.joyralocation, function (index, item) {
+                    marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(item.Latitude, item.Longitude),
+                        map: map,
+                        icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+                    });
+                    google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                        return function () {
+                            infowindow.setContent(item.Address);
+                            infowindow.open(map, marker);
+                        }
+                    })(marker, i));
+                });
+
+                //Shops
+                $.each(data.shopLocation, function (index, item) {
+                    marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(item.Latitude, item.Longitude),
+                        map: map,
+                        icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+                    });
+                    google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                        return function () {
+                            infowindow.setContent(item.Address);
+                            infowindow.open(map, marker);
+                        }
+                    })(marker, i));
+                });
+
+                //delivery
+                $.each(data.deliverylocation, function (index, item) {
+                    marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(item.Latitude, item.Longitude),
+                        map: map,
+                        icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+                    });
+                    google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                        return function () {
+                            infowindow.setContent(item.Address);
+                            infowindow.open(map, marker);
+                        }
+                    })(marker, i));
+                });
+            });
+        }
+    </script>
+
+}
