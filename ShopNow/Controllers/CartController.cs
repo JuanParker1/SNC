@@ -1733,6 +1733,45 @@ namespace ShopNow.Controllers
             return View(model);
         }
 
+        [AccessPolicy(PageCode = "")]
+        public ActionResult DeliveryLocationMap()
+        {
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            return View();
+        }
+
+        public JsonResult GetDeliveryLocations()
+        {
+            var joyraLocation = db.Shops.Where(i => i.Id == 123)
+                .Select(i => new 
+                {
+                    Latitude = i.Latitude,
+                    Longitude = i.Longitude,
+                    Address = i.Name
+                }).ToList();
+           var deliverylocationlist = db.Orders
+                .Where(i => i.Status == 2 || i.Status == 3)
+                .AsEnumerable()
+                .Select(i => new 
+                {
+                    Latitude = i.Latitude,
+                    Longitude = i.Longitude,
+                    Address = i.DeliveryAddress + i.DateEncoded.ToString("hh:mm tt")
+                }).ToList();
+
+            var shopLocationList = db.Orders
+                .Where(i => i.Status == 2 || i.Status == 3)
+                .Join(db.Shops, o => o.ShopId, s => s.Id, (o, s) => new { o, s })
+                .Select(i => new
+                {
+                    Latitude = i.s.Latitude,
+                    Longitude = i.s.Longitude,
+                    Address = i.s.Name + "-" + i.s.Address
+                }).ToList();
+            return Json(new { joyralocation = joyraLocation,deliverylocation=deliverylocationlist,shopLocation=shopLocationList}, JsonRequestBehavior.AllowGet);
+        }
+
         //public void AddPaymentData(string code, int ordernumber)
         //{
         //    if (!string.IsNullOrEmpty(code) && ordernumber != 0)
