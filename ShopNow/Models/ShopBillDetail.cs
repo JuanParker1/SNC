@@ -15,7 +15,7 @@ namespace ShopNow.Models
     public partial class ShopBillDetail
     {
         public int Id { get; set; }
-        public int BillNo { get; set; }
+        public string BillNo { get; set; }
         public double BillAmount { get; set; }
         public int OrderNumber { get; set; }
         public System.DateTime DateEncoded { get; set; }
