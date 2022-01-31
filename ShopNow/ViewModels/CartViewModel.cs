@@ -171,6 +171,8 @@ namespace ShopNow.ViewModels
         public double? RefundAmount { get; set; }
         public string RefundRemark { get; set; }
         public List<ImagePathList> ImagePathLists { get; set; }
+        public string BillNo { get; set; }
+        public double BillAmount { get; set; }
         public class ImagePathList
         {
             public string ImagePath { get; set; }
