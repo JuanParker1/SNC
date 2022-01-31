@@ -408,7 +408,7 @@ namespace ShopNow.Controllers
                  (DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate))) && (model.ShopId !=0?i.ShopId == model.ShopId:true))
               // .Join(db.Shops, p => p.ShopId, s => s.Id, (p, s) => new { p, s })
                .Join(db.Orders.Where(i => i.Status == 6), p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
-               .Join(db.Offers, p=> p.c.OfferId, o=> o.Id,(p,o)=> new { p, o })
+               .GroupJoin(db.Offers, p=> p.c.OfferId, o=> o.Id,(p,o)=> new { p, o })
                .GroupJoin(db.PaymentsDatas, p => p.p.p.ReferenceCode, pd => pd.PaymentId, (p, pd) => new { p, pd })
                .AsEnumerable()
                .Select((i, index) => new RetailerPaymentListViewModel.ListItem
@@ -417,10 +417,10 @@ namespace ShopNow.Controllers
                    OrderDate = i.p.p.p.DateEncoded,
                    OrderFirstAmount = i.p.p.p.Amount,
                    OrderNumber = i.p.p.p.OrderNumber,
-                   //PaidAmount = i.PaidAmount ?? 0,
-                   PaidAmount = i.p.o.OwnerType == 1 ? ((i.p.p.p.Amount + i.p.p.c.OfferAmount) - (i.p.p.p.RefundAmount ?? 0)) : i.p.p.p.Amount - (i.p.p.p.RefundAmount ?? 0),
-                   //PaymentAmount = i.PaymentAmount ?? 0,
-                   PaymentAmount = i.p.o.OwnerType == 1 ? ((i.p.p.p.Amount + i.p.p.c.OfferAmount) - (i.p.p.p.RefundAmount ?? 0)) : i.p.p.p.Amount - (i.p.p.p.RefundAmount ?? 0) - Convert.ToDouble((i.pd.Any() ? i.pd.FirstOrDefault().Fee : 0)) - Convert.ToDouble((i.pd.Any() ? i.pd.FirstOrDefault().Tax : 0)),
+                   PaidAmount = i.p.o.FirstOrDefault()?.OwnerType == 1 ? ((i.p.p.c.TotalShopPrice != 0 ? (i.p.p.c.TotalPrice - Math.Abs(i.p.p.c.TotalShopPrice - i.p.p.c.TotalPrice)) - (i.p.p.p.RefundAmount ?? 0) : i.p.p.p.Amount + i.p.p.c.OfferAmount) - (i.p.p.p.RefundAmount ?? 0)) : i.p.p.c.TotalShopPrice != 0 ? i.p.p.p.Amount - Math.Abs(i.p.p.c.TotalPrice - i.p.p.c.TotalShopPrice) : i.p.p.p.Amount - (i.p.p.p.RefundAmount ?? 0),
+                   //PaidAmount = i.p.o.OwnerType == 1 ? ((i.p.p.p.Amount + i.p.p.c.OfferAmount) - (i.p.p.p.RefundAmount ?? 0)) : i.p.p.p.Amount - (i.p.p.p.RefundAmount ?? 0),
+                   PaymentAmount = i.p.o.FirstOrDefault()?.OwnerType == 1 ? ((i.p.p.c.TotalShopPrice != 0 ? (i.p.p.p.Amount - Math.Abs(i.p.p.c.TotalPrice - i.p.p.c.TotalShopPrice)) : i.p.p.p.Amount + i.p.p.c.OfferAmount) - (i.p.p.p.RefundAmount ?? 0)) : (i.p.p.c.TotalShopPrice != 0 ? i.p.p.p.Amount - (Math.Abs(i.p.p.c.TotalPrice - i.p.p.c.TotalShopPrice)) : i.p.p.p.Amount) - (i.p.p.p.RefundAmount ?? 0) - Convert.ToDouble((i.pd.Any() ? i.pd.FirstOrDefault().Fee : 0)) - Convert.ToDouble((i.pd.Any() ? i.pd.FirstOrDefault().Tax : 0)),
+                   //PaymentAmount = i.p.o.OwnerType == 1 ? ((i.p.p.p.Amount + i.p.p.c.OfferAmount) - (i.p.p.p.RefundAmount ?? 0)) : i.p.p.p.Amount - (i.p.p.p.RefundAmount ?? 0) - Convert.ToDouble((i.pd.Any() ? i.pd.FirstOrDefault().Fee : 0)) - Convert.ToDouble((i.pd.Any() ? i.pd.FirstOrDefault().Tax : 0)),
                    // PaymentAmount = i.p.p.Amount - (i.p.p.RefundAmount ?? 0) - Convert.ToDouble((i.pd.Any()? i.pd.FirstOrDefault().Fee : 0)) - Convert.ToDouble((i.pd.Any() ? i.pd.FirstOrDefault().Tax : 0)),
                    PaymentDate = i.p.p.p.DateEncoded,
                    PaymentId = i.p.p.p.ReferenceCode ?? "N/A",
