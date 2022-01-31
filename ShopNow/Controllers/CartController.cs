@@ -1752,10 +1752,11 @@ namespace ShopNow.Controllers
                     ShopLongitude = i.s.Longitude,
                     CustomerLatitude = i.o.Latitude,
                     CustomerLongitude = i.o.Longitude,
-                    CustomerAddress = i.o.DeliveryAddress + " - " + i.o.DateEncoded.ToString("hh:mm tt"),
+                    CustomerAddress = i.o.DeliveryAddress,
                     ShopAddress = i.s.Address,
                     ShopName = i.s.Name,
-                    OrderNumber = i.o.OrderNumber
+                    OrderNumber = i.o.OrderNumber,
+                    OrderTime = i.o.DateEncoded.ToString("hh:mm tt")
                 }).ToList();
 
             return Json(ordersList, JsonRequestBehavior.AllowGet);
