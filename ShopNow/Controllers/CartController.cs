@@ -554,6 +554,7 @@ namespace ShopNow.Controllers
                 return HttpNotFound();
             var cart = db.Orders.FirstOrDefault(i => i.Id == dInt);
             var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == OrderNumber);
+            var shopBill = db.ShopBillDetails.FirstOrDefault(i => i.OrderNumber == OrderNumber);
             var model = new CartListViewModel();
             if (cart != null)
             {
@@ -567,19 +568,14 @@ namespace ShopNow.Controllers
                 model.CustomerPhoneNumber = cart.CustomerPhoneNumber;
                 model.DeliveryBoyName = cart.DeliveryBoyName;
                 model.DateEncoded = cart.DateEncoded;
+                model.BillNo = shopBill.BillNo;
+                model.BillAmount = shopBill.BillAmount;
                 var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == cart.DeliveryBoyId);
                 if (deliveryBoy != null)
                 {
                     model.isAssign = deliveryBoy.isAssign;
                     model.OnWork = deliveryBoy.OnWork;
                 }
-            }
-            if (payment != null)
-            {
-                model.TotalPrice = payment.Amount;
-                model.Packingcharge = payment.PackingCharge;
-                model.Convinenientcharge = payment.ConvenientCharge;
-                model.DeliveryCharge = payment.DeliveryCharge;
             }
             model.List = db.OrderItems.Where(i => i.OrdeNumber == OrderNumber && i.Status == 0)
             .Select(i => new CartListViewModel.CartList
@@ -1871,6 +1867,12 @@ namespace ShopNow.Controllers
         //        return Json(new { success = false }, JsonRequestBehavior.AllowGet);
         //    }
         //}
+
+        public ActionResult ShopBillUpdate(string BillNo, double BillAmount)
+        {
+
+            return View();
+        }
 
         protected override void Dispose(bool disposing)
         {
