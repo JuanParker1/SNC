@@ -1256,7 +1256,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="BillNo" Type="int" Nullable="false" />
+          <Property Name="BillNo" Type="nvarchar" MaxLength="150" />
           <Property Name="BillAmount" Type="float" Nullable="false" />
           <Property Name="OrderNumber" Type="int" Nullable="false" />
           <Property Name="DateEncoded" Type="datetime" Nullable="false" />
@@ -3502,7 +3502,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="BillNo" Type="Int32" Nullable="false" />
+          <Property Name="BillNo" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="BillAmount" Type="Double" Nullable="false" />
           <Property Name="OrderNumber" Type="Int32" Nullable="false" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
