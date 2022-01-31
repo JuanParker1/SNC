@@ -574,9 +574,8 @@ namespace ShopNow.ViewModels
             public double DeliveryCharge { get; set; }
             public int DeliveryBoyPaymentStatus { get; set; }
             public double Distance { get; set; }
+            public string ShopName { get; set; }
         }
-
-
     }
 
     public class ShopDeliveredAmountReportViewModel
@@ -705,8 +704,6 @@ namespace ShopNow.ViewModels
 
     public class CartDelivaryShopApiViewModel
     {
-
-
         public List<CartList> List { get; set; }
         public class CartList
         {
