@@ -4539,15 +4539,14 @@ namespace ShopNow.Controllers
                 model.ListItems = db.Payments
                      .Where(i => ((DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(startDate)) &&
                  (DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(endDate))))
-                 //.Join(db.Shops.Where(i => i.Id == shopId), p => p.ShopId, s => s.Id, (p, s) => new { p, s })
                  .Join(db.Orders.Where(i => i.Status == 6 && i.ShopId == shopId), p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
                  .GroupBy(i => DbFunctions.TruncateTime(i.p.DateEncoded))
                  .AsEnumerable()
                  .Select(i => new ShopApiReportsViewModel.EarningListItem
                  {
-                     // Date = i.Any() ? i.FirstOrDefault().p.DateEncoded.ToString("dd-MMM-yyyy HH:ss") : "",
                      DateEncoded = i.FirstOrDefault().p.DateEncoded,
-                     Earning = i.Sum(a => a.p.Amount),
+                     //Earning = i.Sum(a => a.p.Amount),
+                     Earning = i.FirstOrDefault().c.TotalShopPrice == 0 ? i.Sum(a => a.p.Amount) : i.Sum(a => a.c.TotalShopPrice + a.c.Packingcharge),
                      Paid = GetShopPaidAmount(i.Key.Value, shopId),
                  }).OrderByDescending(j => j.DateEncoded).ToList();
                 return Json(model.ListItems, JsonRequestBehavior.AllowGet);
@@ -4557,17 +4556,15 @@ namespace ShopNow.Controllers
                 model.RefundLists = db.Payments
                     .Where(i => ((DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(startDate)) &&
                 (DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(endDate))))
-                //.Join(db.Shops.Where(i => i.Id == shopId), p => p.ShopId, s => s.Id, (p, s) => new { p, s })
                 .Join(db.Orders.Where(i => i.Status == 6 && i.ShopId == shopId), p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
-                // .Join(db.ShopCharges.Where(i => i.Status == 0), p => p.p.p.OrderNo, sc => sc.OrderNo, (p, sc) => new { p, sc })
-                // .AsEnumerable()
                 .Select(i => new ShopApiReportsViewModel.RefundListItem
                 {
-                    // Date = i.p.DateEncoded.ToString("dd-MMM-yyyy HH:ss"),
                     DateEncoded = i.p.DateEncoded,
-                    Earning = i.p.Amount,
+                    //Earning = i.p.Amount,
+                    Earning = i.c.TotalShopPrice == 0 ? i.p.Amount : (i.c.TotalShopPrice + i.c.Packingcharge),
                     Refund = i.p.RefundAmount ?? 0,
-                    DeliveryCredits = i.c.DeliveryCharge,
+                    //DeliveryCredits =  i.c.DeliveryCharge,
+                    DeliveryCredits = i.c.TotalShopPrice != 0 ? 0 : i.c.DeliveryCharge,
                     OrderNo = i.p.OrderNumber
                 }).OrderByDescending(i => i.DateEncoded).ToList();
                 return Json(model.RefundLists, JsonRequestBehavior.AllowGet);
@@ -4583,7 +4580,8 @@ namespace ShopNow.Controllers
            .GroupBy(i => DbFunctions.TruncateTime(dateEncoded))
            .Select(i => new
            {
-               amount = i.Any() ? i.Sum(a => a.p.p.Amount) : 0
+               //amount = i.Any() ? i.Sum(a => a.p.p.Amount) : 0
+               amount = i.Any() ? i.FirstOrDefault().c.TotalShopPrice == 0 ? i.Sum(a => a.p.p.Amount) : i.Sum(a => a.c.TotalShopPrice + a.c.Packingcharge) : 0
            }).FirstOrDefault();
             if (list != null)
                 return Convert.ToDouble(list.amount);
@@ -5669,7 +5667,7 @@ namespace ShopNow.Controllers
                 string query = "SELECT * " +
                                    " FROM Shops where(3959 * acos(cos(radians(@latitude)) * cos(radians(Latitude)) * cos(radians(Longitude) - radians(@longitude)) + sin(radians(@latitude)) * sin(radians(Latitude)))) < 16 and ShopCategoryId =" + shop.ShopCategoryId + " and (Status = 0 or  Status = 6) and Latitude != 0 and Longitude != 0" +
                                    " order by IsOnline desc,Adscore desc,Rating desc";
-                if (shop.Id == 347 || shop.Id==360)
+                if (shop.Id == 347 || shop.Id==360 || shop.Id== 367)
                 {
                     model.MRP = product.MenuPrice; //Remove in next App release
                     model.SalePrice = product.MenuPrice;  //Remove in next App release
