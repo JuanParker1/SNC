@@ -579,11 +579,17 @@ namespace ShopNow.Controllers
             {
                 model.BillNo = shopBill.BillNo;
                 model.BillAmount = shopBill.BillAmount;
+                
             }
             if(payment != null)
             {
                 model.RefundAmount = payment.RefundAmount;
                 model.RefundRemark = payment.RefundRemark;
+            }
+            if(cart != null && payment!= null && shopBill != null)
+            {
+                model.DifferenceAmount = shopBill.BillAmount - (Math.Round(cart.TotalPrice) - (payment.RefundAmount ?? 0));
+                model.DifferencePercentage = Math.Round(((shopBill.BillAmount - (Math.Round(cart.TotalPrice) - (payment.RefundAmount ?? 0))) / shopBill.BillAmount) * 100);
             }
             model.List = db.OrderItems.Where(i => i.OrdeNumber == OrderNumber && i.Status == 0)
             .Select(i => new CartListViewModel.CartList

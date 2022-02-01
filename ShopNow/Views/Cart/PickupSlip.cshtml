@@ -99,17 +99,18 @@
                                         <td colspan="1">
                                             @if (Model.RefundAmount != null)
                                             {<span> @Model.RefundAmount (@Model.RefundRemark) </span>}
+                                            else { <span>N/A</span>}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td colspan="1">D</td>
                                     <td colspan="4">Difference Bill Amount</td>
-                                    <td colspan="1"> </td>
+                                    <td colspan="1">@Model.DifferenceAmount</td>
                                 </tr>
                                 <tr>
                                     <td colspan="1">E</td>
                                     <td colspan="4">Difference Bill Percentage</td>
-                                    <td colspan="1"> </td>
+                                    <td colspan="1">@Model.DifferencePercentage</td>
                                 </tr>
                                 </tbody>
                             </table>

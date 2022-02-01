@@ -173,6 +173,8 @@ namespace ShopNow.ViewModels
         public List<ImagePathList> ImagePathLists { get; set; }
         public string BillNo { get; set; }
         public double BillAmount { get; set; }
+        public double DifferenceAmount { get; set; }
+        public double DifferencePercentage { get; set; }
         public class ImagePathList
         {
             public string ImagePath { get; set; }
