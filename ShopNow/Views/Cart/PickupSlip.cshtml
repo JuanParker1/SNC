@@ -95,73 +95,25 @@
                                     </tr>
                                     <tr>
                                         <td colspan="1">C</td>
-                                        <td colspan="4">Difference (Only refund amount)</td>
-                                        <td colspan="1">@Model.RefundAmount (@Model.RefundRemark)</td>
-                                    </tr>
-                                    @*<tr class="hide-print">
-                    <td colspan="1">D</td>
-                    <td colspan="3">Packing Charges</td>
-                    <td colspan="1">@Model.PackagingCharge</td>
-                </tr>
-                <tr class="hide-print">
-                    <td colspan="1">E</td>
-                    <td colspan="3">Convinence Charge</td>
-                    <td colspan="1">@Model.ConvenientCharge</td>
-                </tr>
-                <tr class="hide-print">
-                    <td colspan="1">F</td>
-                    <td colspan="3">Delivery Charges</td>
-                    <td colspan="1">@Model.DelivaryCharge</td>
-                </tr>
-                <tr class="hide-print">
-                    <td colspan="1">G</td>
-                    <td colspan="3">Total</td>
-                    <td colspan="1">@Math.Abs(Model.Amount + Model.PackagingCharge + Model.ConvenientCharge + Model.DelivaryCharge)</td>
-                </tr>*@
+                                        <td colspan="4">Refund Amount</td>
+                                        <td colspan="1">
+                                            @if (Model.RefundAmount != null)
+                                            {<span> @Model.RefundAmount (@Model.RefundRemark) </span>}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="1">D</td>
+                                    <td colspan="4">Difference Bill Amount</td>
+                                    <td colspan="1"> </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="1">E</td>
+                                    <td colspan="4">Difference Bill Percentage</td>
+                                    <td colspan="1"> </td>
+                                </tr>
                                 </tbody>
                             </table>
                         </form>
-                        @*<table class="table table-bordered">
-            <tbody>
-                <tr>
-                    <td colspan="1">A</td>
-                    <td colspan="6">App items value</td>
-                    <td colspan="2">@Model.Amount</td>
-                </tr>
-                <tr>
-                    <td colspan="1">B</td>
-                    <td colspan="2">Shop bill No.</td>
-                    <td colspan="2" class="p-3"></td>
-                    <td colspan="2">Value</td>
-                    <td colspan="2" class="p-3"></td>
-                </tr>
-                <tr>
-                    <td colspan="1">C</td>
-                    <td colspan="6">Difference (Only refund amount)</td>
-                    <td colspan="2"></td>
-                </tr>
-                <tr class="hide-print">
-                    <td colspan="1">D</td>
-                    <td colspan="6">Packing Charges</td>
-                    <td colspan="2">@Model.PackagingCharge</td>
-                </tr>
-                <tr class="hide-print">
-                    <td colspan="1">E</td>
-                    <td colspan="6">Convinence Charge</td>
-                    <td colspan="2">@Model.ConvenientCharge</td>
-                </tr>
-                <tr class="hide-print">
-                    <td colspan="1">F</td>
-                    <td colspan="6">Delivery Charges</td>
-                    <td colspan="2">@Model.DelivaryCharge</td>
-                </tr>
-                <tr class="hide-print">
-                    <td colspan="1">G</td>
-                    <td colspan="6">Total</td>
-                    <td colspan="2">@Math.Abs(Model.Amount + Model.PackagingCharge + Model.ConvenientCharge + Model.DelivaryCharge)</td>
-                </tr>
-            </tbody>
-        </table>*@
                     </div>
                 </div>
             </div>
