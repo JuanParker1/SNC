@@ -114,8 +114,6 @@ namespace ShopNow.Controllers
             if (category != null)
             {
                 category.Name = model.editName;
-                category.ProductTypeId = model.editProductTypeId;
-                category.ProductTypeName= model.editProductTypeName;
                 category.OrderNo = model.editOrderNo;
                 category.UpdatedBy = user.Name;
                 category.DateUpdated = DateTime.Now;
