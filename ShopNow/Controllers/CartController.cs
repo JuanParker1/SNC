@@ -872,7 +872,7 @@ namespace ShopNow.Controllers
                            OrderNumber = i.o.OrderNumber,
                            DeliveryBoyId = i.o.DeliveryBoyId,
                            DeliveryBoyName = i.o.DeliveryBoyName,
-                           DeliveryBoyPhoneNumber = i.o.DeliveryBoyPhoneNumber,
+                           ShopName = i.o.ShopName,
                            DeliveryCharge = i.d.WorkType == 1 ? (i.o.DeliveryCharge == 35 ? 20 + i.o.TipsAmount : 20 + (i.o.DeliveryCharge - 35) + i.o.TipsAmount) : i.o.DeliveryCharge + i.o.TipsAmount,
                            DeliveryBoyPaymentStatus = i.o.DeliveryBoyPaymentStatus,
                            Distance = i.o.Distance

@@ -152,6 +152,11 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <input type="button" class="btn btn-danger btn-sm d-none ml-4" id="btnRemove1" value="Remove" />
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label class="control-label text-secondary font-weight-bold ml-2">FMCG Image-2</label>
@@ -162,6 +167,11 @@
                                                     <input type="file" id="FMCGImage2" name="FMCGImage2" class="d-none" />
                                                     <label for="FMCGImage2" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                                     <input type="hidden" name="ImagePath2" id="ImagePath2" />
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <input type="button" class="btn btn-danger btn-sm  d-none ml-5" id="btnRemove2" value="Remove" />
                                                 </div>
                                             </div>
                                         </div>
@@ -177,6 +187,11 @@
                                                     <input type="hidden" name="ImagePath3" id="ImagePath3" />
                                                 </div>
                                             </div>
+                                        </div> 
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <input type="button" class="btn btn-danger btn-sm  d-none ml-4" id="btnRemove3" value="Remove" />
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-4 form-group">
@@ -191,6 +206,11 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <input type="button" class="btn btn-danger btn-sm  d-none ml-4" id="btnRemove4" value="Remove" />
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-md-4 form-group">
                                         <label class="control-label text-secondary font-weight-bold ml-2">FMCG Image-5</label>
@@ -202,6 +222,11 @@
                                                     <label for="FMCGImage5" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                                     <input type="hidden" name="ImagePath5" id="ImagePath5" />
                                                 </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <input type="button" class="btn btn-danger btn-sm  d-none ml-4" id="btnRemove5" value="Remove" />
                                             </div>
                                         </div>
                                     </div>
@@ -348,6 +373,15 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
+            $("#FMCGImage1").change(function () {
+                readURLFMCGImage1(this);
+                $("#btnRemove1").removeClass("d-none");
+            });
+            $('#btnRemove1').click(function () {
+                $("#img-FMCGImage1").attr('src', '');
+                $("#FMCGImage1").val('');
+                $(this).addClass("d-none");
+            });
 
             function readURLFMCGImage2(input) {
                 if (input.files && input.files[0]) {
@@ -358,6 +392,15 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
+            $("#FMCGImage2").change(function () {
+                readURLFMCGImage2(this);
+                $("#btnRemove2").removeClass("d-none");
+            });
+            $('#btnRemove2').on('click', function () {
+                $("#img-FMCGImage2").attr('src', '');
+                $("#FMCGImage2").val('');
+                $(this).addClass("d-none");
+            });
 
             function readURLFMCGImage3(input) {
                 if (input.files && input.files[0]) {
@@ -368,6 +411,15 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
+            $("#FMCGImage3").change(function () {
+                readURLFMCGImage3(this);
+                $("#btnRemove3").removeClass("d-none");
+            });
+            $('#btnRemove3').on('click', function () {
+                $("#img-FMCGImage3").attr('src', '');
+                $("#FMCGImage3").val('');
+                $(this).addClass("d-none");
+            });
 
             function readURLFMCGImage4(input) {
                 if (input.files && input.files[0]) {
@@ -378,6 +430,15 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
+            $("#FMCGImage4").change(function () {
+                readURLFMCGImage4(this);
+                $("#btnRemove4").removeClass("d-none");
+            });
+            $('#btnRemove4').on('click', function () {
+                $("#img-FMCGImage4").attr('src', '');
+                $("#FMCGImage4").val('');
+                $(this).addClass("d-none");
+            });
 
             function readURLFMCGImage5(input) {
                 if (input.files && input.files[0]) {
@@ -388,24 +449,33 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
-            $("#FMCGImage1").change(function () {
-                readURLFMCGImage1(this);
-            });
-            $("#FMCGImage2").change(function () {
-                readURLFMCGImage2(this);
-            });
-            $("#FMCGImage3").change(function () {
-                readURLFMCGImage3(this);
-            });
-
-            $("#FMCGImage4").change(function () {
-                readURLFMCGImage4(this);
-            });
-
             $("#FMCGImage5").change(function () {
                 readURLFMCGImage5(this);
+                $("#btnRemove5").removeClass("d-none");
             });
+            $('#btnRemove5').on('click', function () {
+                $("#img-FMCGImage5").attr('src', '');
+                $("#FMCGImage5").val('');
+                $(this).addClass("d-none");
+            });
+
+            //$("#FMCGImage1").change(function () {
+            //    readURLFMCGImage1(this);
+            //});
+            //$("#FMCGImage2").change(function () {
+            //    readURLFMCGImage2(this);
+            //});
+            //$("#FMCGImage3").change(function () {
+            //    readURLFMCGImage3(this);
+            //});
+
+            //$("#FMCGImage4").change(function () {
+            //    readURLFMCGImage4(this);
+            //});
+
+            //$("#FMCGImage5").change(function () {
+            //    readURLFMCGImage5(this);
+            //});
 
             $('#Length,#Width,#Height').on('change', function () {
                 calculateSizeLWH();

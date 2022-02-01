@@ -50,7 +50,7 @@
                                     <th class="font-weight-bold">No.</th>
                                     <th>Date</th>
                                     <th>OrderNumber</th>
-                                    <th>DeliveryBoy Phone</th>
+                                    <th>Shop Name</th>
                                     <th class="font-weight-bold">DeliveryBoy Name</th>
                                     <th class="font-weight-bold">Amount</th>
                                     <th>Distance(Km)</th>
@@ -64,7 +64,7 @@
                                         <td></td>
                                         <td class="text-nowrap">@item.DateEncoded.ToString("dd-MM-yyyy")</td>
                                         <td><a href="~/Cart/Edit?OrderNumber=@item.OrderNumber&id=@ShopNow.Helpers.AdminHelpers.ECodeLong(item.Id)">@item.OrderNumber</a></td>
-                                        <td>@item.DeliveryBoyPhoneNumber</td>
+                                        <td>@item.ShopName</td>
                                         <td>@item.DeliveryBoyName</td>
                                         <td>@Math.Round(item.DeliveryCharge,2)</td>
                                         <td>@Math.Round(item.Distance,2)</td>
