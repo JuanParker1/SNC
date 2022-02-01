@@ -453,15 +453,16 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             model.ListItems = db.ShopBillDetails
-                .Join(db.Payments, sb=> sb.OrderNumber, p=> p.OrderNumber,(sb,p)=> new { sb,p})
-                .Join(db.Orders, s=>s.p.OrderNumber, o=> o.OrderNumber,(s,o)=> new { s,o})
+                .GroupJoin(db.Payments, s => s.OrderNumber, p => p.OrderNumber, (s,p) => new { s,p })
+                .GroupJoin(db.Orders, p => p.p.FirstOrDefault().OrderNumber, o => o.OrderNumber, (p, o) => new { p, o })
                 .Select(i => new ShopBillDifferenceReportViewModel.ListItem
-            {
-                BillAmount = i.s.sb.BillAmount,
-                BillNo = i.s.sb.BillNo,
-                OrderNumber = i.s.sb.OrderNumber,
-                DifferenceAmount = (i.s.sb.BillAmount - (i.s.p.OriginalAmount - i.s.p.RefundAmount??0)),
-                DifferencePercentage = i.s.sb.BillAmount *(i.s.sb.BillAmount - (i.s.p.OriginalAmount - i.s.p.RefundAmount??0))/100,
+                {
+                    BillAmount = i.p.s.BillAmount,
+                    BillNo = i.p.s.BillNo,
+                    OrderNumber = i.p.s.OrderNumber,
+                    TotalPrice = i.o.FirstOrDefault().TotalPrice,
+                    DifferenceAmount = i.p.s.BillAmount -  (Math.Round(i.o.FirstOrDefault().TotalPrice) - (i.p.p.FirstOrDefault().RefundAmount ?? 0)),
+                    DifferencePercentage = Math.Round(((i.p.s.BillAmount - (Math.Round(i.o.FirstOrDefault().TotalPrice) - (i.p.p.FirstOrDefault().RefundAmount ?? 0))) /i.p.s.BillAmount)*100),
                 }).ToList();
             return View(model);
         }

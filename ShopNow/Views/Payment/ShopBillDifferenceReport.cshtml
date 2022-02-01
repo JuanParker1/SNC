@@ -16,19 +16,20 @@
         <div class="col-md-6">
             <h5 class="mt-1 text-uppercase text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
         </div>
-            <div class="col-md-6 text-right">
+            @*<div class="col-md-6 text-right">
                 <input type="button" id="btnExport" class="btn btn-vsm btn-secondary" value="Export To Excel" />
-            </div>
+            </div>*@
         <div class="col-md-12">
             <div class="card shadow mt-3">
                 <div class="card-body">
                     @Html.Grid(Model.ListItems).Columns(columns =>
-   {
-      columns.Add(c => c.BillNo).Titled("Bill Number").Filterable(true).SetWidth(10);
-      columns.Add(c => c.BillAmount).Titled("Bill Amount").Filterable(true).SetWidth(9);
-      columns.Add(c => c.DifferenceAmount).Titled("Difference Amount").Filterable(true).SetWidth(10);
-      columns.Add(c => c.DifferencePercentage).Titled("Difference Percentage").Filterable(true).SetWidth(4);
-   }).WithPaging(20).Sortable(true)
+               {
+                   columns.Add(c => c.OrderNumber).Titled("Order Number").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.BillNo).Titled("Bill Number").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.BillAmount).Titled("Bill Amount").Filterable(true).SetWidth(9);
+                   columns.Add(c => c.DifferenceAmount).Titled("Difference Amount").Filterable(true).SetWidth(10);
+                   columns.Add(c => c.DifferencePercentage).Titled("Difference Percentage").Filterable(true).SetWidth(4);
+               }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>

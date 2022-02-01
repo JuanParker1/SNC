@@ -405,6 +405,7 @@ namespace ShopNow.ViewModels
             public int OrderNumber { get; set; }
             public string BillNo { get; set; }
             public double BillAmount { get; set; }
+            public double TotalPrice { get; set; }
             public double DifferenceAmount { get; set; }
             public double DifferencePercentage { get; set; }
            
