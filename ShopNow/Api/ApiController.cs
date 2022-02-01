@@ -5613,7 +5613,9 @@ namespace ShopNow.Controllers
                                ShopLongitude = i.p.s.Longitude,
                                ShopPhoneNumber = i.p.s.PhoneNumber,
                                ShopStatus = i.p.s.Status,
-                               ShopNextOnTime = i.p.s.NextOnTime
+                               ShopNextOnTime = i.p.s.NextOnTime,
+                               IsOnline = i.p.p.IsOnline,
+                               NextOnTime = i.p.p.NextOnTime
                            }).ToList();
                 //}
             }
@@ -5694,7 +5696,9 @@ namespace ShopNow.Controllers
                                               ShopLongitude = i.p.s.Longitude,
                                               ShopPhoneNumber = i.p.s.PhoneNumber,
                                               ShopStatus = i.p.s.Status,
-                                              ShopNextOnTime = i.p.s.NextOnTime
+                                              ShopNextOnTime = i.p.s.NextOnTime,
+                                              IsOnline = i.p.p.IsOnline,
+                                              NextOnTime = i.p.p.NextOnTime
                                           }).ToList();
                 }
                 else
