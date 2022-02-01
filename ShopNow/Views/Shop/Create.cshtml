@@ -8,6 +8,7 @@
         height: 100%;
         position: inherit;
     }
+
     .focused {
         border: solid 1px red;
     }
@@ -21,7 +22,7 @@
             <label class="font-weight-bold text-secondary">Customer Phone No.</label>
         </div>
         <div class="col-md-2">
-            <input type="text" class="form-control" id="phoneNumber" maxlength="10"  oninput="this.value=this.value.replace(/[^0-9]/g,'');" autofocus />
+            <input type="text" class="form-control" id="phoneNumber" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'');" autofocus />
         </div>
         <div class="col-md-1">
             <input type="button" class="form-control btn btn-sm btn-success" id="btnCustomer" value="Check" />
@@ -147,8 +148,8 @@
                                 <div class="col-md-4 text-md-left">
                                 </div>
                                 <div class="col-md-4">
-                                    <small class="control-label col-sm-12" for="PinId"><i class="text-secondary">PIN Code</i></small>
-                                    <input id="PinId" type="text" class="form-control" placeholder="PIN Code" name="PinId" readonly />
+                                    <small class="control-label col-sm-12" for="PinCode"><i class="text-secondary">PIN Code</i></small>
+                                    <input id="PinCode" type="text" class="form-control" placeholder="PIN Code" name="PinCode" readonly />
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -214,7 +215,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="card mb-4 shadow">
                     <div class="row">
                         <h5 class="text-success ml-4 mt-2">Proprietor Details</h5>
@@ -811,6 +811,7 @@
                         $('.penFssi').addClass('d-none');
                     }
                 });
+
             $('input:radio[name="DrugLicense"]').change(
                 function () {
                     if (this.checked && this.value == 'Image') {
@@ -826,6 +827,7 @@
                         $('.penDrug').addClass('d-none');
                     }
                 });
+
             $('input:radio[name="EstablishLicense"]').change(
                 function () {
                     if (this.checked && this.value == 'Image') {
@@ -841,6 +843,7 @@
                         $('.penEsta').addClass('d-none');
                     }
                 });
+
             $('input:radio[name="OtherLicense"]').change(
                 function () {
                     if (this.checked && this.value == 'Image') {
@@ -856,6 +859,7 @@
                         $('.penOther').addClass('d-none');
                     }
                 });
+
             $('input:radio[name="AuthLicense"]').change(
                 function () {
                     if (this.checked && this.value == 'Image') {
@@ -871,6 +875,7 @@
                         $('.penAuth').addClass('d-none');
                     }
                 });
+
             $('input:radio[name="GstinLicense"]').change(
                 function () {
                     if (this.checked && this.value == 'Image') {
@@ -886,6 +891,7 @@
                         $('.penGstn').addClass('d-none');
                     }
                 });
+
             $('input:radio[name="PanLicense"]').change(
                 function () {
                     if (this.checked && this.value == 'Image') {
@@ -901,6 +907,7 @@
                         $('.penPan').addClass('d-none');
                     }
                 });
+
             $('input:radio[name="AadharDocument"]').change(
                 function () {
                     if (this.checked && this.value == 'Image') {
@@ -914,6 +921,7 @@
                         $("#img-aadhar").attr('src', '');
                     }
                 });
+
             $('input:radio[name="AccountDocument"]').change(
                 function () {
                     if (this.checked && this.value == 'Image') {
@@ -927,6 +935,7 @@
                         $("#img-account").attr('src', '');
                     }
                 });
+
             $('#AuthorisedBrandId').select2({
                 placeholder: "Search Brand",
                 ajax: {
@@ -947,7 +956,7 @@
                 var adharNumber = $("#AadharNumber").val();
                 var adharImage = $("#AadharImage").val();
                 var adharPdf = $("#AadharPdf").val();
-                var shoptype = $("#ShopCategoryId").val();                
+                var shoptype = $("#ShopCategoryId").val();
                 if (shoptype == null || shoptype == "") {
                     swal("Notice!", "Please Select Shop Type!", "warning");
                 } else if (adharName != "" && adharNumber != "" && (adharImage != "" || adharPdf != "")) {
@@ -988,7 +997,6 @@
                 }
             });
 
-         
             function readAuthoriseURL(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
@@ -1000,7 +1008,6 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
             $("#AuthorisedDistributorImage").change(function () {
                 readAuthoriseURL(this);
                 $('.penAuth').removeClass('d-none');
@@ -1008,6 +1015,7 @@
             $("#AuthorisedDistributorPdf").change(function () {
                 $('.penAuth').removeClass('d-none');
             });
+
             function readOtherLicenseURL(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
@@ -1019,7 +1027,6 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
             $("#OtherLicenseImage").change(function () {
                 readOtherLicenseURL(this);
                 $('.penOther').removeClass('d-none');
@@ -1027,6 +1034,7 @@
             $("#OtherLicensePdf").change(function () {
                 $('.penOther').removeClass('d-none');
             });
+
             function readEstablishURL(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
@@ -1038,7 +1046,6 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
             $("#EstablishImage").change(function () {
                 readEstablishURL(this);
                 $('.penEsta').removeClass('d-none');
@@ -1046,6 +1053,7 @@
             $("#EstablishPdf").change(function () {
                 $('.penEsta').removeClass('d-none');
             });
+
             function readDrugURL(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
@@ -1057,7 +1065,6 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
             $("#DrugImage").change(function () {
                 readDrugURL(this);
                 document.getElementById("SaveR").disabled = false;
@@ -1084,7 +1091,6 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
             $("#FSSAIImage").change(function () {
                 readFssaiURL(this);
                 document.getElementById("SaveR").disabled = false;
@@ -1110,7 +1116,6 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
             $("#PanImage").change(function () {
                 readURLPan(this);
                 $('.penPan').removeClass('d-none');
@@ -1118,6 +1123,7 @@
             $("#PanPdf").change(function () {
                 $('.penPan').removeClass('d-none');
             });
+
             function readURLGstin(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
@@ -1129,7 +1135,6 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
             $("#GSTINImage").change(function () {
                 readURLGstin(this);
                 $('.penGstn').removeClass('d-none');
@@ -1137,6 +1142,7 @@
             $("#GSTINPdf").change(function () {
                 $('.penGstn').removeClass('d-none');
             });
+
             function readURLAccount(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
@@ -1148,7 +1154,6 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
             $("#AccountImage").change(function () {
                 readURLAccount(this);
             });
@@ -1164,7 +1169,6 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
             $("#ShopImage").change(function () {
                 readURL(this);
             });
@@ -1180,7 +1184,6 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
             $("#LogoImage").change(function () {
                 readURLLogo(this);
             });
@@ -1196,7 +1199,6 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
             $("#BannerImage").change(function () {
                 readURLBanner(this);
             });
@@ -1213,7 +1215,6 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
             $("#AadharImage").change(function () {
                 readURLAadhar(this);
             });
@@ -1284,7 +1285,6 @@
                                             if (this.types[0] == "postal_code") {
                                                 $('#PinCode').val(this.long_name);
                                             }
-
                                         });
 
                                         $('#Latitude').val(results[0].geometry.location.lat);
@@ -1343,7 +1343,7 @@
                                 google.maps.event.addListener(marker, 'drag', function () {
                                     geocodePosition(marker.position);
                                 });
-                                
+
                                 map.fitBounds(place.geometry.viewport);
                                 marker.setPosition(place.geometry.location);
                                 marker.setVisible(true);
@@ -1372,7 +1372,7 @@
                                 $('#Latitude').val(place.geometry.location.lat);
                                 $('#Longitude').val(place.geometry.location.lng);
                                 $('#GooglePlaceId').val(place.place_id);
-                               
+
                                 $.getJSON('/Shop/GetShop?placeid=' + place.place_id, null, function (data) {
                                     $('#Rating').val(data.result.result.rating);
                                     $('#CustomerReview').val(data.result.result.user_ratings_total);
@@ -1405,7 +1405,6 @@
             } else {
                 x.innerHTML = "Geolocation is not supported by this browser.";
             }
-
         }
 
         function handleLocationError(browserHasGeolocation, infoWindow, pos) {
