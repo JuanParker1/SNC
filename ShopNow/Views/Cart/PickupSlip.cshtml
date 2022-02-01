@@ -39,122 +39,129 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <table class="table table-striped table-bordered mb-4">
-                            <thead>
-                                <tr class="table-secondary">
-                                    <th>Sl.No</th>
-                                    <th>Item Name</th>
-                                    <th>MRP Price</th>
-                                    <th>Rate</th>
-                                    <th>Qty</th>
-                                    <th>Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model.List)
-                                {
-                                    var totalcount = Model.List.Count();
-                                    var count = Model.List.IndexOf(item);
-                                    count++;
-                                <tr>
-                                    <td>@count</td>
-                                    @if (item.ProductName != null)
+                        <form action="~/Cart/ShopBillUpdate" method="post">
+                            <table class="table table-striped table-bordered mb-4">
+                                <thead>
+                                    <tr class="table-secondary">
+                                        <th>Sl.No</th>
+                                        <th>Item Name</th>
+                                        <th>MRP Price</th>
+                                        <th>Rate</th>
+                                        <th>Qty</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.List)
                                     {
-                                        <td>@item.ProductName</td>
-}
-                                    else
-                                    {
-                                        <td>N/A</td>
+                                        var totalcount = Model.List.Count();
+                                        var count = Model.List.IndexOf(item);
+                                        count++;
+                                        <tr>
+                                            <td>@count</td>
+                                            @if (item.ProductName != null)
+                                            {
+                                                <td>@item.ProductName</td>
+                                            }
+                                            else
+                                            {
+                                                <td>N/A</td>
+                                            }
+                                            <td>@item.MRPPrice</td>
+                                            <td>@item.SinglePrice</td>
+                                            <td>@item.Qty</td>
+                                            <td id="amount">@item.Price</td>
+                                        </tr>
                                     }
-                                    <td>@item.MRPPrice</td>
-                                    <td>@item.SinglePrice</td>
-                                    <td>@item.Qty</td>
-                                    <td id="amount">@item.Price</td>
-                                </tr>
-                                }
-                                <tr>
-                                    <td colspan="6">&nbsp;</td>
-                                </tr>
-                                <tr>
-                                    <td>A</td>
-                                    <td colspan="4">App items value</td>
-                                    @*<td>@Model.Amount</td>*@
-                                    <td>@Model.List.Sum(i=>i.Price)</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="1">B</td>
-                                    <td colspan="3">Shop bill No. <input type="text" name="BillNo" id="BillNo" class="form-control" /></td>
-                                    <td>Value <input type="number" name="BillAmount" id="BillAmount" class="form-control" /></td>
-                                    <td><input type="submit" class="btn btn-sm btn-success" /></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="1">C</td>
-                                    <td colspan="4">Difference (Only refund amount)</td>
-                                    <td colspan="1"></td>
-                                </tr>
-                                @*<tr class="hide-print">
-                                    <td colspan="1">D</td>
-                                    <td colspan="3">Packing Charges</td>
-                                    <td colspan="1">@Model.PackagingCharge</td>
-                                </tr>
-                                <tr class="hide-print">
-                                    <td colspan="1">E</td>
-                                    <td colspan="3">Convinence Charge</td>
-                                    <td colspan="1">@Model.ConvenientCharge</td>
-                                </tr>
-                                <tr class="hide-print">
-                                    <td colspan="1">F</td>
-                                    <td colspan="3">Delivery Charges</td>
-                                    <td colspan="1">@Model.DelivaryCharge</td>
-                                </tr>
-                                <tr class="hide-print">
-                                    <td colspan="1">G</td>
-                                    <td colspan="3">Total</td>
-                                    <td colspan="1">@Math.Abs(Model.Amount + Model.PackagingCharge + Model.ConvenientCharge + Model.DelivaryCharge)</td>
-                                </tr>*@
-                            </tbody>
-                        </table>
+                                    <tr>
+                                        <td colspan="6">&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td>A</td>
+                                        <td colspan="4">App items value</td>
+                                        @*<td>@Model.Amount</td>*@
+                                        <td>@Model.List.Sum(i => i.Price)</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="1">B</td>
+                                        <td colspan="3">Shop bill No. <input type="text" class="form-control d-inline w-50" name="BillNo" id="BillNo" value="@Model.BillNo" required /></td>
+                                        <td>Value </td>
+                                        <td>
+                                            <input type="text" class="form-control d-inline w-25" name="BillAmount" id="BillAmount" value="@Model.BillAmount" />
+                                            <input type="hidden" name="OrderNumber" value="@Model.OrderNumber" />
+                                            <input type="hidden" name="OrderId" value="@ShopNow.Helpers.AdminHelpers.ECodeLong(Model.Id)" />
+                                            <input type="submit" class="btn btn-sm btn-success ml-3" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="1">C</td>
+                                        <td colspan="4">Difference (Only refund amount)</td>
+                                        <td colspan="1">@Model.RefundAmount (@Model.RefundRemark)</td>
+                                    </tr>
+                                    @*<tr class="hide-print">
+                    <td colspan="1">D</td>
+                    <td colspan="3">Packing Charges</td>
+                    <td colspan="1">@Model.PackagingCharge</td>
+                </tr>
+                <tr class="hide-print">
+                    <td colspan="1">E</td>
+                    <td colspan="3">Convinence Charge</td>
+                    <td colspan="1">@Model.ConvenientCharge</td>
+                </tr>
+                <tr class="hide-print">
+                    <td colspan="1">F</td>
+                    <td colspan="3">Delivery Charges</td>
+                    <td colspan="1">@Model.DelivaryCharge</td>
+                </tr>
+                <tr class="hide-print">
+                    <td colspan="1">G</td>
+                    <td colspan="3">Total</td>
+                    <td colspan="1">@Math.Abs(Model.Amount + Model.PackagingCharge + Model.ConvenientCharge + Model.DelivaryCharge)</td>
+                </tr>*@
+                                </tbody>
+                            </table>
+                        </form>
                         @*<table class="table table-bordered">
-                            <tbody>
-                                <tr>
-                                    <td colspan="1">A</td>
-                                    <td colspan="6">App items value</td>
-                                    <td colspan="2">@Model.Amount</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="1">B</td>
-                                    <td colspan="2">Shop bill No.</td>
-                                    <td colspan="2" class="p-3"></td>
-                                    <td colspan="2">Value</td>
-                                    <td colspan="2" class="p-3"></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="1">C</td>
-                                    <td colspan="6">Difference (Only refund amount)</td>
-                                    <td colspan="2"></td>
-                                </tr>
-                                <tr class="hide-print">
-                                    <td colspan="1">D</td>
-                                    <td colspan="6">Packing Charges</td>
-                                    <td colspan="2">@Model.PackagingCharge</td>
-                                </tr>
-                                <tr class="hide-print">
-                                    <td colspan="1">E</td>
-                                    <td colspan="6">Convinence Charge</td>
-                                    <td colspan="2">@Model.ConvenientCharge</td>
-                                </tr>
-                                <tr class="hide-print">
-                                    <td colspan="1">F</td>
-                                    <td colspan="6">Delivery Charges</td>
-                                    <td colspan="2">@Model.DelivaryCharge</td>
-                                </tr>
-                                <tr class="hide-print">
-                                    <td colspan="1">G</td>
-                                    <td colspan="6">Total</td>
-                                    <td colspan="2">@Math.Abs(Model.Amount + Model.PackagingCharge + Model.ConvenientCharge + Model.DelivaryCharge)</td>
-                                </tr>
-                            </tbody>
-                        </table>*@
+            <tbody>
+                <tr>
+                    <td colspan="1">A</td>
+                    <td colspan="6">App items value</td>
+                    <td colspan="2">@Model.Amount</td>
+                </tr>
+                <tr>
+                    <td colspan="1">B</td>
+                    <td colspan="2">Shop bill No.</td>
+                    <td colspan="2" class="p-3"></td>
+                    <td colspan="2">Value</td>
+                    <td colspan="2" class="p-3"></td>
+                </tr>
+                <tr>
+                    <td colspan="1">C</td>
+                    <td colspan="6">Difference (Only refund amount)</td>
+                    <td colspan="2"></td>
+                </tr>
+                <tr class="hide-print">
+                    <td colspan="1">D</td>
+                    <td colspan="6">Packing Charges</td>
+                    <td colspan="2">@Model.PackagingCharge</td>
+                </tr>
+                <tr class="hide-print">
+                    <td colspan="1">E</td>
+                    <td colspan="6">Convinence Charge</td>
+                    <td colspan="2">@Model.ConvenientCharge</td>
+                </tr>
+                <tr class="hide-print">
+                    <td colspan="1">F</td>
+                    <td colspan="6">Delivery Charges</td>
+                    <td colspan="2">@Model.DelivaryCharge</td>
+                </tr>
+                <tr class="hide-print">
+                    <td colspan="1">G</td>
+                    <td colspan="6">Total</td>
+                    <td colspan="2">@Math.Abs(Model.Amount + Model.PackagingCharge + Model.ConvenientCharge + Model.DelivaryCharge)</td>
+                </tr>
+            </tbody>
+        </table>*@
                     </div>
                 </div>
             </div>

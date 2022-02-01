@@ -17,12 +17,12 @@ namespace ShopNow.Controllers
         private MapperConfiguration _mapperConfiguration;
 
         public PaymentController()
-        {                                                                                                                                               
+        {
             _mapperConfiguration = new MapperConfiguration(config =>
             {
                 config.CreateMap<Payment, PaymentReportViewModel>();
                 config.CreateMap<Payment, PaymentReportViewModel.PaymentReportList>();
-                                                                       
+
             });
             _mapper = _mapperConfiguration.CreateMapper();
         }
@@ -51,7 +51,7 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCPYPR183")]
-        public ActionResult PlatformCreditReport(DateTime? StartDate, DateTime? EndDate, int shopId=0)
+        public ActionResult PlatformCreditReport(DateTime? StartDate, DateTime? EndDate, int shopId = 0)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -160,7 +160,7 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCPYDR185")]
-        public ActionResult DeliveryCreditReport(DateTime? StartDate, DateTime? EndDate, int shopId=0)
+        public ActionResult DeliveryCreditReport(DateTime? StartDate, DateTime? EndDate, int shopId = 0)
         {
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -270,7 +270,7 @@ namespace ShopNow.Controllers
             //       ShopPaymentStatus = i.p.c.ShopPaymentStatus
             //   }).ToList();
 
-            model.ListItems = db.Payments.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(model.EarningDate.Value) && i.OrderNumber !=0)
+            model.ListItems = db.Payments.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(model.EarningDate.Value) && i.OrderNumber != 0)
               .Join(db.Shops, p => p.ShopId, s => s.Id, (p, s) => new { p, s })
               .Join(db.Orders.Where(i => i.Status == 6), p => p.p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
               .GroupJoin(db.PaymentsDatas, p => p.p.p.ReferenceCode, pd => pd.PaymentId, (p, pd) => new { p, pd })
@@ -283,7 +283,7 @@ namespace ShopNow.Controllers
                   AccountType = i.FirstOrDefault().p.p.s.AcountType,
                   //FinalAmount = i.FirstOrDefault().p.p.p.Amount - (i.FirstOrDefault().p.p.p.RefundAmount ?? 0) - (Convert.ToDouble(i.FirstOrDefault().pd.Any() ? (i.FirstOrDefault().pd.FirstOrDefault().Fee ?? 0) : 0)) - (Convert.ToDouble(i.FirstOrDefault().pd.Any() ? (i.FirstOrDefault().pd.FirstOrDefault().Tax ?? 0) : 0)),
                   //FinalAmount = i.FirstOrDefault().p.c.TotalShopPrice !=0 ? i.FirstOrDefault().p.p.p.Amount - Math.Abs(i.FirstOrDefault().p.c.TotalPrice - i.FirstOrDefault().p.c.TotalShopPrice - i.FirstOrDefault().p.c.NetDeliveryCharge) - (i.FirstOrDefault().p.p.p.RefundAmount ?? 0) - (Convert.ToDouble(i.FirstOrDefault().pd.Any() ? (i.FirstOrDefault().pd.FirstOrDefault().Fee ?? 0) : 0)) - (Convert.ToDouble(i.FirstOrDefault().pd.Any() ? (i.FirstOrDefault().pd.FirstOrDefault().Tax ?? 0) : 0)): i.FirstOrDefault().p.p.p.Amount - (i.FirstOrDefault().p.p.p.RefundAmount ?? 0) - (Convert.ToDouble(i.FirstOrDefault().pd.Any() ? (i.FirstOrDefault().pd.FirstOrDefault().Fee ?? 0) : 0)) - (Convert.ToDouble(i.FirstOrDefault().pd.Any() ? (i.FirstOrDefault().pd.FirstOrDefault().Tax ?? 0) : 0)),
-                  FinalAmount = i.FirstOrDefault().p.c.TotalShopPrice !=0 ? (i.FirstOrDefault().p.c.TotalShopPrice + i.FirstOrDefault().p.c.Packingcharge) - (i.FirstOrDefault().p.p.p.RefundAmount ?? 0) - (Convert.ToDouble(i.FirstOrDefault().pd.Any() ? (i.FirstOrDefault().pd.FirstOrDefault().Fee ?? 0) : 0)) - (Convert.ToDouble(i.FirstOrDefault().pd.Any() ? (i.FirstOrDefault().pd.FirstOrDefault().Tax ?? 0) : 0)): i.FirstOrDefault().p.p.p.Amount - (i.FirstOrDefault().p.p.p.RefundAmount ?? 0) - (Convert.ToDouble(i.FirstOrDefault().pd.Any() ? (i.FirstOrDefault().pd.FirstOrDefault().Fee ?? 0) : 0)) - (Convert.ToDouble(i.FirstOrDefault().pd.Any() ? (i.FirstOrDefault().pd.FirstOrDefault().Tax ?? 0) : 0)),
+                  FinalAmount = i.FirstOrDefault().p.c.TotalShopPrice != 0 ? (i.FirstOrDefault().p.c.TotalShopPrice + i.FirstOrDefault().p.c.Packingcharge) - (i.FirstOrDefault().p.p.p.RefundAmount ?? 0) - (Convert.ToDouble(i.FirstOrDefault().pd.Any() ? (i.FirstOrDefault().pd.FirstOrDefault().Fee ?? 0) : 0)) - (Convert.ToDouble(i.FirstOrDefault().pd.Any() ? (i.FirstOrDefault().pd.FirstOrDefault().Tax ?? 0) : 0)) : i.FirstOrDefault().p.p.p.Amount - (i.FirstOrDefault().p.p.p.RefundAmount ?? 0) - (Convert.ToDouble(i.FirstOrDefault().pd.Any() ? (i.FirstOrDefault().pd.FirstOrDefault().Fee ?? 0) : 0)) - (Convert.ToDouble(i.FirstOrDefault().pd.Any() ? (i.FirstOrDefault().pd.FirstOrDefault().Tax ?? 0) : 0)),
                   IfscCode = i.FirstOrDefault().p.p.s.IFSCCode,
                   PaymentDate = i.FirstOrDefault().p.p.p.DateEncoded,
                   PaymentId = "JOY" + i.FirstOrDefault().p.p.p.OrderNumber.ToString(),
@@ -308,10 +308,10 @@ namespace ShopNow.Controllers
 
         public ActionResult MarkShopPaymentAsPaidInCart(DateTime date)
         {
-            var paymentListByDate = db.Payments.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(date) && i.OrderNumber != 0).Select(i=>i.OrderNumber).ToList();
+            var paymentListByDate = db.Payments.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(date) && i.OrderNumber != 0).Select(i => i.OrderNumber).ToList();
             foreach (var orderno in paymentListByDate)
             {
-                var orderList = db.Orders.Where(i => i.OrderNumber == orderno && i.Status==6).ToList();
+                var orderList = db.Orders.Where(i => i.OrderNumber == orderno && i.Status == 6).ToList();
                 foreach (var item in orderList)
                 {
                     var order = db.Orders.FirstOrDefault(i => i.Id == item.Id);
@@ -405,35 +405,35 @@ namespace ShopNow.Controllers
             //        TransactionTax = i.TransactionTax ?? 0
             //    }).ToList();
 
-          model.ListItems =  db.Payments.Where(i => ((DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate)) &&
-                 (DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate))) && (model.ShopId !=0?i.ShopId == model.ShopId:true))
-              // .Join(db.Shops, p => p.ShopId, s => s.Id, (p, s) => new { p, s })
-               .Join(db.Orders.Where(i => i.Status == 6), p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
-               .GroupJoin(db.Offers, p=> p.c.OfferId, o=> o.Id,(p,o)=> new { p, o })
-               .GroupJoin(db.PaymentsDatas, p => p.p.p.ReferenceCode, pd => pd.PaymentId, (p, pd) => new { p, pd })
-               .AsEnumerable()
-               .Select((i, index) => new RetailerPaymentListViewModel.ListItem
-               {
-                   No = index + 1,
-                   OrderDate = i.p.p.p.DateEncoded,
-                   OrderFirstAmount = i.p.p.p.Amount,
-                   OrderNumber = i.p.p.p.OrderNumber,
-                   PaidAmount = i.p.o.FirstOrDefault()?.OwnerType == 1 ? ((i.p.p.c.TotalShopPrice != 0 ? (i.p.p.c.TotalPrice - Math.Abs(i.p.p.c.TotalShopPrice - i.p.p.c.TotalPrice)) - (i.p.p.p.RefundAmount ?? 0) : i.p.p.p.Amount + i.p.p.c.OfferAmount) - (i.p.p.p.RefundAmount ?? 0)) : i.p.p.c.TotalShopPrice != 0 ? i.p.p.p.Amount - Math.Abs(i.p.p.c.TotalPrice - i.p.p.c.TotalShopPrice) : i.p.p.p.Amount - (i.p.p.p.RefundAmount ?? 0),
+            model.ListItems = db.Payments.Where(i => ((DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(model.StartDate)) &&
+                  (DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(model.EndDate))) && (model.ShopId != 0 ? i.ShopId == model.ShopId : true))
+                 // .Join(db.Shops, p => p.ShopId, s => s.Id, (p, s) => new { p, s })
+                 .Join(db.Orders.Where(i => i.Status == 6), p => p.OrderNumber, c => c.OrderNumber, (p, c) => new { p, c })
+                 .GroupJoin(db.Offers, p => p.c.OfferId, o => o.Id, (p, o) => new { p, o })
+                 .GroupJoin(db.PaymentsDatas, p => p.p.p.ReferenceCode, pd => pd.PaymentId, (p, pd) => new { p, pd })
+                 .AsEnumerable()
+                 .Select((i, index) => new RetailerPaymentListViewModel.ListItem
+                 {
+                     No = index + 1,
+                     OrderDate = i.p.p.p.DateEncoded,
+                     OrderFirstAmount = i.p.p.p.Amount,
+                     OrderNumber = i.p.p.p.OrderNumber,
+                     PaidAmount = i.p.o.FirstOrDefault()?.OwnerType == 1 ? ((i.p.p.c.TotalShopPrice != 0 ? (i.p.p.c.TotalPrice - Math.Abs(i.p.p.c.TotalShopPrice - i.p.p.c.TotalPrice)) - (i.p.p.p.RefundAmount ?? 0) : i.p.p.p.Amount + i.p.p.c.OfferAmount) - (i.p.p.p.RefundAmount ?? 0)) : i.p.p.c.TotalShopPrice != 0 ? i.p.p.p.Amount - Math.Abs(i.p.p.c.TotalPrice - i.p.p.c.TotalShopPrice) : i.p.p.p.Amount - (i.p.p.p.RefundAmount ?? 0),
                    //PaidAmount = i.p.o.OwnerType == 1 ? ((i.p.p.p.Amount + i.p.p.c.OfferAmount) - (i.p.p.p.RefundAmount ?? 0)) : i.p.p.p.Amount - (i.p.p.p.RefundAmount ?? 0),
                    PaymentAmount = i.p.o.FirstOrDefault()?.OwnerType == 1 ? ((i.p.p.c.TotalShopPrice != 0 ? (i.p.p.p.Amount - Math.Abs(i.p.p.c.TotalPrice - i.p.p.c.TotalShopPrice)) : i.p.p.p.Amount + i.p.p.c.OfferAmount) - (i.p.p.p.RefundAmount ?? 0)) : (i.p.p.c.TotalShopPrice != 0 ? i.p.p.p.Amount - (Math.Abs(i.p.p.c.TotalPrice - i.p.p.c.TotalShopPrice)) : i.p.p.p.Amount) - (i.p.p.p.RefundAmount ?? 0) - Convert.ToDouble((i.pd.Any() ? i.pd.FirstOrDefault().Fee : 0)) - Convert.ToDouble((i.pd.Any() ? i.pd.FirstOrDefault().Tax : 0)),
                    //PaymentAmount = i.p.o.OwnerType == 1 ? ((i.p.p.p.Amount + i.p.p.c.OfferAmount) - (i.p.p.p.RefundAmount ?? 0)) : i.p.p.p.Amount - (i.p.p.p.RefundAmount ?? 0) - Convert.ToDouble((i.pd.Any() ? i.pd.FirstOrDefault().Fee : 0)) - Convert.ToDouble((i.pd.Any() ? i.pd.FirstOrDefault().Tax : 0)),
                    // PaymentAmount = i.p.p.Amount - (i.p.p.RefundAmount ?? 0) - Convert.ToDouble((i.pd.Any()? i.pd.FirstOrDefault().Fee : 0)) - Convert.ToDouble((i.pd.Any() ? i.pd.FirstOrDefault().Tax : 0)),
                    PaymentDate = i.p.p.p.DateEncoded,
-                   PaymentId = i.p.p.p.ReferenceCode ?? "N/A",
-                   PaymentType = i.p.p.p.PaymentMode,
-                   RefundAmount = i.p.p.p.RefundAmount ?? 0,
-                   RefundeRemark = i.p.p.p.RefundRemark ?? "N/A",
-                   RefundStatus = i.p.p.p.RefundStatus,
-                   ShopName = i.p.p.p.ShopName,
-                   ShopPaymentStatus = i.p.p.c.ShopPaymentStatus,
-                   TransactionFee = i.pd.Any()? i.pd.FirstOrDefault().Fee : 0,
-                   TransactionTax = i.pd.Any() ? i.pd.FirstOrDefault().Tax : 0
-               }).ToList();
+                     PaymentId = i.p.p.p.ReferenceCode ?? "N/A",
+                     PaymentType = i.p.p.p.PaymentMode,
+                     RefundAmount = i.p.p.p.RefundAmount ?? 0,
+                     RefundeRemark = i.p.p.p.RefundRemark ?? "N/A",
+                     RefundStatus = i.p.p.p.RefundStatus,
+                     ShopName = i.p.p.p.ShopName,
+                     ShopPaymentStatus = i.p.p.c.ShopPaymentStatus,
+                     TransactionFee = i.pd.Any() ? i.pd.FirstOrDefault().Fee : 0,
+                     TransactionTax = i.pd.Any() ? i.pd.FirstOrDefault().Tax : 0
+                 }).ToList();
 
             return View(model);
         }
@@ -446,6 +446,24 @@ namespace ShopNow.Controllers
             db.Entry(order).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
             return RedirectToAction("RetailerPayment");
+        }
+
+        public ActionResult ShopBillDifferenceReport(ShopBillDifferenceReportViewModel model)
+        {
+            var user = ((Helpers.Sessions.User)Session["USER"]);
+            ViewBag.Name = user.Name;
+            model.ListItems = db.ShopBillDetails
+                .Join(db.Payments, sb=> sb.OrderNumber, p=> p.OrderNumber,(sb,p)=> new { sb,p})
+                .Join(db.Orders, s=>s.p.OrderNumber, o=> o.OrderNumber,(s,o)=> new { s,o})
+                .Select(i => new ShopBillDifferenceReportViewModel.ListItem
+            {
+                BillAmount = i.s.sb.BillAmount,
+                BillNo = i.s.sb.BillNo,
+                OrderNumber = i.s.sb.OrderNumber,
+                DifferenceAmount = (i.s.sb.BillAmount - (i.s.p.OriginalAmount - i.s.p.RefundAmount??0)),
+                DifferencePercentage = i.s.sb.BillAmount *(i.s.sb.BillAmount - (i.s.p.OriginalAmount - i.s.p.RefundAmount??0))/100,
+                }).ToList();
+            return View(model);
         }
 
         [AccessPolicy(PageCode = "SNCPYC189")]
@@ -486,14 +504,14 @@ namespace ShopNow.Controllers
                 pay.UpdatedBy = user.Name;
                 pay.DateEncoded = DateTime.Now;
                 pay.DateUpdated = DateTime.Now;
-                if(model.CreditType == 0)               // PlatformCredit
+                if (model.CreditType == 0)               // PlatformCredit
                 {
                     if (model.ReferenceCode != null)
                         pay.PlatformCreditType = 1;     // Purchase
                     else
                         pay.PlatformCreditType = 2;     // Free
                 }
-                else if(model.CreditType == 1)          // DeliveryCredit
+                else if (model.CreditType == 1)          // DeliveryCredit
                 {
                     if (model.ReferenceCode != null)
                         pay.DeliveryCreditType = 1;     // Purchase
@@ -551,7 +569,7 @@ namespace ShopNow.Controllers
             var user = ((Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var pay = db.Payments.FirstOrDefault(i => i.Id == id);
-            var order = db.Orders.FirstOrDefault(i=> i.OrderNumber == pay.OrderNumber);
+            var order = db.Orders.FirstOrDefault(i => i.OrderNumber == pay.OrderNumber);
             var model = new PaymentCreditsViewModel();
             if (pay != null)
             {
@@ -607,8 +625,8 @@ namespace ShopNow.Controllers
                     PurchasedAmount = i.o.NetTotal,
                     OfferPercentage = i.of.Percentage,
                     OrderDate = i.o.DateEncoded,
-                    SNCLossAmount = i.of.OwnerType == 1? i.o.OfferAmount:0,
-                    ShopLossAmount = i.of.OwnerType == 2? i.o.OfferAmount:0
+                    SNCLossAmount = i.of.OwnerType == 1 ? i.o.OfferAmount : 0,
+                    ShopLossAmount = i.of.OwnerType == 2 ? i.o.OfferAmount : 0
                 }).ToList();
             return View(model.ListItems);
         }
