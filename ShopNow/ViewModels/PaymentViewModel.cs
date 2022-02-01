@@ -396,5 +396,19 @@ namespace ShopNow.ViewModels
 
         }
     }
+
+    public class ShopBillDifferenceReportViewModel
+    {
+        public List<ListItem> ListItems { get; set; }
+        public class ListItem
+        {
+            public int OrderNumber { get; set; }
+            public string BillNo { get; set; }
+            public double BillAmount { get; set; }
+            public double DifferenceAmount { get; set; }
+            public double DifferencePercentage { get; set; }
+           
+        }
+    }
 }
 

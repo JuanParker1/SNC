@@ -1,0 +1,53 @@
+﻿@model ShopNow.ViewModels.ShopBillDifferenceReportViewModel
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Shop Bill Difference Report";
+}
+<title>ShopNow | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+<style>
+    .dis-none {
+        display: none;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <h5 class="mt-1 text-uppercase text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+        </div>
+            <div class="col-md-6 text-right">
+                <input type="button" id="btnExport" class="btn btn-vsm btn-secondary" value="Export To Excel" />
+            </div>
+        <div class="col-md-12">
+            <div class="card shadow mt-3">
+                <div class="card-body">
+                    @Html.Grid(Model.ListItems).Columns(columns =>
+   {
+      columns.Add(c => c.BillNo).Titled("Bill Number").Filterable(true).SetWidth(10);
+      columns.Add(c => c.BillAmount).Titled("Bill Amount").Filterable(true).SetWidth(9);
+      columns.Add(c => c.DifferenceAmount).Titled("Difference Amount").Filterable(true).SetWidth(10);
+      columns.Add(c => c.DifferencePercentage).Titled("Difference Percentage").Filterable(true).SetWidth(4);
+   }).WithPaging(20).Sortable(true)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts
+{
+    <script src="/Scripts/exporttoexcel/Table2ExcelNew.js"></script>
+    <script>
+        $(document).ready(function () {
+         
+            $('#table-excel tr').each(function (index, tr) {
+
+                $(this).find("td").eq(3).html($(this).find("td").eq(3).html().trim());
+                $(this).find("td").eq(11).html($(this).find("td").eq(11).html().trim());
+            });
+        });
+    </script>
+}

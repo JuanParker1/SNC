@@ -568,14 +568,22 @@ namespace ShopNow.Controllers
                 model.CustomerPhoneNumber = cart.CustomerPhoneNumber;
                 model.DeliveryBoyName = cart.DeliveryBoyName;
                 model.DateEncoded = cart.DateEncoded;
-                model.BillNo = shopBill.BillNo;
-                model.BillAmount = shopBill.BillAmount;
                 var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == cart.DeliveryBoyId);
                 if (deliveryBoy != null)
                 {
                     model.isAssign = deliveryBoy.isAssign;
                     model.OnWork = deliveryBoy.OnWork;
                 }
+            }
+            if(shopBill != null)
+            {
+                model.BillNo = shopBill.BillNo;
+                model.BillAmount = shopBill.BillAmount;
+            }
+            if(payment != null)
+            {
+                model.RefundAmount = payment.RefundAmount;
+                model.RefundRemark = payment.RefundRemark;
             }
             model.List = db.OrderItems.Where(i => i.OrdeNumber == OrderNumber && i.Status == 0)
             .Select(i => new CartListViewModel.CartList
@@ -1829,10 +1837,32 @@ namespace ShopNow.Controllers
         //    }
         //}
 
-        public ActionResult ShopBillUpdate(string BillNo, double BillAmount)
+        public ActionResult ShopBillUpdate(string BillNo, double BillAmount, int OrderNumber, string OrderId)
         {
-
-            return View();
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            var shopBill = db.ShopBillDetails.FirstOrDefault(i => i.OrderNumber == OrderNumber);
+            if(shopBill != null)
+            {
+                shopBill.BillNo = BillNo;
+                shopBill.BillAmount = BillAmount;
+                shopBill.OrderNumber = OrderNumber;
+                shopBill.DateEncoded = DateTime.Now;
+                shopBill.UpdatedBy = user.Name;
+                db.Entry(shopBill).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            else if(!string.IsNullOrEmpty(BillNo))
+            {
+                ShopBillDetail shopBillDetail = new ShopBillDetail();
+                shopBillDetail.BillNo = BillNo;
+                shopBillDetail.BillAmount = BillAmount;
+                shopBillDetail.OrderNumber = OrderNumber;
+                shopBillDetail.DateEncoded = DateTime.Now;
+                shopBillDetail.UpdatedBy = user.Name;
+                db.ShopBillDetails.Add(shopBillDetail);
+                db.SaveChanges();
+            }
+            return RedirectToAction("PickupSlip", new { OrderNumber=OrderNumber, id=OrderId});
         }
 
         protected override void Dispose(bool disposing)
