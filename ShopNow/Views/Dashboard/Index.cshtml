@@ -10,6 +10,12 @@
     <link href="~/Scripts/CustomScript/CustomDashboard.css" rel="stylesheet" />
     <link href="~/Content/chart/material-charts.css" rel="stylesheet" />
     <script src="~/Scripts/chart/material-charts.js"></script>
+
+    <style>
+        .material-charts-box-chart-vertical-tick-label {
+        left:-10px;
+        }
+    </style>
 </head>
 <body class="antialiased bg-green-200">
     <div class="container-fluid">
@@ -142,14 +148,14 @@
                 <div class="col-xl-12 mt-5 px-1">
                     <div class="card shadow-sm">
                         <div class="card-body">
-                            <h3 class="text-center">@DateTime.Now.ToString("yyyy") Order Summary</h3>
+                            <h3 class="text-center"><b>@DateTime.Now.ToString("yyyy") Order Summary</b></h3>
                             <div id="bar-chart-example" class="w-100"></div>
                         </div>
                     </div>
                 </div>
                 <footer class="block py-4">
                     <div class="col-md-12 mx-auto">
-                        <p class="text-center font-weight-light small">&copy; Copyright 2020. All Rights Reserved.<br /> Designed by ShopNow</p>
+                        <p class="text-center font-weight-light small">&copy; Copyright 2020. All Rights Reserved.<br /> Designed by Snowch</p>
                     </div>
                 </footer>
             </div>
@@ -179,7 +185,7 @@
                     ],
                         "color": "green"
         },
-            "height": "300px",
+            "height": "400px",
             "width": "1300px",
             //"background": "#FFFFFF",
             "shadowDepth": "0",

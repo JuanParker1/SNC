@@ -118,10 +118,11 @@
                                             <label class="col-md-12 text-center text-secondary font-weight-bold">Image</label>
                                             <label class="col-md-12 small font-italic">* Upload recent photo</label>
                                             <div class="img-upload-container mx-auto text-center">
-                                                <img class="img-container w-100 h-100" id="img-upload" />
+                                                <img class="img-container w-100 h-100" id="img-upload" onerror="this.src='/Images/No Photo.png'" />
                                                 <input type="file" id="DeliveryBoyImage" name="DeliveryBoyImage" class="d-none" />
                                                 <label for="DeliveryBoyImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                             </div>
+                                            <input type="button" class="btn btn-sm btn-danger d-none ml-4 mt-5" id="btnRemove" value="Remove" />
                                         </div>
                                     </div>
                                     <div class="card border-info">
@@ -269,6 +270,7 @@
                     });
                 }
             });
+
             $('#Create').on('click', function () {
                 var isValidated = false;
                 var requiredArr = [
@@ -281,8 +283,8 @@
                     $('#DeliveryBoyForm').submit();
                 }
             });
-            $('input:radio[name="DrivingLicense"]').change(
-                function () {
+
+            $('input:radio[name="DrivingLicense"]').change(function () {
                     if (this.checked && this.value == 'Image') {
                         $('.DrivingImg').removeClass('d-none');
                         $('.DrivingPdf').addClass('d-none');
@@ -293,20 +295,20 @@
                         $("#DrivingLicenseImage").val("");
                         $("#img-license").attr('src', '');
                     }
-                });
-            $('input:radio[name="AccountDocument"]').change(
-                function () {
-                    if (this.checked && this.value == 'Image') {
-                        $('.AccountDocumentImg').removeClass('d-none');
-                        $('.AccountDocumentPdf').addClass('d-none');
-                        $("#BankPassbookPdf").val("");
-                    } else {
-                        $('.AccountDocumentImg').addClass('d-none');
-                        $('.AccountDocumentPdf').removeClass('d-none');
-                        $("#BankPassbookImage").val("");
-                        $("#img-account").attr('src', '');
-                    }
-                });
+            });
+
+            $('input:radio[name="AccountDocument"]').change(function () {
+                if (this.checked && this.value == 'Image') {
+                    $('.AccountDocumentImg').removeClass('d-none');
+                    $('.AccountDocumentPdf').addClass('d-none');
+                    $("#BankPassbookPdf").val("");
+                } else {
+                    $('.AccountDocumentImg').addClass('d-none');
+                    $('.AccountDocumentPdf').removeClass('d-none');
+                    $("#BankPassbookImage").val("");
+                    $("#img-account").attr('src', '');
+                }
+            });
             function readURL(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
@@ -318,6 +320,15 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
+            $("#DeliveryBoyImage").change(function () {
+                readURL(this);
+                $("#btnRemove").removeClass("d-none");
+            });
+            $("#btnRemove").on('click', function () {
+                $('#img-upload').attr('src', '');
+                $("#DeliveryBoyImage").val('');
+                $(this).addClass("d-none");
+            });
 
             function readURLlicense(input) {
                 if (input.files && input.files[0]) {
@@ -342,10 +353,6 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
-            $("#DeliveryBoyImage").change(function () {
-                readURL(this);
-            });
 
             $("#DrivingLicenseImage").change(function () {
                 readURLlicense(this);
