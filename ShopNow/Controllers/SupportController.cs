@@ -68,7 +68,8 @@ namespace ShopNow.Controllers
             model.ShopOnBoardingVerifyCount = db.Shops.Where(i => i.Status == 1).Count();
             model.DeliveryBoyVerifyCount = db.DeliveryBoys.Where(i => i.Status == 1).Count();
             model.BannerPendingCount = db.Banners.Where(i => i.Status == 1).Count();
-            model.ShopCount = db.Shops.Where(i => i.Status == 0 || i.Status == 6).Count();
+           // model.ShopCount = db.Shops.Where(i => i.Status == 0 || i.Status == 6).Count();
+            model.ShopCount = db.Shops.Where(i => i.Status == 0).Count();
             model.CustomerCount = db.CustomerAddresses.GroupBy(a => a.CustomerId).Count();
 
             model.DeliveryBoyLiveCount = db.DeliveryBoys.Where(i => i.Status == 0 && i.isAssign == 0 && i.OnWork == 0 && i.Active == 1).Count();
@@ -79,6 +80,9 @@ namespace ShopNow.Controllers
                 .Join(db.Shops.Where(i => i.IsTrail == false && i.Status == 0), sc => sc.CustomerId, s => s.CustomerId, (sc, s) => new { sc, s })
                 .Count();
             model.CustomerPrescriptionCount = db.CustomerPrescriptions.Where(i => i.Status == 0).Count();
+
+            model.ShopOnlineCount = db.Shops.Where(i => i.Status == 0 && i.IsOnline == true).Count();
+            model.ShopOfflineCount = db.Shops.Where(i => i.Status == 0 && i.IsOnline == false).Count();
             return View(model);
         }
 
