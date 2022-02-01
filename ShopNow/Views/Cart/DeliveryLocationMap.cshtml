@@ -63,7 +63,7 @@
                    
                     google.maps.event.addListener(marker, 'click', (function (marker, i) {
                         return function () {
-                            infowindow.setContent('<h5>' + item.ShopName + '</h5>' + '<p>' + item.ShopAddress + '</p>');
+                            infowindow.setContent('<h5>' + item.ShopName + '</h5>' + '<p class="mb-1">' + item.ShopAddress + '</p>');
                             infowindow.open(map, marker);
                         }
                     })(marker, i));
@@ -76,7 +76,7 @@
                     });
                     google.maps.event.addListener(marker, 'click', (function (marker, i) {
                         return function () {
-                            infowindow.setContent('<h5>' + item.OrderNumber + " - " + item.OrderTime + '</h5>' + '<p class="mb-1">' + item.CustomerAddress + '</p>' + '<p>Distance: ' + item.Distance + 'Kms</p>');
+                            infowindow.setContent('<h5>' + item.OrderNumber + " - " + item.OrderTime + '</h5>' + '<p class="mb-1">' + item.CustomerAddress + '</p>' + '<p class="mb-1">Distance: ' + item.Distance + 'Kms</p>');
                             infowindow.open(map, marker);
                         }
                     })(marker, i));
