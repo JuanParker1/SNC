@@ -30,6 +30,7 @@ namespace ShopNow.Controllers
                 HasSchedule = i.FirstOrDefault().psc.p.HasSchedule ?? false,
                 ProductId = i.Key,
                 ProductName = i.FirstOrDefault().m.Name + " - " + i.FirstOrDefault().psc.p.ShopName,
+                AvailableDays = i.FirstOrDefault().psc.psc.AvailableDays,
                 TimeListItems = i.Where(a => a.psc.psc.Status == 0).Select(a => new ProductScheduleIndexViewModel.ListItem.TimeListItem
                 {
                     Id= a.psc.psc.Id,
@@ -74,7 +75,8 @@ namespace ShopNow.Controllers
                 OnTime = onTime,
                 ProductId = productid,
                 Status = 0,
-                UpdatedBy = user.Name
+                UpdatedBy = user.Name,
+                AvailableDays =  db.ProductSchedules.FirstOrDefault(i => i.ProductId == productid).AvailableDays
             };
             db.ProductSchedules.Add(ProductSchedule);
             db.SaveChanges();
@@ -126,7 +128,8 @@ namespace ShopNow.Controllers
                             OnTime = item.OnTime,
                             ProductId = proId,
                             Status = 0,
-                            UpdatedBy = user.Name
+                            UpdatedBy = user.Name,
+                            AvailableDays = string.Join(",", model.AvailableDays)
                         };
                         db.ProductSchedules.Add(productSchedule);
                         db.SaveChanges();
@@ -139,6 +142,29 @@ namespace ShopNow.Controllers
             productList.ForEach(i => i.HasSchedule = true);
             db.SaveChanges();
             return Json(true, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult RemoveAvailableDays(string productId)
+        {
+            long dId = AdminHelpers.DCodeLong(productId);
+            var productSchedule = db.ProductSchedules.Where(i => i.ProductId == dId && i.Status == 0).ToList();
+            if (productSchedule.Count() > 0)
+            {
+                productSchedule.ForEach(i => i.AvailableDays = string.Empty);
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult AddUpdateAvailableDays(int productId, string[] AvailableDays)
+        {
+            var productSchedule = db.ProductSchedules.Where(i => i.ProductId == productId && i.Status == 0).ToList();
+            if (productSchedule.Count() > 0)
+            {
+                productSchedule.ForEach(i => i.AvailableDays = string.Join(",", AvailableDays));
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index");
         }
 
         public async Task<JsonResult> GetScheduleProductSelect2(string q = "")

@@ -568,14 +568,28 @@ namespace ShopNow.Controllers
                 model.CustomerPhoneNumber = cart.CustomerPhoneNumber;
                 model.DeliveryBoyName = cart.DeliveryBoyName;
                 model.DateEncoded = cart.DateEncoded;
-                model.BillNo = shopBill.BillNo;
-                model.BillAmount = shopBill.BillAmount;
                 var deliveryBoy = db.DeliveryBoys.FirstOrDefault(i => i.Id == cart.DeliveryBoyId);
                 if (deliveryBoy != null)
                 {
                     model.isAssign = deliveryBoy.isAssign;
                     model.OnWork = deliveryBoy.OnWork;
                 }
+            }
+            if(shopBill != null)
+            {
+                model.BillNo = shopBill.BillNo;
+                model.BillAmount = shopBill.BillAmount;
+                
+            }
+            if(payment != null)
+            {
+                model.RefundAmount = payment.RefundAmount;
+                model.RefundRemark = payment.RefundRemark;
+            }
+            if(cart != null && payment!= null && shopBill != null)
+            {
+                model.DifferenceAmount = shopBill.BillAmount - (Math.Round(cart.TotalPrice) - (payment.RefundAmount ?? 0));
+                model.DifferencePercentage = Math.Round(((shopBill.BillAmount - (Math.Round(cart.TotalPrice) - (payment.RefundAmount ?? 0))) / shopBill.BillAmount) * 100);
             }
             model.List = db.OrderItems.Where(i => i.OrdeNumber == OrderNumber && i.Status == 0)
             .Select(i => new CartListViewModel.CartList
@@ -1752,49 +1766,11 @@ namespace ShopNow.Controllers
                     ShopAddress = i.s.Address,
                     ShopName = i.s.Name,
                     OrderNumber = i.o.OrderNumber,
-                    OrderTime = i.o.DateEncoded.ToString("hh:mm tt")
+                    OrderTime = i.o.DateEncoded.ToString("hh:mm tt"),
+                    Distance = Math.Round((double)(GetMeters(i.s.Latitude, i.s.Longitude, i.o.Latitude, i.o.Longitude) / 1000), 2)
                 }).ToList();
 
             return Json(ordersList, JsonRequestBehavior.AllowGet);
-
-
-            //var joyraLocation = db.Shops.Where(i => i.Id == 123)
-            //    .Select(i => new 
-            //    {
-            //        Latitude = i.Latitude,
-            //        Longitude = i.Longitude,
-            //        Address = i.Name
-            //    }).ToList();
-
-            //var deliverylocationlist = db.Orders.Where(i => i.Status == 2 || i.Status == 3)
-            //     .AsEnumerable()
-            //     .Select(i => new 
-            //     {
-            //         Latitude = i.Latitude,
-            //         Longitude = i.Longitude,
-            //         Address = i.DeliveryAddress + " - "+ i.DateEncoded.ToString("hh:mm tt")
-            //     }).ToList();
-
-            // var shopLocationList = db.Orders.Where(i => i.Status == 2 || i.Status == 3)
-            //     .Join(db.Shops, o => o.ShopId, s => s.Id, (o, s) => new { o, s })
-            //     .Select(i => new
-            //     {
-            //         Latitude = i.s.Latitude,
-            //         Longitude = i.s.Longitude,
-            //         Address = i.s.Name + "-" + i.s.Address
-            //     }).ToList();
-
-            // var locationList = db.Orders.Where(i => i.Status == 2 || i.Status == 3)
-            //     .Join(db.Shops, o => o.ShopId, s => s.Id, (o, s) => new { o, s })
-            //     .Select(i => new
-            //     {
-            //         ShopLatitude = i.s.Latitude,
-            //         ShopLongitude = i.s.Longitude,
-            //         CustomerLatitude = i.o.Latitude,
-            //         CustomerLongitude = i.o.Longitude
-            //     }).ToList();
-
-            // return Json(new { joyralocation = joyraLocation,deliverylocation=deliverylocationlist,shopLocation=shopLocationList,locationlist = locationList }, JsonRequestBehavior.AllowGet);
         }
 
         //public void AddPaymentData(string code, int ordernumber)
@@ -1868,10 +1844,32 @@ namespace ShopNow.Controllers
         //    }
         //}
 
-        public ActionResult ShopBillUpdate(string BillNo, double BillAmount)
+        public ActionResult ShopBillUpdate(string BillNo, double BillAmount, int OrderNumber, string OrderId)
         {
-
-            return View();
+            var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
+            var shopBill = db.ShopBillDetails.FirstOrDefault(i => i.OrderNumber == OrderNumber);
+            if(shopBill != null)
+            {
+                shopBill.BillNo = BillNo;
+                shopBill.BillAmount = BillAmount;
+                shopBill.OrderNumber = OrderNumber;
+                shopBill.DateEncoded = DateTime.Now;
+                shopBill.UpdatedBy = user.Name;
+                db.Entry(shopBill).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            else if(!string.IsNullOrEmpty(BillNo))
+            {
+                ShopBillDetail shopBillDetail = new ShopBillDetail();
+                shopBillDetail.BillNo = BillNo;
+                shopBillDetail.BillAmount = BillAmount;
+                shopBillDetail.OrderNumber = OrderNumber;
+                shopBillDetail.DateEncoded = DateTime.Now;
+                shopBillDetail.UpdatedBy = user.Name;
+                db.ShopBillDetails.Add(shopBillDetail);
+                db.SaveChanges();
+            }
+            return RedirectToAction("PickupSlip", new { OrderNumber=OrderNumber, id=OrderId});
         }
 
         protected override void Dispose(bool disposing)

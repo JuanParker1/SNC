@@ -21,6 +21,9 @@ namespace ShopNow.ViewModels
         public int ShopLowCreditCount { get; set; }
         public int CustomerPrescriptionCount { get; set; }
 
+        public int ShopOnlineCount { get; set; }
+        public int ShopOfflineCount { get; set; }
+
         //Verification Count
         public int CustomerAadhaarVerifyCount { get; set; }
         public int ShopOnBoardingVerifyCount { get; set; }

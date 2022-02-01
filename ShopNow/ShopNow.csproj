@@ -3322,6 +3322,7 @@
     <Content Include="Views\Accounts\BillWiseReport.cshtml" />
     <Content Include="Views\CustomerPrescription\CancelList.cshtml" />
     <Content Include="Views\Cart\DeliveryLocationMap.cshtml" />
+    <Content Include="Views\Payment\ShopBillDifferenceReport.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

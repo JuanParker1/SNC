@@ -1171,6 +1171,7 @@
           <Property Name="ProductId" Type="bigint" Nullable="false" />
           <Property Name="OnTime" Type="time" Precision="7" />
           <Property Name="OffTime" Type="time" Precision="7" />
+          <Property Name="AvailableDays" Type="nvarchar" MaxLength="150" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="UpdatedBy" Type="nvarchar" MaxLength="50" />
           <Property Name="DateTimeUpdated" Type="datetime" Nullable="false" />
@@ -2564,18 +2565,6 @@
           <Property Name="CreatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="UpdatedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="ProductSchedule">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ProductId" Type="Int64" Nullable="false" />
-          <Property Name="OnTime" Type="Time" Precision="7" />
-          <Property Name="OffTime" Type="Time" Precision="7" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="UpdatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DateTimeUpdated" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
         <EntityType Name="ProductSpecificationItem">
           <Key>
             <PropertyRef Name="Id" />
@@ -2939,7 +2928,6 @@
           <EntitySet Name="PlatFormCreditRates" EntityType="Self.PlatFormCreditRate" />
           <EntitySet Name="Portions" EntityType="Self.Portion" />
           <EntitySet Name="ProductDishAddOns" EntityType="Self.ProductDishAddOn" />
-          <EntitySet Name="ProductSchedules" EntityType="Self.ProductSchedule" />
           <EntitySet Name="ProductSpecificationItems" EntityType="Self.ProductSpecificationItem" />
           <EntitySet Name="ProductSpecifications" EntityType="Self.ProductSpecification" />
           <EntitySet Name="ProductTypes" EntityType="Self.ProductType" />
@@ -3086,6 +3074,7 @@
           <EntitySet Name="ShopSchedules" EntityType="sncModel.ShopSchedule" />
           <EntitySet Name="DeliveryBoys" EntityType="sncModel.DeliveryBoy" />
           <EntitySet Name="ShopBillDetails" EntityType="sncModel.ShopBillDetail" />
+          <EntitySet Name="ProductSchedules" EntityType="sncModel.ProductSchedule" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3507,6 +3496,19 @@
           <Property Name="OrderNumber" Type="Int32" Nullable="false" />
           <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedBy" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ProductSchedule">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductId" Type="Int64" Nullable="false" />
+          <Property Name="OnTime" Type="Time" Precision="7" />
+          <Property Name="OffTime" Type="Time" Precision="7" />
+          <Property Name="AvailableDays" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DateTimeUpdated" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -4424,19 +4426,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ProductSchedules">
-            <EntityTypeMapping TypeName="sncModel.ProductSchedule">
-              <MappingFragment StoreEntitySet="ProductSchedules">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="OnTime" ColumnName="OnTime" />
-                <ScalarProperty Name="OffTime" ColumnName="OffTime" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-                <ScalarProperty Name="DateTimeUpdated" ColumnName="DateTimeUpdated" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ProductSpecificationItems">
             <EntityTypeMapping TypeName="sncModel.ProductSpecificationItem">
               <MappingFragment StoreEntitySet="ProductSpecificationItems">
@@ -5247,6 +5236,20 @@
                 <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
                 <ScalarProperty Name="BillAmount" ColumnName="BillAmount" />
                 <ScalarProperty Name="BillNo" ColumnName="BillNo" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductSchedules">
+            <EntityTypeMapping TypeName="sncModel.ProductSchedule">
+              <MappingFragment StoreEntitySet="ProductSchedules">
+                <ScalarProperty Name="DateTimeUpdated" ColumnName="DateTimeUpdated" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="AvailableDays" ColumnName="AvailableDays" />
+                <ScalarProperty Name="OffTime" ColumnName="OffTime" />
+                <ScalarProperty Name="OnTime" ColumnName="OnTime" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
