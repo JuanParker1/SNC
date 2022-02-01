@@ -399,6 +399,8 @@ namespace ShopNow.ViewModels
 
     public class ShopBillDifferenceReportViewModel
     {
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {
