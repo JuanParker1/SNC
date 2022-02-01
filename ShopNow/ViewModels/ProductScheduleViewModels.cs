@@ -15,6 +15,7 @@ namespace ShopNow.ViewModels
             public long ProductId { get; set; }
             public string ProductName { get; set; }
             public bool HasSchedule { get; set; }
+            public string AvailableDays { get; set; }
 
             public List<TimeListItem> TimeListItems { get; set; }
             public class TimeListItem
@@ -29,6 +30,7 @@ namespace ShopNow.ViewModels
     public class ProductScheduleAddViewModel
     {
         public long[] ProductId { get; set; }
+        public string[] AvailableDays { get; set; }
         public List<TimeListItem> TimeListItems { get; set; }
         public class TimeListItem
         {
