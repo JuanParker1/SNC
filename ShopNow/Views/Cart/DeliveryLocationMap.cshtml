@@ -48,29 +48,12 @@
                 mapTypeId: google.maps.MapTypeId.ROADMAP,
                // styles: [{ "stylers": [{ "visibility": "off" }] }, { "featureType": "road", "stylers": [{ "visibility": "on" }, { "color": "#ffffff" }] }, { "featureType": "road.arterial", "stylers": [{ "visibility": "on" }, { "color": "#fee379" }] }, { "featureType": "road.highway", "stylers": [{ "visibility": "on" }, { "color": "#fee379" }] }, { "featureType": "landscape", "stylers": [{ "visibility": "on" }, { "color": "#f3f4f4" }] }, { "featureType": "water", "stylers": [{ "visibility": "on" }, { "color": "#7fc8ed" }] }, {}, { "featureType": "road", "elementType": "labels", "stylers": [{ "visibility": "off" }] }, { "featureType": "poi.park", "elementType": "geometry.fill", "stylers": [{ "visibility": "on" }, { "color": "#83cead" }] }, { "elementType": "labels", "stylers": [{ "visibility": "off" }] }, { "featureType": "landscape.man_made", "elementType": "geometry", "stylers": [{ "weight": 0.9 }, { "visibility": "off" }] }]
             });
-
-            //var infowindow = new google.maps.InfoWindow();
          
             $.getJSON('/Cart/GetDeliveryLocations', function (data) {
-
-                //Joyra
-                //$.each(data.joyralocation, function (index, item) {
-                //    marker = new google.maps.Marker({
-                //        position: new google.maps.LatLng(item.Latitude, item.Longitude),
-                //        map: map,
-                //        icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
-                //    });
-                //    google.maps.event.addListener(marker, 'click', (function (marker, i) {
-                //        return function () {
-                //            infowindow.setContent(item.Address);
-                //            infowindow.open(map, marker);
-                //        }
-                //    })(marker, i));
-                //});
-
                 
                 $.each(data, function (index, item) {
                     var infowindow = new google.maps.InfoWindow();
+
                     //Shops Marker
                     marker = new google.maps.Marker({
                         position: new google.maps.LatLng(item.ShopLatitude, item.ShopLongitude),
@@ -80,8 +63,6 @@
                    
                     google.maps.event.addListener(marker, 'click', (function (marker, i) {
                         return function () {
-                            //infowindow.setContent(item.ShopAddress);
-                            //infowindow.open(map, marker);
                             infowindow.setContent('<h5>' + item.ShopName + '</h5>' + '<p>' + item.ShopAddress + '</p>');
                             infowindow.open(map, marker);
                         }
@@ -93,8 +74,6 @@
                         map: map,
                         icon: '/Images/Location/pink-dot.png'
                     });
-                    infowindow.setContent(item.CustomerAddress);
-                    infowindow.open(map, marker);
                     google.maps.event.addListener(marker, 'click', (function (marker, i) {
                         return function () {
                             infowindow.setContent('<h5>' + item.OrderNumber + " - " + item.OrderTime + '</h5>' + '<p>' + item.CustomerAddress + '</p>');
