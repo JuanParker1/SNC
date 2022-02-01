@@ -1760,7 +1760,8 @@ namespace ShopNow.Controllers
                     ShopAddress = i.s.Address,
                     ShopName = i.s.Name,
                     OrderNumber = i.o.OrderNumber,
-                    OrderTime = i.o.DateEncoded.ToString("hh:mm tt")
+                    OrderTime = i.o.DateEncoded.ToString("hh:mm tt"),
+                    Distance = Math.Round((double)(GetMeters(i.s.Latitude, i.s.Longitude, i.o.Latitude, i.o.Longitude) / 1000), 2)
                 }).ToList();
 
             return Json(ordersList, JsonRequestBehavior.AllowGet);
