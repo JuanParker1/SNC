@@ -168,19 +168,37 @@
                             </div>
                             <div class="form-group row">
                                 <div class="col-md-4">
-                                    <label class="text-secondary font-weight-bold ml-2">Shop Image</label><br />
-                                    <div class="img-upload-container">
-                                        <img class="img-container w-100 h-100" id="img-upload" onerror="this.src='/Images/No Photo.png'" />
-                                        <input type="file" id="ShopImage" name="ShopImage" class="d-none" />
-                                        <label for="ShopImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label class="text-secondary font-weight-bold ml-2">Shop Image</label><br />
+                                            <div class="img-upload-container">
+                                                <img class="img-container w-100 h-100" id="img-upload" onerror="this.src='/Images/No Photo.png'" />
+                                                <input type="file" id="ShopImage" name="ShopImage" class="d-none" />
+                                                <label for="ShopImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <input type="button" class="btn btn-sm btn-danger ml-4 d-none" id="btnRemove1" value="Remove" />
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <label class="text-secondary font-weight-bold ml-2">Logo Image</label><br />
-                                    <div class="img-upload-container">
-                                        <img class="img-container w-100 h-100" id="img-logo" onerror="this.src='/Images/No Photo.png'" />
-                                        <input type="file" id="LogoImage" name="LogoImage" class="d-none" />
-                                        <label for="LogoImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="img-upload-container">
+                                                <img class="img-container w-100 h-100" id="img-logo" onerror="this.src='/Images/No Photo.png'" />
+                                                <input type="file" id="LogoImage" name="LogoImage" class="d-none" />
+                                                <label for="LogoImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <input type="button" class="btn btn-sm btn-danger ml-4 d-none" id="btnRemove2" value="Remove" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -264,10 +282,19 @@
                                         <input type="file" id="AadharPdf" name="AadharPdf" />
                                     </div>
                                     <div class="row ml-3 AadharDocumentImg mt-2">
-                                        <div class="img-upload-container">
-                                            <img class="img-container w-100 h-100 mb-2" id="img-aadhar" onerror="this.src='/Images/No Photo.png'" />
-                                            <input type="file" id="AadharImage" name="AadharImage" class="d-none" />
-                                            <label for="AadharImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="img-upload-container">
+                                                    <img class="img-container w-100 h-100 mb-2" id="img-aadhar" onerror="this.src='/Images/No Photo.png'" />
+                                                    <input type="file" id="AadharImage" name="AadharImage" class="d-none" />
+                                                    <label for="AadharImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <input type="button" class="btn btn-danger btn-sm ml-5 d-none" id="btnRemove3" value="Remove" />
                                         </div>
                                     </div>
                                 </div>
@@ -281,7 +308,7 @@
                         <div class="card-body row">
                             <div class="col-md-3">
                                 <div class="card-columns mr-1 form-group row">
-                                    <div class="card border-primary bg-muted">
+                                    <div class="card border-success bg-muted">
                                         <div class="card-body">
                                             <div class="alert alert-warning alert-dismissible fade show d-none fssi">
                                                 <strong>Warning!</strong> It is Required Field.Please upload license
@@ -297,10 +324,17 @@
                                                 <input type="file" id="FSSAIPdf" name="FSSAIPdf" />
                                             </div>
                                             <div class="row ml-3 FssaiImg mt-2">
-                                                <div class="img-upload-container mb-3">
-                                                    <img class="img-container w-100 h-100 mb-2" id="img-fssai" onerror="this.src='/Images/No Photo.png'" />
-                                                    <input type="file" id="FSSAIImage" name="FSSAIImage" class="d-none" />
-                                                    <label for="FSSAIImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                <div class="col-md-6">
+                                                    <div class="img-upload-container mb-3">
+                                                        <img class="img-container w-100 h-100 mb-2" id="img-fssai" onerror="this.src='/Images/No Photo.png'" />
+                                                        <input type="file" id="FSSAIImage" name="FSSAIImage" class="d-none" />
+                                                        <label for="FSSAIImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-md-12">
+                                                    <input type="button" class="btn btn-danger btn-sm ml-5 d-none" id="btnRemove4" value="Remove" />
                                                 </div>
                                             </div>
                                             <div class="alert alert-danger d-none penFssi p-2">
@@ -312,7 +346,7 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="card-columns mr-1 form-group row">
-                                    <div class="card border-primary bg-muted">
+                                    <div class="card border-success bg-muted">
                                         <div class="card-body">
                                             <div class="alert alert-warning alert-dismissible fade show d-none drug">
                                                 <strong>Warning!</strong> It is Required Field.Please upload license
@@ -334,6 +368,11 @@
                                                     <label for="DrugImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                                 </div>
                                             </div>
+                                            <div class="row mb-2">
+                                                <div class="col-md-12">
+                                                    <input type="button" class="btn btn-danger btn-sm ml-5 d-none" id="btnRemove5" value="Remove" />
+                                                </div>
+                                            </div>
                                             <div class="alert alert-danger d-none penDrug p-2">
                                                 <strong>Pending Verification!</strong>
                                             </div>
@@ -343,7 +382,7 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="card-columns mr-1 form-group row">
-                                    <div class="card border-primary  bg-muted">
+                                    <div class="card border-success bg-muted">
                                         <div class="card-body">
                                             <label class="col-md-12 text-center"><strong class="text-secondary">Establish License</strong></label>
                                             <label class="col-md-12 text-left"><small class="text-secondary"><i>License Number</i></small></label>
@@ -361,6 +400,11 @@
                                                     <label for="EstablishImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                                 </div>
                                             </div>
+                                            <div class="row mb-2">
+                                                <div class="col-md-12">
+                                                    <input type="button" class="btn btn-danger btn-sm ml-5 d-none" id="btnRemove6" value="Remove" />
+                                                </div>
+                                            </div>
                                             <div class="alert alert-danger d-none penEsta p-2">
                                                 <strong>Pending Verification!</strong>
                                             </div>
@@ -370,7 +414,7 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="card-columns mr-1 form-group row">
-                                    <div class="card border-primary bg-muted">
+                                    <div class="card border-success bg-muted">
                                         <div class="card-body">
                                             <label class="col-md-12 text-center"><strong class="text-secondary">Other License</strong></label>
                                             <label class="col-md-12 text-left"><small class="text-secondary"><i>License Name</i></small></label>
@@ -388,6 +432,11 @@
                                                     <img class="img-container w-100 h-100 mb-2" id="img-other" onerror="this.src='/Images/No Photo.png'" />
                                                     <input type="file" id="OtherLicenseImage" name="OtherLicenseImage" class="d-none" />
                                                     <label for="OtherLicenseImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-md-12">
+                                                    <input type="button" class="btn btn-danger btn-sm ml-5 d-none" id="btnRemove7" value="Remove" />
                                                 </div>
                                             </div>
                                             <div class="alert alert-danger d-none penOther p-2">
@@ -431,6 +480,11 @@
                                             <label for="AuthorisedDistributorImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                         </div>
                                     </div>
+                                    <div class="row mb-2">
+                                        <div class="col-md-12">
+                                            <input type="button" class="btn btn-danger btn-sm ml-5 d-none" id="btnRemove8" value="Remove" />
+                                        </div>
+                                    </div>
                                     <div class="alert alert-danger d-none penAuth p-2">
                                         <strong>Pending Verification!</strong>
                                     </div>
@@ -461,7 +515,7 @@
                             </div>
                         </div>
                         <div class="card-columns mr-1 form-group row col-md-3">
-                            <div class="card border-primary bg-muted">
+                            <div class="card border-success bg-muted">
                                 <div class="card-body text-center">
                                     <label class="col-md-12"><small class="text-secondary"><i>GSTIN Image</i></small></label>
                                     <input type="radio" class="ml-3" name="GstinLicense" id="GstinLicenseImage" value="Image" checked> <label for="GstinLicenseImage"> Image</label>
@@ -476,6 +530,11 @@
                                             <label for="GSTINImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                         </div>
                                     </div>
+                                    <div class="row mb-2">
+                                        <div class="col-md-12">
+                                            <input type="button" class="btn btn-danger btn-sm ml-2 d-none" id="btnRemove9" value="Remove" />
+                                        </div>
+                                    </div>
                                     <div class="alert alert-danger d-none penGstn p-2">
                                         <strong>Pending Verification!</strong>
                                     </div>
@@ -483,7 +542,7 @@
                             </div>
                         </div>
                         <div class="card-columns form-group row col-md-3">
-                            <div class="card border-primary bg-muted">
+                            <div class="card border-success bg-muted">
                                 <div class="card-body text-center">
                                     <label class="col-md-12"><small class="text-secondary"><i>PAN Image</i></small></label>
                                     <input type="radio" class="ml-3" name="PanLicense" id="PanLicenseImage" value="Image" checked> <label for="PanLicenseImage"> Image</label>
@@ -496,6 +555,11 @@
                                             <img class="img-container w-100 h-100 mb-2" id="img-pan" onerror="this.src='/Images/No Photo.png'" />
                                             <input type="file" id="PanImage" name="PanImage" class="d-none" />
                                             <label for="PanImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <div class="col-md-12">
+                                            <input type="button" class="btn btn-danger btn-sm ml-2 d-none" id="btnRemove10" value="Remove" />
                                         </div>
                                     </div>
                                     <div class="alert alert-danger d-none penPan p-2">
@@ -559,10 +623,17 @@
                                         <div class="row ml-3 AccountDocumentPdf d-none mt-2 mb-3">
                                             <input type="file" id="AccountPdf" name="AccountPdf" />
                                         </div>
-                                        <div class="img-upload-container ml-lg-5 mb-3 AccountDocumentImg">
-                                            <img class="img-container w-100 h-100 mb-2" id="img-account" onerror="this.src='/Images/No Photo.png'" />
-                                            <input type="file" id="AccountImage" name="AccountImage" class="d-none" />
-                                            <label for="AccountImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                        <div class="row text-center">
+                                            <div class="img-upload-container ml-lg-5 mb-3 AccountDocumentImg">
+                                                <img class="img-container w-100 h-100 mb-2" id="img-account" onerror="this.src='/Images/No Photo.png'" />
+                                                <input type="file" id="AccountImage" name="AccountImage" class="d-none" />
+                                                <label for="AccountImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <input type="button" class="btn btn-danger btn-sm ml-2 d-none" id="btnRemove11" value="Remove" />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1004,16 +1075,28 @@
                     reader.onload = function (e) {
                         $('#img-authorise').attr('src', e.target.result);
                     }
-
                     reader.readAsDataURL(input.files[0]);
                 }
             }
             $("#AuthorisedDistributorImage").change(function () {
                 readAuthoriseURL(this);
                 $('.penAuth').removeClass('d-none');
+                $("#btnRemove8").removeClass('d-none');
             });
             $("#AuthorisedDistributorPdf").change(function () {
                 $('.penAuth').removeClass('d-none');
+                $("#btnRemove8").removeClass('d-none');
+            });
+            $("#btnRemove8").on('click', function () {
+                $('#img-authorise').attr('src', '');
+                $("#AuthorisedDistributorImage").val('');
+                $('.penAuth').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+            $("#btnRemove8").on('click', function () {
+                $("#AuthorisedDistributorPdf").val('');
+                $('.penAuth').addClass('d-none');
+                $(this).addClass("d-none");
             });
 
             function readOtherLicenseURL(input) {
@@ -1023,16 +1106,28 @@
                     reader.onload = function (e) {
                         $('#img-other').attr('src', e.target.result);
                     }
-
                     reader.readAsDataURL(input.files[0]);
                 }
             }
             $("#OtherLicenseImage").change(function () {
                 readOtherLicenseURL(this);
                 $('.penOther').removeClass('d-none');
+                $("#btnRemove7").removeClass("d-none");
             });
             $("#OtherLicensePdf").change(function () {
                 $('.penOther').removeClass('d-none');
+                $("#btnRemove7").removeClass("d-none");
+            });
+            $("#btnRemove7").on('click', function () {
+                $('#img-other').attr('src', '');
+                $("#OtherLicenseImage").val('');
+                $('.penOther').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+            $("#btnRemove7").on('click', function () {
+                $("#OtherLicensePdf").val('');
+                $('.penOther').addClass('d-none');
+                $(this).addClass("d-none");
             });
 
             function readEstablishURL(input) {
@@ -1049,9 +1144,22 @@
             $("#EstablishImage").change(function () {
                 readEstablishURL(this);
                 $('.penEsta').removeClass('d-none');
+                $("#btnRemove6").removeClass("d-none");
             });
             $("#EstablishPdf").change(function () {
                 $('.penEsta').removeClass('d-none');
+                $("#btnRemove6").removeClass("d-none");
+            });
+            $("#btnRemove6").on('click', function () {
+                $('#img-establish').attr('src', '');
+                $("#EstablishImage").val('');
+                $('.penEsta').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+            $("#btnRemove6").on('click', function () {
+                $("#EstablishPdf").val('');
+                $('.penEsta').addClass('d-none');
+                $(this).addClass("d-none");
             });
 
             function readDrugURL(input) {
@@ -1061,7 +1169,6 @@
                     reader.onload = function (e) {
                         $('#img-drug').attr('src', e.target.result);
                     }
-
                     reader.readAsDataURL(input.files[0]);
                 }
             }
@@ -1071,13 +1178,25 @@
                 document.getElementById("Save").disabled = false;
                 $('.drug').addClass('d-none');
                 $('.penDrug').removeClass('d-none');
-
+                $("#btnRemove5").removeClass("d-none");
             });
             $("#DrugPdf").change(function () {
                 document.getElementById("SaveR").disabled = false;
                 document.getElementById("Save").disabled = false;
                 $('.drug').addClass('d-none');
                 $('.penDrug').removeClass('d-none');
+                $("#btnRemove5").removeClass("d-none");
+            });
+            $("#btnRemove5").on('click', function () {
+                $('#img-drug').attr('src', '');
+                $("#DrugImage").val('');
+                $('.penDrug').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+            $("#btnRemove5").on('click', function () {
+                $("#DrugPdf").val('');
+                $('.penDrug').addClass('d-none');
+                $(this).addClass("d-none");
             });
 
             function readFssaiURL(input) {
@@ -1087,7 +1206,6 @@
                     reader.onload = function (e) {
                         $('#img-fssai').attr('src', e.target.result);
                     }
-
                     reader.readAsDataURL(input.files[0]);
                 }
             }
@@ -1097,12 +1215,25 @@
                 document.getElementById("Save").disabled = false;
                 $('.fssi').addClass('d-none');
                 $('.penFssi').removeClass('d-none');
+                $("#btnRemove4").removeClass("d-none");
             });
             $("#FSSAIPdf").change(function () {
                 document.getElementById("SaveR").disabled = false;
                 document.getElementById("Save").disabled = false;
                 $('.fssi').addClass('d-none');
                 $('.penFssi').removeClass('d-none');
+                $("#btnRemove4").removeClass("d-none");
+            });            
+            $("#btnRemove4").on('click', function () {
+                $('#img-fssai').attr('src', '');
+                $("#FSSAIImage").val('');
+                $('.penFssi').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+            $("#btnRemove4").on('click', function () {
+                $("#FSSAIPdf").val('');
+                $('.penFssi').addClass('d-none');
+                $(this).addClass("d-none");
             });
 
             function readURLPan(input) {
@@ -1112,16 +1243,28 @@
                     reader.onload = function (e) {
                         $('#img-pan').attr('src', e.target.result);
                     }
-
                     reader.readAsDataURL(input.files[0]);
                 }
             }
             $("#PanImage").change(function () {
                 readURLPan(this);
                 $('.penPan').removeClass('d-none');
+                $("#btnRemove10").removeClass("d-none");
             });
             $("#PanPdf").change(function () {
                 $('.penPan').removeClass('d-none');
+                $("#btnRemove10").removeClass("d-none");
+            });
+            $("#btnRemove10").on('click', function () {
+                $('#img-pan').attr('src', '');
+                $("#PanImage").val('');
+                $('.penPan').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+            $("#btnRemove10").on('click', function () {
+                $("#PanPdf").val('');
+                $('.penPan').addClass('d-none');
+                $(this).addClass("d-none");
             });
 
             function readURLGstin(input) {
@@ -1131,16 +1274,28 @@
                     reader.onload = function (e) {
                         $('#img-gstin').attr('src', e.target.result);
                     }
-
                     reader.readAsDataURL(input.files[0]);
                 }
             }
             $("#GSTINImage").change(function () {
                 readURLGstin(this);
                 $('.penGstn').removeClass('d-none');
+                $("#btnRemove9").removeClass('d-none');
             });
             $("#GSTINPdf").change(function () {
                 $('.penGstn').removeClass('d-none');
+                $("#btnRemove9").removeClass('d-none');
+            });
+            $("#btnRemove9").on('click', function () {
+                $('#img-gstin').attr('src', '');
+                $("#GSTINImage").val('');
+                $('.penGstn').addClass('d-none');
+                $(this).addClass("d-none");
+            });
+            $("#btnRemove9").on('click', function () {
+                $("#GSTINPdf").val('');
+                $('.penGstn').addClass('d-none');
+                $(this).addClass("d-none");
             });
 
             function readURLAccount(input) {
@@ -1150,12 +1305,24 @@
                     reader.onload = function (e) {
                         $('#img-account').attr('src', e.target.result);
                     }
-
                     reader.readAsDataURL(input.files[0]);
                 }
             }
             $("#AccountImage").change(function () {
                 readURLAccount(this);
+                $("#btnRemove11").removeClass('d-none');
+            });
+            $("#btnRemove11").on('click', function () {
+                $('#img-account').attr('src', '');
+                $("#AccountImage").val('');
+                $(this).addClass("d-none");
+            });
+            $("#AccountPdf").change(function () {
+                $("#btnRemove11").removeClass('d-none');
+            });
+            $("#btnRemove11").on('click', function () {
+                $("#AccountPdf").val('');
+                $(this).addClass("d-none");
             });
 
             function readURL(input) {
@@ -1165,12 +1332,17 @@
                     reader.onload = function (e) {
                         $('#img-upload').attr('src', e.target.result);
                     }
-
                     reader.readAsDataURL(input.files[0]);
                 }
             }
             $("#ShopImage").change(function () {
                 readURL(this);
+                $("#btnRemove1").removeClass("d-none");
+            });
+            $("#btnRemove1").on('click', function () {
+                $('#img-upload').attr('src', '');
+                $("#ShopImage").val('');
+                $(this).addClass("d-none");
             });
 
             function readURLLogo(input) {
@@ -1186,6 +1358,12 @@
             }
             $("#LogoImage").change(function () {
                 readURLLogo(this);
+                $("#btnRemove2").removeClass("d-none");
+            });
+            $("#btnRemove2").on('click', function () {
+                $('#img-logo').attr('src', '');
+                $("#LogoImage").val('');
+                $(this).addClass("d-none");
             });
 
             function readURLBanner(input) {
@@ -1203,7 +1381,6 @@
                 readURLBanner(this);
             });
 
-
             function readURLAadhar(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
@@ -1211,12 +1388,24 @@
                     reader.onload = function (e) {
                         $('#img-aadhar').attr('src', e.target.result);
                     }
-
                     reader.readAsDataURL(input.files[0]);
                 }
             }
             $("#AadharImage").change(function () {
                 readURLAadhar(this);
+                $("#btnRemove3").removeClass("d-none");
+            });
+            $("#btnRemove3").on('click', function () {
+                $('#img-aadhar').attr('src', '');
+                $("#AadharImage").val("");
+                $(this).addClass("d-none");
+            });
+            $("#AadharPdf").change(function () {
+                $("#btnRemove3").removeClass("d-none");
+            });
+            $("#btnRemove3").on('click', function () {
+                $("#AadharPdf").val("");
+                $(this).addClass("d-none");
             });
 
         });

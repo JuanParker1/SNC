@@ -48,11 +48,11 @@ columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
                     <div class="form-group row">
                         <div class="col-md-6">
                             <label class="col-form-label font-weight-bold text-secondary">Category Name</label>
-                            <input type="text" name="Name" id="Name" class="form-control" />
+                            <input type="text" name="Name" id="Name" class="form-control" required />
                         </div>
                         <div class="col-md-6">
                             <label class="col-form-label"><strong class="text-secondary">Item Type</strong></label>
-                            <select name="ProductTypeId" class="form-control" id="ProductTypeId">
+                            <select name="ProductTypeId" class="form-control" id="ProductTypeId" required>
                             </select>
                             <input type="hidden" id="ProductTypeName" name="ProductTypeName" />
                         </div>
@@ -67,6 +67,7 @@ columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
                                 <input type="file" id="CategoryImage" name="CategoryImage" class="d-none" />
                                 <label for="CategoryImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                             </div>
+                            <input type="button" class="btn btn-sm btn-danger d-none ml-2 mt-5" id="btnRemove" value="Remove" />
                         </div>
                     </div>
                 </div>
@@ -124,6 +125,7 @@ columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
         </form>
     </div>
 </div>
+
 @section Scripts
 {
     <script src="~/Scripts/ValidateRequiredFields.js"></script>
@@ -279,6 +281,16 @@ columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
                     reader.readAsDataURL(input.files[0]);
                 }
             }
+            $("#CategoryImage").change(function () {
+                readURLCategory(this);
+                $("#btnRemove").removeClass("d-none");
+            });
+            $("#btnRemove").on('click', function () {
+                $('#img-CategoryImage').attr('src', '');
+                $("#CategoryImage").val('');
+                $(this).addClass("d-none");
+            });
+
             function readURLEditCategory(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
@@ -288,16 +300,10 @@ columns.Add(c => c.OrderNo).Titled("Order No.").Filterable(true).SetWidth(20);
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-
-            $("#CategoryImage").change(function () {
-                readURLCategory(this);
-            });
             $("#editCategoryImage").change(function () {
                 readURLEditCategory(this);
             });
-
         });
-
     </script>
 }
 
