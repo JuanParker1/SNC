@@ -58,7 +58,7 @@
 
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Category Name</strong></label>
-                                        <select id="CategoryId" name="CategoryId" class="form-control">
+                                        <select id="CategoryId" name="CategoryId" class="form-control" required>
                                             @if (Model.CategoryId != 0)
                                             {
                                                 <option value="@Model.CategoryId">@Model.CategoryName</option>

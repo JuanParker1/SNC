@@ -4079,7 +4079,7 @@ namespace ShopNow.Controllers
                        ShopLongitude = i.s.Longitude,
                        DateEncoded = i.scc.DateEncoded,
                        TipAmount = i.scc.TipsAmount,
-                       //DeliveryCharge = i.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.DeliveryCharge - 35)
+                       DeliveryCharge = i.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.DeliveryCharge - 35)
                    }).OrderByDescending(j => j.DateEncoded).ToList();
                 if (model.List.Count() != 0)
                 {
@@ -4104,7 +4104,7 @@ namespace ShopNow.Controllers
                        ShopLongitude = i.s.Longitude,
                        DateEncoded = i.scc.DateEncoded,
                        TipAmount = i.scc.TipsAmount,
-                       //DeliveryCharge = i.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.DeliveryCharge - 35)
+                       DeliveryCharge = i.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.DeliveryCharge - 35)
                    }).OrderByDescending(j => j.DateEncoded).ToList();
                 if (model.List.Count() != 0)
                 {
@@ -4126,7 +4126,7 @@ namespace ShopNow.Controllers
                        ShopLongitude = i.s.Longitude,
                        DateEncoded = i.scc.DateEncoded,
                        TipAmount = i.scc.TipsAmount,
-                      // DeliveryCharge = i.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.DeliveryCharge - 35)
+                       DeliveryCharge = i.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.DeliveryCharge - 35)
                    }).OrderByDescending(j => j.DateEncoded).ToList();
                 if (model.List.Count() != 0)
                 {

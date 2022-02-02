@@ -57,21 +57,21 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Category Name</strong></label>
-                                        <select name="CategoryId" id="CategoryId" class="form-control">
+                                        <select name="CategoryId" id="CategoryId" class="form-control" required>
                                             <option value="@Model.CategoryId">@Model.CategoryName</option>
                                         </select>
                                         <input type="hidden" name="CategoryName" id="CategoryName" value="@Model.CategoryName" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Sub Category I Name</strong></label>
-                                        <select name="SubCategoryId" id="SubCategoryId" class="form-control">
+                                        <select name="SubCategoryId" id="SubCategoryId" class="form-control" required>
                                             <option value="@Model.SubCategoryId">@Model.SubCategoryName</option>
                                         </select>
                                         <input type="hidden" name="SubCategoryName" id="SubCategoryName" value="@Model.SubCategoryName" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Sub Category II Name</strong></label>
-                                        <select name="NextSubCategoryId" id="NextSubCategoryId" class="form-control">
+                                        <select name="NextSubCategoryId" id="NextSubCategoryId" class="form-control" required>
                                             <option value="@Model.NextSubCategoryId">@Model.NextSubCategoryName</option>
                                         </select>
                                         <input type="hidden" name="NextSubCategoryName" id="NextSubCategoryName" value="@Model.NextSubCategoryName" />
