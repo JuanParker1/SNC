@@ -735,12 +735,14 @@ namespace ShopNow.ViewModels
         {
             public int OrderNumber { get; set; }
             public double GrossDeliveryCharge { get; set; }
+            public double DeliveryCharge { get; set; }
             public int CartStatus { get; set; }
             public DateTime DateEncoded { get; set; }
             public double ShopLatitude { get; set; }
             public double ShopLongitude { get; set; }
             public double CustomerLatitude { get; set; }
             public double CustomerLongitude { get; set; }
+            public double TipAmount { get; set; }
             //public string Date { get; set; }
         }
     }
@@ -754,6 +756,8 @@ namespace ShopNow.ViewModels
             public DateTime Date { get; set; }
             public double TotalAmount { get; set; }
             public double PaidAmount { get; set; }
+            public double Amount { get; set; }
+            public double TipAmount { get; set; }
         }
     }
 

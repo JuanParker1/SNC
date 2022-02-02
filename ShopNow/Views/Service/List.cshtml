@@ -1,0 +1,48 @@
+﻿@model ShopNow.ViewModels.ServiceListViewModel
+@using GridMvc.Html
+@{
+    ViewBag.Title = "Service List";
+}
+
+<title>ShopNow | @ViewBag.Title</title>
+<link href="~/Content/Gridmvc.css" rel="stylesheet" />
+<script src="~/Scripts/gridmvc.js"></script>
+
+
+<div class="container-fluid mb-3">
+    <div class="d-flex justify-content-between">
+        <h5 class="text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+        @*<a href="/Offer/Create"><u>Add New Offer</u></a>*@
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow mt-3">
+                <div class="card-body">
+                    @Html.Grid(Model.ListItems).Columns(columns =>
+               {
+               columns.Add(s => s.PickupAddress).Titled("Pickup Address").Filterable(true).SetWidth(30);
+               columns.Add(s => s.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(30);
+               columns.Add(s => s.Name).Titled("Name").Filterable(true).SetWidth(15);
+               columns.Add(s => s.PhoneNumber).Titled("Phone Number").Filterable(true).SetWidth(15);
+               columns.Add(s => s.Distance).Titled("Distance").Filterable(true).SetWidth(10);
+               columns.Add(s => s.Remarks).Titled("Remarks").Filterable(true).SetWidth(10);
+           }).WithPaging(20).Sortable(true)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/Scripts/sweetalert/sweetalert.min.js"></script>
+    <link href="~/Content/sweetalert/sweetalert.css" rel="stylesheet" />
+
+    <script>
+        $(document).ready(function () {
+
+      
+
+        });
+    </script>
+}

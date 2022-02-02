@@ -105,6 +105,7 @@ namespace ShopNow.Models
         public virtual DbSet<DeliveryBoy> DeliveryBoys { get; set; }
         public virtual DbSet<ShopBillDetail> ShopBillDetails { get; set; }
         public virtual DbSet<ProductSchedule> ProductSchedules { get; set; }
+        public virtual DbSet<Service> Services { get; set; }
     
         [DbFunction("sncEntities", "GetTableVAlueString")]
         public virtual IQueryable<GetTableVAlueString_Result> GetTableVAlueString(string key)

@@ -4078,6 +4078,8 @@ namespace ShopNow.Controllers
                        ShopLatitude = i.s.Latitude,
                        ShopLongitude = i.s.Longitude,
                        DateEncoded = i.scc.DateEncoded,
+                       TipAmount = i.scc.TipsAmount,
+                       //DeliveryCharge = i.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.DeliveryCharge - 35)
                    }).OrderByDescending(j => j.DateEncoded).ToList();
                 if (model.List.Count() != 0)
                 {
@@ -4101,6 +4103,8 @@ namespace ShopNow.Controllers
                        ShopLatitude = i.s.Latitude,
                        ShopLongitude = i.s.Longitude,
                        DateEncoded = i.scc.DateEncoded,
+                       TipAmount = i.scc.TipsAmount,
+                       //DeliveryCharge = i.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.DeliveryCharge - 35)
                    }).OrderByDescending(j => j.DateEncoded).ToList();
                 if (model.List.Count() != 0)
                 {
@@ -4121,6 +4125,8 @@ namespace ShopNow.Controllers
                        ShopLatitude = i.s.Latitude,
                        ShopLongitude = i.s.Longitude,
                        DateEncoded = i.scc.DateEncoded,
+                       TipAmount = i.scc.TipsAmount,
+                      // DeliveryCharge = i.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.DeliveryCharge - 35)
                    }).OrderByDescending(j => j.DateEncoded).ToList();
                 if (model.List.Count() != 0)
                 {
@@ -4504,6 +4510,8 @@ namespace ShopNow.Controllers
             .Select(i => new DelivaryBoyPayoutReportViewModel.PayoutOut
             {
                 Date = i.FirstOrDefault().c.DateEncoded,
+                //Amount = i.FirstOrDefault().d.WorkType == 1 ? i.Sum(a => (a.c.DeliveryCharge == 35 ? 20 : 20 + (a.c.DeliveryCharge - 35))) : i.Sum(a => a.c.DeliveryCharge),
+                TipAmount = i.Sum(a=>a.c.TipsAmount),
                 TotalAmount = i.FirstOrDefault().d.WorkType == 1 ? i.Sum(a => (a.c.DeliveryCharge == 35 ? 20 : 20 + (a.c.DeliveryCharge - 35))) + i.Sum(a=>a.c.TipsAmount) : i.Sum(a => a.c.DeliveryCharge) + i.Sum(a => a.c.TipsAmount),
                 PaidAmount = GetPaidAmount(i.Key.Value, phoneNo),
             }).OrderByDescending(j => j.Date).ToList();
