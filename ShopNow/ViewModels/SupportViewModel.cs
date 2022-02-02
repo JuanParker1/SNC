@@ -35,6 +35,9 @@ namespace ShopNow.ViewModels
         public int OrderMissedCount { get; set; }
         public int ProductUnMappedCount { get; set; }
 
+        public int ServiceCount { get; set; }
+
+
     }
 
     public class DeliveryBoyAssignViewModel

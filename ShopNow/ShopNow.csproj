@@ -409,6 +409,7 @@
     <Compile Include="Controllers\RefundController.cs" />
     <Compile Include="Controllers\SalesController.cs" />
     <Compile Include="Controllers\SearchDataController.cs" />
+    <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\ShopDiscountCategoryController.cs" />
     <Compile Include="Controllers\ShopScheduleController.cs" />
     <Compile Include="Controllers\StaffController.cs" />
@@ -680,6 +681,9 @@
     <Compile Include="Models\SearchData.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Service.cs">
+      <DependentUpon>ApplicationDbContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Shop.cs">
       <DependentUpon>ApplicationDbContext.tt</DependentUpon>
     </Compile>
@@ -780,6 +784,7 @@
     <Compile Include="ViewModels\RefundViewModels.cs" />
     <Compile Include="ViewModels\SalesViewModel.cs" />
     <Compile Include="ViewModels\SearchDataViewModels.cs" />
+    <Compile Include="ViewModels\ServiceViewModels.cs" />
     <Compile Include="ViewModels\ShopDiscountCategoryViewModel.cs" />
     <Compile Include="ViewModels\ShopScheduleViewModels.cs" />
     <Compile Include="ViewModels\ShopViewModel.cs" />
@@ -3323,6 +3328,7 @@
     <Content Include="Views\CustomerPrescription\CancelList.cshtml" />
     <Content Include="Views\Cart\DeliveryLocationMap.cshtml" />
     <Content Include="Views\Payment\ShopBillDifferenceReport.cshtml" />
+    <Content Include="Views\Service\List.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1252,6 +1252,29 @@
           <Property Name="Source" Type="nvarchar" MaxLength="500" />
           <Property Name="KeyValue" Type="nvarchar" MaxLength="500" />
         </EntityType>
+        <EntityType Name="Services">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerId" Type="int" Nullable="false" />
+          <Property Name="PickupAddress" Type="nvarchar(max)" />
+          <Property Name="PickupLatitude" Type="float" Nullable="false" />
+          <Property Name="PickupLongitude" Type="float" Nullable="false" />
+          <Property Name="DeliveryAddress" Type="nvarchar(max)" />
+          <Property Name="DeliveryLatitude" Type="float" Nullable="false" />
+          <Property Name="DeliveryLongitude" Type="float" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="200" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="Amount" Type="float" Nullable="false" />
+          <Property Name="DeliveryCharge" Type="float" Nullable="false" />
+          <Property Name="Distance" Type="float" Nullable="false" />
+          <Property Name="Remarks" Type="nvarchar(max)" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DateEncoded" Type="datetime" Nullable="false" />
+          <Property Name="DateUpdated" Type="datetime" Nullable="false" />
+          <Property Name="UpdatedBy" Type="nvarchar" MaxLength="150" />
+        </EntityType>
         <EntityType Name="ShopBillDetails">
           <Key>
             <PropertyRef Name="Id" />
@@ -1677,6 +1700,7 @@
           <EntitySet Name="ReferralSettings" EntityType="Self.ReferralSettings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RefundsData" EntityType="Self.RefundsData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SearchData" EntityType="Self.SearchData" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Services" EntityType="Self.Services" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ShopBillDetails" EntityType="Self.ShopBillDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ShopCategories" EntityType="Self.ShopCategories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ShopCredit" EntityType="Self.ShopCredit" Schema="dbo" store:Type="Tables" />
@@ -3075,6 +3099,7 @@
           <EntitySet Name="DeliveryBoys" EntityType="sncModel.DeliveryBoy" />
           <EntitySet Name="ShopBillDetails" EntityType="sncModel.ShopBillDetail" />
           <EntitySet Name="ProductSchedules" EntityType="sncModel.ProductSchedule" />
+          <EntitySet Name="Services" EntityType="sncModel.Service" />
         </EntityContainer>
         <ComplexType Name="GetDEliveryBoyList_Result">
           <Property Type="Int32" Name="Id" Nullable="false" />
@@ -3509,6 +3534,29 @@
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="UpdatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DateTimeUpdated" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="Service">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="PickupAddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PickupLatitude" Type="Double" Nullable="false" />
+          <Property Name="PickupLongitude" Type="Double" Nullable="false" />
+          <Property Name="DeliveryAddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DeliveryLatitude" Type="Double" Nullable="false" />
+          <Property Name="DeliveryLongitude" Type="Double" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Amount" Type="Double" Nullable="false" />
+          <Property Name="DeliveryCharge" Type="Double" Nullable="false" />
+          <Property Name="Distance" Type="Double" Nullable="false" />
+          <Property Name="Remarks" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DateEncoded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateUpdated" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -5250,6 +5298,30 @@
                 <ScalarProperty Name="OffTime" ColumnName="OffTime" />
                 <ScalarProperty Name="OnTime" ColumnName="OnTime" />
                 <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Services">
+            <EntityTypeMapping TypeName="sncModel.Service">
+              <MappingFragment StoreEntitySet="Services">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="DateUpdated" ColumnName="DateUpdated" />
+                <ScalarProperty Name="DateEncoded" ColumnName="DateEncoded" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="Distance" ColumnName="Distance" />
+                <ScalarProperty Name="DeliveryCharge" ColumnName="DeliveryCharge" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="DeliveryLongitude" ColumnName="DeliveryLongitude" />
+                <ScalarProperty Name="DeliveryLatitude" ColumnName="DeliveryLatitude" />
+                <ScalarProperty Name="DeliveryAddress" ColumnName="DeliveryAddress" />
+                <ScalarProperty Name="PickupLongitude" ColumnName="PickupLongitude" />
+                <ScalarProperty Name="PickupLatitude" ColumnName="PickupLatitude" />
+                <ScalarProperty Name="PickupAddress" ColumnName="PickupAddress" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
