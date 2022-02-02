@@ -461,9 +461,9 @@ namespace ShopNow.Controllers
                     BillAmount = i.p.s.BillAmount,
                     BillNo = i.p.s.BillNo,
                     OrderNumber = i.p.s.OrderNumber,
-                    TotalPrice = Math.Round(i.o.FirstOrDefault().TotalPrice),
-                    DifferenceAmount = i.p.s.BillAmount -  (Math.Round(i.o.FirstOrDefault().TotalPrice) - (i.p.p.FirstOrDefault().RefundAmount ?? 0)),
-                    DifferencePercentage = Math.Round(((i.p.s.BillAmount - (Math.Round(i.o.FirstOrDefault().TotalPrice) - (i.p.p.FirstOrDefault().RefundAmount ?? 0))) /i.p.s.BillAmount)*100),
+                    TotalPrice = Math.Round(i.o.FirstOrDefault().TotalPrice,2),
+                    DifferenceAmount = Math.Round(i.p.s.BillAmount -  (i.o.FirstOrDefault().TotalPrice - (i.p.p.FirstOrDefault().RefundAmount ?? 0)),2),
+                    DifferencePercentage = Math.Round(((i.p.s.BillAmount - (i.o.FirstOrDefault().TotalPrice - (i.p.p.FirstOrDefault().RefundAmount ?? 0))) /i.p.s.BillAmount)*100,2),
                 }).ToList();
             return View(model);
         }
