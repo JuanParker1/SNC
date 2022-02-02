@@ -5403,7 +5403,7 @@ namespace ShopNow.Controllers
         public JsonResult GetPrescriptionList(int customerid)
         {
             var model = new CustomerPrescriptionListViewModel();
-            model.ListItems = db.CustomerPrescriptions.Where(i => i.CustomerId == customerid && i.Status !=2)
+            model.ListItems = db.CustomerPrescriptions.Where(i => i.CustomerId == customerid && i.Status ==0)
                 .AsEnumerable()
                 .Select(i => new CustomerPrescriptionListViewModel.ListItem
                 {
