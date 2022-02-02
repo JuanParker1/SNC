@@ -340,7 +340,7 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             var model = new BillingDeliveryChargeViewModel();
             model = CommonHelpers.GetDeliveryCharge(shopid, totalSize, totalWeight);
-            var customer = db.Customers.FirstOrDefault(i => i.Id == customerid);
+            var customerPrescription = db.CustomerPrescriptions.FirstOrDefault(i => i.CustomerId == customerid);
 
             var shop = db.Shops.Where(i => i.Id == shopid && i.Status == 0).FirstOrDefault();
             var ConvenientCharge = 0.0;
@@ -353,8 +353,8 @@ namespace ShopNow.Controllers
                 ConvenientCharge = model.ConvenientCharge;
             }
             // Gross Delivery Charge
-            var Distance = (((Math.Acos(Math.Sin((shop.Latitude * Math.PI / 180)) * Math.Sin((customer.Latitude * Math.PI / 180)) + Math.Cos((shop.Latitude * Math.PI / 180)) * Math.Cos((customer.Latitude * Math.PI / 180))
-                 * Math.Cos(((shop.Longitude - customer.Longitude) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000;
+            var Distance = (((Math.Acos(Math.Sin((shop.Latitude * Math.PI / 180)) * Math.Sin(((customerPrescription.Latitude ??0)* Math.PI / 180)) + Math.Cos((shop.Latitude * Math.PI / 180)) * Math.Cos(((customerPrescription.Latitude??0) * Math.PI / 180))
+                 * Math.Cos(((shop.Longitude - (customerPrescription.Longitude??0)) * Math.PI / 180)))) * 180 / Math.PI) * 60 * 1.1515 * 1609.344) / 1000;
             if (Distance < 5)
             {
                 GrossDeliveryCharge = model.DeliveryChargeKM;
