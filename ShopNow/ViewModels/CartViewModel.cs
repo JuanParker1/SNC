@@ -611,6 +611,7 @@ namespace ShopNow.ViewModels
             public string Date { get; set; }
             public int TotalOrder { get; set; }
             public int NewOrder { get; set; }
+            public int DeliveredOrder { get; set; }
             public int CancelOrder { get; set; }
             public int ResTotal { get; set; }
             public int VegTotal { get; set; }
@@ -621,6 +622,7 @@ namespace ShopNow.ViewModels
             public int ResCancelOrder { get; set; }
             public int VegCancelOrder { get; set; }
             public int MedicalCancelOrder { get; set; }
+            public int CustomerCount { get; set; }
         }
     }
 

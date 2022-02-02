@@ -1399,24 +1399,49 @@ namespace ShopNow.Controllers
             ViewBag.Name = user.Name;
             model.MonthFilter = model.MonthFilter != 0 ? model.MonthFilter : DateTime.Now.Month;
             model.YearFilter = model.YearFilter != 0 ? model.YearFilter : DateTime.Now.Year;
-            model.ListItems = db.Orders.Where(a => a.DateEncoded.Month == model.MonthFilter && a.DateEncoded.Year == model.YearFilter && (a.Status == 6 || a.Status == 7 || a.Status == 9 || a.Status == 10)).GroupBy(i => DbFunctions.TruncateTime(i.DateEncoded))
-                .AsEnumerable()
-                .Select(i => new OrderRatioViewModel.ListItem
-                {
-                    Date = i.Key.Value.ToString("dd-MMM-yyyy"),
-                    TotalOrder = i.Count(), //status 6,7
-                    CancelOrder = i.Where(a => a.Status == 7).Count(),
-                    NewOrder = GetNewOrderCount(i.Key.Value, 0), //status 6
-                    ResTotal = i.Join(db.Shops.Where(a => a.ShopCategoryId == 1), o => o.ShopId, s => s.Id, (o, s) => new { o, s }).Count(),
-                    VegTotal = i.Join(db.Shops.Where(a => a.ShopCategoryId == 2), o => o.ShopId, s => s.Id, (o, s) => new { o, s }).Count(),
-                    MedicalTotal = i.Join(db.Shops.Where(a => a.ShopCategoryId == 4), o => o.ShopId, s => s.Id, (o, s) => new { o, s }).Count(),
-                    ResNewOrder = GetNewOrderCount(i.Key.Value, 1),
-                    VegNewOrder = GetNewOrderCount(i.Key.Value, 2),
-                    MedicalNewOrder = GetNewOrderCount(i.Key.Value, 4),
-                    ResCancelOrder = i.Where(a => a.Status == 7).Join(db.Shops.Where(a => a.ShopCategoryId == 1), o => o.ShopId, s => s.Id, (o, s) => new { o, s }).Count(),
-                    VegCancelOrder = i.Where(a => a.Status == 7).Join(db.Shops.Where(a => a.ShopCategoryId == 2), o => o.ShopId, s => s.Id, (o, s) => new { o, s }).Count(),
-                    MedicalCancelOrder = i.Where(a => a.Status == 7).Join(db.Shops.Where(a => a.ShopCategoryId == 4), o => o.ShopId, s => s.Id, (o, s) => new { o, s }).Count()
-                }).ToList();
+            //model.ListItems = db.Orders.Where(a => a.DateEncoded.Month == model.MonthFilter && a.DateEncoded.Year == model.YearFilter && (a.Status == 6 || a.Status == 7 || a.Status == 9 || a.Status == 10)).GroupBy(i => DbFunctions.TruncateTime(i.DateEncoded))
+            //    .AsEnumerable()
+            //    .Select(i => new OrderRatioViewModel.ListItem
+            //    {
+            //        Date = i.Key.Value.ToString("dd-MMM-yyyy"),
+            //        TotalOrder = i.Count(), //status 6,7
+            //        CancelOrder = i.Where(a => a.Status == 7).Count(),
+            //        NewOrder = GetNewOrderCount(i.Key.Value, 0), //status 6
+            //        ResTotal = i.Join(db.Shops.Where(a => a.ShopCategoryId == 1), o => o.ShopId, s => s.Id, (o, s) => new { o, s }).Count(),
+            //        VegTotal = i.Join(db.Shops.Where(a => a.ShopCategoryId == 2), o => o.ShopId, s => s.Id, (o, s) => new { o, s }).Count(),
+            //        MedicalTotal = i.Join(db.Shops.Where(a => a.ShopCategoryId == 4), o => o.ShopId, s => s.Id, (o, s) => new { o, s }).Count(),
+            //        ResNewOrder = GetNewOrderCount(i.Key.Value, 1),
+            //        VegNewOrder = GetNewOrderCount(i.Key.Value, 2),
+            //        MedicalNewOrder = GetNewOrderCount(i.Key.Value, 4),
+            //        ResCancelOrder = i.Where(a => a.Status == 7).Join(db.Shops.Where(a => a.ShopCategoryId == 1), o => o.ShopId, s => s.Id, (o, s) => new { o, s }).Count(),
+            //        VegCancelOrder = i.Where(a => a.Status == 7).Join(db.Shops.Where(a => a.ShopCategoryId == 2), o => o.ShopId, s => s.Id, (o, s) => new { o, s }).Count(),
+            //        MedicalCancelOrder = i.Where(a => a.Status == 7).Join(db.Shops.Where(a => a.ShopCategoryId == 4), o => o.ShopId, s => s.Id, (o, s) => new { o, s }).Count()
+            //    }).ToList();
+
+
+            model.ListItems = db.Orders.Where(a => a.DateEncoded.Month == model.MonthFilter && a.DateEncoded.Year == model.YearFilter && 
+            (a.Status == 6 || a.Status == 7 || a.Status == 9 || a.Status == 10))
+                .Join(db.Shops, o => o.ShopId, s => s.Id, (o, s) => new { o, s })
+                .GroupBy(i => DbFunctions.TruncateTime(i.o.DateEncoded))
+               .AsEnumerable()
+               .Select(i => new OrderRatioViewModel.ListItem
+               {
+                   Date = i.Key.Value.ToString("dd-MMM-yyyy"),
+                   TotalOrder = i.Count(), //status 6,7,9,10
+                   DeliveredOrder = i.Where(a => a.o.Status == 6).Count(),
+                   CancelOrder = i.Where(a => a.o.Status !=6).Count(),
+                   NewOrder = GetNewOrderCount(i.Key.Value, 0), //status 6
+                   ResTotal = i.Where(a => a.s.ShopCategoryId == 1).Count(),
+                   VegTotal = i.Where(a => a.s.ShopCategoryId == 2).Count(),
+                   MedicalTotal = i.Where(a => a.s.ShopCategoryId == 4).Count(),
+                   ResNewOrder = GetNewOrderCount(i.Key.Value, 1),
+                   VegNewOrder = GetNewOrderCount(i.Key.Value, 2),
+                   MedicalNewOrder = GetNewOrderCount(i.Key.Value, 4),
+                   ResCancelOrder = i.Where(a => a.o.Status == 7 && a.s.ShopCategoryId == 1).Count(),
+                   VegCancelOrder = i.Where(a => a.o.Status == 7 && a.s.ShopCategoryId == 2).Count(),
+                   MedicalCancelOrder = i.Where(a => a.o.Status == 7 && a.s.ShopCategoryId == 4).Count(),
+                   CustomerCount = GetNewCustomerCount(i.Key.Value)
+               }).ToList();
             return View(model);
         }
 
@@ -1676,6 +1701,12 @@ namespace ShopNow.Controllers
             var count = db.Orders.Where(a => !orders.Contains(a.CustomerId) && DbFunctions.TruncateTime(a.DateEncoded) == DbFunctions.TruncateTime(date) && a.Status == 6)
                 .Join(db.Shops.Where(i => categoryType != 0 ? i.ShopCategoryId == categoryType : true), o => o.ShopId, s => s.Id, (o, s) => new { o, s })
                 .Count();
+            return count;
+        }
+
+        public int GetNewCustomerCount(DateTime date)
+        {
+            var count = db.Customers.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(date)).Count();
             return count;
         }
 
