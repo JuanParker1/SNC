@@ -11,72 +11,90 @@
         display: none;
     }
 </style>
-<div class="container-fluid">
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <h5 class="mt-1 text-uppercase text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
-        </div>
-            <div class="col-md-6 text-right">
+@using (Html.BeginForm("ShopBillDifferenceReport", "Payment", FormMethod.Post, new { id = "ReportForm", role = "form", enctype = "multipart/form-data" }))
+{
+    <div class="container-fluid">
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <h5 class="mt-1 text-uppercase text-success" style="letter-spacing:1px">@ViewBag.Title</h5>
+            </div>
+            <div class="col-md-4">
+                <div class="input-daterange input-group">
+                    <input type="date" class="form-control well well-sm" placeholder="From Date" id="datepicker" name="StartDate" @if (Model.StartDate != null)
+                    { <text> value="@Model.StartDate.Value.ToString("yyyy-MM-dd")" </text> }>
+                    <span class="input-group-addon mx-3">to</span>
+                    <input type="date" class="form-control" placeholder="To Date" id="datepicker1" name="EndDate" @if (Model.EndDate != null)
+                    { <text> value="@Model.EndDate.Value.ToString("yyyy-MM-dd")" </text> }>
+                </div>
+            </div>
+            <div class="col-md-1">
+                <input type="submit" class="btn btn-info" value="Apply Filter" />
+            </div>
+            <div class="col-md-1">
+                <a href="/Payment/ShopBillDifferenceReport" class="btn btn-secondary">Clear</a>
+            </div>
+            <div class="col-md-2 text-right">
                 <input type="button" id="btnExport" class="btn btn-vsm btn-secondary" value="Export To Excel" />
             </div>
-        <div class="col-md-12">
-            <div class="card shadow mt-3">
-                <div class="card-body">
-                    @Html.Grid(Model.ListItems).Columns(columns =>
-               {
-                   columns.Add(c => c.OrderNumber).Titled("Order Number").Filterable(true).SetWidth(10);
-                   columns.Add(c => c.BillNo).Titled("Shop Bill Number").Filterable(true).SetWidth(10);
-                   columns.Add(c => c.BillAmount).Titled("Shop Bill Amount").Filterable(true).SetWidth(10);
-                   columns.Add(c => c.TotalPrice).Titled("SNOWCH Bill Amount").Filterable(true).SetWidth(10);
-                   columns.Add(c => c.DifferenceAmount).Titled("Difference Amount").Filterable(true).SetWidth(10);
-                   columns.Add(c => c.DifferencePercentage).Titled("Difference Percentage").Filterable(true).SetWidth(10);
-               }).WithPaging(20).Sortable(true)
+            <div class="col-md-12">
+                <div class="card shadow mt-3">
+                    <div class="card-body">
+                        @Html.Grid(Model.ListItems).Columns(columns =>
+                   {
+                       columns.Add(c => c.OrderNumber).Titled("Order Number").Filterable(true).SetWidth(10);
+                       columns.Add(c => c.BillNo).Titled("Shop Bill Number").Filterable(true).SetWidth(10);
+                       columns.Add(c => c.BillAmount).Titled("Shop Bill Amount").Filterable(true).SetWidth(10);
+                       columns.Add(c => c.TotalPrice).Titled("SNOWCH Bill Amount").Filterable(true).SetWidth(10);
+                       columns.Add(c => c.DifferenceAmount).Titled("Difference Amount").Filterable(true).SetWidth(10);
+                       columns.Add(c => c.DifferencePercentage).Titled("Difference Percentage").Filterable(true).SetWidth(10);
+                   }).WithPaging(20).Sortable(true)
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<table id="table-excel" class="d-none">
-    <thead>
-        <tr>
-            <td>Order Number</td>
-            <td>Shop Bill Number</td>
-            <td>Shop Bill Amount</td>
-            <td>SNOWCH Bill Amount</td>
-            <td>Difference Amount</td>
-            <td>Difference Percentage</td>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.ListItems)
-        {
+}
+    <table id="table-excel" class="d-none">
+        <thead>
             <tr>
-                
-                <td>@item.OrderNumber</td>
-                <td>@item.BillNo</td>
-                <td>@item.BillAmount</td>
-                <td>@item.TotalPrice</td>
-                <td>@item.DifferenceAmount</td>
-                <td>@item.DifferencePercentage</td>
+                <td>Order Number</td>
+                <td>Shop Bill Number</td>
+                <td>Shop Bill Amount</td>
+                <td>SNOWCH Bill Amount</td>
+                <td>Difference Amount</td>
+                <td>Difference Percentage</td>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ListItems)
+            {
+                <tr>
+
+                    <td>@item.OrderNumber</td>
+                    <td>@item.BillNo</td>
+                    <td>@item.BillAmount</td>
+                    <td>@item.TotalPrice</td>
+                    <td>@item.DifferenceAmount</td>
+                    <td>@item.DifferencePercentage</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
 
-@section Scripts
+    @section Scripts
 {
-    <script src="/Scripts/exporttoexcel/Table2ExcelNew.js"></script>
-    <script>
-        $(document).ready(function () {
-            $("#btnExport").on('click', function () {
-                $(function () {
-                    var table2excel = new Table2Excel({
-                        defaultFileName: "ShopBillDifference",
+        <script src="/Scripts/exporttoexcel/Table2ExcelNew.js"></script>
+        <script>
+            $(document).ready(function () {
+                $("#btnExport").on('click', function () {
+                    $(function () {
+                        var table2excel = new Table2Excel({
+                            defaultFileName: "ShopBillDifference",
+                        });
+                        table2excel.export($("#table-excel"));
                     });
-                    table2excel.export($("#table-excel"));
                 });
             });
-        });
-    </script>
-}
+        </script>
+    }
