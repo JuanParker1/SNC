@@ -64,7 +64,6 @@
         <EntityTypeShape EntityType="sncModel.ShopCredit" Width="1.5" PointX="2.75" PointY="26.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.ShopDishAddOn" Width="1.5" PointX="26.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.ShopMember" Width="1.5" PointX="10.75" PointY="26.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="sncModel.Shop" Width="1.5" PointX="26.75" PointY="11.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.ShopStaff" Width="1.5" PointX="20.75" PointY="27.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.Specification" Width="1.5" PointX="28.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="sncModel.Staff" Width="1.5" PointX="28.75" PointY="4.75" IsExpanded="true" />
@@ -84,6 +83,7 @@
         <EntityTypeShape EntityType="sncModel.ShopBillDetail" Width="1.5" PointX="15.375" PointY="16.75" />
         <EntityTypeShape EntityType="sncModel.ProductSchedule" Width="1.5" PointX="15.375" PointY="19.75" />
         <EntityTypeShape EntityType="sncModel.Service" Width="1.5" PointX="29.375" PointY="25.75" />
+        <EntityTypeShape EntityType="sncModel.Shop" Width="1.5" PointX="31.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

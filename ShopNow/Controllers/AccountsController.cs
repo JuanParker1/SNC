@@ -42,7 +42,7 @@ namespace ShopNow.Controllers
                     TotalDeliveryCharge = i.o.o.DeliveryCharge,
                     DeliveryChargePaidToDeliveryBoy = i.o.o.DeliveryCharge == 35 ? 20 : 20 + (i.o.o.DeliveryCharge - 35),
                     DeliveryChargeProfit = 15,
-                    AmountProfit = i.o.o.TotalShopPrice != 0 ? Math.Round(i.o.o.TotalPrice - i.o.o.TotalShopPrice, MidpointRounding.AwayFromZero) : 0
+                    AmountProfit = i.o.o.TotalShopPrice != 0 ? Math.Round(i.o.o.TotalPrice - i.o.o.TotalShopPrice, MidpointRounding.AwayFromZero) + i.o.o.Convinenientcharge : i.o.o.Convinenientcharge
                 }).OrderBy(i => i.Date).ToList();
 
             int counter = 1;
