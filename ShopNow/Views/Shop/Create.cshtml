@@ -532,10 +532,12 @@
                                         <input type="file" id="GSTINPdf" name="GSTINPdf" />
                                     </div>
                                     <div class="row GstinLicenseImg mt-2 ml-3">
-                                        <div class="img-upload-container mb-3">
-                                            <img class="img-container w-100 h-100 mb-2" id="img-gstin" onerror="this.src='/Images/No Photo.png'" />
-                                            <input type="file" id="GSTINImage" name="GSTINImage" class="d-none" />
-                                            <label for="GSTINImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                        <div class="col-md-12">
+                                            <div class="img-upload-container mb-3 ml-5">
+                                                <img class="img-container w-100 h-100 mb-2" id="img-gstin" onerror="this.src='/Images/No Photo.png'" />
+                                                <input type="file" id="GSTINImage" name="GSTINImage" class="d-none" />
+                                                <label for="GSTINImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row mb-2">
@@ -559,10 +561,12 @@
                                         <input type="file" id="PanPdf" name="PanPdf" />
                                     </div>
                                     <div class="row PanLicenseImg ml-3 mt-2">
-                                        <div class="img-upload-container mb-3">
-                                            <img class="img-container w-100 h-100 mb-2" id="img-pan" onerror="this.src='/Images/No Photo.png'" />
-                                            <input type="file" id="PanImage" name="PanImage" class="d-none" />
-                                            <label for="PanImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                        <div class="col-md-12">
+                                            <div class="img-upload-container mb-3 ml-5">
+                                                <img class="img-container w-100 h-100 mb-2" id="img-pan" onerror="this.src='/Images/No Photo.png'" />
+                                                <input type="file" id="PanImage" name="PanImage" class="d-none" />
+                                                <label for="PanImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="row mb-2">
@@ -626,16 +630,18 @@
                                     <div class="card-body text-center">
                                         <label class="col-md-12 text-center"><strong class="text-secondary">Bank Account</strong></label>
                                         <label class="col-md-12 text-center"><small class="text-secondary"><i>Account Proof Image</i></small></label>
-                                        <input type="radio" class="ml-3" name="AccountDocument" id="AccountDocumentImage" value="Image" checked> <label for="AccountDocumentImage"> Image</label>
-                                        <input type="radio" class="ml-3" name="AccountDocument" id="AccountDocumentPDF" value="PDF"> <label for="AccountDocumentPDF"> PDF</label>
-                                        <div class="row ml-3 AccountDocumentPdf d-none mt-2 mb-3">
+                                        <input type="radio" class="ml-2" name="AccountDocument" id="AccountDocumentImage" value="Image" checked> <label for="AccountDocumentImage"> Image</label>
+                                        <input type="radio" class="ml-2" name="AccountDocument" id="AccountDocumentPDF" value="PDF"> <label for="AccountDocumentPDF"> PDF</label>
+                                        <div class="row ml-3 AccountDocumentPdf d-none mt-2 mb-3 ml-4">
                                             <input type="file" id="AccountPdf" name="AccountPdf" />
                                         </div>
-                                        <div class="row text-center">
-                                            <div class="img-upload-container ml-lg-5 mb-3 AccountDocumentImg">
-                                                <img class="img-container w-100 h-100 mb-2" id="img-account" onerror="this.src='/Images/No Photo.png'" />
-                                                <input type="file" id="AccountImage" name="AccountImage" class="d-none" />
-                                                <label for="AccountImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                        <div class="row mt-1 ml-3">
+                                            <div class="col-md-12 ml-5">
+                                                <div class="img-upload-container mb-3 AccountDocumentImg ml-5">
+                                                    <img class="img-container w-100 h-100 mb-2" id="img-account" onerror="this.src='/Images/No Photo.png'" />
+                                                    <input type="file" id="AccountImage" name="AccountImage" class="d-none" />
+                                                    <label for="AccountImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -882,12 +888,14 @@
                         $('.FssaiPdf').addClass('d-none');
                         $("#FSSAIPdf").val("");
                         $('.penFssi').addClass('d-none');
+                        $("#btnRemove4").addClass("d-none");
                     } else {
                         $('.FssaiImg').addClass('d-none');
                         $('.FssaiPdf').removeClass('d-none');
                         $("#FSSAIImage").val("");
                         $("#img-fssai").attr('src', '');
                         $('.penFssi').addClass('d-none');
+                        $("#btnRemove4").addClass("d-none");
                     }
                 });
 
@@ -898,12 +906,14 @@
                         $('.DrugPdf').addClass('d-none');
                         $("#DrugPdf").val("");
                         $('.penDrug').addClass('d-none');
+                        $("#btnRemove5").addClass("d-none");
                     } else {
                         $('.DrugImg').addClass('d-none');
                         $('.DrugPdf').removeClass('d-none');
                         $("#DrugImage").val("");
                         $("#img-drug").attr('src', '');
                         $('.penDrug').addClass('d-none');
+                        $("#btnRemove5").addClass("d-none");
                     }
                 });
 
@@ -914,12 +924,14 @@
                         $('.EstPdf').addClass('d-none');
                         $("#EstablishPdf").val("");
                         $('.penEsta').addClass('d-none');
+                        $('#btnRemove6').addClass('d-none');
                     } else {
                         $('.EstImg').addClass('d-none');
                         $('.EstPdf').removeClass('d-none');
                         $("#EstablishImage").val("");
                         $("#img-establish").attr('src', '');
                         $('.penEsta').addClass('d-none');
+                        $('#btnRemove6').addClass('d-none');
                     }
                 });
 
@@ -930,12 +942,14 @@
                         $('.OtherPdf').addClass('d-none');
                         $("#OtherLicensePdf").val("");
                         $('.penOther').addClass('d-none');
+                        $("#btnRemove7").addClass('d-none');
                     } else {
                         $('.OtherImg').addClass('d-none');
                         $('.OtherPdf').removeClass('d-none');
                         $("#OtherLicenseImage").val("");
                         $("#img-other").attr('src', '');
                         $('.penOther').addClass('d-none');
+                        $("#btnRemove7").addClass('d-none');
                     }
                 });
 
@@ -946,12 +960,14 @@
                         $('.AuthLicensePdf').addClass('d-none');
                         $("#AuthorisedDistributorPdf").val("");
                         $('.penAuth').addClass('d-none');
+                        $("#btnRemove8").addClass('d-none');
                     } else {
                         $('.AuthLicenseImg').addClass('d-none');
                         $('.AuthLicensePdf').removeClass('d-none');
                         $("#AuthorisedDistributorImage").val("");
                         $("#img-authorise").attr('src', '');
                         $('.penAuth').addClass('d-none');
+                        $("#btnRemove8").addClass('d-none');
                     }
                 });
 
@@ -962,12 +978,14 @@
                         $('.GstinLicensePdf').addClass('d-none');
                         $("#GSTINPdf").val("");
                         $('.penGstn').addClass('d-none');
+                        $('#btnRemove9').addClass('d-none');
                     } else {
                         $('.GstinLicenseImg').addClass('d-none');
                         $('.GstinLicensePdf').removeClass('d-none');
                         $("#GSTINImage").val("");
                         $("#img-gstin").attr('src', '');
                         $('.penGstn').addClass('d-none');
+                        $('#btnRemove9').addClass('d-none');
                     }
                 });
 
@@ -978,12 +996,14 @@
                         $('.PanLicensePdf').addClass('d-none');
                         $("#PanPdf").val("");
                         $('.penPan').addClass('d-none');
+                        $("#btnRemove10").addClass('d-none');
                     } else {
                         $('.PanLicenseImg').addClass('d-none');
                         $('.PanLicensePdf').removeClass('d-none');
                         $("#PanImage").val("");
                         $("#img-pan").attr('src', '');
                         $('.penPan').addClass('d-none');
+                        $("#btnRemove10").addClass('d-none');
                     }
                 });
 
@@ -993,11 +1013,13 @@
                         $('.AadharDocumentImg').removeClass('d-none');
                         $('.AadharDocumentPdf').addClass('d-none');
                         $("#AadharPdf").val("");
+                        $("#btnRemove3").addClass("d-none");
                     } else {
                         $('.AadharDocumentImg').addClass('d-none');
                         $('.AadharDocumentPdf').removeClass('d-none');
                         $("#AadharImage").val("");
                         $("#img-aadhar").attr('src', '');
+                        $("#btnRemove3").addClass("d-none");
                     }
                 });
 
@@ -1007,11 +1029,13 @@
                         $('.AccountDocumentImg').removeClass('d-none');
                         $('.AccountDocumentPdf').addClass('d-none');
                         $("#AccountPdf").val("");
+                        $("#btnRemove11").addClass('d-none');
                     } else {
                         $('.AccountDocumentImg').addClass('d-none');
                         $('.AccountDocumentPdf').removeClass('d-none');
                         $("#AccountImage").val("");
                         $("#img-account").attr('src', '');
+                        $("#btnRemove11").addClass('d-none');
                     }
                 });
 
