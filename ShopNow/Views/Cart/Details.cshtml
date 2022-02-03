@@ -768,6 +768,7 @@
                         <label class="col-form-label mr-2">Unit Price:</label>
                         <input class="form-control w-50" type="number" min="1" step="any" name="UnitPrice" id="input-unitprice" />
                     </div>
+                    <span id="warning-text" class="text-danger"></span>
                     <div class="form-group">
                         <label class="col-form-label">Remarks:</label>
                         <textarea class="form-control" name="Remarks" id="input-remark" required></textarea>
@@ -946,8 +947,24 @@
                 $('#text-category').text($(this).data('category'));
                 $('#input-quantity').val($(this).data('quantity'));
                 $('#input-unitprice').val($(this).data('unitprice'));
+                $('#input-unitprice').data('unitprice',$(this).data('unitprice'));
                 $('#input-remark').val($(this).data('remark'));
                 $('#modal-item-update').modal('show');
+            });
+
+            $('#input-unitprice').on('change', function () {
+                var price = parseFloat($(this).val());
+                var originalprice = parseFloat($(this).data('unitprice'));
+                if (price < originalprice) {
+                    $(this).val(originalprice);
+                    $('#warning-text').text('Price should not be less than Original price');
+                } else {
+                    $('#warning-text').text('');
+                }
+            });
+
+            $('#modal-item-update').on('hidden.bs.modal', function () {
+                $('#warning-text').text('');
             });
 
             //$("#btn-paymentmode-update").on('click', function () {
