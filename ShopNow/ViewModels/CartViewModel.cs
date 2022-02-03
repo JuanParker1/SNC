@@ -730,6 +730,7 @@ namespace ShopNow.ViewModels
     public class DelivaryBoyReportViewModel
     {
         public double EarningOfToday { get; set; }
+        public double TotalAmount { get; set; }
         public List<CartList> List { get; set; }
         public class CartList
         {
@@ -743,7 +744,7 @@ namespace ShopNow.ViewModels
             public double CustomerLatitude { get; set; }
             public double CustomerLongitude { get; set; }
             public double TipAmount { get; set; }
-            //public string Date { get; set; }
+            public double Distance { get; set; }
         }
     }
 

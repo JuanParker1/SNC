@@ -4068,18 +4068,21 @@ namespace ShopNow.Controllers
             {
                 model.List = db.Orders.Where(i => i.Status == 6 && i.DeliveryBoyPhoneNumber == phoneNumber && DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(DateTime.Now))
                             .Join(db.Shops, scc => scc.ShopId, s => s.Id, (scc, s) => new { scc, s })
+                   .Join(db.DeliveryBoys, scc => scc.scc.DeliveryBoyId, d => d.Id, (scc, d) => new { scc, d })
+                   .AsEnumerable()
                    .Select(i => new DelivaryBoyReportViewModel.CartList
                    {
-                       OrderNumber = i.scc.OrderNumber,
-                       CartStatus = i.scc.Status,
-                       GrossDeliveryCharge = (i.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.DeliveryCharge - 35)) + i.scc.TipsAmount,
-                       CustomerLatitude = i.scc.Latitude,
-                       CustomerLongitude = i.scc.Longitude,
-                       ShopLatitude = i.s.Latitude,
-                       ShopLongitude = i.s.Longitude,
-                       DateEncoded = i.scc.DateEncoded,
-                       TipAmount = i.scc.TipsAmount,
-                       DeliveryCharge = i.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.DeliveryCharge - 35)
+                       OrderNumber = i.scc.scc.OrderNumber,
+                       CartStatus = i.scc.scc.Status,
+                       GrossDeliveryCharge = i.d.WorkType == 1 ? ((i.scc.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.scc.DeliveryCharge - 35)) + i.scc.scc.TipsAmount) : i.scc.scc.DeliveryCharge + i.scc.scc.TipsAmount,
+                       CustomerLatitude = i.scc.scc.Latitude,
+                       CustomerLongitude = i.scc.scc.Longitude,
+                       ShopLatitude = i.scc.s.Latitude,
+                       ShopLongitude = i.scc.s.Longitude,
+                       DateEncoded = i.scc.scc.DateEncoded,
+                       TipAmount = i.scc.scc.TipsAmount,
+                       DeliveryCharge = i.d.WorkType == 1 ? (i.scc.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.scc.DeliveryCharge - 35)) : i.scc.scc.DeliveryCharge,
+                       Distance = i.scc.scc.Distance == 0 ? Math.Round((double)(GetMeters(i.scc.s.Latitude, i.scc.s.Longitude, i.scc.scc.Latitude, i.scc.scc.Longitude) / 1000), 2):i.scc.scc.Distance
                    }).OrderByDescending(j => j.DateEncoded).ToList();
                 if (model.List.Count() != 0)
                 {
@@ -4093,18 +4096,21 @@ namespace ShopNow.Controllers
                 model.List = db.Orders.Where(i => i.Status == 6 && i.DeliveryBoyPhoneNumber == phoneNumber && ((DbFunctions.TruncateTime(i.DateEncoded) >= DbFunctions.TruncateTime(from1)) &&
             (DbFunctions.TruncateTime(i.DateEncoded) <= DbFunctions.TruncateTime(to1))))
                             .Join(db.Shops, scc => scc.ShopId, s => s.Id, (scc, s) => new { scc, s })
+                    .Join(db.DeliveryBoys, scc => scc.scc.DeliveryBoyId, d => d.Id, (scc, d) => new { scc, d })
+                    .AsEnumerable()
                    .Select(i => new DelivaryBoyReportViewModel.CartList
                    {
-                       OrderNumber = i.scc.OrderNumber,
-                       CartStatus = i.scc.Status,
-                       GrossDeliveryCharge = (i.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.DeliveryCharge - 35)) + i.scc.TipsAmount,
-                       CustomerLatitude = i.scc.Latitude,
-                       CustomerLongitude = i.scc.Longitude,
-                       ShopLatitude = i.s.Latitude,
-                       ShopLongitude = i.s.Longitude,
-                       DateEncoded = i.scc.DateEncoded,
-                       TipAmount = i.scc.TipsAmount,
-                       DeliveryCharge = i.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.DeliveryCharge - 35)
+                       OrderNumber = i.scc.scc.OrderNumber,
+                       CartStatus = i.scc.scc.Status,
+                       GrossDeliveryCharge = i.d.WorkType == 1 ? ((i.scc.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.scc.DeliveryCharge - 35)) + i.scc.scc.TipsAmount) : i.scc.scc.DeliveryCharge + i.scc.scc.TipsAmount,
+                       CustomerLatitude = i.scc.scc.Latitude,
+                       CustomerLongitude = i.scc.scc.Longitude,
+                       ShopLatitude = i.scc.s.Latitude,
+                       ShopLongitude = i.scc.s.Longitude,
+                       DateEncoded = i.scc.scc.DateEncoded,
+                       TipAmount = i.scc.scc.TipsAmount,
+                       DeliveryCharge = i.d.WorkType == 1 ? (i.scc.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.scc.DeliveryCharge - 35)) : i.scc.scc.DeliveryCharge,
+                       Distance = i.scc.scc.Distance == 0 ? Math.Round((double)(GetMeters(i.scc.s.Latitude, i.scc.s.Longitude, i.scc.scc.Latitude, i.scc.scc.Longitude) / 1000), 2) : i.scc.scc.Distance
                    }).OrderByDescending(j => j.DateEncoded).ToList();
                 if (model.List.Count() != 0)
                 {
@@ -4115,18 +4121,21 @@ namespace ShopNow.Controllers
             {
                 model.List = db.Orders.Where(i => i.Status == 6 && i.DeliveryBoyPhoneNumber == phoneNumber && DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(DateTime.Now))
                             .Join(db.Shops, scc => scc.ShopId, s => s.Id, (scc, s) => new { scc, s })
+                            .Join(db.DeliveryBoys, scc => scc.scc.DeliveryBoyId, d =>d.Id, (scc,d) => new { scc, d })
+                            .AsEnumerable()
                    .Select(i => new DelivaryBoyReportViewModel.CartList
                    {
-                       OrderNumber = i.scc.OrderNumber,
-                       CartStatus = i.scc.Status,
-                       GrossDeliveryCharge = (i.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.DeliveryCharge - 35)) + i.scc.TipsAmount,
-                       CustomerLatitude = i.scc.Latitude,
-                       CustomerLongitude = i.scc.Longitude,
-                       ShopLatitude = i.s.Latitude,
-                       ShopLongitude = i.s.Longitude,
-                       DateEncoded = i.scc.DateEncoded,
-                       TipAmount = i.scc.TipsAmount,
-                       DeliveryCharge = i.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.DeliveryCharge - 35)
+                       OrderNumber = i.scc.scc.OrderNumber,
+                       CartStatus = i.scc.scc.Status,
+                       GrossDeliveryCharge = i.d.WorkType == 1 ? ((i.scc.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.scc.DeliveryCharge - 35)) + i.scc.scc.TipsAmount): i.scc.scc.DeliveryCharge+i.scc.scc.TipsAmount,
+                       CustomerLatitude = i.scc.scc.Latitude,
+                       CustomerLongitude = i.scc.scc.Longitude,
+                       ShopLatitude = i.scc.s.Latitude,
+                       ShopLongitude = i.scc.s.Longitude,
+                       DateEncoded = i.scc.scc.DateEncoded,
+                       TipAmount = i.scc.scc.TipsAmount,
+                       DeliveryCharge = i.d.WorkType == 1 ? (i.scc.scc.DeliveryCharge == 35 ? 20 : 20 + (i.scc.scc.DeliveryCharge - 35)):i.scc.scc.DeliveryCharge,
+                       Distance = i.scc.scc.Distance == 0 ? Math.Round((double)(GetMeters(i.scc.s.Latitude, i.scc.s.Longitude, i.scc.scc.Latitude, i.scc.scc.Longitude) / 1000), 2) : i.scc.scc.Distance
                    }).OrderByDescending(j => j.DateEncoded).ToList();
                 if (model.List.Count() != 0)
                 {
@@ -4154,7 +4163,7 @@ namespace ShopNow.Controllers
                 previousPage,
                 nextPage
             };
-            return Json(new { Page = paginationMetadata, items }, JsonRequestBehavior.AllowGet);
+            return Json(new { Page = paginationMetadata, items,total=model.EarningOfToday }, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult GetDelivaryCreditReport(string phoneNumber, string dt, string from, string to)
@@ -5737,7 +5746,9 @@ namespace ShopNow.Controllers
                           ShopLongitude = i.p.p.s.Longitude,
                           ShopPhoneNumber = i.p.p.s.PhoneNumber,
                           ShopStatus = i.p.p.s.Status,
-                          ShopNextOnTime = i.p.p.s.NextOnTime
+                          ShopNextOnTime = i.p.p.s.NextOnTime,
+                          IsOnline = i.p.p.p.IsOnline,
+                          NextOnTime = i.p.p.p.NextOnTime
                       }).ToList();
                 }
                

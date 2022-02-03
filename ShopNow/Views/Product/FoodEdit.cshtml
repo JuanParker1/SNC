@@ -273,13 +273,14 @@
                 showHour();
             });
             //Calculate ShopPricePercentage 
-            calculateShopPrice($("#MenuPrice").val(), $("#ShopPricePercentage").val());
+          //  calculateShopPrice($("#MenuPrice").val(), $("#ShopPricePercentage").val(), $("#Price").val(), $("#Percentage").val());
 
             $('#Price').on('change keyup', function () {
                 var menuprice = $("#MenuPrice").val();
                 var sellingprice = $(this).val();
                 var results = Math.ceil(((menuprice - sellingprice) / menuprice) * 100);
                 $("#Percentage").val(results);
+                calculateShopPrice(menuprice, $("#ShopPricePercentage").val(), sellingprice, results); 
             });
 
             $('#MenuPrice').on('change keyup', function () {
@@ -287,7 +288,7 @@
                 var sellingprice = $('#Price').val();
                 var results = Math.ceil(((menuprice - sellingprice) / menuprice) * 100);
                 $("#Percentage").val(results);
-                calculateShopPrice(menuprice, $("#ShopPricePercentage").val());  //Calculate ShopPricePercentage 
+                calculateShopPrice(menuprice, $("#ShopPricePercentage").val(), sellingprice, results);  //Calculate ShopPricePercentage 
             });
 
             $('#Percentage').on('change keyup', function () {
@@ -295,6 +296,7 @@
                 var menuprice = $("#MenuPrice").val();
                 var results = Math.ceil(menuprice - (menuprice * (percentage / 100)));
                 $("#Price").val(results);
+               // calculateShopPrice(menuprice, $("#ShopPricePercentage").val(), sellingprice, results);
             });
 
             var cust = $('#select-customisation').val();
@@ -502,9 +504,18 @@
             }
         }
          //Calculate ShopPricePercentage 
-        function calculateShopPrice(price, percentage) {
-            var shopprice = (price - (price * (percentage / 100)));
-            $('#ShopPrice').val(shopprice);
+        function calculateShopPrice(menuprice, shoppercentage, sellingprice, percentage) {
+            if (shoppercentage != 0 && percentage == 0) {
+                var shopprice = (menuprice - (menuprice * (shoppercentage / 100)));
+                $('#ShopPrice').val(shopprice);
+            } else if (shoppercentage != 0 && percentage != 0) {
+                var shopprice = (sellingprice - (sellingprice * (shoppercentage / 100)));
+                $('#ShopPrice').val(shopprice);
+            } else if (shoppercentage == 0 && percentage == 0) {
+                $('#ShopPrice').val(menuprice);
+            } else {
+                $('#ShopPrice').val(sellingprice);
+            }
         }
     </script>
 }
