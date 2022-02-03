@@ -75,7 +75,6 @@
         <EntityTypeShape EntityType="sncModel.CustomerAppInfo" Width="1.5" PointX="3.375" PointY="29.75" />
         <EntityTypeShape EntityType="sncModel.CustomerDeviceInfo" Width="1.5" PointX="29.375" PointY="21.75" />
         <EntityTypeShape EntityType="sncModel.CustomerGiftCard" Width="1.5" PointX="9.375" PointY="13.75" />
-        <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="21.375" PointY="30.75" />
         <EntityTypeShape EntityType="sncModel.CustomerPrescription" Width="1.5" PointX="0.75" PointY="29.75" />
         <EntityTypeShape EntityType="sncModel.OrderItem" Width="1.5" PointX="27.375" PointY="28.75" />
         <EntityTypeShape EntityType="sncModel.ShopSchedule" Width="1.5" PointX="15.375" PointY="0.75" />
@@ -84,6 +83,7 @@
         <EntityTypeShape EntityType="sncModel.ProductSchedule" Width="1.5" PointX="15.375" PointY="19.75" />
         <EntityTypeShape EntityType="sncModel.Service" Width="1.5" PointX="29.375" PointY="25.75" />
         <EntityTypeShape EntityType="sncModel.Shop" Width="1.5" PointX="31.375" PointY="0.75" />
+        <EntityTypeShape EntityType="sncModel.Order" Width="1.5" PointX="19.375" PointY="30.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
