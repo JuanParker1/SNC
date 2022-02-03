@@ -5737,7 +5737,9 @@ namespace ShopNow.Controllers
                           ShopLongitude = i.p.p.s.Longitude,
                           ShopPhoneNumber = i.p.p.s.PhoneNumber,
                           ShopStatus = i.p.p.s.Status,
-                          ShopNextOnTime = i.p.p.s.NextOnTime
+                          ShopNextOnTime = i.p.p.s.NextOnTime,
+                          IsOnline = i.p.p.p.IsOnline,
+                          NextOnTime = i.p.p.p.NextOnTime
                       }).ToList();
                 }
                
