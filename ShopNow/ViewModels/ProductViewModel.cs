@@ -434,6 +434,7 @@ namespace ShopNow.ViewModels
     public class FMCGEditViewModel : FMCGCreateViewModel
     {
         public long Id { get; set; }
+        public double ShopPricePercentage { get; set; }
     }
 
     public class ElectronicCreateEditViewModel
@@ -531,6 +532,7 @@ namespace ShopNow.ViewModels
         public bool IsPreorder { get; set; }
         public int PreorderHour { get; set; }
         public double ShopPrice { get; set; }
+        public double ShopPricePercentage { get; set; }
     }
 
     public class ShopAddOnSessionAddViewModel

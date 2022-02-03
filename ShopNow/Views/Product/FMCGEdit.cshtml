@@ -32,6 +32,7 @@
                                         <input type="text" name="ShopName" class="form-control" id="ShopName" value="@Model.ShopName" readonly />
                                         <input type="hidden" name="ShopName" value="@Model.ShopName" />
                                         <input type="hidden" name="ShopId" value="@Model.ShopId" />
+                                        <input type="hidden" name="ShopPricePercentage" id="ShopPricePercentage" value="@Model.ShopPricePercentage" />
                                     }
                                 </div>
                             </div>
@@ -109,7 +110,7 @@
                                     </div>
                                     <div class="col-md-2">
                                         <label class="col-form-label" for="ShopPrice"><strong class="text-secondary">Shop Price</strong></label>
-                                        <input id="ShopPrice" type="number" class="form-control" name="ShopPrice" min="1" step="any" value="@Model.ShopPrice" />
+                                        <input id="ShopPrice" type="number" class="form-control" name="ShopPrice" min="1" step="any" value="@Model.ShopPrice" readonly />
                                     </div>
                                     <div class="col-md-2">
                                         <label class="col-form-label" for="Percentage"><strong class="text-secondary">Percentage</strong></label>
@@ -239,6 +240,9 @@
     <!--Select2 End-->
     <script>
         $(document).ready(function () {
+            //Calculate ShopPricePercentage 
+            calculateShopPrice($("#MenuPrice").val(), $("#ShopPricePercentage").val());
+
             $('#Price').on('change keyup', function () {
                 var menuprice = $("#MenuPrice").val();
                 var sellingprice = $(this).val();
@@ -251,6 +255,7 @@
                 var sellingprice = $('#Price').val();
                 var results = Math.ceil(((menuprice - sellingprice) / menuprice) * 100);
                 $("#Percentage").val(results);
+                calculateShopPrice(menuprice, $("#ShopPricePercentage").val());  //Calculate ShopPricePercentage 
             });
 
             $('#Percentage').on('change keyup', function () {
@@ -324,6 +329,12 @@
                 $("#PreorderHour").addClass('d-none');
                 $("#PreorderHour").val(0);
             }
+        }
+
+        //Calculate ShopPricePercentage 
+        function calculateShopPrice(price, percentage) {
+            var shopprice = (price - (price * (percentage / 100)));
+            $('#ShopPrice').val(shopprice);
         }
     </script>
 }
