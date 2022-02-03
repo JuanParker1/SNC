@@ -291,6 +291,7 @@
                 var sellingprice = $(this).val();
                 var results = Math.ceil(((menuprice - sellingprice) / menuprice) * 100);
                 $("#Percentage").val(results);
+                calculateShopPrice(menuprice, $("#ShopPricePercentage").val(), sellingprice, results);
             });
 
             $('#MenuPrice').on('change keyup', function () {
@@ -298,7 +299,7 @@
                 var sellingprice = $('#Price').val();
                 var results = Math.ceil(((menuprice - sellingprice) / menuprice) * 100);
                 $("#Percentage").val(results);
-                calculateShopPrice(menuprice, $("#ShopPricePercentage").val());
+                calculateShopPrice(menuprice, $("#ShopPricePercentage").val(), sellingprice, results);
             });
 
             $('#ShopId').select2({
@@ -370,7 +371,7 @@
                 $('#img-ProductImage1').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath1);
                 $('input[name="ImagePath1"]').val(e.params.data.ImagePath1);
                 $('input[name="MenuPrice"]').val(e.params.data.Price);
-                calculateShopPrice(e.params.data.Price, $("#ShopPricePercentage").val());
+                calculateShopPrice(e.params.data.Price, $("#ShopPricePercentage").val(),0,0);
                 $('input[name="GoogleTaxonomyCode"]').val(e.params.data.GoogleTaxonomyCode);
 
                 $('#divAddOns').addClass('d-none');
@@ -513,9 +514,18 @@
             }
         });
 
-        function calculateShopPrice(price,percentage) {
-            var shopprice = (price - (price * (percentage / 100)));
-            $('#ShopPrice').val(shopprice);
+        function calculateShopPrice(menuprice, shoppercentage, sellingprice, percentage) {
+            if (shoppercentage != 0 && percentage == 0) {
+                var shopprice = (menuprice - (menuprice * (shoppercentage / 100)));
+                $('#ShopPrice').val(shopprice);
+            } else if (shoppercentage != 0 && percentage != 0) {
+                var shopprice = (sellingprice - (sellingprice * (shoppercentage / 100)));
+                $('#ShopPrice').val(shopprice);
+            } else if (shoppercentage == 0 && percentage == 0) {
+                $('#ShopPrice').val(menuprice);
+            } else {
+                $('#ShopPrice').val(sellingprice);
+            }
         }
     </script>
 }
