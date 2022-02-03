@@ -692,7 +692,7 @@ namespace ShopNow.Controllers
                           select (Double?)i.DeliveryCharge).Sum() ?? 0;
 
             model.Lists = db.DeliveryBoys
-               .Where(i => i.OnWork == 0 && i.isAssign == 0 && i.Active == 1 && i.Status == 0)
+               .Where(i => i.Active == 1 && i.Status == 0)
                  .AsEnumerable()
                  .Select(i => new CartAssignDeliveryBoyViewModel.CartAssignList
                  {
