@@ -84,7 +84,7 @@ namespace ShopNow.Controllers
             model.ShopOnlineCount = db.Shops.Where(i => i.Status == 0 && i.IsOnline == true).Count();
             model.ShopOfflineCount = db.Shops.Where(i => i.Status == 0 && i.IsOnline == false).Count();
 
-            model.ServiceCount = db.Services.Where(i => i.Status == 0).Count();
+            //model.ServiceCount = db.Services.Where(i => i.Status == 0).Count();
             return View(model);
         }
 
