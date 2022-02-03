@@ -1197,7 +1197,8 @@ namespace ShopNow.Controllers
             {
                 id = i.Id,
                 text = i.Name + " -- " + i.DistrictName,
-                textSave = i.Name
+                textSave = i.Name,
+                percentage = i.ShopPricePercentage
             }).ToListAsync();
 
             return Json(new { results = model, pagination = new { more = false } }, JsonRequestBehavior.AllowGet);

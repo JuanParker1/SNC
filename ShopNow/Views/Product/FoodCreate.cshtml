@@ -39,7 +39,7 @@
                                 {
                                     <select id="ShopId" name="ShopId" class="form-control"></select>
                                     <input type="hidden" name="ShopName" id="ShopName" />
-                                    @*<input type="hidden" name="ShopId" id="ShopId" />*@
+                                    <input type="hidden" name="ShopPricePercentage" id="ShopPricePercentage" />
                                 }
                             </div>
                         </div>
@@ -104,7 +104,7 @@
                             <div class="col-md-2">
                                 <label class="control-label" for="ShopPrice"><strong class="text-secondary">Shop Price</strong></label>
                                 <div class="form-group">
-                                    <input type="number" class="form-control" name="ShopPrice" step="any" id="ShopPrice" min="0" />
+                                    <input type="number" class="form-control" name="ShopPrice" step="any" id="ShopPrice" min="0" readonly />
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -298,6 +298,7 @@
                 var sellingprice = $('#Price').val();
                 var results = Math.ceil(((menuprice - sellingprice) / menuprice) * 100);
                 $("#Percentage").val(results);
+                calculateShopPrice(menuprice, $("#ShopPricePercentage").val());
             });
 
             $('#ShopId').select2({
@@ -310,6 +311,7 @@
                 }
             }).on('select2:select', function (e) {
                 $('input[name="ShopName"]').val(e.params.data.textSave);
+                $('input[name="ShopPricePercentage"]').val(e.params.data.percentage);
             });
 
             $('#CategoryId').select2({
@@ -368,8 +370,9 @@
                 $('#img-ProductImage1').attr('src', 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/' + e.params.data.ImagePath1);
                 $('input[name="ImagePath1"]').val(e.params.data.ImagePath1);
                 $('input[name="MenuPrice"]').val(e.params.data.Price);
-                $('#ShopPrice').val(e.params.data.Price);
+                calculateShopPrice(e.params.data.Price, $("#ShopPricePercentage").val());
                 $('input[name="GoogleTaxonomyCode"]').val(e.params.data.GoogleTaxonomyCode);
+
                 $('#divAddOns').addClass('d-none');
                 $('#tbl-addOns tbody').empty();
                 $.getJSON('/Product/GetProductDishAddOns', { masterProductId: e.params.data.MasterId }, function (data) {
@@ -509,6 +512,11 @@
                 }
             }
         });
+
+        function calculateShopPrice(price,percentage) {
+            var shopprice = (price - (price * (percentage / 100)));
+            $('#ShopPrice').val(shopprice);
+        }
     </script>
 }
 

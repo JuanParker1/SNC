@@ -199,7 +199,7 @@
                                             <input type="radio" class="text-center" name="AccountDocument" id="AccountImage" value="Image" checked> <label for="AccountImage"> Image</label>
                                             <input type="radio" class="text-center ml-3" name="AccountDocument" id="AccountPDF" value="PDF"> <label for="AccountPDF"> PDF</label>
                                         </span>
-                                        <div class="row AccountDocumentPdf mx-auto d-none mt-2 mb-3">
+                                        <div class="row AccountDocumentPdf mx-auto d-none mt-2 mb-3 ml-4">
                                             <input class="mx-auto" type="file" id="BankPassbookPdf" name="BankPassbookPdf" />
                                         </div>
                                         <div class="img-upload-container mx-auto mb-3 AccountDocumentImg">
@@ -299,11 +299,13 @@
                         $('.DrivingImg').removeClass('d-none');
                         $('.DrivingPdf').addClass('d-none');
                         $("#DrivingLicensePdf").val("");
+                        $("#btnRemove3").addClass("d-none");
                     } else {
                         $('.DrivingImg').addClass('d-none');
                         $('.DrivingPdf').removeClass('d-none');
                         $("#DrivingLicenseImage").val("");
                         $("#img-license").attr('src', '');
+                        $("#btnRemove3").addClass("d-none");
                     }
             });
 
@@ -312,11 +314,13 @@
                     $('.AccountDocumentImg').removeClass('d-none');
                     $('.AccountDocumentPdf').addClass('d-none');
                     $("#BankPassbookPdf").val("");
+                    $("#btnRemove4").addClass("d-none");
                 } else {
                     $('.AccountDocumentImg').addClass('d-none');
                     $('.AccountDocumentPdf').removeClass('d-none');
                     $("#BankPassbookImage").val("");
                     $("#img-account").attr('src', '');
+                    $("#btnRemove4").addClass("d-none");
                 }
             });
             function readURL(input) {
