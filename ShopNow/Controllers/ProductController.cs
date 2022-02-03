@@ -461,6 +461,11 @@ namespace ShopNow.Controllers
                     model.CategoryName = "N/A";
                 model.ImagePath1 = masterProduct.ImagePath1;
             }
+            var shop = db.Shops.FirstOrDefault(i => i.Id == product.ShopId && i.Status == 0);
+            if(shop!= null)
+            {
+                model.ShopPricePercentage = shop.ShopPricePercentage;
+            }
             Session["ShopAddOnsEdit"] = new List<ShopAddOnSessionEditViewModel>();
             return View(model);
         }
@@ -719,6 +724,11 @@ namespace ShopNow.Controllers
                 model.ASIN = masterProduct.ASIN;
             }
             model.DiscountCategoryPercentage = db.DiscountCategories.FirstOrDefault(i => i.Id == product.DiscountCategoryId)?.Percentage;
+            var shop = db.Shops.FirstOrDefault(i => i.Id == product.ShopId && i.Status == 0);
+            if (shop != null)
+            {
+                model.ShopPricePercentage = shop.ShopPricePercentage;
+            }
             return View(model);
         }
 

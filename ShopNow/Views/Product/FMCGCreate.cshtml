@@ -29,6 +29,7 @@
                                 <div class="col-md-4">
                                     <select id="ShopId" name="ShopId" class="form-control"></select>
                                     <input type="hidden" name="ShopName" id="ShopName" />
+                                    <input type="hidden" name="ShopPricePercentage" id="ShopPricePercentage" />
                                 </div>
                             </div>
                         </div>
@@ -81,7 +82,7 @@
                                     <div class="col-md-2">
                                         <div class="form-group">
                                             <label class="col-form-label" for="ShopPrice"><strong class="text-secondary">Shop Price</strong></label>
-                                            <input id="ShopPrice" type="number" class="form-control" name="ShopPrice" min="1" step="any" />
+                                            <input id="ShopPrice" type="number" class="form-control" name="ShopPrice" min="1" step="any" readonly />
                                         </div>
                                     </div>
                                     <div class="col-md-2">
@@ -275,6 +276,7 @@
                 var sellingprice = $('#Price').val();
                 var results = Math.ceil(((menuprice - sellingprice) / menuprice) * 100);
                 $("#Percentage").val(results);
+                calculateShopPrice(menuprice, $("#ShopPricePercentage").val());
             });
 
             $('#IsPreorder').change(function () {
@@ -383,7 +385,7 @@
                 $('input[name="ImagePath4"]').val(e.params.data.ImagePath4);
                 $('input[name="ImagePath5"]').val(e.params.data.ImagePath5);
                 $('#MenuPrice').val(e.params.data.Price);
-                $('#ShopPrice').val(e.params.data.Price);
+                calculateShopPrice(e.params.data.Price, $("#ShopPricePercentage").val());
                 $('#Weight').val(e.params.data.Weight);
                 $('#SizeLBH').val(e.params.data.SizeLBH);
                 $('#ShortDescription').val(e.params.data.ShortDescription);
@@ -426,5 +428,10 @@
                 //}
             });
         });
+
+        function calculateShopPrice(price, percentage) {
+            var shopprice = (price - (price * (percentage / 100)));
+            $('#ShopPrice').val(shopprice);
+        }
     </script>
 }
