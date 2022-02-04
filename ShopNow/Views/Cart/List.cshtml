@@ -48,7 +48,9 @@
                    columns.Add(c => c.DeliveryAddress).Titled("Delivery Address").Filterable(true).SetWidth(30);
                    columns.Add(c => c.CustomerPhoneNumber).Titled("Cust.PhoneNo").Filterable(true).SetWidth(25);
                    //columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
-                   columns.Add(c => c.OrderStatusText).Titled("Order Status").Filterable(true).SetWidth(15);
+                   // columns.Add(c => c.OrderStatusText).Titled("Order Status").Filterable(true).SetWidth(15);
+                   columns.Add().Encoded(false).Sanitized(false)
+                 .RenderValueAs(o=>o.IsPickupDrop == true?"<span>"+o.OrderStatusText+"</span><br/><span class='text-primary font-weight-bold'>Pickup-Drop</span>": "<span>" + o.OrderStatusText + "</span>").Titled("Order Status").SetWidth(5);
                    columns.Add().Encoded(false).Sanitized(false)
                    .RenderValueAs(o => Html.ActionLink("View", "Edit", new { OrderNumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-vsm btn-info", @style = "padding: 3px 26px" }).ToHtmlString() +
                    Html.ActionLink("Details", "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-vsm btn-secondary mt-1", @style = "padding: 3px 20px" }).ToHtmlString()).Titled("Action").SetWidth(5);

@@ -26,14 +26,16 @@
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
                {
-                   columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(1);
+                   //columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(1);
+                   columns.Add().Encoded(false).Sanitized(false)
+                .RenderValueAs(o => o.IsPickupDrop == true ? "<span>" + o.No + "</span><br/><span class='text-primary font-weight-bold'>Pickup-Drop</span>" : "<span>" + o.No + "</span>").Titled("SI.No").SetWidth(5);
                    columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
                    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
                    columns.Add(c => c.PaymentMode).Titled("PaymentMode").Filterable(true).SetWidth(28);
                    columns.Add(c => c.Price).Titled("Amount").Filterable(true).SetWidth(5);
                    columns.Add(c => c.ShopOwnerPhoneNumber).Titled("ShopOwnerPh.No").Filterable(true).SetWidth(30);
                    columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(13).Format("{0:dd-MMM-yyyy hh:mm tt}");
-                  // columns.Add().RenderValueAs(c => c.Status == 2 ? "Pending" : "N/A").Titled("Order Status").Filterable(true).SetWidth(12);
+                   // columns.Add().RenderValueAs(c => c.Status == 2 ? "Pending" : "N/A").Titled("Order Status").Filterable(true).SetWidth(12);
                    columns.Add().Encoded(false).Sanitized(false)
                    .RenderValueAs(o => Html.ActionLink("View", "Edit", new { OrderNumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-info btn-block", }).ToHtmlString()
                    + Html.ActionLink("Pickup Slip", "PickupSlip", new { OrderNumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-secondary btn-block", }).ToHtmlString()).Titled("Action").SetWidth(15);

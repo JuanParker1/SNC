@@ -73,6 +73,10 @@ namespace ShopNow.ViewModels
         public bool IsPrescriptionOrder { get; set; }
         public string PrescriptionImagePath { get; set; }
         public double TotalShopPrice { get; set; }
+        public bool IsPickupDrop { get; set; }
+        public string CustomerPrescriptionRemarks { get; set; }
+
+
         public List<ImagePathList> ImagePathLists { get; set; }
         public class ImagePathList
         {
@@ -175,6 +179,7 @@ namespace ShopNow.ViewModels
         public double BillAmount { get; set; }
         public double DifferenceAmount { get; set; }
         public double DifferencePercentage { get; set; }
+        public bool IsPickupDrop { get; set; }
         public class ImagePathList
         {
             public string ImagePath { get; set; }
@@ -196,6 +201,7 @@ namespace ShopNow.ViewModels
             public DateTime DateEncoded { get; set; }
             public double? RefundAmount { get; set; }
             public string RefundRemark { get; set; }
+            public bool IsPickupDrop { get; set; }
             public string OrderStatusText
             {
                 get
@@ -243,6 +249,7 @@ namespace ShopNow.ViewModels
             public double? RefundAmount { get; set; }
             public string RefundRemark { get; set; }
             public string PaymentMode { get; set; }
+            public bool IsPickupDrop { get; set; }
         }
 
         public List<CartPreparedList> CartPreparedLists { get; set; }
@@ -262,6 +269,7 @@ namespace ShopNow.ViewModels
             public double? RefundAmount { get; set; }
             public string RefundRemark { get; set; }
             public string PaymentMode { get; set; }
+            public bool IsPickupDrop { get; set; }
         }
 
         public List<DeliveryAgentAssignedList> DeliveryAgentAssignedLists { get; set; }
@@ -279,6 +287,7 @@ namespace ShopNow.ViewModels
             public double Price { get; set; }
             public double? RefundAmount { get; set; }
             public string RefundRemark { get; set; }
+            public bool IsPickupDrop { get; set; }
         }
 
         public List<PickupList> PickupLists { get; set; }
@@ -297,6 +306,7 @@ namespace ShopNow.ViewModels
             public double Amount { get; set; }
             public double? RefundAmount { get; set; }
             public string RefundRemark { get; set; }
+            public bool IsPickupDrop { get; set; }
         }
 
         public List<OntheWayList> OntheWayLists { get; set; }
@@ -314,6 +324,7 @@ namespace ShopNow.ViewModels
             public double Amount { get; set; }
             public double? RefundAmount { get; set; }
             public string RefundRemark { get; set; }
+            public bool IsPickupDrop { get; set; }
         }
 
         public List<DeliveredList> DeliveredLists { get; set; }
@@ -335,6 +346,7 @@ namespace ShopNow.ViewModels
             public string RefundRemark { get; set; }
             public double ShopAcceptedTime { get; set; }
             public double OrderPeriod { get; set; }
+            public bool IsPickupDrop { get; set; }
         }
 
         public List<CancelledList> CancelledLists { get; set; }

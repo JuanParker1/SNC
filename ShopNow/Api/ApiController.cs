@@ -136,24 +136,64 @@ namespace ShopNow.Controllers
         public JsonResult Register(CustomerCreateViewModel model)
         {
             var otpVerification = db.Customers.FirstOrDefault(i => i.PhoneNumber == model.PhoneNumber && i.Status == 0);
-            if (otpVerification == null)
+            try
             {
-                var user = _mapper.Map<CustomerCreateViewModel, Models.Customer>(model);
-                user.Position = 0;
-                if (user.Name == null || user.Name == "")
+                if (otpVerification == null)
                 {
-                    user.Name = "Null";
+                    var user = _mapper.Map<CustomerCreateViewModel, Models.Customer>(model);
+                    user.Position = 0;
+                    if (user.Name == null || user.Name == "")
+                    {
+                        user.Name = "Null";
+                    }
+                    user.Status = 0;
+                    user.DateEncoded = DateTime.Now;
+                    user.DateUpdated = DateTime.Now;
+                    db.Customers.Add(user);
+                    db.SaveChanges();
+                    if (user.Id != 0)
+                    {
+                        var otpmodel = new OtpVerification();
+                        otpmodel.CustomerId = user.Id;
+                        otpmodel.CustomerName = user.Name;
+                        otpmodel.PhoneNumber = model.PhoneNumber;
+                        if (model.PhoneNumber == "1234567890")
+                            otpmodel.Otp = "123789";
+                        else
+                            otpmodel.Otp = _generatedCode;
+                        otpmodel.ReferenceCode = _referenceCode;
+                        otpmodel.Verify = false;
+                        otpmodel.CreatedBy = user.Name;
+                        otpmodel.UpdatedBy = user.Name;
+                        otpmodel.DateEncoded = DateTime.Now;
+                        //var dateAndTime = DateTime.Now;
+                        //var date = dateAndTime.ToString("d");
+                        //var time = dateAndTime.ToString("HH:mm");
+                        string joyra = "04448134440";
+                        string Msg = "Hi, " + otpmodel.Otp + " is the OTP for (Shop Now Chat) Verification at " + DateTime.Now.ToString("HH:mm") + " with " + otpmodel.ReferenceCode + " reference - Joyra";
+                        string result = SendSMS.execute(joyra, model.PhoneNumber, Msg);
+                        otpmodel.Status = 0;
+                        otpmodel.DateUpdated = DateTime.Now;
+                        db.OtpVerifications.Add(otpmodel);
+                        db.SaveChanges();
+                        if (otpmodel != null)
+                        {
+                            return Json(new { message = "Successfully Registered and OTP send!", id = user.Id, user.Position });
+
+                        }
+                        else
+                            return Json("Otp Failed to send!");
+                    }
+                    else
+                        return Json("Registration Failed!");
                 }
-                user.Status = 0;
-                user.DateEncoded = DateTime.Now;
-                user.DateUpdated = DateTime.Now;
-                db.Customers.Add(user);
-                db.SaveChanges();
-                if (user.Id != 0)
+                else
                 {
+
                     var otpmodel = new OtpVerification();
-                    otpmodel.CustomerId = user.Id;
-                    otpmodel.CustomerName = user.Name;
+                    var customer = db.Customers.FirstOrDefault(i => i.PhoneNumber == model.PhoneNumber);
+                    otpmodel.CustomerId = customer.Id;
+                    otpmodel.CustomerName = customer.Name;
                     otpmodel.PhoneNumber = model.PhoneNumber;
                     if (model.PhoneNumber == "1234567890")
                         otpmodel.Otp = "123789";
@@ -161,31 +201,29 @@ namespace ShopNow.Controllers
                         otpmodel.Otp = _generatedCode;
                     otpmodel.ReferenceCode = _referenceCode;
                     otpmodel.Verify = false;
-                    otpmodel.CreatedBy = user.Name;
-                    otpmodel.UpdatedBy = user.Name;
-                    otpmodel.DateEncoded = DateTime.Now;
-                    //var dateAndTime = DateTime.Now;
-                    //var date = dateAndTime.ToString("d");
-                    //var time = dateAndTime.ToString("HH:mm");
+                    var dateAndTime = DateTime.Now;
+                    var date = dateAndTime.ToString("d");
+                    var time = dateAndTime.ToString("HH:mm");
                     string joyra = "04448134440";
-                    string Msg = "Hi, " + otpmodel.Otp + " is the OTP for (Shop Now Chat) Verification at " + DateTime.Now.ToString("HH:mm") + " with " + otpmodel.ReferenceCode + " reference - Joyra";
-                    string result = SendSMS.execute(joyra, model.PhoneNumber, Msg);
+                    string Msg = "Hi, " + otpmodel.Otp + " is the OTP for (Shop Now Chat) Verification at " + time + " with " + otpmodel.ReferenceCode + " reference - Joyra";
+                    string result = "";
+                    if (model.PhoneNumber != "1234567890")
+                        result = SendSMS.execute(joyra, model.PhoneNumber, Msg);
                     otpmodel.Status = 0;
+                    otpmodel.DateEncoded = DateTime.Now;
                     otpmodel.DateUpdated = DateTime.Now;
                     db.OtpVerifications.Add(otpmodel);
                     db.SaveChanges();
                     if (otpmodel != null)
                     {
-                        return Json(new { message = "Successfully Registered and OTP send!", id = user.Id, user.Position });
-
+                        return Json(new { message = "Already Customer and OTP send!", id = customer.Id, Position = customer.Position });
                     }
                     else
                         return Json("Otp Failed to send!");
+
                 }
-                else
-                    return Json("Registration Failed!");
             }
-            else
+            catch (Exception ex)
             {
                 var otpmodel = new OtpVerification();
                 var customer = db.Customers.FirstOrDefault(i => i.PhoneNumber == model.PhoneNumber);
@@ -201,11 +239,12 @@ namespace ShopNow.Controllers
                 var dateAndTime = DateTime.Now;
                 var date = dateAndTime.ToString("d");
                 var time = dateAndTime.ToString("HH:mm");
-                string joyra = "04448134440";
-                string Msg = "Hi, " + otpmodel.Otp + " is the OTP for (Shop Now Chat) Verification at " + time + " with " + otpmodel.ReferenceCode + " reference - Joyra";
-                string result = "";
-                if (model.PhoneNumber != "1234567890")
-                 result = SendSMS.execute(joyra, model.PhoneNumber, Msg);
+                //string joyra = "04448134440";
+                //string Msg = "Hi, " + otpmodel.Otp + " is the OTP for (Shop Now Chat) Verification at " + time + " with " + otpmodel.ReferenceCode + " reference - Joyra";
+                //string result = "";
+                //if (model.PhoneNumber != "1234567890")
+                //    result = SendSMS.execute(joyra, model.PhoneNumber, Msg);
+                Helpers.PushNotification.SendbydeviceId($"Hi, " + otpmodel.Otp + " is the OTP for (Shop Now Chat) Verification at " + time + " with " + otpmodel.ReferenceCode + " reference - Joyra", "Snowch", "a.mp3", customer.FcmTocken??"".ToString());
                 otpmodel.Status = 0;
                 otpmodel.DateEncoded = DateTime.Now;
                 otpmodel.DateUpdated = DateTime.Now;
@@ -213,7 +252,11 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
                 if (otpmodel != null)
                 {
-                    return Json(new { message = "Already Customer and OTP send!", id = customer.Id, Position = customer.Position });
+                    if (otpVerification != null)
+                    {
+                        return Json(new { message = "Already Customer and OTP send!", id = customer.Id, Position = customer.Position });
+                    }else
+                        return Json(new { message = "Successfully Registered and OTP send!", id = customer.Id, customer.Position });
                 }
                 else
                     return Json("Otp Failed to send!");
@@ -1318,11 +1361,14 @@ namespace ShopNow.Controllers
 
                     if (order != null)
                     {
-                        var fcmToken = (from c in db.Customers
-                                        join s in db.Shops on c.Id equals s.CustomerId
-                                        where s.Id == model.ShopId
-                                        select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                        Helpers.PushNotification.SendbydeviceId("You have received new order.Accept Soon", "Snowch", "a.mp3", fcmToken.ToString());
+                        if (order.IsPickupDrop == false)
+                        {
+                            var fcmToken = (from c in db.Customers
+                                            join s in db.Shops on c.Id equals s.CustomerId
+                                            where s.Id == model.ShopId
+                                            select c.FcmTocken ?? "").FirstOrDefault().ToString();
+                            Helpers.PushNotification.SendbydeviceId("You have received new order.Accept Soon", "Snowch", "a.mp3", fcmToken.ToString());
+                        }
 
                         return Json(new { status = true, orderId = order.Id }, JsonRequestBehavior.AllowGet);
                     }
@@ -1360,15 +1406,18 @@ namespace ShopNow.Controllers
                         db.SaveChanges();
                     }
                 }
-                var fcmToken = (from c in db.Customers
-                                where c.Id == order.CustomerId
-                                select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                //accept
-                if (status == 3)
+                var fcmToken="";
+                if (order.CustomerId != 0)
                 {
-                    Helpers.PushNotification.SendbydeviceId($"Your order has been accepted by shop({order.ShopName}).", "Snowch", "a.mp3", fcmToken.ToString());
+                     fcmToken = (from c in db.Customers
+                                    where c.Id == order.CustomerId
+                                    select c.FcmTocken ?? "").FirstOrDefault().ToString();
+                    //accept
+                    if (status == 3)
+                    {
+                        Helpers.PushNotification.SendbydeviceId($"Your order has been accepted by shop({order.ShopName}).", "Snowch", "a.mp3", fcmToken.ToString());
+                    }
                 }
-
                 //Refund
                 if (status == 7)
                 {
@@ -1770,10 +1819,13 @@ namespace ShopNow.Controllers
                     db.SaveChanges();
                     notificationMessage = $"Your order on shop({order.ShopName}) is on the way. Please share the delivery code { models.Otp} with the delivery partner {customer.Name} for verification.";
                 }
-                var fcmToken = (from c in db.Customers
-                                where c.Id == order.CustomerId
-                                select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                Helpers.PushNotification.SendbydeviceId(notificationMessage, "Snowch", "a.mp3", fcmToken.ToString());
+                if (order.CustomerId != 0)
+                {
+                    var fcmToken = (from c in db.Customers
+                                    where c.Id == order.CustomerId
+                                    select c.FcmTocken ?? "").FirstOrDefault().ToString();
+                    Helpers.PushNotification.SendbydeviceId(notificationMessage, "Snowch", "a.mp3", fcmToken.ToString());
+                }
                 return Json(new { message = "Successfully DelivaryBoy PickUp!" }, JsonRequestBehavior.AllowGet);
             }
             else
@@ -1976,17 +2028,22 @@ namespace ShopNow.Controllers
                 //db.SaveChanges();
 
                 //delivery boy
-                var fcmToken = (from c in db.Customers
-                                where c.Id == deliveryBoyId
-                                select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                Helpers.PushNotification.SendbydeviceId("You have a new Order. Accept Soon.", "Snowch", "../../assets/b.mp3", fcmToken.ToString());
+                if (deliveryBoyId != 0)
+                {
+                    var fcmToken = (from c in db.Customers
+                                    where c.Id == deliveryBoyId
+                                    select c.FcmTocken ?? "").FirstOrDefault().ToString();
+                    Helpers.PushNotification.SendbydeviceId("You have a new Order. Accept Soon.", "Snowch", "../../assets/b.mp3", fcmToken.ToString());
+                }
 
-                //Customer
-                var fcmTokenCustomer = (from c in db.Customers
-                                        where c.Id == order.Id
-                                        select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                Helpers.PushNotification.SendbydeviceId($"Delivery Boy ${order.DeliveryBoyName} is Assigned for your Order.", "Snowch", "../../assets/b.mp3", fcmToken.ToString());
-
+                if (order.CustomerId != 0)
+                {
+                    //Customer
+                    var fcmTokenCustomer = (from c in db.Customers
+                                            where c.Id == order.CustomerId
+                                            select c.FcmTocken ?? "").FirstOrDefault().ToString();
+                    Helpers.PushNotification.SendbydeviceId($"Delivery Boy ${order.DeliveryBoyName} is Assigned for your Order.", "Snowch", "../../assets/b.mp3", fcmTokenCustomer.ToString());
+                }
                 return Json(new { message = "Successfully DelivaryBoy Assign!" }, JsonRequestBehavior.AllowGet);
             }
             else
