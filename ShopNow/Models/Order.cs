@@ -73,6 +73,10 @@ namespace ShopNow.Models
         public Nullable<bool> IsCallActive { get; set; }
         public bool IsPrescriptionOrder { get; set; }
         public int CustomerPrescriptionId { get; set; }
+        public bool IsPickupDrop { get; set; }
+        public string PickupAddress { get; set; }
+        public double PickupLatitude { get; set; }
+        public double PickupLongitude { get; set; }
         public int Status { get; set; }
         public System.DateTime DateEncoded { get; set; }
         public System.DateTime DateUpdated { get; set; }

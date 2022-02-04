@@ -147,6 +147,10 @@
             {
                 <h2 class="text-primary text-center">----- Preorder -----</h2>
             }
+            @if (Model.IsPickupDrop == true)
+            {
+                <h2 class="text-primary text-center">----- Pickup-Drop -----</h2>
+            }
             @if (Model.Status != 7 && Model.Status != 9 && Model.Status != 10)
             {
                 <div class="row d-flex justify-content-center">
@@ -307,13 +311,13 @@
                             <b>@Model.DeliveryBoyPhoneNumber</b>
                         </div>
                     }
-                    @if (Model.PrescriptionImagePath != null)
-                    {
-                        <label>Prescription Image</label><br />
-                        <div class="d-flex">
-                            <img alt="Image" data-toggle="modal" data-target="#PrescriptionImageModal" class="img-thumbnail PrescriptionImage p-1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/@Model.PrescriptionImagePath" onerror="this.src='/Images/No Photo.png'" style="width:45px;height:45px" />
-                        </div>
-                    }
+                    @*@if (Model.PrescriptionImagePath != null)
+        {
+            <label>Prescription Image</label><br />
+            <div class="d-flex">
+                <img alt="Image" data-toggle="modal" data-target="#PrescriptionImageModal" class="img-thumbnail PrescriptionImage p-1" src="https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Small/@Model.PrescriptionImagePath" onerror="this.src='/Images/No Photo.png'" style="width:45px;height:45px" />
+            </div>
+        }*@
                     @if (Model.ImagePathLists.Count() > 0)
                     {
                         <label>Prescription Image</label><br />
@@ -322,6 +326,13 @@
                             {
                                 <img alt="Image" data-toggle="modal" data-target="#PrescriptionImageModal" class="img-thumbnail PrescriptionImage p-1" src="@im.ImagePath" onerror="this.src='/Images/No Photo.png'" style="width:45px;height:45px" />
                             }
+                        </div>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.CustomerPrescriptionRemarks))
+                    {
+                        <div class="d-flex">
+                            <label class="mr-3">Prescription Remarks:</label>
+                            <b>@Model.CustomerPrescriptionRemarks</b>
                         </div>
                     }
                 </div>
@@ -546,7 +557,12 @@
                     <label class="font-weight-bold text-muted mt-3"><u>Amount Details:</u></label>
                     <div class="d-flex justify-content-between">
                         <label class="mr-3">Items Total:</label>
-                        <b>₹@Model.ListItems.Sum(i => i.Price).ToString("#,#,0.00")</b>
+                        <b>@if (Model.ListItems.Sum(i => i.Price) == 0) {
+                            <span>@Model.TotalPrice.ToString("#,#,0.00")</span>
+                        }else
+                        {
+                            <span>@Model.ListItems.Sum(i => i.Price).ToString("#,#,0.00")</span>
+                        }</b>
                     </div>
                     <div class="d-flex justify-content-between">
                         <label class="mr-3">Packing Charge:</label>
