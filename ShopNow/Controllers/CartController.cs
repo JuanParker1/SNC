@@ -39,7 +39,7 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCCL059")]
-        public ActionResult List(int shopId = 0)
+        public ActionResult List(int shopId = 0,string district="")
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -47,24 +47,27 @@ namespace ShopNow.Controllers
             var model = new CartListViewModel();
             model.TodayLists = db.Orders.Where(i => /*(DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(dt))*/ i.Status != 6 && i.Status != 7 && i.Status != 9 && i.Status != 10 && i.Status != 0 && i.Status != -1 && (shopId != 0 ? i.ShopId == shopId : true))
                 .Join(db.Payments, c=> c.OrderNumber, p=> p.OrderNumber,(c,p)=> new { c, p })
+                .Join(db.Shops.Where(i=> (district != "" ? i.DistrictName == district : true)),c=>c.c.ShopId,s=>s.Id,(c,s)=>new { c,s})
             .Select(i => new CartListViewModel.TodayList
             {
-                Id = i.c.Id,
-                ShopName = i.c.ShopName,
-                OrderNumber = i.c.OrderNumber,
-                DeliveryAddress = i.c.DeliveryAddress,
-                ShopPhoneNumber = i.c.ShopPhoneNumber,
-                Status = i.c.Status,
-                DeliveryBoyName = i.c.DeliveryBoyName ?? "N/A",
-                PaymentMode = i.c.PaymentMode,
-                Amount = i.p.Amount - (i.p.RefundAmount?? 0),
-                CustomerPhoneNumber = i.c.CustomerPhoneNumber,
-                RefundAmount = i.p.RefundAmount ?? 0,
-                RefundRemark = i.p.RefundRemark ?? "",
-                DateEncoded = i.c.DateEncoded
+                Id = i.c.c.Id,
+                ShopName = i.c.c.ShopName,
+                OrderNumber = i.c.c.OrderNumber,
+                DeliveryAddress = i.c.c.DeliveryAddress,
+                ShopPhoneNumber = i.c.c.ShopPhoneNumber,
+                Status = i.c.c.Status,
+                DeliveryBoyName = i.c.c.DeliveryBoyName ?? "N/A",
+                PaymentMode = i.c.c.PaymentMode,
+                Amount = i.c.p.Amount - (i.c.p.RefundAmount?? 0),
+                CustomerPhoneNumber = i.c.c.CustomerPhoneNumber,
+                RefundAmount = i.c.p.RefundAmount ?? 0,
+                RefundRemark = i.c.p.RefundRemark ?? "",
+                DateEncoded = i.c.c.DateEncoded,
+                IsPickupDrop = i.c.c.IsPickupDrop
             }).OrderBy(i => i.Status).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.TodayLists.ForEach(x => x.No = counter++);
+            ViewBag.District = district;
             return View(model.TodayLists);
         }
 
@@ -89,7 +92,8 @@ namespace ShopNow.Controllers
                                Price = i.c.NetTotal,
                                RefundAmount = i.p.RefundAmount ?? 0,
                                RefundRemark = i.p.RefundRemark ?? "",
-                               PaymentMode = i.p.PaymentMode
+                               PaymentMode = i.p.PaymentMode,
+                               IsPickupDrop = i.c.IsPickupDrop
                            }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.CartPendingLists.ForEach(x => x.No = counter++);
@@ -118,6 +122,7 @@ namespace ShopNow.Controllers
                                RefundAmount = i.p.RefundAmount ?? 0,
                                RefundRemark = i.p.RefundRemark ?? "",
                                PaymentMode = i.p.PaymentMode,
+                               IsPickupDrop = i.c.IsPickupDrop
                            }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.CartPendingLists.ForEach(x => x.No = counter++);
@@ -146,7 +151,8 @@ namespace ShopNow.Controllers
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
                     DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber ?? "Not Assigned",
-                    Price = i.p.Amount - (i.p.RefundAmount ?? 0)
+                    Price = i.p.Amount - (i.p.RefundAmount ?? 0),
+                    IsPickupDrop = i.c.IsPickupDrop
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.CartPreparedLists.ForEach(x => x.No = counter++);
@@ -175,7 +181,8 @@ namespace ShopNow.Controllers
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
-                    DeliveryBoyPhoneNumber = i.c.c.DeliveryBoyPhoneNumber
+                    DeliveryBoyPhoneNumber = i.c.c.DeliveryBoyPhoneNumber,
+                    IsPickupDrop = i.c.c.IsPickupDrop
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.DeliveryAgentAssignedLists.ForEach(x => x.No = counter++);
@@ -204,7 +211,8 @@ namespace ShopNow.Controllers
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
                     DeliveryBoyPhoneNumber = i.c.c.DeliveryBoyPhoneNumber,
-                    Price = i.p.Amount - (i.p.RefundAmount ?? 0)
+                    Price = i.p.Amount - (i.p.RefundAmount ?? 0),
+                    IsPickupDrop = i.c.c.IsPickupDrop
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.DeliveryAgentAssignedLists.ForEach(x => x.No = counter++);
@@ -234,6 +242,7 @@ namespace ShopNow.Controllers
                      RefundRemark = i.p.RefundRemark ?? "",
                      PaymentMode = i.p.PaymentMode,
                      Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
+                     IsPickupDrop = i.c.c.IsPickupDrop
                  }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.PickupLists.ForEach(x => x.No = counter++);
@@ -263,6 +272,7 @@ namespace ShopNow.Controllers
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
                     Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
+                    IsPickupDrop = i.c.c.IsPickupDrop
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.PickupLists.ForEach(x => x.No = counter++);
@@ -289,6 +299,7 @@ namespace ShopNow.Controllers
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
+                    IsPickupDrop = i.c.IsPickupDrop
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.OntheWayLists.ForEach(x => x.No = counter++);
@@ -315,6 +326,7 @@ namespace ShopNow.Controllers
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
                     Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
+                    IsPickupDrop = i.c.IsPickupDrop
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.OntheWayLists.ForEach(x => x.No = counter++);
@@ -345,6 +357,7 @@ namespace ShopNow.Controllers
                     PaymentMode = i.p.PaymentMode,
                     OrderPeriod = Math.Round((i.c.DateUpdated - i.c.DateEncoded).TotalMinutes),
                     ShopAcceptedTime = i.c.ShopAcceptedTime != null ? Math.Round((i.c.ShopAcceptedTime.Value - i.c.DateEncoded).TotalMinutes) : 0,
+                    IsPickupDrop = i.c.IsPickupDrop
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.DeliveredLists.ForEach(x => x.No = counter++);
@@ -540,6 +553,13 @@ namespace ShopNow.Controllers
                     model.RefundRemark = payment.RefundRemark;
                     model.PaymentMode = payment.PaymentMode;
                 }
+
+                if (order.IsPrescriptionOrder)
+                {
+                    var prescription = db.CustomerPrescriptions.FirstOrDefault(i => i.Id == order.CustomerPrescriptionId);
+                    if (prescription != null)
+                        model.CustomerPrescriptionRemarks = prescription.Remarks;
+                }
             }
             return View(model);
         }
@@ -638,6 +658,7 @@ namespace ShopNow.Controllers
                 model.TotalPrice = cart.NetTotal;
                 model.PaymentMode = cart.PaymentMode;
                 model.PrescriptionImagePath = cart.PrescriptionImagePath;
+                model.IsPickupDrop = cart.IsPickupDrop;
                 model.ImagePathLists = db.CustomerPrescriptionImages.Where(i => i.CustomerPrescriptionId == cart.CustomerPrescriptionId)
                        .Select(i => new CartListViewModel.ImagePathList
                        {
@@ -733,17 +754,21 @@ namespace ShopNow.Controllers
                 db.Entry(delivery).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
 
-                var fcmToken = (from c in db.Customers
-                                where c.Id == delivery.CustomerId
-                                select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                Helpers.PushNotification.SendbydeviceId("You have received new order. Accept Soon", "ShopNowChat", "a.mp3", fcmToken.ToString());
-
+                if (delivery.CustomerId != 0)
+                {
+                    var fcmToken = (from c in db.Customers
+                                    where c.Id == delivery.CustomerId
+                                    select c.FcmTocken ?? "").FirstOrDefault().ToString();
+                    Helpers.PushNotification.SendbydeviceId("You have received new order. Accept Soon", "ShopNowChat", "a.mp3", fcmToken.ToString());
+                }
                 //Customer
-                var fcmTokenCustomer = (from c in db.Customers
-                                        where c.Id == cart.CustomerId
-                                        select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                Helpers.PushNotification.SendbydeviceId($"Delivery Boy {cart.DeliveryBoyName} is Assigned for your Order.", "ShopNowChat", "../../assets/b.mp3", fcmToken.ToString());
-
+                if (cart.CustomerId != 0)
+                {
+                    var fcmTokenCustomer = (from c in db.Customers
+                                            where c.Id == cart.CustomerId
+                                            select c.FcmTocken ?? "").FirstOrDefault().ToString();
+                    Helpers.PushNotification.SendbydeviceId($"Delivery Boy {cart.DeliveryBoyName} is Assigned for your Order.", "ShopNowChat", "../../assets/b.mp3", fcmTokenCustomer.ToString());
+                }
                 return RedirectToAction("List");
             }
             else
@@ -983,11 +1008,13 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
 
                 //Customer
-                var fcmToken = (from c in db.Customers
-                                where c.Id == order.CustomerId
-                                select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                Helpers.PushNotification.SendbydeviceId($"Your order has been accepted by shop({order.ShopName}).", "ShopNowChat", "a.mp3", fcmToken.ToString());
-
+                if (order.CustomerId != 0)
+                {
+                    var fcmToken = (from c in db.Customers
+                                    where c.Id == order.CustomerId
+                                    select c.FcmTocken ?? "").FirstOrDefault().ToString();
+                    Helpers.PushNotification.SendbydeviceId($"Your order has been accepted by shop({order.ShopName}).", "ShopNowChat", "a.mp3", fcmToken.ToString());
+                }
                 //AddPaymentData
                 //if (order.PaymentModeType == 1)
                 //{
@@ -1009,7 +1036,7 @@ namespace ShopNow.Controllers
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
-            if (OrderNumber != 0 && customerId != 0 && status != 0)
+            if (OrderNumber != 0  && status != 0)
             {
                 var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
                 var order = db.Orders.FirstOrDefault(i => i.OrderNumber == OrderNumber);
@@ -1033,7 +1060,7 @@ namespace ShopNow.Controllers
                     payment.RefundRemark = "Customer Not Pickedup the Order.";
                     payment.RefundAmount = 0;
                 }
-                payment.UpdatedBy = customer.Name;
+                payment.UpdatedBy = user.Name;
                 payment.DateUpdated = DateTime.Now;
                 db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
@@ -1055,24 +1082,26 @@ namespace ShopNow.Controllers
                 }
 
                 //Add Wallet Amount to customer
-                if (order.WalletAmount != 0)
+                if (order.WalletAmount != 0 && customer != null)
                 {
                     customer.WalletAmount += order.WalletAmount;
                     db.Entry(customer).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }
 
-                var fcmToken = (from c in db.Customers
-                                where c.Id == order.CustomerId
-                                select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                //order cancel
-                Helpers.PushNotification.SendbydeviceId($"Shop({order.ShopName}) has rejected your order. Kindly contact shop for details or try another order.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+                if (order.CustomerId != 0)
+                {
+                    var fcmToken = (from c in db.Customers
+                                    where c.Id == order.CustomerId
+                                    select c.FcmTocken ?? "").FirstOrDefault().ToString();
+                    //order cancel
+                    Helpers.PushNotification.SendbydeviceId($"Shop({order.ShopName}) has rejected your order. Kindly contact shop for details or try another order.", "ShopNowChat", "a.mp3", fcmToken.ToString());
 
-                //Refund notification
-                if (payment.PaymentMode == "Online Payment" && status == 7)
-                    Helpers.PushNotification.SendbydeviceId($"Your refund of amount {payment.Amount} for order no {payment.OrderNumber} is for {payment.RefundRemark} initiated and you will get credited with in 7 working days.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+                    //Refund notification
+                    if (payment.PaymentMode == "Online Payment" && status == 7)
+                        Helpers.PushNotification.SendbydeviceId($"Your refund of amount {payment.Amount} for order no {payment.OrderNumber} is for {payment.RefundRemark} initiated and you will get credited with in 7 working days.", "ShopNowChat", "a.mp3", fcmToken.ToString());
 
-
+                }
                 //AddPaymentData
                 //if (order.PaymentModeType == 1)
                 //{
@@ -1173,10 +1202,13 @@ namespace ShopNow.Controllers
                 db.SaveChanges();
                 notificationMessage = $"Your order on shop({order.ShopName}) is on the way. Please share the delivery code { otpVerification.Otp} with the delivery partner {order.DeliveryBoyName} for verification.";
             }
-            var fcmToken = (from c in db.Customers
-                            where c.Id == order.CustomerId
-                            select c.FcmTocken ?? "").FirstOrDefault().ToString();
-            Helpers.PushNotification.SendbydeviceId(notificationMessage, "ShopNowChat", "a.mp3", fcmToken.ToString());
+            if (order.CustomerId != 0)
+            {
+                var fcmToken = (from c in db.Customers
+                                where c.Id == order.CustomerId
+                                select c.FcmTocken ?? "").FirstOrDefault().ToString();
+                Helpers.PushNotification.SendbydeviceId(notificationMessage, "ShopNowChat", "a.mp3", fcmToken.ToString());
+            }
             return RedirectToAction("Edit", "Cart", new { OrderNumber = OrderNumber, id = AdminHelpers.ECodeLong(id) });
         }
 
@@ -1459,14 +1491,16 @@ namespace ShopNow.Controllers
             db.Entry(payment).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
-            var fcmToken = (from c in db.Customers
-                            where c.Id == order.CustomerId
-                            select c.FcmTocken ?? "").FirstOrDefault().ToString();
-            if (payment.PaymentMode == "Online Payment")
-                Helpers.PushNotification.SendbydeviceId($"Your refund of amount {payment.RefundAmount} for order no {payment.OrderNumber} is for {payment.RefundRemark} initiated and you will get credited with in 7 working days.", "ShopNowChat", "a.mp3", fcmToken.ToString());
-            else
-                Helpers.PushNotification.SendbydeviceId($"Your order is reduced with {payment.RefundAmount} amount for {payment.RefundRemark}", "ShopNowChat", "a.mp3", fcmToken.ToString());
-
+            if (order.CustomerId != 0)
+            {
+                var fcmToken = (from c in db.Customers
+                                where c.Id == order.CustomerId
+                                select c.FcmTocken ?? "").FirstOrDefault().ToString();
+                if (payment.PaymentMode == "Online Payment")
+                    Helpers.PushNotification.SendbydeviceId($"Your refund of amount {payment.RefundAmount} for order no {payment.OrderNumber} is for {payment.RefundRemark} initiated and you will get credited with in 7 working days.", "ShopNowChat", "a.mp3", fcmToken.ToString());
+                else
+                    Helpers.PushNotification.SendbydeviceId($"Your order is reduced with {payment.RefundAmount} amount for {payment.RefundRemark}", "ShopNowChat", "a.mp3", fcmToken.ToString());
+            }
             //AddPaymentData
             //if (order.PaymentModeType == 1)
             //{

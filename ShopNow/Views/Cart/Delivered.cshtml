@@ -43,7 +43,9 @@
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
                {
-                   columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(1);
+                   //columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(1);
+                   columns.Add().Encoded(false).Sanitized(false)
+                .RenderValueAs(o => o.IsPickupDrop == true ? "<span>" + o.No + "</span><br/><span class='text-primary font-weight-bold'>Pickup-Drop</span>" : "<span>" + o.No + "</span>").Titled("SI.No").SetWidth(1);
                    columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
                    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
                    columns.Add().Encoded(false).Sanitized(false)

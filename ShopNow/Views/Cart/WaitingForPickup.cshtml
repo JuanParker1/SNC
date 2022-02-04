@@ -32,7 +32,8 @@
                    columns.Add(c => c.PaymentMode).Titled("Payment Mode").Filterable(true).SetWidth(30);
                    columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(8);
                    columns.Add(c => c.DeliveryBoyPhoneNumber).Titled("D.Boy Phone").Filterable(true).SetWidth(10);
-                   columns.Add().RenderValueAs(c => c.Status == 5 ? "Waiting for Pickup" : "Waiting for Pickup").Titled("Order Status").Filterable(true).SetWidth(15);
+                   //columns.Add().RenderValueAs(c => c.Status == 5 ? "Waiting for Pickup" : "Waiting for Pickup").Titled("Order Status").Filterable(true).SetWidth(15);
+                   columns.Add().Encoded(false).Sanitized(false).RenderValueAs(c => (c.Status == 5 && c.IsPickupDrop == true) ? "<span>Waiting for Pickup</span><br/><span class='font-weight-bold text-primary'>Pickup-Drop</span>" : "Waiting for Pickup").Titled("Order Status").Filterable(true).SetWidth(10);
                    columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(15).Format("{0:dd-MMM-yyyy}");
                    columns.Add().Encoded(false).Sanitized(false)
                   .RenderValueAs(o => Html.ActionLink("View", "Edit", new { OrderNumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-info", }).ToHtmlString()
