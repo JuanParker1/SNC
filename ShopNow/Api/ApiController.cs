@@ -225,35 +225,36 @@ namespace ShopNow.Controllers
             }
             catch (Exception ex)
             {
-                //var otpmodel = new OtpVerification();
-                //var customer = db.Customers.FirstOrDefault(i => i.PhoneNumber == model.PhoneNumber);
-                //otpmodel.CustomerId = customer.Id;
-                //otpmodel.CustomerName = customer.Name;
-                //otpmodel.PhoneNumber = model.PhoneNumber;
-                //if (model.PhoneNumber == "1234567890")
-                //    otpmodel.Otp = "123789";
-                //else
-                //    otpmodel.Otp = _generatedCode;
-                //otpmodel.ReferenceCode = _referenceCode;
-                //otpmodel.Verify = false;
-                //var dateAndTime = DateTime.Now;
-                //var date = dateAndTime.ToString("d");
-                //var time = dateAndTime.ToString("HH:mm");
-                //Helpers.PushNotification.SendbydeviceId($"Hi, " + otpmodel.Otp + " is the OTP for (Shop Now Chat) Verification at " + time + " with " + otpmodel.ReferenceCode + " reference - Joyra", "Snowch", "a.mp3", customer.FcmTocken??"".ToString());
-                //otpmodel.Status = 0;
-                //otpmodel.DateEncoded = DateTime.Now;
-                //otpmodel.DateUpdated = DateTime.Now;
-                //db.OtpVerifications.Add(otpmodel);
-                //db.SaveChanges();
-                //if (otpmodel != null)
-                //{
-                //    if (otpVerification != null)
-                //    {
-                //        return Json(new { message = "Already Customer and OTP send!", id = customer.Id, Position = customer.Position });
-                //    }else
-                //        return Json(new { message = "Successfully Registered and OTP send!", id = customer.Id, customer.Position });
-                //}
-                //else
+                var otpmodel = new OtpVerification();
+                var customer = db.Customers.FirstOrDefault(i => i.PhoneNumber == model.PhoneNumber);
+                otpmodel.CustomerId = customer.Id;
+                otpmodel.CustomerName = customer.Name;
+                otpmodel.PhoneNumber = model.PhoneNumber;
+                if (model.PhoneNumber == "1234567890")
+                    otpmodel.Otp = "123789";
+                else
+                    otpmodel.Otp = _generatedCode;
+                otpmodel.ReferenceCode = _referenceCode;
+                otpmodel.Verify = false;
+                var dateAndTime = DateTime.Now;
+                var date = dateAndTime.ToString("d");
+                var time = dateAndTime.ToString("HH:mm");
+                Helpers.PushNotification.SendbydeviceId($"Hi, " + otpmodel.Otp + " is the OTP for (Shop Now Chat) Verification at " + time + " with " + otpmodel.ReferenceCode + " reference - Joyra", "Snowch", "a.mp3", customer.FcmTocken ?? "".ToString());
+                otpmodel.Status = 0;
+                otpmodel.DateEncoded = DateTime.Now;
+                otpmodel.DateUpdated = DateTime.Now;
+                db.OtpVerifications.Add(otpmodel);
+                db.SaveChanges();
+                if (otpmodel != null)
+                {
+                    if (otpVerification != null)
+                    {
+                        return Json(new { message = "Already Customer and OTP send!", id = customer.Id, Position = customer.Position });
+                    }
+                    else
+                        return Json(new { message = "Successfully Registered and OTP send!", id = customer.Id, customer.Position });
+                }
+                else
                     return Json("Otp Failed to send!");
             }
         }
