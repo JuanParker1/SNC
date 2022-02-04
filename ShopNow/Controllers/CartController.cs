@@ -39,7 +39,7 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCCL059")]
-        public ActionResult List(int shopId = 0)
+        public ActionResult List(int shopId = 0,string district="")
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -47,25 +47,27 @@ namespace ShopNow.Controllers
             var model = new CartListViewModel();
             model.TodayLists = db.Orders.Where(i => /*(DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(dt))*/ i.Status != 6 && i.Status != 7 && i.Status != 9 && i.Status != 10 && i.Status != 0 && i.Status != -1 && (shopId != 0 ? i.ShopId == shopId : true))
                 .Join(db.Payments, c=> c.OrderNumber, p=> p.OrderNumber,(c,p)=> new { c, p })
+                .Join(db.Shops.Where(i=> (district != "" ? i.DistrictName == district : true)),c=>c.c.ShopId,s=>s.Id,(c,s)=>new { c,s})
             .Select(i => new CartListViewModel.TodayList
             {
-                Id = i.c.Id,
-                ShopName = i.c.ShopName,
-                OrderNumber = i.c.OrderNumber,
-                DeliveryAddress = i.c.DeliveryAddress,
-                ShopPhoneNumber = i.c.ShopPhoneNumber,
-                Status = i.c.Status,
-                DeliveryBoyName = i.c.DeliveryBoyName ?? "N/A",
-                PaymentMode = i.c.PaymentMode,
-                Amount = i.p.Amount - (i.p.RefundAmount?? 0),
-                CustomerPhoneNumber = i.c.CustomerPhoneNumber,
-                RefundAmount = i.p.RefundAmount ?? 0,
-                RefundRemark = i.p.RefundRemark ?? "",
-                DateEncoded = i.c.DateEncoded,
-                IsPickupDrop = i.c.IsPickupDrop
+                Id = i.c.c.Id,
+                ShopName = i.c.c.ShopName,
+                OrderNumber = i.c.c.OrderNumber,
+                DeliveryAddress = i.c.c.DeliveryAddress,
+                ShopPhoneNumber = i.c.c.ShopPhoneNumber,
+                Status = i.c.c.Status,
+                DeliveryBoyName = i.c.c.DeliveryBoyName ?? "N/A",
+                PaymentMode = i.c.c.PaymentMode,
+                Amount = i.c.p.Amount - (i.c.p.RefundAmount?? 0),
+                CustomerPhoneNumber = i.c.c.CustomerPhoneNumber,
+                RefundAmount = i.c.p.RefundAmount ?? 0,
+                RefundRemark = i.c.p.RefundRemark ?? "",
+                DateEncoded = i.c.c.DateEncoded,
+                IsPickupDrop = i.c.c.IsPickupDrop
             }).OrderBy(i => i.Status).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.TodayLists.ForEach(x => x.No = counter++);
+            ViewBag.District = district;
             return View(model.TodayLists);
         }
 
