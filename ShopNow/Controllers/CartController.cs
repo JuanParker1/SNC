@@ -1261,36 +1261,37 @@ namespace ShopNow.Controllers
             var customerDetails = (from c in db.Customers
                                    where c.Id == order.CustomerId
                                    select c).FirstOrDefault();
-
-            if (customerDetails.IsReferred == false && !string.IsNullOrEmpty(customerDetails.ReferralNumber))
+            if (customerDetails != null)
             {
-                //customerDetails.Id = customerDetails.Id;
-                customerDetails.IsReferred = true;
-                db.Entry(customerDetails).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-
-                var referralCustomer = db.Customers.FirstOrDefault(c => c.PhoneNumber == customerDetails.ReferralNumber);
-                if (referralCustomer != null)
+                if (customerDetails.IsReferred == false && !string.IsNullOrEmpty(customerDetails.ReferralNumber))
                 {
-                    var referalAmount = db.ReferralSettings.Where(r => r.Status == 0 && r.ShopDistrict == shop.DistrictName).Select(r => r.Amount).FirstOrDefault();
-                    referralCustomer.WalletAmount = referralCustomer.WalletAmount + referalAmount;
-                    db.Entry(referralCustomer).State = System.Data.Entity.EntityState.Modified;
+                    //customerDetails.Id = customerDetails.Id;
+                    customerDetails.IsReferred = true;
+                    db.Entry(customerDetails).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
 
-                    //Wallet History for Referral
-                    var walletHistory = new CustomerWalletHistory
+                    var referralCustomer = db.Customers.FirstOrDefault(c => c.PhoneNumber == customerDetails.ReferralNumber);
+                    if (referralCustomer != null)
                     {
-                        Amount = referalAmount,
-                        CustomerId = referralCustomer.Id,
-                        DateEncoded = DateTime.Now,
-                        Description = "Received from referral",
-                        Type = 1
-                    };
-                    db.CustomerWalletHistories.Add(walletHistory);
-                    db.SaveChanges();
+                        var referalAmount = db.ReferralSettings.Where(r => r.Status == 0 && r.ShopDistrict == shop.DistrictName).Select(r => r.Amount).FirstOrDefault();
+                        referralCustomer.WalletAmount = referralCustomer.WalletAmount + referalAmount;
+                        db.Entry(referralCustomer).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+
+                        //Wallet History for Referral
+                        var walletHistory = new CustomerWalletHistory
+                        {
+                            Amount = referalAmount,
+                            CustomerId = referralCustomer.Id,
+                            DateEncoded = DateTime.Now,
+                            Description = "Received from referral",
+                            Type = 1
+                        };
+                        db.CustomerWalletHistories.Add(walletHistory);
+                        db.SaveChanges();
+                    }
                 }
             }
-
             //Update Wallet Amount with offers
             var offer = db.Offers.FirstOrDefault(i => i.Id == order.OfferId);
             if (offer != null)
@@ -1331,11 +1332,16 @@ namespace ShopNow.Controllers
             }
 
             //Update Achievement Wallet
-            Helpers.AchievementHelpers.UpdateAchievements(order.CustomerId);
+            if (order.CustomerId != 0)
+            {
+                Helpers.AchievementHelpers.UpdateAchievements(order.CustomerId);
+            }
+            if (customerDetails != null)
+            {
+                string fcmtocken = customerDetails.FcmTocken ?? "";
 
-            string fcmtocken = customerDetails.FcmTocken ?? "";
-
-            Helpers.PushNotification.SendbydeviceId($"Your order on shop({ order.ShopName}) has been delivered by delivery partner { order.DeliveryBoyName}.", "ShopNowChat", "a.mp3", fcmtocken);
+                Helpers.PushNotification.SendbydeviceId($"Your order on shop({ order.ShopName}) has been delivered by delivery partner { order.DeliveryBoyName}.", "ShopNowChat", "a.mp3", fcmtocken);
+            }
             return RedirectToAction("Edit", "Cart", new { OrderNumber = OrderNumber, id = AdminHelpers.ECodeLong(id) });
         }
 

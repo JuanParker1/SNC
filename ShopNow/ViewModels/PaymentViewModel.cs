@@ -401,10 +401,14 @@ namespace ShopNow.ViewModels
     {
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+        public int ShopId { get; set; }
+        public string ShopName { get; set; }
         public List<ListItem> ListItems { get; set; }
         public class ListItem
         {
+            public long OrderId { get; set; }
             public int OrderNumber { get; set; }
+            public string ShopName { get; set; }
             public string BillNo { get; set; }
             public double BillAmount { get; set; }
             public double TotalPrice { get; set; }

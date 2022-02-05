@@ -455,12 +455,14 @@ namespace ShopNow.Controllers
             model.ListItems = db.ShopBillDetails
                 .GroupJoin(db.Payments, s => s.OrderNumber, p => p.OrderNumber, (s,p) => new { s,p })
                 .GroupJoin(db.Orders, p => p.p.FirstOrDefault().OrderNumber, o => o.OrderNumber, (p, o) => new { p, o })
-                .Where(i => ((model.StartDate != null && model.EndDate != null) ? DbFunctions.TruncateTime(i.o.FirstOrDefault().DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.o.FirstOrDefault().DateEncoded) <= DbFunctions.TruncateTime(model.EndDate) : true))
+                .Where(i => ((model.StartDate != null && model.EndDate != null) ? DbFunctions.TruncateTime(i.o.FirstOrDefault().DateEncoded) >= DbFunctions.TruncateTime(model.StartDate) && DbFunctions.TruncateTime(i.o.FirstOrDefault().DateEncoded) <= DbFunctions.TruncateTime(model.EndDate) : true) && (model.ShopId != 0 ? i.o.FirstOrDefault().ShopId == model.ShopId : true))
                 .Select(i => new ShopBillDifferenceReportViewModel.ListItem
                 {
+                    OrderId = i.o.FirstOrDefault().Id,
                     BillAmount = i.p.s.BillAmount,
                     BillNo = i.p.s.BillNo,
                     OrderNumber = i.p.s.OrderNumber,
+                    ShopName = i.o.FirstOrDefault().ShopName,
                     TotalPrice = Math.Round(i.o.FirstOrDefault().TotalPrice,2),
                     DifferenceAmount = Math.Round(i.p.s.BillAmount -  (i.o.FirstOrDefault().TotalPrice - (i.p.p.FirstOrDefault().RefundAmount ?? 0)),2),
                     DifferencePercentage = Math.Round(((i.p.s.BillAmount - (i.o.FirstOrDefault().TotalPrice - (i.p.p.FirstOrDefault().RefundAmount ?? 0))) /i.p.s.BillAmount)*100,2),
