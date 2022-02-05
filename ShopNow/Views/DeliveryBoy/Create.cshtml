@@ -145,13 +145,15 @@
                                             <label class="col-md-12 text-left"><small class="text-secondary"><i>License Number</i></small></label>
                                             <input id="LicenseNumber" type="text" class="form-control" name="LicenseNumber" />
                                             <label class="col-md-12"><small class="text-secondary"><i>Driving License Image</i></small></label>
-                                            <input type="radio" class="ml-3" name="DrivingLicense" id="LicenseImage" value="Image" checked> <label for="LicenseImage"> Image</label>
-                                            <input type="radio" class="ml-3" name="DrivingLicense" id="LicensePDF" value="PDF"> <label for="LicensePDF"> PDF</label>
+                                            <div class="text-center">
+                                                <input type="radio" class="ml-3" name="DrivingLicense" id="LicenseImage" value="Image" checked> <label for="LicenseImage"> Image</label>
+                                                <input type="radio" class="ml-3" name="DrivingLicense" id="LicensePDF" value="PDF"> <label for="LicensePDF"> PDF</label>
+                                            </div>
                                             <div class="row ml-3 DrivingPdf d-none mt-2 mb-3">
                                                 <input type="file" id="DrivingLicensePdf" name="DrivingLicensePdf" />
                                             </div>
-                                            <div class="row ml-3 DrivingImg mt-2">
-                                                <div class="img-upload-container mb-3">
+                                            <div class="row ml-3 DrivingImg my-2">
+                                                <div class="img-upload-container mx-auto">
                                                     <img class="img-container w-100 h-100 mb-2" id="img-license" onerror="this.src='/Images/No Photo.png'" />
                                                     <input type="file" id="DrivingLicenseImage" name="DrivingLicenseImage" class="d-none" />
                                                     <label for="DrivingLicenseImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>

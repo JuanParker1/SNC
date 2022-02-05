@@ -54,9 +54,21 @@
                                     }
                                 </select>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 <input type="submit" class="btn btn-info mr-3" value="Filter" />
                                 <a href="/Accounts/BillWiseReport" class="btn btn-warning">Clear</a>
+                            </div>
+                            <div class="col text-center">
+                                <span class="text-muted">Total Orders</span><br />
+                                <h5>@Model.ListItems.Count()</h5>
+                            </div>
+                            <div class="col text-center">
+                                <span class="text-muted">Delivery Charge Profit</span><br />
+                                <h5>@Model.ListItems.Sum(i => i.DeliveryChargeProfit).ToString("#,##.00")</h5>
+                            </div>
+                            <div class="col text-center">
+                                <span class="text-muted">Trade Profit</span><br />
+                                <h5>@Model.ListItems.Sum(i => i.AmountProfit).ToString("#,##.00")</h5>
                             </div>
                         </div>
                     </form>

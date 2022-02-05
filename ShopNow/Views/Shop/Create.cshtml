@@ -33,421 +33,550 @@
     </div>
 </div>
 <div class="container-fluid my-0 d-none divContainer">
-    <div class="row">
-        <div class="col-md-12 mx-auto">
-            @using (Html.BeginForm("Create", "Shop", FormMethod.Post, new { id = "ShopForm", role = "form", enctype = "multipart/form-data" }))
-            {
-                @Html.AntiForgeryToken()
-                <input type="hidden" name="CustomerId" id="CustomerId" />
-                <input type="hidden" name="CustomerName" id="CustomerName" />
-                <input type="hidden" name="shopduplicateCount" id="shopduplicateCount" value="@ViewBag.shopduplicateCount" />
-                <input type="hidden" name="shopbeforeApprovalCount" id="shopbeforeApprovalCount" value="@ViewBag.shopbeforeApprovalCount" />
-                <input type="hidden" name="shopownerphonenumber" id="shopownerphonenumber" value="@ViewBag.shopownerphonenumber" />
-                <input type="hidden" name="shopname" id="shopname" value="@ViewBag.shopname" />
-                <div class="card mb-4 shadow">
-                    <div class="card-body row">
-                        <div class="col-md-6">
-                            <div class="row ml-2">
-                                <input class="col-11 mb-2" id="pac-input" type="text" placeholder="Select your Shop" />
-                                <div id="location-error"></div>
-                                <div class="mb-4" id="map" style="width: 92%; height: 250px;"></div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group row">
-                                <div class="col-md-4 text-md-left">
-                                    <label class="col-form-label"><strong class="text-secondary">Name</strong></label>
-                                </div>
-                                <div class="col-md-8">
-                                    <input id="Name" type="text" class="form-control" name="Name" />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-4 text-md-left">
-                                    <label class="col-form-label"><strong class="text-secondary">Mobile Number</strong></label>
-                                </div>
-                                <div class="col-md-8">
-                                    <input id="PhoneNumber" type="text" class="form-control" name="PhoneNumber" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'');" />
-                                </div>
-                            </div>
-                            <div class="form-group row manualmobile">
-                                <div class="col-md-4"></div>
-                                <div class="col-md-3 OtpButton">
-                                    <input type="button" value="OTP" class="btn btn-info btn-sm form-control" id="btnOTP" />
-                                </div>
-                                <div class="col-md-6 d-none OtpNumber">
-                                    <input id="Otp" type="text" class="form-control" name="Otp" placeholder="Enter OTP" />
-                                </div>
-                                <div class="col-md-1 d-none GoIcon">
-                                    <a href="#"><i class="fa fa-arrow-circle-right fa-2x text-dark" id="OtpGoIcon"></i></a>
-                                </div>
-                                <div class="col-md-1 OkIcon d-none">
-                                    <a href="#"><i class="fa fa-check fa-2x text-success"></i></a>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-4 text-md-left">
-                                    <label class="col-form-label"><strong class="text-secondary">Official Email</strong></label>
-                                </div>
-                                <div class="col-md-8">
-                                    <input id="OfficialEmail" type="text" class="form-control" name="OfficialEmail" />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-4 text-md-left">
-                                    <label class="col-form-label"><strong class="text-secondary">Website</strong></label>
-                                </div>
-                                <div class="col-md-8">
-                                    <input id="Website" type="text" class="form-control" name="Website" />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-4 text-md-left">
-                                    <label class="col-form-label"><strong class="text-secondary">Shop Type</strong></label>
-                                </div>
-                                <div class="col-md-8">
-                                    <select id="ShopCategoryId" name="ShopCategoryId" class="form-control" style="width:100%;" required></select>
-                                    <input type="hidden" name="ShopCategoryName" id="ShopCategoryName" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group row">
-                                <div class="col-md-4 text-md-left">
-                                    <label class="col-form-label"><strong class="text-secondary">Address</strong></label>
-                                </div>
-                                <div class="col-md-8">
-                                    <input id="Address" type="text" class="form-control" placeholder="Address" name="Address" readonly />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-4 text-md-left">
-                                </div>
-                                <div class="col-md-4">
-                                    <small class="control-label col-sm-12" for="StreetName"><i class="text-secondary">Locality</i></small>
-                                    <input id="StreetName" type="text" class="form-control mb-2" placeholder="Street Name" name="StreetName" readonly />
-                                </div>
-                                <div class="col-md-4">
-                                    <small class="control-label col-sm-12" for="DistrictName"><i class="text-secondary">District</i></small>
-                                    <input id="DistrictName" type="text" class="form-control" placeholder="District Name" name="DistrictName" readonly />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-4 text-md-left">
-                                </div>
-                                <div class="col-md-4">
-                                    <small class="control-label col-sm-12" for="StateName"><i class="text-secondary">State / Province</i></small>
-                                    <input id="StateName" type="text" class="form-control mb-2" placeholder="State Name" name="StateName" readonly />
-                                </div>
-                                <div class="col-md-4">
-                                    <small class="control-label col-sm-12" for="CountryName"><i class="text-secondary">Country</i></small>
-                                    <input id="CountryName" type="text" class="form-control" placeholder="Country Name" name="CountryName" readonly />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-4 text-md-left">
-                                </div>
-                                <div class="col-md-4">
-                                    <small class="control-label col-sm-12" for="PinCode"><i class="text-secondary">PIN Code</i></small>
-                                    <input id="PinCode" type="text" class="form-control" placeholder="PIN Code" name="PinCode" readonly />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-4 text-md-left">
-                                    <label class="col-form-label"><strong class="text-secondary">Location</strong></label>
-                                </div>
-                                <div class="col-md-4">
-                                    <small class="control-label col-sm-12" for="Latitude"><i class="text-secondary">Latitude</i></small>
-                                    <input id="Latitude" type="text" class="form-control mb-2" placeholder="Latitude" name="Latitude" />
-                                </div>
-                                <div class="col-md-4">
-                                    <small class="control-label col-sm-12" for="Longitude"><i class="text-secondary">Longitude</i></small>
-                                    <input id="Longitude" type="text" class="form-control" placeholder="Longitude" name="Longitude" />
-                                    <input type="hidden" name="GooglePlaceId" id="GooglePlaceId" />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-4">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <label class="text-secondary font-weight-bold ml-2">Shop Image</label><br />
-                                            <div class="img-upload-container">
-                                                <img class="img-container w-100 h-100" id="img-upload" onerror="this.src='/Images/No Photo.png'" />
-                                                <input type="file" id="ShopImage" name="ShopImage" class="d-none" />
-                                                <label for="ShopImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <input type="button" class="btn btn-sm btn-danger ml-4 d-none" id="btnRemove1" value="Remove" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="text-secondary font-weight-bold ml-2">Logo Image</label><br />
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="img-upload-container">
-                                                <img class="img-container w-100 h-100" id="img-logo" onerror="this.src='/Images/No Photo.png'" />
-                                                <input type="file" id="LogoImage" name="LogoImage" class="d-none" />
-                                                <label for="LogoImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <input type="button" class="btn btn-sm btn-danger ml-4 d-none" id="btnRemove2" value="Remove" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="row">
-                                <div class="col-md-12 form-group row">
-                                    <div class="col-md-5 text-md-left">
-                                        <label class="col-form-label"><strong class="text-secondary">Google Rating</strong></label>
-                                    </div>
-                                    <div class="col-md-7">
-                                        <input id="Rating" type="text" class="form-control" placeholder="Rating" name="Rating" readonly />
-                                    </div>
-                                </div>
-                                <div class="col-md-12 form-group row">
-                                    <div class="col-md-5 text-md-left">
-                                        <label class="col-form-label"><strong class="text-secondary">Google Review</strong></label>
-                                    </div>
-                                    <div class="col-md-7">
-                                        <input id="CustomerReview" type="text" class="form-control" placeholder="Customer Review" name="CustomerReview" readonly />
-                                    </div>
-                                </div>
-                                <div class="col-md-12 form-group row">
-                                    <div class="col-md-5 text-md-left">
-                                        <label class="col-form-label text-secondary font-weight-bold">Adscore</label>
-                                    </div>
-                                    <div class="col-md-7">
-                                        <input id="Adscore" type="number" min="1" value="1" class="form-control" name="Adscore" />
-                                    </div>
-                                </div>
-                                <div class="col-md-12 form-group row">
-                                    <div class="col-md-5 text-md-left">
-                                        <label class="col-form-label text-secondary font-weight-bold">Shop Price Percentage</label>
-                                    </div>
-                                    <div class="col-md-7">
-                                        <input id="ShopPricePercentage" type="number" min="0" value="0" class="form-control" name="ShopPricePercentage" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card mb-4 shadow">
-                    <div class="row">
-                        <h5 class="text-success ml-4 mt-2">Proprietor Details</h5>
-                        <div class="col-md-12 mx-auto">
+    <div class="card shadow mb-3">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12 mx-auto">
+                    @using (Html.BeginForm("Create", "Shop", FormMethod.Post, new { id = "ShopForm", role = "form", enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="CustomerId" id="CustomerId" />
+                        <input type="hidden" name="CustomerName" id="CustomerName" />
+                        <input type="hidden" name="shopduplicateCount" id="shopduplicateCount" value="@ViewBag.shopduplicateCount" />
+                        <input type="hidden" name="shopbeforeApprovalCount" id="shopbeforeApprovalCount" value="@ViewBag.shopbeforeApprovalCount" />
+                        <input type="hidden" name="shopownerphonenumber" id="shopownerphonenumber" value="@ViewBag.shopownerphonenumber" />
+                        <input type="hidden" name="shopname" id="shopname" value="@ViewBag.shopname" />
+                        <div class="card border-0 mb-4">
                             <div class="card-body row">
-                                <div class="col-md-7">
+                                <div class="col-md-6">
+                                    <div class="row ml-2">
+                                        <input class="col-11 mb-2" id="pac-input" type="text" placeholder="Select your Shop" />
+                                        <div id="location-error"></div>
+                                        <div class="mb-4" id="map" style="width: 92%; height: 250px;"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
                                     <div class="form-group row">
-                                        <div class="col-md-4 mt-4 text-md-left">
+                                        <div class="col-md-4 text-md-left">
                                             <label class="col-form-label"><strong class="text-secondary">Name</strong></label>
                                         </div>
                                         <div class="col-md-8">
-                                            <small class="control-label col-sm-12" for="AadharName"><i class="text-secondary">*  As in Aadhar</i></small>
-                                            <input id="AadharName" type="text" class="form-control" name="AadharName" />
+                                            <input id="Name" type="text" class="form-control" name="Name" />
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-md-4 text-md-left">
-                                            <label class="col-form-label"><strong class="text-secondary">Aadhar Number</strong></label>
+                                            <label class="col-form-label"><strong class="text-secondary">Mobile Number</strong></label>
                                         </div>
                                         <div class="col-md-8">
-                                            <input id="AadharNumber" type="text" maxlength="12" class="form-control" name="AadharNumber" oninput="this.value=this.value.replace(/[^0-9]/g,'');" />
+                                            <input id="PhoneNumber" type="text" class="form-control" name="PhoneNumber" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'');" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row manualmobile">
+                                        <div class="col-md-4"></div>
+                                        <div class="col-md-3 OtpButton">
+                                            <input type="button" value="OTP" class="btn btn-info btn-sm form-control" id="btnOTP" />
+                                        </div>
+                                        <div class="col-md-6 d-none OtpNumber">
+                                            <input id="Otp" type="text" class="form-control" name="Otp" placeholder="Enter OTP" />
+                                        </div>
+                                        <div class="col-md-1 d-none GoIcon">
+                                            <a href="#"><i class="fa fa-arrow-circle-right fa-2x text-dark" id="OtpGoIcon"></i></a>
+                                        </div>
+                                        <div class="col-md-1 OkIcon d-none">
+                                            <a href="#"><i class="fa fa-check fa-2x text-success"></i></a>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-md-4 text-md-left">
-                                            <label class="col-form-label"><strong class="text-secondary">Mobile Number *</strong></label>
+                                            <label class="col-form-label"><strong class="text-secondary">Official Email</strong></label>
                                         </div>
                                         <div class="col-md-8">
-                                            <input id="OwnerPhoneNumber" type="text" class="form-control" name="OwnerPhoneNumber" />
+                                            <input id="OfficialEmail" type="text" class="form-control" name="OfficialEmail" />
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-md-4 text-md-left">
-                                            <label class="col-form-label"><strong class="text-secondary">Personal Email</strong></label>
+                                            <label class="col-form-label"><strong class="text-secondary">Website</strong></label>
                                         </div>
                                         <div class="col-md-8">
-                                            <input id="Email" type="text" class="form-control" name="Email" />
+                                            <input id="Website" type="text" class="form-control" name="Website" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4 text-md-left">
+                                            <label class="col-form-label"><strong class="text-secondary">Shop Type</strong></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <select id="ShopCategoryId" name="ShopCategoryId" class="form-control" style="width:100%;" required></select>
+                                            <input type="hidden" name="ShopCategoryName" id="ShopCategoryName" />
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-1"></div>
-                                <div class="col-md-4">
-                                    <label class="text-secondary font-weight-bold ml-2">Aadhar Image</label><br />
-                                    <input type="radio" class="ml-3" name="AadharDocument" id="AadharDocumentImage" value="Image" checked> <label for="AadharDocumentImage"> Image</label>
-                                    <input type="radio" class="ml-3" name="AadharDocument" id="AadharDocumentPDF" value="PDF"> <label for="AadharDocumentPDF"> PDF</label>
-                                    <div class="row ml-3 AadharDocumentPdf d-none mt-2 mb-3">
-                                        <input type="file" id="AadharPdf" name="AadharPdf" />
-                                    </div>
-                                    <div class="row ml-3 AadharDocumentImg mt-2">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="img-upload-container">
-                                                    <img class="img-container w-100 h-100 mb-2" id="img-aadhar" onerror="this.src='/Images/No Photo.png'" />
-                                                    <input type="file" id="AadharImage" name="AadharImage" class="d-none" />
-                                                    <label for="AadharImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                                </div>
-                                            </div>
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <div class="col-md-4 text-md-left">
+                                            <label class="col-form-label"><strong class="text-secondary">Address</strong></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input id="Address" type="text" class="form-control" placeholder="Address" name="Address" readonly />
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <input type="button" class="btn btn-danger btn-sm ml-5 d-none" id="btnRemove3" value="Remove" />
+                                    <div class="form-group row">
+                                        <div class="col-md-4 text-md-left">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <small class="control-label col-sm-12" for="StreetName"><i class="text-secondary">Locality</i></small>
+                                            <input id="StreetName" type="text" class="form-control mb-2" placeholder="Street Name" name="StreetName" readonly />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <small class="control-label col-sm-12" for="DistrictName"><i class="text-secondary">District</i></small>
+                                            <input id="DistrictName" type="text" class="form-control" placeholder="District Name" name="DistrictName" readonly />
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card mb-4 shadow">
-                    <h5 class="text-success ml-2 mt-2">License Details</h5>
-                    <div class="col-md-12 mx-auto">
-                        <div class="card-body row">
-                            <div class="col-md-3">
-                                <div class="card-columns mr-1 form-group row">
-                                    <div class="card border-success bg-muted">
-                                        <div class="card-body">
-                                            <div class="alert alert-warning alert-dismissible fade show d-none fssi">
-                                                <strong>Warning!</strong> It is Required Field.Please upload license
-                                                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                            </div>
-                                            <label class="col-md-12 text-center"><strong class="text-secondary">FSSAI License</strong></label>
-                                            <label class="col-md-12 text-left"><small class="text-secondary text-left"><i>License Number</i></small></label>
-                                            <input id="FSSAINumber" type="text" class="form-control col-md-12" name="FSSAINumber" />
-                                            <label class="col-md-12 text-left"><small class="text-secondary"><i>License Image</i></small></label>
-                                            <input type="radio" class="ml-3" name="FssaiLicense" id="FssaiLicenseImage" value="Image" checked> <label for="FssaiLicenseImage"> Image</label>
-                                            <input type="radio" class="ml-3" name="FssaiLicense" id="FssaiLicensePDF" value="PDF"> <label for="FssaiLicensePDF"> PDF</label>
-                                            <div class="row ml-3 FssaiPdf d-none mt-2 mb-3">
-                                                <input type="file" id="FSSAIPdf" name="FSSAIPdf" />
-                                            </div>
-                                            <div class="row ml-3 FssaiImg mt-2">
-                                                <div class="col-md-6">
-                                                    <div class="img-upload-container mb-3">
-                                                        <img class="img-container w-100 h-100 mb-2" id="img-fssai" onerror="this.src='/Images/No Photo.png'" />
-                                                        <input type="file" id="FSSAIImage" name="FSSAIImage" class="d-none" />
-                                                        <label for="FSSAIImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                    <div class="form-group row">
+                                        <div class="col-md-4 text-md-left">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <small class="control-label col-sm-12" for="StateName"><i class="text-secondary">State / Province</i></small>
+                                            <input id="StateName" type="text" class="form-control mb-2" placeholder="State Name" name="StateName" readonly />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <small class="control-label col-sm-12" for="CountryName"><i class="text-secondary">Country</i></small>
+                                            <input id="CountryName" type="text" class="form-control" placeholder="Country Name" name="CountryName" readonly />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4 text-md-left">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <small class="control-label col-sm-12" for="PinCode"><i class="text-secondary">PIN Code</i></small>
+                                            <input id="PinCode" type="text" class="form-control" placeholder="PIN Code" name="PinCode" readonly />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4 text-md-left">
+                                            <label class="col-form-label"><strong class="text-secondary">Location</strong></label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <small class="control-label col-sm-12" for="Latitude"><i class="text-secondary">Latitude</i></small>
+                                            <input id="Latitude" type="text" class="form-control mb-2" placeholder="Latitude" name="Latitude" />
+                                        </div>
+                                        <div class="col-md-4">
+                                            <small class="control-label col-sm-12" for="Longitude"><i class="text-secondary">Longitude</i></small>
+                                            <input id="Longitude" type="text" class="form-control" placeholder="Longitude" name="Longitude" />
+                                            <input type="hidden" name="GooglePlaceId" id="GooglePlaceId" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <label class="text-secondary font-weight-bold ml-2">Shop Image</label><br />
+                                                    <div class="img-upload-container">
+                                                        <img class="img-container w-100 h-100" id="img-upload" onerror="this.src='/Images/No Photo.png'" />
+                                                        <input type="file" id="ShopImage" name="ShopImage" class="d-none" />
+                                                        <label for="ShopImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row mb-2">
+                                            <div class="row">
                                                 <div class="col-md-12">
-                                                    <input type="button" class="btn btn-danger btn-sm ml-5 d-none" id="btnRemove4" value="Remove" />
+                                                    <input type="button" class="btn btn-sm btn-danger ml-4 d-none" id="btnRemove1" value="Remove" />
                                                 </div>
                                             </div>
-                                            <div class="alert alert-danger d-none penFssi p-2">
-                                                <strong>Pending Verification!</strong>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="text-secondary font-weight-bold ml-2">Logo Image</label><br />
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="img-upload-container">
+                                                        <img class="img-container w-100 h-100" id="img-logo" onerror="this.src='/Images/No Photo.png'" />
+                                                        <input type="file" id="LogoImage" name="LogoImage" class="d-none" />
+                                                        <label for="LogoImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <input type="button" class="btn btn-sm btn-danger ml-4 d-none" id="btnRemove2" value="Remove" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-12 form-group row">
+                                            <div class="col-md-5 text-md-left">
+                                                <label class="col-form-label"><strong class="text-secondary">Google Rating</strong></label>
+                                            </div>
+                                            <div class="col-md-7">
+                                                <input id="Rating" type="text" class="form-control" placeholder="Rating" name="Rating" readonly />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 form-group row">
+                                            <div class="col-md-5 text-md-left">
+                                                <label class="col-form-label"><strong class="text-secondary">Google Review</strong></label>
+                                            </div>
+                                            <div class="col-md-7">
+                                                <input id="CustomerReview" type="text" class="form-control" placeholder="Customer Review" name="CustomerReview" readonly />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 form-group row">
+                                            <div class="col-md-5 text-md-left">
+                                                <label class="col-form-label text-secondary font-weight-bold">Adscore</label>
+                                            </div>
+                                            <div class="col-md-7">
+                                                <input id="Adscore" type="number" min="1" value="1" class="form-control" name="Adscore" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 form-group row">
+                                            <div class="col-md-5 text-md-left">
+                                                <label class="col-form-label text-secondary font-weight-bold">Shop Price Percentage</label>
+                                            </div>
+                                            <div class="col-md-7">
+                                                <input id="ShopPricePercentage" type="number" min="0" value="0" class="form-control" name="ShopPricePercentage" />
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <div class="card-columns mr-1 form-group row">
-                                    <div class="card border-success bg-muted">
-                                        <div class="card-body">
-                                            <div class="alert alert-warning alert-dismissible fade show d-none drug">
+                        </div>
+                        <div class="card mb-4">
+                            <div class="row">
+                                <h5 class="text-success ml-4 mt-2">Proprietor Details</h5>
+                                <div class="col-md-12 mx-auto">
+                                    <div class="card-body row">
+                                        <div class="col-md-7">
+                                            <div class="form-group row">
+                                                <div class="col-md-4 mt-4 text-md-left">
+                                                    <label class="col-form-label"><strong class="text-secondary">Name</strong></label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <small class="control-label col-sm-12" for="AadharName"><i class="text-secondary">*  As in Aadhar</i></small>
+                                                    <input id="AadharName" type="text" class="form-control" name="AadharName" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-4 text-md-left">
+                                                    <label class="col-form-label"><strong class="text-secondary">Aadhar Number</strong></label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <input id="AadharNumber" type="text" maxlength="12" class="form-control" name="AadharNumber" oninput="this.value=this.value.replace(/[^0-9]/g,'');" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-4 text-md-left">
+                                                    <label class="col-form-label"><strong class="text-secondary">Mobile Number *</strong></label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <input id="OwnerPhoneNumber" type="text" class="form-control" name="OwnerPhoneNumber" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-4 text-md-left">
+                                                    <label class="col-form-label"><strong class="text-secondary">Personal Email</strong></label>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <input id="Email" type="text" class="form-control" name="Email" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                        <div class="col-md-4">
+                                            <label class="text-secondary font-weight-bold ml-2">Aadhar Image</label><br />
+                                            <input type="radio" class="ml-3" name="AadharDocument" id="AadharDocumentImage" value="Image" checked> <label for="AadharDocumentImage"> Image</label>
+                                            <input type="radio" class="ml-3" name="AadharDocument" id="AadharDocumentPDF" value="PDF"> <label for="AadharDocumentPDF"> PDF</label>
+                                            <div class="row ml-3 AadharDocumentPdf d-none mt-2 mb-3">
+                                                <input type="file" id="AadharPdf" name="AadharPdf" />
+                                            </div>
+                                            <div class="row ml-3 AadharDocumentImg mt-2">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="img-upload-container">
+                                                            <img class="img-container w-100 h-100 mb-2" id="img-aadhar" onerror="this.src='/Images/No Photo.png'" />
+                                                            <input type="file" id="AadharImage" name="AadharImage" class="d-none" />
+                                                            <label for="AadharImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <input type="button" class="btn btn-danger btn-sm ml-5 d-none" id="btnRemove3" value="Remove" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mb-4">
+                            <h5 class="text-success ml-2 mt-2">License Details</h5>
+                            <div class="col-md-12 mx-auto">
+                                <div class="card-body row">
+                                    <div class="col-md-3">
+                                        <div class="card-columns mr-1 form-group row">
+                                            <div class="card border-success bg-muted">
+                                                <div class="card-body">
+                                                    <div class="alert alert-warning alert-dismissible fade show d-none fssi">
+                                                        <strong>Warning!</strong> It is Required Field.Please upload license
+                                                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                                    </div>
+                                                    <label class="col-md-12 text-center"><strong class="text-secondary">FSSAI License</strong></label>
+                                                    <label class="col-md-12 text-left"><small class="text-secondary text-left"><i>License Number</i></small></label>
+                                                    <input id="FSSAINumber" type="text" class="form-control col-md-12" name="FSSAINumber" />
+                                                    <label class="col-md-12 text-left"><small class="text-secondary"><i>License Image</i></small></label>
+                                                    <input type="radio" class="ml-3" name="FssaiLicense" id="FssaiLicenseImage" value="Image" checked> <label for="FssaiLicenseImage"> Image</label>
+                                                    <input type="radio" class="ml-3" name="FssaiLicense" id="FssaiLicensePDF" value="PDF"> <label for="FssaiLicensePDF"> PDF</label>
+                                                    <div class="row ml-3 FssaiPdf d-none mt-2 mb-3">
+                                                        <input type="file" id="FSSAIPdf" name="FSSAIPdf" />
+                                                    </div>
+                                                    <div class="row FssaiImg">
+                                                        <div class="img-upload-container">
+                                                            <img class="img-container w-100 h-100 mb-2" id="img-fssai" onerror="this.src='/Images/No Photo.png'" />
+                                                            <input type="file" id="FSSAIImage" name="FSSAIImage" class="d-none" />
+                                                            <label for="FSSAIImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-2">
+                                                        <div class="col-md-12">
+                                                            <input type="button" class="btn btn-danger btn-sm ml-5 d-none" id="btnRemove4" value="Remove" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="alert alert-danger d-none penFssi p-2">
+                                                        <strong>Pending Verification!</strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card-columns mr-1 form-group row">
+                                            <div class="card border-success bg-muted">
+                                                <div class="card-body">
+                                                    <div class="alert alert-warning alert-dismissible fade show d-none drug">
+                                                        <strong>Warning!</strong> It is Required Field.Please upload license
+                                                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                                    </div>
+                                                    <label class="col-md-12 text-center"><strong class="text-secondary">Drug License</strong></label>
+                                                    <label class="col-md-12 text-left"><small class="text-secondary"><i>License Number</i></small></label>
+                                                    <input id="DrugNumber" type="text" class="form-control" name="DrugNumber" />
+                                                    <label class="col-md-12 text-left"><small class="text-secondary"><i>License Image</i></small></label>
+                                                    <input type="radio" class="ml-3" name="DrugLicense" id="DrugLicenseImage" value="Image" checked> <label for="DrugLicenseImage"> Image</label>
+                                                    <input type="radio" class="ml-3" name="DrugLicense" id="DrugLicensePDF" value="PDF"> <label for="DrugLicensePDF"> PDF</label>
+                                                    <div class="row ml-3 DrugPdf d-none mt-2 mb-3">
+                                                        <input type="file" id="DrugPdf" name="DrugPdf" />
+                                                    </div>
+                                                    <div class="row DrugImg">
+                                                        <div class="img-upload-container">
+                                                            <img class="img-container w-100 h-100 mb-2" id="img-drug" onerror="this.src='/Images/No Photo.png'" />
+                                                            <input type="file" id="DrugImage" name="DrugImage" class="d-none" />
+                                                            <label for="DrugImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-2">
+                                                        <div class="col-md-12">
+                                                            <input type="button" class="btn btn-danger btn-sm ml-5 d-none" id="btnRemove5" value="Remove" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="alert alert-danger d-none penDrug p-2">
+                                                        <strong>Pending Verification!</strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card-columns mr-1 form-group row">
+                                            <div class="card border-success bg-muted">
+                                                <div class="card-body">
+                                                    <label class="col-md-12 text-center"><strong class="text-secondary">Establish License</strong></label>
+                                                    <label class="col-md-12 text-left"><small class="text-secondary"><i>License Number</i></small></label>
+                                                    <input id="EstablishNumber" type="text" class="form-control" name="EstablishNumber" />
+                                                    <label class="col-md-12"><small class="text-secondary"><i>License Image</i></small></label>
+                                                    <input type="radio" class="ml-3" name="EstablishLicense" id="EstablishLicenseImage" value="Image" checked> <label for="EstablishLicenseImage"> Image</label>
+                                                    <input type="radio" class="ml-3" name="EstablishLicense" id="EstablishLicensePDF" value="PDF"> <label for="EstablishLicensePDF"> PDF</label>
+                                                    <div class="row ml-3 EstPdf d-none mt-2 mb-3">
+                                                        <input type="file" id="EstablishPdf" name="EstablishPdf" />
+                                                    </div>
+                                                    <div class="row EstImg">
+                                                        <div class="img-upload-container">
+                                                            <img class="img-container w-100 h-100 mb-2" id="img-establish" onerror="this.src='/Images/No Photo.png'" />
+                                                            <input type="file" id="EstablishImage" name="EstablishImage" class="d-none" />
+                                                            <label for="EstablishImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-2">
+                                                        <div class="col-md-12">
+                                                            <input type="button" class="btn btn-danger btn-sm ml-5 d-none" id="btnRemove6" value="Remove" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="alert alert-danger d-none penEsta p-2">
+                                                        <strong>Pending Verification!</strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card-columns mr-1 form-group row">
+                                            <div class="card border-success bg-muted">
+                                                <div class="card-body">
+                                                    <label class="col-md-12 text-center"><strong class="text-secondary">Other License</strong></label>
+                                                    <label class="col-md-12 text-left"><small class="text-secondary"><i>License Name</i></small></label>
+                                                    <input id="OtherLicenseName" type="text" class="form-control" name="OtherLicenseName" />
+                                                    <label class="col-md-12 text-left"><small class="text-secondary"><i>License Number</i></small></label>
+                                                    <input id="OtherLicenseNumber" type="text" class="form-control" name="OtherLicenseNumber" />
+                                                    <label class="col-md-12"><small class="text-secondary"><i>License Image</i></small></label>
+                                                    <input type="radio" class="ml-3" name="OtherLicense" id="OtherImage" value="Image" checked> <label for="OtherImage"> Image</label>
+                                                    <input type="radio" class="ml-3" name="OtherLicense" id="OtherPDF" value="PDF"> <label for="OtherPDF"> PDF</label>
+                                                    <div class="row ml-3 OtherPdf d-none mt-2 mb-3">
+                                                        <input type="file" id="OtherLicensePdf" name="OtherLicensePdf" />
+                                                    </div>
+                                                    <div class="row OtherImg">
+                                                        <div class="img-upload-container">
+                                                            <img class="img-container w-100 h-100 mb-2" id="img-other" onerror="this.src='/Images/No Photo.png'" />
+                                                            <input type="file" id="OtherLicenseImage" name="OtherLicenseImage" class="d-none" />
+                                                            <label for="OtherLicenseImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row mb-2">
+                                                        <div class="col-md-12">
+                                                            <input type="button" class="btn btn-danger btn-sm ml-5 d-none" id="btnRemove7" value="Remove" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="alert alert-danger d-none penOther p-2">
+                                                        <strong>Pending Verification!</strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mb-4">
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <div class="col-md-6">
+                                        Authorised Distributer of any Brand :   <input type="radio" name="distributorCheck" value="yes"> Yes
+                                        <input type="radio" name="distributorCheck" value="no"> No
+                                    </div>
+                                </div>
+                                <div class="card-columns d-none form-group row col-md-4 distributor">
+                                    <div class="card bg-muted">
+                                        <div class="card-body text-center">
+                                            <div class="alert alert-warning alert-dismissible fade show d-none brand">
                                                 <strong>Warning!</strong> It is Required Field.Please upload license
                                                 <button type="button" class="close" data-dismiss="alert">&times;</button>
                                             </div>
-                                            <label class="col-md-12 text-center"><strong class="text-secondary">Drug License</strong></label>
-                                            <label class="col-md-12 text-left"><small class="text-secondary"><i>License Number</i></small></label>
-                                            <input id="DrugNumber" type="text" class="form-control" name="DrugNumber" />
-                                            <label class="col-md-12 text-left"><small class="text-secondary"><i>License Image</i></small></label>
-                                            <input type="radio" class="ml-3" name="DrugLicense" id="DrugLicenseImage" value="Image" checked> <label for="DrugLicenseImage"> Image</label>
-                                            <input type="radio" class="ml-3" name="DrugLicense" id="DrugLicensePDF" value="PDF"> <label for="DrugLicensePDF"> PDF</label>
-                                            <div class="row ml-3 DrugPdf d-none mt-2 mb-3">
-                                                <input type="file" id="DrugPdf" name="DrugPdf" />
+                                            <label class="col-md-12"><small class="text-secondary"><i>Authorised Brand Name</i></small></label>
+                                            <select id="AuthorisedBrandId" name="AuthorisedBrandId" class="form-control"></select>
+                                            <input type="hidden" name="AuthorisedBrandName" id="AuthorisedBrandName" />
+                                            <label class="col-md-12"><small class="text-secondary"><i>Authorised Certificate Upload</i></small></label>
+                                            <div class="text-center">
+                                                <input type="radio" class="ml-3" name="AuthLicense" id="AuthLicenseImage" value="Image" checked> <label for="AuthLicenseImage"> Image</label>
+                                                <input type="radio" class="ml-3" name="AuthLicense" id="AuthLicensePDF" value="PDF"> <label for="AuthLicensePDF"> PDF</label>
                                             </div>
-                                            <div class="row ml-3 DrugImg mt-2">
-                                                <div class="img-upload-container text-center mb-3">
-                                                    <img class="img-container w-100 h-100 mb-2" id="img-drug" onerror="this.src='/Images/No Photo.png'" />
-                                                    <input type="file" id="DrugImage" name="DrugImage" class="d-none" />
-                                                    <label for="DrugImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            <div class="row ml-3 AuthLicensePdf d-none mt-2 mb-3">
+                                                <input type="file" id="AuthorisedDistributorPdf" name="AuthorisedDistributorPdf" />
+                                            </div>
+                                            <div class="row AuthLicenseImg my-2">
+                                                <div class="img-upload-container mx-auto">
+                                                    <img class="img-container w-100 h-100 mb-2" id="img-authorise" onerror="this.src='/Images/No Photo.png'" />
+                                                    <input type="file" id="AuthorisedDistributorImage" name="AuthorisedDistributorImage" class="d-none" />
+                                                    <label for="AuthorisedDistributorImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                                 </div>
                                             </div>
                                             <div class="row mb-2">
                                                 <div class="col-md-12">
-                                                    <input type="button" class="btn btn-danger btn-sm ml-5 d-none" id="btnRemove5" value="Remove" />
+                                                    <input type="button" class="btn btn-danger btn-sm ml-5 d-none" id="btnRemove8" value="Remove" />
                                                 </div>
                                             </div>
-                                            <div class="alert alert-danger d-none penDrug p-2">
+                                            <div class="alert alert-danger d-none penAuth p-2">
                                                 <strong>Pending Verification!</strong>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <div class="card-columns mr-1 form-group row">
+                        </div>
+                        <div class="card mb-4">
+                            <h5 class="text-success ml-2 mt-2">Tax Details</h5>
+                            <div class="col-md-12 mx-auto row">
+                                <div class="col-md-6">
+                                    <div class="form-group row">
+                                        <div class="col-md-4 text-md-left">
+                                            <label class="col-form-label"><strong class="text-secondary">GSTIN Number</strong></label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" name="GSTINNumber" id="GSTINNumber" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-4 text-md-left">
+                                            <label class="col-form-label"><strong class="text-secondary">PAN Number</strong></label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="text" name="PanNumber" id="PanNumber" class="form-control" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-columns mr-1 form-group row col-md-3">
                                     <div class="card border-success bg-muted">
-                                        <div class="card-body">
-                                            <label class="col-md-12 text-center"><strong class="text-secondary">Establish License</strong></label>
-                                            <label class="col-md-12 text-left"><small class="text-secondary"><i>License Number</i></small></label>
-                                            <input id="EstablishNumber" type="text" class="form-control" name="EstablishNumber" />
-                                            <label class="col-md-12"><small class="text-secondary"><i>License Image</i></small></label>
-                                            <input type="radio" class="ml-3" name="EstablishLicense" id="EstablishLicenseImage" value="Image" checked> <label for="EstablishLicenseImage"> Image</label>
-                                            <input type="radio" class="ml-3" name="EstablishLicense" id="EstablishLicensePDF" value="PDF"> <label for="EstablishLicensePDF"> PDF</label>
-                                            <div class="row ml-3 EstPdf d-none mt-2 mb-3">
-                                                <input type="file" id="EstablishPdf" name="EstablishPdf" />
+                                        <div class="card-body text-center">
+                                            <label class="col-md-12"><small class="text-secondary"><i>GSTIN Image</i></small></label>
+                                            <div class="text-center">
+                                                <input type="radio" class="ml-3" name="GstinLicense" id="GstinLicenseImage" value="Image" checked> <label for="GstinLicenseImage"> Image</label>
+                                                <input type="radio" class="ml-3" name="GstinLicense" id="GstinLicensePDF" value="PDF"> <label for="GstinLicensePDF"> PDF</label>
                                             </div>
-                                            <div class="row ml-3 EstImg mt-2">
-                                                <div class="img-upload-container mb-3">
-                                                    <img class="img-container w-100 h-100 mb-2" id="img-establish" onerror="this.src='/Images/No Photo.png'" />
-                                                    <input type="file" id="EstablishImage" name="EstablishImage" class="d-none" />
-                                                    <label for="EstablishImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            <div class="row ml-3 GstinLicensePdf d-none mt-2 mb-3">
+                                                <input type="file" id="GSTINPdf" name="GSTINPdf" />
+                                            </div>
+                                            <div class="row GstinLicenseImg my-2">
+                                                <div class="img-upload-container mx-auto">
+                                                    <img class="img-container w-100 h-100 mb-2" id="img-gstin" onerror="this.src='/Images/No Photo.png'" />
+                                                    <input type="file" id="GSTINImage" name="GSTINImage" class="d-none" />
+                                                    <label for="GSTINImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                                 </div>
                                             </div>
                                             <div class="row mb-2">
                                                 <div class="col-md-12">
-                                                    <input type="button" class="btn btn-danger btn-sm ml-5 d-none" id="btnRemove6" value="Remove" />
+                                                    <input type="button" class="btn btn-danger btn-sm d-none" id="btnRemove9" value="Remove" />
                                                 </div>
                                             </div>
-                                            <div class="alert alert-danger d-none penEsta p-2">
+                                            <div class="alert alert-danger d-none penGstn p-2">
                                                 <strong>Pending Verification!</strong>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="card-columns mr-1 form-group row">
+                                <div class="card-columns form-group row col-md-3">
                                     <div class="card border-success bg-muted">
-                                        <div class="card-body">
-                                            <label class="col-md-12 text-center"><strong class="text-secondary">Other License</strong></label>
-                                            <label class="col-md-12 text-left"><small class="text-secondary"><i>License Name</i></small></label>
-                                            <input id="OtherLicenseName" type="text" class="form-control" name="OtherLicenseName" />
-                                            <label class="col-md-12 text-left"><small class="text-secondary"><i>License Number</i></small></label>
-                                            <input id="OtherLicenseNumber" type="text" class="form-control" name="OtherLicenseNumber" />
-                                            <label class="col-md-12"><small class="text-secondary"><i>License Image</i></small></label>
-                                            <input type="radio" class="ml-3" name="OtherLicense" id="OtherImage" value="Image" checked> <label for="OtherImage"> Image</label>
-                                            <input type="radio" class="ml-3" name="OtherLicense" id="OtherPDF" value="PDF"> <label for="OtherPDF"> PDF</label>
-                                            <div class="row ml-3 OtherPdf d-none mt-2 mb-3">
-                                                <input type="file" id="OtherLicensePdf" name="OtherLicensePdf" />
+                                        <div class="card-body text-center">
+                                            <label class="col-md-12"><small class="text-secondary"><i>PAN Image</i></small></label>
+                                            <div class="text-center">
+                                                <input type="radio" class="ml-3" name="PanLicense" id="PanLicenseImage" value="Image" checked> <label for="PanLicenseImage"> Image</label>
+                                                <input type="radio" class="ml-3" name="PanLicense" id="PanLicensePDF" value="PDF"> <label for="PanLicensePDF"> PDF</label>
                                             </div>
-                                            <div class="row ml-3 OtherImg mt-2">
-                                                <div class="img-upload-container mb-3">
-                                                    <img class="img-container w-100 h-100 mb-2" id="img-other" onerror="this.src='/Images/No Photo.png'" />
-                                                    <input type="file" id="OtherLicenseImage" name="OtherLicenseImage" class="d-none" />
-                                                    <label for="OtherLicenseImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            <div class="row ml-3 PanLicensePdf d-none mt-2 mb-3">
+                                                <input type="file" id="PanPdf" name="PanPdf" />
+                                            </div>
+                                            <div class="row PanLicenseImg my-2">
+                                                <div class="img-upload-container mx-auto">
+                                                    <img class="img-container w-100 h-100 mb-2" id="img-pan" onerror="this.src='/Images/No Photo.png'" />
+                                                    <input type="file" id="PanImage" name="PanImage" class="d-none" />
+                                                    <label for="PanImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                                 </div>
                                             </div>
                                             <div class="row mb-2">
                                                 <div class="col-md-12">
-                                                    <input type="button" class="btn btn-danger btn-sm ml-5 d-none" id="btnRemove7" value="Remove" />
+                                                    <input type="button" class="btn btn-danger btn-sm d-none" id="btnRemove10" value="Remove" />
                                                 </div>
                                             </div>
-                                            <div class="alert alert-danger d-none penOther p-2">
+                                            <div class="alert alert-danger d-none penPan p-2">
                                                 <strong>Pending Verification!</strong>
                                             </div>
                                         </div>
@@ -455,268 +584,143 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="card mb-4 shadow">
-                    <div class="col-md-12">
-                        <div class="form-group row">
-                            <div class="col-md-6">
-                                Authorised Distributer of any Brand :   <input type="radio" name="distributorCheck" value="yes"> Yes
-                                <input type="radio" name="distributorCheck" value="no"> No
-                            </div>
-                        </div>
-                        <div class="card-columns d-none form-group row col-md-4 distributor">
-                            <div class="card bg-muted">
-                                <div class="card-body text-center">
-                                    <div class="alert alert-warning alert-dismissible fade show d-none brand">
-                                        <strong>Warning!</strong> It is Required Field.Please upload license
-                                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                    </div>
-                                    <label class="col-md-12"><small class="text-secondary"><i>Authorised Brand Name</i></small></label>
-                                    <select id="AuthorisedBrandId" name="AuthorisedBrandId" class="form-control"></select>
-                                    <input type="hidden" name="AuthorisedBrandName" id="AuthorisedBrandName" />
-                                    <label class="col-md-12"><small class="text-secondary"><i>Authorised Certificate Upload</i></small></label>
-                                    <input type="radio" class="ml-3" name="AuthLicense" id="AuthLicenseImage" value="Image" checked> <label for="AuthLicenseImage"> Image</label>
-                                    <input type="radio" class="ml-3" name="AuthLicense" id="AuthLicensePDF" value="PDF"> <label for="AuthLicensePDF"> PDF</label>
-                                    <div class="row ml-3 AuthLicensePdf d-none mt-2 mb-3">
-                                        <input type="file" id="AuthorisedDistributorPdf" name="AuthorisedDistributorPdf" />
-                                    </div>
-                                    <div class="row ml-lg-5 AuthLicenseImg mt-2">
-                                        <div class="img-upload-container">
-                                            <img class="img-container w-100 h-100 mb-2" id="img-authorise" onerror="this.src='/Images/No Photo.png'" />
-                                            <input type="file" id="AuthorisedDistributorImage" name="AuthorisedDistributorImage" class="d-none" />
-                                            <label for="AuthorisedDistributorImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                        <div class="card mb-4">
+                            <h5 class="text-success ml-2 mt-2">Bank Details</h5>
+                            <div class="col-md-12 row">
+                                <div class="col-md-8">
+                                    <div class="form-group row">
+                                        <div class="col-md-6">
+                                            <small class="control-label col-sm-12" for="BankName"><i class="text-secondary">Bank Name</i></small>
+                                            <input id="BankName" type="text" class="form-control" name="BankName" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <small class="control-label col-sm-12" for="AccountName"><i class="text-secondary">Account Name</i></small>
+                                            <input id="AccountName" type="text" class="form-control" name="AccountName" />
                                         </div>
                                     </div>
-                                    <div class="row mb-2">
-                                        <div class="col-md-12">
-                                            <input type="button" class="btn btn-danger btn-sm ml-5 d-none" id="btnRemove8" value="Remove" />
+                                    <div class="form-group row">
+                                        <div class="col-md-6">
+                                            <small class="control-label col-sm-12" for="AccountNumber"><i class="text-secondary">Account Number</i></small>
+                                            <input id="AccountNumber" type="text" class="form-control" name="AccountNumber" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <small class="control-label col-sm-12" for="IFSCId"><i class="text-secondary">IFSC Id</i></small>
+                                            <input id="IFSCId" type="text" class="form-control" name="IFSCId" />
                                         </div>
                                     </div>
-                                    <div class="alert alert-danger d-none penAuth p-2">
-                                        <strong>Pending Verification!</strong>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card mb-4 shadow">
-                    <h5 class="text-success ml-2 mt-2">Tax Details</h5>
-                    <div class="col-md-12 mx-auto row">
-                        <div class="col-md-6">
-                            <div class="form-group row">
-                                <div class="col-md-4 text-md-left">
-                                    <label class="col-form-label"><strong class="text-secondary">GSTIN Number</strong></label>
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="text" name="GSTINNumber" id="GSTINNumber" class="form-control" />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-4 text-md-left">
-                                    <label class="col-form-label"><strong class="text-secondary">PAN Number</strong></label>
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="text" name="PanNumber" id="PanNumber" class="form-control" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-columns mr-1 form-group row col-md-3">
-                            <div class="card border-success bg-muted">
-                                <div class="card-body text-center">
-                                    <label class="col-md-12"><small class="text-secondary"><i>GSTIN Image</i></small></label>
-                                    <input type="radio" class="ml-3" name="GstinLicense" id="GstinLicenseImage" value="Image" checked> <label for="GstinLicenseImage"> Image</label>
-                                    <input type="radio" class="ml-3" name="GstinLicense" id="GstinLicensePDF" value="PDF"> <label for="GstinLicensePDF"> PDF</label>
-                                    <div class="row ml-3 GstinLicensePdf d-none mt-2 mb-3">
-                                        <input type="file" id="GSTINPdf" name="GSTINPdf" />
-                                    </div>
-                                    <div class="row GstinLicenseImg mt-2 ml-3">
-                                        <div class="col-md-12">
-                                            <div class="img-upload-container mb-3 ml-5">
-                                                <img class="img-container w-100 h-100 mb-2" id="img-gstin" onerror="this.src='/Images/No Photo.png'" />
-                                                <input type="file" id="GSTINImage" name="GSTINImage" class="d-none" />
-                                                <label for="GSTINImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-6">
+                                            <small class="control-label col-sm-12" for="SwiftId"><i class="text-secondary">SWIFT Id</i></small>
+                                            <input id="SwiftId" type="text" class="form-control" name="SwiftId" />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <small class="control-label col-sm-12" for="UPIID"><i class="text-secondary">UPI Id</i></small>
+                                            <input id="UPIID" type="text" class="form-control" name="UPIID" />
                                         </div>
                                     </div>
-                                    <div class="row mb-2">
-                                        <div class="col-md-12">
-                                            <input type="button" class="btn btn-danger btn-sm d-none" id="btnRemove9" value="Remove" />
-                                        </div>
-                                    </div>
-                                    <div class="alert alert-danger d-none penGstn p-2">
-                                        <strong>Pending Verification!</strong>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-columns form-group row col-md-3">
-                            <div class="card border-success bg-muted">
-                                <div class="card-body text-center">
-                                    <label class="col-md-12"><small class="text-secondary"><i>PAN Image</i></small></label>
-                                    <input type="radio" class="ml-3" name="PanLicense" id="PanLicenseImage" value="Image" checked> <label for="PanLicenseImage"> Image</label>
-                                    <input type="radio" class="ml-3" name="PanLicense" id="PanLicensePDF" value="PDF"> <label for="PanLicensePDF"> PDF</label>
-                                    <div class="row ml-3 PanLicensePdf d-none mt-2 mb-3">
-                                        <input type="file" id="PanPdf" name="PanPdf" />
-                                    </div>
-                                    <div class="row PanLicenseImg ml-3 mt-2">
-                                        <div class="col-md-12">
-                                            <div class="img-upload-container mb-3 ml-5">
-                                                <img class="img-container w-100 h-100 mb-2" id="img-pan" onerror="this.src='/Images/No Photo.png'" />
-                                                <input type="file" id="PanImage" name="PanImage" class="d-none" />
-                                                <label for="PanImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-2">
-                                        <div class="col-md-12">
-                                            <input type="button" class="btn btn-danger btn-sm d-none" id="btnRemove10" value="Remove" />
-                                        </div>
-                                    </div>
-                                    <div class="alert alert-danger d-none penPan p-2">
-                                        <strong>Pending Verification!</strong>
+                                    <div class="form-group row">
+                                        <label class="ml-3"> Saving Type:</label>
+                                        <p>
+                                            &nbsp; <input type="radio" name="AcountType" id="SA" value="SA"><label for="SA">&nbsp;Saving Account</label><br />
+                                            &nbsp; <input type="radio" name="AcountType" id="CA" value="CA"><label for="CA">&nbsp;Current Account</label>
+                                        </p>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card mb-4 shadow">
-                    <h5 class="text-success ml-2 mt-2">Bank Details</h5>
-                    <div class="col-md-12 row">
-                        <div class="col-md-8">
-                            <div class="form-group row">
-                                <div class="col-md-6">
-                                    <small class="control-label col-sm-12" for="BankName"><i class="text-secondary">Bank Name</i></small>
-                                    <input id="BankName" type="text" class="form-control" name="BankName" />
-                                </div>
-                                <div class="col-md-6">
-                                    <small class="control-label col-sm-12" for="AccountName"><i class="text-secondary">Account Name</i></small>
-                                    <input id="AccountName" type="text" class="form-control" name="AccountName" />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-6">
-                                    <small class="control-label col-sm-12" for="AccountNumber"><i class="text-secondary">Account Number</i></small>
-                                    <input id="AccountNumber" type="text" class="form-control" name="AccountNumber" />
-                                </div>
-                                <div class="col-md-6">
-                                    <small class="control-label col-sm-12" for="IFSCId"><i class="text-secondary">IFSC Id</i></small>
-                                    <input id="IFSCId" type="text" class="form-control" name="IFSCId" />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-6">
-                                    <small class="control-label col-sm-12" for="SwiftId"><i class="text-secondary">SWIFT Id</i></small>
-                                    <input id="SwiftId" type="text" class="form-control" name="SwiftId" />
-                                </div>
-                                <div class="col-md-6">
-                                    <small class="control-label col-sm-12" for="UPIID"><i class="text-secondary">UPI Id</i></small>
-                                    <input id="UPIID" type="text" class="form-control" name="UPIID" />
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="ml-3"> Saving Type:</label>
-                                <p>
-                                    &nbsp; <input type="radio" name="AcountType" id="SA" value="SA"><label for="SA"> Saving Account</label><br />
-                                    &nbsp; <input type="radio" name="AcountType" id="CA" value="CA"><label for="CA"> Current Account</label>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card-columns form-group row col-md-12">
-                                <div class="card border-success bg-muted">
-                                    <div class="card-body text-center">
-                                        <label class="col-md-12 text-center"><strong class="text-secondary">Bank Account</strong></label>
-                                        <label class="col-md-12 text-center"><small class="text-secondary"><i>Account Proof Image</i></small></label>
-                                        <input type="radio" class="ml-2" name="AccountDocument" id="AccountDocumentImage" value="Image" checked> <label for="AccountDocumentImage"> Image</label>
-                                        <input type="radio" class="ml-2" name="AccountDocument" id="AccountDocumentPDF" value="PDF"> <label for="AccountDocumentPDF"> PDF</label>
-                                        <div class="row ml-3 AccountDocumentPdf d-none mt-2 mb-3 ml-4">
-                                            <input type="file" id="AccountPdf" name="AccountPdf" />
-                                        </div>
-                                        <div class="row mt-1 ml-3">
-                                            <div class="col-md-12 ml-5">
-                                                <div class="img-upload-container mb-3 AccountDocumentImg ml-5">
-                                                    <img class="img-container w-100 h-100 mb-2" id="img-account" onerror="this.src='/Images/No Photo.png'" />
-                                                    <input type="file" id="AccountImage" name="AccountImage" class="d-none" />
-                                                    <label for="AccountImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                <div class="col-md-4">
+                                    <div class="card-columns form-group row col-md-12">
+                                        <div class="card border-success bg-muted">
+                                            <div class="card-body text-center">
+                                                <label class="col-md-12 text-center"><strong class="text-secondary">Bank Account</strong></label>
+                                                <label class="col-md-12 text-center"><small class="text-secondary"><i>Account Proof Image</i></small></label>
+                                                <div class="text-center">
+                                                    <input type="radio" class="ml-2" name="AccountDocument" id="AccountDocumentImage" value="Image" checked> <label for="AccountDocumentImage"> Image</label>
+                                                    <input type="radio" class="ml-2" name="AccountDocument" id="AccountDocumentPDF" value="PDF"> <label for="AccountDocumentPDF"> PDF</label>
+                                                </div>
+                                                <div class="row ml-3 AccountDocumentPdf d-none mt-2 mb-3 ml-4">
+                                                    <input type="file" id="AccountPdf" name="AccountPdf" />
+                                                </div>
+                                                <div class="row my-2">
+                                                    <div class="img-upload-container AccountDocumentImg mx-auto">
+                                                        <img class="img-container w-100 h-100 mb-2" id="img-account" onerror="this.src='/Images/No Photo.png'" />
+                                                        <input type="file" id="AccountImage" name="AccountImage" class="d-none" />
+                                                        <label for="AccountImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <input type="button" class="btn btn-danger btn-sm d-none" id="btnRemove11" value="Remove" />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <input type="button" class="btn btn-danger btn-sm d-none" id="btnRemove11" value="Remove" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mb-4">
+                            <h5 class="text-success ml-2 mt-2">Delivery Charge Assign</h5>
+                            <div class="row mb-3 ml-3">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label class="col-form-label text-secondary font-weight-bold">Delivery Mode</label>
+                                        </div>
+                                        <div class="col-md-6 mt-2">
+                                            <div class="form-check-inline mr-3">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" name="DeliveryType" value="0" checked> General
+                                                </label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" name="DeliveryType" value="1"> Special
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-md-2">
+                                            <label class="col-form-label text-secondary font-weight-bold">Delivery Charge Type</label>
+                                        </div>
+                                        <div class="col-md-8 mt-2">
+                                            <div class="form-check-inline mr-3">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" name="DeliveryTierType" value="1" checked> 1<sup>st</sup> Tier
+                                                </label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" name="DeliveryTierType" value="2"> 2<sup>nd</sup> Tier
+                                                </label>
+                                            </div>
+                                            <div class="form-check-inline">
+                                                <label class="form-check-label">
+                                                    <input type="radio" class="form-check-input" name="DeliveryTierType" value="3"> 3<sup>rd</sup> Tier
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="card mb-4 shadow">
-                    <h5 class="text-success ml-2 mt-2">Delivery Charge Assign</h5>
-                    <div class="row mb-3 ml-3">
                         <div class="col-md-12">
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <label class="col-form-label text-secondary font-weight-bold">Delivery Mode</label>
-                                </div>
-                                <div class="col-md-6 mt-2">
-                                    <div class="form-check-inline mr-3">
-                                        <label class="form-check-label">
-                                            <input type="radio" class="form-check-input" name="DeliveryType" value="0" checked> General
-                                        </label>
-                                    </div>
-                                    <div class="form-check-inline">
-                                        <label class="form-check-label">
-                                            <input type="radio" class="form-check-input" name="DeliveryType" value="1"> Special
-                                        </label>
-                                    </div>
+                            <div class="form-group row mx-2">
+                                Release the Restrict: <input class="mx-2 mt-2" type="checkbox" id="myCheck" onclick="myFunction()">
+                            </div>
+                            <div class="form-group row Restrict">
+                                <div class="col-md-4 mx-auto">
+                                    <button type="button" id="SaveR" class="btn btn-block btn-success Save"><span class="glyphicon glyphicon-file"></span> Save</button>
                                 </div>
                             </div>
-                            <div class="row mt-3">
-                                <div class="col-md-2">
-                                    <label class="col-form-label text-secondary font-weight-bold">Delivery Charge Type</label>
-                                </div>
-                                <div class="col-md-8 mt-2">
-                                    <div class="form-check-inline mr-3">
-                                        <label class="form-check-label">
-                                            <input type="radio" class="form-check-input" name="DeliveryTierType" value="1" checked> 1<sup>st</sup> Tier
-                                        </label>
-                                    </div>
-                                    <div class="form-check-inline">
-                                        <label class="form-check-label">
-                                            <input type="radio" class="form-check-input" name="DeliveryTierType" value="2"> 2<sup>nd</sup> Tier
-                                        </label>
-                                    </div>
-                                    <div class="form-check-inline">
-                                        <label class="form-check-label">
-                                            <input type="radio" class="form-check-input" name="DeliveryTierType" value="3"> 3<sup>rd</sup> Tier
-                                        </label>
-                                    </div>
+                            <div class="form-group row d-none NoRestrict">
+                                <div class="col-md-4 mx-auto">
+                                    <button type="submit" id="Save" class="btn btn-block btn-success SaveNR"><span class="glyphicon glyphicon-file"></span> Save</button>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    }
                 </div>
-                <div class="col-md-12">
-                    <div class="form-group row mx-2">
-                        Release the Restrict: <input class="mx-2 mt-2" type="checkbox" id="myCheck" onclick="myFunction()">
-                    </div>
-                    <div class="form-group row Restrict">
-                        <div class="col-md-4 mx-auto">
-                            <button type="button" id="SaveR" class="btn btn-block btn-success Save"><span class="glyphicon glyphicon-file"></span> Save</button>
-                        </div>
-                    </div>
-                    <div class="form-group row d-none NoRestrict">
-                        <div class="col-md-4 mx-auto">
-                            <button type="submit" id="Save" class="btn btn-block btn-success SaveNR"><span class="glyphicon glyphicon-file"></span> Save</button>
-                        </div>
-                    </div>
-                </div>
-            }
+            </div>
         </div>
     </div>
 </div>
@@ -735,7 +739,7 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCl_9yf43Z6hWLvVvwd68p7WXwq_oYcS_0&libraries=places&callback=initMap"
             async defer></script>
     <script>
-        $('#AuthorisedBrandId').select2();
+        //$('#AuthorisedBrandId').select2();
 
         function myFunction() {
             var checkBox = document.getElementById("myCheck");
@@ -1255,7 +1259,7 @@
                 $('.fssi').addClass('d-none');
                 $('.penFssi').removeClass('d-none');
                 $("#btnRemove4").removeClass("d-none");
-            });            
+            });
             $("#btnRemove4").on('click', function () {
                 $('#img-fssai').attr('src', '');
                 $("#FSSAIImage").val('');
