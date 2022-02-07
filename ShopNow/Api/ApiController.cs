@@ -1899,10 +1899,13 @@ namespace ShopNow.Controllers
             //Reducing Platformcredits
             var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == orderNo);
             var shop = db.Shops.FirstOrDefault(i => i.Id == order.ShopId);
-            var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
-            shopCredits.DeliveryCredit -= payment.DeliveryCharge;
-            db.Entry(shopCredits).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
+            if (shop.IsTrail == false || order.IsPickupDrop == true) //Only Reduce DeliveryCredits When Shop is not trail and for all Pickupdrop order
+            {
+                var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
+                shopCredits.DeliveryCredit -= payment.DeliveryCharge;
+                db.Entry(shopCredits).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
 
             if (order.CustomerId != 0) // not for pickup drop
             {
