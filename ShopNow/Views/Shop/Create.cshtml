@@ -328,24 +328,28 @@
                                                     <label class="col-md-12 text-left"><small class="text-secondary text-left"><i>License Number</i></small></label>
                                                     <input id="FSSAINumber" type="text" class="form-control col-md-12" name="FSSAINumber" />
                                                     <label class="col-md-12 text-left"><small class="text-secondary"><i>License Image</i></small></label>
-                                                    <input type="radio" class="ml-3" name="FssaiLicense" id="FssaiLicenseImage" value="Image" checked> <label for="FssaiLicenseImage"> Image</label>
-                                                    <input type="radio" class="ml-3" name="FssaiLicense" id="FssaiLicensePDF" value="PDF"> <label for="FssaiLicensePDF"> PDF</label>
+                                                    <div class="text-center">
+                                                        <input type="radio" class="ml-3" name="FssaiLicense" id="FssaiLicenseImage" value="Image" checked> <label for="FssaiLicenseImage"> Image</label>
+                                                        <input type="radio" class="ml-3" name="FssaiLicense" id="FssaiLicensePDF" value="PDF"> <label for="FssaiLicensePDF"> PDF</label>
+                                                    </div>
                                                     <div class="row ml-3 FssaiPdf d-none mt-2 mb-3">
                                                         <input type="file" id="FSSAIPdf" name="FSSAIPdf" />
                                                     </div>
-                                                    <div class="row FssaiImg">
-                                                        <div class="img-upload-container">
-                                                            <img class="img-container w-100 h-100 mb-2" id="img-fssai" onerror="this.src='/Images/No Photo.png'" />
-                                                            <input type="file" id="FSSAIImage" name="FSSAIImage" class="d-none" />
-                                                            <label for="FSSAIImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                    <div class="row FssaiImg my-2">
+                                                        <div class="col-md-12 text-center ml-4">
+                                                            <div class="img-upload-container ml-5">
+                                                                <img class="img-container w-100 h-100 mb-2" id="img-fssai" onerror="this.src='/Images/No Photo.png'" />
+                                                                <input type="file" id="FSSAIImage" name="FSSAIImage" class="d-none" />
+                                                                <label for="FSSAIImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div class="row mb-2">
-                                                        <div class="col-md-12">
-                                                            <input type="button" class="btn btn-danger btn-sm ml-5 d-none" id="btnRemove4" value="Remove" />
+                                                        <div class="col-md-12 text-center">
+                                                            <input type="button" class="btn btn-danger btn-sm d-none" id="btnRemove4" value="Remove" />
                                                         </div>
                                                     </div>
-                                                    <div class="alert alert-danger d-none penFssi p-2">
+                                                    <div class="alert alert-danger d-none penFssi p-2 text-center">
                                                         <strong>Pending Verification!</strong>
                                                     </div>
                                                 </div>
@@ -364,24 +368,28 @@
                                                     <label class="col-md-12 text-left"><small class="text-secondary"><i>License Number</i></small></label>
                                                     <input id="DrugNumber" type="text" class="form-control" name="DrugNumber" />
                                                     <label class="col-md-12 text-left"><small class="text-secondary"><i>License Image</i></small></label>
-                                                    <input type="radio" class="ml-3" name="DrugLicense" id="DrugLicenseImage" value="Image" checked> <label for="DrugLicenseImage"> Image</label>
-                                                    <input type="radio" class="ml-3" name="DrugLicense" id="DrugLicensePDF" value="PDF"> <label for="DrugLicensePDF"> PDF</label>
+                                                    <div class="text-center">
+                                                        <input type="radio" class="ml-3" name="DrugLicense" id="DrugLicenseImage" value="Image" checked> <label for="DrugLicenseImage"> Image</label>
+                                                        <input type="radio" class="ml-3" name="DrugLicense" id="DrugLicensePDF" value="PDF"> <label for="DrugLicensePDF"> PDF</label>
+                                                    </div>
                                                     <div class="row ml-3 DrugPdf d-none mt-2 mb-3">
                                                         <input type="file" id="DrugPdf" name="DrugPdf" />
                                                     </div>
-                                                    <div class="row DrugImg">
-                                                        <div class="img-upload-container">
-                                                            <img class="img-container w-100 h-100 mb-2" id="img-drug" onerror="this.src='/Images/No Photo.png'" />
-                                                            <input type="file" id="DrugImage" name="DrugImage" class="d-none" />
-                                                            <label for="DrugImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                    <div class="row DrugImg my-2">
+                                                        <div class="col-md-12 text-center ml-4">
+                                                            <div class="img-upload-container ml-5">
+                                                                <img class="img-container w-100 h-100 mb-2" id="img-drug" onerror="this.src='/Images/No Photo.png'" />
+                                                                <input type="file" id="DrugImage" name="DrugImage" class="d-none" />
+                                                                <label for="DrugImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div class="row mb-2">
-                                                        <div class="col-md-12">
-                                                            <input type="button" class="btn btn-danger btn-sm ml-5 d-none" id="btnRemove5" value="Remove" />
+                                                        <div class="col-md-12 text-center">
+                                                            <input type="button" class="btn btn-danger btn-sm d-none" id="btnRemove5" value="Remove" />
                                                         </div>
                                                     </div>
-                                                    <div class="alert alert-danger d-none penDrug p-2">
+                                                    <div class="alert alert-danger d-none penDrug p-2 text-center">
                                                         <strong>Pending Verification!</strong>
                                                     </div>
                                                 </div>
@@ -396,24 +404,28 @@
                                                     <label class="col-md-12 text-left"><small class="text-secondary"><i>License Number</i></small></label>
                                                     <input id="EstablishNumber" type="text" class="form-control" name="EstablishNumber" />
                                                     <label class="col-md-12"><small class="text-secondary"><i>License Image</i></small></label>
-                                                    <input type="radio" class="ml-3" name="EstablishLicense" id="EstablishLicenseImage" value="Image" checked> <label for="EstablishLicenseImage"> Image</label>
-                                                    <input type="radio" class="ml-3" name="EstablishLicense" id="EstablishLicensePDF" value="PDF"> <label for="EstablishLicensePDF"> PDF</label>
+                                                    <div class="text-center">
+                                                        <input type="radio" class="ml-3" name="EstablishLicense" id="EstablishLicenseImage" value="Image" checked> <label for="EstablishLicenseImage"> Image</label>
+                                                        <input type="radio" class="ml-3" name="EstablishLicense" id="EstablishLicensePDF" value="PDF"> <label for="EstablishLicensePDF"> PDF</label>
+                                                    </div>
                                                     <div class="row ml-3 EstPdf d-none mt-2 mb-3">
                                                         <input type="file" id="EstablishPdf" name="EstablishPdf" />
                                                     </div>
-                                                    <div class="row EstImg">
-                                                        <div class="img-upload-container">
-                                                            <img class="img-container w-100 h-100 mb-2" id="img-establish" onerror="this.src='/Images/No Photo.png'" />
-                                                            <input type="file" id="EstablishImage" name="EstablishImage" class="d-none" />
-                                                            <label for="EstablishImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                    <div class="row EstImg my-2">
+                                                        <div class="col-md-12 text-center ml-4">
+                                                            <div class="img-upload-container ml-5">
+                                                                <img class="img-container w-100 h-100 mb-2" id="img-establish" onerror="this.src='/Images/No Photo.png'" />
+                                                                <input type="file" id="EstablishImage" name="EstablishImage" class="d-none" />
+                                                                <label for="EstablishImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div class="row mb-2">
-                                                        <div class="col-md-12">
-                                                            <input type="button" class="btn btn-danger btn-sm ml-5 d-none" id="btnRemove6" value="Remove" />
+                                                        <div class="col-md-12 text-center">
+                                                            <input type="button" class="btn btn-danger btn-sm d-none" id="btnRemove6" value="Remove" />
                                                         </div>
                                                     </div>
-                                                    <div class="alert alert-danger d-none penEsta p-2">
+                                                    <div class="alert alert-danger d-none penEsta p-2 text-center">
                                                         <strong>Pending Verification!</strong>
                                                     </div>
                                                 </div>
@@ -430,24 +442,28 @@
                                                     <label class="col-md-12 text-left"><small class="text-secondary"><i>License Number</i></small></label>
                                                     <input id="OtherLicenseNumber" type="text" class="form-control" name="OtherLicenseNumber" />
                                                     <label class="col-md-12"><small class="text-secondary"><i>License Image</i></small></label>
-                                                    <input type="radio" class="ml-3" name="OtherLicense" id="OtherImage" value="Image" checked> <label for="OtherImage"> Image</label>
-                                                    <input type="radio" class="ml-3" name="OtherLicense" id="OtherPDF" value="PDF"> <label for="OtherPDF"> PDF</label>
+                                                    <div class="text-center">
+                                                        <input type="radio" class="ml-3" name="OtherLicense" id="OtherImage" value="Image" checked> <label for="OtherImage"> Image</label>
+                                                        <input type="radio" class="ml-3" name="OtherLicense" id="OtherPDF" value="PDF"> <label for="OtherPDF"> PDF</label>
+                                                    </div>
                                                     <div class="row ml-3 OtherPdf d-none mt-2 mb-3">
                                                         <input type="file" id="OtherLicensePdf" name="OtherLicensePdf" />
                                                     </div>
-                                                    <div class="row OtherImg">
-                                                        <div class="img-upload-container">
-                                                            <img class="img-container w-100 h-100 mb-2" id="img-other" onerror="this.src='/Images/No Photo.png'" />
-                                                            <input type="file" id="OtherLicenseImage" name="OtherLicenseImage" class="d-none" />
-                                                            <label for="OtherLicenseImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                    <div class="row OtherImg my-2">  
+                                                        <div class="col-md-12 text-center ml-4">
+                                                            <div class="img-upload-container ml-5">
+                                                                <img class="img-container w-100 h-100 mb-2" id="img-other" onerror="this.src='/Images/No Photo.png'" />
+                                                                <input type="file" id="OtherLicenseImage" name="OtherLicenseImage" class="d-none" />
+                                                                <label for="OtherLicenseImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div class="row mb-2">
-                                                        <div class="col-md-12">
-                                                            <input type="button" class="btn btn-danger btn-sm ml-5 d-none" id="btnRemove7" value="Remove" />
+                                                        <div class="col-md-12 text-center">
+                                                            <input type="button" class="btn btn-danger btn-sm d-none" id="btnRemove7" value="Remove" />
                                                         </div>
                                                     </div>
-                                                    <div class="alert alert-danger d-none penOther p-2">
+                                                    <div class="alert alert-danger d-none penOther p-2 text-center">
                                                         <strong>Pending Verification!</strong>
                                                     </div>
                                                 </div>
@@ -472,9 +488,13 @@
                                                 <strong>Warning!</strong> It is Required Field.Please upload license
                                                 <button type="button" class="close" data-dismiss="alert">&times;</button>
                                             </div>
-                                            <label class="col-md-12"><small class="text-secondary"><i>Authorised Brand Name</i></small></label>
-                                            <select id="AuthorisedBrandId" name="AuthorisedBrandId" class="form-control"></select>
-                                            <input type="hidden" name="AuthorisedBrandName" id="AuthorisedBrandName" />
+                                            <div class="col-md-12">
+                                                <label><small class="text-secondary"><i>Authorised Brand Name</i></small></label>
+                                            </div>
+                                            <div class="row">
+                                                <select id="AuthorisedBrandId" name="AuthorisedBrandId" class="form-control" style="width:411px;"></select>
+                                                <input type="hidden" name="AuthorisedBrandName" id="AuthorisedBrandName" />
+                                            </div>
                                             <label class="col-md-12"><small class="text-secondary"><i>Authorised Certificate Upload</i></small></label>
                                             <div class="text-center">
                                                 <input type="radio" class="ml-3" name="AuthLicense" id="AuthLicenseImage" value="Image" checked> <label for="AuthLicenseImage"> Image</label>
@@ -492,7 +512,7 @@
                                             </div>
                                             <div class="row mb-2">
                                                 <div class="col-md-12">
-                                                    <input type="button" class="btn btn-danger btn-sm ml-5 d-none" id="btnRemove8" value="Remove" />
+                                                    <input type="button" class="btn btn-danger btn-sm ml-3 d-none" id="btnRemove8" value="Remove" />
                                                 </div>
                                             </div>
                                             <div class="alert alert-danger d-none penAuth p-2">

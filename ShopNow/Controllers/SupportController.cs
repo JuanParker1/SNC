@@ -148,6 +148,9 @@ namespace ShopNow.Controllers
                 .Join(db.Shops.Where(i => i.IsTrail == false && i.Status == 0), sc => sc.CustomerId, s => s.CustomerId, (sc, s) => new { sc, s })
                 .Count();
             model.CustomerPrescriptionCount = db.CustomerPrescriptions.Where(i => i.Status == 0).Count();
+
+            model.ShopOnlineCount = db.Shops.Where(i => i.Status == 0 && i.IsOnline == true).Count();
+            model.ShopOfflineCount = db.Shops.Where(i => i.Status == 0 && i.IsOnline == false).Count();
             return View(model);
         }
 
@@ -428,7 +431,6 @@ namespace ShopNow.Controllers
                 db.Entry(cart).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
-
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
