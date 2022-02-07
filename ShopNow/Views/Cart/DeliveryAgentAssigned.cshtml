@@ -6,6 +6,11 @@
 <title>ShopNow | Delivery Agent Assigned List</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
+<style>
+    table > thead > tr > th:first-child {
+        padding: 12px 5px;
+    }
+</style>
 <div class="container-fluid">
     <div class="row my-2">
         <div class="col-md-4">
@@ -36,10 +41,10 @@
                    columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(10).Format("{0:dd-MMM-yyyy}");
                    columns.Add().Encoded(false).Sanitized(false)
                   .RenderValueAs(o => Html.ActionLink("View", "Edit", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-info" }).ToHtmlString()
-                  + Html.ActionLink("Pickup Slip", "PickupSlip", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-secondary mt-1" }).ToHtmlString()
-                  + Html.ActionLink("UnAssigned", "UnAssignDeliveryBoy", new { ordernumber = o.OrderNumber}, new { @class = "btn btn-sm btn-danger mt-1"}).ToHtmlString()).Titled("Action").SetWidth(15);
+                    + Html.ActionLink("Pickup Slip", "PickupSlip", new { ordernumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-secondary mt-1" }).ToHtmlString()
+                    + Html.ActionLink("UnAssigned", "UnAssignDeliveryBoy", new { ordernumber = o.OrderNumber}, new { @class = "btn btn-sm btn-danger mt-1"}).ToHtmlString()).Titled("Action").SetWidth(15);
                    columns.Add().Encoded(false).Sanitized(false)
-                   .RenderValueAs(o => (o.RefundAmount == 0 || o.RefundAmount == null) ? "<a href='#modal-refund' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-refund' class='btn btn-sm btn-primary btn-modal-refund mt-4 btn-block'>Refund</a>" : o.RefundAmount.Value > 0 ? "<span>" + o.RefundAmount + "(" + o.RefundRemark + ")" + "</span>" : "N/A").Titled("Refund").SetWidth(10);
+                  .RenderValueAs(o => (o.RefundAmount == 0 || o.RefundAmount == null) ? "<a href='#modal-refund' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-refund' class='btn btn-sm btn-primary btn-modal-refund mt-4 btn-block'>Refund</a>" : o.RefundAmount.Value > 0 ? "<span>" + o.RefundAmount + "(" + o.RefundRemark + ")" + "</span>" : "N/A").Titled("Refund").SetWidth(10);
                }).WithPaging(20).Sortable(true)
                 </div>
             </div>

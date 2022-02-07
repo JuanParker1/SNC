@@ -14,6 +14,10 @@
         .grid-mvc table {
             width: auto;
         }
+
+    table > thead > tr > th:first-child {
+        padding: 12px 5px;
+    }
 </style>
 <div class="container-fluid">
     <div class="d-flex justify-content-between">
@@ -24,7 +28,6 @@
         }
     </div>
     <div class="row">
-
         <div class="col-md-12">
             <div class="card shadow mt-3">
                 <div class="card-body">
@@ -72,10 +75,9 @@
                             </div>
                         </div>
                     </form>
-
                     @Html.Grid(Model.ListItems).Columns(columns =>
                {
-                   columns.Add(c => c.SNo).Titled("SNo").Filterable(true).SetWidth(1);
+                   columns.Add(c => c.SNo).Titled("Sl.No").Filterable(false).SetWidth(1);
                    columns.Add(c => c.Date).Titled("Order Date").Filterable(true).SetWidth(20).Format("{0:dd-MMM-yyyy}");
                    columns.Add(c => c.OrderNumber).Titled("Order Number").Filterable(true).SetWidth(10);
                    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(4);
@@ -101,10 +103,10 @@
 
 @section Scripts
 {
-<script src="~/Scripts/exporttoexcel/jquery.table2excel.js"></script>
+    <script src="~/Scripts/exporttoexcel/jquery.table2excel.js"></script>
     <script>
         $(document).ready(function () {
-            
+
           $('select[name="MonthFilter"] option[value=@Model.MonthFilter]').prop('selected', true);
             $('select[name="YearFilter"] option[value=@Model.YearFilter]').prop('selected', true);
 

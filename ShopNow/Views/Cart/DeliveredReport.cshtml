@@ -6,7 +6,11 @@
 <title>ShopNow | @ViewBag.Title</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-
+<style>
+    table > thead > tr > th:first-child {
+        padding: 12px 5px;
+    }
+</style>
 <div class="container-fluid mb-3">
     <div class="row d-print-none my-3">
         <div class="col-md-3">
@@ -32,7 +36,7 @@
                     <h4 class="text-center d-none d-print-block">@ViewBag.Title</h4>
                     @Html.Grid(Model.DeliveredReportLists).Columns(columns =>
                {
-                   columns.Add(c => c.No).Titled("Sl.No").Filterable(true).SetWidth(5);
+                   columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(1);
                    columns.Add(c => c.OrderNumber).Titled("Order Number").Filterable(true).SetWidth(10);
                    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
                    columns.Add(c => c.PaymentMode).Titled("Payment Mode").Filterable(true).SetWidth(10);

@@ -6,6 +6,11 @@
 <title>ShopNow | On the Way </title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
+<style>
+    table > thead > tr > th:first-child {
+        padding: 12px 5px;
+    }
+</style>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-4">
@@ -25,22 +30,22 @@
             <div class="card shadow mt-3">
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
-     {
-         columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(1);
-         columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
-         columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
-         columns.Add(c => c.PaymentMode).Titled("Payment Mode").Filterable(true).SetWidth(10);
-         columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(10);
-         columns.Add(c => c.DeliveryBoyPhoneNumber).Titled("D.Boy Phone").Filterable(true).SetWidth(15);
-         //columns.Add().RenderValueAs(c => c.Status == 5 ? "On The Way" : "On The Way").Titled("Order Status").Filterable(true).SetWidth(10);
-         columns.Add().Encoded(false).Sanitized(false).RenderValueAs(c => (c.Status == 5 && c.IsPickupDrop == true) ? "<span>On The Way</span><br/><span class='font-weight-bold text-primary'>Pickup-Drop</span>" : "On The Way").Titled("Order Status").Filterable(true).SetWidth(10);
-         columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(15).Format("{0:dd-MMM-yyyy}");
-         columns.Add().Encoded(false).Sanitized(false)
-         .RenderValueAs(o => Html.ActionLink("View", "Edit", new { OrderNumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-info btn-block mr-1", }).ToHtmlString()
-         + Html.ActionLink("UnAssigned", "UnAssignDeliveryBoy", new { OrderNumber = o.OrderNumber }, new { @class = "btn btn-sm btn-block btn-danger mt-2" }).ToHtmlString()).Titled("Action").SetWidth(10);
-         columns.Add().Encoded(false).Sanitized(false)
-         .RenderValueAs(o => (o.RefundAmount == 0 || o.RefundAmount == null) ? "<a href='#modal-refund' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-refund' class='btn btn-sm btn-primary btn-modal-refund btn-block mt-3'>Refund</a>" : o.RefundAmount.Value > 0 ? "<span>" + o.RefundAmount + "(" + o.RefundRemark + ")" + "</span>" : "N/A").Titled("Refund").SetWidth(10);
-     }).WithPaging(20).Sortable(true)
+                    {
+                        columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(1);
+                        columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
+                        columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
+                        columns.Add(c => c.PaymentMode).Titled("Payment Mode").Filterable(true).SetWidth(10);
+                        columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(10);
+                        columns.Add(c => c.DeliveryBoyPhoneNumber).Titled("D.Boy Phone").Filterable(true).SetWidth(15);
+                          //columns.Add().RenderValueAs(c => c.Status == 5 ? "On The Way" : "On The Way").Titled("Order Status").Filterable(true).SetWidth(10);
+                        columns.Add().Encoded(false).Sanitized(false).RenderValueAs(c => (c.Status == 5 && c.IsPickupDrop == true) ? "<span>On The Way</span><br/><span class='font-weight-bold text-primary'>Pickup-Drop</span>" : "On The Way").Titled("Order Status").Filterable(true).SetWidth(10);
+                        columns.Add(c => c.DateEncoded).Titled("Date").Filterable(true).SetWidth(15).Format("{0:dd-MMM-yyyy}");
+                        columns.Add().Encoded(false).Sanitized(false)
+                       .RenderValueAs(o => Html.ActionLink("View", "Edit", new { OrderNumber = o.OrderNumber, id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-info btn-block mr-1", }).ToHtmlString()
+                         + Html.ActionLink("UnAssigned", "UnAssignDeliveryBoy", new { OrderNumber = o.OrderNumber }, new { @class = "btn btn-sm btn-block btn-danger mt-2" }).ToHtmlString()).Titled("Action").SetWidth(10);
+                        columns.Add().Encoded(false).Sanitized(false)
+                       .RenderValueAs(o => (o.RefundAmount == 0 || o.RefundAmount == null) ? "<a href='#modal-refund' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-refund' class='btn btn-sm btn-primary btn-modal-refund btn-block mt-3'>Refund</a>" : o.RefundAmount.Value > 0 ? "<span>" + o.RefundAmount + "(" + o.RefundRemark + ")" + "</span>" : "N/A").Titled("Refund").SetWidth(10);
+                   }).WithPaging(20).Sortable(true)
                 </div>
             </div>
         </div>
