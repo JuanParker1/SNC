@@ -58,7 +58,7 @@ namespace ShopNow.Controllers
                 Status = i.c.c.Status,
                 DeliveryBoyName = i.c.c.DeliveryBoyName ?? "N/A",
                 PaymentMode = i.c.c.PaymentMode,
-                Amount = i.c.p.Amount - (i.c.p.RefundAmount?? 0),
+                Amount = i.c.c.IsPickupDrop == true? i.c.c.TotalPrice: i.c.p.Amount - (i.c.p.RefundAmount?? 0),
                 CustomerPhoneNumber = i.c.c.CustomerPhoneNumber,
                 RefundAmount = i.c.p.RefundAmount ?? 0,
                 RefundRemark = i.c.p.RefundRemark ?? "",
@@ -795,7 +795,8 @@ namespace ShopNow.Controllers
                        DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
                        DeliveryBoyId = i.c.DeliveryBoyId,
                        DeliveryBoyName = i.c.DeliveryBoyName,
-                       Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
+                      // Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
+                       Amount = i.c.IsPickupDrop ==true ? i.c.TotalPrice: i.p.Amount - (i.p.RefundAmount ?? 0),
                        DateEncoded = i.p.DateEncoded,
                        DeliveryOrderPaymentStatus = i.c.DeliveryOrderPaymentStatus
                    }).OrderByDescending(i => i.DateEncoded).ToList();
@@ -1214,7 +1215,7 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCCMD086")]
-        public ActionResult MarkAsDelivered(int OrderNumber, int id)
+        public ActionResult MarkAsDelivered(int OrderNumber, int id,string address="")
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -1240,6 +1241,10 @@ namespace ShopNow.Controllers
                 db.Entry(otpVerify).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
+            if (!string.IsNullOrEmpty(address))
+            {
+                order.DeliveryAddress = address;
+            }
             order.Status = 6;
             order.UpdatedBy = user.Name;
             order.DateUpdated = DateTime.Now;
@@ -1254,10 +1259,13 @@ namespace ShopNow.Controllers
             //Reducing Platformcredits
             var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == OrderNumber);
             var shop = db.Shops.FirstOrDefault(i => i.Id == order.ShopId);
-            var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
-            shopCredits.DeliveryCredit -= payment.DeliveryCharge;
-            db.Entry(shopCredits).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
+            if (shop.IsTrail == false || order.IsPickupDrop == true) //Only Reduce DeliveryCredits When Shop is not trail and for all Pickupdrop order
+            {
+                var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
+                shopCredits.DeliveryCredit -= payment.DeliveryCharge;
+                db.Entry(shopCredits).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
 
             var customerDetails = (from c in db.Customers
                                    where c.Id == order.CustomerId

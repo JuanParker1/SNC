@@ -1595,8 +1595,8 @@ namespace ShopNow.Controllers
                     NetTotal = i.o.o.o.o.IsPickupDrop == true ? i.o.o.o.o.TotalPrice : i.o.o.o.o.NetTotal, //for pickupdrop don't show delivery charge in total
                     WalletAmount = i.o.o.o.o.WalletAmount,
                     TipAmount = i.o.o.o.o.TipsAmount,
+                    IsPickupDrop = i.o.o.o.o.IsPickupDrop,
                     OrderItemList = i.oi.ToList(),
-
                 }).ToList();
 
             model.OtherList = db.Orders.Where(i => (i.Status == 4 || i.Status == 5) && i.DeliveryBoyPhoneNumber == phoneNumber  /*&& DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(DateTime.Now)*/)
@@ -1635,6 +1635,7 @@ namespace ShopNow.Controllers
                    NetTotal = i.o.o.o.o.IsPickupDrop == true ? i.o.o.o.o.TotalPrice : i.o.o.o.o.NetTotal,
                    WalletAmount = i.o.o.o.o.WalletAmount,
                    TipAmount = i.o.o.o.o.TipsAmount,
+                   IsPickupDrop = i.o.o.o.o.IsPickupDrop,
                    OrderItemList = i.oi.ToList()
                }).ToList();
 
@@ -1898,10 +1899,13 @@ namespace ShopNow.Controllers
             //Reducing Platformcredits
             var payment = db.Payments.FirstOrDefault(i => i.OrderNumber == orderNo);
             var shop = db.Shops.FirstOrDefault(i => i.Id == order.ShopId);
-            var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
-            shopCredits.DeliveryCredit -= payment.DeliveryCharge;
-            db.Entry(shopCredits).State = System.Data.Entity.EntityState.Modified;
-            db.SaveChanges();
+            if (shop.IsTrail == false || order.IsPickupDrop == true) //Only Reduce DeliveryCredits When Shop is not trail and for all Pickupdrop order
+            {
+                var shopCredits = db.ShopCredits.FirstOrDefault(i => i.CustomerId == shop.CustomerId);
+                shopCredits.DeliveryCredit -= payment.DeliveryCharge;
+                db.Entry(shopCredits).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
 
             if (order.CustomerId != 0) // not for pickup drop
             {
