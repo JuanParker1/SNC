@@ -19,8 +19,12 @@
         display: inline-block;
         position: relative;
         height: 90px;
-        width:150px;
+        width: 150px;
         overflow-y: scroll;
+    }
+
+    table > thead > tr > th:first-child {
+        padding: 12px 5px;
     }
 </style>
 <div class="container-fluid">
@@ -43,9 +47,9 @@
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
                {
-                   //columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(1);
+                  //columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(1);
                    columns.Add().Encoded(false).Sanitized(false)
-                .RenderValueAs(o => o.IsPickupDrop == true ? "<span>" + o.No + "</span><br/><span class='text-primary font-weight-bold'>Pickup-Drop</span>" : "<span>" + o.No + "</span>").Titled("SI.No").SetWidth(1);
+                 .RenderValueAs(o => o.IsPickupDrop == true ? "<span>" + o.No + "</span><br/><span class='text-primary font-weight-bold'>Pickup-Drop</span>" : "<span>" + o.No + "</span>").Titled("SI.No").SetWidth(1);
                    columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
                    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(10);
                    columns.Add().Encoded(false).Sanitized(false)
@@ -57,8 +61,8 @@
                    columns.Add(c => c.ShopAcceptedTime).Titled("Shop Accept").Filterable(true).SetWidth(88);
                    columns.Add(c => c.OrderPeriod).Titled("Order Period").Filterable(true).SetWidth(8);
                    columns.Add().Encoded(false).Sanitized(false)
-                   .RenderValueAs(o => ((o.RefundAmount == 0 || o.RefundAmount == null) ? "<a href='#modal-refund' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-refund' class='btn btn-sm btn-primary btn-block btn-modal-refund mt-2'>Refund</a>" : o.RefundAmount.Value > 0 ? "<span id = 'scroll'>" + o.RefundAmount + "(" + o.RefundRemark + ")" + "</span>" : "N/A") +
-                  Html.ActionLink("Details", "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-secondary btn-block mt-1", @style = "padding: 3px 10px" }).ToHtmlString()).Titled("Action").SetWidth(10);
+                  .RenderValueAs(o => ((o.RefundAmount == 0 || o.RefundAmount == null) ? "<a href='#modal-refund' data-id='" + o.Id + "' data-toggle='modal' data-target='#modal-refund' class='btn btn-sm btn-primary btn-block btn-modal-refund mt-2'>Refund</a>" : o.RefundAmount.Value > 0 ? "<span id = 'scroll'>" + o.RefundAmount + "(" + o.RefundRemark + ")" + "</span>" : "N/A") 
+                    + Html.ActionLink("Details", "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeLong(o.Id) }, new { @class = "btn btn-sm btn-secondary btn-block mt-1", @style = "padding: 3px 10px" }).ToHtmlString()).Titled("Action").SetWidth(10);
                }).WithPaging(10).Sortable(true)
                 </div>
             </div>

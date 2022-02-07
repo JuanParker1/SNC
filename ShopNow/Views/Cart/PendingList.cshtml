@@ -6,6 +6,11 @@
 <title>ShopNow | @ViewBag.Title</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
+<style>
+    table > thead > tr > th:first-child {
+        padding: 12px 5px;
+    }
+</style>
 <div class="container-fluid">
     <div class="row my-2">
         <div class="col-md-4">
@@ -28,7 +33,7 @@
                {
                    //columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(1);
                    columns.Add().Encoded(false).Sanitized(false)
-                .RenderValueAs(o => o.IsPickupDrop == true ? "<span>" + o.No + "</span><br/><span class='text-primary font-weight-bold'>Pickup-Drop</span>" : "<span>" + o.No + "</span>").Titled("SI.No").SetWidth(5);
+                .RenderValueAs(o => o.IsPickupDrop == true ? "<span>" + o.No + "</span><br/><span class='text-primary font-weight-bold'>Pickup-Drop</span>" : "<span>" + o.No + "</span>").Titled("Sl.No").SetWidth(5);
                    columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
                    columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(15);
                    columns.Add(c => c.PaymentMode).Titled("PaymentMode").Filterable(true).SetWidth(28);

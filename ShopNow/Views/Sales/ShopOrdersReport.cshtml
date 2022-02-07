@@ -6,7 +6,11 @@
 <title>ShopNow | @ViewBag.Title</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
-
+<style>
+    table > thead > tr > th:first-child {
+        padding: 12px 6px;
+    }
+</style>
 <div class="container-fluid mb-5">
     <h5 class="d-print-block d-none text-center">@Model.ShopName</h5>
     <form method="get" action="/Sales/ShopOrdersReport" class="my-3 d-print-none">
@@ -48,19 +52,18 @@
             </div>
         </div>
     </form>
-    <div class="card mt-3 shadow-sm">
+    <div class="card mt-3 shadow">
         <div class="card-body">
             @Html.Grid(Model.ListItems).Columns(columns =>
-{
-columns.Add(c => c.SiNo).Titled("Sl.No").Filterable(false).SetWidth(1);
-columns.Add(c => c.ShopName).Titled("ShopName").Filterable(true).SetWidth(50);
-columns.Add(c => c.CustomerName).Titled("CustomerName").Filterable(true).SetWidth(50);
-columns.Add(c => c.OrderDate).Titled("OrderDate").Filterable(true).Format("{0:dd-MMM-yyyy}").SetWidth(50);
-columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(50);
-columns.Add(c => c.RefundAmount).Titled("RefundAmount").Filterable(true).SetWidth(50);
-columns.Add(c => c.Price).Titled("Amount").Filterable(true).SetWidth(50);
-
-}).Sortable(true)
+            {
+               columns.Add(c => c.SiNo).Titled("Sl.No").Filterable(false).SetWidth(1);
+               columns.Add(c => c.ShopName).Titled("ShopName").Filterable(true).SetWidth(50);
+               columns.Add(c => c.CustomerName).Titled("CustomerName").Filterable(true).SetWidth(50);
+               columns.Add(c => c.OrderDate).Titled("OrderDate").Filterable(true).Format("{0:dd-MMM-yyyy}").SetWidth(50);
+               columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(50);
+               columns.Add(c => c.RefundAmount).Titled("RefundAmount").Filterable(true).SetWidth(50);
+               columns.Add(c => c.Price).Titled("Amount").Filterable(true).SetWidth(50);
+             }).Sortable(true)
         </div>
     </div>
 </div>
@@ -89,6 +92,7 @@ columns.Add(c => c.Price).Titled("Amount").Filterable(true).SetWidth(50);
             $('#btnPrint').click(function () {
                 window.print();
             });
+
             $("#btnExport").click(function () {
                 $("table").table2excel({
                     name: "Worksheet Name",
@@ -97,10 +101,8 @@ columns.Add(c => c.Price).Titled("Amount").Filterable(true).SetWidth(50);
                     exclude_links: true,
                 });
             });
-
         });
     </script>
-
 }
 
 
