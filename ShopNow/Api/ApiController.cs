@@ -1777,11 +1777,11 @@ namespace ShopNow.Controllers
         {
             if (orderNo != 0 && customerId != 0)
             {
-                var customer = db.Customers.FirstOrDefault(i => i.Id == customerId); //This is delivery boy
+                var deliveryboy = db.DeliveryBoys.FirstOrDefault(i => i.CustomerId == customerId); //This is delivery boy
                 var order = db.Orders.FirstOrDefault(i => i.OrderNumber == orderNo);
                 string notificationMessage = $"Your order on shop({order.ShopName}) is on the way.";
                 order.Status = 5;
-                order.UpdatedBy = customer.Name;
+                order.UpdatedBy = deliveryboy.Name;
                 order.DateUpdated = DateTime.Now;
                 order.OrderPickupTime = DateTime.Now;
                 db.Entry(order).State = System.Data.Entity.EntityState.Modified;
@@ -1814,7 +1814,7 @@ namespace ShopNow.Controllers
                     models.DateUpdated = DateTime.Now;
                     db.OtpVerifications.Add(models);
                     db.SaveChanges();
-                    notificationMessage = $"Your order on shop({order.ShopName}) is on the way. Please share the delivery code { models.Otp} with the delivery partner {customer.Name} for verification.";
+                    notificationMessage = $"Your order on shop({order.ShopName}) is on the way. Please share the delivery code { models.Otp} with the delivery partner {deliveryboy.Name} for verification.";
                 }
                 if (order.CustomerId != 0)
                 {
@@ -1833,25 +1833,16 @@ namespace ShopNow.Controllers
 
         public JsonResult GetDelivaryBoyAccept(int orderNo, int customerId)
         {
-            if (orderNo != 0 && customerId != 0)
+            if (orderNo != 0 /*&& customerId != 0*/)
             {
-                var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
+                //var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
                 var delivaryBoy = db.DeliveryBoys.FirstOrDefault(i => i.CustomerId == customerId && i.Status == 0);
                 delivaryBoy.OnWork = 1;
-                delivaryBoy.UpdatedBy = customer.Name;
+                delivaryBoy.UpdatedBy = delivaryBoy.Name;
                 delivaryBoy.DateUpdated = DateTime.Now;
                 db.Entry(delivaryBoy).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
-                //var shopCharge = db.ShopCharges.FirstOrDefault(i => i.OrderNo == orderNo);
-                //var shop = db.Shops.FirstOrDefault(i => i.Id == shopCharge.ShopId);
-                //var topup = db.TopUps.OrderByDescending(q => q.Id).FirstOrDefault(i => i.CustomerCode == shop.CustomerCode && i.CreditType == 1 && i.Status == 0);// TopUp.GetCustomerDelivary(shop.CustomerCode);
-                //if (topup != null)
-                //{
-                //    topup.CreditAmount = topup.CreditAmount - shopCharge.GrossDeliveryCharge;
-                //    topup.DateUpdated = DateTime.Now;
-                //    db.Entry(topup).State = System.Data.Entity.EntityState.Modified;
-                //    db.SaveChanges();
-                //}
+                
                 return Json(new { message = "Successfully DelivaryBoy Accepted!" }, JsonRequestBehavior.AllowGet);
             }
             else
@@ -1912,85 +1903,89 @@ namespace ShopNow.Controllers
             db.Entry(shopCredits).State = System.Data.Entity.EntityState.Modified;
             db.SaveChanges();
 
-            var customerDetails = (from c in db.Customers
-                                   where c.Id == order.CustomerId
-                                   //select c.FcmTocken ?? "").FirstOrDefault().ToString();
-                                   select c).FirstOrDefault();
-
-            if (customerDetails.IsReferred == false && !string.IsNullOrEmpty(customerDetails.ReferralNumber))
+            if (order.CustomerId != 0) // not for pickup drop
             {
-                //customerDetails.Id = customerDetails.Id;
-                customerDetails.IsReferred = true;
-                db.Entry(customerDetails).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
+                var customerDetails = (from c in db.Customers
+                                       where c.Id == order.CustomerId
+                                       //select c.FcmTocken ?? "").FirstOrDefault().ToString();
+                                       select c).FirstOrDefault();
 
-                var referralCustomer = db.Customers.FirstOrDefault(c => c.PhoneNumber == customerDetails.ReferralNumber);
-                if (referralCustomer != null)
+                if (customerDetails.IsReferred == false && !string.IsNullOrEmpty(customerDetails.ReferralNumber))
                 {
-                    var referalAmount = db.ReferralSettings.Where(r => r.Status == 0 && r.ShopDistrict == shop.DistrictName).Select(r => r.Amount).FirstOrDefault();
-                    referralCustomer.WalletAmount = referralCustomer.WalletAmount + referalAmount;
-                    db.Entry(referralCustomer).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-
-                    //Wallet History for Referral
-                    var walletHistory = new CustomerWalletHistory
-                    {
-                        Amount = referalAmount,
-                        CustomerId = referralCustomer.Id,
-                        DateEncoded = DateTime.Now,
-                        Description = "Received from referral",
-                        Type = 1
-                    };
-                    db.CustomerWalletHistories.Add(walletHistory);
-                    db.SaveChanges();
-                }
-            }
-
-            //Update Wallet Amount with offers
-            var offer = db.Offers.FirstOrDefault(i => i.Id == order.OfferId);
-            if (offer != null)
-            {
-                if (offer.DiscountType == 2)
-                {
-                    customerDetails.WalletAmount += order.OfferAmount;
+                    //customerDetails.Id = customerDetails.Id;
+                    customerDetails.IsReferred = true;
                     db.Entry(customerDetails).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
 
+                    var referralCustomer = db.Customers.FirstOrDefault(c => c.PhoneNumber == customerDetails.ReferralNumber);
+                    if (referralCustomer != null)
+                    {
+                        var referalAmount = db.ReferralSettings.Where(r => r.Status == 0 && r.ShopDistrict == shop.DistrictName).Select(r => r.Amount).FirstOrDefault();
+                        referralCustomer.WalletAmount = referralCustomer.WalletAmount + referalAmount;
+                        db.Entry(referralCustomer).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+
+                        //Wallet History for Referral
+                        var walletHistory = new CustomerWalletHistory
+                        {
+                            Amount = referalAmount,
+                            CustomerId = referralCustomer.Id,
+                            DateEncoded = DateTime.Now,
+                            Description = "Received from referral",
+                            Type = 1
+                        };
+                        db.CustomerWalletHistories.Add(walletHistory);
+                        db.SaveChanges();
+                    }
+                }
+
+
+                //Update Wallet Amount with offers
+                var offer = db.Offers.FirstOrDefault(i => i.Id == order.OfferId);
+                if (offer != null)
+                {
+                    if (offer.DiscountType == 2)
+                    {
+                        customerDetails.WalletAmount += order.OfferAmount;
+                        db.Entry(customerDetails).State = System.Data.Entity.EntityState.Modified;
+                        db.SaveChanges();
+
+                        //Wallet History for Wallet Offer
+                        var walletHistory = new CustomerWalletHistory
+                        {
+                            Amount = order.OfferAmount,
+                            CustomerId = customerDetails.Id,
+                            DateEncoded = DateTime.Now,
+                            Description = $"Received from offer({offer.Name})",
+                            Type = 1
+                        };
+                        db.CustomerWalletHistories.Add(walletHistory);
+                        db.SaveChanges();
+                    }
+                }
+
+                if (order.WalletAmount > 0)
+                {
                     //Wallet History for Wallet Offer
                     var walletHistory = new CustomerWalletHistory
                     {
-                        Amount = order.OfferAmount,
+                        Amount = order.WalletAmount,
                         CustomerId = customerDetails.Id,
                         DateEncoded = DateTime.Now,
-                        Description = $"Received from offer({offer.Name})",
-                        Type = 1
+                        Description = $"Payment to Order(#{order.OrderNumber})",
+                        Type = 2
                     };
                     db.CustomerWalletHistories.Add(walletHistory);
                     db.SaveChanges();
                 }
+
+                //Update Achievement Wallet
+                Helpers.AchievementHelpers.UpdateAchievements(order.CustomerId);
+
+                string fcmtocken = customerDetails.FcmTocken ?? "";
+
+                Helpers.PushNotification.SendbydeviceId($"Your order on shop({order.ShopName}) has been delivered by delivery partner {order.DeliveryBoyName}.", "Snowch", "a.mp3", fcmtocken.ToString());
             }
-
-            if (order.WalletAmount > 0)
-            {
-                //Wallet History for Wallet Offer
-                var walletHistory = new CustomerWalletHistory
-                {
-                    Amount = order.WalletAmount,
-                    CustomerId = customerDetails.Id,
-                    DateEncoded = DateTime.Now,
-                    Description = $"Payment to Order(#{order.OrderNumber})",
-                    Type = 2
-                };
-                db.CustomerWalletHistories.Add(walletHistory);
-                db.SaveChanges();
-            }
-
-            //Update Achievement Wallet
-            Helpers.AchievementHelpers.UpdateAchievements(order.CustomerId);
-
-            string fcmtocken = customerDetails.FcmTocken ?? "";
-
-            Helpers.PushNotification.SendbydeviceId($"Your order on shop({order.ShopName}) has been delivered by delivery partner {order.DeliveryBoyName}.", "Snowch", "a.mp3", fcmtocken.ToString());
             return Json(new { message = "Successfully DelivaryBoy Delivered!" }, JsonRequestBehavior.AllowGet);
         }
 
