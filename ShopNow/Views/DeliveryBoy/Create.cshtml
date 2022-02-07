@@ -3,7 +3,6 @@
     ViewBag.Title = "DeliveryBoy Entry";
 }
 <title>ShopNow | @ViewBag.Title</title>
-
 <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-md-3">
@@ -114,16 +113,22 @@
                             <div class="col-md-12 mx-2 row">
                                 <div class="card-deck">
                                     <div class="card border-info">
-                                        <div class="card-body ">
+                                        <div class="card-body">
                                             <label class="col-md-12 text-center text-secondary font-weight-bold">Image</label>
-                                            <label class="col-md-12 small font-italic">* Upload recent photo</label>
-                                            <div class="img-upload-container mx-auto text-center">
-                                                <img class="img-container w-100 h-100" id="img-upload" onerror="this.src='/Images/No Photo.png'" />
-                                                <input type="file" id="DeliveryBoyImage" name="DeliveryBoyImage" class="d-none" />
-                                                <label for="DeliveryBoyImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                            <label class="col-md-12 small font-italic ml-4">* Upload recent photo</label>
+                                            <div class="row">
+                                                <div class="col-md-12 text-center ml-5">
+                                                    <div class="img-upload-container mx-auto">
+                                                        <img class="img-container w-100 h-100" id="img-upload" onerror="this.src='/Images/No Photo.png'" />
+                                                        <input type="file" id="DeliveryBoyImage" name="DeliveryBoyImage" class="d-none" />
+                                                        <label for="DeliveryBoyImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="col-md-12">
-                                                <input type="button" class="btn btn-sm btn-danger d-none ml-4 mt-5" id="btnRemove1" value="Remove" />
+                                            <div class="row my-2">
+                                                <div class="col-md-12 ml-4">
+                                                    <input type="button" class="btn btn-sm btn-danger ml-5 d-none" id="btnRemove1" value="Remove" />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -159,8 +164,8 @@
                                                     <label for="DrivingLicenseImage" class="img-browse"><span class="fa fa-plus"></span> Select Image</label>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12">
-                                                <input type="button" class="btn btn-sm btn-danger d-none ml-4 mt-1" id="btnRemove3" value="Remove" />
+                                            <div class="col-md-12 text-center">
+                                                <input type="button" class="btn btn-sm btn-danger ml-4 d-none mt-1" id="btnRemove3" value="Remove" />
                                             </div>
                                         </div>
                                     </div>
