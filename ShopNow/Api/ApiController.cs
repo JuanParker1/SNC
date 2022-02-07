@@ -1592,11 +1592,11 @@ namespace ShopNow.Controllers
                     TotalPrice = i.o.o.o.o.TotalPrice,
                     TotalProduct = i.o.o.o.o.TotalProduct,
                     TotalQuantity = i.o.o.o.o.TotalQuantity,
-                    NetTotal = i.o.o.o.o.NetTotal,
+                    NetTotal = i.o.o.o.o.IsPickupDrop == true ? i.o.o.o.o.TotalPrice : i.o.o.o.o.NetTotal, //for pickupdrop don't show delivery charge in total
                     WalletAmount = i.o.o.o.o.WalletAmount,
                     TipAmount = i.o.o.o.o.TipsAmount,
                     OrderItemList = i.oi.ToList(),
-                    
+
                 }).ToList();
 
             model.OtherList = db.Orders.Where(i => (i.Status == 4 || i.Status == 5) && i.DeliveryBoyPhoneNumber == phoneNumber  /*&& DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(DateTime.Now)*/)
@@ -1631,7 +1631,8 @@ namespace ShopNow.Controllers
                    TotalPrice = i.o.o.o.o.TotalPrice,
                    TotalProduct = i.o.o.o.o.TotalProduct,
                    TotalQuantity = i.o.o.o.o.TotalQuantity,
-                   NetTotal = i.o.o.o.o.NetTotal,
+                   //NetTotal = i.o.o.o.o.NetTotal,
+                   NetTotal = i.o.o.o.o.IsPickupDrop == true ? i.o.o.o.o.TotalPrice : i.o.o.o.o.NetTotal,
                    WalletAmount = i.o.o.o.o.WalletAmount,
                    TipAmount = i.o.o.o.o.TipsAmount,
                    OrderItemList = i.oi.ToList()
