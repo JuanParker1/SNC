@@ -6,6 +6,11 @@
 <title>ShopNow | Customer List</title>
 <link href="~/Content/Gridmvc.css" rel="stylesheet" />
 <script src="~/Scripts/gridmvc.js"></script>
+<style>
+    table > thead > tr > th:first-child {
+        padding: 12px 6px;
+    }
+</style>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12">
@@ -18,7 +23,7 @@
                 <div class="card-body">
                     @Html.Grid(Model).Columns(columns =>
                     {
-                       columns.Add(c => c.No).Titled("Sl.No").Filterable(true).SetWidth(5);
+                       columns.Add(c => c.No).Titled("Sl.No").Filterable(false).SetWidth(5);
                        columns.Add(b => b.Name).RenderValueAs(o => Html.ActionLink(o.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id) }).ToHtmlString()).Titled("Name").Encoded(false).Sanitized(false).Filterable(true).SetWidth(15);
                      //columns.Add(b => b.Name).Titled("Name").RenderValueAs(o=> Html.ActionLink(o.Name, "Details", new { id = @ShopNow.Helpers.AdminHelpers.ECodeInt(o.Id)}).ToHtmlString()).Encoded(false).Sanitized(false).Filterable(true).SetWidth(15);
                        columns.Add(b => b.PhoneNumber).Titled("Phone No").Filterable(true).SetWidth(10);
