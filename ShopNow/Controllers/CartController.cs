@@ -58,7 +58,7 @@ namespace ShopNow.Controllers
                 Status = i.c.c.Status,
                 DeliveryBoyName = i.c.c.DeliveryBoyName ?? "N/A",
                 PaymentMode = i.c.c.PaymentMode,
-                Amount = i.c.p.Amount - (i.c.p.RefundAmount?? 0),
+                Amount = i.c.c.IsPickupDrop == true? i.c.c.TotalPrice: i.c.p.Amount - (i.c.p.RefundAmount?? 0),
                 CustomerPhoneNumber = i.c.c.CustomerPhoneNumber,
                 RefundAmount = i.c.p.RefundAmount ?? 0,
                 RefundRemark = i.c.p.RefundRemark ?? "",
@@ -795,7 +795,8 @@ namespace ShopNow.Controllers
                        DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
                        DeliveryBoyId = i.c.DeliveryBoyId,
                        DeliveryBoyName = i.c.DeliveryBoyName,
-                       Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
+                      // Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
+                       Amount = i.c.IsPickupDrop ==true ? i.c.TotalPrice: i.p.Amount - (i.p.RefundAmount ?? 0),
                        DateEncoded = i.p.DateEncoded,
                        DeliveryOrderPaymentStatus = i.c.DeliveryOrderPaymentStatus
                    }).OrderByDescending(i => i.DateEncoded).ToList();
