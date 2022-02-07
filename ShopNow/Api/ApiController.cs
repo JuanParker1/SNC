@@ -1833,7 +1833,7 @@ namespace ShopNow.Controllers
 
         public JsonResult GetDelivaryBoyAccept(int orderNo, int customerId)
         {
-            if (orderNo != 0 /*&& customerId != 0*/)
+            if (orderNo != 0 && customerId != 0)
             {
                 //var customer = db.Customers.FirstOrDefault(i => i.Id == customerId);
                 var delivaryBoy = db.DeliveryBoys.FirstOrDefault(i => i.CustomerId == customerId && i.Status == 0);
