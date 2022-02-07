@@ -1215,7 +1215,7 @@ namespace ShopNow.Controllers
         }
 
         [AccessPolicy(PageCode = "SNCCMD086")]
-        public ActionResult MarkAsDelivered(int OrderNumber, int id)
+        public ActionResult MarkAsDelivered(int OrderNumber, int id,string address="")
         {
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
@@ -1240,6 +1240,10 @@ namespace ShopNow.Controllers
                 otpVerify.DateUpdated = DateTime.Now;
                 db.Entry(otpVerify).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
+            }
+            if (!string.IsNullOrEmpty(address))
+            {
+                order.DeliveryAddress = address;
             }
             order.Status = 6;
             order.UpdatedBy = user.Name;
