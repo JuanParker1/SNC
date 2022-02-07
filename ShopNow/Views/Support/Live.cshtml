@@ -228,8 +228,16 @@
                 <div class="card-footer">
                     <hr class="m-1" />
                     <div class="stats">
-                        <i class="fa fa-clock-o"></i>
-                        Live
+                        <div class="d-flex justify-content-between">
+                            <div class="">
+                                <i class="fa fa-clock-o"></i>
+                                Online - <span class="text-success font-weight-bold">@Model.ShopOnlineCount</span>
+                            </div>
+                            <div class="">
+                                <i class="fa fa-power-off"></i>
+                                Offline - <span class="text-danger font-weight-bold">@Model.ShopOfflineCount</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
