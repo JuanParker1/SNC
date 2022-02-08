@@ -83,7 +83,7 @@ namespace ShopNow.Controllers
                            {
                                Id = i.c.Id,
                                ShopName = i.c.ShopName,
-                               OrderNumber = i.c.OrderNumber,
+                               OrderNumber = i.c.OrderNumber.ToString(),
                                DeliveryAddress = i.c.DeliveryAddress,
                                ShopOwnerPhoneNumber = i.c.ShopOwnerPhoneNumber,
                                Status = i.c.Status,
@@ -112,7 +112,7 @@ namespace ShopNow.Controllers
                            {
                                Id = i.c.Id,
                                ShopName = i.c.ShopName,
-                               OrderNumber = i.c.OrderNumber,
+                               OrderNumber = i.c.OrderNumber.ToString(),
                                DeliveryAddress = i.c.DeliveryAddress,
                                ShopOwnerPhoneNumber = i.c.ShopOwnerPhoneNumber,
                                Status = i.c.Status,
@@ -141,7 +141,7 @@ namespace ShopNow.Controllers
                 {
                     Id = i.c.Id,
                     ShopName = i.c.ShopName,
-                    OrderNumber = i.c.OrderNumber,
+                    OrderNumber = i.c.OrderNumber.ToString(),
                     DeliveryAddress = i.c.DeliveryAddress,
                     ShopPhoneNumber = i.c.ShopPhoneNumber,
                     Status = i.c.Status,
@@ -166,7 +166,6 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new CartListViewModel();
-
             model.DeliveryAgentAssignedLists = db.Orders.Where(i => (shopId != 0 ? i.ShopId == shopId : true) && i.Status == 4)
                 .Join(db.DeliveryBoys.Where(i => i.isAssign == 1 && i.OnWork == 0), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
                 .Join(db.Payments, c => c.c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
@@ -174,7 +173,7 @@ namespace ShopNow.Controllers
                 {
                     Id = i.c.c.Id,
                     ShopName = i.c.c.ShopName,
-                    OrderNumber = i.c.c.OrderNumber,
+                    OrderNumber = i.c.c.OrderNumber.ToString(),
                     Status = i.c.c.Status,
                     DeliveryBoyName = i.c.c.DeliveryBoyName,
                     DateEncoded = i.c.c.DateEncoded,
@@ -203,7 +202,7 @@ namespace ShopNow.Controllers
                 {
                     Id = i.c.c.Id,
                     ShopName = i.c.c.ShopName,
-                    OrderNumber = i.c.c.OrderNumber,
+                    OrderNumber = i.c.c.OrderNumber.ToString(),
                     Status = i.c.c.Status,
                     DeliveryBoyName = i.c.c.DeliveryBoyName,
                     DateEncoded = i.c.c.DateEncoded,
@@ -225,7 +224,6 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             var model = new CartListViewModel();
-
             model.PickupLists = db.Orders.Where(i => i.Status == 4 && (shopId != 0 ? i.ShopId == shopId : true))
                 .Join(db.DeliveryBoys.Where(i => i.isAssign == 1 && i.OnWork == 1), c => c.DeliveryBoyId, d => d.Id, (c, d) => new { c, d })
                 .Join(db.Payments, c => c.c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
@@ -233,7 +231,7 @@ namespace ShopNow.Controllers
                  {
                      Id = i.c.c.Id,
                      ShopName = i.c.c.ShopName,
-                     OrderNumber = i.c.c.OrderNumber,
+                     OrderNumber = i.c.c.OrderNumber.ToString(),
                      DeliveryBoyPhoneNumber = i.c.c.DeliveryBoyPhoneNumber,
                      Status = i.c.c.Status,
                      DeliveryBoyName = i.c.c.DeliveryBoyName,
@@ -263,7 +261,7 @@ namespace ShopNow.Controllers
                 {
                     Id = i.c.c.Id,
                     ShopName = i.c.c.ShopName,
-                    OrderNumber = i.c.c.OrderNumber,
+                    OrderNumber = i.c.c.OrderNumber.ToString(),
                     DeliveryBoyPhoneNumber = i.c.c.DeliveryBoyPhoneNumber,
                     Status = i.c.c.Status,
                     DeliveryBoyName = i.c.c.DeliveryBoyName,
@@ -291,7 +289,7 @@ namespace ShopNow.Controllers
                 {
                     Id = i.c.Id,
                     ShopName = i.c.ShopName,
-                    OrderNumber = i.c.OrderNumber,
+                    OrderNumber = i.c.OrderNumber.ToString(),
                     DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
                     Status = i.c.Status,
                     DateEncoded = i.c.DateEncoded,
@@ -318,7 +316,7 @@ namespace ShopNow.Controllers
                 {
                     Id = i.c.Id,
                     ShopName = i.c.ShopName,
-                    OrderNumber = i.c.OrderNumber,
+                    OrderNumber = i.c.OrderNumber.ToString(),
                     DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
                     Status = i.c.Status,
                     DateEncoded = i.c.DateEncoded,
@@ -346,7 +344,7 @@ namespace ShopNow.Controllers
                 {
                     Id = i.c.Id,
                     ShopName = i.c.ShopName,
-                    OrderNumber = i.c.OrderNumber,
+                    OrderNumber = i.c.OrderNumber.ToString(),
                     CustomerPhoneNumber = i.c.CustomerPhoneNumber,
                     Status = i.c.Status,
                     DateEncoded = i.c.DateEncoded,
@@ -371,7 +369,6 @@ namespace ShopNow.Controllers
             var user = ((ShopNow.Helpers.Sessions.User)Session["USER"]);
             ViewBag.Name = user.Name;
             model.StartDate = model.StartDate == null ? DateTime.Now : model.StartDate;
-
             model.DeliveredReportLists = db.Orders.Where(i => DbFunctions.TruncateTime(i.DateEncoded) == DbFunctions.TruncateTime(model.StartDate) && i.Status == 6)
                 .Join(db.Payments, c => c.OrderNumber, p => p.OrderNumber, (c, p) => new { c, p })
                 .AsEnumerable()
@@ -379,7 +376,7 @@ namespace ShopNow.Controllers
             {
                 Id = i.c.Id,
                 ShopName = i.c.ShopName,
-                OrderNumber = i.c.OrderNumber,
+                OrderNumber = i.c.OrderNumber.ToString(),
                 DeliveryAddress = i.c.DeliveryAddress,
                 PhoneNumber = i.c.CustomerPhoneNumber,
                 DateEncoded = i.c.DateEncoded,
@@ -404,7 +401,7 @@ namespace ShopNow.Controllers
                         {
                             Id = i.c.Id,
                             ShopName = i.c.ShopName,
-                            OrderNumber = i.c.OrderNumber,
+                            OrderNumber = i.c.OrderNumber.ToString(),
                             CustomerPhoneNumber = i.c.CustomerPhoneNumber,
                             Status = i.c.Status,
                             PaymentMode = i.p.PaymentMode,
@@ -431,7 +428,7 @@ namespace ShopNow.Controllers
             {
                 Id = i.Id,
                 ShopName = i.ShopName,
-                OrderNumber = i.OrderNumber,
+                OrderNumber = i.OrderNumber.ToString(),
                 DeliveryAddress = i.DeliveryAddress,
                 PhoneNumber = i.CustomerPhoneNumber,
                 DateEncoded = i.DateEncoded
@@ -451,7 +448,7 @@ namespace ShopNow.Controllers
                 .Select(i => new CartListViewModel.CustomerCancelledList
                 {
                     Id = i.c.Id,
-                    OrderNumber = i.c.OrderNumber,
+                    OrderNumber = i.c.OrderNumber.ToString(),
                     ShopName = i.c.ShopName,
                     CustomerPhoneNumber = i.c.CustomerPhoneNumber,
                     Status = i.c.Status,
@@ -478,7 +475,7 @@ namespace ShopNow.Controllers
                 {
                     Id = i.c.Id,
                     ShopName = i.c.ShopName,
-                    OrderNumber = i.c.OrderNumber,
+                    OrderNumber = i.c.OrderNumber.ToString(),
                     CustomerPhoneNumber = i.c.CustomerPhoneNumber,
                     Status = i.c.Status,
                     DateEncoded = i.c.DateEncoded,

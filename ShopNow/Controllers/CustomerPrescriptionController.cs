@@ -143,7 +143,7 @@ namespace ShopNow.Controllers
                    No = index + 1,
                    Id = i.Id,
                    ShopName = i.ShopName,
-                   OrderNumber = i.OrderNumber,
+                   OrderNumber = i.OrderNumber.ToString(),
                    CustomerPhoneNumber = i.CustomerPhoneNumber,
                    Status = i.Status,
                    DateEncoded = i.DateEncoded,

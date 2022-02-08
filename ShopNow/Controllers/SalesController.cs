@@ -85,7 +85,7 @@ namespace ShopNowPay.Controllers
                     SiNo = index + 1,
                     CustomerName = i.c.CustomerName + " - " + i.c.CustomerPhoneNumber,
                     OrderDate = i.c.DateEncoded,
-                    OrderNumber = i.c.OrderNumber,
+                    OrderNumber = i.c.OrderNumber.ToString(),
                     Price = (i.p.Amount - (i.p.RefundAmount ?? 0)),
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",

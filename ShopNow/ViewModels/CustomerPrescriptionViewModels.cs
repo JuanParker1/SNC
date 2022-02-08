@@ -37,7 +37,7 @@ namespace ShopNow.ViewModels
         {
             public int No { get; set; }
             public long Id { get; set; }
-            public int OrderNumber { get; set; }
+            public string OrderNumber { get; set; }
             public string ShopName { get; set; }
             public string CustomerPhoneNumber { get; set; }
             public int Status { get; set; }
