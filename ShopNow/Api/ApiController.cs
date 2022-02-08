@@ -5231,8 +5231,8 @@ namespace ShopNow.Controllers
                 response.ShopId = shop.Id;
                 response.ShopIsOnline = shop.IsOnline;
                 response.ShopNextOnTime = shop.NextOnTime;
-                response.ProductListItems = db.Products.AsEnumerable().Where(i => model.ProductListItems.Select(a => a.Id).ToArray().Contains(i.Id))
-
+                var productIdArray = model.ProductListItems.Select(a => a.Id).ToArray();
+                response.ProductListItems = db.Products.Where(i=>i.ShopId == model.ShopId && productIdArray.Contains(i.Id))
                     .Select(i => new OldCartResponseViewModel.ProductListItem
                     {
                         Id = i.Id,
