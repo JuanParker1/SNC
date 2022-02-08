@@ -1950,12 +1950,13 @@ namespace ShopNow.Controllers
             return RedirectToAction("PickupSlip", new { OrderNumber=OrderNumber, id=OrderId});
         }
 
-        public ActionResult UpdateDeliveryAddress(long orderId, string address, double latitude=0, double longitude=0)
+        public ActionResult UpdateDeliveryAddress(long orderId, string address,double distance=0, double latitude=0, double longitude=0)
         {
             var order = db.Orders.FirstOrDefault(i => i.Id == orderId);
             order.DeliveryAddress = address;
             order.Latitude = latitude;
             order.Longitude = longitude;
+            order.Distance = distance;
             order.DateUpdated = DateTime.Now;
             db.Entry(order).State = EntityState.Modified;
             db.SaveChanges();
