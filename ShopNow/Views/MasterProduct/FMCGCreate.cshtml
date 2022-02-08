@@ -57,17 +57,17 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Category Name</strong></label>
-                                        <select name="CategoryId" id="CategoryId" class="form-control" required></select>
+                                        <select name="CategoryId" id="CategoryId" class="form-control"></select>
                                         <input type="hidden" name="CategoryName" id="CategoryName" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Sub Category I Name</strong></label>
-                                        <select name="SubCategoryId" id="SubCategoryId" class="form-control" required></select>
+                                        <select name="SubCategoryId" id="SubCategoryId" class="form-control"></select>
                                         <input type="hidden" name="SubCategoryName" id="SubCategoryName" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Sub Category II Name</strong></label>
-                                        <select name="NextSubCategoryId" id="NextSubCategoryId" class="form-control" required></select>
+                                        <select name="NextSubCategoryId" id="NextSubCategoryId" class="form-control"></select>
                                         <input type="hidden" name="NextSubCategoryName" id="NextSubCategoryName" />
                                     </div>
                                     <div class="col-md-3">
@@ -355,7 +355,10 @@
                 var isValidated = false;
                 var requiredArr = [
                     'Name',
-                    'Price'
+                    'Price',
+                    'CategoryId',
+                    'SubCategoryId',
+                    'NextSubCategoryId'
                 ];
                 isValidated = ValidateEmptyRequiredFiels(requiredArr);
 
