@@ -407,7 +407,7 @@ namespace ShopNow.ViewModels
         public class ListItem
         {
             public long OrderId { get; set; }
-            public int OrderNumber { get; set; }
+            public string OrderNumber { get; set; }
             public string ShopName { get; set; }
             public string BillNo { get; set; }
             public double BillAmount { get; set; }
