@@ -44,7 +44,7 @@ namespace ShopNow.Controllers
                 Address = i.c.DeliveryAddress,
                 DateEncoded = i.c.DateEncoded,
                 Amount = i.p.Amount,
-                OrderNumber = i.p.OrderNumber
+                OrderNumber = i.p.OrderNumber.ToString()
             }).OrderByDescending(i => i.DateEncoded).ToList();
 
             return View(model.List);
@@ -417,7 +417,7 @@ namespace ShopNow.Controllers
                      No = index + 1,
                      OrderDate = i.p.p.p.DateEncoded,
                      OrderFirstAmount = i.p.p.p.Amount,
-                     OrderNumber = i.p.p.p.OrderNumber,
+                     OrderNumber = i.p.p.p.OrderNumber.ToString(),
                      PaidAmount = i.p.o.FirstOrDefault()?.OwnerType == 1 ? ((i.p.p.c.TotalShopPrice != 0 ? (i.p.p.c.TotalPrice - Math.Abs(i.p.p.c.TotalShopPrice - i.p.p.c.TotalPrice)) - (i.p.p.p.RefundAmount ?? 0) : i.p.p.p.Amount + i.p.p.c.OfferAmount) - (i.p.p.p.RefundAmount ?? 0)) : i.p.p.c.TotalShopPrice != 0 ? i.p.p.p.Amount - Math.Abs(i.p.p.c.TotalPrice - i.p.p.c.TotalShopPrice) : i.p.p.p.Amount - (i.p.p.p.RefundAmount ?? 0),
                    //PaidAmount = i.p.o.OwnerType == 1 ? ((i.p.p.p.Amount + i.p.p.c.OfferAmount) - (i.p.p.p.RefundAmount ?? 0)) : i.p.p.p.Amount - (i.p.p.p.RefundAmount ?? 0),
                    PaymentAmount = i.p.o.FirstOrDefault()?.OwnerType == 1 ? ((i.p.p.c.TotalShopPrice != 0 ? (i.p.p.p.Amount - Math.Abs(i.p.p.c.TotalPrice - i.p.p.c.TotalShopPrice)) : i.p.p.p.Amount + i.p.p.c.OfferAmount) - (i.p.p.p.RefundAmount ?? 0)) : (i.p.p.c.TotalShopPrice != 0 ? i.p.p.p.Amount - (Math.Abs(i.p.p.c.TotalPrice - i.p.p.c.TotalShopPrice)) : i.p.p.p.Amount) - (i.p.p.p.RefundAmount ?? 0) - Convert.ToDouble((i.pd.Any() ? i.pd.FirstOrDefault().Fee : 0)) - Convert.ToDouble((i.pd.Any() ? i.pd.FirstOrDefault().Tax : 0)),
@@ -641,7 +641,7 @@ namespace ShopNow.Controllers
                 .Join(db.Offers, o => o.OfferId, of => of.Id, (o, of) => new { o, of })
                 .Select(i => new OrderOfferReportViewModel.ListItem
                 {
-                    OrderNumber = i.o.OrderNumber,
+                    OrderNumber = i.o.OrderNumber.ToString(),
                     OfferName = i.of.Name,
                     OfferCode = i.of.OfferCode,
                     PurchasedAmount = i.o.NetTotal,

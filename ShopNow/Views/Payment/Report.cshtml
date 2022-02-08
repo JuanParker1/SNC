@@ -28,7 +28,7 @@
                         <h4 class="text-center d-none d-print-block">Payment Report</h4>
                         @Html.Grid(Model).Columns(columns =>
                         {
-                             columns.Add(c => c.OrderNumber).Titled("OrderNo").Filterable(true).SetWidth(10);
+                             columns.Add(c => c.OrderNumber).Titled("Order Number").Filterable(true).SetWidth(10);
                              columns.Add(c => c.ShopName).Titled("Shop Name").Filterable(true).SetWidth(9);
                              columns.Add(c => c.Address).Titled("Delivery Address").Filterable(true).SetWidth(10);
                              columns.Add(c => c.Amount).Titled("Amount").Filterable(true).SetWidth(4);
