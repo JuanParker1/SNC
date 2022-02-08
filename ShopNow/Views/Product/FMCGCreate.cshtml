@@ -53,17 +53,17 @@
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Category Name</strong></label>
-                                        <select id="CategoryId" name="CategoryId" class="form-control" required></select>
+                                        <select id="CategoryId" name="CategoryId" class="form-control"></select>
                                         <input type="hidden" name="CategoryName" id="CategoryName" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Sub Category I Name</strong></label>
-                                        <select id="SubCategoryId" name="SubCategoryId" class="form-control" required></select>
+                                        <select id="SubCategoryId" name="SubCategoryId" class="form-control"></select>
                                         <input type="hidden" name="SubCategoryName" id="SubCategoryName" />
                                     </div>
                                     <div class="col-md-3">
                                         <label class="col-form-label"><strong class="text-secondary">Sub Category II Name</strong></label>
-                                        <select id="NextSubCategoryId" name="NextSubCategoryId" class="form-control" required></select>
+                                        <select id="NextSubCategoryId" name="NextSubCategoryId" class="form-control"></select>
                                         <input type="hidden" name="NextSubCategoryName" id="NextSubCategoryName" />
                                     </div>
                                     <div class="col-md-3">
@@ -411,7 +411,10 @@
                     'MenuPrice',
                     'Price',
                     'ShopId',
-                    'MasterProductId'
+                    'MasterProductId',
+                    'CategoryId',
+                    'SubCategoryId',
+                    'NextSubCategoryId'
                 ];
                 isValidated = ValidateEmptyRequiredFiels(requiredArr);
                 if (isValidated) {
