@@ -91,7 +91,7 @@
                                 @foreach (var item in Model.ListItems)
                                 {
 
-                                <tr class="@if (item.Date.Equals(DateTime.Now.ToString("dd-MMM-yyyy"))) { <text>text-primary</text> }">
+                                <tr class="@if (item.Date.Equals(DateTime.Now.ToString("dd-MMM-yyyy"))) { <text>text-danger</text> }">
                                     <td class="text-nowrap">@item.Date</td>
                                     <td>@item.TotalOrder</td>
                                     <td>@item.DeliveredOrder</td>
