@@ -52,7 +52,7 @@ namespace ShopNow.Controllers
             {
                 Id = i.c.c.Id,
                 ShopName = i.c.c.ShopName,
-                OrderNumber = i.c.c.OrderNumber,
+                OrderNumber = i.c.c.OrderNumber.ToString(),
                 DeliveryAddress = i.c.c.DeliveryAddress,
                 ShopPhoneNumber = i.c.c.ShopPhoneNumber,
                 Status = i.c.c.Status,
@@ -89,7 +89,7 @@ namespace ShopNow.Controllers
                                Status = i.c.Status,
                                DeliveryBoyName = i.c.DeliveryBoyName,
                                DateEncoded = i.c.DateEncoded,
-                               Price = i.c.NetTotal,
+                               Price = i.c.IsPickupDrop == true ? i.c.TotalPrice : i.c.NetTotal,
                                RefundAmount = i.p.RefundAmount ?? 0,
                                RefundRemark = i.p.RefundRemark ?? "",
                                PaymentMode = i.p.PaymentMode,
@@ -118,7 +118,7 @@ namespace ShopNow.Controllers
                                Status = i.c.Status,
                                DeliveryBoyName = i.c.DeliveryBoyName,
                                DateEncoded = i.c.DateEncoded,
-                               Price = i.c.NetTotal,
+                               Price = i.c.IsPickupDrop == true ? i.c.TotalPrice : i.c.NetTotal,
                                RefundAmount = i.p.RefundAmount ?? 0,
                                RefundRemark = i.p.RefundRemark ?? "",
                                PaymentMode = i.p.PaymentMode,
@@ -151,7 +151,7 @@ namespace ShopNow.Controllers
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
                     DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber ?? "Not Assigned",
-                    Price = i.p.Amount - (i.p.RefundAmount ?? 0),
+                    Price = i.c.IsPickupDrop == true ? i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
                     IsPickupDrop = i.c.IsPickupDrop
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
@@ -211,7 +211,7 @@ namespace ShopNow.Controllers
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
                     DeliveryBoyPhoneNumber = i.c.c.DeliveryBoyPhoneNumber,
-                    Price = i.p.Amount - (i.p.RefundAmount ?? 0),
+                    Price = i.c.c.IsPickupDrop == true ? i.c.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
                     IsPickupDrop = i.c.c.IsPickupDrop
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
@@ -241,7 +241,7 @@ namespace ShopNow.Controllers
                      RefundAmount = i.p.RefundAmount ?? 0,
                      RefundRemark = i.p.RefundRemark ?? "",
                      PaymentMode = i.p.PaymentMode,
-                     Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
+                     Amount = i.c.c.IsPickupDrop == true ? i.c.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
                      IsPickupDrop = i.c.c.IsPickupDrop
                  }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
@@ -271,7 +271,7 @@ namespace ShopNow.Controllers
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
-                    Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
+                    Amount = i.c.c.IsPickupDrop == true ? i.c.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
                     IsPickupDrop = i.c.c.IsPickupDrop
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
@@ -295,7 +295,7 @@ namespace ShopNow.Controllers
                     DeliveryBoyPhoneNumber = i.c.DeliveryBoyPhoneNumber,
                     Status = i.c.Status,
                     DateEncoded = i.c.DateEncoded,
-                    Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
+                    Amount = i.c.IsPickupDrop == true ? i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
@@ -325,7 +325,7 @@ namespace ShopNow.Controllers
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
-                    Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
+                    Amount = i.c.IsPickupDrop == true ? i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
                     IsPickupDrop = i.c.IsPickupDrop
                 }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
@@ -351,7 +351,7 @@ namespace ShopNow.Controllers
                     Status = i.c.Status,
                     DateEncoded = i.c.DateEncoded,
                     DeliveredTime = i.c.DeliveredTime == null ? i.c.DateUpdated : i.c.DeliveredTime,
-                    Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
+                    Amount = i.c.IsPickupDrop == true ? i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
@@ -384,7 +384,7 @@ namespace ShopNow.Controllers
                 PhoneNumber = i.c.CustomerPhoneNumber,
                 DateEncoded = i.c.DateEncoded,
                 PaymentMode = i.c.PaymentMode,
-                Amount = i.p.Amount - (i.p.RefundAmount == null ? 0 : i.p.RefundAmount) ?? 0
+                Amount = i.c.IsPickupDrop == true ? i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0)
             }).OrderByDescending(i => i.DateEncoded).ToList();
             int counter = 1;
             model.DeliveredReportLists.ForEach(x => x.No = counter++);
@@ -408,8 +408,8 @@ namespace ShopNow.Controllers
                             CustomerPhoneNumber = i.c.CustomerPhoneNumber,
                             Status = i.c.Status,
                             PaymentMode = i.p.PaymentMode,
-                            //Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
-                            Amount = i.p.Amount,
+                            //Amount = i.p.Amount,
+                            Amount = i.c.IsPickupDrop == true ? i.c.TotalPrice : i.p.Amount,
                             DateEncoded = i.c.DateEncoded,
                             ShopCancelledTime = i.c.ShopAcceptedTime,
                             ShopCancelPeriod = i.c.ShopAcceptedTime != null ? Math.Round((i.c.ShopAcceptedTime.Value - i.c.DateEncoded).TotalMinutes) : 0
@@ -455,7 +455,7 @@ namespace ShopNow.Controllers
                     ShopName = i.c.ShopName,
                     CustomerPhoneNumber = i.c.CustomerPhoneNumber,
                     Status = i.c.Status,
-                    Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
+                    Amount = i.c.IsPickupDrop == true ? i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
                     PaymentMode = i.p.PaymentMode,
                     DateEncoded = i.c.DateEncoded,
                     CustomerCancelledTime = i.c.DateUpdated
@@ -483,7 +483,7 @@ namespace ShopNow.Controllers
                     Status = i.c.Status,
                     DateEncoded = i.c.DateEncoded,
                     DateUpdated = i.c.DateUpdated,
-                    Amount = i.p.Amount - (i.p.RefundAmount ?? 0),
+                    Amount = i.c.IsPickupDrop == true ? i.c.TotalPrice : i.p.Amount - (i.p.RefundAmount ?? 0),
                     RefundAmount = i.p.RefundAmount ?? 0,
                     RefundRemark = i.p.RefundRemark ?? "",
                     PaymentMode = i.p.PaymentMode,
